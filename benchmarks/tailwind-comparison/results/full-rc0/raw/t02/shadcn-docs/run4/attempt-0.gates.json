@@ -1,0 +1,62 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6261
+    },
+    "build": {
+      "ok": true,
+      "ms": 15184
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1935,
+          "height": 3477,
+          "width": 803,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1935,
+          "height": 2784,
+          "width": 819,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1935,
+          "height": 2748,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 4,
+        "nodes": 4,
+        "serious_or_critical": 3,
+        "ids": [
+          "color-contrast:serious:1",
+          "heading-order:moderate:1",
+          "label-title-only:serious:1",
+          "label:critical:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      }
+    }
+  }
+}

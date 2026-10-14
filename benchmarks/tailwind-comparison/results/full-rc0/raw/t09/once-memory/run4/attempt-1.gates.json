@@ -1,0 +1,33 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3030
+    },
+    "build": {
+      "ok": true,
+      "ms": 8588
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "errors": [
+        "server did not start:\n"
+      ],
+      "axe": null,
+      "interaction": {}
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

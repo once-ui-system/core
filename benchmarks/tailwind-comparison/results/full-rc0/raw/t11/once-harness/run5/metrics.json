@@ -1,0 +1,38 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 434,
+    "chars": 13271,
+    "bytes": 13271,
+    "tokens_o200k": 3147,
+    "tokens_claudeLegacy": 3294,
+    "tokens_exact": 4831
+  },
+  "raw": {
+    "lines": 374,
+    "chars": 12666,
+    "bytes": 12666,
+    "tokens_o200k": 3065,
+    "tokens_claudeLegacy": 3235,
+    "tokens_exact": 4705
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Chip",
+    "CodeBlock",
+    "Column",
+    "Heading",
+    "Icon",
+    "IconName",
+    "InlineCode",
+    "List",
+    "ListItem",
+    "Row",
+    "Tag",
+    "Text",
+    "Timeline",
+    "VisuallyHidden"
+  ]
+}

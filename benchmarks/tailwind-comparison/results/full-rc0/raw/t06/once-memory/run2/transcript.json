@@ -1,0 +1,346 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P8F1MohXSEfftKRGf4xG6m",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LHSKYgDqTn9Ny4i8HrWBXi",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P8F1MohXSEfftKRGf4xG6m",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LHSKYgDqTn9Ny4i8HrWBXi",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017KbipTZjTrZWE5FCWQ6ykd",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MZ654NzJeTK1WcoZKtG65d",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QHxd8a4fZBrZpuhu9boq51",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017KbipTZjTrZWE5FCWQ6ykd",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MZ654NzJeTK1WcoZKtG65d",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QHxd8a4fZBrZpuhu9boq51",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RrbcpcwxYjh7iYSmv5amso",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DJpR89DUWnzyUSUCoE4sk4",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01By6Ku83qmCWajXy3FH6XrB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018q8AeGrGG53AuxHHQzHktw",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HFyLQceQnGrnkPqmXEJMnP",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RrbcpcwxYjh7iYSmv5amso",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DJpR89DUWnzyUSUCoE4sk4",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01By6Ku83qmCWajXy3FH6XrB",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018q8AeGrGG53AuxHHQzHktw",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HFyLQceQnGrnkPqmXEJMnP",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check whether the package is installed so I can verify the component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0174VJCzrMu6pA1hdRHKj9Dq",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019B454ZBDdWraNY3egwGtKz",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0174VJCzrMu6pA1hdRHKj9Dq",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019B454ZBDdWraNY3egwGtKz",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't inspect the package directly, I'll build on my known Once UI APIs conservatively: a login card with email/password that opens a stacked OTP dialog on submit, six auto-advancing digit inputs (with backspace nav, paste support, resend countdown, and demo code 424242), followed by a signed-in state with sign-out. I'll use native `<input>` elements for the OTP cells styled with Once UI tokens to keep refs and key handling type-safe.\n\n",
+          "signature": "CAQStwsKEQgSGAI4AUIJbmFycmF0aW9uEgzt5l+bZ6HN9OxNwgIaDCom7Vm+y0PD/w70CCIwjc35DbhDfBTraiQn+uGjSewpW9TM0Ny2DpUNw/M2TlaJAJAYu2NzOOCvW7/7rlzjKtMKWN7x2O7MncPZ6n2iVaLKjY2y3RNsbY4XAlN7LeZgNwbh5lUVSSyCsCUCCV6oa809ZOKdZIZp3a3QIR3X0jRYhJH3mdUNgDolHsVR8JG0/BsTGgbkXigABaQaE6Fm49+Obn4RaFIj/OWHBRhih8ok3gpVw31sO+lkOwiMTqQoNgJjI9LNypr+JLr2tTMfhgtvfHdYDoOFryflV7UG6+XBt+siW8z28Xj4ewPXoLzlhvEsJc9S7EAhjd1Z0JxNPiS+140+TmKbDs43cPUN0M8+OxHwkiSnAJje1qDz6k/U5dFVYPGykFzji+IS8VJqaFqPyCcxdKz3kFA3ER7Wai/9w2Sadf2GzwWsw26X9IYu2REnayHicPkLeYrmYxaeAsYpkpHvyyOLT4TCn6r9L/KqglYJOgslR2blqB4Sg+X1KQatKGU0WSjwhtofjNOTtnBrqtI269mzRZe8roWNrFlZ6daExZvmHmxPNQSL5oH2pq6EhFPZy9LpOUBSGS3RcyAKLhw0nTVbGgSjiFT9nzpaBeM5EgQsa/MRrcWT/D7EiLFNVLSVq3hdJmXonpLi+AubYujza+R/44fk4OS8M9Tozq7ujBBxGOE5x4iHySrKysSi6LPaiJgNgRMB4voEYp/1HmyCfIFZqdtAPuXyVE/ATO9qnglSmgB4sUYVNQOeZAI+0qC254EPME02aLbmR8K9DZMnNNlCDpTuOqLzZGhwuhXMJkzmF+8YwttOe7lXoWoqlfcTTMHORrLljtzde53Q8D8OELx6cKvU+ws21efT0OKGdZXUB0yRQhOqKRfANzXydFI+0KHD5YCnqgk9Vml87LooCijOWiJBDTvSuPag0aW+WhSIIWsj6M4HMbgngc8Y2aEAgs9WFjlPWPHd/YaNom3p+GfkYQmc/VqAKgEej9IxFBAPXSWTFpJDT4Zvwu6abC2QSwRp1PLUO6t29EUSJ8ZNp83Q3cUBjAA/CPUzS+eIgkaBnMRhFrwge2SoXKKl6ES5uL0Mt9xD8zd9AQ2p6ENrI02c5DJSd5plNM6VIs/UPgumFZU7snMmshp368xarFjEuF8w6pfLA+29fH5eg1s8647xjqrs7uVL49McUmZwPWWpsEU6VKh7RnKUIMgxnlFpSXOOT+uS1wl6A9GJOPTv6Q0oIGEyNMepJuS7yBbZS/73+rZrI64HzpcBd7qxMB1zZYWUbMCvDn2ZnZ2UjPVnCPBtoQvP2awVd/dgOm8GnWu+ydoSq6a6RVLBW8/QF/x+scuOR/96/erctm36SzuVg1KSrCoXRYADIrhwqOt4TE8M/uuKHIaam8SXgPobDsOCI6ZSBdhxLck8s45NjqpugkP4mdd7V/XXboAT8St54uYog9fhXKciO5s8z1XwTVgqffuNff5zgQzjwaYJ5uitjI737lrxKUXw/3EC1gyalDGei7bVuq3L4aXMeh8HyL+edF40AxqOXhH6j/QdfU43/JgTaAm1JBTkGpoqNSTkq3esG1r4V6xYkmmwd/gUiagBDIGAl79PjGI1KDCYDiDSlF/1ccthca9DV9DV9XfjbpJIPxiYR8nfKDm4RD2NuaZ1c+MoFWAKuz5oXFkyt0w856loi/YPHcDFUhNkdsm4J3iIQkzHxz63VMNc6sj04GaKzBX9zHPeRUAB8DsU/DDZqbNv98aT9qNxL5c2YGBtPE2XFuPz98eHlzDEPuXBSPZnJ8dLGX+RM2dGN7i73YqIKrXcFFsW03sK656GNk1gKmnYsUs0TEDpgf60KL81E2aIBdcCjCbnrKTYOGne/wyIqAuXuZkTh/Y71vMUZdxSfxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UBF5XiRH2Zw1jqt9Jo5w1K",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UBF5XiRH2Zw1jqt9Jo5w1K",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport {\n  Background,\n  Button,\n  Checkbox,\n  Column,\n  Dialog,\n  Feedback,\n  Heading,\n  Input,\n  Line,\n  PasswordInput,\n  Row,\n  Text,\n  useToast,\n} from \"@once-ui-system/core\";\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { ClipboardEvent, FormEvent, KeyboardEvent } from \"react\";\n\nconst OTP_LENGTH = 6;\nconst DEMO_EMAIL = \"maya.okafor@northwind.example\";\nconst DEMO_PASSWORD = \"northwind-2025\";\nconst DEMO_OTP = \"424242\";\nconst RESEND_SECONDS = 30;\n\ntype Stage = \"credentials\" | \"otp\" | \"signedIn\";\n\nfunction maskEmail(email: string): string {\n  const [local, domain] = email.split(\"@\");\n  if (!local || !domain) return email;\n  return `${local.slice(0, 2)}${\"•\".repeat(Math.max(local.length - 2, 2))}@${domain}`;\n}\n\nfunction OtpCells({\n  value,\n  onChange,\n  onComplete,\n  disabled,\n  invalid,\n  describedBy,\n  groupLabelId,\n}: {\n  value: string[];\n  onChange: (next: string[]) => void;\n  onComplete: (code: string) => void;\n  disabled: boolean;\n  invalid: boolean;\n  describedBy?: string;\n  groupLabelId: string;\n}) {\n  const refs = useRef<Array<HTMLInputElement | null>>([]);\n\n  const focusCell = (index: number) => {\n    const el = refs.current[Math.max(0, Math.min(OTP_LENGTH - 1, index))];\n    el?.focus();\n    el?.select();\n  };\n\n  useEffect(() => {\n    const t = window.setTimeout(() => focusCell(0), 80);\n    return () => window.clearTimeout(t);\n  }, []);\n\n  const commit = (next: string[]) => {\n    onChange(next);\n    if (next.every((d) => d !== \"\")) onComplete(next.join(\"\"));\n  };\n\n  const handleInput = (index: number, raw: string) => {\n    const digits = raw.replace(/\\D/g, \"\");\n    if (!digits) {\n      const next = [...value];\n      next[index] = \"\";\n      onChange(next);\n      return;\n    }\n    const next = [...value];\n    let cursor = index;\n    for (const d of digits) {\n      if (cursor >= OTP_LENGTH) break;\n      next[cursor] = d;\n      cursor += 1;\n    }\n    commit(next);\n    focusCell(cursor);\n  };\n\n  const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !value[index] && index > 0) {\n      e.preventDefault();\n      const next = [...value];\n      next[index - 1] = \"\";\n      onChange(next);\n      focusCell(index - 1);\n    } else if (e.key === \"ArrowLeft\") {\n      e.preventDefault();\n      focusCell(index - 1);\n    } else if (e.key === \"ArrowRight\") {\n      e.preventDefault();\n      focusCell(index + 1);\n    }\n  };\n\n  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    e.preventDefault();\n    const digits = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\").slice(0, OTP_LENGTH);\n    if (!digits) return;\n    const next = Array.from({ length: OTP_LENGTH }, (_, i) => digits[i] ?? \"\");\n    commit(next);\n    focusCell(Math.min(digits.length, OTP_LENGTH - 1));\n  };\n\n  return (\n    <Row\n      gap=\"8\"\n      fillWidth\n      horizontal=\"center\"\n      role=\"group\"\n      aria-labelledby={groupLabelId}\n      aria-describedby={describedBy}\n    >\n      {value.map((digit, i) => (\n        <input\n          key={i}\n          ref={(el) => {\n            refs.current[i] = el;\n          }}\n          value={digit}\n          inputMode=\"numeric\"\n          pattern=\"[0-9]*\"\n          autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n          maxLength={OTP_LENGTH}\n          disabled={disabled}\n          aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n          aria-invalid={invalid}\n          onChange={(e) => handleInput(i, e.target.value)}\n          onKeyDown={(e) => handleKeyDown(i, e)}\n          onPaste={handlePaste}\n          onFocus={(e) => e.currentTarget.select()}\n          style={{\n            width: \"min(3rem, 13vw)\",\n            height: \"3.5rem\",\n            textAlign: \"center\",\n            fontSize: \"1.5rem\",\n            fontWeight: 600,\n            fontFamily: \"var(--font-code)\",\n            color: \"var(--neutral-on-background-strong)\",\n            background: \"var(--surface-background)\",\n            border: `1px solid ${\n              invalid ? \"var(--danger-solid-medium)\" : \"var(--neutral-alpha-medium)\"\n            }`,\n            borderRadius: \"var(--radius-m)\",\n            outlineOffset: 2,\n            minWidth: 0,\n          }}\n        />\n      ))}\n    </Row>\n  );\n}\n\nexport default function Page() {\n  const { addToast } = useToast();\n\n  const [stage, setStage] = useState<Stage>(\"credentials\");\n  const [email, setEmail] = useState(DEMO_EMAIL);\n  const [password, setPassword] = useState(\"\");\n  const [remember, setRemember] = useState(true);\n  const [credError, setCredError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  const [otp, setOtp] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [verifying, setVerifying] = useState(false);\n  const [countdown, setCountdown] = useState(RESEND_SECONDS);\n\n  const otpLabelId = useId();\n  const otpErrorId = useId();\n  const errorId = useId();\n\n  const otpOpen = stage === \"otp\";\n\n  // Resend countdown\n  useEffect(() => {\n    if (!otpOpen || countdown <= 0) return;\n    const t = window.setTimeout(() => setCountdown((c) => c - 1), 1000);\n    return () => window.clearTimeout(t);\n  }, [otpOpen, countdown]);\n\n  const resetOtp = useCallback(() => {\n    setOtp(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(null);\n    setVerifying(false);\n  }, []);\n\n  const handleCredentials = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (submitting) return;\n    const trimmed = email.trim();\n    if (!/^\\S+@\\S+\\.\\S+$/.test(trimmed)) {\n      setCredError(\"Enter a valid work email address.\");\n      return;\n    }\n    if (password.length === 0) {\n      setCredError(\"Enter your password to continue.\");\n      return;\n    }\n    setCredError(null);\n    setSubmitting(true);\n    window.setTimeout(() => {\n      setSubmitting(false);\n      if (password !== DEMO_PASSWORD) {\n        setCredError(\"That email and password combination doesn't match our records.\");\n        return;\n      }\n      resetOtp();\n      setCountdown(RESEND_SECONDS);\n      setStage(\"otp\");\n    }, 700);\n  };\n\n  const verifyCode = (code: string) => {\n    if (verifying) return;\n    setVerifying(true);\n    setOtpError(null);\n    window.setTimeout(() => {\n      if (code === DEMO_OTP) {\n        setVerifying(false);\n        setStage(\"signedIn\");\n        addToast({ variant: \"success\", message: \"Verified. Welcome back, Maya.\" });\n      } else {\n        setVerifying(false);\n        setOtpError(\"That code is incorrect or has expired. Try again.\");\n        setOtp(Array(OTP_LENGTH).fill(\"\"));\n      }\n    }, 600);\n  };\n\n  const handleOtpSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    const code = otp.join(\"\");\n    if (code.length < OTP_LENGTH) {\n      setOtpError(`Enter all ${OTP_LENGTH} digits of your code.`);\n      return;\n    }\n    verifyCode(code);\n  };\n\n  const handleResend = () => {\n    if (countdown > 0) return;\n    resetOtp();\n    setCountdown(RESEND_SECONDS);\n    addToast({ variant: \"success\", message: \"A new code is on its way.\" });\n  };\n\n  const closeOtp = () => {\n    resetOtp();\n    setStage(\"credentials\");\n    setPassword(\"\");\n  };\n\n  const signOut = () => {\n    setPassword(\"\");\n    resetOtp();\n    setCredError(null);\n    setStage(\"credentials\");\n  };\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      flex={1}\n      horizontal=\"center\"\n      vertical=\"center\"\n      padding=\"l\"\n      style={{ minHeight: \"100vh\", position: \"relative\", overflow: \"hidden\" }}\n    >\n      <Background\n        position=\"absolute\"\n        fill\n        gradient={{\n          display: true,\n          opacity: 60,\n          x: 50,\n          y: 0,\n          width: 100,\n          height: 60,\n          tilt: 0,\n          colorStart: \"brand-background-strong\",\n          colorEnd: \"page-background\",\n        }}\n        mask={{ x: 50, y: 0, radius: 100 }}\n      />\n\n      <Column\n        fillWidth\n        maxWidth={26}\n        gap=\"24\"\n        position=\"relative\"\n        style={{ zIndex: 1 }}\n      >\n        <Column gap=\"8\" horizontal=\"center\" align=\"center\">\n          <Row\n            radius=\"l\"\n            background=\"brand-strong\"\n            horizontal=\"center\"\n            vertical=\"center\"\n            aria-hidden=\"true\"\n            style={{ width: 48, height: 48 }}\n          >\n            <Text variant=\"heading-strong-l\" onBackground=\"brand-strong\" style={{ color: \"#fff\" }}>\n              N\n            </Text>\n          </Row>\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Northwind Workspace\n          </Text>\n        </Column>\n\n        {stage === \"signedIn\" ? (\n          <Column\n            background=\"surface\"\n            border=\"neutral-alpha-weak\"\n            radius=\"xl\"\n            padding=\"32\"\n            gap=\"20\"\n            horizontal=\"center\"\n            align=\"center\"\n            role=\"status\"\n            aria-live=\"polite\"\n          >\n            <Heading as=\"h1\" variant=\"heading-strong-l\">\n              You&apos;re signed in\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              Signed in as {DEMO_EMAIL}. Your session stays active on this device\n              {remember ? \" for 30 days\" : \" until you close the browser\"}.\n            </Text>\n            <Line />\n            <Row fillWidth gap=\"12\" mobileDirection=\"column\">\n              <Button fillWidth variant=\"primary\" href=\"#dashboard\">\n                Open dashboard\n              </Button>\n              <Button fillWidth variant=\"secondary\" onClick={signOut}>\n                Sign out\n              </Button>\n            </Row>\n          </Column>\n        ) : (\n          <Column\n            as=\"form\"\n            background=\"surface\"\n            border=\"neutral-alpha-weak\"\n            radius=\"xl\"\n            padding=\"32\"\n            gap=\"20\"\n            onSubmit={handleCredentials}\n            noValidate\n            aria-labelledby=\"login-title\"\n          >\n            <Column gap=\"8\">\n              <Heading as=\"h1\" variant=\"heading-strong-l\" id=\"login-title\">\n                Sign in to your workspace\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Use your work email. We&apos;ll ask for a verification code next.\n              </Text>\n            </Column>\n\n            {credError && (\n              <Feedback variant=\"danger\" id={errorId} role=\"alert\" title=\"Couldn't sign you in\">\n                {credError}\n              </Feedback>\n            )}\n\n            <Column gap=\"16\">\n              <Input\n                id=\"email\"\n                name=\"email\"\n                type=\"email\"\n                label=\"Work email\"\n                autoComplete=\"username\"\n                value={email}\n                onChange={(e) => setEmail(e.target.value)}\n                disabled={submitting}\n              />\n              <PasswordInput\n                id=\"password\"\n                name=\"password\"\n                label=\"Password\"\n                autoComplete=\"current-password\"\n                value={password}\n                onChange={(e) => setPassword(e.target.value)}\n                disabled={submitting}\n              />\n            </Column>\n\n            <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"12\" wrap>\n              <Checkbox\n                label=\"Keep me signed in\"\n                isChecked={remember}\n                onToggle={() => setRemember((r) => !r)}\n              />\n              <Button variant=\"tertiary\" size=\"s\" href=\"#forgot\">\n                Forgot password?\n              </Button>\n            </Row>\n\n            <Button type=\"submit\" fillWidth size=\"l\" loading={submitting} disabled={submitting}>\n              Continue\n            </Button>\n\n            <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"center\">\n              Demo credentials: password <code>{DEMO_PASSWORD}</code>, then code{\" \"}\n              <code>{DEMO_OTP}</code>.\n            </Text>\n          </Column>\n        )}\n      </Column>\n\n      <Dialog\n        isOpen={otpOpen}\n        onClose={closeOtp}\n        title=\"Verify it's you\"\n        description={`Enter the 6-digit code we sent to the authenticator linked to ${maskEmail(\n          email.trim() || DEMO_EMAIL,\n        )}.`}\n        base\n        stack\n        footer={\n          <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"12\" wrap>\n            <Button\n              variant=\"tertiary\"\n              size=\"s\"\n              onClick={handleResend}\n              disabled={countdown > 0 || verifying}\n            >\n              {countdown > 0 ? `Resend code in ${countdown}s` : \"Resend code\"}\n            </Button>\n            <Button variant=\"secondary\" size=\"s\" onClick={closeOtp} disabled={verifying}>\n              Back\n            </Button>\n          </Row>\n        }\n      >\n        <Column\n          as=\"form\"\n          gap=\"16\"\n          fillWidth\n          onSubmit={handleOtpSubmit}\n          noValidate\n          aria-busy={verifying}\n        >\n          <Text id={otpLabelId} variant=\"label-default-s\" onBackground=\"neutral-weak\" align=\"center\">\n            Verification code\n          </Text>\n\n          <OtpCells\n            value={otp}\n            onChange={setOtp}\n            onComplete={verifyCode}\n            disabled={verifying}\n            invalid={otpError !== null}\n            describedBy={otpError ? otpErrorId : undefined}\n            groupLabelId={otpLabelId}\n          />\n\n          <div aria-live=\"assertive\" style={{ minHeight: \"1.25rem\" }}>\n            {otpError && (\n              <Text\n                id={otpErrorId}\n                variant=\"body-default-s\"\n                onBackground=\"danger-medium\"\n                align=\"center\"\n                as=\"p\"\n              >\n                {otpError}\n              </Text>\n            )}\n          </div>\n\n          <Button type=\"submit\" fillWidth loading={verifying} disabled={verifying}>\n            Verify and sign in\n          </Button>\n        </Column>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(342,37): error TS2322: Type '{ children: Element[]; fillWidth: true; gap: \"12\"; mobileDirection: string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'mobileDirection' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(359,13): error TS2322: Type '(e: FormEvent<HTMLFormElement>) => void' is not assignable to type 'SubmitEventHandler<HTMLDivElement>'.\n  Types of parameters 'e' and 'event' are incompatible.\n    Type 'SubmitEvent<HTMLDivElement>' is not assignable to type 'FormEvent<HTMLFormElement>'.\n      Types of property 'currentTarget' are incompatible.\n        Type 'EventTarget & HTMLDivElement' is not assignable to type 'EventTarget & HTMLFormElement'.\n          Type 'EventTarget & HTMLDivElement' is missing the following properties from type 'HTMLFormElement': acceptCharset, action, autocomplete, elements, and 15 more.\napp/page.tsx(403,17): error TS2322: Type '{ label: string; isChecked: boolean; onToggle: () => void; }' is not assignable to type 'IntrinsicAttributes & CheckboxProps & RefAttributes<HTMLInputElement>'.\n  Property 'isChecked' does not exist on type 'IntrinsicAttributes & CheckboxProps & RefAttributes<HTMLInputElement>'. Did you mean 'checked'?\napp/page.tsx(424,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; title: string; description: string; base: true; stack: true; footer: Element; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?\napp/page.tsx(452,11): error TS2322: Type '(e: FormEvent<HTMLFormElement>) => void' is not assignable to type 'SubmitEventHandler<HTMLDivElement>'.\n  Types of parameters 'e' and 'event' are incompatible.\n    Type 'SubmitEvent<HTMLDivElement>' is not assignable to type 'FormEvent<HTMLFormElement>'.\n      Types of property 'currentTarget' are incompatible.\n        Type 'EventTarget & HTMLDivElement' is not assignable to type 'EventTarget & HTMLFormElement'.\n          Type 'EventTarget & HTMLDivElement' is missing the following properties from type 'HTMLFormElement': acceptCharset, action, autocomplete, elements, and 15 more.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll fix the errors by making these changes:\n- **`mobileDirection`:** replaced with `s`-breakpoint-safe `wrap` on the Row.\n- **`Column as=\"form\"`:** the Column's submit handler is typed for a `div`. I now use native `<form>` elements and put a Column inside them.\n- **`Checkbox`:** `isChecked` becomes `checked`. I kept `onToggle` as an `onChange` handler, which I'm assuming is the native input change event.\n- **`Dialog`:** `isOpen` becomes `open`."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016rFJdKjTWWbu5VCXvpSSDR",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016rFJdKjTWWbu5VCXvpSSDR",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The package still isn't installed, so I can't check the types directly. Since `Checkbox` is `checked`-based, it likely extends native input props, so I'll use `onChange`.\n\n```tsx\n\"use client\";\n\nimport {\n  Background,\n  Button,\n  Checkbox,\n  Column,\n  Dialog,\n  Feedback,\n  Heading,\n  Input,\n  Line,\n  PasswordInput,\n  Row,\n  Text,\n  useToast,\n} from \"@once-ui-system/core\";\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { ClipboardEvent, FormEvent, KeyboardEvent } from \"react\";\n\nconst OTP_LENGTH = 6;\nconst DEMO_EMAIL = \"maya.okafor@northwind.example\";\nconst DEMO_PASSWORD = \"northwind-2025\";\nconst DEMO_OTP = \"424242\";\nconst RESEND_SECONDS = 30;\n\ntype Stage = \"credentials\" | \"otp\" | \"signedIn\";\n\nfunction maskEmail(email: string): string {\n  const [local, domain] = email.split(\"@\");\n  if (!local || !domain) return email;\n  return `${local.slice(0, 2)}${\"•\".repeat(Math.max(local.length - 2, 2))}@${domain}`;\n}\n\nfunction OtpCells({\n  value,\n  onChange,\n  onComplete,\n  disabled,\n  invalid,\n  describedBy,\n  groupLabelId,\n}: {\n  value: string[];\n  onChange: (next: string[]) => void;\n  onComplete: (code: string) => void;\n  disabled: boolean;\n  invalid: boolean;\n  describedBy?: string;\n  groupLabelId: string;\n}) {\n  const refs = useRef<Array<HTMLInputElement | null>>([]);\n\n  const focusCell = (index: number) => {\n    const el = refs.current[Math.max(0, Math.min(OTP_LENGTH - 1, index))];\n    el?.focus();\n    el?.select();\n  };\n\n  useEffect(() => {\n    const t = window.setTimeout(() => focusCell(0), 80);\n    return () => window.clearTimeout(t);\n  }, []);\n\n  const commit = (next: string[]) => {\n    onChange(next);\n    if (next.every((d) => d !== \"\")) onComplete(next.join(\"\"));\n  };\n\n  const handleInput = (index: number, raw: string) => {\n    const digits = raw.replace(/\\D/g, \"\");\n    if (!digits) {\n      const next = [...value];\n      next[index] = \"\";\n      onChange(next);\n      return;\n    }\n    const next = [...value];\n    let cursor = index;\n    for (const d of digits) {\n      if (cursor >= OTP_LENGTH) break;\n      next[cursor] = d;\n      cursor += 1;\n    }\n    commit(next);\n    focusCell(cursor);\n  };\n\n  const handleKeyDown = (index: number, e: KeyboardEvent<HTMLInputElement>) => {\n    if (e.key === \"Backspace\" && !value[index] && index > 0) {\n      e.preventDefault();\n      const next = [...value];\n      next[index - 1] = \"\";\n      onChange(next);\n      focusCell(index - 1);\n    } else if (e.key === \"ArrowLeft\") {\n      e.preventDefault();\n      focusCell(index - 1);\n    } else if (e.key === \"ArrowRight\") {\n      e.preventDefault();\n      focusCell(index + 1);\n    }\n  };\n\n  const handlePaste = (e: ClipboardEvent<HTMLInputElement>) => {\n    e.preventDefault();\n    const digits = e.clipboardData.getData(\"text\").replace(/\\D/g, \"\").slice(0, OTP_LENGTH);\n    if (!digits) return;\n    const next = Array.from({ length: OTP_LENGTH }, (_, i) => digits[i] ?? \"\");\n    commit(next);\n    focusCell(Math.min(digits.length, OTP_LENGTH - 1));\n  };\n\n  return (\n    <Row\n      gap=\"8\"\n      fillWidth\n      horizontal=\"center\"\n      role=\"group\"\n      aria-labelledby={groupLabelId}\n      aria-describedby={describedBy}\n    >\n      {value.map((digit, i) => (\n        <input\n          key={i}\n          ref={(el) => {\n            refs.current[i] = el;\n          }}\n          value={digit}\n          inputMode=\"numeric\"\n          pattern=\"[0-9]*\"\n          autoComplete={i === 0 ? \"one-time-code\" : \"off\"}\n          maxLength={OTP_LENGTH}\n          disabled={disabled}\n          aria-label={`Digit ${i + 1} of ${OTP_LENGTH}`}\n          aria-invalid={invalid}\n          onChange={(e) => handleInput(i, e.target.value)}\n          onKeyDown={(e) => handleKeyDown(i, e)}\n          onPaste={handlePaste}\n          onFocus={(e) => e.currentTarget.select()}\n          style={{\n            width: \"min(3rem, 13vw)\",\n            height: \"3.5rem\",\n            textAlign: \"center\",\n            fontSize: \"1.5rem\",\n            fontWeight: 600,\n            fontFamily: \"var(--font-code)\",\n            color: \"var(--neutral-on-background-strong)\",\n            background: \"var(--surface-background)\",\n            border: `1px solid ${\n              invalid ? \"var(--danger-solid-medium)\" : \"var(--neutral-alpha-medium)\"\n            }`,\n            borderRadius: \"var(--radius-m)\",\n            outlineOffset: 2,\n            minWidth: 0,\n          }}\n        />\n      ))}\n    </Row>\n  );\n}\n\nexport default function Page() {\n  const { addToast } = useToast();\n\n  const [stage, setStage] = useState<Stage>(\"credentials\");\n  const [email, setEmail] = useState(DEMO_EMAIL);\n  const [password, setPassword] = useState(\"\");\n  const [remember, setRemember] = useState(true);\n  const [credError, setCredError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  const [otp, setOtp] = useState<string[]>(() => Array(OTP_LENGTH).fill(\"\"));\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [verifying, setVerifying] = useState(false);\n  const [countdown, setCountdown] = useState(RESEND_SECONDS);\n\n  const otpLabelId = useId();\n  const otpErrorId = useId();\n  const errorId = useId();\n\n  const otpOpen = stage === \"otp\";\n\n  // Resend countdown\n  useEffect(() => {\n    if (!otpOpen || countdown <= 0) return;\n    const t = window.setTimeout(() => setCountdown((c) => c - 1), 1000);\n    return () => window.clearTimeout(t);\n  }, [otpOpen, countdown]);\n\n  const resetOtp = useCallback(() => {\n    setOtp(Array(OTP_LENGTH).fill(\"\"));\n    setOtpError(null);\n    setVerifying(false);\n  }, []);\n\n  const handleCredentials = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    if (submitting) return;\n    const trimmed = email.trim();\n    if (!/^\\S+@\\S+\\.\\S+$/.test(trimmed)) {\n      setCredError(\"Enter a valid work email address.\");\n      return;\n    }\n    if (password.length === 0) {\n      setCredError(\"Enter your password to continue.\");\n      return;\n    }\n    setCredError(null);\n    setSubmitting(true);\n    window.setTimeout(() => {\n      setSubmitting(false);\n      if (password !== DEMO_PASSWORD) {\n        setCredError(\"That email and password combination doesn't match our records.\");\n        return;\n      }\n      resetOtp();\n      setCountdown(RESEND_SECONDS);\n      setStage(\"otp\");\n    }, 700);\n  };\n\n  const verifyCode = (code: string) => {\n    if (verifying) return;\n    setVerifying(true);\n    setOtpError(null);\n    window.setTimeout(() => {\n      if (code === DEMO_OTP) {\n        setVerifying(false);\n        setStage(\"signedIn\");\n        addToast({ variant: \"success\", message: \"Verified. Welcome back, Maya.\" });\n      } else {\n        setVerifying(false);\n        setOtpError(\"That code is incorrect or has expired. Try again.\");\n        setOtp(Array(OTP_LENGTH).fill(\"\"));\n      }\n    }, 600);\n  };\n\n  const handleOtpSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    const code = otp.join(\"\");\n    if (code.length < OTP_LENGTH) {\n      setOtpError(`Enter all ${OTP_LENGTH} digits of your code.`);\n      return;\n    }\n    verifyCode(code);\n  };\n\n  const handleResend = () => {\n    if (countdown > 0) return;\n    resetOtp();\n    setCountdown(RESEND_SECONDS);\n    addToast({ variant: \"success\", message: \"A new code is on its way.\" });\n  };\n\n  const closeOtp = () => {\n    resetOtp();\n    setStage(\"credentials\");\n    setPassword(\"\");\n  };\n\n  const signOut = () => {\n    setPassword(\"\");\n    resetOtp();\n    setCredError(null);\n    setStage(\"credentials\");\n  };\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      flex={1}\n      horizontal=\"center\"\n      vertical=\"center\"\n      padding=\"l\"\n      style={{ minHeight: \"100vh\", position: \"relative\", overflow: \"hidden\" }}\n    >\n      <Background\n        position=\"absolute\"\n        fill\n        gradient={{\n          display: true,\n          opacity: 60,\n          x: 50,\n          y: 0,\n          width: 100,\n          height: 60,\n          tilt: 0,\n          colorStart: \"brand-background-strong\",\n          colorEnd: \"page-background\",\n        }}\n        mask={{ x: 50, y: 0, radius: 100 }}\n      />\n\n      <Column\n        fillWidth\n        maxWidth={26}\n        gap=\"24\"\n        position=\"relative\"\n        style={{ zIndex: 1 }}\n      >\n        <Column gap=\"8\" horizontal=\"center\" align=\"center\">\n          <Row\n            radius=\"l\"\n            background=\"brand-strong\"\n            horizontal=\"center\"\n            vertical=\"center\"\n            aria-hidden=\"true\"\n            style={{ width: 48, height: 48 }}\n          >\n            <Text variant=\"heading-strong-l\" onBackground=\"brand-strong\" style={{ color: \"#fff\" }}>\n              N\n            </Text>\n          </Row>\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n            Northwind Workspace\n          </Text>\n        </Column>\n\n        {stage === \"signedIn\" ? (\n          <Column\n            background=\"surface\"\n            border=\"neutral-alpha-weak\"\n            radius=\"xl\"\n            padding=\"32\"\n            gap=\"20\"\n            horizontal=\"center\"\n            align=\"center\"\n            role=\"status\"\n            aria-live=\"polite\"\n          >\n            <Heading as=\"h1\" variant=\"heading-strong-l\">\n              You&apos;re signed in\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n              Signed in as {DEMO_EMAIL}. Your session stays active on this device\n              {remember ? \" for 30 days\" : \" until you close the browser\"}.\n            </Text>\n            <Line />\n            <Row fillWidth gap=\"12\" wrap>\n              <Button fillWidth variant=\"primary\" href=\"#dashboard\">\n                Open dashboard\n              </Button>\n              <Button fillWidth variant=\"secondary\" onClick={signOut}>\n                Sign out\n              </Button>\n            </Row>\n          </Column>\n        ) : (\n          <form\n            onSubmit={handleCredentials}\n            noValidate\n            aria-labelledby=\"login-title\"\n            style={{ display: \"flex\", width: \"100%\" }}\n          >\n            <Column\n              fillWidth\n              background=\"surface\"\n              border=\"neutral-alpha-weak\"\n              radius=\"xl\"\n              padding=\"32\"\n              gap=\"20\"\n            >\n              <Column gap=\"8\">\n                <Heading as=\"h1\" variant=\"heading-strong-l\" id=\"login-title\">\n                  Sign in to your workspace\n                </Heading>\n                <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                  Use your work email. We&apos;ll ask for a verification code next.\n                </Text>\n              </Column>\n\n              {credError && (\n                <Feedback variant=\"danger\" id={errorId} role=\"alert\" title=\"Couldn't sign you in\">\n                  {credError}\n                </Feedback>\n              )}\n\n              <Column gap=\"16\">\n                <Input\n                  id=\"email\"\n                  name=\"email\"\n                  type=\"email\"\n                  label=\"Work email\"\n                  autoComplete=\"username\"\n                  value={email}\n                  onChange={(e) => setEmail(e.target.value)}\n                  disabled={submitting}\n                />\n                <PasswordInput\n                  id=\"password\"\n                  name=\"password\"\n                  label=\"Password\"\n                  autoComplete=\"current-password\"\n                  value={password}\n                  onChange={(e) => setPassword(e.target.value)}\n                  disabled={submitting}\n                />\n              </Column>\n\n              <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"12\" wrap>\n                <Checkbox\n                  label=\"Keep me signed in\"\n                  checked={remember}\n                  onChange={() => setRemember((r) => !r)}\n                />\n                <Button variant=\"tertiary\" size=\"s\" href=\"#forgot\">\n                  Forgot password?\n                </Button>\n              </Row>\n\n              <Button type=\"submit\" fillWidth size=\"l\" loading={submitting} disabled={submitting}>\n                Continue\n              </Button>\n\n              <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"center\">\n                Demo credentials: password <code>{DEMO_PASSWORD}</code>, then code{\" \"}\n                <code>{DEMO_OTP}</code>.\n              </Text>\n            </Column>\n          </form>\n        )}\n      </Column>\n\n      <Dialog\n        open={otpOpen}\n        onClose={closeOtp}\n        title=\"Verify it's you\"\n        description={`Enter the 6-digit code we sent to the authenticator linked to ${maskEmail(\n          email.trim() || DEMO_EMAIL,\n        )}.`}\n        base\n        stack\n        footer={\n          <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"12\" wrap>\n            <Button\n              variant=\"tertiary\"\n              size=\"s\"\n              onClick={handleResend}\n              disabled={countdown > 0 || verifying}\n            >\n              {countdown > 0 ? `Resend code in ${countdown}s` : \"Resend code\"}\n            </Button>\n            <Button variant=\"secondary\" size=\"s\" onClick={closeOtp} disabled={verifying}>\n              Back\n            </Button>\n          </Row>\n        }\n      >\n        <form\n          onSubmit={handleOtpSubmit}\n          noValidate\n          aria-busy={verifying}\n          style={{ display: \"flex\", width: \"100%\" }}\n        >\n          <Column gap=\"16\" fillWidth>\n            <Text\n              id={otpLabelId}\n              variant=\"label-default-s\"\n              onBackground=\"neutral-weak\"\n              align=\"center\"\n            >\n              Verification code\n            </Text>\n\n            <OtpCells\n              value={otp}\n              onChange={setOtp}\n              onComplete={verifyCode}\n              disabled={verifying}\n              invalid={otpError !== null}\n              describedBy={otpError ? otpErrorId : undefined}\n              groupLabelId={otpLabelId}\n            />\n\n            <div aria-live=\"assertive\" style={{ minHeight: \"1.25rem\" }}>\n              {otpError && (\n                <Text\n                  id={otpErrorId}\n                  variant=\"body-default-s\"\n                  onBackground=\"danger-medium\"\n                  align=\"center\"\n                  as=\"p\"\n                >\n                  {otpError}\n                </Text>\n              )}\n            </div>\n\n            <Button type=\"submit\" fillWidth loading={verifying} disabled={verifying}>\n              Verify and sign in\n            </Button>\n          </Column>\n        </form>\n      </Dialog>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

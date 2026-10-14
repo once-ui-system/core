@@ -1,0 +1,315 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Analytics dashboard — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LCnuxpVGNoZj7q96t8Nk2T",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011PkA5KHXFL8iALXJ3WBXU9",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LCnuxpVGNoZj7q96t8Nk2T",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011PkA5KHXFL8iALXJ3WBXU9",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01EJT6fnJMuuA4MKRhLKxiAq",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017cLqDbffkhDVqvkRNU9vrQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01N5RkyAe355Bcir6VQxRXwn",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EJT6fnJMuuA4MKRhLKxiAq",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017cLqDbffkhDVqvkRNU9vrQ",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01N5RkyAe355Bcir6VQxRXwn",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0176FsR3ZyxiDTHcky29c2QK",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012XijhRkEFvEFtnvHXhzX2Y",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014DVWGRZEwCUSxh3uZ9TbZj",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ADCkSzjZ1rGHErkL8UgZD4",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NEotvR4VmVynRmqhXw6eHe",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0176FsR3ZyxiDTHcky29c2QK",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012XijhRkEFvEFtnvHXhzX2Y",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014DVWGRZEwCUSxh3uZ9TbZj",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ADCkSzjZ1rGHErkL8UgZD4",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NEotvR4VmVynRmqhXw6eHe",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the package is installed, so I can verify component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01YTx1jr5CgUoRc83j5V7rp9",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019TtSRjgCjV9SLw4HeZKMUp",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01YTx1jr5CgUoRc83j5V7rp9",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019TtSRjgCjV9SLw4HeZKMUp",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't inspect the package, I'll stick to Once UI components I'm confident about and build the charts as hand-written accessible SVG instead of relying on a chart API.\n\n",
+          "signature": "CAQS7QcKEQgSGAI4AUIJbmFycmF0aW9uEgwz/o9A7dzlzE8+8bsaDF0QrFzrdkZz70ic9SIwwXZ6FkGTqjI+hbyG1cW4IDnVT7DXtHVnFRc0sGHz3ObIWV4nLMt7hwd6P1eoMV4XKokHbZTjX+gQkD+NiprI7MmOY9P115Uvt+qyBPzt/Ydql6rM7TIrN0qZo7aDGZQgfmGzJ56NB9my4ZF9yQtfhdoeqdianr40qNdAVtYYAwWOHopv9tAIYvU/+Ak4P/z/IAscE2J1NjjHcMpCmhN9ASAfjwEhwch9QrcmE/hHlsXqm5KIKlNoGDzT+gs/wY+yuUpXxFpxDNg5heMEOoDAmK6DCrQBRe47mKa8XcDs9nvAkZOu2eJNYCqpWnglYPnuHgsY09v2W7yNP92cmqD7oTS/isF5hsVi3ZI6zbcQBrOKmIfUTAMKN89wGMpUJSaQJhXzN/QLrfsDrzkMjwgFPcEPk5Yn103CcpMhtkKPV/KdYR+XD1Jf1KVs7Mn5zgaX04FlsFJRGTqlle1FtjoYrNKaevqTtKQoGuJA72v/kuKsUXc9ArffhOMY1WQHe+brKvTbcI9BMaaa0BUvo26viqBsv9TpRJezSKex1Bj9auKEM+PqjDyHgAZ3RGK3QhWc/9OitbrULCuSB5Cy4hXGPa+wMkjJzWXTBXy8r2nBvGYIioFsTY3FY+LI8Q65ZRUhcIhT4KL2qcoWmfwrDcAoNkmH1s6U+1NjERRRq+so6qgbxOchwEimn0iDWyzX3YP+lRLACn+VjsNO2UyLIQ/KrNwtnUi9dWX/pSbBUK7FhgJJ0OFbIFiOljhVku3zs8W5oCaKNYiX752c1zurDPzOUSvQM4lkVNTUc5N93cPYc5cMZc/tfvWFc00YkbdxasfC7UKJpW3UrRaLecfJS9U5DsLZNFgRKqoKDZoKJdy2EjUc5epFsMqHHaz6zBh6wV9uRwuab0JjQcl6sSZ1v7SAds8lx3Wno6XeIyJbHN+AWs6ZNX3kRGDKrKno6Z7MsvcTqPhE29cbqW6t/wGs0I2hsmXyzaPRAu/0c4FPslCkDPz5MASs8PtYdRl0kO+6jlCy74DAE4d1JS0x6FvDmNAgnVXWbBmrqK6Uk6bJbHNWRJ7kuqaNCb6tPQxpLWBpSWEPPCUdnuf3qW6w4yw8C/nIvrg/ptW9T2+YNgzNR77sBBg6qcFoJPo+oamX8jPTUz6fJfmN4Dr2b39yWhd4MZr9ltdf0lUKSO9Hnk2oZlL5RyR0h1lM7iOGc0CmT/b7CVfaRmKBkmVrwQaAj9QP99MBlRXgwksjUcs0TFDVW6UzkLs54rT6lRMXoyMVHWwYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Wi7QFJHaPdp6qHsTBA2PD4",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Wi7QFJHaPdp6qHsTBA2PD4",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport { Avatar, Badge, Button, Column, Flex, Heading, Icon, Row, Text } from \"@once-ui-system/core\";\n\n/* ----------------------------- Data ----------------------------- */\n\ntype Trend = \"up\" | \"down\";\n\ninterface Kpi {\n  label: string;\n  value: string;\n  change: string;\n  trend: Trend;\n  /** Whether the trend direction is good news (e.g. bounce rate going down is good). */\n  positive: boolean;\n  icon: string;\n  note: string;\n}\n\nconst KPIS: Kpi[] = [\n  { label: \"Total revenue\", value: \"$48,920\", change: \"12.4%\", trend: \"up\", positive: true, icon: \"dollar\", note: \"vs. previous 30 days\" },\n  { label: \"Active users\", value: \"12,486\", change: \"8.1%\", trend: \"up\", positive: true, icon: \"person\", note: \"vs. previous 30 days\" },\n  { label: \"Conversion rate\", value: \"3.62%\", change: \"0.4%\", trend: \"down\", positive: false, icon: \"chart\", note: \"vs. previous 30 days\" },\n  { label: \"Bounce rate\", value: \"38.2%\", change: \"2.7%\", trend: \"down\", positive: true, icon: \"globe\", note: \"vs. previous 30 days\" },\n];\n\ninterface Point {\n  label: string;\n  value: number;\n}\n\nconst VISITS: Point[] = [\n  { label: \"Mon\", value: 3240 },\n  { label: \"Tue\", value: 3880 },\n  { label: \"Wed\", value: 3520 },\n  { label: \"Thu\", value: 4410 },\n  { label: \"Fri\", value: 4960 },\n  { label: \"Sat\", value: 3790 },\n  { label: \"Sun\", value: 4230 },\n];\n\nconst VISITS_PREV: Point[] = [\n  { label: \"Mon\", value: 2910 },\n  { label: \"Tue\", value: 3120 },\n  { label: \"Wed\", value: 3340 },\n  { label: \"Thu\", value: 3690 },\n  { label: \"Fri\", value: 4020 },\n  { label: \"Sat\", value: 3300 },\n  { label: \"Sun\", value: 3580 },\n];\n\nconst SIGNUPS: Point[] = [\n  { label: \"Jan\", value: 420 },\n  { label: \"Feb\", value: 510 },\n  { label: \"Mar\", value: 480 },\n  { label: \"Apr\", value: 640 },\n  { label: \"May\", value: 720 },\n  { label: \"Jun\", value: 690 },\n];\n\nconst CHANNELS: Point[] = [\n  { label: \"Organic\", value: 4820 },\n  { label: \"Direct\", value: 3150 },\n  { label: \"Referral\", value: 2210 },\n  { label: \"Social\", value: 1640 },\n  { label: \"Email\", value: 980 },\n];\n\ninterface Activity {\n  id: string;\n  name: string;\n  action: string;\n  target: string;\n  time: string;\n  icon: string;\n}\n\nconst ACTIVITY: Activity[] = [\n  { id: \"a1\", name: \"Priya Raman\", action: \"upgraded to\", target: \"Business plan\", time: \"4 min ago\", icon: \"arrowUp\" },\n  { id: \"a2\", name: \"Marcus Lindqvist\", action: \"completed checkout for\", target: \"Order #10482\", time: \"18 min ago\", icon: \"check\" },\n  { id: \"a3\", name: \"Elena Duarte\", action: \"left a review on\", target: \"Onboarding flow\", time: \"42 min ago\", icon: \"chat\" },\n  { id: \"a4\", name: \"Tomasz Kowalski\", action: \"created the report\", target: \"Q2 Retention\", time: \"1 hr ago\", icon: \"document\" },\n  { id: \"a5\", name: \"Aisha Bello\", action: \"invited 3 teammates to\", target: \"Growth workspace\", time: \"2 hr ago\", icon: \"person\" },\n  { id: \"a6\", name: \"Daniel Okafor\", action: \"cancelled\", target: \"Starter plan\", time: \"3 hr ago\", icon: \"close\" },\n];\n\nconst RANGES = [\"7 days\", \"30 days\", \"90 days\"] as const;\ntype Range = (typeof RANGES)[number];\n\n/* --------------------------- Helpers ---------------------------- */\n\nconst nf = new Intl.NumberFormat(\"en-US\");\n\nfunction initials(name: string): string {\n  return name\n    .split(\" \")\n    .map((p) => p[0])\n    .join(\"\")\n    .slice(0, 2);\n}\n\nfunction niceMax(v: number): number {\n  const step = Math.pow(10, Math.floor(Math.log10(v)));\n  return Math.ceil(v / step) * step;\n}\n\n/* ------------------------- Chart styling ------------------------ */\n\nconst AXIS = \"var(--neutral-on-background-weak)\";\nconst GRID = \"var(--neutral-alpha-medium)\";\nconst PRIMARY = \"var(--brand-solid-strong)\";\nconst SECONDARY = \"var(--neutral-solid-medium)\";\n\nconst W = 640;\nconst H = 280;\nconst PAD = { top: 16, right: 16, bottom: 32, left: 48 };\nconst IW = W - PAD.left - PAD.right;\nconst IH = H - PAD.top - PAD.bottom;\n\n/* --------------------------- Line chart ------------------------- */\n\nfunction LineChart({ data, previous }: { data: Point[]; previous: Point[] }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.value), ...previous.map((d) => d.value)));\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(max * t));\n  const x = (i: number) => PAD.left + (data.length === 1 ? IW / 2 : (i / (data.length - 1)) * IW);\n  const y = (v: number) => PAD.top + IH - (v / max) * IH;\n  const path = (pts: Point[]) => pts.map((p, i) => `${i === 0 ? \"M\" : \"L\"}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(\" \");\n  const area = `${path(data)} L${x(data.length - 1).toFixed(1)},${y(0)} L${x(0).toFixed(1)},${y(0)} Z`;\n  const gradId = useId();\n  const titleId = useId();\n  const descId = useId();\n  const total = data.reduce((s, d) => s + d.value, 0);\n\n  return (\n    <Column fillWidth gap=\"12\">\n      <div style={{ position: \"relative\", width: \"100%\" }}>\n        <svg\n          viewBox={`0 0 ${W} ${H}`}\n          role=\"img\"\n          aria-labelledby={`${titleId} ${descId}`}\n          style={{ width: \"100%\", height: \"auto\", display: \"block\", overflow: \"visible\" }}\n        >\n          <title id={titleId}>Daily visits, this week versus last week</title>\n          <desc id={descId}>\n            {`Line chart. This week totals ${nf.format(total)} visits. ` +\n              data.map((d) => `${d.label}: ${nf.format(d.value)}`).join(\", \") +\n              \".\"}\n          </desc>\n          <defs>\n            <linearGradient id={gradId} x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\">\n              <stop offset=\"0%\" stopColor={PRIMARY} stopOpacity=\"0.28\" />\n              <stop offset=\"100%\" stopColor={PRIMARY} stopOpacity=\"0\" />\n            </linearGradient>\n          </defs>\n          {ticks.map((t) => (\n            <g key={t} aria-hidden=\"true\">\n              <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke={GRID} strokeWidth=\"1\" />\n              <text x={PAD.left - 8} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize=\"11\" fill={AXIS}>\n                {t >= 1000 ? `${t / 1000}k` : t}\n              </text>\n            </g>\n          ))}\n          <path d={area} fill={`url(#${gradId})`} aria-hidden=\"true\" />\n          <path d={path(previous)} fill=\"none\" stroke={SECONDARY} strokeWidth=\"2\" strokeDasharray=\"5 5\" strokeLinejoin=\"round\" aria-hidden=\"true\" />\n          <path d={path(data)} fill=\"none\" stroke={PRIMARY} strokeWidth=\"3\" strokeLinejoin=\"round\" strokeLinecap=\"round\" aria-hidden=\"true\" />\n          {data.map((d, i) => (\n            <g key={d.label}>\n              <text x={x(i)} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={AXIS} aria-hidden=\"true\">\n                {d.label}\n              </text>\n              <circle cx={x(i)} cy={y(d.value)} r={active === i ? 6 : 4} fill={PRIMARY} stroke=\"var(--page-background)\" strokeWidth=\"2\" aria-hidden=\"true\" />\n              <rect\n                x={x(i) - IW / (data.length - 1) / 2}\n                y={PAD.top}\n                width={IW / (data.length - 1)}\n                height={IH}\n                fill=\"transparent\"\n                onMouseEnter={() => setActive(i)}\n                onMouseLeave={() => setActive(null)}\n                onTouchStart={() => setActive(i)}\n                aria-hidden=\"true\"\n              />\n            </g>\n          ))}\n        </svg>\n        {active !== null && (\n          <div\n            aria-hidden=\"true\"\n            style={{\n              position: \"absolute\",\n              top: 0,\n              left: `${Math.min(Math.max((x(active) / W) * 100, 14), 86)}%`,\n              transform: \"translateX(-50%)\",\n              pointerEvents: \"none\",\n              background: \"var(--surface-background)\",\n              border: \"1px solid var(--neutral-alpha-medium)\",\n              borderRadius: 8,\n              padding: \"6px 10px\",\n              fontSize: 12,\n              whiteSpace: \"nowrap\",\n              color: \"var(--neutral-on-background-strong)\",\n            }}\n          >\n            <strong>{data[active].label}</strong>: {nf.format(data[active].value)} visits\n            <br />\n            <span style={{ color: \"var(--neutral-on-background-weak)\" }}>Last week: {nf.format(previous[active].value)}</span>\n          </div>\n        )}\n      </div>\n      <Row gap=\"24\" wrap horizontal=\"center\">\n        <Row gap=\"8\" vertical=\"center\">\n          <span aria-hidden=\"true\" style={{ width: 16, height: 3, borderRadius: 2, background: PRIMARY, display: \"inline-block\" }} />\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">This week</Text>\n        </Row>\n        <Row gap=\"8\" vertical=\"center\">\n          <span aria-hidden=\"true\" style={{ width: 16, height: 0, borderTop: `3px dashed ${SECONDARY}`, display: \"inline-block\" }} />\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">Last week</Text>\n        </Row>\n      </Row>\n    </Column>\n  );\n}\n\n/* --------------------------- Bar chart -------------------------- */\n\nfunction BarChart({ data, title, unit }: { data: Point[]; title: string; unit: string }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.value)));\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(max * t));\n  const slot = IW / data.length;\n  const barW = Math.min(slot * 0.58, 56);\n  const y = (v: number) => PAD.top + IH - (v / max) * IH;\n  const titleId = useId();\n  const descId = useId();\n\n  return (\n    <svg\n      viewBox={`0 0 ${W} ${H}`}\n      role=\"img\"\n      aria-labelledby={`${titleId} ${descId}`}\n      style={{ width: \"100%\", height: \"auto\", display: \"block\" }}\n    >\n      <title id={titleId}>{title}</title>\n      <desc id={descId}>{data.map((d) => `${d.label}: ${nf.format(d.value)} ${unit}`).join(\", \") + \".\"}</desc>\n      {ticks.map((t) => (\n        <g key={t} aria-hidden=\"true\">\n          <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke={GRID} strokeWidth=\"1\" />\n          <text x={PAD.left - 8} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize=\"11\" fill={AXIS}>\n            {t >= 1000 ? `${t / 1000}k` : t}\n          </text>\n        </g>\n      ))}\n      {data.map((d, i) => {\n        const cx = PAD.left + slot * i + slot / 2;\n        const h = (d.value / max) * IH;\n        const isActive = active === i;\n        return (\n          <g\n            key={d.label}\n            aria-hidden=\"true\"\n            onMouseEnter={() => setActive(i)}\n            onMouseLeave={() => setActive(null)}\n            onTouchStart={() => setActive(i)}\n          >\n            <rect x={cx - slot / 2} y={PAD.top} width={slot} height={IH} fill=\"transparent\" />\n            <rect\n              x={cx - barW / 2}\n              y={y(d.value)}\n              width={barW}\n              height={h}\n              rx=\"6\"\n              fill={PRIMARY}\n              opacity={active === null || isActive ? 1 : 0.45}\n            />\n            {isActive && (\n              <text x={cx} y={y(d.value) - 8} textAnchor=\"middle\" fontSize=\"12\" fontWeight=\"600\" fill=\"var(--neutral-on-background-strong)\">\n                {nf.format(d.value)}\n              </text>\n            )}\n            <text x={cx} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={AXIS}>\n              {d.label}\n            </text>\n          </g>\n        );\n      })}\n    </svg>\n  );\n}\n\n/* ---------------------------- Cards ----------------------------- */\n\nfunction Card({\n  children,\n  as,\n  labelledBy,\n}: {\n  children: React.ReactNode;\n  as?: \"section\" | \"article\" | \"li\";\n  labelledBy?: string;\n}) {\n  return (\n    <Column\n      as={as}\n      aria-labelledby={labelledBy}\n      background=\"surface\"\n      border=\"neutral-alpha-weak\"\n      radius=\"l\"\n      padding=\"20\"\n      gap=\"16\"\n      fillWidth\n      minWidth={0}\n    >\n      {children}\n    </Column>\n  );\n}\n\nfunction KpiCard({ kpi }: { kpi: Kpi }) {\n  const color = kpi.positive ? \"success-on-background-strong\" : \"danger-on-background-strong\";\n  const verb = kpi.trend === \"up\" ? \"increased\" : \"decreased\";\n  return (\n    <Card as=\"article\">\n      <Row horizontal=\"between\" vertical=\"center\" gap=\"8\">\n        <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n          {kpi.label}\n        </Text>\n        <Row\n          center\n          background=\"neutral-alpha-weak\"\n          radius=\"m\"\n          style={{ width: 32, height: 32, flexShrink: 0 }}\n          aria-hidden=\"true\"\n        >\n          <Icon name={kpi.icon} size=\"s\" onBackground=\"neutral-weak\" />\n        </Row>\n      </Row>\n      <Heading as=\"p\" variant=\"display-strong-s\">\n        {kpi.value}\n      </Heading>\n      <Row gap=\"8\" vertical=\"center\" wrap>\n        <Badge\n          arrow={false}\n          onBackground={kpi.positive ? \"success-strong\" : \"danger-strong\"}\n          background={kpi.positive ? \"success-alpha-weak\" : \"danger-alpha-weak\"}\n          effect={false}\n        >\n          <Row gap=\"4\" vertical=\"center\">\n            <span aria-hidden=\"true\">{kpi.trend === \"up\" ? \"▲\" : \"▼\"}</span>\n            <span>{kpi.change}</span>\n            <span\n              style={{\n                position: \"absolute\",\n                width: 1,\n                height: 1,\n                overflow: \"hidden\",\n                clip: \"rect(0 0 0 0)\",\n                whiteSpace: \"nowrap\",\n              }}\n            >\n              {`${verb} by ${kpi.change}, ${kpi.positive ? \"an improvement\" : \"a decline\"}`}\n            </span>\n          </Row>\n        </Badge>\n        <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" style={{ color: undefined }}>\n          <span style={{ color: `var(--${color})`, display: \"none\" }} />\n          {kpi.note}\n        </Text>\n      </Row>\n    </Card>\n  );\n}\n\n/* ----------------------------- Page ----------------------------- */\n\nexport default function Page() {\n  const [range, setRange] = useState<Range>(\"7 days\");\n  const lineId = useId();\n  const barId = useId();\n  const channelId = useId();\n  const activityId = useId();\n\n  return (\n    <Flex as=\"main\" fillWidth horizontal=\"center\" paddingX=\"16\" paddingY=\"24\" style={{ boxSizing: \"border-box\" }}>\n      <Column fillWidth gap=\"24\" style={{ maxWidth: 1200 }}>\n        {/* Header */}\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n          <Column gap=\"4\" minWidth={0}>\n            <Heading as=\"h1\" variant=\"heading-strong-xl\">\n              Analytics overview\n            </Heading>\n            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n              Performance for Northwind Store · updated 6 minutes ago\n            </Text>\n          </Column>\n          <div role=\"group\" aria-label=\"Date range\" style={{ display: \"flex\", gap: 8, flexWrap: \"wrap\" }}>\n            {RANGES.map((r) => (\n              <Button\n                key={r}\n                size=\"s\"\n                variant={range === r ? \"primary\" : \"secondary\"}\n                onClick={() => setRange(r)}\n                aria-pressed={range === r}\n              >\n                {r}\n              </Button>\n            ))}\n          </div>\n        </Row>\n\n        {/* KPIs */}\n        <section aria-label=\"Key metrics\">\n          <div\n            style={{\n              display: \"grid\",\n              gap: 16,\n              gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 240px), 1fr))\",\n            }}\n          >\n            {KPIS.map((k) => (\n              <KpiCard key={k.label} kpi={k} />\n            ))}\n          </div>\n        </section>\n\n        {/* Charts row */}\n        <div\n          style={{\n            display: \"grid\",\n            gap: 16,\n            gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 380px), 1fr))\",\n          }}\n        >\n          <Card as=\"section\" labelledBy={lineId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={lineId}>\n                Visits\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Daily sessions, this week compared with last week\n              </Text>\n            </Column>\n            <LineChart data={VISITS} previous={VISITS_PREV} />\n          </Card>\n\n          <Card as=\"section\" labelledBy={barId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={barId}>\n                New sign-ups\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Accounts created per month, January to June\n              </Text>\n            </Column>\n            <BarChart data={SIGNUPS} title=\"New sign-ups per month\" unit=\"sign-ups\" />\n          </Card>\n        </div>\n\n        {/* Channels + activity */}\n        <div\n          style={{\n            display: \"grid\",\n            gap: 16,\n            gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 380px), 1fr))\",\n          }}\n        >\n          <Card as=\"section\" labelledBy={channelId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={channelId}>\n                Traffic by channel\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Sessions by acquisition source\n              </Text>\n            </Column>\n            <BarChart data={CHANNELS} title=\"Sessions by traffic channel\" unit=\"sessions\" />\n          </Card>\n\n          <Card as=\"section\" labelledBy={activityId}>\n            <Row horizontal=\"between\" vertical=\"center\" gap=\"8\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={activityId}>\n                Recent activity\n              </Heading>\n              <Badge arrow={false}>{ACTIVITY.length} new</Badge>\n            </Row>\n            <ul style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexDirection: \"column\" }}>\n              {ACTIVITY.map((a, i) => (\n                <li\n                  key={a.id}\n                  style={{\n                    display: \"flex\",\n                    gap: 12,\n                    alignItems: \"center\",\n                    padding: \"12px 0\",\n                    borderTop: i === 0 ? \"none\" : \"1px solid var(--neutral-alpha-weak)\",\n                  }}\n                >\n                  <Avatar size=\"m\" value={initials(a.name)} aria-hidden=\"true\" />\n                  <Column gap=\"2\" minWidth={0} flex={1}>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-strong\">\n                      <strong>{a.name}</strong> {a.action} <strong>{a.target}</strong>\n                    </Text>\n                    <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                      {a.time}\n                    </Text>\n                  </Column>\n                  <Icon name={a.icon} size=\"s\" onBackground=\"neutral-weak\" aria-hidden=\"true\" />\n                </li>\n              ))}\n            </ul>\n          </Card>\n        </div>\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(336,17): error TS2322: Type 'string' is not assignable to type 'IconName'.\napp/page.tsx(508,25): error TS2322: Type 'string' is not assignable to type 'IconName'.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I can't confirm the exact `IconName` union without the package installed, so I'll avoid depending on it. I'll drop the Once UI `Icon` and render small inline SVG icons that I define myself, which also keeps the page free of icon-registry issues at runtime. I'll also remove the leftover no-op span in the KPI card.\n\n```tsx\n\"use client\";\n\nimport { useId, useState } from \"react\";\nimport { Avatar, Badge, Button, Column, Flex, Heading, Row, Text } from \"@once-ui-system/core\";\n\n/* ----------------------------- Data ----------------------------- */\n\ntype Trend = \"up\" | \"down\";\ntype IconKey = \"revenue\" | \"users\" | \"conversion\" | \"bounce\" | \"upgrade\" | \"order\" | \"review\" | \"report\" | \"invite\" | \"cancel\";\n\ninterface Kpi {\n  label: string;\n  value: string;\n  change: string;\n  trend: Trend;\n  /** Whether the trend direction is good news (e.g. bounce rate going down is good). */\n  positive: boolean;\n  icon: IconKey;\n  note: string;\n}\n\nconst KPIS: Kpi[] = [\n  { label: \"Total revenue\", value: \"$48,920\", change: \"12.4%\", trend: \"up\", positive: true, icon: \"revenue\", note: \"vs. previous 30 days\" },\n  { label: \"Active users\", value: \"12,486\", change: \"8.1%\", trend: \"up\", positive: true, icon: \"users\", note: \"vs. previous 30 days\" },\n  { label: \"Conversion rate\", value: \"3.62%\", change: \"0.4%\", trend: \"down\", positive: false, icon: \"conversion\", note: \"vs. previous 30 days\" },\n  { label: \"Bounce rate\", value: \"38.2%\", change: \"2.7%\", trend: \"down\", positive: true, icon: \"bounce\", note: \"vs. previous 30 days\" },\n];\n\ninterface Point {\n  label: string;\n  value: number;\n}\n\nconst VISITS: Point[] = [\n  { label: \"Mon\", value: 3240 },\n  { label: \"Tue\", value: 3880 },\n  { label: \"Wed\", value: 3520 },\n  { label: \"Thu\", value: 4410 },\n  { label: \"Fri\", value: 4960 },\n  { label: \"Sat\", value: 3790 },\n  { label: \"Sun\", value: 4230 },\n];\n\nconst VISITS_PREV: Point[] = [\n  { label: \"Mon\", value: 2910 },\n  { label: \"Tue\", value: 3120 },\n  { label: \"Wed\", value: 3340 },\n  { label: \"Thu\", value: 3690 },\n  { label: \"Fri\", value: 4020 },\n  { label: \"Sat\", value: 3300 },\n  { label: \"Sun\", value: 3580 },\n];\n\nconst SIGNUPS: Point[] = [\n  { label: \"Jan\", value: 420 },\n  { label: \"Feb\", value: 510 },\n  { label: \"Mar\", value: 480 },\n  { label: \"Apr\", value: 640 },\n  { label: \"May\", value: 720 },\n  { label: \"Jun\", value: 690 },\n];\n\nconst CHANNELS: Point[] = [\n  { label: \"Organic\", value: 4820 },\n  { label: \"Direct\", value: 3150 },\n  { label: \"Referral\", value: 2210 },\n  { label: \"Social\", value: 1640 },\n  { label: \"Email\", value: 980 },\n];\n\ninterface Activity {\n  id: string;\n  name: string;\n  action: string;\n  target: string;\n  time: string;\n  icon: IconKey;\n}\n\nconst ACTIVITY: Activity[] = [\n  { id: \"a1\", name: \"Priya Raman\", action: \"upgraded to\", target: \"Business plan\", time: \"4 min ago\", icon: \"upgrade\" },\n  { id: \"a2\", name: \"Marcus Lindqvist\", action: \"completed checkout for\", target: \"Order #10482\", time: \"18 min ago\", icon: \"order\" },\n  { id: \"a3\", name: \"Elena Duarte\", action: \"left a review on\", target: \"Onboarding flow\", time: \"42 min ago\", icon: \"review\" },\n  { id: \"a4\", name: \"Tomasz Kowalski\", action: \"created the report\", target: \"Q2 Retention\", time: \"1 hr ago\", icon: \"report\" },\n  { id: \"a5\", name: \"Aisha Bello\", action: \"invited 3 teammates to\", target: \"Growth workspace\", time: \"2 hr ago\", icon: \"invite\" },\n  { id: \"a6\", name: \"Daniel Okafor\", action: \"cancelled\", target: \"Starter plan\", time: \"3 hr ago\", icon: \"cancel\" },\n];\n\nconst RANGES = [\"7 days\", \"30 days\", \"90 days\"] as const;\ntype Range = (typeof RANGES)[number];\n\n/* --------------------------- Helpers ---------------------------- */\n\nconst nf = new Intl.NumberFormat(\"en-US\");\n\nfunction initials(name: string): string {\n  return name\n    .split(\" \")\n    .map((p) => p[0])\n    .join(\"\")\n    .slice(0, 2);\n}\n\nfunction niceMax(v: number): number {\n  const step = Math.pow(10, Math.floor(Math.log10(v)));\n  return Math.ceil(v / step) * step;\n}\n\n/* ----------------------------- Icons ---------------------------- */\n\nconst ICON_PATHS: Record<IconKey, string> = {\n  revenue: \"M12 2v20M17 6.5C17 4.6 14.8 3.5 12 3.5S7 4.9 7 7c0 4.5 10 2.5 10 7 0 2.1-2.2 3.5-5 3.5s-5-1.1-5-3\",\n  users: \"M16 20v-1.5a3.5 3.5 0 0 0-3.5-3.5h-5A3.5 3.5 0 0 0 4 18.5V20M10 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM20 20v-1.5a3.5 3.5 0 0 0-2.5-3.3M15.5 4.2a3.5 3.5 0 0 1 0 6.6\",\n  conversion: \"M3 17l6-6 4 4 8-8M15 7h6v6\",\n  bounce: \"M4 12a8 8 0 1 0 8-8M4 4v5h5\",\n  upgrade: \"M12 19V5M5 12l7-7 7 7\",\n  order: \"M5 12.5l4.5 4.5L19 7.5\",\n  review: \"M21 12a8 8 0 0 1-11.7 7.1L4 20l1-4.6A8 8 0 1 1 21 12z\",\n  report: \"M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6\",\n  invite: \"M12 5v14M5 12h14\",\n  cancel: \"M6 6l12 12M18 6L6 18\",\n};\n\nfunction GlyphIcon({ name, size = 16 }: { name: IconKey; size?: number }) {\n  return (\n    <svg\n      width={size}\n      height={size}\n      viewBox=\"0 0 24 24\"\n      fill=\"none\"\n      stroke=\"currentColor\"\n      strokeWidth=\"2\"\n      strokeLinecap=\"round\"\n      strokeLinejoin=\"round\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n      style={{ flexShrink: 0, display: \"block\" }}\n    >\n      <path d={ICON_PATHS[name]} />\n    </svg>\n  );\n}\n\n/* ------------------------- Chart styling ------------------------ */\n\nconst AXIS = \"var(--neutral-on-background-weak)\";\nconst GRID = \"var(--neutral-alpha-medium)\";\nconst PRIMARY = \"var(--brand-solid-strong)\";\nconst SECONDARY = \"var(--neutral-solid-medium)\";\n\nconst W = 640;\nconst H = 280;\nconst PAD = { top: 16, right: 16, bottom: 32, left: 48 };\nconst IW = W - PAD.left - PAD.right;\nconst IH = H - PAD.top - PAD.bottom;\n\nconst VISUALLY_HIDDEN: React.CSSProperties = {\n  position: \"absolute\",\n  width: 1,\n  height: 1,\n  overflow: \"hidden\",\n  clip: \"rect(0 0 0 0)\",\n  whiteSpace: \"nowrap\",\n};\n\n/* --------------------------- Line chart ------------------------- */\n\nfunction LineChart({ data, previous }: { data: Point[]; previous: Point[] }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.value), ...previous.map((d) => d.value)));\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(max * t));\n  const x = (i: number) => PAD.left + (data.length === 1 ? IW / 2 : (i / (data.length - 1)) * IW);\n  const y = (v: number) => PAD.top + IH - (v / max) * IH;\n  const path = (pts: Point[]) => pts.map((p, i) => `${i === 0 ? \"M\" : \"L\"}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join(\" \");\n  const area = `${path(data)} L${x(data.length - 1).toFixed(1)},${y(0)} L${x(0).toFixed(1)},${y(0)} Z`;\n  const gradId = useId();\n  const titleId = useId();\n  const descId = useId();\n  const total = data.reduce((s, d) => s + d.value, 0);\n  const hitW = data.length > 1 ? IW / (data.length - 1) : IW;\n  const activePoint = active !== null ? data[active] : null;\n  const activePrev = active !== null ? previous[active] : null;\n\n  return (\n    <Column fillWidth gap=\"12\">\n      <div style={{ position: \"relative\", width: \"100%\" }}>\n        <svg\n          viewBox={`0 0 ${W} ${H}`}\n          role=\"img\"\n          aria-labelledby={`${titleId} ${descId}`}\n          style={{ width: \"100%\", height: \"auto\", display: \"block\", overflow: \"visible\" }}\n        >\n          <title id={titleId}>Daily visits, this week versus last week</title>\n          <desc id={descId}>\n            {`Line chart. This week totals ${nf.format(total)} visits. ` +\n              data.map((d) => `${d.label}: ${nf.format(d.value)}`).join(\", \") +\n              \".\"}\n          </desc>\n          <defs>\n            <linearGradient id={gradId} x1=\"0\" x2=\"0\" y1=\"0\" y2=\"1\">\n              <stop offset=\"0%\" stopColor={PRIMARY} stopOpacity=\"0.28\" />\n              <stop offset=\"100%\" stopColor={PRIMARY} stopOpacity=\"0\" />\n            </linearGradient>\n          </defs>\n          {ticks.map((t) => (\n            <g key={t} aria-hidden=\"true\">\n              <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke={GRID} strokeWidth=\"1\" />\n              <text x={PAD.left - 8} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize=\"11\" fill={AXIS}>\n                {t >= 1000 ? `${t / 1000}k` : t}\n              </text>\n            </g>\n          ))}\n          <path d={area} fill={`url(#${gradId})`} aria-hidden=\"true\" />\n          <path d={path(previous)} fill=\"none\" stroke={SECONDARY} strokeWidth=\"2\" strokeDasharray=\"5 5\" strokeLinejoin=\"round\" aria-hidden=\"true\" />\n          <path d={path(data)} fill=\"none\" stroke={PRIMARY} strokeWidth=\"3\" strokeLinejoin=\"round\" strokeLinecap=\"round\" aria-hidden=\"true\" />\n          {data.map((d, i) => (\n            <g key={d.label} aria-hidden=\"true\">\n              <text x={x(i)} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={AXIS}>\n                {d.label}\n              </text>\n              <circle cx={x(i)} cy={y(d.value)} r={active === i ? 6 : 4} fill={PRIMARY} stroke=\"var(--page-background)\" strokeWidth=\"2\" />\n              <rect\n                x={x(i) - hitW / 2}\n                y={PAD.top}\n                width={hitW}\n                height={IH}\n                fill=\"transparent\"\n                onMouseEnter={() => setActive(i)}\n                onMouseLeave={() => setActive(null)}\n                onTouchStart={() => setActive(i)}\n              />\n            </g>\n          ))}\n        </svg>\n        {active !== null && activePoint && activePrev && (\n          <div\n            aria-hidden=\"true\"\n            style={{\n              position: \"absolute\",\n              top: 0,\n              left: `${Math.min(Math.max((x(active) / W) * 100, 14), 86)}%`,\n              transform: \"translateX(-50%)\",\n              pointerEvents: \"none\",\n              background: \"var(--surface-background)\",\n              border: \"1px solid var(--neutral-alpha-medium)\",\n              borderRadius: 8,\n              padding: \"6px 10px\",\n              fontSize: 12,\n              whiteSpace: \"nowrap\",\n              color: \"var(--neutral-on-background-strong)\",\n            }}\n          >\n            <strong>{activePoint.label}</strong>: {nf.format(activePoint.value)} visits\n            <br />\n            <span style={{ color: \"var(--neutral-on-background-weak)\" }}>Last week: {nf.format(activePrev.value)}</span>\n          </div>\n        )}\n      </div>\n      <Row gap=\"24\" wrap horizontal=\"center\">\n        <Row gap=\"8\" vertical=\"center\">\n          <span aria-hidden=\"true\" style={{ width: 16, height: 3, borderRadius: 2, background: PRIMARY, display: \"inline-block\" }} />\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">This week</Text>\n        </Row>\n        <Row gap=\"8\" vertical=\"center\">\n          <span aria-hidden=\"true\" style={{ width: 16, height: 0, borderTop: `3px dashed ${SECONDARY}`, display: \"inline-block\" }} />\n          <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">Last week</Text>\n        </Row>\n      </Row>\n    </Column>\n  );\n}\n\n/* --------------------------- Bar chart -------------------------- */\n\nfunction BarChart({ data, title, unit }: { data: Point[]; title: string; unit: string }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.value)));\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(max * t));\n  const slot = IW / data.length;\n  const barW = Math.min(slot * 0.58, 56);\n  const y = (v: number) => PAD.top + IH - (v / max) * IH;\n  const titleId = useId();\n  const descId = useId();\n\n  return (\n    <svg\n      viewBox={`0 0 ${W} ${H}`}\n      role=\"img\"\n      aria-labelledby={`${titleId} ${descId}`}\n      style={{ width: \"100%\", height: \"auto\", display: \"block\" }}\n    >\n      <title id={titleId}>{title}</title>\n      <desc id={descId}>{data.map((d) => `${d.label}: ${nf.format(d.value)} ${unit}`).join(\", \") + \".\"}</desc>\n      {ticks.map((t) => (\n        <g key={t} aria-hidden=\"true\">\n          <line x1={PAD.left} x2={W - PAD.right} y1={y(t)} y2={y(t)} stroke={GRID} strokeWidth=\"1\" />\n          <text x={PAD.left - 8} y={y(t)} textAnchor=\"end\" dominantBaseline=\"middle\" fontSize=\"11\" fill={AXIS}>\n            {t >= 1000 ? `${t / 1000}k` : t}\n          </text>\n        </g>\n      ))}\n      {data.map((d, i) => {\n        const cx = PAD.left + slot * i + slot / 2;\n        const h = (d.value / max) * IH;\n        const isActive = active === i;\n        return (\n          <g\n            key={d.label}\n            aria-hidden=\"true\"\n            onMouseEnter={() => setActive(i)}\n            onMouseLeave={() => setActive(null)}\n            onTouchStart={() => setActive(i)}\n          >\n            <rect x={cx - slot / 2} y={PAD.top} width={slot} height={IH} fill=\"transparent\" />\n            <rect\n              x={cx - barW / 2}\n              y={y(d.value)}\n              width={barW}\n              height={h}\n              rx=\"6\"\n              fill={PRIMARY}\n              opacity={active === null || isActive ? 1 : 0.45}\n            />\n            {isActive && (\n              <text x={cx} y={y(d.value) - 8} textAnchor=\"middle\" fontSize=\"12\" fontWeight=\"600\" fill=\"var(--neutral-on-background-strong)\">\n                {nf.format(d.value)}\n              </text>\n            )}\n            <text x={cx} y={H - 8} textAnchor=\"middle\" fontSize=\"11\" fill={AXIS}>\n              {d.label}\n            </text>\n          </g>\n        );\n      })}\n    </svg>\n  );\n}\n\n/* ---------------------------- Cards ----------------------------- */\n\nfunction Card({\n  children,\n  as,\n  labelledBy,\n}: {\n  children: React.ReactNode;\n  as?: \"section\" | \"article\";\n  labelledBy?: string;\n}) {\n  return (\n    <Column\n      as={as}\n      aria-labelledby={labelledBy}\n      background=\"surface\"\n      border=\"neutral-alpha-weak\"\n      radius=\"l\"\n      padding=\"20\"\n      gap=\"16\"\n      fillWidth\n      minWidth={0}\n    >\n      {children}\n    </Column>\n  );\n}\n\nfunction KpiCard({ kpi }: { kpi: Kpi }) {\n  const verb = kpi.trend === \"up\" ? \"increased\" : \"decreased\";\n  return (\n    <Card as=\"article\">\n      <Row horizontal=\"between\" vertical=\"center\" gap=\"8\">\n        <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n          {kpi.label}\n        </Text>\n        <Row\n          center\n          background=\"neutral-alpha-weak\"\n          radius=\"m\"\n          style={{ width: 32, height: 32, flexShrink: 0, color: \"var(--neutral-on-background-weak)\" }}\n          aria-hidden=\"true\"\n        >\n          <GlyphIcon name={kpi.icon} size={16} />\n        </Row>\n      </Row>\n      <Heading as=\"p\" variant=\"display-strong-s\">\n        {kpi.value}\n      </Heading>\n      <Row gap=\"8\" vertical=\"center\" wrap>\n        <span\n          style={{\n            display: \"inline-flex\",\n            alignItems: \"center\",\n            gap: 4,\n            padding: \"2px 8px\",\n            borderRadius: 999,\n            fontSize: 12,\n            fontWeight: 600,\n            background: kpi.positive ? \"var(--success-alpha-weak)\" : \"var(--danger-alpha-weak)\",\n            color: kpi.positive ? \"var(--success-on-background-strong)\" : \"var(--danger-on-background-strong)\",\n          }}\n        >\n          <span aria-hidden=\"true\">{kpi.trend === \"up\" ? \"▲\" : \"▼\"}</span>\n          <span aria-hidden=\"true\">{kpi.change}</span>\n          <span style={VISUALLY_HIDDEN}>{`${verb} by ${kpi.change}, ${kpi.positive ? \"an improvement\" : \"a decline\"}`}</span>\n        </span>\n        <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n          {kpi.note}\n        </Text>\n      </Row>\n    </Card>\n  );\n}\n\n/* ----------------------------- Page ----------------------------- */\n\nexport default function Page() {\n  const [range, setRange] = useState<Range>(\"7 days\");\n  const lineId = useId();\n  const barId = useId();\n  const channelId = useId();\n  const activityId = useId();\n\n  return (\n    <Flex as=\"main\" fillWidth horizontal=\"center\" paddingX=\"16\" paddingY=\"24\" style={{ boxSizing: \"border-box\" }}>\n      <Column fillWidth gap=\"24\" style={{ maxWidth: 1200 }}>\n        {/* Header */}\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n          <Column gap=\"4\" minWidth={0}>\n            <Heading as=\"h1\" variant=\"heading-strong-xl\">\n              Analytics overview\n            </Heading>\n            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n              Performance for Northwind Store · updated 6 minutes ago\n            </Text>\n          </Column>\n          <div role=\"group\" aria-label=\"Date range\" style={{ display: \"flex\", gap: 8, flexWrap: \"wrap\" }}>\n            {RANGES.map((r) => (\n              <Button\n                key={r}\n                size=\"s\"\n                variant={range === r ? \"primary\" : \"secondary\"}\n                onClick={() => setRange(r)}\n                aria-pressed={range === r}\n              >\n                {r}\n              </Button>\n            ))}\n          </div>\n        </Row>\n\n        {/* KPIs */}\n        <section aria-label=\"Key metrics\">\n          <div\n            style={{\n              display: \"grid\",\n              gap: 16,\n              gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 240px), 1fr))\",\n            }}\n          >\n            {KPIS.map((k) => (\n              <KpiCard key={k.label} kpi={k} />\n            ))}\n          </div>\n        </section>\n\n        {/* Charts row */}\n        <div\n          style={{\n            display: \"grid\",\n            gap: 16,\n            gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 380px), 1fr))\",\n          }}\n        >\n          <Card as=\"section\" labelledBy={lineId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={lineId}>\n                Visits\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Daily sessions, this week compared with last week\n              </Text>\n            </Column>\n            <LineChart data={VISITS} previous={VISITS_PREV} />\n          </Card>\n\n          <Card as=\"section\" labelledBy={barId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={barId}>\n                New sign-ups\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Accounts created per month, January to June\n              </Text>\n            </Column>\n            <BarChart data={SIGNUPS} title=\"New sign-ups per month\" unit=\"sign-ups\" />\n          </Card>\n        </div>\n\n        {/* Channels + activity */}\n        <div\n          style={{\n            display: \"grid\",\n            gap: 16,\n            gridTemplateColumns: \"repeat(auto-fit, minmax(min(100%, 380px), 1fr))\",\n          }}\n        >\n          <Card as=\"section\" labelledBy={channelId}>\n            <Column gap=\"4\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={channelId}>\n                Traffic by channel\n              </Heading>\n              <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Sessions by acquisition source\n              </Text>\n            </Column>\n            <BarChart data={CHANNELS} title=\"Sessions by traffic channel\" unit=\"sessions\" />\n          </Card>\n\n          <Card as=\"section\" labelledBy={activityId}>\n            <Row horizontal=\"between\" vertical=\"center\" gap=\"8\">\n              <Heading as=\"h2\" variant=\"heading-strong-m\" id={activityId}>\n                Recent activity\n              </Heading>\n              <Badge arrow={false}>{ACTIVITY.length} new</Badge>\n            </Row>\n            <ul style={{ listStyle: \"none\", margin: 0, padding: 0, display: \"flex\", flexDirection: \"column\" }}>\n              {ACTIVITY.map((a, i) => (\n                <li\n                  key={a.id}\n                  style={{\n                    display: \"flex\",\n                    gap: 12,\n                    alignItems: \"center\",\n                    padding: \"12px 0\",\n                    borderTop: i === 0 ? \"none\" : \"1px solid var(--neutral-alpha-weak)\",\n                  }}\n                >\n                  <Avatar size=\"m\" value={initials(a.name)} />\n                  <Column gap=\"2\" minWidth={0} flex={1}>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-strong\">\n                      <strong>{a.name}</strong> {a.action} <strong>{a.target}</strong>\n                    </Text>\n                    <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                      {a.time}\n                    </Text>\n                  </Column>\n                  <span style={{ color: \"var(--neutral-on-background-weak)\", display: \"flex\" }}>\n                    <GlyphIcon name={a.icon} size={16} />\n                  </span>\n                </li>\n              ))}\n            </ul>\n          </Card>\n        </div>\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

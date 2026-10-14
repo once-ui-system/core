@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Settings page — sidebar sections, profile form (avatar upload, inputs, selects), danger zone.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me take a quick look at the project's existing files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NzZZYpUxBcYVCfxYYQPocT",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014hiJjnsL2CMBp3kdcriUpR",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NzZZYpUxBcYVCfxYYQPocT",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014hiJjnsL2CMBp3kdcriUpR",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01R4FGnLtZtzPA6woFJR8cF2",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JwWHpbZm6osESv5eFdXECV",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Eabs8SBiXmSdAcYXneyv8g",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R4FGnLtZtzPA6woFJR8cF2",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JwWHpbZm6osESv5eFdXECV",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Eabs8SBiXmSdAcYXneyv8g",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01VyVtN4UodWeHDqhgZ6bzDv",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JudhyEM5BFMkuUGWvCinhY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018JVkNxnCn474ioMtfWAU34",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VyVtN4UodWeHDqhgZ6bzDv",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JudhyEM5BFMkuUGWvCinhY",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018JVkNxnCn474ioMtfWAU34",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Plain Tailwind v4, so I'll build everything with utility classes. lucide-react v1 may have renamed some icons, so I'll stick to long-standing ones (User, Bell, Shield, CreditCard, Palette, Camera, Trash2, Check, AlertTriangle, X).\n\n```tsx\n\"use client\";\n\nimport { useEffect, useId, useRef, useState } from \"react\";\nimport type { ChangeEvent, FormEvent } from \"react\";\nimport {\n  AlertTriangle,\n  Bell,\n  Camera,\n  Check,\n  CreditCard,\n  Shield,\n  Trash2,\n  User,\n  X,\n} from \"lucide-react\";\n\ntype SectionId = \"profile\" | \"notifications\" | \"security\" | \"billing\";\n\nconst SECTIONS: { id: SectionId; label: string; description: string; icon: typeof User }[] = [\n  { id: \"profile\", label: \"Profile\", description: \"Your public information\", icon: User },\n  { id: \"notifications\", label: \"Notifications\", description: \"Email and push alerts\", icon: Bell },\n  { id: \"security\", label: \"Security\", description: \"Password and sessions\", icon: Shield },\n  { id: \"billing\", label: \"Billing\", description: \"Plan and invoices\", icon: CreditCard },\n];\n\nconst TIMEZONES = [\n  \"America/Los_Angeles (UTC−08:00)\",\n  \"America/New_York (UTC−05:00)\",\n  \"Europe/London (UTC+00:00)\",\n  \"Europe/Berlin (UTC+01:00)\",\n  \"Asia/Kolkata (UTC+05:30)\",\n  \"Asia/Tokyo (UTC+09:00)\",\n];\n\nconst LANGUAGES = [\"English (US)\", \"English (UK)\", \"Deutsch\", \"Español\", \"Français\", \"日本語\"];\n\nconst ROLES = [\"Product designer\", \"Software engineer\", \"Product manager\", \"Founder\", \"Other\"];\n\nconst inputClass =\n  \"block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-2 focus:ring-indigo-600/30 disabled:cursor-not-allowed disabled:bg-slate-100\";\n\nconst labelClass = \"mb-1.5 block text-sm font-medium text-slate-800\";\n\nfunction Field({\n  label,\n  htmlFor,\n  hint,\n  children,\n}: {\n  label: string;\n  htmlFor: string;\n  hint?: string;\n  children: React.ReactNode;\n}) {\n  return (\n    <div>\n      <label htmlFor={htmlFor} className={labelClass}>\n        {label}\n      </label>\n      {children}\n      {hint ? (\n        <p id={`${htmlFor}-hint`} className=\"mt-1.5 text-xs text-slate-500\">\n          {hint}\n        </p>\n      ) : null}\n    </div>\n  );\n}\n\nfunction initials(first: string, last: string): string {\n  return `${first.trim().charAt(0)}${last.trim().charAt(0)}`.toUpperCase() || \"?\";\n}\n\nfunction ComingSoon({ title }: { title: string }) {\n  return (\n    <section className=\"rounded-xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8\">\n      <h2 className=\"text-lg font-semibold text-slate-900\">{title}</h2>\n      <p className=\"mt-2 text-sm text-slate-600\">\n        This section is not part of the demo. Switch back to Profile to see the full form.\n      </p>\n    </section>\n  );\n}\n\nexport default function SettingsPage() {\n  const [section, setSection] = useState<SectionId>(\"profile\");\n\n  const [firstName, setFirstName] = useState(\"Amara\");\n  const [lastName, setLastName] = useState(\"Okafor\");\n  const [email, setEmail] = useState(\"amara.okafor@northwind.example\");\n  const [username, setUsername] = useState(\"amara.okafor\");\n  const [role, setRole] = useState(ROLES[0]);\n  const [timezone, setTimezone] = useState(TIMEZONES[1]);\n  const [language, setLanguage] = useState(LANGUAGES[0]);\n  const [bio, setBio] = useState(\n    \"Designing calm, accessible interfaces for logistics teams. Based in Brooklyn, coffee-powered.\"\n  );\n\n  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);\n  const [avatarError, setAvatarError] = useState<string | null>(null);\n  const fileRef = useRef<HTMLInputElement>(null);\n\n  const [saved, setSaved] = useState(false);\n  const [confirmOpen, setConfirmOpen] = useState(false);\n  const [confirmText, setConfirmText] = useState(\"\");\n  const [deleted, setDeleted] = useState(false);\n\n  const uid = useId();\n  const id = (name: string) => `${uid}-${name}`;\n\n  // Revoke object URLs to avoid leaks.\n  useEffect(() => {\n    return () => {\n      if (avatarUrl) URL.revokeObjectURL(avatarUrl);\n    };\n  }, [avatarUrl]);\n\n  // Auto-hide the saved notice.\n  useEffect(() => {\n    if (!saved) return;\n    const t = window.setTimeout(() => setSaved(false), 3500);\n    return () => window.clearTimeout(t);\n  }, [saved]);\n\n  // Close dialog on Escape.\n  useEffect(() => {\n    if (!confirmOpen) return;\n    const onKey = (e: KeyboardEvent) => {\n      if (e.key === \"Escape\") setConfirmOpen(false);\n    };\n    window.addEventListener(\"keydown\", onKey);\n    return () => window.removeEventListener(\"keydown\", onKey);\n  }, [confirmOpen]);\n\n  const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {\n    const file = e.target.files?.[0];\n    if (!file) return;\n    if (!file.type.startsWith(\"image/\")) {\n      setAvatarError(\"Please choose an image file (PNG, JPG or GIF).\");\n      return;\n    }\n    if (file.size > 2 * 1024 * 1024) {\n      setAvatarError(\"That image is larger than 2 MB. Try a smaller one.\");\n      return;\n    }\n    setAvatarError(null);\n    setAvatarUrl(URL.createObjectURL(file));\n    setSaved(false);\n  };\n\n  const removeAvatar = () => {\n    setAvatarUrl(null);\n    setAvatarError(null);\n    if (fileRef.current) fileRef.current.value = \"\";\n  };\n\n  const onSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    setSaved(true);\n  };\n\n  const canDelete = confirmText.trim() === username;\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8\">\n          <h1 className=\"text-2xl font-semibold tracking-tight\">Settings</h1>\n          <p className=\"mt-1 text-sm text-slate-600\">\n            Manage your account details, preferences and workspace access.\n          </p>\n        </div>\n      </header>\n\n      <div className=\"mx-auto grid max-w-6xl gap-6 px-4 py-6 sm:px-6 lg:grid-cols-[16rem_1fr] lg:gap-10 lg:px-8 lg:py-10\">\n        <nav aria-label=\"Settings sections\" className=\"lg:sticky lg:top-6 lg:self-start\">\n          <ul className=\"-mx-4 flex gap-1 overflow-x-auto px-4 pb-1 sm:mx-0 sm:px-0 lg:flex-col lg:overflow-visible lg:pb-0\">\n            {SECTIONS.map(({ id: sid, label, description, icon: Icon }) => {\n              const active = section === sid;\n              return (\n                <li key={sid} className=\"shrink-0 lg:shrink\">\n                  <button\n                    type=\"button\"\n                    onClick={() => setSection(sid)}\n                    aria-current={active ? \"page\" : undefined}\n                    className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 ${\n                      active\n                        ? \"bg-indigo-50 font-medium text-indigo-700\"\n                        : \"text-slate-700 hover:bg-slate-100\"\n                    }`}\n                  >\n                    <Icon className=\"h-5 w-5 shrink-0\" aria-hidden=\"true\" />\n                    <span className=\"flex flex-col\">\n                      <span>{label}</span>\n                      <span className=\"hidden text-xs font-normal text-slate-500 lg:block\">\n                        {description}\n                      </span>\n                    </span>\n                  </button>\n                </li>\n              );\n            })}\n          </ul>\n        </nav>\n\n        <main className=\"min-w-0 space-y-6\">\n          {section !== \"profile\" ? (\n            <ComingSoon title={SECTIONS.find((s) => s.id === section)?.label ?? \"\"} />\n          ) : (\n            <>\n              <form\n                onSubmit={onSubmit}\n                className=\"rounded-xl border border-slate-200 bg-white shadow-sm\"\n                aria-labelledby={id(\"profile-title\")}\n              >\n                <div className=\"border-b border-slate-200 p-6 sm:px-8\">\n                  <h2 id={id(\"profile-title\")} className=\"text-lg font-semibold\">\n                    Profile\n                  </h2>\n                  <p className=\"mt-1 text-sm text-slate-600\">\n                    This information appears on your public profile and in shared projects.\n                  </p>\n                </div>\n\n                <div className=\"space-y-6 p-6 sm:px-8\">\n                  {/* Avatar */}\n                  <div className=\"flex flex-col gap-4 sm:flex-row sm:items-center\">\n                    <div\n                      className=\"relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-full bg-indigo-100 text-xl font-semibold text-indigo-700 ring-4 ring-white shadow\"\n                      role=\"img\"\n                      aria-label={\n                        avatarUrl ? \"Your profile photo\" : `Initials avatar for ${firstName} ${lastName}`\n                      }\n                    >\n                      {avatarUrl ? (\n                        // eslint-disable-next-line @next/next/no-img-element\n                        <img src={avatarUrl} alt=\"\" className=\"h-full w-full object-cover\" />\n                      ) : (\n                        <span aria-hidden=\"true\">{initials(firstName, lastName)}</span>\n                      )}\n                    </div>\n                    <div>\n                      <div className=\"flex flex-wrap gap-2\">\n                        <input\n                          ref={fileRef}\n                          id={id(\"avatar\")}\n                          type=\"file\"\n                          accept=\"image/png,image/jpeg,image/gif\"\n                          onChange={onAvatarChange}\n                          className=\"sr-only\"\n                          aria-describedby={id(\"avatar-hint\")}\n                        />\n                        <button\n                          type=\"button\"\n                          onClick={() => fileRef.current?.click()}\n                          className=\"inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-800 shadow-sm hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600\"\n                        >\n                          <Camera className=\"h-4 w-4\" aria-hidden=\"true\" />\n                          Upload photo\n                        </button>\n                        {avatarUrl ? (\n                          <button\n                            type=\"button\"\n                            onClick={removeAvatar}\n                            className=\"inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-700 hover:bg-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600\"\n                          >\n                            <X className=\"h-4 w-4\" aria-hidden=\"true\" />\n                            Remove\n                          </button>\n                        ) : null}\n                      </div>\n                      <p id={id(\"avatar-hint\")} className=\"mt-2 text-xs text-slate-500\">\n                        PNG, JPG or GIF. Maximum size 2 MB.\n                      </p>\n                      {avatarError ? (\n                        <p role=\"alert\" className=\"mt-1 text-xs font-medium text-red-600\">\n                          {avatarError}\n                        </p>\n                      ) : null}\n                    </div>\n                  </div>\n\n                  <div className=\"grid gap-5 sm:grid-cols-2\">\n                    <Field label=\"First name\" htmlFor={id(\"first\")}>\n                      <input\n                        id={id(\"first\")}\n                        name=\"firstName\"\n                        type=\"text\"\n                        autoComplete=\"given-name\"\n                        required\n                        value={firstName}\n                        onChange={(e) => setFirstName(e.target.value)}\n                        className={inputClass}\n                      />\n                    </Field>\n                    <Field label=\"Last name\" htmlFor={id(\"last\")}>\n                      <input\n                        id={id(\"last\")}\n                        name=\"lastName\"\n                        type=\"text\"\n                        autoComplete=\"family-name\"\n                        required\n                        value={lastName}\n                        onChange={(e) => setLastName(e.target.value)}\n                        className={inputClass}\n                      />\n                    </Field>\n                    <div className=\"sm:col-span-2\">\n                      <Field\n                        label=\"Email address\"\n                        htmlFor={id(\"email\")}\n                        hint=\"We'll send receipts and security alerts here.\"\n                      >\n                        <input\n                          id={id(\"email\")}\n                          name=\"email\"\n                          type=\"email\"\n                          autoComplete=\"email\"\n                          required\n                          value={email}\n                          onChange={(e) => setEmail(e.target.value)}\n                          aria-describedby={`${id(\"email\")}-hint`}\n                          className={inputClass}\n                        />\n                      </Field>\n                    </div>\n                    <Field\n                      label=\"Username\"\n                      htmlFor={id(\"username\")}\n                      hint=\"Used in your profile URL.\"\n                    >\n                      <input\n                        id={id(\"username\")}\n                        name=\"username\"\n                        type=\"text\"\n                        autoComplete=\"username\"\n                        required\n                        pattern=\"[a-zA-Z0-9._\\-]+\"\n                        value={username}\n                        onChange={(e) => setUsername(e.target.value)}\n                        aria-describedby={`${id(\"username\")}-hint`}\n                        className={inputClass}\n                      />\n                    </Field>\n                    <Field label=\"Role\" htmlFor={id(\"role\")}>\n                      <select\n                        id={id(\"role\")}\n                        name=\"role\"\n                        value={role}\n                        onChange={(e) => setRole(e.target.value)}\n                        className={inputClass}\n                      >\n                        {ROLES.map((r) => (\n                          <option key={r} value={r}>\n                            {r}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                    <Field label=\"Time zone\" htmlFor={id(\"tz\")}>\n                      <select\n                        id={id(\"tz\")}\n                        name=\"timezone\"\n                        value={timezone}\n                        onChange={(e) => setTimezone(e.target.value)}\n                        className={inputClass}\n                      >\n                        {TIMEZONES.map((t) => (\n                          <option key={t} value={t}>\n                            {t}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                    <Field label=\"Language\" htmlFor={id(\"lang\")}>\n                      <select\n                        id={id(\"lang\")}\n                        name=\"language\"\n                        value={language}\n                        onChange={(e) => setLanguage(e.target.value)}\n                        className={inputClass}\n                      >\n                        {LANGUAGES.map((l) => (\n                          <option key={l} value={l}>\n                            {l}\n                          </option>\n                        ))}\n                      </select>\n                    </Field>\n                    <div className=\"sm:col-span-2\">\n                      <Field\n                        label=\"Bio\"\n                        htmlFor={id(\"bio\")}\n                        hint={`${bio.length}/200 characters`}\n                      >\n                        <textarea\n                          id={id(\"bio\")}\n                          name=\"bio\"\n                          rows={4}\n                          maxLength={200}\n                          value={bio}\n                          onChange={(e) => setBio(e.target.value)}\n                          aria-describedby={`${id(\"bio\")}-hint`}\n                          className={inputClass}\n                        />\n                      </Field>\n                    </div>\n                  </div>\n                </div>\n\n                <div className=\"flex flex-col-reverse items-stretch gap-3 border-t border-slate-200 bg-slate-50/60 px-6 py-4 sm:flex-row sm:items-center sm:justify-end sm:px-8\">\n                  <p role=\"status\" aria-live=\"polite\" className=\"text-sm text-emerald-700 sm:mr-auto\">\n                    {saved ? (\n                      <span className=\"inline-flex items-center gap-1.5\">\n                        <Check className=\"h-4 w-4\" aria-hidden=\"true\" />\n                        Profile changes saved.\n                      </span>\n                    ) : null}\n                  </p>\n                  <button\n                    type=\"submit\"\n                    className=\"inline-flex items-center justify-center rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600 focus-visible:ring-offset-2\"\n                  >\n                    Save changes\n                  </button>\n                </div>\n              </form>\n\n              {/* Danger zone */}\n              <section\n                aria-labelledby={id(\"danger-title\")}\n                className=\"rounded-xl border border-red-200 bg-white shadow-sm\"\n              >\n                <div className=\"border-b border-red-200 bg-red-50 p-6 sm:px-8 rounded-t-xl\">\n                  <h2\n                    id={id(\"danger-title\")}\n                    className=\"flex items-center gap-2 text-lg font-semibold text-red-800\"\n                  >\n                    <AlertTriangle className=\"h-5 w-5\" aria-hidden=\"true\" />\n                    Danger zone\n                  </h2>\n                  <p className=\"mt-1 text-sm text-red-700\">\n                    These actions are permanent and cannot be undone.\n                  </p>\n                </div>\n                <div className=\"p-6 sm:px-8\">\n                  {deleted ? (\n                    <p role=\"status\" className=\"text-sm font-medium text-slate-700\">\n                      Deletion requested. Your account will be removed within 24 hours. (Demo only —\n                      nothing was deleted.)\n                    </p>\n                  ) : (\n                    <div className=\"flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between\">\n                      <div>\n                        <h3 className=\"text-sm font-semibold text-slate-900\">Delete account</h3>\n                        <p className=\"mt-1 max-w-prose text-sm text-slate-600\">\n                          Permanently remove your profile, 14 projects and all associated data from\n                          Northwind Studio.\n                        </p>\n                      </div>\n                      <button\n                        type=\"button\"\n                        onClick={() => {\n                          setConfirmText(\"\");\n                          setConfirmOpen(true);\n                        }}\n                        className=\"inline-flex shrink-0 items-center justify-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2\"\n                      >\n                        <Trash2 className=\"h-4 w-4\" aria-hidden=\"true\" />\n                        Delete account\n                      </button>\n                    </div>\n                  )}\n                </div>\n              </section>\n            </>\n          )}\n        </main>\n      </div>\n\n      {confirmOpen ? (\n        <div className=\"fixed inset-0 z-50 flex items-end justify-center bg-slate-900/50 p-4 sm:items-center\">\n          <div\n            role=\"dialog\"\n            aria-modal=\"true\"\n            aria-labelledby={id(\"dlg-title\")}\n            aria-describedby={id(\"dlg-desc\")}\n            className=\"w-full max-w-md rounded-xl bg-white p-6 shadow-xl\"\n          >\n            <h2 id={id(\"dlg-title\")} className=\"text-lg font-semibold text-slate-900\">\n              Delete your account?\n            </h2>\n            <p id={id(\"dlg-desc\")} className=\"mt-2 text-sm text-slate-600\">\n              This will permanently delete your account and all of its data. To confirm, type your\n              username <strong className=\"font-semibold text-slate-900\">{username}</strong> below.\n            </p>\n            <div className=\"mt-4\">\n              <label htmlFor={id(\"confirm\")} className={labelClass}>\n                Username\n              </label>\n              <input\n                id={id(\"confirm\")}\n                type=\"text\"\n                autoFocus\n                autoComplete=\"off\"\n                value={confirmText}\n                onChange={(e) => setConfirmText(e.target.value)}\n                className={inputClass}\n              />\n            </div>\n            <div className=\"mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end\">\n              <button\n                type=\"button\"\n                onClick={() => setConfirmOpen(false)}\n                className=\"rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-800 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-600\"\n              >\n                Cancel\n              </button>\n              <button\n                type=\"button\"\n                disabled={!canDelete}\n                onClick={() => {\n                  setConfirmOpen(false);\n                  setDeleted(true);\n                }}\n                className=\"rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-600 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50\"\n              >\n                Permanently delete\n              </button>\n            </div>\n          </div>\n        </div>\n      ) : null}\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

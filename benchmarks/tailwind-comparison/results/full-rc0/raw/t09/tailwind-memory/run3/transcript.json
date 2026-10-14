@@ -1,0 +1,220 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PzWxHX3QzmBxf3BkBgEvb9",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019uL4832jM2Dv5fooR8G9iA",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PzWxHX3QzmBxf3BkBgEvb9",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019uL4832jM2Dv5fooR8G9iA",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_016CmZ8zKf9bEhfkowWfL5hK",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016GCC8L7pAWNeG99BuZL26u",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Hr11tZqivJ9XYz93XBB59f",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016CmZ8zKf9bEhfkowWfL5hK",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016GCC8L7pAWNeG99BuZL26u",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Hr11tZqivJ9XYz93XBB59f",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01PNA6kncbXPwUjZGbUY6Efi",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016DQ4EoRERrpXWsbSPk468H",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012BMruT5zDQ4yfDuLCEMRHC",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PNA6kncbXPwUjZGbUY6Efi",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016DQ4EoRERrpXWsbSPk468H",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012BMruT5zDQ4yfDuLCEMRHC",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll build an orders table with inline data, a segmented status control, date range filtering, search, sortable columns, and pagination—using UTC-based date strings to avoid timezone/hydration issues, accessible radiogroup/aria-sort patterns, and CSS-only card collapsing below `md`.\n\n",
+          "signature": "CAQSlgkKEQgSGAI4AUIJbmFycmF0aW9uEgyMJSel17rO8VKi2MgaDCOaIp7WS1r2fM4PBSIwwGzZvUm8uTAaMhEhFQjlsMNt3uYbxeUhJP+8xfi64VojdK+/15A5SmsTPp/Hms87KrIIaeYMvOag1iRv/N+/+QKqT736zBOxVtJmz1EhHw0bON3jjJ14T7GzcwhrgxBUd7P7k/GVseJvM5CVmj5oR4NDZxQ1OxZW9oLden4e7cnQo8XtxlDPLEjH2Ycwgt6pQeuNJuUDwjOjKBuU4Zy2SUiaNyiooQ7gM6Dy9PFaox7qFHEibi9UUi4SlqZ05oRVqGhcHNaLumOe22gma9jPYoiC+PDcQuG2YIYbNmD4gi46V+FFEiA4YlJxJIPTfkycRn03SmunNPIPlbLtlwjas8VVoNglEdsewHSavrnKk7sOGHeiaD5/kROYlk3kc0s/kSGNPDTF+2NcGjDCHL/1z2a5y4zBkxT0h4/Iul+58T3AD6ff+jP4XHS9K7WI5ipHXFD5i+eZpO1s+f78L0z0T5rhreij1qpdCk7bhNn7oShe9ETC+3H/IZZ+vGsWC5TPVYWdsY3+5g5CytGh2XQRSUajmQKOvlsLN8WaaS8dVhsp7vcl7pM5i4muRCWGsbSALvoW9xAK9fdkMrgqu5UnMPQffmlqOB26K6tAmm8QfAX8tA+Dlqd5bncfTDvS3LfOaHCICZ40JWtQl5JyIp+cXXYU2YrPfJs77a8+kBSDDXFgQ2ytEuf0Ach3ySZlRd1eWNGXqKy+ulQeRcb3zXoJIvZ5rKkehDkBmeb6gx8LgTNnwfmIg07ldPDjtyL930aC4w8+WTKm7XDT0PjcgCrjz5MMCu8hX3HDwFEogP5/DBtgbqvPYfPKgFOriYkoYfq8YIhba/00RNq9+Q/cUoNrN6WN36Y7Y2FMa5DaFaxVVHdO7VKhnWt+hOLSLJLdo8/K1y4f9gpoDyzF5WBXoNKxIqkfUk1u1zE6SPAM9L0qSlFE6ilL8rLHg/zkh6df6LGdGPzOmrWtcz19uFKGQ5yPfKx2VeFYmq/HWAiJ/CtkHKndFSxCEkeHrP4wk5SnmX1YMqvfVF9TypjKb23V1jTSSZkiqmIxW7X02vFOz7NWF6L/eDRWzxVrMslzIH23YgTX8VwzbjNfVPToPM3t00G5WQ3bwytm5Tzm5f4P1La1CVr8ZCq7epZZFmGC9J5gqFO3S49JH4HANuF8Tge+OzJmP/2NLg9pOxk7bl/bPsFSzDITkDHmmY8NkmUeInw5FozUs2RbebtX8tWDVHSbI59+xq7HEqMDB1zxDQ8zEtGbGxCaLDhmHPous94M6z+eblF3vnbDtzf6aC2REgZBiyN9i53WnuXQOrq+8wl09l8Ml8e1CHknLKawrh9X+BVTedRO6GGOOFd5EU0OVlmmctO/B6zx974kdSxeRRmrU5udziLY7Uy+RcbWGMhh+Whdp7u4a4vPfD3eo4wd/8kUxGUcXlWKzgIZ/F9Y/swaCSXpx+MEhSKkq5/xYlXHGvM4z+oU6dxqSLMApbN1Ns2PbkIiAffb/1DKGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012e55mdg27SJEVJ6yE93HwG",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012e55mdg27SJEVJ6yE93HwG",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useMemo, useRef, useState } from \"react\";\nimport type { KeyboardEvent } from \"react\";\nimport {\n  ArrowDown,\n  ArrowUp,\n  ArrowUpDown,\n  ChevronLeft,\n  ChevronRight,\n  ChevronsLeft,\n  ChevronsRight,\n  Search,\n  X,\n} from \"lucide-react\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Refunded\" | \"Failed\";\ntype StatusFilter = \"All\" | Status;\n\ninterface Order {\n  id: string;\n  customer: string;\n  email: string;\n  date: string; // ISO yyyy-mm-dd\n  amount: number;\n  status: Status;\n  method: string;\n}\n\ntype SortKey = \"id\" | \"customer\" | \"date\" | \"amount\" | \"status\";\ntype SortDir = \"asc\" | \"desc\";\n\nconst ORDERS: Order[] = [\n  { id: \"ORD-10482\", customer: \"Amara Okafor\", email: \"amara.okafor@brightwave.io\", date: \"2025-03-28\", amount: 1249.0, status: \"Paid\", method: \"Visa •• 4242\" },\n  { id: \"ORD-10481\", customer: \"Liam Fischer\", email: \"liam.fischer@northpeak.de\", date: \"2025-03-28\", amount: 86.5, status: \"Pending\", method: \"PayPal\" },\n  { id: \"ORD-10480\", customer: \"Sofia Marchetti\", email: \"sofia@marchetti-studio.it\", date: \"2025-03-27\", amount: 432.9, status: \"Paid\", method: \"Mastercard •• 1881\" },\n  { id: \"ORD-10479\", customer: \"Noah Williams\", email: \"noah.w@harborlane.com\", date: \"2025-03-26\", amount: 59.0, status: \"Failed\", method: \"Visa •• 0019\" },\n  { id: \"ORD-10478\", customer: \"Yuki Tanaka\", email: \"y.tanaka@kumo-labs.jp\", date: \"2025-03-25\", amount: 2310.75, status: \"Paid\", method: \"Bank transfer\" },\n  { id: \"ORD-10477\", customer: \"Elena Petrova\", email: \"elena.petrova@volgatech.ru\", date: \"2025-03-24\", amount: 178.2, status: \"Refunded\", method: \"Visa •• 7733\" },\n  { id: \"ORD-10476\", customer: \"Mateo Alvarez\", email: \"mateo@alvarezgroup.mx\", date: \"2025-03-23\", amount: 645.0, status: \"Paid\", method: \"Mastercard •• 5520\" },\n  { id: \"ORD-10475\", customer: \"Priya Nair\", email: \"priya.nair@lumenworks.in\", date: \"2025-03-22\", amount: 94.99, status: \"Pending\", method: \"UPI\" },\n  { id: \"ORD-10474\", customer: \"Oliver Grant\", email: \"oliver.grant@fernhill.co.uk\", date: \"2025-03-21\", amount: 1520.0, status: \"Paid\", method: \"Amex •• 3005\" },\n  { id: \"ORD-10473\", customer: \"Chloé Dubois\", email: \"chloe.dubois@atelier-nord.fr\", date: \"2025-03-20\", amount: 312.4, status: \"Paid\", method: \"Visa •• 9921\" },\n  { id: \"ORD-10472\", customer: \"Kwame Mensah\", email: \"kwame@accracraft.gh\", date: \"2025-03-19\", amount: 47.25, status: \"Failed\", method: \"Mastercard •• 6104\" },\n  { id: \"ORD-10471\", customer: \"Hannah Lindqvist\", email: \"hannah.l@fjordsoft.se\", date: \"2025-03-18\", amount: 889.0, status: \"Paid\", method: \"Visa •• 1156\" },\n  { id: \"ORD-10470\", customer: \"Diego Ramirez\", email: \"diego.ramirez@solcafe.es\", date: \"2025-03-17\", amount: 205.8, status: \"Refunded\", method: \"PayPal\" },\n  { id: \"ORD-10469\", customer: \"Isabella Rossi\", email: \"isabella.rossi@casaviva.it\", date: \"2025-03-15\", amount: 73.0, status: \"Paid\", method: \"Apple Pay\" },\n  { id: \"ORD-10468\", customer: \"Ethan Brooks\", email: \"ethan.brooks@tidalcore.com\", date: \"2025-03-14\", amount: 1975.5, status: \"Pending\", method: \"Bank transfer\" },\n  { id: \"ORD-10467\", customer: \"Fatima Al-Sayed\", email: \"fatima@sandstone.ae\", date: \"2025-03-13\", amount: 560.0, status: \"Paid\", method: \"Visa •• 8842\" },\n  { id: \"ORD-10466\", customer: \"Lucas Meyer\", email: \"lucas.meyer@alpenwerk.ch\", date: \"2025-03-12\", amount: 129.9, status: \"Paid\", method: \"Mastercard •• 2290\" },\n  { id: \"ORD-10465\", customer: \"Grace Kim\", email: \"grace.kim@seoulbyte.kr\", date: \"2025-03-11\", amount: 38.0, status: \"Failed\", method: \"Visa •• 4410\" },\n  { id: \"ORD-10464\", customer: \"Tomás Silva\", email: \"tomas.silva@lisbonloom.pt\", date: \"2025-03-10\", amount: 742.35, status: \"Paid\", method: \"Google Pay\" },\n  { id: \"ORD-10463\", customer: \"Aisha Khan\", email: \"aisha.khan@crescentlogic.pk\", date: \"2025-03-08\", amount: 261.0, status: \"Pending\", method: \"Visa •• 3367\" },\n  { id: \"ORD-10462\", customer: \"Jack Thompson\", email: \"jack.t@redwoodsupply.com\", date: \"2025-03-07\", amount: 3120.0, status: \"Paid\", method: \"Bank transfer\" },\n  { id: \"ORD-10461\", customer: \"Marta Kowalska\", email: \"marta.kowalska@wislaworks.pl\", date: \"2025-03-05\", amount: 99.0, status: \"Refunded\", method: \"Mastercard •• 7015\" },\n  { id: \"ORD-10460\", customer: \"Samuel Osei\", email: \"samuel@kumasidesign.gh\", date: \"2025-03-04\", amount: 415.6, status: \"Paid\", method: \"Visa •• 5588\" },\n  { id: \"ORD-10459\", customer: \"Emma Johansson\", email: \"emma.j@nordlicht.se\", date: \"2025-03-03\", amount: 68.4, status: \"Paid\", method: \"Apple Pay\" },\n  { id: \"ORD-10458\", customer: \"Rahul Mehta\", email: \"rahul.mehta@orbitlane.in\", date: \"2025-03-02\", amount: 1089.0, status: \"Pending\", method: \"UPI\" },\n  { id: \"ORD-10457\", customer: \"Zoe Martin\", email: \"zoe.martin@pixelharbor.ca\", date: \"2025-03-01\", amount: 224.75, status: \"Paid\", method: \"Visa •• 6671\" },\n  { id: \"ORD-10456\", customer: \"Andre Costa\", email: \"andre.costa@vertexrio.br\", date: \"2025-02-27\", amount: 530.0, status: \"Failed\", method: \"Mastercard •• 4123\" },\n  { id: \"ORD-10455\", customer: \"Nina Haas\", email: \"nina.haas@kleinbauer.at\", date: \"2025-02-25\", amount: 147.0, status: \"Paid\", method: \"PayPal\" },\n  { id: \"ORD-10454\", customer: \"Omar Haddad\", email: \"omar.haddad@medinaworks.ma\", date: \"2025-02-22\", amount: 799.9, status: \"Paid\", method: \"Visa •• 2048\" },\n  { id: \"ORD-10453\", customer: \"Lena Schmidt\", email: \"lena.schmidt@rheinblick.de\", date: \"2025-02-20\", amount: 52.5, status: \"Refunded\", method: \"Mastercard •• 9037\" },\n  { id: \"ORD-10452\", customer: \"Daniel Cohen\", email: \"daniel.cohen@telaviv-ops.il\", date: \"2025-02-18\", amount: 1640.0, status: \"Paid\", method: \"Amex •• 1009\" },\n  { id: \"ORD-10451\", customer: \"Mei Lin\", email: \"mei.lin@jadepeak.sg\", date: \"2025-02-15\", amount: 318.0, status: \"Pending\", method: \"Visa •• 7710\" },\n  { id: \"ORD-10450\", customer: \"Victor Novak\", email: \"victor.novak@praguepress.cz\", date: \"2025-02-12\", amount: 91.2, status: \"Paid\", method: \"Mastercard •• 3382\" },\n];\n\nconst STATUS_OPTIONS: StatusFilter[] = [\"All\", \"Paid\", \"Pending\", \"Refunded\", \"Failed\"];\nconst PAGE_SIZES = [5, 10, 20] as const;\n\nconst STATUS_STYLES: Record<Status, string> = {\n  Paid: \"bg-emerald-50 text-emerald-800 ring-emerald-600/20\",\n  Pending: \"bg-amber-50 text-amber-800 ring-amber-600/25\",\n  Refunded: \"bg-slate-100 text-slate-700 ring-slate-500/20\",\n  Failed: \"bg-rose-50 text-rose-800 ring-rose-600/20\",\n};\n\nconst STATUS_DOT: Record<Status, string> = {\n  Paid: \"bg-emerald-500\",\n  Pending: \"bg-amber-500\",\n  Refunded: \"bg-slate-400\",\n  Failed: \"bg-rose-500\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" });\nconst dateFmt = new Intl.DateTimeFormat(\"en-US\", {\n  month: \"short\",\n  day: \"numeric\",\n  year: \"numeric\",\n  timeZone: \"UTC\",\n});\n\nfunction formatDate(iso: string): string {\n  return dateFmt.format(new Date(`${iso}T00:00:00Z`));\n}\n\nfunction compare(a: Order, b: Order, key: SortKey): number {\n  switch (key) {\n    case \"amount\":\n      return a.amount - b.amount;\n    case \"date\":\n      return a.date.localeCompare(b.date);\n    default:\n      return a[key].localeCompare(b[key]);\n  }\n}\n\nfunction StatusBadge({ status }: { status: Status }) {\n  return (\n    <span\n      className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${STATUS_STYLES[status]}`}\n    >\n      <span aria-hidden=\"true\" className={`size-1.5 rounded-full ${STATUS_DOT[status]}`} />\n      {status}\n    </span>\n  );\n}\n\nfunction Segmented({\n  label,\n  options,\n  value,\n  onChange,\n  counts,\n}: {\n  label: string;\n  options: StatusFilter[];\n  value: StatusFilter;\n  onChange: (v: StatusFilter) => void;\n  counts: Record<StatusFilter, number>;\n}) {\n  const refs = useRef<Array<HTMLButtonElement | null>>([]);\n\n  function onKeyDown(e: KeyboardEvent<HTMLButtonElement>, index: number) {\n    let next = index;\n    if (e.key === \"ArrowRight\" || e.key === \"ArrowDown\") next = (index + 1) % options.length;\n    else if (e.key === \"ArrowLeft\" || e.key === \"ArrowUp\") next = (index - 1 + options.length) % options.length;\n    else if (e.key === \"Home\") next = 0;\n    else if (e.key === \"End\") next = options.length - 1;\n    else return;\n    e.preventDefault();\n    onChange(options[next]);\n    refs.current[next]?.focus();\n  }\n\n  return (\n    <div\n      role=\"radiogroup\"\n      aria-label={label}\n      className=\"flex w-full overflow-x-auto rounded-lg bg-slate-100 p-1 sm:w-auto\"\n    >\n      {options.map((opt, i) => {\n        const selected = opt === value;\n        return (\n          <button\n            key={opt}\n            ref={(el) => {\n              refs.current[i] = el;\n            }}\n            type=\"button\"\n            role=\"radio\"\n            aria-checked={selected}\n            tabIndex={selected ? 0 : -1}\n            onClick={() => onChange(opt)}\n            onKeyDown={(e) => onKeyDown(e, i)}\n            className={`flex flex-1 items-center justify-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 sm:flex-none ${\n              selected ? \"bg-white text-slate-900 shadow-sm\" : \"text-slate-600 hover:text-slate-900\"\n            }`}\n          >\n            {opt}\n            <span\n              className={`rounded-full px-1.5 text-xs tabular-nums ${\n                selected ? \"bg-slate-100 text-slate-700\" : \"text-slate-500\"\n              }`}\n            >\n              {counts[opt]}\n            </span>\n          </button>\n        );\n      })}\n    </div>\n  );\n}\n\nfunction SortHeader({\n  label,\n  sortKey,\n  active,\n  dir,\n  onSort,\n  align = \"left\",\n}: {\n  label: string;\n  sortKey: SortKey;\n  active: boolean;\n  dir: SortDir;\n  onSort: (k: SortKey) => void;\n  align?: \"left\" | \"right\";\n}) {\n  const Icon = !active ? ArrowUpDown : dir === \"asc\" ? ArrowUp : ArrowDown;\n  return (\n    <th\n      scope=\"col\"\n      aria-sort={active ? (dir === \"asc\" ? \"ascending\" : \"descending\") : \"none\"}\n      className={`px-4 py-3 ${align === \"right\" ? \"text-right\" : \"text-left\"}`}\n    >\n      <button\n        type=\"button\"\n        onClick={() => onSort(sortKey)}\n        className={`group inline-flex items-center gap-1.5 rounded text-xs font-semibold uppercase tracking-wide hover:text-slate-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n          active ? \"text-slate-900\" : \"text-slate-600\"\n        } ${align === \"right\" ? \"flex-row-reverse\" : \"\"}`}\n      >\n        {label}\n        <Icon\n          aria-hidden=\"true\"\n          className={`size-3.5 ${active ? \"text-indigo-600\" : \"text-slate-400 group-hover:text-slate-600\"}`}\n        />\n      </button>\n    </th>\n  );\n}\n\nexport default function Page() {\n  const uid = useId();\n  const [status, setStatus] = useState<StatusFilter>(\"All\");\n  const [query, setQuery] = useState(\"\");\n  const [from, setFrom] = useState(\"\");\n  const [to, setTo] = useState(\"\");\n  const [sortKey, setSortKey] = useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = useState<SortDir>(\"desc\");\n  const [page, setPage] = useState(1);\n  const [pageSize, setPageSize] = useState<number>(10);\n\n  const rangeInvalid = from !== \"\" && to !== \"\" && from > to;\n\n  // Rows matching search + date range (status counts are derived from these).\n  const baseFiltered = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return ORDERS.filter((o) => {\n      if (q && !`${o.id} ${o.customer} ${o.email}`.toLowerCase().includes(q)) return false;\n      if (!rangeInvalid) {\n        if (from && o.date < from) return false;\n        if (to && o.date > to) return false;\n      }\n      return true;\n    });\n  }, [query, from, to, rangeInvalid]);\n\n  const counts = useMemo(() => {\n    const c: Record<StatusFilter, number> = {\n      All: baseFiltered.length,\n      Paid: 0,\n      Pending: 0,\n      Refunded: 0,\n      Failed: 0,\n    };\n    for (const o of baseFiltered) c[o.status] += 1;\n    return c;\n  }, [baseFiltered]);\n\n  const rows = useMemo(() => {\n    const filtered = status === \"All\" ? baseFiltered : baseFiltered.filter((o) => o.status === status);\n    const sorted = [...filtered].sort((a, b) => {\n      const r = compare(a, b, sortKey);\n      if (r !== 0) return sortDir === \"asc\" ? r : -r;\n      return b.id.localeCompare(a.id);\n    });\n    return sorted;\n  }, [baseFiltered, status, sortKey, sortDir]);\n\n  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n  const startIdx = (currentPage - 1) * pageSize;\n  const pageRows = rows.slice(startIdx, startIdx + pageSize);\n  const shownFrom = rows.length === 0 ? 0 : startIdx + 1;\n  const shownTo = startIdx + pageRows.length;\n\n  const hasFilters = status !== \"All\" || query !== \"\" || from !== \"\" || to !== \"\";\n\n  function handleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function clearFilters() {\n    setStatus(\"All\");\n    setQuery(\"\");\n    setFrom(\"\");\n    setTo(\"\");\n    setPage(1);\n  }\n\n  const pageNumbers = useMemo(() => {\n    const pages: Array<number | \"gap-start\" | \"gap-end\"> = [];\n    const windowStart = Math.max(2, currentPage - 1);\n    const windowEnd = Math.min(totalPages - 1, currentPage + 1);\n    pages.push(1);\n    if (windowStart > 2) pages.push(\"gap-start\");\n    for (let p = windowStart; p <= windowEnd; p++) pages.push(p);\n    if (windowEnd < totalPages - 1) pages.push(\"gap-end\");\n    if (totalPages > 1) pages.push(totalPages);\n    return pages;\n  }, [currentPage, totalPages]);\n\n  const pageBtn =\n    \"inline-flex size-9 items-center justify-center rounded-md text-sm font-medium text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:text-slate-300 disabled:hover:bg-transparent\";\n\n  const inputBase =\n    \"h-10 w-full rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 placeholder:text-slate-500 focus-visible:border-indigo-600 focus-visible:outline-2 focus-visible:outline-indigo-600\";\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <div className=\"mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8\">\n        <header className=\"mb-6\">\n          <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Orders</h1>\n          <p className=\"mt-1 text-sm text-slate-600\">\n            Review recent payments, track their status and find a specific customer or order.\n          </p>\n        </header>\n\n        <section\n          aria-label=\"Orders table\"\n          className=\"rounded-xl border border-slate-200 bg-white shadow-sm\"\n        >\n          {/* Filters row */}\n          <div className=\"flex flex-col gap-4 border-b border-slate-200 p-4 lg:flex-row lg:items-end lg:justify-between\">\n            <div className=\"flex flex-col gap-1.5\">\n              <span id={`${uid}-status`} className=\"text-xs font-medium text-slate-600\">\n                Status\n              </span>\n              <Segmented\n                label=\"Filter by status\"\n                options={STATUS_OPTIONS}\n                value={status}\n                counts={counts}\n                onChange={(v) => {\n                  setStatus(v);\n                  setPage(1);\n                }}\n              />\n            </div>\n\n            <div className=\"flex flex-col gap-4 sm:flex-row sm:items-end\">\n              <fieldset className=\"min-w-0\">\n                <legend className=\"mb-1.5 text-xs font-medium text-slate-600\">Order date</legend>\n                <div className=\"flex items-center gap-2\">\n                  <label className=\"sr-only\" htmlFor={`${uid}-from`}>\n                    From date\n                  </label>\n                  <input\n                    id={`${uid}-from`}\n                    type=\"date\"\n                    value={from}\n                    max={to || undefined}\n                    onChange={(e) => {\n                      setFrom(e.target.value);\n                      setPage(1);\n                    }}\n                    aria-invalid={rangeInvalid}\n                    aria-describedby={rangeInvalid ? `${uid}-range-error` : undefined}\n                    className={`${inputBase} min-w-0 sm:w-40`}\n                  />\n                  <span aria-hidden=\"true\" className=\"text-slate-500\">\n                    –\n                  </span>\n                  <label className=\"sr-only\" htmlFor={`${uid}-to`}>\n                    To date\n                  </label>\n                  <input\n                    id={`${uid}-to`}\n                    type=\"date\"\n                    value={to}\n                    min={from || undefined}\n                    onChange={(e) => {\n                      setTo(e.target.value);\n                      setPage(1);\n                    }}\n                    aria-invalid={rangeInvalid}\n                    aria-describedby={rangeInvalid ? `${uid}-range-error` : undefined}\n                    className={`${inputBase} min-w-0 sm:w-40`}\n                  />\n                </div>\n              </fieldset>\n\n              <div className=\"sm:w-64\">\n                <label htmlFor={`${uid}-search`} className=\"mb-1.5 block text-xs font-medium text-slate-600\">\n                  Search\n                </label>\n                <div className=\"relative\">\n                  <Search\n                    aria-hidden=\"true\"\n                    className=\"pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-slate-500\"\n                  />\n                  <input\n                    id={`${uid}-search`}\n                    type=\"search\"\n                    value={query}\n                    onChange={(e) => {\n                      setQuery(e.target.value);\n                      setPage(1);\n                    }}\n                    placeholder=\"Customer, email or order ID\"\n                    autoComplete=\"off\"\n                    className={`${inputBase} pl-9`}\n                  />\n                </div>\n              </div>\n            </div>\n          </div>\n\n          {rangeInvalid && (\n            <p\n              id={`${uid}-range-error`}\n              role=\"alert\"\n              className=\"border-b border-rose-200 bg-rose-50 px-4 py-2 text-sm text-rose-800\"\n            >\n              The start date is after the end date, so the date filter is being ignored.\n            </p>\n          )}\n\n          {/* Active filter summary */}\n          <div className=\"flex min-h-12 flex-wrap items-center justify-between gap-2 px-4 py-2 text-sm text-slate-600\">\n            <p aria-live=\"polite\" role=\"status\">\n              {rows.length === 0\n                ? \"No orders match your filters\"\n                : `Showing ${shownFrom}–${shownTo} of ${rows.length} ${rows.length === 1 ? \"order\" : \"orders\"}`}\n            </p>\n            {hasFilters && (\n              <button\n                type=\"button\"\n                onClick={clearFilters}\n                className=\"inline-flex items-center gap-1 rounded-md px-2 py-1 font-medium text-indigo-700 hover:bg-indigo-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n              >\n                <X aria-hidden=\"true\" className=\"size-4\" />\n                Clear filters\n              </button>\n            )}\n          </div>\n\n          {/* Table */}\n          <div className=\"overflow-x-auto\">\n            <table className=\"w-full text-sm\">\n              <caption className=\"sr-only\">\n                Orders, sorted by {sortKey} {sortDir === \"asc\" ? \"ascending\" : \"descending\"}\n              </caption>\n              <thead className=\"hidden border-y border-slate-200 bg-slate-50 md:table-header-group\">\n                <tr>\n                  <SortHeader label=\"Order\" sortKey=\"id\" active={sortKey === \"id\"} dir={sortDir} onSort={handleSort} />\n                  <SortHeader\n                    label=\"Customer\"\n                    sortKey=\"customer\"\n                    active={sortKey === \"customer\"}\n                    dir={sortDir}\n                    onSort={handleSort}\n                  />\n                  <SortHeader label=\"Date\" sortKey=\"date\" active={sortKey === \"date\"} dir={sortDir} onSort={handleSort} />\n                  <SortHeader\n                    label=\"Status\"\n                    sortKey=\"status\"\n                    active={sortKey === \"status\"}\n                    dir={sortDir}\n                    onSort={handleSort}\n                  />\n                  <SortHeader\n                    label=\"Amount\"\n                    sortKey=\"amount\"\n                    active={sortKey === \"amount\"}\n                    dir={sortDir}\n                    onSort={handleSort}\n                    align=\"right\"\n                  />\n                </tr>\n              </thead>\n              <tbody className=\"block divide-y divide-slate-100 md:table-row-group\">\n                {pageRows.map((o) => (\n                  <tr\n                    key={o.id}\n                    className=\"grid grid-cols-2 gap-x-4 gap-y-1 px-4 py-3 hover:bg-slate-50 md:table-row md:p-0\"\n                  >\n                    <td className=\"col-span-1 font-mono text-xs font-medium text-slate-900 md:table-cell md:px-4 md:py-3.5\">\n                      {o.id}\n                    </td>\n                    <td className=\"col-span-1 row-start-1 justify-self-end md:table-cell md:px-4 md:py-3.5 md:text-left md:hidden\">\n                      <StatusBadge status={o.status} />\n                    </td>\n                    <td className=\"col-span-2 md:table-cell md:px-4 md:py-3.5\">\n                      <div className=\"font-medium text-slate-900\">{o.customer}</div>\n                      <div className=\"truncate text-slate-600\">{o.email}</div>\n                    </td>\n                    <td className=\"col-span-1 text-slate-700 md:table-cell md:px-4 md:py-3.5 md:whitespace-nowrap\">\n                      <time dateTime={o.date}>{formatDate(o.date)}</time>\n                    </td>\n                    <td className=\"hidden md:table-cell md:px-4 md:py-3.5\">\n                      <StatusBadge status={o.status} />\n                    </td>\n                    <td className=\"col-span-1 text-right font-medium tabular-nums text-slate-900 md:table-cell md:px-4 md:py-3.5\">\n                      {currency.format(o.amount)}\n                    </td>\n                  </tr>\n                ))}\n              </tbody>\n            </table>\n\n            {pageRows.length === 0 && (\n              <div className=\"flex flex-col items-center gap-2 px-4 py-16 text-center\">\n                <div className=\"flex size-10 items-center justify-center rounded-full bg-slate-100\">\n                  <Search aria-hidden=\"true\" className=\"size-5 text-slate-500\" />\n                </div>\n                <h2 className=\"text-base font-semibold\">No orders found</h2>\n                <p className=\"max-w-sm text-sm text-slate-600\">\n                  Try a different search term, widen the date range or pick another status.\n                </p>\n                {hasFilters && (\n                  <button\n                    type=\"button\"\n                    onClick={clearFilters}\n                    className=\"mt-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                  >\n                    Clear all filters\n                  </button>\n                )}\n              </div>\n            )}\n          </div>\n\n          {/* Pagination */}\n          <div className=\"flex flex-col gap-3 border-t border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between\">\n            <div className=\"flex items-center gap-2 text-sm text-slate-600\">\n              <label htmlFor={`${uid}-size`}>Rows per page</label>\n              <select\n                id={`${uid}-size`}\n                value={pageSize}\n                onChange={(e) => {\n                  setPageSize(Number(e.target.value));\n                  setPage(1);\n                }}\n                className=\"h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n              >\n                {PAGE_SIZES.map((s) => (\n                  <option key={s} value={s}>\n                    {s}\n                  </option>\n                ))}\n              </select>\n            </div>\n\n            <nav aria-label=\"Pagination\" className=\"flex items-center justify-between gap-1 sm:justify-end\">\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(1)}\n                disabled={currentPage === 1}\n                aria-label=\"First page\"\n              >\n                <ChevronsLeft aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(currentPage - 1)}\n                disabled={currentPage === 1}\n                aria-label=\"Previous page\"\n              >\n                <ChevronLeft aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n\n              <ul className=\"hidden items-center gap-1 sm:flex\">\n                {pageNumbers.map((p) =>\n                  typeof p === \"number\" ? (\n                    <li key={p}>\n                      <button\n                        type=\"button\"\n                        onClick={() => setPage(p)}\n                        aria-label={`Page ${p}`}\n                        aria-current={p === currentPage ? \"page\" : undefined}\n                        className={`${pageBtn} ${\n                          p === currentPage ? \"bg-indigo-600 text-white hover:bg-indigo-600\" : \"\"\n                        }`}\n                      >\n                        {p}\n                      </button>\n                    </li>\n                  ) : (\n                    <li key={p} aria-hidden=\"true\" className=\"px-1 text-slate-500\">\n                      …\n                    </li>\n                  ),\n                )}\n              </ul>\n              <span className=\"px-2 text-sm text-slate-600 sm:hidden\">\n                Page {currentPage} of {totalPages}\n              </span>\n\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(currentPage + 1)}\n                disabled={currentPage === totalPages}\n                aria-label=\"Next page\"\n              >\n                <ChevronRight aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n              <button\n                type=\"button\"\n                className={pageBtn}\n                onClick={() => setPage(totalPages)}\n                disabled={currentPage === totalPages}\n                aria-label=\"Last page\"\n              >\n                <ChevronsRight aria-hidden=\"true\" className=\"size-4\" />\n              </button>\n            </nav>\n          </div>\n        </section>\n\n        {/* Mobile sort control (headers are hidden below md) */}\n        <MobileSort sortKey={sortKey} sortDir={sortDir} onSort={handleSort} uid={uid} />\n      </div>\n    </main>\n  );\n}\n\nfunction MobileSort({\n  sortKey,\n  sortDir,\n  onSort,\n  uid,\n}: {\n  sortKey: SortKey;\n  sortDir: SortDir;\n  onSort: (k: SortKey) => void;\n  uid: string;\n}) {\n  const options: Array<{ key: SortKey; label: string }> = [\n    { key: \"date\", label: \"Date\" },\n    { key: \"amount\", label: \"Amount\" },\n    { key: \"customer\", label: \"Customer\" },\n    { key: \"status\", label: \"Status\" },\n    { key: \"id\", label: \"Order\" },\n  ];\n  return (\n    <div className=\"mt-4 flex items-center gap-2 text-sm text-slate-600 md:hidden\">\n      <label htmlFor={`${uid}-msort`}>Sort by</label>\n      <select\n        id={`${uid}-msort`}\n        value={sortKey}\n        onChange={(e) => onSort(e.target.value as SortKey)}\n        className=\"h-9 rounded-lg border border-slate-300 bg-white px-2 text-sm text-slate-900 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n      >\n        {options.map((o) => (\n          <option key={o.key} value={o.key}>\n            {o.label}\n          </option>\n        ))}\n      </select>\n      <button\n        type=\"button\"\n        onClick={() => onSort(sortKey)}\n        aria-label={`Sort direction: ${sortDir === \"asc\" ? \"ascending\" : \"descending\"}. Activate to reverse.`}\n        className=\"inline-flex h-9 items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 font-medium text-slate-800 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-indigo-600\"\n      >\n        {sortDir === \"asc\" ? (\n          <ArrowUp aria-hidden=\"true\" className=\"size-4\" />\n        ) : (\n          <ArrowDown aria-hidden=\"true\" className=\"size-4\" />\n        )}\n        {sortDir === \"asc\" ? \"Ascending\" : \"Descending\"}\n      </button>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

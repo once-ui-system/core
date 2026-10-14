@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(474,14): error TS2322: Type '\"space-between\"' is not assignable to type '\"center\" | \"start\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | undefined'.\napp/page.tsx(550,24): error TS2322: Type '\"space-between\"' is not assignable to type '\"center\" | \"start\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | undefined'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3041
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [color.svgPaint] Literal colour in inline SVG: <svg fill=\"#f5a524\"> — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

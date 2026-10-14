@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll take a quick look at the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NiPevY5hfiHVJr2jNPqFpM",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CkE2wGyZJVKVg1jqXAX1pE",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NiPevY5hfiHVJr2jNPqFpM",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CkE2wGyZJVKVg1jqXAX1pE",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01SjwVcVUD9PARdWsXq4JwHD",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BnpSwHVdA9cD8ptSqjHC9C",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GaWr8GiowRxqxGh7nm1xFZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SjwVcVUD9PARdWsXq4JwHD",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BnpSwHVdA9cD8ptSqjHC9C",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GaWr8GiowRxqxGh7nm1xFZ",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_017U9nXGKLAVGQJNRc1kPBKz",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018kBQztEfMPsDMKS6TJMZ8S",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013koCCRDReNamDhn6tEDxjs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017U9nXGKLAVGQJNRc1kPBKz",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018kBQztEfMPsDMKS6TJMZ8S",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013koCCRDReNamDhn6tEDxjs",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useState } from \"react\";\nimport { Check, Minus, ChevronDown, Sparkles } from \"lucide-react\";\n\ntype Billing = \"monthly\" | \"yearly\";\n\ntype Tier = {\n  id: string;\n  name: string;\n  tagline: string;\n  monthly: number;\n  yearly: number; // per month, billed annually\n  cta: string;\n  highlighted: boolean;\n  features: string[];\n};\n\nconst TIERS: Tier[] = [\n  {\n    id: \"starter\",\n    name: \"Starter\",\n    tagline: \"For solo makers shipping their first project.\",\n    monthly: 12,\n    yearly: 10,\n    cta: \"Start free trial\",\n    highlighted: false,\n    features: [\n      \"3 active projects\",\n      \"5 GB asset storage\",\n      \"Basic analytics\",\n      \"Community support\",\n      \"Public share links\",\n    ],\n  },\n  {\n    id: \"team\",\n    name: \"Team\",\n    tagline: \"For growing teams that need to move fast together.\",\n    monthly: 36,\n    yearly: 29,\n    cta: \"Start free trial\",\n    highlighted: true,\n    features: [\n      \"Unlimited projects\",\n      \"100 GB asset storage\",\n      \"Advanced analytics & exports\",\n      \"Priority email support\",\n      \"Roles and permissions\",\n      \"Slack and GitHub integrations\",\n    ],\n  },\n  {\n    id: \"enterprise\",\n    name: \"Enterprise\",\n    tagline: \"For organizations with security and scale needs.\",\n    monthly: 89,\n    yearly: 74,\n    cta: \"Contact sales\",\n    highlighted: false,\n    features: [\n      \"Everything in Team\",\n      \"1 TB asset storage\",\n      \"SSO and SCIM provisioning\",\n      \"Audit logs, 2-year retention\",\n      \"99.95% uptime SLA\",\n      \"Dedicated success manager\",\n    ],\n  },\n];\n\ntype CellValue = boolean | string;\n\ntype ComparisonRow = {\n  feature: string;\n  values: [CellValue, CellValue, CellValue];\n};\n\ntype ComparisonGroup = {\n  group: string;\n  rows: ComparisonRow[];\n};\n\nconst COMPARISON: ComparisonGroup[] = [\n  {\n    group: \"Workspace\",\n    rows: [\n      { feature: \"Active projects\", values: [\"3\", \"Unlimited\", \"Unlimited\"] },\n      { feature: \"Asset storage\", values: [\"5 GB\", \"100 GB\", \"1 TB\"] },\n      { feature: \"Team members\", values: [\"1\", \"Up to 25\", \"Unlimited\"] },\n      { feature: \"Version history\", values: [\"7 days\", \"90 days\", \"Unlimited\"] },\n    ],\n  },\n  {\n    group: \"Collaboration\",\n    rows: [\n      { feature: \"Public share links\", values: [true, true, true] },\n      { feature: \"Roles and permissions\", values: [false, true, true] },\n      { feature: \"Comments and mentions\", values: [false, true, true] },\n      { feature: \"Slack and GitHub integrations\", values: [false, true, true] },\n    ],\n  },\n  {\n    group: \"Security and support\",\n    rows: [\n      { feature: \"Two-factor authentication\", values: [true, true, true] },\n      { feature: \"SSO and SCIM\", values: [false, false, true] },\n      { feature: \"Audit logs\", values: [false, \"30 days\", \"2 years\"] },\n      { feature: \"Support\", values: [\"Community\", \"Priority email\", \"Dedicated manager\"] },\n      { feature: \"Uptime SLA\", values: [false, false, \"99.95%\"] },\n    ],\n  },\n];\n\ntype Faq = { q: string; a: string };\n\nconst FAQS: Faq[] = [\n  {\n    q: \"How does the free trial work?\",\n    a: \"Every paid plan starts with a 14-day free trial. No credit card is required, and you can invite your team right away. At the end of the trial you choose a plan or your workspace switches to read-only mode.\",\n  },\n  {\n    q: \"Can I switch plans later?\",\n    a: \"Yes. You can upgrade at any time and the change takes effect immediately, with the difference prorated. If you downgrade, the new plan starts at your next billing date.\",\n  },\n  {\n    q: \"What happens if I go over my storage limit?\",\n    a: \"We never delete your files. You will get a warning at 80% and 100% of your limit, and uploads pause until you free up space or upgrade. Existing assets stay available.\",\n  },\n  {\n    q: \"Do you offer discounts for nonprofits or students?\",\n    a: \"We offer 50% off any plan for registered nonprofits, accredited schools and students. Email our billing team with proof of status and we will apply the discount within one business day.\",\n  },\n  {\n    q: \"How does annual billing work?\",\n    a: \"Annual billing is charged once per year and saves roughly 20% compared with monthly billing. You can cancel any time and keep access until the end of the paid period.\",\n  },\n];\n\nfunction formatPrice(n: number): string {\n  return `$${n}`;\n}\n\nfunction CellContent({ value }: { value: CellValue }) {\n  if (value === true) {\n    return (\n      <>\n        <Check className=\"mx-auto size-5 text-indigo-600\" aria-hidden=\"true\" />\n        <span className=\"sr-only\">Included</span>\n      </>\n    );\n  }\n  if (value === false) {\n    return (\n      <>\n        <Minus className=\"mx-auto size-5 text-slate-300\" aria-hidden=\"true\" />\n        <span className=\"sr-only\">Not included</span>\n      </>\n    );\n  }\n  return <span className=\"text-sm text-slate-700\">{value}</span>;\n}\n\nfunction BillingToggle({\n  billing,\n  onChange,\n}: {\n  billing: Billing;\n  onChange: (b: Billing) => void;\n}) {\n  const options: { value: Billing; label: string }[] = [\n    { value: \"monthly\", label: \"Monthly\" },\n    { value: \"yearly\", label: \"Yearly\" },\n  ];\n  return (\n    <div className=\"flex flex-col items-center gap-3 sm:flex-row sm:justify-center\">\n      <div\n        role=\"radiogroup\"\n        aria-label=\"Billing period\"\n        className=\"inline-flex rounded-full bg-slate-100 p-1 ring-1 ring-slate-200\"\n      >\n        {options.map((o) => {\n          const active = billing === o.value;\n          return (\n            <button\n              key={o.value}\n              type=\"button\"\n              role=\"radio\"\n              aria-checked={active}\n              onClick={() => onChange(o.value)}\n              className={`rounded-full px-5 py-2 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                active\n                  ? \"bg-white text-slate-900 shadow-sm ring-1 ring-slate-200\"\n                  : \"text-slate-600 hover:text-slate-900\"\n              }`}\n            >\n              {o.label}\n            </button>\n          );\n        })}\n      </div>\n      <span className=\"rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200\">\n        Save about 20% with yearly billing\n      </span>\n    </div>\n  );\n}\n\nfunction TierCard({ tier, billing }: { tier: Tier; billing: Billing }) {\n  const price = billing === \"monthly\" ? tier.monthly : tier.yearly;\n  const headingId = `tier-${tier.id}`;\n  const h = tier.highlighted;\n\n  return (\n    <article\n      aria-labelledby={headingId}\n      className={`relative flex flex-col rounded-3xl p-8 ${\n        h\n          ? \"bg-slate-900 text-white shadow-2xl shadow-indigo-900/20 ring-2 ring-indigo-500 lg:-my-4 lg:py-12\"\n          : \"bg-white text-slate-900 ring-1 ring-slate-200\"\n      }`}\n    >\n      {h && (\n        <span className=\"absolute -top-3.5 left-1/2 inline-flex -translate-x-1/2 items-center gap-1 rounded-full bg-indigo-500 px-3 py-1 text-xs font-semibold text-white\">\n          <Sparkles className=\"size-3.5\" aria-hidden=\"true\" />\n          Most popular\n        </span>\n      )}\n      <h3 id={headingId} className=\"text-lg font-semibold\">\n        {tier.name}\n      </h3>\n      <p className={`mt-2 text-sm ${h ? \"text-slate-300\" : \"text-slate-600\"}`}>\n        {tier.tagline}\n      </p>\n      <p className=\"mt-6 flex items-baseline gap-1\">\n        <span className=\"text-5xl font-bold tracking-tight\">\n          {formatPrice(price)}\n        </span>\n        <span className={`text-sm ${h ? \"text-slate-300\" : \"text-slate-600\"}`}>\n          /month\n        </span>\n      </p>\n      <p\n        className={`mt-1 min-h-5 text-xs ${h ? \"text-slate-400\" : \"text-slate-500\"}`}\n        aria-live=\"polite\"\n      >\n        {billing === \"yearly\"\n          ? `Billed annually at ${formatPrice(tier.yearly * 12)}`\n          : \"Billed monthly\"}\n      </p>\n      <a\n        href=\"#\"\n        onClick={(e) => e.preventDefault()}\n        aria-label={`${tier.cta} — ${tier.name} plan`}\n        className={`mt-6 block rounded-xl px-4 py-3 text-center text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 ${\n          h\n            ? \"bg-indigo-500 text-white hover:bg-indigo-400\"\n            : \"bg-slate-900 text-white hover:bg-slate-700\"\n        }`}\n      >\n        {tier.cta}\n      </a>\n      <ul className=\"mt-8 space-y-3 text-sm\">\n        {tier.features.map((f) => (\n          <li key={f} className=\"flex gap-3\">\n            <Check\n              className={`mt-0.5 size-5 shrink-0 ${h ? \"text-indigo-300\" : \"text-indigo-600\"}`}\n              aria-hidden=\"true\"\n            />\n            <span className={h ? \"text-slate-200\" : \"text-slate-700\"}>{f}</span>\n          </li>\n        ))}\n      </ul>\n    </article>\n  );\n}\n\nfunction ComparisonTable() {\n  return (\n    <div className=\"overflow-x-auto rounded-2xl ring-1 ring-slate-200\">\n      <table className=\"w-full min-w-[40rem] border-collapse bg-white text-left\">\n        <caption className=\"sr-only\">\n          Feature comparison across Starter, Team and Enterprise plans\n        </caption>\n        <thead>\n          <tr className=\"border-b border-slate-200\">\n            <th scope=\"col\" className=\"w-2/5 px-4 py-4 text-sm font-semibold text-slate-900 sm:px-6\">\n              Features\n            </th>\n            {TIERS.map((t) => (\n              <th\n                key={t.id}\n                scope=\"col\"\n                className={`px-4 py-4 text-center text-sm font-semibold sm:px-6 ${\n                  t.highlighted ? \"bg-indigo-50 text-indigo-700\" : \"text-slate-900\"\n                }`}\n              >\n                {t.name}\n              </th>\n            ))}\n          </tr>\n        </thead>\n        {COMPARISON.map((g) => (\n          <tbody key={g.group}>\n            <tr>\n              <th\n                scope=\"colgroup\"\n                colSpan={4}\n                className=\"bg-slate-50 px-4 py-2.5 text-xs font-semibold uppercase tracking-wider text-slate-500 sm:px-6\"\n              >\n                {g.group}\n              </th>\n            </tr>\n            {g.rows.map((r) => (\n              <tr key={r.feature} className=\"border-t border-slate-100\">\n                <th\n                  scope=\"row\"\n                  className=\"px-4 py-3.5 text-sm font-medium text-slate-700 sm:px-6\"\n                >\n                  {r.feature}\n                </th>\n                {r.values.map((v, i) => (\n                  <td\n                    key={TIERS[i].id}\n                    className={`px-4 py-3.5 text-center sm:px-6 ${\n                      TIERS[i].highlighted ? \"bg-indigo-50/60\" : \"\"\n                    }`}\n                  >\n                    <CellContent value={v} />\n                  </td>\n                ))}\n              </tr>\n            ))}\n          </tbody>\n        ))}\n      </table>\n    </div>\n  );\n}\n\nfunction FaqItem({\n  faq,\n  index,\n  open,\n  onToggle,\n}: {\n  faq: Faq;\n  index: number;\n  open: boolean;\n  onToggle: () => void;\n}) {\n  const buttonId = `faq-button-${index}`;\n  const panelId = `faq-panel-${index}`;\n  return (\n    <div className=\"border-b border-slate-200 last:border-b-0\">\n      <h3>\n        <button\n          id={buttonId}\n          type=\"button\"\n          aria-expanded={open}\n          aria-controls={panelId}\n          onClick={onToggle}\n          className=\"flex w-full items-center justify-between gap-4 py-5 text-left text-base font-semibold text-slate-900 hover:text-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n        >\n          {faq.q}\n          <ChevronDown\n            aria-hidden=\"true\"\n            className={`size-5 shrink-0 text-slate-500 transition-transform duration-200 ${\n              open ? \"rotate-180\" : \"\"\n            }`}\n          />\n        </button>\n      </h3>\n      <div\n        id={panelId}\n        role=\"region\"\n        aria-labelledby={buttonId}\n        hidden={!open}\n        className=\"pb-5 pr-9 text-sm leading-6 text-slate-600\"\n      >\n        {faq.a}\n      </div>\n    </div>\n  );\n}\n\nexport default function Page() {\n  const [billing, setBilling] = useState<Billing>(\"yearly\");\n  const [openFaq, setOpenFaq] = useState<number | null>(0);\n\n  return (\n    <main className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <section\n        aria-labelledby=\"pricing-heading\"\n        className=\"mx-auto max-w-7xl px-4 pb-16 pt-16 sm:px-6 sm:pt-24 lg:px-8\"\n      >\n        <div className=\"mx-auto max-w-2xl text-center\">\n          <p className=\"text-sm font-semibold uppercase tracking-wider text-indigo-600\">\n            Pricing\n          </p>\n          <h1\n            id=\"pricing-heading\"\n            className=\"mt-3 text-4xl font-bold tracking-tight text-balance sm:text-5xl\"\n          >\n            Simple plans that grow with your team\n          </h1>\n          <p className=\"mt-4 text-lg text-slate-600 text-pretty\">\n            Try any plan free for 14 days. No credit card required, and you can\n            change or cancel whenever you like.\n          </p>\n        </div>\n\n        <div className=\"mt-10\">\n          <BillingToggle billing={billing} onChange={setBilling} />\n        </div>\n\n        <div className=\"mx-auto mt-14 grid max-w-md grid-cols-1 gap-8 lg:mt-16 lg:max-w-none lg:grid-cols-3 lg:items-center\">\n          {TIERS.map((t) => (\n            <TierCard key={t.id} tier={t} billing={billing} />\n          ))}\n        </div>\n      </section>\n\n      <section\n        aria-labelledby=\"compare-heading\"\n        className=\"mx-auto max-w-5xl px-4 py-16 sm:px-6 lg:px-8\"\n      >\n        <h2\n          id=\"compare-heading\"\n          className=\"text-center text-3xl font-bold tracking-tight\"\n        >\n          Compare plans in detail\n        </h2>\n        <p className=\"mx-auto mt-3 max-w-xl text-center text-slate-600\">\n          Everything included in each plan, side by side.\n        </p>\n        <div className=\"mt-10\">\n          <ComparisonTable />\n        </div>\n      </section>\n\n      <section\n        aria-labelledby=\"faq-heading\"\n        className=\"mx-auto max-w-3xl px-4 py-16 pb-24 sm:px-6 lg:px-8\"\n      >\n        <h2\n          id=\"faq-heading\"\n          className=\"text-center text-3xl font-bold tracking-tight\"\n        >\n          Frequently asked questions\n        </h2>\n        <div className=\"mt-10 rounded-2xl bg-white px-6 ring-1 ring-slate-200\">\n          {FAQS.map((f, i) => (\n            <FaqItem\n              key={f.q}\n              faq={f}\n              index={i}\n              open={openFaq === i}\n              onToggle={() => setOpenFaq(openFaq === i ? null : i)}\n            />\n          ))}\n        </div>\n        <p className=\"mt-8 text-center text-sm text-slate-600\">\n          Still have questions? Email us at{\" \"}\n          <a\n            href=\"mailto:hello@example.com\"\n            className=\"font-semibold text-indigo-600 underline underline-offset-2 hover:text-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            hello@example.com\n          </a>\n          .\n        </p>\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

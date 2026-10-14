@@ -1,0 +1,60 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 312,
+    "chars": 10317,
+    "bytes": 10319,
+    "tokens_o200k": 2430,
+    "tokens_claudeLegacy": 2620,
+    "tokens_exact": 3870
+  },
+  "raw": {
+    "lines": 316,
+    "chars": 10518,
+    "bytes": 10520,
+    "tokens_o200k": 2462,
+    "tokens_claudeLegacy": 2660,
+    "tokens_exact": 3916
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogTitle",
+    "DialogTrigger",
+    "Label",
+    "Textarea",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/label.tsx",
+      "components/ui/textarea.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 490,
+    "chars": 15918,
+    "bytes": 15918,
+    "tokens_o200k": 3967,
+    "tokens_claudeLegacy": 4606,
+    "tokens_exact": 6869
+  }
+}

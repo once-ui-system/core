@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the existing project structure first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XDT4WMCT72VSz2LCAZxB76",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WgqLyYcsEHXewsP65sR5H1",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XDT4WMCT72VSz2LCAZxB76",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WgqLyYcsEHXewsP65sR5H1",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013BsDzZao47PEw7yQ8zsoe1",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011RcdYr9YuAnqWkAjxgYenr",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QU1vDG7KzT5VrahvUebe21",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013BsDzZao47PEw7yQ8zsoe1",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011RcdYr9YuAnqWkAjxgYenr",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QU1vDG7KzT5VrahvUebe21",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_012Z7qeqHpSeGg5BDBNxg824",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AcuDAJykGqc2zjMWq32k38",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DZjqvhU5HK1xnA4rCZoM42",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012Z7qeqHpSeGg5BDBNxg824",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AcuDAJykGqc2zjMWq32k38",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DZjqvhU5HK1xnA4rCZoM42",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The globals only import Tailwind, so I'll keep all styling in utility classes and use inline `<style>` for the confetti keyframes.\n\n```tsx\n\"use client\";\n\nimport { useEffect, useMemo, useRef, useState } from \"react\";\nimport {\n  Check,\n  ChevronDown,\n  Circle,\n  Loader2,\n  PartyPopper,\n  RotateCcw,\n  Sparkles,\n  Clock,\n} from \"lucide-react\";\n\ntype Status = \"todo\" | \"in-progress\" | \"done\";\n\ntype Step = {\n  id: string;\n  title: string;\n  description: string;\n  detail: string;\n  minutes: number;\n  actionLabel: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your workspace profile\",\n    description: \"Add your team name, logo colour and time zone.\",\n    detail:\n      \"Your workspace profile appears on invoices, shared reports and email notifications. Pick a name your teammates will recognise and set the time zone your team works in.\",\n    minutes: 2,\n    actionLabel: \"Edit profile\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite your first teammates\",\n    description: \"Bring in at least two people to collaborate with.\",\n    detail:\n      \"Invite colleagues by email or share a join link. Admins can manage billing, members can create and edit projects, and viewers get read-only access.\",\n    minutes: 3,\n    actionLabel: \"Invite people\",\n  },\n  {\n    id: \"project\",\n    title: \"Create your first project\",\n    description: \"Start from a template or build from scratch.\",\n    detail:\n      \"Projects keep tasks, files and discussions in one place. The 'Product launch' template includes a timeline, a task board and a weekly status report.\",\n    minutes: 4,\n    actionLabel: \"New project\",\n  },\n  {\n    id: \"integrations\",\n    title: \"Connect Slack or Google Calendar\",\n    description: \"Get updates where your team already works.\",\n    detail:\n      \"Connect an integration to post project updates to a Slack channel or sync due dates with Google Calendar. You can disconnect at any time from Settings.\",\n    minutes: 3,\n    actionLabel: \"Browse integrations\",\n  },\n  {\n    id: \"notifications\",\n    title: \"Choose your notification preferences\",\n    description: \"Decide what lands in your inbox and what stays quiet.\",\n    detail:\n      \"Pick between instant, daily digest or weekly summary emails, and set quiet hours so you are not pinged outside of working time.\",\n    minutes: 1,\n    actionLabel: \"Open preferences\",\n  },\n];\n\nconst CONFETTI_COLORS = [\n  \"bg-emerald-400\",\n  \"bg-sky-400\",\n  \"bg-amber-400\",\n  \"bg-rose-400\",\n  \"bg-violet-400\",\n  \"bg-teal-400\",\n];\n\nfunction StatusIcon({ status }: { status: Status }) {\n  if (status === \"done\") {\n    return (\n      <span className=\"flex size-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white\">\n        <Check className=\"size-4\" strokeWidth={3} aria-hidden=\"true\" />\n      </span>\n    );\n  }\n  if (status === \"in-progress\") {\n    return (\n      <span className=\"flex size-8 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-indigo-700 ring-2 ring-indigo-500\">\n        <Loader2\n          className=\"size-4 motion-safe:animate-spin\"\n          aria-hidden=\"true\"\n        />\n      </span>\n    );\n  }\n  return (\n    <span className=\"flex size-8 shrink-0 items-center justify-center rounded-full border-2 border-slate-300 bg-white text-slate-300\">\n      <Circle className=\"size-3\" aria-hidden=\"true\" />\n    </span>\n  );\n}\n\nconst STATUS_LABEL: Record<Status, string> = {\n  done: \"Completed\",\n  \"in-progress\": \"In progress\",\n  todo: \"Not started\",\n};\n\nexport default function Page() {\n  const [statuses, setStatuses] = useState<Record<string, Status>>(() =>\n    Object.fromEntries(\n      STEPS.map((s, i) => [s.id, (i === 0 ? \"done\" : \"todo\") as Status]),\n    ),\n  );\n  const [expanded, setExpanded] = useState<string | null>(\"invite\");\n  const [announcement, setAnnouncement] = useState(\"\");\n  const celebrationRef = useRef<HTMLDivElement>(null);\n  const wasComplete = useRef(false);\n\n  const doneCount = STEPS.filter((s) => statuses[s.id] === \"done\").length;\n  const total = STEPS.length;\n  const percent = Math.round((doneCount / total) * 100);\n  const complete = doneCount === total;\n\n  const remainingMinutes = STEPS.reduce(\n    (sum, s) => (statuses[s.id] === \"done\" ? sum : sum + s.minutes),\n    0,\n  );\n\n  const confetti = useMemo(\n    () =>\n      Array.from({ length: 28 }, (_, i) => ({\n        id: i,\n        left: (i * 37) % 100,\n        delay: ((i * 53) % 100) / 100,\n        duration: 1.8 + ((i * 29) % 15) / 10,\n        color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n        rotate: (i * 47) % 360,\n        round: i % 3 === 0,\n      })),\n    [],\n  );\n\n  useEffect(() => {\n    if (complete && !wasComplete.current) {\n      setAnnouncement(\"All steps complete. You're ready to go!\");\n      celebrationRef.current?.focus();\n    }\n    wasComplete.current = complete;\n  }, [complete]);\n\n  function setStatus(id: string, status: Status) {\n    setStatuses((prev) => ({ ...prev, [id]: status }));\n    const step = STEPS.find((s) => s.id === id);\n    if (step && status !== \"done\") {\n      setAnnouncement(`${step.title}: ${STATUS_LABEL[status]}`);\n    } else if (step) {\n      setAnnouncement(`${step.title} marked as complete`);\n    }\n  }\n\n  function startStep(id: string) {\n    setStatus(id, \"in-progress\");\n  }\n\n  function toggleDone(id: string) {\n    setStatus(id, statuses[id] === \"done\" ? \"todo\" : \"done\");\n  }\n\n  function reset() {\n    setStatuses(\n      Object.fromEntries(\n        STEPS.map((s, i) => [s.id, (i === 0 ? \"done\" : \"todo\") as Status]),\n      ),\n    );\n    setExpanded(\"invite\");\n    setAnnouncement(\"Checklist reset\");\n  }\n\n  return (\n    <main className=\"min-h-screen bg-gradient-to-b from-slate-50 to-indigo-50/60 px-4 py-8 text-slate-900 sm:px-6 sm:py-14\">\n      <style>{`\n        @keyframes confetti-fall {\n          0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }\n          100% { transform: translateY(260px) rotate(540deg); opacity: 0; }\n        }\n        @keyframes pop-in {\n          0% { transform: scale(0.85); opacity: 0; }\n          100% { transform: scale(1); opacity: 1; }\n        }\n        @media (prefers-reduced-motion: reduce) {\n          .confetti-piece { animation: none !important; opacity: 0 !important; }\n          .pop-in { animation: none !important; }\n        }\n      `}</style>\n\n      <div className=\"mx-auto w-full max-w-2xl\">\n        <header className=\"mb-6 sm:mb-8\">\n          <p className=\"mb-2 inline-flex items-center gap-1.5 rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700\">\n            <Sparkles className=\"size-3.5\" aria-hidden=\"true\" />\n            Getting started\n          </p>\n          <h1 className=\"text-balance text-2xl font-bold tracking-tight sm:text-3xl\">\n            Welcome to Northwind, Priya\n          </h1>\n          <p className=\"mt-2 text-slate-600\">\n            Finish these five steps to get your team set up. It takes about ten\n            minutes, and you can pick up where you left off at any time.\n          </p>\n        </header>\n\n        <section\n          aria-labelledby=\"progress-heading\"\n          className=\"mb-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5\"\n        >\n          <div className=\"mb-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1\">\n            <h2 id=\"progress-heading\" className=\"text-sm font-semibold\">\n              Your progress\n            </h2>\n            <p className=\"text-sm text-slate-600\">\n              <span className=\"font-semibold text-slate-900\">\n                {doneCount} of {total}\n              </span>{\" \"}\n              steps complete\n            </p>\n          </div>\n          <div\n            role=\"progressbar\"\n            aria-labelledby=\"progress-heading\"\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n            aria-valuetext={`${doneCount} of ${total} steps complete, ${percent} percent`}\n            className=\"h-3 w-full overflow-hidden rounded-full bg-slate-100\"\n          >\n            <div\n              className={`h-full rounded-full transition-[width] duration-500 ease-out motion-reduce:transition-none ${\n                complete\n                  ? \"bg-emerald-500\"\n                  : \"bg-gradient-to-r from-indigo-500 to-violet-500\"\n              }`}\n              style={{ width: `${percent}%` }}\n            />\n          </div>\n          <div className=\"mt-3 flex items-center justify-between text-xs text-slate-500\">\n            <span className=\"font-medium tabular-nums\">{percent}%</span>\n            {!complete && (\n              <span className=\"inline-flex items-center gap-1\">\n                <Clock className=\"size-3.5\" aria-hidden=\"true\" />\n                About {remainingMinutes} min left\n              </span>\n            )}\n          </div>\n        </section>\n\n        {complete && (\n          <div\n            ref={celebrationRef}\n            tabIndex={-1}\n            className=\"pop-in relative mb-6 overflow-hidden rounded-2xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6 text-center shadow-sm outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 sm:p-8\"\n            style={{ animation: \"pop-in 0.4s ease-out both\" }}\n          >\n            <div\n              className=\"pointer-events-none absolute inset-0\"\n              aria-hidden=\"true\"\n            >\n              {confetti.map((c) => (\n                <span\n                  key={c.id}\n                  className={`confetti-piece absolute top-0 block size-2.5 ${c.color} ${\n                    c.round ? \"rounded-full\" : \"rounded-[2px]\"\n                  }`}\n                  style={{\n                    left: `${c.left}%`,\n                    transform: `rotate(${c.rotate}deg)`,\n                    animation: `confetti-fall ${c.duration}s ease-in ${c.delay}s both`,\n                  }}\n                />\n              ))}\n            </div>\n            <div className=\"relative\">\n              <span className=\"mx-auto mb-3 flex size-14 items-center justify-center rounded-full bg-emerald-600 text-white shadow-md\">\n                <PartyPopper className=\"size-7\" aria-hidden=\"true\" />\n              </span>\n              <h2 className=\"text-xl font-bold text-emerald-900 sm:text-2xl\">\n                You&apos;re all set!\n              </h2>\n              <p className=\"mx-auto mt-2 max-w-md text-emerald-800\">\n                Your workspace is ready. Your team can start planning, sharing\n                and shipping together right away.\n              </p>\n              <div className=\"mt-5 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center\">\n                <button\n                  type=\"button\"\n                  className=\"rounded-lg bg-emerald-700 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700\"\n                >\n                  Go to my dashboard\n                </button>\n                <button\n                  type=\"button\"\n                  onClick={reset}\n                  className=\"inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium text-emerald-900 transition-colors hover:bg-emerald-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700\"\n                >\n                  <RotateCcw className=\"size-4\" aria-hidden=\"true\" />\n                  Restart checklist\n                </button>\n              </div>\n            </div>\n          </div>\n        )}\n\n        <ol className=\"space-y-3\">\n          {STEPS.map((step, index) => {\n            const status = statuses[step.id];\n            const isOpen = expanded === step.id;\n            const panelId = `panel-${step.id}`;\n            const buttonId = `trigger-${step.id}`;\n            return (\n              <li\n                key={step.id}\n                className={`rounded-2xl border bg-white shadow-sm transition-colors ${\n                  status === \"in-progress\"\n                    ? \"border-indigo-300\"\n                    : status === \"done\"\n                      ? \"border-emerald-200\"\n                      : \"border-slate-200\"\n                }`}\n              >\n                <h3>\n                  <button\n                    id={buttonId}\n                    type=\"button\"\n                    aria-expanded={isOpen}\n                    aria-controls={panelId}\n                    onClick={() => setExpanded(isOpen ? null : step.id)}\n                    className=\"flex w-full items-center gap-3 rounded-2xl p-4 text-left focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600 sm:gap-4 sm:p-5\"\n                  >\n                    <StatusIcon status={status} />\n                    <span className=\"min-w-0 flex-1\">\n                      <span className=\"block text-xs font-medium text-slate-500\">\n                        Step {index + 1} of {total}\n                        <span className=\"sr-only\">. {STATUS_LABEL[status]}</span>\n                      </span>\n                      <span\n                        className={`block font-semibold ${\n                          status === \"done\"\n                            ? \"text-slate-500 line-through decoration-slate-300\"\n                            : \"text-slate-900\"\n                        }`}\n                      >\n                        {step.title}\n                      </span>\n                      <span className=\"mt-0.5 block text-sm text-slate-600\">\n                        {step.description}\n                      </span>\n                    </span>\n                    <span\n                      className={`hidden shrink-0 rounded-full px-2.5 py-1 text-xs font-medium sm:inline-block ${\n                        status === \"done\"\n                          ? \"bg-emerald-50 text-emerald-700\"\n                          : status === \"in-progress\"\n                            ? \"bg-indigo-50 text-indigo-700\"\n                            : \"bg-slate-100 text-slate-600\"\n                      }`}\n                      aria-hidden=\"true\"\n                    >\n                      {STATUS_LABEL[status]}\n                    </span>\n                    <ChevronDown\n                      className={`size-5 shrink-0 text-slate-400 transition-transform motion-reduce:transition-none ${\n                        isOpen ? \"rotate-180\" : \"\"\n                      }`}\n                      aria-hidden=\"true\"\n                    />\n                  </button>\n                </h3>\n                {isOpen && (\n                  <div\n                    id={panelId}\n                    role=\"region\"\n                    aria-labelledby={buttonId}\n                    className=\"border-t border-slate-100 px-4 pb-4 pt-4 sm:px-5 sm:pb-5 sm:pl-[4.5rem]\"\n                  >\n                    <p className=\"text-sm leading-relaxed text-slate-600\">\n                      {step.detail}\n                    </p>\n                    <p className=\"mt-2 inline-flex items-center gap-1 text-xs text-slate-500\">\n                      <Clock className=\"size-3.5\" aria-hidden=\"true\" />\n                      Takes about {step.minutes} min\n                    </p>\n                    <div className=\"mt-4 flex flex-col gap-2 sm:flex-row\">\n                      {status !== \"done\" && (\n                        <button\n                          type=\"button\"\n                          onClick={() => startStep(step.id)}\n                          disabled={status === \"in-progress\"}\n                          className=\"rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:cursor-not-allowed disabled:bg-indigo-300\"\n                        >\n                          {status === \"in-progress\"\n                            ? \"In progress…\"\n                            : step.actionLabel}\n                        </button>\n                      )}\n                      <button\n                        type=\"button\"\n                        onClick={() => toggleDone(step.id)}\n                        className=\"inline-flex items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n                      >\n                        {status === \"done\" ? (\n                          <>\n                            <RotateCcw className=\"size-4\" aria-hidden=\"true\" />\n                            Mark as not done\n                          </>\n                        ) : (\n                          <>\n                            <Check className=\"size-4\" aria-hidden=\"true\" />\n                            Mark as done\n                          </>\n                        )}\n                      </button>\n                    </div>\n                  </div>\n                )}\n              </li>\n            );\n          })}\n        </ol>\n\n        {!complete && (\n          <p className=\"mt-6 text-center text-sm text-slate-500\">\n            Need a hand? Our team replies to onboarding questions within one\n            business hour.\n          </p>\n        )}\n\n        <div role=\"status\" aria-live=\"polite\" className=\"sr-only\">\n          {announcement}\n        </div>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

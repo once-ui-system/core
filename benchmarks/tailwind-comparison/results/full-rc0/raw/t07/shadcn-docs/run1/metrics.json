@@ -1,0 +1,63 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 622,
+    "chars": 19126,
+    "bytes": 19133,
+    "tokens_o200k": 4698,
+    "tokens_claudeLegacy": 5078,
+    "tokens_exact": 7497
+  },
+  "raw": {
+    "lines": 615,
+    "chars": 19160,
+    "bytes": 19167,
+    "tokens_o200k": 4715,
+    "tokens_claudeLegacy": 5115,
+    "tokens_exact": 7533
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle",
+    "Empty",
+    "EmptyContent",
+    "EmptyDescription",
+    "EmptyHeader",
+    "EmptyMedia",
+    "EmptyTitle",
+    "Input",
+    "NativeSelect",
+    "NativeSelectOption",
+    "Skeleton",
+    "Tooltip",
+    "TooltipContent",
+    "TooltipProvider",
+    "TooltipTrigger"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/empty.tsx",
+      "components/ui/input.tsx",
+      "components/ui/native-select.tsx",
+      "components/ui/skeleton.tsx",
+      "components/ui/tooltip.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 425,
+    "chars": 13828,
+    "bytes": 13828,
+    "tokens_o200k": 3521,
+    "tokens_claudeLegacy": 4095,
+    "tokens_exact": 5927
+  }
+}

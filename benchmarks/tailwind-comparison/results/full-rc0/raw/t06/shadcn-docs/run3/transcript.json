@@ -1,0 +1,373 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HaZYs3FpUGSrsRRGe7riYV",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017NcTga3pbQGsAqv7BGGEJ7",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HaZYs3FpUGSrsRRGe7riYV",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017NcTga3pbQGsAqv7BGGEJ7",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01D3dsyByjYUMxnDz4vr4JLc",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Cj4bMUwTavEJHBQzC2pmbm",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/input-otp.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FovKR8V71cgPAHm3Ymtdzq",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/dialog.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01D3dsyByjYUMxnDz4vr4JLc",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Cj4bMUwTavEJHBQzC2pmbm",
+          "content": "---\ntitle: Input OTP\ndescription: Accessible one-time password component with copy-paste functionality.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://input-otp.rodz.dev\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-demo\" />\n\n## About\n\nInput OTP is built on top of [input-otp](https://github.com/guilhermerodz/input-otp) by [@guilherme_rodz](https://twitter.com/guilherme_rodz).\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add input-otp\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install input-otp\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"input-otp\"\n  title=\"components/ui/input-otp.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\"\n```\n\n```tsx showLineNumbers\n<InputOTP maxLength={6}>\n  <InputOTPGroup>\n    <InputOTPSlot index={0} />\n    <InputOTPSlot index={1} />\n    <InputOTPSlot index={2} />\n  </InputOTPGroup>\n  <InputOTPSeparator />\n  <InputOTPGroup>\n    <InputOTPSlot index={3} />\n    <InputOTPSlot index={4} />\n    <InputOTPSlot index={5} />\n  </InputOTPGroup>\n</InputOTP>\n```\n\n## Composition\n\nUse the following composition to build an `InputOTP`:\n\n```text\nInputOTP\n├── InputOTPGroup\n│   ├── InputOTPSlot\n│   ├── InputOTPSlot\n│   └── InputOTPSlot\n├── InputOTPSeparator\n├── InputOTPGroup\n│   ├── InputOTPSlot\n│   ├── InputOTPSlot\n│   └── InputOTPSlot\n├── InputOTPSeparator\n└── InputOTPGroup\n    ├── InputOTPSlot\n    └── InputOTPSlot\n```\n\n## Pattern\n\nUse the `pattern` prop to define a custom pattern for the OTP input.\n\n```tsx showLineNumbers {1,5}\nimport { REGEXP_ONLY_DIGITS_AND_CHARS } from \"input-otp\"\n\n;<InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>\n  ...\n</InputOTP>\n```\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-pattern\" />\n\n## Separator\n\nUse the `<InputOTPSeparator />` component to add a separator between input groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-separator\" />\n\n## Disabled\n\nUse the `disabled` prop to disable the input.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-disabled\" />\n\n## Controlled\n\nUse the `value` and `onChange` props to control the input value.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-controlled\" />\n\n## Invalid\n\nUse `aria-invalid` on the slots to show an error state.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-invalid\" />\n\n## Four Digits\n\nA common pattern for PIN codes. This uses the `pattern={REGEXP_ONLY_DIGITS}` prop.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-four-digits\" />\n\n## Alphanumeric\n\nUse `REGEXP_ONLY_DIGITS_AND_CHARS` to accept both letters and numbers.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-alphanumeric\" />\n\n## Form\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"input-otp-form\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [input-otp](https://input-otp.rodz.dev) documentation for more information.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FovKR8V71cgPAHm3Ymtdzq",
+          "content": "---\ntitle: Dialog\ndescription: A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.\nfeatured: true\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/dialog\n  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"dialog-demo\"\n  description=\"A dialog for editing profile details.\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add dialog\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"dialog\"\n  title=\"components/ui/dialog.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\"\n```\n\n```tsx showLineNumbers\n<Dialog>\n  <DialogTrigger>Open</DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Are you absolutely sure?</DialogTitle>\n      <DialogDescription>\n        This action cannot be undone. This will permanently delete your account\n        and remove your data from our servers.\n      </DialogDescription>\n    </DialogHeader>\n  </DialogContent>\n</Dialog>\n```\n\n## Composition\n\nUse the following composition to build a `Dialog`:\n\n```text\nDialog\n├── DialogTrigger\n└── DialogContent\n    ├── DialogHeader\n    │   ├── DialogTitle\n    │   └── DialogDescription\n    └── DialogFooter\n```\n\n## Custom Close Button\n\nReplace the default close control with your own button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-close-button\" />\n\n## No Close Button\n\nUse `showCloseButton={false}` to hide the close button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-no-close-button\" />\n\n## Sticky Footer\n\nKeep actions visible while the content scrolls.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-sticky-footer\" />\n\n## Scrollable Content\n\nLong content can scroll while the header stays in view.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-scrollable-content\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/docs/primitives/components/dialog#api-reference) documentation for more information.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the installed components directly."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Mokujo2NNSAbH2FaWAvKbP",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/dialog.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013x5Axao6DiQQMqpb2axvio",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input-otp.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RJbWZ2zg8eQw5s7LQnJcmE",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WgcSFWQejwJDjqGriBmYSQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/field.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Mokujo2NNSAbH2FaWAvKbP",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { XIcon } from \"lucide-react\"\nimport { Dialog as DialogPrimitive } from \"radix-ui\"\n\nimport { Button } from \"@/components/ui/button\"\n\nfunction Dialog({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Root>) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogPortal({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Portal>) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />\n}\n\nfunction DialogClose({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Close>) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {\n  return (\n    <DialogPrimitive.Overlay\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Content> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <DialogPortal data-slot=\"dialog-portal\">\n      <DialogOverlay />\n      <DialogPrimitive.Content\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-w-lg\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            className=\"absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\"\n          >\n            <XIcon />\n            <span className=\"sr-only\">Close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Content>\n    </DialogPortal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-header\"\n      className={cn(\"flex flex-col gap-2 text-center sm:text-left\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\n        \"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {showCloseButton && (\n        <DialogPrimitive.Close asChild>\n          <Button variant=\"outline\">Close</Button>\n        </DialogPrimitive.Close>\n      )}\n    </div>\n  )\n}\n\nfunction DialogTitle({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Title>) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\"text-lg leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Description>) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013x5Axao6DiQQMqpb2axvio",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { OTPInput, OTPInputContext } from \"input-otp\"\nimport { MinusIcon } from \"lucide-react\"\n\nfunction InputOTP({\n  className,\n  containerClassName,\n  ...props\n}: React.ComponentProps<typeof OTPInput> & {\n  containerClassName?: string\n}) {\n  return (\n    <OTPInput\n      data-slot=\"input-otp\"\n      containerClassName={cn(\n        \"flex items-center gap-2 has-disabled:opacity-50\",\n        containerClassName\n      )}\n      className={cn(\"disabled:cursor-not-allowed\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputOTPGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-otp-group\"\n      className={cn(\"flex items-center\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputOTPSlot({\n  index,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  index: number\n}) {\n  const inputOTPContext = React.useContext(OTPInputContext)\n  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}\n\n  return (\n    <div\n      data-slot=\"input-otp-slot\"\n      data-active={isActive}\n      className={cn(\n        \"relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    >\n      {char}\n      {hasFakeCaret && (\n        <div className=\"pointer-events-none absolute inset-0 flex items-center justify-center\">\n          <div className=\"h-4 w-px animate-caret-blink bg-foreground duration-1000\" />\n        </div>\n      )}\n    </div>\n  )\n}\n\nfunction InputOTPSeparator({ ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div data-slot=\"input-otp-separator\" role=\"separator\" {...props}>\n      <MinusIcon />\n    </div>\n  )\n}\n\nexport { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RJbWZ2zg8eQw5s7LQnJcmE",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WgcSFWQejwJDjqGriBmYSQ",
+          "content": "\"use client\"\n\nimport { useMemo } from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\n\nfunction FieldSet({ className, ...props }: React.ComponentProps<\"fieldset\">) {\n  return (\n    <fieldset\n      data-slot=\"field-set\"\n      className={cn(\n        \"flex flex-col gap-6\",\n        \"has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLegend({\n  className,\n  variant = \"legend\",\n  ...props\n}: React.ComponentProps<\"legend\"> & { variant?: \"legend\" | \"label\" }) {\n  return (\n    <legend\n      data-slot=\"field-legend\"\n      data-variant={variant}\n      className={cn(\n        \"mb-3 font-medium\",\n        \"data-[variant=legend]:text-base\",\n        \"data-[variant=label]:text-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-group\"\n      className={cn(\n        \"group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst fieldVariants = cva(\n  \"group/field flex w-full gap-3 data-[invalid=true]:text-destructive\",\n  {\n    variants: {\n      orientation: {\n        vertical: [\"flex-col [&>*]:w-full [&>.sr-only]:w-auto\"],\n        horizontal: [\n          \"flex-row items-center\",\n          \"[&>[data-slot=field-label]]:flex-auto\",\n          \"has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n        responsive: [\n          \"flex-col @md/field-group:flex-row @md/field-group:items-center [&>*]:w-full @md/field-group:[&>*]:w-auto [&>.sr-only]:w-auto\",\n          \"@md/field-group:[&>[data-slot=field-label]]:flex-auto\",\n          \"@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n      },\n    },\n    defaultVariants: {\n      orientation: \"vertical\",\n    },\n  }\n)\n\nfunction Field({\n  className,\n  orientation = \"vertical\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof fieldVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"field\"\n      data-orientation={orientation}\n      className={cn(fieldVariants({ orientation }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction FieldContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-content\"\n      className={cn(\n        \"group/field-content flex flex-1 flex-col gap-1.5 leading-snug\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof Label>) {\n  return (\n    <Label\n      data-slot=\"field-label\"\n      className={cn(\n        \"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50\",\n        \"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4\",\n        \"has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-label\"\n      className={cn(\n        \"flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"field-description\"\n      className={cn(\n        \"text-sm leading-normal font-normal text-muted-foreground group-has-[[data-orientation=horizontal]]/field:text-balance\",\n        \"last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5\",\n        \"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldSeparator({\n  children,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  children?: React.ReactNode\n}) {\n  return (\n    <div\n      data-slot=\"field-separator\"\n      data-content={!!children}\n      className={cn(\n        \"relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2\",\n        className\n      )}\n      {...props}\n    >\n      <Separator className=\"absolute inset-0 top-1/2\" />\n      {children && (\n        <span\n          className=\"relative mx-auto block w-fit bg-background px-2 text-muted-foreground\"\n          data-slot=\"field-separator-content\"\n        >\n          {children}\n        </span>\n      )}\n    </div>\n  )\n}\n\nfunction FieldError({\n  className,\n  children,\n  errors,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  errors?: Array<{ message?: string } | undefined>\n}) {\n  const content = useMemo(() => {\n    if (children) {\n      return children\n    }\n\n    if (!errors?.length) {\n      return null\n    }\n\n    const uniqueErrors = [\n      ...new Map(errors.map((error) => [error?.message, error])).values(),\n    ]\n\n    if (uniqueErrors?.length == 1) {\n      return uniqueErrors[0]?.message\n    }\n\n    return (\n      <ul className=\"ml-4 flex list-disc flex-col gap-1\">\n        {uniqueErrors.map(\n          (error, index) =>\n            error?.message && <li key={index}>{error.message}</li>\n        )}\n      </ul>\n    )\n  }, [children, errors])\n\n  if (!content) {\n    return null\n  }\n\n  return (\n    <div\n      role=\"alert\"\n      data-slot=\"field-error\"\n      className={cn(\"text-sm font-normal text-destructive\", className)}\n      {...props}\n    >\n      {content}\n    </div>\n  )\n}\n\nexport {\n  Field,\n  FieldLabel,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLegend,\n  FieldSeparator,\n  FieldSet,\n  FieldContent,\n  FieldTitle,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing page and layout, plus the input, button, checkbox and card components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01W74LPZHiHZKLkZ2a1ouJ79",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AcvdZFWmiJhGdxYU3FXbhM",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0112TgsJhZXik3RsDGufp6BJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01A1UVX5RXU6BywWrogjMwAE",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VwFdD8dknpNpxh5HTiQvLM",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01W74LPZHiHZKLkZ2a1ouJ79",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AcvdZFWmiJhGdxYU3FXbhM",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0112TgsJhZXik3RsDGufp6BJ",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01A1UVX5RXU6BywWrogjMwAE",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VwFdD8dknpNpxh5HTiQvLM",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the Spinner, Checkbox and Card APIs before writing the page."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016RDXAnLYVcpv5q97GHMdxM",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/spinner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017pRBt92hCKYnLh8VsuGhQx",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/checkbox.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K64qxrVgQAVGREfCezUMdm",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016RDXAnLYVcpv5q97GHMdxM",
+          "content": "import { cn } from \"@/lib/utils\"\nimport { Loader2Icon } from \"lucide-react\"\n\nfunction Spinner({ className, ...props }: React.ComponentProps<\"svg\">) {\n  return (\n    <Loader2Icon\n      role=\"status\"\n      aria-label=\"Loading\"\n      className={cn(\"size-4 animate-spin\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Spinner }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017pRBt92hCKYnLh8VsuGhQx",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon } from \"lucide-react\"\nimport { Checkbox as CheckboxPrimitive } from \"radix-ui\"\n\nfunction Checkbox({\n  className,\n  ...props\n}: React.ComponentProps<typeof CheckboxPrimitive.Root>) {\n  return (\n    <CheckboxPrimitive.Root\n      data-slot=\"checkbox\"\n      className={cn(\n        \"peer size-4 shrink-0 rounded-[4px] border border-input shadow-xs transition-shadow outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:bg-input/30 dark:aria-invalid:ring-destructive/40 dark:data-[state=checked]:bg-primary\",\n        className\n      )}\n      {...props}\n    >\n      <CheckboxPrimitive.Indicator\n        data-slot=\"checkbox-indicator\"\n        className=\"grid place-content-center text-current transition-none\"\n      >\n        <CheckIcon className=\"size-3.5\" />\n      </CheckboxPrimitive.Indicator>\n    </CheckboxPrimitive.Root>\n  )\n}\n\nexport { Checkbox }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K64qxrVgQAVGREfCezUMdm",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. The design is a login page with a card. Submitting the correct email and password opens an OTP dialog, which is the \"stacked dialog\". A \"trouble with your code?\" link opens a second dialog on top of the first (recovery options), so the stacking is real.\n\nDemo credentials are shown inline, and the valid OTP is `428193`.\n\n```tsx\n\"use client\";\n\nimport { useEffect, useId, useRef, useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport { REGEXP_ONLY_DIGITS } from \"input-otp\";\nimport {\n  CheckCircle2,\n  Eye,\n  EyeOff,\n  KeyRound,\n  LifeBuoy,\n  LogOut,\n  Mail,\n  ShieldCheck,\n  Smartphone,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport { Checkbox } from \"@/components/ui/checkbox\";\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n} from \"@/components/ui/dialog\";\nimport {\n  Field,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLabel,\n} from \"@/components/ui/field\";\nimport { Input } from \"@/components/ui/input\";\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\";\nimport { Spinner } from \"@/components/ui/spinner\";\n\nconst DEMO_EMAIL = \"maya.okafor@northwind.dev\";\nconst DEMO_PASSWORD = \"Harbor-Lantern-42\";\nconst DEMO_OTP = \"428193\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\n\ntype Session = { name: string; email: string };\n\nfunction wait(ms: number) {\n  return new Promise<void>((resolve) => setTimeout(resolve, ms));\n}\n\nfunction maskEmail(email: string) {\n  const [local, domain] = email.split(\"@\");\n  if (!local || !domain) return email;\n  return `${local.slice(0, 2)}${\"•\".repeat(Math.max(local.length - 2, 2))}@${domain}`;\n}\n\nexport default function Page() {\n  const formId = useId();\n\n  // Credentials step\n  const [email, setEmail] = useState(\"\");\n  const [password, setPassword] = useState(\"\");\n  const [showPassword, setShowPassword] = useState(false);\n  const [remember, setRemember] = useState(true);\n  const [emailError, setEmailError] = useState<string | null>(null);\n  const [passwordError, setPasswordError] = useState<string | null>(null);\n  const [formError, setFormError] = useState<string | null>(null);\n  const [submitting, setSubmitting] = useState(false);\n\n  // OTP step\n  const [otpOpen, setOtpOpen] = useState(false);\n  const [otp, setOtp] = useState(\"\");\n  const [otpError, setOtpError] = useState<string | null>(null);\n  const [verifying, setVerifying] = useState(false);\n  const [cooldown, setCooldown] = useState(0);\n  const [attempts, setAttempts] = useState(0);\n\n  // Stacked help dialog\n  const [helpOpen, setHelpOpen] = useState(false);\n\n  // Result\n  const [session, setSession] = useState<Session | null>(null);\n\n  const emailRef = useRef<HTMLInputElement>(null);\n  const passwordRef = useRef<HTMLInputElement>(null);\n\n  useEffect(() => {\n    if (cooldown <= 0) return;\n    const id = setTimeout(() => setCooldown((c) => c - 1), 1000);\n    return () => clearTimeout(id);\n  }, [cooldown]);\n\n  async function handleCredentials(e: FormEvent<HTMLFormElement>) {\n    e.preventDefault();\n    setFormError(null);\n\n    const trimmed = email.trim();\n    const nextEmailError = !trimmed\n      ? \"Enter your work email.\"\n      : !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(trimmed)\n        ? \"Enter a valid email address.\"\n        : null;\n    const nextPasswordError = !password ? \"Enter your password.\" : null;\n\n    setEmailError(nextEmailError);\n    setPasswordError(nextPasswordError);\n\n    if (nextEmailError) {\n      emailRef.current?.focus();\n      return;\n    }\n    if (nextPasswordError) {\n      passwordRef.current?.focus();\n      return;\n    }\n\n    setSubmitting(true);\n    await wait(900);\n    setSubmitting(false);\n\n    if (\n      trimmed.toLowerCase() !== DEMO_EMAIL ||\n      password !== DEMO_PASSWORD\n    ) {\n      setFormError(\n        \"That email and password combination doesn't match our records.\"\n      );\n      return;\n    }\n\n    setOtp(\"\");\n    setOtpError(null);\n    setAttempts(0);\n    setCooldown(RESEND_SECONDS);\n    setOtpOpen(true);\n  }\n\n  async function verifyOtp(code: string) {\n    if (verifying || code.length !== OTP_LENGTH) return;\n    setOtpError(null);\n    setVerifying(true);\n    await wait(800);\n    setVerifying(false);\n\n    if (code !== DEMO_OTP) {\n      const nextAttempts = attempts + 1;\n      setAttempts(nextAttempts);\n      setOtp(\"\");\n      setOtpError(\n        nextAttempts >= 3\n          ? \"Incorrect code again. Request a new code or try another method.\"\n          : \"That code is incorrect or has expired. Try again.\"\n      );\n      return;\n    }\n\n    setOtpOpen(false);\n    setHelpOpen(false);\n    setSession({ name: \"Maya Okafor\", email: DEMO_EMAIL });\n    toast.success(\"Signed in\", {\n      description: \"Welcome back, Maya. Your device has been verified.\",\n    });\n  }\n\n  function handleOtpSubmit(e: FormEvent<HTMLFormElement>) {\n    e.preventDefault();\n    if (otp.length !== OTP_LENGTH) {\n      setOtpError(\"Enter all 6 digits of your code.\");\n      return;\n    }\n    void verifyOtp(otp);\n  }\n\n  function resendCode() {\n    if (cooldown > 0) return;\n    setOtp(\"\");\n    setOtpError(null);\n    setCooldown(RESEND_SECONDS);\n    toast(\"New code sent\", {\n      description: `We emailed a fresh 6-digit code to ${maskEmail(DEMO_EMAIL)}.`,\n    });\n  }\n\n  function signOut() {\n    setSession(null);\n    setPassword(\"\");\n    setOtp(\"\");\n    setFormError(null);\n    toast(\"Signed out\", { description: \"You've been signed out safely.\" });\n  }\n\n  if (session) {\n    return (\n      <main className=\"flex min-h-svh items-center justify-center bg-muted/40 px-4 py-10\">\n        <Card className=\"w-full max-w-md\">\n          <CardHeader className=\"items-center text-center\">\n            <div className=\"mx-auto mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary\">\n              <CheckCircle2 className=\"size-6\" aria-hidden=\"true\" />\n            </div>\n            <CardTitle className=\"text-xl\">You&apos;re signed in</CardTitle>\n            <CardDescription>\n              Signed in as <span className=\"font-medium text-foreground\">{session.name}</span>{\" \"}\n              ({session.email}). Two-step verification was completed on this\n              device.\n            </CardDescription>\n          </CardHeader>\n          <CardContent>\n            <dl className=\"divide-y rounded-lg border text-sm\">\n              <div className=\"flex items-center justify-between gap-4 px-4 py-3\">\n                <dt className=\"text-muted-foreground\">Workspace</dt>\n                <dd className=\"font-medium\">Northwind Logistics</dd>\n              </div>\n              <div className=\"flex items-center justify-between gap-4 px-4 py-3\">\n                <dt className=\"text-muted-foreground\">Session length</dt>\n                <dd className=\"font-medium\">{remember ? \"30 days\" : \"This browser session\"}</dd>\n              </div>\n              <div className=\"flex items-center justify-between gap-4 px-4 py-3\">\n                <dt className=\"text-muted-foreground\">Verification</dt>\n                <dd className=\"font-medium\">Email code</dd>\n              </div>\n            </dl>\n          </CardContent>\n          <CardFooter>\n            <Button variant=\"outline\" className=\"w-full\" onClick={signOut}>\n              <LogOut aria-hidden=\"true\" />\n              Sign out\n            </Button>\n          </CardFooter>\n        </Card>\n      </main>\n    );\n  }\n\n  return (\n    <main className=\"flex min-h-svh items-center justify-center bg-muted/40 px-4 py-10\">\n      <div className=\"w-full max-w-md\">\n        <div className=\"mb-6 flex items-center justify-center gap-2\">\n          <div className=\"flex size-9 items-center justify-center rounded-lg bg-primary text-primary-foreground\">\n            <ShieldCheck className=\"size-5\" aria-hidden=\"true\" />\n          </div>\n          <span className=\"text-lg font-semibold tracking-tight\">Northwind</span>\n        </div>\n\n        <Card>\n          <CardHeader className=\"text-center\">\n            <CardTitle className=\"text-xl\">Welcome back</CardTitle>\n            <CardDescription>\n              Sign in to your workspace to manage shipments and invoices.\n            </CardDescription>\n          </CardHeader>\n\n          <CardContent>\n            <form\n              id={formId}\n              onSubmit={handleCredentials}\n              noValidate\n              aria-describedby={formError ? `${formId}-error` : undefined}\n            >\n              <FieldGroup className=\"gap-5\">\n                {formError && (\n                  <div\n                    id={`${formId}-error`}\n                    role=\"alert\"\n                    className=\"rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive\"\n                  >\n                    {formError}\n                  </div>\n                )}\n\n                <Field data-invalid={emailError ? true : undefined}>\n                  <FieldLabel htmlFor={`${formId}-email`}>Work email</FieldLabel>\n                  <Input\n                    ref={emailRef}\n                    id={`${formId}-email`}\n                    type=\"email\"\n                    inputMode=\"email\"\n                    autoComplete=\"username\"\n                    placeholder=\"you@company.com\"\n                    value={email}\n                    onChange={(e) => {\n                      setEmail(e.target.value);\n                      if (emailError) setEmailError(null);\n                    }}\n                    aria-invalid={emailError ? true : undefined}\n                    aria-describedby={emailError ? `${formId}-email-error` : undefined}\n                    disabled={submitting}\n                  />\n                  {emailError && (\n                    <FieldError id={`${formId}-email-error`}>{emailError}</FieldError>\n                  )}\n                </Field>\n\n                <Field data-invalid={passwordError ? true : undefined}>\n                  <div className=\"flex items-center justify-between gap-2\">\n                    <FieldLabel htmlFor={`${formId}-password`}>Password</FieldLabel>\n                    <button\n                      type=\"button\"\n                      className=\"rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n                      onClick={() =>\n                        toast(\"Reset link sent\", {\n                          description:\n                            \"If an account exists for that email, a reset link is on its way.\",\n                        })\n                      }\n                    >\n                      Forgot password?\n                    </button>\n                  </div>\n                  <div className=\"relative\">\n                    <Input\n                      ref={passwordRef}\n                      id={`${formId}-password`}\n                      type={showPassword ? \"text\" : \"password\"}\n                      autoComplete=\"current-password\"\n                      placeholder=\"Enter your password\"\n                      className=\"pr-10\"\n                      value={password}\n                      onChange={(e) => {\n                        setPassword(e.target.value);\n                        if (passwordError) setPasswordError(null);\n                      }}\n                      aria-invalid={passwordError ? true : undefined}\n                      aria-describedby={\n                        passwordError ? `${formId}-password-error` : undefined\n                      }\n                      disabled={submitting}\n                    />\n                    <Button\n                      type=\"button\"\n                      variant=\"ghost\"\n                      size=\"icon-sm\"\n                      className=\"absolute top-0.5 right-0.5\"\n                      onClick={() => setShowPassword((v) => !v)}\n                      aria-label={showPassword ? \"Hide password\" : \"Show password\"}\n                      aria-pressed={showPassword}\n                    >\n                      {showPassword ? (\n                        <EyeOff aria-hidden=\"true\" />\n                      ) : (\n                        <Eye aria-hidden=\"true\" />\n                      )}\n                    </Button>\n                  </div>\n                  {passwordError && (\n                    <FieldError id={`${formId}-password-error`}>\n                      {passwordError}\n                    </FieldError>\n                  )}\n                </Field>\n\n                <Field orientation=\"horizontal\">\n                  <Checkbox\n                    id={`${formId}-remember`}\n                    checked={remember}\n                    onCheckedChange={(v) => setRemember(v === true)}\n                  />\n                  <FieldLabel htmlFor={`${formId}-remember`} className=\"font-normal\">\n                    Keep me signed in for 30 days\n                  </FieldLabel>\n                </Field>\n\n                <Button type=\"submit\" size=\"lg\" disabled={submitting}>\n                  {submitting ? (\n                    <>\n                      <Spinner aria-hidden=\"true\" />\n                      Checking credentials…\n                    </>\n                  ) : (\n                    \"Continue\"\n                  )}\n                </Button>\n              </FieldGroup>\n            </form>\n          </CardContent>\n\n          <CardFooter className=\"flex-col items-stretch gap-3\">\n            <div className=\"rounded-md border border-dashed bg-muted/50 p-3 text-xs text-muted-foreground\">\n              <p className=\"mb-1 font-medium text-foreground\">Demo credentials</p>\n              <p>\n                Email: <code className=\"font-mono text-foreground\">{DEMO_EMAIL}</code>\n              </p>\n              <p>\n                Password:{\" \"}\n                <code className=\"font-mono text-foreground\">{DEMO_PASSWORD}</code>\n              </p>\n              <p>\n                Then enter code{\" \"}\n                <code className=\"font-mono text-foreground\">{DEMO_OTP}</code>.\n              </p>\n            </div>\n          </CardFooter>\n        </Card>\n\n        <p className=\"mt-6 text-center text-xs text-muted-foreground\">\n          Protected by two-step verification. By continuing you agree to the\n          Terms of Service and Privacy Policy.\n        </p>\n      </div>\n\n      {/* Step 2: OTP dialog */}\n      <Dialog\n        open={otpOpen}\n        onOpenChange={(open) => {\n          setOtpOpen(open);\n          if (!open) {\n            setHelpOpen(false);\n            setOtp(\"\");\n            setOtpError(null);\n          }\n        }}\n      >\n        <DialogContent\n          className=\"sm:max-w-md\"\n          onInteractOutside={(e) => {\n            if (verifying) e.preventDefault();\n          }}\n        >\n          <form onSubmit={handleOtpSubmit} noValidate className=\"grid gap-5\">\n            <DialogHeader>\n              <div className=\"mb-1 flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary max-sm:mx-auto\">\n                <Mail className=\"size-5\" aria-hidden=\"true\" />\n              </div>\n              <DialogTitle>Check your email</DialogTitle>\n              <DialogDescription>\n                We sent a 6-digit verification code to{\" \"}\n                <span className=\"font-medium text-foreground\">\n                  {maskEmail(DEMO_EMAIL)}\n                </span>\n                . It expires in 10 minutes.\n              </DialogDescription>\n            </DialogHeader>\n\n            <Field data-invalid={otpError ? true : undefined}>\n              <FieldLabel htmlFor={`${formId}-otp`} className=\"sr-only\">\n                Verification code\n              </FieldLabel>\n              <div className=\"flex justify-center\">\n                <InputOTP\n                  id={`${formId}-otp`}\n                  maxLength={OTP_LENGTH}\n                  pattern={REGEXP_ONLY_DIGITS}\n                  inputMode=\"numeric\"\n                  autoComplete=\"one-time-code\"\n                  value={otp}\n                  onChange={(value) => {\n                    setOtp(value);\n                    if (otpError) setOtpError(null);\n                  }}\n                  onComplete={(value) => void verifyOtp(value)}\n                  disabled={verifying}\n                  autoFocus\n                  aria-invalid={otpError ? true : undefined}\n                  aria-describedby={otpError ? `${formId}-otp-error` : undefined}\n                >\n                  <InputOTPGroup>\n                    {[0, 1, 2].map((i) => (\n                      <InputOTPSlot\n                        key={i}\n                        index={i}\n                        className=\"size-10 text-base sm:size-12 sm:text-lg\"\n                        aria-invalid={otpError ? true : undefined}\n                      />\n                    ))}\n                  </InputOTPGroup>\n                  <InputOTPSeparator />\n                  <InputOTPGroup>\n                    {[3, 4, 5].map((i) => (\n                      <InputOTPSlot\n                        key={i}\n                        index={i}\n                        className=\"size-10 text-base sm:size-12 sm:text-lg\"\n                        aria-invalid={otpError ? true : undefined}\n                      />\n                    ))}\n                  </InputOTPGroup>\n                </InputOTP>\n              </div>\n              <div aria-live=\"polite\" className=\"min-h-5 text-center\">\n                {otpError && (\n                  <FieldError id={`${formId}-otp-error`}>{otpError}</FieldError>\n                )}\n              </div>\n            </Field>\n\n            <div className=\"flex flex-col items-center gap-1 text-sm text-muted-foreground\">\n              <p>\n                Didn&apos;t get it?{\" \"}\n                <button\n                  type=\"button\"\n                  onClick={resendCode}\n                  disabled={cooldown > 0 || verifying}\n                  className=\"rounded-sm font-medium text-foreground underline underline-offset-4 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:text-muted-foreground disabled:no-underline\"\n                >\n                  {cooldown > 0 ? `Resend in ${cooldown}s` : \"Resend code\"}\n                </button>\n              </p>\n              <button\n                type=\"button\"\n                onClick={() => setHelpOpen(true)}\n                className=\"inline-flex items-center gap-1.5 rounded-sm underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n              >\n                <LifeBuoy className=\"size-3.5\" aria-hidden=\"true\" />\n                Trouble with your code?\n              </button>\n            </div>\n\n            <DialogFooter>\n              <Button\n                type=\"button\"\n                variant=\"outline\"\n                onClick={() => setOtpOpen(false)}\n                disabled={verifying}\n              >\n                Back\n              </Button>\n              <Button type=\"submit\" disabled={verifying || otp.length !== OTP_LENGTH}>\n                {verifying ? (\n                  <>\n                    <Spinner aria-hidden=\"true\" />\n                    Verifying…\n                  </>\n                ) : (\n                  \"Verify and sign in\"\n                )}\n              </Button>\n            </DialogFooter>\n          </form>\n        </DialogContent>\n      </Dialog>\n\n      {/* Stacked dialog on top of the OTP dialog */}\n      <Dialog open={helpOpen} onOpenChange={setHelpOpen}>\n        <DialogContent className=\"sm:max-w-sm\">\n          <DialogHeader>\n            <DialogTitle>Other ways to verify</DialogTitle>\n            <DialogDescription>\n              Pick another method if the email code isn&apos;t arriving. Your\n              password has already been accepted.\n            </DialogDescription>\n          </DialogHeader>\n\n          <ul className=\"grid gap-2\">\n            <li>\n              <Button\n                variant=\"outline\"\n                className=\"h-auto w-full justify-start gap-3 px-3 py-3 text-left whitespace-normal\"\n                onClick={() => {\n                  setHelpOpen(false);\n                  toast(\"Authenticator app\", {\n                    description:\n                      \"Open your authenticator app and enter the current 6-digit code.\",\n                  });\n                }}\n              >\n                <Smartphone className=\"size-5 text-muted-foreground\" aria-hidden=\"true\" />\n                <span className=\"grid gap-0.5\">\n                  <span className=\"font-medium\">Authenticator app</span>\n                  <span className=\"text-xs font-normal text-muted-foreground\">\n                    Use the rotating code from your phone.\n                  </span>\n                </span>\n              </Button>\n            </li>\n            <li>\n              <Button\n                variant=\"outline\"\n                className=\"h-auto w-full justify-start gap-3 px-3 py-3 text-left whitespace-normal\"\n                onClick={() => {\n                  setHelpOpen(false);\n                  toast(\"Recovery code\", {\n                    description: \"Enter one of the 10-character codes you saved at setup.\",\n                  });\n                }}\n              >\n                <KeyRound className=\"size-5 text-muted-foreground\" aria-hidden=\"true\" />\n                <span className=\"grid gap-0.5\">\n                  <span className=\"font-medium\">Recovery code</span>\n                  <span className=\"text-xs font-normal text-muted-foreground\">\n                    Use a single-use backup code.\n                  </span>\n                </span>\n              </Button>\n            </li>\n          </ul>\n\n          <FieldDescription>\n            Still stuck? Contact your workspace admin at\n            {\" \"}\n            <span className=\"font-medium text-foreground\">it-help@northwind.dev</span>.\n          </FieldDescription>\n\n          <DialogFooter>\n            <Button variant=\"ghost\" onClick={() => setHelpOpen(false)}>\n              Back to code entry\n            </Button>\n          </DialogFooter>\n        </DialogContent>\n      </Dialog>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

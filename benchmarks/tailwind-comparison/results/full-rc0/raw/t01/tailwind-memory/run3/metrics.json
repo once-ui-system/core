@@ -1,0 +1,21 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 730,
+    "chars": 21819,
+    "bytes": 21828,
+    "tokens_o200k": 6095,
+    "tokens_claudeLegacy": 6391,
+    "tokens_exact": 8850
+  },
+  "raw": {
+    "lines": 488,
+    "chars": 19820,
+    "bytes": 19829,
+    "tokens_o200k": 5830,
+    "tokens_claudeLegacy": 6159,
+    "tokens_exact": 8362
+  },
+  "components": []
+}

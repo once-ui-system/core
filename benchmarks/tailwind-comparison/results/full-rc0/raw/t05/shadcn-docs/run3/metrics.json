@@ -1,0 +1,37 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 326,
+    "chars": 10453,
+    "bytes": 10453,
+    "tokens_o200k": 2905,
+    "tokens_claudeLegacy": 2982,
+    "tokens_exact": 4223
+  },
+  "raw": {
+    "lines": 269,
+    "chars": 9940,
+    "bytes": 9940,
+    "tokens_o200k": 2834,
+    "tokens_claudeLegacy": 2935,
+    "tokens_exact": 4123
+  },
+  "components": [
+    "Badge",
+    "Button"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 109,
+    "chars": 4354,
+    "bytes": 4354,
+    "tokens_o200k": 1126,
+    "tokens_claudeLegacy": 1326,
+    "tokens_exact": 1904
+  }
+}

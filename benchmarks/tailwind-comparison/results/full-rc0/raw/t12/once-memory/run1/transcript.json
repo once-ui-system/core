@@ -1,0 +1,267 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to see how the providers and layout are set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017zV2Feqnd5Aj7zYvQznjJp",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ccn9iHWYLXvB5p3DX8x4RL",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017zV2Feqnd5Aj7zYvQznjJp",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ccn9iHWYLXvB5p3DX8x4RL",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015kLtzBULHibDwcoZZJVkUY",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TN4QNU55hSRfuhXcW84zmH",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WxeLXprBeAoQSBmZg6HnZd",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015kLtzBULHibDwcoZZJVkUY",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TN4QNU55hSRfuhXcW84zmH",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WxeLXprBeAoQSBmZg6HnZd",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Vm5iCYdMDmwAkZZ82i1MuY",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01W6uLfkwUqwwFVv476pAJXt",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013J2YkehK6muU6SNe2uELFv",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014KRaL5sxBqfRuL78kRYesX",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MnhoBDJGTmQXYvdw1tJ1Xn",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Vm5iCYdMDmwAkZZ82i1MuY",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01W6uLfkwUqwwFVv476pAJXt",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013J2YkehK6muU6SNe2uELFv",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014KRaL5sxBqfRuL78kRYesX",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MnhoBDJGTmQXYvdw1tJ1Xn",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since dependencies aren't installed, I'll build the feedback widget from my knowledge of Once UI's API—using Dialog, Button, Textarea, and related components for a floating trigger, accessible rating chips, and a toast confirmation on submit.\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FoGNKNa3Ga4GLkcYdieufi",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FoGNKNa3Ga4GLkcYdieufi",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Nothing else is available to inspect, so I'll write the file defensively.\n\n```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { CSSProperties, FormEvent, KeyboardEvent } from \"react\";\nimport {\n  Badge,\n  Button,\n  Column,\n  Dialog,\n  Heading,\n  Row,\n  Text,\n  Textarea,\n  useToast,\n} from \"@once-ui-system/core\";\n\ninterface Rating {\n  value: number;\n  label: string;\n  emoji: string;\n}\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Frustrating\", emoji: \"😞\" },\n  { value: 2, label: \"Poor\", emoji: \"😕\" },\n  { value: 3, label: \"Okay\", emoji: \"😐\" },\n  { value: 4, label: \"Good\", emoji: \"🙂\" },\n  { value: 5, label: \"Excellent\", emoji: \"🤩\" },\n];\n\nconst HIGHLIGHTS: { title: string; body: string }[] = [\n  {\n    title: \"Shared dashboards\",\n    body: \"Pin the charts your team checks every morning and share them with a single link.\",\n  },\n  {\n    title: \"Scheduled exports\",\n    body: \"Send weekly CSV summaries of revenue, signups and churn straight to your inbox.\",\n  },\n  {\n    title: \"Faster search\",\n    body: \"Jump to any customer, invoice or report with the new command menu.\",\n  },\n];\n\nconst MAX_LENGTH = 500;\n\nconst floatingStyle: CSSProperties = {\n  position: \"fixed\",\n  right: \"max(16px, env(safe-area-inset-right))\",\n  bottom: \"max(16px, env(safe-area-inset-bottom))\",\n  zIndex: 50,\n};\n\nconst chipBase: CSSProperties = {\n  display: \"flex\",\n  flexDirection: \"column\",\n  alignItems: \"center\",\n  justifyContent: \"center\",\n  gap: 4,\n  flex: \"1 1 88px\",\n  minWidth: 72,\n  minHeight: 72,\n  padding: \"10px 8px\",\n  borderRadius: 12,\n  borderWidth: 1,\n  borderStyle: \"solid\",\n  cursor: \"pointer\",\n  font: \"inherit\",\n  color: \"var(--neutral-on-background-strong)\",\n  transition: \"background-color 120ms ease, border-color 120ms ease\",\n};\n\nexport default function Page() {\n  const { addToast } = useToast();\n  const [open, setOpen] = useState<boolean>(false);\n  const [rating, setRating] = useState<number | null>(null);\n  const [comment, setComment] = useState<string>(\"\");\n  const [submitting, setSubmitting] = useState<boolean>(false);\n  const [error, setError] = useState<string | null>(null);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n  const chipRefs = useRef<Array<HTMLButtonElement | null>>([]);\n\n  const groupLabelId = useId();\n  const errorId = useId();\n  const countId = useId();\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const reset = useCallback(() => {\n    setRating(null);\n    setComment(\"\");\n    setError(null);\n    setSubmitting(false);\n  }, []);\n\n  const handleClose = useCallback(() => {\n    if (timer.current) {\n      clearTimeout(timer.current);\n      timer.current = null;\n    }\n    setOpen(false);\n    reset();\n  }, [reset]);\n\n  const selectAt = useCallback((index: number) => {\n    const count = RATINGS.length;\n    const next = ((index % count) + count) % count;\n    setRating(RATINGS[next].value);\n    setError(null);\n    chipRefs.current[next]?.focus();\n  }, []);\n\n  const onChipKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {\n    switch (event.key) {\n      case \"ArrowRight\":\n      case \"ArrowDown\":\n        event.preventDefault();\n        selectAt(index + 1);\n        break;\n      case \"ArrowLeft\":\n      case \"ArrowUp\":\n        event.preventDefault();\n        selectAt(index - 1);\n        break;\n      case \"Home\":\n        event.preventDefault();\n        selectAt(0);\n        break;\n      case \"End\":\n        event.preventDefault();\n        selectAt(RATINGS.length - 1);\n        break;\n      default:\n        break;\n    }\n  };\n\n  const submit = (event?: FormEvent<HTMLFormElement>) => {\n    event?.preventDefault();\n    if (submitting) return;\n    if (rating === null) {\n      setError(\"Please choose a rating before sending.\");\n      chipRefs.current[0]?.focus();\n      return;\n    }\n    setSubmitting(true);\n    timer.current = setTimeout(() => {\n      timer.current = null;\n      const chosen = RATINGS.find((r) => r.value === rating);\n      setOpen(false);\n      reset();\n      addToast({\n        variant: \"success\",\n        message: `Thanks for your feedback${chosen ? ` (${chosen.label.toLowerCase()})` : \"\"}! We read every note.`,\n      });\n    }, 700);\n  };\n\n  // Roving tabindex: the selected chip is tabbable, or the first one if none selected.\n  const tabbableIndex = rating === null ? 0 : RATINGS.findIndex((r) => r.value === rating);\n\n  return (\n    <>\n      <Column\n        as=\"main\"\n        fillWidth\n        horizontal=\"center\"\n        paddingX=\"l\"\n        paddingY=\"xl\"\n        style={{ minHeight: \"100vh\" }}\n      >\n        <Column maxWidth={48} fillWidth gap=\"32\" paddingBottom=\"80\">\n          <Column gap=\"16\">\n            <Badge title=\"Release 4.2\" icon=\"sparkles\" />\n            <Heading as=\"h1\" variant=\"display-strong-s\" wrap=\"balance\">\n              Northwind Analytics\n            </Heading>\n            <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" wrap=\"balance\">\n              Your reports, dashboards and exports in one calm workspace. Here is what changed in\n              this release. Tell us how it feels using the feedback button in the corner.\n            </Text>\n          </Column>\n\n          <Column as=\"section\" gap=\"16\" aria-label=\"Release highlights\">\n            {HIGHLIGHTS.map((item) => (\n              <Column\n                key={item.title}\n                padding=\"20\"\n                gap=\"8\"\n                radius=\"l\"\n                border=\"neutral-alpha-medium\"\n                background=\"surface\"\n              >\n                <Heading as=\"h2\" variant=\"heading-strong-m\">\n                  {item.title}\n                </Heading>\n                <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                  {item.body}\n                </Text>\n              </Column>\n            ))}\n          </Column>\n        </Column>\n      </Column>\n\n      <div style={floatingStyle}>\n        <Button\n          variant=\"primary\"\n          size=\"l\"\n          prefixIcon=\"chat\"\n          onClick={() => setOpen(true)}\n          aria-haspopup=\"dialog\"\n        >\n          Feedback\n        </Button>\n      </div>\n\n      <Dialog\n        isOpen={open}\n        onClose={handleClose}\n        title=\"Share your feedback\"\n        description=\"How was your experience with this release? It takes less than a minute.\"\n        footer={\n          <Row gap=\"8\" horizontal=\"end\" fillWidth wrap>\n            <Button variant=\"tertiary\" onClick={handleClose} disabled={submitting}>\n              Cancel\n            </Button>\n            <Button\n              variant=\"primary\"\n              type=\"submit\"\n              form=\"feedback-form\"\n              loading={submitting}\n              disabled={submitting}\n            >\n              Send feedback\n            </Button>\n          </Row>\n        }\n      >\n        <form id=\"feedback-form\" onSubmit={submit} noValidate>\n          <Column gap=\"20\" fillWidth>\n            <Column gap=\"8\" fillWidth>\n              <Text id={groupLabelId} variant=\"label-default-s\" onBackground=\"neutral-strong\">\n                Overall rating\n              </Text>\n              <div\n                role=\"radiogroup\"\n                aria-labelledby={groupLabelId}\n                aria-required=\"true\"\n                aria-invalid={error ? true : undefined}\n                aria-describedby={error ? errorId : undefined}\n                style={{ display: \"flex\", flexWrap: \"wrap\", gap: 8 }}\n              >\n                {RATINGS.map((item, index) => {\n                  const selected = rating === item.value;\n                  return (\n                    <button\n                      key={item.value}\n                      ref={(el) => {\n                        chipRefs.current[index] = el;\n                      }}\n                      type=\"button\"\n                      role=\"radio\"\n                      aria-checked={selected}\n                      tabIndex={index === tabbableIndex ? 0 : -1}\n                      onClick={() => {\n                        setRating(item.value);\n                        setError(null);\n                      }}\n                      onKeyDown={(e) => onChipKeyDown(e, index)}\n                      style={{\n                        ...chipBase,\n                        backgroundColor: selected\n                          ? \"var(--brand-alpha-weak)\"\n                          : \"var(--surface-background)\",\n                        borderColor: selected\n                          ? \"var(--brand-solid-strong)\"\n                          : \"var(--neutral-alpha-medium)\",\n                        boxShadow: selected ? \"0 0 0 1px var(--brand-solid-strong)\" : \"none\",\n                      }}\n                    >\n                      <span aria-hidden=\"true\" style={{ fontSize: 24, lineHeight: 1 }}>\n                        {item.emoji}\n                      </span>\n                      <span style={{ fontSize: 13, fontWeight: selected ? 600 : 500 }}>\n                        {item.label}\n                      </span>\n                    </button>\n                  );\n                })}\n              </div>\n              {error && (\n                <Text id={errorId} role=\"alert\" variant=\"body-default-s\" onBackground=\"danger-weak\">\n                  {error}\n                </Text>\n              )}\n            </Column>\n\n            <Column gap=\"8\" fillWidth>\n              <Textarea\n                id=\"feedback-comment\"\n                label=\"Anything we should know? (optional)\"\n                lines={4}\n                value={comment}\n                maxLength={MAX_LENGTH}\n                aria-describedby={countId}\n                onChange={(e) => setComment(e.target.value)}\n              />\n              <Text id={countId} variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"right\">\n                {comment.length}/{MAX_LENGTH}\n              </Text>\n            </Column>\n          </Column>\n        </form>\n      </Dialog>\n    </>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(179,40): error TS2820: Type '\"sparkles\"' is not assignable to type 'IconName | undefined'. Did you mean '\"sparkle\"'?\napp/page.tsx(224,9): error TS2322: Type '{ children: Element; isOpen: boolean; onClose: () => void; title: string; description: string; footer: Element; }' is not assignable to type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'isOpen' does not exist on type 'IntrinsicAttributes & Omit<DialogProps, \"ref\"> & RefAttributes<HTMLDivElement>'. Did you mean 'open'?\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useCallback, useEffect, useId, useRef, useState } from \"react\";\nimport type { CSSProperties, FormEvent, KeyboardEvent } from \"react\";\nimport {\n  Badge,\n  Button,\n  Column,\n  Dialog,\n  Heading,\n  Row,\n  Text,\n  Textarea,\n  useToast,\n} from \"@once-ui-system/core\";\n\ninterface Rating {\n  value: number;\n  label: string;\n  emoji: string;\n}\n\nconst RATINGS: Rating[] = [\n  { value: 1, label: \"Frustrating\", emoji: \"😞\" },\n  { value: 2, label: \"Poor\", emoji: \"😕\" },\n  { value: 3, label: \"Okay\", emoji: \"😐\" },\n  { value: 4, label: \"Good\", emoji: \"🙂\" },\n  { value: 5, label: \"Excellent\", emoji: \"🤩\" },\n];\n\nconst HIGHLIGHTS: { title: string; body: string }[] = [\n  {\n    title: \"Shared dashboards\",\n    body: \"Pin the charts your team checks every morning and share them with a single link.\",\n  },\n  {\n    title: \"Scheduled exports\",\n    body: \"Send weekly CSV summaries of revenue, signups and churn straight to your inbox.\",\n  },\n  {\n    title: \"Faster search\",\n    body: \"Jump to any customer, invoice or report with the new command menu.\",\n  },\n];\n\nconst MAX_LENGTH = 500;\n\nconst floatingStyle: CSSProperties = {\n  position: \"fixed\",\n  right: \"max(16px, env(safe-area-inset-right))\",\n  bottom: \"max(16px, env(safe-area-inset-bottom))\",\n  zIndex: 50,\n};\n\nconst chipBase: CSSProperties = {\n  display: \"flex\",\n  flexDirection: \"column\",\n  alignItems: \"center\",\n  justifyContent: \"center\",\n  gap: 4,\n  flex: \"1 1 88px\",\n  minWidth: 72,\n  minHeight: 72,\n  padding: \"10px 8px\",\n  borderRadius: 12,\n  borderWidth: 1,\n  borderStyle: \"solid\",\n  cursor: \"pointer\",\n  font: \"inherit\",\n  color: \"var(--neutral-on-background-strong)\",\n  transition: \"background-color 120ms ease, border-color 120ms ease\",\n};\n\nexport default function Page() {\n  const { addToast } = useToast();\n  const [open, setOpen] = useState<boolean>(false);\n  const [rating, setRating] = useState<number | null>(null);\n  const [comment, setComment] = useState<string>(\"\");\n  const [submitting, setSubmitting] = useState<boolean>(false);\n  const [error, setError] = useState<string | null>(null);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n  const chipRefs = useRef<Array<HTMLButtonElement | null>>([]);\n\n  const groupLabelId = useId();\n  const errorId = useId();\n  const countId = useId();\n\n  useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const reset = useCallback(() => {\n    setRating(null);\n    setComment(\"\");\n    setError(null);\n    setSubmitting(false);\n  }, []);\n\n  const handleClose = useCallback(() => {\n    if (timer.current) {\n      clearTimeout(timer.current);\n      timer.current = null;\n    }\n    setOpen(false);\n    reset();\n  }, [reset]);\n\n  const selectAt = useCallback((index: number) => {\n    const count = RATINGS.length;\n    const next = ((index % count) + count) % count;\n    setRating(RATINGS[next].value);\n    setError(null);\n    chipRefs.current[next]?.focus();\n  }, []);\n\n  const onChipKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {\n    switch (event.key) {\n      case \"ArrowRight\":\n      case \"ArrowDown\":\n        event.preventDefault();\n        selectAt(index + 1);\n        break;\n      case \"ArrowLeft\":\n      case \"ArrowUp\":\n        event.preventDefault();\n        selectAt(index - 1);\n        break;\n      case \"Home\":\n        event.preventDefault();\n        selectAt(0);\n        break;\n      case \"End\":\n        event.preventDefault();\n        selectAt(RATINGS.length - 1);\n        break;\n      default:\n        break;\n    }\n  };\n\n  const submit = (event?: FormEvent<HTMLFormElement>) => {\n    event?.preventDefault();\n    if (submitting) return;\n    if (rating === null) {\n      setError(\"Please choose a rating before sending.\");\n      chipRefs.current[0]?.focus();\n      return;\n    }\n    setSubmitting(true);\n    timer.current = setTimeout(() => {\n      timer.current = null;\n      const chosen = RATINGS.find((r) => r.value === rating);\n      setOpen(false);\n      reset();\n      addToast({\n        variant: \"success\",\n        message: `Thanks for your feedback${chosen ? ` (${chosen.label.toLowerCase()})` : \"\"}! We read every note.`,\n      });\n    }, 700);\n  };\n\n  // Roving tabindex: the selected chip is tabbable, or the first one if none selected.\n  const tabbableIndex = rating === null ? 0 : RATINGS.findIndex((r) => r.value === rating);\n\n  return (\n    <>\n      <Column\n        as=\"main\"\n        fillWidth\n        horizontal=\"center\"\n        paddingX=\"l\"\n        paddingY=\"xl\"\n        style={{ minHeight: \"100vh\" }}\n      >\n        <Column maxWidth={48} fillWidth gap=\"32\" paddingBottom=\"80\">\n          <Column gap=\"16\">\n            <Badge title=\"Release 4.2\" icon=\"sparkle\" />\n            <Heading as=\"h1\" variant=\"display-strong-s\" wrap=\"balance\">\n              Northwind Analytics\n            </Heading>\n            <Text variant=\"body-default-l\" onBackground=\"neutral-weak\" wrap=\"balance\">\n              Your reports, dashboards and exports in one calm workspace. Here is what changed in\n              this release. Tell us how it feels using the feedback button in the corner.\n            </Text>\n          </Column>\n\n          <Column as=\"section\" gap=\"16\" aria-label=\"Release highlights\">\n            {HIGHLIGHTS.map((item) => (\n              <Column\n                key={item.title}\n                padding=\"20\"\n                gap=\"8\"\n                radius=\"l\"\n                border=\"neutral-alpha-medium\"\n                background=\"surface\"\n              >\n                <Heading as=\"h2\" variant=\"heading-strong-m\">\n                  {item.title}\n                </Heading>\n                <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n                  {item.body}\n                </Text>\n              </Column>\n            ))}\n          </Column>\n        </Column>\n      </Column>\n\n      <div style={floatingStyle}>\n        <Button\n          variant=\"primary\"\n          size=\"l\"\n          prefixIcon=\"chat\"\n          onClick={() => setOpen(true)}\n          aria-haspopup=\"dialog\"\n        >\n          Feedback\n        </Button>\n      </div>\n\n      <Dialog\n        open={open}\n        onClose={handleClose}\n        title=\"Share your feedback\"\n        description=\"How was your experience with this release? It takes less than a minute.\"\n        footer={\n          <Row gap=\"8\" horizontal=\"end\" fillWidth wrap>\n            <Button variant=\"tertiary\" onClick={handleClose} disabled={submitting}>\n              Cancel\n            </Button>\n            <Button\n              variant=\"primary\"\n              type=\"submit\"\n              form=\"feedback-form\"\n              loading={submitting}\n              disabled={submitting}\n            >\n              Send feedback\n            </Button>\n          </Row>\n        }\n      >\n        <form id=\"feedback-form\" onSubmit={submit} noValidate>\n          <Column gap=\"20\" fillWidth>\n            <Column gap=\"8\" fillWidth>\n              <Text id={groupLabelId} variant=\"label-default-s\" onBackground=\"neutral-strong\">\n                Overall rating\n              </Text>\n              <div\n                role=\"radiogroup\"\n                aria-labelledby={groupLabelId}\n                aria-required=\"true\"\n                aria-invalid={error ? true : undefined}\n                aria-describedby={error ? errorId : undefined}\n                style={{ display: \"flex\", flexWrap: \"wrap\", gap: 8 }}\n              >\n                {RATINGS.map((item, index) => {\n                  const selected = rating === item.value;\n                  return (\n                    <button\n                      key={item.value}\n                      ref={(el) => {\n                        chipRefs.current[index] = el;\n                      }}\n                      type=\"button\"\n                      role=\"radio\"\n                      aria-checked={selected}\n                      tabIndex={index === tabbableIndex ? 0 : -1}\n                      onClick={() => {\n                        setRating(item.value);\n                        setError(null);\n                      }}\n                      onKeyDown={(e) => onChipKeyDown(e, index)}\n                      style={{\n                        ...chipBase,\n                        backgroundColor: selected\n                          ? \"var(--brand-alpha-weak)\"\n                          : \"var(--surface-background)\",\n                        borderColor: selected\n                          ? \"var(--brand-solid-strong)\"\n                          : \"var(--neutral-alpha-medium)\",\n                        boxShadow: selected ? \"0 0 0 1px var(--brand-solid-strong)\" : \"none\",\n                      }}\n                    >\n                      <span aria-hidden=\"true\" style={{ fontSize: 24, lineHeight: 1 }}>\n                        {item.emoji}\n                      </span>\n                      <span style={{ fontSize: 13, fontWeight: selected ? 600 : 500 }}>\n                        {item.label}\n                      </span>\n                    </button>\n                  );\n                })}\n              </div>\n              {error && (\n                <Text id={errorId} role=\"alert\" variant=\"body-default-s\" onBackground=\"danger-weak\">\n                  {error}\n                </Text>\n              )}\n            </Column>\n\n            <Column gap=\"8\" fillWidth>\n              <Textarea\n                id=\"feedback-comment\"\n                label=\"Anything we should know? (optional)\"\n                lines={4}\n                value={comment}\n                maxLength={MAX_LENGTH}\n                aria-describedby={countId}\n                onChange={(e) => setComment(e.target.value)}\n              />\n              <Text id={countId} variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"right\">\n                {comment.length}/{MAX_LENGTH}\n              </Text>\n            </Column>\n          </Column>\n        </form>\n      </Dialog>\n    </>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

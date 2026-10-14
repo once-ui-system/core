@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(269,27): error TS2322: Type '{ children: string; size: \"s\"; variant: string; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(290,29): error TS2322: Type '{ children: string; size: \"m\"; variant: \"neutral\" | \"brand\" | \"info\" | \"danger\" | \"warning\" | \"success\"; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(323,25): error TS2322: Type '{ children: string; size: \"m\"; variant: string; style: { alignSelf: \"flex-start\"; }; }' is not assignable to type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'variant' does not exist on type 'IntrinsicAttributes & Omit<TagProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 3161
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 5 issue(s)\n  [api.renamed] Tag takes scheme in 2.x; variant is the 1.x name\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] borderBottom=\"neutral-alpha-weak\" restates the default border — write bare borderBottom, and name a colour only to deviate\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the existing project files first."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JVsCcJuBHkikrajEJDXCHn",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FeL9YUgphZEzadvDPKDcZc",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JVsCcJuBHkikrajEJDXCHn",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FeL9YUgphZEzadvDPKDcZc",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HSCX4hFhe9exSNkemBfGie",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KwXCFv5hnBELjioFEwf2MW",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PWxfenfpQLhpgMmsMqNQqk",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HSCX4hFhe9exSNkemBfGie",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KwXCFv5hnBELjioFEwf2MW",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PWxfenfpQLhpgMmsMqNQqk",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01N3gkxFPvYXsn67fWyYb56k",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016j4pPD8XbyX7aWZUYQnrHt",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AUN3rYyVVG1kKnXBePiSiu",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01N3gkxFPvYXsn67fWyYb56k",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016j4pPD8XbyX7aWZUYQnrHt",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AUN3rYyVVG1kKnXBePiSiu",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The layout is minimal with no dark-mode setup, so I'll build a self-contained light design with tag filtering and copy-to-clipboard snippets.\n\n```tsx\n\"use client\";\n\nimport { useMemo, useRef, useState } from \"react\";\nimport {\n  Check,\n  Copy,\n  Sparkles,\n  Wrench,\n  ShieldAlert,\n  AlertTriangle,\n  Zap,\n  Rss,\n  type LucideIcon,\n} from \"lucide-react\";\n\ntype Tag = \"Feature\" | \"Fix\" | \"Security\" | \"Breaking\" | \"Performance\";\n\ninterface Snippet {\n  label: string;\n  language: string;\n  code: string;\n}\n\ninterface Release {\n  version: string;\n  date: string;\n  title: string;\n  summary: string;\n  tags: Tag[];\n  changes: string[];\n  snippet?: Snippet;\n  latest?: boolean;\n}\n\nconst TAG_STYLES: Record<Tag, { classes: string; icon: LucideIcon }> = {\n  Feature: { classes: \"bg-indigo-50 text-indigo-700 ring-indigo-600/20\", icon: Sparkles },\n  Fix: { classes: \"bg-emerald-50 text-emerald-700 ring-emerald-600/20\", icon: Wrench },\n  Security: { classes: \"bg-rose-50 text-rose-700 ring-rose-600/20\", icon: ShieldAlert },\n  Breaking: { classes: \"bg-amber-50 text-amber-800 ring-amber-600/30\", icon: AlertTriangle },\n  Performance: { classes: \"bg-sky-50 text-sky-700 ring-sky-600/20\", icon: Zap },\n};\n\nconst ALL_TAGS: Tag[] = [\"Feature\", \"Fix\", \"Security\", \"Breaking\", \"Performance\"];\n\nconst RELEASES: Release[] = [\n  {\n    version: \"v2.4.0\",\n    date: \"2025-06-10\",\n    title: \"Streaming responses and typed webhooks\",\n    summary:\n      \"Large exports can now be consumed as a stream, and webhook payloads ship with generated TypeScript types so handlers are checked at compile time.\",\n    tags: [\"Feature\", \"Performance\"],\n    latest: true,\n    changes: [\n      \"Added client.exports.stream() which yields rows as they are produced instead of buffering the full result.\",\n      \"Webhook payload types are now exported from @relay/sdk/webhooks.\",\n      \"Reduced median cold-start time of the CLI from 480ms to 190ms.\",\n    ],\n    snippet: {\n      label: \"Stream an export\",\n      language: \"ts\",\n      code: `import { Relay } from \"@relay/sdk\";\n\nconst client = new Relay({ apiKey: process.env.RELAY_KEY! });\n\nfor await (const row of client.exports.stream({ table: \"events\" })) {\n  console.log(row.id, row.createdAt);\n}`,\n    },\n  },\n  {\n    version: \"v2.3.2\",\n    date: \"2025-05-27\",\n    title: \"Patch for token refresh race condition\",\n    summary:\n      \"Fixes an issue where two concurrent requests could both attempt a token refresh, invalidating the session.\",\n    tags: [\"Fix\", \"Security\"],\n    changes: [\n      \"Token refresh is now serialized behind a single in-flight promise.\",\n      \"Rotated refresh tokens are no longer written to debug logs.\",\n      \"Fixed a crash when the system clock moved backwards during a request.\",\n    ],\n  },\n  {\n    version: \"v2.3.0\",\n    date: \"2025-05-06\",\n    title: \"Retry policies you can configure\",\n    summary:\n      \"Retries are now configurable per client or per request, with exponential backoff and jitter enabled by default.\",\n    tags: [\"Feature\"],\n    changes: [\n      \"New retry option accepting maxAttempts, baseDelayMs and a custom shouldRetry predicate.\",\n      \"Requests that fail with 429 now honor the Retry-After header.\",\n      \"Added a request-level AbortSignal option.\",\n    ],\n    snippet: {\n      label: \"Configure retries\",\n      language: \"ts\",\n      code: `const client = new Relay({\n  apiKey: process.env.RELAY_KEY!,\n  retry: {\n    maxAttempts: 5,\n    baseDelayMs: 250,\n    shouldRetry: (err) => err.status >= 500,\n  },\n});`,\n    },\n  },\n  {\n    version: \"v2.0.0\",\n    date: \"2025-03-18\",\n    title: \"A new, ESM-only package\",\n    summary:\n      \"Version 2 drops CommonJS builds and Node 16 support. The public API is otherwise unchanged, so most projects only need to update their import style.\",\n    tags: [\"Breaking\", \"Performance\"],\n    changes: [\n      \"Removed CommonJS entry points. Use import or a dynamic import() instead of require().\",\n      \"Minimum supported Node.js version is now 18.17.\",\n      \"Bundle size reduced by 38% after removing legacy polyfills.\",\n      \"Renamed client.send() to client.request(); the old name was removed.\",\n    ],\n    snippet: {\n      label: \"Upgrade to v2\",\n      language: \"bash\",\n      code: `npm install @relay/sdk@2\nnpx relay-codemod rename-send ./src`,\n    },\n  },\n  {\n    version: \"v1.9.1\",\n    date: \"2025-01-29\",\n    title: \"Pagination and error message fixes\",\n    summary: \"A small maintenance release focused on list endpoints and clearer errors.\",\n    tags: [\"Fix\"],\n    changes: [\n      \"Cursor pagination no longer skips the final page when the result count equals the page size.\",\n      \"Validation errors now include the offending field path.\",\n    ],\n  },\n];\n\nfunction formatDate(iso: string): string {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString(\"en-US\", {\n    year: \"numeric\",\n    month: \"long\",\n    day: \"numeric\",\n    timeZone: \"UTC\",\n  });\n}\n\nfunction TagBadge({ tag }: { tag: Tag }) {\n  const { classes, icon: Icon } = TAG_STYLES[tag];\n  return (\n    <span\n      className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium ring-1 ring-inset ${classes}`}\n    >\n      <Icon className=\"size-3\" aria-hidden=\"true\" />\n      {tag}\n    </span>\n  );\n}\n\nfunction CodeSnippet({ snippet, id }: { snippet: Snippet; id: string }) {\n  const [copied, setCopied] = useState(false);\n  const [failed, setFailed] = useState(false);\n  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  const handleCopy = async () => {\n    try {\n      await navigator.clipboard.writeText(snippet.code);\n      setCopied(true);\n      setFailed(false);\n    } catch {\n      setCopied(false);\n      setFailed(true);\n    }\n    if (timer.current) clearTimeout(timer.current);\n    timer.current = setTimeout(() => {\n      setCopied(false);\n      setFailed(false);\n    }, 2000);\n  };\n\n  return (\n    <figure className=\"mt-5 overflow-hidden rounded-xl border border-slate-800 bg-slate-950 shadow-sm\">\n      <figcaption className=\"flex items-center justify-between gap-3 border-b border-slate-800 bg-slate-900 px-4 py-2\">\n        <span className=\"min-w-0 truncate text-xs font-medium text-slate-300\">\n          {snippet.label}\n          <span className=\"ml-2 rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wide text-slate-400\">\n            {snippet.language}\n          </span>\n        </span>\n        <button\n          type=\"button\"\n          onClick={handleCopy}\n          aria-describedby={`${id}-status`}\n          className=\"inline-flex shrink-0 items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium text-slate-300 transition hover:bg-slate-800 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-400\"\n        >\n          {copied ? (\n            <Check className=\"size-3.5 text-emerald-400\" aria-hidden=\"true\" />\n          ) : (\n            <Copy className=\"size-3.5\" aria-hidden=\"true\" />\n          )}\n          <span>{copied ? \"Copied\" : failed ? \"Copy failed\" : \"Copy\"}</span>\n          <span className=\"sr-only\"> {snippet.label} code</span>\n        </button>\n        <span id={`${id}-status`} role=\"status\" className=\"sr-only\">\n          {copied ? \"Code copied to clipboard\" : failed ? \"Could not copy code\" : \"\"}\n        </span>\n      </figcaption>\n      <pre\n        tabIndex={0}\n        className=\"overflow-x-auto p-4 text-[13px] leading-relaxed text-slate-100 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-400\"\n      >\n        <code className=\"font-mono\">{snippet.code}</code>\n      </pre>\n    </figure>\n  );\n}\n\nexport default function Page() {\n  const [active, setActive] = useState<Tag | \"All\">(\"All\");\n\n  const visible = useMemo(\n    () => (active === \"All\" ? RELEASES : RELEASES.filter((r) => r.tags.includes(active))),\n    [active],\n  );\n\n  const filters: (Tag | \"All\")[] = [\"All\", ...ALL_TAGS];\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <a\n        href=\"#releases\"\n        className=\"sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-10 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:shadow\"\n      >\n        Skip to releases\n      </a>\n\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16\">\n          <p className=\"text-sm font-semibold uppercase tracking-wider text-indigo-600\">\n            Relay SDK\n          </p>\n          <h1 className=\"mt-2 text-3xl font-bold tracking-tight sm:text-4xl\">Changelog</h1>\n          <p className=\"mt-3 max-w-xl text-base text-slate-600\">\n            New features, fixes and breaking changes for every release of the Relay SDK. Subscribe\n            to stay up to date.\n          </p>\n          <a\n            href=\"#releases\"\n            className=\"mt-5 inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600\"\n          >\n            <Rss className=\"size-4\" aria-hidden=\"true\" />\n            Latest: {RELEASES[0].version}\n          </a>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-3xl px-4 py-10 sm:px-6\">\n        <div role=\"group\" aria-label=\"Filter releases by tag\" className=\"flex flex-wrap gap-2\">\n          {filters.map((f) => {\n            const selected = active === f;\n            return (\n              <button\n                key={f}\n                type=\"button\"\n                aria-pressed={selected}\n                onClick={() => setActive(f)}\n                className={`rounded-full px-3.5 py-1.5 text-sm font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                  selected\n                    ? \"bg-slate-900 text-white\"\n                    : \"bg-white text-slate-700 ring-1 ring-inset ring-slate-300 hover:bg-slate-100\"\n                }`}\n              >\n                {f}\n              </button>\n            );\n          })}\n        </div>\n        <p role=\"status\" className=\"mt-3 text-sm text-slate-500\">\n          Showing {visible.length} of {RELEASES.length} releases\n        </p>\n\n        <ol id=\"releases\" className=\"mt-8 scroll-mt-8\">\n          {visible.map((release, i) => {\n            const isLast = i === visible.length - 1;\n            const id = `release-${release.version.replace(/\\./g, \"-\")}`;\n            return (\n              <li key={release.version} className=\"relative flex gap-4 sm:gap-6\">\n                {/* Timeline rail */}\n                <div className=\"flex flex-col items-center\" aria-hidden=\"true\">\n                  <span\n                    className={`mt-1.5 size-3.5 shrink-0 rounded-full border-2 ${\n                      release.latest\n                        ? \"border-indigo-600 bg-indigo-600 ring-4 ring-indigo-100\"\n                        : \"border-slate-400 bg-white\"\n                    }`}\n                  />\n                  {!isLast && <span className=\"mt-1 w-px flex-1 bg-slate-300\" />}\n                </div>\n\n                <article\n                  aria-labelledby={id}\n                  className={`min-w-0 flex-1 ${isLast ? \"pb-0\" : \"pb-12\"}`}\n                >\n                  <div className=\"flex flex-wrap items-center gap-x-3 gap-y-1\">\n                    <h2 id={id} className=\"font-mono text-xl font-bold tracking-tight\">\n                      {release.version}\n                    </h2>\n                    {release.latest && (\n                      <span className=\"rounded-full bg-indigo-600 px-2 py-0.5 text-xs font-semibold text-white\">\n                        Latest\n                      </span>\n                    )}\n                    <time dateTime={release.date} className=\"text-sm text-slate-500\">\n                      {formatDate(release.date)}\n                    </time>\n                  </div>\n\n                  <p className=\"mt-2 text-lg font-semibold text-slate-900\">{release.title}</p>\n\n                  <ul className=\"mt-3 flex flex-wrap gap-2\" aria-label=\"Tags\">\n                    {release.tags.map((t) => (\n                      <li key={t}>\n                        <TagBadge tag={t} />\n                      </li>\n                    ))}\n                  </ul>\n\n                  <p className=\"mt-4 text-slate-600\">{release.summary}</p>\n\n                  <ul className=\"mt-4 space-y-2 text-sm text-slate-700\">\n                    {release.changes.map((c) => (\n                      <li key={c} className=\"flex gap-2.5\">\n                        <span\n                          className=\"mt-2 size-1.5 shrink-0 rounded-full bg-slate-400\"\n                          aria-hidden=\"true\"\n                        />\n                        <span className=\"min-w-0\">{c}</span>\n                      </li>\n                    ))}\n                  </ul>\n\n                  {release.snippet && <CodeSnippet snippet={release.snippet} id={id} />}\n                </article>\n              </li>\n            );\n          })}\n        </ol>\n\n        {visible.length === 0 && (\n          <p className=\"rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500\">\n            No releases match this tag.\n          </p>\n        )}\n      </main>\n\n      <footer className=\"border-t border-slate-200 bg-white\">\n        <div className=\"mx-auto max-w-3xl px-4 py-6 text-sm text-slate-500 sm:px-6\">\n          Relay SDK is released under the MIT license.\n        </div>\n      </footer>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

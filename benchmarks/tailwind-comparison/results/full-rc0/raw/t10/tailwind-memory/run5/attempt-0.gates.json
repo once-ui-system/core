@@ -1,0 +1,25 @@
+{
+  "arm": "D",
+  "passed": false,
+  "failed_gate": "render",
+  "failure_output": "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3104\n- Network:       http://127.0.0.1:3104\n✓ Ready in 208ms\n",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2917
+    },
+    "build": {
+      "ok": true,
+      "ms": 12680
+    },
+    "render": {
+      "ok": false,
+      "viewports": {},
+      "errors": [
+        "server did not start:\n▲ Next.js 16.2.12\n- Local:         http://127.0.0.1:3104\n- Network:       http://127.0.0.1:3104\n✓ Ready in 208ms\n"
+      ],
+      "axe": null,
+      "interaction": {}
+    }
+  }
+}

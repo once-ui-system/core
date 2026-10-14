@@ -1,0 +1,302 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Settings page — sidebar sections, profile form (avatar upload, inputs, selects), danger zone.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files to see how things are set up."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WjDUDKLBJeHBnFMT25ccar",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0122vHMJx5XcdDyEznRuLY1v",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WjDUDKLBJeHBnFMT25ccar",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0122vHMJx5XcdDyEznRuLY1v",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01JMpDw66fgYrWrqhfZiLovs",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01R6wV9pw7nNCkkCvEvYGfkC",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01X8gaaSdp76T4pKrdCTyBem",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BY8sX2U3J1V28yoWY6Lg7A",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JMpDw66fgYrWrqhfZiLovs",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01R6wV9pw7nNCkkCvEvYGfkC",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X8gaaSdp76T4pKrdCTyBem",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BY8sX2U3J1V28yoWY6Lg7A",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01NbU8QgYXqGRe3CYE6wd547",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0111D3kQsxyfGYzHkuVT828r",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0137gJrPnownscXTHjDiwnoh",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ABX7izNCmEhWTNpZBBYa7v",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NbU8QgYXqGRe3CYE6wd547",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0111D3kQsxyfGYzHkuVT828r",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0137gJrPnownscXTHjDiwnoh",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ABX7izNCmEhWTNpZBBYa7v",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check whether the Once UI package is installed so I can verify its API."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01A9ceVfgH72xVFtfwSJexBw",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FPji45QewdGePKypwEUUMt",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01A9ceVfgH72xVFtfwSJexBw",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FPji45QewdGePKypwEUUMt",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I can't inspect the package directly, so I'll stick to the Once UI APIs I'm confident about (Flex, Column, Heading, Button, Dialog, etc.) and use native elements for file inputs, nav, and selects styled with Once UI tokens to limit type risk.\n\n",
+          "signature": "CAQSowgKEQgSGAI4AUIJbmFycmF0aW9uEgxF7Tardk05xqRTiiUaDCnksfYatkyIRWxuXCIwWcnmYqZKcF/YYWFawcPZ2zeGXix4zm9gOxWqFlefD8yesJ1a9k/buoXSEwDz1djIKr8HEFehaHUSqLdhq+OWU7EHlk3shraqh29KNGq0KLxIG1iY/6dpSuIuJW3D0FW5PvL5OMTBnhoqSP+5MuDCC5JYMy69Kx1RhhsxiIXMapp3K/Ojh3JGibXi/OWSzpll1pt3oxoces9lNIPXV9XkieEnxTEwq/TA70NTDzvpN67ykzwMSqnDYkzXD89gjFGDLyfetF8odaZwvYBMoczPJmAy3BF3hw4eK+xCB0X+twP3REAYO0gn0DSg4z+zjloAv/vNuqM43xVbJqmxJcvh0DG0/rhhPs1CRNdXPwF9xBeJGwsw/MpKHZ1hSNgYCDYXRI7z/PhE8qVVsRzii8KmqpN+21vtDsRPKg0mw6flgfdCJ85lEptBCP+0m1NmuM4GAaHekbHrqGFpPhpydFfOliD+CPFrYBU0QMcviMvKZMyhqX12sm3hfmVGeUt55gNH1QJkbx6P7JP/RDe1LvBNel2OPqL4I9CsA4jKYGszeR9hLheoRSlKI48Lre2N/obckZA1GWI2sXLJqtRu2j7oZ+sEFLDp4IDK3LXYd3dZwqBgIZdM9nM4hlVh1JTj8HaMW7bmMR+ncpNmkMdA9QjGgQotvl2DBSS3ByRH2ldeBcCKtS47TPeeYpiSETtcbztF00pTMIa1A49ySakQW6F69Yn8MqDs8IIiS3Qlk5Mn/nsLLElrGpJeNCYIB6Z+U9WfklK7nr79Bm6G+ZAhAQiEhIwUwXOSHFNkOU2U1EoZspchZ03ejUZttkFFTGhbXsITn2tSyLUqT4mbIEw90LC8xUnKeSZzxCPJqs5QLvG4oDnuCgizZwWErV+oU23G2WedyjW4ypQelGOY95iTTc2vGRWsR1JIrkey62yq+ify577bv3GNGjDlEkalzHheHFd+cYxjoK9Btw+svaCqtOiavPF5RZ4SXqeqCmuMWJp0EbSVeY/ewwATeOYjorIcMhcrVaqncj0fh7Tp3TfEkuPeJgOuuazbwTJdDcM/+zN/jF8bTacsO94cHrf2D5XoEU40X4yG+oV6qXoIBkFqLaGhQd8+Vy5pLpoimbkcw8YW1fqIgrKPA92ny7Ih7iZfhLIBjnR5M/pOD/I36Pz4OCKI/khOT9JUCdkker/pxXt1RgUbWL9xB6LF6efTVoXpTNAN6X7rc+jU5jY5WIThTUtLqEzXYWxqKVLUbe1b+10QjEzVkeXEph3CQoseqJl57Z7i+eeTd7Oqqby2vfyc6YngY9BSZLdfYRSkxYO2Uv3RYbE1I5m1B8L2iYsKu91GR65h3MoYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012DFNjXzEm8yz9XbARUGY2A",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012DFNjXzEm8yz9XbARUGY2A",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useEffect, useId, useRef, useState } from \"react\";\nimport type { ChangeEvent, FormEvent } from \"react\";\nimport { Avatar, Button, Column, Heading, Input, Row, Text, Textarea, useToast } from \"@once-ui-system/core\";\n\ntype SectionId = \"profile\" | \"account\" | \"notifications\" | \"danger\";\n\ninterface SectionDef {\n  id: SectionId;\n  label: string;\n  description: string;\n}\n\nconst SECTIONS: SectionDef[] = [\n  { id: \"profile\", label: \"Profile\", description: \"Your public information\" },\n  { id: \"account\", label: \"Account\", description: \"Email and security\" },\n  { id: \"notifications\", label: \"Notifications\", description: \"How we reach you\" },\n  { id: \"danger\", label: \"Danger zone\", description: \"Irreversible actions\" },\n];\n\ninterface Option {\n  value: string;\n  label: string;\n}\n\nconst TIMEZONES: Option[] = [\n  { value: \"America/Los_Angeles\", label: \"Pacific Time (UTC−08:00)\" },\n  { value: \"America/New_York\", label: \"Eastern Time (UTC−05:00)\" },\n  { value: \"Europe/London\", label: \"London (UTC+00:00)\" },\n  { value: \"Europe/Berlin\", label: \"Central European Time (UTC+01:00)\" },\n  { value: \"Asia/Tokyo\", label: \"Japan Standard Time (UTC+09:00)\" },\n];\n\nconst LANGUAGES: Option[] = [\n  { value: \"en\", label: \"English\" },\n  { value: \"de\", label: \"Deutsch\" },\n  { value: \"es\", label: \"Español\" },\n  { value: \"fr\", label: \"Français\" },\n  { value: \"ja\", label: \"日本語\" },\n];\n\nconst ROLES: Option[] = [\n  { value: \"design\", label: \"Product design\" },\n  { value: \"engineering\", label: \"Engineering\" },\n  { value: \"product\", label: \"Product management\" },\n  { value: \"marketing\", label: \"Marketing\" },\n];\n\ninterface ProfileState {\n  firstName: string;\n  lastName: string;\n  username: string;\n  email: string;\n  role: string;\n  timezone: string;\n  language: string;\n  bio: string;\n}\n\nconst INITIAL_PROFILE: ProfileState = {\n  firstName: \"Maya\",\n  lastName: \"Okafor\",\n  username: \"mayaokafor\",\n  email: \"maya.okafor@northwind.example\",\n  role: \"design\",\n  timezone: \"Europe/London\",\n  language: \"en\",\n  bio: \"Product designer at Northwind. I care about calm interfaces, clear writing and design systems that scale.\",\n};\n\nconst BIO_LIMIT = 200;\nconst MAX_AVATAR_BYTES = 2 * 1024 * 1024;\n\nconst selectStyle: React.CSSProperties = {\n  width: \"100%\",\n  minHeight: \"2.5rem\",\n  padding: \"0 0.75rem\",\n  borderRadius: \"var(--radius-m)\",\n  border: \"1px solid var(--neutral-alpha-medium)\",\n  background: \"var(--surface-background)\",\n  color: \"var(--neutral-on-background-strong)\",\n  font: \"inherit\",\n  fontSize: \"var(--font-size-s)\",\n};\n\ninterface SelectFieldProps {\n  label: string;\n  value: string;\n  options: Option[];\n  onChange: (value: string) => void;\n}\n\nfunction SelectField({ label, value, options, onChange }: SelectFieldProps) {\n  const id = useId();\n  return (\n    <Column gap=\"8\" fillWidth>\n      <label htmlFor={id}>\n        <Text variant=\"label-default-s\" onBackground=\"neutral-strong\">\n          {label}\n        </Text>\n      </label>\n      <select\n        id={id}\n        value={value}\n        style={selectStyle}\n        onChange={(e: ChangeEvent<HTMLSelectElement>) => onChange(e.target.value)}\n      >\n        {options.map((o) => (\n          <option key={o.value} value={o.value}>\n            {o.label}\n          </option>\n        ))}\n      </select>\n    </Column>\n  );\n}\n\ninterface ToggleRowProps {\n  label: string;\n  description: string;\n  checked: boolean;\n  onChange: (checked: boolean) => void;\n}\n\nfunction ToggleRow({ label, description, checked, onChange }: ToggleRowProps) {\n  const id = useId();\n  const descId = `${id}-desc`;\n  return (\n    <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" paddingY=\"12\">\n      <Column gap=\"4\" flex={1} style={{ minWidth: 0 }}>\n        <label htmlFor={id}>\n          <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n            {label}\n          </Text>\n        </label>\n        <Text id={descId} variant=\"body-default-s\" onBackground=\"neutral-weak\">\n          {description}\n        </Text>\n      </Column>\n      <input\n        id={id}\n        type=\"checkbox\"\n        role=\"switch\"\n        checked={checked}\n        aria-describedby={descId}\n        onChange={(e: ChangeEvent<HTMLInputElement>) => onChange(e.target.checked)}\n        style={{ width: \"2.5rem\", height: \"1.5rem\", accentColor: \"var(--brand-solid-strong)\", flexShrink: 0 }}\n      />\n    </Row>\n  );\n}\n\nfunction SectionCard({\n  id,\n  title,\n  description,\n  children,\n  danger,\n}: {\n  id: string;\n  title: string;\n  description: string;\n  children: React.ReactNode;\n  danger?: boolean;\n}) {\n  return (\n    <section\n      id={id}\n      aria-labelledby={`${id}-title`}\n      style={{\n        scrollMarginTop: \"1.5rem\",\n        border: `1px solid ${danger ? \"var(--danger-alpha-strong)\" : \"var(--neutral-alpha-medium)\"}`,\n        borderRadius: \"var(--radius-l)\",\n        background: \"var(--surface-background)\",\n        padding: \"clamp(1rem, 4vw, 1.5rem)\",\n      }}\n    >\n      <Column gap=\"24\" fillWidth>\n        <Column gap=\"4\">\n          <Heading as=\"h2\" id={`${id}-title`} variant=\"heading-strong-l\">\n            {title}\n          </Heading>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n            {description}\n          </Text>\n        </Column>\n        {children}\n      </Column>\n    </section>\n  );\n}\n\nexport default function SettingsPage() {\n  const { addToast } = useToast();\n  const [active, setActive] = useState<SectionId>(\"profile\");\n  const [profile, setProfile] = useState<ProfileState>(INITIAL_PROFILE);\n  const [saved, setSaved] = useState<ProfileState>(INITIAL_PROFILE);\n  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);\n  const [avatarError, setAvatarError] = useState<string>(\"\");\n  const [errors, setErrors] = useState<Partial<Record<keyof ProfileState, string>>>({});\n  const [notify, setNotify] = useState({ product: true, digest: false, security: true });\n  const [confirming, setConfirming] = useState(false);\n  const [confirmText, setConfirmText] = useState(\"\");\n  const fileRef = useRef<HTMLInputElement>(null);\n  const urlRef = useRef<string | null>(null);\n  const confirmId = useId();\n\n  useEffect(() => {\n    return () => {\n      if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    };\n  }, []);\n\n  const dirty = JSON.stringify(profile) !== JSON.stringify(saved);\n\n  const update = <K extends keyof ProfileState>(key: K, value: ProfileState[K]) => {\n    setProfile((p) => ({ ...p, [key]: value }));\n  };\n\n  const onAvatarChange = (e: ChangeEvent<HTMLInputElement>) => {\n    const file = e.target.files?.[0];\n    e.target.value = \"\";\n    if (!file) return;\n    if (!file.type.startsWith(\"image/\")) {\n      setAvatarError(\"Please choose an image file (PNG, JPG or WebP).\");\n      return;\n    }\n    if (file.size > MAX_AVATAR_BYTES) {\n      setAvatarError(\"That image is larger than 2 MB. Try a smaller one.\");\n      return;\n    }\n    setAvatarError(\"\");\n    if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    const url = URL.createObjectURL(file);\n    urlRef.current = url;\n    setAvatarUrl(url);\n  };\n\n  const removeAvatar = () => {\n    if (urlRef.current) URL.revokeObjectURL(urlRef.current);\n    urlRef.current = null;\n    setAvatarUrl(null);\n    setAvatarError(\"\");\n  };\n\n  const onSubmit = (e: FormEvent<HTMLFormElement>) => {\n    e.preventDefault();\n    const next: Partial<Record<keyof ProfileState, string>> = {};\n    if (!profile.firstName.trim()) next.firstName = \"First name is required.\";\n    if (!profile.lastName.trim()) next.lastName = \"Last name is required.\";\n    if (!/^[a-z0-9_]{3,20}$/i.test(profile.username)) {\n      next.username = \"Use 3–20 letters, numbers or underscores.\";\n    }\n    if (!/^\\S+@\\S+\\.\\S+$/.test(profile.email)) next.email = \"Enter a valid email address.\";\n    setErrors(next);\n    if (Object.keys(next).length > 0) return;\n    setSaved(profile);\n    addToast({ variant: \"success\", message: \"Profile changes saved.\" });\n  };\n\n  const onReset = () => {\n    setProfile(saved);\n    setErrors({});\n  };\n\n  const goTo = (id: SectionId) => {\n    setActive(id);\n    document.getElementById(id)?.scrollIntoView({ behavior: \"smooth\", block: \"start\" });\n  };\n\n  const deleteReady = confirmText === profile.username;\n\n  const onDelete = () => {\n    if (!deleteReady) return;\n    setConfirming(false);\n    setConfirmText(\"\");\n    addToast({ variant: \"danger\", message: \"Account deletion requested. Check your email to confirm.\" });\n  };\n\n  const fullName = `${profile.firstName} ${profile.lastName}`.trim();\n\n  return (\n    <Column fillWidth horizontal=\"center\" paddingX=\"m\" paddingY=\"24\">\n      <Column fillWidth gap=\"32\" style={{ maxWidth: \"64rem\" }}>\n        <Column as=\"header\" gap=\"8\">\n          <Heading as=\"h1\" variant=\"display-strong-xs\">\n            Settings\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Manage your profile, account preferences and workspace access.\n          </Text>\n        </Column>\n\n        <div\n          style={{\n            display: \"flex\",\n            flexWrap: \"wrap\",\n            gap: \"2rem\",\n            alignItems: \"flex-start\",\n          }}\n        >\n          <nav\n            aria-label=\"Settings sections\"\n            style={{ flex: \"1 1 14rem\", maxWidth: \"100%\", minWidth: 0, position: \"sticky\", top: \"1rem\" }}\n          >\n            <ul\n              style={{\n                listStyle: \"none\",\n                margin: 0,\n                padding: 0,\n                display: \"flex\",\n                flexWrap: \"wrap\",\n                gap: \"0.25rem\",\n              }}\n            >\n              {SECTIONS.map((s) => {\n                const isActive = active === s.id;\n                const isDanger = s.id === \"danger\";\n                return (\n                  <li key={s.id} style={{ flex: \"1 1 auto\" }}>\n                    <button\n                      type=\"button\"\n                      onClick={() => goTo(s.id)}\n                      aria-current={isActive ? \"true\" : undefined}\n                      style={{\n                        width: \"100%\",\n                        textAlign: \"left\",\n                        cursor: \"pointer\",\n                        font: \"inherit\",\n                        padding: \"0.625rem 0.75rem\",\n                        minHeight: \"2.75rem\",\n                        borderRadius: \"var(--radius-m)\",\n                        border: \"1px solid transparent\",\n                        background: isActive ? \"var(--neutral-alpha-weak)\" : \"transparent\",\n                        color: isDanger ? \"var(--danger-on-background-strong)\" : \"var(--neutral-on-background-strong)\",\n                        fontWeight: isActive ? 600 : 400,\n                      }}\n                    >\n                      <span style={{ display: \"block\", fontSize: \"var(--font-size-s)\" }}>{s.label}</span>\n                      <span\n                        style={{\n                          display: \"block\",\n                          fontSize: \"var(--font-size-xs)\",\n                          color: \"var(--neutral-on-background-weak)\",\n                          fontWeight: 400,\n                        }}\n                      >\n                        {s.description}\n                      </span>\n                    </button>\n                  </li>\n                );\n              })}\n            </ul>\n          </nav>\n\n          <main style={{ flex: \"3 1 22rem\", minWidth: 0 }}>\n            <Column gap=\"24\" fillWidth>\n              <SectionCard\n                id=\"profile\"\n                title=\"Profile\"\n                description=\"This information is shown on your public profile and in shared projects.\"\n              >\n                <form onSubmit={onSubmit} noValidate aria-label=\"Profile form\">\n                  <Column gap=\"24\" fillWidth>\n                    <Row gap=\"16\" vertical=\"center\" wrap>\n                      <Avatar src={avatarUrl ?? undefined} value={avatarUrl ? undefined : `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`} size=\"xl\" />\n                      <Column gap=\"8\">\n                        <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n                          {fullName || \"Your name\"}\n                        </Text>\n                        <Row gap=\"8\" wrap>\n                          <Button type=\"button\" variant=\"secondary\" size=\"s\" onClick={() => fileRef.current?.click()}>\n                            Upload photo\n                          </Button>\n                          {avatarUrl && (\n                            <Button type=\"button\" variant=\"tertiary\" size=\"s\" onClick={removeAvatar}>\n                              Remove\n                            </Button>\n                          )}\n                        </Row>\n                        <input\n                          ref={fileRef}\n                          type=\"file\"\n                          accept=\"image/png,image/jpeg,image/webp\"\n                          onChange={onAvatarChange}\n                          aria-label=\"Upload profile photo\"\n                          style={{ display: \"none\" }}\n                        />\n                        <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\">\n                          PNG, JPG or WebP, up to 2 MB.\n                        </Text>\n                        <div role=\"status\" aria-live=\"polite\">\n                          {avatarError && (\n                            <Text variant=\"body-default-xs\" onBackground=\"danger-weak\">\n                              {avatarError}\n                            </Text>\n                          )}\n                        </div>\n                      </Column>\n                    </Row>\n\n                    <div\n                      style={{\n                        display: \"grid\",\n                        gridTemplateColumns: \"repeat(auto-fit, minmax(14rem, 1fr))\",\n                        gap: \"1rem\",\n                      }}\n                    >\n                      <Input\n                        id=\"firstName\"\n                        label=\"First name\"\n                        value={profile.firstName}\n                        onChange={(e: ChangeEvent<HTMLInputElement>) => update(\"firstName\", e.target.value)}\n                        error={!!errors.firstName}\n                        errorMessage={errors.firstName}\n                        autoComplete=\"given-name\"\n                      />\n                      <Input\n                        id=\"lastName\"\n                        label=\"Last name\"\n                        value={profile.lastName}\n                        onChange={(e: ChangeEvent<HTMLInputElement>) => update(\"lastName\", e.target.value)}\n                        error={!!errors.lastName}\n                        errorMessage={errors.lastName}\n                        autoComplete=\"family-name\"\n                      />\n                      <Input\n                        id=\"username\"\n                        label=\"Username\"\n                        value={profile.username}\n                        onChange={(e: ChangeEvent<HTMLInputElement>) => update(\"username\", e.target.value)}\n                        error={!!errors.username}\n                        errorMessage={errors.username}\n                        autoComplete=\"username\"\n                      />\n                      <Input\n                        id=\"email\"\n                        label=\"Email\"\n                        type=\"email\"\n                        value={profile.email}\n                        onChange={(e: ChangeEvent<HTMLInputElement>) => update(\"email\", e.target.value)}\n                        error={!!errors.email}\n                        errorMessage={errors.email}\n                        autoComplete=\"email\"\n                      />\n                      <SelectField label=\"Role\" value={profile.role} options={ROLES} onChange={(v) => update(\"role\", v)} />\n                      <SelectField\n                        label=\"Language\"\n                        value={profile.language}\n                        options={LANGUAGES}\n                        onChange={(v) => update(\"language\", v)}\n                      />\n                      <SelectField\n                        label=\"Time zone\"\n                        value={profile.timezone}\n                        options={TIMEZONES}\n                        onChange={(v) => update(\"timezone\", v)}\n                      />\n                    </div>\n\n                    <Column gap=\"8\">\n                      <Textarea\n                        id=\"bio\"\n                        label=\"Bio\"\n                        lines={4}\n                        value={profile.bio}\n                        onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>\n                          update(\"bio\", e.target.value.slice(0, BIO_LIMIT))\n                        }\n                      />\n                      <Text variant=\"body-default-xs\" onBackground=\"neutral-weak\" align=\"right\">\n                        {profile.bio.length}/{BIO_LIMIT} characters\n                      </Text>\n                    </Column>\n\n                    <Row gap=\"12\" wrap horizontal=\"end\">\n                      <Button type=\"button\" variant=\"tertiary\" onClick={onReset} disabled={!dirty}>\n                        Discard changes\n                      </Button>\n                      <Button type=\"submit\" variant=\"primary\" disabled={!dirty}>\n                        Save changes\n                      </Button>\n                    </Row>\n                  </Column>\n                </form>\n              </SectionCard>\n\n              <SectionCard\n                id=\"account\"\n                title=\"Account\"\n                description=\"Security and sign-in details for your Northwind account.\"\n              >\n                <Column gap=\"12\" fillWidth>\n                  <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n                    <Column gap=\"4\">\n                      <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n                        Password\n                      </Text>\n                      <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                        Last changed 3 months ago\n                      </Text>\n                    </Column>\n                    <Button\n                      type=\"button\"\n                      variant=\"secondary\"\n                      size=\"s\"\n                      onClick={() => addToast({ variant: \"success\", message: \"Password reset link sent to your email.\" })}\n                    >\n                      Send reset link\n                    </Button>\n                  </Row>\n                  <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n                    <Column gap=\"4\">\n                      <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n                        Active sessions\n                      </Text>\n                      <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                        2 devices: MacBook Pro (London), iPhone 15\n                      </Text>\n                    </Column>\n                    <Button\n                      type=\"button\"\n                      variant=\"secondary\"\n                      size=\"s\"\n                      onClick={() => addToast({ variant: \"success\", message: \"Signed out of all other devices.\" })}\n                    >\n                      Sign out others\n                    </Button>\n                  </Row>\n                </Column>\n              </SectionCard>\n\n              <SectionCard\n                id=\"notifications\"\n                title=\"Notifications\"\n                description=\"Choose which updates you want to receive by email.\"\n              >\n                <Column fillWidth>\n                  <ToggleRow\n                    label=\"Product updates\"\n                    description=\"New features and improvements, about twice a month.\"\n                    checked={notify.product}\n                    onChange={(v) => setNotify((n) => ({ ...n, product: v }))}\n                  />\n                  <ToggleRow\n                    label=\"Weekly digest\"\n                    description=\"A Monday summary of activity across your projects.\"\n                    checked={notify.digest}\n                    onChange={(v) => setNotify((n) => ({ ...n, digest: v }))}\n                  />\n                  <ToggleRow\n                    label=\"Security alerts\"\n                    description=\"Sign-ins from new devices and password changes.\"\n                    checked={notify.security}\n                    onChange={(v) => setNotify((n) => ({ ...n, security: v }))}\n                  />\n                </Column>\n              </SectionCard>\n\n              <SectionCard\n                id=\"danger\"\n                title=\"Danger zone\"\n                description=\"These actions are permanent and cannot be undone.\"\n                danger\n              >\n                <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n                  <Column gap=\"4\" flex={1} style={{ minWidth: \"12rem\" }}>\n                    <Text variant=\"label-default-m\" onBackground=\"neutral-strong\">\n                      Delete account\n                    </Text>\n                    <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                      Permanently remove your profile, projects and all associated data.\n                    </Text>\n                  </Column>\n                  <Button\n                    type=\"button\"\n                    variant=\"danger\"\n                    onClick={() => setConfirming(true)}\n                    aria-expanded={confirming}\n                    aria-controls={`${confirmId}-panel`}\n                  >\n                    Delete account\n                  </Button>\n                </Row>\n                {confirming && (\n                  <div\n                    id={`${confirmId}-panel`}\n                    role=\"group\"\n                    aria-labelledby={`${confirmId}-heading`}\n                    style={{\n                      border: \"1px solid var(--danger-alpha-strong)\",\n                      borderRadius: \"var(--radius-m)\",\n                      padding: \"1rem\",\n                    }}\n                  >\n                    <Column gap=\"16\" fillWidth>\n                      <Text id={`${confirmId}-heading`} variant=\"label-default-m\" onBackground=\"neutral-strong\">\n                        Type <strong>{profile.username}</strong> to confirm deletion\n                      </Text>\n                      <Input\n                        id={`${confirmId}-input`}\n                        label=\"Username confirmation\"\n                        value={confirmText}\n                        onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmText(e.target.value)}\n                        autoComplete=\"off\"\n                      />\n                      <Row gap=\"12\" wrap horizontal=\"end\">\n                        <Button\n                          type=\"button\"\n                          variant=\"tertiary\"\n                          onClick={() => {\n                            setConfirming(false);\n                            setConfirmText(\"\");\n                          }}\n                        >\n                          Cancel\n                        </Button>\n                        <Button type=\"button\" variant=\"danger\" disabled={!deleteReady} onClick={onDelete}>\n                          Permanently delete\n                        </Button>\n                      </Row>\n                    </Column>\n                  </div>\n                )}\n              </SectionCard>\n            </Column>\n          </main>\n        </div>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

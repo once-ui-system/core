@@ -1,0 +1,20 @@
+{
+  "arm": "B",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(165,9): error TS2322: Type '\"space-between\"' is not assignable to type '\"center\" | \"end\" | \"start\" | \"stretch\" | \"between\" | \"around\" | \"even\" | undefined'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2608
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 5 issue(s)\n  [layout.shorthands] Use Row instead of a Flex with no direction — Flex defaults to row; it is for a direction that changes at a breakpoint\n  [border.default] borderBottom=\"neutral-alpha-weak\" restates the default border — write bare borderBottom, and name a colour only to deviate\n  [color.tokens] Use semantic color tokens, not hex/rgb\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

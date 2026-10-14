@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(113,58): error TS2322: Type '{ children: string; href: string; size: \"l\"; arrowIcon: true; s: { fillWidth: boolean; }; }' is not assignable to type 'IntrinsicAttributes & ((ButtonProps | AnchorProps) & RefAttributes<HTMLButtonElement>)'.\n  Property 's' does not exist on type 'IntrinsicAttributes & ((ButtonProps | AnchorProps) & RefAttributes<HTMLButtonElement>)'.\napp/page.tsx(121,19): error TS2322: Type '{ children: string; href: string; size: \"l\"; variant: \"secondary\"; prefixIcon: \"play\"; s: { fillWidth: boolean; }; }' is not assignable to type 'IntrinsicAttributes & ((ButtonProps | AnchorProps) & RefAttributes<HTMLButtonElement>)'.\n  Property 's' does not exist on type 'IntrinsicAttributes & ((ButtonProps | AnchorProps) & RefAttributes<HTMLButtonElement>)'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2553
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

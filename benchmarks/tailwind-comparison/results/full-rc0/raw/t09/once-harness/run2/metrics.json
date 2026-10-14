@@ -1,0 +1,35 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 478,
+    "chars": 13606,
+    "bytes": 13609,
+    "tokens_o200k": 3326,
+    "tokens_claudeLegacy": 3517,
+    "tokens_exact": 5172
+  },
+  "raw": {
+    "lines": 353,
+    "chars": 12932,
+    "bytes": 12935,
+    "tokens_o200k": 3184,
+    "tokens_claudeLegacy": 3391,
+    "tokens_exact": 4911
+  },
+  "components": [
+    "Button",
+    "Column",
+    "DataTable",
+    "DateRangeInput",
+    "Heading",
+    "Icon",
+    "IconButton",
+    "Input",
+    "Pagination",
+    "Row",
+    "SegmentedControl",
+    "Tag",
+    "Text"
+  ]
+}

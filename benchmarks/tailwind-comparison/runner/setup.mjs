@@ -71,6 +71,14 @@ if (!args["skip-install"]) {
     // file: dependency, so that scaffold is re-resolved with `npm install` (commit
     // the updated arms/once/package-lock.json with the results).
     const cmd = scaffold === "once" && onceVersion ? "install" : "ci";
+    if (cmd === "install") {
+      // `npm install` still enforces the lockfile's old integrity for a file:
+      // tarball (EINTEGRITY), so drop that one entry and let npm re-record it.
+      const lockPath = path.join(ROOT, "arms/once/package-lock.json");
+      const lock = JSON.parse(fs.readFileSync(lockPath, "utf8"));
+      delete lock.packages?.["node_modules/@once-ui-system/core"];
+      fs.writeFileSync(lockPath, JSON.stringify(lock, null, 2) + "\n");
+    }
     console.log(`npm ${cmd}: arms/${scaffold}`);
     execFileSync("npm", [cmd, "--no-audit", "--no-fund", "--loglevel=error"], {
       cwd: path.join(ROOT, "arms", scaffold),

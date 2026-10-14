@@ -1,0 +1,298 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QXzHpoUP9DKxf4PrUot1x1",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012FUEe4AmXSot7iKLhShWQw",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QXzHpoUP9DKxf4PrUot1x1",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012FUEe4AmXSot7iKLhShWQw",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_0134vNKB8LH2i8VTCZ6K2yPr",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0157r29oe4tkXqnbmLrL2spp",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PZ8WuTGizuYMefa4N8PAFh",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0134vNKB8LH2i8VTCZ6K2yPr",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0157r29oe4tkXqnbmLrL2spp",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PZ8WuTGizuYMefa4N8PAFh",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01ENWKQygegFfJ6PrQ1HiFrz",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014MLdRvcA4Jhh67ogcc1dZ9",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MLRbRo36pFYvegdN3M6ykN",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014yhHHLHmAHM2eog8BarqYE",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ENWKQygegFfJ6PrQ1HiFrz",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014MLdRvcA4Jhh67ogcc1dZ9",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MLRbRo36pFYvegdN3M6ykN",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014yhHHLHmAHM2eog8BarqYE",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check whether the Once UI package is installed locally, to confirm component APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Qnx7U6xt9WnaCroMiUVVNh",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SKhpRh5Gz1qwKmEPtJYbUH",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Qnx7U6xt9WnaCroMiUVVNh",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SKhpRh5Gz1qwKmEPtJYbUH",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "Since I can't inspect the package directly, I'll stick to Once UI components I'm confident about—`Flex`, `Column`, `Row`, `Heading`, `Text`, `Button`, `Badge`, and `SegmentedControl`—and build the table and inputs with native HTML styled via Once UI CSS tokens to minimize type-checking risk.\n\n",
+          "signature": "CAQS3wgKEQgSGAI4AUIJbmFycmF0aW9uEgzkbK0JMoJ5RuTZZZQaDE+6DP7o36sOWoyTXyIwLkBl1uNLU3d7ElkdTwIcmREjKkBYRT6oiX+cim3snhwyBzvnbf51gwCNF2OyYZH7KvsH9KrqrueJe8AdhfyZTs+hF78PapfMNjwKbhAfVkpP/0aPkBgkrPQHCALP+ksIQ2ABvZRzfokQbzqmsGRX+mRyqUByRhbiqEmEhyxra6NQdZYbyl9Qsbsonkzjo1d5d8WYp1h/eLMlwIfN2VSMK32oqv/5ZipN+kq4u/OSfnOE+UBSIT1lBJf1hDCvo/LobS7TcD/dOY3WbZSszLFKyT3HP6oI9/AMgPtYwawxPuZ6OCIJr4bre5knsgDY5+BvXfoQD295/S5hNGyJgtjZBSlzsv8ZfEEdH/g4EQ1JVO93YF7exMfjTCIcBsAlEqbtEe7hpExx6j/PcFktYl9o4lCztpmKXvyjQsGpBx7k6OyW0yqbIo4nNIrjGtXx+yC3D5HcioMyjm+PAmjZH8qBVk9LTJE6sawXVSGRbXmpPvs7sQ7y4e2/kLmWB+aKZ2KN8ts8e+QqrZYaK20nAsQ1IRqYIgMiZGsQPvAPlGeLv3QRQ2BLXkJIzDhaNBDw0nbB3UDTBkIbSEUraYmCMRR7PdH8nhD77c2r9FhvXenOYwmTucaTxqgNiC6xQzLNGlJodLi2KJxxWtfbkDHmi5ZqqP4Pj/dWMdHA7mv4eM3KyXji+7FkyRYBAsOP/GxCduS5UY9h3SZgjOFr0FLiA7Vzk7oUxPYm/DPxhuLvtN5Hz/03leRodDouk1f48zsTpZLU93lWnqG4u316jmUaqIgsbJvqVci1qJt3/c//R3b+7c085Ik18CvH4F5CT4QpBz5oP2yzBje5FgNmT1pAmhV1+1pibpSdS7PPcFrtmH+zh3ejKxuyJlZ1YI5yk0hzcPr1NcAqyHjq8muOmeEzns9XrsQg/kHQfdaKRFjP8t1T2cZ0dGs8AornZBCcvbBeBw5WxACBi5wH2GbnutsnU/71r0EyUofngURskrRfqHSbyklDAbFXMnlrRy+0g/vZS06425/dXuWzzsDHQ/0quVLjYBIG01q/yUQSJ4loSIyann6JcN7NQxMsEkW90a4cx5ESx3R9+MF8yG02yQFxGrnRQTmnGHz1v6CPY6YHLXvz9bf8M0xImEdoXprUDCsZCfvvj64RTBeY6JKVz51raxBVLAp94ugQVx5QmvQE3pvZ5rnNHLuf60T9m8vAezllwlE4ezDYRZQqZ6EWRc998CTX70y2S24rlkFeARnW3IjPxHopT+dY/wrzvZDPwTmCtGNtSOf6g2QThUkQSAMkG4y2Hf9ahFH5RedAgPAlcjW6aGyqFSY2czE7yydoxYp9J+te2YQC6cq68XZoV5gqYs9oErC9SBdBTB9/4EMGo0Ls1qmnQT9Z66OsiKbi64NA9bk6g+Tson90G7jdXOg5e1kYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K46z4ENds9rKy6mrJvVzuq",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K46z4ENds9rKy6mrJvVzuq",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useMemo, useState, useId } from \"react\";\nimport type { CSSProperties } from \"react\";\nimport { Column, Row, Heading, Text, Button, SegmentedControl } from \"@once-ui-system/core\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Overdue\" | \"Refunded\";\ntype StatusFilter = \"all\" | Status;\n\ninterface Invoice {\n  id: string;\n  customer: string;\n  email: string;\n  plan: string;\n  amount: number;\n  status: Status;\n  date: string; // ISO yyyy-mm-dd\n}\n\nconst CUSTOMERS: Array<[string, string, string]> = [\n  [\"Marta Kowalski\", \"marta@northwind.example\", \"Team\"],\n  [\"Devon Okafor\", \"devon@brightlabs.example\", \"Business\"],\n  [\"Priya Raman\", \"priya@lumenworks.example\", \"Starter\"],\n  [\"Lucas Ferreira\", \"lucas@oakandpine.example\", \"Team\"],\n  [\"Hannah Berg\", \"hannah@fjordstudio.example\", \"Enterprise\"],\n  [\"Tomás Herrera\", \"tomas@solaris.example\", \"Business\"],\n  [\"Aiko Tanaka\", \"aiko@kitebridge.example\", \"Starter\"],\n  [\"Samuel Reyes\", \"samuel@harborpoint.example\", \"Team\"],\n  [\"Imogen Clarke\", \"imogen@copperkettle.example\", \"Business\"],\n  [\"Yusuf Demir\", \"yusuf@bluepeak.example\", \"Enterprise\"],\n  [\"Chloe Martin\", \"chloe@wildroot.example\", \"Starter\"],\n  [\"Nikolai Petrov\", \"nikolai@greystone.example\", \"Team\"],\n];\n\nconst STATUSES: Status[] = [\"Paid\", \"Paid\", \"Pending\", \"Paid\", \"Overdue\", \"Paid\", \"Refunded\", \"Pending\"];\n\nconst INVOICES: Invoice[] = Array.from({ length: 48 }, (_, i) => {\n  const [customer, email, plan] = CUSTOMERS[(i * 5 + 3) % CUSTOMERS.length];\n  const day = new Date(Date.UTC(2025, 4, 30));\n  day.setUTCDate(day.getUTCDate() - i * 3 - (i % 4));\n  const base = plan === \"Enterprise\" ? 1890 : plan === \"Business\" ? 640 : plan === \"Team\" ? 249 : 49;\n  return {\n    id: `INV-${String(2048 - i).padStart(4, \"0\")}`,\n    customer,\n    email,\n    plan,\n    amount: base + ((i * 37) % 11) * (base > 200 ? 12 : 3),\n    status: STATUSES[(i * 3 + (i % 5)) % STATUSES.length],\n    date: day.toISOString().slice(0, 10),\n  };\n});\n\ntype SortKey = \"id\" | \"customer\" | \"plan\" | \"amount\" | \"status\" | \"date\";\ntype SortDir = \"asc\" | \"desc\";\n\nconst COLUMNS: Array<{ key: SortKey; label: string; numeric?: boolean }> = [\n  { key: \"id\", label: \"Invoice\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"plan\", label: \"Plan\" },\n  { key: \"status\", label: \"Status\" },\n  { key: \"date\", label: \"Date\" },\n  { key: \"amount\", label: \"Amount\", numeric: true },\n];\n\nconst PAGE_SIZES = [5, 10, 20];\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" });\nconst dateFmt = new Intl.DateTimeFormat(\"en-US\", {\n  year: \"numeric\",\n  month: \"short\",\n  day: \"numeric\",\n  timeZone: \"UTC\",\n});\n\nfunction formatDate(iso: string): string {\n  return dateFmt.format(new Date(`${iso}T00:00:00Z`));\n}\n\nconst STATUS_COLORS: Record<Status, { fg: string; bg: string }> = {\n  Paid: { fg: \"var(--success-on-background-strong)\", bg: \"var(--success-alpha-weak)\" },\n  Pending: { fg: \"var(--warning-on-background-strong)\", bg: \"var(--warning-alpha-weak)\" },\n  Overdue: { fg: \"var(--danger-on-background-strong)\", bg: \"var(--danger-alpha-weak)\" },\n  Refunded: { fg: \"var(--neutral-on-background-strong)\", bg: \"var(--neutral-alpha-medium)\" },\n};\n\nconst inputStyle: CSSProperties = {\n  height: \"2.5rem\",\n  padding: \"0 0.75rem\",\n  borderRadius: \"var(--radius-m, 0.5rem)\",\n  border: \"1px solid var(--neutral-alpha-medium)\",\n  background: \"var(--surface-background, transparent)\",\n  color: \"var(--neutral-on-background-strong)\",\n  font: \"inherit\",\n  fontSize: \"0.875rem\",\n  minWidth: 0,\n  width: \"100%\",\n};\n\nconst thButtonStyle: CSSProperties = {\n  all: \"unset\",\n  cursor: \"pointer\",\n  display: \"inline-flex\",\n  alignItems: \"center\",\n  gap: \"0.375rem\",\n  padding: \"0.25rem 0.25rem\",\n  borderRadius: \"0.25rem\",\n  fontWeight: 600,\n  fontSize: \"0.8125rem\",\n  color: \"var(--neutral-on-background-strong)\",\n  whiteSpace: \"nowrap\",\n};\n\nconst cellStyle: CSSProperties = {\n  padding: \"0.875rem 1rem\",\n  borderBottom: \"1px solid var(--neutral-alpha-weak)\",\n  fontSize: \"0.875rem\",\n  color: \"var(--neutral-on-background-strong)\",\n  verticalAlign: \"middle\",\n};\n\nexport default function Page() {\n  const uid = useId();\n  const [status, setStatus] = useState<StatusFilter>(\"all\");\n  const [from, setFrom] = useState(\"\");\n  const [to, setTo] = useState(\"\");\n  const [query, setQuery] = useState(\"\");\n  const [sortKey, setSortKey] = useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = useState<SortDir>(\"desc\");\n  const [pageSize, setPageSize] = useState(10);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return INVOICES.filter((inv) => {\n      if (status !== \"all\" && inv.status !== status) return false;\n      if (from && inv.date < from) return false;\n      if (to && inv.date > to) return false;\n      if (q) {\n        const hay = `${inv.id} ${inv.customer} ${inv.email} ${inv.plan}`.toLowerCase();\n        if (!hay.includes(q)) return false;\n      }\n      return true;\n    });\n  }, [status, from, to, query]);\n\n  const sorted = useMemo(() => {\n    const dir = sortDir === \"asc\" ? 1 : -1;\n    return [...filtered].sort((a, b) => {\n      const av = a[sortKey];\n      const bv = b[sortKey];\n      if (typeof av === \"number\" && typeof bv === \"number\") return (av - bv) * dir;\n      return String(av).localeCompare(String(bv)) * dir;\n    });\n  }, [filtered, sortKey, sortDir]);\n\n  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n  const startIdx = (currentPage - 1) * pageSize;\n  const rows = sorted.slice(startIdx, startIdx + pageSize);\n  const total = useMemo(() => filtered.reduce((sum, inv) => sum + inv.amount, 0), [filtered]);\n\n  const hasFilters = status !== \"all\" || from !== \"\" || to !== \"\" || query !== \"\";\n  const dateInvalid = from !== \"\" && to !== \"\" && from > to;\n\n  function toggleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function resetFilters() {\n    setStatus(\"all\");\n    setFrom(\"\");\n    setTo(\"\");\n    setQuery(\"\");\n    setPage(1);\n  }\n\n  const pageNumbers = useMemo(() => {\n    const pages: Array<number | \"gap-l\" | \"gap-r\"> = [];\n    for (let p = 1; p <= totalPages; p++) {\n      if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1) {\n        pages.push(p);\n      } else if (p < currentPage && pages[pages.length - 1] !== \"gap-l\") {\n        pages.push(\"gap-l\");\n      } else if (p > currentPage && pages[pages.length - 1] !== \"gap-r\") {\n        pages.push(\"gap-r\");\n      }\n    }\n    return pages;\n  }, [totalPages, currentPage]);\n\n  const searchId = `${uid}-search`;\n  const fromId = `${uid}-from`;\n  const toId = `${uid}-to`;\n  const sizeId = `${uid}-size`;\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      horizontal=\"center\"\n      paddingX=\"16\"\n      paddingY=\"32\"\n      style={{ minHeight: \"100vh\" }}\n    >\n      <Column fillWidth maxWidth={72} gap=\"24\" style={{ maxWidth: \"72rem\" }}>\n        <Column gap=\"8\">\n          <Heading as=\"h1\" variant=\"display-strong-xs\">\n            Invoices\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Track billing activity across every customer account. Sort columns, narrow by status\n            or date, and search by name, email or invoice number.\n          </Text>\n        </Column>\n\n        <Column\n          as=\"section\"\n          aria-label=\"Filters\"\n          gap=\"16\"\n          padding=\"16\"\n          radius=\"l\"\n          border=\"neutral-alpha-weak\"\n          background=\"surface\"\n        >\n          <Row fillWidth gap=\"16\" wrap vertical=\"end\">\n            <Column gap=\"8\" style={{ flex: \"1 1 100%\", minWidth: 0 }}>\n              <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\" id={`${uid}-status-label`}>\n                Status\n              </Text>\n              <div\n                role=\"group\"\n                aria-labelledby={`${uid}-status-label`}\n                style={{ overflowX: \"auto\", maxWidth: \"100%\" }}\n              >\n                <SegmentedControl\n                  buttons={[\n                    { value: \"all\", label: \"All\" },\n                    { value: \"Paid\", label: \"Paid\" },\n                    { value: \"Pending\", label: \"Pending\" },\n                    { value: \"Overdue\", label: \"Overdue\" },\n                    { value: \"Refunded\", label: \"Refunded\" },\n                  ]}\n                  selected={status}\n                  onToggle={(value) => {\n                    setStatus(value as StatusFilter);\n                    setPage(1);\n                  }}\n                />\n              </div>\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"1 1 9rem\", minWidth: 0 }}>\n              <label htmlFor={fromId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  From\n                </Text>\n              </label>\n              <input\n                id={fromId}\n                type=\"date\"\n                value={from}\n                max={to || undefined}\n                onChange={(e) => {\n                  setFrom(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"1 1 9rem\", minWidth: 0 }}>\n              <label htmlFor={toId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  To\n                </Text>\n              </label>\n              <input\n                id={toId}\n                type=\"date\"\n                value={to}\n                min={from || undefined}\n                onChange={(e) => {\n                  setTo(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"2 1 14rem\", minWidth: 0 }}>\n              <label htmlFor={searchId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  Search\n                </Text>\n              </label>\n              <input\n                id={searchId}\n                type=\"search\"\n                value={query}\n                placeholder=\"Customer, email or invoice no.\"\n                onChange={(e) => {\n                  setQuery(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Button\n              variant=\"tertiary\"\n              size=\"m\"\n              onClick={resetFilters}\n              disabled={!hasFilters}\n              aria-label=\"Reset all filters\"\n            >\n              Reset\n            </Button>\n          </Row>\n          {dateInvalid && (\n            <Text variant=\"body-default-s\" onBackground=\"danger-strong\" role=\"alert\">\n              The start date is after the end date, so no invoices can match.\n            </Text>\n          )}\n        </Column>\n\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"8\" wrap>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n            {sorted.length === 0\n              ? \"No invoices match\"\n              : `Showing ${startIdx + 1}–${startIdx + rows.length} of ${sorted.length} invoices`}\n          </Text>\n          <Text variant=\"label-default-s\" onBackground=\"neutral-strong\">\n            Total: {currency.format(total)}\n          </Text>\n        </Row>\n\n        <Column\n          fillWidth\n          radius=\"l\"\n          border=\"neutral-alpha-weak\"\n          background=\"surface\"\n          style={{ overflow: \"hidden\" }}\n        >\n          <div style={{ overflowX: \"auto\" }} tabIndex={0} role=\"region\" aria-label=\"Invoices table, scrollable\">\n            <table style={{ width: \"100%\", borderCollapse: \"collapse\", minWidth: \"44rem\" }}>\n              <caption\n                style={{\n                  position: \"absolute\",\n                  width: 1,\n                  height: 1,\n                  overflow: \"hidden\",\n                  clip: \"rect(0 0 0 0)\",\n                  whiteSpace: \"nowrap\",\n                }}\n              >\n                Invoices, sorted by {COLUMNS.find((c) => c.key === sortKey)?.label}{\" \"}\n                {sortDir === \"asc\" ? \"ascending\" : \"descending\"}\n              </caption>\n              <thead>\n                <tr>\n                  {COLUMNS.map((col) => {\n                    const active = col.key === sortKey;\n                    return (\n                      <th\n                        key={col.key}\n                        scope=\"col\"\n                        aria-sort={active ? (sortDir === \"asc\" ? \"ascending\" : \"descending\") : \"none\"}\n                        style={{\n                          ...cellStyle,\n                          textAlign: col.numeric ? \"right\" : \"left\",\n                          background: \"var(--neutral-alpha-weak)\",\n                          padding: \"0.5rem 1rem\",\n                        }}\n                      >\n                        <button type=\"button\" onClick={() => toggleSort(col.key)} style={thButtonStyle}>\n                          {col.label}\n                          <span aria-hidden=\"true\" style={{ opacity: active ? 1 : 0.35, fontSize: \"0.75rem\" }}>\n                            {active ? (sortDir === \"asc\" ? \"▲\" : \"▼\") : \"↕\"}\n                          </span>\n                        </button>\n                      </th>\n                    );\n                  })}\n                </tr>\n              </thead>\n              <tbody>\n                {rows.length === 0 ? (\n                  <tr>\n                    <td colSpan={COLUMNS.length} style={{ ...cellStyle, textAlign: \"center\", padding: \"3rem 1rem\" }}>\n                      <Column gap=\"12\" horizontal=\"center\">\n                        <Text variant=\"heading-strong-m\">No invoices found</Text>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          Try widening the date range or clearing your search.\n                        </Text>\n                        {hasFilters && (\n                          <Button variant=\"secondary\" size=\"s\" onClick={resetFilters}>\n                            Clear filters\n                          </Button>\n                        )}\n                      </Column>\n                    </td>\n                  </tr>\n                ) : (\n                  rows.map((inv) => {\n                    const c = STATUS_COLORS[inv.status];\n                    return (\n                      <tr key={inv.id}>\n                        <td style={{ ...cellStyle, fontFamily: \"var(--font-code)\", whiteSpace: \"nowrap\" }}>\n                          {inv.id}\n                        </td>\n                        <td style={cellStyle}>\n                          <div style={{ fontWeight: 600 }}>{inv.customer}</div>\n                          <div style={{ fontSize: \"0.75rem\", color: \"var(--neutral-on-background-weak)\" }}>\n                            {inv.email}\n                          </div>\n                        </td>\n                        <td style={cellStyle}>{inv.plan}</td>\n                        <td style={cellStyle}>\n                          <span\n                            style={{\n                              display: \"inline-block\",\n                              padding: \"0.125rem 0.625rem\",\n                              borderRadius: \"999px\",\n                              fontSize: \"0.75rem\",\n                              fontWeight: 600,\n                              color: c.fg,\n                              background: c.bg,\n                            }}\n                          >\n                            {inv.status}\n                          </span>\n                        </td>\n                        <td style={{ ...cellStyle, whiteSpace: \"nowrap\" }}>\n                          <time dateTime={inv.date}>{formatDate(inv.date)}</time>\n                        </td>\n                        <td\n                          style={{\n                            ...cellStyle,\n                            textAlign: \"right\",\n                            fontVariantNumeric: \"tabular-nums\",\n                            whiteSpace: \"nowrap\",\n                          }}\n                        >\n                          {currency.format(inv.amount)}\n                        </td>\n                      </tr>\n                    );\n                  })\n                )}\n              </tbody>\n            </table>\n          </div>\n        </Column>\n\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n          <Row vertical=\"center\" gap=\"8\">\n            <label htmlFor={sizeId}>\n              <Text as=\"span\" variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Rows per page\n              </Text>\n            </label>\n            <select\n              id={sizeId}\n              value={pageSize}\n              onChange={(e) => {\n                setPageSize(Number(e.target.value));\n                setPage(1);\n              }}\n              style={{ ...inputStyle, width: \"auto\", paddingRight: \"0.5rem\" }}\n            >\n              {PAGE_SIZES.map((s) => (\n                <option key={s} value={s}>\n                  {s}\n                </option>\n              ))}\n            </select>\n          </Row>\n\n          <nav aria-label=\"Pagination\">\n            <Row gap=\"4\" vertical=\"center\" wrap>\n              <Button\n                variant=\"secondary\"\n                size=\"s\"\n                disabled={currentPage <= 1}\n                onClick={() => setPage(currentPage - 1)}\n                aria-label=\"Previous page\"\n              >\n                Prev\n              </Button>\n              {pageNumbers.map((p) =>\n                typeof p === \"number\" ? (\n                  <Button\n                    key={p}\n                    variant={p === currentPage ? \"primary\" : \"tertiary\"}\n                    size=\"s\"\n                    onClick={() => setPage(p)}\n                    aria-label={`Page ${p}`}\n                    aria-current={p === currentPage ? \"page\" : undefined}\n                  >\n                    {String(p)}\n                  </Button>\n                ) : (\n                  <Text key={p} as=\"span\" onBackground=\"neutral-weak\" aria-hidden=\"true\">\n                    …\n                  </Text>\n                ),\n              )}\n              <Button\n                variant=\"secondary\"\n                size=\"s\"\n                disabled={currentPage >= totalPages}\n                onClick={() => setPage(currentPage + 1)}\n                aria-label=\"Next page\"\n              >\n                Next\n              </Button>\n            </Row>\n          </nav>\n        </Row>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": "Your page failed the typecheck check. Output (truncated to 4,000 characters):\n\n```\napp/page.tsx(249,19): error TS2322: Type '{ buttons: { value: string; label: string; }[]; selected: StatusFilter; onToggle: (value: ToggleEvent<HTMLDivElement>) => void; }' is not assignable to type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'selected' does not exist on type 'IntrinsicAttributes & Omit<SegmentedControlProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\napp/page.tsx(251,31): error TS2352: Conversion of type 'ToggleEvent<HTMLDivElement>' to type 'StatusFilter' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.\n```\n\nFix the problem and reply with the complete corrected `app/page.tsx` in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The errors show that `SegmentedControl` has no `selected` prop and that `onToggle` receives an event rather than a value. I can't inspect the package types, so I'm replacing it with a native accessible segmented control built from buttons with `aria-pressed`, which doesn't depend on the library's API.\n\n```tsx\n\"use client\";\n\nimport { useMemo, useState, useId } from \"react\";\nimport type { CSSProperties } from \"react\";\nimport { Column, Row, Heading, Text, Button } from \"@once-ui-system/core\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Overdue\" | \"Refunded\";\ntype StatusFilter = \"all\" | Status;\n\ninterface Invoice {\n  id: string;\n  customer: string;\n  email: string;\n  plan: string;\n  amount: number;\n  status: Status;\n  date: string; // ISO yyyy-mm-dd\n}\n\nconst CUSTOMERS: Array<[string, string, string]> = [\n  [\"Marta Kowalski\", \"marta@northwind.example\", \"Team\"],\n  [\"Devon Okafor\", \"devon@brightlabs.example\", \"Business\"],\n  [\"Priya Raman\", \"priya@lumenworks.example\", \"Starter\"],\n  [\"Lucas Ferreira\", \"lucas@oakandpine.example\", \"Team\"],\n  [\"Hannah Berg\", \"hannah@fjordstudio.example\", \"Enterprise\"],\n  [\"Tomás Herrera\", \"tomas@solaris.example\", \"Business\"],\n  [\"Aiko Tanaka\", \"aiko@kitebridge.example\", \"Starter\"],\n  [\"Samuel Reyes\", \"samuel@harborpoint.example\", \"Team\"],\n  [\"Imogen Clarke\", \"imogen@copperkettle.example\", \"Business\"],\n  [\"Yusuf Demir\", \"yusuf@bluepeak.example\", \"Enterprise\"],\n  [\"Chloe Martin\", \"chloe@wildroot.example\", \"Starter\"],\n  [\"Nikolai Petrov\", \"nikolai@greystone.example\", \"Team\"],\n];\n\nconst STATUSES: Status[] = [\"Paid\", \"Paid\", \"Pending\", \"Paid\", \"Overdue\", \"Paid\", \"Refunded\", \"Pending\"];\n\nconst INVOICES: Invoice[] = Array.from({ length: 48 }, (_, i) => {\n  const [customer, email, plan] = CUSTOMERS[(i * 5 + 3) % CUSTOMERS.length];\n  const day = new Date(Date.UTC(2025, 4, 30));\n  day.setUTCDate(day.getUTCDate() - i * 3 - (i % 4));\n  const base = plan === \"Enterprise\" ? 1890 : plan === \"Business\" ? 640 : plan === \"Team\" ? 249 : 49;\n  return {\n    id: `INV-${String(2048 - i).padStart(4, \"0\")}`,\n    customer,\n    email,\n    plan,\n    amount: base + ((i * 37) % 11) * (base > 200 ? 12 : 3),\n    status: STATUSES[(i * 3 + (i % 5)) % STATUSES.length],\n    date: day.toISOString().slice(0, 10),\n  };\n});\n\ntype SortKey = \"id\" | \"customer\" | \"plan\" | \"amount\" | \"status\" | \"date\";\ntype SortDir = \"asc\" | \"desc\";\n\nconst COLUMNS: Array<{ key: SortKey; label: string; numeric?: boolean }> = [\n  { key: \"id\", label: \"Invoice\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"plan\", label: \"Plan\" },\n  { key: \"status\", label: \"Status\" },\n  { key: \"date\", label: \"Date\" },\n  { key: \"amount\", label: \"Amount\", numeric: true },\n];\n\nconst STATUS_OPTIONS: Array<{ value: StatusFilter; label: string }> = [\n  { value: \"all\", label: \"All\" },\n  { value: \"Paid\", label: \"Paid\" },\n  { value: \"Pending\", label: \"Pending\" },\n  { value: \"Overdue\", label: \"Overdue\" },\n  { value: \"Refunded\", label: \"Refunded\" },\n];\n\nconst PAGE_SIZES = [5, 10, 20];\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" });\nconst dateFmt = new Intl.DateTimeFormat(\"en-US\", {\n  year: \"numeric\",\n  month: \"short\",\n  day: \"numeric\",\n  timeZone: \"UTC\",\n});\n\nfunction formatDate(iso: string): string {\n  return dateFmt.format(new Date(`${iso}T00:00:00Z`));\n}\n\nconst STATUS_COLORS: Record<Status, { fg: string; bg: string }> = {\n  Paid: { fg: \"var(--success-on-background-strong)\", bg: \"var(--success-alpha-weak)\" },\n  Pending: { fg: \"var(--warning-on-background-strong)\", bg: \"var(--warning-alpha-weak)\" },\n  Overdue: { fg: \"var(--danger-on-background-strong)\", bg: \"var(--danger-alpha-weak)\" },\n  Refunded: { fg: \"var(--neutral-on-background-strong)\", bg: \"var(--neutral-alpha-medium)\" },\n};\n\nconst inputStyle: CSSProperties = {\n  height: \"2.5rem\",\n  padding: \"0 0.75rem\",\n  borderRadius: \"var(--radius-m, 0.5rem)\",\n  border: \"1px solid var(--neutral-alpha-medium)\",\n  background: \"var(--surface-background, transparent)\",\n  color: \"var(--neutral-on-background-strong)\",\n  font: \"inherit\",\n  fontSize: \"0.875rem\",\n  minWidth: 0,\n  width: \"100%\",\n};\n\nconst thButtonStyle: CSSProperties = {\n  all: \"unset\",\n  cursor: \"pointer\",\n  display: \"inline-flex\",\n  alignItems: \"center\",\n  gap: \"0.375rem\",\n  padding: \"0.25rem 0.25rem\",\n  borderRadius: \"0.25rem\",\n  fontWeight: 600,\n  fontSize: \"0.8125rem\",\n  color: \"var(--neutral-on-background-strong)\",\n  whiteSpace: \"nowrap\",\n};\n\nconst cellStyle: CSSProperties = {\n  padding: \"0.875rem 1rem\",\n  borderBottom: \"1px solid var(--neutral-alpha-weak)\",\n  fontSize: \"0.875rem\",\n  color: \"var(--neutral-on-background-strong)\",\n  verticalAlign: \"middle\",\n};\n\nconst segmentGroupStyle: CSSProperties = {\n  display: \"inline-flex\",\n  padding: \"0.25rem\",\n  gap: \"0.125rem\",\n  borderRadius: \"var(--radius-l, 0.75rem)\",\n  border: \"1px solid var(--neutral-alpha-medium)\",\n  background: \"var(--neutral-alpha-weak)\",\n};\n\nfunction segmentStyle(active: boolean): CSSProperties {\n  return {\n    all: \"unset\",\n    cursor: \"pointer\",\n    boxSizing: \"border-box\",\n    padding: \"0.375rem 0.875rem\",\n    minHeight: \"1.75rem\",\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    borderRadius: \"var(--radius-m, 0.5rem)\",\n    fontSize: \"0.8125rem\",\n    fontWeight: 600,\n    whiteSpace: \"nowrap\",\n    color: active ? \"var(--neutral-on-background-strong)\" : \"var(--neutral-on-background-weak)\",\n    background: active ? \"var(--surface-background, var(--page-background))\" : \"transparent\",\n    boxShadow: active ? \"0 0 0 1px var(--neutral-alpha-medium)\" : \"none\",\n  };\n}\n\nexport default function Page() {\n  const uid = useId();\n  const [status, setStatus] = useState<StatusFilter>(\"all\");\n  const [from, setFrom] = useState(\"\");\n  const [to, setTo] = useState(\"\");\n  const [query, setQuery] = useState(\"\");\n  const [sortKey, setSortKey] = useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = useState<SortDir>(\"desc\");\n  const [pageSize, setPageSize] = useState(10);\n  const [page, setPage] = useState(1);\n\n  const filtered = useMemo(() => {\n    const q = query.trim().toLowerCase();\n    return INVOICES.filter((inv) => {\n      if (status !== \"all\" && inv.status !== status) return false;\n      if (from && inv.date < from) return false;\n      if (to && inv.date > to) return false;\n      if (q) {\n        const hay = `${inv.id} ${inv.customer} ${inv.email} ${inv.plan}`.toLowerCase();\n        if (!hay.includes(q)) return false;\n      }\n      return true;\n    });\n  }, [status, from, to, query]);\n\n  const sorted = useMemo(() => {\n    const dir = sortDir === \"asc\" ? 1 : -1;\n    return [...filtered].sort((a, b) => {\n      const av = a[sortKey];\n      const bv = b[sortKey];\n      if (typeof av === \"number\" && typeof bv === \"number\") return (av - bv) * dir;\n      return String(av).localeCompare(String(bv)) * dir;\n    });\n  }, [filtered, sortKey, sortDir]);\n\n  const totalPages = Math.max(1, Math.ceil(sorted.length / pageSize));\n  const currentPage = Math.min(page, totalPages);\n  const startIdx = (currentPage - 1) * pageSize;\n  const rows = sorted.slice(startIdx, startIdx + pageSize);\n  const total = useMemo(() => filtered.reduce((sum, inv) => sum + inv.amount, 0), [filtered]);\n\n  const hasFilters = status !== \"all\" || from !== \"\" || to !== \"\" || query !== \"\";\n  const dateInvalid = from !== \"\" && to !== \"\" && from > to;\n\n  function toggleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function resetFilters() {\n    setStatus(\"all\");\n    setFrom(\"\");\n    setTo(\"\");\n    setQuery(\"\");\n    setPage(1);\n  }\n\n  const pageNumbers = useMemo(() => {\n    const pages: Array<number | \"gap-l\" | \"gap-r\"> = [];\n    for (let p = 1; p <= totalPages; p++) {\n      if (p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1) {\n        pages.push(p);\n      } else if (p < currentPage && pages[pages.length - 1] !== \"gap-l\") {\n        pages.push(\"gap-l\");\n      } else if (p > currentPage && pages[pages.length - 1] !== \"gap-r\") {\n        pages.push(\"gap-r\");\n      }\n    }\n    return pages;\n  }, [totalPages, currentPage]);\n\n  const searchId = `${uid}-search`;\n  const fromId = `${uid}-from`;\n  const toId = `${uid}-to`;\n  const sizeId = `${uid}-size`;\n  const statusLabelId = `${uid}-status-label`;\n\n  return (\n    <Column\n      as=\"main\"\n      fillWidth\n      horizontal=\"center\"\n      paddingX=\"16\"\n      paddingY=\"32\"\n      style={{ minHeight: \"100vh\" }}\n    >\n      <Column fillWidth gap=\"24\" style={{ maxWidth: \"72rem\" }}>\n        <Column gap=\"8\">\n          <Heading as=\"h1\" variant=\"display-strong-xs\">\n            Invoices\n          </Heading>\n          <Text variant=\"body-default-m\" onBackground=\"neutral-weak\">\n            Track billing activity across every customer account. Sort columns, narrow by status\n            or date, and search by name, email or invoice number.\n          </Text>\n        </Column>\n\n        <Column\n          as=\"section\"\n          aria-label=\"Filters\"\n          gap=\"16\"\n          padding=\"16\"\n          radius=\"l\"\n          border=\"neutral-alpha-weak\"\n          background=\"surface\"\n        >\n          <Row fillWidth gap=\"16\" wrap vertical=\"end\">\n            <Column gap=\"8\" style={{ flex: \"1 1 100%\", minWidth: 0 }}>\n              <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\" id={statusLabelId}>\n                Status\n              </Text>\n              <div style={{ overflowX: \"auto\", maxWidth: \"100%\" }}>\n                <div role=\"group\" aria-labelledby={statusLabelId} style={segmentGroupStyle}>\n                  {STATUS_OPTIONS.map((opt) => {\n                    const active = opt.value === status;\n                    return (\n                      <button\n                        key={opt.value}\n                        type=\"button\"\n                        aria-pressed={active}\n                        onClick={() => {\n                          setStatus(opt.value);\n                          setPage(1);\n                        }}\n                        style={segmentStyle(active)}\n                      >\n                        {opt.label}\n                      </button>\n                    );\n                  })}\n                </div>\n              </div>\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"1 1 9rem\", minWidth: 0 }}>\n              <label htmlFor={fromId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  From\n                </Text>\n              </label>\n              <input\n                id={fromId}\n                type=\"date\"\n                value={from}\n                max={to || undefined}\n                onChange={(e) => {\n                  setFrom(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"1 1 9rem\", minWidth: 0 }}>\n              <label htmlFor={toId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  To\n                </Text>\n              </label>\n              <input\n                id={toId}\n                type=\"date\"\n                value={to}\n                min={from || undefined}\n                onChange={(e) => {\n                  setTo(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Column gap=\"8\" style={{ flex: \"2 1 14rem\", minWidth: 0 }}>\n              <label htmlFor={searchId}>\n                <Text as=\"span\" variant=\"label-default-s\" onBackground=\"neutral-weak\">\n                  Search\n                </Text>\n              </label>\n              <input\n                id={searchId}\n                type=\"search\"\n                value={query}\n                placeholder=\"Customer, email or invoice no.\"\n                onChange={(e) => {\n                  setQuery(e.target.value);\n                  setPage(1);\n                }}\n                style={inputStyle}\n              />\n            </Column>\n\n            <Button\n              variant=\"tertiary\"\n              size=\"m\"\n              onClick={resetFilters}\n              disabled={!hasFilters}\n              aria-label=\"Reset all filters\"\n            >\n              Reset\n            </Button>\n          </Row>\n          {dateInvalid && (\n            <Text variant=\"body-default-s\" onBackground=\"danger-strong\" role=\"alert\">\n              The start date is after the end date, so no invoices can match.\n            </Text>\n          )}\n        </Column>\n\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"8\" wrap>\n          <Text variant=\"body-default-s\" onBackground=\"neutral-weak\" aria-live=\"polite\">\n            {sorted.length === 0\n              ? \"No invoices match\"\n              : `Showing ${startIdx + 1}–${startIdx + rows.length} of ${sorted.length} invoices`}\n          </Text>\n          <Text variant=\"label-default-s\" onBackground=\"neutral-strong\">\n            Total: {currency.format(total)}\n          </Text>\n        </Row>\n\n        <Column\n          fillWidth\n          radius=\"l\"\n          border=\"neutral-alpha-weak\"\n          background=\"surface\"\n          style={{ overflow: \"hidden\" }}\n        >\n          <div style={{ overflowX: \"auto\" }} tabIndex={0} role=\"region\" aria-label=\"Invoices table, scrollable\">\n            <table style={{ width: \"100%\", borderCollapse: \"collapse\", minWidth: \"44rem\" }}>\n              <caption\n                style={{\n                  position: \"absolute\",\n                  width: 1,\n                  height: 1,\n                  overflow: \"hidden\",\n                  clip: \"rect(0 0 0 0)\",\n                  whiteSpace: \"nowrap\",\n                }}\n              >\n                Invoices, sorted by {COLUMNS.find((c) => c.key === sortKey)?.label}{\" \"}\n                {sortDir === \"asc\" ? \"ascending\" : \"descending\"}\n              </caption>\n              <thead>\n                <tr>\n                  {COLUMNS.map((col) => {\n                    const active = col.key === sortKey;\n                    return (\n                      <th\n                        key={col.key}\n                        scope=\"col\"\n                        aria-sort={active ? (sortDir === \"asc\" ? \"ascending\" : \"descending\") : \"none\"}\n                        style={{\n                          ...cellStyle,\n                          textAlign: col.numeric ? \"right\" : \"left\",\n                          background: \"var(--neutral-alpha-weak)\",\n                          padding: \"0.5rem 1rem\",\n                        }}\n                      >\n                        <button type=\"button\" onClick={() => toggleSort(col.key)} style={thButtonStyle}>\n                          {col.label}\n                          <span aria-hidden=\"true\" style={{ opacity: active ? 1 : 0.35, fontSize: \"0.75rem\" }}>\n                            {active ? (sortDir === \"asc\" ? \"▲\" : \"▼\") : \"↕\"}\n                          </span>\n                        </button>\n                      </th>\n                    );\n                  })}\n                </tr>\n              </thead>\n              <tbody>\n                {rows.length === 0 ? (\n                  <tr>\n                    <td colSpan={COLUMNS.length} style={{ ...cellStyle, textAlign: \"center\", padding: \"3rem 1rem\" }}>\n                      <Column gap=\"12\" horizontal=\"center\">\n                        <Text variant=\"heading-strong-m\">No invoices found</Text>\n                        <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                          Try widening the date range or clearing your search.\n                        </Text>\n                        {hasFilters && (\n                          <Button variant=\"secondary\" size=\"s\" onClick={resetFilters}>\n                            Clear filters\n                          </Button>\n                        )}\n                      </Column>\n                    </td>\n                  </tr>\n                ) : (\n                  rows.map((inv) => {\n                    const c = STATUS_COLORS[inv.status];\n                    return (\n                      <tr key={inv.id}>\n                        <td style={{ ...cellStyle, fontFamily: \"var(--font-code)\", whiteSpace: \"nowrap\" }}>\n                          {inv.id}\n                        </td>\n                        <td style={cellStyle}>\n                          <div style={{ fontWeight: 600 }}>{inv.customer}</div>\n                          <div style={{ fontSize: \"0.75rem\", color: \"var(--neutral-on-background-weak)\" }}>\n                            {inv.email}\n                          </div>\n                        </td>\n                        <td style={cellStyle}>{inv.plan}</td>\n                        <td style={cellStyle}>\n                          <span\n                            style={{\n                              display: \"inline-block\",\n                              padding: \"0.125rem 0.625rem\",\n                              borderRadius: \"999px\",\n                              fontSize: \"0.75rem\",\n                              fontWeight: 600,\n                              color: c.fg,\n                              background: c.bg,\n                            }}\n                          >\n                            {inv.status}\n                          </span>\n                        </td>\n                        <td style={{ ...cellStyle, whiteSpace: \"nowrap\" }}>\n                          <time dateTime={inv.date}>{formatDate(inv.date)}</time>\n                        </td>\n                        <td\n                          style={{\n                            ...cellStyle,\n                            textAlign: \"right\",\n                            fontVariantNumeric: \"tabular-nums\",\n                            whiteSpace: \"nowrap\",\n                          }}\n                        >\n                          {currency.format(inv.amount)}\n                        </td>\n                      </tr>\n                    );\n                  })\n                )}\n              </tbody>\n            </table>\n          </div>\n        </Column>\n\n        <Row fillWidth horizontal=\"between\" vertical=\"center\" gap=\"16\" wrap>\n          <Row vertical=\"center\" gap=\"8\">\n            <label htmlFor={sizeId}>\n              <Text as=\"span\" variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                Rows per page\n              </Text>\n            </label>\n            <select\n              id={sizeId}\n              value={pageSize}\n              onChange={(e) => {\n                setPageSize(Number(e.target.value));\n                setPage(1);\n              }}\n              style={{ ...inputStyle, width: \"auto\", paddingRight: \"0.5rem\" }}\n            >\n              {PAGE_SIZES.map((s) => (\n                <option key={s} value={s}>\n                  {s}\n                </option>\n              ))}\n            </select>\n          </Row>\n\n          <nav aria-label=\"Pagination\">\n            <Row gap=\"4\" vertical=\"center\" wrap>\n              <Button\n                variant=\"secondary\"\n                size=\"s\"\n                disabled={currentPage <= 1}\n                onClick={() => setPage(currentPage - 1)}\n                aria-label=\"Previous page\"\n              >\n                Prev\n              </Button>\n              {pageNumbers.map((p) =>\n                typeof p === \"number\" ? (\n                  <Button\n                    key={p}\n                    variant={p === currentPage ? \"primary\" : \"tertiary\"}\n                    size=\"s\"\n                    onClick={() => setPage(p)}\n                    aria-label={`Page ${p}`}\n                    aria-current={p === currentPage ? \"page\" : undefined}\n                  >\n                    {String(p)}\n                  </Button>\n                ) : (\n                  <Text key={p} as=\"span\" onBackground=\"neutral-weak\" aria-hidden=\"true\">\n                    …\n                  </Text>\n                ),\n              )}\n              <Button\n                variant=\"secondary\"\n                size=\"s\"\n                disabled={currentPage >= totalPages}\n                onClick={() => setPage(currentPage + 1)}\n                aria-label=\"Next page\"\n              >\n                Next\n              </Button>\n            </Row>\n          </nav>\n        </Row>\n      </Column>\n    </Column>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

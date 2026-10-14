@@ -1,0 +1,73 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 569,
+    "chars": 21009,
+    "bytes": 21015,
+    "tokens_o200k": 4536,
+    "tokens_claudeLegacy": 4914,
+    "tokens_exact": 7591
+  },
+  "raw": {
+    "lines": 570,
+    "chars": 21252,
+    "bytes": 21258,
+    "tokens_o200k": 4585,
+    "tokens_claudeLegacy": 4967,
+    "tokens_exact": 7667
+  },
+  "components": [
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "Checkbox",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogTitle",
+    "Field",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "InputOTP",
+    "InputOTPGroup",
+    "InputOTPSeparator",
+    "InputOTPSlot",
+    "Label",
+    "Spinner"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/checkbox.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/field.tsx",
+      "components/ui/input-group.tsx",
+      "components/ui/input-otp.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/spinner.tsx",
+      "components/ui/textarea.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 866,
+    "chars": 26917,
+    "bytes": 26917,
+    "tokens_o200k": 6937,
+    "tokens_claudeLegacy": 7923,
+    "tokens_exact": 11521
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 416,
+    "chars": 14326,
+    "bytes": 14326,
+    "tokens_o200k": 2949,
+    "tokens_claudeLegacy": 3100,
+    "tokens_exact": 4681
+  },
+  "raw": {
+    "lines": 392,
+    "chars": 13898,
+    "bytes": 13898,
+    "tokens_o200k": 2936,
+    "tokens_claudeLegacy": 3114,
+    "tokens_exact": 4664
+  },
+  "components": [
+    "Button",
+    "CelebrationFx",
+    "Column",
+    "Heading",
+    "Icon",
+    "IconName",
+    "ProgressBar",
+    "Row",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

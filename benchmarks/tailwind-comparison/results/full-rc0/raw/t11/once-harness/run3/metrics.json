@@ -1,0 +1,36 @@
+{
+  "attempt": 0,
+  "tokenizer": "exact (count_tokens) + proxy",
+  "normalised": {
+    "lines": 528,
+    "chars": 15391,
+    "bytes": 15391,
+    "tokens_o200k": 3691,
+    "tokens_claudeLegacy": 3874,
+    "tokens_exact": 5651
+  },
+  "raw": {
+    "lines": 417,
+    "chars": 14455,
+    "bytes": 14455,
+    "tokens_o200k": 3568,
+    "tokens_claudeLegacy": 3777,
+    "tokens_exact": 5415
+  },
+  "components": [
+    "Button",
+    "CodeBlock",
+    "ColorScheme",
+    "Column",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconName",
+    "InlineCode",
+    "Row",
+    "SegmentedControl",
+    "Tag",
+    "Text",
+    "Timeline"
+  ]
+}

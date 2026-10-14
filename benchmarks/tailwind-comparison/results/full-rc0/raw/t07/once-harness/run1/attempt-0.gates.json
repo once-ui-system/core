@@ -1,0 +1,71 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2467
+    },
+    "build": {
+      "ok": true,
+      "ms": 7794
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 179,
+          "height": 1611,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 179,
+          "height": 2374,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 179,
+          "height": 1310,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 1,
+        "serious_or_critical": 0,
+        "ids": [
+          "heading-order:moderate:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": false,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "errors": []
+        }
+      }
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 3 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [color.svgPaint] Literal colour in inline SVG: <circle fill=\"#f6f6f2\"> (and 1 more) — paint with currentColor (set the colour with onBackground on the wrapper) or a token, var(--brand-solid-strong)",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

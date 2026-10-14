@@ -1,0 +1,285 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Once UI (`@once-ui-system/core` 2.1) is installed and its standard providers are mounted in the root layout; no documentation is available, so work from what you know.\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013XHp2KMDEAFbkQGejJPH9s",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Bak1GE8QTHhEdr4JYobPgH",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013XHp2KMDEAFbkQGejJPH9s",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Bak1GE8QTHhEdr4JYobPgH",
+          "content": "app/\nnext.config.mjs\npackage.json\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01HiSwuqxNDJSvgWLJiwDhr4",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018dZmQ6eewccAzSzVgodrRh",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01B6ay2AdH8oTEHyfR4Ht1ej",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HiSwuqxNDJSvgWLJiwDhr4",
+          "content": "fonts.css\nlayout.tsx\npage.tsx\nproviders.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018dZmQ6eewccAzSzVgodrRh",
+          "content": "{\n  \"name\": \"bench-arm-once\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@once-ui-system/core\": \"file:./vendor/once-ui-system-core.tgz\",\n    \"compressorjs\": \"1.4.0\",\n    \"next\": \"16.2.12\",\n    \"prismjs\": \"1.30.0\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\",\n    \"recharts\": \"3.10.1\"\n  },\n  \"devDependencies\": {\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01B6ay2AdH8oTEHyfR4Ht1ej",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013Gn7bA62JiXL7k7q27FQ42",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018Pm1erebW285a4sV5tdaNk",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/providers.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JgrfkAT1fZ4nU16FmGT6Kj",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Hxj7UGaGor4uZ72Yb5jZ3v",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/fonts.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013Gn7bA62JiXL7k7q27FQ42",
+          "content": "import \"@once-ui-system/core/css/styles.css\";\nimport \"@once-ui-system/core/css/tokens.css\";\nimport \"./fonts.css\";\n\nimport type { Metadata } from \"next\";\nimport { Column, Flex } from \"@once-ui-system/core\";\nimport { Providers } from \"./providers\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <Flex as=\"html\" lang=\"en\" suppressHydrationWarning>\n      <Column as=\"body\" background=\"page\" fillWidth margin=\"0\" padding=\"0\" minHeight=\"100vh\">\n        <Providers>{children}</Providers>\n      </Column>\n    </Flex>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018Pm1erebW285a4sV5tdaNk",
+          "content": "\"use client\";\n\n// Standard Once UI provider stack (mirrors the official Next.js starter):\n// theme, Next-aware links/images, chart theme, toasts, icons.\nimport { DataThemeProvider, IconProvider, ThemeProvider, ToastProvider } from \"@once-ui-system/core\";\nimport { LayoutProvider } from \"@once-ui-system/core/next\";\n\nexport function Providers({ children }: { children: React.ReactNode }) {\n  return (\n    <ThemeProvider>\n      <LayoutProvider>\n        <DataThemeProvider>\n          <ToastProvider>\n            <IconProvider>{children}</IconProvider>\n          </ToastProvider>\n        </DataThemeProvider>\n      </LayoutProvider>\n    </ThemeProvider>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JgrfkAT1fZ4nU16FmGT6Kj",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Hxj7UGaGor4uZ72Yb5jZ3v",
+          "content": "/* System font stack, identical in every arm (no network font fetch at build). */\n:root {\n  --font-heading: ui-sans-serif, system-ui, sans-serif;\n  --font-body: ui-sans-serif, system-ui, sans-serif;\n  --font-label: ui-sans-serif, system-ui, sans-serif;\n  --font-code: ui-monospace, monospace;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check whether the Once UI package is installed so I can verify the exports."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AmuKtJjCTYa8omJM1dySsH",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/@once-ui-system/core"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018MCYS2z6bmW7bkMtRmmRzi",
+          "name": "list_dir",
+          "input": {
+            "path": "project/vendor"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AmuKtJjCTYa8omJM1dySsH",
+          "content": "no such file or directory: project/node_modules/@once-ui-system/core",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018MCYS2z6bmW7bkMtRmmRzi",
+          "content": "no such file or directory: project/vendor",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll stick with familiar Once UI components and native HTML for accessibility, building steps as a semantic `<ol>` with toggle buttons, a labeled progress bar with live announcements, and a celebration confetti effect that respects reduced-motion preferences, plus a reset button.\n\n",
+          "signature": "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"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01A61b4f4ar9MjRPGadYiXtc",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01A61b4f4ar9MjRPGadYiXtc",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useId, useMemo, useState } from \"react\";\nimport { Badge, Button, Column, Flex, Heading, Icon, Row, Text } from \"@once-ui-system/core\";\n\ntype Step = {\n  id: string;\n  title: string;\n  summary: string;\n  detail: string;\n  actionLabel: string;\n  estimate: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your workspace profile\",\n    summary: \"Add your team name, logo initials and time zone.\",\n    detail:\n      \"Your profile helps teammates recognise the workspace in invites and notifications. Pick a time zone so scheduled reports arrive at a sensible hour.\",\n    actionLabel: \"Edit profile\",\n    estimate: \"2 min\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite your first teammates\",\n    summary: \"Send invitations to at least two collaborators.\",\n    detail:\n      \"Invite colleagues by email. They can join as editors or viewers, and you can change roles at any time from the members page.\",\n    actionLabel: \"Send invites\",\n    estimate: \"3 min\",\n  },\n  {\n    id: \"source\",\n    title: \"Connect a data source\",\n    summary: \"Link your warehouse, CSV upload or analytics tool.\",\n    detail:\n      \"Connect PostgreSQL, BigQuery, or upload a CSV to see real numbers right away. Credentials are encrypted and read-only by default.\",\n    actionLabel: \"Connect source\",\n    estimate: \"5 min\",\n  },\n  {\n    id: \"dashboard\",\n    title: \"Build your first dashboard\",\n    summary: \"Start from a template and pin three key metrics.\",\n    detail:\n      \"Templates for revenue, product usage and support load are ready to go. Pin the metrics you check every morning so they sit at the top.\",\n    actionLabel: \"Open templates\",\n    estimate: \"4 min\",\n  },\n  {\n    id: \"alerts\",\n    title: \"Set up a weekly digest\",\n    summary: \"Get a Monday summary delivered to your inbox or Slack.\",\n    detail:\n      \"Choose the dashboards to include and the channel to deliver them to. You can pause the digest whenever you need a quiet week.\",\n    actionLabel: \"Schedule digest\",\n    estimate: \"1 min\",\n  },\n];\n\nconst CONFETTI_COLORS = [\"#f5b700\", \"#ef476f\", \"#06d6a0\", \"#118ab2\", \"#9b5de5\", \"#ff7f50\"];\n\nconst CONFETTI = Array.from({ length: 28 }, (_, i) => ({\n  left: (i * 37) % 100,\n  delay: ((i * 53) % 60) / 100,\n  duration: 1.8 + ((i * 29) % 12) / 10,\n  drift: ((i * 17) % 80) - 40,\n  size: 6 + ((i * 7) % 6),\n  color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n  round: i % 3 === 0,\n}));\n\nconst STYLES = `\n.ob-progress-track {\n  height: 10px;\n  width: 100%;\n  border-radius: 999px;\n  background: var(--neutral-alpha-medium);\n  overflow: hidden;\n}\n.ob-progress-fill {\n  height: 100%;\n  border-radius: 999px;\n  background: var(--brand-solid-strong, #3b82f6);\n  transition: width 500ms cubic-bezier(0.22, 1, 0.36, 1);\n}\n.ob-progress-fill[data-complete=\"true\"] {\n  background: var(--success-solid-strong, #16a34a);\n}\n.ob-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }\n.ob-item {\n  border: 1px solid var(--neutral-alpha-medium);\n  border-radius: 16px;\n  background: var(--surface-background, transparent);\n  transition: border-color 200ms ease, background 200ms ease;\n}\n.ob-item[data-done=\"true\"] { border-color: var(--success-alpha-medium, rgba(22,163,74,0.35)); }\n.ob-item[data-current=\"true\"] { border-color: var(--brand-alpha-strong, rgba(59,130,246,0.6)); }\n.ob-row { display: flex; align-items: flex-start; gap: 14px; padding: 16px; }\n.ob-check {\n  flex: none;\n  width: 32px;\n  height: 32px;\n  margin-top: 2px;\n  border-radius: 999px;\n  border: 2px solid var(--neutral-alpha-strong);\n  background: transparent;\n  color: var(--static-white, #fff);\n  display: inline-flex;\n  align-items: center;\n  justify-content: center;\n  cursor: pointer;\n  padding: 0;\n  transition: background 200ms ease, border-color 200ms ease, transform 150ms ease;\n}\n.ob-check:hover { transform: scale(1.06); }\n.ob-check:focus-visible, .ob-expand:focus-visible {\n  outline: 3px solid var(--brand-solid-strong, #3b82f6);\n  outline-offset: 2px;\n}\n.ob-check[aria-checked=\"true\"] {\n  background: var(--success-solid-strong, #16a34a);\n  border-color: var(--success-solid-strong, #16a34a);\n}\n.ob-check[data-current=\"true\"][aria-checked=\"false\"] { border-color: var(--brand-solid-strong, #3b82f6); }\n.ob-expand {\n  all: unset;\n  box-sizing: border-box;\n  cursor: pointer;\n  display: block;\n  text-align: left;\n  border-radius: 8px;\n  width: 100%;\n}\n.ob-title-done { text-decoration: line-through; opacity: 0.65; }\n.ob-detail { padding: 0 16px 16px 62px; }\n.ob-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 12px; }\n\n.ob-celebrate { position: relative; overflow: hidden; }\n.ob-confetti { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }\n.ob-piece {\n  position: absolute;\n  top: -16px;\n  opacity: 0;\n  animation-name: ob-fall;\n  animation-timing-function: ease-in;\n  animation-fill-mode: forwards;\n}\n@keyframes ob-fall {\n  0% { opacity: 1; transform: translate3d(0, 0, 0) rotate(0deg); }\n  100% { opacity: 0; transform: translate3d(var(--drift), 340px, 0) rotate(540deg); }\n}\n.ob-pop { animation: ob-pop 600ms cubic-bezier(0.34, 1.56, 0.64, 1); }\n@keyframes ob-pop {\n  0% { transform: scale(0.6); opacity: 0; }\n  100% { transform: scale(1); opacity: 1; }\n}\n@media (prefers-reduced-motion: reduce) {\n  .ob-progress-fill, .ob-item, .ob-check { transition: none; }\n  .ob-piece { display: none; }\n  .ob-pop { animation: none; }\n}\n@media (max-width: 480px) {\n  .ob-detail { padding-left: 16px; }\n}\n.ob-sr {\n  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;\n  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;\n}\n`;\n\nexport default function Page() {\n  const [done, setDone] = useState<Record<string, boolean>>({ profile: true });\n  const [openId, setOpenId] = useState<string | null>(\"invite\");\n  const baseId = useId();\n\n  const completedCount = useMemo(() => STEPS.filter((s) => done[s.id]).length, [done]);\n  const total = STEPS.length;\n  const percent = Math.round((completedCount / total) * 100);\n  const allDone = completedCount === total;\n  const currentId = STEPS.find((s) => !done[s.id])?.id ?? null;\n\n  const toggle = (id: string) => setDone((prev) => ({ ...prev, [id]: !prev[id] }));\n  const complete = (id: string) => {\n    setDone((prev) => ({ ...prev, [id]: true }));\n    const idx = STEPS.findIndex((s) => s.id === id);\n    const next = STEPS.slice(idx + 1).find((s) => !done[s.id]);\n    setOpenId(next ? next.id : null);\n  };\n  const reset = () => {\n    setDone({});\n    setOpenId(STEPS[0].id);\n  };\n\n  const remainingMinutes = STEPS.filter((s) => !done[s.id]).reduce(\n    (sum, s) => sum + parseInt(s.estimate, 10),\n    0,\n  );\n\n  return (\n    <Flex fillWidth horizontal=\"center\" paddingX=\"16\" paddingY=\"32\" tabIndex={-1}>\n      <style>{STYLES}</style>\n      <Column as=\"main\" fillWidth maxWidth={40} gap=\"24\">\n        <Column gap=\"8\">\n          <Row gap=\"12\" vertical=\"center\" wrap>\n            <Badge\n              textVariant=\"label-default-s\"\n              onBackground=\"brand-strong\"\n              background=\"brand-alpha-weak\"\n              arrow={false}\n            >\n              Getting started\n            </Badge>\n            <Text variant=\"label-default-s\" onBackground=\"neutral-weak\">\n              {allDone ? \"All done\" : `About ${remainingMinutes} min left`}\n            </Text>\n          </Row>\n          <Heading as=\"h1\" variant=\"display-strong-s\">\n            Welcome to Northwind Analytics\n          </Heading>\n          <Text variant=\"body-default-l\" onBackground=\"neutral-weak\">\n            Finish these five steps to get your workspace ready for the whole team.\n          </Text>\n        </Column>\n\n        <Column\n          gap=\"12\"\n          padding=\"20\"\n          radius=\"l\"\n          border=\"neutral-alpha-medium\"\n          background=\"surface\"\n          aria-labelledby={`${baseId}-progress-label`}\n          as=\"section\"\n        >\n          <Row horizontal=\"between\" vertical=\"center\" gap=\"12\">\n            <Text id={`${baseId}-progress-label`} variant=\"label-strong-m\">\n              Your progress\n            </Text>\n            <Text variant=\"label-strong-m\" aria-hidden=\"true\">\n              {completedCount} of {total} · {percent}%\n            </Text>\n          </Row>\n          <div\n            className=\"ob-progress-track\"\n            role=\"progressbar\"\n            aria-labelledby={`${baseId}-progress-label`}\n            aria-valuemin={0}\n            aria-valuemax={100}\n            aria-valuenow={percent}\n            aria-valuetext={`${completedCount} of ${total} steps complete`}\n          >\n            <div className=\"ob-progress-fill\" data-complete={allDone} style={{ width: `${percent}%` }} />\n          </div>\n          <div className=\"ob-sr\" role=\"status\" aria-live=\"polite\">\n            {completedCount} of {total} steps complete.\n            {allDone ? \" Setup finished. Congratulations!\" : \"\"}\n          </div>\n        </Column>\n\n        {allDone && (\n          <Column\n            as=\"section\"\n            aria-labelledby={`${baseId}-celebrate`}\n            className=\"ob-celebrate\"\n            padding=\"24\"\n            radius=\"l\"\n            border=\"success-alpha-medium\"\n            background=\"success-alpha-weak\"\n            gap=\"12\"\n            horizontal=\"center\"\n            align=\"center\"\n          >\n            <div className=\"ob-confetti\" aria-hidden=\"true\">\n              {CONFETTI.map((c, i) => (\n                <span\n                  key={i}\n                  className=\"ob-piece\"\n                  style={\n                    {\n                      left: `${c.left}%`,\n                      width: c.size,\n                      height: c.size * (c.round ? 1 : 1.6),\n                      background: c.color,\n                      borderRadius: c.round ? \"50%\" : 2,\n                      animationDelay: `${c.delay}s`,\n                      animationDuration: `${c.duration}s`,\n                      \"--drift\": `${c.drift}px`,\n                    } as React.CSSProperties\n                  }\n                />\n              ))}\n            </div>\n            <div className=\"ob-pop\" aria-hidden=\"true\" style={{ fontSize: 48, lineHeight: 1 }}>\n              🎉\n            </div>\n            <Heading as=\"h2\" id={`${baseId}-celebrate`} variant=\"heading-strong-xl\">\n              You&apos;re all set!\n            </Heading>\n            <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n              Your workspace is ready. Your team can now explore dashboards, and your first weekly digest\n              arrives on Monday.\n            </Text>\n            <Row gap=\"8\" wrap horizontal=\"center\">\n              <Button variant=\"primary\" size=\"m\" href=\"#\" onClick={(e: React.MouseEvent) => e.preventDefault()}>\n                Go to dashboard\n              </Button>\n              <Button variant=\"secondary\" size=\"m\" onClick={reset}>\n                Restart checklist\n              </Button>\n            </Row>\n          </Column>\n        )}\n\n        <Column as=\"section\" gap=\"12\" aria-label=\"Onboarding steps\">\n          <ol className=\"ob-list\">\n            {STEPS.map((step, index) => {\n              const isDone = !!done[step.id];\n              const isCurrent = step.id === currentId;\n              const isOpen = openId === step.id;\n              const panelId = `${baseId}-panel-${step.id}`;\n              const titleId = `${baseId}-title-${step.id}`;\n              const statusText = isDone ? \"Completed\" : isCurrent ? \"Up next\" : \"Not started\";\n\n              return (\n                <li key={step.id} className=\"ob-item\" data-done={isDone} data-current={isCurrent}>\n                  <div className=\"ob-row\">\n                    <button\n                      type=\"button\"\n                      role=\"checkbox\"\n                      aria-checked={isDone}\n                      aria-labelledby={titleId}\n                      className=\"ob-check\"\n                      data-current={isCurrent}\n                      onClick={() => toggle(step.id)}\n                    >\n                      {isDone ? (\n                        <Icon name=\"check\" size=\"s\" onBackground=\"neutral-strong\" />\n                      ) : (\n                        <Text variant=\"label-strong-s\" onBackground=\"neutral-weak\" aria-hidden=\"true\">\n                          {index + 1}\n                        </Text>\n                      )}\n                    </button>\n\n                    <Column flex={1} gap=\"4\" minWidth={0}>\n                      <button\n                        type=\"button\"\n                        className=\"ob-expand\"\n                        aria-expanded={isOpen}\n                        aria-controls={panelId}\n                        onClick={() => setOpenId(isOpen ? null : step.id)}\n                      >\n                        <Row horizontal=\"between\" vertical=\"start\" gap=\"12\">\n                          <Column gap=\"4\" minWidth={0}>\n                            <Text\n                              id={titleId}\n                              variant=\"heading-strong-s\"\n                              className={isDone ? \"ob-title-done\" : undefined}\n                            >\n                              {step.title}\n                            </Text>\n                            <Text variant=\"body-default-s\" onBackground=\"neutral-weak\">\n                              {step.summary}\n                            </Text>\n                          </Column>\n                          <Icon\n                            name={isOpen ? \"chevronUp\" : \"chevronDown\"}\n                            size=\"s\"\n                            onBackground=\"neutral-weak\"\n                            aria-hidden=\"true\"\n                          />\n                        </Row>\n                      </button>\n                      <Row gap=\"8\" vertical=\"center\" wrap>\n                        <Badge\n                          arrow={false}\n                          textVariant=\"label-default-xs\"\n                          background={isDone ? \"success-alpha-weak\" : isCurrent ? \"brand-alpha-weak\" : \"neutral-alpha-weak\"}\n                          onBackground={isDone ? \"success-strong\" : isCurrent ? \"brand-strong\" : \"neutral-medium\"}\n                        >\n                          {statusText}\n                        </Badge>\n                        <Text variant=\"label-default-xs\" onBackground=\"neutral-weak\">\n                          {step.estimate}\n                        </Text>\n                      </Row>\n                    </Column>\n                  </div>\n\n                  {isOpen && (\n                    <div id={panelId} className=\"ob-detail\" role=\"region\" aria-labelledby={titleId}>\n                      <Text variant=\"body-default-m\" onBackground=\"neutral-medium\">\n                        {step.detail}\n                      </Text>\n                      <div className=\"ob-actions\">\n                        {isDone ? (\n                          <Button variant=\"tertiary\" size=\"s\" onClick={() => toggle(step.id)}>\n                            Mark as not done\n                          </Button>\n                        ) : (\n                          <Button variant=\"primary\" size=\"s\" onClick={() => complete(step.id)}>\n                            {step.actionLabel}\n                          </Button>\n                        )}\n                      </div>\n                    </div>\n                  )}\n                </li>\n              );\n            })}\n          </ol>\n        </Column>\n\n        {!allDone && completedCount > 0 && (\n          <Row horizontal=\"center\">\n            <Button variant=\"tertiary\" size=\"s\" onClick={reset}>\n              Reset checklist\n            </Button>\n          </Row>\n        )}\n      </Column>\n    </Flex>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

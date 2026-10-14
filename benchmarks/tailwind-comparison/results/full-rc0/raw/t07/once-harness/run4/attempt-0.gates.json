@@ -1,0 +1,20 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(359,13): error TS2322: Type '\"heart\" | \"heartFilledFallback\"' is not assignable to type 'IconName | undefined'.\n  Type '\"heartFilledFallback\"' is not assignable to type 'IconName | undefined'.\napp/page.tsx(432,68): error TS2322: Type '\"auto\"' is not assignable to type 'number | SpacingToken | undefined'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2953
+    }
+  },
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] position=\"relative\" is the default — omit it\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0-rc.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

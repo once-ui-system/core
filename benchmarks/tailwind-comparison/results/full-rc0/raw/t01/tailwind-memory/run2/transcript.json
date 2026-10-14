@@ -1,0 +1,188 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 is set up with no component library, lucide-react is installed for icons, and no documentation is available, so work from what you know.\n\nTask: Analytics dashboard — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the existing project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XMoReM4qijhnxhUecGtGtY",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013TZxWaDhxzW9BJZfdnb7Wm",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XMoReM4qijhnxhUecGtGtY",
+          "content": "project/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013TZxWaDhxzW9BJZfdnb7Wm",
+          "content": "app/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01CKTkCJSiQXP5ShKorGgF1G",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FyULpZH4knjYtcnikyL6bJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014hhuUWjFagtYWGTAPm8pFF",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CKTkCJSiQXP5ShKorGgF1G",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FyULpZH4knjYtcnikyL6bJ",
+          "content": "{\n  \"name\": \"bench-arm-tailwind\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"react\": \"19.2.8\",\n    \"react-dom\": \"19.2.8\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014hhuUWjFagtYWGTAPm8pFF",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RK4ZYSBHpm1Axv6aLxYpJQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01D32TeVcQPXrnRntUZBpZHZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BT5Rv4A11NFw4PZtTXwe6e",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RK4ZYSBHpm1Axv6aLxYpJQ",
+          "content": "@import \"tailwindcss\";\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01D32TeVcQPXrnRntUZBpZHZ",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\">\n      <body className=\"font-sans antialiased\">{children}</body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BT5Rv4A11NFw4PZtTXwe6e",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll build the charts as hand-rolled SVG with a small amount of state for tooltips and a range toggle.\n\nDesign notes:\n- The line chart uses a viewBox with `preserveAspectRatio=\"none\"` for the stroke and area, and an HTML overlay for hover so the tooltip text isn't distorted.\n- The bar chart is built from flex columns, so it's responsive without SVG scaling issues.\n- Each chart has an accessible description and a visually hidden data table.\n\n```tsx\n\"use client\";\n\nimport { useId, useMemo, useState } from \"react\";\nimport type { ComponentType, SVGProps } from \"react\";\nimport {\n  Activity,\n  ArrowDownRight,\n  ArrowUpRight,\n  BarChart3,\n  CreditCard,\n  DollarSign,\n  RefreshCw,\n  ShoppingCart,\n  UserPlus,\n  Users,\n  AlertTriangle,\n  Percent,\n} from \"lucide-react\";\n\ntype IconType = ComponentType<SVGProps<SVGSVGElement> & { size?: number | string }>;\n\ntype Kpi = {\n  id: string;\n  label: string;\n  value: string;\n  change: number; // percent\n  goodWhenUp: boolean;\n  note: string;\n  icon: IconType;\n  spark: number[];\n};\n\nconst KPIS: Kpi[] = [\n  {\n    id: \"revenue\",\n    label: \"Total revenue\",\n    value: \"$128,430\",\n    change: 12.4,\n    goodWhenUp: true,\n    note: \"vs. previous 30 days\",\n    icon: DollarSign,\n    spark: [32, 35, 33, 38, 41, 40, 46, 49, 52, 58],\n  },\n  {\n    id: \"users\",\n    label: \"Active users\",\n    value: \"24,861\",\n    change: 8.1,\n    goodWhenUp: true,\n    note: \"vs. previous 30 days\",\n    icon: Users,\n    spark: [20, 22, 21, 24, 26, 25, 28, 29, 31, 33],\n  },\n  {\n    id: \"conversion\",\n    label: \"Conversion rate\",\n    value: \"3.82%\",\n    change: -0.6,\n    goodWhenUp: true,\n    note: \"vs. previous 30 days\",\n    icon: Percent,\n    spark: [42, 41, 43, 40, 41, 39, 40, 38, 39, 37],\n  },\n  {\n    id: \"churn\",\n    label: \"Churn rate\",\n    value: \"1.9%\",\n    change: -0.3,\n    goodWhenUp: false,\n    note: \"vs. previous 30 days\",\n    icon: RefreshCw,\n    spark: [30, 31, 29, 30, 28, 27, 28, 26, 25, 24],\n  },\n];\n\ntype RangeKey = \"7d\" | \"30d\" | \"90d\";\n\ntype Point = { label: string; visitors: number; signups: number };\n\nconst SERIES: Record<RangeKey, Point[]> = {\n  \"7d\": [\n    { label: \"Mon\", visitors: 4120, signups: 182 },\n    { label: \"Tue\", visitors: 4580, signups: 205 },\n    { label: \"Wed\", visitors: 4310, signups: 191 },\n    { label: \"Thu\", visitors: 5040, signups: 238 },\n    { label: \"Fri\", visitors: 5420, signups: 251 },\n    { label: \"Sat\", visitors: 3890, signups: 164 },\n    { label: \"Sun\", visitors: 3620, signups: 149 },\n  ],\n  \"30d\": [\n    { label: \"Wk 1\", visitors: 28400, signups: 1210 },\n    { label: \"Wk 2\", visitors: 30150, signups: 1342 },\n    { label: \"Wk 3\", visitors: 29320, signups: 1275 },\n    { label: \"Wk 4\", visitors: 33880, signups: 1498 },\n    { label: \"Wk 5\", visitors: 35210, signups: 1587 },\n  ],\n  \"90d\": [\n    { label: \"Jan\", visitors: 104200, signups: 4420 },\n    { label: \"Feb\", visitors: 112600, signups: 4890 },\n    { label: \"Mar\", visitors: 126300, signups: 5610 },\n  ],\n};\n\nconst RANGE_LABELS: Record<RangeKey, string> = {\n  \"7d\": \"Last 7 days\",\n  \"30d\": \"Last 30 days\",\n  \"90d\": \"Last 90 days\",\n};\n\ntype Channel = { name: string; revenue: number };\n\nconst CHANNELS: Channel[] = [\n  { name: \"Organic search\", revenue: 42800 },\n  { name: \"Direct\", revenue: 31200 },\n  { name: \"Paid ads\", revenue: 24600 },\n  { name: \"Email\", revenue: 17900 },\n  { name: \"Referral\", revenue: 8700 },\n  { name: \"Social\", revenue: 3230 },\n];\n\ntype ActivityTone = \"success\" | \"info\" | \"warning\" | \"neutral\";\n\ntype ActivityItem = {\n  id: string;\n  title: string;\n  detail: string;\n  time: string;\n  tone: ActivityTone;\n  icon: IconType;\n};\n\nconst ACTIVITY: ActivityItem[] = [\n  {\n    id: \"a1\",\n    title: \"New enterprise subscription\",\n    detail: \"Northwind Logistics upgraded to the Scale plan — $1,490/mo\",\n    time: \"4 min ago\",\n    tone: \"success\",\n    icon: CreditCard,\n  },\n  {\n    id: \"a2\",\n    title: \"New user signed up\",\n    detail: \"Priya Raman joined from the spring webinar campaign\",\n    time: \"18 min ago\",\n    tone: \"info\",\n    icon: UserPlus,\n  },\n  {\n    id: \"a3\",\n    title: \"Order #48213 completed\",\n    detail: \"3 items · $342.00 · paid with Visa ending 4417\",\n    time: \"42 min ago\",\n    tone: \"success\",\n    icon: ShoppingCart,\n  },\n  {\n    id: \"a4\",\n    title: \"Payment failed\",\n    detail: \"Brightside Studio — card declined on renewal, retry scheduled\",\n    time: \"1 hr ago\",\n    tone: \"warning\",\n    icon: AlertTriangle,\n  },\n  {\n    id: \"a5\",\n    title: \"Weekly report generated\",\n    detail: \"Acquisition summary for 12–18 May is ready to download\",\n    time: \"3 hr ago\",\n    tone: \"neutral\",\n    icon: BarChart3,\n  },\n  {\n    id: \"a6\",\n    title: \"Traffic spike detected\",\n    detail: \"Organic visits up 38% on /pricing after newsletter send\",\n    time: \"5 hr ago\",\n    tone: \"info\",\n    icon: Activity,\n  },\n];\n\nconst TONE_STYLES: Record<ActivityTone, string> = {\n  success: \"bg-emerald-100 text-emerald-700\",\n  info: \"bg-sky-100 text-sky-700\",\n  warning: \"bg-amber-100 text-amber-700\",\n  neutral: \"bg-slate-100 text-slate-600\",\n};\n\nconst nf = new Intl.NumberFormat(\"en-US\");\nconst usd = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  maximumFractionDigits: 0,\n});\n\nfunction Sparkline({ data, positive }: { data: number[]; positive: boolean }) {\n  const w = 96;\n  const h = 32;\n  const min = Math.min(...data);\n  const max = Math.max(...data);\n  const span = max - min || 1;\n  const pts = data\n    .map((v, i) => {\n      const x = (i / (data.length - 1)) * w;\n      const y = h - 3 - ((v - min) / span) * (h - 6);\n      return `${x.toFixed(1)},${y.toFixed(1)}`;\n    })\n    .join(\" \");\n  return (\n    <svg\n      viewBox={`0 0 ${w} ${h}`}\n      className={`h-8 w-24 shrink-0 ${positive ? \"text-emerald-500\" : \"text-rose-500\"}`}\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      <polyline\n        points={pts}\n        fill=\"none\"\n        stroke=\"currentColor\"\n        strokeWidth=\"2\"\n        strokeLinecap=\"round\"\n        strokeLinejoin=\"round\"\n      />\n    </svg>\n  );\n}\n\nfunction StatCard({ kpi }: { kpi: Kpi }) {\n  const up = kpi.change >= 0;\n  const good = up === kpi.goodWhenUp;\n  const TrendIcon = up ? ArrowUpRight : ArrowDownRight;\n  const Icon = kpi.icon;\n  const sign = up ? \"+\" : \"−\";\n  const abs = Math.abs(kpi.change);\n  return (\n    <article className=\"rounded-2xl border border-slate-200 bg-white p-5 shadow-sm\">\n      <div className=\"flex items-start justify-between gap-3\">\n        <h3 className=\"text-sm font-medium text-slate-500\">{kpi.label}</h3>\n        <span className=\"flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600\">\n          <Icon className=\"h-[18px] w-[18px]\" aria-hidden=\"true\" focusable=\"false\" />\n        </span>\n      </div>\n      <p className=\"mt-3 text-3xl font-semibold tracking-tight text-slate-900\">{kpi.value}</p>\n      <div className=\"mt-3 flex items-end justify-between gap-3\">\n        <div className=\"min-w-0\">\n          <p\n            className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-semibold ${\n              good ? \"bg-emerald-50 text-emerald-700\" : \"bg-rose-50 text-rose-700\"\n            }`}\n          >\n            <TrendIcon className=\"h-3.5 w-3.5\" aria-hidden=\"true\" focusable=\"false\" />\n            <span>\n              {sign}\n              {abs}%\n            </span>\n            <span className=\"sr-only\">\n              {up ? \"increase\" : \"decrease\"}, {good ? \"favorable\" : \"unfavorable\"}\n            </span>\n          </p>\n          <p className=\"mt-1.5 text-xs text-slate-500\">{kpi.note}</p>\n        </div>\n        <Sparkline data={kpi.spark} positive={good} />\n      </div>\n    </article>\n  );\n}\n\nfunction niceMax(v: number): number {\n  const pow = Math.pow(10, Math.floor(Math.log10(v)));\n  const n = v / pow;\n  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 2.5 ? 2.5 : n <= 5 ? 5 : 10;\n  return step * pow;\n}\n\nfunction compact(n: number): string {\n  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\\.0$/, \"\")}M`;\n  if (n >= 1000) return `${(n / 1000).toFixed(1).replace(/\\.0$/, \"\")}k`;\n  return String(n);\n}\n\nfunction LineChart({ data, rangeLabel }: { data: Point[]; rangeLabel: string }) {\n  const gradId = useId();\n  const [active, setActive] = useState<number | null>(null);\n\n  const W = 640;\n  const H = 280;\n  const pad = { top: 16, right: 16, bottom: 8, left: 8 };\n  const innerW = W - pad.left - pad.right;\n  const innerH = H - pad.top - pad.bottom;\n\n  const max = niceMax(Math.max(...data.map((d) => d.visitors)) * 1.05);\n  const ticks = [0, 0.25, 0.5, 0.75, 1].map((t) => t * max);\n\n  const coords = useMemo(\n    () =>\n      data.map((d, i) => ({\n        x: pad.left + (data.length === 1 ? innerW / 2 : (i / (data.length - 1)) * innerW),\n        y: pad.top + innerH - (d.visitors / max) * innerH,\n      })),\n    // eslint-disable-next-line react-hooks/exhaustive-deps\n    [data, max],\n  );\n\n  const line = coords.map((c, i) => `${i === 0 ? \"M\" : \"L\"}${c.x.toFixed(1)},${c.y.toFixed(1)}`).join(\" \");\n  const area = `${line} L${coords[coords.length - 1].x.toFixed(1)},${pad.top + innerH} L${coords[0].x.toFixed(\n    1,\n  )},${pad.top + innerH} Z`;\n\n  const activePoint = active !== null ? data[active] : null;\n  const activeCoord = active !== null ? coords[active] : null;\n\n  const peak = data.reduce((a, b) => (b.visitors > a.visitors ? b : a));\n\n  return (\n    <div>\n      <p id=\"line-desc\" className=\"sr-only\">\n        Line chart of visitors for {rangeLabel.toLowerCase()}. Peak was {nf.format(peak.visitors)} visitors\n        in {peak.label}. A full data table follows the chart.\n      </p>\n      <div className=\"flex\">\n        <div\n          className=\"flex w-10 shrink-0 flex-col-reverse justify-between pb-2 pt-4 text-right text-[11px] text-slate-500 sm:w-12\"\n          aria-hidden=\"true\"\n        >\n          {ticks.map((t) => (\n            <span key={t} className=\"-my-1.5 pr-2 leading-none\">\n              {compact(t)}\n            </span>\n          ))}\n        </div>\n        <div className=\"relative min-w-0 flex-1\">\n          <svg\n            viewBox={`0 0 ${W} ${H}`}\n            preserveAspectRatio=\"none\"\n            className=\"h-56 w-full sm:h-72\"\n            role=\"img\"\n            aria-labelledby=\"line-title line-desc\"\n          >\n            <title id=\"line-title\">Visitors over time</title>\n            <defs>\n              <linearGradient id={gradId} x1=\"0\" y1=\"0\" x2=\"0\" y2=\"1\">\n                <stop offset=\"0%\" stopColor=\"#6366f1\" stopOpacity=\"0.25\" />\n                <stop offset=\"100%\" stopColor=\"#6366f1\" stopOpacity=\"0\" />\n              </linearGradient>\n            </defs>\n            {ticks.map((t) => {\n              const y = pad.top + innerH - (t / max) * innerH;\n              return (\n                <line\n                  key={t}\n                  x1={pad.left}\n                  x2={W - pad.right}\n                  y1={y}\n                  y2={y}\n                  stroke=\"#e2e8f0\"\n                  strokeWidth=\"1\"\n                  vectorEffect=\"non-scaling-stroke\"\n                  strokeDasharray={t === 0 ? undefined : \"3 4\"}\n                />\n              );\n            })}\n            <path d={area} fill={`url(#${gradId})`} />\n            <path\n              d={line}\n              fill=\"none\"\n              stroke=\"#6366f1\"\n              strokeWidth=\"2.5\"\n              strokeLinecap=\"round\"\n              strokeLinejoin=\"round\"\n              vectorEffect=\"non-scaling-stroke\"\n            />\n            {activeCoord && (\n              <line\n                x1={activeCoord.x}\n                x2={activeCoord.x}\n                y1={pad.top}\n                y2={pad.top + innerH}\n                stroke=\"#94a3b8\"\n                strokeWidth=\"1\"\n                vectorEffect=\"non-scaling-stroke\"\n              />\n            )}\n          </svg>\n\n          {/* HTML markers so circles are not distorted by non-uniform scaling */}\n          <div className=\"pointer-events-none absolute inset-0\" aria-hidden=\"true\">\n            {coords.map((c, i) => (\n              <span\n                key={data[i].label}\n                className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-indigo-500 bg-white transition-all ${\n                  active === i ? \"h-3.5 w-3.5\" : \"h-2 w-2\"\n                }`}\n                style={{ left: `${(c.x / W) * 100}%`, top: `${(c.y / H) * 100}%` }}\n              />\n            ))}\n          </div>\n\n          {/* Interactive hit areas (keyboard + pointer) */}\n          <div className=\"absolute inset-0 flex\" role=\"group\" aria-label=\"Chart data points\">\n            {data.map((d, i) => (\n              <button\n                key={d.label}\n                type=\"button\"\n                className=\"h-full flex-1 cursor-crosshair rounded-sm focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-indigo-600\"\n                aria-label={`${d.label}: ${nf.format(d.visitors)} visitors, ${nf.format(d.signups)} sign-ups`}\n                onMouseEnter={() => setActive(i)}\n                onMouseLeave={() => setActive(null)}\n                onFocus={() => setActive(i)}\n                onBlur={() => setActive(null)}\n              />\n            ))}\n          </div>\n\n          {activePoint && activeCoord && (\n            <div\n              className=\"pointer-events-none absolute z-10 w-36 -translate-x-1/2 rounded-lg bg-slate-900 px-3 py-2 text-xs text-white shadow-lg\"\n              style={{\n                left: `clamp(4.5rem, ${(activeCoord.x / W) * 100}%, calc(100% - 4.5rem))`,\n                top: `${Math.max((activeCoord.y / H) * 100 - 6, 0)}%`,\n                transform: \"translate(-50%, -100%)\",\n              }}\n              aria-hidden=\"true\"\n            >\n              <p className=\"font-semibold\">{activePoint.label}</p>\n              <p className=\"mt-0.5 text-slate-300\">{nf.format(activePoint.visitors)} visitors</p>\n              <p className=\"text-slate-300\">{nf.format(activePoint.signups)} sign-ups</p>\n            </div>\n          )}\n        </div>\n      </div>\n      <div className=\"ml-10 mt-2 flex justify-between text-[11px] text-slate-500 sm:ml-12\" aria-hidden=\"true\">\n        {data.map((d) => (\n          <span key={d.label}>{d.label}</span>\n        ))}\n      </div>\n\n      <table className=\"sr-only\">\n        <caption>Visitors and sign-ups, {rangeLabel.toLowerCase()}</caption>\n        <thead>\n          <tr>\n            <th scope=\"col\">Period</th>\n            <th scope=\"col\">Visitors</th>\n            <th scope=\"col\">Sign-ups</th>\n          </tr>\n        </thead>\n        <tbody>\n          {data.map((d) => (\n            <tr key={d.label}>\n              <th scope=\"row\">{d.label}</th>\n              <td>{nf.format(d.visitors)}</td>\n              <td>{nf.format(d.signups)}</td>\n            </tr>\n          ))}\n        </tbody>\n      </table>\n    </div>\n  );\n}\n\nfunction BarChart({ data }: { data: Channel[] }) {\n  const [active, setActive] = useState<number | null>(null);\n  const max = niceMax(Math.max(...data.map((d) => d.revenue)));\n  const total = data.reduce((s, d) => s + d.revenue, 0);\n  const top = data.reduce((a, b) => (b.revenue > a.revenue ? b : a));\n\n  return (\n    <div>\n      <p id=\"bar-desc\" className=\"sr-only\">\n        Bar chart of revenue by acquisition channel. {top.name} leads with {usd.format(top.revenue)} of{\" \"}\n        {usd.format(total)} total.\n      </p>\n      <ul className=\"space-y-3\" aria-labelledby=\"bar-title\" aria-describedby=\"bar-desc\">\n        {data.map((d, i) => {\n          const pct = (d.revenue / max) * 100;\n          const share = Math.round((d.revenue / total) * 100);\n          const isActive = active === i;\n          return (\n            <li\n              key={d.name}\n              className=\"group\"\n              onMouseEnter={() => setActive(i)}\n              onMouseLeave={() => setActive(null)}\n            >\n              <div className=\"mb-1 flex items-baseline justify-between gap-3 text-sm\">\n                <span className=\"truncate font-medium text-slate-700\">{d.name}</span>\n                <span className=\"shrink-0 tabular-nums text-slate-600\">\n                  {usd.format(d.revenue)} <span className=\"text-xs text-slate-500\">· {share}%</span>\n                </span>\n              </div>\n              <div\n                className=\"h-3 w-full overflow-hidden rounded-full bg-slate-100\"\n                role=\"meter\"\n                aria-label={`${d.name} revenue`}\n                aria-valuemin={0}\n                aria-valuemax={max}\n                aria-valuenow={d.revenue}\n                aria-valuetext={`${usd.format(d.revenue)}, ${share}% of total`}\n              >\n                <div\n                  className={`h-full rounded-full transition-all duration-300 ${\n                    isActive || i === 0 ? \"bg-indigo-600\" : \"bg-indigo-400\"\n                  }`}\n                  style={{ width: `${pct}%` }}\n                />\n              </div>\n            </li>\n          );\n        })}\n      </ul>\n    </div>\n  );\n}\n\nfunction VerticalBars({ data }: { data: Channel[] }) {\n  // Compact column chart used on wider screens alongside the ranked list.\n  const max = niceMax(Math.max(...data.map((d) => d.revenue)));\n  return (\n    <div className=\"hidden items-end gap-2 sm:flex sm:h-28\" aria-hidden=\"true\">\n      {data.map((d) => (\n        <div key={d.name} className=\"flex h-full flex-1 flex-col justify-end\">\n          <div\n            className=\"w-full rounded-t-md bg-indigo-200\"\n            style={{ height: `${(d.revenue / max) * 100}%` }}\n          />\n        </div>\n      ))}\n    </div>\n  );\n}\n\nexport default function Page() {\n  const [range, setRange] = useState<RangeKey>(\"30d\");\n  const data = SERIES[range];\n  const ranges: RangeKey[] = [\"7d\", \"30d\", \"90d\"];\n\n  const totalVisitors = data.reduce((s, d) => s + d.visitors, 0);\n  const totalSignups = data.reduce((s, d) => s + d.signups, 0);\n\n  return (\n    <div className=\"min-h-screen bg-slate-50 text-slate-900\">\n      <a\n        href=\"#main\"\n        className=\"sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:shadow-lg focus:outline-2 focus:outline-indigo-600\"\n      >\n        Skip to main content\n      </a>\n\n      <header className=\"border-b border-slate-200 bg-white\">\n        <div className=\"mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8\">\n          <div className=\"flex items-center gap-3\">\n            <span className=\"flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-600 text-white\">\n              <BarChart3 className=\"h-5 w-5\" aria-hidden=\"true\" focusable=\"false\" />\n            </span>\n            <span className=\"text-base font-semibold tracking-tight\">Lumen Analytics</span>\n          </div>\n          <p className=\"hidden text-sm text-slate-500 sm:block\">Updated today at 09:42 UTC</p>\n        </div>\n      </header>\n\n      <main id=\"main\" className=\"mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8\">\n        <div className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n          <div>\n            <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Performance overview</h1>\n            <p className=\"mt-1 text-sm text-slate-600\">\n              Track revenue, audience growth and acquisition across all your products.\n            </p>\n          </div>\n          <div role=\"group\" aria-label=\"Chart date range\" className=\"inline-flex self-start rounded-xl border border-slate-200 bg-white p-1 shadow-sm\">\n            {ranges.map((r) => {\n              const selected = r === range;\n              return (\n                <button\n                  key={r}\n                  type=\"button\"\n                  aria-pressed={selected}\n                  onClick={() => setRange(r)}\n                  className={`rounded-lg px-3.5 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${\n                    selected ? \"bg-indigo-600 text-white\" : \"text-slate-600 hover:bg-slate-100\"\n                  }`}\n                >\n                  {r === \"7d\" ? \"7 days\" : r === \"30d\" ? \"30 days\" : \"90 days\"}\n                </button>\n              );\n            })}\n          </div>\n        </div>\n\n        <section aria-labelledby=\"kpi-heading\" className=\"mt-6\">\n          <h2 id=\"kpi-heading\" className=\"sr-only\">\n            Key metrics\n          </h2>\n          <div className=\"grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4\">\n            {KPIS.map((k) => (\n              <StatCard key={k.id} kpi={k} />\n            ))}\n          </div>\n        </section>\n\n        <div className=\"mt-6 grid grid-cols-1 gap-6 lg:grid-cols-3\">\n          <section\n            aria-labelledby=\"traffic-heading\"\n            className=\"min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:col-span-2\"\n          >\n            <div className=\"flex flex-wrap items-start justify-between gap-3\">\n              <div>\n                <h2 id=\"traffic-heading\" className=\"text-base font-semibold\">\n                  Visitors\n                </h2>\n                <p className=\"text-sm text-slate-500\">{RANGE_LABELS[range]}</p>\n              </div>\n              <dl className=\"flex gap-6 text-right\">\n                <div>\n                  <dt className=\"text-xs text-slate-500\">Total visitors</dt>\n                  <dd className=\"text-lg font-semibold tabular-nums\">{nf.format(totalVisitors)}</dd>\n                </div>\n                <div>\n                  <dt className=\"text-xs text-slate-500\">Sign-ups</dt>\n                  <dd className=\"text-lg font-semibold tabular-nums\">{nf.format(totalSignups)}</dd>\n                </div>\n              </dl>\n            </div>\n            <div className=\"mt-5\">\n              <LineChart key={range} data={data} rangeLabel={RANGE_LABELS[range]} />\n            </div>\n          </section>\n\n          <section\n            aria-labelledby=\"activity-heading\"\n            className=\"min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm\"\n          >\n            <h2 id=\"activity-heading\" className=\"text-base font-semibold\">\n              Recent activity\n            </h2>\n            <p className=\"text-sm text-slate-500\">Latest events across your workspace</p>\n            <ol className=\"mt-4 divide-y divide-slate-100\">\n              {ACTIVITY.map((a) => {\n                const Icon = a.icon;\n                return (\n                  <li key={a.id} className=\"flex gap-3 py-3 first:pt-0 last:pb-0\">\n                    <span\n                      className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${TONE_STYLES[a.tone]}`}\n                    >\n                      <Icon className=\"h-4 w-4\" aria-hidden=\"true\" focusable=\"false\" />\n                    </span>\n                    <div className=\"min-w-0 flex-1\">\n                      <div className=\"flex items-baseline justify-between gap-2\">\n                        <p className=\"text-sm font-medium text-slate-900\">{a.title}</p>\n                        <p className=\"shrink-0 text-xs text-slate-500\">{a.time}</p>\n                      </div>\n                      <p className=\"mt-0.5 text-sm text-slate-600\">{a.detail}</p>\n                    </div>\n                  </li>\n                );\n              })}\n            </ol>\n          </section>\n        </div>\n\n        <section\n          aria-labelledby=\"bar-title\"\n          className=\"mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm\"\n        >\n          <div className=\"flex flex-wrap items-start justify-between gap-3\">\n            <div>\n              <h2 id=\"bar-title\" className=\"text-base font-semibold\">\n                Revenue by channel\n              </h2>\n              <p className=\"text-sm text-slate-500\">Last 30 days · all products</p>\n            </div>\n            <p className=\"text-sm text-slate-600\">\n              Total <span className=\"font-semibold tabular-nums text-slate-900\">{usd.format(CHANNELS.reduce((s, c) => s + c.revenue, 0))}</span>\n            </p>\n          </div>\n          <div className=\"mt-5 grid gap-6 lg:grid-cols-5 lg:gap-10\">\n            <div className=\"lg:col-span-3\">\n              <BarChart data={CHANNELS} />\n            </div>\n            <div className=\"flex flex-col justify-end lg:col-span-2\">\n              <p className=\"mb-2 hidden text-xs font-medium uppercase tracking-wide text-slate-500 sm:block\">\n                Distribution\n              </p>\n              <VerticalBars data={CHANNELS} />\n              <p className=\"mt-3 text-sm text-slate-600\">\n                Organic search and direct traffic generate{\" \"}\n                <span className=\"font-semibold text-slate-900\">58%</span> of revenue, while paid ads\n                contribute a further 19%.\n              </p>\n            </div>\n          </div>\n        </section>\n      </main>\n\n      <footer className=\"mx-auto max-w-7xl px-4 pb-8 text-xs text-slate-500 sm:px-6 lg:px-8\">\n        Figures are sample data for demonstration purposes.\n      </footer>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
