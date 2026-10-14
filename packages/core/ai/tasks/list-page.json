@@ -27,7 +27,11 @@
     "layout.defaults",
     "Icon.names",
     "color.tokens",
-    "Select.closed"
+    "Select.closed",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "Checkbox.checked"
   ],
   "quality": {
     "pageHeader": "Title and one primary Button in a Row that stacks at s; per-record actions belong in the Table's actions, not the header",

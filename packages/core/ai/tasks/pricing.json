@@ -32,7 +32,11 @@
     "LogoCloud.columns",
     "layout.shorthands",
     "section.gaps",
-    "animation.budget"
+    "animation.budget",
+    "layout.responsiveProps",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "RevealFx.primaryContent"
   ],
   "quality": {
     "sectionGap": "104",

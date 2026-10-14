@@ -13,6 +13,25 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Changed
+
+- **The harness costs an agent about a third less to read.** In the
+  2.1.0-rc.0 benchmark, agents opened the 131 KB `spec.json` in 50 of 60
+  runs, to look up a type a component slice named but didn't define. Each
+  slice now carries the types it reaches under `types`, and slices point at
+  the new `tokens.json` and `functions.json` instead of the spec; with that
+  change agents opened `spec.json` in 3 of 60 runs. `catalog.json` keeps only
+  each component's purpose, import path and warnings (40 KB → 22 KB); tags
+  and pairings moved to the slices.
+- **One file per task.** `ai/bundles/{id}.json` holds the task with every
+  slice, type, mixin and gotcha it names, so an agent reads one file instead
+  of a dozen slices, each of which it re-sends on every later turn.
+- **Rules and gotchas for the type errors agents make most:** responsive
+  props only on `Flex`/`Row`/`Column`/`Grid`, no `baseline` alignment, the
+  spacing tokens, no `span` or `type` on layout, a native `<form>` around a
+  `Column`, `checked` (not `isChecked`) on `Checkbox`/`Switch`/`RadioButton`,
+  and no `RevealFx` on headlines, prices or KPIs.
+
 ## [2.1.0-rc.0] — 2026-10-13
 
 2.1 is a minor release: additive only, nothing removed or renamed. The plan
