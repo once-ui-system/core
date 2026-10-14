@@ -9,7 +9,8 @@ Content that scrolls sideways inside its own container, such as a wide table on 
 Score each axis from 1 (poor) to 5 (excellent):
 
 - polish: consistent spacing rhythm, type scale and surface hierarchy; looks like a carefully designed product.
-- completeness: every element the task asks for is present and plausible, on the routes where it belongs. Judge what the screenshots show, including the interaction screenshots when there are any.
+- completeness: every element the task asks for is present and plausible, on the routes where it belongs. Judge what the screenshots show, including the interaction screenshots when there are any. The task's required elements:
+{{CHECKLIST}}
 - responsiveness: every route adapts sensibly across the three widths; nothing overflows the page, overlaps or becomes unusable.
 - restraint: effects and decoration support the content rather than dominate it.
 - coherence: the routes read as one app: the same shell, navigation, spacing and components, and navigation that shows where you are.

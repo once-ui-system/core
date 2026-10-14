@@ -15,6 +15,9 @@ export const config = JSON.parse(fs.readFileSync(path.join(ROOT, "config.json"),
 export const TASKS_FILE = path.resolve(ROOT, process.env.BENCH_TASKS ?? "prompts/tasks.json");
 const taskSet = JSON.parse(fs.readFileSync(TASKS_FILE, "utf8"));
 export const tasks = taskSet.tasks;
+// A task set may fix its own generation budgets (v2: larger apps, larger
+// budgets); they apply to every task in the set and are recorded with it.
+if (taskSet.generation) Object.assign(config.generation, taskSet.generation);
 // Scripted interactions are keyed by task id, so they belong to their task
 // set: the 12 single-page tasks keep prompts/interactions.json, another set
 // carries its own under `interactions` (none if it has none).

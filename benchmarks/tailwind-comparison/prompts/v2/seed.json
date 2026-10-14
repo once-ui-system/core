@@ -1,0 +1,44 @@
+{
+  "product": "Lumen, a product-analytics and issue-tracking app for small software teams",
+  "user": { "name": "Maya Okafor", "email": "maya@acmelabs.io", "role": "Owner" },
+  "orgs": [
+    { "name": "Acme Labs", "plan": "Team", "members": 8, "current": true },
+    { "name": "Northwind Studio", "plan": "Starter", "members": 3 },
+    { "name": "Okafor Consulting", "plan": "Free", "members": 1 }
+  ],
+  "projects": [
+    { "key": "WEB", "name": "Marketing site", "status": "Active", "issues": 12, "updated": "2026-10-12" },
+    { "key": "APP", "name": "Customer app", "status": "Active", "issues": 31, "updated": "2026-10-14" },
+    { "key": "API", "name": "Public API", "status": "Active", "issues": 9, "updated": "2026-10-09" },
+    { "key": "MOB", "name": "Mobile beta", "status": "Paused", "issues": 4, "updated": "2026-09-28" },
+    { "key": "OPS", "name": "Internal tools", "status": "Archived", "issues": 0, "updated": "2026-08-30" }
+  ],
+  "members": [
+    { "id": "m-01", "name": "Maya Okafor", "email": "maya@acmelabs.io", "role": "Owner", "status": "Active", "joined": "2024-03-02" },
+    { "id": "m-02", "name": "Daniel Reyes", "email": "daniel@acmelabs.io", "role": "Admin", "status": "Active", "joined": "2024-05-19" },
+    { "id": "m-03", "name": "Priya Natarajan", "email": "priya@acmelabs.io", "role": "Member", "status": "Active", "joined": "2024-11-07" },
+    { "id": "m-04", "name": "Tomás Lindqvist", "email": "tomas@acmelabs.io", "role": "Member", "status": "Active", "joined": "2025-02-14" },
+    { "id": "m-05", "name": "Hana Sato", "email": "hana@acmelabs.io", "role": "Member", "status": "Invited", "joined": null },
+    { "id": "m-06", "name": "Grace Mensah", "email": "grace@acmelabs.io", "role": "Viewer", "status": "Active", "joined": "2025-06-30" },
+    { "id": "m-07", "name": "Leo Brandt", "email": "leo@acmelabs.io", "role": "Member", "status": "Suspended", "joined": "2025-01-21" },
+    { "id": "m-08", "name": "Ines Duarte", "email": "ines@acmelabs.io", "role": "Viewer", "status": "Invited", "joined": null }
+  ],
+  "issues": [
+    { "id": "LUM-104", "title": "Checkout fails on Safari 17", "status": "In progress", "priority": "Urgent", "assignee": "Daniel Reyes", "project": "APP", "updated": "2026-10-14" },
+    { "id": "LUM-103", "title": "Export to CSV drops the last row", "status": "Todo", "priority": "High", "assignee": "Priya Natarajan", "project": "APP", "updated": "2026-10-13" },
+    { "id": "LUM-101", "title": "Rate limit headers missing on 429", "status": "In review", "priority": "Medium", "assignee": "Tomás Lindqvist", "project": "API", "updated": "2026-10-12" },
+    { "id": "LUM-098", "title": "Pricing page shows old annual price", "status": "Todo", "priority": "High", "assignee": null, "project": "WEB", "updated": "2026-10-11" },
+    { "id": "LUM-095", "title": "Dark mode contrast on charts", "status": "Backlog", "priority": "Low", "assignee": "Grace Mensah", "project": "APP", "updated": "2026-10-08" },
+    { "id": "LUM-091", "title": "Push notifications arrive twice", "status": "Done", "priority": "Medium", "assignee": "Daniel Reyes", "project": "MOB", "updated": "2026-10-02" }
+  ],
+  "metrics": {
+    "kpis": { "visitors": 48210, "signups": 1342, "conversion": 0.0278, "mrr": 18450, "change_vs_previous": { "visitors": 0.12, "signups": 0.08, "conversion": -0.004, "mrr": 0.05 } },
+    "daily_last_14_days": {
+      "dates": ["2026-10-01","2026-10-02","2026-10-03","2026-10-04","2026-10-05","2026-10-06","2026-10-07","2026-10-08","2026-10-09","2026-10-10","2026-10-11","2026-10-12","2026-10-13","2026-10-14"],
+      "visitors": [3120,3290,3010,2480,2390,3410,3560,3480,3620,3390,2710,2580,3730,3820],
+      "signups": [88,97,85,61,58,102,109,104,111,98,72,69,118,121]
+    },
+    "signups_by_channel": [ { "channel": "Organic", "signups": 512 }, { "channel": "Paid search", "signups": 341 }, { "channel": "Referral", "signups": 228 }, { "channel": "Social", "signups": 167 }, { "channel": "Direct", "signups": 94 } ],
+    "segments": ["All users", "New users", "Returning users"]
+  }
+}
