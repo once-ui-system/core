@@ -12,7 +12,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { runGates } from "./gates.mjs";
-import { WORK, armByLetter, buildPrompt, buildRepairPrompt, config, extractCode, tasks } from "./lib.mjs";
+import { WORK, armByLetter, buildPrompt, buildRepairPrompt, config, extractCode, extractFiles, isMulti, taskById, tasks } from "./lib.mjs";
 
 const arg = (k, d) => {
   const i = process.argv.indexOf(`--${k}`);
@@ -66,6 +66,7 @@ async function runOne(client, letter, task, run) {
   if (fs.existsSync(statePath) && ["accepted", "failed"].includes(JSON.parse(fs.readFileSync(statePath, "utf8")).status)) return;
 
   const sandbox = path.join(WORK, "sandbox", arm.id);
+  const multi = isMulti(taskById(task));
   const { system, user } = buildPrompt(letter, task);
   fs.writeFileSync(path.join(dir, "prompt.txt"), `${system}\n\n${user}`);
   const messages = [{ role: "user", content: user }];
@@ -126,8 +127,23 @@ async function runOne(client, letter, task, run) {
       messages.push({ role: "user", content: results });
     }
     fs.writeFileSync(path.join(dir, `attempt-${attempt}.reply.md`), reply);
-    const code = extractCode(reply);
-    if (code) fs.writeFileSync(path.join(dir, `attempt-${attempt}.tsx`), code);
+    let code;
+    if (multi) {
+      // attempt-N.files/ mirrors the paths the model wrote; attempt-N.files.json lists them.
+      const { files, rejected } = extractFiles(reply);
+      code = files;
+      if (files) {
+        for (const [f, src] of Object.entries(files)) {
+          const p = path.join(dir, `attempt-${attempt}.files`, f);
+          fs.mkdirSync(path.dirname(p), { recursive: true });
+          fs.writeFileSync(p, src);
+        }
+      }
+      fs.writeFileSync(path.join(dir, `attempt-${attempt}.files.json`), JSON.stringify({ files: Object.keys(files ?? {}), rejected }, null, 2));
+    } else {
+      code = extractCode(reply);
+      if (code) fs.writeFileSync(path.join(dir, `attempt-${attempt}.tsx`), code);
+    }
     const g = await runGates(letter, code, path.join(dir, `attempt-${attempt}`), task);
     fs.renameSync(path.join(dir, `attempt-${attempt}`, "gates.json"), path.join(dir, `attempt-${attempt}.gates.json`));
     if (g.passed) {
@@ -135,7 +151,7 @@ async function runOne(client, letter, task, run) {
       accepted = attempt;
       break;
     }
-    if (attempt < config.repair_rounds) messages.push({ role: "user", content: buildRepairPrompt(g.failed_gate, g.failure_output) });
+    if (attempt < config.repair_rounds) messages.push({ role: "user", content: buildRepairPrompt(g.failed_gate, g.failure_output, multi) });
   }
 
   const byAttempt = [];
@@ -163,12 +179,20 @@ function mockClient() {
   let n = 0;
   const page = `import { Column, Heading, Text } from "@once-ui-system/core";\nexport default function Page() {\n  return (\n    <Column as="main" fillWidth padding="40" gap="16">\n      <Heading>Mock page for the runner self-test</Heading>\n      <Text>This page only checks that the generation loop and the gates work end to end.</Text>\n    </Column>\n  );\n}\n`;
   const usage = { input_tokens: 100, output_tokens: 10 };
+  // A multi-file task gets a two-route app: a shared component and two pages.
+  const reply = isMulti(taskById(taskIds[0]))
+    ? [
+        "```tsx components/Panel.tsx\nimport { Column, Text } from \"@once-ui-system/core\";\nexport function Panel({ label }: { label: string }) {\n  return (\n    <Column padding=\"24\" gap=\"8\" border radius=\"l\">\n      <Text>{label}: a panel shared by both routes of the runner self-test app.</Text>\n    </Column>\n  );\n}\n```",
+        "```tsx app/page.tsx\n" + page.replace("<Text>", "<Panel label=\"Home\" />\n      <Text>").replace('import { Column', 'import { Panel } from "@/components/Panel";\nimport { Column') + "```",
+        "```tsx app/settings/page.tsx\n" + page.replace("<Text>", "<Panel label=\"Settings\" />\n      <Text>").replace('import { Column', 'import { Panel } from "@/components/Panel";\nimport { Column') + "```",
+      ].join("\n\n")
+    : "```tsx\n" + page + "```";
   return {
     messages: {
       create: async () =>
         n++ % 2 === 0
           ? { id: `mock${n}`, model: "mock", stop_reason: "tool_use", usage, content: [{ type: "tool_use", id: `tu${n}`, name: "read_file", input: { path: "project/app/layout.tsx" } }] }
-          : { id: `mock${n}`, model: "mock", stop_reason: "end_turn", usage, content: [{ type: "text", text: "```tsx\n" + page + "```" }] },
+          : { id: `mock${n}`, model: "mock", stop_reason: "end_turn", usage, content: [{ type: "text", text: reply }] },
     },
   };
 }

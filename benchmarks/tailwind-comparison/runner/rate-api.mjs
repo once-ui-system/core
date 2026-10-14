@@ -33,10 +33,13 @@ for (const id of fs.readdirSync(blindDir).sort()) {
   if (done.some((r) => r.id === id)) continue;
   const dir = path.join(blindDir, id);
   const content = [];
-  for (const img of IMAGES) {
+  // images.json (blind.mjs) gives the order and labels; older packets lack it.
+  const listPath = path.join(dir, "images.json");
+  const list = fs.existsSync(listPath) ? JSON.parse(fs.readFileSync(listPath, "utf8")) : IMAGES.map((name) => ({ name, label: name }));
+  for (const { name: img, label } of list) {
     const f = path.join(dir, `${img}.jpg`);
     if (!fs.existsSync(f)) continue;
-    content.push({ type: "text", text: `${img}:` });
+    content.push({ type: "text", text: `${label}:` });
     content.push({ type: "image", source: { type: "base64", media_type: "image/jpeg", data: fs.readFileSync(f).toString("base64") } });
   }
   content.push({ type: "text", text: fs.readFileSync(path.join(dir, "prompt.md"), "utf8") });
@@ -51,5 +54,7 @@ for (const id of fs.readdirSync(blindDir).sort()) {
   const json = JSON.parse(text.slice(text.indexOf("{"), text.lastIndexOf("}") + 1));
   done.push({ ...json, id, usage: res.usage });
   fs.writeFileSync(outPath, JSON.stringify(done, null, 2));
-  console.log(`${id} polish=${json.polish} completeness=${json.completeness} responsiveness=${json.responsiveness} restraint=${json.restraint}`);
+  console.log(
+    `${id} polish=${json.polish} completeness=${json.completeness} responsiveness=${json.responsiveness} restraint=${json.restraint}${json.coherence != null ? ` coherence=${json.coherence}` : ""}`,
+  );
 }
