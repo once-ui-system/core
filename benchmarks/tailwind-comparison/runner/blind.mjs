@@ -65,7 +65,7 @@ order.forEach((d, i) => {
   const gates = JSON.parse(fs.readFileSync(path.join(resultsDir, "raw", d, `attempt-${state.accepted_attempt}.gates.json`), "utf8"));
   const spec = interactions[String(task)];
   const shots = [];
-  for (const vp of ["phone", "desktop"]) {
+  for (const vp of spec?.viewports ?? ["phone", "desktop"]) {
     const f = path.join(src, `screenshot-${vp}-interaction.jpg`);
     if (fs.existsSync(f)) {
       fs.copyFileSync(f, path.join(blindDir, id, `${vp}-interaction.jpg`));
@@ -85,6 +85,7 @@ order.forEach((d, i) => {
     .readFileSync(path.join(ROOT, isMulti(taskDef) ? "prompts/rater-multi.md" : "prompts/rater.md"), "utf8")
     .replace("{{TASK}}", taskText)
     .replace("{{ROUTES}}", routesOf(taskDef).map((r) => `\`${r}\``).join(", "))
+    .replace("{{CHECKLIST}}", (taskDef.checklist ?? []).map((c) => `- ${c}`).join("\n"))
     .replace("{{INTERACTION}}", interaction)
     .replace("{{ID}}", id);
   fs.writeFileSync(path.join(blindDir, id, "prompt.md"), prompt);

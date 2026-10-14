@@ -20,23 +20,21 @@ const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104 };
 const AXE = fs.readFileSync(path.join(ROOT, "node_modules/axe-core/axe.min.js"), "utf8");
 const INTERACTION_VIEWPORTS = ["phone", "desktop"];
 
-// The task's scripted interaction (prompts/interactions.json), on the page as it is.
-// Recorded for the rater, never gated.
-async function interact(page, task, outDir, vp, ignored) {
-  const spec = interactions[String(task)];
+// The task's scripted interaction (the task set's interactions), on the page as
+// it is. Recorded for the rater, never gated. A spec is one action on one target
+// (v1), or `steps`: click / hover on a target, `press` a key (on a target, or
+// the page), `type` text (into a target, or whatever has focus). `route` and
+// `viewports` say where it runs (default "/" at phone and desktop).
+export const interactionViewports = (spec) => spec?.viewports ?? INTERACTION_VIEWPORTS;
+async function interact(page, spec, outDir, vp, ignored) {
   if (!spec || spec.action === "none") return { action: "none" };
+  const steps = spec.steps ?? [{ action: spec.action, target: spec.target, fallback: spec.fallback }];
   const locate = (t) =>
     t.selector
       ? page.locator(t.selector).first()
       : page.getByRole(t.role, t.name ? { name: new RegExp(t.name, "i") } : {}).first();
-  let target = locate(spec.target);
-  let found = (await target.count()) > 0 && (await target.isVisible().catch(() => false));
-  if (!found && spec.fallback) {
-    target = locate(spec.fallback);
-    found = (await target.count()) > 0 && (await target.isVisible().catch(() => false));
-  }
-  const out = { action: spec.action, found, errors: [] };
-  if (!found) return out;
+  const visible = async (l) => (await l.count()) > 0 && (await l.isVisible().catch(() => false));
+  const out = { action: steps.map((s) => s.action).join(" > "), found: true, steps: 0, errors: [] };
   const onErr = (m) => {
     if (m.type() !== "error" || ignored.has(m.location()?.url ?? "")) return;
     out.errors.push(`console.error: ${m.text()}`);
@@ -45,15 +43,32 @@ async function interact(page, task, outDir, vp, ignored) {
   page.on("console", onErr);
   page.on("pageerror", onPageErr);
   try {
-    await target.scrollIntoViewIfNeeded({ timeout: 5000 });
-    if (spec.action === "hover") await target.hover({ timeout: 5000 });
-    else await target.click({ timeout: 5000 });
-    await page.waitForTimeout(800);
-    await page.screenshot({
-      path: path.join(outDir, `screenshot-${vp.name}-interaction.jpg`),
-      type: config.screenshot.type,
-      quality: config.screenshot.quality,
-    });
+    for (const step of steps) {
+      let target = null;
+      if (step.target) {
+        target = locate(step.target);
+        if (!(await visible(target)) && step.fallback) target = locate(step.fallback);
+        if (!(await visible(target))) {
+          out.found = false;
+          break;
+        }
+        await target.scrollIntoViewIfNeeded({ timeout: 5000 });
+      }
+      if (step.action === "hover") await target.hover({ timeout: 5000 });
+      else if (step.action === "click") await target.click({ timeout: 5000 });
+      else if (step.action === "press") await (target ? target.press(step.key) : page.keyboard.press(step.key));
+      else if (step.action === "type") await (target ? target.fill(step.text) : page.keyboard.type(step.text));
+      out.steps++;
+      await page.waitForTimeout(step.wait_ms ?? 400);
+    }
+    if (out.found) {
+      await page.waitForTimeout(400);
+      await page.screenshot({
+        path: path.join(outDir, `screenshot-${vp.name}-interaction.jpg`),
+        type: config.screenshot.type,
+        quality: config.screenshot.quality,
+      });
+    }
   } catch (e) {
     out.errors.push(`interaction failed: ${e.message.split("\n")[0]}`);
   } finally {
@@ -241,8 +256,9 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
     out.viewport = { ...dims, horizontal_overflow: dims.width > vp.width, errors: [...errs] };
     out.errors = errs;
     // After the gate's own checks, so interaction-time errors never gate.
-    if (task != null && route === "/" && INTERACTION_VIEWPORTS.includes(vp.name)) {
-      out.interaction = await interact(page, task, outDir, vp, ignored);
+    const spec = task != null ? interactions[String(task)] : null;
+    if (spec && route === (spec.route ?? "/") && interactionViewports(spec).includes(vp.name)) {
+      out.interaction = await interact(page, spec, outDir, vp, ignored);
     }
     return out;
   } finally {
@@ -277,8 +293,8 @@ async function renderGate(letter, dir, outDir, task) {
           if (route === "/" || routes.length === 1) {
             result.viewports[vp.name] = r.viewport;
             if (r.axe) result.axe = r.axe;
-            if (r.interaction) result.interaction[vp.name] = r.interaction;
           }
+          if (r.interaction) result.interaction[vp.name] = r.interaction;
           if (routes.length > 1) {
             (result.routes[route] ??= { viewports: {} }).viewports[vp.name] = r.viewport;
             if (r.axe) result.routes[route].axe = r.axe;
