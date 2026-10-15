@@ -1,9 +1,8 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.1.0-rc.0",
+  "version": "2.1.0",
   "publishConfig": {
-    "access": "public",
-    "tag": "next"
+    "access": "public"
   },
   "files": [
     "dist",

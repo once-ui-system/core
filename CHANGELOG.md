@@ -13,6 +13,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-10-15
+
+2.1.0 is `2.1.0-rc.0` (below) plus the changes listed here. It is a
+minor release: additive only, nothing removed or renamed.
+
 ### Added
 
 - **`Schema` takes `as="aboutPage"` and `as="creativeWork"`**, which emit
