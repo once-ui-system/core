@@ -78,7 +78,11 @@ describe("config", () => {
     expect(await getToken(env)).toBeNull();
     await saveToken("oui_abc", env);
     expect(await getToken(env)).toBe("oui_abc");
-    expect(statSync(configPath(env)).mode & 0o777).toBe(0o600);
+    // Windows has no POSIX permission bits: Node reports any writable file as 0o666
+    // and chmod only toggles read-only, so the owner-only check applies elsewhere.
+    if (process.platform !== "win32") {
+      expect(statSync(configPath(env)).mode & 0o777).toBe(0o600);
+    }
     await clearToken(env);
     expect(await getToken(env)).toBeNull();
   });
