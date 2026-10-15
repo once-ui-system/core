@@ -1,0 +1,92 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2349
+    },
+    "build": {
+      "ok": true,
+      "ms": 7909
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1389,
+          "height": 8896,
+          "width": 1217,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1389,
+          "height": 4576,
+          "width": 2434,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1389,
+          "height": 3724,
+          "width": 4014,
+          "horizontal_overflow": true,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 18,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:17",
+          "heading-order:moderate:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 2272,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 2269,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 2267,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

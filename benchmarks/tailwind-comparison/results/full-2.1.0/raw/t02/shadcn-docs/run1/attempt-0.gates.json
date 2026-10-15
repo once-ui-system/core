@@ -1,0 +1,19 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "build",
+  "failure_output": "Type error: Type 'typeof import(\"/tmp/claude-0/-home-user/143d04a5-2931-5188-9bbf-5b0f2fb6f110/scratchpad/core/benchmarks/tailwind-comparison/work/gate/shadcn-docs/app/page\")' does not satisfy the constraint 'AppPageConfig<\"/\">'.\n  Property 'default' is missing in type 'typeof import(\"/tmp/claude-0/-home-user/143d04a5-2931-5188-9bbf-5b0f2fb6f110/scratchpad/core/benchmarks/tailwind-comparison/work/gate/shadcn-docs/app/page\")' but required in type 'AppPageConfig<\"/\">'.\n\nNext.js build worker exited with code: 1 and signal: null",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6006
+    },
+    "build": {
+      "ok": false,
+      "ms": 14812
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ]
+}

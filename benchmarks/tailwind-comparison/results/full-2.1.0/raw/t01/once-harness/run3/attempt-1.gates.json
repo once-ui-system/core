@@ -1,0 +1,83 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2453
+    },
+    "build": {
+      "ok": true,
+      "ms": 13178
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1781,
+          "height": 2890,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1830,
+          "height": 2665,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1865,
+          "height": 2238,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1768,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1766,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

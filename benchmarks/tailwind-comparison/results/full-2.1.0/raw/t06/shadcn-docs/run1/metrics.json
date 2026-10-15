@@ -1,0 +1,68 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 701,
+    "chars": 24673,
+    "bytes": 24689,
+    "tokens_o200k": 5448,
+    "tokens_claudeLegacy": 5950
+  },
+  "raw": {
+    "lines": 707,
+    "chars": 25448,
+    "bytes": 25464,
+    "tokens_o200k": 5569,
+    "tokens_claudeLegacy": 6093
+  },
+  "components": [
+    "Alert",
+    "AlertDescription",
+    "AlertTitle",
+    "Button",
+    "Checkbox",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogHeader",
+    "DialogTitle",
+    "DialogTrigger",
+    "Field",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "InputOTP",
+    "InputOTPGroup",
+    "InputOTPSeparator",
+    "InputOTPSlot",
+    "Spinner"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/alert.tsx",
+      "components/ui/button.tsx",
+      "components/ui/checkbox.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/field.tsx",
+      "components/ui/input-group.tsx",
+      "components/ui/input-otp.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/spinner.tsx",
+      "components/ui/textarea.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 843,
+    "chars": 26545,
+    "bytes": 26545,
+    "tokens_o200k": 6840,
+    "tokens_claudeLegacy": 7825
+  }
+}

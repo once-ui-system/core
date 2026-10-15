@@ -1,0 +1,249 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_tokens": 48156,
+      "output_tokens": 9713
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j3fSqyDr3MMquMvhKC",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 957,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 116,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j3mkMJP3uv9k68PVFp",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1608,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 157,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j3tXQD9C5q1eSHXUKL",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5537,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 283,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j44EZ6ufWovGgwKr9P",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 9081,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 386,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j4GD8hTdKRUKAkgELg",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 13999,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 163,
+        "output_tokens_details": {
+          "thinking_tokens": 106
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4j4VHgX8V1VuEGF77Ei",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 16974,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 8608,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/card.mdx",
+      "chars": 7043
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/skeleton.mdx",
+      "chars": 1483
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/skeleton.tsx",
+      "chars": 276
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/tooltip.tsx",
+      "chars": 1829
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/toggle-group.tsx",
+      "chars": 2308
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/select.tsx",
+      "chars": 6352
+    }
+  ]
+}

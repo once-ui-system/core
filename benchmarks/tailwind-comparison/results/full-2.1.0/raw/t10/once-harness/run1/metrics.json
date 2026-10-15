@@ -1,0 +1,34 @@
+{
+  "attempt": 1,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 400,
+    "chars": 13333,
+    "bytes": 13343,
+    "tokens_o200k": 2696,
+    "tokens_claudeLegacy": 2784
+  },
+  "raw": {
+    "lines": 392,
+    "chars": 13264,
+    "bytes": 13274,
+    "tokens_o200k": 2693,
+    "tokens_claudeLegacy": 2794
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "DropdownWrapper",
+    "Heading",
+    "Hover",
+    "IconButton",
+    "Line",
+    "Option",
+    "Row",
+    "StatusIndicator",
+    "Tag",
+    "Text"
+  ]
+}

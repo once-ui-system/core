@@ -1,0 +1,73 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 1048,
+    "chars": 31078,
+    "bytes": 31088,
+    "tokens_o200k": 7483,
+    "tokens_claudeLegacy": 7932
+  },
+  "raw": {
+    "lines": 705,
+    "chars": 30049,
+    "bytes": 30059,
+    "tokens_o200k": 7135,
+    "tokens_claudeLegacy": 7637
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Calendar",
+    "Empty",
+    "EmptyContent",
+    "EmptyDescription",
+    "EmptyHeader",
+    "EmptyMedia",
+    "EmptyTitle",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "Popover",
+    "PopoverContent",
+    "PopoverTrigger",
+    "Select",
+    "SelectContent",
+    "SelectItem",
+    "SelectTrigger",
+    "SelectValue",
+    "Table",
+    "TableBody",
+    "TableCaption",
+    "TableCell",
+    "TableHead",
+    "TableHeader",
+    "TableRow",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/calendar.tsx",
+      "components/ui/empty.tsx",
+      "components/ui/input-group.tsx",
+      "components/ui/input.tsx",
+      "components/ui/popover.tsx",
+      "components/ui/select.tsx",
+      "components/ui/table.tsx",
+      "components/ui/textarea.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 1078,
+    "chars": 36429,
+    "bytes": 36429,
+    "tokens_o200k": 9099,
+    "tokens_claudeLegacy": 10532
+  }
+}

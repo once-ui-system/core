@@ -1,0 +1,329 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_tokens": 93963,
+      "output_tokens": 14193
+    },
+    {
+      "attempt": 1,
+      "calls": 1,
+      "input_tokens": 41914,
+      "output_tokens": 12759
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gpePkT4oJ1stbSwAtq",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 961,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 116,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gpmJDgEUiU3vNikD41",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1612,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 97,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gptkguv2sH4zZQBm86",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1864,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 155,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gq2jAJXv7mgGmaAhss",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 11408,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 429,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gqJn4vxxHhtXLS3Wk9",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 22398,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 320,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gqZCEej59C7CLXCBd4",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 26975,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 248,
+        "output_tokens_details": {
+          "thinking_tokens": 79
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4gqobf4MzyuUE7jCTCR",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 28745,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 12828,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 1,
+      "id": "msg_011Cg4gxRAErLgwZbifKsSVR",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 41914,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 12759,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "docs/skill",
+      "chars": 105
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/skill/SKILL.md",
+      "chars": 22692
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/field.tsx",
+      "chars": 6159
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/select.tsx",
+      "chars": 6352
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/avatar.tsx",
+      "chars": 2915
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/alert-dialog.tsx",
+      "chars": 5439
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input-group.tsx",
+      "chars": 5065
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/spinner.tsx",
+      "chars": 330
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/textarea.tsx",
+      "chars": 758
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/switch.tsx",
+      "chars": 1407
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input.tsx",
+      "chars": 961
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/separator.tsx",
+      "chars": 693
+    }
+  ]
+}

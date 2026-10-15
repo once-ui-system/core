@@ -1,0 +1,364 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Onboarding checklist — progress bar, step list with status indicators, celebratory completion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PXvxAr56MDYAcpnXDvjiXC",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LDNnVMxxKi2vUWyhwHSMXV",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CZZFJm62YupTnPNzcag9iW",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PXvxAr56MDYAcpnXDvjiXC",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LDNnVMxxKi2vUWyhwHSMXV",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CZZFJm62YupTnPNzcag9iW",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the project's existing files and the relevant component docs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TUHTox7ZR1yJWUSLei5N9K",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013sSY55C3EG34n6R6SyMEUo",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VncgRS5vXFjsKTxEjz5e3c",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011GvB8vsGhfBzsDqzBdR9ZC",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/progress.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011kHh1kVm8kt5hFQVpcbjLR",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/checkbox.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TUHTox7ZR1yJWUSLei5N9K",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013sSY55C3EG34n6R6SyMEUo",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VncgRS5vXFjsKTxEjz5e3c",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011GvB8vsGhfBzsDqzBdR9ZC",
+          "content": "---\ntitle: Progress\ndescription: Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/progress\n  api: https://www.radix-ui.com/docs/primitives/components/progress#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"progress-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add progress\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"progress\"\n  title=\"components/ui/progress.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport { Progress } from \"@/components/ui/progress\"\n```\n\n```tsx showLineNumbers\n<Progress value={33} />\n```\n\n## Label\n\nUse a `Field` component to add a label to the progress bar.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"progress-label\" />\n\n## Controlled\n\nA progress bar that can be controlled by a slider.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"progress-controlled\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"progress-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI Progress](https://www.radix-ui.com/docs/primitives/components/progress#api-reference) documentation.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011kHh1kVm8kt5hFQVpcbjLR",
+          "content": "---\ntitle: Checkbox\ndescription: A control that allows the user to toggle between checked and not checked.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/checkbox\n  api: https://www.radix-ui.com/docs/primitives/components/checkbox#api-reference\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"checkbox-demo\"\n  previewClassName=\"h-80\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add checkbox\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"checkbox\"\n  title=\"components/ui/checkbox.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Checkbox } from \"@/components/ui/checkbox\"\n```\n\n```tsx\n<Checkbox />\n```\n\n## Checked State\n\nUse `defaultChecked` for uncontrolled checkboxes, or `checked` and\n`onCheckedChange` to control the state.\n\n```tsx showLineNumbers\nimport * as React from \"react\"\n\nexport function Example() {\n  const [checked, setChecked] = React.useState(false)\n\n  return <Checkbox checked={checked} onCheckedChange={setChecked} />\n}\n```\n\n## Invalid State\n\nSet `aria-invalid` on the checkbox and `data-invalid` on the field wrapper to\nshow the invalid styles.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"checkbox-invalid\" />\n\n## Basic\n\nPair the checkbox with `Field` and `FieldLabel` for proper layout and labeling.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"checkbox-basic\" />\n\n## Description\n\nUse `FieldContent` and `FieldDescription` for helper text.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"checkbox-description\" />\n\n## Disabled\n\nUse the `disabled` prop to prevent interaction and add the `data-disabled` attribute to the `<Field>` component for disabled styles.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"checkbox-disabled\" />\n\n## Group\n\nUse multiple fields to create a checkbox list.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"checkbox-group\" />\n\n## Table\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"checkbox-table\"\n  previewClassName=\"p-4 md:p-8\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"checkbox-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-80\"\n/>\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/docs/primitives/components/checkbox#api-reference) documentation for more information.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the existing page, layout, and the actual component sources I plan to use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_019rH3QD2xS3rb54UTL1acyj",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01E8eC57eiHXNbHdvNjb5EZs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Gx1DLT1Ae9xQT6PvpG9pbh",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/progress.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q2BmLLtysEDqVpbpARZbVS",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VXXAi7e56LTwytiF42t3cz",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012E5QZ12Fbx9h5Qx8beZZB4",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011WeXctQbH5MdJ59mnmU7fT",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019rH3QD2xS3rb54UTL1acyj",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01E8eC57eiHXNbHdvNjb5EZs",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Gx1DLT1Ae9xQT6PvpG9pbh",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Progress as ProgressPrimitive } from \"radix-ui\"\n\nfunction Progress({\n  className,\n  value,\n  ...props\n}: React.ComponentProps<typeof ProgressPrimitive.Root>) {\n  return (\n    <ProgressPrimitive.Root\n      data-slot=\"progress\"\n      className={cn(\n        \"relative h-2 w-full overflow-hidden rounded-full bg-primary/20\",\n        className\n      )}\n      {...props}\n    >\n      <ProgressPrimitive.Indicator\n        data-slot=\"progress-indicator\"\n        className=\"h-full w-full flex-1 bg-primary transition-all\"\n        style={{ transform: `translateX(-${100 - (value || 0)}%)` }}\n      />\n    </ProgressPrimitive.Root>\n  )\n}\n\nexport { Progress }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q2BmLLtysEDqVpbpARZbVS",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VXXAi7e56LTwytiF42t3cz",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012E5QZ12Fbx9h5Qx8beZZB4",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011WeXctQbH5MdJ59mnmU7fT",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've settled on the design: a card with a progress bar and 6 toggleable steps (only the current one expanded), a celebratory completion state with reduced-motion-safe confetti, and accessibility features like aria-live, aria-pressed, and focus management. Since custom confetti keyframes need CSS, I'll inject a scoped `<style>` block for that.\n\n",
+          "signature": "CAQS1QoKEQgSGAI4AUIJbmFycmF0aW9uEgzQNrVfgtSSF9VIzjMaDFC2kNRO5itLVhD5NSIwhVYWk6ia0EjN+lsJoTUrrwwdHpwzd6wxgY2YdkmvWtygjsdyPiLm42ezwiwuPB6yKvEJtArvkDP+Lvjs/cF7b1XJfqP79P0OPzh6W3jQH+GPH9lnBQbzxGlLaaKZu8d7G3yvjvu0h6ThClEh86qZUK9RVP+TK4AJUdsy0deAf9rRmDIBMtf8KskOADohpm/aIM1rfLvEuWX4ZLDllP1ojRRMS0rJjqnqYrZz06okCVsc5YJ/q0NYUoXFGnP9PTWZQDN+pDPqBt+n3nfiSUgcOAfyNZNfu29TaUpwnYu5QSZJ109dqh//k9Vb8Q+sXGUcdAPLG/RTf31Ii9e3X362F2XU07607arwWY3A69dKLx/COQKJHQbnzaeAShEVx718+afgnHDg2J03oi7ILuSkyw1SA5apC5ndgvCOvmUCBO/zoT8Ev2miCnvIm57f+53YyObDwTtwV3yQg4T5olVJ3JOsyR5cXVwAbDHdtzfF4n0e69GjYEuIzABxV76LY7F96IGx1rqpFpyPFlgmdTzbuDnfxMRQKNXO8IQtqu1M0RQmChXDIhQ+Rd0rvrWCAUuXFBUck5q4l8Y0epfYz1f+1MsXbsD42gufqctsjiyDj9o1vCR6hAHvbpjEBYdNyNJt3YagHikxASwvCUKg/ae3J9YjVeEAfyo6LIjEf1Htg3xxHTwRAyhUjiY7xKEk7JOdL+yP8d+IrTxwFNdi2xry1WIBjcUmKizU1+Amp7EjVotVUltjZ/h9REla7vAyGizGFdjBgXXmiTJ961sARZT2OZy8v2GZNrgsnluBCSXpUf/TiBYLhdjf6qOrxQNoOJPkd8ZhTPWeTdk9uMbUTGAuKugAfnYcIg+paGw70SoGrnh6TgV0Ox60xNj6Zm9Q3DWVRJRGUz55A5npT7rgOc9WgqWZQmjTu0zu3TLQ5VLcFMVpuiCVE91lv2Ge97gWN4AscyGC6bU7MWrFqigmuvuYYQQJfG49q9dy/L3KpElRtTcbzU6eOxSEXMxGYgtKwP6rXnIx9uDk0ykx7K04Fj5Z/cn7197kxiH6A5Q7nZYhD+VRjWR+OjYUTJMiIUMoueDmVZiz9zEcER7hRykNDOKcfgCoi32KL6y5zMvS8HEHI+9F/j6jaTq8hlbmhyTJNWCfuFfOVlxtx0GjwWZ7OmcvbSznD5uOTjHoktpOw0qsSciLY8aVkWqQHfw6AdDOL5l6L0Wo3HHlaZNyrjJUBc+L8Yq01F5kIT7SBOPPt4Dm1xZH9O4ZU/hyV+VdOWwFexg9mS4byOVHVyLs6uFOszNhgRlYMy2RH2tyLIb9i8ebTKoC0yZh/aWx2M8e3InBCyr28ASFpNyOLmt0tVk/iKg2qPyJWqh/iK12uIMkpm70SZHxuDTCLvwM6uokjSONQxgti6JRh15p1wRsDOVnCNr1oTHVqHmfeYgy7ghAagd+boBlwai0qkH2WiE5Ta6DFDePIIW9IynZeQgrkCZcSr9TA83mBezAtexq3u2C0+ox32w2QhLLpk5/7YzL+Lkjm3urdzA/z+VHczOl5Scb8LxpmjmLaxG55VwZQ2zTHb43u0Lci6HGRyQk/mf9Gob2dOhzCeovobjP/Sfuu9afwXQAVXP0+STO+pzoiqqg+2/j5Q4CH43LtpmxLeQDwo743/ptreKtDEDrC2y+rrExZOCuhp2iAPanciQpiNJNBjpajouc9agvV1pfmcAKw9P2rJRYxlK0s1xuVDR/1lAczOhB7jLw6pkYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011HCmT9oBkTNt42CxUxbkKe",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/spinner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Np6WayX3bBzrcymJjnq7kG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011HCmT9oBkTNt42CxUxbkKe",
+          "content": "import { cn } from \"@/lib/utils\"\nimport { Loader2Icon } from \"lucide-react\"\n\nfunction Spinner({ className, ...props }: React.ComponentProps<\"svg\">) {\n  return (\n    <Loader2Icon\n      role=\"status\"\n      aria-label=\"Loading\"\n      className={cn(\"size-4 animate-spin\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Spinner }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Np6WayX3bBzrcymJjnq7kG",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  ArrowRight,\n  Check,\n  ChevronDown,\n  Circle,\n  PartyPopper,\n  RotateCcw,\n  Sparkles,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport { Progress } from \"@/components/ui/progress\";\nimport { cn } from \"@/lib/utils\";\n\ntype Step = {\n  id: string;\n  title: string;\n  description: string;\n  actionLabel: string;\n  estimate: string;\n};\n\nconst STEPS: Step[] = [\n  {\n    id: \"profile\",\n    title: \"Complete your profile\",\n    description:\n      \"Add your name, role and a profile photo so teammates can recognise you in comments and mentions.\",\n    actionLabel: \"Edit profile\",\n    estimate: \"2 min\",\n  },\n  {\n    id: \"workspace\",\n    title: \"Name your workspace\",\n    description:\n      \"Choose a workspace name and URL. You can change these later from Settings, so don't overthink it.\",\n    actionLabel: \"Open workspace settings\",\n    estimate: \"1 min\",\n  },\n  {\n    id: \"invite\",\n    title: \"Invite your team\",\n    description:\n      \"Projects move faster together. Send invites by email and pick a default role for each person.\",\n    actionLabel: \"Invite teammates\",\n    estimate: \"3 min\",\n  },\n  {\n    id: \"project\",\n    title: \"Create your first project\",\n    description:\n      \"Start from a template such as Product Launch or Sprint Planning, or begin with a blank board.\",\n    actionLabel: \"Browse templates\",\n    estimate: \"4 min\",\n  },\n  {\n    id: \"integrations\",\n    title: \"Connect an integration\",\n    description:\n      \"Link Slack, GitHub or Google Calendar to get updates where you already work.\",\n    actionLabel: \"View integrations\",\n    estimate: \"2 min\",\n  },\n  {\n    id: \"notifications\",\n    title: \"Set notification preferences\",\n    description:\n      \"Decide what is worth an email, what belongs in your inbox, and when to stay quiet.\",\n    actionLabel: \"Manage notifications\",\n    estimate: \"1 min\",\n  },\n];\n\nconst CONFETTI_COLORS = [\n  \"oklch(0.646 0.222 41.116)\",\n  \"oklch(0.6 0.118 184.704)\",\n  \"oklch(0.828 0.189 84.429)\",\n  \"oklch(0.769 0.188 70.08)\",\n  \"oklch(0.627 0.265 303.9)\",\n  \"oklch(0.696 0.17 162.48)\",\n];\n\ntype ConfettiPiece = {\n  left: number;\n  delay: number;\n  duration: number;\n  drift: number;\n  rotate: number;\n  color: string;\n  round: boolean;\n};\n\n// Deterministic pseudo-random layout so server/client markup never diverges.\nconst CONFETTI: ConfettiPiece[] = Array.from({ length: 32 }, (_, i) => {\n  const seed = (i * 9301 + 49297) % 233280;\n  const r = seed / 233280;\n  return {\n    left: (i * 100) / 32 + (r * 3 - 1.5),\n    delay: ((i * 37) % 10) * 0.07,\n    duration: 2.2 + ((i * 13) % 8) * 0.18,\n    drift: Math.round((r - 0.5) * 120),\n    rotate: 360 + Math.round(r * 540),\n    color: CONFETTI_COLORS[i % CONFETTI_COLORS.length],\n    round: i % 3 === 0,\n  };\n});\n\nfunction StatusIndicator({\n  status,\n}: {\n  status: \"done\" | \"current\" | \"upcoming\";\n}) {\n  return (\n    <span\n      aria-hidden=\"true\"\n      className={cn(\n        \"flex size-7 shrink-0 items-center justify-center rounded-full border-2 transition-all duration-300\",\n        status === \"done\" &&\n          \"border-primary bg-primary text-primary-foreground\",\n        status === \"current\" && \"border-primary bg-background text-primary\",\n        status === \"upcoming\" &&\n          \"border-muted-foreground/30 bg-background text-muted-foreground/50\",\n      )}\n    >\n      {status === \"done\" ? (\n        <Check className=\"size-4 animate-in zoom-in-50 duration-300\" strokeWidth={3} />\n      ) : status === \"current\" ? (\n        <span className=\"size-2.5 rounded-full bg-primary\" />\n      ) : (\n        <Circle className=\"size-3 opacity-0\" />\n      )}\n    </span>\n  );\n}\n\nexport default function OnboardingPage() {\n  const [completed, setCompleted] = React.useState<ReadonlySet<string>>(\n    () => new Set<string>(),\n  );\n  const [expandedId, setExpandedId] = React.useState<string | null>(\n    STEPS[0].id,\n  );\n  const [celebrating, setCelebrating] = React.useState(false);\n  const headingRef = React.useRef<HTMLHeadingElement>(null);\n\n  const total = STEPS.length;\n  const doneCount = completed.size;\n  const percent = Math.round((doneCount / total) * 100);\n  const allDone = doneCount === total;\n  const firstIncompleteId =\n    STEPS.find((s) => !completed.has(s.id))?.id ?? null;\n\n  const remainingMinutes = STEPS.filter((s) => !completed.has(s.id)).reduce(\n    (sum, s) => sum + parseInt(s.estimate, 10),\n    0,\n  );\n\n  const toggleStep = (id: string, title: string) => {\n    const next = new Set(completed);\n    const wasDone = next.has(id);\n    if (wasDone) {\n      next.delete(id);\n      setExpandedId(id);\n    } else {\n      next.add(id);\n      const upcoming = STEPS.find((s) => !next.has(s.id));\n      setExpandedId(upcoming ? upcoming.id : null);\n    }\n    setCompleted(next);\n\n    if (next.size === total) {\n      setCelebrating(true);\n      toast.success(\"Onboarding complete!\", {\n        description: \"Your workspace is ready to go.\",\n      });\n    } else {\n      setCelebrating(false);\n      if (!wasDone) {\n        toast(`“${title}” done`, {\n          description: `${next.size} of ${total} steps complete.`,\n        });\n      }\n    }\n  };\n\n  const reset = () => {\n    setCompleted(new Set<string>());\n    setExpandedId(STEPS[0].id);\n    setCelebrating(false);\n  };\n\n  // Move focus to the celebration heading so screen-reader and keyboard users land on it.\n  React.useEffect(() => {\n    if (allDone) headingRef.current?.focus();\n  }, [allDone]);\n\n  return (\n    <main className=\"min-h-dvh bg-muted/40 px-4 py-8 sm:py-12 lg:py-16\">\n      <style>{`\n        @keyframes onb-confetti-fall {\n          0% { transform: translate3d(0, -20px, 0) rotate(0deg); opacity: 1; }\n          85% { opacity: 1; }\n          100% { transform: translate3d(var(--onb-drift), 420px, 0) rotate(var(--onb-rotate)); opacity: 0; }\n        }\n        .onb-confetti {\n          animation: onb-confetti-fall var(--onb-duration) cubic-bezier(0.2, 0.6, 0.4, 1) var(--onb-delay) both;\n        }\n        @media (prefers-reduced-motion: reduce) {\n          .onb-confetti { display: none; }\n        }\n      `}</style>\n\n      <div className=\"mx-auto w-full max-w-2xl\">\n        <Card className=\"relative gap-0 overflow-hidden py-0\">\n          {celebrating && (\n            <div\n              aria-hidden=\"true\"\n              className=\"pointer-events-none absolute inset-x-0 top-0 z-10 h-[420px] overflow-hidden\"\n            >\n              {CONFETTI.map((p, i) => (\n                <span\n                  key={i}\n                  className={cn(\n                    \"onb-confetti absolute top-0 block h-3 w-2\",\n                    p.round && \"rounded-full\",\n                  )}\n                  style={\n                    {\n                      left: `${p.left}%`,\n                      backgroundColor: p.color,\n                      \"--onb-delay\": `${p.delay}s`,\n                      \"--onb-duration\": `${p.duration}s`,\n                      \"--onb-drift\": `${p.drift}px`,\n                      \"--onb-rotate\": `${p.rotate}deg`,\n                    } as React.CSSProperties\n                  }\n                />\n              ))}\n            </div>\n          )}\n\n          <CardHeader className=\"gap-3 border-b px-5 py-6 sm:px-8\">\n            <div className=\"flex items-start justify-between gap-4\">\n              <div className=\"space-y-1.5\">\n                <Badge variant=\"secondary\" className=\"mb-1\">\n                  <Sparkles /> Getting started\n                </Badge>\n                <CardTitle className=\"text-2xl leading-tight\">\n                  Welcome to Northwind, Priya\n                </CardTitle>\n                <CardDescription>\n                  Finish these six steps to get your team up and running.\n                </CardDescription>\n              </div>\n              <div\n                className=\"shrink-0 text-right\"\n                aria-live=\"polite\"\n                aria-atomic=\"true\"\n              >\n                <p className=\"text-3xl leading-none font-semibold tabular-nums\">\n                  {percent}%\n                </p>\n                <p className=\"mt-1 text-xs text-muted-foreground\">\n                  {doneCount} of {total} done\n                </p>\n              </div>\n            </div>\n\n            <Progress\n              value={percent}\n              aria-label=\"Onboarding progress\"\n              aria-valuetext={`${doneCount} of ${total} steps complete`}\n              className=\"h-2.5\"\n            />\n          </CardHeader>\n\n          {allDone ? (\n            <CardContent className=\"px-5 py-10 sm:px-8\">\n              <div className=\"flex flex-col items-center text-center\">\n                <div className=\"mb-5 flex size-16 items-center justify-center rounded-full bg-primary text-primary-foreground animate-in zoom-in-50 duration-500\">\n                  <PartyPopper className=\"size-8\" aria-hidden=\"true\" />\n                </div>\n                <h2\n                  ref={headingRef}\n                  tabIndex={-1}\n                  className=\"text-2xl font-semibold outline-none\"\n                >\n                  You&apos;re all set!\n                </h2>\n                <p className=\"mt-2 max-w-md text-sm text-muted-foreground\">\n                  Your profile, workspace, team and integrations are ready.\n                  Nice work, that was quicker than most teams manage.\n                </p>\n                <div className=\"mt-6 flex w-full flex-col gap-3 sm:w-auto sm:flex-row\">\n                  <Button size=\"lg\" onClick={() => toast(\"Opening your dashboard…\")}>\n                    Go to dashboard <ArrowRight />\n                  </Button>\n                  <Button size=\"lg\" variant=\"outline\" onClick={reset}>\n                    <RotateCcw /> Start over\n                  </Button>\n                </div>\n              </div>\n            </CardContent>\n          ) : (\n            <CardContent className=\"px-0\">\n              <ol className=\"divide-y\">\n                {STEPS.map((step, index) => {\n                  const isDone = completed.has(step.id);\n                  const isCurrent = step.id === firstIncompleteId;\n                  const status = isDone\n                    ? \"done\"\n                    : isCurrent\n                      ? \"current\"\n                      : \"upcoming\";\n                  const isOpen = expandedId === step.id;\n                  const panelId = `panel-${step.id}`;\n                  const buttonId = `trigger-${step.id}`;\n\n                  return (\n                    <li\n                      key={step.id}\n                      className={cn(\n                        \"transition-colors\",\n                        isCurrent && \"bg-accent/50\",\n                      )}\n                    >\n                      <h3 className=\"m-0\">\n                        <button\n                          id={buttonId}\n                          type=\"button\"\n                          aria-expanded={isOpen}\n                          aria-controls={panelId}\n                          onClick={() =>\n                            setExpandedId(isOpen ? null : step.id)\n                          }\n                          className=\"flex w-full items-center gap-3 px-5 py-4 text-left outline-none focus-visible:bg-accent focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:ring-inset sm:gap-4 sm:px-8\"\n                        >\n                          <StatusIndicator status={status} />\n                          <span className=\"min-w-0 flex-1\">\n                            <span\n                              className={cn(\n                                \"block text-sm font-medium\",\n                                isDone &&\n                                  \"text-muted-foreground line-through decoration-muted-foreground/50\",\n                              )}\n                            >\n                              <span className=\"sr-only\">\n                                Step {index + 1}:{\" \"}\n                              </span>\n                              {step.title}\n                            </span>\n                            <span className=\"block text-xs text-muted-foreground\">\n                              <span className=\"sr-only\">Status: </span>\n                              {isDone\n                                ? \"Completed\"\n                                : isCurrent\n                                  ? `Up next · about ${step.estimate}`\n                                  : `About ${step.estimate}`}\n                            </span>\n                          </span>\n                          <ChevronDown\n                            aria-hidden=\"true\"\n                            className={cn(\n                              \"size-4 shrink-0 text-muted-foreground transition-transform duration-200\",\n                              isOpen && \"rotate-180\",\n                            )}\n                          />\n                        </button>\n                      </h3>\n\n                      <div\n                        id={panelId}\n                        role=\"region\"\n                        aria-labelledby={buttonId}\n                        hidden={!isOpen}\n                        className=\"px-5 pb-5 sm:px-8 sm:pl-[4.75rem]\"\n                      >\n                        <p className=\"text-sm text-muted-foreground sm:pl-0 pl-10\">\n                          {step.description}\n                        </p>\n                        <div className=\"mt-4 flex flex-col gap-2 pl-10 sm:flex-row sm:pl-0\">\n                          {!isDone && (\n                            <Button\n                              size=\"sm\"\n                              variant=\"outline\"\n                              onClick={() =>\n                                toast.info(`${step.actionLabel}…`, {\n                                  description:\n                                    \"In the real product this opens the relevant screen.\",\n                                })\n                              }\n                            >\n                              {step.actionLabel}\n                            </Button>\n                          )}\n                          <Button\n                            size=\"sm\"\n                            variant={isDone ? \"ghost\" : \"default\"}\n                            aria-pressed={isDone}\n                            onClick={() => toggleStep(step.id, step.title)}\n                          >\n                            {isDone ? (\n                              <>\n                                <RotateCcw /> Mark as not done\n                              </>\n                            ) : (\n                              <>\n                                <Check /> Mark as done\n                              </>\n                            )}\n                          </Button>\n                        </div>\n                      </div>\n                    </li>\n                  );\n                })}\n              </ol>\n            </CardContent>\n          )}\n\n          {!allDone && (\n            <CardFooter className=\"flex-col items-start justify-between gap-3 border-t px-5 py-4 sm:flex-row sm:items-center sm:px-8\">\n              <p className=\"text-sm text-muted-foreground\">\n                {doneCount === 0\n                  ? `About ${remainingMinutes} minutes to finish setup.`\n                  : `Only about ${remainingMinutes} minute${remainingMinutes === 1 ? \"\" : \"s\"} left. Keep going!`}\n              </p>\n              <Button\n                variant=\"ghost\"\n                size=\"sm\"\n                onClick={reset}\n                disabled={doneCount === 0}\n              >\n                <RotateCcw /> Reset progress\n              </Button>\n            </CardFooter>\n          )}\n        </Card>\n\n        <p className=\"mt-6 text-center text-xs text-muted-foreground\">\n          Need a hand? Our support team replies in under an hour on weekdays.\n        </p>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

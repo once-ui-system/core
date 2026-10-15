@@ -1,0 +1,77 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5781
+    },
+    "build": {
+      "ok": true,
+      "ms": 16038
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 2161,
+          "height": 3486,
+          "width": 732,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 2161,
+          "height": 2937,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 2161,
+          "height": 2901,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 2,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:2"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1758,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ]
+}

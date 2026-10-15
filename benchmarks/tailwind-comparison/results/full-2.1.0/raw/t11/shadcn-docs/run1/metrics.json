@@ -1,0 +1,41 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 604,
+    "chars": 19214,
+    "bytes": 19216,
+    "tokens_o200k": 4755,
+    "tokens_claudeLegacy": 5102
+  },
+  "raw": {
+    "lines": 584,
+    "chars": 19225,
+    "bytes": 19227,
+    "tokens_o200k": 4754,
+    "tokens_claudeLegacy": 5121
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Separator",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 251,
+    "chars": 8939,
+    "bytes": 8939,
+    "tokens_o200k": 2235,
+    "tokens_claudeLegacy": 2613
+  }
+}

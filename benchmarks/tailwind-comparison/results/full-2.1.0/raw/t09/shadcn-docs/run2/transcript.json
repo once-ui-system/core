@@ -1,0 +1,647 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NZ78GYL8fChiNQwgftL2pU",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PYvF6mZF1pKWakRLG3e4Rw",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NZ78GYL8fChiNQwgftL2pU",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PYvF6mZF1pKWakRLG3e4Rw",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_015GUP3g5xKpJGhWHvDxj8NE",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CEVCyREvBU8NXT5mAqPE9o",
+          "name": "list_dir",
+          "input": {
+            "path": "docs/components"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015GUP3g5xKpJGhWHvDxj8NE",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CEVCyREvBU8NXT5mAqPE9o",
+          "content": "accordion.mdx\nalert-dialog.mdx\nalert.mdx\naspect-ratio.mdx\nattachment.mdx\navatar.mdx\nbadge.mdx\nbreadcrumb.mdx\nbubble.mdx\nbutton-group.mdx\nbutton.mdx\ncalendar.mdx\ncard.mdx\ncarousel.mdx\nchart.mdx\ncheckbox.mdx\ncollapsible.mdx\ncombobox.mdx\ncommand.mdx\ncontext-menu.mdx\ndata-table.mdx\ndate-picker.mdx\ndialog.mdx\ndirection.mdx\ndrawer.mdx\ndropdown-menu.mdx\nempty.mdx\nfield.mdx\nhover-card.mdx\ninput-group.mdx\ninput-otp.mdx\ninput.mdx\nitem.mdx\nkbd.mdx\nlabel.mdx\nmarker.mdx\nmenubar.mdx\nmessage-scroller.mdx\nmessage.mdx\nnative-select.mdx\nnavigation-menu.mdx\npagination.mdx\npopover.mdx\nprogress.mdx\nquestionnaire.mdx\nradio-group.mdx\nresizable.mdx\nscroll-area.mdx\nselect.mdx\nseparator.mdx\nsheet.mdx\nsidebar.mdx\nskeleton.mdx\nslider.mdx\nsonner.mdx\nspinner.mdx\nswitch.mdx\ntable.mdx\ntabs.mdx\ntextarea.mdx\ntoast.mdx\ntoggle-group.mdx\ntoggle.mdx\ntooltip.mdx\ntypography.mdx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01DE3Fmb9RU9Z25j68Dggzw6",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Bvvx6439ARi7fockXpn27y",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VZXz3EpUGvHuiBGRazpQ5B",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/toggle-group.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CzoPKg3VRbJX13K8QbpfhH",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/date-picker.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DE3Fmb9RU9Z25j68Dggzw6",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Bvvx6439ARi7fockXpn27y",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VZXz3EpUGvHuiBGRazpQ5B",
+          "content": "---\ntitle: Toggle Group\ndescription: A set of two-state buttons that can be toggled on or off.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/toggle-group\n  api: https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add toggle-group\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"toggle-group\"\n  title=\"components/ui/toggle-group.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\"\n```\n\n```tsx\n<ToggleGroup type=\"single\">\n  <ToggleGroupItem value=\"a\">A</ToggleGroupItem>\n  <ToggleGroupItem value=\"b\">B</ToggleGroupItem>\n  <ToggleGroupItem value=\"c\">C</ToggleGroupItem>\n</ToggleGroup>\n```\n\n## Composition\n\nUse the following composition to build a `ToggleGroup`:\n\n```text\nToggleGroup\n├── ToggleGroupItem\n└── ToggleGroupItem\n```\n\n## Outline\n\nUse `variant=\"outline\"` for an outline style.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-outline\" />\n\n## Size\n\nUse the `size` prop to change the size of the toggle group.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-sizes\" />\n\n## Spacing\n\nUse `spacing` to add spacing between toggle group items.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-spacing\" />\n\n## Vertical\n\nUse `orientation=\"vertical\"` for vertical toggle groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-vertical\" />\n\n## Disabled\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-disabled\" />\n\n## Custom\n\nA custom toggle group example.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-font-weight-selector\"\n  previewClassName=\"*:data-[slot=field]:max-w-xs\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-rtl\"\n  direction=\"rtl\"\n/>\n\n## API Reference\n\nSee the [Radix Toggle Group](https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference) documentation.\n\n## Changelog\n\n### 2026-05-17 Default Spacing\n\nChanged the default `spacing` from `0` to `2` so toggle groups render with space between items by default. Use `spacing={0}` for connected items.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CzoPKg3VRbJX13K8QbpfhH",
+          "content": "---\ntitle: Date Picker\ndescription: A date picker component with range and presets.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-demo\" />\n\n## Installation\n\nThe Date Picker is built using a composition of the `<Popover />` and the `<Calendar />` components.\n\nSee installation instructions for the [Popover](/docs/components/radix/popover#installation) and the [Calendar](/docs/components/radix/calendar#installation) components.\n\n## Usage\n\n```tsx showLineNumbers title=\"components/example-date-picker.tsx\"\n\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"cn\"\nimport { format } from \"date-fns\"\nimport { Calendar as CalendarIcon } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Calendar } from \"@/components/ui/calendar\"\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\"\n\nexport function DatePickerDemo() {\n  const [date, setDate] = React.useState<Date>()\n\n  return (\n    <Popover>\n      <PopoverTrigger asChild>\n        <Button\n          variant=\"outline\"\n          data-empty={!date}\n          className=\"w-[280px] justify-start text-left font-normal data-[empty=true]:text-muted-foreground\"\n        >\n          <CalendarIcon />\n          {date ? format(date, \"PPP\") : <span>Pick a date</span>}\n        </Button>\n      </PopoverTrigger>\n      <PopoverContent className=\"w-auto p-0\">\n        <Calendar mode=\"single\" selected={date} onSelect={setDate} />\n      </PopoverContent>\n    </Popover>\n  )\n}\n```\n\nSee the [React DayPicker](https://react-day-picker.js.org) documentation for more information.\n\n## Composition\n\nA date picker is built from `Popover` and `Calendar` (there is no `DatePicker` root component):\n\n```text\nPopover\n├── PopoverTrigger\n└── PopoverContent\n    └── Calendar\n```\n\n## Basic\n\nA basic date picker component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-basic\" />\n\n## Range Picker\n\nA date picker component for selecting a range of dates.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-range\" />\n\n## Date of Birth\n\nA date picker component for selecting a date of birth. This component includes a dropdown caption layout for date and month selection.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-dob\" />\n\n## Input\n\nA date picker component with an input field for selecting a date.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-input\" />\n\n## Time Picker\n\nA date picker component with a time input field for selecting a time.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-time\" />\n\n## Natural Language Picker\n\nThis component uses the `chrono-node` library to parse natural language dates.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-natural-language\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"date-picker-rtl\"\n  direction=\"rtl\"\n/>\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the actual installed components, the package.json (for date-fns/react-day-picker), and the existing page/layout."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JC8MGKFxDmSfLvEPoiZppT",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HMfjHxGdYobCNR4eVyg98j",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01EK385oDehQW8z2E3EDFW9F",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/calendar.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XJMu354x1Mt7wqsjspZwp1",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/pagination.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y2u2X8WzQoE1hgFy6xGLY1",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Sz7ZspkiG31tQ2Nd1emqDz",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JC8MGKFxDmSfLvEPoiZppT",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HMfjHxGdYobCNR4eVyg98j",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01EK385oDehQW8z2E3EDFW9F",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  ChevronDownIcon,\n  ChevronLeftIcon,\n  ChevronRightIcon,\n} from \"lucide-react\"\nimport {\n  DayPicker,\n  getDefaultClassNames,\n  type DayButton,\n} from \"react-day-picker\"\n\nimport { Button, buttonVariants } from \"@/components/ui/button\"\n\nfunction Calendar({\n  className,\n  classNames,\n  showOutsideDays = true,\n  captionLayout = \"label\",\n  buttonVariant = \"ghost\",\n  formatters,\n  components,\n  ...props\n}: React.ComponentProps<typeof DayPicker> & {\n  buttonVariant?: React.ComponentProps<typeof Button>[\"variant\"]\n}) {\n  const defaultClassNames = getDefaultClassNames()\n\n  return (\n    <DayPicker\n      showOutsideDays={showOutsideDays}\n      className={cn(\n        \"group/calendar bg-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent\",\n        String.raw`rtl:**:[.rdp-button\\_next>svg]:rotate-180`,\n        String.raw`rtl:**:[.rdp-button\\_previous>svg]:rotate-180`,\n        className\n      )}\n      captionLayout={captionLayout}\n      formatters={{\n        formatMonthDropdown: (date) =>\n          date.toLocaleString(\"default\", { month: \"short\" }),\n        ...formatters,\n      }}\n      classNames={{\n        root: cn(\"w-fit\", defaultClassNames.root),\n        months: cn(\n          \"relative flex flex-col gap-4 md:flex-row\",\n          defaultClassNames.months\n        ),\n        month: cn(\"flex w-full flex-col gap-4\", defaultClassNames.month),\n        nav: cn(\n          \"absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1\",\n          defaultClassNames.nav\n        ),\n        button_previous: cn(\n          buttonVariants({ variant: buttonVariant }),\n          \"size-(--cell-size) p-0 select-none aria-disabled:opacity-50\",\n          defaultClassNames.button_previous\n        ),\n        button_next: cn(\n          buttonVariants({ variant: buttonVariant }),\n          \"size-(--cell-size) p-0 select-none aria-disabled:opacity-50\",\n          defaultClassNames.button_next\n        ),\n        month_caption: cn(\n          \"flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)\",\n          defaultClassNames.month_caption\n        ),\n        dropdowns: cn(\n          \"flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium\",\n          defaultClassNames.dropdowns\n        ),\n        dropdown_root: cn(\n          \"relative rounded-md border border-input shadow-xs has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50\",\n          defaultClassNames.dropdown_root\n        ),\n        dropdown: cn(\n          \"absolute inset-0 bg-popover opacity-0\",\n          defaultClassNames.dropdown\n        ),\n        caption_label: cn(\n          \"font-medium select-none\",\n          captionLayout === \"label\"\n            ? \"text-sm\"\n            : \"flex h-8 items-center gap-1 rounded-md pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground\",\n          defaultClassNames.caption_label\n        ),\n        month_grid: cn(\"w-full border-collapse\", defaultClassNames.month_grid),\n        weekdays: cn(\"flex\", defaultClassNames.weekdays),\n        weekday: cn(\n          \"flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none\",\n          defaultClassNames.weekday\n        ),\n        week: cn(\"mt-2 flex w-full\", defaultClassNames.week),\n        week_number_header: cn(\n          \"w-(--cell-size) select-none\",\n          defaultClassNames.week_number_header\n        ),\n        week_number: cn(\n          \"text-[0.8rem] text-muted-foreground select-none\",\n          defaultClassNames.week_number\n        ),\n        day: cn(\n          \"group/day relative aspect-square h-full w-full p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md\",\n          props.showWeekNumber\n            ? \"[&:nth-child(2)[data-selected=true]_button]:rounded-l-md\"\n            : \"[&:first-child[data-selected=true]_button]:rounded-l-md\",\n          defaultClassNames.day\n        ),\n        range_start: cn(\n          \"rounded-l-md bg-accent\",\n          defaultClassNames.range_start\n        ),\n        range_middle: cn(\"rounded-none\", defaultClassNames.range_middle),\n        range_end: cn(\"rounded-r-md bg-accent\", defaultClassNames.range_end),\n        today: cn(\n          \"rounded-md bg-accent text-accent-foreground data-[selected=true]:rounded-none\",\n          defaultClassNames.today\n        ),\n        outside: cn(\n          \"text-muted-foreground aria-selected:text-muted-foreground\",\n          defaultClassNames.outside\n        ),\n        disabled: cn(\n          \"text-muted-foreground opacity-50\",\n          defaultClassNames.disabled\n        ),\n        hidden: cn(\"invisible\", defaultClassNames.hidden),\n        ...classNames,\n      }}\n      components={{\n        Root: ({ className, rootRef, ...props }) => {\n          return (\n            <div\n              data-slot=\"calendar\"\n              ref={rootRef}\n              className={cn(className)}\n              {...props}\n            />\n          )\n        },\n        Chevron: ({ className, orientation, ...props }) => {\n          if (orientation === \"left\") {\n            return (\n              <ChevronLeftIcon className={cn(\"size-4\", className)} {...props} />\n            )\n          }\n\n          if (orientation === \"right\") {\n            return (\n              <ChevronRightIcon\n                className={cn(\"size-4\", className)}\n                {...props}\n              />\n            )\n          }\n\n          return (\n            <ChevronDownIcon className={cn(\"size-4\", className)} {...props} />\n          )\n        },\n        DayButton: CalendarDayButton,\n        WeekNumber: ({ children, ...props }) => {\n          return (\n            <td {...props}>\n              <div className=\"flex size-(--cell-size) items-center justify-center text-center\">\n                {children}\n              </div>\n            </td>\n          )\n        },\n        ...components,\n      }}\n      {...props}\n    />\n  )\n}\n\nfunction CalendarDayButton({\n  className,\n  day,\n  modifiers,\n  ...props\n}: React.ComponentProps<typeof DayButton>) {\n  const defaultClassNames = getDefaultClassNames()\n\n  const ref = React.useRef<HTMLButtonElement>(null)\n  React.useEffect(() => {\n    if (modifiers.focused) ref.current?.focus()\n  }, [modifiers.focused])\n\n  return (\n    <Button\n      ref={ref}\n      variant=\"ghost\"\n      size=\"icon\"\n      data-day={day.date.toLocaleDateString()}\n      data-selected-single={\n        modifiers.selected &&\n        !modifiers.range_start &&\n        !modifiers.range_end &&\n        !modifiers.range_middle\n      }\n      data-range-start={modifiers.range_start}\n      data-range-end={modifiers.range_end}\n      data-range-middle={modifiers.range_middle}\n      className={cn(\n        \"flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70\",\n        defaultClassNames.day,\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Calendar, CalendarDayButton }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XJMu354x1Mt7wqsjspZwp1",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  ChevronLeftIcon,\n  ChevronRightIcon,\n  MoreHorizontalIcon,\n} from \"lucide-react\"\n\nimport { buttonVariants, type Button } from \"@/components/ui/button\"\n\nfunction Pagination({ className, ...props }: React.ComponentProps<\"nav\">) {\n  return (\n    <nav\n      role=\"navigation\"\n      aria-label=\"pagination\"\n      data-slot=\"pagination\"\n      className={cn(\"mx-auto flex w-full justify-center\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationContent({\n  className,\n  ...props\n}: React.ComponentProps<\"ul\">) {\n  return (\n    <ul\n      data-slot=\"pagination-content\"\n      className={cn(\"flex flex-row items-center gap-1\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationItem({ ...props }: React.ComponentProps<\"li\">) {\n  return <li data-slot=\"pagination-item\" {...props} />\n}\n\ntype PaginationLinkProps = {\n  isActive?: boolean\n} & Pick<React.ComponentProps<typeof Button>, \"size\"> &\n  React.ComponentProps<\"a\">\n\nfunction PaginationLink({\n  className,\n  isActive,\n  size = \"icon\",\n  ...props\n}: PaginationLinkProps) {\n  return (\n    <a\n      aria-current={isActive ? \"page\" : undefined}\n      data-slot=\"pagination-link\"\n      data-active={isActive}\n      className={cn(\n        buttonVariants({\n          variant: isActive ? \"outline\" : \"ghost\",\n          size,\n        }),\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationPrevious({\n  className,\n  ...props\n}: React.ComponentProps<typeof PaginationLink>) {\n  return (\n    <PaginationLink\n      aria-label=\"Go to previous page\"\n      size=\"default\"\n      className={cn(\"gap-1 px-2.5 sm:pl-2.5\", className)}\n      {...props}\n    >\n      <ChevronLeftIcon />\n      <span className=\"hidden sm:block\">Previous</span>\n    </PaginationLink>\n  )\n}\n\nfunction PaginationNext({\n  className,\n  ...props\n}: React.ComponentProps<typeof PaginationLink>) {\n  return (\n    <PaginationLink\n      aria-label=\"Go to next page\"\n      size=\"default\"\n      className={cn(\"gap-1 px-2.5 sm:pr-2.5\", className)}\n      {...props}\n    >\n      <span className=\"hidden sm:block\">Next</span>\n      <ChevronRightIcon />\n    </PaginationLink>\n  )\n}\n\nfunction PaginationEllipsis({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      aria-hidden\n      data-slot=\"pagination-ellipsis\"\n      className={cn(\"flex size-9 items-center justify-center\", className)}\n      {...props}\n    >\n      <MoreHorizontalIcon className=\"size-4\" />\n      <span className=\"sr-only\">More pages</span>\n    </span>\n  )\n}\n\nexport {\n  Pagination,\n  PaginationContent,\n  PaginationLink,\n  PaginationItem,\n  PaginationPrevious,\n  PaginationNext,\n  PaginationEllipsis,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y2u2X8WzQoE1hgFy6xGLY1",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Sz7ZspkiG31tQ2Nd1emqDz",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the remaining components I plan to use (table, button, input, select, popover, badge, card, toggle, input-group)."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SiCUYaJxEXzWVUyc5sqQ4Z",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/table.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013QjxdA9YkAg1SUBT9KB7dQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011mQwN1jn6mBM281Xt1hkDM",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/select.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01G9BuHAarqY2cxdhF9ZNWWc",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KS33WNmirmC8R4xiRshsUU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016rApoDgrkSvNZ819zKwyQc",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SiCUYaJxEXzWVUyc5sqQ4Z",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Table({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div\n      data-slot=\"table-container\"\n      className=\"relative w-full overflow-x-auto\"\n    >\n      <table\n        data-slot=\"table\"\n        className={cn(\"w-full caption-bottom text-sm\", className)}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return (\n    <thead\n      data-slot=\"table-header\"\n      className={cn(\"[&_tr]:border-b\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  return (\n    <tbody\n      data-slot=\"table-body\"\n      className={cn(\"[&_tr:last-child]:border-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return (\n    <tfoot\n      data-slot=\"table-footer\"\n      className={cn(\n        \"border-t bg-muted/50 font-medium [&>tr]:last:border-b-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return (\n    <tr\n      data-slot=\"table-row\"\n      className={cn(\n        \"border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableHead({ className, ...props }: React.ComponentProps<\"th\">) {\n  return (\n    <th\n      data-slot=\"table-head\"\n      className={cn(\n        \"h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      className={cn(\n        \"p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCaption({\n  className,\n  ...props\n}: React.ComponentProps<\"caption\">) {\n  return (\n    <caption\n      data-slot=\"table-caption\"\n      className={cn(\"mt-4 text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableHead,\n  TableRow,\n  TableCell,\n  TableCaption,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013QjxdA9YkAg1SUBT9KB7dQ",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011mQwN1jn6mBM281Xt1hkDM",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon, ChevronDownIcon, ChevronUpIcon } from \"lucide-react\"\nimport { Select as SelectPrimitive } from \"radix-ui\"\n\nfunction Select({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Root>) {\n  return <SelectPrimitive.Root data-slot=\"select\" {...props} />\n}\n\nfunction SelectGroup({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Group>) {\n  return <SelectPrimitive.Group data-slot=\"select-group\" {...props} />\n}\n\nfunction SelectValue({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Value>) {\n  return <SelectPrimitive.Value data-slot=\"select-value\" {...props} />\n}\n\nfunction SelectTrigger({\n  className,\n  size = \"default\",\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SelectPrimitive.Trigger\n      data-slot=\"select-trigger\"\n      data-size={size}\n      className={cn(\n        \"flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[placeholder]:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      <SelectPrimitive.Icon asChild>\n        <ChevronDownIcon className=\"size-4 opacity-50\" />\n      </SelectPrimitive.Icon>\n    </SelectPrimitive.Trigger>\n  )\n}\n\nfunction SelectContent({\n  className,\n  children,\n  position = \"item-aligned\",\n  align = \"center\",\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Content>) {\n  return (\n    <SelectPrimitive.Portal>\n      <SelectPrimitive.Content\n        data-slot=\"select-content\"\n        className={cn(\n          \"relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          position === \"popper\" &&\n            \"data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1\",\n          className\n        )}\n        position={position}\n        align={align}\n        {...props}\n      >\n        <SelectScrollUpButton />\n        <SelectPrimitive.Viewport\n          className={cn(\n            \"p-1\",\n            position === \"popper\" &&\n              \"h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1\"\n          )}\n        >\n          {children}\n        </SelectPrimitive.Viewport>\n        <SelectScrollDownButton />\n      </SelectPrimitive.Content>\n    </SelectPrimitive.Portal>\n  )\n}\n\nfunction SelectLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Label>) {\n  return (\n    <SelectPrimitive.Label\n      data-slot=\"select-label\"\n      className={cn(\"px-2 py-1.5 text-xs text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectItem({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Item>) {\n  return (\n    <SelectPrimitive.Item\n      data-slot=\"select-item\"\n      className={cn(\n        \"relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2\",\n        className\n      )}\n      {...props}\n    >\n      <span\n        data-slot=\"select-item-indicator\"\n        className=\"absolute right-2 flex size-3.5 items-center justify-center\"\n      >\n        <SelectPrimitive.ItemIndicator>\n          <CheckIcon className=\"size-4\" />\n        </SelectPrimitive.ItemIndicator>\n      </span>\n      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>\n    </SelectPrimitive.Item>\n  )\n}\n\nfunction SelectSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Separator>) {\n  return (\n    <SelectPrimitive.Separator\n      data-slot=\"select-separator\"\n      className={cn(\"pointer-events-none -mx-1 my-1 h-px bg-border\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectScrollUpButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {\n  return (\n    <SelectPrimitive.ScrollUpButton\n      data-slot=\"select-scroll-up-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronUpIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollUpButton>\n  )\n}\n\nfunction SelectScrollDownButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {\n  return (\n    <SelectPrimitive.ScrollDownButton\n      data-slot=\"select-scroll-down-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronDownIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollDownButton>\n  )\n}\n\nexport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectLabel,\n  SelectScrollDownButton,\n  SelectScrollUpButton,\n  SelectSeparator,\n  SelectTrigger,\n  SelectValue,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01G9BuHAarqY2cxdhF9ZNWWc",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Textarea } from \"@/components/ui/textarea\"\n\nfunction InputGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-group\"\n      role=\"group\"\n      className={cn(\n        \"group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30\",\n        \"h-9 min-w-0 has-[>textarea]:h-auto\",\n\n        // Variants based on alignment.\n        \"has-[>[data-align=inline-start]]:[&>input]:pl-2\",\n        \"has-[>[data-align=inline-end]]:[&>input]:pr-2\",\n        \"has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3\",\n        \"has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3\",\n\n        // Focus state.\n        \"has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50\",\n\n        // Error state.\n        \"has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40\",\n\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupAddonVariants = cva(\n  \"flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      align: {\n        \"inline-start\":\n          \"order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]\",\n        \"inline-end\":\n          \"order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]\",\n        \"block-start\":\n          \"order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3\",\n        \"block-end\":\n          \"order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5 [.border-t]:pt-3\",\n      },\n    },\n    defaultVariants: {\n      align: \"inline-start\",\n    },\n  }\n)\n\nfunction InputGroupAddon({\n  className,\n  align = \"inline-start\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof inputGroupAddonVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"input-group-addon\"\n      data-align={align}\n      className={cn(inputGroupAddonVariants({ align }), className)}\n      onClick={(e) => {\n        if ((e.target as HTMLElement).closest(\"button\")) {\n          return\n        }\n        e.currentTarget.parentElement?.querySelector(\"input\")?.focus()\n      }}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupButtonVariants = cva(\n  \"flex items-center gap-2 text-sm shadow-none\",\n  {\n    variants: {\n      size: {\n        xs: \"h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5\",\n        sm: \"h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5\",\n        \"icon-xs\":\n          \"size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0\",\n        \"icon-sm\": \"size-8 p-0 has-[>svg]:p-0\",\n      },\n    },\n    defaultVariants: {\n      size: \"xs\",\n    },\n  }\n)\n\nfunction InputGroupButton({\n  className,\n  type = \"button\",\n  variant = \"ghost\",\n  size = \"xs\",\n  ...props\n}: Omit<React.ComponentProps<typeof Button>, \"size\"> &\n  VariantProps<typeof inputGroupButtonVariants>) {\n  return (\n    <Button\n      type={type}\n      data-size={size}\n      variant={variant}\n      className={cn(inputGroupButtonVariants({ size }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupText({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      className={cn(\n        \"flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupInput({\n  className,\n  ...props\n}: React.ComponentProps<\"input\">) {\n  return (\n    <Input\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupTextarea({\n  className,\n  ...props\n}: React.ComponentProps<\"textarea\">) {\n  return (\n    <Textarea\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupText,\n  InputGroupInput,\n  InputGroupTextarea,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KS33WNmirmC8R4xiRshsUU",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016rApoDgrkSvNZ819zKwyQc",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. Let me quickly check the popover, input, card, and empty components, plus how range selection types work in react-day-picker v10."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015aVonevY4NudMufTNpCtri",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/popover.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0129P9CNiEQJ6VuyaJ1FCUHT",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TD95ekqa5qATgyyYrFmQWw",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/empty.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Cv2s6pfNYCSPJGAS2tcBGW",
+          "name": "read_file",
+          "input": {
+            "path": "docs/examples/date-picker-range.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Nz8LhSuMGLXmSwE5m3Nw1k",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015aVonevY4NudMufTNpCtri",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Popover as PopoverPrimitive } from \"radix-ui\"\n\nfunction Popover({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Root>) {\n  return <PopoverPrimitive.Root data-slot=\"popover\" {...props} />\n}\n\nfunction PopoverTrigger({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {\n  return <PopoverPrimitive.Trigger data-slot=\"popover-trigger\" {...props} />\n}\n\nfunction PopoverContent({\n  className,\n  align = \"center\",\n  sideOffset = 4,\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Content>) {\n  return (\n    <PopoverPrimitive.Portal>\n      <PopoverPrimitive.Content\n        data-slot=\"popover-content\"\n        align={align}\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          className\n        )}\n        {...props}\n      />\n    </PopoverPrimitive.Portal>\n  )\n}\n\nfunction PopoverAnchor({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {\n  return <PopoverPrimitive.Anchor data-slot=\"popover-anchor\" {...props} />\n}\n\nfunction PopoverHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"popover-header\"\n      className={cn(\"flex flex-col gap-1 text-sm\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverTitle({ className, ...props }: React.ComponentProps<\"h2\">) {\n  return (\n    <div\n      data-slot=\"popover-title\"\n      className={cn(\"font-medium\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverDescription({\n  className,\n  ...props\n}: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"popover-description\"\n      className={cn(\"text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Popover,\n  PopoverTrigger,\n  PopoverContent,\n  PopoverAnchor,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverDescription,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0129P9CNiEQJ6VuyaJ1FCUHT",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TD95ekqa5qATgyyYrFmQWw",
+          "content": "import { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Empty({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty\"\n      className={cn(\n        \"flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-header\"\n      className={cn(\n        \"flex max-w-sm flex-col items-center gap-2 text-center\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst emptyMediaVariants = cva(\n  \"mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        icon: \"flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-6\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction EmptyMedia({\n  className,\n  variant = \"default\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof emptyMediaVariants>) {\n  return (\n    <div\n      data-slot=\"empty-icon\"\n      data-variant={variant}\n      className={cn(emptyMediaVariants({ variant, className }))}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-title\"\n      className={cn(\"text-lg font-medium tracking-tight\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <div\n      data-slot=\"empty-description\"\n      className={cn(\n        \"text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-content\"\n      className={cn(\n        \"flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Empty,\n  EmptyHeader,\n  EmptyTitle,\n  EmptyDescription,\n  EmptyContent,\n  EmptyMedia,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Cv2s6pfNYCSPJGAS2tcBGW",
+          "content": "no such file or directory: docs/examples/date-picker-range.tsx",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Nz8LhSuMGLXmSwE5m3Nw1k",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check how `Calendar` is used with ranges in the docs examples, and the `DateRange` type export in react-day-picker v10."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01778tX5E2thCS9R6Hw1VtJk",
+          "name": "list_dir",
+          "input": {
+            "path": "docs/examples"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VLYGy4mN9e9K8hGsu2cmmE",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/calendar.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01778tX5E2thCS9R6Hw1VtJk",
+          "content": "_registry.ts\naccordion-demo.tsx\nalert-demo.tsx\nalert-destructive.tsx\nalert-dialog-demo.tsx\naspect-ratio-demo.tsx\navatar-demo.tsx\nbadge-demo.tsx\nbadge-destructive.tsx\nbadge-outline.tsx\nbadge-secondary.tsx\nbreadcrumb-demo.tsx\nbreadcrumb-dropdown.tsx\nbreadcrumb-ellipsis.tsx\nbreadcrumb-link.tsx\nbreadcrumb-responsive.tsx\nbreadcrumb-separator.tsx\nbutton-as-child.tsx\nbutton-default.tsx\nbutton-demo.tsx\nbutton-destructive.tsx\nbutton-ghost.tsx\nbutton-group-demo.tsx\nbutton-group-dropdown.tsx\nbutton-group-input-group.tsx\nbutton-group-input.tsx\nbutton-group-nested.tsx\nbutton-group-orientation.tsx\nbutton-group-popover.tsx\nbutton-group-select.tsx\nbutton-group-separator.tsx\nbutton-group-size.tsx\nbutton-group-split.tsx\nbutton-icon.tsx\nbutton-link.tsx\nbutton-loading.tsx\nbutton-outline.tsx\nbutton-rounded.tsx\nbutton-secondary.tsx\nbutton-size.tsx\nbutton-with-icon.tsx\ncalendar-demo.tsx\ncalendar-hijri.tsx\ncard-demo.tsx\ncard-with-form.tsx\ncarousel-api.tsx\ncarousel-demo.tsx\ncarousel-orientation.tsx\ncarousel-plugin.tsx\ncarousel-size.tsx\ncarousel-spacing.tsx\nchart-bar-demo-axis.tsx\nchart-bar-demo-grid.tsx\nchart-bar-demo-legend.tsx\nchart-bar-demo-tooltip.tsx\nchart-bar-demo.tsx\nchart-tooltip-demo.tsx\ncheckbox-demo.tsx\ncheckbox-disabled.tsx\ncheckbox-with-text.tsx\ncollapsible-demo.tsx\ncombobox-demo.tsx\ncombobox-dropdown-menu.tsx\ncombobox-popover.tsx\ncombobox-responsive.tsx\ncommand-demo.tsx\ncommand-dialog.tsx\ncontext-menu-demo.tsx\ndata-table-demo.tsx\ndate-picker-demo.tsx\ndate-picker-with-presets.tsx\ndate-picker-with-range.tsx\ndialog-close-button.tsx\ndialog-demo.tsx\ndrawer-demo.tsx\ndrawer-dialog.tsx\ndropdown-menu-checkboxes.tsx\ndropdown-menu-demo.tsx\ndropdown-menu-dialog.tsx\ndropdown-menu-radio-group.tsx\nempty-avatar-group.tsx\nempty-avatar.tsx\nempty-background.tsx\nempty-demo.tsx\nempty-icon.tsx\nempty-input-group.tsx\nempty-outline.tsx\nfield-checkbox.tsx\nfield-choice-card.tsx\nfield-demo.tsx\nfield-fieldset.tsx\nfield-group.tsx\nfield-input.tsx\nfield-radio.tsx\nfield-responsive.tsx\nfield-select.tsx\nfield-slider.tsx\nfield-switch.tsx\nfield-textarea.tsx\nform-formisch-array.tsx\nform-formisch-checkbox.tsx\nform-formisch-complex.tsx\nform-formisch-demo.tsx\nform-formisch-input.tsx\nform-formisch-radiogroup.tsx\nform-formisch-select.tsx\nform-formisch-switch.tsx\nform-formisch-textarea.tsx\nform-next-complex-action.ts\nform-next-complex-schema.ts\nform-next-complex.tsx\nform-next-demo-action.ts\nform-next-demo-schema.ts\nform-next-demo.tsx\nform-rhf-array.tsx\nform-rhf-checkbox.tsx\nform-rhf-complex.tsx\nform-rhf-demo.tsx\nform-rhf-input.tsx\nform-rhf-password.tsx\nform-rhf-radiogroup.tsx\nform-rhf-select.tsx\nform-rhf-switch.tsx\nform-rhf-textarea.tsx\nform-tanstack-array.tsx\nform-tanstack-checkbox.tsx\nform-tanstack-complex.tsx\nform-tanstack-demo.tsx\nform-tanstack-input.tsx\nform-tanstack-radiogroup.tsx\nform-tanstack-select.tsx\nform-tanstack-switch.tsx\nform-tanstack-textarea.tsx\nhover-card-demo.tsx\ninput-demo.tsx\ninput-disabled.tsx\ninput-file.tsx\ninput-group-button-group.tsx\ninput-group-button.tsx\ninput-group-custom.tsx\ninput-group-demo.tsx\ninput-group-dropdown.tsx\ninput-group-icon.tsx\ninput-group-label.tsx\ninput-group-spinner.tsx\ninput-group-text.tsx\ninput-group-textarea.tsx\ninput-group-tooltip.tsx\ninput-otp-controlled.tsx\ninput-otp-demo.tsx\ninput-otp-pattern.tsx\ninput-otp-separator.tsx\ninput-with-button.tsx\ninput-with-label.tsx\ninput-with-text.tsx\nitem-avatar.tsx\nitem-demo.tsx\nitem-dropdown.tsx\nitem-group.tsx\nitem-header.tsx\nitem-icon.tsx\nitem-image.tsx\nitem-link.tsx\nitem-size.tsx\nitem-variant.tsx\nkbd-button.tsx\nkbd-demo.tsx\nkbd-group.tsx\nkbd-input-group.tsx\nkbd-tooltip.tsx\nlabel-demo.tsx\nmenubar-demo.tsx\nmode-toggle.tsx\nnative-select-demo.tsx\nnative-select-disabled.tsx\nnative-select-groups.tsx\nnative-select-invalid.tsx\nnavigation-menu-demo.tsx\npagination-demo.tsx\npopover-demo.tsx\nprogress-demo.tsx\nradio-group-demo.tsx\nresizable-demo-with-handle.tsx\nresizable-demo.tsx\nresizable-handle.tsx\nresizable-vertical.tsx\nscroll-area-demo.tsx\nscroll-area-horizontal-demo.tsx\nselect-demo.tsx\nselect-scrollable.tsx\nseparator-demo.tsx\nsheet-demo.tsx\nsheet-side.tsx\nskeleton-card.tsx\nskeleton-demo.tsx\nslider-demo.tsx\nsonner-demo.tsx\nsonner-types.tsx\nspinner-badge.tsx\nspinner-basic.tsx\nspinner-button.tsx\nspinner-color.tsx\nspinner-custom.tsx\nspinner-demo.tsx\nspinner-empty.tsx\nspinner-input-group.tsx\nspinner-item.tsx\nspinner-size.tsx\nswitch-demo.tsx\ntable-demo.tsx\ntabs-demo.tsx\ntextarea-demo.tsx\ntextarea-disabled.tsx\ntextarea-with-button.tsx\ntextarea-with-label.tsx\ntextarea-with-text.tsx\ntoggle-demo.tsx\ntoggle-disabled.tsx\ntoggle-group-demo.tsx\ntoggle-group-disabled.tsx\ntoggle-group-lg.tsx\ntoggle-group-outline.tsx\ntoggle-group-single.tsx\ntoggle-group-sm.tsx\ntoggle-group-spacing.tsx\ntoggle-lg.tsx\ntoggle-outline.tsx\ntoggle-sm.tsx\ntoggle-with-text.tsx\ntooltip-demo.tsx\ntypography-blockquote.tsx\ntypography-demo.tsx\ntypography-h1.tsx\ntypography-h2.tsx\ntypography-h3.tsx\ntypography-h4.tsx\ntypography-inline-code.tsx\ntypography-large.tsx\ntypography-lead.tsx\ntypography-list.tsx\ntypography-muted.tsx\ntypography-p.tsx\ntypography-small.tsx\ntypography-table.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VLYGy4mN9e9K8hGsu2cmmE",
+          "content": "---\ntitle: Calendar\ndescription: A calendar component that allows users to select a date or a range of dates.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://react-day-picker.js.org\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-demo\"\n  previewClassName=\"h-96\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add calendar\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install react-day-picker date-fns\n```\n\n<Step>Add the `Button` component to your project.</Step>\n\nThe `Calendar` component uses the `Button` component. Make sure you have it installed in your project.\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"calendar\"\n  title=\"components/ui/calendar.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport { Calendar } from \"@/components/ui/calendar\"\n```\n\n```tsx showLineNumbers\nconst [date, setDate] = React.useState<Date | undefined>(new Date())\n\nreturn (\n  <Calendar\n    mode=\"single\"\n    selected={date}\n    onSelect={setDate}\n    className=\"rounded-lg border\"\n  />\n)\n```\n\nSee the [React DayPicker](https://react-day-picker.js.org) documentation for more information.\n\n## About\n\nThe `Calendar` component is built on top of [React DayPicker](https://react-day-picker.js.org).\n\n## Date Picker\n\nYou can use the `<Calendar>` component to build a date picker. See the [Date Picker](/docs/components/radix/date-picker) page for more information.\n\n## Persian / Hijri / Jalali Calendar\n\nTo use the Persian calendar, edit `components/ui/calendar.tsx` and replace `react-day-picker` with `react-day-picker/persian`.\n\n```diff\n- import { DayPicker } from \"react-day-picker\"\n+ import { DayPicker } from \"react-day-picker/persian\"\n```\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-hijri\"\n  title=\"Persian / Hijri / Jalali Calendar\"\n  description=\"A Persian calendar.\"\n  previewClassName=\"h-[400px]\"\n/>\n\n## Selected Date (With TimeZone)\n\nThe Calendar component accepts a `timeZone` prop to ensure dates are displayed and selected in the user's local timezone.\n\n```tsx showLineNumbers\nexport function CalendarWithTimezone() {\n  const [date, setDate] = React.useState<Date | undefined>(undefined)\n  const [timeZone, setTimeZone] = React.useState<string | undefined>(undefined)\n\n  React.useEffect(() => {\n    setTimeZone(Intl.DateTimeFormat().resolvedOptions().timeZone)\n  }, [])\n\n  return (\n    <Calendar\n      mode=\"single\"\n      selected={date}\n      onSelect={setDate}\n      timeZone={timeZone}\n    />\n  )\n}\n```\n\n**Note:** If you notice a selected date offset (for example, selecting the 20th highlights the 19th), make sure the `timeZone` prop is set to the user's local timezone.\n\n**Why client-side?** The timezone is detected using `Intl.DateTimeFormat().resolvedOptions().timeZone` inside a `useEffect` to ensure compatibility with server-side rendering. Detecting the timezone during render would cause hydration mismatches, as the server and client may be in different timezones.\n\n## Basic\n\nA basic calendar component. We used `className=\"rounded-lg border\"` to style the calendar.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-basic\"\n  previewClassName=\"h-96\"\n/>\n\n## Range Calendar\n\nUse the `mode=\"range\"` prop to enable range selection.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-range\"\n  previewClassName=\"h-[36rem] md:h-96\"\n/>\n\n## Month and Year Selector\n\nUse `captionLayout=\"dropdown\"` to show month and year dropdowns.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-caption\"\n  previewClassName=\"h-96\"\n/>\n\n## Presets\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-presets\"\n  previewClassName=\"h-[650px]\"\n/>\n\n## Date and Time Picker\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-time\"\n  previewClassName=\"h-[600px]\"\n/>\n\n## Booked dates\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-booked-dates\"\n  previewClassName=\"h-96\"\n/>\n\n## Custom Cell Size\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-custom-days\"\n  title=\"Custom Cell Size\"\n  description=\"A calendar with custom cell size that's responsive.\"\n  className=\"**:[.preview]:h-[560px]\"\n/>\n\nYou can customize the size of calendar cells using the `--cell-size` CSS variable. You can also make it responsive by using breakpoint-specific values:\n\n```tsx showLineNumbers\n<Calendar\n  mode=\"single\"\n  selected={date}\n  onSelect={setDate}\n  className=\"rounded-lg border [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]\"\n/>\n```\n\nOr use fixed values:\n\n```tsx showLineNumbers\n<Calendar\n  mode=\"single\"\n  selected={date}\n  onSelect={setDate}\n  className=\"rounded-lg border [--cell-size:2.75rem] md:[--cell-size:3rem]\"\n/>\n```\n\n## Week Numbers\n\nUse `showWeekNumber` to show week numbers.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-week-numbers\"\n  previewClassName=\"h-96\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\nSee also the [Hijri Guide](#persian--hijri--jalali-calendar) for enabling the Persian / Hijri / Jalali calendar.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"calendar-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-96\"\n/>\n\nWhen using RTL, import the locale from `react-day-picker/locale` and pass both the `locale` and `dir` props to the Calendar component:\n\n```tsx showLineNumbers\nimport { arSA } from \"react-day-picker/locale\"\n\n;<Calendar\n  mode=\"single\"\n  selected={date}\n  onSelect={setDate}\n  locale={arSA}\n  dir=\"rtl\"\n/>\n```\n\n## API Reference\n\nSee the [React DayPicker](https://react-day-picker.js.org) documentation for more information on the `Calendar` component.\n\n## Changelog\n\n### RTL Support\n\nIf you're upgrading from a previous version of the `Calendar` component, you'll need to apply the following updates to add locale support:\n\n<Steps>\n\n<Step>Import the `Locale` type.</Step>\n\nAdd `Locale` to your imports from `react-day-picker`:\n\n```diff\n  import {\n    DayPicker,\n    getDefaultClassNames,\n    type DayButton,\n+   type Locale,\n  } from \"react-day-picker\"\n```\n\n<Step>Add `locale` prop to the Calendar component.</Step>\n\nAdd the `locale` prop to the component's props:\n\n```diff\n  function Calendar({\n    className,\n    classNames,\n    showOutsideDays = true,\n    captionLayout = \"label\",\n    buttonVariant = \"ghost\",\n+   locale,\n    formatters,\n    components,\n    ...props\n  }: React.ComponentProps<typeof DayPicker> & {\n    buttonVariant?: React.ComponentProps<typeof Button>[\"variant\"]\n  }) {\n```\n\n<Step>Pass `locale` to DayPicker.</Step>\n\nPass the `locale` prop to the `DayPicker` component:\n\n```diff\n    <DayPicker\n      showOutsideDays={showOutsideDays}\n      className={cn(...)}\n      captionLayout={captionLayout}\n+     locale={locale}\n      formatters={{\n        formatMonthDropdown: (date) =>\n-         date.toLocaleString(\"default\", { month: \"short\" }),\n+         date.toLocaleString(locale?.code, { month: \"short\" }),\n        ...formatters,\n      }}\n```\n\n<Step>Update CalendarDayButton to accept locale.</Step>\n\nUpdate the `CalendarDayButton` component signature and pass `locale`:\n\n```diff\n  function CalendarDayButton({\n    className,\n    day,\n    modifiers,\n+   locale,\n    ...props\n- }: React.ComponentProps<typeof DayButton>) {\n+ }: React.ComponentProps<typeof DayButton> & { locale?: Partial<Locale> }) {\n```\n\n<Step>Update date formatting in CalendarDayButton.</Step>\n\nUse `locale?.code` in the date formatting:\n\n```diff\n    <Button\n      variant=\"ghost\"\n      size=\"icon\"\n-     data-day={day.date.toLocaleDateString()}\n+     data-day={day.date.toLocaleDateString(locale?.code)}\n      ...\n    />\n```\n\n<Step>Pass locale to DayButton component.</Step>\n\nUpdate the `DayButton` component usage to pass the `locale` prop:\n\n```diff\n      components={{\n        ...\n-       DayButton: CalendarDayButton,\n+       DayButton: ({ ...props }) => (\n+         <CalendarDayButton locale={locale} {...props} />\n+       ),\n        ...\n      }}\n```\n\n<Step>Update RTL-aware CSS classes.</Step>\n\nReplace directional classes with logical properties for better RTL support:\n\n```diff\n  // In the day classNames:\n- [&:last-child[data-selected=true]_button]:rounded-r-(--cell-radius)\n+ [&:last-child[data-selected=true]_button]:rounded-e-(--cell-radius)\n- [&:nth-child(2)[data-selected=true]_button]:rounded-l-(--cell-radius)\n+ [&:nth-child(2)[data-selected=true]_button]:rounded-s-(--cell-radius)\n- [&:first-child[data-selected=true]_button]:rounded-l-(--cell-radius)\n+ [&:first-child[data-selected=true]_button]:rounded-s-(--cell-radius)\n\n  // In range_start classNames:\n- rounded-l-(--cell-radius) ... after:right-0\n+ rounded-s-(--cell-radius) ... after:end-0\n\n  // In range_end classNames:\n- rounded-r-(--cell-radius) ... after:left-0\n+ rounded-e-(--cell-radius) ... after:start-0\n\n  // In CalendarDayButton className:\n- data-[range-end=true]:rounded-r-(--cell-radius)\n+ data-[range-end=true]:rounded-e-(--cell-radius)\n- data-[range-start=true]:rounded-l-(--cell-radius)\n+ data-[range-start=true]:rounded-s-(--cell-radius)\n```\n\n</Steps>\n\nAfter applying these changes, you can use the `locale` prop to provide locale-specific formatting:\n\n```tsx\nimport { enUS } from \"react-day-picker/locale\"\n\n;<Calendar mode=\"single\" selected={date} onSelect={setDate} locale={enUS} />\n```\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the range date-picker example."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012A6x8rMR2YaD7vQjwHRfy5",
+          "name": "read_file",
+          "input": {
+            "path": "docs/examples/date-picker-with-range.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QPWnSW6Le8RRQDJTBwqdXf",
+          "name": "read_file",
+          "input": {
+            "path": "docs/examples/toggle-group-outline.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012A6x8rMR2YaD7vQjwHRfy5",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { addDays, format } from \"date-fns\"\nimport { CalendarIcon } from \"lucide-react\"\nimport { type DateRange } from \"react-day-picker\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Calendar } from \"@/components/ui/calendar\"\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\"\n\nexport default function DatePickerWithRange({\n  className,\n}: React.HTMLAttributes<HTMLDivElement>) {\n  const [date, setDate] = React.useState<DateRange | undefined>({\n    from: new Date(2022, 0, 20),\n    to: addDays(new Date(2022, 0, 20), 20),\n  })\n\n  return (\n    <div className={cn(\"grid gap-2\", className)}>\n      <Popover>\n        <PopoverTrigger asChild>\n          <Button\n            id=\"date\"\n            variant={\"outline\"}\n            className={cn(\n              \"w-[300px] justify-start text-left font-normal\",\n              !date && \"text-muted-foreground\"\n            )}\n          >\n            <CalendarIcon />\n            {date?.from ? (\n              date.to ? (\n                <>\n                  {format(date.from, \"LLL dd, y\")} -{\" \"}\n                  {format(date.to, \"LLL dd, y\")}\n                </>\n              ) : (\n                format(date.from, \"LLL dd, y\")\n              )\n            ) : (\n              <span>Pick a date</span>\n            )}\n          </Button>\n        </PopoverTrigger>\n        <PopoverContent className=\"w-auto p-0\" align=\"start\">\n          <Calendar\n            initialFocus\n            mode=\"range\"\n            defaultMonth={date?.from}\n            selected={date}\n            onSelect={setDate}\n            numberOfMonths={2}\n          />\n        </PopoverContent>\n      </Popover>\n    </div>\n  )\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QPWnSW6Le8RRQDJTBwqdXf",
+          "content": "import { Bold, Italic, Underline } from \"lucide-react\"\n\nimport {\n  ToggleGroup,\n  ToggleGroupItem,\n} from \"@/components/ui/toggle-group\"\n\nexport default function ToggleGroupDemo() {\n  return (\n    <ToggleGroup type=\"multiple\" variant=\"outline\">\n      <ToggleGroupItem value=\"bold\" aria-label=\"Toggle bold\">\n        <Bold className=\"h-4 w-4\" />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"italic\" aria-label=\"Toggle italic\">\n        <Italic className=\"h-4 w-4\" />\n      </ToggleGroupItem>\n      <ToggleGroupItem value=\"strikethrough\" aria-label=\"Toggle strikethrough\">\n        <Underline className=\"h-4 w-4\" />\n      </ToggleGroupItem>\n    </ToggleGroup>\n  )\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've settled on the design: a deterministic 42-row invoices table with segmented status filters, date-range and search inputs, sortable headers, accessible pagination using real buttons, and ARIA live regions for results. Now I'll start building it.\n\n",
+          "signature": "CAQS0AwKEQgSGAI4AUIJbmFycmF0aW9uEgy9P2CCgECZLpX7wOEaDKm0YpN7rSgtEkX3LCIwjV7S3tNBcg1W6NNPLcTKsSzL6zHZCEvUOpIQGEBVLB65eF9QuqBZvPHXggssmHdYKuwLEL1bziTfX3FMYRdIitUL4ulRhyZOodJ4Tqd4DPeE/7LD7L8mbi30Ao2JsWlwg7pFCrLLujmM/BSomqfIPFdSe0hSwEVbSo1YIBC4QtH7W2fdpL8KOVY9jETHXLXyhcY/vPd93BFEcbYrsRkwRmWv8BBwo43VWBmg6VvOVlwwnIsa9SLSbVYeX6hX+2U7PMk1URAlvYfRnJs1cBAErujaypGi+eiI20EDYN8sga8V8hPJbAjBeizVP2Foa/RIZTxYi6jEXryvhhyg6rXr++x90oReH3FW4WZHzu3ErSciRhL63xsAOg+oQ6Me/gZh6omvu4VPGS+SycyUnaRJG9eDujM4DJT6gGOAK5E/rmPjetppot0b0qFk2WcuZ5AIZFhuS0fVAzt51lEAYTUF/eaLrZBbErXzBTOqFaLXWRv4UOP46SaRoL/tRygwbRRNxhDB8SaugTRiFJUzZRxuLxFvtZZR1/wDbum5cuuRwUZ9Cs3ySyyCCyfdbtKv16jafQk1aqc5p1et8CqX2IT0QK9aye3+Qf4l5pnnyA1RQ/v2N/tZ06IbnJC1Ozl0+5srb8woi1VEZJrck3cO+NCatHlVySynECC7t6ymG6JXlDL4pksnLp661ODGsKxW0etPck/kHYuXM8cNNMXG6cmFIQH0La4Jo27/j+NxmlW6r1UWry3bS1LjEIU7bfdH3jTugMIdJ8VphOolAplPS/Ed1SmrtJ1dN0ancUDxOhYiqgopdYgRdkDbcQIUTYnLA4spc4C1dzqn97HNQq7B7XKyZyBNwdMo8PChUFgmCTS6jA8lgEC/Z3U79j59DKZDmohwxHtS5RpeY3J/OBq/FjyJvCHYq1274wyQORhPq+KZIkRqBr1oJ8UKFRGIktLpVGEV2VRTS1mE5sku6Wb4NtTs+bLSUVpHwUa0LO7P6khiePawg2SzthfI0hNq0i/ULsqXh8xexhxv7sDBGQj9mLhPOtyjw2MD+mkeQGKeO550UZyQk5rYWBE8kQ8X+wylgyVYRhQ3lw6AQA9MUVoK+ORztV/1clN7x5JpnMmrUeQYfq+7eDbABRVft8PC++aw4QQXh0orwz8+DW+8YTYb1r9dx6dtViMjAUAbwuSLiNxoseAvnjadNsGLmMxrjaBW0KyPDbEI2CPNqb4HL5oxlRcngTsKtR429WoZzMkXvcCKIpNTYVRTCUI2Fhzq35OVUiEQofA7C7aLJlxysIQFaJcYtDNQ4bIXDTUobbwF5lqRRnuKpHrqDdwCtuXi8BKP9BYtGri3rYNa1wOghsYR7WwoXzwy2mQqXl1yVZDPgupJEv7FovPD7FAipyRlL9BmpvjfLwfk/jadgm61IDfC3tKukCv9WJD4hUvXDT3gGEzzGCTUqCBLNdPI5vX2NMN0AG42e+ppOKvQCl6JWBf/QgBdb1nefJCBrZVYuEf0WJQL6LkUz/mjON+Oml2PM+DQ6aCo9vCRgZuY+ggOOS8cbzAcT1hB93rujpiMYBG/ksAXORfxcHfBfh0zjKSshYcOjkEE9lIGuN6oOnS7kHd6B6XgeIugyJBBev9bASo5IG5DgPTYy0qf3SAXBmKnjU4qI55vTC7XiIBLDu23neV9XBNImoz4/rR4Pf+XlTVFBYYaXaOQ7MJ5GmwN4cx92KaPisEOajPALV6EO4GwCKitErcFjXUAMTW3b7H/aRCDqYw2nrhfhVoHHY/597P0L3MoRiPCeMPcEIDQNUQ6XnIv7R3RbZpGmJIivRO/kEU4hrCu735bCwWY04kHe4inr6rt7KADz5spjxCtV1guogR73JxLlZ0N37d+mK52/GfXJp0KIfJq8eTD0FQkSbMs7IHxJOiqZc3hqOMX4H1vzp2bDOc2UYQRJSjkf4aJ2PTgWBNSoOlkXCeBYazZBDI1Hj9Abz6PgOfWyL3KI4xxZ7kH99IOLwy+x2Jo9OLuJ1qHalcx5JMZKeyaKNJ4S2d7yu1Nb2mH5OEQtc/Ah0xEKanDjZXP/l1qjROZ+ugVG69Eq/mcvRgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011xoYR1rdKKMySPjQnAp4eA",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011xoYR1rdKKMySPjQnAp4eA",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "One design note: the ToggleGroup default spacing in this installed version is `0` (the connected look), which suits a segmented control.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { format } from \"date-fns\";\nimport {\n  ArrowDownIcon,\n  ArrowUpDownIcon,\n  ArrowUpIcon,\n  CalendarIcon,\n  ChevronLeftIcon,\n  ChevronRightIcon,\n  ChevronsLeftIcon,\n  ChevronsRightIcon,\n  DownloadIcon,\n  SearchIcon,\n  SearchXIcon,\n  XIcon,\n} from \"lucide-react\";\nimport { type DateRange } from \"react-day-picker\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Calendar } from \"@/components/ui/calendar\";\nimport {\n  Empty,\n  EmptyContent,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@/components/ui/empty\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@/components/ui/input-group\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\";\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\";\nimport {\n  Table,\n  TableBody,\n  TableCaption,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\nimport { cn } from \"@/lib/utils\";\n\n/* -------------------------------------------------------------------------- */\n/*                                    Data                                    */\n/* -------------------------------------------------------------------------- */\n\ntype Status = \"paid\" | \"pending\" | \"overdue\" | \"draft\";\ntype StatusFilter = \"all\" | Status;\n\ntype Invoice = {\n  id: string;\n  customer: string;\n  email: string;\n  status: Status;\n  amount: number;\n  issued: Date;\n  due: Date;\n};\n\nconst STATUS_LABEL: Record<Status, string> = {\n  paid: \"Paid\",\n  pending: \"Pending\",\n  overdue: \"Overdue\",\n  draft: \"Draft\",\n};\n\nconst STATUS_STYLE: Record<Status, string> = {\n  paid: \"border-emerald-200 bg-emerald-50 text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950 dark:text-emerald-300\",\n  pending:\n    \"border-amber-200 bg-amber-50 text-amber-800 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-300\",\n  overdue:\n    \"border-red-200 bg-red-50 text-red-800 dark:border-red-900 dark:bg-red-950 dark:text-red-300\",\n  draft: \"border-border bg-muted text-muted-foreground\",\n};\n\nconst STATUS_DOT: Record<Status, string> = {\n  paid: \"bg-emerald-500\",\n  pending: \"bg-amber-500\",\n  overdue: \"bg-red-500\",\n  draft: \"bg-muted-foreground/60\",\n};\n\ntype Seed = [string, string, Status, number, string, number];\n\n// [customer, email, status, amount, issued (YYYY-MM-DD), net days]\nconst SEEDS: Seed[] = [\n  [\"Northwind Logistics\", \"ap@northwind.example\", \"paid\", 4820.5, \"2025-01-06\", 30],\n  [\"Alder & Finch Studio\", \"billing@alderfinch.example\", \"paid\", 1260, \"2025-01-09\", 14],\n  [\"Brightwave Energy\", \"finance@brightwave.example\", \"overdue\", 18450, \"2025-01-14\", 30],\n  [\"Harbor Street Bakery\", \"hello@harborstreet.example\", \"paid\", 342.75, \"2025-01-17\", 7],\n  [\"Meridian Health Group\", \"payables@meridian.example\", \"pending\", 9275, \"2025-01-22\", 45],\n  [\"Copperline Robotics\", \"ar@copperline.example\", \"paid\", 22100, \"2025-01-28\", 30],\n  [\"Juniper Legal LLP\", \"accounts@juniperlegal.example\", \"overdue\", 3150, \"2025-02-03\", 14],\n  [\"Tidewater Marine Co.\", \"ops@tidewater.example\", \"paid\", 6780.25, \"2025-02-05\", 30],\n  [\"Pinecrest Schools\", \"bursar@pinecrest.example\", \"pending\", 12400, \"2025-02-10\", 60],\n  [\"Lumen Photonics\", \"invoices@lumen.example\", \"draft\", 5600, \"2025-02-12\", 30],\n  [\"Oakridge Dental\", \"office@oakridge.example\", \"paid\", 875, \"2025-02-14\", 14],\n  [\"Saffron Table Catering\", \"events@saffrontable.example\", \"paid\", 2290, \"2025-02-19\", 14],\n  [\"Granite Peak Outfitters\", \"ap@granitepeak.example\", \"overdue\", 7340.8, \"2025-02-24\", 30],\n  [\"Velvet Moon Records\", \"label@velvetmoon.example\", \"pending\", 1980, \"2025-03-02\", 30],\n  [\"Atlas Freight Partners\", \"billing@atlasfreight.example\", \"paid\", 15620, \"2025-03-04\", 30],\n  [\"Sunbeam Childcare\", \"admin@sunbeam.example\", \"paid\", 640, \"2025-03-07\", 7],\n  [\"Blue Heron Analytics\", \"finance@blueheron.example\", \"pending\", 8900, \"2025-03-11\", 30],\n  [\"Fernhill Garden Centre\", \"shop@fernhill.example\", \"draft\", 410.4, \"2025-03-13\", 14],\n  [\"Quarry Lane Architects\", \"studio@quarrylane.example\", \"paid\", 11250, \"2025-03-18\", 30],\n  [\"Ironbridge Fabrication\", \"ap@ironbridge.example\", \"overdue\", 26800, \"2025-03-21\", 30],\n  [\"Maple & Main Hardware\", \"orders@maplemain.example\", \"paid\", 1715.6, \"2025-03-25\", 14],\n  [\"Skyline Rooftop Bar\", \"manager@skylinebar.example\", \"pending\", 3420, \"2025-03-28\", 21],\n  [\"Cobalt Cloud Services\", \"billing@cobaltcloud.example\", \"paid\", 19990, \"2025-04-01\", 30],\n  [\"Wren & Willow Florists\", \"hello@wrenwillow.example\", \"paid\", 298, \"2025-04-03\", 7],\n  [\"Redwood Property Mgmt\", \"rent@redwoodpm.example\", \"pending\", 7450, \"2025-04-08\", 30],\n  [\"Kestrel Aerospace\", \"ap@kestrelaero.example\", \"paid\", 48200, \"2025-04-10\", 60],\n  [\"Paper Lantern Print\", \"jobs@paperlantern.example\", \"draft\", 1180, \"2025-04-14\", 14],\n  [\"Summit Physio Clinic\", \"reception@summitphysio.example\", \"paid\", 1540, \"2025-04-17\", 14],\n  [\"Evergreen Co-op Market\", \"finance@evergreencoop.example\", \"overdue\", 5230.9, \"2025-04-22\", 30],\n  [\"Driftwood Surf School\", \"info@driftwoodsurf.example\", \"pending\", 760, \"2025-04-25\", 14],\n  [\"Halcyon Pharmacy\", \"accounts@halcyonrx.example\", \"paid\", 9640, \"2025-05-02\", 30],\n  [\"Vantage Point Media\", \"ap@vantagepoint.example\", \"pending\", 13500, \"2025-05-06\", 45],\n  [\"Silverleaf Accounting\", \"team@silverleaf.example\", \"paid\", 2100, \"2025-05-09\", 14],\n  [\"Bramble Ice Cream\", \"orders@bramble.example\", \"paid\", 445.2, \"2025-05-12\", 7],\n  [\"Foxglove Veterinary\", \"clinic@foxglovevet.example\", \"draft\", 920, \"2025-05-15\", 14],\n  [\"Lighthouse Software\", \"billing@lighthouse.example\", \"paid\", 31400, \"2025-05-20\", 30],\n  [\"Orchard Bay Hotels\", \"payables@orchardbay.example\", \"overdue\", 16780, \"2025-05-23\", 30],\n  [\"Terra Nova Surveying\", \"office@terranova.example\", \"pending\", 4380, \"2025-05-27\", 30],\n  [\"Marlowe Bookshop\", \"shop@marlowebooks.example\", \"paid\", 212.9, \"2025-06-02\", 7],\n  [\"Ember Wood Fired Pizza\", \"kitchen@emberwood.example\", \"paid\", 1085, \"2025-06-05\", 14],\n  [\"Kingfisher Travel\", \"bookings@kingfisher.example\", \"pending\", 6120, \"2025-06-09\", 30],\n  [\"Nimbus Weather Labs\", \"ap@nimbuslabs.example\", \"draft\", 14250, \"2025-06-12\", 30],\n];\n\nconst INVOICES: Invoice[] = SEEDS.map(\n  ([customer, email, status, amount, issued, net], index) => {\n    const [y, m, d] = issued.split(\"-\").map(Number);\n    const issuedDate = new Date(y, m - 1, d);\n    const dueDate = new Date(y, m - 1, d + net);\n    return {\n      id: `INV-${String(2041 + index).padStart(5, \"0\")}`,\n      customer,\n      email,\n      status,\n      amount,\n      issued: issuedDate,\n      due: dueDate,\n    };\n  },\n);\n\n/* -------------------------------------------------------------------------- */\n/*                                   Helpers                                  */\n/* -------------------------------------------------------------------------- */\n\ntype SortKey = \"id\" | \"customer\" | \"status\" | \"amount\" | \"issued\" | \"due\";\ntype SortDir = \"asc\" | \"desc\";\ntype SortState = { key: SortKey; dir: SortDir } | null;\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n});\n\nconst STATUS_ORDER: Record<Status, number> = {\n  overdue: 0,\n  pending: 1,\n  draft: 2,\n  paid: 3,\n};\n\nfunction compare(a: Invoice, b: Invoice, key: SortKey): number {\n  switch (key) {\n    case \"id\":\n      return a.id.localeCompare(b.id);\n    case \"customer\":\n      return a.customer.localeCompare(b.customer);\n    case \"status\":\n      return STATUS_ORDER[a.status] - STATUS_ORDER[b.status];\n    case \"amount\":\n      return a.amount - b.amount;\n    case \"issued\":\n      return a.issued.getTime() - b.issued.getTime();\n    case \"due\":\n      return a.due.getTime() - b.due.getTime();\n  }\n}\n\nfunction startOfDay(date: Date): number {\n  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();\n}\n\nfunction pageList(current: number, total: number): (number | \"gap-start\" | \"gap-end\")[] {\n  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);\n  const pages: (number | \"gap-start\" | \"gap-end\")[] = [1];\n  const start = Math.max(2, current - 1);\n  const end = Math.min(total - 1, current + 1);\n  if (start > 2) pages.push(\"gap-start\");\n  for (let p = start; p <= end; p++) pages.push(p);\n  if (end < total - 1) pages.push(\"gap-end\");\n  pages.push(total);\n  return pages;\n}\n\nfunction formatRange(range: DateRange | undefined): string | null {\n  if (!range?.from) return null;\n  if (!range.to) return format(range.from, \"LLL d, y\");\n  return `${format(range.from, \"LLL d, y\")} – ${format(range.to, \"LLL d, y\")}`;\n}\n\n/* -------------------------------------------------------------------------- */\n/*                                    Page                                    */\n/* -------------------------------------------------------------------------- */\n\nconst STATUS_FILTERS: { value: StatusFilter; label: string }[] = [\n  { value: \"all\", label: \"All\" },\n  { value: \"paid\", label: \"Paid\" },\n  { value: \"pending\", label: \"Pending\" },\n  { value: \"overdue\", label: \"Overdue\" },\n  { value: \"draft\", label: \"Draft\" },\n];\n\nconst PAGE_SIZES = [\"5\", \"10\", \"20\"];\n\nconst COLUMNS: { key: SortKey; label: string; align?: \"right\"; className?: string }[] = [\n  { key: \"id\", label: \"Invoice\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"status\", label: \"Status\" },\n  { key: \"issued\", label: \"Issued\", className: \"hidden md:table-cell\" },\n  { key: \"due\", label: \"Due\", className: \"hidden sm:table-cell\" },\n  { key: \"amount\", label: \"Amount\", align: \"right\" },\n];\n\nexport default function Page() {\n  const [status, setStatus] = React.useState<StatusFilter>(\"all\");\n  const [range, setRange] = React.useState<DateRange | undefined>(undefined);\n  const [query, setQuery] = React.useState(\"\");\n  const [sort, setSort] = React.useState<SortState>({ key: \"issued\", dir: \"desc\" });\n  const [pageSize, setPageSize] = React.useState(\"10\");\n  const [page, setPage] = React.useState(1);\n  const [calendarOpen, setCalendarOpen] = React.useState(false);\n\n  const searchId = React.useId();\n  const normalizedQuery = query.trim().toLowerCase();\n\n  // Rows matching search + date range, before status filter (used for segment counts).\n  const baseRows = React.useMemo(() => {\n    const from = range?.from ? startOfDay(range.from) : null;\n    const to = range?.to ? startOfDay(range.to) : from;\n    return INVOICES.filter((inv) => {\n      if (normalizedQuery) {\n        const haystack = `${inv.customer} ${inv.id} ${inv.email}`.toLowerCase();\n        if (!haystack.includes(normalizedQuery)) return false;\n      }\n      if (from !== null && to !== null) {\n        const t = startOfDay(inv.issued);\n        if (t < from || t > to) return false;\n      }\n      return true;\n    });\n  }, [normalizedQuery, range]);\n\n  const counts = React.useMemo(() => {\n    const result: Record<StatusFilter, number> = {\n      all: baseRows.length,\n      paid: 0,\n      pending: 0,\n      overdue: 0,\n      draft: 0,\n    };\n    for (const inv of baseRows) result[inv.status] += 1;\n    return result;\n  }, [baseRows]);\n\n  const sortedRows = React.useMemo(() => {\n    const rows = status === \"all\" ? baseRows : baseRows.filter((inv) => inv.status === status);\n    if (!sort) return rows;\n    const factor = sort.dir === \"asc\" ? 1 : -1;\n    return [...rows].sort((a, b) => factor * compare(a, b, sort.key) || a.id.localeCompare(b.id));\n  }, [baseRows, status, sort]);\n\n  const size = Number(pageSize);\n  const pageCount = Math.max(1, Math.ceil(sortedRows.length / size));\n  const currentPage = Math.min(page, pageCount);\n  const startIndex = (currentPage - 1) * size;\n  const pageRows = sortedRows.slice(startIndex, startIndex + size);\n  const total = sortedRows.reduce((sum, inv) => sum + inv.amount, 0);\n\n  const hasFilters = status !== \"all\" || Boolean(range?.from) || normalizedQuery !== \"\";\n  const rangeLabel = formatRange(range);\n\n  function resetPage() {\n    setPage(1);\n  }\n\n  function toggleSort(key: SortKey) {\n    setSort((prev) => {\n      if (!prev || prev.key !== key) return { key, dir: \"asc\" };\n      if (prev.dir === \"asc\") return { key, dir: \"desc\" };\n      return null;\n    });\n    resetPage();\n  }\n\n  function clearFilters() {\n    setStatus(\"all\");\n    setRange(undefined);\n    setQuery(\"\");\n    resetPage();\n  }\n\n  function exportCsv() {\n    toast.success(\"Export started\", {\n      description: `${sortedRows.length} invoice${sortedRows.length === 1 ? \"\" : \"s\"} will be emailed to you as CSV.`,\n    });\n  }\n\n  const pages = pageList(currentPage, pageCount);\n  const pageButtonClass =\n    \"inline-flex size-9 shrink-0 items-center justify-center rounded-md text-sm font-medium transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground\";\n\n  return (\n    <main className=\"min-h-screen bg-background\">\n      <div className=\"mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:py-12\">\n        {/* Header */}\n        <header className=\"flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between\">\n          <div className=\"flex flex-col gap-1\">\n            <p className=\"text-sm font-medium text-muted-foreground\">Billing</p>\n            <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Invoices</h1>\n            <p className=\"max-w-prose text-sm text-muted-foreground\">\n              Track what has been billed, what is outstanding, and which customers are running\n              late.\n            </p>\n          </div>\n          <Button variant=\"outline\" onClick={exportCsv} className=\"self-start sm:self-auto\">\n            <DownloadIcon aria-hidden=\"true\" />\n            Export CSV\n          </Button>\n        </header>\n\n        {/* Filters */}\n        <section\n          aria-label=\"Filter invoices\"\n          className=\"flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between\"\n        >\n          <div className=\"-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0\">\n            <ToggleGroup\n              type=\"single\"\n              variant=\"outline\"\n              value={status}\n              onValueChange={(value) => {\n                // Radix emits \"\" when the active item is pressed again; keep a selection.\n                if (!value) return;\n                setStatus(value as StatusFilter);\n                resetPage();\n              }}\n              aria-label=\"Filter by status\"\n              className=\"w-max\"\n            >\n              {STATUS_FILTERS.map((item) => (\n                <ToggleGroupItem\n                  key={item.value}\n                  value={item.value}\n                  aria-label={`${item.label}, ${counts[item.value]} invoices`}\n                  className=\"gap-2\"\n                >\n                  {item.value !== \"all\" && (\n                    <span\n                      aria-hidden=\"true\"\n                      className={cn(\"size-1.5 rounded-full\", STATUS_DOT[item.value])}\n                    />\n                  )}\n                  {item.label}\n                  <span\n                    aria-hidden=\"true\"\n                    className=\"text-xs font-normal tabular-nums text-muted-foreground\"\n                  >\n                    {counts[item.value]}\n                  </span>\n                </ToggleGroupItem>\n              ))}\n            </ToggleGroup>\n          </div>\n\n          <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center\">\n            <div className=\"flex items-center gap-1\">\n              <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>\n                <PopoverTrigger asChild>\n                  <Button\n                    variant=\"outline\"\n                    data-empty={!rangeLabel}\n                    aria-label={\n                      rangeLabel ? `Issue date range: ${rangeLabel}` : \"Select issue date range\"\n                    }\n                    className=\"min-w-0 flex-1 justify-start text-left font-normal data-[empty=true]:text-muted-foreground sm:w-64 sm:flex-none\"\n                  >\n                    <CalendarIcon aria-hidden=\"true\" />\n                    <span className=\"truncate\">{rangeLabel ?? \"Issued between…\"}</span>\n                  </Button>\n                </PopoverTrigger>\n                <PopoverContent className=\"w-auto max-w-[calc(100vw-2rem)] p-0\" align=\"end\">\n                  <Calendar\n                    mode=\"range\"\n                    defaultMonth={range?.from ?? new Date(2025, 2, 1)}\n                    selected={range}\n                    onSelect={(next) => {\n                      setRange(next);\n                      resetPage();\n                    }}\n                    numberOfMonths={2}\n                    startMonth={new Date(2025, 0, 1)}\n                    endMonth={new Date(2025, 11, 31)}\n                    className=\"[--cell-size:--spacing(9)] sm:[--cell-size:--spacing(8)]\"\n                  />\n                  <div className=\"flex items-center justify-between gap-2 border-t p-2\">\n                    <Button\n                      variant=\"ghost\"\n                      size=\"sm\"\n                      onClick={() => {\n                        setRange(undefined);\n                        resetPage();\n                      }}\n                      disabled={!range?.from}\n                    >\n                      Clear\n                    </Button>\n                    <Button size=\"sm\" onClick={() => setCalendarOpen(false)}>\n                      Done\n                    </Button>\n                  </div>\n                </PopoverContent>\n              </Popover>\n              {range?.from && (\n                <Button\n                  variant=\"ghost\"\n                  size=\"icon\"\n                  aria-label=\"Clear date range\"\n                  onClick={() => {\n                    setRange(undefined);\n                    resetPage();\n                  }}\n                >\n                  <XIcon aria-hidden=\"true\" />\n                </Button>\n              )}\n            </div>\n\n            <InputGroup className=\"sm:w-64\">\n              <InputGroupAddon>\n                <SearchIcon aria-hidden=\"true\" />\n              </InputGroupAddon>\n              <InputGroupInput\n                id={searchId}\n                type=\"search\"\n                inputMode=\"search\"\n                placeholder=\"Search customer or invoice…\"\n                aria-label=\"Search invoices by customer, invoice number or email\"\n                value={query}\n                onChange={(event) => {\n                  setQuery(event.target.value);\n                  resetPage();\n                }}\n                autoComplete=\"off\"\n                className=\"[&::-webkit-search-cancel-button]:appearance-none\"\n              />\n              {query && (\n                <InputGroupAddon align=\"inline-end\">\n                  <InputGroupButton\n                    size=\"icon-xs\"\n                    aria-label=\"Clear search\"\n                    onClick={() => {\n                      setQuery(\"\");\n                      resetPage();\n                    }}\n                  >\n                    <XIcon aria-hidden=\"true\" />\n                  </InputGroupButton>\n                </InputGroupAddon>\n              )}\n            </InputGroup>\n          </div>\n        </section>\n\n        {/* Table */}\n        <section aria-label=\"Invoice results\" className=\"overflow-hidden rounded-xl border bg-card\">\n          <Table>\n            <TableCaption className=\"sr-only\">\n              Invoices, sorted\n              {sort\n                ? ` by ${COLUMNS.find((c) => c.key === sort.key)?.label ?? sort.key}, ${\n                    sort.dir === \"asc\" ? \"ascending\" : \"descending\"\n                  }`\n                : \" in original order\"}\n              . Showing {pageRows.length} of {sortedRows.length} invoices.\n            </TableCaption>\n            <TableHeader className=\"bg-muted/40\">\n              <TableRow className=\"hover:bg-transparent\">\n                {COLUMNS.map((col) => {\n                  const active = sort?.key === col.key;\n                  const ariaSort = active\n                    ? sort.dir === \"asc\"\n                      ? \"ascending\"\n                      : \"descending\"\n                    : \"none\";\n                  const Icon = active ? (sort.dir === \"asc\" ? ArrowUpIcon : ArrowDownIcon) : ArrowUpDownIcon;\n                  return (\n                    <TableHead\n                      key={col.key}\n                      aria-sort={ariaSort}\n                      className={cn(\"px-2 first:pl-4 last:pr-4\", col.align === \"right\" && \"text-right\", col.className)}\n                    >\n                      <Button\n                        variant=\"ghost\"\n                        size=\"sm\"\n                        onClick={() => toggleSort(col.key)}\n                        className={cn(\n                          \"-mx-2 h-8 gap-1.5 px-2 font-medium\",\n                          col.align === \"right\" && \"flex-row-reverse\",\n                          !active && \"text-muted-foreground\",\n                        )}\n                      >\n                        {col.label}\n                        <Icon\n                          aria-hidden=\"true\"\n                          className={cn(\"size-3.5\", !active && \"opacity-60\")}\n                        />\n                        <span className=\"sr-only\">\n                          {active\n                            ? `, sorted ${sort.dir === \"asc\" ? \"ascending\" : \"descending\"}. Activate to ${\n                                sort.dir === \"asc\" ? \"sort descending\" : \"clear sorting\"\n                              }`\n                            : \", not sorted. Activate to sort ascending\"}\n                        </span>\n                      </Button>\n                    </TableHead>\n                  );\n                })}\n              </TableRow>\n            </TableHeader>\n            <TableBody>\n              {pageRows.map((inv) => (\n                <TableRow key={inv.id}>\n                  <TableCell className=\"pl-4 font-mono text-xs text-muted-foreground\">\n                    {inv.id}\n                  </TableCell>\n                  <TableCell>\n                    <div className=\"flex min-w-0 flex-col\">\n                      <span className=\"max-w-[10rem] truncate font-medium sm:max-w-[16rem]\">\n                        {inv.customer}\n                      </span>\n                      <span className=\"hidden max-w-[16rem] truncate text-xs text-muted-foreground sm:block\">\n                        {inv.email}\n                      </span>\n                    </div>\n                  </TableCell>\n                  <TableCell>\n                    <Badge variant=\"outline\" className={cn(\"gap-1.5\", STATUS_STYLE[inv.status])}>\n                      <span\n                        aria-hidden=\"true\"\n                        className={cn(\"size-1.5 rounded-full\", STATUS_DOT[inv.status])}\n                      />\n                      {STATUS_LABEL[inv.status]}\n                    </Badge>\n                  </TableCell>\n                  <TableCell className=\"hidden text-muted-foreground md:table-cell\">\n                    <time dateTime={format(inv.issued, \"yyyy-MM-dd\")}>\n                      {format(inv.issued, \"MMM d, y\")}\n                    </time>\n                  </TableCell>\n                  <TableCell\n                    className={cn(\n                      \"hidden sm:table-cell\",\n                      inv.status === \"overdue\" ? \"font-medium text-destructive\" : \"text-muted-foreground\",\n                    )}\n                  >\n                    <time dateTime={format(inv.due, \"yyyy-MM-dd\")}>{format(inv.due, \"MMM d, y\")}</time>\n                  </TableCell>\n                  <TableCell className=\"pr-4 text-right font-medium tabular-nums\">\n                    {currency.format(inv.amount)}\n                  </TableCell>\n                </TableRow>\n              ))}\n            </TableBody>\n          </Table>\n\n          {pageRows.length === 0 && (\n            <Empty className=\"border-t\">\n              <EmptyHeader>\n                <EmptyMedia variant=\"icon\">\n                  <SearchXIcon aria-hidden=\"true\" />\n                </EmptyMedia>\n                <EmptyTitle>No invoices match</EmptyTitle>\n                <EmptyDescription>\n                  Try a different search term, widen the date range, or switch the status filter.\n                </EmptyDescription>\n              </EmptyHeader>\n              <EmptyContent>\n                <Button variant=\"outline\" onClick={clearFilters}>\n                  Clear all filters\n                </Button>\n              </EmptyContent>\n            </Empty>\n          )}\n        </section>\n\n        {/* Footer: summary + pagination */}\n        <footer className=\"flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between\">\n          <div className=\"flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row sm:items-center sm:gap-4\">\n            <p role=\"status\" aria-live=\"polite\">\n              {sortedRows.length === 0\n                ? \"0 invoices\"\n                : `Showing ${startIndex + 1}–${startIndex + pageRows.length} of ${sortedRows.length} invoices`}\n              {hasFilters && \" (filtered)\"}\n            </p>\n            <p className=\"tabular-nums\">\n              Total <span className=\"font-medium text-foreground\">{currency.format(total)}</span>\n            </p>\n            {hasFilters && (\n              <Button variant=\"link\" size=\"sm\" onClick={clearFilters} className=\"h-auto self-start p-0\">\n                Reset filters\n              </Button>\n            )}\n          </div>\n\n          <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between lg:justify-end lg:gap-6\">\n            <div className=\"flex items-center gap-2\">\n              <label htmlFor=\"rows-per-page\" className=\"text-sm text-muted-foreground\">\n                Rows per page\n              </label>\n              <Select\n                value={pageSize}\n                onValueChange={(value) => {\n                  setPageSize(value);\n                  resetPage();\n                }}\n              >\n                <SelectTrigger id=\"rows-per-page\" size=\"sm\" className=\"w-[4.5rem]\">\n                  <SelectValue />\n                </SelectTrigger>\n                <SelectContent>\n                  {PAGE_SIZES.map((option) => (\n                    <SelectItem key={option} value={option}>\n                      {option}\n                    </SelectItem>\n                  ))}\n                </SelectContent>\n              </Select>\n            </div>\n\n            <nav aria-label=\"Pagination\" className=\"flex items-center\">\n              <ul className=\"flex flex-row items-center gap-1\">\n                <li>\n                  <button\n                    type=\"button\"\n                    className={pageButtonClass}\n                    aria-label=\"Go to first page\"\n                    disabled={currentPage === 1}\n                    onClick={() => setPage(1)}\n                  >\n                    <ChevronsLeftIcon className=\"size-4\" aria-hidden=\"true\" />\n                  </button>\n                </li>\n                <li>\n                  <button\n                    type=\"button\"\n                    className={pageButtonClass}\n                    aria-label=\"Go to previous page\"\n                    disabled={currentPage === 1}\n                    onClick={() => setPage(currentPage - 1)}\n                  >\n                    <ChevronLeftIcon className=\"size-4\" aria-hidden=\"true\" />\n                  </button>\n                </li>\n                {/* Compact indicator on phones, numbered pages from sm up */}\n                <li className=\"px-2 text-sm tabular-nums sm:hidden\" aria-hidden=\"true\">\n                  {currentPage} / {pageCount}\n                </li>\n                {pages.map((p) =>\n                  typeof p === \"number\" ? (\n                    <li key={p} className=\"hidden sm:block\">\n                      <button\n                        type=\"button\"\n                        aria-label={`Go to page ${p}`}\n                        aria-current={p === currentPage ? \"page\" : undefined}\n                        onClick={() => setPage(p)}\n                        className={cn(\n                          pageButtonClass,\n                          p === currentPage && \"border bg-background shadow-xs dark:border-input dark:bg-input/30\",\n                        )}\n                      >\n                        {p}\n                      </button>\n                    </li>\n                  ) : (\n                    <li\n                      key={p}\n                      aria-hidden=\"true\"\n                      className=\"hidden size-9 items-center justify-center text-muted-foreground sm:flex\"\n                    >\n                      …\n                    </li>\n                  ),\n                )}\n                <li>\n                  <button\n                    type=\"button\"\n                    className={pageButtonClass}\n                    aria-label=\"Go to next page\"\n                    disabled={currentPage === pageCount}\n                    onClick={() => setPage(currentPage + 1)}\n                  >\n                    <ChevronRightIcon className=\"size-4\" aria-hidden=\"true\" />\n                  </button>\n                </li>\n                <li>\n                  <button\n                    type=\"button\"\n                    className={pageButtonClass}\n                    aria-label=\"Go to last page\"\n                    disabled={currentPage === pageCount}\n                    onClick={() => setPage(pageCount)}\n                  >\n                    <ChevronsRightIcon className=\"size-4\" aria-hidden=\"true\" />\n                  </button>\n                </li>\n              </ul>\n            </nav>\n          </div>\n        </footer>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

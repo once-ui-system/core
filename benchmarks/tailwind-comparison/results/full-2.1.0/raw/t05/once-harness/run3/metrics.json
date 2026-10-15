@@ -1,0 +1,33 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 262,
+    "chars": 6782,
+    "bytes": 6782,
+    "tokens_o200k": 1684,
+    "tokens_claudeLegacy": 1682
+  },
+  "raw": {
+    "lines": 210,
+    "chars": 6239,
+    "bytes": 6239,
+    "tokens_o200k": 1635,
+    "tokens_claudeLegacy": 1659
+  },
+  "components": [
+    "Background",
+    "Button",
+    "Column",
+    "Grid",
+    "Heading",
+    "Icon",
+    "LetterFx",
+    "Line",
+    "Row",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

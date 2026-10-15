@@ -1,0 +1,253 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the docs and the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GykR7toWu1gWwJVeG3d8yq",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UiJJzA5FdUor6UnYCtDarF",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GykR7toWu1gWwJVeG3d8yq",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UiJJzA5FdUor6UnYCtDarF",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01LfiN4AFVQCDhBKdLcYqN8m",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Urb2jVCaVD8nwDimxZ1hyt",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/button.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014t4hGF5CjTUqjg7BdTGiw7",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/badge.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LfiN4AFVQCDhBKdLcYqN8m",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Urb2jVCaVD8nwDimxZ1hyt",
+          "content": "---\ntitle: Button\ndescription: Displays a button or a component that looks like a button.\nfeatured: true\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add button\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"button\"\n  title=\"components/ui/button.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Button } from \"@/components/ui/button\"\n```\n\n```tsx\n<Button variant=\"outline\">Button</Button>\n```\n\n## Cursor\n\nTailwind v4 [switched](https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor) from `cursor: pointer` to `cursor: default` for the button component.\n\nIf you want to keep the `cursor: pointer` behavior, add the following code to your CSS file:\n\nYou can also enable this during project setup with `npx shadcn@latest init --pointer`.\n\n```css showLineNumbers title=\"globals.css\"\n@layer base {\n  button:not(:disabled),\n  [role=\"button\"]:not(:disabled) {\n    cursor: pointer;\n  }\n}\n```\n\n## Size\n\nUse the `size` prop to change the size of the button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-size\" />\n\n## Default\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-default\" />\n\n## Outline\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-outline\" />\n\n## Secondary\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-secondary\" />\n\n## Ghost\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-ghost\" />\n\n## Destructive\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-destructive\" />\n\n## Link\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-link\" />\n\n## Icon\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-icon\" />\n\n## With Icon\n\nRemember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` attribute to the icon for the correct spacing.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-with-icon\" />\n\n## Rounded\n\nUse the `rounded-full` class to make the button rounded.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-rounded\" />\n\n## Spinner\n\nRender a `<Spinner />` component inside the button to show a loading state. Remember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` attribute to the spinner for the correct spacing.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-spinner\" />\n\n## Button Group\n\nTo create a button group, use the `ButtonGroup` component. See the [Button Group](/docs/components/radix/button-group) documentation for more details.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-group-demo\" />\n\n## As Child\n\nYou can use the `asChild` prop on `<Button />` to make another component look like a button. Here's an example of a link that looks like a button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-aschild\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-rtl\" direction=\"rtl\" />\n\n## API Reference\n\n### Button\n\nThe `Button` component is a wrapper around the `button` element that adds a variety of styles and functionality.\n\n| Prop      | Type                                                                                 | Default     |\n| --------- | ------------------------------------------------------------------------------------ | ----------- |\n| `variant` | `\"default\" \\| \"outline\" \\| \"ghost\" \\| \"destructive\" \\| \"secondary\" \\| \"link\"`        | `\"default\"` |\n| `size`    | `\"default\" \\| \"xs\" \\| \"sm\" \\| \"lg\" \\| \"icon\" \\| \"icon-xs\" \\| \"icon-sm\" \\| \"icon-lg\"` | `\"default\"` |\n| `asChild` | `boolean`                                                                            | `false`     |\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014t4hGF5CjTUqjg7BdTGiw7",
+          "content": "---\ntitle: Badge\ndescription: Displays a badge or a component that looks like a badge.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add badge\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  styleName=\"radix-nova\"\n  name=\"badge\"\n  title=\"components/ui/badge.tsx\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Badge } from \"@/components/ui/badge\"\n```\n\n```tsx\n<Badge variant=\"default | outline | secondary | destructive\">Badge</Badge>\n```\n\n## Variants\n\nUse the `variant` prop to change the variant of the badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-variants\" />\n\n## With Icon\n\nYou can render an icon inside the badge. Use `data-icon=\"inline-start\"` to render the icon on the left and `data-icon=\"inline-end\"` to render the icon on the right.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-icon\" />\n\n## With Spinner\n\nYou can render a spinner inside the badge. Remember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` prop to the spinner.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-spinner\" />\n\n## Link\n\nUse the `asChild` prop to render a link as a badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-link\" />\n\n## Custom Colors\n\nYou can customize the colors of a badge by adding custom classes such as `bg-green-50 dark:bg-green-800` to the `Badge` component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-colors\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-rtl\" direction=\"rtl\" />\n\n## API Reference\n\n### Badge\n\nThe `Badge` component displays a badge or a component that looks like a badge.\n\n| Prop        | Type                                                                          | Default     |\n| ----------- | ----------------------------------------------------------------------------- | ----------- |\n| `variant`   | `\"default\" \\| \"secondary\" \\| \"destructive\" \\| \"outline\" \\| \"ghost\" \\| \"link\"` | `\"default\"` |\n| `className` | `string`                                                                      | -           |\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the actual installed components and the global styles."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HXuZEfCAGVby3CvEGBs4ZD",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011n3XeacwgFd3pxsjjzZQNG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01A35BKf6XAbELoo9mvHdz5R",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HXuZEfCAGVby3CvEGBs4ZD",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011n3XeacwgFd3pxsjjzZQNG",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01A35BKf6XAbELoo9mvHdz5R",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01TuYHA1JT1LBZoUsa7d5SaK",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NYD7FUPuSkLjazg7ECMFYs",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016k2i6mnWaPhZKCi6shCgjS",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TuYHA1JT1LBZoUsa7d5SaK",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NYD7FUPuSkLjazg7ECMFYs",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016k2i6mnWaPhZKCi6shCgjS",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. Since I can't add keyframes to the global CSS, I'll use an inline `<style>` tag for the text-effect and background animations, with `prefers-reduced-motion` support. Social proof logos will be inline SVG wordmarks, so nothing loads from the network.\n\n```tsx\n\"use client\";\n\nimport { useState, type ReactNode } from \"react\";\nimport { ArrowRight, Play, Sparkles, Star, Check } from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\n\ntype Logo = { name: string; mark: ReactNode };\n\nconst LOGOS: Logo[] = [\n  {\n    name: \"Northwind\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\" strokeLinejoin=\"round\">\n        <path d=\"M4 20V6l8 8V4M12 14l8 6V4\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Lumen Labs\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\">\n        <circle cx=\"12\" cy=\"12\" r=\"4\" />\n        <path d=\"M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M19 5l-2 2M7 17l-2 2\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Parcel\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinejoin=\"round\">\n        <path d=\"M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z\" />\n        <path d=\"M12 12l8-4.5M12 12v9M12 12L4 7.5\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Helix\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\" strokeLinecap=\"round\">\n        <path d=\"M7 3c0 6 10 6 10 12s-10 6-10 6M17 3c0 6-10 6-10 12\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Orbit\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2\">\n        <circle cx=\"12\" cy=\"12\" r=\"3\" fill=\"currentColor\" />\n        <ellipse cx=\"12\" cy=\"12\" rx=\"10\" ry=\"4.5\" transform=\"rotate(-30 12 12)\" />\n      </svg>\n    ),\n  },\n  {\n    name: \"Basalt\",\n    mark: (\n      <svg viewBox=\"0 0 24 24\" className=\"size-6\" aria-hidden=\"true\" fill=\"currentColor\">\n        <path d=\"M3 20L9 6l4 8 3-5 5 11H3z\" />\n      </svg>\n    ),\n  },\n];\n\nconst HIGHLIGHTS = [\"Free 14-day trial\", \"No credit card required\", \"SOC 2 Type II\"];\n\nconst STYLES = `\n@keyframes hero-shimmer {\n  0% { background-position: 0% 50%; }\n  100% { background-position: 200% 50%; }\n}\n@keyframes hero-float {\n  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n  50% { transform: translate3d(2%, 4%, 0) scale(1.08); }\n}\n@keyframes hero-rise {\n  from { opacity: 0; transform: translateY(14px); }\n  to { opacity: 1; transform: translateY(0); }\n}\n.hero-gradient-text {\n  background-image: linear-gradient(\n    90deg,\n    oklch(0.55 0.22 265),\n    oklch(0.65 0.24 320),\n    oklch(0.7 0.19 40),\n    oklch(0.55 0.22 265)\n  );\n  background-size: 200% 100%;\n  -webkit-background-clip: text;\n  background-clip: text;\n  color: transparent;\n  animation: hero-shimmer 6s linear infinite;\n}\n.dark .hero-gradient-text {\n  background-image: linear-gradient(\n    90deg,\n    oklch(0.75 0.17 265),\n    oklch(0.8 0.18 320),\n    oklch(0.85 0.15 60),\n    oklch(0.75 0.17 265)\n  );\n}\n.hero-blob { animation: hero-float 14s ease-in-out infinite; }\n.hero-blob-2 { animation-duration: 18s; animation-delay: -6s; }\n.hero-rise { opacity: 0; animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }\n.hero-grid {\n  background-image:\n    linear-gradient(to right, color-mix(in oklab, var(--foreground) 8%, transparent) 1px, transparent 1px),\n    linear-gradient(to bottom, color-mix(in oklab, var(--foreground) 8%, transparent) 1px, transparent 1px);\n  background-size: 48px 48px;\n  mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);\n  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);\n}\n@media (prefers-reduced-motion: reduce) {\n  .hero-gradient-text, .hero-blob { animation: none; }\n  .hero-rise { animation: none; opacity: 1; }\n}\n`;\n\nexport default function Page() {\n  const [watching, setWatching] = useState(false);\n\n  function handleDemo() {\n    setWatching(true);\n    toast(\"Demo coming up\", {\n      description: \"We'll open the 2-minute product tour in a new view.\",\n    });\n    window.setTimeout(() => setWatching(false), 1200);\n  }\n\n  return (\n    <main className=\"relative isolate min-h-screen overflow-hidden bg-background\">\n      <style>{STYLES}</style>\n\n      {/* Background effect */}\n      <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0 -z-10\">\n        <div className=\"hero-grid absolute inset-0\" />\n        <div className=\"hero-blob absolute -top-32 left-1/2 h-[28rem] w-[28rem] -translate-x-[85%] rounded-full bg-[oklch(0.65_0.2_265)] opacity-25 blur-3xl dark:opacity-30 sm:h-[36rem] sm:w-[36rem]\" />\n        <div className=\"hero-blob hero-blob-2 absolute -top-16 left-1/2 h-[24rem] w-[24rem] -translate-x-[10%] rounded-full bg-[oklch(0.72_0.2_330)] opacity-25 blur-3xl dark:opacity-25 sm:h-[32rem] sm:w-[32rem]\" />\n        <div className=\"absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent\" />\n      </div>\n\n      <section\n        aria-labelledby=\"hero-heading\"\n        className=\"mx-auto flex max-w-5xl flex-col items-center px-4 pb-20 pt-20 text-center sm:px-6 sm:pt-28 lg:pt-36\"\n      >\n        <div className=\"hero-rise\" style={{ animationDelay: \"0ms\" }}>\n          <Badge variant=\"outline\" className=\"gap-1.5 bg-background/60 px-3 py-1 text-xs backdrop-blur\">\n            <Sparkles aria-hidden=\"true\" className=\"text-[oklch(0.65_0.24_320)]\" />\n            New: Autopilot reports are live\n          </Badge>\n        </div>\n\n        <h1\n          id=\"hero-heading\"\n          className=\"hero-rise mt-6 text-balance text-4xl font-semibold tracking-tight sm:text-6xl lg:text-7xl\"\n          style={{ animationDelay: \"80ms\" }}\n        >\n          Ship product decisions{\" \"}\n          <span className=\"hero-gradient-text\">ten times faster</span>\n        </h1>\n\n        <p\n          className=\"hero-rise mt-6 max-w-2xl text-pretty text-base leading-relaxed text-muted-foreground sm:text-lg\"\n          style={{ animationDelay: \"160ms\" }}\n        >\n          Meridian pulls usage data, support threads, and sales calls into one\n          workspace, then tells your team what to build next and why. Less\n          dashboard digging, more shipping.\n        </p>\n\n        <div\n          className=\"hero-rise mt-9 flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center\"\n          style={{ animationDelay: \"240ms\" }}\n        >\n          <Button asChild size=\"lg\" className=\"h-11 px-6 text-base\">\n            <a href=\"#get-started\">\n              Start free trial\n              <ArrowRight aria-hidden=\"true\" />\n            </a>\n          </Button>\n          <Button\n            type=\"button\"\n            variant=\"outline\"\n            size=\"lg\"\n            className=\"h-11 px-6 text-base\"\n            onClick={handleDemo}\n            aria-busy={watching}\n          >\n            <Play aria-hidden=\"true\" />\n            Watch 2-min demo\n          </Button>\n        </div>\n\n        <ul\n          className=\"hero-rise mt-6 flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm text-muted-foreground\"\n          style={{ animationDelay: \"300ms\" }}\n        >\n          {HIGHLIGHTS.map((item) => (\n            <li key={item} className=\"flex items-center gap-1.5\">\n              <Check aria-hidden=\"true\" className=\"size-4 text-foreground\" />\n              {item}\n            </li>\n          ))}\n        </ul>\n\n        {/* Social proof */}\n        <div\n          className=\"hero-rise mt-16 w-full sm:mt-20\"\n          style={{ animationDelay: \"380ms\" }}\n        >\n          <div className=\"flex flex-col items-center gap-2 sm:flex-row sm:justify-center sm:gap-3\">\n            <div className=\"flex items-center gap-0.5\" role=\"img\" aria-label=\"Rated 4.9 out of 5 stars\">\n              {Array.from({ length: 5 }).map((_, i) => (\n                <Star\n                  key={i}\n                  aria-hidden=\"true\"\n                  className=\"size-4 fill-[oklch(0.8_0.17_80)] text-[oklch(0.8_0.17_80)]\"\n                />\n              ))}\n            </div>\n            <p className=\"text-sm text-muted-foreground\">\n              Rated <span className=\"font-medium text-foreground\">4.9/5</span> by\n              product teams at 2,400+ companies\n            </p>\n          </div>\n\n          <ul\n            aria-label=\"Companies that use Meridian\"\n            className=\"mx-auto mt-8 grid max-w-3xl grid-cols-2 gap-x-6 gap-y-8 sm:grid-cols-3 lg:grid-cols-6\"\n          >\n            {LOGOS.map((logo) => (\n              <li\n                key={logo.name}\n                className=\"flex items-center justify-center gap-2 text-muted-foreground transition-colors hover:text-foreground\"\n              >\n                {logo.mark}\n                <span className=\"text-base font-semibold tracking-tight\">{logo.name}</span>\n              </li>\n            ))}\n          </ul>\n        </div>\n\n        <div id=\"get-started\" className=\"sr-only\" tabIndex={-1}>\n          Get started with your free trial\n        </div>\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

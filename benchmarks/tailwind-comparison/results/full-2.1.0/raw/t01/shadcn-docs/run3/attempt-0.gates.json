@@ -1,0 +1,78 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 5785
+    },
+    "build": {
+      "ok": true,
+      "ms": 18475
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 1408,
+          "height": 2570,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 1408,
+          "height": 1906,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 1408,
+          "height": 1298,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 7,
+        "serious_or_critical": 2,
+        "ids": [
+          "aria-valid-attr-value:critical:1",
+          "color-contrast:serious:6"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "none"
+        },
+        "desktop": {
+          "action": "none"
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1762,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ]
+}

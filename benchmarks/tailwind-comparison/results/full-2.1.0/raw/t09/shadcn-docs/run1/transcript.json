@@ -1,0 +1,534 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Data table page — sortable table, filters row (segmented control, date range, search), pagination.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01NFWRRSDreZCg6JXRbkwtAT",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PTJEdVLH5HjDYBTYeHa2LH",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01NFWRRSDreZCg6JXRbkwtAT",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PTJEdVLH5HjDYBTYeHa2LH",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01C81XXz12EgmaE2L88F9vTR",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RF99G6ocAj2LLpotMa2KJK",
+          "name": "list_dir",
+          "input": {
+            "path": "docs/components"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01C81XXz12EgmaE2L88F9vTR",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RF99G6ocAj2LLpotMa2KJK",
+          "content": "accordion.mdx\nalert-dialog.mdx\nalert.mdx\naspect-ratio.mdx\nattachment.mdx\navatar.mdx\nbadge.mdx\nbreadcrumb.mdx\nbubble.mdx\nbutton-group.mdx\nbutton.mdx\ncalendar.mdx\ncard.mdx\ncarousel.mdx\nchart.mdx\ncheckbox.mdx\ncollapsible.mdx\ncombobox.mdx\ncommand.mdx\ncontext-menu.mdx\ndata-table.mdx\ndate-picker.mdx\ndialog.mdx\ndirection.mdx\ndrawer.mdx\ndropdown-menu.mdx\nempty.mdx\nfield.mdx\nhover-card.mdx\ninput-group.mdx\ninput-otp.mdx\ninput.mdx\nitem.mdx\nkbd.mdx\nlabel.mdx\nmarker.mdx\nmenubar.mdx\nmessage-scroller.mdx\nmessage.mdx\nnative-select.mdx\nnavigation-menu.mdx\npagination.mdx\npopover.mdx\nprogress.mdx\nquestionnaire.mdx\nradio-group.mdx\nresizable.mdx\nscroll-area.mdx\nselect.mdx\nseparator.mdx\nsheet.mdx\nsidebar.mdx\nskeleton.mdx\nslider.mdx\nsonner.mdx\nspinner.mdx\nswitch.mdx\ntable.mdx\ntabs.mdx\ntextarea.mdx\ntoast.mdx\ntoggle-group.mdx\ntoggle.mdx\ntooltip.mdx\ntypography.mdx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01MHcLcwfB4kuGxX6Vxtxkw8",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VEjK1Az7cCTRQNpkynEAxC",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Nq4P2weR7VDYZAVSAnMopd",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/toggle-group.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XvMe3HYNWLKdE4Nh8XdujA",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/date-picker.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MHcLcwfB4kuGxX6Vxtxkw8",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VEjK1Az7cCTRQNpkynEAxC",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Nq4P2weR7VDYZAVSAnMopd",
+          "content": "---\ntitle: Toggle Group\ndescription: A set of two-state buttons that can be toggled on or off.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/toggle-group\n  api: https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add toggle-group\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"toggle-group\"\n  title=\"components/ui/toggle-group.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\"\n```\n\n```tsx\n<ToggleGroup type=\"single\">\n  <ToggleGroupItem value=\"a\">A</ToggleGroupItem>\n  <ToggleGroupItem value=\"b\">B</ToggleGroupItem>\n  <ToggleGroupItem value=\"c\">C</ToggleGroupItem>\n</ToggleGroup>\n```\n\n## Composition\n\nUse the following composition to build a `ToggleGroup`:\n\n```text\nToggleGroup\n├── ToggleGroupItem\n└── ToggleGroupItem\n```\n\n## Outline\n\nUse `variant=\"outline\"` for an outline style.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-outline\" />\n\n## Size\n\nUse the `size` prop to change the size of the toggle group.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-sizes\" />\n\n## Spacing\n\nUse `spacing` to add spacing between toggle group items.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-spacing\" />\n\n## Vertical\n\nUse `orientation=\"vertical\"` for vertical toggle groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-vertical\" />\n\n## Disabled\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-disabled\" />\n\n## Custom\n\nA custom toggle group example.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-font-weight-selector\"\n  previewClassName=\"*:data-[slot=field]:max-w-xs\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-rtl\"\n  direction=\"rtl\"\n/>\n\n## API Reference\n\nSee the [Radix Toggle Group](https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference) documentation.\n\n## Changelog\n\n### 2026-05-17 Default Spacing\n\nChanged the default `spacing` from `0` to `2` so toggle groups render with space between items by default. Use `spacing={0}` for connected items.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XvMe3HYNWLKdE4Nh8XdujA",
+          "content": "---\ntitle: Date Picker\ndescription: A date picker component with range and presets.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-demo\" />\n\n## Installation\n\nThe Date Picker is built using a composition of the `<Popover />` and the `<Calendar />` components.\n\nSee installation instructions for the [Popover](/docs/components/radix/popover#installation) and the [Calendar](/docs/components/radix/calendar#installation) components.\n\n## Usage\n\n```tsx showLineNumbers title=\"components/example-date-picker.tsx\"\n\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"cn\"\nimport { format } from \"date-fns\"\nimport { Calendar as CalendarIcon } from \"lucide-react\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Calendar } from \"@/components/ui/calendar\"\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\"\n\nexport function DatePickerDemo() {\n  const [date, setDate] = React.useState<Date>()\n\n  return (\n    <Popover>\n      <PopoverTrigger asChild>\n        <Button\n          variant=\"outline\"\n          data-empty={!date}\n          className=\"w-[280px] justify-start text-left font-normal data-[empty=true]:text-muted-foreground\"\n        >\n          <CalendarIcon />\n          {date ? format(date, \"PPP\") : <span>Pick a date</span>}\n        </Button>\n      </PopoverTrigger>\n      <PopoverContent className=\"w-auto p-0\">\n        <Calendar mode=\"single\" selected={date} onSelect={setDate} />\n      </PopoverContent>\n    </Popover>\n  )\n}\n```\n\nSee the [React DayPicker](https://react-day-picker.js.org) documentation for more information.\n\n## Composition\n\nA date picker is built from `Popover` and `Calendar` (there is no `DatePicker` root component):\n\n```text\nPopover\n├── PopoverTrigger\n└── PopoverContent\n    └── Calendar\n```\n\n## Basic\n\nA basic date picker component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-basic\" />\n\n## Range Picker\n\nA date picker component for selecting a range of dates.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-range\" />\n\n## Date of Birth\n\nA date picker component for selecting a date of birth. This component includes a dropdown caption layout for date and month selection.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-dob\" />\n\n## Input\n\nA date picker component with an input field for selecting a date.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-input\" />\n\n## Time Picker\n\nA date picker component with a time input field for selecting a time.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-time\" />\n\n## Natural Language Picker\n\nThis component uses the `chrono-node` library to parse natural language dates.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"date-picker-natural-language\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"date-picker-rtl\"\n  direction=\"rtl\"\n/>\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the actual installed components, the package.json, and the range picker example."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017kyZnoJ8ot6tbS2ywMH3FU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Xm3MefWzD1sL5A1nyMSufE",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012ZMwTdbvbx8TnSxAvf72kh",
+          "name": "read_file",
+          "input": {
+            "path": "docs/examples/date-picker-range.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LNabL5j1fCTa5VfLyRQNuS",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/table.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TMKuggkFifXBvukV6gVpjU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/pagination.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BAM9a2BdLrYusEWkgb5Woq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017kyZnoJ8ot6tbS2ywMH3FU",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Xm3MefWzD1sL5A1nyMSufE",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012ZMwTdbvbx8TnSxAvf72kh",
+          "content": "no such file or directory: docs/examples/date-picker-range.tsx",
+          "is_error": true
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LNabL5j1fCTa5VfLyRQNuS",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Table({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div\n      data-slot=\"table-container\"\n      className=\"relative w-full overflow-x-auto\"\n    >\n      <table\n        data-slot=\"table\"\n        className={cn(\"w-full caption-bottom text-sm\", className)}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return (\n    <thead\n      data-slot=\"table-header\"\n      className={cn(\"[&_tr]:border-b\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  return (\n    <tbody\n      data-slot=\"table-body\"\n      className={cn(\"[&_tr:last-child]:border-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return (\n    <tfoot\n      data-slot=\"table-footer\"\n      className={cn(\n        \"border-t bg-muted/50 font-medium [&>tr]:last:border-b-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return (\n    <tr\n      data-slot=\"table-row\"\n      className={cn(\n        \"border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableHead({ className, ...props }: React.ComponentProps<\"th\">) {\n  return (\n    <th\n      data-slot=\"table-head\"\n      className={cn(\n        \"h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      className={cn(\n        \"p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCaption({\n  className,\n  ...props\n}: React.ComponentProps<\"caption\">) {\n  return (\n    <caption\n      data-slot=\"table-caption\"\n      className={cn(\"mt-4 text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableHead,\n  TableRow,\n  TableCell,\n  TableCaption,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TMKuggkFifXBvukV6gVpjU",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  ChevronLeftIcon,\n  ChevronRightIcon,\n  MoreHorizontalIcon,\n} from \"lucide-react\"\n\nimport { buttonVariants, type Button } from \"@/components/ui/button\"\n\nfunction Pagination({ className, ...props }: React.ComponentProps<\"nav\">) {\n  return (\n    <nav\n      role=\"navigation\"\n      aria-label=\"pagination\"\n      data-slot=\"pagination\"\n      className={cn(\"mx-auto flex w-full justify-center\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationContent({\n  className,\n  ...props\n}: React.ComponentProps<\"ul\">) {\n  return (\n    <ul\n      data-slot=\"pagination-content\"\n      className={cn(\"flex flex-row items-center gap-1\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationItem({ ...props }: React.ComponentProps<\"li\">) {\n  return <li data-slot=\"pagination-item\" {...props} />\n}\n\ntype PaginationLinkProps = {\n  isActive?: boolean\n} & Pick<React.ComponentProps<typeof Button>, \"size\"> &\n  React.ComponentProps<\"a\">\n\nfunction PaginationLink({\n  className,\n  isActive,\n  size = \"icon\",\n  ...props\n}: PaginationLinkProps) {\n  return (\n    <a\n      aria-current={isActive ? \"page\" : undefined}\n      data-slot=\"pagination-link\"\n      data-active={isActive}\n      className={cn(\n        buttonVariants({\n          variant: isActive ? \"outline\" : \"ghost\",\n          size,\n        }),\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction PaginationPrevious({\n  className,\n  ...props\n}: React.ComponentProps<typeof PaginationLink>) {\n  return (\n    <PaginationLink\n      aria-label=\"Go to previous page\"\n      size=\"default\"\n      className={cn(\"gap-1 px-2.5 sm:pl-2.5\", className)}\n      {...props}\n    >\n      <ChevronLeftIcon />\n      <span className=\"hidden sm:block\">Previous</span>\n    </PaginationLink>\n  )\n}\n\nfunction PaginationNext({\n  className,\n  ...props\n}: React.ComponentProps<typeof PaginationLink>) {\n  return (\n    <PaginationLink\n      aria-label=\"Go to next page\"\n      size=\"default\"\n      className={cn(\"gap-1 px-2.5 sm:pr-2.5\", className)}\n      {...props}\n    >\n      <span className=\"hidden sm:block\">Next</span>\n      <ChevronRightIcon />\n    </PaginationLink>\n  )\n}\n\nfunction PaginationEllipsis({\n  className,\n  ...props\n}: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      aria-hidden\n      data-slot=\"pagination-ellipsis\"\n      className={cn(\"flex size-9 items-center justify-center\", className)}\n      {...props}\n    >\n      <MoreHorizontalIcon className=\"size-4\" />\n      <span className=\"sr-only\">More pages</span>\n    </span>\n  )\n}\n\nexport {\n  Pagination,\n  PaginationContent,\n  PaginationLink,\n  PaginationItem,\n  PaginationPrevious,\n  PaginationNext,\n  PaginationEllipsis,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BAM9a2BdLrYusEWkgb5Woq",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The pagination links are anchors, so I'll use plain Buttons for pagination. Let me check the Calendar, Select, Button, Input, Badge, and Popover components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JtVZnGBQxov9M6BhXhvcs7",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/calendar.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01V6yF3zYznwaZKS2J12AuZ9",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TuzepeAkA72K4hbB2vMS62",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/select.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013EVszzbVWSRVXL4ju6qJkZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VW5Cq2pqSG5ESrAfiJJ7Sv",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DzznJ4xMmxRXMfpJZgEPxr",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JtVZnGBQxov9M6BhXhvcs7",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport {\n  ChevronDownIcon,\n  ChevronLeftIcon,\n  ChevronRightIcon,\n} from \"lucide-react\"\nimport {\n  DayPicker,\n  getDefaultClassNames,\n  type DayButton,\n} from \"react-day-picker\"\n\nimport { Button, buttonVariants } from \"@/components/ui/button\"\n\nfunction Calendar({\n  className,\n  classNames,\n  showOutsideDays = true,\n  captionLayout = \"label\",\n  buttonVariant = \"ghost\",\n  formatters,\n  components,\n  ...props\n}: React.ComponentProps<typeof DayPicker> & {\n  buttonVariant?: React.ComponentProps<typeof Button>[\"variant\"]\n}) {\n  const defaultClassNames = getDefaultClassNames()\n\n  return (\n    <DayPicker\n      showOutsideDays={showOutsideDays}\n      className={cn(\n        \"group/calendar bg-background p-3 [--cell-size:--spacing(8)] [[data-slot=card-content]_&]:bg-transparent [[data-slot=popover-content]_&]:bg-transparent\",\n        String.raw`rtl:**:[.rdp-button\\_next>svg]:rotate-180`,\n        String.raw`rtl:**:[.rdp-button\\_previous>svg]:rotate-180`,\n        className\n      )}\n      captionLayout={captionLayout}\n      formatters={{\n        formatMonthDropdown: (date) =>\n          date.toLocaleString(\"default\", { month: \"short\" }),\n        ...formatters,\n      }}\n      classNames={{\n        root: cn(\"w-fit\", defaultClassNames.root),\n        months: cn(\n          \"relative flex flex-col gap-4 md:flex-row\",\n          defaultClassNames.months\n        ),\n        month: cn(\"flex w-full flex-col gap-4\", defaultClassNames.month),\n        nav: cn(\n          \"absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1\",\n          defaultClassNames.nav\n        ),\n        button_previous: cn(\n          buttonVariants({ variant: buttonVariant }),\n          \"size-(--cell-size) p-0 select-none aria-disabled:opacity-50\",\n          defaultClassNames.button_previous\n        ),\n        button_next: cn(\n          buttonVariants({ variant: buttonVariant }),\n          \"size-(--cell-size) p-0 select-none aria-disabled:opacity-50\",\n          defaultClassNames.button_next\n        ),\n        month_caption: cn(\n          \"flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)\",\n          defaultClassNames.month_caption\n        ),\n        dropdowns: cn(\n          \"flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium\",\n          defaultClassNames.dropdowns\n        ),\n        dropdown_root: cn(\n          \"relative rounded-md border border-input shadow-xs has-focus:border-ring has-focus:ring-[3px] has-focus:ring-ring/50\",\n          defaultClassNames.dropdown_root\n        ),\n        dropdown: cn(\n          \"absolute inset-0 bg-popover opacity-0\",\n          defaultClassNames.dropdown\n        ),\n        caption_label: cn(\n          \"font-medium select-none\",\n          captionLayout === \"label\"\n            ? \"text-sm\"\n            : \"flex h-8 items-center gap-1 rounded-md pr-1 pl-2 text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground\",\n          defaultClassNames.caption_label\n        ),\n        month_grid: cn(\"w-full border-collapse\", defaultClassNames.month_grid),\n        weekdays: cn(\"flex\", defaultClassNames.weekdays),\n        weekday: cn(\n          \"flex-1 rounded-md text-[0.8rem] font-normal text-muted-foreground select-none\",\n          defaultClassNames.weekday\n        ),\n        week: cn(\"mt-2 flex w-full\", defaultClassNames.week),\n        week_number_header: cn(\n          \"w-(--cell-size) select-none\",\n          defaultClassNames.week_number_header\n        ),\n        week_number: cn(\n          \"text-[0.8rem] text-muted-foreground select-none\",\n          defaultClassNames.week_number\n        ),\n        day: cn(\n          \"group/day relative aspect-square h-full w-full p-0 text-center select-none [&:last-child[data-selected=true]_button]:rounded-r-md\",\n          props.showWeekNumber\n            ? \"[&:nth-child(2)[data-selected=true]_button]:rounded-l-md\"\n            : \"[&:first-child[data-selected=true]_button]:rounded-l-md\",\n          defaultClassNames.day\n        ),\n        range_start: cn(\n          \"rounded-l-md bg-accent\",\n          defaultClassNames.range_start\n        ),\n        range_middle: cn(\"rounded-none\", defaultClassNames.range_middle),\n        range_end: cn(\"rounded-r-md bg-accent\", defaultClassNames.range_end),\n        today: cn(\n          \"rounded-md bg-accent text-accent-foreground data-[selected=true]:rounded-none\",\n          defaultClassNames.today\n        ),\n        outside: cn(\n          \"text-muted-foreground aria-selected:text-muted-foreground\",\n          defaultClassNames.outside\n        ),\n        disabled: cn(\n          \"text-muted-foreground opacity-50\",\n          defaultClassNames.disabled\n        ),\n        hidden: cn(\"invisible\", defaultClassNames.hidden),\n        ...classNames,\n      }}\n      components={{\n        Root: ({ className, rootRef, ...props }) => {\n          return (\n            <div\n              data-slot=\"calendar\"\n              ref={rootRef}\n              className={cn(className)}\n              {...props}\n            />\n          )\n        },\n        Chevron: ({ className, orientation, ...props }) => {\n          if (orientation === \"left\") {\n            return (\n              <ChevronLeftIcon className={cn(\"size-4\", className)} {...props} />\n            )\n          }\n\n          if (orientation === \"right\") {\n            return (\n              <ChevronRightIcon\n                className={cn(\"size-4\", className)}\n                {...props}\n              />\n            )\n          }\n\n          return (\n            <ChevronDownIcon className={cn(\"size-4\", className)} {...props} />\n          )\n        },\n        DayButton: CalendarDayButton,\n        WeekNumber: ({ children, ...props }) => {\n          return (\n            <td {...props}>\n              <div className=\"flex size-(--cell-size) items-center justify-center text-center\">\n                {children}\n              </div>\n            </td>\n          )\n        },\n        ...components,\n      }}\n      {...props}\n    />\n  )\n}\n\nfunction CalendarDayButton({\n  className,\n  day,\n  modifiers,\n  ...props\n}: React.ComponentProps<typeof DayButton>) {\n  const defaultClassNames = getDefaultClassNames()\n\n  const ref = React.useRef<HTMLButtonElement>(null)\n  React.useEffect(() => {\n    if (modifiers.focused) ref.current?.focus()\n  }, [modifiers.focused])\n\n  return (\n    <Button\n      ref={ref}\n      variant=\"ghost\"\n      size=\"icon\"\n      data-day={day.date.toLocaleDateString()}\n      data-selected-single={\n        modifiers.selected &&\n        !modifiers.range_start &&\n        !modifiers.range_end &&\n        !modifiers.range_middle\n      }\n      data-range-start={modifiers.range_start}\n      data-range-end={modifiers.range_end}\n      data-range-middle={modifiers.range_middle}\n      className={cn(\n        \"flex aspect-square size-auto w-full min-w-(--cell-size) flex-col gap-1 leading-none font-normal group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:border-ring group-data-[focused=true]/day:ring-[3px] group-data-[focused=true]/day:ring-ring/50 data-[range-end=true]:rounded-md data-[range-end=true]:rounded-r-md data-[range-end=true]:bg-primary data-[range-end=true]:text-primary-foreground data-[range-middle=true]:rounded-none data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground data-[range-start=true]:rounded-md data-[range-start=true]:rounded-l-md data-[range-start=true]:bg-primary data-[range-start=true]:text-primary-foreground data-[selected-single=true]:bg-primary data-[selected-single=true]:text-primary-foreground dark:hover:text-accent-foreground [&>span]:text-xs [&>span]:opacity-70\",\n        defaultClassNames.day,\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Calendar, CalendarDayButton }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01V6yF3zYznwaZKS2J12AuZ9",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TuzepeAkA72K4hbB2vMS62",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon, ChevronDownIcon, ChevronUpIcon } from \"lucide-react\"\nimport { Select as SelectPrimitive } from \"radix-ui\"\n\nfunction Select({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Root>) {\n  return <SelectPrimitive.Root data-slot=\"select\" {...props} />\n}\n\nfunction SelectGroup({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Group>) {\n  return <SelectPrimitive.Group data-slot=\"select-group\" {...props} />\n}\n\nfunction SelectValue({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Value>) {\n  return <SelectPrimitive.Value data-slot=\"select-value\" {...props} />\n}\n\nfunction SelectTrigger({\n  className,\n  size = \"default\",\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SelectPrimitive.Trigger\n      data-slot=\"select-trigger\"\n      data-size={size}\n      className={cn(\n        \"flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[placeholder]:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      <SelectPrimitive.Icon asChild>\n        <ChevronDownIcon className=\"size-4 opacity-50\" />\n      </SelectPrimitive.Icon>\n    </SelectPrimitive.Trigger>\n  )\n}\n\nfunction SelectContent({\n  className,\n  children,\n  position = \"item-aligned\",\n  align = \"center\",\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Content>) {\n  return (\n    <SelectPrimitive.Portal>\n      <SelectPrimitive.Content\n        data-slot=\"select-content\"\n        className={cn(\n          \"relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          position === \"popper\" &&\n            \"data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1\",\n          className\n        )}\n        position={position}\n        align={align}\n        {...props}\n      >\n        <SelectScrollUpButton />\n        <SelectPrimitive.Viewport\n          className={cn(\n            \"p-1\",\n            position === \"popper\" &&\n              \"h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1\"\n          )}\n        >\n          {children}\n        </SelectPrimitive.Viewport>\n        <SelectScrollDownButton />\n      </SelectPrimitive.Content>\n    </SelectPrimitive.Portal>\n  )\n}\n\nfunction SelectLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Label>) {\n  return (\n    <SelectPrimitive.Label\n      data-slot=\"select-label\"\n      className={cn(\"px-2 py-1.5 text-xs text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectItem({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Item>) {\n  return (\n    <SelectPrimitive.Item\n      data-slot=\"select-item\"\n      className={cn(\n        \"relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2\",\n        className\n      )}\n      {...props}\n    >\n      <span\n        data-slot=\"select-item-indicator\"\n        className=\"absolute right-2 flex size-3.5 items-center justify-center\"\n      >\n        <SelectPrimitive.ItemIndicator>\n          <CheckIcon className=\"size-4\" />\n        </SelectPrimitive.ItemIndicator>\n      </span>\n      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>\n    </SelectPrimitive.Item>\n  )\n}\n\nfunction SelectSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Separator>) {\n  return (\n    <SelectPrimitive.Separator\n      data-slot=\"select-separator\"\n      className={cn(\"pointer-events-none -mx-1 my-1 h-px bg-border\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectScrollUpButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {\n  return (\n    <SelectPrimitive.ScrollUpButton\n      data-slot=\"select-scroll-up-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronUpIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollUpButton>\n  )\n}\n\nfunction SelectScrollDownButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {\n  return (\n    <SelectPrimitive.ScrollDownButton\n      data-slot=\"select-scroll-down-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronDownIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollDownButton>\n  )\n}\n\nexport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectLabel,\n  SelectScrollDownButton,\n  SelectScrollUpButton,\n  SelectSeparator,\n  SelectTrigger,\n  SelectValue,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013EVszzbVWSRVXL4ju6qJkZ",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Textarea } from \"@/components/ui/textarea\"\n\nfunction InputGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-group\"\n      role=\"group\"\n      className={cn(\n        \"group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30\",\n        \"h-9 min-w-0 has-[>textarea]:h-auto\",\n\n        // Variants based on alignment.\n        \"has-[>[data-align=inline-start]]:[&>input]:pl-2\",\n        \"has-[>[data-align=inline-end]]:[&>input]:pr-2\",\n        \"has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3\",\n        \"has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3\",\n\n        // Focus state.\n        \"has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50\",\n\n        // Error state.\n        \"has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40\",\n\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupAddonVariants = cva(\n  \"flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      align: {\n        \"inline-start\":\n          \"order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]\",\n        \"inline-end\":\n          \"order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]\",\n        \"block-start\":\n          \"order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3\",\n        \"block-end\":\n          \"order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5 [.border-t]:pt-3\",\n      },\n    },\n    defaultVariants: {\n      align: \"inline-start\",\n    },\n  }\n)\n\nfunction InputGroupAddon({\n  className,\n  align = \"inline-start\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof inputGroupAddonVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"input-group-addon\"\n      data-align={align}\n      className={cn(inputGroupAddonVariants({ align }), className)}\n      onClick={(e) => {\n        if ((e.target as HTMLElement).closest(\"button\")) {\n          return\n        }\n        e.currentTarget.parentElement?.querySelector(\"input\")?.focus()\n      }}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupButtonVariants = cva(\n  \"flex items-center gap-2 text-sm shadow-none\",\n  {\n    variants: {\n      size: {\n        xs: \"h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5\",\n        sm: \"h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5\",\n        \"icon-xs\":\n          \"size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0\",\n        \"icon-sm\": \"size-8 p-0 has-[>svg]:p-0\",\n      },\n    },\n    defaultVariants: {\n      size: \"xs\",\n    },\n  }\n)\n\nfunction InputGroupButton({\n  className,\n  type = \"button\",\n  variant = \"ghost\",\n  size = \"xs\",\n  ...props\n}: Omit<React.ComponentProps<typeof Button>, \"size\"> &\n  VariantProps<typeof inputGroupButtonVariants>) {\n  return (\n    <Button\n      type={type}\n      data-size={size}\n      variant={variant}\n      className={cn(inputGroupButtonVariants({ size }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupText({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      className={cn(\n        \"flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupInput({\n  className,\n  ...props\n}: React.ComponentProps<\"input\">) {\n  return (\n    <Input\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupTextarea({\n  className,\n  ...props\n}: React.ComponentProps<\"textarea\">) {\n  return (\n    <Textarea\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupText,\n  InputGroupInput,\n  InputGroupTextarea,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VW5Cq2pqSG5ESrAfiJJ7Sv",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DzznJ4xMmxRXMfpJZgEPxr",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the Popover, Badge, Input, Card, and Label components quickly."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LnjLPyAgG9TTLNTbBi5Ndf",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/popover.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017i916pV82DGk1dswkofqre",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0158vPFEq5BbMfzr5KptxAmH",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0121D77ftpi1ZJ5jMVEcPxf5",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/empty.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LnjLPyAgG9TTLNTbBi5Ndf",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Popover as PopoverPrimitive } from \"radix-ui\"\n\nfunction Popover({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Root>) {\n  return <PopoverPrimitive.Root data-slot=\"popover\" {...props} />\n}\n\nfunction PopoverTrigger({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {\n  return <PopoverPrimitive.Trigger data-slot=\"popover-trigger\" {...props} />\n}\n\nfunction PopoverContent({\n  className,\n  align = \"center\",\n  sideOffset = 4,\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Content>) {\n  return (\n    <PopoverPrimitive.Portal>\n      <PopoverPrimitive.Content\n        data-slot=\"popover-content\"\n        align={align}\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          className\n        )}\n        {...props}\n      />\n    </PopoverPrimitive.Portal>\n  )\n}\n\nfunction PopoverAnchor({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {\n  return <PopoverPrimitive.Anchor data-slot=\"popover-anchor\" {...props} />\n}\n\nfunction PopoverHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"popover-header\"\n      className={cn(\"flex flex-col gap-1 text-sm\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverTitle({ className, ...props }: React.ComponentProps<\"h2\">) {\n  return (\n    <div\n      data-slot=\"popover-title\"\n      className={cn(\"font-medium\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverDescription({\n  className,\n  ...props\n}: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"popover-description\"\n      className={cn(\"text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Popover,\n  PopoverTrigger,\n  PopoverContent,\n  PopoverAnchor,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverDescription,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017i916pV82DGk1dswkofqre",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0158vPFEq5BbMfzr5KptxAmH",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0121D77ftpi1ZJ5jMVEcPxf5",
+          "content": "import { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Empty({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty\"\n      className={cn(\n        \"flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-header\"\n      className={cn(\n        \"flex max-w-sm flex-col items-center gap-2 text-center\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst emptyMediaVariants = cva(\n  \"mb-2 flex shrink-0 items-center justify-center [&_svg]:pointer-events-none [&_svg]:shrink-0\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        icon: \"flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted text-foreground [&_svg:not([class*='size-'])]:size-6\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction EmptyMedia({\n  className,\n  variant = \"default\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof emptyMediaVariants>) {\n  return (\n    <div\n      data-slot=\"empty-icon\"\n      data-variant={variant}\n      className={cn(emptyMediaVariants({ variant, className }))}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-title\"\n      className={cn(\"text-lg font-medium tracking-tight\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <div\n      data-slot=\"empty-description\"\n      className={cn(\n        \"text-sm/relaxed text-muted-foreground [&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-content\"\n      className={cn(\n        \"flex w-full max-w-sm min-w-0 flex-col items-center gap-4 text-sm text-balance\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Empty,\n  EmptyHeader,\n  EmptyTitle,\n  EmptyDescription,\n  EmptyContent,\n  EmptyMedia,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll design the Orders page with a status toggle, date-range calendar popover, search, sortable headers, page-size select, and pagination—using fixed inline dates and locale-safe formatting to keep output deterministic.\n\n",
+          "signature": "CAQS6wgKEQgSGAI4AUIJbmFycmF0aW9uEgzdiAGamGOuAQmxLVEaDGpqNGhZ9JYDJzJKlCIwvmTmfGq9jSWOBG1sqIQjbug8KvRw4wj3dhFmwfy8hNo801NcF5DCnEqeupNY2kT8KocI0X9F5k5Paysw53PkW/Im59zBx8fO0xInqGml9uEefRgRjTQNnElx9nMgodyVc+xWVcN8ZoPGw00nnW7k4hCwOJ91z46K1tBbJ9A2E5C/pY128g45g14an39QpThNhay80HSiQmfi3JlQYvCqzj6KBPP5xArGTd5VVfQ4Q4XIqBKT4yqymXhIfXEoJ3ZtCM1jEpfkZBIEq7latPT8u5rbrV/9WEDrV/EPECVrcByxASGZCqRQQYYzPeNuQKLG+96Iw1bBitDloIpwRDnARDNJ7xSRC0f1NdwnWKftXQ4gNI5g07fA5/mH5VHHs7om+FzQ0Vyo99vGG26KvYepkhVGk2ZaIsipbRWC1gKsnFBBZCQ8KN6Nvdv1qbm5KvsTSnpi8fG/ClqXqhE5EV+zYA47QHvRZvt1vri4XEIlu/SKZWmlEK9UnBD3ZRIsrHtD3bxblyYWY6Y2Ihob1RPmI2GvGy6zEVrs5IJdagzTXZ2aOR0Z0Yl/im1y0/IOLmgnjRr3h270uo6kDu0v6o4jAf/eOCC0JN4sEnN1EKUuR1aJ0BS8c7/Ya+Mvq5bz4tJXlXUJgBxCLySk3aPNvPDaECEH6JaeWra5l6nZRweVFNRkTLWVsGWDY2hrHtWzMnWCTRwYONaZL39dhjilH4uYQQXJHu97l8Va7JsHH76gEke8kxb/jMJeMlQv+LX1NlA5lfKlk4q7cdilSwZ+KrbXjN/FuCFAJYQfnhy3P+BxNmZdM549x70QRrq4LRL6LW68pFUde+DtmhVhtxIAEw9f2fH4+LLeckN0Il87h+6QOtC70HSvT4gc+Y1e7stfAKQPPadc6RtaodmQIS5+WeT2709lEwFQ+BAo2w0LT9VkkR0dqeBVjAhdVRhbnvKmtz02NcDWOiK6fhUhU5yYN10JJrWTf/2NzevCFLzU7qAc9vfqP1zD/SQNV+SGxAUoMnTrX7KFsskVkcD5SNItlhSnfzquhnGAfReUlUMnQixxx7QTp6ixsMTxjxBqrE23ZOdXo71GvTy4G8O6QhDAjLGHC3qIMSOGt/1QRROG0n/JPss6HpUlik2qVAN3GzdvAm/ythtSYkmxlPRP0I5zd94DW55wqc3BVrwZAnLQHXiLVh5xtnfnAWvKMGG+WXPIo/M70ZyiCjHWAvTCL1WtyjTHEg0M7pMDfmzeYah7U+a2FcIfKvFuwqY/MtrpEofIWI/QkL+CGWi0iFbsFB6weKgGy/LZcjdcO9nYC7JW/+d4LULjdzrpeFRy+//THQiEme2BqNVyYFQJdyHCnxXjg19k2lqcmgzkMNGw6CtVtZXnuku+A4R9Jt8OVc76ztYKrg8Uq2/DSKKqseIABsWKXDQTK+YX5URQZMfbJFYYAQ=="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WiHmMtMv1r2QFbTpPFoPjq",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WiHmMtMv1r2QFbTpPFoPjq",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport type { DateRange } from \"react-day-picker\";\nimport {\n  ArrowDownIcon,\n  ArrowUpDownIcon,\n  ArrowUpIcon,\n  CalendarIcon,\n  ChevronLeftIcon,\n  ChevronRightIcon,\n  ChevronsLeftIcon,\n  ChevronsRightIcon,\n  SearchIcon,\n  SearchXIcon,\n  XIcon,\n} from \"lucide-react\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Calendar } from \"@/components/ui/calendar\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport {\n  Empty,\n  EmptyDescription,\n  EmptyHeader,\n  EmptyMedia,\n  EmptyTitle,\n} from \"@/components/ui/empty\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@/components/ui/input-group\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\";\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\";\nimport {\n  Table,\n  TableBody,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\n\ntype Status = \"Paid\" | \"Pending\" | \"Refunded\" | \"Failed\";\ntype StatusFilter = \"All\" | Status;\ntype SortKey = \"id\" | \"customer\" | \"date\" | \"status\" | \"amount\";\ntype SortDir = \"asc\" | \"desc\";\n\ninterface Order {\n  id: string;\n  customer: string;\n  email: string;\n  /** ISO date (yyyy-mm-dd) */\n  date: string;\n  status: Status;\n  amount: number;\n}\n\nconst ORDERS: Order[] = [\n  { id: \"ORD-10482\", customer: \"Amara Okafor\", email: \"amara.okafor@northwind.example\", date: \"2025-05-28\", status: \"Paid\", amount: 248.5 },\n  { id: \"ORD-10481\", customer: \"Liam Chen\", email: \"liam.chen@brightloop.example\", date: \"2025-05-28\", status: \"Pending\", amount: 89.0 },\n  { id: \"ORD-10479\", customer: \"Sofia Marchetti\", email: \"sofia@marchetti-studio.example\", date: \"2025-05-27\", status: \"Paid\", amount: 1320.0 },\n  { id: \"ORD-10477\", customer: \"Noah Williams\", email: \"noah.w@fernhill.example\", date: \"2025-05-26\", status: \"Failed\", amount: 54.99 },\n  { id: \"ORD-10474\", customer: \"Priya Raman\", email: \"priya.raman@oakbridge.example\", date: \"2025-05-25\", status: \"Paid\", amount: 612.75 },\n  { id: \"ORD-10471\", customer: \"Mateo García\", email: \"mateo.garcia@solenta.example\", date: \"2025-05-24\", status: \"Refunded\", amount: 175.0 },\n  { id: \"ORD-10469\", customer: \"Hannah Becker\", email: \"h.becker@kleinwerk.example\", date: \"2025-05-23\", status: \"Paid\", amount: 436.2 },\n  { id: \"ORD-10466\", customer: \"Yuki Tanaka\", email: \"yuki.tanaka@tidepool.example\", date: \"2025-05-22\", status: \"Pending\", amount: 929.0 },\n  { id: \"ORD-10463\", customer: \"Oliver Hughes\", email: \"oliver.hughes@marlow.example\", date: \"2025-05-21\", status: \"Paid\", amount: 72.4 },\n  { id: \"ORD-10460\", customer: \"Fatima Al-Sayed\", email: \"fatima@alsayed-trading.example\", date: \"2025-05-20\", status: \"Paid\", amount: 2104.0 },\n  { id: \"ORD-10457\", customer: \"Lucas Moreau\", email: \"lucas.moreau@vignoble.example\", date: \"2025-05-19\", status: \"Failed\", amount: 310.0 },\n  { id: \"ORD-10455\", customer: \"Emma Johansson\", email: \"emma.j@nordlys.example\", date: \"2025-05-18\", status: \"Paid\", amount: 158.3 },\n  { id: \"ORD-10452\", customer: \"Diego Alvarez\", email: \"diego.alvarez@cobaltpath.example\", date: \"2025-05-17\", status: \"Pending\", amount: 487.9 },\n  { id: \"ORD-10449\", customer: \"Chloe Dubois\", email: \"chloe.dubois@lumiere.example\", date: \"2025-05-16\", status: \"Refunded\", amount: 96.0 },\n  { id: \"ORD-10446\", customer: \"Ethan Brooks\", email: \"ethan.brooks@gridiron.example\", date: \"2025-05-15\", status: \"Paid\", amount: 744.6 },\n  { id: \"ORD-10443\", customer: \"Ingrid Larsen\", email: \"ingrid.larsen@fjordworks.example\", date: \"2025-05-14\", status: \"Paid\", amount: 365.0 },\n  { id: \"ORD-10440\", customer: \"Kwame Mensah\", email: \"kwame.mensah@goldcoast.example\", date: \"2025-05-13\", status: \"Pending\", amount: 1180.25 },\n  { id: \"ORD-10437\", customer: \"Isabella Rossi\", email: \"isabella.rossi@trattoria.example\", date: \"2025-05-12\", status: \"Paid\", amount: 59.9 },\n  { id: \"ORD-10434\", customer: \"Jack Thompson\", email: \"jack.t@harborlight.example\", date: \"2025-05-11\", status: \"Failed\", amount: 215.0 },\n  { id: \"ORD-10431\", customer: \"Aisha Khan\", email: \"aisha.khan@crescent.example\", date: \"2025-05-10\", status: \"Paid\", amount: 882.0 },\n  { id: \"ORD-10428\", customer: \"Pedro Santos\", email: \"pedro.santos@vermelho.example\", date: \"2025-05-09\", status: \"Paid\", amount: 143.75 },\n  { id: \"ORD-10425\", customer: \"Mia Novak\", email: \"mia.novak@brnolab.example\", date: \"2025-05-08\", status: \"Refunded\", amount: 402.0 },\n  { id: \"ORD-10422\", customer: \"Oscar Lindqvist\", email: \"oscar.l@stenhus.example\", date: \"2025-05-07\", status: \"Paid\", amount: 267.4 },\n  { id: \"ORD-10419\", customer: \"Zara Ahmed\", email: \"zara.ahmed@pinecone.example\", date: \"2025-05-06\", status: \"Pending\", amount: 539.0 },\n  { id: \"ORD-10416\", customer: \"William Clarke\", email: \"will.clarke@stonegate.example\", date: \"2025-05-05\", status: \"Paid\", amount: 1675.5 },\n  { id: \"ORD-10413\", customer: \"Lena Fischer\", email: \"lena.fischer@rheinblick.example\", date: \"2025-05-04\", status: \"Paid\", amount: 98.2 },\n  { id: \"ORD-10410\", customer: \"Arjun Mehta\", email: \"arjun.mehta@saffron.example\", date: \"2025-05-03\", status: \"Failed\", amount: 720.0 },\n  { id: \"ORD-10407\", customer: \"Camille Laurent\", email: \"camille.laurent@atelier.example\", date: \"2025-05-02\", status: \"Paid\", amount: 189.0 },\n  { id: \"ORD-10404\", customer: \"Tomás Silva\", email: \"tomas.silva@alfama.example\", date: \"2025-05-01\", status: \"Paid\", amount: 451.3 },\n  { id: \"ORD-10401\", customer: \"Grace Murphy\", email: \"grace.murphy@emeraldisle.example\", date: \"2025-04-30\", status: \"Pending\", amount: 326.0 },\n  { id: \"ORD-10398\", customer: \"Hiro Sato\", email: \"hiro.sato@kitsune.example\", date: \"2025-04-29\", status: \"Paid\", amount: 1042.0 },\n  { id: \"ORD-10395\", customer: \"Nadia Petrova\", email: \"nadia.petrova@volgaworks.example\", date: \"2025-04-28\", status: \"Refunded\", amount: 233.5 },\n  { id: \"ORD-10392\", customer: \"Daniel Kim\", email: \"daniel.kim@hanriver.example\", date: \"2025-04-27\", status: \"Paid\", amount: 615.0 },\n  { id: \"ORD-10389\", customer: \"Elena Popescu\", email: \"elena.popescu@carpathia.example\", date: \"2025-04-26\", status: \"Paid\", amount: 77.0 },\n  { id: \"ORD-10386\", customer: \"Samuel Adeyemi\", email: \"sam.adeyemi@lagoon.example\", date: \"2025-04-25\", status: \"Failed\", amount: 498.0 },\n  { id: \"ORD-10383\", customer: \"Olivia Bennett\", email: \"olivia.bennett@redwood.example\", date: \"2025-04-24\", status: \"Paid\", amount: 361.8 },\n  { id: \"ORD-10380\", customer: \"Marco Bianchi\", email: \"marco.bianchi@lagomaggiore.example\", date: \"2025-04-23\", status: \"Pending\", amount: 855.0 },\n  { id: \"ORD-10377\", customer: \"Sara Lindholm\", email: \"sara.lindholm@auroraco.example\", date: \"2025-04-22\", status: \"Paid\", amount: 129.0 },\n  { id: \"ORD-10374\", customer: \"Ravi Patel\", email: \"ravi.patel@monsoon.example\", date: \"2025-04-21\", status: \"Paid\", amount: 1499.0 },\n  { id: \"ORD-10371\", customer: \"Julia Wagner\", email: \"julia.wagner@alpenglow.example\", date: \"2025-04-20\", status: \"Refunded\", amount: 64.5 },\n  { id: \"ORD-10368\", customer: \"Andre Costa\", email: \"andre.costa@tagus.example\", date: \"2025-04-19\", status: \"Paid\", amount: 297.0 },\n  { id: \"ORD-10365\", customer: \"Leila Haddad\", email: \"leila.haddad@medina.example\", date: \"2025-04-18\", status: \"Paid\", amount: 573.2 },\n  { id: \"ORD-10362\", customer: \"Finn O'Brien\", email: \"finn.obrien@shamrock.example\", date: \"2025-04-17\", status: \"Pending\", amount: 208.0 },\n  { id: \"ORD-10359\", customer: \"Mei Lin\", email: \"mei.lin@jadegarden.example\", date: \"2025-04-16\", status: \"Paid\", amount: 936.4 },\n  { id: \"ORD-10356\", customer: \"Victor Nilsson\", email: \"victor.nilsson@polarbear.example\", date: \"2025-04-15\", status: \"Failed\", amount: 175.0 },\n  { id: \"ORD-10353\", customer: \"Amelia Foster\", email: \"amelia.foster@wrenhouse.example\", date: \"2025-04-14\", status: \"Paid\", amount: 412.0 },\n];\n\nconst STATUS_FILTERS: StatusFilter[] = [\"All\", \"Paid\", \"Pending\", \"Refunded\", \"Failed\"];\nconst PAGE_SIZES = [\"5\", \"10\", \"20\"] as const;\n\nconst STATUS_STYLES: Record<Status, string> = {\n  Paid: \"border-transparent bg-emerald-100 text-emerald-800 dark:bg-emerald-500/15 dark:text-emerald-300\",\n  Pending: \"border-transparent bg-amber-100 text-amber-800 dark:bg-amber-500/15 dark:text-amber-300\",\n  Refunded: \"border-transparent bg-sky-100 text-sky-800 dark:bg-sky-500/15 dark:text-sky-300\",\n  Failed: \"border-transparent bg-red-100 text-red-800 dark:bg-red-500/15 dark:text-red-300\",\n};\n\nconst MONTHS = [\"Jan\", \"Feb\", \"Mar\", \"Apr\", \"May\", \"Jun\", \"Jul\", \"Aug\", \"Sep\", \"Oct\", \"Nov\", \"Dec\"];\n\nconst currency = new Intl.NumberFormat(\"en-US\", { style: \"currency\", currency: \"USD\" });\n\n/** Parse an ISO yyyy-mm-dd string as a local date (no timezone drift). */\nfunction parseISO(iso: string): Date {\n  const [y, m, d] = iso.split(\"-\").map(Number);\n  return new Date(y, m - 1, d);\n}\n\nfunction formatDate(date: Date): string {\n  return `${MONTHS[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()}`;\n}\n\nfunction formatISO(iso: string): string {\n  return formatDate(parseISO(iso));\n}\n\nfunction startOfDay(date: Date): number {\n  return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();\n}\n\nfunction compare(a: Order, b: Order, key: SortKey): number {\n  switch (key) {\n    case \"amount\":\n      return a.amount - b.amount;\n    case \"date\":\n      return a.date.localeCompare(b.date);\n    case \"id\":\n      return a.id.localeCompare(b.id);\n    case \"customer\":\n      return a.customer.localeCompare(b.customer);\n    case \"status\":\n      return a.status.localeCompare(b.status);\n  }\n}\n\ninterface Column {\n  key: SortKey;\n  label: string;\n  className?: string;\n  numeric?: boolean;\n}\n\nconst COLUMNS: Column[] = [\n  { key: \"id\", label: \"Order\" },\n  { key: \"customer\", label: \"Customer\" },\n  { key: \"date\", label: \"Date\" },\n  { key: \"status\", label: \"Status\" },\n  { key: \"amount\", label: \"Amount\", numeric: true },\n];\n\nexport default function Page() {\n  const [status, setStatus] = React.useState<StatusFilter>(\"All\");\n  const [range, setRange] = React.useState<DateRange | undefined>(undefined);\n  const [query, setQuery] = React.useState(\"\");\n  const [sortKey, setSortKey] = React.useState<SortKey>(\"date\");\n  const [sortDir, setSortDir] = React.useState<SortDir>(\"desc\");\n  const [pageSize, setPageSize] = React.useState<(typeof PAGE_SIZES)[number]>(\"10\");\n  const [page, setPage] = React.useState(1);\n\n  const filtered = React.useMemo(() => {\n    const q = query.trim().toLowerCase();\n    const from = range?.from ? startOfDay(range.from) : null;\n    const to = range?.to ? startOfDay(range.to) : from;\n\n    const rows = ORDERS.filter((o) => {\n      if (status !== \"All\" && o.status !== status) return false;\n      if (q && !`${o.id} ${o.customer} ${o.email}`.toLowerCase().includes(q)) return false;\n      if (from !== null) {\n        const t = startOfDay(parseISO(o.date));\n        if (t < from || (to !== null && t > to)) return false;\n      }\n      return true;\n    });\n\n    const dir = sortDir === \"asc\" ? 1 : -1;\n    return rows.sort((a, b) => compare(a, b, sortKey) * dir || a.id.localeCompare(b.id));\n  }, [status, query, range, sortKey, sortDir]);\n\n  const size = Number(pageSize);\n  const pageCount = Math.max(1, Math.ceil(filtered.length / size));\n  const currentPage = Math.min(page, pageCount);\n  const startIndex = (currentPage - 1) * size;\n  const pageRows = filtered.slice(startIndex, startIndex + size);\n\n  const hasFilters = status !== \"All\" || query !== \"\" || range?.from !== undefined;\n\n  function toggleSort(key: SortKey) {\n    if (key === sortKey) {\n      setSortDir((d) => (d === \"asc\" ? \"desc\" : \"asc\"));\n    } else {\n      setSortKey(key);\n      setSortDir(key === \"amount\" || key === \"date\" ? \"desc\" : \"asc\");\n    }\n    setPage(1);\n  }\n\n  function clearFilters() {\n    setStatus(\"All\");\n    setQuery(\"\");\n    setRange(undefined);\n    setPage(1);\n  }\n\n  const rangeLabel = range?.from\n    ? range.to && startOfDay(range.to) !== startOfDay(range.from)\n      ? `${formatDate(range.from)} – ${formatDate(range.to)}`\n      : formatDate(range.from)\n    : \"Any date\";\n\n  return (\n    <main className=\"mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12\">\n      <header className=\"mb-6 flex flex-col gap-1\">\n        <h1 className=\"text-2xl font-semibold tracking-tight sm:text-3xl\">Orders</h1>\n        <p className=\"text-sm text-muted-foreground\">\n          Track payments, refunds and failed charges across your storefront.\n        </p>\n      </header>\n\n      <Card className=\"gap-4 py-4 sm:py-6\">\n        <CardHeader className=\"px-4 sm:px-6\">\n          <CardTitle>\n            <h2>Recent orders</h2>\n          </CardTitle>\n          <CardDescription>\n            Filter by status or date, search by customer or order number, and click a column\n            heading to sort.\n          </CardDescription>\n        </CardHeader>\n\n        <CardContent className=\"flex flex-col gap-4 px-4 sm:px-6\">\n          {/* Filters row */}\n          <div\n            role=\"search\"\n            aria-label=\"Filter orders\"\n            className=\"flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between\"\n          >\n            <div className=\"-mx-1 overflow-x-auto px-1 py-1\">\n              <ToggleGroup\n                type=\"single\"\n                variant=\"outline\"\n                spacing={0}\n                value={status}\n                onValueChange={(value) => {\n                  // Radix emits \"\" when the active item is clicked again; keep a selection.\n                  if (value) {\n                    setStatus(value as StatusFilter);\n                    setPage(1);\n                  }\n                }}\n                aria-label=\"Filter by status\"\n              >\n                {STATUS_FILTERS.map((s) => (\n                  <ToggleGroupItem key={s} value={s} aria-label={`${s} orders`}>\n                    {s}\n                  </ToggleGroupItem>\n                ))}\n              </ToggleGroup>\n            </div>\n\n            <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center\">\n              <Popover>\n                <PopoverTrigger asChild>\n                  <Button\n                    variant=\"outline\"\n                    data-empty={!range?.from}\n                    aria-label={`Date range: ${rangeLabel}`}\n                    className=\"w-full justify-start font-normal data-[empty=true]:text-muted-foreground sm:w-64\"\n                  >\n                    <CalendarIcon aria-hidden=\"true\" />\n                    <span className=\"truncate\">{range?.from ? rangeLabel : \"Pick a date range\"}</span>\n                  </Button>\n                </PopoverTrigger>\n                <PopoverContent className=\"w-auto max-w-[calc(100vw-2rem)] overflow-x-auto p-0\" align=\"end\">\n                  <Calendar\n                    mode=\"range\"\n                    numberOfMonths={1}\n                    defaultMonth={range?.from ?? new Date(2025, 4, 1)}\n                    selected={range}\n                    onSelect={(next) => {\n                      setRange(next);\n                      setPage(1);\n                    }}\n                  />\n                  <div className=\"flex items-center justify-between gap-2 border-t p-2\">\n                    <span className=\"px-2 text-xs text-muted-foreground\">{rangeLabel}</span>\n                    <Button\n                      variant=\"ghost\"\n                      size=\"sm\"\n                      disabled={!range?.from}\n                      onClick={() => {\n                        setRange(undefined);\n                        setPage(1);\n                      }}\n                    >\n                      Reset\n                    </Button>\n                  </div>\n                </PopoverContent>\n              </Popover>\n\n              <InputGroup className=\"sm:w-64\">\n                <InputGroupAddon>\n                  <SearchIcon aria-hidden=\"true\" />\n                </InputGroupAddon>\n                <InputGroupInput\n                  type=\"search\"\n                  value={query}\n                  onChange={(e) => {\n                    setQuery(e.target.value);\n                    setPage(1);\n                  }}\n                  placeholder=\"Search orders or customers\"\n                  aria-label=\"Search orders or customers\"\n                  autoComplete=\"off\"\n                  className=\"[&::-webkit-search-cancel-button]:hidden\"\n                />\n                {query && (\n                  <InputGroupAddon align=\"inline-end\">\n                    <InputGroupButton\n                      size=\"icon-xs\"\n                      aria-label=\"Clear search\"\n                      onClick={() => {\n                        setQuery(\"\");\n                        setPage(1);\n                      }}\n                    >\n                      <XIcon aria-hidden=\"true\" />\n                    </InputGroupButton>\n                  </InputGroupAddon>\n                )}\n              </InputGroup>\n            </div>\n          </div>\n\n          {/* Result summary */}\n          <div className=\"flex min-h-8 items-center justify-between gap-2 text-sm text-muted-foreground\">\n            <p role=\"status\" aria-live=\"polite\">\n              {filtered.length === 0\n                ? \"No orders match\"\n                : `${filtered.length} ${filtered.length === 1 ? \"order\" : \"orders\"}`}\n              {status !== \"All\" && (\n                <Badge variant=\"outline\" className=\"ml-2 align-middle\">\n                  {status}\n                </Badge>\n              )}\n            </p>\n            {hasFilters && (\n              <Button variant=\"ghost\" size=\"sm\" onClick={clearFilters}>\n                <XIcon aria-hidden=\"true\" />\n                Clear filters\n              </Button>\n            )}\n          </div>\n\n          {/* Table */}\n          <div className=\"rounded-lg border\">\n            <Table>\n              <TableHeader>\n                <TableRow className=\"hover:bg-transparent\">\n                  {COLUMNS.map((col) => {\n                    const active = sortKey === col.key;\n                    const ariaSort = active\n                      ? sortDir === \"asc\"\n                        ? \"ascending\"\n                        : \"descending\"\n                      : \"none\";\n                    const Icon = !active ? ArrowUpDownIcon : sortDir === \"asc\" ? ArrowUpIcon : ArrowDownIcon;\n                    return (\n                      <TableHead\n                        key={col.key}\n                        aria-sort={ariaSort}\n                        className={col.numeric ? \"pr-3 text-right\" : \"pl-1\"}\n                      >\n                        <Button\n                          variant=\"ghost\"\n                          size=\"sm\"\n                          onClick={() => toggleSort(col.key)}\n                          className={\n                            col.numeric ? \"-mr-2 flex-row-reverse\" : \"-ml-1\"\n                          }\n                        >\n                          {col.label}\n                          <Icon\n                            aria-hidden=\"true\"\n                            className={active ? \"opacity-100\" : \"opacity-40\"}\n                          />\n                          <span className=\"sr-only\">\n                            {active\n                              ? `, sorted ${sortDir === \"asc\" ? \"ascending\" : \"descending\"}. Activate to reverse.`\n                              : \", not sorted. Activate to sort ascending.\"}\n                          </span>\n                        </Button>\n                      </TableHead>\n                    );\n                  })}\n                </TableRow>\n              </TableHeader>\n              <TableBody>\n                {pageRows.map((o) => (\n                  <TableRow key={o.id}>\n                    <TableCell className=\"pl-3 font-mono text-xs sm:text-sm\">{o.id}</TableCell>\n                    <TableCell>\n                      <div className=\"flex flex-col\">\n                        <span className=\"font-medium\">{o.customer}</span>\n                        <span className=\"text-xs text-muted-foreground\">{o.email}</span>\n                      </div>\n                    </TableCell>\n                    <TableCell className=\"tabular-nums\">\n                      <time dateTime={o.date}>{formatISO(o.date)}</time>\n                    </TableCell>\n                    <TableCell>\n                      <Badge className={STATUS_STYLES[o.status]}>{o.status}</Badge>\n                    </TableCell>\n                    <TableCell className=\"pr-3 text-right font-medium tabular-nums\">\n                      {currency.format(o.amount)}\n                    </TableCell>\n                  </TableRow>\n                ))}\n              </TableBody>\n            </Table>\n\n            {pageRows.length === 0 && (\n              <Empty className=\"border-t\">\n                <EmptyHeader>\n                  <EmptyMedia variant=\"icon\">\n                    <SearchXIcon aria-hidden=\"true\" />\n                  </EmptyMedia>\n                  <EmptyTitle>No orders found</EmptyTitle>\n                  <EmptyDescription>\n                    Nothing matches the current filters. Try a different status, widen the date\n                    range, or clear your search.\n                  </EmptyDescription>\n                </EmptyHeader>\n                <Button variant=\"outline\" size=\"sm\" onClick={clearFilters}>\n                  Clear filters\n                </Button>\n              </Empty>\n            )}\n          </div>\n\n          {/* Pagination */}\n          <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between\">\n            <div className=\"flex items-center justify-between gap-3 sm:justify-start\">\n              <label htmlFor=\"page-size\" className=\"text-sm text-muted-foreground\">\n                Rows per page\n              </label>\n              <Select\n                value={pageSize}\n                onValueChange={(v) => {\n                  setPageSize(v as (typeof PAGE_SIZES)[number]);\n                  setPage(1);\n                }}\n              >\n                <SelectTrigger id=\"page-size\" size=\"sm\" className=\"w-20\">\n                  <SelectValue />\n                </SelectTrigger>\n                <SelectContent>\n                  {PAGE_SIZES.map((s) => (\n                    <SelectItem key={s} value={s}>\n                      {s}\n                    </SelectItem>\n                  ))}\n                </SelectContent>\n              </Select>\n            </div>\n\n            <nav\n              aria-label=\"Table pagination\"\n              className=\"flex items-center justify-between gap-3 sm:justify-end\"\n            >\n              <p className=\"text-sm text-muted-foreground\" aria-live=\"polite\">\n                {filtered.length === 0\n                  ? \"0 of 0\"\n                  : `${startIndex + 1}–${Math.min(startIndex + size, filtered.length)} of ${filtered.length}`}\n              </p>\n              <div className=\"flex items-center gap-1\">\n                <Button\n                  variant=\"outline\"\n                  size=\"icon-sm\"\n                  aria-label=\"First page\"\n                  disabled={currentPage === 1}\n                  onClick={() => setPage(1)}\n                >\n                  <ChevronsLeftIcon aria-hidden=\"true\" />\n                </Button>\n                <Button\n                  variant=\"outline\"\n                  size=\"icon-sm\"\n                  aria-label=\"Previous page\"\n                  disabled={currentPage === 1}\n                  onClick={() => setPage(currentPage - 1)}\n                >\n                  <ChevronLeftIcon aria-hidden=\"true\" />\n                </Button>\n                <span className=\"min-w-20 px-2 text-center text-sm tabular-nums\">\n                  Page {currentPage} of {pageCount}\n                </span>\n                <Button\n                  variant=\"outline\"\n                  size=\"icon-sm\"\n                  aria-label=\"Next page\"\n                  disabled={currentPage === pageCount}\n                  onClick={() => setPage(currentPage + 1)}\n                >\n                  <ChevronRightIcon aria-hidden=\"true\" />\n                </Button>\n                <Button\n                  variant=\"outline\"\n                  size=\"icon-sm\"\n                  aria-label=\"Last page\"\n                  disabled={currentPage === pageCount}\n                  onClick={() => setPage(pageCount)}\n                >\n                  <ChevronsRightIcon aria-hidden=\"true\" />\n                </Button>\n              </div>\n            </nav>\n          </div>\n        </CardContent>\n      </Card>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

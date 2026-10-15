@@ -1,0 +1,49 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 666,
+    "chars": 20411,
+    "bytes": 20417,
+    "tokens_o200k": 5509,
+    "tokens_claudeLegacy": 5755
+  },
+  "raw": {
+    "lines": 549,
+    "chars": 19361,
+    "bytes": 19367,
+    "tokens_o200k": 5410,
+    "tokens_claudeLegacy": 5699
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Card",
+    "Select",
+    "SelectContent",
+    "SelectItem",
+    "SelectTrigger",
+    "SelectValue",
+    "Skeleton",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/select.tsx",
+      "components/ui/skeleton.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 498,
+    "chars": 16875,
+    "bytes": 16875,
+    "tokens_o200k": 4248,
+    "tokens_claudeLegacy": 4911
+  }
+}

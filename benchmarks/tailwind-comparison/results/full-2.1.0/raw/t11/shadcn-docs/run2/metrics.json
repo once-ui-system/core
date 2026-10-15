@@ -1,0 +1,59 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 649,
+    "chars": 21608,
+    "bytes": 21608,
+    "tokens_o200k": 5103,
+    "tokens_claudeLegacy": 5505
+  },
+  "raw": {
+    "lines": 650,
+    "chars": 21747,
+    "bytes": 21747,
+    "tokens_o200k": 5138,
+    "tokens_claudeLegacy": 5564
+  },
+  "components": [
+    "Alert",
+    "AlertDescription",
+    "AlertTitle",
+    "Badge",
+    "Button",
+    "Empty",
+    "EmptyContent",
+    "EmptyDescription",
+    "EmptyHeader",
+    "EmptyMedia",
+    "EmptyTitle",
+    "InputGroup",
+    "InputGroupAddon",
+    "InputGroupButton",
+    "InputGroupInput",
+    "Separator",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/alert.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/empty.tsx",
+      "components/ui/input-group.tsx",
+      "components/ui/input.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/textarea.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 591,
+    "chars": 19676,
+    "bytes": 19676,
+    "tokens_o200k": 5076,
+    "tokens_claudeLegacy": 5890
+  }
+}

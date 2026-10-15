@@ -1,0 +1,340 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Feedback widget — floating trigger, dialog with rating chips, textarea, toast on submit.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0113xHFzf3xbNWhbx5XGp5CV",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01T3QKivA8EzG8tqZnbvby6b",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0113xHFzf3xbNWhbx5XGp5CV",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01T3QKivA8EzG8tqZnbvby6b",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01G7WLhejGxdUTcUgJqHbSbn",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017tTmNGp5Ghcau6Eh6DQiYc",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/dialog.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PvVSGqTWaPoAz3V2WtgB9x",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/toggle-group.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01G7WLhejGxdUTcUgJqHbSbn",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017tTmNGp5Ghcau6Eh6DQiYc",
+          "content": "---\ntitle: Dialog\ndescription: A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.\nfeatured: true\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/dialog\n  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"dialog-demo\"\n  description=\"A dialog for editing profile details.\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add dialog\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"dialog\"\n  title=\"components/ui/dialog.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\"\n```\n\n```tsx showLineNumbers\n<Dialog>\n  <DialogTrigger>Open</DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Are you absolutely sure?</DialogTitle>\n      <DialogDescription>\n        This action cannot be undone. This will permanently delete your account\n        and remove your data from our servers.\n      </DialogDescription>\n    </DialogHeader>\n  </DialogContent>\n</Dialog>\n```\n\n## Composition\n\nUse the following composition to build a `Dialog`:\n\n```text\nDialog\n├── DialogTrigger\n└── DialogContent\n    ├── DialogHeader\n    │   ├── DialogTitle\n    │   └── DialogDescription\n    └── DialogFooter\n```\n\n## Custom Close Button\n\nReplace the default close control with your own button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-close-button\" />\n\n## No Close Button\n\nUse `showCloseButton={false}` to hide the close button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-no-close-button\" />\n\n## Sticky Footer\n\nKeep actions visible while the content scrolls.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-sticky-footer\" />\n\n## Scrollable Content\n\nLong content can scroll while the header stays in view.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-scrollable-content\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/docs/primitives/components/dialog#api-reference) documentation for more information.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PvVSGqTWaPoAz3V2WtgB9x",
+          "content": "---\ntitle: Toggle Group\ndescription: A set of two-state buttons that can be toggled on or off.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/toggle-group\n  api: https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add toggle-group\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"toggle-group\"\n  title=\"components/ui/toggle-group.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\"\n```\n\n```tsx\n<ToggleGroup type=\"single\">\n  <ToggleGroupItem value=\"a\">A</ToggleGroupItem>\n  <ToggleGroupItem value=\"b\">B</ToggleGroupItem>\n  <ToggleGroupItem value=\"c\">C</ToggleGroupItem>\n</ToggleGroup>\n```\n\n## Composition\n\nUse the following composition to build a `ToggleGroup`:\n\n```text\nToggleGroup\n├── ToggleGroupItem\n└── ToggleGroupItem\n```\n\n## Outline\n\nUse `variant=\"outline\"` for an outline style.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-outline\" />\n\n## Size\n\nUse the `size` prop to change the size of the toggle group.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-sizes\" />\n\n## Spacing\n\nUse `spacing` to add spacing between toggle group items.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-spacing\" />\n\n## Vertical\n\nUse `orientation=\"vertical\"` for vertical toggle groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-vertical\" />\n\n## Disabled\n\n<ComponentPreview styleName=\"radix-nova\" name=\"toggle-group-disabled\" />\n\n## Custom\n\nA custom toggle group example.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-font-weight-selector\"\n  previewClassName=\"*:data-[slot=field]:max-w-xs\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"toggle-group-rtl\"\n  direction=\"rtl\"\n/>\n\n## API Reference\n\nSee the [Radix Toggle Group](https://www.radix-ui.com/docs/primitives/components/toggle-group#api-reference) documentation.\n\n## Changelog\n\n### 2026-05-17 Default Spacing\n\nChanged the default `spacing` from `0` to `2` so toggle groups render with space between items by default. Use `spacing={0}` for connected items.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the installed components directly, since the API may differ from the docs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MY6DE4n7MsmNpbA33yXGLG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Pe3TKzDWddKb2q6RznSH4B",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/dialog.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0118HMGszQxi2k1FT24233Wn",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MY6DE4n7MsmNpbA33yXGLG",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Pe3TKzDWddKb2q6RznSH4B",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { XIcon } from \"lucide-react\"\nimport { Dialog as DialogPrimitive } from \"radix-ui\"\n\nimport { Button } from \"@/components/ui/button\"\n\nfunction Dialog({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Root>) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogPortal({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Portal>) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />\n}\n\nfunction DialogClose({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Close>) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {\n  return (\n    <DialogPrimitive.Overlay\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Content> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <DialogPortal data-slot=\"dialog-portal\">\n      <DialogOverlay />\n      <DialogPrimitive.Content\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-w-lg\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            className=\"absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\"\n          >\n            <XIcon />\n            <span className=\"sr-only\">Close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Content>\n    </DialogPortal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-header\"\n      className={cn(\"flex flex-col gap-2 text-center sm:text-left\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\n        \"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {showCloseButton && (\n        <DialogPrimitive.Close asChild>\n          <Button variant=\"outline\">Close</Button>\n        </DialogPrimitive.Close>\n      )}\n    </div>\n  )\n}\n\nfunction DialogTitle({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Title>) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\"text-lg leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Description>) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0118HMGszQxi2k1FT24233Wn",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the existing page, the layout, and the textarea, label, and button components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PV2Hij5aH2xE4Q3ZPzqDWw",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BZfAw1im2ZnDjNhBJKmcb9",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016nXv96aobGGJDGidTupa8E",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/textarea.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016B7TgmEBi4XkJ5RKiJJhx9",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015de3Mw76CCMFSH29BMciDr",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/label.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PV2Hij5aH2xE4Q3ZPzqDWw",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BZfAw1im2ZnDjNhBJKmcb9",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016nXv96aobGGJDGidTupa8E",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      className={cn(\n        \"flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Textarea }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016B7TgmEBi4XkJ5RKiJJhx9",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015de3Mw76CCMFSH29BMciDr",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Label as LabelPrimitive } from \"radix-ui\"\n\nfunction Label({\n  className,\n  ...props\n}: React.ComponentProps<typeof LabelPrimitive.Root>) {\n  return (\n    <LabelPrimitive.Root\n      data-slot=\"label\"\n      className={cn(\n        \"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Label }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'll configure the toggle group with spacing={2} and flex-wrap for chip styling, use a single-select ToggleGroup for rating while ignoring deselection to keep a choice locked in, and use sonner for toasts.\n\n",
+          "signature": "CAQSiQgKEQgSGAI4AUIJbmFycmF0aW9uEgzVpqbhBHv00KTvQvsaDPzb1euCQgKBOvrUVCIw7MaLEa0FjqIy1E+i0P4MovFM3F/Bg7xnz7yS2jF4R5U3YNmiQekPRZ9lal3mm+GuKqUHf192f0WbWtGAENo0Y23xJOfJrxeARRkaOW59cAdCV8g6KUfkvCEayS8bRujgKsIGkNKWnyPdxHWepFBPh8+3eGcM/IYbKfRC72smGAwhWQ/AXTHyLozoOFSv5U1T9pj8a0f7qe5G5STkr7cEfUXLMe/eVpHwv9UKq3HmKfAjyVxP4eBxDRaakbSEVPLnZ2U47ifHMlH2Qxv3O0Aw3TPhsWCbgtIDet87+pH1whFMaXJdn3h5woVeMvjArvMTLebnVPzS5OZDXZsZasNXHpbGEEvnxmgCiDX2Q3oQezv6qY9jlUGtCynqqzmY6mW7uCg5BAKm9O2q9Uqj0sqw4+BGb45ilDW8hI2GKuqHA7y+wJcNU6lMdKdukn5K6g44BZPLr9UbTiQtXUnprwbsiZbBU5NHNwfZiA3SxC8OIDmKH6oBgwIJwjyQ3TCPtGMlRb1/4ha3kyWbcHeNInNRVYRYlOeGYrm5Zg6ayG6wCTJafE7Jkv4EP2pBM3mTa6NOByydSDqMJ3WSGNqPS6KRxER/NiYqWj7VQexrB5WxtwMFvr201YZBWU+n2mzie24Z5RklliuKbWfUTHHWZxfzjyzz+Kp1HNzCzYhbXTcWJj2WA/geP5N/4abJ8UnvI2hd9HuB/S/6CfQArLLMhUgOtFvNR84ST0ydb0ujAeOmijqSl0fufVqXW11GftEnR1kIMiLgP69e3QuezBEnANgp6kQUiAb3UREO90vH4Wgp12jxP1YuT19JgVC/Drc1rwy55ZuJwA1jKR27NygMV7uOfWvz85+ctdCCl1XhrK/80+GkSvvSIQ8kD2OuMscv6AwUbOb8QVeOrxS68yBn37rOFbU2jkhYUg6KpxbExCF67/SdJ1QEdDcXyajHXhYhkhTEaZ3GEon+DLPT+iUwzUBjHup6nv2SLTAOi4ZZ1nE1zw2KKnS/aokptVcfDco6sGJ0vrmUubk4bdbzDkFyaACrvOTu3HWF/iRTFrkZR4x8KJG411unZ4bwyTIggsICnKblMzg8c7Wyst9mBbu3fpbT5mLZfZZtho9FeeTck4SlSH/ev3p2eKeyJuB7LtKBGtgqiAj4Ea5L/ZaR347m5EzqIID0ykx1Qf9R4r/wFOgWHOFU9HXUa3SGPKSSXkt+mW+VpFYgnW6QLekwvoZ9mena3/T9E7j0JUXEAiB+RqPa0MXQw7c5LWIaGLsrvsTemBkrgRZywM2lfkvCx5yjUPXq2GQG+/c/ezRLGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Bd2Am2ydkcHKa6Bfy14Ddt",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JKDG2D3SG8ztL4PnwUVvqC",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Bd2Am2ydkcHKa6Bfy14Ddt",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JKDG2D3SG8ztL4PnwUVvqC",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport { useState } from \"react\";\nimport type { FormEvent } from \"react\";\nimport {\n  Angry,\n  Frown,\n  Laugh,\n  Meh,\n  MessageSquarePlus,\n  Send,\n  Smile,\n} from \"lucide-react\";\nimport type { LucideIcon } from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\";\nimport { Label } from \"@/components/ui/label\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\n\ntype Rating = {\n  value: string;\n  label: string;\n  icon: LucideIcon;\n  prompt: string;\n};\n\nconst RATINGS: Rating[] = [\n  { value: \"1\", label: \"Terrible\", icon: Angry, prompt: \"What went wrong?\" },\n  { value: \"2\", label: \"Poor\", icon: Frown, prompt: \"What could we fix first?\" },\n  { value: \"3\", label: \"Okay\", icon: Meh, prompt: \"What would make it better?\" },\n  { value: \"4\", label: \"Good\", icon: Smile, prompt: \"What did you enjoy most?\" },\n  { value: \"5\", label: \"Great\", icon: Laugh, prompt: \"What made it great?\" },\n];\n\nconst MAX_LENGTH = 500;\n\nconst HIGHLIGHTS = [\n  {\n    title: \"Shared workspaces\",\n    body: \"Invite teammates to a project and see their edits appear live, with per-section comment threads.\",\n  },\n  {\n    title: \"Scheduled exports\",\n    body: \"Send a weekly PDF or CSV summary to your clients every Monday at 8:00 without lifting a finger.\",\n  },\n  {\n    title: \"Usage insights\",\n    body: \"Track which reports your team opens most and trim the ones nobody reads.\",\n  },\n];\n\nfunction FeedbackWidget() {\n  const [open, setOpen] = useState(false);\n  const [rating, setRating] = useState(\"\");\n  const [message, setMessage] = useState(\"\");\n  const [showError, setShowError] = useState(false);\n\n  const selected = RATINGS.find((r) => r.value === rating);\n\n  function handleOpenChange(next: boolean) {\n    setOpen(next);\n    if (!next) setShowError(false);\n  }\n\n  function handleSubmit(event: FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (!selected) {\n      setShowError(true);\n      return;\n    }\n    toast.success(\"Thanks for your feedback!\", {\n      description: `You rated your experience \"${selected.label}\". Our team reads every note.`,\n    });\n    setOpen(false);\n    setRating(\"\");\n    setMessage(\"\");\n    setShowError(false);\n  }\n\n  return (\n    <Dialog open={open} onOpenChange={handleOpenChange}>\n      <DialogTrigger asChild>\n        <Button\n          size=\"lg\"\n          className=\"fixed right-4 bottom-4 z-40 h-12 rounded-full px-5 shadow-lg sm:right-6 sm:bottom-6\"\n        >\n          <MessageSquarePlus aria-hidden=\"true\" />\n          Feedback\n        </Button>\n      </DialogTrigger>\n\n      <DialogContent className=\"max-h-[calc(100dvh-2rem)] overflow-y-auto\">\n        <form onSubmit={handleSubmit} noValidate className=\"grid gap-5\">\n          <DialogHeader>\n            <DialogTitle>Share your feedback</DialogTitle>\n            <DialogDescription>\n              Tell us how Ledgerly is working for you. It takes less than a\n              minute.\n            </DialogDescription>\n          </DialogHeader>\n\n          <div className=\"grid gap-2\">\n            <Label id=\"rating-label\">How was your experience?</Label>\n            <ToggleGroup\n              type=\"single\"\n              variant=\"outline\"\n              spacing={2}\n              value={rating}\n              onValueChange={(value) => {\n                if (value) {\n                  setRating(value);\n                  setShowError(false);\n                }\n              }}\n              aria-labelledby=\"rating-label\"\n              aria-describedby={showError ? \"rating-error\" : undefined}\n              className=\"flex w-full flex-wrap\"\n            >\n              {RATINGS.map((r) => {\n                const Icon = r.icon;\n                return (\n                  <ToggleGroupItem\n                    key={r.value}\n                    value={r.value}\n                    aria-label={`${r.value} of 5: ${r.label}`}\n                    className=\"h-auto flex-1 basis-[4.5rem] flex-col gap-1 rounded-lg py-2 data-[state=on]:border-primary data-[state=on]:bg-primary/10\"\n                  >\n                    <Icon aria-hidden=\"true\" className=\"size-5\" />\n                    <span className=\"text-xs\">{r.label}</span>\n                  </ToggleGroupItem>\n                );\n              })}\n            </ToggleGroup>\n            {showError && (\n              <p\n                id=\"rating-error\"\n                role=\"alert\"\n                className=\"text-sm text-destructive\"\n              >\n                Please pick a rating before sending.\n              </p>\n            )}\n          </div>\n\n          <div className=\"grid gap-2\">\n            <Label htmlFor=\"feedback-message\">\n              {selected ? selected.prompt : \"Anything you'd like to add?\"}\n              <span className=\"font-normal text-muted-foreground\">\n                (optional)\n              </span>\n            </Label>\n            <Textarea\n              id=\"feedback-message\"\n              value={message}\n              maxLength={MAX_LENGTH}\n              onChange={(e) => setMessage(e.target.value)}\n              placeholder=\"e.g. The new export screen is great, but I couldn't find where to change the date format.\"\n              className=\"min-h-28 resize-none\"\n              aria-describedby=\"feedback-count\"\n            />\n            <p\n              id=\"feedback-count\"\n              className=\"text-right text-xs text-muted-foreground tabular-nums\"\n            >\n              {message.length}/{MAX_LENGTH}\n            </p>\n          </div>\n\n          <DialogFooter>\n            <DialogClose asChild>\n              <Button type=\"button\" variant=\"outline\">\n                Cancel\n              </Button>\n            </DialogClose>\n            <Button type=\"submit\">\n              <Send aria-hidden=\"true\" />\n              Send feedback\n            </Button>\n          </DialogFooter>\n        </form>\n      </DialogContent>\n    </Dialog>\n  );\n}\n\nexport default function Page() {\n  return (\n    <div className=\"min-h-dvh bg-background text-foreground\">\n      <header className=\"border-b\">\n        <div className=\"mx-auto flex max-w-5xl items-center justify-between px-4 py-4 sm:px-6\">\n          <span className=\"text-lg font-semibold tracking-tight\">Ledgerly</span>\n          <nav aria-label=\"Primary\" className=\"flex gap-4 text-sm text-muted-foreground\">\n            <span>Reports</span>\n            <span>Clients</span>\n            <span className=\"hidden sm:inline\">Billing</span>\n          </nav>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-5xl px-4 py-10 sm:px-6 sm:py-16\">\n        <section className=\"max-w-2xl\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            What&apos;s new in March\n          </p>\n          <h1 className=\"mt-2 text-3xl font-semibold tracking-tight text-balance sm:text-4xl\">\n            Reporting that keeps your whole team on the same page\n          </h1>\n          <p className=\"mt-4 text-base text-muted-foreground sm:text-lg\">\n            We shipped three updates this month based on requests from\n            customers like you. Try them out, then let us know how they work\n            with the feedback button in the corner.\n          </p>\n        </section>\n\n        <section\n          aria-label=\"Recent updates\"\n          className=\"mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3\"\n        >\n          {HIGHLIGHTS.map((item) => (\n            <article key={item.title} className=\"rounded-xl border bg-card p-5 shadow-xs\">\n              <h2 className=\"font-semibold\">{item.title}</h2>\n              <p className=\"mt-2 text-sm text-muted-foreground\">{item.body}</p>\n            </article>\n          ))}\n        </section>\n      </main>\n\n      <FeedbackWidget />\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

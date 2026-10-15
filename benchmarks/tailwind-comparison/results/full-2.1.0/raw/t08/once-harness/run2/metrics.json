@@ -1,0 +1,31 @@
+{
+  "attempt": 1,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 489,
+    "chars": 16000,
+    "bytes": 16001,
+    "tokens_o200k": 3235,
+    "tokens_claudeLegacy": 3352
+  },
+  "raw": {
+    "lines": 455,
+    "chars": 15222,
+    "bytes": 15223,
+    "tokens_o200k": 3185,
+    "tokens_claudeLegacy": 3319
+  },
+  "components": [
+    "Button",
+    "CelebrationFx",
+    "Column",
+    "Heading",
+    "Icon",
+    "IconName",
+    "ProgressBar",
+    "Row",
+    "Tag",
+    "Text"
+  ]
+}

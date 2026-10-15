@@ -1,0 +1,364 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Marketing hero — headline with text effect, CTA pair, social proof logos, background effect.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by looking at the docs and the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012av8DFzYAh52Zg97eGitvh",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QmnBUwyBXHh3aQ5vuuSTXS",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012av8DFzYAh52Zg97eGitvh",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QmnBUwyBXHh3aQ5vuuSTXS",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Prq8d9iZokaLYpReU25xyZ",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RvQ7cWnYUX9h8QBNhAPKeZ",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/button.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013nQYWTmvgtDoijvGAcA7v1",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/badge.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Prq8d9iZokaLYpReU25xyZ",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RvQ7cWnYUX9h8QBNhAPKeZ",
+          "content": "---\ntitle: Button\ndescription: Displays a button or a component that looks like a button.\nfeatured: true\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add button\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"button\"\n  title=\"components/ui/button.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Button } from \"@/components/ui/button\"\n```\n\n```tsx\n<Button variant=\"outline\">Button</Button>\n```\n\n## Cursor\n\nTailwind v4 [switched](https://tailwindcss.com/docs/upgrade-guide#buttons-use-the-default-cursor) from `cursor: pointer` to `cursor: default` for the button component.\n\nIf you want to keep the `cursor: pointer` behavior, add the following code to your CSS file:\n\nYou can also enable this during project setup with `npx shadcn@latest init --pointer`.\n\n```css showLineNumbers title=\"globals.css\"\n@layer base {\n  button:not(:disabled),\n  [role=\"button\"]:not(:disabled) {\n    cursor: pointer;\n  }\n}\n```\n\n## Size\n\nUse the `size` prop to change the size of the button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-size\" />\n\n## Default\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-default\" />\n\n## Outline\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-outline\" />\n\n## Secondary\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-secondary\" />\n\n## Ghost\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-ghost\" />\n\n## Destructive\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-destructive\" />\n\n## Link\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-link\" />\n\n## Icon\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-icon\" />\n\n## With Icon\n\nRemember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` attribute to the icon for the correct spacing.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-with-icon\" />\n\n## Rounded\n\nUse the `rounded-full` class to make the button rounded.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-rounded\" />\n\n## Spinner\n\nRender a `<Spinner />` component inside the button to show a loading state. Remember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` attribute to the spinner for the correct spacing.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-spinner\" />\n\n## Button Group\n\nTo create a button group, use the `ButtonGroup` component. See the [Button Group](/docs/components/radix/button-group) documentation for more details.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-group-demo\" />\n\n## As Child\n\nYou can use the `asChild` prop on `<Button />` to make another component look like a button. Here's an example of a link that looks like a button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-aschild\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"button-rtl\" direction=\"rtl\" />\n\n## API Reference\n\n### Button\n\nThe `Button` component is a wrapper around the `button` element that adds a variety of styles and functionality.\n\n| Prop      | Type                                                                                 | Default     |\n| --------- | ------------------------------------------------------------------------------------ | ----------- |\n| `variant` | `\"default\" \\| \"outline\" \\| \"ghost\" \\| \"destructive\" \\| \"secondary\" \\| \"link\"`        | `\"default\"` |\n| `size`    | `\"default\" \\| \"xs\" \\| \"sm\" \\| \"lg\" \\| \"icon\" \\| \"icon-xs\" \\| \"icon-sm\" \\| \"icon-lg\"` | `\"default\"` |\n| `asChild` | `boolean`                                                                            | `false`     |\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013nQYWTmvgtDoijvGAcA7v1",
+          "content": "---\ntitle: Badge\ndescription: Displays a badge or a component that looks like a badge.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add badge\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  styleName=\"radix-nova\"\n  name=\"badge\"\n  title=\"components/ui/badge.tsx\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Badge } from \"@/components/ui/badge\"\n```\n\n```tsx\n<Badge variant=\"default | outline | secondary | destructive\">Badge</Badge>\n```\n\n## Variants\n\nUse the `variant` prop to change the variant of the badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-variants\" />\n\n## With Icon\n\nYou can render an icon inside the badge. Use `data-icon=\"inline-start\"` to render the icon on the left and `data-icon=\"inline-end\"` to render the icon on the right.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-icon\" />\n\n## With Spinner\n\nYou can render a spinner inside the badge. Remember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` prop to the spinner.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-spinner\" />\n\n## Link\n\nUse the `asChild` prop to render a link as a badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-link\" />\n\n## Custom Colors\n\nYou can customize the colors of a badge by adding custom classes such as `bg-green-50 dark:bg-green-800` to the `Badge` component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-colors\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-rtl\" direction=\"rtl\" />\n\n## API Reference\n\n### Badge\n\nThe `Badge` component displays a badge or a component that looks like a badge.\n\n| Prop        | Type                                                                          | Default     |\n| ----------- | ----------------------------------------------------------------------------- | ----------- |\n| `variant`   | `\"default\" \\| \"secondary\" \\| \"destructive\" \\| \"outline\" \\| \"ghost\" \\| \"link\"` | `\"default\"` |\n| `className` | `string`                                                                      | -           |\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the actual component files, globals, and layout."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fiov9cdLKGbEzNh45NrGvV",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DY4wYKDQj29XTG2RxtgoSu",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Kc6Q9bVYoQxiaMvsrN5uJ3",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fiov9cdLKGbEzNh45NrGvV",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DY4wYKDQj29XTG2RxtgoSu",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Kc6Q9bVYoQxiaMvsrN5uJ3",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01Xz13rtguh4P2Avc6QHMS28",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BHSxmFnrv9s9FzYR3kSiAq",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01SRu5UFo3Pg6DvSKwrs8QNu",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Xz13rtguh4P2Avc6QHMS28",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BHSxmFnrv9s9FzYR3kSiAq",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01SRu5UFo3Pg6DvSKwrs8QNu",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've settled on a design plan using Tailwind and tw-animate-css instead of custom CSS: a decorative animated background, a headline with gradient-sweep and rotating-word effects (with reduced-motion and screen-reader fallbacks), two CTAs, and a social proof section with logos, ratings, and an avatar stack. Now I'll start implementing it.\n\n",
+          "signature": "CAQS3AoKEQgSGAI4AUIJbmFycmF0aW9uEgxLfbSsIOwazRVdbGQaDKyecBBFeQ0zGbWV9SIwgaK7CUR3nJsgQF9XGXKRTKUuVsb8joQ2KGvqOqqzLfS5hcY8o3120qifcpDe8UhXKvgJQPnyTn0ZUjLXRbmxvIVbSa8AwvtfXLt6qNlgqMReb4tvkkpsdPaq5VYfETOR6EMr/G7ddNmoSvgXt1B1avf3kpbXQfbaqZ7wt4AEWN4kKDeRC9eBfPf+KeRAZk1M9p6saxdt8tameCXdwS44WBl5MQogcXk0+mIs+V/2r/8yxps75Te2TWhsucviCm2EkV3bCIyX4Bt2Sx7gixhEE0QvMBIqoDL0RaIhFALwCX3ojYiOSzeNRmbIP2FJo1tSEaQIDmGrA6AB/vNIWzjWej5kSr6dnXKwe31QH2pSwPUF7c+PId6bluZiZN0CfGcAU1D7twP25aVVGcM3nDUbYEmwHlNckmEjZSzw2f1bIegTz/SfBwJFpXZHKH30sUegpipbL1TzBkdGrM13Ot5M0h35OerGfoVF33LH46ZV0q905MrbwpmcI9fSp7LDcwm0lNhnyPtt8LNKUDuKnshRxVDSXm5xUXjW/LT0t6W+OPPKMhxEBgKECZbvtwTQEnIK09nHN6w1L+aOPf/+wc1LPY8acUdPIIsO9aqgN4Aq8X3szMOQWJQi7Bf+Q3AC5JJIMHv8MmPb2OVpuloUMWi0/6VB6Y/N0rCpMr704hFUm/p5IOoCEqEwhGQTcEMqSao0xudn2xYeYcaOJVYEPWCKEoke8SiDU/LSahGnDHvjEQI9v28uf3FS5G15qRkoVEg7vUfLvcB9ikthrL3WuGN8rw772R/5bHMT1g9SXs0rOMlaSSK91Ca227NKJJzVbvMwWk+aJYMYbFLlogQr+BuVa8s3Z3v5wARdn5S42hOG+/UAaoAvlNz1SKk7saJfA8XNwLgtKz1Gio4af8ZK2LeasC2OZ0mW6DJeOIIBm/7c0byF9sufN8d7sO6e85fNt/DB6p+ebBqONbChVG5QuqjrVfcbOopydf/vH1wSQrSQH4WSwpD7bZhs+nv8nzsKlhXTKwe7ubAMW7axey9cIxmv/C+Ir8T336/whmYjtECTdwdP2F7vFOj6YPTbBK5XzFAuIRV1Pjf+2O2iLEaF654XpJJo8UbQPzyF/EHcdSpFGJPaw/MT1JbFwt69fHaFlTdl9r8Jc/abV+GcY2CYmbH+njC9Q7n8ZhiBWM69Egxa0fXtBf1GksCvH3q8NmF/tR++YKAwSSXlbLSH5sBvZZXs6djbCRn3nMaBVTMtOyEceyUOpu3tqIPQ6orbIzX0CvgFQsj7SfX74url8I3aBM6LpR/U8hiB2xcM7xEYY52NAzzJWfGHHE8rWMj5vDBTT4oDZ5ObTWrtVuYrBM8begv6K+SVjKOa37/NnrdHVGtNGr8lJ1i3gIMI/ckbvzj+bz3ABPamYyfc2ip03WSBbcf+/bxBtZ6Y1PI5W2vUXfBpF4ZzBwjDC0yuvrhxlaZT19qyfPD56GY1X/X3h/Aswigz+q0R+rBjsUkr0g/baI9RtuKh/LvXtc0Teu4WX13VkHDi2BunAceMnAtbPmrCm5X1rpaycYnQaTItHQWzG4KRc7v4hYubiu+g1aHdAGh8vLz9v6nwvhxR3mqB7IENZRC8NurO2T5HT9gcY524hu6pX8q7yvEVW9HVgWdeUaHChP+NuuIlR1ULjRSgEZxhT96uE2LF4rs6B1XVg2Qc0ZTofkJlEPnNz7pL/u9L6xh2NCXxRMe31fEHRdnEwlTDKme3QN8Dd330vyy6zU66GAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01FP54u1x7d5kouCoi4us5g6",
+          "name": "read_file",
+          "input": {
+            "path": "project/lib/utils.ts"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01QEisME8gJ9Rc4o8ChNzsMV",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01FP54u1x7d5kouCoi4us5g6",
+          "content": "import { clsx, type ClassValue } from \"clsx\"\nimport { twMerge } from \"tailwind-merge\"\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01QEisME8gJ9Rc4o8ChNzsMV",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "lucide-react 1.55 removed brand icons, so I'll use only generic icons (`ArrowRight`, `PlayCircle`, `Sparkles`, `Star`, `Check`). To stay safe on icon names, I'll stick to long-standing ones."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KfNmzwxzDQFm7PezR7CfNX",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KfNmzwxzDQFm7PezR7CfNX",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check the Avatar component for its API."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Hhf2UkdZCQWgGRMATUk3kX",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/avatar.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Hhf2UkdZCQWgGRMATUk3kX",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Avatar as AvatarPrimitive } from \"radix-ui\"\n\nfunction Avatar({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Root> & {\n  size?: \"default\" | \"sm\" | \"lg\"\n}) {\n  return (\n    <AvatarPrimitive.Root\n      data-slot=\"avatar\"\n      data-size={size}\n      className={cn(\n        \"group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarImage({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Image>) {\n  return (\n    <AvatarPrimitive.Image\n      data-slot=\"avatar-image\"\n      className={cn(\"aspect-square size-full\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarFallback({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {\n  return (\n    <AvatarPrimitive.Fallback\n      data-slot=\"avatar-fallback\"\n      className={cn(\n        \"flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarBadge({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"avatar-badge\"\n      className={cn(\n        \"absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background select-none\",\n        \"group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden\",\n        \"group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2\",\n        \"group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group\"\n      className={cn(\n        \"group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroupCount({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group-count\"\n      className={cn(\n        \"relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Avatar,\n  AvatarImage,\n  AvatarFallback,\n  AvatarBadge,\n  AvatarGroup,\n  AvatarGroupCount,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have everything I need. Writing the page now.\n\n```tsx\n\"use client\";\n\nimport { useEffect, useState } from \"react\";\nimport { ArrowRight, PlayCircle, Sparkles, Star } from \"lucide-react\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Avatar,\n  AvatarFallback,\n  AvatarGroup,\n} from \"@/components/ui/avatar\";\n\nconst ROTATING_WORDS = [\"ship faster\", \"stay in sync\", \"close the loop\", \"scale calmly\"] as const;\n\nconst AVATARS = [\n  { initials: \"AK\", tone: \"bg-chart-1/25 text-chart-1\" },\n  { initials: \"MR\", tone: \"bg-chart-2/25 text-chart-2\" },\n  { initials: \"JL\", tone: \"bg-chart-4/30 text-chart-5\" },\n  { initials: \"SO\", tone: \"bg-chart-3/25 text-chart-3\" },\n  { initials: \"TP\", tone: \"bg-chart-5/25 text-chart-5\" },\n] as const;\n\ntype LogoProps = { className?: string };\n\nfunction LogoNorthwind({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 150 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <path d=\"M4 26V6l9 20V6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"3.2\" strokeLinejoin=\"round\" strokeLinecap=\"round\" />\n      <text x=\"24\" y=\"23\" fontSize=\"17\" fontWeight=\"700\" letterSpacing=\"-0.4\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Northwind\n      </text>\n    </svg>\n  );\n}\n\nfunction LogoLumen({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 120 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <circle cx=\"14\" cy=\"16\" r=\"9\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"3\" />\n      <circle cx=\"14\" cy=\"16\" r=\"3.5\" />\n      <text x=\"31\" y=\"23\" fontSize=\"18\" fontWeight=\"600\" letterSpacing=\"-0.3\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Lumen\n      </text>\n    </svg>\n  );\n}\n\nfunction LogoParcel({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 130 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <rect x=\"4\" y=\"7\" width=\"18\" height=\"18\" rx=\"4\" />\n      <path d=\"M8.5 16h9M13 11.5v9\" stroke=\"var(--background)\" strokeWidth=\"2.4\" strokeLinecap=\"round\" />\n      <text x=\"30\" y=\"23\" fontSize=\"18\" fontWeight=\"700\" letterSpacing=\"-0.3\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Parcel\n      </text>\n    </svg>\n  );\n}\n\nfunction LogoHalcyon({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 140 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <path d=\"M4 25 14 6l10 19z\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"3\" strokeLinejoin=\"round\" />\n      <text x=\"31\" y=\"23\" fontSize=\"18\" fontWeight=\"500\" letterSpacing=\"0.2\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Halcyon\n      </text>\n    </svg>\n  );\n}\n\nfunction LogoOrbital({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 140 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <ellipse cx=\"14\" cy=\"16\" rx=\"11\" ry=\"6\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"2.6\" transform=\"rotate(-25 14 16)\" />\n      <circle cx=\"14\" cy=\"16\" r=\"3.2\" />\n      <text x=\"31\" y=\"23\" fontSize=\"18\" fontWeight=\"700\" letterSpacing=\"-0.4\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Orbital\n      </text>\n    </svg>\n  );\n}\n\nfunction LogoKestrel({ className }: LogoProps) {\n  return (\n    <svg viewBox=\"0 0 140 32\" className={className} fill=\"currentColor\" aria-hidden=\"true\">\n      <path d=\"M3 9h7l6 14 6-14h7\" fill=\"none\" stroke=\"currentColor\" strokeWidth=\"3\" strokeLinejoin=\"round\" strokeLinecap=\"round\" />\n      <text x=\"38\" y=\"23\" fontSize=\"18\" fontWeight=\"600\" letterSpacing=\"-0.3\" fontFamily=\"ui-sans-serif, system-ui, sans-serif\">\n        Kestrel\n      </text>\n    </svg>\n  );\n}\n\nconst LOGOS = [\n  { name: \"Northwind\", Logo: LogoNorthwind },\n  { name: \"Lumen\", Logo: LogoLumen },\n  { name: \"Parcel\", Logo: LogoParcel },\n  { name: \"Halcyon\", Logo: LogoHalcyon },\n  { name: \"Orbital\", Logo: LogoOrbital },\n  { name: \"Kestrel\", Logo: LogoKestrel },\n] as const;\n\nfunction useRotatingIndex(length: number, intervalMs: number): number {\n  const [index, setIndex] = useState(0);\n\n  useEffect(() => {\n    const media = window.matchMedia(\"(prefers-reduced-motion: reduce)\");\n    if (media.matches) return;\n\n    const id = window.setInterval(() => {\n      setIndex((current) => (current + 1) % length);\n    }, intervalMs);\n\n    return () => window.clearInterval(id);\n  }, [length, intervalMs]);\n\n  return index;\n}\n\nfunction HeroBackground() {\n  return (\n    <div aria-hidden=\"true\" className=\"pointer-events-none absolute inset-0 -z-10 overflow-hidden\">\n      {/* Grid with radial mask */}\n      <div\n        className=\"absolute inset-0 opacity-[0.55] dark:opacity-40\"\n        style={{\n          backgroundImage:\n            \"linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)\",\n          backgroundSize: \"56px 56px\",\n          maskImage: \"radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%)\",\n          WebkitMaskImage: \"radial-gradient(ellipse 70% 60% at 50% 30%, #000 30%, transparent 75%)\",\n        }}\n      />\n\n      {/* Drifting blurred orbs */}\n      <div className=\"hero-orb-a absolute -top-32 left-1/2 size-[34rem] -translate-x-[85%] rounded-full bg-chart-1/25 blur-3xl dark:bg-chart-1/20\" />\n      <div className=\"hero-orb-b absolute -top-24 left-1/2 size-[30rem] -translate-x-[10%] rounded-full bg-chart-2/25 blur-3xl dark:bg-chart-2/15\" />\n      <div className=\"hero-orb-c absolute top-40 left-1/2 size-[26rem] -translate-x-1/2 rounded-full bg-chart-4/20 blur-3xl dark:bg-chart-4/15\" />\n\n      {/* Bottom fade into page background */}\n      <div className=\"absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent\" />\n    </div>\n  );\n}\n\nexport default function Page() {\n  const wordIndex = useRotatingIndex(ROTATING_WORDS.length, 2800);\n\n  return (\n    <main className=\"relative isolate flex min-h-screen flex-col bg-background text-foreground\">\n      <style>{`\n        @keyframes hero-sheen {\n          0% { background-position: 0% 50%; }\n          100% { background-position: 200% 50%; }\n        }\n        @keyframes hero-drift-a {\n          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n          50% { transform: translate3d(40px, 30px, 0) scale(1.08); }\n        }\n        @keyframes hero-drift-b {\n          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n          50% { transform: translate3d(-50px, 20px, 0) scale(1.1); }\n        }\n        @keyframes hero-drift-c {\n          0%, 100% { transform: translate3d(0, 0, 0) scale(1); }\n          50% { transform: translate3d(30px, -30px, 0) scale(0.94); }\n        }\n        @keyframes hero-word-in {\n          0% { opacity: 0; transform: translateY(0.35em); filter: blur(6px); }\n          100% { opacity: 1; transform: translateY(0); filter: blur(0); }\n        }\n        @keyframes hero-marquee {\n          0% { transform: translateX(0); }\n          100% { transform: translateX(-50%); }\n        }\n        .hero-sheen-text {\n          background-image: linear-gradient(\n            90deg,\n            var(--foreground) 0%,\n            var(--chart-1) 25%,\n            var(--chart-2) 50%,\n            var(--chart-4) 75%,\n            var(--foreground) 100%\n          );\n          background-size: 200% 100%;\n          -webkit-background-clip: text;\n          background-clip: text;\n          -webkit-text-fill-color: transparent;\n          color: transparent;\n          animation: hero-sheen 8s linear infinite;\n        }\n        .hero-orb-a { animation: hero-drift-a 18s ease-in-out infinite; }\n        .hero-orb-b { animation: hero-drift-b 22s ease-in-out infinite; }\n        .hero-orb-c { animation: hero-drift-c 26s ease-in-out infinite; }\n        .hero-word { animation: hero-word-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }\n        .hero-marquee-track { animation: hero-marquee 40s linear infinite; }\n        .hero-marquee:hover .hero-marquee-track { animation-play-state: paused; }\n        @media (prefers-reduced-motion: reduce) {\n          .hero-sheen-text,\n          .hero-orb-a,\n          .hero-orb-b,\n          .hero-orb-c,\n          .hero-word,\n          .hero-marquee-track {\n            animation: none !important;\n          }\n        }\n      `}</style>\n\n      <section\n        aria-labelledby=\"hero-heading\"\n        className=\"relative mx-auto flex w-full max-w-6xl flex-1 flex-col items-center px-4 pt-20 pb-16 text-center sm:px-6 sm:pt-28 lg:px-8 lg:pt-32\"\n      >\n        <HeroBackground />\n\n        <div className=\"animate-in fade-in slide-in-from-bottom-2 duration-700\">\n          <Badge\n            variant=\"outline\"\n            className=\"h-7 gap-1.5 bg-background/70 px-3 text-xs backdrop-blur\"\n          >\n            <Sparkles aria-hidden=\"true\" className=\"text-chart-1\" />\n            <span>Meet Relay 2.0 — now with AI triage</span>\n          </Badge>\n        </div>\n\n        <h1\n          id=\"hero-heading\"\n          className=\"mt-6 max-w-4xl text-4xl leading-[1.08] font-semibold tracking-tight text-balance animate-in fade-in slide-in-from-bottom-4 duration-700 sm:text-6xl lg:text-7xl\"\n        >\n          <span className=\"block\">The project hub where</span>\n          <span className=\"block\">\n            teams <span className=\"hero-sheen-text\">{ROTATING_WORDS[wordIndex]}</span>\n          </span>\n        </h1>\n\n        {/* Screen readers get a stable, complete sentence; the rotating word is visual only */}\n        <p className=\"sr-only\">\n          The project hub where teams ship faster, stay in sync, close the loop and scale calmly.\n        </p>\n\n        <p className=\"mt-6 max-w-2xl text-base text-pretty text-muted-foreground animate-in fade-in slide-in-from-bottom-4 duration-700 delay-150 sm:text-lg\">\n          Relay brings roadmaps, tickets and release notes into one calm workspace, so your\n          team spends less time chasing updates and more time shipping work customers notice.\n        </p>\n\n        <div className=\"mt-9 flex w-full flex-col items-stretch gap-3 animate-in fade-in slide-in-from-bottom-4 duration-700 delay-300 sm:w-auto sm:flex-row sm:items-center\">\n          <Button size=\"lg\" className=\"h-11 px-6 text-base shadow-lg shadow-primary/20\" asChild>\n            <a href=\"#get-started\">\n              Start free trial\n              <ArrowRight aria-hidden=\"true\" data-icon=\"inline-end\" />\n            </a>\n          </Button>\n          <Button\n            size=\"lg\"\n            variant=\"outline\"\n            className=\"h-11 bg-background/70 px-6 text-base backdrop-blur\"\n            asChild\n          >\n            <a href=\"#demo\">\n              <PlayCircle aria-hidden=\"true\" data-icon=\"inline-start\" />\n              Watch 2-min demo\n            </a>\n          </Button>\n        </div>\n\n        <p className=\"mt-4 text-sm text-muted-foreground animate-in fade-in duration-700 delay-500\">\n          14-day free trial · No credit card required · Cancel anytime\n        </p>\n\n        {/* Social proof */}\n        <div className=\"mt-14 flex w-full flex-col items-center gap-10 animate-in fade-in duration-1000 delay-500 sm:mt-20\">\n          <div className=\"flex flex-col items-center gap-4 sm:flex-row sm:gap-5\">\n            <AvatarGroup aria-hidden=\"true\">\n              {AVATARS.map(({ initials, tone }) => (\n                <Avatar key={initials} size=\"lg\">\n                  <AvatarFallback className={`${tone} text-xs font-semibold`}>\n                    {initials}\n                  </AvatarFallback>\n                </Avatar>\n              ))}\n            </AvatarGroup>\n\n            <div className=\"flex flex-col items-center gap-1 sm:items-start\">\n              <div className=\"flex items-center gap-1\">\n                <div className=\"flex\" aria-hidden=\"true\">\n                  {Array.from({ length: 5 }).map((_, i) => (\n                    <Star\n                      key={i}\n                      className=\"size-4 fill-chart-4 text-chart-4\"\n                    />\n                  ))}\n                </div>\n                <span className=\"ml-1 text-sm font-semibold\">4.9</span>\n              </div>\n              <p className=\"text-sm text-muted-foreground\">\n                <span className=\"sr-only\">Rated 4.9 out of 5 stars by </span>\n                Loved by <strong className=\"font-semibold text-foreground\">12,000+</strong> product\n                teams\n              </p>\n            </div>\n          </div>\n\n          <div className=\"w-full\">\n            <h2 className=\"text-xs font-medium tracking-widest text-muted-foreground uppercase\">\n              Trusted by teams at\n            </h2>\n\n            {/* Static grid for small / reduced-motion-agnostic readers */}\n            <ul\n              className=\"mx-auto mt-6 grid max-w-3xl grid-cols-2 items-center justify-items-center gap-x-8 gap-y-6 text-muted-foreground sm:grid-cols-3 lg:hidden\"\n              aria-label=\"Customer logos\"\n            >\n              {LOGOS.map(({ name, Logo }) => (\n                <li key={name} className=\"flex items-center\">\n                  <Logo className=\"h-6 w-auto opacity-70 transition-opacity hover:opacity-100\" />\n                  <span className=\"sr-only\">{name}</span>\n                </li>\n              ))}\n            </ul>\n\n            {/* Marquee on large screens */}\n            <div\n              className=\"hero-marquee mt-6 hidden overflow-hidden text-muted-foreground lg:block\"\n              style={{\n                maskImage:\n                  \"linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)\",\n                WebkitMaskImage:\n                  \"linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)\",\n              }}\n            >\n              <div className=\"hero-marquee-track flex w-max items-center gap-16 pr-16\">\n                {[...LOGOS, ...LOGOS].map(({ name, Logo }, i) => (\n                  <Logo\n                    key={`${name}-${i}`}\n                    className=\"h-7 w-auto shrink-0 opacity-70 transition-opacity hover:opacity-100\"\n                  />\n                ))}\n              </div>\n              <span className=\"sr-only\">\n                Customers include {LOGOS.map((l) => l.name).join(\", \")}.\n              </span>\n            </div>\n          </div>\n        </div>\n      </section>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

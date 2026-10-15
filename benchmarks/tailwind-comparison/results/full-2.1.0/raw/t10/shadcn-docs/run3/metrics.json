@@ -1,0 +1,51 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 454,
+    "chars": 14833,
+    "bytes": 14835,
+    "tokens_o200k": 3597,
+    "tokens_claudeLegacy": 3859
+  },
+  "raw": {
+    "lines": 453,
+    "chars": 14859,
+    "bytes": 14861,
+    "tokens_o200k": 3594,
+    "tokens_claudeLegacy": 3869
+  },
+  "components": [
+    "Avatar",
+    "AvatarBadge",
+    "AvatarFallback",
+    "Badge",
+    "Button",
+    "HoverCard",
+    "HoverCardContent",
+    "HoverCardTrigger",
+    "Popover",
+    "PopoverContent",
+    "PopoverTrigger",
+    "Separator",
+    "Switch"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/hover-card.tsx",
+      "components/ui/popover.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/switch.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 381,
+    "chars": 13282,
+    "bytes": 13282,
+    "tokens_o200k": 3380,
+    "tokens_claudeLegacy": 3933
+  }
+}

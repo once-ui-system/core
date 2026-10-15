@@ -1,0 +1,32 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 388,
+    "chars": 12103,
+    "bytes": 12120,
+    "tokens_o200k": 2691,
+    "tokens_claudeLegacy": 2865
+  },
+  "raw": {
+    "lines": 313,
+    "chars": 11626,
+    "bytes": 11643,
+    "tokens_o200k": 2634,
+    "tokens_claudeLegacy": 2835
+  },
+  "components": [
+    "Badge",
+    "Button",
+    "Column",
+    "Dialog",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconName",
+    "Row",
+    "Text",
+    "Textarea"
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Pricing page — three tiers, highlighted middle tier, feature comparison table, FAQ accordion.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015tGuWkkvKR7DCoJc4aB8it",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01M1MCvJdCGSSCNPNRuPSq7M",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015tGuWkkvKR7DCoJc4aB8it",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01M1MCvJdCGSSCNPNRuPSq7M",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the accordion, table, and other component docs, plus the project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TirGGozxN9pxBsBADtppgn",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/accordion.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018Qjma2ecBL9Tj9TgLf4ijP",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/table.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P4qJ2vvkttHnrFG1xwfJHT",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TirGGozxN9pxBsBADtppgn",
+          "content": "---\ntitle: Accordion\ndescription: A vertically stacked set of interactive headings that each reveal a section of content.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/primitives/docs/components/accordion\n  api: https://www.radix-ui.com/primitives/docs/components/accordion#api-reference\n---\n\n<ComponentPreview\n  name=\"accordion-demo\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-[300px]\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add accordion\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"accordion\"\n  title=\"components/ui/accordion.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"@/components/ui/accordion\"\n```\n\n```tsx showLineNumbers\n<Accordion type=\"single\" collapsible defaultValue=\"item-1\">\n  <AccordionItem value=\"item-1\">\n    <AccordionTrigger>Is it accessible?</AccordionTrigger>\n    <AccordionContent>\n      Yes. It adheres to the WAI-ARIA design pattern.\n    </AccordionContent>\n  </AccordionItem>\n</Accordion>\n```\n\n## Composition\n\nUse the following composition to build an `Accordion`:\n\n```text\nAccordion\n├── AccordionItem\n│   ├── AccordionTrigger\n│   └── AccordionContent\n└── AccordionItem\n    ├── AccordionTrigger\n    └── AccordionContent\n```\n\n## Basic\n\nA basic accordion that shows one item at a time. The first item is open by default.\n\n<ComponentPreview\n  name=\"accordion-basic\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-[300px]\"\n/>\n\n## Multiple\n\nUse `type=\"multiple\"` to allow multiple items to be open at the same time.\n\n<ComponentPreview\n  name=\"accordion-multiple\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-[36rem] md:h-[30rem]\"\n/>\n\n## Disabled\n\nUse the `disabled` prop on `AccordionItem` to disable individual items.\n\n<ComponentPreview\n  name=\"accordion-disabled\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-[300px]\"\n/>\n\n## Borders\n\nAdd `border` to the `Accordion` and `border-b last:border-b-0` to the `AccordionItem` to add borders to the items.\n\n<ComponentPreview\n  name=\"accordion-borders\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-96 md:h-80\"\n/>\n\n## Card\n\nWrap the `Accordion` in a `Card` component.\n\n<ComponentPreview\n  name=\"accordion-card\"\n  styleName=\"radix-nova\"\n  align=\"start\"\n  previewClassName=\"*:data-[slot=accordion]:max-w-sm h-[32rem] md:h-[28rem]\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"accordion-rtl\"\n  align=\"start\"\n  direction=\"rtl\"\n/>\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/primitives/docs/components/accordion#api-reference) documentation for more information.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018Qjma2ecBL9Tj9TgLf4ijP",
+          "content": "---\ntitle: Table\ndescription: A responsive table component.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"table-demo\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add table\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"table\"\n  title=\"components/ui/table.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Table,\n  TableBody,\n  TableCaption,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\"\n```\n\n```tsx showLineNumbers\n<Table>\n  <TableCaption>A list of your recent invoices.</TableCaption>\n  <TableHeader>\n    <TableRow>\n      <TableHead className=\"w-[100px]\">Invoice</TableHead>\n      <TableHead>Status</TableHead>\n      <TableHead>Method</TableHead>\n      <TableHead className=\"text-right\">Amount</TableHead>\n    </TableRow>\n  </TableHeader>\n  <TableBody>\n    <TableRow>\n      <TableCell className=\"font-medium\">INV001</TableCell>\n      <TableCell>Paid</TableCell>\n      <TableCell>Credit Card</TableCell>\n      <TableCell className=\"text-right\">$250.00</TableCell>\n    </TableRow>\n  </TableBody>\n</Table>\n```\n\n## Composition\n\nUse the following composition to build a `Table`:\n\n```text\nTable\n├── TableCaption\n├── TableHeader\n│   └── TableRow\n│       ├── TableHead\n│       ├── TableHead\n│       ├── TableHead\n│       └── TableHead\n├── TableBody\n│   ├── TableRow\n│   │   ├── TableCell\n│   │   ├── TableCell\n│   │   ├── TableCell\n│   │   └── TableCell\n│   └── TableRow\n│       ├── TableCell\n│       ├── TableCell\n│       ├── TableCell\n│       └── TableCell\n└── TableFooter\n```\n\n## Footer\n\nUse the `<TableFooter />` component to add a footer to the table.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"table-footer\" />\n\n## Actions\n\nA table showing actions for each row using a `<DropdownMenu />` component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"table-actions\" />\n\n## Data Table\n\nYou can use the `<Table />` component to build more complex data tables. Combine it with [@tanstack/react-table](https://tanstack.com/table/latest) to create tables with sorting, filtering and pagination.\n\nSee the [Data Table](/docs/components/data-table) documentation for more information.\n\nYou can also see an example of a data table in the [Tasks](/examples/tasks) demo.\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"table-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-auto\"\n/>\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P4qJ2vvkttHnrFG1xwfJHT",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the installed components and the layout."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015hTt4MTNyrrPZjeoMZSZQ8",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AtjetJzNUcHEzJyqYpdqSQ",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015hTt4MTNyrrPZjeoMZSZQ8",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AtjetJzNUcHEzJyqYpdqSQ",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_014Fq4uGWy96VLukKGq8Y958",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013JQ1rn4NjoPWZXzQ1faFyR",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GU6113zjg3Nx3conRbn4SD",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/accordion.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XKXMdGteWrozrQeZGcFgvu",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/table.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CU5J4MUhng4AJ2kTHwMwiW",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KLggchbtCmtH5CgfQXQ75w",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016sfVb2ufZFeosaoWWsYs8V",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011HX6AA8eKtM7St7WTHEfve",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/switch.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014Fq4uGWy96VLukKGq8Y958",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013JQ1rn4NjoPWZXzQ1faFyR",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GU6113zjg3Nx3conRbn4SD",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { ChevronDownIcon } from \"lucide-react\"\nimport { Accordion as AccordionPrimitive } from \"radix-ui\"\n\nfunction Accordion({\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Root>) {\n  return <AccordionPrimitive.Root data-slot=\"accordion\" {...props} />\n}\n\nfunction AccordionItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Item>) {\n  return (\n    <AccordionPrimitive.Item\n      data-slot=\"accordion-item\"\n      className={cn(\"border-b last:border-b-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AccordionTrigger({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {\n  return (\n    <AccordionPrimitive.Header className=\"flex\">\n      <AccordionPrimitive.Trigger\n        data-slot=\"accordion-trigger\"\n        className={cn(\n          \"flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <ChevronDownIcon className=\"pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200\" />\n      </AccordionPrimitive.Trigger>\n    </AccordionPrimitive.Header>\n  )\n}\n\nfunction AccordionContent({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof AccordionPrimitive.Content>) {\n  return (\n    <AccordionPrimitive.Content\n      data-slot=\"accordion-content\"\n      className=\"overflow-hidden text-sm data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down\"\n      {...props}\n    >\n      <div className={cn(\"pt-0 pb-4\", className)}>{children}</div>\n    </AccordionPrimitive.Content>\n  )\n}\n\nexport { Accordion, AccordionItem, AccordionTrigger, AccordionContent }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XKXMdGteWrozrQeZGcFgvu",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Table({ className, ...props }: React.ComponentProps<\"table\">) {\n  return (\n    <div\n      data-slot=\"table-container\"\n      className=\"relative w-full overflow-x-auto\"\n    >\n      <table\n        data-slot=\"table\"\n        className={cn(\"w-full caption-bottom text-sm\", className)}\n        {...props}\n      />\n    </div>\n  )\n}\n\nfunction TableHeader({ className, ...props }: React.ComponentProps<\"thead\">) {\n  return (\n    <thead\n      data-slot=\"table-header\"\n      className={cn(\"[&_tr]:border-b\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableBody({ className, ...props }: React.ComponentProps<\"tbody\">) {\n  return (\n    <tbody\n      data-slot=\"table-body\"\n      className={cn(\"[&_tr:last-child]:border-0\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction TableFooter({ className, ...props }: React.ComponentProps<\"tfoot\">) {\n  return (\n    <tfoot\n      data-slot=\"table-footer\"\n      className={cn(\n        \"border-t bg-muted/50 font-medium [&>tr]:last:border-b-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableRow({ className, ...props }: React.ComponentProps<\"tr\">) {\n  return (\n    <tr\n      data-slot=\"table-row\"\n      className={cn(\n        \"border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableHead({ className, ...props }: React.ComponentProps<\"th\">) {\n  return (\n    <th\n      data-slot=\"table-head\"\n      className={cn(\n        \"h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCell({ className, ...props }: React.ComponentProps<\"td\">) {\n  return (\n    <td\n      data-slot=\"table-cell\"\n      className={cn(\n        \"p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TableCaption({\n  className,\n  ...props\n}: React.ComponentProps<\"caption\">) {\n  return (\n    <caption\n      data-slot=\"table-caption\"\n      className={cn(\"mt-4 text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Table,\n  TableHeader,\n  TableBody,\n  TableFooter,\n  TableHead,\n  TableRow,\n  TableCell,\n  TableCaption,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CU5J4MUhng4AJ2kTHwMwiW",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KLggchbtCmtH5CgfQXQ75w",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016sfVb2ufZFeosaoWWsYs8V",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011HX6AA8eKtM7St7WTHEfve",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\n\nfunction Switch({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof SwitchPrimitive.Root> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      data-size={size}\n      className={cn(\n        \"peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80\",\n        className\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb\n        data-slot=\"switch-thumb\"\n        className={cn(\n          \"pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground\"\n        )}\n      />\n    </SwitchPrimitive.Root>\n  )\n}\n\nexport { Switch }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. I'll build the page with a monthly/annual billing switch, three tier cards, a comparison table, and an FAQ accordion.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { Check, Minus, Sparkles } from \"lucide-react\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\nimport {\n  Accordion,\n  AccordionContent,\n  AccordionItem,\n  AccordionTrigger,\n} from \"@/components/ui/accordion\";\nimport {\n  Table,\n  TableBody,\n  TableCaption,\n  TableCell,\n  TableHead,\n  TableHeader,\n  TableRow,\n} from \"@/components/ui/table\";\nimport { Switch } from \"@/components/ui/switch\";\nimport { Label } from \"@/components/ui/label\";\nimport { cn } from \"@/lib/utils\";\n\ntype Tier = {\n  id: \"starter\" | \"team\" | \"enterprise\";\n  name: string;\n  tagline: string;\n  monthly: number | null;\n  annual: number | null;\n  cta: string;\n  highlighted?: boolean;\n  features: string[];\n};\n\nconst TIERS: Tier[] = [\n  {\n    id: \"starter\",\n    name: \"Starter\",\n    tagline: \"For solo builders shipping their first side project.\",\n    monthly: 0,\n    annual: 0,\n    cta: \"Start for free\",\n    features: [\n      \"Up to 3 projects\",\n      \"5,000 monitored events / month\",\n      \"7-day data retention\",\n      \"Community support\",\n      \"1 team member\",\n    ],\n  },\n  {\n    id: \"team\",\n    name: \"Team\",\n    tagline: \"For growing teams that need speed and visibility.\",\n    monthly: 29,\n    annual: 24,\n    cta: \"Start 14-day free trial\",\n    highlighted: true,\n    features: [\n      \"Unlimited projects\",\n      \"250,000 monitored events / month\",\n      \"90-day data retention\",\n      \"Custom dashboards & alerts\",\n      \"Slack and PagerDuty integrations\",\n      \"Priority email support\",\n    ],\n  },\n  {\n    id: \"enterprise\",\n    name: \"Enterprise\",\n    tagline: \"For organizations with security and scale requirements.\",\n    monthly: null,\n    annual: null,\n    cta: \"Contact sales\",\n    features: [\n      \"Unlimited events, volume pricing\",\n      \"Unlimited data retention\",\n      \"SAML SSO and SCIM provisioning\",\n      \"Audit logs and custom roles\",\n      \"99.99% uptime SLA\",\n      \"Dedicated success manager\",\n    ],\n  },\n];\n\ntype CellValue = boolean | string;\n\ntype ComparisonRow = {\n  feature: string;\n  values: [CellValue, CellValue, CellValue];\n};\n\ntype ComparisonGroup = {\n  group: string;\n  rows: ComparisonRow[];\n};\n\nconst COMPARISON: ComparisonGroup[] = [\n  {\n    group: \"Usage\",\n    rows: [\n      { feature: \"Projects\", values: [\"3\", \"Unlimited\", \"Unlimited\"] },\n      {\n        feature: \"Monitored events / month\",\n        values: [\"5,000\", \"250,000\", \"Custom\"],\n      },\n      { feature: \"Team members\", values: [\"1\", \"Up to 25\", \"Unlimited\"] },\n      { feature: \"Data retention\", values: [\"7 days\", \"90 days\", \"Unlimited\"] },\n    ],\n  },\n  {\n    group: \"Features\",\n    rows: [\n      { feature: \"Custom dashboards\", values: [false, true, true] },\n      { feature: \"Alert rules\", values: [\"2\", \"Unlimited\", \"Unlimited\"] },\n      { feature: \"Slack & PagerDuty integrations\", values: [false, true, true] },\n      { feature: \"Public API access\", values: [true, true, true] },\n      { feature: \"Data export (CSV, S3)\", values: [false, true, true] },\n    ],\n  },\n  {\n    group: \"Security & compliance\",\n    rows: [\n      { feature: \"Two-factor authentication\", values: [true, true, true] },\n      { feature: \"SAML SSO & SCIM\", values: [false, false, true] },\n      { feature: \"Audit logs\", values: [false, false, true] },\n      { feature: \"SOC 2 report & DPA\", values: [false, false, true] },\n    ],\n  },\n  {\n    group: \"Support\",\n    rows: [\n      {\n        feature: \"Support channel\",\n        values: [\"Community\", \"Priority email\", \"Dedicated manager\"],\n      },\n      { feature: \"First response time\", values: [\"—\", \"< 8 hours\", \"< 1 hour\"] },\n      { feature: \"Uptime SLA\", values: [false, false, \"99.99%\"] },\n    ],\n  },\n];\n\nconst FAQS: { q: string; a: string }[] = [\n  {\n    q: \"Can I try Team before paying?\",\n    a: \"Yes. Every new workspace gets a 14-day free trial of the Team plan with no credit card required. When the trial ends, your workspace moves to Starter unless you choose to upgrade.\",\n  },\n  {\n    q: \"What counts as a monitored event?\",\n    a: \"An event is any error, performance trace, or custom log line sent to Pulseboard from your application. Health checks and dashboard views never count against your quota.\",\n  },\n  {\n    q: \"What happens if I go over my event limit?\",\n    a: \"We never drop data without warning. You'll get an email at 80% and 100% of your quota, and on Team you can enable overage billing at $0.40 per additional 1,000 events or let ingestion pause until the next cycle.\",\n  },\n  {\n    q: \"Can I switch between monthly and annual billing?\",\n    a: \"Absolutely. Switching to annual billing saves about 17% and takes effect on your next invoice. If you move from annual back to monthly, the change applies at the end of your current term.\",\n  },\n  {\n    q: \"Do you offer discounts for startups or nonprofits?\",\n    a: \"We do. Early-stage startups can receive 50% off Team for their first year, and registered nonprofits and open-source maintainers get a 30% discount. Contact our team with a few details and we'll set it up.\",\n  },\n  {\n    q: \"How do refunds work?\",\n    a: \"If Pulseboard isn't the right fit, email us within 30 days of your first paid invoice and we'll refund it in full, no questions asked.\",\n  },\n];\n\nfunction formatPrice(value: number): string {\n  return `$${value}`;\n}\n\nfunction CellContent({ value }: { value: CellValue }) {\n  if (value === true) {\n    return (\n      <>\n        <Check className=\"mx-auto size-4 text-primary\" aria-hidden=\"true\" />\n        <span className=\"sr-only\">Included</span>\n      </>\n    );\n  }\n  if (value === false) {\n    return (\n      <>\n        <Minus\n          className=\"mx-auto size-4 text-muted-foreground/60\"\n          aria-hidden=\"true\"\n        />\n        <span className=\"sr-only\">Not included</span>\n      </>\n    );\n  }\n  return <span>{value}</span>;\n}\n\nfunction PriceBlock({ tier, annual }: { tier: Tier; annual: boolean }) {\n  const price = annual ? tier.annual : tier.monthly;\n\n  if (price === null) {\n    return (\n      <div className=\"flex min-h-[4.5rem] flex-col justify-end\">\n        <p className=\"text-4xl font-bold tracking-tight\">Custom</p>\n        <p className=\"text-sm text-muted-foreground\">Tailored to your volume</p>\n      </div>\n    );\n  }\n\n  return (\n    <div className=\"flex min-h-[4.5rem] flex-col justify-end\">\n      <p className=\"flex items-baseline gap-1\">\n        <span className=\"text-4xl font-bold tracking-tight\">\n          {formatPrice(price)}\n        </span>\n        <span className=\"text-sm text-muted-foreground\">\n          {price === 0 ? \"forever\" : \"/ user / month\"}\n        </span>\n      </p>\n      <p className=\"text-sm text-muted-foreground\">\n        {price === 0\n          ? \"No credit card required\"\n          : annual\n            ? \"Billed annually\"\n            : \"Billed monthly\"}\n      </p>\n    </div>\n  );\n}\n\nexport default function PricingPage() {\n  const [annual, setAnnual] = React.useState(true);\n\n  return (\n    <main className=\"min-h-screen bg-background text-foreground\">\n      <div className=\"mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-24\">\n        {/* Hero */}\n        <header className=\"mx-auto max-w-2xl text-center\">\n          <Badge variant=\"secondary\" className=\"mb-4\">\n            Pricing\n          </Badge>\n          <h1 className=\"text-balance text-4xl font-bold tracking-tight sm:text-5xl\">\n            Simple pricing that scales with your team\n          </h1>\n          <p className=\"mt-4 text-pretty text-base text-muted-foreground sm:text-lg\">\n            Pulseboard gives you real-time monitoring for errors, performance\n            and uptime. Start free, upgrade when you need more room, and cancel\n            any time.\n          </p>\n\n          <div className=\"mt-8 flex items-center justify-center gap-3\">\n            <Label\n              htmlFor=\"billing-toggle\"\n              className={cn(\n                \"cursor-pointer text-sm\",\n                !annual ? \"font-semibold\" : \"text-muted-foreground\",\n              )}\n            >\n              Monthly\n            </Label>\n            <Switch\n              id=\"billing-toggle\"\n              checked={annual}\n              onCheckedChange={setAnnual}\n              aria-label=\"Toggle annual billing\"\n            />\n            <Label\n              htmlFor=\"billing-toggle\"\n              className={cn(\n                \"cursor-pointer text-sm\",\n                annual ? \"font-semibold\" : \"text-muted-foreground\",\n              )}\n            >\n              Annual\n            </Label>\n            <Badge variant=\"outline\" className=\"ml-1\">\n              Save 17%\n            </Badge>\n          </div>\n        </header>\n\n        {/* Tiers */}\n        <section\n          aria-labelledby=\"plans-heading\"\n          className=\"mt-12 sm:mt-16\"\n        >\n          <h2 id=\"plans-heading\" className=\"sr-only\">\n            Plans\n          </h2>\n          <div className=\"grid gap-6 lg:grid-cols-3 lg:items-stretch lg:gap-8\">\n            {TIERS.map((tier) => (\n              <Card\n                key={tier.id}\n                className={cn(\n                  \"relative\",\n                  tier.highlighted &&\n                    \"border-primary shadow-lg ring-2 ring-primary lg:-my-4 lg:py-10\",\n                )}\n              >\n                {tier.highlighted && (\n                  <Badge className=\"absolute -top-3 left-1/2 -translate-x-1/2\">\n                    <Sparkles aria-hidden=\"true\" />\n                    Most popular\n                  </Badge>\n                )}\n                <CardHeader>\n                  <CardTitle className=\"text-xl\">{tier.name}</CardTitle>\n                  <CardDescription className=\"min-h-10\">\n                    {tier.tagline}\n                  </CardDescription>\n                </CardHeader>\n                <CardContent className=\"flex flex-1 flex-col gap-6\">\n                  <PriceBlock tier={tier} annual={annual} />\n                  <ul className=\"flex flex-col gap-3 text-sm\">\n                    {tier.features.map((feature) => (\n                      <li key={feature} className=\"flex items-start gap-2\">\n                        <Check\n                          className=\"mt-0.5 size-4 shrink-0 text-primary\"\n                          aria-hidden=\"true\"\n                        />\n                        <span>{feature}</span>\n                      </li>\n                    ))}\n                  </ul>\n                </CardContent>\n                <CardFooter>\n                  <Button\n                    className=\"w-full\"\n                    size=\"lg\"\n                    variant={tier.highlighted ? \"default\" : \"outline\"}\n                    aria-label={`${tier.cta} — ${tier.name} plan`}\n                  >\n                    {tier.cta}\n                  </Button>\n                </CardFooter>\n              </Card>\n            ))}\n          </div>\n        </section>\n\n        {/* Comparison */}\n        <section\n          aria-labelledby=\"compare-heading\"\n          className=\"mt-20 sm:mt-28\"\n        >\n          <div className=\"mx-auto max-w-2xl text-center\">\n            <h2\n              id=\"compare-heading\"\n              className=\"text-balance text-3xl font-bold tracking-tight\"\n            >\n              Compare plans in detail\n            </h2>\n            <p className=\"mt-3 text-muted-foreground\">\n              Every feature, limit and service level across Starter, Team and\n              Enterprise.\n            </p>\n          </div>\n\n          <div className=\"mt-10 rounded-xl border bg-card\">\n            <Table className=\"min-w-[640px]\">\n              <TableCaption className=\"sr-only\">\n                Feature comparison between the Starter, Team and Enterprise\n                plans\n              </TableCaption>\n              <TableHeader>\n                <TableRow className=\"hover:bg-transparent\">\n                  <TableHead scope=\"col\" className=\"h-14 w-2/5 px-4\">\n                    <span className=\"sr-only\">Feature</span>\n                  </TableHead>\n                  {TIERS.map((tier) => (\n                    <TableHead\n                      key={tier.id}\n                      scope=\"col\"\n                      className={cn(\n                        \"h-14 px-4 text-center text-base\",\n                        tier.highlighted && \"bg-primary/5 text-primary\",\n                      )}\n                    >\n                      {tier.name}\n                    </TableHead>\n                  ))}\n                </TableRow>\n              </TableHeader>\n              {COMPARISON.map((group) => (\n                <TableBody key={group.group}>\n                  <TableRow className=\"bg-muted/40 hover:bg-muted/40\">\n                    <TableHead\n                      scope=\"colgroup\"\n                      colSpan={4}\n                      className=\"h-10 px-4 text-xs font-semibold uppercase tracking-wider text-muted-foreground\"\n                    >\n                      {group.group}\n                    </TableHead>\n                  </TableRow>\n                  {group.rows.map((row) => (\n                    <TableRow key={row.feature}>\n                      <TableHead\n                        scope=\"row\"\n                        className=\"h-12 px-4 font-normal whitespace-normal\"\n                      >\n                        {row.feature}\n                      </TableHead>\n                      {row.values.map((value, i) => (\n                        <TableCell\n                          key={TIERS[i].id}\n                          className={cn(\n                            \"px-4 text-center\",\n                            TIERS[i].highlighted && \"bg-primary/5 font-medium\",\n                          )}\n                        >\n                          <CellContent value={value} />\n                        </TableCell>\n                      ))}\n                    </TableRow>\n                  ))}\n                </TableBody>\n              ))}\n            </Table>\n          </div>\n        </section>\n\n        {/* FAQ */}\n        <section\n          aria-labelledby=\"faq-heading\"\n          className=\"mx-auto mt-20 max-w-3xl sm:mt-28\"\n        >\n          <div className=\"text-center\">\n            <h2\n              id=\"faq-heading\"\n              className=\"text-balance text-3xl font-bold tracking-tight\"\n            >\n              Frequently asked questions\n            </h2>\n            <p className=\"mt-3 text-muted-foreground\">\n              Can&apos;t find what you&apos;re looking for? Email\n              support@pulseboard.example and a human will get back to you.\n            </p>\n          </div>\n\n          <Accordion\n            type=\"single\"\n            collapsible\n            defaultValue=\"faq-0\"\n            className=\"mt-8 rounded-xl border bg-card px-4 sm:px-6\"\n          >\n            {FAQS.map((item, i) => (\n              <AccordionItem key={item.q} value={`faq-${i}`}>\n                <AccordionTrigger className=\"text-base\">\n                  {item.q}\n                </AccordionTrigger>\n                <AccordionContent className=\"text-muted-foreground\">\n                  {item.a}\n                </AccordionContent>\n              </AccordionItem>\n            ))}\n          </Accordion>\n        </section>\n\n        {/* Closing CTA */}\n        <section\n          aria-labelledby=\"cta-heading\"\n          className=\"mt-20 rounded-2xl border bg-muted/40 px-6 py-12 text-center sm:mt-28\"\n        >\n          <h2\n            id=\"cta-heading\"\n            className=\"text-balance text-2xl font-bold tracking-tight sm:text-3xl\"\n          >\n            Ready to see what your app is really doing?\n          </h2>\n          <p className=\"mx-auto mt-3 max-w-xl text-muted-foreground\">\n            Connect your first project in under five minutes. No credit card,\n            no sales call.\n          </p>\n          <div className=\"mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row\">\n            <Button size=\"lg\">Start for free</Button>\n            <Button size=\"lg\" variant=\"outline\">\n              Talk to sales\n            </Button>\n          </div>\n        </section>\n      </div>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

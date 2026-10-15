@@ -1,0 +1,92 @@
+{
+  "arm": "A",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 2468
+    },
+    "build": {
+      "ok": true,
+      "ms": 7836
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 596,
+          "height": 2511,
+          "width": 735,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 596,
+          "height": 2408,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 596,
+          "height": 2555,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 2,
+        "nodes": 2,
+        "serious_or_critical": 2,
+        "ids": [
+          "label-content-name-mismatch:serious:1",
+          "role-img-alt:serious:1"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click",
+          "found": true,
+          "steps": 1,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1759,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 5 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [border.default] borderBottom=\"neutral-alpha-weak\" restates the default border — write bare borderBottom, and name a colour only to deviate\n  [components.primitives] Use Once UI components (Media, SmartLink, Button) instead of raw HTML\n  [Icon.cast] 3 `as IconName` casts — never cast an icon name: use a registered one from iconNames (type the field as IconName, or write the literal `as const`), or register the icon by augmenting IconLibraryOverrides\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

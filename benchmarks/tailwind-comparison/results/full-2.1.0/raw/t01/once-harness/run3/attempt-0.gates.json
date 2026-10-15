@@ -1,0 +1,23 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(477,13): error TS2322: Type 'RefObject<HTMLUListElement | null>' is not assignable to type 'Ref<HTMLDivElement> | undefined'.\n  Type 'RefObject<HTMLUListElement | null>' is not assignable to type 'RefObject<HTMLDivElement | null>'.\n    Type 'HTMLUListElement | null' is not assignable to type 'HTMLDivElement | null'.\n      Property 'align' is missing in type 'HTMLUListElement' but required in type 'HTMLDivElement'.\napp/page.tsx(529,17): error TS2322: Type 'RevenuePoint[]' is not assignable to type 'DataPoint[]'.\n  Type 'RevenuePoint' is not assignable to type 'DataPoint'.\n    Index signature for type 'string' is missing in type 'RevenuePoint'.\napp/page.tsx(563,17): error TS2322: Type 'ChannelPoint[]' is not assignable to type 'DataPoint[]'.\n  Type 'ChannelPoint' is not assignable to type 'DataPoint'.\n    Index signature for type 'string' is missing in type 'ChannelPoint'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2557
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

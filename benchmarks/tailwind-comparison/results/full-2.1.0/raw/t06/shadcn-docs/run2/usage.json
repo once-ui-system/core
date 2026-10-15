@@ -1,0 +1,283 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 7,
+      "input_tokens": 58920,
+      "output_tokens": 8150
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4ihYfVNxtuAoTF4xiRr",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 950,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 116,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4ihiZJnU4SsHo1757ZT",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1601,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 159,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4ihwQUZUCGM5vTgJBo7",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 4750,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 226,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4ii71vMDXbEXciG7iRC",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 8491,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 182,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4iiFrjHbwxFNCo49r4Q",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 9439,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 278,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4iiTbRdcaCKTdmscMGr",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 15838,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 302,
+        "output_tokens_details": {
+          "thinking_tokens": 133
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4iik3tPTVgQ1qrDEeFL",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 17851,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 6887,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/input-otp.mdx",
+      "chars": 3562
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/dialog.mdx",
+      "chars": 2833
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/dialog.tsx",
+      "chars": 4303
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input-otp.tsx",
+      "chars": 2253
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/package.json",
+      "chars": 1045
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/field.tsx",
+      "chars": 6159
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/spinner.tsx",
+      "chars": 330
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input-group.tsx",
+      "chars": 5065
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/input.tsx",
+      "chars": 961
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/card.tsx",
+      "chars": 1986
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/sonner.tsx",
+      "chars": 1034
+    }
+  ]
+}

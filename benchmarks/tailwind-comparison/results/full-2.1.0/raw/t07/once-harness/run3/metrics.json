@@ -1,0 +1,34 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 567,
+    "chars": 16104,
+    "bytes": 16107,
+    "tokens_o200k": 3973,
+    "tokens_claudeLegacy": 4187
+  },
+  "raw": {
+    "lines": 464,
+    "chars": 15196,
+    "bytes": 15199,
+    "tokens_o200k": 3860,
+    "tokens_claudeLegacy": 4116
+  },
+  "components": [
+    "Button",
+    "Column",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconButton",
+    "IconName",
+    "Row",
+    "SegmentedControl",
+    "Skeleton",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

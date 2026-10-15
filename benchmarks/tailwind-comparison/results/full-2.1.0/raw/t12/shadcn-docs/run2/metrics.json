@@ -1,0 +1,50 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 356,
+    "chars": 12031,
+    "bytes": 12033,
+    "tokens_o200k": 2874,
+    "tokens_claudeLegacy": 3109
+  },
+  "raw": {
+    "lines": 317,
+    "chars": 11758,
+    "bytes": 11760,
+    "tokens_o200k": 2838,
+    "tokens_claudeLegacy": 3087
+  },
+  "components": [
+    "Button",
+    "Dialog",
+    "DialogClose",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogTitle",
+    "DialogTrigger",
+    "Label",
+    "Textarea",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/button.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/label.tsx",
+      "components/ui/textarea.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 362,
+    "chars": 12138,
+    "bytes": 12138,
+    "tokens_o200k": 2991,
+    "tokens_claudeLegacy": 3486
+  }
+}

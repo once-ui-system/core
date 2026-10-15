@@ -1,0 +1,249 @@
+{
+  "exact": true,
+  "attempts": [
+    {
+      "attempt": 0,
+      "calls": 6,
+      "input_tokens": 42663,
+      "output_tokens": 6698
+    }
+  ],
+  "calls": [
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kK6fvom67H2NmrrmVy",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 955,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 115,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kKU6YCJcYie5JhPyah",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 1605,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 157,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kKrRhhp4y8VJXwzfjv",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 5086,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 235,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kL1brYiz2hoJ7AMdPV",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 8270,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 364,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kLDUyNaQgBUY68EKtn",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "tool_use",
+      "usage": {
+        "input_tokens": 11786,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 289,
+        "output_tokens_details": {
+          "thinking_tokens": 180
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    },
+    {
+      "attempt": 0,
+      "id": "msg_011Cg4kLZfvD82ZQmqKnbHp9",
+      "model": "claude-sonnet-5-5",
+      "stop_reason": "end_turn",
+      "usage": {
+        "input_tokens": 14961,
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 0
+        },
+        "output_tokens": 5538,
+        "output_tokens_details": {
+          "thinking_tokens": 0
+        },
+        "service_tier": "standard",
+        "inference_geo": "global",
+        "speed": "standard"
+      }
+    }
+  ],
+  "tool_calls": [
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/README.md",
+      "chars": 1186
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": ".",
+      "chars": 14
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project",
+      "chars": 106
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/popover.mdx",
+      "chars": 2361
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "docs/components/avatar.mdx",
+      "chars": 5173
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/components/ui",
+      "chars": 785
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/popover.tsx",
+      "chars": 2356
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/avatar.tsx",
+      "chars": 2915
+    },
+    {
+      "attempt": 0,
+      "name": "list_dir",
+      "path": "project/app",
+      "chars": 31
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/page.tsx",
+      "chars": 124
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/layout.tsx",
+      "chars": 431
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/button.tsx",
+      "chars": 2391
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/hover-card.tsx",
+      "chars": 1525
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/separator.tsx",
+      "chars": 693
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/badge.tsx",
+      "chars": 1775
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/components/ui/switch.tsx",
+      "chars": 1407
+    },
+    {
+      "attempt": 0,
+      "name": "read_file",
+      "path": "project/app/globals.css",
+      "chars": 4219
+    }
+  ]
+}

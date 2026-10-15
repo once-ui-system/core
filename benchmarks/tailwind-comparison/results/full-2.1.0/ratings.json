@@ -1,0 +1,1946 @@
+[
+  {
+    "task": 7,
+    "arm": "A",
+    "run": 2,
+    "id": "R001",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Desktop is clean, with a consistent type scale and spacing, and it shows tags, prices, ratings and filters. Phone and tablet captures are stuck on the skeleton state, and no hover actions are visible, so completeness is only partly demonstrated.",
+    "usage": {
+      "input_tokens": 6797,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "C",
+    "run": 2,
+    "id": "R002",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent popover with stats, toggles, storage meter and menu actions that adapts well across widths; the phone menu lacks nav links, hover-card preview isn't shown, and the tablet/desktop layouts leave large empty space below.",
+    "usage": {
+      "input_tokens": 5859,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "C",
+    "run": 1,
+    "id": "R003",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent dashboard with all requested elements and sensible 1→2→4 column adaptation; minor flaws include the traffic chart's y-axis scale making lines look unusually flat, a stray line artifact near the sign-up momentum footer, and the churn badge using an up arrow.",
+    "usage": {
+      "input_tokens": 6333,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "A",
+    "run": 1,
+    "id": "R004",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent design with a well-structured popover (identity, stats, menu items, sign out) that fits cleanly at phone and desktop widths; the main page leaves large empty space below the cards, and the reviewer hover-card preview isn't shown.",
+    "usage": {
+      "input_tokens": 5915,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "A",
+    "run": 2,
+    "id": "R005",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, consistent dashboard with all requested elements and good adaptation across widths; minor quirks like centered badges on tablet activity rows, a faint/low-contrast chart gradient, and the previous-period series reading heavy.",
+    "usage": {
+      "input_tokens": 6553,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 7,
+    "arm": "A",
+    "run": 3,
+    "id": "R006",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 3,
+    "note": "Product images are oversized circles that overflow their cards, so the grid is cropped on tablet and desktop and cards run off the right edge; the hover state shows only a wishlist heart and no clear quick actions.",
+    "usage": {
+      "input_tokens": 8002,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 114,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "C",
+    "run": 2,
+    "id": "R007",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "note": "Clean, consistent billing page with a working feedback dialog (rating chips, textarea, counter, buttons); on phone the floating trigger overlaps the Paid badge, the header email is truncated, and rating labels are clipped (\"Terri…\", \"Excel…\"), while the toast is not shown.",
+    "usage": {
+      "input_tokens": 5965,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 7,
+    "arm": "A",
+    "run": 1,
+    "id": "R008",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent product grid with tags, prices, ratings and wishlist buttons that adapts well from 1 to 2 to 3 columns, but the skeleton loading state and hover actions are not visible, and the category filters and cart don't appear to be functional.",
+    "usage": {
+      "input_tokens": 7533,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "A",
+    "run": 1,
+    "id": "R009",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent table page with all requested elements and a working sort. The phone view clips the status filter and the date and search fields, which scroll within their own container, so there is a minor usability cost.",
+    "usage": {
+      "input_tokens": 6151,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 107,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "C",
+    "run": 2,
+    "id": "R010",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent table page with all requested elements (segmented filter, date range, search, sortable headers, pagination) that adapts well, using a horizontally scrolling table on phone; sorting visibly works, with only minor tab truncation on phone.",
+    "usage": {
+      "input_tokens": 5921,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "A",
+    "run": 3,
+    "id": "R011",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent pricing page with all requested parts and a working FAQ accordion; the phone comparison table scrolls sideways inside its container, which is acceptable, but only shows the Starter column initially.",
+    "usage": {
+      "input_tokens": 9296,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 114,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "A",
+    "run": 1,
+    "id": "R012",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 3,
+    "note": "Oversized blank image placeholders dominate the cards; on phone they overflow the card edge and hide the titles and descriptions, and on tablet the feedback button covers the card text. The dialog is reasonable, but the textarea shows a stray '500' counter and the phone dialog's send button is hidden behind the floating trigger. No toast is visible.",
+    "usage": {
+      "input_tokens": 10509,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "A",
+    "run": 1,
+    "id": "R013",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, well-spaced hero with blue accent on 'weeks', CTA pair, logo row and stats that adapt well across widths; the gradient background is subtle, though the 'Trusted by' line sits tight to the hero edge and the logo grid is slightly uneven on tablet.",
+    "usage": {
+      "input_tokens": 4012,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 141,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "A",
+    "run": 3,
+    "id": "R014",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent data table with all requested elements; the sort interaction works, and the phone table scrolls horizontally with the filter inputs a bit awkwardly offset (empty space left of search). Sort indicator and status pills are well handled.",
+    "usage": {
+      "input_tokens": 6025,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "A",
+    "run": 1,
+    "id": "R015",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent changelog with a clear timeline, tags, and code snippets that reflow well across widths; the copy interaction shows a check icon and tooltip, though the tooltip overlaps the snippet and the code boxes are slightly clipped on phone.",
+    "usage": {
+      "input_tokens": 8740,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "C",
+    "run": 1,
+    "id": "R016",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent chat UI with avatars, attachment, reactions, working emoji picker and command hint, but no streaming indicator is visible and the Relay Assistant never appears in the messages.",
+    "usage": {
+      "input_tokens": 5829,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 111,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "A",
+    "run": 2,
+    "id": "R017",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, coherent hero with CTA pair, logos and stats that adapts well, but the headline shows no visible text effect, the background gradient is very subtle, logos are plain icon+text, and the hero's background cuts off abruptly right above the 'Trusted by' line with tight spacing.",
+    "usage": {
+      "input_tokens": 3998,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 142,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "C",
+    "run": 3,
+    "id": "R018",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent table page with all requested elements (segmented filter, date, search, sortable headers, pagination) and a working sort; phone scrolls the table horizontally inside its container, which is acceptable, though the Status column is partly cut off by default.",
+    "usage": {
+      "input_tokens": 5949,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "C",
+    "run": 3,
+    "id": "R019",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, well-spaced chat UI with avatars, reactions, emoji picker and command hint across all widths; no streaming/typing indicator is visible, and the phone header's truncated subtitle plus clipped avatar stack are minor flaws.",
+    "usage": {
+      "input_tokens": 5843,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "A",
+    "run": 1,
+    "id": "R020",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent pricing page with highlighted Pro tier, full comparison table, working FAQ accordion; phone table scrolls sideways (acceptable) and hero background gradient is slightly abrupt.",
+    "usage": {
+      "input_tokens": 9112,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "A",
+    "run": 3,
+    "id": "R021",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 2,
+    "note": "Step icons render as huge green and dashed circles/pills that dominate each card and squeeze the text into a narrow column at every width, though the progress bar, status badges and completed state are present; no celebratory completion is visible.",
+    "usage": {
+      "input_tokens": 8284,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "A",
+    "run": 2,
+    "id": "R022",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, consistent sign-in card with good responsive adaptation and inline validation errors, but the OTP step in a stacked dialog is never shown and the left panel on desktop has a large empty gap.",
+    "usage": {
+      "input_tokens": 5836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 112,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "A",
+    "run": 3,
+    "id": "R023",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean hero with a blue-accent headline, CTA pair, trust checks and a logo grid that reflows 3→2→2 columns cleanly; the trust line sits tight against the gradient edge, and the large empty space below the logos and the stray divider feel slightly unfinished.",
+    "usage": {
+      "input_tokens": 3778,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 139,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "C",
+    "run": 3,
+    "id": "R024",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 5,
+    "restraint": 5,
+    "note": "Clean, consistent checklist with progress bar, status pills and a good responsive layout, but the celebratory completion state isn't shown and the interaction screenshots appear to show a reset/initial state rather than a visibly completed step.",
+    "usage": {
+      "input_tokens": 6252,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "C",
+    "run": 3,
+    "id": "R025",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 5,
+    "note": "Clean, consistent settings UI with all requested parts, but the phone layout is cropped on the right (inputs, tabs, text cut off) and the sidebar becomes a truncated tab row, while tablet and desktop adapt well.",
+    "usage": {
+      "input_tokens": 8474,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "C",
+    "run": 1,
+    "id": "R026",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent onboarding card that adapts well across widths, but the scripted interaction only collapsed the step and showed no completion state, progress change, or celebration.",
+    "usage": {
+      "input_tokens": 5942,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 242,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "A",
+    "run": 3,
+    "id": "R027",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent login card that adapts well across widths and shows an inline empty-submit error, but the OTP step in a stacked dialog is never shown (only a demo code listed), and the demo credentials sit exposed on the page.",
+    "usage": {
+      "input_tokens": 5836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "A",
+    "run": 1,
+    "id": "R028",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 3,
+    "note": "KPI cards are dominated by huge empty gray placeholder blocks (likely failed sparklines/images) with tiny labels squeezed beside them, and on desktop the grid is wider than the charts below; charts and activity list are decent but the broken KPI cards undermine the page.",
+    "usage": {
+      "input_tokens": 6641,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "C",
+    "run": 1,
+    "id": "R029",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent minimal landing and well-formed login dialog that adapts across widths; the OTP step is not shown, and the email field has awkward selected-text highlighting and truncation on phone.",
+    "usage": {
+      "input_tokens": 5836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 111,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "A",
+    "run": 3,
+    "id": "R030",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 3,
+    "restraint": 4,
+    "note": "Clean, consistent dashboard with all requested elements (KPI cards with trends, area and bar charts, activity list); the layout barely changes between tablet and phone (just a 2x2 KPI grid at desktop), the desktop revenue chart x-axis labels are unevenly spaced and crowded, and the revenue chart's grey previous-period fill is heavy.",
+    "usage": {
+      "input_tokens": 8225,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 167,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "C",
+    "run": 1,
+    "id": "R031",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent timeline with tags, filters, and copyable snippets plus a clear 'Copied' toast; on phone the code blocks scroll sideways inside their containers and the timeline rail is dropped, both acceptable.",
+    "usage": {
+      "input_tokens": 9200,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "C",
+    "run": 1,
+    "id": "R032",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent profile popover with stats, follow, status options and menu actions (keyboard hints on desktop), adapting well across widths; the dashboard behind it is sparse and the phone popover spans nearly full width.",
+    "usage": {
+      "input_tokens": 5831,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "C",
+    "run": 1,
+    "id": "R033",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "note": "Clean, restrained pricing page with all requested sections; phone comparison table shows only Starter column with no scroll cue, tablet stacks cards in a wide single column, and the FAQ toggle state is ambiguous.",
+    "usage": {
+      "input_tokens": 8836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 395,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "A",
+    "run": 1,
+    "id": "R034",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, restrained layout with working progress and step states, but the number/status gutter column overlaps the icon and body text in expanded cards (visible defect at all widths), and the celebratory completion state isn't shown.",
+    "usage": {
+      "input_tokens": 5914,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 115,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "A",
+    "run": 1,
+    "id": "R035",
+    "polish": 2,
+    "completeness": 2,
+    "responsiveness": 2,
+    "restraint": 4,
+    "note": "Phone screenshot shows an empty message list and the tablet/desktop layouts push avatars far from their messages with a huge gap. The avatar cluster in the header overlaps, there is no streaming indicator, and the emoji picker opens but is misaligned and clips the message list.",
+    "usage": {
+      "input_tokens": 5829,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 137,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "A",
+    "run": 2,
+    "id": "R036",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 3,
+    "note": "The feedback dialog is clean and well-organized with rating chips, topic tags and a textarea, but the stat cards are dominated by huge empty blue placeholder blocks, the desktop layout squeezes the metrics into a narrow column, the phone trigger overlaps the card, and no toast is shown.",
+    "usage": {
+      "input_tokens": 10211,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "A",
+    "run": 3,
+    "id": "R037",
+    "polish": 3,
+    "completeness": 2,
+    "responsiveness": 3,
+    "restraint": 4,
+    "note": "Clean, calm and consistent profile form, but the danger zone the task asked for is absent, the phone tab row clips the Workspace label, and the tablet drops the sidebar for tabs while leaving the tab widths uneven.",
+    "usage": {
+      "input_tokens": 4476,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "A",
+    "run": 2,
+    "id": "R038",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent table page with all requested controls and working sort; phone table scrolls sideways acceptably and the tablet filter layout is slightly odd (right-aligned block with empty left space).",
+    "usage": {
+      "input_tokens": 6185,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 111,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "C",
+    "run": 1,
+    "id": "R039",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent settings page with all requested sections (avatar upload, inputs, selects, danger zone); the phone swaps the sidebar for a tab row that lacks Billing and Danger zone, and the desktop layout is a bit sparse with a plain sidebar.",
+    "usage": {
+      "input_tokens": 8686,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 7,
+    "arm": "C",
+    "run": 2,
+    "id": "R040",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent card grid with badges, ratings, prices, wishlist and hover actions (add to cart, quick view) that adapt from 1 to 2 to 4 columns; the skeleton loading state isn't shown, and the phone filter chips are clipped at the right edge, though that is an acceptable horizontal scroll.",
+    "usage": {
+      "input_tokens": 7518,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 155,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "C",
+    "run": 2,
+    "id": "R041",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent chat UI with avatars, role labels, file attachment, input bar, emoji picker and command hint; however, no visible streaming indicator, the header avatar stack is cramped with a stray mark, and the emoji picker is clipped and covers content on phone.",
+    "usage": {
+      "input_tokens": 5829,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "C",
+    "run": 3,
+    "id": "R042",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent page with a well-built dialog (rating chips, textarea, counter, send/cancel); the toast isn't shown, the phone nav omits Billing, and the floating trigger overlaps the last card on phone.",
+    "usage": {
+      "input_tokens": 5853,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "C",
+    "run": 2,
+    "id": "R043",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent monochrome pricing page with highlighted Pro tier, full comparison table and FAQ; the phone table scrolls sideways within its container (acceptable), but the interaction screenshots show the opened FAQ answer only on phone and the first question just underlined with no visible open state on desktop.",
+    "usage": {
+      "input_tokens": 10400,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 147,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "A",
+    "run": 3,
+    "id": "R044",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 3,
+    "note": "The activity thumbnails are oversized gray blocks that squeeze the text into a narrow column, and on phone the text is cut off at the right edge while the Feedback button overlaps the heading; the dialog itself is clean, but no toast is shown.",
+    "usage": {
+      "input_tokens": 9475,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "C",
+    "run": 3,
+    "id": "R045",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "note": "Clean, consistent monochrome pricing page with all requested sections, but the phone comparison table clips the Team and Enterprise columns (no visible scroll cue), and the interaction screenshots show the first FAQ only underlined with no visible expanded answer.",
+    "usage": {
+      "input_tokens": 9572,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "A",
+    "run": 2,
+    "id": "R046",
+    "polish": 2,
+    "completeness": 2,
+    "responsiveness": 2,
+    "restraint": 2,
+    "note": "Step number badges render as enormous circles that dominate each card, so titles are squeezed or missing on phone, and after completing step 1 the progress stays at 0% with no visible status change.",
+    "usage": {
+      "input_tokens": 8560,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 106,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "C",
+    "run": 3,
+    "id": "R047",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent timeline changelog with tags, copyable snippets and clear copy feedback (button state plus toast); on phone the code blocks are clipped but scroll inside their container, and the layout adapts well overall.",
+    "usage": {
+      "input_tokens": 9476,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "C",
+    "run": 3,
+    "id": "R048",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, consistent card system with all requested elements (KPI cards with trends, line chart, bar chart, activity list) and sensible 1/2/4-column adaptation; minor nits are the single-color bars, the 'hidden scale' dual-axis note, and the sparse empty space in the charts' lower areas.",
+    "usage": {
+      "input_tokens": 6141,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "C",
+    "run": 2,
+    "id": "R049",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent timeline changelog with tags, filters, search and copyable snippets across all widths; the interaction copied the install command (a toast confirms) rather than the first snippet, and code blocks are clipped but scroll inside their containers.",
+    "usage": {
+      "input_tokens": 8096,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "C",
+    "run": 2,
+    "id": "R050",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent dashboard with all requested elements (KPI cards with trend badges, line chart, bar chart, activity list) that reflows well from 4-up to 2x2 to stacked; only minor issues like a slightly uneven chart height on desktop and a truncated review quote on phone.",
+    "usage": {
+      "input_tokens": 5789,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "A",
+    "run": 2,
+    "id": "R051",
+    "polish": 3,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, restrained changelog with tags, a timeline and copyable snippets, but the version and date are duplicated in each entry header, the timeline dots are inconsistently coloured, and the faint grey body text is a little low in contrast.",
+    "usage": {
+      "input_tokens": 9016,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 7,
+    "arm": "C",
+    "run": 3,
+    "id": "R052",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent card grid with badges, ratings, sale pricing, wishlist buttons and a 1/2/4-column adaptation; hover actions and the skeleton state aren't visible in the screenshots, though a Reload control hints at loading.",
+    "usage": {
+      "input_tokens": 5585,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "C",
+    "run": 1,
+    "id": "R053",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent data table with all requested controls; on phone the table scrolls sideways so date/status/amount are hidden, and sort on the first column works (shown ascending), though the segmented control is clipped but scrollable.",
+    "usage": {
+      "input_tokens": 6269,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "C",
+    "run": 2,
+    "id": "R054",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 2,
+    "restraint": 5,
+    "note": "Clean, consistent desktop and tablet layouts with all requested sections, but the phone view overflows horizontally (inputs, buttons and text clipped on the right, tabs cut off) and the sidebar becomes a clipped tab row.",
+    "usage": {
+      "input_tokens": 7922,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "C",
+    "run": 3,
+    "id": "R055",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent minimal landing and login dialog that adapts well across widths; the OTP step isn't shown in the screenshots, and the landing page is quite sparse.",
+    "usage": {
+      "input_tokens": 5836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 103,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "C",
+    "run": 2,
+    "id": "R056",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent minimal landing and a tidy login dialog that adapts well across widths, but only the password step is shown (no OTP step visible), the email text is selected/clipped on phone, and the page has large empty areas.",
+    "usage": {
+      "input_tokens": 5836,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "A",
+    "run": 2,
+    "id": "R057",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent article page with a well-structured account popover (stats, plan badge, menu items, sign out) that adapts well across widths; the author hover card isn't shown in the interaction screenshots, and the desktop popover slightly overlaps content as expected.",
+    "usage": {
+      "input_tokens": 5887,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "C",
+    "run": 1,
+    "id": "R058",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, well-spaced hero with gradient headline text, CTA pair, avatar/rating proof, logo marquee and soft blob background that adapts well across widths; minor nits are the tablet's empty gap above the logo strip and the clipped edge logos.",
+    "usage": {
+      "input_tokens": 3694,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "A",
+    "run": 3,
+    "id": "R059",
+    "polish": 2,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 2,
+    "note": "The popover itself is well made (avatar, stats, menu items, actions), but the recent-activity avatars render as huge grey circles that dominate the page and on phone push the text out of view and clip at the right edge, so the page looks broken.",
+    "usage": {
+      "input_tokens": 11125,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 11,
+    "arm": "A",
+    "run": 3,
+    "id": "R060",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent timeline with tag chips, filter row, and copyable snippets; the copy button shows a check state and tooltip, and code scrolls inside its container on phone; the timeline dots and line colors vary a bit arbitrarily, and the large gaps between entries are slightly loose.",
+    "usage": {
+      "input_tokens": 10736,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "A",
+    "run": 1,
+    "id": "R061",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent settings page with a sidebar on desktop and tabs on smaller widths, but the danger zone section content is not shown and the phone tab bar is cut off (Security truncated).",
+    "usage": {
+      "input_tokens": 4288,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 111,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "A",
+    "run": 3,
+    "id": "R062",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent chat UI with avatars, AI badge, reactions, emoji picker and Ctrl K hint; missing a visible streaming indicator, and the phone view scrolls to the bottom with the header partly clipping the first message.",
+    "usage": {
+      "input_tokens": 5829,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 6,
+    "arm": "A",
+    "run": 1,
+    "id": "R063",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 5,
+    "restraint": 5,
+    "note": "Clean, consistent login card that scales well across all three widths, but only the password step is shown with no visible OTP step or stacked dialog, and the demo-credentials box is a bit odd.",
+    "usage": {
+      "input_tokens": 3679,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 107,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "C",
+    "run": 3,
+    "id": "R064",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent profile popover with avatar, stats, DND toggle, menu items and shortcuts, and it adapts well across widths; the hover-card for teammate handles isn't shown, and the tablet/desktop pages leave a lot of empty space below.",
+    "usage": {
+      "input_tokens": 5831,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 7,
+    "arm": "C",
+    "run": 1,
+    "id": "R065",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean, consistent card grid with badges, ratings, strike-through prices and a sensible 1/2/4-column adaptation, but the hover actions and skeleton loading state are not shown (the reload control exists) and the placeholder icons are generic.",
+    "usage": {
+      "input_tokens": 6145,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "C",
+    "run": 2,
+    "id": "R066",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean hero with gradient headline text, CTA pair, rating/avatars, logo strip (marquee on desktop, grid on smaller) and soft blurred background; layout adapts well, with only minor emptiness below the content on tablet and a slightly cropped logo marquee on desktop.",
+    "usage": {
+      "input_tokens": 3722,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 142,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 2,
+    "arm": "A",
+    "run": 2,
+    "id": "R067",
+    "polish": 4,
+    "completeness": 2,
+    "responsiveness": 3,
+    "restraint": 5,
+    "note": "Clean, consistent profile form with sidebar tabs, avatar upload and inputs, but the danger zone is missing and the selects look like plain text fields; on phone the tab row clips 'Workspace' and the sidebar becomes tabs.",
+    "usage": {
+      "input_tokens": 4294,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "C",
+    "run": 3,
+    "id": "R068",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 4,
+    "note": "Clean hero with gradient headline, CTA pair, trust checks, rating and logo row that reflows well from 2-col to 3-col to 6-in-a-row; minor flaws are the 'Lumen Labs' wrapping on desktop and the large empty space below the content on tablet and desktop.",
+    "usage": {
+      "input_tokens": 3694,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 145,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "C",
+    "run": 2,
+    "id": "R069",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 5,
+    "restraint": 5,
+    "note": "Clean, consistent onboarding checklist with progress bar, status badges and good adaptation across widths; the interaction undo works, but no celebratory completion state is visible and the 'Mark done' control isn't obviously shown.",
+    "usage": {
+      "input_tokens": 7456,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 120,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 4,
+    "arm": "A",
+    "run": 2,
+    "id": "R070",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 4,
+    "note": "Desktop and tablet look clean with avatars, reactions, an AI badge and a working emoji picker. However, the phone view renders an empty message list, the avatars sit far from the messages on wide screens, there is no visible streaming indicator, and the picker overlaps and floats oddly over the messages on desktop.",
+    "usage": {
+      "input_tokens": 5829,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 12,
+    "arm": "C",
+    "run": 1,
+    "id": "R071",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "note": "Clean, consistent page with a well-made dialog (rating chips, category chips, textarea, counter) that adapts well across widths; the floating button overlaps card text and changelog dates on phone and tablet, and the toast on submit isn't shown.",
+    "usage": {
+      "input_tokens": 6453,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "A",
+    "run": 2,
+    "id": "R072",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "note": "Clean, consistent pricing page with a highlighted Pro card, full comparison table and a working FAQ accordion; on phone the comparison table shows only the Starter column (Pro/Enterprise likely scroll sideways but are not visible), which weakens usability.",
+    "usage": {
+      "input_tokens": 9572,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 133,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  }
+]

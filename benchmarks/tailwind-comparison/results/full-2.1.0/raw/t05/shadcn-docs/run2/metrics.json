@@ -1,0 +1,39 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 439,
+    "chars": 14812,
+    "bytes": 14816,
+    "tokens_o200k": 3993,
+    "tokens_claudeLegacy": 4195
+  },
+  "raw": {
+    "lines": 315,
+    "chars": 14184,
+    "bytes": 14188,
+    "tokens_o200k": 3887,
+    "tokens_claudeLegacy": 4139
+  },
+  "components": [
+    "Avatar",
+    "AvatarFallback",
+    "AvatarGroup",
+    "Badge",
+    "Button"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 209,
+    "chars": 7279,
+    "bytes": 7279,
+    "tokens_o200k": 1890,
+    "tokens_claudeLegacy": 2184
+  }
+}

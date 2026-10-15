@@ -1,0 +1,61 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 536,
+    "chars": 19988,
+    "bytes": 20004,
+    "tokens_o200k": 4374,
+    "tokens_claudeLegacy": 4739
+  },
+  "raw": {
+    "lines": 504,
+    "chars": 19610,
+    "bytes": 19626,
+    "tokens_o200k": 4382,
+    "tokens_claudeLegacy": 4760
+  },
+  "components": [
+    "Alert",
+    "AlertDescription",
+    "AlertTitle",
+    "Button",
+    "Dialog",
+    "DialogContent",
+    "DialogDescription",
+    "DialogFooter",
+    "DialogHeader",
+    "DialogTitle",
+    "Field",
+    "FieldDescription",
+    "FieldError",
+    "FieldGroup",
+    "FieldLabel",
+    "Input",
+    "InputOTP",
+    "InputOTPGroup",
+    "InputOTPSeparator",
+    "InputOTPSlot",
+    "Spinner"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/alert.tsx",
+      "components/ui/button.tsx",
+      "components/ui/dialog.tsx",
+      "components/ui/field.tsx",
+      "components/ui/input-otp.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/spinner.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 648,
+    "chars": 19577,
+    "bytes": 19577,
+    "tokens_o200k": 5008,
+    "tokens_claudeLegacy": 5697
+  }
+}

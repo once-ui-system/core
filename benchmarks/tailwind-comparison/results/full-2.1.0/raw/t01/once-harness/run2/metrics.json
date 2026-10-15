@@ -1,0 +1,35 @@
+{
+  "attempt": 1,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 626,
+    "chars": 18233,
+    "bytes": 18248,
+    "tokens_o200k": 4433,
+    "tokens_claudeLegacy": 4569
+  },
+  "raw": {
+    "lines": 419,
+    "chars": 16774,
+    "bytes": 16789,
+    "tokens_o200k": 4262,
+    "tokens_claudeLegacy": 4433
+  },
+  "components": [
+    "BarChart",
+    "Column",
+    "CountFx",
+    "Grid",
+    "Heading",
+    "Icon",
+    "IconName",
+    "Line",
+    "LineChart",
+    "Row",
+    "SegmentedControl",
+    "Tag",
+    "Text",
+    "VisuallyHidden"
+  ]
+}

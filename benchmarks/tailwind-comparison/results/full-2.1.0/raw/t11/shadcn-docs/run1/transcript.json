@@ -1,0 +1,274 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Changelog/timeline page — versioned entries on a timeline, tags per release, copyable code snippets.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GxkSdeML8jiqbprnxUwkmd",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013Ppc1ode3BDYujTj4U87aQ",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GxkSdeML8jiqbprnxUwkmd",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013Ppc1ode3BDYujTj4U87aQ",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01RryFxwKrd5AL3AVziwEy5e",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015yuaquXqrnaMqcDx1syLca",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/badge.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RryFxwKrd5AL3AVziwEy5e",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015yuaquXqrnaMqcDx1syLca",
+          "content": "---\ntitle: Badge\ndescription: Displays a badge or a component that looks like a badge.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add badge\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  styleName=\"radix-nova\"\n  name=\"badge\"\n  title=\"components/ui/badge.tsx\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Badge } from \"@/components/ui/badge\"\n```\n\n```tsx\n<Badge variant=\"default | outline | secondary | destructive\">Badge</Badge>\n```\n\n## Variants\n\nUse the `variant` prop to change the variant of the badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-variants\" />\n\n## With Icon\n\nYou can render an icon inside the badge. Use `data-icon=\"inline-start\"` to render the icon on the left and `data-icon=\"inline-end\"` to render the icon on the right.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-icon\" />\n\n## With Spinner\n\nYou can render a spinner inside the badge. Remember to add the `data-icon=\"inline-start\"` or `data-icon=\"inline-end\"` prop to the spinner.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-spinner\" />\n\n## Link\n\nUse the `asChild` prop to render a link as a badge.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-link\" />\n\n## Custom Colors\n\nYou can customize the colors of a badge by adding custom classes such as `bg-green-50 dark:bg-green-800` to the `Badge` component.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-colors\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"badge-rtl\" direction=\"rtl\" />\n\n## API Reference\n\n### Badge\n\nThe `Badge` component displays a badge or a component that looks like a badge.\n\n| Prop        | Type                                                                          | Default     |\n| ----------- | ----------------------------------------------------------------------------- | ----------- |\n| `variant`   | `\"default\" \\| \"secondary\" \\| \"destructive\" \\| \"outline\" \\| \"ghost\" \\| \"link\"` | `\"default\"` |\n| `className` | `string`                                                                      | -           |\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the installed components and project files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UQrEYVFHRGHHDpsBTyN3uk",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01E3LC5XU1FUyC2eVUBPoR1e",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014BfsYpJALN22vuy4Qu2VrJ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015LPjC9phnG6nj3GRHY2V39",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UQrEYVFHRGHHDpsBTyN3uk",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01E3LC5XU1FUyC2eVUBPoR1e",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014BfsYpJALN22vuy4Qu2VrJ",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015LPjC9phnG6nj3GRHY2V39",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing page, layout and a few other components I plan to use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017aaYr1gZvVaVToNttvTAff",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LEskJFzkfUm9ZW1A8C7QUf",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0161SHsvke4wB7LkkkUdxkjg",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HWT6KLeJMAEQeUNK39eZ7m",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/tooltip.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017aaYr1gZvVaVToNttvTAff",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LEskJFzkfUm9ZW1A8C7QUf",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0161SHsvke4wB7LkkkUdxkjg",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HWT6KLeJMAEQeUNK39eZ7m",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Tooltip as TooltipPrimitive } from \"radix-ui\"\n\nfunction TooltipProvider({\n  delayDuration = 0,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {\n  return (\n    <TooltipPrimitive.Provider\n      data-slot=\"tooltip-provider\"\n      delayDuration={delayDuration}\n      {...props}\n    />\n  )\n}\n\nfunction Tooltip({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Root>) {\n  return <TooltipPrimitive.Root data-slot=\"tooltip\" {...props} />\n}\n\nfunction TooltipTrigger({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {\n  return <TooltipPrimitive.Trigger data-slot=\"tooltip-trigger\" {...props} />\n}\n\nfunction TooltipContent({\n  className,\n  sideOffset = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Content>) {\n  return (\n    <TooltipPrimitive.Portal>\n      <TooltipPrimitive.Content\n        data-slot=\"tooltip-content\"\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <TooltipPrimitive.Arrow className=\"z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground\" />\n      </TooltipPrimitive.Content>\n    </TooltipPrimitive.Portal>\n  )\n}\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. I'll build a timeline with a tag filter (toggle group), a version jump nav, and copyable code blocks with a clipboard fallback.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  Bug,\n  Check,\n  Copy,\n  Rocket,\n  ShieldAlert,\n  Sparkles,\n  TriangleAlert,\n  Wrench,\n  Zap,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport { Separator } from \"@/components/ui/separator\";\nimport { ToggleGroup, ToggleGroupItem } from \"@/components/ui/toggle-group\";\nimport { cn } from \"@/lib/utils\";\n\ntype Tag = \"feature\" | \"improvement\" | \"fix\" | \"security\" | \"breaking\";\n\ntype Snippet = {\n  title: string;\n  language: string;\n  code: string;\n};\n\ntype Change = {\n  tag: Tag;\n  text: string;\n};\n\ntype Release = {\n  version: string;\n  date: string; // ISO date\n  title: string;\n  summary: string;\n  tags: Tag[];\n  latest?: boolean;\n  changes: Change[];\n  snippets?: Snippet[];\n};\n\nconst TAG_META: Record<\n  Tag,\n  { label: string; icon: React.ComponentType<{ className?: string }>; className: string }\n> = {\n  feature: {\n    label: \"Feature\",\n    icon: Sparkles,\n    className:\n      \"bg-emerald-50 text-emerald-800 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-900\",\n  },\n  improvement: {\n    label: \"Improvement\",\n    icon: Zap,\n    className:\n      \"bg-sky-50 text-sky-800 border-sky-200 dark:bg-sky-950/50 dark:text-sky-300 dark:border-sky-900\",\n  },\n  fix: {\n    label: \"Fix\",\n    icon: Bug,\n    className:\n      \"bg-amber-50 text-amber-900 border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-900\",\n  },\n  security: {\n    label: \"Security\",\n    icon: ShieldAlert,\n    className:\n      \"bg-violet-50 text-violet-800 border-violet-200 dark:bg-violet-950/50 dark:text-violet-300 dark:border-violet-900\",\n  },\n  breaking: {\n    label: \"Breaking\",\n    icon: TriangleAlert,\n    className:\n      \"bg-red-50 text-red-800 border-red-200 dark:bg-red-950/50 dark:text-red-300 dark:border-red-900\",\n  },\n};\n\nconst TAG_ORDER: Tag[] = [\"feature\", \"improvement\", \"fix\", \"security\", \"breaking\"];\n\nconst RELEASES: Release[] = [\n  {\n    version: \"3.2.0\",\n    date: \"2025-06-10\",\n    title: \"Streaming exports and scoped API tokens\",\n    summary:\n      \"Export millions of rows without timeouts, and give each integration only the access it needs.\",\n    tags: [\"feature\", \"improvement\", \"fix\"],\n    latest: true,\n    changes: [\n      {\n        tag: \"feature\",\n        text: \"Streaming CSV and NDJSON exports with resumable downloads for datasets up to 50 million rows.\",\n      },\n      {\n        tag: \"feature\",\n        text: \"Scoped API tokens: restrict a token to specific projects and read-only or read-write access.\",\n      },\n      {\n        tag: \"improvement\",\n        text: \"Dashboard charts render up to 3x faster on workspaces with more than 200 saved views.\",\n      },\n      {\n        tag: \"fix\",\n        text: \"Webhook retries no longer fire twice when the first attempt times out at exactly 10 seconds.\",\n      },\n    ],\n    snippets: [\n      {\n        title: \"Create a scoped token\",\n        language: \"bash\",\n        code: `curl -X POST https://api.example.com/v3/tokens \\\\\n  -H \"Authorization: Bearer $ADMIN_TOKEN\" \\\\\n  -H \"Content-Type: application/json\" \\\\\n  -d '{\n    \"name\": \"reporting-service\",\n    \"scopes\": [\"projects:read\", \"exports:write\"],\n    \"projects\": [\"prj_8fd21a\"]\n  }'`,\n      },\n      {\n        title: \"Stream an export\",\n        language: \"ts\",\n        code: `import { createClient } from \"@acme/sdk\";\n\nconst acme = createClient({ token: process.env.ACME_TOKEN! });\n\nfor await (const row of acme.exports.stream(\"orders\", { format: \"ndjson\" })) {\n  console.log(row.id, row.total);\n}`,\n      },\n    ],\n  },\n  {\n    version: \"3.1.2\",\n    date: \"2025-05-22\",\n    title: \"Security patch for invitation links\",\n    summary: \"A recommended update for all self-hosted installations.\",\n    tags: [\"security\", \"fix\"],\n    changes: [\n      {\n        tag: \"security\",\n        text: \"Invitation links now expire after 72 hours and are invalidated once accepted.\",\n      },\n      {\n        tag: \"security\",\n        text: \"Rate limit added to the password reset endpoint (5 requests per minute per IP).\",\n      },\n      {\n        tag: \"fix\",\n        text: \"Fixed a crash when importing workspaces whose names contain emoji.\",\n      },\n    ],\n    snippets: [\n      {\n        title: \"Upgrade a self-hosted install\",\n        language: \"bash\",\n        code: `docker pull acme/server:3.1.2\ndocker compose up -d --no-deps server`,\n      },\n    ],\n  },\n  {\n    version: \"3.1.0\",\n    date: \"2025-04-29\",\n    title: \"Saved filters and keyboard shortcuts\",\n    summary: \"Faster navigation for power users, plus smarter defaults for new teams.\",\n    tags: [\"feature\", \"improvement\"],\n    changes: [\n      {\n        tag: \"feature\",\n        text: \"Saved filters can be shared with your team and pinned to the sidebar.\",\n      },\n      {\n        tag: \"feature\",\n        text: \"Press ? anywhere to open the new keyboard shortcut reference.\",\n      },\n      {\n        tag: \"improvement\",\n        text: \"Search now matches partial words and ignores diacritics, so \\\"cafe\\\" finds \\\"café\\\".\",\n      },\n      {\n        tag: \"improvement\",\n        text: \"Empty states include links to the most relevant guide instead of a generic message.\",\n      },\n    ],\n  },\n  {\n    version: \"3.0.0\",\n    date: \"2025-03-18\",\n    title: \"The v3 platform\",\n    summary:\n      \"A new data model, a rewritten SDK, and a cleaner API. Read the migration notes before upgrading.\",\n    tags: [\"feature\", \"breaking\", \"improvement\"],\n    changes: [\n      {\n        tag: \"breaking\",\n        text: \"The /v2 REST endpoints are removed. Use /v3, which returns cursor-based pagination.\",\n      },\n      {\n        tag: \"breaking\",\n        text: \"SDK initialization now takes a single options object instead of positional arguments.\",\n      },\n      {\n        tag: \"feature\",\n        text: \"Workspaces can contain multiple projects, each with its own members and billing tags.\",\n      },\n      {\n        tag: \"improvement\",\n        text: \"Cold start time for the CLI dropped from 1.8s to 0.4s.\",\n      },\n    ],\n    snippets: [\n      {\n        title: \"Migrate SDK initialization\",\n        language: \"diff\",\n        code: `- const acme = new Acme(\"sk_live_123\", \"eu-west\");\n+ const acme = createClient({\n+   token: process.env.ACME_TOKEN!,\n+   region: \"eu-west\",\n+ });`,\n      },\n      {\n        title: \"Cursor-based pagination\",\n        language: \"ts\",\n        code: `let cursor: string | undefined;\n\ndo {\n  const page = await acme.orders.list({ limit: 100, cursor });\n  process(page.items);\n  cursor = page.nextCursor;\n} while (cursor);`,\n      },\n    ],\n  },\n  {\n    version: \"2.9.4\",\n    date: \"2025-02-06\",\n    title: \"Reliability fixes\",\n    summary: \"Small but important fixes collected from support tickets.\",\n    tags: [\"fix\"],\n    changes: [\n      {\n        tag: \"fix\",\n        text: \"Scheduled reports respect the workspace time zone across daylight saving changes.\",\n      },\n      {\n        tag: \"fix\",\n        text: \"Avatar uploads larger than 4 MB now show a clear error instead of failing silently.\",\n      },\n      {\n        tag: \"fix\",\n        text: \"Resolved a rare deadlock when two members reordered the same board at once.\",\n      },\n    ],\n  },\n];\n\nconst dateFormatter = new Intl.DateTimeFormat(\"en-US\", {\n  year: \"numeric\",\n  month: \"long\",\n  day: \"numeric\",\n  timeZone: \"UTC\",\n});\n\nfunction formatDate(iso: string): string {\n  return dateFormatter.format(new Date(`${iso}T00:00:00Z`));\n}\n\nfunction versionId(version: string): string {\n  return `v${version.replace(/\\./g, \"-\")}`;\n}\n\nasync function writeToClipboard(text: string): Promise<boolean> {\n  try {\n    if (navigator.clipboard && window.isSecureContext) {\n      await navigator.clipboard.writeText(text);\n      return true;\n    }\n  } catch {\n    // fall through to legacy path\n  }\n  try {\n    const el = document.createElement(\"textarea\");\n    el.value = text;\n    el.setAttribute(\"readonly\", \"\");\n    el.style.position = \"fixed\";\n    el.style.opacity = \"0\";\n    document.body.appendChild(el);\n    el.select();\n    const ok = document.execCommand(\"copy\");\n    document.body.removeChild(el);\n    return ok;\n  } catch {\n    return false;\n  }\n}\n\nfunction TagBadge({ tag }: { tag: Tag }) {\n  const meta = TAG_META[tag];\n  const Icon = meta.icon;\n  return (\n    <Badge variant=\"outline\" className={cn(\"gap-1\", meta.className)}>\n      <Icon aria-hidden=\"true\" />\n      {meta.label}\n    </Badge>\n  );\n}\n\nfunction CodeSnippet({ snippet }: { snippet: Snippet }) {\n  const [copied, setCopied] = React.useState(false);\n  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  React.useEffect(() => {\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, []);\n\n  const handleCopy = async () => {\n    const ok = await writeToClipboard(snippet.code);\n    if (ok) {\n      setCopied(true);\n      toast.success(\"Copied to clipboard\", { description: snippet.title });\n      if (timer.current) clearTimeout(timer.current);\n      timer.current = setTimeout(() => setCopied(false), 2000);\n    } else {\n      toast.error(\"Couldn't copy\", {\n        description: \"Select the snippet and copy it manually.\",\n      });\n    }\n  };\n\n  return (\n    <figure className=\"overflow-hidden rounded-lg border bg-muted/40\">\n      <figcaption className=\"flex items-center justify-between gap-2 border-b bg-muted/60 py-1.5 pr-1.5 pl-3\">\n        <span className=\"flex min-w-0 items-center gap-2\">\n          <span className=\"truncate text-xs font-medium\">{snippet.title}</span>\n          <span className=\"shrink-0 rounded bg-background px-1.5 py-0.5 font-mono text-[10px] tracking-wide text-muted-foreground uppercase\">\n            {snippet.language}\n          </span>\n        </span>\n        <Button\n          type=\"button\"\n          variant=\"ghost\"\n          size=\"sm\"\n          onClick={handleCopy}\n          aria-label={`Copy snippet: ${snippet.title}`}\n          className=\"h-7 shrink-0 gap-1.5 px-2 text-xs\"\n        >\n          {copied ? (\n            <Check aria-hidden=\"true\" className=\"text-emerald-600 dark:text-emerald-400\" />\n          ) : (\n            <Copy aria-hidden=\"true\" />\n          )}\n          <span aria-live=\"polite\">{copied ? \"Copied\" : \"Copy\"}</span>\n        </Button>\n      </figcaption>\n      <pre\n        tabIndex={0}\n        className=\"overflow-x-auto p-3 font-mono text-[13px] leading-relaxed focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none\"\n      >\n        <code>{snippet.code}</code>\n      </pre>\n    </figure>\n  );\n}\n\nfunction ReleaseEntry({ release, isLast }: { release: Release; isLast: boolean }) {\n  const id = versionId(release.version);\n  const headingId = `${id}-heading`;\n\n  return (\n    <li className=\"relative grid grid-cols-[1.5rem_minmax(0,1fr)] gap-x-4 sm:gap-x-6 md:grid-cols-[9rem_1.5rem_minmax(0,1fr)]\">\n      {/* Date column (desktop) */}\n      <div className=\"hidden pt-1 text-right md:block\">\n        <time\n          dateTime={release.date}\n          className=\"text-sm font-medium text-muted-foreground\"\n        >\n          {formatDate(release.date)}\n        </time>\n      </div>\n\n      {/* Rail */}\n      <div className=\"relative flex justify-center\" aria-hidden=\"true\">\n        {!isLast && (\n          <span className=\"absolute top-3 -bottom-10 w-px bg-border\" />\n        )}\n        <span\n          className={cn(\n            \"relative z-10 mt-1.5 flex size-3 items-center justify-center rounded-full border-2 bg-background\",\n            release.latest\n              ? \"border-primary ring-4 ring-primary/15\"\n              : \"border-muted-foreground/50\"\n          )}\n        />\n      </div>\n\n      {/* Content */}\n      <article\n        id={id}\n        aria-labelledby={headingId}\n        className=\"min-w-0 scroll-mt-24 pb-12\"\n      >\n        <div className=\"flex flex-wrap items-center gap-x-3 gap-y-1\">\n          <h2\n            id={headingId}\n            className=\"font-mono text-xl font-semibold tracking-tight\"\n          >\n            v{release.version}\n          </h2>\n          {release.latest && (\n            <Badge className=\"gap-1\">\n              <Rocket aria-hidden=\"true\" />\n              Latest\n            </Badge>\n          )}\n          <time\n            dateTime={release.date}\n            className=\"text-sm text-muted-foreground md:hidden\"\n          >\n            {formatDate(release.date)}\n          </time>\n        </div>\n\n        <p className=\"mt-1 text-base font-medium\">{release.title}</p>\n        <p className=\"mt-1 max-w-prose text-sm text-muted-foreground\">\n          {release.summary}\n        </p>\n\n        <ul\n          className=\"mt-3 flex flex-wrap gap-1.5\"\n          aria-label={`Tags for version ${release.version}`}\n        >\n          {release.tags.map((tag) => (\n            <li key={tag}>\n              <TagBadge tag={tag} />\n            </li>\n          ))}\n        </ul>\n\n        <ul className=\"mt-5 space-y-3\">\n          {release.changes.map((change, i) => {\n            const meta = TAG_META[change.tag];\n            const Icon = meta.icon;\n            return (\n              <li key={i} className=\"flex items-start gap-3 text-sm leading-relaxed\">\n                <span\n                  className={cn(\n                    \"mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-md border\",\n                    meta.className\n                  )}\n                >\n                  <Icon aria-hidden=\"true\" className=\"size-3\" />\n                  <span className=\"sr-only\">{meta.label}: </span>\n                </span>\n                <span className=\"min-w-0\">{change.text}</span>\n              </li>\n            );\n          })}\n        </ul>\n\n        {release.snippets && release.snippets.length > 0 && (\n          <div className=\"mt-6 space-y-4\">\n            {release.snippets.map((snippet) => (\n              <CodeSnippet key={snippet.title} snippet={snippet} />\n            ))}\n          </div>\n        )}\n      </article>\n    </li>\n  );\n}\n\nexport default function ChangelogPage() {\n  const [activeTags, setActiveTags] = React.useState<Tag[]>([]);\n\n  const visibleReleases = React.useMemo(() => {\n    if (activeTags.length === 0) return RELEASES;\n    return RELEASES.filter((r) => r.tags.some((t) => activeTags.includes(t)));\n  }, [activeTags]);\n\n  const tagCounts = React.useMemo(() => {\n    const counts = {} as Record<Tag, number>;\n    for (const tag of TAG_ORDER) {\n      counts[tag] = RELEASES.filter((r) => r.tags.includes(tag)).length;\n    }\n    return counts;\n  }, []);\n\n  return (\n    <div className=\"min-h-screen bg-background text-foreground\">\n      <a\n        href=\"#timeline\"\n        className=\"sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:bg-primary focus:px-3 focus:py-2 focus:text-sm focus:text-primary-foreground\"\n      >\n        Skip to changelog\n      </a>\n\n      <header className=\"border-b bg-muted/30\">\n        <div className=\"mx-auto max-w-4xl px-4 py-12 sm:px-6 sm:py-16\">\n          <Badge variant=\"secondary\" className=\"mb-4 gap-1\">\n            <Wrench aria-hidden=\"true\" />\n            Acme Platform\n          </Badge>\n          <h1 className=\"text-3xl font-bold tracking-tight text-balance sm:text-4xl\">\n            Changelog\n          </h1>\n          <p className=\"mt-3 max-w-xl text-base text-muted-foreground text-pretty\">\n            New features, improvements and fixes shipped to Acme. Every release\n            is versioned, tagged, and includes code you can copy straight into\n            your project.\n          </p>\n          <p className=\"mt-4 text-sm text-muted-foreground\">\n            Latest release:{\" \"}\n            <a\n              href={`#${versionId(RELEASES[0].version)}`}\n              className=\"rounded font-mono font-medium text-foreground underline underline-offset-4 focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none\"\n            >\n              v{RELEASES[0].version}\n            </a>{\" \"}\n            · {formatDate(RELEASES[0].date)}\n          </p>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-10\">\n        <section aria-labelledby=\"filter-heading\" className=\"mb-10\">\n          <div className=\"flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between\">\n            <h2 id=\"filter-heading\" className=\"text-sm font-medium\">\n              Filter by tag\n            </h2>\n            {activeTags.length > 0 && (\n              <Button\n                type=\"button\"\n                variant=\"ghost\"\n                size=\"sm\"\n                onClick={() => setActiveTags([])}\n                className=\"self-start sm:self-auto\"\n              >\n                Clear filters\n              </Button>\n            )}\n          </div>\n\n          <ToggleGroup\n            type=\"multiple\"\n            variant=\"outline\"\n            spacing={2}\n            value={activeTags}\n            onValueChange={(value) => setActiveTags(value as Tag[])}\n            aria-label=\"Filter releases by tag\"\n            className=\"mt-3 flex-wrap\"\n          >\n            {TAG_ORDER.map((tag) => {\n              const meta = TAG_META[tag];\n              const Icon = meta.icon;\n              return (\n                <ToggleGroupItem\n                  key={tag}\n                  value={tag}\n                  size=\"sm\"\n                  aria-label={`${meta.label} (${tagCounts[tag]} releases)`}\n                  className=\"gap-1.5\"\n                >\n                  <Icon aria-hidden=\"true\" className=\"size-3.5\" />\n                  {meta.label}\n                  <span className=\"text-xs text-muted-foreground tabular-nums\">\n                    {tagCounts[tag]}\n                  </span>\n                </ToggleGroupItem>\n              );\n            })}\n          </ToggleGroup>\n\n          <p className=\"sr-only\" role=\"status\" aria-live=\"polite\">\n            Showing {visibleReleases.length} of {RELEASES.length} releases\n          </p>\n        </section>\n\n        <Separator className=\"mb-10\" />\n\n        <div id=\"timeline\" tabIndex={-1} className=\"outline-none\">\n          {visibleReleases.length > 0 ? (\n            <ol className=\"list-none\">\n              {visibleReleases.map((release, i) => (\n                <ReleaseEntry\n                  key={release.version}\n                  release={release}\n                  isLast={i === visibleReleases.length - 1}\n                />\n              ))}\n            </ol>\n          ) : (\n            <div className=\"rounded-lg border border-dashed p-10 text-center\">\n              <p className=\"font-medium\">No releases match these tags</p>\n              <p className=\"mt-1 text-sm text-muted-foreground\">\n                Try removing a filter to see more of the changelog.\n              </p>\n              <Button\n                type=\"button\"\n                variant=\"outline\"\n                size=\"sm\"\n                className=\"mt-4\"\n                onClick={() => setActiveTags([])}\n              >\n                Clear filters\n              </Button>\n            </div>\n          )}\n        </div>\n\n        <p className=\"mt-4 text-center text-sm text-muted-foreground\">\n          You&apos;ve reached the beginning of the changelog.\n        </p>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
