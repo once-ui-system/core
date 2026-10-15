@@ -205,7 +205,11 @@ if (!process.env.ANTHROPIC_API_KEY) {
   console.error("ANTHROPIC_API_KEY is not set. The full run needs exact API usage counts; see METHODOLOGY.md §6.");
   process.exit(2);
 }
-const client = new Anthropic(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {});
+const client = new Anthropic({
+  // v2 asks for 32k max_tokens; an explicit timeout lets non-streaming calls that long through the SDK guard.
+  timeout: 20 * 60 * 1000,
+  ...(process.env.ANTHROPIC_WORKSPACE_ID ? { defaultHeaders: { "anthropic-workspace-id": process.env.ANTHROPIC_WORKSPACE_ID } } : {}),
+});
 // Arms run in parallel (one gate working copy each); runs within an arm are sequential.
 await Promise.all(
   arms.map(async (letter) => {
