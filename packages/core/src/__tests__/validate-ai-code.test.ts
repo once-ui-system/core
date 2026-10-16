@@ -801,7 +801,7 @@ describe("size.rem", () => {
     const issue = issues(`<Row width={40} height={40}><Icon name="check" /></Row>`).find(
       (i) => i.rule === "size.rem",
     );
-    expect(issue.message).toMatch(/40rem \(640 px\).*width="40"/);
+    expect(issue?.message).toMatch(/40rem \(640 px\).*width="40"/);
   });
 
   it("leaves rem sizes that hold layout, and tokens, alone", () => {
