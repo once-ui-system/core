@@ -13,6 +13,15 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
+  `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an
+  icon renders a 512 px box. The 2.1.0 benchmark traced most of its lowest-polish pages to
+  this. A new `size.rem` gotcha is in every task bundle, `rules.compact.md` shows the
+  token string (`width="32"`, 32 px) to write instead, and `validate-ai-code` reports an
+  icon, avatar or label box sized with a repeated pixel-like number.
+
 ## [2.1.0] — 2026-10-15
 
 2.1.0 is `2.1.0-rc.0` (below) plus the changes listed here. It is a

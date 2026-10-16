@@ -783,3 +783,40 @@ describe("api.renamed: 1.x prop names", () => {
     }
   });
 });
+
+describe("size.rem", () => {
+  it("flags an icon box sized in pixels, which a number turns into rem", () => {
+    expect(rules(`<Row width={32} height={32} center><Icon name="check" /></Row>`)).toContain(
+      "size.rem",
+    );
+    expect(
+      rules(`<Row minWidth={40} minHeight={40} center><Icon name={item.icon} /></Row>`),
+    ).toContain("size.rem");
+    expect(rules(`<Column width={32} minWidth={32}><Avatar value="MO" /></Column>`)).toContain(
+      "size.rem",
+    );
+  });
+
+  it("names the size in rem and pixels and the token to write instead", () => {
+    const issue = issues(`<Row width={40} height={40}><Icon name="check" /></Row>`).find(
+      (i) => i.rule === "size.rem",
+    );
+    expect(issue.message).toMatch(/40rem \(640 px\).*width="40"/);
+  });
+
+  it("leaves rem sizes that hold layout, and tokens, alone", () => {
+    expect(rules(`<Column minWidth={14} gap="8"><Text>Name</Text></Column>`)).not.toContain(
+      "size.rem",
+    );
+    expect(rules(`<Row width="32" height="32"><Icon name="check" /></Row>`)).not.toContain(
+      "size.rem",
+    );
+    expect(rules(`<Row width={2} height={2}><Icon name="check" /></Row>`)).not.toContain(
+      "size.rem",
+    );
+    expect(
+      rules(`<Column width={32} height={32}><Row gap="8"><Text>Hero</Text></Row></Column>`),
+    ).not.toContain("size.rem");
+    expect(rules(`<Background width={40} height={40} />`)).not.toContain("size.rem");
+  });
+});

@@ -30,6 +30,7 @@
     "animation.budget",
     "overflow.hero",
     "layout.responsiveProps",
+    "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
     "RevealFx.primaryContent"
