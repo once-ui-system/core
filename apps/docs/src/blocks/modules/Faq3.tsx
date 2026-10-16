@@ -32,19 +32,7 @@ export const Faq3: React.FC<Faq3Props> = ({ title, description, content, categor
     : content || [];
 
   return (
-    <Row fillWidth s={{ direction: "column" }} gap="24" {...flex}>
-      <Column fillWidth paddingTop="24" paddingLeft="24">
-        {title && (
-          <Heading as="h2" variant="display-strong-m" marginBottom="20">
-            {title}
-          </Heading>
-        )}
-        {description && (
-          <Text onBackground="neutral-medium" variant="body-default-xl">
-            {description}
-          </Text>
-        )}
-      </Column>
+    <Row fillWidth s={{ direction: "column-reverse" }} gap="xl" {...flex}>
       <Column fillWidth>
         {categories && categories.length > 0 && (
           <Row fillWidth paddingX="24" marginBottom="24">
@@ -70,6 +58,18 @@ export const Faq3: React.FC<Faq3Props> = ({ title, description, content, categor
           Got more questions? Email us at{" "}
           <SmartLink href={`mailto:${schema.email}`}>{schema.email}</SmartLink>
         </Text>
+      </Column>
+      <Column fillWidth paddingTop="24" paddingLeft="24">
+        {title && (
+          <Heading as="h2" variant="display-strong-m" marginBottom="20">
+            {title}
+          </Heading>
+        )}
+        {description && (
+          <Text onBackground="neutral-medium" variant="body-default-xl">
+            {description}
+          </Text>
+        )}
       </Column>
     </Row>
   );
