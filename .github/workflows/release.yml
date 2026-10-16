@@ -1,0 +1,119 @@
+# Publishes a package to npm when its release tag is pushed, through npm
+# trusted publishing (OIDC): no npm token is stored anywhere.
+#
+#   v2.2.0, v2.2.0-rc.0   ->  @once-ui-system/core  (packages/core)
+#   cli-v0.2.0            ->  @once-ui-system/cli   (packages/cli)
+#
+# A prerelease version (anything with a "-") goes to the `next` dist-tag and
+# publishes straight away. A stable version goes to `latest` and waits in the
+# `npm-latest` environment, so it publishes only once a required reviewer
+# approves the run. The tag must match the version in the package's
+# package.json, or nothing is published.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+      - "cli-v*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    name: Resolve package and dist-tag
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      dir: ${{ steps.resolve.outputs.dir }}
+      name: ${{ steps.resolve.outputs.name }}
+      version: ${{ steps.resolve.outputs.version }}
+      dist_tag: ${{ steps.resolve.outputs.dist_tag }}
+      environment: ${{ steps.resolve.outputs.environment }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve
+        id: resolve
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          case "$TAG" in
+            cli-v*) dir=packages/cli;  version="${TAG#cli-v}" ;;
+            v*)     dir=packages/core; version="${TAG#v}" ;;
+            *) echo "::error::Unrecognised release tag $TAG"; exit 1 ;;
+          esac
+          name=$(node -p "require('./$dir/package.json').name")
+          pkg_version=$(node -p "require('./$dir/package.json').version")
+          if [ "$pkg_version" != "$version" ]; then
+            echo "::error::Tag $TAG says $version but $dir/package.json says $pkg_version"
+            exit 1
+          fi
+          if [ "${version#*-}" != "$version" ]; then
+            dist_tag=next; environment=npm-next
+          else
+            dist_tag=latest; environment=npm-latest
+          fi
+          {
+            echo "dir=$dir"
+            echo "name=$name"
+            echo "version=$version"
+            echo "dist_tag=$dist_tag"
+            echo "environment=$environment"
+          } >> "$GITHUB_OUTPUT"
+          echo "Publishing $name@$version to '$dist_tag' (environment $environment)" >> "$GITHUB_STEP_SUMMARY"
+
+  publish:
+    name: Publish ${{ needs.resolve.outputs.name }}@${{ needs.resolve.outputs.version }} to ${{ needs.resolve.outputs.dist_tag }}
+    needs: resolve
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    # `npm-latest` carries the required reviewer; `npm-next` has no rules.
+    environment: ${{ needs.resolve.outputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm's version comes from `packageManager` in the root package.json.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Update npm
+        run: npm install -g npm@^11.5.1
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build, typecheck and test
+        working-directory: ${{ needs.resolve.outputs.dir }}
+        run: |
+          pnpm build
+          pnpm typecheck
+          pnpm test
+
+      - name: Pack (dry run)
+        working-directory: ${{ needs.resolve.outputs.dir }}
+        run: npm pack --dry-run
+
+      # --tag is always explicit, so a stable release never depends on
+      # publishConfig.tag having been removed, and a prerelease can't land on
+      # `latest`.
+      - name: Publish
+        working-directory: ${{ needs.resolve.outputs.dir }}
+        run: npm publish --provenance --access public --tag ${{ needs.resolve.outputs.dist_tag }}
+
+      - name: Check dist-tags
+        run: npm view ${{ needs.resolve.outputs.name }} dist-tags

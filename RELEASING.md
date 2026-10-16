@@ -64,9 +64,12 @@ downstream (Studio, Aveiro/Magic, Chirio) key off these files.
 3. **Verification.** `pnpm --filter @once-ui-system/core build`, `typecheck`, and `test`
    must pass; test regressions against the known-failure baseline in `AGENTS.md` block
    the release.
-4. **Approval and publish.** The maintainer (Lorant) reviews and approves the release PR
-   and runs `npm publish`. Nothing is published by automation or agents — releases are
-   proposals until the maintainer executes them.
+4. **Publish.** Pushing the release tag (`v2.2.0` for core, `cli-v0.2.0` for the CLI)
+   runs `.github/workflows/release.yml`, which checks that the tag matches
+   `package.json`, builds, typechecks, tests and publishes through npm trusted
+   publishing (no token is stored). A prerelease goes to `next` straight away. A
+   stable version goes to `latest` only after the maintainer (Lorant) approves the
+   waiting run in the `npm-latest` environment.
 5. **After publish:** create the GitHub release from the changelog entry, and notify
    downstream projects that pin the package (see cross-project notes in `ROADMAP.md`).
 
@@ -88,12 +91,14 @@ and `publishConfig.tag`, and moves `[Unreleased]` under the RC's heading; it is
 tagged `v2.1.0-rc.N` so the published tarball can always be traced to a commit.
 
 ```bash
-# from packages/core, on the commit being published, with the tree clean
-pnpm build && pnpm typecheck && pnpm test
-npm pack --dry-run     # the files allowlist, the version, nothing unexpected
-npm publish            # publishConfig.tag pins this to `next` (or `alpha`)
+# on the commit being published; the release workflow builds, tests and
+# publishes it to `next`, because the version has a prerelease suffix
 git tag v2.1.0-rc.0 && git push origin v2.1.0-rc.0
 ```
+
+Publishing by hand still works as before (`pnpm build && pnpm typecheck &&
+pnpm test`, `npm pack --dry-run`, then `npm publish` from `packages/core`),
+for when the workflow is unavailable.
 
 `packages/core/package.json` carries `publishConfig.tag`, so a bare
 `npm publish` cannot set `latest` by accident — which it otherwise would,
