@@ -29,6 +29,7 @@
     "color.tokens",
     "Select.closed",
     "layout.responsiveProps",
+    "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
     "Checkbox.checked"

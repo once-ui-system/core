@@ -29,6 +29,7 @@
     "Badge.duplicate",
     "layout.shorthands",
     "layout.responsiveProps",
+    "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType"
   ]

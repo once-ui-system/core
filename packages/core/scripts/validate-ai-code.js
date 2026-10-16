@@ -744,6 +744,29 @@ function looksLikeSeconds(value) {
   return /^\d*\.\d+$/.test(expr) || /\*\s*\d*\.\d+|\d*\.\d+\s*\*/.test(expr);
 }
 
+const BOX_SIZE = /\b(width|height|minWidth|minHeight)=\{\s*(\d+)\s*\}/g;
+/** Spacing tokens, in px, that read as a box size when written as a number. */
+const PIXEL_TOKENS = new Set([16, 20, 24, 32, 40, 48, 56, 64, 72, 80, 104, 128, 160]);
+
+/**
+ * A box sized as if numbers were pixels: two of `width`, `height`, `minWidth`,
+ * `minHeight` set to the same spacing-token number (`width={32} height={32}`)
+ * on an element that holds only an icon, avatar or a line of text. A number
+ * is rem, so that box is 512 px. Large rem boxes holding layout (a hero, a
+ * decorative blob, a 14rem timer dial) are left alone. Returns the number, or 0.
+ */
+function pixelBoxSize(source, tag) {
+  if (!RELATIVE_BY_DEFAULT.has(tag.name) || tag.attrs.trimEnd().endsWith("/")) return 0;
+  const values = [...tag.attrs.matchAll(BOX_SIZE)].map((m) => Number(m[2]));
+  const size = values.find((v, i) => PIXEL_TOKENS.has(v) && values.indexOf(v) !== i);
+  if (!size) return 0;
+  const close = source.indexOf(`</${tag.name}>`, tag.end);
+  if (close < 0) return 0;
+  const body = source.slice(tag.end + 1, close);
+  if (body.length > 400 || /<(Row|Column|Flex|Grid|Media|Background)\b/.test(body)) return 0;
+  return /<(Icon|Avatar|Text|Heading|Badge|Tag)\b|\{[^}]*\}/.test(body) ? size : 0;
+}
+
 const POSITIONED = /(?:^|\s)position=\{?\s*["'](?:absolute|fixed|sticky)["']\s*\}?/;
 
 /**
@@ -1058,6 +1081,15 @@ function validate(source, spec, iconNames, options = {}) {
     add(
       "RevealFx.delay",
       `${seconds[0]} ${seconds[1]} is in milliseconds — use index * 100, not index * 0.1`,
+    );
+  }
+
+  const pixelBox = tags.map((t) => [t, pixelBoxSize(source, t)]).find(([, size]) => size);
+  if (pixelBox) {
+    const [tag, size] = pixelBox;
+    add(
+      "size.rem",
+      `${tag.name} sized ${size} around an icon or label is ${size}rem (${size * 16} px) — a number is rem. For ${size} px write the token string, width="${size}"`,
     );
   }
 

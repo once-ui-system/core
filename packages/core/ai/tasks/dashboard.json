@@ -35,6 +35,7 @@
     "layout.shorthands",
     "LogoCloud.columns",
     "layout.responsiveProps",
+    "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
     "RevealFx.primaryContent",

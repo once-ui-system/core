@@ -180,5 +180,9 @@
   "RevealFx.primaryContent": {
     "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with speed=\"fast\".",
     "components": ["RevealFx"]
+  },
+  "size.rem": {
+    "rule": "A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width=\"32\" (32 px), or the rem value, width={2}. An icon or avatar box is usually \"24\" to \"48\".",
+    "components": ["Flex", "Row", "Column", "Grid"]
   }
 }
