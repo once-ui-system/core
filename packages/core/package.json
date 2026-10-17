@@ -99,6 +99,7 @@
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
