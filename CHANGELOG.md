@@ -57,6 +57,18 @@ item (see `ROADMAP.md`, Week 4).
 - **Raw CSS colours on `Background`, `ParticleFx`, the charts and the gauges painted
   nothing.** `ColorValue` takes `#fff`, `rgb(...)` or `var(...)`, but they were
   wrapped as `var(--#fff)`. They now pass through as written; tokens resolve as before.
+- **`DatePicker` ignored `defaultDate`.** It is now the starting selection and month
+  when there is no `value`.
+- **`NumberInput` and `DateInput` passed the native `defaultValue` to an input that
+  also had a `value`**: React warned and the default never showed. `NumberInput`
+  takes `defaultValue` as a number (a string is parsed), `DateInput` as a `Date`.
+- **`DateInput` could not be cleared from outside.** Setting `value` back to
+  `undefined` now empties the field.
+- **`Input` and `Textarea` ran `validate` only on a controlled `value`.** An
+  uncontrolled field now validates what was typed.
+- **`EmojiPickerDropdown` closed after a pick only when `open` was controlled.**
+- **`Text`, `Heading` and `Flex` logged prop-misuse warnings on every render in
+  production.** They now warn outside production only.
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an

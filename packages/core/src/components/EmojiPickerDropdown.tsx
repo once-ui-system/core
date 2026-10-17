@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
 import type { StyleProps } from "../interfaces";
 import type { GridSize } from "../types";
 import { DropdownWrapper } from "./DropdownWrapper";
@@ -22,20 +22,33 @@ const EmojiPickerDropdown = forwardRef<HTMLDivElement, EmojiPickerDropdownProps>
       closeAfterClick = true,
       background = "surface",
       columns = "8",
+      open: controlledOpen,
+      onOpenChange,
       ...dropdownProps
     },
     ref,
   ) => {
+    // Closing after a pick used to go only through `onOpenChange`, so it
+    // worked only when the caller controlled `open`. Uncontrolled, the
+    // dropdown's open state lives here and the pick closes it.
+    const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+    const open = controlledOpen ?? uncontrolledOpen;
+    const setOpen = (next: boolean) => {
+      if (controlledOpen === undefined) setUncontrolledOpen(next);
+      onOpenChange?.(next);
+    };
+
     const handleEmojiSelect = (emoji: string) => {
       onSelect(emoji);
-      if (closeAfterClick) {
-        dropdownProps.onOpenChange?.(false);
-      }
+      if (closeAfterClick) setOpen(false);
     };
 
     return (
       <DropdownWrapper
         {...dropdownProps}
+        ref={ref}
+        open={open}
+        onOpenChange={setOpen}
         trigger={trigger}
         handleArrowNavigation={false}
         dropdown={
@@ -43,7 +56,7 @@ const EmojiPickerDropdown = forwardRef<HTMLDivElement, EmojiPickerDropdownProps>
             columns={columns}
             padding="8"
             onSelect={handleEmojiSelect}
-            onClose={closeAfterClick ? () => dropdownProps.onOpenChange?.(false) : undefined}
+            onClose={closeAfterClick ? () => setOpen(false) : undefined}
             background={background}
           />
         }

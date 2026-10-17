@@ -81,6 +81,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       children,
       onFocus,
       onBlur,
+      onChange,
       onAnimationStart,
       validate,
       cursor,
@@ -97,7 +98,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // floated and sat on top of the text until the first focus and blur.
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    // `validate` reads the field's text. Uncontrolled there is no `value`, so
+    // the field tracks what was typed itself; it used to validate nothing.
+    const [uncontrolledValue, setUncontrolledValue] = useState(props.defaultValue);
+    const fieldValue = props.value !== undefined ? props.value : uncontrolledValue;
+    const debouncedValue = useDebounce(fieldValue, 1000);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (props.value === undefined) setUncontrolledValue(event.target.value);
+      if (onChange) onChange(event);
+    };
 
     const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
@@ -192,7 +202,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: (error || (displayError && debouncedValue !== "")) && props.value !== "",
+          [styles.error]: (error || (displayError && debouncedValue !== "")) && fieldValue !== "",
         })}
       >
         <Row
@@ -223,6 +233,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ref={ref}
               id={id}
               placeholder={placeholder}
+              onChange={handleChange}
               onFocus={handleFocus}
               onBlur={handleBlur}
               onAnimationStart={handleAnimationStart}

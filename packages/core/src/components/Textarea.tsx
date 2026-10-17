@@ -102,7 +102,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    // `validate` reads the field's text. Uncontrolled there is no `value`, so
+    // the field tracks what was typed itself; it used to validate nothing.
+    const [uncontrolledValue, setUncontrolledValue] = useState(props.defaultValue);
+    const fieldValue = props.value !== undefined ? props.value : uncontrolledValue;
+    const debouncedValue = useDebounce(fieldValue, 1000);
 
     const adjustHeight = () => {
       if (textareaRef.current) {
@@ -114,6 +118,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (props.value === undefined) setUncontrolledValue(event.target.value);
       if (lines === "auto") {
         adjustHeight();
       }

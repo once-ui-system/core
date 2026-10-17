@@ -175,15 +175,23 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
     const today = new Date();
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+    // `defaultDate` is the starting selection when there is no `value`. It
+    // was declared and never read.
+    const initialDate = value ?? defaultDate;
+    const initialTime =
+      defaultTime ??
+      (initialDate
+        ? { hours: initialDate.getHours(), minutes: initialDate.getMinutes() }
+        : undefined);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
     const [selectedTime, setSelectedTime] = useState<
       | {
           hours: number;
           minutes: number;
         }
       | undefined
-    >(defaultTime);
-    const [isPM, setIsPM] = useState(defaultTime?.hours ? defaultTime.hours >= 12 : false);
+    >(initialTime);
+    const [isPM, setIsPM] = useState(initialTime?.hours ? initialTime.hours >= 12 : false);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
@@ -207,12 +215,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [currentMonth, setCurrentMonth] = useState<number>(() =>
       monthIsControlled && propCurrentMonth !== undefined
         ? propCurrentMonth
-        : (value ?? today).getMonth(),
+        : (initialDate ?? today).getMonth(),
     );
     const [currentYear, setCurrentYear] = useState<number>(() =>
       monthIsControlled && propCurrentYear !== undefined
         ? propCurrentYear
-        : (value ?? today).getFullYear(),
+        : (initialDate ?? today).getFullYear(),
     );
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
@@ -273,7 +281,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       }
     }, [isReady, value, isCalendarSynced, monthIsControlled]);
 
+    // On mount without a `value`, keep the `defaultDate` selection; after
+    // that, `value` going back to undefined clears it as before.
+    const valueSeen = useRef(false);
     useEffect(() => {
+      if (value === undefined && !valueSeen.current) return;
+      valueSeen.current = true;
       setSelectedDate(value);
       if (value) {
         setSelectedTime({

@@ -2523,6 +2523,7 @@
     "label": "string",
     "placeholder": "string",
     "value": "Date",
+    "defaultValue": "Date",
     "onChange": "(date: Date) => void",
     "minHeight": "number",
     "className": "string",
@@ -3505,6 +3506,7 @@
    ],
    "props": {
     "value": "number",
+    "defaultValue": "number | string",
     "onChange": "(value: number) => void",
     "min": "number",
     "max": "number",
