@@ -225,7 +225,8 @@ describe("Select labels", () => {
 });
 
 describe("DatePicker week start", () => {
-  const headers = () => screen.getAllByRole("columnheader").map((h) => h.getAttribute("aria-label"));
+  const headers = () =>
+    screen.getAllByRole("columnheader").map((h) => h.getAttribute("aria-label"));
   const leadingDays = (g: HTMLElement) =>
     Array.from(g.querySelectorAll('[role="row"]')[1].querySelectorAll("button[disabled]")).length;
 
