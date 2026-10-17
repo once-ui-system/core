@@ -9,6 +9,7 @@ const {
   validate,
   applyFixes,
   PRE_2_PROPS,
+  PRE_3_PROPS,
   loadSpec,
   parseIconNames,
   openingTags,
@@ -744,16 +745,26 @@ describe("api.renamed: 1.x prop names", () => {
       `<SegmentedControl buttons={b} selected="a" onToggle={(v) => set(v)} />\n<Dialog isOpen={open} title="Hi" onClose={close} />`,
     ).filter((issue) => issue.rule === "api.renamed");
     expect(found.map((issue) => issue.message)).toEqual([
-      "SegmentedControl takes value in 2.x; selected is the 1.x name",
-      "SegmentedControl takes onChange in 2.x; onToggle is the 1.x name",
-      "Dialog takes open in 2.x; isOpen is the 1.x name",
+      "SegmentedControl takes value; selected is the 1.x name",
+      "SegmentedControl takes onValueChange; onToggle is the 1.x name",
+      "Dialog takes open; isOpen is the 1.x name",
+    ]);
+  });
+
+  it("names the 3.0 prop for a 2.x one", () => {
+    const found = issues(
+      `<Switch checked={on} onToggle={set} />\n<Tabs value={tab} onChange={pick} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      "Switch takes onCheckedChange in 3.0; onToggle is the 2.x name",
+      "Tabs takes onValueChange in 3.0; onChange is the 2.x name",
     ]);
   });
 
   it("leaves the 2.x names, and old names 2.x reuses, alone", () => {
     expect(
       rules(
-        `<SegmentedControl buttons={b} value="a" onChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
+        `<SegmentedControl buttons={b} value="a" onValueChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
       ),
     ).not.toContain("api.renamed");
   });
@@ -763,6 +774,8 @@ describe("api.renamed: 1.x prop names", () => {
     const components = spec.components as Record<string, Entry>;
     const mixins = spec.mixins as Record<string, Record<string, string>>;
     const accepts = (name: string, prop: string, seen = new Set<string>()): boolean => {
+      // Native ARIA attributes reach every component; the spec does not list them.
+      if (prop.startsWith("aria-")) return true;
       const entry = components[name];
       if (!entry || seen.has(name)) return false;
       seen.add(name);
@@ -772,9 +785,10 @@ describe("api.renamed: 1.x prop names", () => {
         (entry.extends ?? []).some((parent) => accepts(parent, prop, seen))
       );
     };
-    for (const [name, renames] of Object.entries(
-      PRE_2_PROPS as Record<string, Record<string, string>>,
-    )) {
+    for (const [name, renames] of [
+      ...Object.entries(PRE_2_PROPS as Record<string, Record<string, string>>),
+      ...Object.entries(PRE_3_PROPS as Record<string, Record<string, string>>),
+    ]) {
       expect(components[name], name).toBeDefined();
       for (const [old, now] of Object.entries(renames)) {
         expect(accepts(name, old), `${name}.${old}`).toBe(false);

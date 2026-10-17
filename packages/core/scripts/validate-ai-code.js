@@ -806,7 +806,11 @@ const PRE_2_PROPS = {
   Toast: { icon: "showIcon" },
   DataTooltip: { colors: "showSwatches" },
   RevealFx: { trigger: "revealed" },
-  SegmentedControl: { selected: "value", onToggle: "onChange", defaultSelected: "defaultValue" },
+  SegmentedControl: {
+    selected: "value",
+    onToggle: "onValueChange",
+    defaultSelected: "defaultValue",
+  },
   NavIcon: { isActive: "active" },
   Checkbox: { isChecked: "checked", isIndeterminate: "indeterminate" },
   RadioButton: { isChecked: "checked" },
@@ -832,6 +836,37 @@ const PRE_2_PROPS = {
   IconButton: { radius: "corners" },
 };
 
+/**
+ * 2.x names 3.0 renamed (MIGRATING.md § 2.x → 3.0), listed only where the old
+ * name is no longer accepted at all: `onChange` stays valid as the native
+ * event on NumberInput, ColorInput, TagInput, DateInput and Slider, so it is
+ * not flagged there.
+ */
+const PRE_3_PROPS = {
+  Dialog: { hideClose: "showClose" },
+  IconButton: { ariaLabel: "aria-label" },
+  Spinner: { ariaLabel: "aria-label" },
+  StatusIndicator: { ariaLabel: "aria-label" },
+  Switch: { ariaLabel: "aria-label", onToggle: "onCheckedChange" },
+  Checkbox: { onToggle: "onCheckedChange" },
+  RadioButton: { onToggle: "onCheckedChange" },
+  DateRangeInput: { onChange: "onValueChange" },
+  DateRangePicker: { onChange: "onValueChange" },
+  DatePicker: { onChange: "onValueChange", defaultDate: "defaultValue" },
+  RadioGroup: { onChange: "onValueChange" },
+  SegmentedControl: { onChange: "onValueChange" },
+  Tabs: { onChange: "onValueChange" },
+  RangeSlider: { onChange: "onValueChange" },
+  ThemeSwitcher: { onChange: "onValueChange" },
+  Pagination: { onChange: "onPageChange" },
+  Scrubber: { ariaLabel: "aria-label", onChange: "onValueChange", onSelect: "onSelectedChange" },
+  Accordion: { onToggle: "onOpenChange" },
+  NavGroup: { onToggle: "onOpenChange" },
+  RevealFx: { revealedByDefault: "defaultRevealed" },
+  Carousel: { revealedByDefault: "defaultRevealed" },
+  Kbar: { inputSize: "size" },
+};
+
 function validate(source, spec, iconNames, options = {}) {
   const issues = [];
 
@@ -847,7 +882,12 @@ function validate(source, spec, iconNames, options = {}) {
     for (const [old, now] of Object.entries(PRE_2_PROPS[t.name] ?? {})) {
       if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
       renamed.add(`${t.name}.${old}`);
-      add("api.renamed", `${t.name} takes ${now} in 2.x; ${old} is the 1.x name`);
+      add("api.renamed", `${t.name} takes ${now}; ${old} is the 1.x name`);
+    }
+    for (const [old, now] of Object.entries(PRE_3_PROPS[t.name] ?? {})) {
+      if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
+      renamed.add(`${t.name}.${old}`);
+      add("api.renamed", `${t.name} takes ${now} in 3.0; ${old} is the 2.x name`);
     }
   }
 
@@ -1381,6 +1421,7 @@ module.exports = {
   validate,
   applyFixes,
   PRE_2_PROPS,
+  PRE_3_PROPS,
   loadSpec,
   parseIconNames,
   iconPropsByComponent,
