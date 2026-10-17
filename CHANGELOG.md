@@ -26,8 +26,23 @@ item (see `ROADMAP.md`, Week 4).
   written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
   `labels.pm` override the words. Without `locale` the time reads as before
   (`01:14 PM`).
+- **Form building blocks** (planned for 2.3). `Field` puts a label, hint and error
+  around any control and wires its `id`, `aria-describedby`, `aria-invalid` and
+  `aria-required`; `Input`, `Textarea` and the fields built on them also draw their
+  error styling from it. `Fieldset` is a real `<fieldset>` with a legend and
+  description that lays its fields out like a `Form`. `SubmitButton` shows a spinner
+  and ignores repeat presses while its form submits. `FormErrorSummary` lists every
+  error after a failed submit, takes focus, and links to each field. `Form`'s
+  `onSubmit` can return a promise, which keeps the form pending (`aria-busy`) until it
+  settles, and `pending` sets that state from outside. `useField()` and
+  `useFormPending()` expose both states to custom controls.
 
 ### Fixed
+
+- **DatePicker: the week starts on the locale's first day.** With `locale="de"` the
+  calendar showed German names in a week that started on Sunday. It now starts on the
+  locale's first day (Monday in most of Europe), read from `Intl`. Without `locale`,
+  and in browsers with no week info (Firefox), it still starts on Sunday.
 
 - **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
   and description ids. The fields are now `{id}-start` and `{id}-end`.
@@ -69,6 +84,11 @@ item (see `ROADMAP.md`, Week 4).
 - **`EmojiPickerDropdown` closed after a pick only when `open` was controlled.**
 - **`Text`, `Heading` and `Flex` logged prop-misuse warnings on every render in
   production.** They now warn outside production only.
+- **`Textarea` ignored `error` and dropped the caller's `aria-describedby`.** `error`
+  now marks it invalid and draws the error state, as it does on `Input`, and a
+  description passed in is kept ahead of the error message.
+- **A `Form` nested in another `Form` reset the size** the outer one set; it now
+  inherits it unless it sets its own.
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an
@@ -76,6 +96,21 @@ item (see `ROADMAP.md`, Week 4).
   this. A new `size.rem` gotcha is in every task bundle, `rules.compact.md` shows the
   token string (`width="32"`, 32 px) to write instead, and `validate-ai-code` reports an
   icon, avatar or label box sized with a repeated pixel-like number.
+- **Leaving a breakpoint restores the base value it overrode.** `ClientFlex` and
+  `ClientGrid` cleared each inline value a breakpoint object had written, so
+  `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40rem on the way back up; they now
+  put back whatever inline value the breakpoint wrote over.
+- **A translate prop survives a component's own `transform`.** `TiltFx`, `FlipFx`, `Arrow`
+  and `CursorCard` wrote a transform (tilt, flip, scale, cursor position) that replaced the
+  `translate()` from `translateX`/`translateY`; the two are composed now.
+- **`FadingLettersFx` forwards `ref`** to the `Text` it renders. It typed `ref` and
+  dropped it on React 18.
+- **Breakpoint borders apply.** `m={{ borderLeft: "brand-strong" }}` (and `border`, the
+  other sides, `borderStyle`, `borderWidth`) type-checked, stayed on the server and drew
+  nothing, as no border class has a breakpoint variant. They move the component to the
+  client, which writes the colour, style and width inline at that breakpoint.
+- **`Fade` honours `blur` outside pattern mode.** It blurred at a fixed 0.5rem unless
+  `pattern.display` was on.
 
 ## [2.1.0] — 2026-10-15
 

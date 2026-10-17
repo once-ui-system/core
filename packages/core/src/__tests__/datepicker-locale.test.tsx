@@ -74,7 +74,8 @@ describe("DatePicker locale", () => {
     render(<DatePicker value={oct(13)} locale="fr" />, { wrapper });
     expect(await grid()).toHaveAttribute("aria-label", "Octobre 2026");
     expect(screen.getByRole("button", { name: /Octobre/ })).toBeInTheDocument();
-    const monday = headers()[1];
+    // A French week starts on Monday, so Monday is the first column.
+    const monday = headers()[0];
     expect(monday.label).toBe("lundi");
     expect(monday.text).toBe(
       new Intl.DateTimeFormat("fr", { weekday: "short", timeZone: "UTC" }).format(

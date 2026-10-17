@@ -12,7 +12,7 @@ import React, {
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 import { Column } from "./Column";
-import { useFieldSize } from "./FormContext";
+import { useFieldInvalid, useFieldSize } from "./FormContext";
 import styles from "./Input.module.scss";
 import { Row } from "./Row";
 import { Spinner } from "./Spinner";
@@ -92,6 +92,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    // A `Field` around this input marks it invalid while its error shows, the
+    // same as passing `error` — the message itself renders in the Field.
+    const fieldInvalid = useFieldInvalid(id);
+    const invalid = error || fieldInvalid;
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
@@ -202,7 +206,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: (error || (displayError && debouncedValue !== "")) && fieldValue !== "",
+          [styles.error]: (invalid || (displayError && debouncedValue !== "")) && fieldValue !== "",
         })}
       >
         <Row
@@ -242,7 +246,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               // `error` alone marks the field invalid too: a field whose
               // message is rendered elsewhere (OTPInput's, a form's summary)
               // was drawn in the error state but announced as valid.
-              aria-invalid={error || !!displayError}
+              aria-invalid={invalid || !!displayError}
             />
             {label && (
               <Text

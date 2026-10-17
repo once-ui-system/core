@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { forwardRef, useEffect, useRef } from "react";
+import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import styles from "./Arrow.module.scss";
 import { Flex } from "./Flex";
 
@@ -14,7 +15,19 @@ interface ArrowProps extends React.ComponentProps<typeof Flex> {
 }
 
 const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
-  ({ trigger, scale = 0.8, color = "onBackground", style, className, ...flex }, _ref) => {
+  (
+    {
+      trigger,
+      scale = 0.8,
+      color = "onBackground",
+      style,
+      className,
+      translateX,
+      translateY,
+      ...flex
+    },
+    _ref,
+  ) => {
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -45,7 +58,12 @@ const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
         center
         className={classNames(styles.arrowContainer, className)}
         style={{
-          transform: `scale(${scale})`,
+          // The scale composes with a translate prop instead of replacing the
+          // transform Flex would have written for it.
+          transform: composeTransform(
+            translateTransform(translateX, translateY),
+            `scale(${scale})`,
+          ),
           ...style,
         }}
         {...flex}

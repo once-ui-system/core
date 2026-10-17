@@ -1,5 +1,5 @@
 {
- "version": "2.1.0",
+ "version": "2.2.0-rc.0",
  "generated": "2026-10-17",
  "imports": {
   "@once-ui-system/core": {
@@ -165,5 +165,6 @@
   "catalog.json"
  ],
  "resolve": "tasks/index.json",
- "bundle": "bundles/{id}.json"
+ "bundle": "bundles/{id}.md",
+ "bundleJson": "bundles/{id}.json"
 }
