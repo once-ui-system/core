@@ -24,7 +24,7 @@ The Slider component provides an intuitive way to select a value from a range us
 return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
     />
@@ -38,7 +38,7 @@ return (
 ## Uncontrolled
 
 Without `value`, Slider keeps its own state and starts at `defaultValue`, or at
-`min` when there is none. `onChange` is optional then: give the slider a `name` and
+`min` when there is none. `onValueChange` is optional then: give the slider a `name` and
 a form submits its value, or read it from a ref.
 
 <CodeBlock
@@ -74,7 +74,7 @@ Add a descriptive label to the slider using the `label` prop.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   label="Volume"
@@ -100,7 +100,7 @@ Display the current value alongside the label using `showValue`.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   label="Brightness"
@@ -127,7 +127,7 @@ Control the granularity of value changes with the `step` prop.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   step={10}
@@ -155,7 +155,7 @@ Define custom minimum and maximum values for your use case.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={10}
   max={30}
   step={1}
@@ -183,7 +183,7 @@ Disable the slider to prevent user interaction.
       code:
 `<Slider
   value={50}
-  onChange={() => {}}
+  onValueChange={() => {}}
   min={0}
   max={100}
   label="Locked Setting"
@@ -201,9 +201,11 @@ Disable the slider to prevent user interaction.
 <PropsTable
   component="Slider"
   describe={{
-    value: "The value, when the host owns the state. Pair with onChange.",
+    value: "The value, when the host owns the state. Pair with onValueChange.",
     defaultValue: "Where the slider starts when it keeps its own state. Defaults to min.",
-    onChange: "Called with the new value, as a number.",
+    onValueChange: "Called with the new value, as a number, on every step of a drag.",
+    onValueCommit: "Called with the value once a change is done: on pointer release, and after each key that moves the thumb.",
+    onChange: "The native change event of the range input.",
     label: "Visible label that names the slider.",
   }}
   content={[

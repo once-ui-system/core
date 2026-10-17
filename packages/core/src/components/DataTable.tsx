@@ -445,7 +445,7 @@ function DataTable<T>({
             <Checkbox
               aria-label={getRowLabel ? getRowLabel(entry.row) : text.selectRow}
               checked={isSelected}
-              onToggle={() => toggleRow(entry.id)}
+              onCheckedChange={() => toggleRow(entry.id)}
             />
           </td>
         )}
@@ -540,7 +540,7 @@ function DataTable<T>({
                     checked={allSelected}
                     indeterminate={someSelected}
                     disabled={visibleIds.length === 0}
-                    onToggle={toggleAll}
+                    onCheckedChange={toggleAll}
                   />
                 </th>
               )}
@@ -568,7 +568,7 @@ function DataTable<T>({
             perPage: text.perPage,
           }}
           page={currentPage}
-          onChange={setPage}
+          onPageChange={setPage}
           count={server ? count : sortedEntries.length}
           total={server ? total : undefined}
           perPage={currentPerPage}

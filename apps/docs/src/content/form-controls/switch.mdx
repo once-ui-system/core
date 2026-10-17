@@ -21,7 +21,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
     label="Enable notifications"
     description="Receive updates about new features and improvements"
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Switch"
@@ -31,7 +31,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
 
 ## State
 
-Control the switch state with the `checked` prop. `onToggle` receives the state the switch moves to, so the setter can be passed straight in.
+Control the switch state with the `checked` prop. `onCheckedChange` receives the state the switch moves to, so the setter can be passed straight in.
 
 <CodeBlock
   marginTop="16"
@@ -45,7 +45,7 @@ Control the switch state with the `checked` prop. `onToggle` receives the state 
 <Switch
     label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
     checked={isChecked}
-    onToggle={setIsChecked}
+    onCheckedChange={setIsChecked}
 />`,
       language: "tsx",
       label: "State"
@@ -55,7 +55,7 @@ Control the switch state with the `checked` prop. `onToggle` receives the state 
 
 ## Uncontrolled
 
-Leave out `checked` and the switch keeps its own state, starting from `defaultChecked`. `onToggle` still reports every change, and with a `name` the switch submits its value with a form.
+Leave out `checked` and the switch keeps its own state, starting from `defaultChecked`. `onCheckedChange` still reports every change, and with a `name` the switch submits its value with a form.
 
 <CodeBlock
   marginTop="16"
@@ -111,7 +111,7 @@ const handleToggle = () => {
     label="Processing"
     checked={isChecked}
     loading={isLoading}
-    onToggle={handleToggle}
+    onCheckedChange={handleToggle}
 />`,
       language: "tsx",
       label: "Loading"
@@ -139,7 +139,7 @@ Disable the switch to prevent user interaction.
     label="Disabled switch"
     disabled
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Disabled"
@@ -165,7 +165,7 @@ Place the switch on the right side of the label.
     description="This places the switch after the label text"
     reverse
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Reversed"
@@ -180,7 +180,8 @@ Place the switch on the right side of the label.
   describe={{
     checked: "Whether it is on, controlled. Leave it out and the switch keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
-    onToggle: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
+    onCheckedChange: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
+    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     loading: "Show a spinner in the track while something resolves.",
     disabled: "Block interaction.",
     reverse: "Put the label before the switch instead of after it.",

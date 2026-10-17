@@ -41,6 +41,65 @@ changes nothing. Lines marked `!` are for you to fix by hand.
 | `BaseBreakpointProps` | `FlexBreakpointProps`, `GridBreakpointProps` or `TextBreakpointProps` | reports |
 | `resetScrollLockState`, `resetAdapterWarning`, `warnIfFrameworkUnadapted` | none: they were test-only or internal | reports |
 
+### 4. One value contract: fields
+
+Every field and picker follows one rule: state `X` is `X` / `defaultX` /
+`onXChange(next)`, and it is controlled only when `X` is set. `onChange` only
+ever means the native DOM event, forwarded to the real `<input>`, so a form
+library's `{...register("x")}` spread works on every field that has one. Each
+renamed handler keeps its 2.x signature, so the codemod's rename is the whole
+migration; a leftover `onChange={(v: number) => …}` is a TypeScript error, not
+a silent bug.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| NumberInput, ColorInput, TagInput, DateInput `onChange(value)` | `onValueChange(value)`; `onChange` is now the native event of the input | renames |
+| DateRangeInput, DatePicker, DateRangePicker `onChange(value)` | `onValueChange(value)` | renames |
+| Select `onSelect(value)` | `onValueChange(value)`; `onSelect` stays the action on menus (DropdownWrapper, ContextMenu) | renames |
+| DatePicker `defaultDate` (declared, never read) | `defaultValue`, which now works | renames |
+| DatePicker `open` | kept, but it only ever re-focused the grid for `autoFocus`; it never showed or hid the picker | reports every use |
+| OTPInput spread its div props (`onChange`, `onKeyDown`, `id`, …) onto every digit and dropped `className` | they go on the root, `className` included | nothing to rewrite: check any handler you passed |
+
+Added, nothing to migrate: `onValueChange(value: string)` on Input, Textarea
+and PasswordInput, whose `validate` and character count now work uncontrolled;
+`defaultValue` on NumberInput, ColorInput, DateInput, DateRangeInput, Select,
+DatePicker, DateRangePicker and OTPInput; `value`/`defaultValue`/`onValueChange`
+on OTPInput; `open`/`defaultOpen`/`onOpenChange` on Select, DateInput and
+DateRangeInput. ColorInput's `value` and handler are no longer required.
+
+### 5. One value contract: controls
+
+The same rule on toggles, groups and disclosure: `checked` / `defaultChecked` /
+`onCheckedChange`, `value` / `defaultValue` / `onValueChange`, `open` /
+`defaultOpen` / `onOpenChange`, controlled only when the state prop is set.
+Checkbox, RadioButton and Switch now put their native input props (`onChange`,
+`onBlur`, `name`, `required`, `form`, `data-*`, …) on the hidden `<input>`,
+which every change goes through, so `{...register("x")}` works on them too.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| Checkbox, RadioButton, Switch `onToggle(checked)` | `onCheckedChange(checked)`; `onChange` is now the input's native event | renames |
+| RadioGroup, SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher `onChange(value)` | `onValueChange(value)` (SegmentedControl keeps its `(value, event?)`) | renames |
+| StylePanel and `StylePanel.Root` `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
+| Pagination `onChange(page)` | `onPageChange(page)`, as on DataTable | renames |
+| Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
+| Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
+| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | reports every `open` |
+| RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
+| Kbar, KbarContent `inputSize` | `size` | renames |
+
+Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when
+it is clicked again, as a native radio; SegmentedControl no longer moves its
+selection when controlled and the parent keeps `value`. A wrapper of yours
+that reads `props.onToggle` (as the docs' `ClientSwitch` did) needs that read
+renamed by hand.
+
+Added, nothing to migrate: `defaultOpen` on Accordion and on each
+AccordionGroup item (which also fixes `autoCollapse={false}` items that could
+never open); `open`/`defaultOpen`/`onOpenChange` on Kbar; `onValueCommit` on
+Slider, on pointer release and after each key; a group `disabled` on
+SegmentedControl, whose `onValueChange` is no longer required.
+
 ---
 
 ## 1.8.x → 2.0

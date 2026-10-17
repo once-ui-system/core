@@ -157,7 +157,7 @@ export const Editor = ({
     <Scrubber
       duration={duration}
       value={time}
-      onChange={setTime}
+      onValueChange={setTime}
       tracks={tracks}
       onGestureStart={pause}
     />

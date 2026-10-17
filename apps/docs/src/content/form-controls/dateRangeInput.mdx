@@ -26,7 +26,7 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
     startLabel="Start date"
     endLabel="End date"
     value={dateRange}
-    onChange={handleDateRangeChange}
+    onValueChange={handleDateRangeChange}
 />`,
       language: "tsx",
       label: "Basic"
@@ -42,8 +42,12 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
     id: "Base of the two fields' ids: the start field is {id}-start and the end field {id}-end.",
     startLabel: "Label on the start field.",
     endLabel: "Label on the end field.",
-    value: "The range, as start and end.",
-    onChange: "Called with the new range.",
+    value: "The range, as start and end, controlled. Leave it out and the fields keep their own.",
+    defaultValue: "The starting range when `value` is left out.",
+    onValueChange: "Called with the new range. Was onChange in 2.x.",
+    open: "Whether the picker is open, controlled.",
+    defaultOpen: "Whether the picker starts open, when `open` is left out.",
+    onOpenChange: "Called with every open and close.",
     minHeight: "Lower bound on the picker's height, in rem.",
     locale: "Locale for the fields' dates and the calendar's names, such as \"de\". US English when left out.",
     labels: "The calendar's own words, for a translated interface: the same { previousMonth, nextMonth, month, year, ... } as DatePicker's labels. Omitted fields stay English.",

@@ -229,7 +229,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
                   minDate={date?.min}
                   dual={date?.dual}
                   value={dateRange}
-                  onChange={handleDateRangeChange}
+                  onValueChange={handleDateRangeChange}
                 />
               </Row>
             }

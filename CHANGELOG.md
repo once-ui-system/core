@@ -30,6 +30,42 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 ### Changed
 
 - **React 19 is the floor** for `react` and `react-dom`.
+- **Fields and pickers report their value through `onValueChange`.** NumberInput,
+  ColorInput, TagInput, DateInput, DateRangeInput, DatePicker and DateRangePicker
+  `onChange(value)` and Select `onSelect(value)` become `onValueChange(value)`, same
+  signature (the codemod renames them). `onChange` is now the native event, forwarded
+  to the real input on NumberInput, ColorInput, TagInput's text field and DateInput.
+- **Input, Textarea and PasswordInput take `onValueChange(value: string)`**, and
+  `validate` and the character count work on an uncontrolled field.
+- **`defaultValue` on every field and picker**: NumberInput, ColorInput, DateInput,
+  DateRangeInput, Select, DatePicker, DateRangePicker and OTPInput. DatePicker's
+  `defaultDate`, which was never read, is renamed `defaultValue` and works.
+- **`open` / `defaultOpen` / `onOpenChange`** on Select, DateInput and DateRangeInput.
+- **OTPInput takes `value` / `defaultValue` / `onValueChange(code)`**, and its div
+  props and `className` go on the root instead of every digit field.
+- **A cleared `value` clears DateInput**; it used to keep showing the last date.
+- **Checkbox, RadioButton and Switch report through `onCheckedChange(checked)`**
+  (was `onToggle`, same signature), and their native input props (`onChange`,
+  `onBlur`, `name`, `required`, …) now land on the real `<input>`, which every
+  change goes through, so form libraries' `register()` works. They used to be
+  spread onto the label and dropped.
+- **Controls report their value through `onValueChange`.** RadioGroup,
+  SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher and StylePanel
+  `onChange`, and Scrubber `onChange`, become `onValueChange`; Scrubber `onSelect`
+  becomes `onSelectedChange`; Pagination `onChange` becomes `onPageChange`. Same
+  signatures (the codemod renames them). Slider's `onChange` is now the range
+  input's native event, and it adds `onValueCommit`. StylePanel is controlled by
+  `value` alone.
+- **Accordion and NavGroup take `open` / `defaultOpen` / `onOpenChange(open)`**
+  (was `onToggle()`, no argument). An Accordion is controlled whenever `open` is
+  set, which fixes AccordionGroup `autoCollapse={false}` items that could never
+  open; AccordionGroup items take `defaultOpen`. The codemod renames and reports
+  each use.
+- **Kbar takes `open` / `defaultOpen` / `onOpenChange`**, and `inputSize` is `size`
+  on Kbar and KbarContent.
+- **RevealFx and Carousel `revealedByDefault` is `defaultRevealed`.**
+- **SegmentedControl** takes a group `disabled`, its handler is optional, and a
+  controlled one stays on `value` until the parent changes it.
 
 ## [Unreleased]
 

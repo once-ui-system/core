@@ -136,7 +136,7 @@ export const Dashboard2 = () => {
                       Real-time health across your projects and deployments.
                     </Text>
                   </Column>
-                  <SegmentedControl buttons={ranges} value={range} onChange={setRange} />
+                  <SegmentedControl buttons={ranges} value={range} onValueChange={setRange} />
                 </Row>
 
                 <Grid columns="4" m={{ columns: 2 }} s={{ columns: 1 }} gap="8" fillWidth>

@@ -10,12 +10,12 @@ import { Text } from "./Text";
 
 interface RangeSliderProps
   extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children"> {
-  /** The selected `[start, end]`, when the host owns the state. Pair with `onChange`. */
+  /** The selected `[start, end]`, when the host owns the state. Pair with `onValueChange`. */
   value?: [number, number];
   /** The range selected first when RangeSlider manages its own state. Defaults to `[min, max]`. */
   defaultValue?: [number, number];
   /** Called with the new `[start, end]`, start never above end. */
-  onChange?: (value: [number, number]) => void;
+  onValueChange?: (value: [number, number]) => void;
   min?: number;
   max?: number;
   /** Every value lands on a multiple of `step` from `min`. */
@@ -67,7 +67,7 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
     {
       value,
       defaultValue,
-      onChange,
+      onValueChange,
       min = 0,
       max = 100,
       step = 1,
@@ -123,7 +123,7 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
       if (next[0] === from && next[1] === until) return;
       latest.current = next;
       if (!controlled) setUncontrolled(next);
-      onChange?.(next);
+      onValueChange?.(next);
     };
 
     // Read on every gesture rather than on render, so it follows a `dir`

@@ -179,7 +179,7 @@ export function Table1<T = Record<string, unknown>>({
                 <Checkbox
                   checked={allCurrentSelected || (someCurrentSelected && !allCurrentSelected)}
                   indeterminate={someCurrentSelected && !allCurrentSelected}
-                  onToggle={toggleSelectAllCurrent}
+                  onCheckedChange={toggleSelectAllCurrent}
                 />
               </Row>
             )}
@@ -227,7 +227,7 @@ export function Table1<T = Record<string, unknown>>({
                           <Checkbox
                             key={`cb-${id}`}
                             checked={isSelected(id)}
-                            onToggle={() => toggleSelect(id)}
+                            onCheckedChange={() => toggleSelect(id)}
                           />
                         </Row>
                       )}

@@ -27,7 +27,7 @@ const handleColorChange = (value: string) => {
     id="color-input-example"
     label="Brand Color"
     value={colorValue}
-    onChange={handleColorChange}
+    onValueChange={handleColorChange}
 />`,
       language: "tsx",
       label: "ColorInput"
@@ -64,7 +64,7 @@ const handleColorChange = (value: string) => {
     id="color-input-alpha-example"
     label="Brand Color"
     value={colorValue}
-    onChange={handleColorChange}
+    onValueChange={handleColorChange}
     supportAlpha
 />`,
       language: "tsx",
@@ -92,7 +92,7 @@ the opacity button ("Adjust opacity") and `opacity` for its slider
   id="brand-colour"
   label={t("brandColour")}
   value={colour}
-  onChange={setColour}
+  onValueChange={setColour}
   labels={{ remove: t("remove") }}
 />
 ```
@@ -104,8 +104,10 @@ The `ColorInput` component extends the standard `Input` component props with the
 <PropsTable
   component="ColorInput"
   describe={{
-    value: "The current colour, as hex or rgba. Controlled — pair it with onChange.",
-    onChange: "Receives the colour string directly, not a DOM event.",
+    value: "The current colour, as hex or rgba, controlled. Leave it out and the field keeps its own.",
+    defaultValue: "The starting colour when `value` is left out.",
+    onValueChange: "Receives the colour string after a pick, an opacity change or a clear (\"\"). Was onChange in 2.x.",
+    onChange: "The native change event of the colour input, as on Input.",
     supportAlpha: "Adds an opacity slider and switches the value to rgba().",
     labels: "The clear and opacity controls' text, to translate them.",
   }}

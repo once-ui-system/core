@@ -39,7 +39,7 @@ function stubTrack(width = 1000, left = 0) {
 
 const Controlled = (props: Partial<React.ComponentProps<typeof RangeSlider>>) => {
   const [value, setValue] = useState<[number, number]>([20, 80]);
-  return <RangeSlider label="Price" value={value} onChange={setValue} {...props} />;
+  return <RangeSlider label="Price" value={value} onValueChange={setValue} {...props} />;
 };
 
 describe("RangeSlider: structure", () => {
@@ -116,7 +116,7 @@ describe("RangeSlider: value", () => {
   it("keeps its own state from defaultValue and reports each change as [start, end]", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} />, {
+    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -132,7 +132,7 @@ describe("RangeSlider: value", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const { rerender } = render(
-      <RangeSlider label="Price" value={[20, 80]} onChange={onChange} />,
+      <RangeSlider label="Price" value={[20, 80]} onValueChange={onChange} />,
       {
         wrapper: wrap,
       },
@@ -142,7 +142,7 @@ describe("RangeSlider: value", () => {
     expect(onChange).toHaveBeenCalledWith([21, 80]);
     expect(startThumb()).toHaveAttribute("aria-valuenow", "20");
 
-    rerender(<RangeSlider label="Price" value={[21, 80]} onChange={onChange} />);
+    rerender(<RangeSlider label="Price" value={[21, 80]} onValueChange={onChange} />);
     expect(startThumb()).toHaveAttribute("aria-valuenow", "21");
   });
 
@@ -236,7 +236,7 @@ describe("RangeSlider: keyboard", () => {
   it("does not report a key that changes nothing", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" onChange={onChange} />, { wrapper: wrap });
+    render(<RangeSlider label="Price" onValueChange={onChange} />, { wrapper: wrap });
     await user.tab();
     await user.keyboard("{Home}{ArrowLeft}");
     expect(onChange).not.toHaveBeenCalled();
@@ -247,7 +247,7 @@ describe("RangeSlider: keyboard", () => {
     const onChange = vi.fn();
     render(
       <>
-        <RangeSlider label="Price" disabled onChange={onChange} />
+        <RangeSlider label="Price" disabled onValueChange={onChange} />
         <button type="button">After</button>
       </>,
       { wrapper: wrap },
@@ -264,7 +264,7 @@ describe("RangeSlider: keyboard", () => {
 describe("RangeSlider: pointer", () => {
   it("moves the nearer thumb to a press on the track and drags it", () => {
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} />, {
+    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     stubTrack();
@@ -300,7 +300,7 @@ describe("RangeSlider: pointer", () => {
 
   it("grabs a thumb where it is, without jumping on the press", () => {
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} />, {
+    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     stubTrack();
@@ -340,12 +340,14 @@ describe("RangeSlider: pointer", () => {
   it("ignores the pointer while disabled, and buttons other than the main one", () => {
     const onChange = vi.fn();
     const { rerender } = render(
-      <RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} />,
+      <RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />,
       { wrapper: wrap },
     );
     stubTrack();
     fireEvent.pointerDown(track(), { button: 2, clientX: 500 });
-    rerender(<RangeSlider label="Price" defaultValue={[20, 80]} onChange={onChange} disabled />);
+    rerender(
+      <RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} disabled />,
+    );
     fireEvent.pointerDown(track(), { button: 0, clientX: 500 });
     fireEvent.pointerMove(document, { clientX: 600 });
     expect(onChange).not.toHaveBeenCalled();

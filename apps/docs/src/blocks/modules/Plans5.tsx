@@ -238,7 +238,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                     </Column>
                     <Switch
                       checked={selectedExtras[bundleIndex]?.[extra.id] || false}
-                      onToggle={() => toggleExtra(bundleIndex, extra.id)}
+                      onCheckedChange={() => toggleExtra(bundleIndex, extra.id)}
                     />
                   </Row>
                 ))}

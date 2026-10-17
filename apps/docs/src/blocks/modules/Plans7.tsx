@@ -194,7 +194,7 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
               { label: "Annual", value: "annual" },
             ]}
             value={billing}
-            onChange={(value) => setBilling(value as BillingPeriod)}
+            onValueChange={(value) => setBilling(value as BillingPeriod)}
           />
           {billing === "annual" && (
             <Tag size="s" scheme="success" themeBorder="rounded">

@@ -112,7 +112,7 @@ export default function DropdownCheck() {
           id="select-plain"
           label="Plain"
           value={plain}
-          onSelect={(value) => setPlain(String(value))}
+          onValueChange={(value) => setPlain(String(value))}
           data-testid="select-plain"
           options={LETTERS.map((value) => ({ value, label: value }))}
         />
@@ -121,7 +121,7 @@ export default function DropdownCheck() {
           label="Searchable"
           searchable
           value={searchable}
-          onSelect={(value) => setSearchable(String(value))}
+          onValueChange={(value) => setSearchable(String(value))}
           data-testid="select-searchable"
           options={LETTERS.map((value) => ({ value, label: value }))}
         />

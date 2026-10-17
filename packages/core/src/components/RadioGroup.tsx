@@ -12,6 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useControllableState } from "../internal/useControllableState";
 import { Column } from "./Column";
 import type { IconButtonProps } from "./IconButton";
 import { RadioButton } from "./RadioButton";
@@ -20,7 +21,7 @@ import { Row } from "./Row";
 import { Text } from "./Text";
 
 interface RadioGroupOption {
-  /** What the group's `value` and `onChange` carry, and what a form submits. */
+  /** What the group's `value` and `onValueChange` carry, and what a form submits. */
   value: string;
   label: ReactNode;
   description?: ReactNode;
@@ -34,12 +35,12 @@ interface RadioGroupProps
   extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children"> {
   /** One RadioButton per option, in order. RadioButton `children` render after them. */
   options?: RadioGroupOption[];
-  /** The selected option's `value`, when the host owns the state. Pair with `onChange`. */
+  /** The selected option's `value`, when the host owns the state. Pair with `onValueChange`. */
   value?: string;
   /** The option selected first when the group manages its own state. Without it, none is. */
   defaultValue?: string;
   /** Called with the newly selected `value`. Not called for the option already selected. */
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   /** Submitted with the selected `value` when the group is inside a form. */
   name?: string;
   /** Visible label that names the group. Without one, name it with `aria-label`. */
@@ -87,7 +88,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       options,
       value,
       defaultValue,
-      onChange,
+      onValueChange,
       name,
       label,
       description,
@@ -102,9 +103,11 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const labelId = useId();
     const descriptionId = useId();
     const groupRef = useRef<HTMLDivElement | null>(null);
-    const controlled = value !== undefined;
-    const [uncontrolled, setUncontrolled] = useState<string | undefined>(defaultValue);
-    const current = controlled ? value : uncontrolled;
+    const [current, setCurrent] = useControllableState<string | undefined>({
+      value,
+      defaultValue,
+      onChange: onValueChange as ((next: string | undefined) => void) | undefined,
+    });
 
     // Exactly one radio must be reachable with the Tab key: the selected one,
     // or the first enabled radio while none is selected (or the selected one is
@@ -128,10 +131,9 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const select = useCallback(
       (next: string) => {
         if (disabled || next === current) return;
-        if (!controlled) setUncontrolled(next);
-        onChange?.(next);
+        setCurrent(next);
       },
-      [disabled, current, controlled, onChange],
+      [disabled, current, setCurrent],
     );
 
     const context = useMemo(

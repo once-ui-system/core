@@ -12,7 +12,7 @@ export function BasicDatePickerExample() {
     setSelectedDate(newDate);
   };
 
-  return <DatePicker value={selectedDate} onChange={handleDateChange} />;
+  return <DatePicker value={selectedDate} onValueChange={handleDateChange} />;
 }
 
 // DatePicker with time picker example
@@ -23,7 +23,7 @@ export function DateTimePickerExample() {
     setDateTime(newDateTime);
   };
 
-  return <DatePicker value={dateTime} onChange={handleDateTimeChange} timePicker />;
+  return <DatePicker value={dateTime} onValueChange={handleDateTimeChange} timePicker />;
 }
 
 // DatePicker in another locale, with its own words translated through labels
@@ -33,7 +33,7 @@ export function LocalizedDatePickerExample() {
   return (
     <DatePicker
       value={selectedDate}
-      onChange={setSelectedDate}
+      onValueChange={setSelectedDate}
       timePicker
       locale="de"
       labels={{
@@ -60,7 +60,7 @@ export function DateRangePickerExample() {
     setDateRange(range);
   };
 
-  return <DateRangePicker value={dateRange} onChange={handleRangeChange} />;
+  return <DateRangePicker value={dateRange} onValueChange={handleRangeChange} />;
 }
 
 // DateRangePicker with custom styling example
@@ -77,7 +77,7 @@ export function DateRangePickerPresetsExample() {
   return (
     <DateRangePicker
       value={dateRange}
-      onChange={handleRangeChange}
+      onValueChange={handleRangeChange}
       size="l"
       style={{ border: "1px solid #e0e0e0", borderRadius: "8px", padding: "16px" }}
     />

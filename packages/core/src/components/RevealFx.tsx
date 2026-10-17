@@ -10,7 +10,7 @@ interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   speed?: "slow" | "medium" | "fast" | number;
   /** Milliseconds before the reveal starts. Was seconds until 2.0. */
   delay?: number;
-  revealedByDefault?: boolean;
+  defaultRevealed?: boolean;
   translateY?: number | SpacingToken;
   revealed?: boolean;
   style?: React.CSSProperties;
@@ -23,7 +23,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
       children,
       speed = "medium",
       delay = 0,
-      revealedByDefault = false,
+      defaultRevealed = false,
       translateY,
       revealed,
       style,
@@ -32,7 +32,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
     },
     ref,
   ) => {
-    const [isRevealed, setIsRevealed] = useState(revealedByDefault);
+    const [isRevealed, setIsRevealed] = useState(defaultRevealed);
     const [maskRemoved, setMaskRemoved] = useState(false);
     const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 

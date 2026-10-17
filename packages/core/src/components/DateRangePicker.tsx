@@ -10,9 +10,15 @@ export interface DateRange {
   endDate: Date | undefined;
 }
 
-export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
+export interface DateRangePickerProps
+  extends Omit<React.ComponentProps<typeof Flex>, "onChange" | "defaultValue"> {
+  /** The range, controlled. Leave it out to let the picker keep its own,
+   *  starting from `defaultValue`. */
   value?: DateRange;
-  onChange?: (range: DateRange) => void;
+  /** The starting range of an uncontrolled DateRangePicker (no `value`). */
+  defaultValue?: DateRange;
+  /** Receives the range after each pick: the start alone, then both ends. */
+  onValueChange?: (range: DateRange) => void;
   minDate?: Date;
   maxDate?: Date;
   dual?: boolean;
@@ -35,21 +41,34 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
 
 const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
   (
-    { value, onChange, minDate, maxDate, size = "m", dual, autoFocus, locale, labels, ...rest },
+    {
+      value,
+      defaultValue,
+      onValueChange,
+      minDate,
+      maxDate,
+      size = "m",
+      dual,
+      autoFocus,
+      locale,
+      labels,
+      ...rest
+    },
     ref,
   ) => {
+    const initial = value ?? defaultValue;
     const [internalValue, setInternalValue] = useState<DateRange>({
-      startDate: value?.startDate || undefined,
-      endDate: value?.endDate || undefined,
+      startDate: initial?.startDate || undefined,
+      endDate: initial?.endDate || undefined,
     });
 
     const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
     // Initialize with the startDate's month and year if available, otherwise use current date
     const [currentMonth, setCurrentMonth] = useState(
-      value?.startDate ? value.startDate.getMonth() : new Date().getMonth(),
+      initial?.startDate ? initial.startDate.getMonth() : new Date().getMonth(),
     );
     const [currentYear, setCurrentYear] = useState(
-      value?.startDate ? value.startDate.getFullYear() : new Date().getFullYear(),
+      initial?.startDate ? initial.startDate.getFullYear() : new Date().getFullYear(),
     );
 
     useEffect(() => {
@@ -75,7 +94,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
           endDate: undefined,
         };
         setInternalValue(newRange);
-        onChange?.(newRange);
+        onValueChange?.(newRange);
       } else {
         const newRange = {
           startDate: internalValue.startDate,
@@ -88,7 +107,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
         }
 
         setInternalValue(newRange);
-        onChange?.(newRange);
+        onValueChange?.(newRange);
       }
     };
 
@@ -122,7 +141,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
       <Flex ref={ref} gap="24" {...rest}>
         <DatePicker
           value={internalValue.startDate}
-          onChange={handleDateChange}
+          onValueChange={handleDateChange}
           range={getPreviewRange() || internalValue}
           minDate={minDate}
           maxDate={maxDate}
@@ -139,7 +158,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
         {dual && (
           <DatePicker
             value={internalValue.endDate}
-            onChange={handleDateChange}
+            onValueChange={handleDateChange}
             range={getPreviewRange() || internalValue}
             minDate={minDate}
             maxDate={maxDate}

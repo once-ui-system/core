@@ -21,7 +21,7 @@ export function BasicDateRangeInputExample() {
         startLabel="Start"
         endLabel="End"
         value={dateRange}
-        onChange={handleDateRangeChange}
+        onValueChange={handleDateRangeChange}
       />
     </Flex>
   );
@@ -45,7 +45,7 @@ export function CustomLabelDateRangeInputExample() {
         startLabel="Check-in"
         endLabel="Check-out"
         value={dateRange}
-        onChange={handleDateRangeChange}
+        onValueChange={handleDateRangeChange}
       />
     </Flex>
   );

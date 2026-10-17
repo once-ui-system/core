@@ -99,9 +99,12 @@ describe("Pagination", () => {
   it("moves through its own pages, from the buttons and the arrows", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { container } = render(<Pagination total={20} defaultPage={1} onChange={onChange} />, {
-      wrapper: wrap,
-    });
+    const { container } = render(
+      <Pagination total={20} defaultPage={1} onPageChange={onChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
 
     expect(shown()).toEqual(["1", "2", "3", "4", "5", "…", "20"]);
 
@@ -124,7 +127,7 @@ describe("Pagination", () => {
   it("does not report the page already shown", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Pagination total={3} onChange={onChange} />, { wrapper: wrap });
+    render(<Pagination total={3} onPageChange={onChange} />, { wrapper: wrap });
     await user.click(screen.getByRole("button", { name: "1" }));
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -132,7 +135,7 @@ describe("Pagination", () => {
   it("follows the host's page when controlled", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { rerender } = render(<Pagination total={10} page={3} onChange={onChange} />, {
+    const { rerender } = render(<Pagination total={10} page={3} onPageChange={onChange} />, {
       wrapper: wrap,
     });
 
@@ -141,7 +144,7 @@ describe("Pagination", () => {
     // Nothing moves until the host says so.
     expect(currentPage()).toHaveTextContent("3");
 
-    rerender(<Pagination total={10} page={7} onChange={onChange} />);
+    rerender(<Pagination total={10} page={7} onPageChange={onChange} />);
     expect(currentPage()).toHaveTextContent("7");
   });
 
@@ -240,7 +243,7 @@ describe("Pagination", () => {
         <Pagination
           count={200}
           page={page}
-          onChange={setPage}
+          onPageChange={setPage}
           perPage={perPage}
           perPageOptions={[10, 20, 50]}
           onPerPageChange={(next) => {

@@ -87,7 +87,7 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
               <Text variant="body-default-s" onBackground="neutral-weak">
                 Enable notifications
               </Text>
-              <Switch checked={notifications} onToggle={() => setNotifications((prev) => !prev)} />
+              <Switch checked={notifications} onCheckedChange={() => setNotifications((prev) => !prev)} />
             </Row>
           </Column>
         </Column>

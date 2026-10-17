@@ -642,7 +642,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-lg"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -655,7 +655,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-md"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -668,7 +668,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-sm"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -726,7 +726,7 @@ export default function ComponentsCheck() {
               element: (
                 <Switch
                   checked={false}
-                  onToggle={() => {}}
+                  onCheckedChange={() => {}}
                   label="Notifications"
                 />
               ),
@@ -735,7 +735,7 @@ export default function ComponentsCheck() {
               value: "on",
               label: "On",
               element: (
-                <Switch checked onToggle={() => {}} label="Dark mode" />
+                <Switch checked onCheckedChange={() => {}} label="Dark mode" />
               ),
             },
             {
@@ -744,7 +744,7 @@ export default function ComponentsCheck() {
               element: (
                 <Switch
                   checked={switchOn}
-                  onToggle={() => setSwitchOn(!switchOn)}
+                  onCheckedChange={() => setSwitchOn(!switchOn)}
                   label="Toggle me"
                 />
               ),
@@ -843,7 +843,7 @@ export default function ComponentsCheck() {
                 <TagInput
                   id="tags"
                   value={["react", "typescript"]}
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               ),
             },
@@ -855,7 +855,7 @@ export default function ComponentsCheck() {
                   id="tags-disabled"
                   value={["react"]}
                   disabled
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               ),
             },
@@ -870,7 +870,7 @@ export default function ComponentsCheck() {
               element: (
                 <SegmentedControl
                   value="one"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                   buttons={[
                     { value: "one", label: "One" },
                     { value: "two", label: "Two" },
@@ -886,7 +886,7 @@ export default function ComponentsCheck() {
                 <SegmentedControl
                   compact
                   value="a"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                   buttons={[
                     { value: "a", label: "A" },
                     { value: "b", label: "B" },
@@ -1800,7 +1800,7 @@ export default function ComponentsCheck() {
               value: "open",
               label: "Open by default",
               element: (
-                <Accordion open title="Installation">
+                <Accordion defaultOpen title="Installation">
                   <Text>
                     Run pnpm install @once-ui-system/core to get started.
                   </Text>
@@ -2552,7 +2552,7 @@ export default function ComponentsCheck() {
               label: "XS input",
               element: (
                 <Kbar
-                  inputSize="xs"
+                  size="xs"
                   items={[
                     {
                       id: "home",
@@ -2581,7 +2581,7 @@ export default function ComponentsCheck() {
               label: "M input",
               element: (
                 <Kbar
-                  inputSize="m"
+                  size="m"
                   items={[
                     {
                       id: "home",
@@ -2610,7 +2610,7 @@ export default function ComponentsCheck() {
               label: "L input",
               element: (
                 <Kbar
-                  inputSize="l"
+                  size="l"
                   items={[
                     {
                       id: "home",
@@ -3140,7 +3140,7 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           value={currentVar}
-                          onChange={(value: string) =>
+                          onValueChange={(value: string) =>
                             selectVar(comp.name, value)
                           }
                           buttons={comp.variations.map((v) => ({

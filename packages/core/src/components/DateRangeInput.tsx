@@ -1,6 +1,7 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useId, useRef } from "react";
+import { useControllableState } from "../internal/useControllableState";
 import { fieldLocale } from "../utils/calendarLocale";
 import type { DatePickerLabels } from "./DatePicker";
 import { DateRange, DateRangePicker } from "./DateRangePicker";
@@ -11,12 +12,26 @@ import { Input } from "./Input";
 import { Row } from "./Row";
 
 interface DateRangeInputProps
-  extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value" | "label"> {
+  extends Omit<
+    React.ComponentProps<typeof Input>,
+    "onChange" | "value" | "defaultValue" | "onValueChange" | "label"
+  > {
   id: string;
   startLabel: string;
   endLabel: string;
+  /** The range, controlled. Leave it out to let the fields keep their own,
+   *  starting from `defaultValue`. */
   value?: DateRange;
-  onChange?: (range: DateRange) => void;
+  /** The starting range of an uncontrolled DateRangeInput (no `value`). */
+  defaultValue?: DateRange;
+  /** Receives the range after each pick: the start alone, then both ends. */
+  onValueChange?: (range: DateRange) => void;
+  /** Whether the picker is open, controlled. */
+  open?: boolean;
+  /** Whether the picker starts open, uncontrolled (no `open`). */
+  defaultOpen?: boolean;
+  /** Receives every open and close the fields make. */
+  onOpenChange?: (open: boolean) => void;
   minHeight?: number;
   className?: string;
   style?: React.CSSProperties;
@@ -60,7 +75,11 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       startLabel = "Start",
       endLabel = "End",
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
+      open,
+      defaultOpen = false,
+      onOpenChange,
       error,
       minHeight,
       className,
@@ -73,33 +92,35 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
     },
     ref,
   ) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState(
-      value ? formatDateRange(value, locale) : { startDate: "", endDate: "" },
-    );
+    const [isOpen, setIsOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
+    const [range, setRange] = useControllableState<DateRange | undefined>({
+      value,
+      defaultValue,
+      onChange: (next) => {
+        if (next) onValueChange?.(next);
+      },
+    });
+    const inputValue = range ? formatDateRange(range, locale) : { startDate: "", endDate: "" };
     const dialogId = `${useId()}-dialog`;
     /** The field that opened the picker, which gets focus back when it closes. */
     const openerRef = useRef<HTMLInputElement | null>(null);
 
-    useEffect(() => {
-      if (value) {
-        setInputValue(formatDateRange(value, locale));
-      }
-    }, [value, locale]);
-
     const handleDateChange = useCallback(
-      (range: DateRange) => {
-        setInputValue(formatDateRange(range, locale));
-        onChange?.(range);
-        if (range.endDate != undefined) {
+      (next: DateRange) => {
+        setRange(next);
+        if (next.endDate != undefined) {
           setIsOpen(false);
         }
       },
-      [onChange, locale],
+      [setRange, setIsOpen],
     );
 
     /** Opens on a click, Enter, Space or ArrowDown, not on focus: see DateInput. */
-    const open = (field: HTMLInputElement) => {
+    const openFrom = (field: HTMLInputElement) => {
       openerRef.current = field;
       setIsOpen(true);
     };
@@ -110,7 +131,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
 
       if (!isOpen && ["Enter", " ", "ArrowDown"].includes(event.key)) {
         event.preventDefault();
-        open(event.currentTarget);
+        openFrom(event.currentTarget);
       } else if (isOpen && event.key === "Escape") {
         event.preventDefault();
         event.stopPropagation();
@@ -120,7 +141,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
 
     const handleFieldClick = (event: React.MouseEvent<HTMLInputElement>) => {
       onClick?.(event);
-      open(event.currentTarget);
+      openFrom(event.currentTarget);
     };
 
     /** Escape inside the picker closes it and hands focus back to the field that opened it. */
@@ -187,8 +208,8 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
         onKeyDown={handleDialogKeyDown}
       >
         <DateRangePicker
-          value={value}
-          onChange={handleDateChange}
+          value={range}
+          onValueChange={handleDateChange}
           autoFocus
           locale={locale}
           labels={labels}

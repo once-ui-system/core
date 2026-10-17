@@ -17,7 +17,7 @@ export function RangeSliderPriceExample() {
         step={10}
         minDistance={50}
         value={range}
-        onChange={setRange}
+        onValueChange={setRange}
         formatValue={price}
         showValue
       />

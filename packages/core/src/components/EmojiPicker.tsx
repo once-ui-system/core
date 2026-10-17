@@ -323,7 +323,7 @@ const EmojiPicker = ({
       {!searchQuery && (
         <SegmentedControl
           buttons={categoryButtons}
-          onChange={handleCategoryChange}
+          onValueChange={handleCategoryChange}
           defaultValue={activeCategory}
           fillWidth
         />

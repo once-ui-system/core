@@ -170,7 +170,7 @@ export const Login4 = () => {
             </Column>
 
             {isSignup && (
-              <Checkbox checked onToggle={() => {}} label="Subscribe to Design Engineers Weekly" />
+              <Checkbox checked onCheckedChange={() => {}} label="Subscribe to Design Engineers Weekly" />
             )}
 
             {!isSignup && (

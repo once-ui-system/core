@@ -114,10 +114,10 @@ export function EditorExample() {
         <Scrubber
           duration={DURATION}
           value={time}
-          onChange={setTime}
+          onValueChange={setTime}
           tracks={tracks}
           selected={selected}
-          onSelect={setSelected}
+          onSelectedChange={setSelected}
           onGestureStart={() => setPlaying(false)}
           onBlockChange={(trackId, blockId, next) =>
             setTracks((all) =>

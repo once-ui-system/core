@@ -56,18 +56,20 @@ describe("aria-label lands on the named element", () => {
 
   describe("Scrubber", () => {
     it("names the slider, by default and with aria-label", () => {
-      const { rerender } = render(<Scrubber duration={1000} value={0} onChange={() => {}} />, {
+      const { rerender } = render(<Scrubber duration={1000} value={0} onValueChange={() => {}} />, {
         wrapper: wrap,
       });
       expect(screen.getByRole("slider", { name: "Seek" })).toBeInTheDocument();
 
-      rerender(<Scrubber duration={1000} value={0} onChange={() => {}} aria-label="Playhead" />);
+      rerender(
+        <Scrubber duration={1000} value={0} onValueChange={() => {}} aria-label="Playhead" />,
+      );
       expect(screen.getByRole("slider", { name: "Playhead" })).toBeInTheDocument();
     });
 
     it("puts aria-label on the slider only", async () => {
       const { container } = render(
-        <Scrubber duration={1000} value={0} onChange={() => {}} aria-label="Clip position" />,
+        <Scrubber duration={1000} value={0} onValueChange={() => {}} aria-label="Clip position" />,
         { wrapper: wrap },
       );
       expect(screen.getByRole("slider", { name: "Clip position" })).toBeInTheDocument();

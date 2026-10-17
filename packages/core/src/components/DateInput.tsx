@@ -1,18 +1,31 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import React, { forwardRef, useCallback, useId, useRef } from "react";
+import { useControllableState } from "../internal/useControllableState";
 import { fieldLocale } from "../utils/calendarLocale";
 import { DatePicker, type DatePickerLabels } from "./DatePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Input } from "./Input";
 
-interface DateInputProps extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value"> {
+interface DateInputProps
+  extends Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue" | "onValueChange"> {
   id: string;
   label?: string;
   placeholder?: string;
+  /** The date, controlled. Leave it out to let the field keep its own,
+   *  starting from `defaultValue`. */
   value?: Date;
-  onChange?: (date: Date) => void;
+  /** The starting date of an uncontrolled DateInput (no `value`). */
+  defaultValue?: Date;
+  /** Receives the date picked, and each time edit with `timePicker`. */
+  onValueChange?: (date: Date) => void;
+  /** Whether the picker is open, controlled. */
+  open?: boolean;
+  /** Whether the picker starts open, uncontrolled (no `open`). */
+  defaultOpen?: boolean;
+  /** Receives every open and close the field makes. */
+  onOpenChange?: (open: boolean) => void;
   minHeight?: number;
   className?: string;
   style?: React.CSSProperties;
@@ -63,7 +76,11 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
       label,
       placeholder,
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
+      open,
+      defaultOpen = false,
+      onOpenChange,
       error,
       minHeight,
       className,
@@ -79,28 +96,34 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     },
     ref,
   ) => {
-    const [isOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState(
-      value ? formatDate(value, timePicker, locale) : "",
-    );
+    const [isOpen, setIsOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
+    /**
+     * The field shows the date it holds, so a `value` cleared from outside
+     * clears it: the text used to follow `value` only while it was set.
+     */
+    const [date, setDate] = useControllableState<Date | undefined>({
+      value,
+      defaultValue,
+      onChange: (next) => {
+        if (next) onValueChange?.(next);
+      },
+    });
+    const inputValue = date ? formatDate(date, timePicker, locale) : "";
     const fieldRef = useRef<HTMLInputElement>(null);
     const dialogId = `${useId()}-dialog`;
 
-    useEffect(() => {
-      if (value) {
-        setInputValue(formatDate(value, timePicker, locale));
-      }
-    }, [value, timePicker, locale]);
-
     const handleDateChange = useCallback(
-      (date: Date) => {
-        setInputValue(formatDate(date, timePicker, locale));
-        onChange?.(date);
+      (next: Date) => {
+        setDate(next);
         if (!timePicker) {
           setIsOpen(false);
         }
       },
-      [onChange, timePicker, locale],
+      [setDate, setIsOpen, timePicker],
     );
 
     /**
@@ -175,7 +198,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               /*
                * Keyed on open state ONLY. Including value.getTime() here remounted
                * the whole picker on every time edit — each hour, minute or AM/PM
-               * change fires onChange, which changes value, which changed the key.
+               * change fires onValueChange, which changes value, which changed the key.
                * The remount reset isTimeSelector, so the time panel vanished and
                * the calendar came back mid-edit. DatePicker already syncs to a
                * changed `value` in an effect, so the key never needed it.
@@ -188,8 +211,8 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               aria-labelledby={labelledBy}
               onKeyDown={handleDialogKeyDown}
               padding="20"
-              value={value}
-              onChange={handleDateChange}
+              value={date}
+              onValueChange={handleDateChange}
               timePicker={timePicker}
               minDate={minDate}
               maxDate={maxDate}

@@ -39,7 +39,7 @@ export const Faq3: React.FC<Faq3Props> = ({ title, description, content, categor
             <SegmentedControl
               buttons={categories.map((cat) => ({ label: cat.label, value: cat.value }))}
               value={activeCategory}
-              onChange={(value) => setActiveCategory(value)}
+              onValueChange={(value) => setActiveCategory(value)}
             />
           </Row>
         )}

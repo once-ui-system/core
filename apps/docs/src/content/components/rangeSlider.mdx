@@ -35,8 +35,8 @@ Without `value` or `defaultValue`, the range starts as the whole track, `[min, m
 
 ## Controlled
 
-Pass `value` and `onChange` when something else owns the range, such as the filters
-of a product list. `onChange` gets the new pair, start never above end. `formatValue`
+Pass `value` and `onValueChange` when something else owns the range, such as the filters
+of a product list. `onValueChange` gets the new pair, start never above end. `formatValue`
 sets how a value reads, in the readout and to a screen reader, and `minDistance`
 keeps the thumbs apart.
 
@@ -56,7 +56,7 @@ keeps the thumbs apart.
   step={10}
   minDistance={50}
   value={range}
-  onChange={setRange}
+  onValueChange={setRange}
   formatValue={(value) => \`$\${value}\`}
   showValue
 />`,
@@ -128,9 +128,9 @@ along, since only one of them can go each way.
 <PropsTable
   component="RangeSlider"
   describe={{
-    value: "The selected [start, end], when the host owns the state. Pair with onChange.",
+    value: "The selected [start, end], when the host owns the state. Pair with onValueChange.",
     defaultValue: "The range selected first when RangeSlider keeps its own state. Defaults to [min, max].",
-    onChange: "Called with the new [start, end].",
+    onValueChange: "Called with the new [start, end].",
     step: "Every value lands on a multiple of step from min.",
     minDistance: "The smallest gap the thumbs keep between them.",
     label: "Visible label that names the pair of thumbs.",

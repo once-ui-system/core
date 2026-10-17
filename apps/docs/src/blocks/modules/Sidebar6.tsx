@@ -145,7 +145,7 @@ export function Sidebar6() {
                   background: pathname === item.href ? "var(--neutral-alpha-weak)" : undefined,
                 }}
                 open={isOpen}
-                onToggle={() => toggle(item.key)}
+                onOpenChange={() => toggle(item.key)}
                 paddingX="16"
                 title={
                   item.href ? (

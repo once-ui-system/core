@@ -53,7 +53,7 @@ export const Settings1 = () => {
                     value: "security",
                   },
                 ]}
-                onChange={setSelectedOption}
+                onValueChange={setSelectedOption}
               />
             </Column>
           </Column>

@@ -23,12 +23,12 @@ interface RadioGroupItemProps<Args extends unknown[]> {
   checked: boolean | undefined;
   name: string | undefined;
   disabled: boolean | undefined;
-  onToggle: ((...args: Args) => void) | undefined;
+  onCheckedChange: ((...args: Args) => void) | undefined;
 }
 
 /**
  * Inside a RadioGroup, the group owns a RadioButton's checked state, name,
- * disabled state and place in the Tab order, and the button's own `onToggle`
+ * disabled state and place in the Tab order, and the button's own `onCheckedChange`
  * still runs when it is picked. Outside one, or with no `value` to match,
  * the button's own props stand.
  *
@@ -46,9 +46,9 @@ export function useRadioGroupItem<Args extends unknown[]>(props: RadioGroupItemP
     checked: group.value === value,
     name: group.name ?? props.name,
     disabled,
-    onToggle: (...args: Args) => {
+    onCheckedChange: (...args: Args) => {
       group.select(value);
-      props.onToggle?.(...args);
+      props.onCheckedChange?.(...args);
     },
     focusProps: {
       tabIndex: !disabled && group.tabbable === value ? 0 : -1,

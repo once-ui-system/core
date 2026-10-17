@@ -48,24 +48,25 @@ interface DragState {
 }
 
 // `onChange` and `onSelect` are both DOM handlers on the inherited
-// HTMLAttributes — `onSelect` fires on text selection. Same collision the rest
-// of 2.0 resolves the same way: omit the inherited declaration and declare our
-// own, since neither native event is meaningful on a timeline.
+// HTMLAttributes — `onSelect` fires on text selection. Neither native event is
+// meaningful on a timeline, so both are omitted; the timeline's own states
+// follow the 3.0 rule (`onValueChange`, `onSelectedChange`).
 interface ScrubberProps extends Omit<React.ComponentProps<typeof Flex>, "onChange" | "onSelect"> {
   /** Total length of the timeline. */
   duration: number;
   /** Playhead position. */
   value: number;
   /** Seek — fired by clicking or dragging anywhere on the tracks. */
-  onChange: (time: number) => void;
+  onValueChange: (time: number) => void;
   /**
    * Zero or more stacked tracks sharing one playhead. With none, the Scrubber
    * is a plain seek bar; with several it is an editor timeline.
    */
   tracks?: ScrubberTrack[];
-  /** Currently selected block id. Controlled — pair with `onSelect`. */
+  /** Currently selected block id. Controlled — pair with `onSelectedChange`. */
   selected?: string | null;
-  onSelect?: (blockId: string | null) => void;
+  /** Called with the block id picked, or `null` when the selection clears. */
+  onSelectedChange?: (blockId: string | null) => void;
   /**
    * A block was moved or trimmed. Absolute times, already clamped to
    * `[0, duration]`; clamp further (against neighbours, a minimum length)
@@ -99,10 +100,10 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
     {
       duration,
       value,
-      onChange,
+      onValueChange,
       tracks = [],
       selected = null,
-      onSelect,
+      onSelectedChange,
       onBlockChange,
       onGestureStart,
       onBlockContextMenu,
@@ -143,7 +144,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
         if (!drag) return;
 
         if (drag.target.kind === "seek") {
-          onChange(timeAt(event.clientX));
+          onValueChange(timeAt(event.clientX));
           return;
         }
 
@@ -182,7 +183,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
         document.body.style.userSelect = previousSelect;
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [dragging, duration, onChange, onBlockChange, timeAt]);
+    }, [dragging, duration, onValueChange, onBlockChange, timeAt]);
 
     const begin = (event: React.PointerEvent, target: DragTarget, block?: ScrubberBlock) => {
       if (event.button !== 0) return;
@@ -219,10 +220,10 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
           aria-valuenow={value}
           aria-valuetext={formatTime(value)}
           onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.key === "ArrowLeft") onChange(clamp(value - keyStep));
-            else if (event.key === "ArrowRight") onChange(clamp(value + keyStep));
-            else if (event.key === "Home") onChange(0);
-            else if (event.key === "End") onChange(duration);
+            if (event.key === "ArrowLeft") onValueChange(clamp(value - keyStep));
+            else if (event.key === "ArrowRight") onValueChange(clamp(value + keyStep));
+            else if (event.key === "Home") onValueChange(0);
+            else if (event.key === "End") onValueChange(duration);
             else return;
             event.preventDefault();
           }}
@@ -237,7 +238,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
               cursor="pointer"
               overflow="hidden"
               onPointerDown={(event: React.PointerEvent) => {
-                onChange(timeAt(event.clientX));
+                onValueChange(timeAt(event.clientX));
                 begin(event, { kind: "seek" });
               }}
             >
@@ -265,8 +266,8 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                   track.onAdd(timeAt(event.clientX));
                   return;
                 }
-                onSelect?.(null);
-                onChange(timeAt(event.clientX));
+                onSelectedChange?.(null);
+                onValueChange(timeAt(event.clientX));
                 begin(event, { kind: "seek" });
               }}
             >
@@ -300,7 +301,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                     }}
                     onPointerDown={(event: React.PointerEvent) => {
                       if (event.button !== 0) return;
-                      onSelect?.(block.id);
+                      onSelectedChange?.(block.id);
                       if (movable) {
                         begin(
                           event,
@@ -309,7 +310,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                         );
                       } else {
                         event.stopPropagation();
-                        onChange(timeAt(event.clientX));
+                        onValueChange(timeAt(event.clientX));
                         begin(event, { kind: "seek" });
                       }
                     }}
@@ -339,7 +340,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           background={isSelected ? `${scheme}-alpha-strong` : "transparent"}
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
-                            onSelect?.(block.id);
+                            onSelectedChange?.(block.id);
                             begin(
                               event,
                               {
@@ -362,7 +363,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           background={isSelected ? `${scheme}-alpha-strong` : "transparent"}
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
-                            onSelect?.(block.id);
+                            onSelectedChange?.(block.id);
                             begin(
                               event,
                               { kind: "block", trackId: track.id, blockId: block.id, mode: "end" },

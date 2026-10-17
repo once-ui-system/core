@@ -31,7 +31,7 @@ const handleDateChange = (newDate: Date) => {
     id="date-input-example"
     label="Select Date"
     value={date}
-    onChange={handleDateChange}
+    onValueChange={handleDateChange}
 />`,
       language: "tsx",
       label: "DateInput"
@@ -64,7 +64,7 @@ const handleDateTimeChange = (newDateTime: Date) => {
   id="date-time-input-example"
   label="Select Date & Time"
   value={dateTime}
-  onChange={handleDateTimeChange}
+  onValueChange={handleDateTimeChange}
   timePicker
 />`,
       language: "tsx",
@@ -85,6 +85,13 @@ const handleDateTimeChange = (newDateTime: Date) => {
 <PropsTable
   component="DateInput"
   describe={{
+    value: "The date, controlled. Leave it out and the field keeps its own.",
+    defaultValue: "The starting date when `value` is left out.",
+    onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x.",
+    onChange: "The native change event of the field, as on Input.",
+    open: "Whether the picker is open, controlled.",
+    defaultOpen: "Whether the picker starts open, when `open` is left out.",
+    onOpenChange: "Called with every open and close.",
     minDate: "Earliest date the calendar allows.",
     maxDate: "Latest date the calendar allows.",
     minHeight: "Minimum height of the calendar popover.",

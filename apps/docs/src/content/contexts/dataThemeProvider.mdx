@@ -145,7 +145,7 @@ It throws outside a `DataThemeProvider`.
     { value: "categorical", label: "Categorical" },
     { value: "divergent", label: "Divergent" },
   ]}
-  onChange={(value) => setChartOptions({ mode: value as ChartOptions["mode"] })}
+  onValueChange={(value) => setChartOptions({ mode: value as ChartOptions["mode"] })}
 />`,
       language: "tsx",
       label: "useDataTheme"

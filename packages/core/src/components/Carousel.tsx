@@ -40,7 +40,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
   sizes?: string | number;
   unoptimized?: boolean;
-  revealedByDefault?: boolean;
+  defaultRevealed?: boolean;
   thumbnail?: ThumbnailItem;
   play?: {
     auto?: boolean;
@@ -62,7 +62,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
       aspectRatio = "original",
       sizes,
       unoptimized = false,
-      revealedByDefault = false,
+      defaultRevealed = false,
       thumbnail = { scaling: 1, height: "80", sizes: "120px" },
       play = { auto: false, interval: 3000, controls: true },
       ...flex
@@ -71,8 +71,8 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
   ) => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [hoverIndex, setHoverIndex] = useState<number | undefined>(0);
-    const [isTransitioning, setIsTransitioning] = useState(revealedByDefault);
-    const [initialTransition, setInitialTransition] = useState(revealedByDefault);
+    const [isTransitioning, setIsTransitioning] = useState(defaultRevealed);
+    const [initialTransition, setInitialTransition] = useState(defaultRevealed);
     const [isPlaying, setIsPlaying] = useState<boolean>(play.auto || false);
     const [progressPercent, setProgressPercent] = useState<number>(0);
 
@@ -189,7 +189,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
     // Handle initial transition
     useEffect(() => {
-      if (!revealedByDefault && !initialTransition) {
+      if (!defaultRevealed && !initialTransition) {
         setIsTransitioning(true);
         setInitialTransition(true);
       }
@@ -198,7 +198,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           clearTimeout(transitionTimeoutRef.current);
         }
       };
-    }, [revealedByDefault, initialTransition]);
+    }, [defaultRevealed, initialTransition]);
 
     // Toggle play/pause function
     const togglePlayPause = () => {

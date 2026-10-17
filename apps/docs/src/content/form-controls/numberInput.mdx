@@ -9,7 +9,7 @@ navIcon: "switch"
 ---
 
 `NumberInput` is [Input](/form-controls/input) for numbers. It adds stepper
-controls and clamps what can be typed, so the value reaching `onChange` is
+controls and clamps what can be typed, so the value reaching `onValueChange` is
 already a number within range — no parsing, no `NaN`.
 
 <CodeBlock
@@ -29,7 +29,7 @@ const handleChange = (newValue: number) => {
     id="quantity"
     label="Quantity"
     value={value}
-    onChange={handleChange}
+    onValueChange={handleChange}
     min={0}
     max={100}
     step={1}
@@ -52,8 +52,10 @@ partial entry such as `-` or `1.` stays as typed until it reads as a number.
 <PropsTable
   component="NumberInput"
   describe={{
-    value: "The current number. Controlled, like every other input here.",
-    onChange: "Receives the number itself, not a change event.",
+    value: "The current number, controlled. Leave it out and the field keeps its own.",
+    defaultValue: "The starting number when `value` is left out.",
+    onValueChange: "Receives the number itself. Was onChange in 2.x.",
+    onChange: "The native change event of the input, as on Input, so a form library's register() works.",
     min: "Lower bound. The decrement control stops here.",
     max: "Upper bound. The increment control stops here.",
     step: "How much each press moves the value.",

@@ -105,7 +105,7 @@ export function ListPageExample({
         <SegmentedControl
           fillWidth={false}
           value={filter}
-          onChange={(value) => setFilter(value as Filter)}
+          onValueChange={(value) => setFilter(value as Filter)}
           buttons={[
             { value: "all", label: "All" },
             { value: "active", label: "Active" },

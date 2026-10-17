@@ -138,7 +138,7 @@ export const Forum1 = () => {
                 { label: "Hot", value: "hot" },
                 { label: "New", value: "new" },
               ]}
-              onChange={() => {}}
+              onValueChange={() => {}}
             />
           </Row>
           <InfiniteScroll

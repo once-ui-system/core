@@ -46,7 +46,7 @@ const Picker = (
         label="Pick"
         options={options}
         value={value}
-        onSelect={(next) => {
+        onValueChange={(next) => {
           setValue(next);
           onPick?.(next as string);
         }}
@@ -356,7 +356,7 @@ describe("Select options' own prefix", () => {
 
   it("shows each option's prefix in a single Select", async () => {
     const user = userEvent.setup();
-    render(<Select id="s" label="Colour" value="a" onSelect={vi.fn()} options={swatched} />, {
+    render(<Select id="s" label="Colour" value="a" onValueChange={vi.fn()} options={swatched} />, {
       wrapper: wrap,
     });
     await user.click(screen.getByRole("combobox"));
@@ -373,7 +373,7 @@ describe("Select options' own prefix", () => {
         label="Colours"
         multiple
         value={["a"]}
-        onSelect={vi.fn()}
+        onValueChange={vi.fn()}
         options={swatched}
       />,
       { wrapper: wrap },

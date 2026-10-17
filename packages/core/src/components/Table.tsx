@@ -384,7 +384,7 @@ function Table({
                 placeholder="Select page size"
                 value={String(pageSize)}
                 size="xs"
-                onSelect={(value) => {
+                onValueChange={(value) => {
                   setPageSize(Number(value));
                   setPage(1);
                 }}
@@ -403,7 +403,7 @@ function Table({
             <Pagination
               page={currentPage}
               total={totalPages}
-              onChange={setPage}
+              onPageChange={setPage}
               size="s"
               showFirstLast
             />

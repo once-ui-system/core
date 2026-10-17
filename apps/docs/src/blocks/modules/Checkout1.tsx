@@ -217,7 +217,7 @@ export const Checkout1 = () => {
                 },
               ]}
               value="United States"
-              onSelect={() => {}}
+              onValueChange={() => {}}
             />
           </Column>
           <Button fillWidth label="Pay" />

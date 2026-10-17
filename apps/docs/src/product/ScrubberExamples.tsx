@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function ScrubberSeekExample() {
   const [time, setTime] = useState(38000);
-  return <Scrubber duration={125000} value={time} onChange={setTime} />;
+  return <Scrubber duration={125000} value={time} onValueChange={setTime} />;
 }
 
 export function ScrubberTracksExample() {
@@ -25,9 +25,9 @@ export function ScrubberTracksExample() {
       <Scrubber
         duration={40000}
         value={time}
-        onChange={setTime}
+        onValueChange={setTime}
         selected={selected}
-        onSelect={setSelected}
+        onSelectedChange={setSelected}
         onBlockChange={(_trackId, blockId, next) =>
           setZooms((current) =>
             current.map((block) =>

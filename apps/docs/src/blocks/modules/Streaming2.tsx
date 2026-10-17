@@ -184,7 +184,7 @@ export const Streaming2 = () => {
             <SegmentedControl
               buttons={genres.map((genre) => ({ label: genre.label, value: genre.value }))}
               value={selectedGenre}
-              onChange={(value) => setSelectedGenre(value)}
+              onValueChange={(value) => setSelectedGenre(value)}
             />
           </Row>
 

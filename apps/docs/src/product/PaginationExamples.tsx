@@ -18,7 +18,7 @@ export function PaginationControlledExample() {
       </Text>
       <Pagination
         page={page}
-        onChange={setPage}
+        onPageChange={setPage}
         count={ARTICLES}
         perPage={perPage}
         perPageOptions={[10, 20, 50]}

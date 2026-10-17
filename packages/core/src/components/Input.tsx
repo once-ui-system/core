@@ -49,6 +49,10 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
   focusRing?: boolean;
   characterCount?: boolean;
   cursor?: undefined | "interactive";
+  /** Receives the field's text on every change, after the native `onChange`.
+   *  The field is controlled only when `value` is set. */
+  onValueChange?: (value: string) => void;
+  /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   loading?: boolean;
   /** How many columns to occupy inside a `Form` grid. `Form` reads this off
@@ -81,6 +85,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       children,
       onFocus,
       onBlur,
+      onChange,
+      onValueChange,
       onAnimationStart,
       validate,
       cursor,
@@ -97,7 +103,27 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // floated and sat on top of the text until the first focus and blur.
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    /**
+     * The text the field holds. Controlled it is `value`; uncontrolled the
+     * field keeps its own copy from `defaultValue` and each change, so
+     * `validate` and the character count see what was typed. Both used to
+     * read `value` alone, and an uncontrolled field never validated.
+     */
+    const controlled = props.value !== undefined;
+    const [ownText, setOwnText] = useState(() =>
+      props.defaultValue === undefined ? "" : String(props.defaultValue),
+    );
+    const text = controlled ? String(props.value) : ownText;
+    const debouncedValue = useDebounce(text, 1000);
+    // What the error styling compares against, as before: the debounced
+    // `value` when controlled, nothing when not.
+    const styledValue = controlled ? debouncedValue : undefined;
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!controlled) setOwnText(event.target.value);
+      onChange?.(event);
+      onValueChange?.(event.target.value);
+    };
 
     const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
@@ -181,7 +207,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         [styles.withSuffix]: suffix,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
-        [styles.error]: displayError && debouncedValue !== "",
+        [styles.error]: displayError && styledValue !== "",
       },
     );
 
@@ -192,7 +218,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: (error || (displayError && debouncedValue !== "")) && props.value !== "",
+          [styles.error]: (error || (displayError && styledValue !== "")) && props.value !== "",
         })}
       >
         <Row
@@ -225,6 +251,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               placeholder={placeholder}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onChange={handleChange}
               onAnimationStart={handleAnimationStart}
               className={inputClassNames}
               aria-describedby={describedBy}
@@ -252,14 +279,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Text
                 variant="label-default-s"
                 onBackground={
-                  props.maxLength - String(props.value || "").length <= 5
+                  props.maxLength - text.length <= 5
                     ? "danger-weak"
-                    : props.maxLength - String(props.value || "").length <= 10
+                    : props.maxLength - text.length <= 10
                       ? "warning-weak"
                       : "neutral-weak"
                 }
               >
-                {props.maxLength - String(props.value || "").length}
+                {props.maxLength - text.length}
               </Text>
             </Row>
           )}

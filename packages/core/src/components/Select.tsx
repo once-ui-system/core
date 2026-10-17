@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
+import { useControllableState } from "../internal/useControllableState";
 import type { Placement } from "../types";
 import { Column } from "./Column";
 import {
@@ -35,12 +36,23 @@ const DEFAULT_LABELS: Required<SelectLabels> = {
 };
 
 interface SelectProps
-  extends Omit<InputProps, "onSelect" | "value">,
+  extends Omit<InputProps, "onSelect" | "value" | "defaultValue" | "onChange" | "onValueChange">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
+  /** The picked option's value (an array with `multiple`), controlled. Leave
+   *  it out to let the Select keep its own, starting from `defaultValue`. */
   value?: string | string[];
+  /** The starting value of an uncontrolled Select (no `value`). */
+  defaultValue?: string | string[];
+  /** Receives the new value after each pick: the whole array with `multiple`. */
+  onValueChange?: (value: string | string[]) => void;
+  /** Whether the list is open, controlled. */
+  open?: boolean;
+  /** Whether the list starts open, uncontrolled (no `open`). */
+  defaultOpen?: boolean;
+  /** Receives every open and close the Select makes. */
+  onOpenChange?: (open: boolean) => void;
   emptyState?: ReactNode;
-  onSelect?: (value: string | string[]) => void;
   placement?: Placement;
   searchable?: boolean;
   className?: string;
@@ -175,8 +187,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       options,
-      value = "",
-      onSelect,
+      value,
+      defaultValue,
+      onValueChange,
+      open,
+      defaultOpen = false,
+      onOpenChange,
       searchable = false,
       emptyState = "No results",
       minHeight,
@@ -205,14 +221,16 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
      */
     const [isFocused, setIsFocused] = useState(false);
 
-    const [internalValue, setInternalValue] = useState(multiple ? [] : value);
-
-    useEffect(() => {
-      if (value !== undefined) {
-        setInternalValue(value);
-      }
-    }, [value]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [currentValue, setValue] = useControllableState<string | string[]>({
+      value,
+      defaultValue: defaultValue ?? (multiple ? [] : ""),
+      onChange: onValueChange,
+    });
+    const [isDropdownOpen, setIsDropdownOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
     const searchInputId = useId();
     const baseId = useId();
     const listboxId = `${baseId}-listbox`;
@@ -275,7 +293,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         }
         setIsDropdownOpen(open);
       },
-      [expectReturningFocus],
+      [expectReturningFocus, setIsDropdownOpen],
     );
 
     const handleFocus = () => {
@@ -334,11 +352,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
         const newValues = currentValues.includes(value)
           ? currentValues.filter((v) => v !== value)
           : [...currentValues, value];
-        setInternalValue(newValues);
-        onSelect?.(newValues);
+        setValue(newValues);
       } else {
-        setInternalValue(value);
-        onSelect?.(value);
+        setValue(value);
         setOpen(false);
       }
     };
@@ -356,7 +372,6 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       searchRef.current?.focus();
     };
 
-    const currentValue = value !== undefined ? value : internalValue;
     const selectedOption = options.find((opt) => opt.value === currentValue) || null;
 
     // For multiple mode, get display text

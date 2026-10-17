@@ -44,11 +44,50 @@ const TRANSFORMS = {
  * Merged into TRANSFORMS per component.
  */
 const VALUE_CONTRACT_FIELDS = {
-  // C1/C2: text-like fields and pickers.
+  // C1/C2: text-like fields and pickers. `onChange` on these is the native
+  // event of the real <input> in 3.0 (NumberInput, ColorInput, TagInput's text
+  // field, DateInput), or no longer accepted (DateRangeInput and the pickers).
+  NumberInput: { onChange: "onValueChange" },
+  ColorInput: { onChange: "onValueChange" },
+  TagInput: { onChange: "onValueChange" },
+  DateInput: { onChange: "onValueChange" },
+  DateRangeInput: { onChange: "onValueChange" },
+  DateRangePicker: { onChange: "onValueChange" },
+  // `defaultDate` was declared and never read in 2.x; `defaultValue` works.
+  DatePicker: { onChange: "onValueChange", defaultDate: "defaultValue" },
+  // `onSelect` stays the action on menus (DropdownWrapper, ContextMenu).
+  Select: { onSelect: "onValueChange" },
 };
 
 const VALUE_CONTRACT_CONTROLS = {
   // C3/C4: toggles, groups, disclosure.
+  // C3: `onToggle(checked)` → `onCheckedChange(checked)`; `onChange` is now
+  // the hidden `<input>`'s native event.
+  Checkbox: { onToggle: "onCheckedChange" },
+  RadioButton: { onToggle: "onCheckedChange" },
+  Switch: { onToggle: "onCheckedChange" },
+  // Docs-site wrapper that forwards its props to Switch.
+  ClientSwitch: { onToggle: "onCheckedChange" },
+  // Value handlers: `onChange(value)` → `onValueChange(value)`.
+  RadioGroup: { onChange: "onValueChange" },
+  SegmentedControl: { onChange: "onValueChange" },
+  Tabs: { onChange: "onValueChange" },
+  Slider: { onChange: "onValueChange" },
+  RangeSlider: { onChange: "onValueChange" },
+  ThemeSwitcher: { onChange: "onValueChange" },
+  StylePanel: { onChange: "onValueChange" },
+  "StylePanel.Root": { onChange: "onValueChange" },
+  Pagination: { onChange: "onPageChange" },
+  Scrubber: { onChange: "onValueChange", onSelect: "onSelectedChange" },
+  // C4: `onToggle()` → `onOpenChange(open)`. Flagged in FLAGGED as well.
+  Accordion: { onToggle: "onOpenChange" },
+  NavGroup: { onToggle: "onOpenChange" },
+  // The `default*` spelling of an uncontrolled starting state.
+  RevealFx: { revealedByDefault: "defaultRevealed" },
+  Carousel: { revealedByDefault: "defaultRevealed" },
+  // A field's height is `size` everywhere else.
+  Kbar: { inputSize: "size" },
+  KbarContent: { inputSize: "size" },
 };
 
 for (const table of [VALUE_CONTRACT_FIELDS, VALUE_CONTRACT_CONTROLS]) {
@@ -61,6 +100,24 @@ for (const table of [VALUE_CONTRACT_FIELDS, VALUE_CONTRACT_CONTROLS]) {
  */
 const FLAGGED = {
   // C: entries appended by the value-contract passes.
+  DatePicker: {
+    open:
+      "was an autofocus hint, not visibility: it re-focuses the grid each time it turns true. " +
+      "Keep it only alongside autoFocus for a picker you open yourself; otherwise remove it",
+  },
+  // C4: renamed too, but the handler now receives the next state, and
+  // `open` controls the accordion whether or not a handler is passed.
+  Accordion: {
+    onToggle:
+      "renamed to onOpenChange, which receives the next open state (a zero-argument toggle still works)",
+    open:
+      "now controls the accordion whenever it is set; if it only gave the starting state " +
+      "(no onToggle/onOpenChange beside it), use defaultOpen",
+  },
+  NavGroup: {
+    onToggle:
+      "renamed to onOpenChange, which receives the next open state (a zero-argument toggle still works)",
+  },
 };
 
 /** The `{…}` contents of an attribute value, or the quoted string as written. */

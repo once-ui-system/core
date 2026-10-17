@@ -36,7 +36,7 @@ export default function DatePickerCheck() {
           width={24}
           data-testid="standalone"
         >
-          <DatePicker value={standalone} onChange={setStandalone} />
+          <DatePicker value={standalone} onValueChange={setStandalone} />
         </Column>
       </Column>
 
@@ -46,7 +46,7 @@ export default function DatePickerCheck() {
           id="datepicker-check-input"
           label="Date"
           value={nested}
-          onChange={setNested}
+          onValueChange={setNested}
           data-testid="nested-input"
         />
       </Column>

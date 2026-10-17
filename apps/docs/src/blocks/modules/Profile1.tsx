@@ -68,7 +68,7 @@ export const Profile1 = () => {
                 value: "about",
               },
             ]}
-            onChange={handleToggle}
+            onValueChange={handleToggle}
           />
           {view === "posts" && (
             <Grid maxWidth="m" columns={3} gap="8" marginTop="40">

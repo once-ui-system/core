@@ -25,9 +25,14 @@ const DEFAULT_LABELS: Required<ColorInputLabels> = {
   opacity: "Opacity",
 };
 
-interface ColorInputProps extends Omit<InputProps, "onChange" | "value"> {
-  value: string;
-  onChange: (value: string) => void;
+interface ColorInputProps extends Omit<InputProps, "value" | "defaultValue" | "onValueChange"> {
+  /** The colour, controlled: a hex, or an `rgba()` with `supportAlpha`. Leave
+   *  it out to let the field keep its own, starting from `defaultValue`. */
+  value?: string;
+  /** The starting colour of an uncontrolled ColorInput (no `value`). */
+  defaultValue?: string;
+  /** Receives the new colour after a pick, an opacity change or a clear (`""`). */
+  onValueChange?: (value: string) => void;
   supportAlpha?: boolean;
   /** The clear and opacity controls' text, for a translated interface. */
   labels?: ColorInputLabels;
@@ -50,18 +55,36 @@ const rgbaToHex = (rgba: string): { hex: string; alpha: number } => {
   return { hex, alpha: Math.round(a) };
 };
 /** The hex colour and the opacity (0–100) a `value` holds. */
-const parseValue = (value: string): { hex: string; alpha: number } =>
-  value.startsWith("rgba") ? rgbaToHex(value) : { hex: value, alpha: 100 };
+const parseValue = (value: string | undefined): { hex: string; alpha: number } =>
+  !value
+    ? { hex: "", alpha: 100 }
+    : value.startsWith("rgba")
+      ? rgbaToHex(value)
+      : { hex: value, alpha: 100 };
 const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
-  ({ label, id, value, onChange, supportAlpha = false, labels, ...props }, ref) => {
+  (
+    {
+      label,
+      id,
+      value,
+      defaultValue,
+      onValueChange,
+      onChange,
+      supportAlpha = false,
+      labels,
+      ...props
+    },
+    ref,
+  ) => {
     const text = mergeLabels(DEFAULT_LABELS, labels);
     const colorInputRef = useRef<HTMLInputElement>(null);
     // The input needs its own ref to open the picker from the swatch; this
     // hands the same element to the caller's ref.
     useImperativeHandle(ref, () => colorInputRef.current as HTMLInputElement);
     const [isAlphaDropdownOpen, setIsAlphaDropdownOpen] = useState(false);
-    const [hexValue, setHexValue] = useState(() => parseValue(value).hex);
-    const [alpha, setAlpha] = useState(() => parseValue(value).alpha);
+    // Uncontrolled, these are the colour itself, from `defaultValue`.
+    const [hexValue, setHexValue] = useState(() => parseValue(value ?? defaultValue).hex);
+    const [alpha, setAlpha] = useState(() => parseValue(value ?? defaultValue).alpha);
 
     /**
      * Follow `value` after mount. It used to seed the state once and never
@@ -88,29 +111,31 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
       (e: React.ChangeEvent<HTMLInputElement>) => {
         const newHex = e.target.value;
         setHexValue(newHex);
+        // The native event first, so a form library's `register()` hears it.
+        onChange?.(e);
         if (supportAlpha) {
           const rgbaValue = hexToRgba(newHex, alpha);
-          onChange(rgbaValue);
+          onValueChange?.(rgbaValue);
         } else {
-          onChange(newHex);
+          onValueChange?.(newHex);
         }
       },
-      [alpha, supportAlpha, onChange],
+      [alpha, supportAlpha, onChange, onValueChange],
     );
     const handleAlphaChange = useCallback(
       (newAlpha: number) => {
         setAlpha(newAlpha);
         if (hexValue) {
           const rgbaValue = hexToRgba(hexValue, newAlpha);
-          onChange(rgbaValue);
+          onValueChange?.(rgbaValue);
         }
       },
-      [hexValue, onChange],
+      [hexValue, onValueChange],
     );
     const handleReset = () => {
       setHexValue("");
       setAlpha(100);
-      onChange("");
+      onValueChange?.("");
     };
     return (
       <Input
@@ -205,7 +230,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                         {" "}
                         <Slider
                           value={alpha}
-                          onChange={handleAlphaChange}
+                          onValueChange={handleAlphaChange}
                           min={0}
                           max={100}
                           step={1}

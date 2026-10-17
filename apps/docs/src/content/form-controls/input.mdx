@@ -393,7 +393,7 @@ takes keyboard input, however that field was focused.
 Four components build on `Input`. They keep everything on this page and add one
 thing each, so they live on pages of their own:
 
-- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onChange`
+- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onValueChange`
 - [OTPInput](/form-controls/otpInput) — one box per digit, with paste and an `onComplete`
 - [PasswordInput](/form-controls/passwordInput) — a reveal toggle
 - [TagInput](/form-controls/tagInput) — an array of removable chips instead of a string
@@ -417,7 +417,8 @@ thing each, so they live on pages of their own:
     variant: "\"ghost\" drops the border and background, for a field inside a surface that already has them.",
     characterCount: "Show how much has been typed, against maxLength.",
     cursor: "Set \"interactive\" for a read-only field that opens something on click.",
-    validate: "Run on a debounce; return a message to show, or null to clear.",
+    onValueChange: "Called with the field's text after every change, after the native onChange. Controlled only when value is set.",
+    validate: "Run on a debounce, controlled or not; return a message to show, or null to clear.",
     loading: "Show a spinner in the suffix while something resolves.",
     className: "",
     style: "",

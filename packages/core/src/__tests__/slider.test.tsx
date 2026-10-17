@@ -19,13 +19,13 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 
 const ControlledSlider = (props: Partial<React.ComponentProps<typeof Slider>>) => {
   const [value, setValue] = useState(20);
-  return <Slider aria-label="Volume" value={value} onChange={setValue} {...props} />;
+  return <Slider aria-label="Volume" value={value} onValueChange={setValue} {...props} />;
 };
 
 describe("Slider", () => {
   it("renders a range input with the value, bounds and step", () => {
     render(
-      <Slider aria-label="Volume" value={30} onChange={vi.fn()} min={10} max={50} step={5} />,
+      <Slider aria-label="Volume" value={30} onValueChange={vi.fn()} min={10} max={50} step={5} />,
       {
         wrapper,
       },
@@ -39,23 +39,28 @@ describe("Slider", () => {
 
   it("reports the new value as a number", () => {
     const onChange = vi.fn();
-    render(<Slider aria-label="Volume" value={30} onChange={onChange} step={0.5} />, { wrapper });
+    render(<Slider aria-label="Volume" value={30} onValueChange={onChange} step={0.5} />, {
+      wrapper,
+    });
     fireEvent.change(screen.getByRole("slider"), { target: { value: "42.5" } });
     expect(onChange).toHaveBeenCalledWith(42.5);
   });
 
   it("is controlled: the input shows `value`, not the last change, until the parent updates it", () => {
     const onChange = vi.fn();
-    const { rerender } = render(<Slider aria-label="Volume" value={30} onChange={onChange} />, {
-      wrapper,
-    });
+    const { rerender } = render(
+      <Slider aria-label="Volume" value={30} onValueChange={onChange} />,
+      {
+        wrapper,
+      },
+    );
     const slider = screen.getByRole("slider") as HTMLInputElement;
 
     fireEvent.change(slider, { target: { value: "80" } });
     expect(onChange).toHaveBeenCalledWith(80);
     expect(slider.value).toBe("30");
 
-    rerender(<Slider aria-label="Volume" value={80} onChange={onChange} />);
+    rerender(<Slider aria-label="Volume" value={80} onValueChange={onChange} />);
     expect(slider.value).toBe("80");
   });
 
@@ -68,7 +73,7 @@ describe("Slider", () => {
 
   it("draws the fill and thumb at the value's position between min and max", () => {
     const { container } = render(
-      <Slider aria-label="Volume" value={75} onChange={vi.fn()} min={50} max={150} />,
+      <Slider aria-label="Volume" value={75} onValueChange={vi.fn()} min={50} max={150} />,
       { wrapper },
     );
     const fill = container.querySelector<HTMLElement>("[style*='width: 25%']");
@@ -78,21 +83,26 @@ describe("Slider", () => {
   });
 
   it("shows the label and, with showValue, the current value", () => {
-    render(<Slider aria-label="Volume" label="Volume" showValue value={12} onChange={vi.fn()} />, {
-      wrapper,
-    });
+    render(
+      <Slider aria-label="Volume" label="Volume" showValue value={12} onValueChange={vi.fn()} />,
+      {
+        wrapper,
+      },
+    );
     expect(screen.getByText("Volume")).toBeInTheDocument();
     expect(screen.getByText("12")).toBeInTheDocument();
   });
 
   it("disables the input", () => {
-    render(<Slider aria-label="Volume" value={30} onChange={vi.fn()} disabled />, { wrapper });
+    render(<Slider aria-label="Volume" value={30} onValueChange={vi.fn()} disabled />, { wrapper });
     expect(screen.getByRole("slider")).toBeDisabled();
   });
 
   it("forwards its ref to the input", () => {
     const ref = createRef<HTMLInputElement>();
-    render(<Slider aria-label="Volume" ref={ref} value={30} onChange={vi.fn()} />, { wrapper });
+    render(<Slider aria-label="Volume" ref={ref} value={30} onValueChange={vi.fn()} />, {
+      wrapper,
+    });
     expect(ref.current).toBe(screen.getByRole("slider"));
   });
 
@@ -104,7 +114,7 @@ describe("Slider", () => {
   // `label` used to render as plain text beside the input, so a Slider given
   // only `label` had no accessible name (axe: "label").
   it("names the input with its `label`", async () => {
-    const { container } = render(<Slider label="Volume" value={30} onChange={vi.fn()} />, {
+    const { container } = render(<Slider label="Volume" value={30} onValueChange={vi.fn()} />, {
       wrapper,
     });
     expect(screen.getByRole("slider", { name: "Volume" })).toBeInTheDocument();
@@ -112,9 +122,12 @@ describe("Slider", () => {
   });
 
   it("lets an aria-label win over the visible label", () => {
-    render(<Slider label="Volume" aria-label="Master volume" value={30} onChange={vi.fn()} />, {
-      wrapper,
-    });
+    render(
+      <Slider label="Volume" aria-label="Master volume" value={30} onValueChange={vi.fn()} />,
+      {
+        wrapper,
+      },
+    );
     expect(screen.getByRole("slider", { name: "Master volume" })).toBeInTheDocument();
   });
 });
@@ -127,7 +140,7 @@ describe("Slider", () => {
 describe("Slider: uncontrolled", () => {
   it("starts at defaultValue and follows the input on its own", () => {
     const onChange = vi.fn();
-    render(<Slider aria-label="Volume" defaultValue={30} onChange={onChange} showValue />, {
+    render(<Slider aria-label="Volume" defaultValue={30} onValueChange={onChange} showValue />, {
       wrapper,
     });
     const slider = screen.getByRole("slider") as HTMLInputElement;
@@ -156,7 +169,7 @@ describe("Slider: uncontrolled", () => {
 
   it("lets `value` win over defaultValue, so a controlled slider stays controlled", () => {
     const onChange = vi.fn();
-    render(<Slider aria-label="Volume" value={40} defaultValue={10} onChange={onChange} />, {
+    render(<Slider aria-label="Volume" value={40} defaultValue={10} onValueChange={onChange} />, {
       wrapper,
     });
     const slider = screen.getByRole("slider") as HTMLInputElement;

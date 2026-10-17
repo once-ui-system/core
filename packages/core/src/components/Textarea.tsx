@@ -52,6 +52,10 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   focusRing?: boolean;
   characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
+  /** Receives the field's text on every change, after the native `onChange`.
+   *  The field is controlled only when `value` is set. */
+  onValueChange?: (value: string) => void;
+  /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   disabled?: boolean;
   /** How many columns to occupy inside a `Form` grid. `Form` reads this off
@@ -86,6 +90,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       onFocus,
       onBlur,
       onChange,
+      onValueChange,
       onAnimationStart,
       style,
       ...props
@@ -102,7 +107,16 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    /** The text the field holds, controlled or not: see Input. */
+    const controlled = props.value !== undefined;
+    const [ownText, setOwnText] = useState(() =>
+      props.defaultValue === undefined ? "" : String(props.defaultValue),
+    );
+    const text = controlled ? String(props.value) : ownText;
+    const debouncedValue = useDebounce(text, 1000);
+    // What the error styling compares against, as before: the debounced
+    // `value` when controlled, nothing when not.
+    const styledValue = controlled ? debouncedValue : undefined;
 
     const adjustHeight = () => {
       if (textareaRef.current) {
@@ -117,7 +131,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       if (lines === "auto") {
         adjustHeight();
       }
+      if (!controlled) setOwnText(event.target.value);
       if (onChange) onChange(event);
+      onValueChange?.(event.target.value);
     };
 
     const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
@@ -202,7 +218,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: displayError && debouncedValue !== "",
+          [styles.error]: displayError && styledValue !== "",
         })}
       >
         <Row
@@ -280,14 +296,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 <Text
                   variant="label-default-s"
                   onBackground={
-                    props.maxLength - String(props.value || "").length <= 5
+                    props.maxLength - text.length <= 5
                       ? "danger-weak"
-                      : props.maxLength - String(props.value || "").length <= 10
+                      : props.maxLength - text.length <= 10
                         ? "warning-weak"
                         : "neutral-weak"
                   }
                 >
-                  {props.maxLength - String(props.value || "").length}
+                  {props.maxLength - text.length}
                 </Text>
               </Row>
             )}

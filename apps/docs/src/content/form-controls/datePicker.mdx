@@ -21,7 +21,7 @@ The DatePicker component provides an interactive calendar interface for selectin
       code:
 `<DatePicker 
     value={selectedDate}
-    onChange={handleDateChange}
+    onValueChange={handleDateChange}
 />`,
       language: "tsx",
       label: "DatePicker"
@@ -42,7 +42,7 @@ The DatePicker component provides an interactive calendar interface for selectin
       code:
 `<DatePicker 
     value={dateTime}
-    onChange={handleDateTimeChange}
+    onValueChange={handleDateTimeChange}
     timePicker
 />`,
       language: "tsx",
@@ -68,7 +68,7 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
       code:
 `<DatePicker
     value={selectedDate}
-    onChange={setSelectedDate}
+    onValueChange={setSelectedDate}
     timePicker
     locale="de"
     labels={{
@@ -92,6 +92,11 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
 <PropsTable
   component="DatePicker"
   describe={{
+    value: "The date, controlled. Leave it out and the picker keeps its own.",
+    defaultValue: "The starting date when `value` is left out. Replaces defaultDate, which 2.x never read.",
+    onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x.",
+    autoFocus: "Move focus onto the selected day as the picker appears, for a picker that has just been opened.",
+    open: "With autoFocus, focus moves in again each time this turns true. It does not show or hide the picker.",
     currentMonth: "Current month",
     currentYear: "Current year",
     locale: "Locale for month and weekday names and the time picker's time, such as \"de\". English when left out.",

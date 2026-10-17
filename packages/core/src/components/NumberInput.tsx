@@ -9,9 +9,17 @@ import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
 
 interface NumberInputProps
-  extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {
+  extends Omit<
+    React.ComponentProps<typeof Input>,
+    "type" | "value" | "defaultValue" | "onValueChange"
+  > {
+  /** The number, controlled. Leave it out to let the field keep its own,
+   *  starting from `defaultValue`. */
   value?: number;
-  onChange?: (value: number) => void;
+  /** The starting number of an uncontrolled NumberInput (no `value`). */
+  defaultValue?: number;
+  /** Receives the number on every change that reads as one, and on each step. */
+  onValueChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -26,8 +34,13 @@ const shows = (text: string, value: number | undefined) =>
   value === undefined ? text === "" : parseFloat(text) === value;
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  ({ value, onChange, min, max, step = 1, padStart, ...props }, ref) => {
-    const [localValue, setLocalValue] = useState<string>(() => format(value, padStart));
+  (
+    { value, defaultValue, onValueChange, onChange, min, max, step = 1, padStart, ...props },
+    ref,
+  ) => {
+    const [localValue, setLocalValue] = useState<string>(() =>
+      format(value ?? defaultValue, padStart),
+    );
 
     /**
      * Follow `value` after mount. The text used to be seeded from it once and
@@ -54,16 +67,18 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = e.target.value;
       setLocalValue(newValue);
+      // The native event first, so a form library's `register()` hears it.
+      onChange?.(e);
 
       const numValue = parseFloat(newValue);
-      if (!isNaN(numValue) && onChange) {
-        onChange(numValue);
+      if (!isNaN(numValue)) {
+        onValueChange?.(numValue);
       }
     };
 
     const updateValue = (newValue: number) => {
       setLocalValue(format(newValue, padStart));
-      onChange?.(newValue);
+      onValueChange?.(newValue);
     };
 
     const increment = () => {

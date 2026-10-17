@@ -78,7 +78,7 @@ export const Productivity2 = () => {
           </Text>
         </Column>
         <Row gap="12" vertical="center">
-          <SegmentedControl buttons={views} value={view} onChange={setView} />
+          <SegmentedControl buttons={views} value={view} onValueChange={setView} />
           <IconButton data-border="rounded" variant="ghost" tooltip="Notifications" icon="bell" />
         </Row>
       </Row>
@@ -173,7 +173,7 @@ export const Productivity2 = () => {
                 </Row>
                 <Checkbox
                   checked={checked[index]}
-                  onToggle={() => setChecked((prev) => ({ ...prev, [index]: !prev[index] }))}
+                  onCheckedChange={() => setChecked((prev) => ({ ...prev, [index]: !prev[index] }))}
                 />
                 <Column fillWidth gap="4">
                   <Text

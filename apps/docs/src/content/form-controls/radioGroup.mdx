@@ -54,7 +54,7 @@ Without a visible `label`, name the group with `aria-label`.
 
 ## Controlled
 
-Pass `value` and `onChange` when something else owns the choice. `onChange` gets the
+Pass `value` and `onValueChange` when something else owns the choice. `onValueChange` gets the
 new option's `value`, and is not called for the option already selected.
 
 <CodeBlock
@@ -66,7 +66,7 @@ new option's `value`, and is not called for the option already selected.
       code:
 `const [plan, setPlan] = useState("annual");
 
-<RadioGroup label="Plan" name="plan" options={plans} value={plan} onChange={setPlan} />`,
+<RadioGroup label="Plan" name="plan" options={plans} value={plan} onValueChange={setPlan} />`,
       language: "tsx",
       label: "Controlled"
     }
@@ -153,7 +153,7 @@ on the group disables every radio, and a disabled group submits nothing.
 
 For a layout `options` cannot describe, such as radio cards in a grid, put
 `RadioButton`s with a `value` anywhere inside the group. The group owns their
-checked state, `name`, `disabled` and focus, and a RadioButton's own `onToggle`
+checked state, `name`, `disabled` and focus, and a RadioButton's own `onCheckedChange`
 still runs when it is picked. `options`, when given too, render first.
 
 <CodeBlock
@@ -221,9 +221,9 @@ and moving through it is how you make it.
   component="RadioGroup"
   describe={{
     options: "One RadioButton per option, in order.",
-    value: "The selected option's value, when the host owns the state. Pair with onChange.",
+    value: "The selected option's value, when the host owns the state. Pair with onValueChange.",
     defaultValue: "The option selected first when the group keeps its own state.",
-    onChange: "Called with the newly selected value.",
+    onValueChange: "Called with the newly selected value.",
     name: "Submitted with the selected value inside a form.",
     label: "Visible label that names the group.",
     description: "Helper text under the label, read out as the group's description.",
@@ -238,7 +238,7 @@ and moving through it is how you make it.
 <PropsTable
   label="Field"
   content={[
-    ["value", "string", "-", "What value and onChange carry, and what a form submits.", true],
+    ["value", "string", "-", "What value and onValueChange carry, and what a form submits.", true],
     ["label", "React.ReactNode", "-", "The radio's label.", true],
     ["description", "React.ReactNode", "-", "Helper text under the label."],
     ["disabled", "boolean", "-", "Visible, not selectable, skipped by the arrow keys."],

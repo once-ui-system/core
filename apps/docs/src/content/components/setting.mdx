@@ -26,10 +26,10 @@ exist yet.
     {
       code:
 `<Setting label="Autoplay" description="Start playing on load">
-    <Switch checked={autoplay} onToggle={toggleAutoplay} />
+    <Switch checked={autoplay} onCheckedChange={toggleAutoplay} />
 </Setting>
 <Setting label="Loop" info="Restarts from the beginning when it reaches the end.">
-    <Switch checked={loop} onToggle={toggleLoop} />
+    <Switch checked={loop} onCheckedChange={toggleLoop} />
 </Setting>`,
       language: "tsx",
       label: "Setting"
@@ -87,14 +87,14 @@ whatever the group is nested in.
       code:
 `<SettingGroup
   label="Watermark"
-  control={<Switch checked={enabled} onToggle={toggleEnabled} />}
+  control={<Switch checked={enabled} onCheckedChange={toggleEnabled} />}
   open={enabled}
 >
     <Setting label="Opacity">
-      <Slider value={opacity} onChange={setOpacity} />
+      <Slider value={opacity} onValueChange={setOpacity} />
     </Setting>
     <Setting label="Position">
-      <SegmentedControl value={position} onChange={setPosition} buttons={positions} />
+      <SegmentedControl value={position} onValueChange={setPosition} buttons={positions} />
     </Setting>
 </SettingGroup>`,
       language: "tsx",
@@ -121,8 +121,8 @@ two rows that read as unrelated settings.
   label="Tilt"
   info="Rotates the frame in 3D. Both axes are degrees."
   axes={[
-    { label: "X", control: <Slider value={x} min={-45} max={45} onChange={setX} /> },
-    { label: "Y", control: <Slider value={y} min={-45} max={45} onChange={setY} /> },
+    { label: "X", control: <Slider value={x} min={-45} max={45} onValueChange={setX} /> },
+    { label: "Y", control: <Slider value={y} min={-45} max={45} onValueChange={setY} /> },
   ]}
 />`,
       language: "tsx",

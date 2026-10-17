@@ -30,13 +30,13 @@ export const Cookie3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
       </Row>
 
       <Row gap="16" vertical="center" wrap fillWidth>
-        <Switch checked={analytics} onToggle={() => setAnalytics(!analytics)} label="Analytics" />
+        <Switch checked={analytics} onCheckedChange={() => setAnalytics(!analytics)} label="Analytics" />
         <Line vert background="neutral-alpha-weak" height="20" s={{ hide: true }} />
-        <Switch checked={marketing} onToggle={() => setMarketing(!marketing)} label="Marketing" />
+        <Switch checked={marketing} onCheckedChange={() => setMarketing(!marketing)} label="Marketing" />
         <Line vert background="neutral-alpha-weak" height="20" s={{ hide: true }} />
         <Switch
           checked={functional}
-          onToggle={() => setFunctional(!functional)}
+          onCheckedChange={() => setFunctional(!functional)}
           label="Functional"
         />
       </Row>

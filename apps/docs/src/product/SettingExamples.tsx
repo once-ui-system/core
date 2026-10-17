@@ -19,10 +19,10 @@ export function SettingBasicExample() {
   return (
     <Column fillWidth gap="8" maxWidth={32}>
       <Setting label="Autoplay" description="Start playing on load">
-        <Switch checked={autoplay} onToggle={() => setAutoplay(!autoplay)} />
+        <Switch checked={autoplay} onCheckedChange={() => setAutoplay(!autoplay)} />
       </Setting>
       <Setting label="Loop" info="Restarts from the beginning when it reaches the end.">
-        <Switch checked={loop} onToggle={() => setLoop(!loop)} />
+        <Switch checked={loop} onCheckedChange={() => setLoop(!loop)} />
       </Setting>
     </Column>
   );
@@ -37,11 +37,11 @@ export function SettingGroupExample() {
     <Column fillWidth gap="8" maxWidth={32}>
       <SettingGroup
         label="Watermark"
-        control={<Switch checked={enabled} onToggle={() => setEnabled(!enabled)} />}
+        control={<Switch checked={enabled} onCheckedChange={() => setEnabled(!enabled)} />}
         open={enabled}
       >
         <Setting label="Opacity">
-          <Slider value={opacity} min={0} max={100} onChange={setOpacity} />
+          <Slider value={opacity} min={0} max={100} onValueChange={setOpacity} />
           <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
             {opacity}%
           </Text>
@@ -50,7 +50,7 @@ export function SettingGroupExample() {
           <SegmentedControl
             fillWidth
             value={position}
-            onChange={setPosition}
+            onValueChange={setPosition}
             buttons={[
               { value: "bottom-left", label: "Left" },
               { value: "bottom-right", label: "Right" },
@@ -78,7 +78,7 @@ export function SettingAxesExample() {
                 value={tilt.x}
                 min={-45}
                 max={45}
-                onChange={(x) => setTilt((t) => ({ ...t, x }))}
+                onValueChange={(x) => setTilt((t) => ({ ...t, x }))}
               />
             ),
           },
@@ -89,7 +89,7 @@ export function SettingAxesExample() {
                 value={tilt.y}
                 min={-45}
                 max={45}
-                onChange={(y) => setTilt((t) => ({ ...t, y }))}
+                onValueChange={(y) => setTilt((t) => ({ ...t, y }))}
               />
             ),
           },

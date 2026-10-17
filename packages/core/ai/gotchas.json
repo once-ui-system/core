@@ -61,11 +61,11 @@
     "components": ["Toast", "Toaster"]
   },
   "NumberInput.value": {
-    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.",
+    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onValueChange; do not remount it with a key to push a new value in.",
     "components": ["NumberInput"]
   },
   "Select.closed": {
-    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.",
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from DropdownWrapper and Options to get this.",
     "components": ["Select"]
   },
   "Button.trigger": {
@@ -97,7 +97,7 @@
     "components": ["Background"]
   },
   "api.renamed": {
-    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
+    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
     "components": [
       "SegmentedControl",
       "Dialog",
@@ -174,7 +174,7 @@
     "components": ["Column", "Input", "Button"]
   },
   "Checkbox.checked": {
-    "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onToggle(checked: boolean). isChecked and isIndeterminate were 1.x; the 2.x props are checked and indeterminate.",
+    "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onCheckedChange(checked: boolean); onChange is the native event of their input. onToggle was 2.x; isChecked and isIndeterminate were 1.x.",
     "components": ["Checkbox", "Switch", "RadioButton"]
   },
   "RevealFx.primaryContent": {

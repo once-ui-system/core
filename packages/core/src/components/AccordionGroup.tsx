@@ -10,6 +10,8 @@ import { Line } from "./Line";
 export type AccordionItem = {
   title: React.ReactNode;
   content: React.ReactNode;
+  /** Starts open. With `autoCollapse`, only the first such item does. */
+  defaultOpen?: boolean;
 };
 
 export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
@@ -22,23 +24,16 @@ export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
 
 const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
   ({ items, size = "m", style, className, autoCollapse = true, ...rest }, ref) => {
-    const [openAccordion, setOpenAccordion] = useState<number | null>(null);
+    // With autoCollapse the group owns which one item is open; without it,
+    // each accordion keeps its own state from its item's `defaultOpen`.
+    const [openAccordion, setOpenAccordion] = useState<number | null>(() => {
+      const first = items?.findIndex((item) => item.defaultOpen) ?? -1;
+      return first === -1 ? null : first;
+    });
 
-    const handleAccordionToggle = useCallback(
-      (index: number) => {
-        if (autoCollapse) {
-          // If clicking the same accordion, close it
-          if (openAccordion === index) {
-            setOpenAccordion(null);
-          } else {
-            // Otherwise, open the clicked accordion and close others
-            setOpenAccordion(index);
-          }
-        }
-        // If autoCollapse is false, let each accordion handle its own state
-      },
-      [autoCollapse, openAccordion],
-    );
+    const handleOpenChange = useCallback((index: number, open: boolean) => {
+      setOpenAccordion((current) => (open ? index : current === index ? null : current));
+    }, []);
 
     if (!items || items.length === 0) {
       return null;
@@ -74,8 +69,12 @@ const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
               <Accordion
                 title={item.title}
                 size={size}
-                open={autoCollapse ? openAccordion === index : undefined}
-                onToggle={() => handleAccordionToggle(index)}
+                {...(autoCollapse
+                  ? {
+                      open: openAccordion === index,
+                      onOpenChange: (open: boolean) => handleOpenChange(index, open),
+                    }
+                  : { defaultOpen: item.defaultOpen })}
                 headerProps={radiusStyle ? { style: radiusStyle } : undefined}
               >
                 {item.content}

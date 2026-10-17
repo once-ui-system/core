@@ -248,7 +248,7 @@ describe("StylePanel labels", () => {
 
   it("reach the rows and groups of a composed panel", () => {
     render(
-      <StylePanel.Root labels={de} value={{ brand: "blue" }} onChange={vi.fn()}>
+      <StylePanel.Root labels={de} value={{ brand: "blue" }} onValueChange={vi.fn()}>
         <StylePanel.Group title="Meine Auswahl">
           <StylePanel.Brand />
           <StylePanel.Solid />

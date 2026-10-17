@@ -100,7 +100,7 @@ export function SettingsExample() {
                   id="timezone"
                   label="Timezone"
                   value={timezone}
-                  onSelect={(value) => setTimezone(value as string)}
+                  onValueChange={(value) => setTimezone(value as string)}
                   options={[
                     { value: "utc", label: "UTC" },
                     { value: "cet", label: "Central European Time" },
@@ -124,7 +124,7 @@ export function SettingsExample() {
             <Setting label="Product updates" description="Release notes and changelog">
               <Switch
                 checked={updates}
-                onToggle={() => setUpdates(!updates)}
+                onCheckedChange={() => setUpdates(!updates)}
                 aria-label="Product updates"
               />
             </Setting>
@@ -134,7 +134,7 @@ export function SettingsExample() {
               control={
                 <Switch
                   checked={digest}
-                  onToggle={() => setDigest(!digest)}
+                  onCheckedChange={() => setDigest(!digest)}
                   aria-label="Weekly digest"
                 />
               }
@@ -146,7 +146,7 @@ export function SettingsExample() {
                   min={0}
                   max={23}
                   value={digestHour}
-                  onChange={setDigestHour}
+                  onValueChange={setDigestHour}
                 />
               </Setting>
             </SettingGroup>

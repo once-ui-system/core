@@ -115,7 +115,7 @@ export function PricingExample() {
             </Heading>
             <SegmentedControl
               value={billing}
-              onChange={(value) => setBilling(value as Billing)}
+              onValueChange={(value) => setBilling(value as Billing)}
               buttons={[
                 { value: "monthly", label: "Monthly" },
                 { value: "yearly", label: "Yearly −20%" },

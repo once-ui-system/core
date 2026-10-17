@@ -66,7 +66,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
               Help us understand usage patterns
             </Text>
           </Column>
-          <Switch checked={analytics} onToggle={() => setAnalytics(!analytics)} />
+          <Switch checked={analytics} onCheckedChange={() => setAnalytics(!analytics)} />
         </Row>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
@@ -75,7 +75,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
               Personalized offers and updates
             </Text>
           </Column>
-          <Switch checked={marketing} onToggle={() => setMarketing(!marketing)} />
+          <Switch checked={marketing} onCheckedChange={() => setMarketing(!marketing)} />
         </Row>
       </Column>
 

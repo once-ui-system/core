@@ -36,7 +36,7 @@ export interface StylePanelProps extends StylePanelRootProps {
    * inherited prop is invisible to anything reading the generated spec.
    */
   value?: StylePanelRootProps["value"];
-  onChange?: StylePanelRootProps["onChange"];
+  onValueChange?: StylePanelRootProps["onValueChange"];
   /**
    * Every string the panel shows or announces, over the English defaults.
    * Restated for the same reason; it names its type rather than indexing it,
@@ -63,7 +63,7 @@ const visible = (section: { section?: boolean } | undefined) => section?.section
  * It is a plain composition of its own parts, so a host that needs a different
  * arrangement — or only two of the sections — can drop this and compose
  * `StylePanel.Page`, `StylePanel.Brand` and the rest directly inside
- * `StylePanel.Root`. Pass `value` and `onChange` to take over the state, in
+ * `StylePanel.Root`. Pass `value` and `onValueChange` to take over the state, in
  * which case nothing is written to ThemeProvider or storage, and `labels` to
  * translate it.
  */

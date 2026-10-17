@@ -27,7 +27,12 @@ const wrap = ({ children }: { children: React.ReactNode }) => (
 describe("DateInput time picker", () => {
   const openToTime = async (user: ReturnType<typeof userEvent.setup>, onChange = vi.fn()) => {
     render(
-      <DateInput id="when" timePicker value={new Date(2026, 7, 15, 21, 31)} onChange={onChange} />,
+      <DateInput
+        id="when"
+        timePicker
+        value={new Date(2026, 7, 15, 21, 31)}
+        onValueChange={onChange}
+      />,
       { wrapper: wrap },
     );
     // The field is a combobox that opens the picker (it was a "textbox").
@@ -71,7 +76,7 @@ describe("DateInput time picker", () => {
 describe("DatePicker reveal and time header", () => {
   it("reveals the calendar in a fraction of a second", () => {
     const { container } = render(
-      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />,
+      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onValueChange={() => {}} />,
       { wrapper: wrap },
     );
     const reveal = Array.from(container.querySelectorAll<HTMLElement>("[style]")).find(
@@ -82,9 +87,12 @@ describe("DatePicker reveal and time header", () => {
   });
 
   it("shows the header time as 12-hour, not 24-hour with an AM/PM suffix", () => {
-    render(<DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onChange={() => {}} />, {
-      wrapper: wrap,
-    });
+    render(
+      <DatePicker timePicker value={new Date(2026, 3, 10, 13, 14)} onValueChange={() => {}} />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(screen.getByText("01:14 PM")).toBeInTheDocument();
     expect(screen.queryByText("13:14 PM")).toBeNull();
   });

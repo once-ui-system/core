@@ -70,15 +70,20 @@ const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
   pm: undefined,
 };
 
-export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
+export interface DatePickerProps
+  extends Omit<React.ComponentProps<typeof Flex>, "onChange" | "defaultValue"> {
+  /** The date, controlled. Leave it out to let the picker keep its own,
+   *  starting from `defaultValue`. */
   value?: Date;
-  onChange?: (date: Date) => void;
+  /** The starting date of an uncontrolled DatePicker (no `value`). */
+  defaultValue?: Date;
+  /** Receives the date picked, and each time edit with `timePicker`. */
+  onValueChange?: (date: Date) => void;
   minDate?: Date;
   maxDate?: Date;
   previousMonth?: boolean;
   nextMonth?: boolean;
   timePicker?: boolean;
-  defaultDate?: Date;
   defaultTime?: {
     hours: number;
     minutes: number;
@@ -148,13 +153,13 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   (
     {
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
       timePicker = false,
       previousMonth = true,
       nextMonth = true,
       minDate,
       maxDate,
-      defaultDate,
       defaultTime,
       size = "m",
       nested = false,
@@ -175,15 +180,28 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
     const today = new Date();
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+    /** Where the picker starts: `value`, else `defaultValue` (2.x's `defaultDate` was never read). */
+    const initialDate = value ?? defaultValue;
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
+    const initialTime =
+      defaultTime ??
+      (initialDate
+        ? { hours: initialDate.getHours(), minutes: initialDate.getMinutes() }
+        : undefined);
     const [selectedTime, setSelectedTime] = useState<
       | {
           hours: number;
           minutes: number;
         }
       | undefined
-    >(defaultTime);
-    const [isPM, setIsPM] = useState(defaultTime?.hours ? defaultTime.hours >= 12 : false);
+    >(initialTime);
+    const [isPM, setIsPM] = useState(initialTime?.hours ? initialTime.hours >= 12 : false);
+    /**
+     * Whether `value` has ever been set. Until it has, the picker is
+     * uncontrolled and keeps its own date; once it has, a `value` cleared
+     * from outside clears the selection, as it always did.
+     */
+    const hadValueRef = useRef(value !== undefined);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
@@ -207,12 +225,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [currentMonth, setCurrentMonth] = useState<number>(() =>
       monthIsControlled && propCurrentMonth !== undefined
         ? propCurrentMonth
-        : (value ?? today).getMonth(),
+        : (initialDate ?? today).getMonth(),
     );
     const [currentYear, setCurrentYear] = useState<number>(() =>
       monthIsControlled && propCurrentYear !== undefined
         ? propCurrentYear
-        : (value ?? today).getFullYear(),
+        : (initialDate ?? today).getFullYear(),
     );
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
@@ -274,6 +292,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     }, [isReady, value, isCalendarSynced, monthIsControlled]);
 
     useEffect(() => {
+      if (value === undefined && !hadValueRef.current) return;
+      hadValueRef.current = true;
       setSelectedDate(value);
       if (value) {
         setSelectedTime({
@@ -376,7 +396,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       if (timePicker) {
         handleTimeToggle(true);
       } else {
-        onChange?.(newDate);
+        onValueChange?.(newDate);
       }
     };
 
@@ -478,7 +498,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       const newDate = new Date(selectedDate);
       newDate.setHours(newTime.hours);
       newDate.setMinutes(minutes);
-      onChange?.(newDate);
+      onValueChange?.(newDate);
     };
 
     const isInRange = (date: Date) => {
@@ -1037,7 +1057,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   },
                 ]}
                 value={isPM ? "PM" : "AM"}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleTimeChange(
                     convert24to12(selectedTime?.hours ?? 0),
                     selectedTime?.minutes ?? 0,
@@ -1052,7 +1072,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   min={1}
                   max={12}
                   value={selectedTime?.hours ? convert24to12(selectedTime.hours) : 12}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     if (value >= 1 && value <= 12) {
                       handleTimeChange(value, selectedTime?.minutes ?? 0);
                     }
@@ -1067,7 +1087,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   max={59}
                   padStart={2}
                   value={selectedTime?.minutes ?? 0}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     if (value >= 0 && value <= 59) {
                       handleTimeChange(convert24to12(selectedTime?.hours ?? 0), value);
                     }

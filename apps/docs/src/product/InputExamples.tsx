@@ -110,7 +110,7 @@ export function ColorInputExample() {
       id="color-input-example"
       label="Brand Color"
       value={colorValue}
-      onChange={handleColorChange}
+      onValueChange={handleColorChange}
     />
   );
 }
@@ -128,7 +128,7 @@ export function ColorInputAlphaExample() {
       id="color-input-alpha-example"
       label="Brand Color"
       value={colorValue}
-      onChange={handleColorChange}
+      onValueChange={handleColorChange}
       supportAlpha
     />
   );
@@ -148,7 +148,7 @@ export function DateInputExample() {
       id="date-input-example"
       placeholder="Select date"
       value={date}
-      onChange={handleDateChange}
+      onValueChange={handleDateChange}
     />
   );
 }
@@ -166,7 +166,7 @@ export function DateTimeInputExample() {
       id="date-time-input-example"
       label="Date & Time"
       value={dateTime}
-      onChange={handleDateTimeChange}
+      onValueChange={handleDateTimeChange}
       timePicker
     />
   );
@@ -186,7 +186,7 @@ export function NumberInputExample() {
       label="Quantity"
       size="xl"
       value={value}
-      onChange={handleChange}
+      onValueChange={handleChange}
       min={0}
       max={100}
       step={1}
@@ -249,7 +249,7 @@ export function TagInputExample() {
     <TagInput
       id="tag-input-example"
       value={tags}
-      onChange={handleChange}
+      onValueChange={handleChange}
       placeholder="Add interest"
       suffix={<Kbd position="absolute" top="16" right="12">Enter</Kbd>}
     />

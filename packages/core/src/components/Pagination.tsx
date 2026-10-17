@@ -39,12 +39,12 @@ const SELECT_SIZE = { s: "xs", m: "xs", l: "s" } as const;
 
 interface PaginationProps
   extends Omit<React.ComponentProps<typeof Row>, "onChange" | "children" | "defaultValue"> {
-  /** The current page, from 1, when the host owns the state. Pair with `onChange`. */
+  /** The current page, from 1, when the host owns the state. Pair with `onPageChange`. */
   page?: number;
   /** The page shown first when Pagination manages its own state. */
   defaultPage?: number;
   /** Called with the new page. Not called for the page already shown. */
-  onChange?: (page: number) => void;
+  onPageChange?: (page: number) => void;
   /** How many pages there are. Or pass `count` and `perPage` and let Pagination work it out. */
   total?: number;
   /** How many items there are across all pages. With `perPage`, gives the page count. */
@@ -57,7 +57,7 @@ interface PaginationProps
   perPageOptions?: number[];
   /**
    * Called with the new page size. The page then moves so the first item on
-   * screen stays on screen, and `onChange` reports that move.
+   * screen stays on screen, and `onPageChange` reports that move.
    */
   onPerPageChange?: (perPage: number) => void;
   /** Pages drawn on each side of the current page. */
@@ -85,14 +85,14 @@ interface PaginationProps
  * With `perPageOptions` it also offers a page-size select.
  *
  * Works on its own state (`defaultPage`) or the host's (`page` and
- * `onChange`), which is what server-side paging wants.
+ * `onPageChange`), which is what server-side paging wants.
  */
 const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
   (
     {
       page,
       defaultPage = 1,
-      onChange,
+      onPageChange,
       total,
       count,
       perPage,
@@ -148,7 +148,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       // left on it, where the browser drops it to the page.
       if (fromArrow && (next === 1 || next === pages)) refocusCurrent.current = true;
       if (!controlled) setUncontrolledPage(next);
-      onChange?.(next);
+      onPageChange?.(next);
     };
 
     // Runs once the new page is drawn, controlled or not: `current` is the
@@ -176,7 +176,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       const clamped = Math.min(nextPages, Math.max(1, target));
       if (clamped !== current) {
         if (!controlled) setUncontrolledPage(clamped);
-        onChange?.(clamped);
+        onPageChange?.(clamped);
       }
     };
 
@@ -218,7 +218,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
                 size={SELECT_SIZE[size]}
                 value={String(currentPerPage)}
                 disabled={disabled}
-                onSelect={changePerPage}
+                onValueChange={changePerPage}
                 options={perPageOptions.map((option) => ({
                   label: String(option),
                   value: String(option),

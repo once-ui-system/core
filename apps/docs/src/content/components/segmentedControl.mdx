@@ -33,7 +33,7 @@ Use this component for toggle-style selection between discrete options. It suppo
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Basic usage"
@@ -72,7 +72,7 @@ Use `selected` to manage the selected state from the parent.
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "External state"
@@ -111,7 +111,7 @@ Use `defaultValue` to define an initial active button in uncontrolled mode. Don'
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Internal state"
@@ -150,7 +150,7 @@ Use `compact` to create a compact variant.
       { value: "week", label: "Week" },
       { value: "month", label: "Month" },
     ]}
-    onChange={(value) => console.log(value)}
+    onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Compact"
@@ -189,7 +189,7 @@ Control the selected value externally with the `value` prop.
     { value: "week", label: "Week" },
     { value: "month", label: "Month" },
   ]}
-  onChange={(value) => console.log(value)}
+  onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Controlled"
@@ -222,7 +222,7 @@ Distribute the button widths evenly across the container.
     { value: "b", label: "B" },
     { value: "c", label: "C" },
   ]}
-  onChange={(value) => console.log(value)}
+  onValueChange={(value) => console.log(value)}
 />`,
       language: "tsx",
       label: "Fill width"
@@ -236,6 +236,10 @@ Distribute the button widths evenly across the container.
   component="SegmentedControl"
   describe={{
     compact: "Tighter padding, for dense toolbars.",
+    value: "The selected button's value, controlled. Leave it out and the control keeps its own state.",
+    defaultValue: "The button selected first when uncontrolled. Defaults to the first one.",
+    onValueChange: "Called with the picked value (and the click, when it was one) on every pick.",
+    disabled: "Disables every button.",
   }}
   content={[
     ["className"],

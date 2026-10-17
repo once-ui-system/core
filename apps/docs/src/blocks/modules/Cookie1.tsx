@@ -72,7 +72,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 <button type="button" onClick={(e) => e.stopPropagation()}>
                   <Switch
                     checked={marketing}
-                    onToggle={() => setMarketing(!marketing)}
+                    onCheckedChange={() => setMarketing(!marketing)}
                     label="Marketing"
                   />
                 </button>
@@ -91,7 +91,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 <button type="button" onClick={(e) => e.stopPropagation()}>
                   <Switch
                     checked={analytics}
-                    onToggle={() => setAnalytics(!analytics)}
+                    onCheckedChange={() => setAnalytics(!analytics)}
                     label="Analytics"
                   />
                 </button>
@@ -110,7 +110,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 <button type="button" onClick={(e) => e.stopPropagation()}>
                   <Switch
                     checked={functional}
-                    onToggle={() => setFunctional(!functional)}
+                    onCheckedChange={() => setFunctional(!functional)}
                     label="Functional"
                   />
                 </button>
@@ -128,7 +128,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
             <Accordion
               title={
                 <button type="button" onClick={(e) => e.stopPropagation()}>
-                  <Switch checked onToggle={() => {}} label="Essential" />
+                  <Switch checked onCheckedChange={() => {}} label="Essential" />
                 </button>
               }
             >

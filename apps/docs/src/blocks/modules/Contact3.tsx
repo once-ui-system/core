@@ -44,7 +44,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
           </Text>
         </Column>
 
-        <SegmentedControl buttons={topics} value={topic} onChange={(value) => setTopic(value)} />
+        <SegmentedControl buttons={topics} value={topic} onValueChange={(value) => setTopic(value)} />
 
         {sent ? (
           <Column

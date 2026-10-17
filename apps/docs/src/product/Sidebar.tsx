@@ -138,6 +138,14 @@ const NavigationItemComponent: React.FC<{
   // This ensures the section is open when arriving at a page within this section
   const shouldBeOpen = isSelected || hasActiveChild || isParentPath || isPathWithinSection;
 
+  // Opens when navigation lands inside the section, and the reader can still
+  // fold it away. (In 2.x a bare `open` on Accordion did both; in 3.0 `open`
+  // controls it, so the state lives here.)
+  const [open, setOpen] = useState(shouldBeOpen);
+  useEffect(() => {
+    setOpen(shouldBeOpen);
+  }, [shouldBeOpen]);
+
   if (item.children) {
     return (
       <Row
@@ -158,7 +166,8 @@ const NavigationItemComponent: React.FC<{
               paddingRight="16"
               size="s"
               radius="s"
-              open={shouldBeOpen}
+              open={open}
+              onOpenChange={setOpen}
               title={
                 <Row fillWidth vertical="center" textVariant="label-default-m" paddingLeft="4">
                   {item.title}

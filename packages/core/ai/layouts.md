@@ -154,7 +154,7 @@ around it: toolbar, layer list, canvas and a working timeline.
   <Scrubber
     duration={duration}
     value={time}
-    onChange={setTime}
+    onValueChange={setTime}
     tracks={tracks}
     onGestureStart={pause}
   />

@@ -36,7 +36,7 @@ The `Checkbox` component provides a selectable control that can be toggled betwe
 
 ## State
 
-Use the `checked` prop with React state to create controlled checkboxes. `onToggle` receives the state the checkbox moves to, so the setter can be passed straight in.
+Use the `checked` prop with React state to create controlled checkboxes. `onCheckedChange` receives the state the checkbox moves to, so the setter can be passed straight in.
 
 <CodeBlock
   marginTop="16"
@@ -54,7 +54,7 @@ Use the `checked` prop with React state to create controlled checkboxes. `onTogg
 <Checkbox
     label="Controlled checkbox"
     checked={checked}
-    onToggle={setChecked}
+    onCheckedChange={setChecked}
 />
 
 // You can also update the state programmatically
@@ -98,7 +98,7 @@ const toggleAll = () => {
     label="Select all items"
     checked={allChecked || isIndeterminate}
     indeterminate={isIndeterminate}
-    onToggle={toggleAll}
+    onCheckedChange={toggleAll}
 />
 
 {items.map(item => (
@@ -106,7 +106,7 @@ const toggleAll = () => {
       key={item.id}
       label={item.label}
       checked={item.checked}
-      onToggle={() => {
+      onCheckedChange={() => {
         setItems(items.map(i => 
           i.id === item.id ? { ...i, checked: !i.checked } : i
         ));
@@ -179,7 +179,8 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
     checked: "Whether it is ticked, controlled. Leave it out and the checkbox keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     indeterminate: "The third state, for a parent whose children are partly ticked.",
-    onToggle: "Called with the new state when it is flipped: true when it becomes ticked.",
+    onCheckedChange: "Called with the new state when it is flipped: true when it becomes ticked.",
+    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     hoverable: "Highlight the row on hover.",
   }}
   content={[

@@ -1,15 +1,9 @@
 "use client";
 
 import classNames from "clsx";
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useCallback, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons";
+import { useControllableState } from "../internal/useControllableState";
 import { CondensedTShirtSizes } from "../types";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column";
@@ -31,8 +25,13 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   iconRotation?: number;
   size?: CondensedTShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  /** Open or not, controlled. Leave it out to let the accordion keep its own
+   *  state, starting from `defaultOpen`. */
   open?: boolean;
-  onToggle?: () => void;
+  /** The starting state of an uncontrolled accordion (no `open`). */
+  defaultOpen?: boolean;
+  /** Called with the state the accordion moves to: `true` when it opens. */
+  onOpenChange?: (open: boolean) => void;
   className?: string;
   style?: React.CSSProperties;
   headerProps?: React.ComponentProps<typeof Row>;
@@ -45,8 +44,9 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     {
       title,
       children,
-      open = false,
-      onToggle,
+      open,
+      defaultOpen = false,
+      onOpenChange,
       iconRotation = 180,
       radius = "m",
       icon = "chevronDown",
@@ -61,30 +61,24 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     ref,
   ) => {
     const headerRef = useRef<HTMLDivElement>(null);
-    const [isOpen, setIsOpen] = useState(open);
+    const contentId = useId();
+    // Controlled when `open` is set, whether or not a handler is passed.
+    const [isAccordionOpen, setOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
 
-    useEffect(() => {
-      setIsOpen(open);
-    }, [open]);
-
-    const isAccordionOpen = onToggle ? open : isOpen;
-
-    const toggleAccordion = useCallback(() => {
-      if (onToggle) {
-        onToggle();
-      } else {
-        setIsOpen((prev) => !prev);
-      }
-    }, [onToggle]);
+    const toggleAccordion = useCallback(() => setOpen((prev) => !prev), [setOpen]);
 
     useImperativeHandle(ref, () => {
       const node = headerRef.current ?? document.createElement("div");
       return Object.assign(node, {
         toggle: toggleAccordion,
-        open: () => setIsOpen(true),
-        close: () => setIsOpen(false),
+        open: () => setOpen(true),
+        close: () => setOpen(false),
       }) as HTMLDivElement & AccordionHandle;
-    }, [toggleAccordion]);
+    }, [toggleAccordion, setOpen]);
 
     const {
       className: headerClassName,
@@ -149,7 +143,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           onClick={handleHeaderClick}
           onKeyDown={handleHeaderKeyDown}
           aria-expanded={isAccordionOpen}
-          aria-controls="accordion-content"
+          aria-controls={contentId}
           radius={radius}
           role="button"
           {...headerRest}
@@ -169,7 +163,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           />
         </Row>
         <Grid
-          id="accordion-content"
+          id={contentId}
           fillWidth
           transition="macro-medium"
           style={{

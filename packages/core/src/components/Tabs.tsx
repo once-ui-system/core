@@ -67,7 +67,7 @@ const enabledTabs = (list: HTMLElement): HTMLElement[] =>
   );
 
 interface TabsProps extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue"> {
-  /** The selected tab's `value`, when the host owns the state. Pair with `onChange`. */
+  /** The selected tab's `value`, when the host owns the state. Pair with `onValueChange`. */
   value?: string;
   /**
    * The tab selected first when Tabs manages its own state. Without it the
@@ -76,7 +76,7 @@ interface TabsProps extends Omit<React.ComponentProps<typeof Column>, "onChange"
    */
   defaultValue?: string;
   /** Called with the newly selected tab's `value`. Not called for the tab already selected. */
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   /**
    * Which arrow keys move between tabs: Left and Right for `horizontal`, Up and
    * Down for `vertical`. Also lays the list out beside the panels instead of above them.
@@ -109,7 +109,7 @@ const Tabs = forwardRef<HTMLDivElement, TabsProps>(
     {
       value,
       defaultValue,
-      onChange,
+      onValueChange,
       orientation = "horizontal",
       activation = "automatic",
       children,
@@ -127,9 +127,9 @@ const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       (next: string) => {
         if (next === current) return;
         if (!controlled) setUncontrolled(next);
-        onChange?.(next);
+        onValueChange?.(next);
       },
-      [current, controlled, onChange],
+      [current, controlled, onValueChange],
     );
 
     const adopt = useCallback(
@@ -282,7 +282,7 @@ const TabList = forwardRef<HTMLDivElement, TabListProps>(
 TabList.displayName = "TabList";
 
 interface TabProps extends Omit<ToggleButtonProps, "selected" | "value" | "role" | "href"> {
-  /** Matches the TabPanel this tab shows, and is what `onChange` reports. */
+  /** Matches the TabPanel this tab shows, and is what `onValueChange` reports. */
   value: string;
   /** The tab's text. `label` works too, as on ToggleButton. */
   children?: ReactNode;

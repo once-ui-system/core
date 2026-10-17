@@ -95,7 +95,7 @@ export const Checkout2 = () => {
                   { label: "Germany", value: "de" },
                 ]}
                 value="United States"
-                onSelect={() => {}}
+                onValueChange={() => {}}
               />
               <Button fillWidth onClick={() => setStep(1)}>
                 Continue to payment

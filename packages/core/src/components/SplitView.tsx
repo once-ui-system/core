@@ -135,7 +135,7 @@ function SplitView({
             { value: "right", label: rightLabel },
           ]}
           value={activePanel}
-          onChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
+          onValueChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
         />
         <Column fill overflowY="auto" minHeight={0}>
           {activePanel === "left" ? leftPanel : rightPanel}

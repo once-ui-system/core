@@ -193,7 +193,7 @@ export const Streaming3 = () => {
             <SegmentedControl
               buttons={topics.map((item) => ({ label: item.label, value: item.value }))}
               value={topic}
-              onChange={setTopic}
+              onValueChange={setTopic}
             />
           </Row>
           <Row fillWidth gap="16" wrap>

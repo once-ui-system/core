@@ -48,7 +48,7 @@ const Single = ({ onPick }: { onPick?: (date: Date) => void }) => {
         id="due"
         label="Due"
         value={value}
-        onChange={(date) => {
+        onValueChange={(date) => {
           setValue(date);
           onPick?.(date);
         }}
@@ -191,7 +191,7 @@ const Range = ({ onPick }: { onPick?: (range: DateRange) => void }) => {
         startLabel="Check-in"
         endLabel="Check-out"
         value={value}
-        onChange={(range) => {
+        onValueChange={(range) => {
           setValue(range);
           onPick?.(range);
         }}

@@ -233,7 +233,7 @@ export default function ComponentsCheckOld() {
         {
           name: "ColorInput",
           element: (
-            <ColorInput id="demo-color" value="#3b82f6" onChange={() => {}} />
+            <ColorInput id="demo-color" value="#3b82f6" onValueChange={() => {}} />
           ),
         },
         { name: "OTPInput", element: <OTPInput length={4} /> },
@@ -246,7 +246,7 @@ export default function ComponentsCheckOld() {
           element: (
             <Switch
               checked={switchOn}
-              onToggle={() => setSwitchOn(!switchOn)}
+              onCheckedChange={() => setSwitchOn(!switchOn)}
               label="Dark mode"
             />
           ),
@@ -272,7 +272,7 @@ export default function ComponentsCheckOld() {
             <TagInput
               id="demo-tags"
               value={["react", "typescript"]}
-              onChange={() => {}}
+              onValueChange={() => {}}
             />
           ),
         },
@@ -281,7 +281,7 @@ export default function ComponentsCheckOld() {
           element: (
             <SegmentedControl
               value={segmentValue}
-              onChange={setSegmentValue}
+              onValueChange={setSegmentValue}
               buttons={[
                 { value: "one", label: "One" },
                 { value: "two", label: "Two" },

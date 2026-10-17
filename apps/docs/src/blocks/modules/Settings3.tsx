@@ -135,7 +135,7 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
                       </Column>
                       <Switch
                         checked={toggles[item.title]}
-                        onToggle={() =>
+                        onCheckedChange={() =>
                           setToggles((prev) => ({
                             ...prev,
                             [item.title]: !prev[item.title],

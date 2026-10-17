@@ -31,8 +31,13 @@ export function useControllableState<T>({
     const { current: prev, controlled: isControlled, onChange: notify } = latest.current;
     const resolved = typeof next === "function" ? (next as (p: T) => T)(prev) : next;
     if (Object.is(resolved, prev)) return;
-    if (!isControlled) setOwn(resolved);
-    latest.current.current = resolved;
+    // Uncontrolled, two changes in one event build on each other. Controlled,
+    // the parent's `value` stays the truth: a parent that declines a change
+    // (keeps `value` as it was) hears the same request again next time.
+    if (!isControlled) {
+      setOwn(resolved);
+      latest.current.current = resolved;
+    }
     notify?.(resolved);
   }, []);
 
