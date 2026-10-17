@@ -182,7 +182,7 @@
     "components": ["RevealFx"]
   },
   "size.rem": {
-    "rule": "A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width=\"32\" (32 px), or the rem value, width={2}. An icon or avatar box is usually \"24\" to \"48\".",
+    "rule": "A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width=\"32\" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale (\"160\" is the largest), so height=\"320\" is a type error: write height={20}. An icon or avatar box is usually \"24\" to \"48\".",
     "components": ["Flex", "Row", "Column", "Grid"]
   }
 }

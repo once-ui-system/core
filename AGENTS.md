@@ -62,7 +62,7 @@ Before generating or editing Once UI UI code in `packages/core` or `apps/*`:
 
 1. Read `packages/core/ai/manifest.json` (or `@once-ui-system/core/ai/manifest.json` from npm)
 2. Load bootstrap: `rules.compact.md` + `catalog.json`
-3. Match intent via `ai/tasks/index.json` - read the task's bundle `ai/bundles/{id}.json` (task + slices + types + gotchas in one file); fetch other slices from `ai/components/` only if needed, and never `spec.json`
+3. Pick the task bundle `ai/bundles/{id}.md` from `packages/core/AGENTS.md` (rules, slices, types, gotchas and gold example in one file); fetch other slices from `ai/components/` only if needed, and never `spec.json`
 4. Validate: `pnpm --filter @once-ui-system/core validate-ai-code path/to/file.tsx` (`--fix` applies the mechanical fixes; `--next`/`--no-next` override Next.js detection)
 
 Consumer apps: run `npx once-ui-init-agent` once after install to scaffold project `AGENTS.md`, `CLAUDE.md` and `.cursor/rules/once-ui-codegen.mdc`. In a Next.js app, `LayoutProvider` comes from `@once-ui-system/core/next`.
