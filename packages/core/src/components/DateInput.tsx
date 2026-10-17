@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { fieldLocale } from "../utils/calendarLocale";
-import { DatePicker } from "./DatePicker";
+import { DatePicker, type DatePickerLabels } from "./DatePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Input } from "./Input";
@@ -25,6 +25,8 @@ interface DateInputProps extends Omit<React.ComponentProps<typeof Input>, "onCha
    * tag the platform does not accept) they are in US English, as before.
    */
   locale?: string;
+  /** The calendar's buttons, fields and names, for a translated interface: see DatePicker. */
+  labels?: DatePickerLabels;
 }
 
 const formatDate = (date: Date, timePicker: boolean, locale?: string) => {
@@ -70,6 +72,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
       minDate,
       maxDate,
       locale,
+      labels,
       onClick,
       onKeyDown,
       ...rest
@@ -193,6 +196,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               autoFocus={true}
               open={isOpen}
               locale={locale}
+              labels={labels}
             />
           }
           fillWidth={false}
