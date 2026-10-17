@@ -10,6 +10,8 @@ export interface CalendarNames {
   weekdays: string[];
   /** The full weekday names, Sunday first, for screen readers. */
   weekdayLabels: string[];
+  /** The day a week starts on in the locale: 0 is Sunday, 1 Monday. */
+  firstDayOfWeek: number;
   /** A month with its year, in the locale's order ("October 2026", "2026年10月"). */
   monthYear: (month: number, year: number) => string;
   /** The words for the two halves of a 12-hour clock: "AM" and "PM" in English. */
@@ -42,6 +44,7 @@ const ENGLISH: CalendarNames = {
   months: ENGLISH_MONTHS,
   weekdays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
   weekdayLabels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+  firstDayOfWeek: 0,
   monthYear: (month, year) => `${ENGLISH_MONTHS[month]} ${year}`,
   dayPeriods: ["AM", "PM"],
   time: (hours, minutes, [am, pm] = ["AM", "PM"]) => {
@@ -67,6 +70,24 @@ const supportedLocale = (locale?: string) => {
  */
 const capitalize = (text: string, locale: string) =>
   text.charAt(0).toLocaleUpperCase(locale) + text.slice(1);
+
+/**
+ * The locale's first day of the week, from `Intl.Locale`'s week info (1 is
+ * Monday, 7 Sunday). Sunday where the platform has no week info (Firefox), as
+ * the calendar has always started.
+ */
+const firstDayOfWeekOf = (locale: string) => {
+  try {
+    const info = new Intl.Locale(locale) as Intl.Locale & {
+      getWeekInfo?: () => { firstDay: number };
+      weekInfo?: { firstDay: number };
+    };
+    const firstDay = (info.getWeekInfo?.() ?? info.weekInfo)?.firstDay;
+    return typeof firstDay === "number" ? firstDay % 7 : 0;
+  } catch {
+    return 0;
+  }
+};
 
 const cache = new Map<string, CalendarNames>();
 
@@ -101,6 +122,7 @@ export const getCalendarNames = (locale?: string): CalendarNames => {
     ),
     weekdays: Array.from({ length: 7 }, (_, index) => weekday.format(sunday(index))),
     weekdayLabels: Array.from({ length: 7 }, (_, index) => weekdayLong.format(sunday(index))),
+    firstDayOfWeek: firstDayOfWeekOf(resolved),
     monthYear: (m, year) => {
       const date = new Date(Date.UTC(2000, m, 1));
       // Date.UTC reads years 0 to 99 as 1900 to 1999.

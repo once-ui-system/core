@@ -29,6 +29,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **DatePicker: the week starts on the locale's first day.** With `locale="de"` the
+  calendar showed German names in a week that started on Sunday. It now starts on the
+  locale's first day (Monday in most of Europe), read from `Intl`. Without `locale`,
+  and in browsers with no week info (Firefox), it still starts on Sunday.
+
 - **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
   and description ids. The fields are now `{id}-start` and `{id}-end`.
 - **The date picker's month and year buttons were named by their value alone**
