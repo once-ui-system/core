@@ -1,6 +1,9 @@
 .overlay {
   animation: fadeIn 0.2s ease-out forwards;
   backdrop-filter: var(--backdrop-filter);
+  /* The panel is centred in what is left after the device's safe areas. */
+  padding: var(--safe-area-top, 0px) var(--safe-area-right, 0px) var(--safe-area-bottom, 0px)
+    var(--safe-area-left, 0px);
 
   &.closing {
     animation: fadeOut 0.2s ease-out forwards;

@@ -6,9 +6,14 @@
   transition: opacity var(--transition-duration-micro-medium) var(--transition-eased);
 }
 
-.heading:hover .anchor,
 .heading:focus-within .anchor {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .heading:hover .anchor {
+    opacity: 1;
+  }
 }
 
 // Touch screens have no hover to reveal it.

@@ -13,6 +13,32 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Mobile-ready core (2.3).** Components work on a phone and in a Capacitor app
+  without changing how they look on a desktop:
+  - **Touch targets.** On a coarse pointer, `Button`, `IconButton`, `ToggleButton`
+    (and `SegmentedControl`, `Pagination`), `Checkbox`, `RadioButton`, `Switch`,
+    `Chip`, `NavIcon`, the `Carousel` indicators and the media players' seek bars
+    take taps from at least 44 px around them. The drawn size and layout stay the
+    same; an invisible area catches the tap.
+  - **Safe areas.** New `--safe-area-top`, `--safe-area-right`, `--safe-area-bottom`
+    and `--safe-area-left` tokens read the device insets (0 unless the page sets
+    `viewport-fit=cover`). `Toaster`, `ScrollToTop`, `Drawer`, `Dialog`, `Modal`,
+    `Kbar` and the full-screen `CodeBlock` keep clear of the notch and the home
+    indicator. New `--touch-target` token (2.75rem).
+  - **No sticky hover.** Hover styles only apply where the pointer can hover, so a
+    tapped button no longer stays highlighted. `Carousel` arrows stay visible on
+    tablets, which have no hover to reveal them.
+  - **Hover detection.** `HoverCard`, `Hover`, `CursorCard` and `TiltFx` decide
+    "touch device" from `(hover: none)` instead of touch support, so laptops with
+    a touchscreen keep their hover cards and effects.
+  - **Viewport units.** The enlarged `Media` overlay is pinned to the viewport's
+    edges instead of `100vw` by `100vh`, which ran under a phone's toolbar, and
+    `Mask` sizes its radius in `svh`.
+  - A test (`mobile-ready.test.ts`) fails on unguarded `:hover`, `vh`/`vw` lengths,
+    fixed UI without safe areas, and the touch targets above going missing.
+
 ### Fixed
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or

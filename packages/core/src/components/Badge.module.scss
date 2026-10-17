@@ -19,9 +19,11 @@
         animation: shineDefault 9s ease-in-out infinite;
     }
 
-    &:hover {
-        &::before {
-            animation: shineHover 3s ease-in-out infinite;
+    @media (hover: hover) {
+        &:hover {
+            &::before {
+                animation: shineHover 3s ease-in-out infinite;
+            }
         }
     }
 }

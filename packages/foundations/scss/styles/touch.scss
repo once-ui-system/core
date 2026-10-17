@@ -1,0 +1,29 @@
+/* Touch helpers for component modules. Emits no CSS of its own. */
+
+/*
+ * Grows the area that takes a tap to `--touch-target` (44px) on a coarse
+ * pointer, without changing the size the control is drawn at or the layout
+ * around it. An invisible pseudo-element, centred on the control and at least
+ * as big as it, catches the tap; a tap on it is a tap on the control.
+ *
+ * The control must be positioned (every Flex is) and must not clip its own
+ * overflow, and the pseudo-element must be free. A control drawn larger than
+ * the target keeps its own size, so the rule is harmless on big buttons.
+ *
+ * Two areas that overlap give the overlap to the later control, so this is
+ * for controls that stand apart, not for dense grids of dots.
+ */
+@mixin target($pseudo: after) {
+    @media (pointer: coarse) {
+        &::#{$pseudo} {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: max(100%, var(--touch-target, 2.75rem));
+            height: max(100%, var(--touch-target, 2.75rem));
+            transform: translate(-50%, -50%);
+        }
+    }
+}
+

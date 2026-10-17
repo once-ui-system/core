@@ -25,10 +25,16 @@
         transform 200ms var(--transition-eased);
 }
 
-.control:hover .anchor,
 .control:focus-within .anchor {
     opacity: 1;
     transform: scale(1);
+}
+
+@media (hover: hover) {
+    .control:hover .anchor {
+        opacity: 1;
+        transform: scale(1);
+    }
 }
 
 // Touch screens have no hover to reveal it.

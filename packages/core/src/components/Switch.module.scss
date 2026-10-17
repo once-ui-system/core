@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .container {
     cursor: var(--cursor-interactive);
     isolation: isolate;
@@ -8,17 +10,19 @@
         }
     }
 
-    &:hover {
-        .switch {
-            background-color: var(--neutral-solid-strong);
-        }
+    @media (hover: hover) {
+        &:hover {
+            .switch {
+                background-color: var(--neutral-solid-strong);
+            }
         
-        .switch.checked {
-            background-color: var(--brand-solid-strong);
-        }
+            .switch.checked {
+                background-color: var(--brand-solid-strong);
+            }
 
-        .switch.checked .element::before {
-            display: none;
+            .switch.checked .element::before {
+                display: none;
+            }
         }
     }
 }
@@ -77,8 +81,7 @@
     }
 }
 
-.container:hover .element::before,
-.element:focus-visible::before {
+@mixin ring {
     content: '';
     position: absolute;
     top: 50%;
@@ -92,6 +95,16 @@
     animation: scaleInCenter 0.2s forwards;
 }
 
+.element:focus-visible::before {
+    @include ring;
+}
+
+@media (hover: hover) {
+    .container:hover .element::before {
+        @include ring;
+    }
+}
+
 @keyframes scaleInCenter {
     from {
         transform: translate(-50%, -50%) scale(0);
@@ -99,4 +112,10 @@
     to {
         transform: translate(-50%, -50%) scale(1);
     }
+}
+
+// A 24px-high switch is a small target for a finger: it takes taps from 44px
+// around it.
+.switch {
+    @include touch.target;
 }

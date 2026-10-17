@@ -264,8 +264,13 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
             background="overlay"
             pointerEvents="auto"
             onClick={handleOverlayClick}
+            // Pinned to all four edges rather than 100vw by 100vh: `vh` is
+            // the tallest a phone's viewport gets, so the overlay ran under
+            // the browser's toolbar, and `vw` counts a desktop scrollbar.
             top="0"
             left="0"
+            right="0"
+            bottom="0"
             zIndex={9}
             opacity={100}
             cursor="interactive"
@@ -273,8 +278,6 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
             className="cursor-interactive"
             style={{
               backdropFilter: "blur(0.5rem)",
-              width: "100vw",
-              height: "100vh",
             }}
           />
         )}

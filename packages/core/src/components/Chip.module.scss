@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .chip {
     white-space: nowrap;
     user-select: none;
@@ -6,9 +8,14 @@
         background: var(--brand-alpha-medium);
         color: var(--brand-on-background-medium);
 
-        &:hover,
         &:focus {
             background: var(--brand-alpha-medium);
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: var(--brand-alpha-medium);
+            }
         }
 
         &:active {
@@ -21,9 +28,14 @@
         background: var(--neutral-alpha-weak);
         color: var(--neutral-on-background-medium);
 
-        &:hover,
         &:focus {
             background: var(--neutral-alpha-medium);
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: var(--neutral-alpha-medium);
+            }
         }
 
         &:active {
@@ -36,6 +48,16 @@
         background: var(--neutral-solid-weak);
         cursor: not-allowed;
     }
+
+    // A chip without a remove button is the control itself.
+    &[role="button"] {
+        @include touch.target;
+    }
+}
+
+// With one, the toggle beside it is.
+.action {
+    @include touch.target;
 }
 
 // A removable chip takes focus on its own control, beside the remove button,

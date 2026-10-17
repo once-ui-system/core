@@ -1,4 +1,8 @@
 .scrollToTop {
+  /* Its `bottom` and `right` offsets come from props; the margins move it the
+     rest of the way clear of the home indicator and a landscape notch. */
+  margin-bottom: var(--safe-area-bottom, 0px);
+  margin-right: var(--safe-area-right, 0px);
   opacity: 0;
   visibility: hidden;
   transition: opacity 200ms ease-in-out, visibility 0ms linear 200ms;

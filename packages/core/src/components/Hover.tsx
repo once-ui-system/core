@@ -9,6 +9,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { cannotHover } from "../internal/pointer";
 import { Flex } from "./Flex";
 import styles from "./Hover.module.scss";
 import { Row } from "./Row";
@@ -50,7 +51,7 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
 
     useEffect(() => {
       setMounted(true);
-      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+      setIsTouchDevice(cannotHover());
     }, []);
 
     const showOverlay = useCallback(() => {

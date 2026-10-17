@@ -7,6 +7,7 @@ import { Column } from "./Column";
 import { FocusTrap } from "./FocusTrap";
 import { Heading } from "./Heading";
 import { IconButton } from "./IconButton";
+import styles from "./Modal.module.scss";
 import { Row } from "./Row";
 import { ScrollLock } from "./ScrollLock";
 
@@ -121,6 +122,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             position="fixed"
             background="overlay"
             zIndex={10}
+            className={styles.overlay}
             style={{
               backdropFilter: "blur(0.5rem)",
               opacity: visible ? 1 : 0,
@@ -146,7 +148,14 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                 transition: "transform 600ms ease",
               }}
             >
-              <Column ref={contentRef} fill overflowY="auto" padding="l" tabIndex={-1}>
+              <Column
+                ref={contentRef}
+                fill
+                overflowY="auto"
+                padding="l"
+                className={styles.content}
+                tabIndex={-1}
+              >
                 <Row
                   position="absolute"
                   right="0"

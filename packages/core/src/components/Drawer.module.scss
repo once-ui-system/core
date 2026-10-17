@@ -15,8 +15,14 @@
 .panel {
   --drawer-inset: var(--static-space-8);
   --drawer-size: 28rem;
-  max-width: calc(100% - 2 * var(--drawer-inset));
-  max-height: calc(100% - 2 * var(--drawer-inset));
+  /* Each edge's inset, pushed out to the device's safe area where that is
+     wider (the notch, the home indicator), so the sheet never runs under it. */
+  --drawer-inset-top: max(var(--drawer-inset), var(--safe-area-top, 0px));
+  --drawer-inset-right: max(var(--drawer-inset), var(--safe-area-right, 0px));
+  --drawer-inset-bottom: max(var(--drawer-inset), var(--safe-area-bottom, 0px));
+  --drawer-inset-left: max(var(--drawer-inset), var(--safe-area-left, 0px));
+  max-width: calc(100% - var(--drawer-inset-left) - var(--drawer-inset-right));
+  max-height: calc(100% - var(--drawer-inset-top) - var(--drawer-inset-bottom));
 
   &.open {
     transform: none;
@@ -42,41 +48,44 @@
 /* Left and right: full height, `size` is the width. */
 .left,
 .right {
-  top: var(--drawer-inset);
-  bottom: var(--drawer-inset);
+  top: var(--drawer-inset-top);
+  bottom: var(--drawer-inset-bottom);
   width: var(--drawer-size);
 }
 
 .left {
-  left: var(--drawer-inset);
-  transform: translateX(calc(-100% - var(--drawer-inset)));
+  left: var(--drawer-inset-left);
+  transform: translateX(calc(-100% - var(--drawer-inset-left)));
 }
 
 .right {
-  right: var(--drawer-inset);
-  transform: translateX(calc(100% + var(--drawer-inset)));
+  right: var(--drawer-inset-right);
+  transform: translateX(calc(100% + var(--drawer-inset-right)));
 }
 
 /* Top and bottom: full width, as tall as the content up to `size`. */
 .top,
 .bottom {
-  left: var(--drawer-inset);
-  right: var(--drawer-inset);
-  max-height: min(var(--drawer-size), calc(100% - 2 * var(--drawer-inset)));
+  left: var(--drawer-inset-left);
+  right: var(--drawer-inset-right);
+  max-height: min(
+    var(--drawer-size),
+    calc(100% - var(--drawer-inset-top) - var(--drawer-inset-bottom))
+  );
 
   &.full {
-    height: calc(100% - 2 * var(--drawer-inset));
+    height: calc(100% - var(--drawer-inset-top) - var(--drawer-inset-bottom));
   }
 }
 
 .top {
-  top: var(--drawer-inset);
-  transform: translateY(calc(-100% - var(--drawer-inset)));
+  top: var(--drawer-inset-top);
+  transform: translateY(calc(-100% - var(--drawer-inset-top)));
 }
 
 .bottom {
-  bottom: var(--drawer-inset);
-  transform: translateY(calc(100% + var(--drawer-inset)));
+  bottom: var(--drawer-inset-bottom);
+  transform: translateY(calc(100% + var(--drawer-inset-bottom)));
 }
 
 /* FocusTrap's wrapper, laid out as the panel's column. */

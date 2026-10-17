@@ -1,13 +1,14 @@
+// Clear of the notch and the home indicator in an app that draws under them.
 .toastContainer {
     left: 50%;
     transform: translateX(-50%);
 
     &.bottom {
-        bottom: var(--responsive-space-l, 2rem);
+        bottom: calc(var(--responsive-space-l, 2rem) + var(--safe-area-bottom, 0px));
     }
 
     &.top {
-        top: var(--responsive-space-l, 2rem);
+        top: calc(var(--responsive-space-l, 2rem) + var(--safe-area-top, 0px));
     }
 }
 

@@ -8,8 +8,10 @@
   position: relative;
   z-index: 1;
   
-  &:hover {
-    z-index: 2;
+  @media (hover: hover) {
+    &:hover {
+      z-index: 2;
+    }
   }
   
   &.dragging {
