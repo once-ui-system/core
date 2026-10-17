@@ -1,5 +1,5 @@
 {
- "version": "2.2.0-rc.0",
+ "version": "2.2.0",
  "generated": "2026-10-17",
  "iconNames": ["adjustments","arrowLeft","arrowRight","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","minimize","minus","moreHorizontal","opacity","organization","pause","paw","payment","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
@@ -146,6 +146,11 @@
   "MegaMenu": {"purpose":"Desktop top navigation with dropdown panels of grouped links"},
   "MobileMegaMenu": {"purpose":"Mobile counterpart of MegaMenu: the same groups as stacked, expandable sections"},
   "HeadingLink": {"purpose":"Section heading with an anchor link, picked up by HeadingNav for the table of contents"},
+  "ChatComposer": {"purpose":"Chat input bar: growing field, Enter to send, optional attach button with file chips, send button"},
+  "ChatMessage": {"purpose":"One chat message: bubble, author, time and delivery status; from=\"self\" sits right, grouped hides the name"},
+  "ChatMessageList": {"purpose":"Scrolling log of ChatMessages that stays pinned to the newest message; onReachStart loads history"},
+  "ConversationItem": {"purpose":"Inbox row: avatar, name, last message, time and unread count; a link with href, a button with onClick"},
+  "TypingIndicator": {"purpose":"Three pulsing dots for someone typing or a reply being generated, with an optional label"},
   "Meta": {"purpose":"Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards"},
   "Schema": {"purpose":"Schema.org JSON-LD script for a page, article or organization"},
   "BarChart": {"purpose":"Bar chart for categorical series, with axes, legend, tooltip, loading and empty states","importFrom":"@once-ui-system/core/data"},
