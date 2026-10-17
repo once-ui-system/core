@@ -112,14 +112,6 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     Lorant One · Founder @Once UI
                   </Row>
                 </Column>
-                <Icon
-                  name="arrowUpRight"
-                  size="s"
-                  position="absolute"
-                  top="40"
-                  right="40"
-                  onBackground="neutral-weak"
-                />
               </Row>
             </Card>
             <Column fillWidth gap="24">

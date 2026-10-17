@@ -89,22 +89,22 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <Row paddingX="56" gap="40" paddingY="48">
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/01.jpg"
               />
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/02.jpg"
               />
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/03.jpg"
               />

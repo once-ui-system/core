@@ -154,7 +154,7 @@ export const Plans2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
       <Row fillWidth paddingY="24" minWidth="20rem">
         <PlanCard id="free" plan={plans.free} radius={undefined} leftRadius="l" />
       </Row>
-      <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth={20} />
+      <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth="20rem" />
     </Row>
   );
 };

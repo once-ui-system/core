@@ -50,8 +50,8 @@ export interface DropdownProps {
   minWidth?: number | CSSUnit;
   /** As `minWidth`; unset, the panel is capped at the space available. */
   maxWidth?: number | CSSUnit;
-  /** The panel's minimum height in px. */
-  minHeight?: number;
+  /** The panel's minimum height: a number is px, a string a CSS length. */
+  minHeight?: number | CSSUnit;
   placement?: Placement;
   /** What opens the dropdown: a Button, an IconButton, any element. With `openOn="contextmenu"`, the region a right-click opens it over. */
   trigger: ReactNode;
@@ -276,7 +276,7 @@ const DropdownMenu = forwardRef<
             }
 
             floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
-            floatingStyle.minHeight = `${Math.min(minHeight || 0)}px`;
+            floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
             floatingStyle.maxHeight = `${availableHeight}px`;
           },
         }),

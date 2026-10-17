@@ -42,7 +42,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
 
   return (
     <Column
-      minWidth={8}
+      minWidth="8rem"
       gap="8"
       paddingY="8"
       background="surface"

@@ -256,7 +256,7 @@ export const Testimonial10 = (flex: React.ComponentProps<typeof Flex>) => {
         <Heading paddingLeft="24" as="h2" textVariant="display-default-s">
           Solo founders and small teams scale faster when their design system does not fight back.
         </Heading>
-        <CaseStudySlideShow aspectRatio="8/3" minHeight={36} activeIndex={0} />
+        <CaseStudySlideShow aspectRatio="8/3" minHeight="36rem" activeIndex={0} />
       </Column>
     </Column>
   );

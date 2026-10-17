@@ -163,7 +163,7 @@ return (
     <Dropdown
       open={isOpen}
       onOpenChange={setIsOpen}
-      minHeight="200rem"
+      minHeight={200}
       trigger={
         <Button 
           variant="secondary" 
@@ -365,7 +365,7 @@ The menu opens at the pointer, or at the element when it is opened from the keyb
     fillWidth: "Match the trigger's width.",
     minWidth: "Lower bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
     maxWidth: "Upper bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
-    minHeight: "Lower bound on the dropdown's height, in px.",
+    minHeight: "Lower bound on the dropdown's height: a number is px, a string a CSS length.",
   }}
   content={[
     ["style", "React.CSSProperties"],

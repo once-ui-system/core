@@ -116,6 +116,7 @@ where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
 | --- | --- | --- |
 | `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
 | Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
+| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object, and on DataThemeProvider |
 | Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
 | Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
 | CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
@@ -125,8 +126,9 @@ where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
 | ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | reports |
 | AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
 
-Left as they were, because they were already px: Dialog, DropdownWrapper,
-ContextMenu, DateInput and DateRangeInput `minHeight`; Animation `blur`;
+Left as they were, because they were already px: Dialog, DateInput and
+DateRangeInput `minHeight` (DropdownWrapper's and ContextMenu's are written
+`"200px"`, since the Dropdown they merge into read numbers as rem in 2.x); Animation `blur`;
 `sizes`; AutoScroll `scrollGap`; Pulse `pulseSize`; `borderWidth`; MatrixFx
 `size`/`spacing`; Background `lines.thickness`; LinearGauge and RadialGauge
 `width`/`height` (the drawing's size: the gauge scales to its box, so set the
@@ -135,8 +137,11 @@ box with `maxWidth`).
 What the codemod reports, for you to finish: a variable, arithmetic or a call
 on one of these props (`maxWidth={layout.content.width}`: write
 ``{`${layout.content.width}rem`}``, or change the value at its source to a rem
-string or px), a breakpoint object passed by name, and spreads. Values in a
-config object (`layout.content.width: 44`) are not Once UI props, so the
+string or px), a breakpoint object passed by name, and spreads; and a number on one of these props on a component of your own
+(defined in the file or imported from a relative path), which was rem if the
+component hands it on to a Once UI one (`<Book minWidth={14} {...flex}>`):
+write `"14rem"` there. Values in a
+config object other than `dataStyle` (`layout.content.width: 44`) are not Once UI props, so the
 codemod cannot see them: change them to `"44rem"` there.
 
 Behaviour to check: keyword speeds that did not divide evenly moved to the

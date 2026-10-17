@@ -413,6 +413,9 @@ const LAYOUT_COMPONENTS = new Set(
  *   vh   a number was vh:         {50} → "50vh"   (Mask radius)
  *   %    a number was a percent:  {50} → "50%"    (Mask x/y, Background gradient)
  *   s    a number was seconds:    {4}  → {4000}   (now milliseconds)
+ *   px!  a number was px, on a component that merges into one whose 2.x
+ *        numbers were rem: {200} → "200px", so a second run cannot read
+ *        the merged element's number as rem (DropdownWrapper → Dropdown)
  * A dotted key is a path into an inline object: `gradient={{ x: 50 }}`.
  *
  * Background's `gradient.width`/`height` were a quarter-percent of the
@@ -424,10 +427,11 @@ const UNIT_TABLE = {
   Media: { height: "rem" },
   Animation: { blur: "px", slideUp: "rem", slideDown: "rem", slideLeft: "rem", slideRight: "rem" },
   Dialog: { minHeight: "px" },
+  DataThemeProvider: { height: "rem" },
   LinearGauge: { width: "px", height: "px" },
   RadialGauge: { width: "px", height: "px" },
-  DropdownWrapper: { minWidth: "rem", maxWidth: "rem" },
-  ContextMenu: { minWidth: "rem", maxWidth: "rem" },
+  DropdownWrapper: { minWidth: "rem", maxWidth: "rem", minHeight: "px!" },
+  ContextMenu: { minWidth: "rem", maxWidth: "rem", minHeight: "px!" },
   Setting: { controlWidth: "rem" },
   SettingAxes: { axisWidth: "rem" },
   CodeBlock: { codeHeight: "rem" },
@@ -483,6 +487,7 @@ const CONSTANT = /^(undefined|null|true|false)$/;
 function convertNumber(kind, text) {
   const n = Number(text);
   if (kind === "px" || n === 0) return null;
+  if (kind === "px!") return { text: `"${n}px"`, quoted: true };
   if (kind === "rem" || kind === "vh" || kind === "%") return { text: `"${n}${kind}"`, quoted: true };
   if (kind === "s") {
     if (Math.abs(n) < SECONDS_BELOW) return { text: String(Math.round(n * 1e6) / 1e3) };
@@ -685,7 +690,7 @@ function namesFor(tag, bindings, isCore) {
 function rewriteValue(kind, expr, base, label, push, warn) {
   const found = literalNumbers(expr);
   if (found.opaque) {
-    if (kind === "px") return;
+    if (kind === "px" || kind === "px!") return;
     const unit = kind === "s" ? "seconds (now milliseconds)" : `${kind} (now px)`;
     const fix =
       kind === "s" ? "multiply it by 1000" : `write {\`\${${expr.trim()}}${kind}\`} or convert it to px`;
@@ -722,6 +727,73 @@ function rewriteObject(paths, raw, base, label, push, warn) {
 }
 
 /**
+ * D2 on the file's own components: a wrapper defined here or imported from a
+ * relative path often hands its size props on to a Once UI Flex (`{...flex}`),
+ * where a 2.x number was rem. Whether it does cannot be seen from the call,
+ * so a literal number is reported, not rewritten. Only in files that import
+ * Once UI, so MDX (whose elements are Once UI's) and unrelated files stay quiet.
+ */
+export function warnLocalSizes(src, { isCore = isCoreSource } = {}) {
+  const warnings = [];
+  const bindings = importBindings(src);
+  if (![...bindings.values()].some((b) => isCore(b.source))) return { warnings };
+  const element = /<([A-Z][\w]*)(?=[\s/>])/g;
+  let m;
+  while ((m = element.exec(src))) {
+    const name = m[1];
+    const bound = bindings.get(name);
+    if (bound ? !bound.source.startsWith(".") || isCore(bound.source) : LAYOUT_COMPONENTS.has(name)) continue;
+    const from = m.index + name.length + 1;
+    const end = openingTagEnd(src, from);
+    if (end < 0) continue;
+    for (const a of attributesOf(src, from, end)) {
+      if (!REM_PROPS.has(a.name) || a.value === null || !/^\{\s*-?\d/.test(String(a.value))) continue;
+      const n = String(a.value).slice(1, -1).trim();
+      if (!/^-?\d+(\.\d+)?$/.test(n) || Number(n) === 0) continue;
+      warnings.push(
+        `<${name}> ${a.name}={${n}}: if ${name} passes ${a.name} on to a Once UI component, this was ${n}rem in 2.x and is ${n}px in 3.0; write "${n}rem" to keep the size`,
+      );
+    }
+  }
+  return { warnings };
+}
+
+/**
+ * D2 in config: the chart height in a `dataStyle: { height: 24 }` object
+ * (once-ui.config's chart defaults, handed to DataThemeProvider) was rem.
+ */
+export function transformDataStyle(src) {
+  const hits = [];
+  const warnings = [];
+  const edits = [];
+  const key = /\bdataStyle\s*:\s*\{/g;
+  let m;
+  while ((m = key.exec(src))) {
+    const at = m.index + m[0].length - 1;
+    const end = closing(src, at);
+    if (end < 0) continue;
+    const { entries } = objectEntries(src.slice(at, end + 1));
+    for (const e of entries) {
+      if (e.key !== "height" || e.shorthand) continue;
+      const found = literalNumbers(e.value);
+      if (found.opaque) {
+        warnings.push(`dataStyle.height: ${e.value}: a number here was rem (now px); if it is a number, write it as "Nrem"`);
+        continue;
+      }
+      for (const span of found.spans) {
+        const r = convertNumber("rem", span.text);
+        if (!r) continue;
+        edits.push({ at: at + e.at + span.at, end: at + e.at + span.end, text: r.text });
+        hits.push(`dataStyle.height: number → "rem" string`);
+      }
+    }
+  }
+  let out = src;
+  for (const e of edits.sort((a, b) => b.at - a.at)) out = out.slice(0, e.at) + e.text + out.slice(e.end);
+  return { out, hits, warnings };
+}
+
+/**
  * The D2–D5 pass on its own: units on Once UI elements, durations in ms,
  * and `speed` renames. `isCore(source)` decides which imports are Once UI
  * (core's own sources pass a predicate that accepts their relative imports).
@@ -746,7 +818,7 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
         const push = (e) =>
           edits.push({
             ...e,
-            hit: `<${tag}> ${e.label}: ${e.kind === "s" ? "seconds → ms" : `number → "${e.kind}" string`}`,
+            hit: `<${tag}> ${e.label}: ${e.kind === "s" ? "seconds → ms" : `number → "${e.kind.replace("!", "")}" string`}`,
           });
         const warn = (w) => warnings.push(`<${tag}> ${w}`);
         for (const a of attrs) {
@@ -1327,6 +1399,11 @@ export function transform(src) {
   out = units.out;
   hits.push(...units.hits);
   warnings.push(...units.warnings);
+  warnings.push(...warnLocalSizes(out).warnings);
+  const config = transformDataStyle(out);
+  out = config.out;
+  hits.push(...config.hits);
+  warnings.push(...config.warnings);
   // F1, F2, F4, F5: components that merged. Last, so the passes above read the
   // 2.x names they know; see the section below.
   const merges = transformMerges(out);

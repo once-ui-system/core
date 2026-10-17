@@ -20,7 +20,7 @@ const { baseURL, style, dataStyle } = defineConfig({
   dataStyle: {
     variant: "gradient", // flat | gradient | outline
     mode: "categorical", // categorical | divergent | sequential
-    height: 24, // default chart height
+    height: "24rem", // default chart height
     axis: {
       stroke: "var(--neutral-alpha-weak)",
     },

@@ -57,7 +57,7 @@ describe("D2: a number that was rem becomes a rem string", () => {
       ),
       `<Avatar size="4rem" /><Media height="20rem" /><Animation slideUp="1rem" blur={4} />` +
         // Converted as DropdownWrapper's, then renamed by F5.
-        `<Dropdown minWidth="12rem" minHeight={200} /><Setting controlWidth="14rem" />` +
+        `<Dropdown minWidth="12rem" minHeight="200px" /><Setting controlWidth="14rem" />` +
         `<CodeBlock codeHeight="24rem" /><Carousel thumbnail={{ height: "6rem", sizes: "120px" }} />`,
     );
   });
@@ -218,5 +218,44 @@ describe("transformUnits", () => {
       transformUnits(src, { isCore: (s) => s.startsWith(".") }).out,
       `import { Row } from "./Row";\n<Row maxWidth="40rem" />`,
     );
+  });
+});
+
+describe("chart height and merged px", () => {
+  it("rewrites dataStyle's height in a config, and on DataThemeProvider", () => {
+    const config = `const dataStyle = 1;\nexport const style = {\n  dataStyle: {\n    variant: "gradient",\n    height: 24, // default\n    tick: { fontSize: 11 },\n  },\n};`;
+    const { out, warnings } = transform(config);
+    assert.match(out, /height: "24rem", \/\/ default/);
+    assert.match(out, /fontSize: 11/);
+    assert.deepEqual(warnings, []);
+    assert.equal(transform(out).out, out);
+    assert.equal(body(`${core("DataThemeProvider")}<DataThemeProvider height={20} />`), `<DataThemeProvider height="20rem" />`);
+  });
+
+  it("reports a dataStyle height it cannot read", () => {
+    assert.equal(transform(`x = { dataStyle: { height: h } };`).warnings.length, 1);
+  });
+
+  it("pins DropdownWrapper's px minHeight, so the merged Dropdown survives a second run", () => {
+    const once = transform(`${core("DropdownWrapper")}<DropdownWrapper minHeight={200} trigger={<b />} dropdown={<i />} />`).out;
+    assert.match(once, /<Dropdown minHeight="200px" trigger=\{<b \/>\}><i \/><\/Dropdown>/);
+    assert.equal(transform(once).out, once);
+  });
+});
+
+describe("the file's own components", () => {
+  const warned = (src) => transform(src).warnings.join("\n");
+
+  it("reports a number on a wrapper defined here or imported from a relative path", () => {
+    const local = `${core("Row")}const Shelf = (flex) => <Row {...flex} />;\n<Shelf minWidth={14} />`;
+    assert.match(warned(local), /<Shelf> minWidth=\{14\}: .* write "14rem"/);
+    assert.equal(transform(local).out, local);
+    assert.match(warned(`${core("Row")}import { PlanCard } from "./PlanCard";\n<PlanCard minWidth={20} />`), /PlanCard/);
+  });
+
+  it("stays quiet on packages, strings, MDX and files without Once UI", () => {
+    assert.equal(warned(`${core("Row")}import Image from "next/image";\n<Image width={200} />`), "");
+    assert.equal(warned(`${core("Row")}const Book = () => null;\n<Book minWidth="14rem" />`), "");
+    assert.equal(warned(`import { Book } from "./Book";\n<Book minWidth={14} />`), "");
   });
 });

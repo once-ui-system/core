@@ -39,8 +39,8 @@ export interface ContextMenuImplProps {
   minWidth?: number | CSSUnit;
   /** As `minWidth`; unset, the panel is capped at the space available. */
   maxWidth?: number | CSSUnit;
-  /** The panel's minimum height in px. */
-  minHeight?: number;
+  /** The panel's minimum height: a number is px, a string a CSS length. */
+  minHeight?: number | CSSUnit;
   style?: React.CSSProperties;
   className?: string;
   onSelect?: (value: string) => void;

@@ -28,7 +28,7 @@ const tiles = {
       media: (
         <Row fill paddingLeft="48">
           <Sidebar1
-            minWidth={16}
+            minWidth="16rem"
             marginTop="48"
             border="neutral-strong"
             tabIndex={-1}
