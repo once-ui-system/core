@@ -1,5 +1,20 @@
-import { Column, Grid, IconButton, Logo, Row, SmartLink, Tag, Text } from "@once-ui-system/core";
-import { social } from "@/resources";
+import {
+  Column,
+  Grid,
+  IconButton,
+  type IconName,
+  Logo,
+  Row,
+  SmartLink,
+  Tag,
+  Text,
+} from "@once-ui-system/core";
+
+const social: { label: string; icon: IconName; href: string }[] = [
+  { label: "GitHub", icon: "github", href: "#" },
+  { label: "LinkedIn", icon: "linkedin", href: "#" },
+  { label: "Discord", icon: "discord", href: "#" },
+];
 
 const navigation = [
   {
@@ -112,14 +127,15 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
             </SmartLink>
           </Row>
           <Row gap="8">
-            {social.map((item, index) => (
+            {social.map((item) => (
               <IconButton
                 data-border="rounded"
                 icon={item.icon}
                 variant="tertiary"
                 size="l"
-                key={index}
-                href={item.link}
+                key={item.label}
+                href={item.href}
+                ariaLabel={item.label}
               />
             ))}
           </Row>
