@@ -172,10 +172,10 @@ importers:
         specifier: ^1.30.0
         version: 1.30.0
       react:
-        specifier: '>=18'
+        specifier: '>=19'
         version: 19.2.8
       react-dom:
-        specifier: '>=18'
+        specifier: '>=19'
         version: 19.2.8(react@19.2.8)
       recharts:
         specifier: ^3.10.1
