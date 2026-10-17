@@ -13,6 +13,22 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Chat building blocks.** Five components for chat interfaces, from the root
+  package: `ChatMessage` (a bubble with its author, time and delivery state;
+  `from="self"` sits on the right, `grouped` lines up follow-ups, a failed
+  message can offer a retry), `ChatMessageList` (a `log` live region that
+  starts at the newest message and follows new content while the reader is at
+  the bottom, with `onReachStart` for loading history), `ChatComposer` (a
+  growing field where Enter sends and Shift+Enter starts a new line, an
+  optional attach button, pasted images, and a send button that waits for an
+  async `onSend`), `TypingIndicator` (three dots in a `status` region that
+  fade instead of bouncing under reduced motion) and `ConversationItem` (an
+  inbox row with the last message, its time and an unread count, as a link or
+  a button). Every label can be replaced for another language. The AI
+  harness's `chat` task lists them first. Docs: Modules → Chat.
+
 ### Fixed
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or

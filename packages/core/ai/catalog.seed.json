@@ -112,6 +112,21 @@
     "tags": ["data", "chart", "feedback"],
     "pairsWith": ["LineChart", "BarChart", "PieChart"]
   },
+  "ChatComposer": {
+    "purpose": "Chat input bar: growing field, Enter to send, optional attach button with file chips, send button",
+    "tags": ["chat", "form"],
+    "pairsWith": ["ChatMessageList", "EmojiPickerDropdown"]
+  },
+  "ChatMessage": {
+    "purpose": "One chat message: bubble, author, time and delivery status; from=\"self\" sits right, grouped hides the name",
+    "tags": ["chat"],
+    "pairsWith": ["ChatMessageList", "TypingIndicator", "Media"]
+  },
+  "ChatMessageList": {
+    "purpose": "Scrolling log of ChatMessages that stays pinned to the newest message; onReachStart loads history",
+    "tags": ["chat"],
+    "pairsWith": ["ChatMessage", "ChatComposer", "TypingIndicator"]
+  },
   "Checkbox": {
     "purpose": "Checkbox with label and description, including an indeterminate state",
     "tags": ["form", "settings"],
@@ -147,6 +162,11 @@
     "purpose": "Menu opened by right-click on its children, with selectable options",
     "tags": ["overlay", "action"],
     "pairsWith": ["Option", "Column"]
+  },
+  "ConversationItem": {
+    "purpose": "Inbox row: avatar, name, last message, time and unread count; a link with href, a button with onClick",
+    "tags": ["chat", "navigation"],
+    "pairsWith": ["Column", "ChatMessageList"]
   },
   "CountdownFx": {
     "purpose": "Animated countdown to a target date, as rolling wheels or plain digits",
@@ -879,6 +899,11 @@
     "purpose": "Typewriter effect that types and deletes a list of words; speed and delay in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
+  },
+  "TypingIndicator": {
+    "purpose": "Three pulsing dots for someone typing or a reply being generated, with an optional label",
+    "tags": ["chat", "feedback"],
+    "pairsWith": ["ChatMessageList", "ChatMessage"]
   },
   "User": {
     "purpose": "Avatar with name, subline and optional tag — an identity row",

@@ -1,0 +1,169 @@
+/* ChatMessageList: a short conversation sits at the bottom, like any chat.
+ * `justify-content: flex-end` would do that too, but a scroll container can't
+ * scroll to content that overflows on its start side, so the oldest messages
+ * would be cut off once the list fills. An auto margin collapses instead. */
+.list {
+  min-height: 0;
+  overscroll-behavior: contain;
+
+  > :first-child {
+    margin-top: auto;
+  }
+
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-border-strong);
+    outline-offset: -2px;
+  }
+}
+
+/* ChatMessage */
+.message {
+  position: relative;
+
+  &:hover .actions,
+  &:focus-within .actions {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+.body {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.bubbleBody {
+  flex: 0 1 auto;
+  max-width: min(80%, 40rem);
+}
+
+.bubble {
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.hidden {
+  visibility: hidden;
+}
+
+.actions {
+  align-self: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition-micro-medium);
+
+  /* No hover on touch, so the controls are always there. */
+  @media (hover: none) {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* TypingIndicator */
+.dot {
+  display: block;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: var(--neutral-on-background-weak);
+  animation: typing 1.2s infinite ease-in-out;
+
+  &:nth-child(2) {
+    animation-delay: 0.15s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-0.1875rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot {
+    animation-name: typing-fade;
+    animation-duration: 2s;
+  }
+}
+
+@keyframes typing-fade {
+  0%,
+  100% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* ChatComposer */
+.composerEdge {
+  align-self: flex-end;
+  padding-bottom: var(--static-space-8);
+}
+
+.attachment {
+  max-width: 16rem;
+  min-width: 0;
+}
+
+/* ConversationItem */
+.conversation {
+  display: flex;
+  width: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: var(--transition-micro-medium);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      background: var(--neutral-alpha-weak);
+    }
+  }
+
+  &:focus-visible {
+    outline: var(--static-space-2) solid var(--brand-border-strong);
+    outline-offset: -2px;
+  }
+
+  &.selected {
+    background: var(--neutral-alpha-medium);
+    border-color: var(--neutral-alpha-medium);
+  }
+}
+
+.conversationText {
+  min-width: 0;
+}
+
+.unread {
+  flex-shrink: 0;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 var(--static-space-4);
+}
+
+.unreadDot {
+  min-width: 0.5rem;
+  width: 0.5rem;
+  height: 0.5rem;
+  padding: 0;
+}

@@ -63,6 +63,15 @@ const NOT_A_TYPE = new Set([
   "Seek",
   "Start",
   "Toggle",
+  // the chat components' default labels
+  "Attach",
+  "Message",
+  "Messages",
+  "Remove",
+  "Retry",
+  "Send",
+  "Typing",
+  "Write",
   // a generic parameter, not a nameable type: `items: T[]` on InfiniteScroll
   "T",
 ]);
