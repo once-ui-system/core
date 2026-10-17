@@ -1,0 +1,374 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: User profile popover — avatar trigger, a user menu or hover card with stats and actions.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and exploring the project."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Makx1CxpoT69eDq36rRnAa",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0166KqHmV3PxnLDsbVydDisY",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Makx1CxpoT69eDq36rRnAa",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0166KqHmV3PxnLDsbVydDisY",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01JPFb34TV4712pzLT8QAMAg",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P2kQcC2jUuJBQ1d9HvjtdD",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/popover.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KbwLNKhoKh5eyi7MfA8cDr",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/avatar.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JPFb34TV4712pzLT8QAMAg",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P2kQcC2jUuJBQ1d9HvjtdD",
+          "content": "---\ntitle: Popover\ndescription: Displays rich content in a portal, triggered by a button.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/popover\n  api: https://www.radix-ui.com/docs/primitives/components/popover#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"popover-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add popover\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"popover\"\n  title=\"components/ui/popover.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Popover,\n  PopoverContent,\n  PopoverDescription,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverTrigger,\n} from \"@/components/ui/popover\"\n```\n\n```tsx showLineNumbers\n<Popover>\n  <PopoverTrigger asChild>\n    <Button variant=\"outline\">Open Popover</Button>\n  </PopoverTrigger>\n  <PopoverContent>\n    <PopoverHeader>\n      <PopoverTitle>Title</PopoverTitle>\n      <PopoverDescription>Description text here.</PopoverDescription>\n    </PopoverHeader>\n  </PopoverContent>\n</Popover>\n```\n\n## Composition\n\nUse the following composition to build a `Popover`:\n\n```text\nPopover\n├── PopoverTrigger\n└── PopoverContent\n```\n\n## Basic\n\nA simple popover with a header, title, and description.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"popover-basic\" />\n\n## Align\n\nUse the `align` prop on `PopoverContent` to control the horizontal alignment.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"popover-alignments\" />\n\n## With Form\n\nA popover with form fields inside.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"popover-form\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"popover-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI Popover](https://www.radix-ui.com/docs/primitives/components/popover#api-reference) documentation.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KbwLNKhoKh5eyi7MfA8cDr",
+          "content": "---\ntitle: Avatar\ndescription: An image element with a fallback for representing the user.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/primitives/docs/components/avatar\n  api: https://www.radix-ui.com/primitives/docs/components/avatar#api-reference\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"avatar-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add avatar\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource styleName=\"radix-nova\"\n  name=\"avatar\"\n  title=\"components/ui/avatar.tsx\"\n\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport { Avatar, AvatarFallback, AvatarImage } from \"@/components/ui/avatar\"\n```\n\n```tsx showLineNumbers\n<Avatar>\n  <AvatarImage src=\"https://github.com/shadcn.png\" />\n  <AvatarFallback>CN</AvatarFallback>\n</Avatar>\n```\n\n## Composition\n\nUse the following composition to build an `Avatar`:\n\n```text\nAvatar\n├── AvatarImage\n├── AvatarFallback\n└── AvatarBadge\n```\n\nUse the following composition to build an `AvatarGroup`:\n\n```text\nAvatarGroup\n├── Avatar\n│   ├── AvatarImage\n│   ├── AvatarFallback\n│   └── AvatarBadge\n├── Avatar\n│   ├── AvatarImage\n│   ├── AvatarFallback\n│   └── AvatarBadge\n└── AvatarGroupCount\n```\n\n## Basic\n\nA basic avatar component with an image and a fallback.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"avatar-basic\" />\n\n## Badge\n\nUse the `AvatarBadge` component to add a badge to the avatar. The badge is positioned at the bottom right of the avatar.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"avatar-badge\" />\n\nUse the `className` prop to add custom styles to the badge such as custom colors, sizes, etc.\n\n```tsx showLineNumbers\n<Avatar>\n  <AvatarImage src=\"https://github.com/shadcn.png\" alt=\"@shadcn\" />\n  <AvatarFallback>CN</AvatarFallback>\n  <AvatarBadge className=\"bg-green-600 dark:bg-green-800\" />\n</Avatar>\n```\n\n## Badge with Icon\n\nYou can also use an icon inside `<AvatarBadge>`.\n\n<ComponentPreview\n  name=\"avatar-badge-icon\"\n  styleName=\"radix-nova\"\n\n/>\n\n## Avatar Group\n\nUse the `AvatarGroup` component to add a group of avatars.\n\n<ComponentPreview\n  name=\"avatar-group\"\n  styleName=\"radix-nova\"\n\n/>\n\n## Avatar Group Count\n\nUse `<AvatarGroupCount>` to add a count to the group.\n\n<ComponentPreview\n  name=\"avatar-group-count\"\n  styleName=\"radix-nova\"\n\n/>\n\n## Avatar Group with Icon\n\nYou can also use an icon inside `<AvatarGroupCount>`.\n\n<ComponentPreview\n  name=\"avatar-group-count-icon\"\n  styleName=\"radix-nova\"\n\n/>\n\n## Sizes\n\nUse the `size` prop to change the size of the avatar.\n\n<ComponentPreview\n  name=\"avatar-size\"\n  styleName=\"radix-nova\"\n\n/>\n\n## Dropdown\n\nYou can use the `Avatar` component as a trigger for a dropdown menu.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"avatar-dropdown\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"avatar-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-72\"\n/>\n\n## API Reference\n\n### Avatar\n\nThe `Avatar` component is the root component that wraps the avatar image and fallback.\n\n| Prop        | Type                        | Default     |\n| ----------- | --------------------------- | ----------- |\n| `size`      | `\"default\" \\| \"sm\" \\| \"lg\"` | `\"default\"` |\n| `className` | `string`                    | -           |\n\n### AvatarImage\n\nThe `AvatarImage` component displays the avatar image. It accepts all Radix UI Avatar Image props.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `src`       | `string` | -       |\n| `alt`       | `string` | -       |\n| `className` | `string` | -       |\n\n### AvatarFallback\n\nThe `AvatarFallback` component displays a fallback when the image fails to load. It accepts all Radix UI Avatar Fallback props.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### AvatarBadge\n\nThe `AvatarBadge` component displays a badge indicator on the avatar, typically positioned at the bottom right.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### AvatarGroup\n\nThe `AvatarGroup` component displays a group of avatars with overlapping styling.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### AvatarGroupCount\n\nThe `AvatarGroupCount` component displays a count indicator in an avatar group, typically showing the number of additional avatars.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\nFor more information about Radix UI Avatar props, see the [Radix UI documentation](https://www.radix-ui.com/primitives/docs/components/avatar#api-reference).\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the actual installed components, since they may differ from the docs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013EzPrHNuRkSbQ9WqfiLE6j",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AqK6vAGKDCEyxGKLaxAzbF",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/popover.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XFVzXoYpipQeKZcKGAkJKb",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/avatar.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013qitnQHnNZbUDtBpMc3Bap",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013EzPrHNuRkSbQ9WqfiLE6j",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AqK6vAGKDCEyxGKLaxAzbF",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Popover as PopoverPrimitive } from \"radix-ui\"\n\nfunction Popover({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Root>) {\n  return <PopoverPrimitive.Root data-slot=\"popover\" {...props} />\n}\n\nfunction PopoverTrigger({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Trigger>) {\n  return <PopoverPrimitive.Trigger data-slot=\"popover-trigger\" {...props} />\n}\n\nfunction PopoverContent({\n  className,\n  align = \"center\",\n  sideOffset = 4,\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Content>) {\n  return (\n    <PopoverPrimitive.Portal>\n      <PopoverPrimitive.Content\n        data-slot=\"popover-content\"\n        align={align}\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-72 origin-(--radix-popover-content-transform-origin) rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          className\n        )}\n        {...props}\n      />\n    </PopoverPrimitive.Portal>\n  )\n}\n\nfunction PopoverAnchor({\n  ...props\n}: React.ComponentProps<typeof PopoverPrimitive.Anchor>) {\n  return <PopoverPrimitive.Anchor data-slot=\"popover-anchor\" {...props} />\n}\n\nfunction PopoverHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"popover-header\"\n      className={cn(\"flex flex-col gap-1 text-sm\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverTitle({ className, ...props }: React.ComponentProps<\"h2\">) {\n  return (\n    <div\n      data-slot=\"popover-title\"\n      className={cn(\"font-medium\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction PopoverDescription({\n  className,\n  ...props\n}: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"popover-description\"\n      className={cn(\"text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Popover,\n  PopoverTrigger,\n  PopoverContent,\n  PopoverAnchor,\n  PopoverHeader,\n  PopoverTitle,\n  PopoverDescription,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XFVzXoYpipQeKZcKGAkJKb",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Avatar as AvatarPrimitive } from \"radix-ui\"\n\nfunction Avatar({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Root> & {\n  size?: \"default\" | \"sm\" | \"lg\"\n}) {\n  return (\n    <AvatarPrimitive.Root\n      data-slot=\"avatar\"\n      data-size={size}\n      className={cn(\n        \"group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarImage({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Image>) {\n  return (\n    <AvatarPrimitive.Image\n      data-slot=\"avatar-image\"\n      className={cn(\"aspect-square size-full\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarFallback({\n  className,\n  ...props\n}: React.ComponentProps<typeof AvatarPrimitive.Fallback>) {\n  return (\n    <AvatarPrimitive.Fallback\n      data-slot=\"avatar-fallback\"\n      className={cn(\n        \"flex size-full items-center justify-center rounded-full bg-muted text-sm text-muted-foreground group-data-[size=sm]/avatar:text-xs\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarBadge({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"avatar-badge\"\n      className={cn(\n        \"absolute right-0 bottom-0 z-10 inline-flex items-center justify-center rounded-full bg-primary text-primary-foreground ring-2 ring-background select-none\",\n        \"group-data-[size=sm]/avatar:size-2 group-data-[size=sm]/avatar:[&>svg]:hidden\",\n        \"group-data-[size=default]/avatar:size-2.5 group-data-[size=default]/avatar:[&>svg]:size-2\",\n        \"group-data-[size=lg]/avatar:size-3 group-data-[size=lg]/avatar:[&>svg]:size-2\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group\"\n      className={cn(\n        \"group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction AvatarGroupCount({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"avatar-group-count\"\n      className={cn(\n        \"relative flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-sm text-muted-foreground ring-2 ring-background group-has-data-[size=lg]/avatar-group:size-10 group-has-data-[size=sm]/avatar-group:size-6 [&>svg]:size-4 group-has-data-[size=lg]/avatar-group:[&>svg]:size-5 group-has-data-[size=sm]/avatar-group:[&>svg]:size-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Avatar,\n  AvatarImage,\n  AvatarFallback,\n  AvatarBadge,\n  AvatarGroup,\n  AvatarGroupCount,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013qitnQHnNZbUDtBpMc3Bap",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing page, layout, and the button, hover-card, separator, and badge components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Y8nBrRPvX2EkVZC7QRg7iw",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01StUcy3SdKhqda1uQHQUBHx",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01495dBXhHQa5wdJWoY1PKj7",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P59ksSQi7U95nzwXriyFUb",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/hover-card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01VuWbc3PeX59XnT27yWRTjU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/separator.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fv6N26BzRYPhGU75TcRe3z",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Y8nBrRPvX2EkVZC7QRg7iw",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01StUcy3SdKhqda1uQHQUBHx",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01495dBXhHQa5wdJWoY1PKj7",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P59ksSQi7U95nzwXriyFUb",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { HoverCard as HoverCardPrimitive } from \"radix-ui\"\n\nfunction HoverCard({\n  ...props\n}: React.ComponentProps<typeof HoverCardPrimitive.Root>) {\n  return <HoverCardPrimitive.Root data-slot=\"hover-card\" {...props} />\n}\n\nfunction HoverCardTrigger({\n  ...props\n}: React.ComponentProps<typeof HoverCardPrimitive.Trigger>) {\n  return (\n    <HoverCardPrimitive.Trigger data-slot=\"hover-card-trigger\" {...props} />\n  )\n}\n\nfunction HoverCardContent({\n  className,\n  align = \"center\",\n  sideOffset = 4,\n  ...props\n}: React.ComponentProps<typeof HoverCardPrimitive.Content>) {\n  return (\n    <HoverCardPrimitive.Portal data-slot=\"hover-card-portal\">\n      <HoverCardPrimitive.Content\n        data-slot=\"hover-card-content\"\n        align={align}\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-64 origin-(--radix-hover-card-content-transform-origin) rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-hidden data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          className\n        )}\n        {...props}\n      />\n    </HoverCardPrimitive.Portal>\n  )\n}\n\nexport { HoverCard, HoverCardTrigger, HoverCardContent }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01VuWbc3PeX59XnT27yWRTjU",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Separator as SeparatorPrimitive } from \"radix-ui\"\n\nfunction Separator({\n  className,\n  orientation = \"horizontal\",\n  decorative = true,\n  ...props\n}: React.ComponentProps<typeof SeparatorPrimitive.Root>) {\n  return (\n    <SeparatorPrimitive.Root\n      data-slot=\"separator\"\n      decorative={decorative}\n      orientation={orientation}\n      className={cn(\n        \"shrink-0 bg-border data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Separator }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fv6N26BzRYPhGU75TcRe3z",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've sketched the design: a clickable avatar opens a Popover with profile info, status switch, stats, and actions, while a HoverCard on a teammate mention shows a mini profile with a follow button—using AvatarFallback initials and sonner toasts since there are no network images. Now I'll start building these components.\n\n",
+          "signature": "CAQSwQkKEQgSGAI4AUIJbmFycmF0aW9uEgwbD7fm2C1g0kCBrIwaDI+g9MR4bmNociffcyIwzU7SYQCmohwLpBag4YHWbDlO7VxTbJvy3tKq0+1JZYK6K10PhJYPtbDymIFI+FOjKt0ICMm0z+X+AMW7B0gEPyhJZbniGAKmDoPxQ3JcDE7ePz1lRWRMBF/sSGxAjyHs5v9ozkTvsj+QbFqm+646mMHNfMOoEtdQAKTDV3PL9BOeAAeNQJMTUooNPQ1SfMmKWcCjVYSVj1SJhiKCWP8i5p4SA9SLOhjw2JC5L3J6DFg+aY+XYUuriUVSnaNbPqyX9nF6C9mjDuhdwDbAes/NJcQphUrM/rMjsTXd6Hzfmda4DMohHJEHl4WQJoO+WFbQFWqruxP+VT5ToVWJOUNJZdKQrABd7xAM0kq20um8DpAzlPEkZrf6o3owPOC9Mk1qVZSH76YAPpPqPwiDW3CWVHUXsNpUSM0xR4ktTu47MzSXpFk5++HNQPLvi5zExBWLrqmofU7fJYtWEab4FgZ6JJEpWp2Avw0lp9n0HtFJXHakT7D1gmeBP7DDnFY89sLunlEtilk9SOKtlBSelrg9RZ+oZq8wEiwEUof964KMuNlWSh3Neo+kg0wekYUVIb/bhJK1e/FzaZRVN6/OuXraP7XxuEtwWLQhd0XlzxUmdCa+s2aO2JI/nbIl3kjPspSlD4GdvBbcq548SFzNYZ95HD5ra7CpRw2C0/XmISODMhVHRGPpUsrBh3wy5ZPFwVfIud1a51LPlXjKrWPfmdsxF7h7J/5vokEA/oJQHiX6mKITNzACuFn0Ag1Svn8EuUWZlz5C5Fu4GMlV1QYWG4cS80S0MYzpvZaaf9DnUAyHtZIStTC6ioI0e8gBC/2FN0ku886fYaindbqnXkD/rQrdz2FAi/63X+owAU8sjDnR1Ure8T/AvLxlVvRqsL7ZLcY5a/f+L/bG5Xx2uoARS0epORENQPitb7VGn1THHn5sktzoVQOo/1raNfdux7kTEsPTHZuIcFri0f90o+N+uN+s3BgXPyKfiGdCr6kyJrMy8V3/myKaYj3WpaV2zYgQpsxgAyGH87PIAg9s8bn7he3QedmR1D27m2scdyGO2TlHnBbTlO7JrW6d2OJXAVqjglAt9LSmJudsr3/M31oWkAstp6vky1fbqa6Vktn2hQTKuzKfx4VhLfUPaj7iEKUC7CLkI2YDTBswy6mj2Euc5gXWoi61qQYja0NyCAxE91z5AOpIbbIx7ttVQOh45aqRfA7Wa8wdKD801dV6zxEdZy6f2qxOfsO4OGcah9fz53l/kzynt4GNK7BUNdyCJ0MS961Vu1oPrUQkd6xqWstIribZHOa2dlnvrWDETQ1OjTENEv3yUguPe7AfCfx2Xb+zKL4exSkgsIXwx5bE0uK4kPWczpN8fnxJrFM1lRVZ/fJkgpL9leZ8rWGJQ1hUcVzjuvWwBLEI6qjPBTTNfHjR4LdFQOKofbrc/JqAM/KUpaybhRDLztCREP3eOmsl0qUhaRysy7MGVmgNEE7ca7bJlSlcQdLJVsAfA8rVOVZla8Mg7DxXjjpdhfC2ojsZt2zVN/QtTod0c1MloXUDkL75X5yD0xgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ARRvmPE6Wpgxgsb4j8xeDB",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/switch.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0123sLDSr7m7hT3m65ofMCyB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ARRvmPE6Wpgxgsb4j8xeDB",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Switch as SwitchPrimitive } from \"radix-ui\"\n\nfunction Switch({\n  className,\n  size = \"default\",\n  ...props\n}: React.ComponentProps<typeof SwitchPrimitive.Root> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      data-size={size}\n      className={cn(\n        \"peer group/switch inline-flex shrink-0 items-center rounded-full border border-transparent shadow-xs transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[1.15rem] data-[size=default]:w-8 data-[size=sm]:h-3.5 data-[size=sm]:w-6 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80\",\n        className\n      )}\n      {...props}\n    >\n      <SwitchPrimitive.Thumb\n        data-slot=\"switch-thumb\"\n        className={cn(\n          \"pointer-events-none block rounded-full bg-background ring-0 transition-transform group-data-[size=default]/switch:size-4 group-data-[size=sm]/switch:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0 dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground\"\n        )}\n      />\n    </SwitchPrimitive.Root>\n  )\n}\n\nexport { Switch }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0123sLDSr7m7hT3m65ofMCyB",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  Bell,\n  BellOff,\n  Bookmark,\n  CalendarDays,\n  CreditCard,\n  FolderKanban,\n  LifeBuoy,\n  LogOut,\n  MapPin,\n  Settings,\n  UserRound,\n  UserPlus,\n  UserCheck,\n  Users,\n  type LucideIcon,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport {\n  Avatar,\n  AvatarBadge,\n  AvatarFallback,\n} from \"@/components/ui/avatar\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  HoverCard,\n  HoverCardContent,\n  HoverCardTrigger,\n} from \"@/components/ui/hover-card\";\nimport {\n  Popover,\n  PopoverContent,\n  PopoverTrigger,\n} from \"@/components/ui/popover\";\nimport { Separator } from \"@/components/ui/separator\";\nimport { Switch } from \"@/components/ui/switch\";\n\ntype Stat = { label: string; value: string };\n\ntype MenuAction = {\n  id: string;\n  label: string;\n  icon: LucideIcon;\n  hint?: string;\n  message: string;\n};\n\nconst currentUser = {\n  name: \"Maya Okonkwo\",\n  handle: \"@maya.okonkwo\",\n  email: \"maya@northwind.studio\",\n  initials: \"MO\",\n  role: \"Design Lead\",\n  plan: \"Pro\",\n  location: \"Lisbon, Portugal\",\n  stats: [\n    { label: \"Projects\", value: \"24\" },\n    { label: \"Followers\", value: \"1.8k\" },\n    { label: \"Reviews\", value: \"312\" },\n  ] satisfies Stat[],\n};\n\nconst menuActions: MenuAction[] = [\n  {\n    id: \"profile\",\n    label: \"View profile\",\n    icon: UserRound,\n    hint: \"G P\",\n    message: \"Opening your public profile\",\n  },\n  {\n    id: \"projects\",\n    label: \"My projects\",\n    icon: FolderKanban,\n    hint: \"G J\",\n    message: \"Opening your projects\",\n  },\n  {\n    id: \"saved\",\n    label: \"Saved items\",\n    icon: Bookmark,\n    message: \"Opening saved items\",\n  },\n  {\n    id: \"billing\",\n    label: \"Billing\",\n    icon: CreditCard,\n    message: \"Opening billing settings\",\n  },\n  {\n    id: \"settings\",\n    label: \"Settings\",\n    icon: Settings,\n    hint: \"G S\",\n    message: \"Opening account settings\",\n  },\n  {\n    id: \"support\",\n    label: \"Help & support\",\n    icon: LifeBuoy,\n    message: \"Connecting you to support\",\n  },\n];\n\nconst teammate = {\n  name: \"Daniel Reyes\",\n  handle: \"@danreyes\",\n  initials: \"DR\",\n  role: \"Senior Frontend Engineer\",\n  bio: \"Building accessible component systems. Currently migrating the Northwind design tokens to Tailwind v4.\",\n  location: \"Mexico City\",\n  joined: \"Joined March 2022\",\n  stats: [\n    { label: \"Projects\", value: \"17\" },\n    { label: \"Followers\", value: \"946\" },\n  ] satisfies Stat[],\n};\n\nfunction StatGrid({ stats }: { stats: Stat[] }) {\n  return (\n    <dl\n      className=\"grid divide-x rounded-lg border bg-muted/40\"\n      style={{ gridTemplateColumns: `repeat(${stats.length}, minmax(0, 1fr))` }}\n    >\n      {stats.map((stat) => (\n        <div\n          key={stat.label}\n          className=\"flex flex-col items-center gap-0.5 px-2 py-2.5\"\n        >\n          <dd className=\"text-base font-semibold tabular-nums leading-none\">\n            {stat.value}\n          </dd>\n          <dt className=\"text-xs text-muted-foreground\">{stat.label}</dt>\n        </div>\n      ))}\n    </dl>\n  );\n}\n\nfunction ProfileMenu() {\n  const [open, setOpen] = React.useState(false);\n  const [dnd, setDnd] = React.useState(false);\n\n  const runAction = (action: MenuAction) => {\n    setOpen(false);\n    toast(action.message);\n  };\n\n  const signOut = () => {\n    setOpen(false);\n    toast.success(\"You have been signed out\", {\n      description: \"See you soon, Maya.\",\n    });\n  };\n\n  return (\n    <Popover open={open} onOpenChange={setOpen}>\n      <PopoverTrigger asChild>\n        <button\n          type=\"button\"\n          aria-label={`Account menu for ${currentUser.name}`}\n          className=\"rounded-full outline-none transition-shadow focus-visible:ring-[3px] focus-visible:ring-ring/50 data-[state=open]:ring-[3px] data-[state=open]:ring-ring/30\"\n        >\n          <Avatar size=\"lg\">\n            <AvatarFallback className=\"bg-primary text-xs font-semibold text-primary-foreground\">\n              {currentUser.initials}\n            </AvatarFallback>\n            <AvatarBadge\n              className={\n                dnd\n                  ? \"bg-amber-500 dark:bg-amber-500\"\n                  : \"bg-emerald-500 dark:bg-emerald-500\"\n              }\n            >\n              <span className=\"sr-only\">\n                {dnd ? \"Do not disturb\" : \"Online\"}\n              </span>\n            </AvatarBadge>\n          </Avatar>\n        </button>\n      </PopoverTrigger>\n\n      <PopoverContent\n        align=\"end\"\n        sideOffset={8}\n        className=\"w-[min(20rem,calc(100vw-1.5rem))] p-0\"\n      >\n        <div className=\"flex items-center gap-3 p-4\">\n          <Avatar className=\"size-12\">\n            <AvatarFallback className=\"bg-primary text-sm font-semibold text-primary-foreground\">\n              {currentUser.initials}\n            </AvatarFallback>\n          </Avatar>\n          <div className=\"min-w-0 flex-1\">\n            <div className=\"flex items-center gap-2\">\n              <h2 className=\"truncate text-sm font-semibold\">\n                {currentUser.name}\n              </h2>\n              <Badge variant=\"secondary\" className=\"shrink-0\">\n                {currentUser.plan}\n              </Badge>\n            </div>\n            <p className=\"truncate text-xs text-muted-foreground\">\n              {currentUser.email}\n            </p>\n            <p className=\"mt-0.5 flex items-center gap-1 text-xs text-muted-foreground\">\n              <MapPin className=\"size-3 shrink-0\" aria-hidden=\"true\" />\n              <span className=\"truncate\">\n                {currentUser.role} · {currentUser.location}\n              </span>\n            </p>\n          </div>\n        </div>\n\n        <div className=\"px-4 pb-4\">\n          <StatGrid stats={currentUser.stats} />\n        </div>\n\n        <Separator />\n\n        <div className=\"flex items-center justify-between gap-3 px-4 py-3\">\n          <label\n            htmlFor=\"dnd-switch\"\n            className=\"flex min-w-0 cursor-pointer items-center gap-2 text-sm\"\n          >\n            {dnd ? (\n              <BellOff\n                className=\"size-4 shrink-0 text-muted-foreground\"\n                aria-hidden=\"true\"\n              />\n            ) : (\n              <Bell\n                className=\"size-4 shrink-0 text-muted-foreground\"\n                aria-hidden=\"true\"\n              />\n            )}\n            <span className=\"truncate\">Do not disturb</span>\n          </label>\n          <Switch\n            id=\"dnd-switch\"\n            checked={dnd}\n            onCheckedChange={(checked) => {\n              setDnd(checked);\n              toast(\n                checked\n                  ? \"Notifications paused\"\n                  : \"Notifications are back on\",\n              );\n            }}\n          />\n        </div>\n\n        <Separator />\n\n        <ul className=\"flex flex-col p-1.5\" aria-label=\"Account actions\">\n          {menuActions.map((action) => (\n            <li key={action.id}>\n              <button\n                type=\"button\"\n                onClick={() => runAction(action)}\n                className=\"flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground\"\n              >\n                <action.icon\n                  className=\"size-4 shrink-0 text-muted-foreground\"\n                  aria-hidden=\"true\"\n                />\n                <span className=\"flex-1 truncate\">{action.label}</span>\n                {action.hint ? (\n                  <span\n                    className=\"hidden text-xs tracking-widest text-muted-foreground sm:inline\"\n                    aria-hidden=\"true\"\n                  >\n                    {action.hint}\n                  </span>\n                ) : null}\n              </button>\n            </li>\n          ))}\n        </ul>\n\n        <Separator />\n\n        <div className=\"p-1.5\">\n          <button\n            type=\"button\"\n            onClick={signOut}\n            className=\"flex w-full items-center gap-2.5 rounded-md px-2.5 py-2 text-left text-sm text-destructive outline-none transition-colors hover:bg-destructive/10 focus-visible:bg-destructive/10\"\n          >\n            <LogOut className=\"size-4 shrink-0\" aria-hidden=\"true\" />\n            <span>Sign out</span>\n          </button>\n        </div>\n      </PopoverContent>\n    </Popover>\n  );\n}\n\nfunction TeammateMention() {\n  const [following, setFollowing] = React.useState(false);\n\n  const toggleFollow = () => {\n    const next = !following;\n    setFollowing(next);\n    toast(next ? `You are now following ${teammate.name}` : `Unfollowed ${teammate.name}`);\n  };\n\n  return (\n    <HoverCard openDelay={150} closeDelay={150}>\n      <HoverCardTrigger asChild>\n        <a\n          href=\"#daniel-reyes\"\n          onClick={(event) => event.preventDefault()}\n          className=\"rounded-sm font-medium text-foreground underline decoration-muted-foreground/50 underline-offset-4 outline-none transition-colors hover:decoration-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n        >\n          {teammate.handle}\n        </a>\n      </HoverCardTrigger>\n      <HoverCardContent\n        align=\"start\"\n        className=\"w-[min(20rem,calc(100vw-1.5rem))] space-y-3\"\n      >\n        <div className=\"flex items-start gap-3\">\n          <Avatar className=\"size-12\">\n            <AvatarFallback className=\"bg-secondary text-sm font-semibold text-secondary-foreground\">\n              {teammate.initials}\n            </AvatarFallback>\n          </Avatar>\n          <div className=\"min-w-0 flex-1\">\n            <p className=\"truncate text-sm font-semibold\">{teammate.name}</p>\n            <p className=\"truncate text-xs text-muted-foreground\">\n              {teammate.handle}\n            </p>\n            <p className=\"truncate text-xs text-muted-foreground\">\n              {teammate.role}\n            </p>\n          </div>\n          <Button\n            size=\"sm\"\n            variant={following ? \"outline\" : \"default\"}\n            onClick={toggleFollow}\n            aria-pressed={following}\n          >\n            {following ? (\n              <UserCheck aria-hidden=\"true\" />\n            ) : (\n              <UserPlus aria-hidden=\"true\" />\n            )}\n            {following ? \"Following\" : \"Follow\"}\n          </Button>\n        </div>\n\n        <p className=\"text-sm text-muted-foreground\">{teammate.bio}</p>\n\n        <StatGrid stats={teammate.stats} />\n\n        <div className=\"flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground\">\n          <span className=\"flex items-center gap-1\">\n            <MapPin className=\"size-3\" aria-hidden=\"true\" />\n            {teammate.location}\n          </span>\n          <span className=\"flex items-center gap-1\">\n            <CalendarDays className=\"size-3\" aria-hidden=\"true\" />\n            {teammate.joined}\n          </span>\n        </div>\n      </HoverCardContent>\n    </HoverCard>\n  );\n}\n\nconst activity = [\n  {\n    id: \"a1\",\n    title: \"Checkout redesign moved to review\",\n    detail: \"12 comments from the payments team\",\n    time: \"12 min ago\",\n  },\n  {\n    id: \"a2\",\n    title: \"Design tokens v2.4 published\",\n    detail: \"Spacing and radius scales are now fully aligned\",\n    time: \"2 hours ago\",\n  },\n  {\n    id: \"a3\",\n    title: \"Quarterly research readout scheduled\",\n    detail: \"Thursday at 15:00 in the Atlas room\",\n    time: \"Yesterday\",\n  },\n];\n\nexport default function Page() {\n  return (\n    <div className=\"min-h-screen bg-muted/30\">\n      <header className=\"sticky top-0 z-40 border-b bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70\">\n        <div className=\"mx-auto flex h-16 max-w-5xl items-center justify-between gap-4 px-4 sm:px-6\">\n          <div className=\"flex items-center gap-2.5\">\n            <div\n              className=\"flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground\"\n              aria-hidden=\"true\"\n            >\n              <Users className=\"size-4\" />\n            </div>\n            <span className=\"text-base font-semibold tracking-tight\">\n              Northwind Studio\n            </span>\n          </div>\n\n          <nav aria-label=\"Primary\" className=\"flex items-center gap-3\">\n            <Button\n              variant=\"ghost\"\n              size=\"icon\"\n              aria-label=\"Notifications\"\n              onClick={() => toast(\"You have 3 unread notifications\")}\n            >\n              <Bell aria-hidden=\"true\" />\n            </Button>\n            <ProfileMenu />\n          </nav>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-5xl px-4 py-8 sm:px-6 sm:py-12\">\n        <div className=\"mb-8 max-w-2xl\">\n          <p className=\"text-sm font-medium text-muted-foreground\">\n            Tuesday overview\n          </p>\n          <h1 className=\"mt-1 text-2xl font-semibold tracking-tight sm:text-3xl\">\n            Good morning, Maya\n          </h1>\n          <p className=\"mt-2 text-sm text-muted-foreground sm:text-base\">\n            Select your avatar in the top right to open your account menu, or\n            hover over a teammate&apos;s handle to preview their profile.\n          </p>\n        </div>\n\n        <section\n          aria-labelledby=\"activity-heading\"\n          className=\"rounded-xl border bg-card text-card-foreground shadow-xs\"\n        >\n          <div className=\"border-b px-4 py-4 sm:px-6\">\n            <h2 id=\"activity-heading\" className=\"text-base font-semibold\">\n              Recent activity\n            </h2>\n            <p className=\"text-sm text-muted-foreground\">\n              What your team has been up to since yesterday.\n            </p>\n          </div>\n\n          <ul className=\"divide-y\">\n            <li className=\"flex flex-col gap-1 px-4 py-4 sm:px-6\">\n              <p className=\"text-sm\">\n                <TeammateMention /> requested your review on{\" \"}\n                <span className=\"font-medium\">Navigation refactor</span>\n              </p>\n              <p className=\"text-xs text-muted-foreground\">\n                Touches 18 files across the shared component library · 38 min\n                ago\n              </p>\n            </li>\n            {activity.map((item) => (\n              <li\n                key={item.id}\n                className=\"flex flex-col gap-1 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6\"\n              >\n                <div className=\"min-w-0\">\n                  <p className=\"text-sm font-medium\">{item.title}</p>\n                  <p className=\"text-sm text-muted-foreground\">{item.detail}</p>\n                </div>\n                <p className=\"shrink-0 text-xs text-muted-foreground\">\n                  {item.time}\n                </p>\n              </li>\n            ))}\n          </ul>\n        </section>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

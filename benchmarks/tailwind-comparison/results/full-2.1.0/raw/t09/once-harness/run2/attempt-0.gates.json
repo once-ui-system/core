@@ -1,0 +1,23 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(230,17): error TS2322: Type 'Range' is not assignable to type 'DateRange'.\n  Property 'startDate' is optional in type 'Range' but required in type 'DateRange'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2304
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 0,
+    "output": "✓ app/page.tsx: no mechanical issues",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

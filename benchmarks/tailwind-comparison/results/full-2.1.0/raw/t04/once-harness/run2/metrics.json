@@ -1,0 +1,36 @@
+{
+  "attempt": 1,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 658,
+    "chars": 19247,
+    "bytes": 19262,
+    "tokens_o200k": 4493,
+    "tokens_claudeLegacy": 4732
+  },
+  "raw": {
+    "lines": 533,
+    "chars": 18399,
+    "bytes": 18414,
+    "tokens_o200k": 4360,
+    "tokens_claudeLegacy": 4644
+  },
+  "components": [
+    "Avatar",
+    "Button",
+    "Column",
+    "Dialog",
+    "EmojiPickerDropdown",
+    "IconButton",
+    "IconName",
+    "KeyTip",
+    "Line",
+    "Row",
+    "Spinner",
+    "StatusIndicator",
+    "Tag",
+    "Text",
+    "Textarea"
+  ]
+}

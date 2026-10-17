@@ -1,0 +1,31 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 563,
+    "chars": 14732,
+    "bytes": 14732,
+    "tokens_o200k": 3959,
+    "tokens_claudeLegacy": 4131
+  },
+  "raw": {
+    "lines": 315,
+    "chars": 13697,
+    "bytes": 13697,
+    "tokens_o200k": 3718,
+    "tokens_claudeLegacy": 3910
+  },
+  "components": [
+    "Button",
+    "Column",
+    "DataTable",
+    "DateRangeInput",
+    "Heading",
+    "Input",
+    "Row",
+    "SegmentedControl",
+    "Tag",
+    "Text"
+  ]
+}

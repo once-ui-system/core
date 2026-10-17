@@ -1,0 +1,23 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(337,38): error TS2322: Type '\"green\" | \"gray\" | \"orange\"' is not assignable to type '\"green\" | \"gray\" | \"yellow\" | \"red\"'.\n  Type '\"orange\"' is not assignable to type '\"green\" | \"gray\" | \"yellow\" | \"red\"'.\napp/page.tsx(415,80): error TS2322: Type '\"green\" | \"gray\" | \"orange\"' is not assignable to type '\"green\" | \"gray\" | \"yellow\" | \"red\"'.\n  Type '\"orange\"' is not assignable to type '\"green\" | \"gray\" | \"yellow\" | \"red\"'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2503
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 1 issue(s)\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "arm": "A",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(267,21): error TS2322: Type '{ children: Element[]; as: \"button\"; type: string; vertical: \"center\"; gap: \"12\"; padding: \"8\"; paddingRight: \"16\"; radius: \"full\"; border: true; background: \"transparent\"; cursor: string; \"aria-label\": string; }' is not assignable to type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.\n  Property 'type' does not exist on type 'IntrinsicAttributes & Omit<RowProps, \"ref\"> & RefAttributes<HTMLDivElement>'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 2408
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ],
+  "validate_ai_code": {
+    "exit": 1,
+    "output": "✗ app/page.tsx: 2 issue(s)\n  [layout.defaults] fillWidth beside maxWidth — maxWidth already fills the width, omit fillWidth\n  [spacing.tokens] Use token props (gap, padding, background) instead of style={{}}",
+    "validator": {
+      "package_version": "2.1.0",
+      "script_sha256": "46be018f1a0f7b9d"
+    }
+  }
+}

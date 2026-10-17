@@ -232,6 +232,10 @@ instead of it.
 
 - **n = 5 runs per task per arm** (12 × 4 × 5 = 240 runs; raised from 3 on 2026-10-11, §11).
   n is fixed in `config.json` before the full run starts and can't be raised partway through.
+  **The 2.1.0 claim run is trimmed** (2026-10-15, §11): arms A and C only, **n = 3**
+  (12 × 2 × 3 = 72 runs), because of budget. The claim conditions in §5.1 are unchanged;
+  the §5.2 wording then says "3 runs per task". Arms B and D are not run on 2.1.0, so the
+  secondary comparisons are reported from rc.0 only and stay internal.
 - Per task and arm: the **median** and **IQR** (type-7 quantiles) of each metric over
   accepted runs.
 - Per task and arm pair (X vs Y), for tasks where both have ≥ 1 accepted run:
@@ -397,3 +401,4 @@ The full run: [`RUN.md`](./RUN.md), step by step. The pilot and the general layo
 | 2026-10-13 | `setup.mjs` drops the stale `@once-ui-system/core` lock entry before `npm install`; API clients send `anthropic-workspace-id` when `ANTHROPIC_WORKSPACE_ID` is set; `report.mjs` counts the API runner's `read_file` as a docs read | EINTEGRITY on the rc.0 tarball; the run's API key is not workspace-scoped; "Docs files read" showed 0 for every API run. None changes a prompt, task, n, the model or a request parameter | during full run (rc.0) |
 | 2026-10-14 | **Approved by Lorant** (2026-10-14 13:26 UTC, in the benchmark thread): before each full-page screenshot the render gate waits at least 1.5 s (as before), then until no finite CSS animation or transition has run for two checks 250 ms apart, at most 5 s (`config.json` `screenshot.settle_*`); the wait per screenshot is recorded in `gates.json` | rc.0 screenshotted `RevealFx` pages mid-blur (13 of 60 arm-A pages; the rater called prices and KPIs "blurred and unreadable"); re-gating rc.0 task 3 run 1 settles at about 4.6 s with nothing blurred. Applies identically to every arm | before the 2.1.0 run |
 | 2026-10-14 | Runner supports multi-file tasks for the v2 app-scale set (`BENCH_TASKS`, task `output: "multi"` and `routes`): the reply is several path-labelled files, the gates render and screenshot every route, metrics sum all files, and the rater sees every route with a `coherence` axis (`prompts/user-multi.md`, `repair-multi.md`, `rater-multi.md`). The 12 single-page tasks run exactly as before | Benchmark v2 needs apps, not single pages; no v2 task is fixed or run yet | before any v2 run |
+| 2026-10-15 | **Approved by Lorant** (2026-10-15 20:36 UTC, in the benchmark thread): the 2.1.0 claim run uses arms A and C only, n = 3 runs per task (`--arms A,C --runs 3`; `config.json` keeps n = 5 as the default), generated task by task and stopped if list-price spend reaches $45. §5.1 conditions unchanged; §5.2 wording says "3 runs per task" | The API budget left for the month is $50; the full 240-run design costs about $75. A vs C is the only pair that can support a claim (§5) | before any 2.1.0 generation |

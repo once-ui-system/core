@@ -1,0 +1,34 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 360,
+    "chars": 10862,
+    "bytes": 10862,
+    "tokens_o200k": 2620,
+    "tokens_claudeLegacy": 2783
+  },
+  "raw": {
+    "lines": 314,
+    "chars": 10446,
+    "bytes": 10446,
+    "tokens_o200k": 2555,
+    "tokens_claudeLegacy": 2738
+  },
+  "components": [
+    "Button",
+    "Chip",
+    "CodeBlock",
+    "Column",
+    "Heading",
+    "Icon",
+    "IconName",
+    "InlineCode",
+    "Line",
+    "Row",
+    "Tag",
+    "Text",
+    "Timeline"
+  ]
+}

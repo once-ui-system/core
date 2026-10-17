@@ -1,0 +1,57 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 715,
+    "chars": 21261,
+    "bytes": 21268,
+    "tokens_o200k": 5292,
+    "tokens_claudeLegacy": 5464
+  },
+  "raw": {
+    "lines": 735,
+    "chars": 22944,
+    "bytes": 22951,
+    "tokens_o200k": 5413,
+    "tokens_claudeLegacy": 5628
+  },
+  "components": [
+    "Avatar",
+    "AvatarFallback",
+    "Badge",
+    "Card",
+    "CardAction",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle",
+    "ChartConfig",
+    "ChartContainer",
+    "ChartLegend",
+    "ChartLegendContent",
+    "ChartTooltip",
+    "ChartTooltipContent",
+    "Separator",
+    "ToggleGroup",
+    "ToggleGroupItem"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/card.tsx",
+      "components/ui/chart.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/toggle-group.tsx",
+      "components/ui/toggle.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 716,
+    "chars": 22013,
+    "bytes": 22013,
+    "tokens_o200k": 5307,
+    "tokens_claudeLegacy": 5915
+  }
+}

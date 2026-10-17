@@ -1,0 +1,422 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Auth flow — login with password + OTP step in a stacked dialog.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014FzKGTv4jdVygomDj4XJjm",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DJ9yaztr3eqGJ5KYv9XT3i",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014FzKGTv4jdVygomDj4XJjm",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DJ9yaztr3eqGJ5KYv9XT3i",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_019YCFA5cgoceds3KwLk5oAQ",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018RuTB6no846CgNXfJxjMBZ",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/input-otp.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01KV8tzUGJHifsJHfqxYPHSV",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/dialog.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_019YCFA5cgoceds3KwLk5oAQ",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018RuTB6no846CgNXfJxjMBZ",
+          "content": "---\ntitle: Input OTP\ndescription: Accessible one-time password component with copy-paste functionality.\nbase: radix\ncomponent: true\nlinks:\n  doc: https://input-otp.rodz.dev\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-demo\" />\n\n## About\n\nInput OTP is built on top of [input-otp](https://github.com/guilhermerodz/input-otp) by [@guilherme_rodz](https://twitter.com/guilherme_rodz).\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add input-otp\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install input-otp\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"input-otp\"\n  title=\"components/ui/input-otp.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\"\n```\n\n```tsx showLineNumbers\n<InputOTP maxLength={6}>\n  <InputOTPGroup>\n    <InputOTPSlot index={0} />\n    <InputOTPSlot index={1} />\n    <InputOTPSlot index={2} />\n  </InputOTPGroup>\n  <InputOTPSeparator />\n  <InputOTPGroup>\n    <InputOTPSlot index={3} />\n    <InputOTPSlot index={4} />\n    <InputOTPSlot index={5} />\n  </InputOTPGroup>\n</InputOTP>\n```\n\n## Composition\n\nUse the following composition to build an `InputOTP`:\n\n```text\nInputOTP\n├── InputOTPGroup\n│   ├── InputOTPSlot\n│   ├── InputOTPSlot\n│   └── InputOTPSlot\n├── InputOTPSeparator\n├── InputOTPGroup\n│   ├── InputOTPSlot\n│   ├── InputOTPSlot\n│   └── InputOTPSlot\n├── InputOTPSeparator\n└── InputOTPGroup\n    ├── InputOTPSlot\n    └── InputOTPSlot\n```\n\n## Pattern\n\nUse the `pattern` prop to define a custom pattern for the OTP input.\n\n```tsx showLineNumbers {1,5}\nimport { REGEXP_ONLY_DIGITS_AND_CHARS } from \"input-otp\"\n\n;<InputOTP maxLength={6} pattern={REGEXP_ONLY_DIGITS_AND_CHARS}>\n  ...\n</InputOTP>\n```\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-pattern\" />\n\n## Separator\n\nUse the `<InputOTPSeparator />` component to add a separator between input groups.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-separator\" />\n\n## Disabled\n\nUse the `disabled` prop to disable the input.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-disabled\" />\n\n## Controlled\n\nUse the `value` and `onChange` props to control the input value.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-controlled\" />\n\n## Invalid\n\nUse `aria-invalid` on the slots to show an error state.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-invalid\" />\n\n## Four Digits\n\nA common pattern for PIN codes. This uses the `pattern={REGEXP_ONLY_DIGITS}` prop.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-four-digits\" />\n\n## Alphanumeric\n\nUse `REGEXP_ONLY_DIGITS_AND_CHARS` to accept both letters and numbers.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-alphanumeric\" />\n\n## Form\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"input-otp-form\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"input-otp-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [input-otp](https://input-otp.rodz.dev) documentation for more information.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01KV8tzUGJHifsJHfqxYPHSV",
+          "content": "---\ntitle: Dialog\ndescription: A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.\nfeatured: true\nbase: radix\ncomponent: true\nlinks:\n  doc: https://www.radix-ui.com/docs/primitives/components/dialog\n  api: https://www.radix-ui.com/docs/primitives/components/dialog#api-reference\n---\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"dialog-demo\"\n  description=\"A dialog for editing profile details.\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add dialog\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Install the following dependencies:</Step>\n\n```bash\nnpm install radix-ui\n```\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"dialog\"\n  title=\"components/ui/dialog.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogHeader,\n  DialogTitle,\n  DialogTrigger,\n} from \"@/components/ui/dialog\"\n```\n\n```tsx showLineNumbers\n<Dialog>\n  <DialogTrigger>Open</DialogTrigger>\n  <DialogContent>\n    <DialogHeader>\n      <DialogTitle>Are you absolutely sure?</DialogTitle>\n      <DialogDescription>\n        This action cannot be undone. This will permanently delete your account\n        and remove your data from our servers.\n      </DialogDescription>\n    </DialogHeader>\n  </DialogContent>\n</Dialog>\n```\n\n## Composition\n\nUse the following composition to build a `Dialog`:\n\n```text\nDialog\n├── DialogTrigger\n└── DialogContent\n    ├── DialogHeader\n    │   ├── DialogTitle\n    │   └── DialogDescription\n    └── DialogFooter\n```\n\n## Custom Close Button\n\nReplace the default close control with your own button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-close-button\" />\n\n## No Close Button\n\nUse `showCloseButton={false}` to hide the close button.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-no-close-button\" />\n\n## Sticky Footer\n\nKeep actions visible while the content scrolls.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-sticky-footer\" />\n\n## Scrollable Content\n\nLong content can scroll while the header stays in view.\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-scrollable-content\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"dialog-rtl\" direction=\"rtl\" />\n\n## API Reference\n\nSee the [Radix UI](https://www.radix-ui.com/docs/primitives/components/dialog#api-reference) documentation for more information.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the installed components and app files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JwNgyq6byEFLxNT4ZKu3yG",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01AkqFyBdtgpaN4zACSYy9FU",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/dialog.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01ABfgo9Vn2vyGAfBxxZD955",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input-otp.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01PG1RV9QPYPmiU4D5gsZY3k",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JwNgyq6byEFLxNT4ZKu3yG",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01AkqFyBdtgpaN4zACSYy9FU",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { XIcon } from \"lucide-react\"\nimport { Dialog as DialogPrimitive } from \"radix-ui\"\n\nimport { Button } from \"@/components/ui/button\"\n\nfunction Dialog({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Root>) {\n  return <DialogPrimitive.Root data-slot=\"dialog\" {...props} />\n}\n\nfunction DialogTrigger({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Trigger>) {\n  return <DialogPrimitive.Trigger data-slot=\"dialog-trigger\" {...props} />\n}\n\nfunction DialogPortal({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Portal>) {\n  return <DialogPrimitive.Portal data-slot=\"dialog-portal\" {...props} />\n}\n\nfunction DialogClose({\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Close>) {\n  return <DialogPrimitive.Close data-slot=\"dialog-close\" {...props} />\n}\n\nfunction DialogOverlay({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Overlay>) {\n  return (\n    <DialogPrimitive.Overlay\n      data-slot=\"dialog-overlay\"\n      className={cn(\n        \"fixed inset-0 z-50 bg-black/50 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction DialogContent({\n  className,\n  children,\n  showCloseButton = true,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Content> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <DialogPortal data-slot=\"dialog-portal\">\n      <DialogOverlay />\n      <DialogPrimitive.Content\n        data-slot=\"dialog-content\"\n        className={cn(\n          \"fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border bg-background p-6 shadow-lg duration-200 outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 sm:max-w-lg\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        {showCloseButton && (\n          <DialogPrimitive.Close\n            data-slot=\"dialog-close\"\n            className=\"absolute top-4 right-4 rounded-xs opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-hidden disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\"\n          >\n            <XIcon />\n            <span className=\"sr-only\">Close</span>\n          </DialogPrimitive.Close>\n        )}\n      </DialogPrimitive.Content>\n    </DialogPortal>\n  )\n}\n\nfunction DialogHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"dialog-header\"\n      className={cn(\"flex flex-col gap-2 text-center sm:text-left\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogFooter({\n  className,\n  showCloseButton = false,\n  children,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  showCloseButton?: boolean\n}) {\n  return (\n    <div\n      data-slot=\"dialog-footer\"\n      className={cn(\n        \"flex flex-col-reverse gap-2 sm:flex-row sm:justify-end\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      {showCloseButton && (\n        <DialogPrimitive.Close asChild>\n          <Button variant=\"outline\">Close</Button>\n        </DialogPrimitive.Close>\n      )}\n    </div>\n  )\n}\n\nfunction DialogTitle({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Title>) {\n  return (\n    <DialogPrimitive.Title\n      data-slot=\"dialog-title\"\n      className={cn(\"text-lg leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction DialogDescription({\n  className,\n  ...props\n}: React.ComponentProps<typeof DialogPrimitive.Description>) {\n  return (\n    <DialogPrimitive.Description\n      data-slot=\"dialog-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Dialog,\n  DialogClose,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogOverlay,\n  DialogPortal,\n  DialogTitle,\n  DialogTrigger,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ABfgo9Vn2vyGAfBxxZD955",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { OTPInput, OTPInputContext } from \"input-otp\"\nimport { MinusIcon } from \"lucide-react\"\n\nfunction InputOTP({\n  className,\n  containerClassName,\n  ...props\n}: React.ComponentProps<typeof OTPInput> & {\n  containerClassName?: string\n}) {\n  return (\n    <OTPInput\n      data-slot=\"input-otp\"\n      containerClassName={cn(\n        \"flex items-center gap-2 has-disabled:opacity-50\",\n        containerClassName\n      )}\n      className={cn(\"disabled:cursor-not-allowed\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputOTPGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-otp-group\"\n      className={cn(\"flex items-center\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputOTPSlot({\n  index,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  index: number\n}) {\n  const inputOTPContext = React.useContext(OTPInputContext)\n  const { char, hasFakeCaret, isActive } = inputOTPContext?.slots[index] ?? {}\n\n  return (\n    <div\n      data-slot=\"input-otp-slot\"\n      data-active={isActive}\n      className={cn(\n        \"relative flex h-9 w-9 items-center justify-center border-y border-r border-input text-sm shadow-xs transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md aria-invalid:border-destructive data-[active=true]:z-10 data-[active=true]:border-ring data-[active=true]:ring-[3px] data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:border-destructive data-[active=true]:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-[active=true]:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    >\n      {char}\n      {hasFakeCaret && (\n        <div className=\"pointer-events-none absolute inset-0 flex items-center justify-center\">\n          <div className=\"h-4 w-px animate-caret-blink bg-foreground duration-1000\" />\n        </div>\n      )}\n    </div>\n  )\n}\n\nfunction InputOTPSeparator({ ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div data-slot=\"input-otp-separator\" role=\"separator\" {...props}>\n      <MinusIcon />\n    </div>\n  )\n}\n\nexport { InputOTP, InputOTPGroup, InputOTPSlot, InputOTPSeparator }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01PG1RV9QPYPmiU4D5gsZY3k",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me look at the existing page, layout, and the other components I plan to use."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012t6jgWLe4LpHXrQ2WbUkaN",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01UJXuqEHwd33G83WMjnDZTK",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GJWwbAdENNECQrC9NBXshH",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012t6jgWLe4LpHXrQ2WbUkaN",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01UJXuqEHwd33G83WMjnDZTK",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GJWwbAdENNECQrC9NBXshH",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "\"Stacked dialog\" suggests the OTP dialog opens on top of the login dialog. I'll check the button, input, label, field and spinner APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TKgSTHZ18XtambZ3qbPDBY",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/field.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0157RtMJw29WcTWLSvHXemjp",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018E5qmgNhaSd4VPbv9VuzDe",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/spinner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018cCSiHkp6hb5eCJGoiV8Qn",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TKgSTHZ18XtambZ3qbPDBY",
+          "content": "\"use client\"\n\nimport { useMemo } from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\n\nfunction FieldSet({ className, ...props }: React.ComponentProps<\"fieldset\">) {\n  return (\n    <fieldset\n      data-slot=\"field-set\"\n      className={cn(\n        \"flex flex-col gap-6\",\n        \"has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLegend({\n  className,\n  variant = \"legend\",\n  ...props\n}: React.ComponentProps<\"legend\"> & { variant?: \"legend\" | \"label\" }) {\n  return (\n    <legend\n      data-slot=\"field-legend\"\n      data-variant={variant}\n      className={cn(\n        \"mb-3 font-medium\",\n        \"data-[variant=legend]:text-base\",\n        \"data-[variant=label]:text-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-group\"\n      className={cn(\n        \"group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst fieldVariants = cva(\n  \"group/field flex w-full gap-3 data-[invalid=true]:text-destructive\",\n  {\n    variants: {\n      orientation: {\n        vertical: [\"flex-col [&>*]:w-full [&>.sr-only]:w-auto\"],\n        horizontal: [\n          \"flex-row items-center\",\n          \"[&>[data-slot=field-label]]:flex-auto\",\n          \"has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n        responsive: [\n          \"flex-col @md/field-group:flex-row @md/field-group:items-center [&>*]:w-full @md/field-group:[&>*]:w-auto [&>.sr-only]:w-auto\",\n          \"@md/field-group:[&>[data-slot=field-label]]:flex-auto\",\n          \"@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n      },\n    },\n    defaultVariants: {\n      orientation: \"vertical\",\n    },\n  }\n)\n\nfunction Field({\n  className,\n  orientation = \"vertical\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof fieldVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"field\"\n      data-orientation={orientation}\n      className={cn(fieldVariants({ orientation }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction FieldContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-content\"\n      className={cn(\n        \"group/field-content flex flex-1 flex-col gap-1.5 leading-snug\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof Label>) {\n  return (\n    <Label\n      data-slot=\"field-label\"\n      className={cn(\n        \"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50\",\n        \"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4\",\n        \"has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-label\"\n      className={cn(\n        \"flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"field-description\"\n      className={cn(\n        \"text-sm leading-normal font-normal text-muted-foreground group-has-[[data-orientation=horizontal]]/field:text-balance\",\n        \"last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5\",\n        \"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldSeparator({\n  children,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  children?: React.ReactNode\n}) {\n  return (\n    <div\n      data-slot=\"field-separator\"\n      data-content={!!children}\n      className={cn(\n        \"relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2\",\n        className\n      )}\n      {...props}\n    >\n      <Separator className=\"absolute inset-0 top-1/2\" />\n      {children && (\n        <span\n          className=\"relative mx-auto block w-fit bg-background px-2 text-muted-foreground\"\n          data-slot=\"field-separator-content\"\n        >\n          {children}\n        </span>\n      )}\n    </div>\n  )\n}\n\nfunction FieldError({\n  className,\n  children,\n  errors,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  errors?: Array<{ message?: string } | undefined>\n}) {\n  const content = useMemo(() => {\n    if (children) {\n      return children\n    }\n\n    if (!errors?.length) {\n      return null\n    }\n\n    const uniqueErrors = [\n      ...new Map(errors.map((error) => [error?.message, error])).values(),\n    ]\n\n    if (uniqueErrors?.length == 1) {\n      return uniqueErrors[0]?.message\n    }\n\n    return (\n      <ul className=\"ml-4 flex list-disc flex-col gap-1\">\n        {uniqueErrors.map(\n          (error, index) =>\n            error?.message && <li key={index}>{error.message}</li>\n        )}\n      </ul>\n    )\n  }, [children, errors])\n\n  if (!content) {\n    return null\n  }\n\n  return (\n    <div\n      role=\"alert\"\n      data-slot=\"field-error\"\n      className={cn(\"text-sm font-normal text-destructive\", className)}\n      {...props}\n    >\n      {content}\n    </div>\n  )\n}\n\nexport {\n  Field,\n  FieldLabel,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLegend,\n  FieldSeparator,\n  FieldSet,\n  FieldContent,\n  FieldTitle,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0157RtMJw29WcTWLSvHXemjp",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018E5qmgNhaSd4VPbv9VuzDe",
+          "content": "import { cn } from \"@/lib/utils\"\nimport { Loader2Icon } from \"lucide-react\"\n\nfunction Spinner({ className, ...props }: React.ComponentProps<\"svg\">) {\n  return (\n    <Loader2Icon\n      role=\"status\"\n      aria-label=\"Loading\"\n      className={cn(\"size-4 animate-spin\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Spinner }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018cCSiHkp6hb5eCJGoiV8Qn",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Button } from \"@/components/ui/button\"\nimport { Input } from \"@/components/ui/input\"\nimport { Textarea } from \"@/components/ui/textarea\"\n\nfunction InputGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"input-group\"\n      role=\"group\"\n      className={cn(\n        \"group/input-group relative flex w-full items-center rounded-md border border-input shadow-xs transition-[color,box-shadow] outline-none dark:bg-input/30\",\n        \"h-9 min-w-0 has-[>textarea]:h-auto\",\n\n        // Variants based on alignment.\n        \"has-[>[data-align=inline-start]]:[&>input]:pl-2\",\n        \"has-[>[data-align=inline-end]]:[&>input]:pr-2\",\n        \"has-[>[data-align=block-start]]:h-auto has-[>[data-align=block-start]]:flex-col has-[>[data-align=block-start]]:[&>input]:pb-3\",\n        \"has-[>[data-align=block-end]]:h-auto has-[>[data-align=block-end]]:flex-col has-[>[data-align=block-end]]:[&>input]:pt-3\",\n\n        // Focus state.\n        \"has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-[3px] has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50\",\n\n        // Error state.\n        \"has-[[data-slot][aria-invalid=true]]:border-destructive has-[[data-slot][aria-invalid=true]]:ring-destructive/20 dark:has-[[data-slot][aria-invalid=true]]:ring-destructive/40\",\n\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupAddonVariants = cva(\n  \"flex h-auto cursor-text items-center justify-center gap-2 py-1.5 text-sm font-medium text-muted-foreground select-none group-data-[disabled=true]/input-group:opacity-50 [&>kbd]:rounded-[calc(var(--radius)-5px)] [&>svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      align: {\n        \"inline-start\":\n          \"order-first pl-3 has-[>button]:ml-[-0.45rem] has-[>kbd]:ml-[-0.35rem]\",\n        \"inline-end\":\n          \"order-last pr-3 has-[>button]:mr-[-0.45rem] has-[>kbd]:mr-[-0.35rem]\",\n        \"block-start\":\n          \"order-first w-full justify-start px-3 pt-3 group-has-[>input]/input-group:pt-2.5 [.border-b]:pb-3\",\n        \"block-end\":\n          \"order-last w-full justify-start px-3 pb-3 group-has-[>input]/input-group:pb-2.5 [.border-t]:pt-3\",\n      },\n    },\n    defaultVariants: {\n      align: \"inline-start\",\n    },\n  }\n)\n\nfunction InputGroupAddon({\n  className,\n  align = \"inline-start\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof inputGroupAddonVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"input-group-addon\"\n      data-align={align}\n      className={cn(inputGroupAddonVariants({ align }), className)}\n      onClick={(e) => {\n        if ((e.target as HTMLElement).closest(\"button\")) {\n          return\n        }\n        e.currentTarget.parentElement?.querySelector(\"input\")?.focus()\n      }}\n      {...props}\n    />\n  )\n}\n\nconst inputGroupButtonVariants = cva(\n  \"flex items-center gap-2 text-sm shadow-none\",\n  {\n    variants: {\n      size: {\n        xs: \"h-6 gap-1 rounded-[calc(var(--radius)-5px)] px-2 has-[>svg]:px-2 [&>svg:not([class*='size-'])]:size-3.5\",\n        sm: \"h-8 gap-1.5 rounded-md px-2.5 has-[>svg]:px-2.5\",\n        \"icon-xs\":\n          \"size-6 rounded-[calc(var(--radius)-5px)] p-0 has-[>svg]:p-0\",\n        \"icon-sm\": \"size-8 p-0 has-[>svg]:p-0\",\n      },\n    },\n    defaultVariants: {\n      size: \"xs\",\n    },\n  }\n)\n\nfunction InputGroupButton({\n  className,\n  type = \"button\",\n  variant = \"ghost\",\n  size = \"xs\",\n  ...props\n}: Omit<React.ComponentProps<typeof Button>, \"size\"> &\n  VariantProps<typeof inputGroupButtonVariants>) {\n  return (\n    <Button\n      type={type}\n      data-size={size}\n      variant={variant}\n      className={cn(inputGroupButtonVariants({ size }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupText({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      className={cn(\n        \"flex items-center gap-2 text-sm text-muted-foreground [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupInput({\n  className,\n  ...props\n}: React.ComponentProps<\"input\">) {\n  return (\n    <Input\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction InputGroupTextarea({\n  className,\n  ...props\n}: React.ComponentProps<\"textarea\">) {\n  return (\n    <Textarea\n      data-slot=\"input-group-control\"\n      className={cn(\n        \"flex-1 resize-none rounded-none border-0 bg-transparent py-3 shadow-none focus-visible:ring-0 dark:bg-transparent\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupText,\n  InputGroupInput,\n  InputGroupTextarea,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've reviewed the flow: a sign-in dialog with email/password leads to a stacked OTP dialog, complete with resend cooldown and error/success states. The demo accepts `correct-horse` as the password and `482913` as the OTP, rejecting anything else with inline errors.\n\n",
+          "signature": "CAQS5ggKEQgSGAI4AUIJbmFycmF0aW9uEgxuwOYiH3DYhhSgswoaDMfM9+JKpHl4ye9YRSIwr5/vk71Pa5KBGuoo78s2MQB+/TT6WgR4Uyxq8VyKSfqJBfSXOCx5X/CyyECpPnt/KoIITkZwqOgMF0fLbtKxGsWk43WhyLJFK+FCJri7RjldJhu62JDuQeRGfaBAhSbYRsgIjD106LdPMA8meuQWuMKawPKPYNNE1qgm7FcicqeTk0c3d2QTPctYWxSFTc3Wrf1POMKlKmMCzV/6Be2QiUk89VJFlhYQdEv0Ncn3/neTyCIB2eIn9mN/zgBq73Qguif3vizGia6pLi24g1TCCBvBjCpT0pCGw2nEngvDJBNz/DzzdbdVrG1hYsNkZq7N95fIhksREvjE+Z8T3lkqNnUDOtVEpOqfPG6mmOwJbAj7xr9n4zYkGcDMfToV/8PEzdXFnEgqqlG5IQRPo8ZCaLSVb2GQtosvMTj37lblaUn+6xDXq9jL3MhmMLMa5nvsWuxZLIwHLkbIVVE0GUWdf9Mp5wBUuROHvPSotoLdOPo18+N2GYZP4xYmWSHLF2YxpJjGTdSbd3L1ZJK8NXeK17M9G9HL8HN+eoGt4lGMuLjje/w8KXyR5EFFZZo5Yoy9hLzigk7e8ctU15NARJWVXsDCJrkxyKgndsWOxrgIMLLbO4vxTV71HgsgOa9af1HP7KlPmSG48KIAgEZtE2tKf6lqiwv810jfqM2QUfgyPDghljm1IVUDUElIRBD3wMrri1ssdcEu8i6K1U6J5o3W6ZgInOwseBC7BCYFt3S5vkB1WwcEdZ3ol0HefQOkjIyO9jwuMeuVjuuzboyxBmr10h/EJZW+LLHt9sO/Sy46e+EQ9fUrOuYPcjO3VaLRYB0JqgVv3bN4L3gT/cnugKFIydBnvEv29OTxkN6qXwcO+5axbYZBh55dDiylRkSOTdxl0pAQAqf1QyX/gX2UYJcI7oebo3I+1WMIJglIYnG+0X2UKEMrHV9Qxmi4lcAn4GqIyOBvlLsnHoejzwXRM66M/knVAYwr3JCvUqbSaheH+Rtf+OwOA29qjnVPbTvbY+u55zkEXogx5/0QBQYCqg++0vPIA/NAHhGlQ2mVy1UTczZi1H9YI4jkQIiyr9oBEbR8uvsvQ6ZKVePxQV6KUpD8kyq1YqWv/GVmN/O4NFOTWJuElnwC2njgdYSPp6lNA9JN2exDLwoy82lFC/K1U4QEpILYc3Z+Wvtc2LlYsFsyIQwNnvsI3Dzf+AUPvYL+WkwNXrgVIJozcaoepimFQ09cLqupQD0lvUl4pYnK4Rvsjte2nkUAzVqG+zdVo3sBvcDP8fGZYAptJg9j/6xA0DfxGOeMdngvLTQTWOeXjJ55aeiSOy1QZke8lLoP95ZWZjHsZQKc6/T3QpFEAaGPTkt9+ah0kKDvR1ZMsCSrWQ9teMJS3Re5wrxhOJDmyPxRNSquXCQBd1aziMGDZ2hzy6x8HNHlSfhSGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LpUkKHYc7WTATokwg5fAps",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013LqM9BnuSn5TZHV7yUMBTK",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01X7puVKWsRrJtvi7Pu4USGK",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LpUkKHYc7WTATokwg5fAps",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013LqM9BnuSn5TZHV7yUMBTK",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01X7puVKWsRrJtvi7Pu4USGK",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Now I'll write the page.\n\n```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport { REGEXP_ONLY_DIGITS } from \"input-otp\";\nimport {\n  ArrowLeftIcon,\n  EyeIcon,\n  EyeOffIcon,\n  LockKeyholeIcon,\n  LogOutIcon,\n  MailIcon,\n  ShieldCheckIcon,\n  SmartphoneIcon,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Dialog,\n  DialogContent,\n  DialogDescription,\n  DialogFooter,\n  DialogHeader,\n  DialogTitle,\n} from \"@/components/ui/dialog\";\nimport {\n  Field,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLabel,\n} from \"@/components/ui/field\";\nimport {\n  InputGroup,\n  InputGroupAddon,\n  InputGroupButton,\n  InputGroupInput,\n} from \"@/components/ui/input-group\";\nimport {\n  InputOTP,\n  InputOTPGroup,\n  InputOTPSeparator,\n  InputOTPSlot,\n} from \"@/components/ui/input-otp\";\nimport { Spinner } from \"@/components/ui/spinner\";\nimport { Avatar, AvatarFallback } from \"@/components/ui/avatar\";\nimport {\n  Card,\n  CardContent,\n  CardDescription,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\";\n\n// Demo credentials (placeholder, no network involved).\nconst DEMO_PASSWORD = \"correct-horse\";\nconst DEMO_OTP = \"482913\";\nconst OTP_LENGTH = 6;\nconst RESEND_SECONDS = 30;\nconst DEFAULT_EMAIL = \"amara.okafor@northwind.example\";\n\ntype Session = { email: string; name: string };\n\nfunction sleep(ms: number) {\n  return new Promise<void>((resolve) => setTimeout(resolve, ms));\n}\n\nfunction maskEmail(email: string) {\n  const [local, domain] = email.split(\"@\");\n  if (!local || !domain) return email;\n  const visible = local.slice(0, 2);\n  return `${visible}${\"•\".repeat(Math.max(local.length - 2, 2))}@${domain}`;\n}\n\nfunction nameFromEmail(email: string) {\n  const local = email.split(\"@\")[0] ?? \"\";\n  const parts = local.split(/[._-]/).filter(Boolean);\n  if (parts.length === 0) return \"Member\";\n  return parts.map((p) => p.charAt(0).toUpperCase() + p.slice(1)).join(\" \");\n}\n\nfunction initials(name: string) {\n  return name\n    .split(\" \")\n    .map((p) => p.charAt(0))\n    .slice(0, 2)\n    .join(\"\")\n    .toUpperCase();\n}\n\nexport default function Page() {\n  const [loginOpen, setLoginOpen] = React.useState(false);\n  const [otpOpen, setOtpOpen] = React.useState(false);\n  const [session, setSession] = React.useState<Session | null>(null);\n\n  // Login step state\n  const [email, setEmail] = React.useState(DEFAULT_EMAIL);\n  const [password, setPassword] = React.useState(\"\");\n  const [showPassword, setShowPassword] = React.useState(false);\n  const [loginError, setLoginError] = React.useState<string | null>(null);\n  const [loginPending, setLoginPending] = React.useState(false);\n\n  // OTP step state\n  const [otp, setOtp] = React.useState(\"\");\n  const [otpError, setOtpError] = React.useState<string | null>(null);\n  const [otpPending, setOtpPending] = React.useState(false);\n  const [cooldown, setCooldown] = React.useState(0);\n\n  const passwordRef = React.useRef<HTMLInputElement>(null);\n\n  // Resend cooldown ticker\n  React.useEffect(() => {\n    if (cooldown <= 0) return;\n    const id = setTimeout(() => setCooldown((c) => c - 1), 1000);\n    return () => clearTimeout(id);\n  }, [cooldown]);\n\n  function resetAll() {\n    setPassword(\"\");\n    setShowPassword(false);\n    setLoginError(null);\n    setLoginPending(false);\n    setOtp(\"\");\n    setOtpError(null);\n    setOtpPending(false);\n    setCooldown(0);\n  }\n\n  function handleLoginOpenChange(next: boolean) {\n    setLoginOpen(next);\n    if (!next) {\n      setOtpOpen(false);\n      resetAll();\n    }\n  }\n\n  function handleOtpOpenChange(next: boolean) {\n    setOtpOpen(next);\n    if (!next) {\n      setOtp(\"\");\n      setOtpError(null);\n      setOtpPending(false);\n    }\n  }\n\n  async function handleLoginSubmit(event: React.FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (loginPending) return;\n    setLoginError(null);\n    setLoginPending(true);\n    await sleep(800);\n    setLoginPending(false);\n\n    if (password !== DEMO_PASSWORD) {\n      setLoginError(\"That email and password don’t match. Please try again.\");\n      passwordRef.current?.focus();\n      return;\n    }\n\n    setOtp(\"\");\n    setOtpError(null);\n    setCooldown(RESEND_SECONDS);\n    setOtpOpen(true);\n    toast.info(\"Verification code sent\", {\n      description: `We texted a 6-digit code to the phone ending in 42.`,\n    });\n  }\n\n  async function verifyOtp(code: string) {\n    if (otpPending) return;\n    setOtpError(null);\n    setOtpPending(true);\n    await sleep(700);\n    setOtpPending(false);\n\n    if (code !== DEMO_OTP) {\n      setOtpError(\"That code is incorrect or has expired. Try again.\");\n      setOtp(\"\");\n      return;\n    }\n\n    const name = nameFromEmail(email);\n    setSession({ email, name });\n    setOtpOpen(false);\n    setLoginOpen(false);\n    resetAll();\n    toast.success(`Welcome back, ${name.split(\" \")[0]}`, {\n      description: \"You’re signed in on this device.\",\n    });\n  }\n\n  function handleOtpSubmit(event: React.FormEvent<HTMLFormElement>) {\n    event.preventDefault();\n    if (otp.length < OTP_LENGTH) {\n      setOtpError(\"Enter all 6 digits of your code.\");\n      return;\n    }\n    void verifyOtp(otp);\n  }\n\n  function handleResend() {\n    if (cooldown > 0) return;\n    setOtp(\"\");\n    setOtpError(null);\n    setCooldown(RESEND_SECONDS);\n    toast.success(\"New code sent\", {\n      description: \"It may take a few seconds to arrive.\",\n    });\n  }\n\n  function handleSignOut() {\n    setSession(null);\n    toast(\"Signed out\", { description: \"See you next time.\" });\n  }\n\n  return (\n    <main className=\"flex min-h-svh flex-col bg-muted/30\">\n      <header className=\"border-b bg-background\">\n        <div className=\"mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-4 sm:px-6\">\n          <div className=\"flex items-center gap-2 font-semibold\">\n            <span className=\"flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground\">\n              <ShieldCheckIcon className=\"size-4\" aria-hidden=\"true\" />\n            </span>\n            Northwind Ledger\n          </div>\n          {session ? (\n            <div className=\"flex items-center gap-3\">\n              <div className=\"hidden text-right text-sm leading-tight sm:block\">\n                <p className=\"font-medium\">{session.name}</p>\n                <p className=\"text-muted-foreground\">{session.email}</p>\n              </div>\n              <Avatar>\n                <AvatarFallback>{initials(session.name)}</AvatarFallback>\n              </Avatar>\n              <Button variant=\"outline\" size=\"sm\" onClick={handleSignOut}>\n                <LogOutIcon aria-hidden=\"true\" />\n                Sign out\n              </Button>\n            </div>\n          ) : (\n            <Button size=\"sm\" onClick={() => setLoginOpen(true)}>\n              Sign in\n            </Button>\n          )}\n        </div>\n      </header>\n\n      <section className=\"mx-auto flex w-full max-w-5xl flex-1 items-center px-4 py-12 sm:px-6 sm:py-20\">\n        {session ? (\n          <Card className=\"w-full max-w-xl\">\n            <CardHeader>\n              <CardTitle className=\"text-xl\">\n                Good to see you, {session.name.split(\" \")[0]}\n              </CardTitle>\n              <CardDescription>\n                Two-step verification is on. Your last sign-in was from Chrome\n                on macOS, Lisbon, Portugal.\n              </CardDescription>\n            </CardHeader>\n            <CardContent className=\"grid gap-4 sm:grid-cols-2\">\n              <div className=\"rounded-lg border p-4\">\n                <p className=\"text-sm text-muted-foreground\">Open invoices</p>\n                <p className=\"mt-1 text-2xl font-semibold tabular-nums\">14</p>\n              </div>\n              <div className=\"rounded-lg border p-4\">\n                <p className=\"text-sm text-muted-foreground\">\n                  Outstanding balance\n                </p>\n                <p className=\"mt-1 text-2xl font-semibold tabular-nums\">\n                  $12,480.50\n                </p>\n              </div>\n            </CardContent>\n          </Card>\n        ) : (\n          <div className=\"mx-auto flex max-w-xl flex-col items-center gap-6 text-center\">\n            <span className=\"flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary\">\n              <LockKeyholeIcon className=\"size-6\" aria-hidden=\"true\" />\n            </span>\n            <div className=\"flex flex-col gap-3\">\n              <h1 className=\"text-3xl font-semibold tracking-tight text-balance sm:text-4xl\">\n                Your books, protected by two-step sign-in\n              </h1>\n              <p className=\"text-pretty text-muted-foreground\">\n                Sign in with your password, then confirm with a one-time code\n                sent to your phone. It takes about ten seconds and keeps your\n                invoices and payouts safe.\n              </p>\n            </div>\n            <Button size=\"lg\" onClick={() => setLoginOpen(true)}>\n              Sign in to your account\n            </Button>\n            <p className=\"text-sm text-muted-foreground\">\n              Demo: password{\" \"}\n              <code className=\"rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground\">\n                {DEMO_PASSWORD}\n              </code>\n              , code{\" \"}\n              <code className=\"rounded bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground\">\n                {DEMO_OTP}\n              </code>\n            </p>\n          </div>\n        )}\n      </section>\n\n      {/* Step 1: password */}\n      <Dialog open={loginOpen} onOpenChange={handleLoginOpenChange}>\n        <DialogContent className=\"sm:max-w-md\">\n          <DialogHeader>\n            <DialogTitle>Sign in</DialogTitle>\n            <DialogDescription>\n              Enter your work email and password to continue.\n            </DialogDescription>\n          </DialogHeader>\n\n          <form onSubmit={handleLoginSubmit} noValidate>\n            <FieldGroup className=\"gap-5\">\n              <Field>\n                <FieldLabel htmlFor=\"login-email\">Email</FieldLabel>\n                <InputGroup>\n                  <InputGroupAddon>\n                    <MailIcon aria-hidden=\"true\" />\n                  </InputGroupAddon>\n                  <InputGroupInput\n                    id=\"login-email\"\n                    type=\"email\"\n                    name=\"email\"\n                    autoComplete=\"username\"\n                    inputMode=\"email\"\n                    required\n                    value={email}\n                    onChange={(e) => setEmail(e.target.value)}\n                    disabled={loginPending}\n                  />\n                </InputGroup>\n              </Field>\n\n              <Field data-invalid={loginError ? true : undefined}>\n                <div className=\"flex items-center justify-between gap-2\">\n                  <FieldLabel htmlFor=\"login-password\">Password</FieldLabel>\n                  <button\n                    type=\"button\"\n                    className=\"rounded-sm text-sm text-muted-foreground underline-offset-4 outline-none hover:text-foreground hover:underline focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n                    onClick={() =>\n                      toast(\"Password reset\", {\n                        description: `We’ve emailed reset steps to ${maskEmail(email)}.`,\n                      })\n                    }\n                  >\n                    Forgot password?\n                  </button>\n                </div>\n                <InputGroup>\n                  <InputGroupAddon>\n                    <LockKeyholeIcon aria-hidden=\"true\" />\n                  </InputGroupAddon>\n                  <InputGroupInput\n                    id=\"login-password\"\n                    ref={passwordRef}\n                    type={showPassword ? \"text\" : \"password\"}\n                    name=\"password\"\n                    autoComplete=\"current-password\"\n                    required\n                    value={password}\n                    onChange={(e) => {\n                      setPassword(e.target.value);\n                      if (loginError) setLoginError(null);\n                    }}\n                    disabled={loginPending}\n                    aria-invalid={loginError ? true : undefined}\n                    aria-describedby={\n                      loginError ? \"login-error\" : undefined\n                    }\n                  />\n                  <InputGroupAddon align=\"inline-end\">\n                    <InputGroupButton\n                      size=\"icon-xs\"\n                      aria-label={\n                        showPassword ? \"Hide password\" : \"Show password\"\n                      }\n                      aria-pressed={showPassword}\n                      onClick={() => setShowPassword((s) => !s)}\n                    >\n                      {showPassword ? (\n                        <EyeOffIcon aria-hidden=\"true\" />\n                      ) : (\n                        <EyeIcon aria-hidden=\"true\" />\n                      )}\n                    </InputGroupButton>\n                  </InputGroupAddon>\n                </InputGroup>\n                {loginError ? (\n                  <FieldError id=\"login-error\">{loginError}</FieldError>\n                ) : null}\n              </Field>\n\n              <Button\n                type=\"submit\"\n                className=\"w-full\"\n                disabled={loginPending || !email || !password}\n              >\n                {loginPending ? (\n                  <>\n                    <Spinner aria-hidden=\"true\" />\n                    Checking…\n                  </>\n                ) : (\n                  \"Continue\"\n                )}\n              </Button>\n            </FieldGroup>\n          </form>\n        </DialogContent>\n      </Dialog>\n\n      {/* Step 2: OTP, stacked on top of the login dialog */}\n      <Dialog open={otpOpen} onOpenChange={handleOtpOpenChange}>\n        <DialogContent\n          className=\"sm:max-w-sm\"\n          showCloseButton={!otpPending}\n          onInteractOutside={(e) => {\n            if (otpPending) e.preventDefault();\n          }}\n          onEscapeKeyDown={(e) => {\n            if (otpPending) e.preventDefault();\n          }}\n        >\n          <DialogHeader className=\"items-center text-center sm:text-center\">\n            <span className=\"flex size-11 items-center justify-center rounded-full bg-primary/10 text-primary\">\n              <SmartphoneIcon className=\"size-5\" aria-hidden=\"true\" />\n            </span>\n            <DialogTitle>Enter verification code</DialogTitle>\n            <DialogDescription>\n              We sent a 6-digit code to the phone ending in 42 for{\" \"}\n              <span className=\"font-medium text-foreground\">\n                {maskEmail(email)}\n              </span>\n              .\n            </DialogDescription>\n          </DialogHeader>\n\n          <form\n            onSubmit={handleOtpSubmit}\n            className=\"flex flex-col items-center gap-4\"\n            noValidate\n          >\n            <Field\n              className=\"items-center\"\n              data-invalid={otpError ? true : undefined}\n            >\n              <FieldLabel htmlFor=\"otp-code\" className=\"sr-only\">\n                6-digit verification code\n              </FieldLabel>\n              <InputOTP\n                id=\"otp-code\"\n                maxLength={OTP_LENGTH}\n                pattern={REGEXP_ONLY_DIGITS}\n                inputMode=\"numeric\"\n                autoComplete=\"one-time-code\"\n                autoFocus\n                value={otp}\n                disabled={otpPending}\n                onChange={(value) => {\n                  setOtp(value);\n                  if (otpError) setOtpError(null);\n                }}\n                onComplete={(value) => void verifyOtp(value)}\n                aria-invalid={otpError ? true : undefined}\n                aria-describedby={otpError ? \"otp-error\" : \"otp-hint\"}\n                containerClassName=\"justify-center\"\n              >\n                <InputOTPGroup>\n                  <InputOTPSlot\n                    index={0}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                  <InputOTPSlot\n                    index={1}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                  <InputOTPSlot\n                    index={2}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                </InputOTPGroup>\n                <InputOTPSeparator />\n                <InputOTPGroup>\n                  <InputOTPSlot\n                    index={3}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                  <InputOTPSlot\n                    index={4}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                  <InputOTPSlot\n                    index={5}\n                    aria-invalid={otpError ? true : undefined}\n                    className=\"size-10 sm:size-11\"\n                  />\n                </InputOTPGroup>\n              </InputOTP>\n              {otpError ? (\n                <FieldError id=\"otp-error\" className=\"text-center\">\n                  {otpError}\n                </FieldError>\n              ) : (\n                <FieldDescription id=\"otp-hint\" className=\"text-center\">\n                  The code expires in 10 minutes.\n                </FieldDescription>\n              )}\n            </Field>\n\n            <Button\n              type=\"submit\"\n              className=\"w-full\"\n              disabled={otpPending || otp.length < OTP_LENGTH}\n            >\n              {otpPending ? (\n                <>\n                  <Spinner aria-hidden=\"true\" />\n                  Verifying…\n                </>\n              ) : (\n                \"Verify and sign in\"\n              )}\n            </Button>\n          </form>\n\n          <DialogFooter className=\"items-center sm:flex-col sm:items-center sm:justify-center\">\n            <p className=\"text-sm text-muted-foreground\" aria-live=\"polite\">\n              Didn’t get a code?{\" \"}\n              {cooldown > 0 ? (\n                <span className=\"tabular-nums\">Resend in {cooldown}s</span>\n              ) : (\n                <button\n                  type=\"button\"\n                  onClick={handleResend}\n                  disabled={otpPending}\n                  className=\"rounded-sm font-medium text-foreground underline underline-offset-4 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:opacity-50\"\n                >\n                  Resend code\n                </button>\n              )}\n            </p>\n            <Button\n              type=\"button\"\n              variant=\"ghost\"\n              size=\"sm\"\n              disabled={otpPending}\n              onClick={() => handleOtpOpenChange(false)}\n            >\n              <ArrowLeftIcon aria-hidden=\"true\" />\n              Back to password\n            </Button>\n          </DialogFooter>\n        </DialogContent>\n      </Dialog>\n    </main>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}

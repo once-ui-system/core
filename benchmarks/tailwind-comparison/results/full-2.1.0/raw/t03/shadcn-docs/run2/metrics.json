@@ -1,0 +1,57 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 449,
+    "chars": 16060,
+    "bytes": 16060,
+    "tokens_o200k": 3558,
+    "tokens_claudeLegacy": 3813
+  },
+  "raw": {
+    "lines": 456,
+    "chars": 16271,
+    "bytes": 16271,
+    "tokens_o200k": 3593,
+    "tokens_claudeLegacy": 3866
+  },
+  "components": [
+    "Accordion",
+    "AccordionContent",
+    "AccordionItem",
+    "AccordionTrigger",
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardFooter",
+    "CardHeader",
+    "CardTitle",
+    "Switch",
+    "Table",
+    "TableBody",
+    "TableCaption",
+    "TableCell",
+    "TableHead",
+    "TableHeader",
+    "TableRow"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/accordion.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/switch.tsx",
+      "components/ui/table.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 387,
+    "chars": 12297,
+    "bytes": 12297,
+    "tokens_o200k": 3129,
+    "tokens_claudeLegacy": 3646
+  }
+}

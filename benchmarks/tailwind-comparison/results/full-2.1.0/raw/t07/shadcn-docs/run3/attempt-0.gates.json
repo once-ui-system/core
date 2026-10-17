@@ -1,0 +1,15 @@
+{
+  "arm": "C",
+  "passed": false,
+  "failed_gate": "typecheck",
+  "failure_output": "app/page.tsx(591,18): error TS2304: Cannot find name 'Plus'.",
+  "gates": {
+    "typecheck": {
+      "ok": false,
+      "ms": 5502
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ]
+}

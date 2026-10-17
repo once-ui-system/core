@@ -1,0 +1,59 @@
+{
+  "attempt": 0,
+  "files": 1,
+  "tokenizer": "proxy",
+  "normalised": {
+    "lines": 464,
+    "chars": 15432,
+    "bytes": 15436,
+    "tokens_o200k": 3571,
+    "tokens_claudeLegacy": 3843
+  },
+  "raw": {
+    "lines": 456,
+    "chars": 15368,
+    "bytes": 15372,
+    "tokens_o200k": 3560,
+    "tokens_claudeLegacy": 3843
+  },
+  "components": [
+    "Avatar",
+    "AvatarBadge",
+    "AvatarFallback",
+    "Badge",
+    "Button",
+    "Card",
+    "CardContent",
+    "CardDescription",
+    "CardHeader",
+    "CardTitle",
+    "HoverCard",
+    "HoverCardContent",
+    "HoverCardTrigger",
+    "Popover",
+    "PopoverContent",
+    "PopoverTrigger",
+    "Progress",
+    "Separator",
+    "Switch"
+  ],
+  "vendored": {
+    "files": [
+      "components/ui/avatar.tsx",
+      "components/ui/badge.tsx",
+      "components/ui/button.tsx",
+      "components/ui/card.tsx",
+      "components/ui/hover-card.tsx",
+      "components/ui/popover.tsx",
+      "components/ui/progress.tsx",
+      "components/ui/separator.tsx",
+      "components/ui/switch.tsx",
+      "lib/utils.ts"
+    ],
+    "lines": 491,
+    "chars": 16013,
+    "bytes": 16013,
+    "tokens_o200k": 4086,
+    "tokens_claudeLegacy": 4721
+  }
+}

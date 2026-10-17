@@ -1,0 +1,40 @@
+{
+  "$comment": "PRACTICE app for the v2 cost check only; not one of the 8 v2 tasks.",
+  "generation": {
+    "max_tokens": 32000,
+    "max_tool_calls_per_attempt": 80
+  },
+  "tasks": [
+    {
+      "id": 99,
+      "slug": "help-center-practice",
+      "title": "Help center (practice)",
+      "routes": [
+        "/",
+        "/articles/getting-started"
+      ],
+      "checklist": [
+        "Search filters the list",
+        "Four category cards with counts",
+        "Article page with breadcrumb and TOC",
+        "Shared header"
+      ],
+      "output": "multi",
+      "prompt": "Lumen's help center. At `/`: a hero with a search field that filters the article list as the user types, four category cards (Basics, Analytics, Issues, Account) with article counts, and a list of popular articles. At `/articles/getting-started`: the article page with a breadcrumb back to the help center, title and reading time, a few sections of body text with headings, an 'On this page' table of contents beside the text on desktop (hidden on phones), and 'Was this helpful?' yes/no buttons. Both routes share a header with the Lumen name and a 'Contact support' button.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"product\": \"Lumen, a product-analytics and issue-tracking app for small software teams\",\n  \"user\": {\n    \"name\": \"Maya Okafor\",\n    \"email\": \"maya@acmelabs.io\",\n    \"role\": \"Owner\"\n  },\n  \"articles\": [\n    {\n      \"slug\": \"getting-started\",\n      \"title\": \"Getting started with Lumen\",\n      \"category\": \"Basics\",\n      \"minutes\": 4\n    },\n    {\n      \"slug\": \"invite-your-team\",\n      \"title\": \"Invite your team\",\n      \"category\": \"Basics\",\n      \"minutes\": 2\n    },\n    {\n      \"slug\": \"track-signups\",\n      \"title\": \"Track signups with events\",\n      \"category\": \"Analytics\",\n      \"minutes\": 6\n    },\n    {\n      \"slug\": \"triage-issues\",\n      \"title\": \"Triage issues faster\",\n      \"category\": \"Issues\",\n      \"minutes\": 5\n    },\n    {\n      \"slug\": \"billing-faq\",\n      \"title\": \"Billing FAQ\",\n      \"category\": \"Account\",\n      \"minutes\": 3\n    }\n  ]\n}\n```"
+    }
+  ],
+  "interactions": {
+    "99": {
+      "steps": [
+        {
+          "action": "type",
+          "target": {
+            "selector": "input[type=search], input[placeholder*='earch' i], [role=searchbox], header ~ * input, main input"
+          },
+          "text": "issue"
+        }
+      ],
+      "describe": "Types 'issue' into the search field."
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "arm": "C",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 6193
+    },
+    "build": {
+      "ok": true,
+      "ms": 15848
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 250,
+          "height": 5140,
+          "width": 375,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "tablet": {
+          "text": 257,
+          "height": 2782,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 257,
+          "height": 1382,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {},
+      "errors": [],
+      "axe": {
+        "rules": 1,
+        "nodes": 2,
+        "serious_or_critical": 1,
+        "ids": [
+          "color-contrast:serious:2"
+        ]
+      },
+      "interaction": {
+        "phone": {
+          "action": "hover",
+          "found": false,
+          "steps": 0,
+          "errors": []
+        },
+        "desktop": {
+          "action": "hover",
+          "found": false,
+          "steps": 0,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1768,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1765,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1762,
+          "settled": true
+        }
+      }
+    }
+  },
+  "files": [
+    "app/page.tsx"
+  ]
+}

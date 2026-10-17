@@ -1,0 +1,374 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the UI described below as a single page in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: E-commerce product card grid — image, price, tag, hover actions, skeleton loading state.\n\nRequirements:\n- Write exactly one file, `app/page.tsx`, that default-exports the page. Put \"use client\" at the top if the page uses state, effects or event handlers.\n- Do not create or change any other file. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Use realistic placeholder content defined inline in the file (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The page must type-check under strict TypeScript, pass `next build`, and render without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with the complete file in a single ```tsx code block and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by reading the docs and checking the project structure."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MQn1wAbL4LkDjeWHCf6Z1G",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018XFbKkf9VEwCVADrPWkuhU",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MQn1wAbL4LkDjeWHCf6Z1G",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018XFbKkf9VEwCVADrPWkuhU",
+          "content": "docs/\nproject/",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01M4BSggHE7BwnXEGH4QaHrX",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Un1KwMeSgtfuT4py4fVhB5",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/card.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014cV5vm8vtppzRm6Pm7GWte",
+          "name": "read_file",
+          "input": {
+            "path": "docs/components/skeleton.mdx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01M4BSggHE7BwnXEGH4QaHrX",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Un1KwMeSgtfuT4py4fVhB5",
+          "content": "---\ntitle: Card\ndescription: Displays a card with header, content, and footer.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview\n  name=\"card-demo\"\n  styleName=\"radix-nova\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add card\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"card\"\n  title=\"components/ui/card.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx showLineNumbers\nimport {\n  Card,\n  CardAction,\n  CardContent,\n  CardDescription,\n  CardFooter,\n  CardHeader,\n  CardTitle,\n} from \"@/components/ui/card\"\n```\n\n```tsx showLineNumbers\n<Card>\n  <CardHeader>\n    <CardTitle>Card Title</CardTitle>\n    <CardDescription>Card Description</CardDescription>\n    <CardAction>Card Action</CardAction>\n  </CardHeader>\n  <CardContent>\n    <p>Card Content</p>\n  </CardContent>\n  <CardFooter>\n    <p>Card Footer</p>\n  </CardFooter>\n</Card>\n```\n\n## Composition\n\nUse the following composition to build a `Card`:\n\n```text\nCard\n├── CardHeader\n│   ├── CardTitle\n│   ├── CardDescription\n│   └── CardAction\n├── CardContent\n└── CardFooter\n```\n\n## Size\n\nUse the `size=\"sm\"` prop to set the size of the card to small. The small size variant uses smaller spacing.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-small\"\n  previewClassName=\"h-96\"\n/>\n\n## Spacing\n\nIn addition to the `size` prop, you can use the `--card-spacing` CSS variable to control the spacing between sections and the inset of card parts.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-spacing\"\n  previewClassName=\"h-[34rem]\"\n/>\n\nUse negative margins with `-mx-(--card-spacing)` to make content go edge to edge while keeping it aligned with the card inset. When the edge-to-edge content sits above a footer, use `-mb-(--card-spacing)` on `CardContent` to remove the section gap.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-edge-to-edge\"\n  previewClassName=\"h-[24rem]\"\n/>\n\n## Image\n\nAdd an image before the card header to create a card with an image.\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-image\"\n  previewClassName=\"h-[32rem]\"\n/>\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"card-rtl\"\n  direction=\"rtl\"\n  previewClassName=\"h-[30rem]\"\n/>\n\n## API Reference\n\n### Card\n\nThe `Card` component is the root container for card content.\n\n| Prop        | Type                | Default     |\n| ----------- | ------------------- | ----------- |\n| `size`      | `\"default\" \\| \"sm\"` | `\"default\"` |\n| `className` | `string`            | -           |\n\n### CardHeader\n\nThe `CardHeader` component is used for a title, description, and optional action.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardTitle\n\nThe `CardTitle` component is used for the card title.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardDescription\n\nThe `CardDescription` component is used for helper text under the title.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardAction\n\nThe `CardAction` component places content in the top-right of the header (for example, a button or a badge).\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardContent\n\nThe `CardContent` component is used for the main card body.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n### CardFooter\n\nThe `CardFooter` component is used for actions and secondary content at the bottom of the card.\n\n| Prop        | Type     | Default |\n| ----------- | -------- | ------- |\n| `className` | `string` | -       |\n\n## Changelog\n\n### Spacing Variable\n\nIf you're upgrading from a previous version of the `Card` component, you'll need to apply the following updates to use the `--card-spacing` variable:\n\n<Steps>\n\n<Step>Update the Card root spacing classes.</Step>\n\nReplace the hard-coded gap and vertical padding with `--card-spacing`, and set the default and small size values on the root:\n\n```diff\n  className={cn(\n-   \"group/card flex flex-col gap-4 overflow-hidden rounded-xl bg-card py-4 text-sm text-card-foreground ring-1 ring-foreground/10 has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:gap-3 data-[size=sm]:py-3 data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl\",\n+   \"group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-xl bg-card py-(--card-spacing) text-sm text-card-foreground ring-1 ring-foreground/10 [--card-spacing:--spacing(4)] has-data-[slot=card-footer]:pb-0 has-[>img:first-child]:pt-0 data-[size=sm]:[--card-spacing:--spacing(3)] data-[size=sm]:has-data-[slot=card-footer]:pb-0 *:[img:first-child]:rounded-t-xl *:[img:last-child]:rounded-b-xl\",\n    className\n  )}\n```\n\n<Step>Update CardHeader spacing classes.</Step>\n\nReplace the horizontal padding and border spacing with the shared variable:\n\n```diff\n  className={cn(\n-   \"group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-4 group-data-[size=sm]/card:px-3 has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-4 group-data-[size=sm]/card:[.border-b]:pb-3\",\n+   \"group/card-header @container/card-header grid auto-rows-min items-start gap-1 rounded-t-xl px-(--card-spacing) has-data-[slot=card-action]:grid-cols-[1fr_auto] has-data-[slot=card-description]:grid-rows-[auto_auto] [.border-b]:pb-(--card-spacing)\",\n    className\n  )}\n```\n\n<Step>Update CardContent and CardFooter spacing classes.</Step>\n\nUse `--card-spacing` for the content inset and footer padding:\n\n```diff\n  function CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n    return (\n      <div\n        data-slot=\"card-content\"\n-       className={cn(\"px-4 group-data-[size=sm]/card:px-3\", className)}\n+       className={cn(\"px-(--card-spacing)\", className)}\n        {...props}\n      />\n    )\n  }\n```\n\n```diff\n  className={cn(\n-   \"flex items-center rounded-b-xl border-t bg-muted/50 p-4 group-data-[size=sm]/card:p-3\",\n+   \"flex items-center rounded-b-xl border-t bg-muted/50 p-(--card-spacing)\",\n    className\n  )}\n```\n\n</Steps>\n\nAfter applying these changes, you can customize card spacing by setting `--card-spacing` on the `Card` with an arbitrary property class:\n\n```tsx\nfunction Example() {\n  return <Card className=\"[--card-spacing:--spacing(6)]\">...</Card>\n}\n```\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014cV5vm8vtppzRm6Pm7GWte",
+          "content": "---\ntitle: Skeleton\ndescription: Use to show a placeholder while content is loading.\nbase: radix\ncomponent: true\n---\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-demo\" />\n\n## Installation\n\n<CodeTabs>\n\n<TabsList>\n  <TabsTrigger value=\"cli\">Command</TabsTrigger>\n  <TabsTrigger value=\"manual\">Manual</TabsTrigger>\n</TabsList>\n<TabsContent value=\"cli\">\n\n```bash\nnpx shadcn@latest add skeleton\n```\n\n</TabsContent>\n\n<TabsContent value=\"manual\">\n\n<Steps className=\"mb-0 pt-2\">\n\n<Step>Copy and paste the following code into your project.</Step>\n\n<ComponentSource\n  name=\"skeleton\"\n  title=\"components/ui/skeleton.tsx\"\n  styleName=\"radix-nova\"\n/>\n\n<Step>Update the import paths to match your project setup.</Step>\n\n</Steps>\n\n</TabsContent>\n\n</CodeTabs>\n\n## Usage\n\n```tsx\nimport { Skeleton } from \"@/components/ui/skeleton\"\n```\n\n```tsx\n<Skeleton className=\"h-[20px] w-[100px] rounded-full\" />\n```\n\n## Avatar\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-avatar\" />\n\n## Card\n\n<ComponentPreview\n  styleName=\"radix-nova\"\n  name=\"skeleton-card\"\n  previewClassName=\"h-80\"\n/>\n\n## Text\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-text\" />\n\n## Form\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-form\" />\n\n## Table\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-table\" />\n\n## RTL\n\nTo enable RTL support in shadcn/ui, see the [RTL configuration guide](/docs/rtl).\n\n<ComponentPreview styleName=\"radix-nova\" name=\"skeleton-rtl\" direction=\"rtl\" />\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Let me check the project's existing files and the installed components."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018RoKXeQHewiyQsVEtnC1PK",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01TLMTL2BWB15xQK4zFa92yT",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fi9BY5v1TK6PJV8oeQvin4",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GFnN2chJSPc9C4V9gSQBn3",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_014NRe7AzdDCEyht4mLzfFXj",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018RoKXeQHewiyQsVEtnC1PK",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01TLMTL2BWB15xQK4zFa92yT",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fi9BY5v1TK6PJV8oeQvin4",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GFnN2chJSPc9C4V9gSQBn3",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_014NRe7AzdDCEyht4mLzfFXj",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The installed Card is the older variant, so I'll use plain divs with Tailwind for layout. Let me check the existing page, layout, skeleton, and globals."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01P3KZDcvy2NrKWqot5uSnb1",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_012S4D5dWUP9KZV7giQhsUYB",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Wn8ggGNtohd3WTqDD4Gn8g",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/skeleton.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HsszGg5R9iUiRTpt9Xi2JG",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013xGGpXauBXysJNjoQjJBRd",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/tooltip.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01DRqZHH3gm9QPkcn4vsyktH",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01P3KZDcvy2NrKWqot5uSnb1",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_012S4D5dWUP9KZV7giQhsUYB",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Wn8ggGNtohd3WTqDD4Gn8g",
+          "content": "import { cn } from \"@/lib/utils\"\n\nfunction Skeleton({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      className={cn(\"animate-pulse rounded-md bg-accent\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Skeleton }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HsszGg5R9iUiRTpt9Xi2JG",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013xGGpXauBXysJNjoQjJBRd",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Tooltip as TooltipPrimitive } from \"radix-ui\"\n\nfunction TooltipProvider({\n  delayDuration = 0,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Provider>) {\n  return (\n    <TooltipPrimitive.Provider\n      data-slot=\"tooltip-provider\"\n      delayDuration={delayDuration}\n      {...props}\n    />\n  )\n}\n\nfunction Tooltip({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Root>) {\n  return <TooltipPrimitive.Root data-slot=\"tooltip\" {...props} />\n}\n\nfunction TooltipTrigger({\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Trigger>) {\n  return <TooltipPrimitive.Trigger data-slot=\"tooltip-trigger\" {...props} />\n}\n\nfunction TooltipContent({\n  className,\n  sideOffset = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof TooltipPrimitive.Content>) {\n  return (\n    <TooltipPrimitive.Portal>\n      <TooltipPrimitive.Content\n        data-slot=\"tooltip-content\"\n        sideOffset={sideOffset}\n        className={cn(\n          \"z-50 w-fit origin-(--radix-tooltip-content-transform-origin) animate-in rounded-md bg-foreground px-3 py-1.5 text-xs text-balance text-background fade-in-0 zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95\",\n          className\n        )}\n        {...props}\n      >\n        {children}\n        <TooltipPrimitive.Arrow className=\"z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground\" />\n      </TooltipPrimitive.Content>\n    </TooltipPrimitive.Portal>\n  )\n}\n\nexport { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01DRqZHH3gm9QPkcn4vsyktH",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I've outlined the storefront design: category filter, sort select, product grid with inline SVG art, hover/focus actions, and skeleton loading states. Now I'll double-check the Select and Input component APIs.\n\n",
+          "signature": "CAQSkggKEQgSGAI4AUIJbmFycmF0aW9uEgxq2O+gvwBEB3q332gaDGgFEftNwkO6JIAvKSIw2v2qs0yySH/rMDbGIelLzQb1UTdnr9G4b+1qmVEnTjMvsYV4Raxw/TZXtg4EkqyUKq4HrJbtsiE1gphRE6UxNJipjhK86KG5FpiexTOZdZu0nOUbrKCnSbJrjivrJptfoTBW7aJ6LF8cQMpakuvxYaSP+PHEcnz7wNORPBgHhKH/M3/SgIgjypF219gYm3OlUHQFW3lK+AZ0bNOgrSBwh5eXvw7rxOVgzqz82o1rjDsLVedC75oNFZ0j2E+o18/L9z4B/k+z7W5JQ8cebCUcgBFODbED3wXebPacWRZxM2E4FiLsR0a8/WpIX009bDwTG0ijLW+P2Y8wemybQQI4Ru7GQ3Pp8l6PR9yqa7FdITUBRNiNy41NTHAU6J6mpP423YLdOPGJe9F6V1Ob9Uqx3RbEXBlQiwccWMUs3OVa6n8bDQpvlseHbxPU5Pp3VZ8W+kMAkkDs9HPdTzgvgmFArlzoNdYJI7HWgIOSnCTLCnYLKqqIcvFJ46/+S/1dQa3TezGl3hs0eZP20jvinckCCLeK6EqgaDZ28LOabHNiVc8mRxUNfttmqd5cAHB8Vlb5dJl4CehFFQVnYGiRtTS3gVu/Ecdbyp8Hoixf9r0X1MxazSycpVswXdhNgirJ5l7hCTuajYDuu2+gG1HrGMINL2lDfpCM5/JTcyqlHXZNDU08RFGf7W6Ept5Fsshmkm/SJjSyJKgB9DVEwcwtDZI88KifQwlAx/lLxhJ/Wyba+voNCD5vsQGAZozPHM02Ov7G8+xwjKTdfal1w1z+viTD9Rbd3Wmm0zpAuOu9yOWEbsFOg5OEJJB3iUbyVB4sWQ8tSfmR3DGN2uGnOY5kw/UiYAXO+Jp/Ie9TO4ZdK54KoEsUl8BkZO7lxRXyC8a+Li2EFtiq7MeZkBGmUClHAZxjtMSPWjJdD6YfNK6JKPtU4pL7g1jgpoHVhlG7MSc7rSCUW98+iuBlvPN1cXrzOerM7qTer0YiYSeY1MM+TP1Bis8rRJzrwYHFSOwqkJpVc/hpcA26wsgf1zeJxBJx5WeXnn8nHrkujFUdrgkNaIJcd1Q5rrn20hOxM0W7K0bLCApslKLW7RFHVPDQbsFKiQBA4VFXJsjDwLrYYPFnMabK1/L6k6m53rRJLchiWXdOa+DgmHmsiDvFt23eMJ/r/aM5/zBC5TtHQOkTvjTHQRYipRjhuclXIB9hJat/qEO79I6vOf5wWA/ulMI2M4BcJmIDOyiznCc1oy5vE5mPIojqfU7A5opMbo9aFn/1D3UM2EDGo/B+m9Th67xteULDQMujjHfej84IvUlDEHtysfM/3b8MGAE="
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RhDwDxvw946NVSFNDiuV6y",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/select.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RhDwDxvw946NVSFNDiuV6y",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon, ChevronDownIcon, ChevronUpIcon } from \"lucide-react\"\nimport { Select as SelectPrimitive } from \"radix-ui\"\n\nfunction Select({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Root>) {\n  return <SelectPrimitive.Root data-slot=\"select\" {...props} />\n}\n\nfunction SelectGroup({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Group>) {\n  return <SelectPrimitive.Group data-slot=\"select-group\" {...props} />\n}\n\nfunction SelectValue({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Value>) {\n  return <SelectPrimitive.Value data-slot=\"select-value\" {...props} />\n}\n\nfunction SelectTrigger({\n  className,\n  size = \"default\",\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SelectPrimitive.Trigger\n      data-slot=\"select-trigger\"\n      data-size={size}\n      className={cn(\n        \"flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[placeholder]:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      <SelectPrimitive.Icon asChild>\n        <ChevronDownIcon className=\"size-4 opacity-50\" />\n      </SelectPrimitive.Icon>\n    </SelectPrimitive.Trigger>\n  )\n}\n\nfunction SelectContent({\n  className,\n  children,\n  position = \"item-aligned\",\n  align = \"center\",\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Content>) {\n  return (\n    <SelectPrimitive.Portal>\n      <SelectPrimitive.Content\n        data-slot=\"select-content\"\n        className={cn(\n          \"relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          position === \"popper\" &&\n            \"data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1\",\n          className\n        )}\n        position={position}\n        align={align}\n        {...props}\n      >\n        <SelectScrollUpButton />\n        <SelectPrimitive.Viewport\n          className={cn(\n            \"p-1\",\n            position === \"popper\" &&\n              \"h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1\"\n          )}\n        >\n          {children}\n        </SelectPrimitive.Viewport>\n        <SelectScrollDownButton />\n      </SelectPrimitive.Content>\n    </SelectPrimitive.Portal>\n  )\n}\n\nfunction SelectLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Label>) {\n  return (\n    <SelectPrimitive.Label\n      data-slot=\"select-label\"\n      className={cn(\"px-2 py-1.5 text-xs text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectItem({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Item>) {\n  return (\n    <SelectPrimitive.Item\n      data-slot=\"select-item\"\n      className={cn(\n        \"relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2\",\n        className\n      )}\n      {...props}\n    >\n      <span\n        data-slot=\"select-item-indicator\"\n        className=\"absolute right-2 flex size-3.5 items-center justify-center\"\n      >\n        <SelectPrimitive.ItemIndicator>\n          <CheckIcon className=\"size-4\" />\n        </SelectPrimitive.ItemIndicator>\n      </span>\n      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>\n    </SelectPrimitive.Item>\n  )\n}\n\nfunction SelectSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Separator>) {\n  return (\n    <SelectPrimitive.Separator\n      data-slot=\"select-separator\"\n      className={cn(\"pointer-events-none -mx-1 my-1 h-px bg-border\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectScrollUpButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {\n  return (\n    <SelectPrimitive.ScrollUpButton\n      data-slot=\"select-scroll-up-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronUpIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollUpButton>\n  )\n}\n\nfunction SelectScrollDownButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {\n  return (\n    <SelectPrimitive.ScrollDownButton\n      data-slot=\"select-scroll-down-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronDownIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollDownButton>\n  )\n}\n\nexport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectLabel,\n  SelectScrollDownButton,\n  SelectScrollUpButton,\n  SelectSeparator,\n  SelectTrigger,\n  SelectValue,\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "```tsx\n\"use client\";\n\nimport * as React from \"react\";\nimport {\n  Eye,\n  Heart,\n  RotateCcw,\n  ShoppingBag,\n  ShoppingCart,\n  Star,\n} from \"lucide-react\";\nimport { toast } from \"sonner\";\n\nimport { Badge } from \"@/components/ui/badge\";\nimport { Button } from \"@/components/ui/button\";\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\nimport { cn } from \"@/lib/utils\";\n\n/* -------------------------------------------------------------------------- */\n/*  Data                                                                       */\n/* -------------------------------------------------------------------------- */\n\ntype Category = \"Audio\" | \"Wearables\" | \"Home\" | \"Bags\" | \"Desk\";\ntype ProductTag = \"New\" | \"Sale\" | \"Bestseller\" | \"Low stock\";\ntype ArtShape = \"headphones\" | \"watch\" | \"lamp\" | \"backpack\" | \"keyboard\" | \"mug\" | \"speaker\" | \"bottle\";\n\ninterface Product {\n  id: string;\n  name: string;\n  category: Category;\n  price: number;\n  compareAt?: number;\n  rating: number;\n  reviews: number;\n  tag?: ProductTag;\n  shape: ArtShape;\n  /** Tailwind gradient classes for the image backdrop */\n  tone: string;\n  /** Accent colour used for the inline artwork */\n  accent: string;\n  colors: string;\n}\n\nconst PRODUCTS: Product[] = [\n  {\n    id: \"p1\",\n    name: \"Aria Wireless Headphones\",\n    category: \"Audio\",\n    price: 189,\n    compareAt: 239,\n    rating: 4.7,\n    reviews: 1284,\n    tag: \"Sale\",\n    shape: \"headphones\",\n    tone: \"from-amber-100 to-orange-200 dark:from-amber-950 dark:to-orange-900\",\n    accent: \"#c2410c\",\n    colors: \"Terracotta\",\n  },\n  {\n    id: \"p2\",\n    name: \"Meridian Smartwatch 2\",\n    category: \"Wearables\",\n    price: 329,\n    rating: 4.5,\n    reviews: 642,\n    tag: \"New\",\n    shape: \"watch\",\n    tone: \"from-sky-100 to-indigo-200 dark:from-sky-950 dark:to-indigo-900\",\n    accent: \"#3730a3\",\n    colors: \"Midnight\",\n  },\n  {\n    id: \"p3\",\n    name: \"Halo Adjustable Desk Lamp\",\n    category: \"Desk\",\n    price: 74,\n    rating: 4.8,\n    reviews: 903,\n    tag: \"Bestseller\",\n    shape: \"lamp\",\n    tone: \"from-yellow-100 to-lime-200 dark:from-yellow-950 dark:to-lime-900\",\n    accent: \"#4d7c0f\",\n    colors: \"Sage\",\n  },\n  {\n    id: \"p4\",\n    name: \"Trailhead 24L Daypack\",\n    category: \"Bags\",\n    price: 98,\n    rating: 4.6,\n    reviews: 417,\n    shape: \"backpack\",\n    tone: \"from-emerald-100 to-teal-200 dark:from-emerald-950 dark:to-teal-900\",\n    accent: \"#0f766e\",\n    colors: \"Forest\",\n  },\n  {\n    id: \"p5\",\n    name: \"Keystone Mechanical Keyboard\",\n    category: \"Desk\",\n    price: 149,\n    compareAt: 179,\n    rating: 4.9,\n    reviews: 2210,\n    tag: \"Sale\",\n    shape: \"keyboard\",\n    tone: \"from-zinc-100 to-slate-300 dark:from-zinc-900 dark:to-slate-800\",\n    accent: \"#334155\",\n    colors: \"Graphite\",\n  },\n  {\n    id: \"p6\",\n    name: \"Hearth Stoneware Mug Set\",\n    category: \"Home\",\n    price: 42,\n    rating: 4.4,\n    reviews: 288,\n    tag: \"Low stock\",\n    shape: \"mug\",\n    tone: \"from-rose-100 to-pink-200 dark:from-rose-950 dark:to-pink-900\",\n    accent: \"#be185d\",\n    colors: \"Blush\",\n  },\n  {\n    id: \"p7\",\n    name: \"Pebble Portable Speaker\",\n    category: \"Audio\",\n    price: 119,\n    rating: 4.3,\n    reviews: 756,\n    tag: \"New\",\n    shape: \"speaker\",\n    tone: \"from-violet-100 to-purple-200 dark:from-violet-950 dark:to-purple-900\",\n    accent: \"#6d28d9\",\n    colors: \"Lilac\",\n  },\n  {\n    id: \"p8\",\n    name: \"Summit Insulated Bottle 750ml\",\n    category: \"Home\",\n    price: 36,\n    rating: 4.7,\n    reviews: 1530,\n    tag: \"Bestseller\",\n    shape: \"bottle\",\n    tone: \"from-cyan-100 to-sky-200 dark:from-cyan-950 dark:to-sky-900\",\n    accent: \"#0369a1\",\n    colors: \"Glacier\",\n  },\n];\n\nconst CATEGORIES: (\"All\" | Category)[] = [\"All\", \"Audio\", \"Wearables\", \"Desk\", \"Home\", \"Bags\"];\n\ntype SortKey = \"featured\" | \"price-asc\" | \"price-desc\" | \"rating\";\n\nconst SORT_LABELS: Record<SortKey, string> = {\n  featured: \"Featured\",\n  \"price-asc\": \"Price: low to high\",\n  \"price-desc\": \"Price: high to low\",\n  rating: \"Top rated\",\n};\n\nconst currency = new Intl.NumberFormat(\"en-US\", {\n  style: \"currency\",\n  currency: \"USD\",\n  maximumFractionDigits: 0,\n});\n\nconst TAG_STYLES: Record<ProductTag, string> = {\n  New: \"bg-primary text-primary-foreground\",\n  Sale: \"bg-destructive text-white dark:bg-destructive/80\",\n  Bestseller: \"bg-amber-500 text-amber-950\",\n  \"Low stock\": \"bg-background text-foreground border-border\",\n};\n\n/* -------------------------------------------------------------------------- */\n/*  Inline artwork (no network assets)                                         */\n/* -------------------------------------------------------------------------- */\n\nfunction ProductArt({ shape, accent }: { shape: ArtShape; accent: string }) {\n  const common = {\n    fill: \"none\",\n    stroke: accent,\n    strokeWidth: 5,\n    strokeLinecap: \"round\" as const,\n    strokeLinejoin: \"round\" as const,\n  };\n  const soft = { fill: accent, fillOpacity: 0.18 };\n\n  return (\n    <svg\n      viewBox=\"0 0 200 200\"\n      className=\"h-3/5 w-3/5 drop-shadow-sm transition-transform duration-500 ease-out group-hover/card:scale-105 group-focus-within/card:scale-105 motion-reduce:transition-none\"\n      aria-hidden=\"true\"\n      focusable=\"false\"\n    >\n      {shape === \"headphones\" && (\n        <>\n          <path d=\"M45 120V100a55 55 0 0 1 110 0v20\" {...common} />\n          <rect x=\"32\" y=\"115\" width=\"32\" height=\"52\" rx=\"14\" {...common} {...soft} />\n          <rect x=\"136\" y=\"115\" width=\"32\" height=\"52\" rx=\"14\" {...common} {...soft} />\n        </>\n      )}\n      {shape === \"watch\" && (\n        <>\n          <path d=\"M78 20h44l6 34H72zM72 146h56l-6 34H78z\" {...common} {...soft} />\n          <rect x=\"56\" y=\"52\" width=\"88\" height=\"96\" rx=\"26\" {...common} {...soft} />\n          <path d=\"M100 78v24l16 10\" {...common} />\n        </>\n      )}\n      {shape === \"lamp\" && (\n        <>\n          <path d=\"M60 176h60\" {...common} />\n          <path d=\"M90 176l10-66 42-48\" {...common} />\n          <path d=\"M126 40l46 30-26 28z\" {...common} {...soft} />\n          <circle cx=\"100\" cy=\"110\" r=\"7\" {...common} {...soft} />\n        </>\n      )}\n      {shape === \"backpack\" && (\n        <>\n          <path d=\"M80 42a20 20 0 0 1 40 0\" {...common} />\n          <rect x=\"50\" y=\"42\" width=\"100\" height=\"134\" rx=\"34\" {...common} {...soft} />\n          <rect x=\"72\" y=\"112\" width=\"56\" height=\"42\" rx=\"12\" {...common} />\n          <path d=\"M72 80h56\" {...common} />\n        </>\n      )}\n      {shape === \"keyboard\" && (\n        <>\n          <rect x=\"16\" y=\"64\" width=\"168\" height=\"84\" rx=\"14\" {...common} {...soft} />\n          <path d=\"M36 88h8M60 88h8M84 88h8M108 88h8M132 88h8M156 88h8M36 108h8M60 108h8M84 108h8M108 108h8M132 108h8M156 108h8M60 128h80\" {...common} />\n        </>\n      )}\n      {shape === \"mug\" && (\n        <>\n          <path d=\"M44 66h96v70a34 34 0 0 1-34 34H78a34 34 0 0 1-34-34z\" {...common} {...soft} />\n          <path d=\"M140 84h8a20 20 0 0 1 0 40h-8\" {...common} />\n          <path d=\"M72 40c-6 8 6 12 0 20M100 40c-6 8 6 12 0 20\" {...common} />\n        </>\n      )}\n      {shape === \"speaker\" && (\n        <>\n          <rect x=\"52\" y=\"30\" width=\"96\" height=\"140\" rx=\"30\" {...common} {...soft} />\n          <circle cx=\"100\" cy=\"104\" r=\"28\" {...common} />\n          <circle cx=\"100\" cy=\"104\" r=\"8\" {...common} {...soft} />\n          <circle cx=\"100\" cy=\"58\" r=\"5\" {...common} />\n        </>\n      )}\n      {shape === \"bottle\" && (\n        <>\n          <rect x=\"84\" y=\"20\" width=\"32\" height=\"22\" rx=\"6\" {...common} />\n          <path d=\"M84 42h32l16 22v100a14 14 0 0 1-14 14H82a14 14 0 0 1-14-14V64z\" {...common} {...soft} />\n          <path d=\"M68 100h64M68 130h64\" {...common} />\n        </>\n      )}\n    </svg>\n  );\n}\n\n/* -------------------------------------------------------------------------- */\n/*  Product card                                                               */\n/* -------------------------------------------------------------------------- */\n\ninterface ProductCardProps {\n  product: Product;\n  wishlisted: boolean;\n  inCart: number;\n  onToggleWishlist: (p: Product) => void;\n  onAddToCart: (p: Product) => void;\n  onQuickView: (p: Product) => void;\n}\n\nfunction ProductCard({\n  product,\n  wishlisted,\n  inCart,\n  onToggleWishlist,\n  onAddToCart,\n  onQuickView,\n}: ProductCardProps) {\n  const titleId = `product-${product.id}-title`;\n  const discount = product.compareAt\n    ? Math.round((1 - product.price / product.compareAt) * 100)\n    : 0;\n\n  return (\n    <article\n      aria-labelledby={titleId}\n      className=\"group/card relative flex flex-col overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-shadow duration-300 hover:shadow-lg focus-within:shadow-lg\"\n    >\n      {/* Image area */}\n      <div\n        className={cn(\n          \"relative flex aspect-[4/3] items-center justify-center overflow-hidden bg-gradient-to-br\",\n          product.tone,\n        )}\n      >\n        <ProductArt shape={product.shape} accent={product.accent} />\n\n        {product.tag && (\n          <Badge\n            className={cn(\n              \"absolute top-3 left-3 shadow-xs\",\n              TAG_STYLES[product.tag],\n            )}\n          >\n            {product.tag === \"Sale\" && discount > 0\n              ? `Sale −${discount}%`\n              : product.tag}\n          </Badge>\n        )}\n\n        {/* Wishlist — always available, also on touch devices */}\n        <Button\n          type=\"button\"\n          size=\"icon-sm\"\n          variant=\"secondary\"\n          aria-pressed={wishlisted}\n          aria-label={\n            wishlisted\n              ? `Remove ${product.name} from wishlist`\n              : `Add ${product.name} to wishlist`\n          }\n          onClick={() => onToggleWishlist(product)}\n          className=\"absolute top-3 right-3 rounded-full bg-background/90 shadow-xs backdrop-blur hover:bg-background\"\n        >\n          <Heart\n            className={cn(\n              \"transition-colors\",\n              wishlisted && \"fill-destructive text-destructive\",\n            )}\n            aria-hidden=\"true\"\n          />\n        </Button>\n\n        {/* Hover / focus actions (always visible on touch screens) */}\n        <div\n          className={cn(\n            \"absolute inset-x-3 bottom-3 flex items-center gap-2\",\n            \"transition-all duration-300 motion-reduce:transition-none\",\n            \"[@media(hover:hover)]:translate-y-3 [@media(hover:hover)]:opacity-0\",\n            \"[@media(hover:hover)]:group-hover/card:translate-y-0 [@media(hover:hover)]:group-hover/card:opacity-100\",\n            \"[@media(hover:hover)]:group-focus-within/card:translate-y-0 [@media(hover:hover)]:group-focus-within/card:opacity-100\",\n          )}\n        >\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            onClick={() => onAddToCart(product)}\n            className=\"flex-1 shadow-md\"\n          >\n            <ShoppingCart aria-hidden=\"true\" />\n            Add to cart\n            {inCart > 0 && (\n              <span className=\"sr-only\">, {inCart} already in cart</span>\n            )}\n          </Button>\n          <Button\n            type=\"button\"\n            size=\"icon-sm\"\n            variant=\"secondary\"\n            aria-label={`Quick view ${product.name}`}\n            onClick={() => onQuickView(product)}\n            className=\"bg-background/90 shadow-md backdrop-blur hover:bg-background\"\n          >\n            <Eye aria-hidden=\"true\" />\n          </Button>\n        </div>\n      </div>\n\n      {/* Details */}\n      <div className=\"flex flex-1 flex-col gap-2 p-4\">\n        <p className=\"text-xs font-medium tracking-wide text-muted-foreground uppercase\">\n          {product.category} · {product.colors}\n        </p>\n        <h3 id={titleId} className=\"leading-snug font-semibold text-balance\">\n          {product.name}\n        </h3>\n\n        <div className=\"flex items-center gap-1.5 text-sm text-muted-foreground\">\n          <Star\n            className=\"size-4 fill-amber-400 text-amber-400\"\n            aria-hidden=\"true\"\n          />\n          <span className=\"font-medium text-foreground\">\n            {product.rating.toFixed(1)}\n          </span>\n          <span className=\"sr-only\">out of 5 stars,</span>\n          <span aria-hidden=\"true\">\n            ({product.reviews.toLocaleString(\"en-US\")})\n          </span>\n          <span className=\"sr-only\">\n            {product.reviews.toLocaleString(\"en-US\")} reviews\n          </span>\n        </div>\n\n        <div className=\"mt-auto flex items-baseline gap-2 pt-1\">\n          <span className=\"text-lg font-semibold tabular-nums\">\n            {currency.format(product.price)}\n          </span>\n          {product.compareAt && (\n            <>\n              <span className=\"sr-only\">Original price</span>\n              <s className=\"text-sm text-muted-foreground tabular-nums\">\n                {currency.format(product.compareAt)}\n              </s>\n            </>\n          )}\n        </div>\n      </div>\n    </article>\n  );\n}\n\n/* -------------------------------------------------------------------------- */\n/*  Skeleton card                                                              */\n/* -------------------------------------------------------------------------- */\n\nfunction ProductCardSkeleton() {\n  return (\n    <div\n      className=\"flex flex-col overflow-hidden rounded-xl border bg-card shadow-sm\"\n      aria-hidden=\"true\"\n    >\n      <Skeleton className=\"aspect-[4/3] w-full rounded-none\" />\n      <div className=\"flex flex-col gap-3 p-4\">\n        <Skeleton className=\"h-3 w-1/3\" />\n        <Skeleton className=\"h-5 w-4/5\" />\n        <Skeleton className=\"h-4 w-1/2\" />\n        <Skeleton className=\"mt-2 h-6 w-1/4\" />\n      </div>\n    </div>\n  );\n}\n\n/* -------------------------------------------------------------------------- */\n/*  Page                                                                       */\n/* -------------------------------------------------------------------------- */\n\nexport default function Page() {\n  const [loading, setLoading] = React.useState(true);\n  const [category, setCategory] = React.useState<\"All\" | Category>(\"All\");\n  const [sort, setSort] = React.useState<SortKey>(\"featured\");\n  const [wishlist, setWishlist] = React.useState<ReadonlySet<string>>(\n    () => new Set<string>([\"p5\"]),\n  );\n  const [cart, setCart] = React.useState<Readonly<Record<string, number>>>({});\n\n  const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);\n\n  /** Show the skeleton for a short, simulated fetch. */\n  const simulateLoad = React.useCallback((ms: number) => {\n    if (timer.current) clearTimeout(timer.current);\n    setLoading(true);\n    timer.current = setTimeout(() => setLoading(false), ms);\n  }, []);\n\n  React.useEffect(() => {\n    simulateLoad(1600);\n    return () => {\n      if (timer.current) clearTimeout(timer.current);\n    };\n  }, [simulateLoad]);\n\n  const visible = React.useMemo(() => {\n    const list =\n      category === \"All\"\n        ? [...PRODUCTS]\n        : PRODUCTS.filter((p) => p.category === category);\n    switch (sort) {\n      case \"price-asc\":\n        return list.sort((a, b) => a.price - b.price);\n      case \"price-desc\":\n        return list.sort((a, b) => b.price - a.price);\n      case \"rating\":\n        return list.sort((a, b) => b.rating - a.rating);\n      default:\n        return list;\n    }\n  }, [category, sort]);\n\n  const cartCount = Object.values(cart).reduce((sum, n) => sum + n, 0);\n\n  const handleCategory = (next: \"All\" | Category) => {\n    if (next === category) return;\n    setCategory(next);\n    simulateLoad(600);\n  };\n\n  const handleSort = (next: string) => {\n    setSort(next as SortKey);\n    simulateLoad(500);\n  };\n\n  const toggleWishlist = (p: Product) => {\n    const has = wishlist.has(p.id);\n    setWishlist((prev) => {\n      const next = new Set(prev);\n      if (next.has(p.id)) next.delete(p.id);\n      else next.add(p.id);\n      return next;\n    });\n    toast(has ? \"Removed from wishlist\" : \"Saved to wishlist\", {\n      description: p.name,\n    });\n  };\n\n  const addToCart = (p: Product) => {\n    setCart((prev) => ({ ...prev, [p.id]: (prev[p.id] ?? 0) + 1 }));\n    toast.success(\"Added to cart\", {\n      description: `${p.name} · ${currency.format(p.price)}`,\n    });\n  };\n\n  const quickView = (p: Product) => {\n    toast(p.name, {\n      description: `${p.category} · ${p.colors} · rated ${p.rating.toFixed(1)} by ${p.reviews.toLocaleString(\"en-US\")} customers.`,\n    });\n  };\n\n  const resetFilters = () => {\n    setCategory(\"All\");\n    setSort(\"featured\");\n    simulateLoad(500);\n  };\n\n  return (\n    <div className=\"min-h-screen bg-background\">\n      <header className=\"border-b\">\n        <div className=\"mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8\">\n          <div className=\"flex items-center gap-2 font-semibold\">\n            <span className=\"flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground\">\n              <ShoppingBag className=\"size-4\" aria-hidden=\"true\" />\n            </span>\n            Northfield Supply\n          </div>\n          <div\n            className=\"flex items-center gap-2 text-sm text-muted-foreground\"\n            role=\"status\"\n            aria-live=\"polite\"\n          >\n            <ShoppingCart className=\"size-4\" aria-hidden=\"true\" />\n            <span>\n              Cart:{\" \"}\n              <span className=\"font-medium text-foreground tabular-nums\">\n                {cartCount}\n              </span>{\" \"}\n              {cartCount === 1 ? \"item\" : \"items\"}\n            </span>\n          </div>\n        </div>\n      </header>\n\n      <main className=\"mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10 lg:px-8\">\n        <div className=\"mb-8 max-w-2xl\">\n          <p className=\"mb-2 text-sm font-medium text-muted-foreground\">\n            Spring collection\n          </p>\n          <h1 className=\"text-3xl font-bold tracking-tight text-balance sm:text-4xl\">\n            Everyday gear, built to last\n          </h1>\n          <p className=\"mt-3 text-muted-foreground text-pretty\">\n            Thoughtfully made audio, desk and home essentials with free\n            returns for 30 days.\n          </p>\n        </div>\n\n        {/* Toolbar */}\n        <div className=\"mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between\">\n          <div\n            role=\"group\"\n            aria-label=\"Filter by category\"\n            className=\"-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0\"\n          >\n            {CATEGORIES.map((c) => (\n              <Button\n                key={c}\n                type=\"button\"\n                size=\"sm\"\n                variant={category === c ? \"default\" : \"outline\"}\n                aria-pressed={category === c}\n                onClick={() => handleCategory(c)}\n                className=\"rounded-full\"\n              >\n                {c}\n              </Button>\n            ))}\n          </div>\n\n          <div className=\"flex items-center justify-between gap-3 sm:justify-end\">\n            <p\n              className=\"text-sm text-muted-foreground\"\n              role=\"status\"\n              aria-live=\"polite\"\n            >\n              {loading\n                ? \"Loading products…\"\n                : `${visible.length} ${visible.length === 1 ? \"product\" : \"products\"}`}\n            </p>\n            <Select value={sort} onValueChange={handleSort}>\n              <SelectTrigger size=\"sm\" className=\"w-[11.5rem]\" aria-label=\"Sort products\">\n                <SelectValue />\n              </SelectTrigger>\n              <SelectContent position=\"popper\" align=\"end\">\n                {(Object.keys(SORT_LABELS) as SortKey[]).map((key) => (\n                  <SelectItem key={key} value={key}>\n                    {SORT_LABELS[key]}\n                  </SelectItem>\n                ))}\n              </SelectContent>\n            </Select>\n          </div>\n        </div>\n\n        {/* Grid */}\n        <section aria-label=\"Products\" aria-busy={loading}>\n          {loading ? (\n            <div className=\"grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4\">\n              {Array.from({ length: Math.max(4, Math.min(visible.length, 8)) }).map(\n                (_, i) => (\n                  <ProductCardSkeleton key={i} />\n                ),\n              )}\n            </div>\n          ) : visible.length > 0 ? (\n            <ul className=\"grid grid-cols-1 gap-5 min-[480px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4\">\n              {visible.map((p) => (\n                <li key={p.id} className=\"flex\">\n                  <div className=\"flex w-full\">\n                    <ProductCard\n                      product={p}\n                      wishlisted={wishlist.has(p.id)}\n                      inCart={cart[p.id] ?? 0}\n                      onToggleWishlist={toggleWishlist}\n                      onAddToCart={addToCart}\n                      onQuickView={quickView}\n                    />\n                  </div>\n                </li>\n              ))}\n            </ul>\n          ) : (\n            <div className=\"flex flex-col items-center gap-3 rounded-xl border border-dashed py-16 text-center\">\n              <p className=\"font-medium\">No products match this filter</p>\n              <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={resetFilters}>\n                <RotateCcw aria-hidden=\"true\" />\n                Reset filters\n              </Button>\n            </div>\n          )}\n        </section>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
