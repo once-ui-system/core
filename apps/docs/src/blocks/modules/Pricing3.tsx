@@ -7,13 +7,13 @@ export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
       <Column maxWidth="40rem" gap="12" horizontal="center">
-        <Tag scheme="brand" size="s">
+        <Tag tone="brand" size="s">
           Services
         </Tag>
-        <Heading as="h1" align="center" variant="display-strong-m">
+        <Heading as="h1" align="center" textVariant="display-strong-m">
           Ship a complete frontend system
         </Heading>
-        <Text align="center" onBackground="neutral-medium" variant="body-default-l" wrap="balance">
+        <Text align="center" onBackground="neutral-medium" textVariant="body-default-l" wrap="balance">
           Fixed-scope bundles with optional add-ons. Pick a foundation and customize with extras
           before you reach out.
         </Text>
@@ -33,14 +33,14 @@ export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
         gap="16"
       >
         <Column gap="4" maxWidth="32rem">
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Need something custom?
           </Text>
-          <Text variant="body-default-s" wrap="balance">
+          <Text textVariant="body-default-s" wrap="balance">
             Enterprise teams and agencies can request a tailored scope with dedicated support.
           </Text>
         </Column>
-        <Text variant="label-default-s" onBackground="brand-medium">
+        <Text textVariant="label-default-s" onBackground="brand-medium">
           hello@once-ui.com
         </Text>
       </Row>

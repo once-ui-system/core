@@ -91,7 +91,7 @@ export const About4 = () => {
           />
           <Row fillWidth>
             <Column fillWidth paddingY="48" gap="20" background="page">
-              <Heading variant="display-strong-m" paddingX="32">
+              <Heading textVariant="display-strong-m" paddingX="32">
                 A vision to build the impossible.
               </Heading>
             </Column>
@@ -138,12 +138,12 @@ export const About4 = () => {
                   border
                 >
                   <Column fillWidth paddingX="l" gap="12">
-                    <Heading as="h2" variant="heading-strong-l" paddingX="4">
+                    <Heading as="h2" textVariant="heading-strong-l" paddingX="4">
                       Curiosity in code<ShineFx baseOpacity={0.4}>_</ShineFx>
                     </Heading>
                     <Text
                       wrap="balance"
-                      variant="body-default-m"
+                      textVariant="body-default-m"
                       onBackground="neutral-weak"
                       marginBottom="16"
                       paddingX="4"
@@ -222,10 +222,10 @@ export const About4 = () => {
             <Row flex={1} borderRight m={{ hide: true }} />
             <Column flex={2} background="page">
               <Column fillWidth paddingX="24" paddingY="80">
-                <Heading variant="heading-strong-l" marginBottom="32">
+                <Heading textVariant="heading-strong-l" marginBottom="32">
                   Rewriting limits.
                 </Heading>
-                <Text variant="body-default-m" onBackground="neutral-weak" as="span">
+                <Text textVariant="body-default-m" onBackground="neutral-weak" as="span">
                   <Text marginBottom="16" as="p">
                     We believe technology should expand human agency, not replace it. While big tech
                     uses AI to generate endless content and feed the dead internet, we see another
@@ -260,10 +260,10 @@ export const About4 = () => {
             <Row fillWidth borderBottom>
               <Column fillWidth background="page">
                 <Column fillWidth paddingY="24" paddingX="l">
-                  <Heading as="h2" variant="heading-strong-l" marginBottom="4">
+                  <Heading as="h2" textVariant="heading-strong-l" marginBottom="4">
                     Frontiers. <Text onBackground="neutral-weak">Pushing Once UI forward.</Text>
                   </Heading>
-                  <Text variant="body-default-s" wrap="balance" onBackground="neutral-weak">
+                  <Text textVariant="body-default-s" wrap="balance" onBackground="neutral-weak">
                     Passionate builders who help us shape the future of Once UI
                   </Text>
                 </Column>
@@ -286,10 +286,10 @@ export const About4 = () => {
                     background="page"
                   >
                     <Icon name={benefit.icon} size="s" onBackground="neutral-weak" />
-                    <Heading as="h3" marginTop="12" variant="body-default-m">
+                    <Heading as="h3" marginTop="12" textVariant="body-default-m">
                       {benefit.title}
                     </Heading>
-                    <Text wrap="balance" onBackground="neutral-weak" variant="label-default-s">
+                    <Text wrap="balance" onBackground="neutral-weak" textVariant="label-default-s">
                       {benefit.description}
                     </Text>
                   </Column>
@@ -305,7 +305,7 @@ export const About4 = () => {
               background="page"
               borderLeft
             >
-              <Heading align="center" as="h2" variant="display-strong-xs">
+              <Heading align="center" as="h2" textVariant="display-strong-xs">
                 Frontier benefits
               </Heading>
               <Column onBackground="neutral-weak" horizontal="center" align="center" gap="20">
@@ -329,7 +329,7 @@ export const About4 = () => {
                   position="sticky"
                   top="56"
                 >
-                  <Heading as="h2" variant="heading-strong-l" marginBottom="8">
+                  <Heading as="h2" textVariant="heading-strong-l" marginBottom="8">
                     Hall of fame
                   </Heading>
                   <Row vertical="center" gap="12" onBackground="neutral-weak">
@@ -357,11 +357,11 @@ export const About4 = () => {
                 border="neutral-alpha-medium"
               >
                 <Avatar size="l" src={profile.avatar} />
-                <Text variant="label-default-m" align="center" marginTop="16">
+                <Text textVariant="label-default-m" align="center" marginTop="16">
                   {profile.name}
                 </Text>
                 <Text
-                  variant="label-default-s"
+                  textVariant="label-default-s"
                   align="center"
                   marginBottom="16"
                   onBackground="neutral-weak"

@@ -14,14 +14,62 @@
   }
 }
 
+// `tone` picks the palette, `variant` how it is drawn. Each tone class sets
+// the colours below, and each variant reads the ones it needs, so any variant
+// takes any tone. The button sets its own tone class every time (`brand` on
+// primary and `neutral` on the rest when none is given), so a button nested
+// in another never inherits its parent's.
+// The tones with their own solid inset and border tokens; the others draw
+// both with their strong alpha.
+$solid-tokens: brand, danger, neutral;
+
+@mixin tone($tone) {
+  --button-solid: var(--#{$tone}-solid-medium);
+  --button-solid-hover: var(--#{$tone}-solid-strong);
+  --button-on-solid: var(--#{$tone}-on-solid-strong);
+  --button-on-background: var(--#{$tone}-on-background-strong);
+  --button-on-background-medium: var(--#{$tone}-on-background-medium);
+
+  @if index($solid-tokens, $tone) {
+    --button-solid-inset: var(--solid-inset-color-#{$tone});
+    --button-solid-border: var(--solid-border-color-#{$tone});
+  } @else {
+    --button-solid-inset: var(--#{$tone}-alpha-strong);
+    --button-solid-border: var(--#{$tone}-alpha-strong);
+  }
+}
+
+// Written out, not generated, so every class is a literal in the source.
+.tone-brand {
+  @include tone(brand);
+}
+.tone-accent {
+  @include tone(accent);
+}
+.tone-neutral {
+  @include tone(neutral);
+}
+.tone-info {
+  @include tone(info);
+}
+.tone-success {
+  @include tone(success);
+}
+.tone-warning {
+  @include tone(warning);
+}
+.tone-danger {
+  @include tone(danger);
+}
+
 .primary {
   box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
-    var(--solid-inset-color-brand);
-  background: var(--brand-solid-medium);
+    var(--button-solid-inset);
+  background: var(--button-solid);
   border-style: solid;
   border-width: var(--solid-border-width);
-  border-color: var(--solid-border-color-brand);
-  color: var(--brand-on-solid-strong);
+  border-color: var(--button-solid-border);
+  color: var(--button-on-solid);
 
   &[data-disabled] {
     box-shadow: none;
@@ -29,10 +77,9 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
-      background: var(--brand-solid-strong);
+      background: var(--button-solid-hover);
     }
   }
 }
@@ -43,7 +90,7 @@
   border-style: solid;
   border: 1px solid var(--neutral-alpha-weak);
   background: var(--static-transparent);
-  color: var(--neutral-on-background-strong);
+  color: var(--button-on-background);
 
   &[data-disabled] {
     box-shadow: none;
@@ -51,7 +98,6 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
       background: var(--neutral-alpha-weak);
@@ -62,7 +108,7 @@
 
 .tertiary {
   background: var(--static-transparent);
-  color: var(--neutral-on-background-strong);
+  color: var(--button-on-background);
   border: 1px solid var(--static-transparent);
 
   &[data-disabled] {
@@ -71,7 +117,6 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
       border: 1px solid var(--neutral-border-medium);
@@ -79,10 +124,11 @@
   }
 }
 
+// 2.x's `quaternary` folds in here; it also filled the background on hover.
 .ghost {
   border: none;
   background: var(--static-transparent);
-  color: var(--neutral-on-background-medium);
+  color: var(--button-on-background-medium);
 
   &[data-disabled] {
     box-shadow: none;
@@ -90,34 +136,9 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
-      color: var(--neutral-on-background-strong);
-    }
-  }
-}
-
-.quaternary {
-  border: none;
-  background: var(--static-transparent);
-  color: var(--neutral-on-background-medium);
-
-  &[data-disabled] {
-    box-shadow: none;
-    background: var(--neutral-background-medium);
-    color: var(--neutral-on-background-weak);
-    border-color: transparent;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not([data-disabled]) {
-      background: color-mix(
-        in srgb,
-        var(--neutral-background-medium) 70%,
-        transparent
-      );
-      color: var(--neutral-on-background-strong);
+      color: var(--button-on-background);
     }
   }
 }
@@ -125,7 +146,7 @@
 .link {
   border: none;
   background: var(--static-transparent);
-  color: var(--neutral-on-background-strong);
+  color: var(--button-on-background);
 
   &[data-disabled] {
     box-shadow: none;
@@ -133,33 +154,9 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
       text-decoration: underline !important;
-    }
-  }
-}
-
-.danger {
-  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
-    var(--solid-inset-color-danger);
-  background: var(--danger-solid-medium);
-  border-style: solid;
-  border-width: var(--solid-border-width);
-  border-color: var(--solid-border-color-danger);
-  color: var(--danger-on-solid-strong);
-
-  &[data-disabled] {
-    box-shadow: none;
-    background: var(--neutral-background-medium);
-    color: var(--neutral-on-background-weak);
-    border-color: transparent;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not([data-disabled]) {
-      background: var(--danger-solid-strong);
     }
   }
 }
@@ -174,7 +171,7 @@
   border-style: solid;
   border-width: var(--solid-border-width);
   border-color: var(--static-transparent);
-  color: var(--neutral-on-background-strong);
+  color: var(--button-on-background);
 
   &[data-disabled] {
     box-shadow: none;
@@ -182,7 +179,6 @@
     color: var(--neutral-on-background-weak);
     border-color: transparent;
   }
-
   @media (hover: hover) and (pointer: fine) {
     &:hover:not([data-disabled]) {
       background: color-mix(
@@ -190,52 +186,6 @@
         var(--neutral-background-strong) 50%,
         transparent
       );
-    }
-  }
-}
-
-.success {
-  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
-    var(--success-alpha-strong);
-  background: var(--success-solid-medium);
-  border-style: solid;
-  border-width: var(--solid-border-width);
-  border-color: var(--success-alpha-strong);
-  color: var(--success-on-solid-strong);
-
-  &[data-disabled] {
-    box-shadow: none;
-    background: var(--neutral-background-medium);
-    color: var(--neutral-on-background-weak);
-    border-color: transparent;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not([data-disabled]) {
-      background: var(--success-solid-strong);
-    }
-  }
-}
-
-.warning {
-  box-shadow: inset 0 var(--solid-inset-distance) var(--solid-inset-size)
-    var(--warning-alpha-strong);
-  background: var(--warning-solid-medium);
-  border-style: solid;
-  border-width: var(--solid-border-width);
-  border-color: var(--warning-alpha-strong);
-  color: var(--warning-on-solid-strong);
-
-  &[data-disabled] {
-    box-shadow: none;
-    background: var(--neutral-background-medium);
-    color: var(--neutral-on-background-weak);
-    border-color: transparent;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    &:hover:not([data-disabled]) {
-      background: var(--warning-solid-strong);
     }
   }
 }

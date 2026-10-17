@@ -22,7 +22,7 @@ The `SplitView` component creates a resizable divider between two panels, allowi
         defaultSplit={0.4}
         leftPanel={
           <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-            <Text variant="heading-strong-m">Left Panel</Text>
+            <Text textVariant="heading-strong-m">Left Panel</Text>
             <Text onBackground="neutral-weak">
               This is the left panel content. You can resize this panel by dragging the divider.
             </Text>
@@ -30,7 +30,7 @@ The `SplitView` component creates a resizable divider between two panels, allowi
         }
         rightPanel={
           <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-            <Text variant="heading-strong-m">Right Panel</Text>
+            <Text textVariant="heading-strong-m">Right Panel</Text>
             <Text onBackground="neutral-weak">
               This is the right panel content. The divider is draggable and provides visual feedback.
             </Text>
@@ -48,7 +48,7 @@ The `SplitView` component creates a resizable divider between two panels, allowi
     defaultSplit={0.4}
     leftPanel={
       <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Left Panel</Text>
+        <Text textVariant="heading-strong-m">Left Panel</Text>
         <Text onBackground="neutral-weak">
           This is the left panel content. You can resize this panel by dragging the divider.
         </Text>
@@ -56,7 +56,7 @@ The `SplitView` component creates a resizable divider between two panels, allowi
     }
     rightPanel={
       <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Right Panel</Text>
+        <Text textVariant="heading-strong-m">Right Panel</Text>
         <Text onBackground="neutral-weak">
           This is the right panel content. The divider is draggable and provides visual feedback.
         </Text>
@@ -81,7 +81,7 @@ SplitView also supports vertical orientation for top-bottom layouts.
       direction="column"
       leftPanel={
         <Column fill padding="20" gap="12" border="surface" background="surface" radius="l">
-          <Text variant="heading-strong-m">Top Panel</Text>
+          <Text textVariant="heading-strong-m">Top Panel</Text>
           <Text onBackground="neutral-weak">
             This is the top panel in a vertical split layout.
           </Text>
@@ -89,7 +89,7 @@ SplitView also supports vertical orientation for top-bottom layouts.
       }
       rightPanel={
         <Column fill padding="20" gap="12" border="surface" background="surface" radius="l">
-          <Text variant="heading-strong-m">Bottom Panel</Text>
+          <Text textVariant="heading-strong-m">Bottom Panel</Text>
           <Text onBackground="neutral-medium">
             This is the bottom panel. The resize handle is horizontal in vertical mode.
           </Text>
@@ -107,12 +107,12 @@ SplitView also supports vertical orientation for top-bottom layouts.
     direction="column"
     leftPanel={
       <Column fill padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Top Panel</Text>
+        <Text textVariant="heading-strong-m">Top Panel</Text>
       </Column>
     }
     rightPanel={
       <Column fill padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Bottom Panel</Text>
+        <Text textVariant="heading-strong-m">Bottom Panel</Text>
       </Column>
     }
 />`,
@@ -135,7 +135,7 @@ You can customize the resize handle size, appearance, and set minimum/maximum sp
       maxSplit={0.8}
       leftPanel={
         <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-          <Text variant="heading-strong-m">Custom Handle</Text>
+          <Text textVariant="heading-strong-m">Custom Handle</Text>
           <Text onBackground="neutral-weak">
             This split view uses a custom handle size and background color.
           </Text>
@@ -143,7 +143,7 @@ You can customize the resize handle size, appearance, and set minimum/maximum sp
       }
       rightPanel={
         <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-          <Text variant="heading-strong-m">Constrained</Text>
+          <Text textVariant="heading-strong-m">Constrained</Text>
           <Text onBackground="neutral-weak">
             This panel has minimum 20% and maximum 80% split constraints.
           </Text>
@@ -162,12 +162,12 @@ You can customize the resize handle size, appearance, and set minimum/maximum sp
     maxSplit={0.8}
     leftPanel={
       <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Custom Handle</Text>
+        <Text textVariant="heading-strong-m">Custom Handle</Text>
       </Column>
     }
     rightPanel={
       <Column fillWidth padding="20" gap="12" border="surface" background="surface" radius="l">
-        <Text variant="heading-strong-m">Constrained</Text>
+        <Text textVariant="heading-strong-m">Constrained</Text>
       </Column>
     }
 />`,

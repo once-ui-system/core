@@ -26,6 +26,7 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { transformMerges } from "./codemod-3.0-merges.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -239,7 +240,7 @@ const REMOVED_EXPORTS = {
     "internal in 3.0; use the `label` and `description` props of Checkbox, RadioButton or Switch",
   InteractiveDetailsProps: "internal in 3.0; use React.ComponentProps<typeof Checkbox>",
   Toaster: "internal in 3.0; ToastProvider renders it, show toasts with useToast()",
-  Arrow: "internal in 3.0; use Button's `arrowIcon` or Badge's `arrow`",
+  Arrow: "internal in 3.0; use Button's `arrowIcon` or Tag's `arrow`",
   ArrowNavigation:
     "internal in 3.0; use the useArrowNavigation hook on your own container (pass containerRef, call handleKeyDown from onKeyDown)",
   ArrowNavigationProps: "internal in 3.0; use ArrowNavigationOptions with the useArrowNavigation hook",
@@ -832,10 +833,453 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
   return { out, hits, warnings };
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// E1–E4, F3: tone, variant, textVariant; Badge and Chip are Tag
+//
+// 3.0 gives each visual prop one meaning. `tone` is the semantic palette
+// (brand, accent, neutral, info, success, warning, danger) everywhere 2.x
+// spelled it `variant`, `scheme`, `state` or `hue`; `variant` is appearance
+// only; `scheme` is a palette hue (blue, green…); Text and Heading take
+// `textVariant`, the name Flex already used. Badge and Chip fold into Tag.
+// Literal values are rewritten; a value the pass cannot read is reported.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/** Plain prop renames: the value means the same under the new name. */
+const TONE_RENAMES = {
+  Text: { variant: "textVariant" },
+  Heading: { variant: "textVariant" },
+  // Components whose props are Text's, which pass `variant` on to it.
+  ListItem: { variant: "textVariant" },
+  CountFx: { variant: "textVariant" },
+  ShineFx: { variant: "textVariant" },
+  TypeFx: { variant: "textVariant" },
+  FadingLettersFx: { variant: "textVariant" },
+  Feedback: { variant: "tone" },
+  Toast: { variant: "tone" },
+  Pulse: { scheme: "tone" },
+  StatusIndicator: { color: "scheme" },
+};
+
+/** E2: Button and IconButton `variant` values that were a tone or a twin. */
+const BUTTON_TONES = new Set(["danger", "success", "warning"]);
+const TONE_WORDS = /^(neutral|brand|accent|info|danger|warning|success)$/;
+
+const quote = (raw) => (String(raw).trim().startsWith("'") ? "'" : '"');
+
+/** Every quoted string literal in `text`, with offsets. */
+function stringLiterals(text) {
+  const found = [];
+  const re = /(["'])((?:\\.|(?!\1).)*)\1/g;
+  let m;
+  while ((m = re.exec(text))) found.push({ at: m.index, end: m.index + m[0].length, value: m[2], q: m[1] });
+  return found;
+}
+
+/** An attribute's value span in `src` (offsets of the text after `=`). */
+const valueSpan = (src, a) => {
+  const at = src.indexOf(a.value, a.at + a.name.length);
+  return { at, end: at + String(a.value).length };
+};
+
+/**
+ * Rename keys inside an inline object or array literal value: `{ key: … }` at
+ * any depth of that literal. `map` is `{ oldKey: (valueText) => replacement
+ * entry text | null }`, where null leaves it alone and `undefined` reports it.
+ */
+function rewriteKeys(text, base, key, replace, push, warn, label) {
+  const re = new RegExp(`(^|[{,\\s])${key}(\\s*:\\s*)`, "g");
+  let m;
+  while ((m = re.exec(text))) {
+    const keyAt = m.index + m[1].length;
+    const valueAt = m.index + m[0].length;
+    // The value runs to the next `,` or `}` at its own depth.
+    let j = valueAt;
+    let depth = 0;
+    while (j < text.length) {
+      const past = skipLexeme(text, j);
+      if (past !== j) {
+        j = past;
+        continue;
+      }
+      const c = text[j];
+      if ("([{".includes(c)) depth++;
+      else if (")]}".includes(c)) {
+        if (depth === 0) break;
+        depth--;
+      } else if (c === "," && depth === 0) break;
+      j++;
+    }
+    let end = j;
+    while (end > valueAt && /\s/.test(text[end - 1])) end--;
+    const value = text.slice(valueAt, end);
+    const r = replace(value.trim());
+    if (r === undefined) warn(`${label}: ${key}: ${value.trim()} cannot be read; check it by hand`);
+    else if (r !== null) push({ at: base + keyAt, end: base + end, text: r.text, remove: r.remove, hit: r.hit });
+  }
+}
+
+/** E2/E1 on Button and IconButton: `variant` tones and `quaternary`, and `color`. */
+function rewriteButton(src, attrs, tag, push, warn) {
+  const variant = attrs.find((a) => a.name === "variant");
+  const color = attrs.find((a) => a.name === "color");
+  const tone = attrs.find((a) => a.name === "tone");
+  let writesTone = false;
+  if (variant?.value) {
+    const v = literal(variant.value);
+    if (v && BUTTON_TONES.has(v)) {
+      // `primary` is the default variant, so the tone is all that is left.
+      const q = quote(variant.value);
+      if (tone) push({ at: withLeadingSpace(src, variant.at), end: variant.end, text: "", hit: `variant="${v}" removed (tone already set)` });
+      else push({ at: variant.at, end: variant.end, text: `tone=${q}${v}${q}`, hit: `variant="${v}" → tone="${v}"` });
+      writesTone = true;
+    } else if (v === "quaternary") {
+      const span = valueSpan(src, variant);
+      push({ at: span.at, end: span.end, text: String(variant.value).replace("quaternary", "ghost"), hit: 'variant="quaternary" → "ghost"' });
+    } else if (!v) {
+      const expr = expressionOf(variant.value);
+      const span = valueSpan(src, variant);
+      for (const s of stringLiterals(String(variant.value))) {
+        if (s.value === "quaternary")
+          push({ at: span.at + s.at, end: span.at + s.end, text: `${s.q}ghost${s.q}`, hit: 'variant "quaternary" → "ghost"' });
+      }
+      const tones = stringLiterals(expr).filter((s) => BUTTON_TONES.has(s.value));
+      if (tones.length || !stringLiterals(expr).length)
+        warn(
+          `variant={${expr}}: danger, success and warning are a tone in 3.0 (variant="primary" tone="danger"), and quaternary is ghost; check what it can hold`,
+        );
+    }
+  }
+  if (color?.value) {
+    const v = literal(color.value);
+    const t = v?.split("-")[0];
+    if (v && TONE_WORDS.test(t) && !tone && !writesTone) {
+      const q = quote(color.value);
+      push({ at: color.at, end: color.end, text: `tone=${q}${t}${q}`, hit: `color="${v}" → tone="${t}"` });
+      warn(`color="${v}" became tone="${t}", which colours the label as well as the icons (2.x tinted only the icons)`);
+    } else {
+      warn(
+        `color: removed in 3.0 (it tinted only the icons); use tone="…" for the label and icons together${tone || writesTone ? ", which is already set here" : ""}`,
+      );
+    }
+  }
+}
+
+/** E1 on Tag: `scheme` → `tone`, `scheme="gradient"` → `variant="gradient"`. */
+function rewriteTagScheme(src, attrs, push, warn) {
+  const scheme = attrs.find((a) => a.name === "scheme");
+  if (!scheme) return;
+  const v = scheme.value === null ? null : literal(scheme.value);
+  if (v === "gradient") {
+    const q = quote(scheme.value);
+    push({ at: scheme.at, end: scheme.end, text: `variant=${q}gradient${q}`, hit: 'scheme="gradient" → variant="gradient"' });
+    return;
+  }
+  push({ at: scheme.at, end: scheme.at + "scheme".length, text: "tone", hit: "scheme → tone" });
+  if (!v && /gradient/.test(String(scheme.value)))
+    warn(`tone=${scheme.value}: "gradient" is variant="gradient" in 3.0, not a tone; split it by hand`);
+}
+
+/** E1 on the gauges: `hue="success"` → `tone`, `hue={[a, b]}` → `hueRange`. */
+function rewriteGauge(src, attrs, push, warn) {
+  const hue = attrs.find((a) => a.name === "hue");
+  if (!hue?.value) return;
+  const v = literal(hue.value);
+  if (v) {
+    push({ at: hue.at, end: hue.at + 3, text: "tone", hit: `hue="${v}" → tone` });
+    return;
+  }
+  const expr = expressionOf(hue.value);
+  // A ternary of tone names (`ok ? "success" : "danger"`) is a tone too.
+  const strings = stringLiterals(expr);
+  if (!expr.includes("[") && strings.length && strings.every((x) => TONE_WORDS.test(x.value))) {
+    push({ at: hue.at, end: hue.at + 3, text: "tone", hit: "hue={…} → tone" });
+    return;
+  }
+  if (expr.startsWith("[")) {
+    push({ at: hue.at, end: hue.at + 3, text: "hueRange", hit: "hue={[…]} → hueRange" });
+    return;
+  }
+  warn(`hue={${expr}}: a tone ("success", "neutral", "danger") is tone= in 3.0, a [start, end] pair is hueRange=; split it by hand`);
+}
+
+/**
+ * An inline object or array attribute whose entries carry a renamed key.
+ * `{…}` / `{[…]}` is rewritten; a variable is reported when this file shows
+ * the old key anywhere, since its entries may be the ones defined here.
+ */
+function rewriteInlineKeys(src, attrs, prop, key, replace, push, warn, note) {
+  const a = attrs.find((x) => x.name === prop);
+  if (!a?.value || !String(a.value).startsWith("{")) return;
+  const inner = String(a.value).slice(1, -1);
+  const body = inner.trim();
+  if (body.startsWith("{") || body.startsWith("[")) {
+    const span = valueSpan(src, a);
+    rewriteKeys(inner, span.at + 1, key, replace, push, warn, prop);
+    return;
+  }
+  if (new RegExp(`\\b${key}\\s*:`).test(src)) warn(`${prop}={${body}}: ${note}`);
+}
+
+const TIMELINE_STATE = (value) => {
+  const v = literal(value);
+  if (v === "default") return { text: "", remove: true, hit: 'state: "default" removed (no tone)' };
+  if (v === "active") return { text: `tone: ${quote(value)}brand${quote(value)}`, hit: 'state: "active" → tone: "brand"' };
+  if (v === "success" || v === "danger") return { text: `tone: ${value}`, hit: `state: "${v}" → tone` };
+  return undefined;
+};
+
+const TABLE_ACTION_VARIANT = (value) => {
+  const v = literal(value);
+  if (v === "danger") {
+    const q = quote(value);
+    return { text: `variant: ${q}primary${q}, tone: ${q}danger${q}`, hit: 'variant: "danger" → variant: "primary", tone: "danger"' };
+  }
+  return v ? null : undefined;
+};
+
+const RENAME_KEY = (to, hit) => (value) => ({ text: `${to}: ${value}`, hit });
+
+/**
+ * F3: Badge and Chip are Tag. The element and its import become Tag, and
+ * the props map:
+ *   Badge  title → label, icon → prefixIcon, + variant="announce" (its look;
+ *          announce also turns the shine on by default, as Badge did)
+ *   Chip   iconButtonProps → removeButtonProps, + selected where it was left
+ *          out (Chip's `selected` defaulted to true, Tag's to false)
+ */
+const FOLDED_INTO_TAG = {
+  Badge: {
+    props: { title: "label", icon: "prefixIcon" },
+    add: (attrs) => (attrs.some((a) => a.name === "variant") ? [] : ['variant="announce"']),
+    types: { BadgeProps: "TagProps" },
+  },
+  Chip: {
+    props: { iconButtonProps: "removeButtonProps" },
+    add: (attrs) => (attrs.some((a) => a.name === "selected") ? [] : ["selected"]),
+    types: { ChipProps: "TagProps" },
+  },
+};
+
+/** The import side of F3: `{ Badge, Chip }` → `{ Tag }`; the elements keep their local names when aliased. */
+function foldImports(src, isCore, hits) {
+  const re = /(import|export)\s+(type\s+)?\{([^}]*)\}\s*(from\s*(["'])([^"']+)\5;?[ \t]*\n?)/g;
+  // A Tag already imported in another statement is not imported twice.
+  const tagBound = (() => {
+    const b = importBindings(src).get("Tag");
+    return Boolean(b && isCore(b.source));
+  })();
+  let first = true;
+  return src.replace(re, (whole, keyword, typeOnly, clause, tail, q, source) => {
+    if (!isCore(source)) return whole;
+    const specs = specifiersOf(clause);
+    if (!specs.some((s) => FOLDED_INTO_TAG[s.name] || s.name === "BadgeProps" || s.name === "ChipProps")) return whole;
+    const out = [];
+    const seen = new Set();
+    for (const s of specs) {
+      const from = FOLDED_INTO_TAG[s.name] ? "Tag" : s.name === "BadgeProps" || s.name === "ChipProps" ? "TagProps" : null;
+      let text = s.text;
+      if (from) {
+        const aliased = /\s+as\s+/.test(s.text);
+        text = aliased ? s.text.replace(s.name, from) : s.text.replace(s.name, from);
+        hits.push(`import ${s.name} → ${from}`);
+      }
+      const key = text.replace(/^type\s+/, "");
+      if (seen.has(key)) continue;
+      if (from && key === "Tag" && keyword === "import" && (tagBound || !first)) continue;
+      seen.add(key);
+      out.push(text);
+    }
+    if (keyword === "import" && out.some((t) => t.replace(/^type\s+/, "") === "Tag")) first = false;
+    if (!out.length) return "";
+    return `${keyword} ${typeOnly ?? ""}{ ${out.join(", ")} } ${tail}`;
+  });
+}
+
+/**
+ * The E/F3 pass on its own. `isCore(source)` decides which imports are Once
+ * UI (core's own sources pass one that accepts their relative imports).
+ */
+export function transformTone(src, { isCore = isCoreSource } = {}) {
+  const hits = [];
+  const warnings = [];
+  let out = src;
+
+  // F3 first: Badge and Chip elements become Tag, with their props mapped.
+  {
+    const bindings = importBindings(out);
+    const edits = [];
+    for (const [tag, spec] of Object.entries(FOLDED_INTO_TAG)) {
+      for (const name of namesFor(tag, bindings, isCore)) {
+        const open = new RegExp(`<${name}(?=[\\s/>])`, "g");
+        let m;
+        while ((m = open.exec(out))) {
+          const from = m.index + name.length + 1;
+          const end = openingTagEnd(out, from);
+          if (end < 0) continue;
+          const attrs = attributesOf(out, from, end);
+          // An alias keeps its local name; the import names Tag.
+          if (name === tag) edits.push({ at: m.index + 1, end: from, text: "Tag", hit: `<${tag}> → <Tag>` });
+          const added = spec.add(attrs);
+          if (added.length) edits.push({ at: from, end: from, text: ` ${added.join(" ")}`, hit: `<${tag}> + ${added.join(" ")}` });
+          for (const a of attrs) {
+            const to = spec.props[a.name];
+            if (!to) continue;
+            if (attrs.some((b) => b.name === to)) {
+              warnings.push(`<${tag}> ${a.name} and ${to} both set; Tag takes ${to}, merge them by hand`);
+              continue;
+            }
+            edits.push({ at: a.at, end: a.at + a.name.length, text: to, hit: `<${tag}> ${a.name} → ${to}` });
+          }
+          // Tag renders its label, or its children without one, as 2.x's Tag
+          // and Chip did; Badge drew its title and its children side by side.
+          const selfClosing = /\/\s*>$/.test(out.slice(from, end + 1).trimEnd());
+          if (
+            tag === "Badge" &&
+            attrs.some((a) => a.name === "title") &&
+            !selfClosing &&
+            !new RegExp(`^\\s*</${name}\\s*>`).test(out.slice(end + 1))
+          )
+            warnings.push("<Badge> title and children both set: Tag shows its label, or its children without one; merge them");
+        }
+        if (name === tag) {
+          const close = new RegExp(`</${tag}\\s*>`, "g");
+          let c;
+          while ((c = close.exec(out))) edits.push({ at: c.index, end: c.index + c[0].length, text: "</Tag>", hit: `</${tag}> → </Tag>` });
+          const typeofRe = new RegExp(`\\btypeof ${tag}\\b`, "g");
+          while ((c = typeofRe.exec(out))) edits.push({ at: c.index, end: c.index + c[0].length, text: "typeof Tag", hit: `typeof ${tag} → typeof Tag` });
+        }
+      }
+    }
+    out = applyEdits(out, edits, hits);
+    out = foldImports(out, isCore, hits);
+    for (const [tag, spec] of Object.entries(FOLDED_INTO_TAG)) {
+      for (const [type, to] of Object.entries(spec.types)) {
+        const before = out;
+        out = out.replace(new RegExp(`(?<![\\w$.])${type}(?![\\w$])`, "g"), to);
+        if (out !== before) hits.push(`${type} → ${to}`);
+      }
+      // Anything else that still names it (a value, a map of components).
+      const bound = importBindings(src).get(tag);
+      const code = out
+        .replace(/import[^;]*;/g, "")
+        .replace(/\/\*[\s\S]*?\*\//g, "")
+        .replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+      const reference = new RegExp(`(?:[{(\\[,=:?]\\s*|\\btypeof\\s+)${tag}\\b|\\b${tag}\\s*[,})\\].]`);
+      if (bound && isCore(bound.source) && reference.test(code))
+        warnings.push(`${tag}: removed in 3.0, use Tag; a reference left in place needs renaming by hand`);
+    }
+  }
+
+  // E1/E2: renames and value rewrites, element by element.
+  const bindings = importBindings(out);
+  const edits = [];
+  const tags = new Set([
+    ...Object.keys(TONE_RENAMES),
+    "Button",
+    "IconButton",
+    "Tag",
+    "LinearGauge",
+    "RadialGauge",
+    "Timeline",
+    "Table",
+    "Scrubber",
+    "Avatar",
+  ]);
+  for (const tag of tags) {
+    for (const name of namesFor(tag, bindings, isCore)) {
+      const open = new RegExp(`<${name}(?=[\\s/>])`, "g");
+      let m;
+      while ((m = open.exec(out))) {
+        const from = m.index + name.length + 1;
+        const end = openingTagEnd(out, from);
+        if (end < 0) continue;
+        const attrs = attributesOf(out, from, end);
+        const push = (e) => {
+          // Removing an object entry takes its comma with it.
+          if (e.remove) {
+            let { at, end: to } = e;
+            const after = /^\s*,\s*/.exec(out.slice(to));
+            if (after) to += after[0].length;
+            else {
+              const before = /,\s*$/.exec(out.slice(0, at));
+              if (before) at -= before[0].length;
+            }
+            edits.push({ at, end: to, text: "", hit: `<${tag}> ${e.hit}` });
+            return;
+          }
+          edits.push({ ...e, hit: `<${tag}> ${e.hit}` });
+        };
+        const warn = (w) => warnings.push(`<${tag}> ${w}`);
+        for (const [old, to] of Object.entries(TONE_RENAMES[tag] ?? {})) {
+          const a = attrs.find((x) => x.name === old);
+          if (!a) continue;
+          if (attrs.some((b) => b.name === to)) push({ at: withLeadingSpace(out, a.at), end: a.end, text: "", hit: `${old} removed (${to} already set)` });
+          else push({ at: a.at, end: a.at + old.length, text: to, hit: `${old} → ${to}` });
+        }
+        if (tag === "Button" || tag === "IconButton") rewriteButton(out, attrs, tag, push, warn);
+        if (tag === "Tag") rewriteTagScheme(out, attrs, push, warn);
+        if (tag === "LinearGauge" || tag === "RadialGauge") rewriteGauge(out, attrs, push, warn);
+        if (tag === "Timeline")
+          rewriteInlineKeys(out, attrs, "items", "state", TIMELINE_STATE, push, warn, 'items[].state is items[].tone in 3.0 ("active" is "brand", "default" is no tone)');
+        if (tag === "Table")
+          rewriteInlineKeys(out, attrs, "actions", "variant", TABLE_ACTION_VARIANT, push, warn, 'actions[].variant "danger" is variant: "primary", tone: "danger" in 3.0');
+        if (tag === "Scrubber")
+          rewriteInlineKeys(out, attrs, "tracks", "scheme", RENAME_KEY("tone", "scheme → tone"), push, warn, "tracks[].scheme and blocks[].scheme are tone in 3.0");
+        if (tag === "Avatar")
+          rewriteInlineKeys(out, attrs, "statusIndicator", "color", RENAME_KEY("scheme", "statusIndicator.color → scheme"), push, warn, "statusIndicator.color is statusIndicator.scheme in 3.0");
+      }
+    }
+  }
+  out = applyEdits(out, edits, hits);
+
+  // E1: `addToast({ variant })` → `addToast({ tone })`, in files that show toasts.
+  if (/\buse(?:Optional)?Toast\b/.test(out) && /\baddToast\b/.test(out)) {
+    const toastEdits = [];
+    const call = /\baddToast\s*(?:\?\.)?\(\s*/g;
+    let m;
+    while ((m = call.exec(out))) {
+      const argAt = m.index + m[0].length;
+      if (out[argAt] !== "{") {
+        if (out[argAt] !== ")") warnings.push("addToast(…): its `variant` is `tone` in 3.0; rename the key where the object is built");
+        continue;
+      }
+      const close = closing(out, argAt);
+      if (close < 0) continue;
+      const body = out.slice(argAt, close + 1);
+      const { entries } = objectEntries(body);
+      for (const e of entries) {
+        if (e.key !== "variant" || e.shorthand) continue;
+        const keyAt = body.lastIndexOf("variant", e.at);
+        toastEdits.push({ at: argAt + keyAt, end: argAt + keyAt + "variant".length, text: "tone", hit: "addToast variant → tone" });
+      }
+      if (entries.some((e) => e.key === "variant" && e.shorthand))
+        warnings.push("addToast({ variant }): rename it `tone: variant`, the key is tone in 3.0");
+    }
+    out = applyEdits(out, toastEdits, hits);
+  }
+  return { out, hits, warnings };
+}
+
+/** Apply edits right to left so earlier offsets stay valid; an overlapping edit is dropped. */
+function applyEdits(src, edits, hits) {
+  edits.sort((x, y) => y.at - x.at || y.end - x.end);
+  let out = src;
+  let lastAt = Number.POSITIVE_INFINITY;
+  for (const e of edits) {
+    if (e.end > lastAt) continue;
+    out = out.slice(0, e.at) + e.text + out.slice(e.end);
+    hits.push(e.hit);
+    lastAt = e.at;
+  }
+  return out;
+}
+
 export function transform(src) {
-  const exp = rewriteExports(src);
-  const hits = [...exp.hits];
-  const warnings = [...exp.warnings];
+  // E/F3 first: Badge and Chip become Tag before the passes below read Tag.
+  const tone = transformTone(src);
+  const exp = rewriteExports(tone.out);
+  const hits = [...tone.hits, ...exp.hits];
+  const warnings = [...tone.warnings, ...exp.warnings];
   let out = exp.out;
   const bindings = importBindings(out);
   const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(REWRITES), ...Object.keys(FLAGGED)]);
@@ -883,8 +1327,27 @@ export function transform(src) {
   out = units.out;
   hits.push(...units.hits);
   warnings.push(...units.warnings);
+  // F1, F2, F4, F5: components that merged. Last, so the passes above read the
+  // 2.x names they know; see the section below.
+  const merges = transformMerges(out);
+  out = merges.out;
+  hits.push(...merges.hits);
+  warnings.push(...merges.warnings);
   return { out, hits, warnings };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// F1, F2, F4, F5: components that merged
+//
+// Modal → Dialog variant="sheet"; Swiper → Carousel mode="snap";
+// ScrollContainer and AutoScroll → Scroller (track mode, `auto`); InfoTip →
+// Tooltip content; Hover and CursorCard → HoverCard placement="cover" |
+// "cursor"; DropdownWrapper → Dropdown; ContextMenu → Dropdown
+// openOn="contextmenu"; EmojiPickerDropdown → EmojiPicker trigger; UserMenu →
+// User dropdown. The pass lives in ./codemod-3.0-merges.mjs, with the JSX
+// scanner it needs to move children and attribute values between slots.
+// ─────────────────────────────────────────────────────────────────────────────
+export { MERGED_EXPORTS, transformMerges } from "./codemod-3.0-merges.mjs";
 
 // Keep `literal` reachable for passes that read scale values (later rows).
 export { literal };

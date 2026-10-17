@@ -9,16 +9,16 @@ is found in the wild.
 
 1. **Analytics dashboard** — KPI stat cards (trend indicators), a line chart, a bar chart, recent-activity list. Tests: data components, `CountFx`, grid responsiveness.
 2. **Settings page** — sidebar sections, profile form (avatar upload, inputs, selects), danger zone. Tests: form controls, `MediaUpload`, surface recipes.
-3. **Pricing page** — three tiers, highlighted middle tier, feature comparison table, FAQ accordion. Tests: `Card`, `Badge`, `Table`, `Accordion`, proportional emphasis.
-4. **Chat UI** — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint. Tests: `EmojiPickerDropdown`, `Kbd`, `Spinner`, scroll containers.
+3. **Pricing page** — three tiers, highlighted middle tier, feature comparison table, FAQ accordion. Tests: `Card`, `Tag`, `Table`, `Accordion`, proportional emphasis.
+4. **Chat UI** — message list with avatars, streaming indicator, input bar with emoji picker, command palette hint. Tests: `EmojiPicker` with `trigger`, `Kbd`, `Spinner`, scroll containers.
 5. **Marketing hero** — headline with text effect, CTA pair, social proof logos, background effect. Tests: effects usage (`LetterFx`/`TypeFx`/`RevealFx`, `Background`/`MatrixFx`/`BlobFx`), restraint.
 6. **Auth flow** — login with password + OTP step in a stacked dialog. Tests: `Dialog` `stack`, `OTPInput`, `PasswordInput`, validation states.
 7. **E-commerce product card grid** — image, price, tag, hover actions, skeleton loading state. Tests: `Card`, `Media`, `Skeleton`, `Tag`, hover patterns.
 8. **Onboarding checklist** — progress bar, step list with status indicators, celebratory completion. Tests: `ProgressBar`, `StatusIndicator`, `CelebrationFx`.
 9. **Data table page** — sortable table, filters row (segmented control, date range, search), pagination. Tests: `Table`, `SegmentedControl`, `DateRangePicker`, toolbar composition.
-10. **User profile popover** — avatar trigger, `UserMenu`/`HoverCard` with stats and actions. Tests: overlay components, `AvatarGroup`.
+10. **User profile popover** — avatar trigger, `User` with `dropdown`/`HoverCard` with stats and actions. Tests: overlay components, `AvatarGroup`.
 11. **Changelog/timeline page** — versioned entries on a `Timeline`, tags per release, copyable code snippets. Tests: `Timeline`, `CodeBlock`, `InlineCode`.
-12. **Feedback widget** — floating trigger, dialog with rating chips, textarea, toast on submit. Tests: `Chip` selection, `useToast`/`Feedback`, positioning.
+12. **Feedback widget** — floating trigger, dialog with rating chips, textarea, toast on submit. Tests: `Tag` selection, `useToast`/`Feedback`, positioning.
 
 ## Scoring checklist (per task)
 

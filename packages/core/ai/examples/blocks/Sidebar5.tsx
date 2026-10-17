@@ -2,7 +2,7 @@ import {
   Avatar,
   Card,
   Column,
-  DropdownWrapper,
+  Dropdown,
   Heading,
   IconButton,
   Media,
@@ -15,7 +15,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
   return (
     <Column fillHeight maxWidth="18rem" background="surface" gap="20" {...flex}>
       <Row paddingX="24" paddingTop="12">
-        <Heading as="h2" variant="label-strong-m">
+        <Heading as="h2" textVariant="label-strong-m">
           Members
         </Heading>
       </Row>
@@ -35,7 +35,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
               <Text>{group.members.length}</Text>
             </Row>
             {group.members.map((member, index) => (
-              <DropdownWrapper
+              <Dropdown
                 fillWidth
                 key={index}
                 placement="left-start"
@@ -51,55 +51,54 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                     gap="16"
                     vertical="center"
                   >
-                    <Avatar src={member.avatar} statusIndicator={{ color: member.statusColor }} />
+                    <Avatar src={member.avatar} statusIndicator={{ scheme: member.statusColor }} />
                     <Column fillWidth gap="2">
-                      <Text variant="label-strong-s" truncate>
+                      <Text textVariant="label-strong-s" truncate>
                         {member.name}
                       </Text>
                       {member.status && (
-                        <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+                        <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
                           {member.status}
                         </Text>
                       )}
                     </Column>
                   </Card>
                 }
-                dropdown={
-                  <Column maxWidth="20rem" fitHeight tabIndex={-1}>
-                    <Row fillWidth>
-                      <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
-                      <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
-                        <IconButton icon="personRemove" tooltip="Remove" tooltipPosition="bottom" />
-                        <IconButton icon="settings" tooltip="Settings" tooltipPosition="bottom" />
-                      </Row>
-                      <Avatar
-                        position="absolute"
-                        left="12"
-                        bottom="0"
-                        src={member.avatar}
-                        size="6rem"
-                        statusIndicator={{ color: member.statusColor }}
-                        translateY="50%"
-                        borderWidth={4}
-                        border="surface"
-                      />
+              >
+                <Column maxWidth="20rem" fitHeight tabIndex={-1}>
+                  <Row fillWidth>
+                    <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
+                    <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
+                      <IconButton icon="personRemove" tooltip="Remove" tooltipPosition="bottom" />
+                      <IconButton icon="settings" tooltip="Settings" tooltipPosition="bottom" />
                     </Row>
-                    <Column fillWidth padding="20" marginTop="40" gap="12">
-                      <Column fillWidth gap="2">
-                        <Text variant="heading-strong-s">{member.name}</Text>
-                        <Text variant="body-default-xs" onBackground="neutral-weak">
-                          {member.status}
-                        </Text>
-                      </Column>
-                      {member.bio && (
-                        <Row fillWidth textVariant="body-default-xs" onBackground="neutral-weak">
-                          {member.bio}
-                        </Row>
-                      )}
+                    <Avatar
+                      position="absolute"
+                      left="12"
+                      bottom="0"
+                      src={member.avatar}
+                      size="6rem"
+                      statusIndicator={{ scheme: member.statusColor }}
+                      translateY="50%"
+                      borderWidth={4}
+                      border="surface"
+                    />
+                  </Row>
+                  <Column fillWidth padding="20" marginTop="40" gap="12">
+                    <Column fillWidth gap="2">
+                      <Text textVariant="heading-strong-s">{member.name}</Text>
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
+                        {member.status}
+                      </Text>
                     </Column>
+                    {member.bio && (
+                      <Row fillWidth textVariant="body-default-xs" onBackground="neutral-weak">
+                        {member.bio}
+                      </Row>
+                    )}
                   </Column>
-                }
-              />
+                </Column>
+              </Dropdown>
             ))}
           </Column>
         ))}

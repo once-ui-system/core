@@ -21,14 +21,14 @@ The IconButton component provides a compact, icon-based interactive element for 
         <IconButton icon="check" variant="primary" />
         <IconButton icon="plus" variant="secondary" />
         <IconButton icon="chevronDown" variant="tertiary" />
-        <IconButton icon="danger" variant="danger" />
+        <IconButton icon="danger" tone="danger" />
         <IconButton icon="info" variant="ghost" />
       </Row>
       <Row gap="16" horizontal="center" wrap>
-        <IconButton icon="sparkle" variant="quaternary" />
+        <IconButton icon="sparkle" variant="ghost" />
         <IconButton icon="settings" variant="subtle" />
-        <IconButton icon="check" variant="success" />
-        <IconButton icon="warning" variant="warning" />
+        <IconButton icon="check" tone="success" />
+        <IconButton icon="warning" tone="warning" />
         <IconButton icon="link" variant="link" />
       </Row>
     </Column>
@@ -39,12 +39,12 @@ The IconButton component provides a compact, icon-based interactive element for 
 `<IconButton icon="check" variant="primary" />
 <IconButton icon="plus" variant="secondary" />
 <IconButton icon="chevronDown" variant="tertiary" />
-<IconButton icon="danger" variant="danger" />
+<IconButton icon="danger" tone="danger" />
 <IconButton icon="info" variant="ghost" />
-<IconButton icon="sparkle" variant="quaternary" />
+<IconButton icon="sparkle" variant="ghost" />
 <IconButton icon="settings" variant="subtle" />
-<IconButton icon="check" variant="success" />
-<IconButton icon="warning" variant="warning" />
+<IconButton icon="check" tone="success" />
+<IconButton icon="warning" tone="warning" />
 <IconButton icon="link" variant="link" />`,
       language: "tsx",
       label: "IconButton"
@@ -185,13 +185,13 @@ Use the children prop to add custom content to the IconButton.
   preview={
     <Row gap="16" horizontal="center">
       <IconButton>
-        <Text variant="body-strong-s">A</Text>
+        <Text textVariant="body-strong-s">A</Text>
       </IconButton>
       <IconButton variant="secondary">
-        <Text variant="body-strong-s">B</Text>
+        <Text textVariant="body-strong-s">B</Text>
       </IconButton>
       <IconButton variant="tertiary">
-        <Text variant="body-strong-s">C</Text>
+        <Text textVariant="body-strong-s">C</Text>
       </IconButton>
     </Row>
   }
@@ -199,13 +199,13 @@ Use the children prop to add custom content to the IconButton.
     {
       code:
 `<IconButton>
-    <Text variant="body-strong-s">A</Text>
+    <Text textVariant="body-strong-s">A</Text>
 </IconButton>
 <IconButton variant="secondary">
-    <Text variant="body-strong-s">B</Text>
+    <Text textVariant="body-strong-s">B</Text>
 </IconButton>
 <IconButton variant="tertiary">
-    <Text variant="body-strong-s">C</Text>
+    <Text textVariant="body-strong-s">C</Text>
 </IconButton>`,
       language: "tsx",
       label: "Custom content"

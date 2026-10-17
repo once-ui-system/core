@@ -24,12 +24,12 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
       <Column as="main" gap="48" maxWidth={maxWidth} padding="l">
         {(title || description) && (
           <Column fillWidth gap="8" paddingX="s">
-            <Heading align={align} variant="display-strong-xs">
+            <Heading align={align} textVariant="display-strong-xs">
               {title}
             </Heading>
             <Text
               align={align}
-              variant="body-default-m"
+              textVariant="body-default-m"
               onBackground="neutral-medium"
               wrap="balance"
             >

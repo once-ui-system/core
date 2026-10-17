@@ -38,7 +38,7 @@ interface TextComponent {
 const Text: TextComponent = forwardRef(function Text<T extends ElementType = "span">(
   {
     as,
-    variant,
+    textVariant,
     size,
     weight,
     family,
@@ -94,8 +94,8 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
 ) {
   const Component = as || "span";
 
-  if (variant && (size || weight)) {
-    console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
+  if (textVariant && (size || weight)) {
+    console.warn("When 'textVariant' is set, 'size' and 'weight' are ignored.");
   }
 
   if (onBackground && onSolid) {
@@ -115,7 +115,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
   const sizeClass = size ? `font-${size}` : "";
   const weightClass = weight ? `font-${weight}` : "";
 
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
+  const classes = textVariant ? getVariantClasses(textVariant) : [sizeClass, weightClass];
 
   let colorClass = "";
   if (onBackground) {

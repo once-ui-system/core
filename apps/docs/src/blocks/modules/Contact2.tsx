@@ -53,11 +53,11 @@ export const Contact2 = () => {
         </Row>
         <Row fillWidth horizontal="center" borderTop="neutral-medium" borderX="neutral-medium">
           <Column maxWidth="xs" gap="16" paddingY="48" paddingX="24">
-            <Heading variant="display-strong-s" align="center">
+            <Heading textVariant="display-strong-s" align="center">
               Get in touch
             </Heading>
             <Text
-              variant="body-default-xl"
+              textVariant="body-default-xl"
               align="center"
               wrap="balance"
               onBackground="neutral-weak"
@@ -102,14 +102,14 @@ export const Contact2 = () => {
                 background="brand-alpha-weak"
                 onBackground="brand-weak"
               />
-              <Heading marginTop="16" marginLeft="12" as="h3" variant="heading-strong-l">
+              <Heading marginTop="16" marginLeft="12" as="h3" textVariant="heading-strong-l">
                 {contact.title}
               </Heading>
               <Text
                 marginBottom="16"
                 marginLeft="12"
                 onBackground="neutral-medium"
-                variant="body-default-s"
+                textVariant="body-default-s"
                 wrap="balance"
               >
                 {contact.description}
@@ -145,8 +145,8 @@ export const Contact2 = () => {
                 ]}
               />
               <Column gap="s" fillWidth marginBottom="32" marginTop="8">
-                <Heading variant="display-strong-s">Send us a message</Heading>
-                <Text variant="body-default-xl" onBackground="neutral-medium" wrap="balance">
+                <Heading textVariant="display-strong-s">Send us a message</Heading>
+                <Text textVariant="body-default-xl" onBackground="neutral-medium" wrap="balance">
                   We'd love to hear from you. Send us a message and we'll respond as soon as
                   possible.
                 </Text>

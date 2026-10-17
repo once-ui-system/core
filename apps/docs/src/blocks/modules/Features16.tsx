@@ -70,18 +70,18 @@ export const Features16 = (flex: React.ComponentProps<typeof Row>) => {
           />
           <Column fillWidth vertical="center" padding="32" gap="12">
             {card.tag && (
-              <Tag position="absolute" top="24" left="24" scheme={card.variant} size="l">
+              <Tag position="absolute" top="24" left="24" tone={card.variant} size="l">
                 {card.tag}
               </Tag>
             )}
             <Heading
-              variant="label-strong-s"
+              textVariant="label-strong-s"
               onBackground={`${card.variant}-weak` as Colors}
               marginTop="56"
             >
               {card.title}
             </Heading>
-            <Text wrap="balance" variant="heading-default-xl">
+            <Text wrap="balance" textVariant="heading-default-xl">
               {card.description}
             </Text>
           </Column>

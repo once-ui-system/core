@@ -95,13 +95,13 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
             }}
           />
           <Column gap="8">
-            <Tag size="s" scheme="brand">
+            <Tag size="s" tone="brand">
               Support
             </Tag>
-            <Heading as="h2" variant="display-strong-s">
+            <Heading as="h2" textVariant="display-strong-s">
               Still have questions?
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+            <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
               Our team helps founders pick blocks, wire themes, and ship production-ready pages.
             </Text>
           </Column>
@@ -112,7 +112,7 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
                 size="s"
                 avatars={supportTeam.map((member) => ({ src: member.avatar }))}
               />
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
                 Avg. response &lt; 4h
               </Text>
             </Row>
@@ -134,7 +134,7 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
             ].map((link) => (
               <Row key={link.label} gap="12" vertical="center" cursor="interactive">
                 <Icon name={link.icon} size="s" onBackground="brand-medium" />
-                <Text variant="label-default-s">{link.label}</Text>
+                <Text textVariant="label-default-s">{link.label}</Text>
               </Row>
             ))}
           </Column>
@@ -142,10 +142,10 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column fillWidth flex={1} gap="32">
           <Column gap="8">
-            <Heading as="h2" variant="display-default-s">
+            <Heading as="h2" textVariant="display-default-s">
               Frequently asked questions
             </Heading>
-            <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+            <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
               Everything you need to know before copying your first block.
             </Text>
           </Column>
@@ -153,10 +153,10 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
           {faqSections.map((section, sectionIndex) => (
             <Column key={section.label} fillWidth gap="12">
               <Row gap="12" vertical="center">
-                <Text variant="code-default-s" onBackground="brand-weak">
+                <Text textVariant="code-default-s" onBackground="brand-weak">
                   {String(sectionIndex + 1).padStart(2, "0")}
                 </Text>
-                <Heading variant="heading-strong-s">{section.label}</Heading>
+                <Heading textVariant="heading-strong-s">{section.label}</Heading>
               </Row>
               <Column fillWidth gap="8">
                 {section.items.map((item) => (
@@ -168,8 +168,8 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
                     padding="4"
                     background="overlay"
                   >
-                    <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-                      <Text variant="body-default-s" onBackground="neutral-medium">
+                    <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+                      <Text textVariant="body-default-s" onBackground="neutral-medium">
                         {item.content}
                       </Text>
                     </Accordion>

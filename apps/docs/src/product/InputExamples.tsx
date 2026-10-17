@@ -199,14 +199,14 @@ export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
   
   const handleComplete = (code: string) => {
     addToast({
-      variant: "success",
+      tone: "success",
       message: `Verification code ${code} submitted successfully`
     });
   };
   
   return (
     <Column gap="16">
-      <Text as="label" htmlFor="otp-input-example" variant="label-default-s" onBackground="neutral-weak">
+      <Text as="label" htmlFor="otp-input-example" textVariant="label-default-s" onBackground="neutral-weak">
         Verification Code
       </Text>
       <OTPInput

@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  AutoScroll,
+  Scroller,
   Background,
   Column,
   Grid,
   Heading,
-  Hover,
+  HoverCard,
   Icon,
   Mask,
   MatrixFx,
@@ -71,7 +71,7 @@ const demoTiles: {
             <MatrixFx flicker size={1.5} colors={["brand-on-background-medium"]} />
           </Mask>
         </Row>
-        <ShineFx variant="code-default-l">Listening...</ShineFx>
+        <ShineFx textVariant="code-default-l">Listening...</ShineFx>
       </Row>
     ),
     flex: 2,
@@ -90,8 +90,8 @@ const demoTiles: {
             colorStart: "neutral-background-strong",
           }}
         />
-        <Text variant="display-strong-s">+24%</Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="display-strong-s">+24%</Text>
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Weekly active builders
         </Text>
         <LineChart
@@ -117,21 +117,21 @@ const demoTiles: {
     flex: 3,
   },
   {
-    label: "<AutoScroll /> + <Tag />",
+    label: "<Scroller auto /> + <Tag />",
     content: (
-      <AutoScroll background="page" borderY="neutral-alpha-medium" paddingY="12">
+      <Scroller auto background="page" borderY="neutral-alpha-medium" paddingY="12">
         <Row paddingX="24" vertical="center" gap="16">
           <Text>Launch week</Text>
-          <Tag scheme="brand">Live</Tag>
+          <Tag tone="brand">Live</Tag>
         </Row>
         <Row paddingX="24" vertical="center">
           <Text onBackground="neutral-weak">New blocks ship every week</Text>
         </Row>
         <Row paddingX="24" vertical="center" gap="16">
           <Text>Launch week</Text>
-          <Tag scheme="brand">Live</Tag>
+          <Tag tone="brand">Live</Tag>
         </Row>
-      </AutoScroll>
+      </Scroller>
     ),
     flex: 2,
   },
@@ -141,11 +141,11 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" paddingX="l" {...flex}>
       <Column maxWidth="l" gap="16">
-        <Heading as="h2" variant="display-default-s">
+        <Heading as="h2" textVariant="display-default-s">
           <Text onBackground="brand-weak">Copy and paste.</Text> Ship with 100+ open-source
           components and Pro blocks from one design system.
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
           Inspired by the Once UI homepage — a capability grid paired with live effect previews.
         </Text>
       </Column>
@@ -160,7 +160,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
             gap="12"
           >
             <Icon size="l" name={category.icon} onBackground="brand-weak" />
-            <Text variant="heading-default-xl">
+            <Text textVariant="heading-default-xl">
               {category.title}. <Text onBackground="neutral-weak">{category.description}</Text>
             </Text>
           </Column>
@@ -194,7 +194,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                 paddingLeft="l"
                 paddingTop="l"
               >
-                <Hover
+                <HoverCard placement="cover"
                   fill
                   trigger={
                     <Row
@@ -208,9 +208,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                     >
                       {tile.content}
                     </Row>
-                  }
-                  overlay={
-                    <Row
+                  }><Row
                       onBackground="brand-weak"
                       position="absolute"
                       bottom="24"
@@ -219,9 +217,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                       textVariant="code-default-xs"
                     >
                       {tile.label}
-                    </Row>
-                  }
-                />
+                    </Row></HoverCard>
               </Column>
             ))}
           </Row>

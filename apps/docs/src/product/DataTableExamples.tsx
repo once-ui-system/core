@@ -42,7 +42,7 @@ const columns: DataTableColumn<Invoice>[] = [
     key: "status",
     header: "Status",
     cell: (invoice) => (
-      <Tag size="s" scheme={STATUS_SCHEME[invoice.status]}>
+      <Tag size="s" tone={STATUS_SCHEME[invoice.status]}>
         {invoice.status}
       </Tag>
     ),
@@ -67,7 +67,7 @@ export function DataTableSelectionExample() {
   return (
     <Column fillWidth gap="12">
       <Row fillWidth horizontal="between" vertical="center" paddingX="4">
-        <Text variant="label-default-m">
+        <Text textVariant="label-default-m">
           {selected.length > 0 ? `${selected.length} selected` : "Invoices"}
         </Text>
         <Button

@@ -68,9 +68,9 @@ export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         />
       </HoloFx>
       <Column pointerEvents="none" horizontal="center" maxWidth="xs" gap="4">
-        <Text variant="heading-strong-xl">Join the squad</Text>
+        <Text textVariant="heading-strong-xl">Join the squad</Text>
         <Text
-          variant="body-default-s"
+          textVariant="body-default-s"
           wrap="balance"
           marginBottom="l"
           onBackground="neutral-medium"

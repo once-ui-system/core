@@ -1,20 +1,20 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
-import { Media } from "./Media";
-import { Row } from "./Row";
-import styles from "./Swiper.module.scss";
+import { Column } from "../components/Column";
+import { Flex } from "../components/Flex";
+import { IconButton } from "../components/IconButton";
+import { Media } from "../components/Media";
+import { Row } from "../components/Row";
+import styles from "./SnapCarousel.module.scss";
 
-interface SwiperItem {
+interface SnapCarouselItem {
   slide: string | React.ReactNode;
   alt?: string;
 }
 
-interface SwiperProps extends React.ComponentProps<typeof Flex> {
-  items: SwiperItem[];
+interface SnapCarouselProps extends React.ComponentProps<typeof Flex> {
+  items: SnapCarouselItem[];
   controls?: boolean | "contained";
   priority?: boolean;
   /**
@@ -31,7 +31,12 @@ interface SwiperProps extends React.ComponentProps<typeof Flex> {
   indicator?: boolean;
 }
 
-const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
+/**
+ * Carousel `mode="snap"` (2.x `Swiper`): a touch-first track of slides with
+ * native scroll snapping, drag, arrows and dots. Internal: render it through
+ * `<Carousel mode="snap">`.
+ */
+const SnapCarousel = forwardRef<HTMLDivElement, SnapCarouselProps>(
   (
     {
       items = [],
@@ -386,6 +391,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
   },
 );
 
-Swiper.displayName = "Swiper";
+SnapCarousel.displayName = "SnapCarousel";
 
-export { Swiper };
+export type { SnapCarouselItem, SnapCarouselProps };
+export { SnapCarousel };

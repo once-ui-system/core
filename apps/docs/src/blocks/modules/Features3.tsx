@@ -38,7 +38,7 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
     <Column fillWidth horizontal="center" gap="xl" {...flex}>
       <Column fillWidth>
         <Row maxWidth="s">
-          <Heading variant="display-default-s">
+          <Heading textVariant="display-default-s">
             Empowering developers with cutting-edge tools and capabilities
           </Heading>
         </Row>
@@ -79,10 +79,10 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                   />
                   <Icon name={feature.icon} onBackground="brand-weak" size="s" />
                 </Row>
-                <Heading variant="label-strong-s" onBackground="brand-weak" marginTop="32">
+                <Heading textVariant="label-strong-s" onBackground="brand-weak" marginTop="32">
                   {feature.title}
                 </Heading>
-                <Text variant="heading-default-xl" wrap="balance">
+                <Text textVariant="heading-default-xl" wrap="balance">
                   {feature.description}
                 </Text>
               </Column>

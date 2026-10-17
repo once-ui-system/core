@@ -39,10 +39,10 @@ export const Contact1 = () => {
   return (
     <Column fillWidth fitHeight horizontal="center" gap="64">
       <Column maxWidth="40rem" gap="12" horizontal="center">
-        <Heading as="h2" align="center" variant="display-strong-m">
+        <Heading as="h2" align="center" textVariant="display-strong-m">
           Get in touch
         </Heading>
-        <Text align="center" onBackground="neutral-medium" variant="body-default-xl" wrap="balance">
+        <Text align="center" onBackground="neutral-medium" textVariant="body-default-xl" wrap="balance">
           We're always here to help
         </Text>
       </Column>
@@ -78,14 +78,14 @@ export const Contact1 = () => {
               background="brand-alpha-weak"
               onBackground="brand-weak"
             />
-            <Heading marginTop="16" marginLeft="12" as="h3" variant="heading-strong-l">
+            <Heading marginTop="16" marginLeft="12" as="h3" textVariant="heading-strong-l">
               {contact.title}
             </Heading>
             <Text
               marginBottom="16"
               marginLeft="12"
               onBackground="neutral-medium"
-              variant="body-default-s"
+              textVariant="body-default-s"
               wrap="balance"
             >
               {contact.description}
@@ -119,8 +119,8 @@ export const Contact1 = () => {
             ]}
           />
           <Column gap="s" fillWidth marginBottom="32" marginTop="8">
-            <Heading variant="display-strong-s">Send us a message</Heading>
-            <Text variant="body-default-xl" onBackground="neutral-medium" wrap="balance">
+            <Heading textVariant="display-strong-s">Send us a message</Heading>
+            <Text textVariant="body-default-xl" onBackground="neutral-medium" wrap="balance">
               We'd love to hear from you. Send us a message and we'll respond as soon as possible.
             </Text>
           </Column>

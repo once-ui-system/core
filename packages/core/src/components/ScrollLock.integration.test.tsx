@@ -5,9 +5,8 @@ import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { resetScrollLockTestState } from "../internal/scrollLockState";
 import { KbarContent } from "../modules/navigation/Kbar";
-import { ContextMenu } from "./ContextMenu";
 import { Dialog } from "./Dialog";
-import { DropdownWrapper } from "./DropdownWrapper";
+import { Dropdown } from "./Dropdown";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
@@ -102,26 +101,23 @@ const OverlayIntegrationHarness = () => (
         </div>
       }
     />
-    <DropdownWrapper
-      open
-      trigger={<button type="button">Open dropdown</button>}
-      dropdown={
+    <Dropdown open trigger={<button type="button">Open dropdown</button>}>
+      {
         <div data-testid="dropdown-scroll-region" style={{ overflowY: "auto", maxHeight: "80px" }}>
           <button type="button">Dropdown allowed action</button>
         </div>
       }
-    />
-    <ContextMenu
+    </Dropdown>
+    <Dropdown
+      openOn="contextmenu"
       open
       onOpenChange={() => undefined}
-      dropdown={
-        <div data-testid="context-scroll-region" style={{ overflowY: "auto", maxHeight: "80px" }}>
-          <button type="button">Context allowed action</button>
-        </div>
-      }
+      trigger={<button type="button">Context anchor</button>}
     >
-      <button type="button">Context anchor</button>
-    </ContextMenu>
+      <div data-testid="context-scroll-region" style={{ overflowY: "auto", maxHeight: "80px" }}>
+        <button type="button">Context allowed action</button>
+      </div>
+    </Dropdown>
     <KbarContent open onClose={() => undefined} items={kbarItems} />
   </LayoutProvider>
 );

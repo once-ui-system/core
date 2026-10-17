@@ -20,17 +20,17 @@ export function AgentUpdatesDialog({
     <Dialog open={isOpen} onClose={onClose} title={title} minHeight={24}>
       <Column gap="8" paddingTop="4">
         {updates.length === 0 ? (
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             No activity yet.
           </Text>
         ) : (
           updates.map((update, index) => (
             <Column key={update.id} gap="8">
               <Row gap="12" vertical="start">
-                <Text variant="label-default-xs" onBackground="neutral-weak" wrap="nowrap">
+                <Text textVariant="label-default-xs" onBackground="neutral-weak" wrap="nowrap">
                   {update.time}
                 </Text>
-                <Text variant="body-default-s" onBackground="neutral-strong">
+                <Text textVariant="body-default-s" onBackground="neutral-strong">
                   {update.message}
                 </Text>
               </Row>

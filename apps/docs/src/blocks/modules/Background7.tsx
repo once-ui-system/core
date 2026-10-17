@@ -56,10 +56,10 @@ export const Background7: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
       />
       <Column fillWidth horizontal="center" padding="xl" gap="16" zIndex={1}>
         <Column maxWidth="40rem" gap="12" horizontal="center">
-          <Text variant="heading-default-xl" onBackground="brand-weak" align="center">
+          <Text textVariant="heading-default-xl" onBackground="brand-weak" align="center">
             Atmospheric hero shell
           </Text>
-          <Heading as="h2" variant="display-default-s" align="center">
+          <Heading as="h2" textVariant="display-default-s" align="center">
             Grid mask, brand gradient, and smoke video layered for product landing pages
           </Heading>
         </Column>

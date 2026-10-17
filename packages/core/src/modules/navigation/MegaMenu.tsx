@@ -561,7 +561,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                               marginBottom="12"
                               marginTop="12"
                               onBackground="neutral-weak"
-                              variant="label-default-s"
+                              textVariant="label-default-s"
                             >
                               {section.title}
                             </Text>
@@ -588,7 +588,10 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                                 )}
                                 <Column gap="4">
                                   {link.label && (
-                                    <Text onBackground="neutral-strong" variant="label-strong-s">
+                                    <Text
+                                      onBackground="neutral-strong"
+                                      textVariant="label-strong-s"
+                                    >
                                       {link.label}
                                     </Text>
                                   )}

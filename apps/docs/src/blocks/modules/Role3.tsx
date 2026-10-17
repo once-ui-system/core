@@ -1,24 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  AvatarGroup,
-  Background,
-  Badge,
-  Button,
-  Column,
-  Grid,
-  Heading,
-  Icon,
-  Input,
-  Pulse,
-  Row,
-  Tag,
-  Text,
-  Textarea,
-  Timeline,
-  type TimelineItem,
-} from "@once-ui-system/core";
+import { Avatar, AvatarGroup, Background, Button, Column, Grid, Heading, Icon, Input, Pulse, Row, Tag, Text, Textarea, Timeline, type TimelineItem } from "@once-ui-system/core";
 
 const roleDetails = {
   title: "Senior Frontend Engineer",
@@ -43,11 +25,11 @@ const roleDetails = {
   ],
 };
 
-const hiringSteps = [
-  { label: "Intro call", description: "30 min with recruiting", state: "active" },
-  { label: "Technical screen", description: "Live coding + architecture", state: "active" },
-  { label: "Team interview", description: "Meet the product squad", state: "default" },
-  { label: "Final conversation", description: "Values and offer discussion", state: "default" },
+const hiringSteps: TimelineItem[] = [
+  { label: "Intro call", description: "30 min with recruiting", tone: "brand" },
+  { label: "Technical screen", description: "Live coding + architecture", tone: "brand" },
+  { label: "Team interview", description: "Meet the product squad" },
+  { label: "Final conversation", description: "Values and offer discussion" },
 ];
 
 const team = [
@@ -74,39 +56,39 @@ export const Role3 = () => {
               Back to openings
             </Button>
             <Row gap="16" vertical="center">
-              <Tag scheme="brand">New role</Tag>
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Tag tone="brand">New role</Tag>
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
                 {roleDetails.posted}
               </Text>
             </Row>
-            <Heading variant="display-strong-s">{roleDetails.title}</Heading>
+            <Heading textVariant="display-strong-s">{roleDetails.title}</Heading>
             <Row gap="24" wrap>
               <Row gap="8" vertical="center">
                 <Icon name="world" size="xs" onBackground="neutral-weak" />
-                <Text variant="body-default-s">{roleDetails.location}</Text>
+                <Text textVariant="body-default-s">{roleDetails.location}</Text>
               </Row>
               <Row gap="8" vertical="center">
                 <Icon name="calendar" size="xs" onBackground="neutral-weak" />
-                <Text variant="body-default-s">{roleDetails.type}</Text>
+                <Text textVariant="body-default-s">{roleDetails.type}</Text>
               </Row>
               <Row gap="8" vertical="center">
                 <Icon name="banknotes" size="xs" onBackground="neutral-weak" />
-                <Text variant="body-default-s">{roleDetails.salary}</Text>
+                <Text textVariant="body-default-s">{roleDetails.salary}</Text>
               </Row>
             </Row>
           </Column>
 
-          <Text variant="body-default-l" onBackground="neutral-medium">
+          <Text textVariant="body-default-l" onBackground="neutral-medium">
             {roleDetails.description}
           </Text>
 
           <Column gap="16">
-            <Heading variant="heading-strong-l">What you'll do</Heading>
+            <Heading textVariant="heading-strong-l">What you'll do</Heading>
             <Column gap="8">
               {roleDetails.responsibilities.map((item) => (
                 <Row key={item} gap="12" vertical="center">
                   <Icon name="check" size="s" onBackground="brand-weak" />
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item}
                   </Text>
                 </Row>
@@ -115,12 +97,12 @@ export const Role3 = () => {
           </Column>
 
           <Column gap="16">
-            <Heading variant="heading-strong-l">What we're looking for</Heading>
+            <Heading textVariant="heading-strong-l">What we're looking for</Heading>
             <Column gap="8">
               {roleDetails.requirements.map((item) => (
                 <Row key={item} gap="12" vertical="center">
                   <Icon name="check" size="s" onBackground="brand-weak" />
-                  <Text variant="body-default-s" onBackground="neutral-medium">
+                  <Text textVariant="body-default-s" onBackground="neutral-medium">
                     {item}
                   </Text>
                 </Row>
@@ -149,8 +131,8 @@ export const Role3 = () => {
               }}
             />
             <Column gap="8">
-              <Heading variant="heading-strong-l">Apply for this role</Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Heading textVariant="heading-strong-l">Apply for this role</Heading>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Share a few details and we will respond within one week.
               </Text>
             </Column>
@@ -174,25 +156,25 @@ export const Role3 = () => {
         >
           <Column fillWidth radius="xl" border padding="l" gap="20" background="surface">
             <Column gap="8">
-              <Heading variant="heading-strong-m">Meet the team</Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Heading textVariant="heading-strong-m">Meet the team</Heading>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 You will work closely with this squad on core product surfaces.
               </Text>
             </Column>
             <AvatarGroup avatars={team.map((src) => ({ src }))} />
             <Column gap="12">
               <Row horizontal="between" vertical="center" paddingTop="24">
-                <Text variant="label-strong-m">Hiring manager</Text>
-                <Badge arrow={false} effect={false} gap="12" paddingLeft="12" paddingY="8">
+                <Text textVariant="label-strong-m">Hiring manager</Text>
+                <Tag variant="announce" arrow={false} effect={false} gap="12" paddingLeft="12" paddingY="8">
                   <Pulse size="s" />
                   Active
-                </Badge>
+                </Tag>
               </Row>
               <Row gap="12" vertical="center">
                 <Avatar src="/images/creators/lorant.jpg" />
                 <Column gap="2">
-                  <Text variant="label-strong-s">Lorant One</Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="label-strong-s">Lorant One</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     Design Engineer
                   </Text>
                 </Column>
@@ -201,13 +183,10 @@ export const Role3 = () => {
           </Column>
 
           <Column fillWidth radius="xl" border padding="l" gap="16" background="surface">
-            <Heading variant="heading-strong-m">Interview process</Heading>
+            <Heading textVariant="heading-strong-m">Interview process</Heading>
             <Timeline
               size="xs"
-              items={hiringSteps.map((item) => ({
-                ...item,
-                state: item.state as TimelineItem["state"],
-              }))}
+              items={hiringSteps}
             />
           </Column>
         </Column>

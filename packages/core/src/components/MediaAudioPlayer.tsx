@@ -195,7 +195,7 @@ const MediaAudioPlayer = forwardRef<HTMLDivElement, MediaAudioPlayerProps>(
             />
           </Row>
           <Text
-            variant="body-default-xs"
+            textVariant="body-default-xs"
             onBackground="neutral-weak"
             wrap="nowrap"
             className={styles.time}

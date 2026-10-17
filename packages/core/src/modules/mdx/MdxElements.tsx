@@ -95,7 +95,7 @@ export function MdxHeading(props: MdxHeadingProps) {
       <Heading
         as={as}
         id={slug || undefined}
-        variant={headingVariant[as]}
+        textVariant={headingVariant[as]}
         className={className}
         style={style}
       >
@@ -159,7 +159,7 @@ export function MdxParagraph(props: MdxParagraphProps) {
       as={blocks.length > 0 ? "div" : "p"}
       id={id}
       className={className}
-      variant="body-default-m"
+      textVariant="body-default-m"
       onBackground="neutral-medium"
       style={{ ...BODY_LINE_HEIGHT, ...style }}
       {...spacing}
@@ -205,7 +205,7 @@ export function MdxBlockQuote(props: MdxBlockQuoteProps) {
     isValidElement<MdxParagraphProps>(child) && child.type === MdxParagraph ? (
       <Text
         as="p"
-        variant="body-default-m"
+        textVariant="body-default-m"
         onBackground="neutral-medium"
         marginTop="8"
         marginBottom="12"

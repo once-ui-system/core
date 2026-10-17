@@ -40,7 +40,7 @@ export const Testimonial1: React.FC<Props> = ({ testimonials, ...flex }) => (
           {...flex}
         >
           <Row padding="32" fillWidth>
-            <Text wrap="balance" variant="heading-default-m">
+            <Text wrap="balance" textVariant="heading-default-m">
               {testimonial.content}
             </Text>
           </Row>

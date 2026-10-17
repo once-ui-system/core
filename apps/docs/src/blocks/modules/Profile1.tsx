@@ -40,14 +40,14 @@ export const Profile1 = () => {
             src="/images/creators/lorant.jpg"
             borderWidth={8}
             size="xl"
-            statusIndicator={{ color: "green" }}
+            statusIndicator={{ scheme: "green" }}
           />
           <Row position="absolute" top="16" right="16">
             <IconButton icon="edit" tooltip="Edit profile" tooltipPosition="left" />
           </Row>
         </Column>
         <Column fillWidth horizontal="center" paddingTop="24" gap="8">
-          <Heading variant="display-default-s" align="center">
+          <Heading textVariant="display-default-s" align="center">
             Lorant One
           </Heading>
           <Text onBackground="neutral-weak" align="center">
@@ -87,12 +87,12 @@ export const Profile1 = () => {
           {view === "about" && (
             <Column maxWidth="xs" gap="16" marginTop="40" paddingX="16">
               <Heading as="h2">About Me</Heading>
-              <Text as="p" onBackground="neutral-medium" variant="body-default-m">
+              <Text as="p" onBackground="neutral-medium" textVariant="body-default-m">
                 I am a passionate and versatile Data Engineer with expertise in SQL, Python, and
                 BigQuery. With 4 years of experience in the field, I specialize in extracting,
                 transforming, and loading data for insights and decision-making.
               </Text>
-              <Text as="p" onBackground="neutral-medium" variant="body-default-m">
+              <Text as="p" onBackground="neutral-medium" textVariant="body-default-m">
                 My strong analytical skills and attention to detail ensure the quality and accuracy
                 of my work. I am always seeking new challenges that push me to stay ahead in the
                 ever-evolving world of data engineering.

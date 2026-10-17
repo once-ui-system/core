@@ -72,7 +72,7 @@ const renderCell = (value: boolean | string) => {
     return <Icon onBackground="neutral-weak" name="close" size="s" />;
   }
   return (
-    <Text variant="label-default-s" onBackground="neutral-strong">
+    <Text textVariant="label-default-s" onBackground="neutral-strong">
       {value}
     </Text>
   );
@@ -84,13 +84,13 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
       <Column maxWidth="40rem" gap="12" horizontal="center">
-        <Tag scheme="brand" size="s">
+        <Tag tone="brand" size="s">
           Compare plans
         </Tag>
-        <Heading as="h2" align="center" variant="display-strong-m">
+        <Heading as="h2" align="center" textVariant="display-strong-m">
           Everything included, side by side
         </Heading>
-        <Text align="center" onBackground="neutral-medium" variant="body-default-l" wrap="balance">
+        <Text align="center" onBackground="neutral-medium" textVariant="body-default-l" wrap="balance">
           A full-width feature matrix with sticky tier headers and mobile plan switching.
         </Text>
       </Column>
@@ -124,7 +124,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
               </Button>
             ))}
           </Row>
-          <Text variant="label-default-m" onBackground="neutral-weak">
+          <Text textVariant="label-default-m" onBackground="neutral-weak">
             {plans[mobilePlan].price}
           </Text>
         </Row>
@@ -151,12 +151,12 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
                 borderLeft="neutral-alpha-medium"
               >
                 <Text
-                  variant="heading-strong-xs"
+                  textVariant="heading-strong-xs"
                   onBackground={plans[key].highlight ? "brand-strong" : "neutral-strong"}
                 >
                   {plans[key].label}
                 </Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   {plans[key].price}
                 </Text>
               </Row>
@@ -171,10 +171,10 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
             borderBottom={index !== comparisonData.length - 1 ? "neutral-alpha-medium" : undefined}
           >
             <Column flex={2} padding="24" vertical="center">
-              <Text variant="label-strong-m" onBackground="neutral-strong">
+              <Text textVariant="label-strong-m" onBackground="neutral-strong">
                 {item.category}
               </Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {item.description}
               </Text>
             </Column>

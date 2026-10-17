@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  AutoScroll,
+  Scroller,
   Avatar,
   Background,
   Column,
@@ -77,22 +77,22 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
           }}
         />
         <Column horizontal="center" align="center" gap="8">
-          <Heading variant="heading-strong-s">Excellent</Heading>
-          <Text variant="display-strong-s" wrap="balance">
+          <Heading textVariant="heading-strong-s">Excellent</Heading>
+          <Text textVariant="display-strong-s" wrap="balance">
             {rating.toFixed(2)}
           </Text>
-          <Text onBackground="brand-weak" variant="label-default-s" wrap="balance">
+          <Text onBackground="brand-weak" textVariant="label-default-s" wrap="balance">
             {reviewCount} Reviews
           </Text>
         </Column>
       </Column>
       <Column fillWidth paddingY="20">
         <Row fillWidth zIndex={1} paddingLeft="12" paddingBottom="20">
-          <Heading as="h2" variant="heading-strong-l">
+          <Heading as="h2" textVariant="heading-strong-l">
             Loved by many
           </Heading>
         </Row>
-        <AutoScroll fillWidth speed="slow">
+        <Scroller auto={{ speed: "slow" }} fillWidth>
           {testimonials.map((testimonial, index) => (
             <Column
               key={index}
@@ -118,13 +118,13 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
                 {(testimonial.role || testimonial.company) && (
                   <Avatar src={testimonial.avatar} size="xs" />
                 )}
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {testimonial.name}
                 </Text>
               </Row>
             </Column>
           ))}
-        </AutoScroll>
+        </Scroller>
         <Fade
           pointerEvents="none"
           fillHeight

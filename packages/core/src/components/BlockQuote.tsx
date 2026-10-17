@@ -64,7 +64,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
           {/* A div, not Text's default span, so the quote can hold
               paragraphs: `<p>` inside a span is invalid HTML. As a flex item
               the span was laid out as a block already. */}
-          <Text as="div" variant="heading-strong-xl" wrap="balance">
+          <Text as="div" textVariant="heading-strong-xl" wrap="balance">
             {children}
           </Text>
           {subline && (
@@ -75,7 +75,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
           {(author || link) && (
             <Row gap="12" center marginTop="32">
               —{author?.avatar && <Avatar size="s" src={author?.avatar} />}
-              {author?.name && <Text variant="label-default-s">{author?.name}</Text>}
+              {author?.name && <Text textVariant="label-default-s">{author?.name}</Text>}
               {link?.href && (
                 <Row as="cite">
                   <SmartLink
@@ -85,7 +85,7 @@ const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
                       (/^https?:\/\//.test(link.href) ? link.href : `https://${link.href}`)
                     }
                   >
-                    <Text variant="label-default-s">{link?.label || link?.href}</Text>
+                    <Text textVariant="label-default-s">{link?.label || link?.href}</Text>
                   </SmartLink>
                 </Row>
               )}

@@ -1,21 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  Background,
-  Badge,
-  Button,
-  Card,
-  Column,
-  CompareImage,
-  Heading,
-  InlineCode,
-  Media,
-  Row,
-  Tag,
-  Text,
-  TiltFx,
-} from "@once-ui-system/core";
+import { Avatar, Background, Button, Card, Column, CompareImage, Heading, InlineCode, Media, Row, Tag, Text, TiltFx } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 
 export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
@@ -31,7 +16,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
     >
       <Column maxWidth="xl" gap="56" horizontal="center">
         <Column maxWidth="l" gap="24" paddingX="s" paddingBottom="l" paddingTop="m">
-          <Badge
+          <Tag variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="20"
@@ -41,7 +26,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
             themeBorder="rounded"
           >
             <Row vertical="center">
-              <Tag scheme="brand">v1.7</Tag>
+              <Tag tone="brand">v1.7</Tag>
               <Row
                 marginLeft="12"
                 textVariant="code-default-xs"
@@ -52,12 +37,12 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                 Discover what&apos;s new
               </Row>
             </Row>
-          </Badge>
-          <Heading variant="display-default-xl" marginTop="8">
+          </Tag>
+          <Heading textVariant="display-default-xl" marginTop="8">
             Write 70% less code with human-readable, machine-writable syntax
             <Text onBackground="brand-medium">.</Text>
           </Heading>
-          <Text wrap="balance" variant="heading-default-l" onBackground="neutral-weak">
+          <Text wrap="balance" textVariant="heading-default-l" onBackground="neutral-weak">
             Build semantic layouts with <InlineCode>Row</InlineCode>,{" "}
             <InlineCode>Column</InlineCode> and <InlineCode>Grid</InlineCode>. Add 100+ pre-styled
             components. Manage themes in a single file.
@@ -164,7 +149,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                             >
                               <Row fillWidth paddingX="20" paddingY="12" gap="12" vertical="center">
                                 <Avatar size="xs" src="/images/creators/lorant.jpg" />
-                                <Text variant="label-default-s">Lorant One</Text>
+                                <Text textVariant="label-default-s">Lorant One</Text>
                               </Row>
                               <Media
                                 border
@@ -181,7 +166,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                                 paddingBottom="20"
                                 gap="12"
                               >
-                                <Heading as="h2" variant="body-default-xl">
+                                <Heading as="h2" textVariant="body-default-xl">
                                   Your AI hallucinates. Let Once UI fix it.
                                 </Heading>
                                 <Text onBackground="neutral-weak" wrap="balance">
@@ -242,7 +227,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
   <Card fillWidth direction="column" padding="4" radius="l" border>
     <Row fillWidth vertical="center" paddingX="20" paddingY="12" gap="12">
       <Avatar size="xs" src="/avatar.jpg"/>
-      <Text variant="label-default-s">Lorant One</Text>
+      <Text textVariant="label-default-s">Lorant One</Text>
     </Row>
     <Media
       border
@@ -253,7 +238,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
       src="/cover.jpg"
     />
     <Column fillWidth paddingX="24" paddingTop="32" paddingBottom="20" gap="12">
-      <Heading as="h2" variant="body-default-xl">
+      <Heading as="h2" textVariant="body-default-xl">
         Your AI hallucinates. Let Once UI fix it.
       </Heading>
       <Text onBackground="neutral-weak" wrap="balance">
@@ -274,7 +259,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
         />
       </Column>
       <Row>
-        <Text variant="label-default-s" align="center" onBackground="brand-weak">
+        <Text textVariant="label-default-s" align="center" onBackground="brand-weak">
           Built for React. Tuned for Next.js.
         </Text>
       </Row>

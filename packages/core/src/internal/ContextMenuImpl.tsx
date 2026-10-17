@@ -12,14 +12,14 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { Flex } from "../components/Flex";
+import { OptionRoleContext } from "../components/OptionRoleContext";
+import { ScrollLock } from "../components/ScrollLock";
 import type { CSSUnit, Placement } from "../types";
-import styles from "./ContextMenu.module.scss";
-import { Dropdown } from "./Dropdown";
-import { Flex } from "./Flex";
-import { OptionRoleContext } from "./OptionRoleContext";
-import { ScrollLock } from "./ScrollLock";
+import styles from "./ContextMenuImpl.module.scss";
+import { DropdownPanel } from "./DropdownPanel";
 
-export interface ContextMenuProps {
+export interface ContextMenuImplProps {
   children: ReactNode;
   dropdown: ReactNode;
   /**
@@ -99,7 +99,7 @@ function menuOrigin(
   };
 }
 
-const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
+const ContextMenuImpl = forwardRef<HTMLDivElement, ContextMenuImplProps>(
   (
     {
       children,
@@ -434,7 +434,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           {/* The menu's items are menu items, and the panel around them is a
               group in the menu, not a listbox of its own. */}
           <OptionRoleContext.Provider value="menuitem">
-            <Dropdown
+            <DropdownPanel
               minWidth={minWidth}
               maxWidth={maxWidth}
               minHeight={minHeight}
@@ -449,7 +449,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
               {...rest}
             >
               {dropdown}
-            </Dropdown>
+            </DropdownPanel>
           </OptionRoleContext.Provider>
         </Flex>,
         document.body,
@@ -481,6 +481,6 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
   },
 );
 
-ContextMenu.displayName = "ContextMenu";
+ContextMenuImpl.displayName = "ContextMenuImpl";
 
-export { ContextMenu };
+export { ContextMenuImpl };

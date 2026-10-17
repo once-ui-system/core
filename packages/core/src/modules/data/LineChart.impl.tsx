@@ -7,6 +7,7 @@ import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import { cssColor } from "../../internal/cssColor";
 import { RadiusSize, schemes } from "../../types";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
@@ -168,7 +169,7 @@ const LineChart: React.FC<LineChartProps> = ({
     (props: any) => {
       const customPayload = autoSeries.map(({ key, color }, index) => ({
         value: key,
-        color: `var(--data-${color || schemes[index % schemes.length]})`,
+        color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
       }));
 
       return (
@@ -280,7 +281,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   <defs>
                     {autoSeries.map(({ key, color }, index) => {
                       const colorValue = color || schemes[index % schemes.length];
-                      const lineColor = `var(--data-${colorValue})`;
+                      const lineColor = cssColor(colorValue, "data-");
                       return (
                         <LinearGradient
                           key={`gradient-${chartId}-${index}`}
@@ -336,7 +337,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   )}
                   {autoSeries.map(({ key, color }, index) => {
                     const colorValue = color || schemes[index % schemes.length];
-                    const lineColor = `var(--data-${colorValue})`;
+                    const lineColor = cssColor(colorValue, "data-");
                     return (
                       <Area
                         key={key}

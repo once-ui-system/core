@@ -57,12 +57,12 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           horizontal="center"
         >
           <Column gap="8" maxWidth="40rem" horizontal="center">
-            <Text align="center" variant="heading-default-xl">
+            <Text align="center" textVariant="heading-default-xl">
               Powering creative minds.
             </Text>
             <Text
               align="center"
-              variant="body-default-s"
+              textVariant="body-default-s"
               onBackground="neutral-weak"
               wrap="balance"
             >
@@ -112,7 +112,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           <Row gap="16" wrap>
             {links.map((link) => (
               <SmartLink key={link.label} href={link.href} unstyled>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {link.label}
                 </Text>
               </SmartLink>

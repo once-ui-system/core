@@ -108,7 +108,7 @@ export const Cta = () => {
         </Row>
         <Column horizontal="center" gap="20">
           <TypeFx
-            variant="display-strong-m"
+            textVariant="display-strong-m"
             words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
             charDuration={80}
             hold={2000}

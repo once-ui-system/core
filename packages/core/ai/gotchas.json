@@ -20,7 +20,7 @@
     "components": ["Fade"]
   },
   "RevealFx.delay": {
-    "rule": "Time is milliseconds everywhere in 3.0: RevealFx (duration, delay), ShineFx and CountFx (duration), TypeFx (charDuration, delay, hold), CelebrationFx and WeatherFx (duration — 5000, not 5), MatrixFx bulge.duration, FlipFx autoFlipInterval, Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay). Stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 0.1 is a tenth of a millisecond, i.e. no stagger). speed is only a multiplier (1 the default, 0.5 half) or \"slow\"/\"medium\"/\"fast\" (0.5/1/2), on MatrixFx, WeatherFx, ParticleFx, CelebrationFx, Effect, AutoScroll, GlitchFx and LetterFx; RevealFx/ShineFx/CountFx speed is duration and TypeFx speed is charDuration since 3.0.",
+    "rule": "Time is milliseconds everywhere in 3.0: RevealFx (duration, delay), ShineFx and CountFx (duration), TypeFx (charDuration, delay, hold), CelebrationFx and WeatherFx (duration — 5000, not 5), MatrixFx bulge.duration, FlipFx autoFlipInterval, Animation and HoverCard (delay, duration; HoverCard placement=\"cover\" also hideDelay) and Skeleton (delay). Stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 0.1 is a tenth of a millisecond, i.e. no stagger). speed is only a multiplier (1 the default, 0.5 half) or \"slow\"/\"medium\"/\"fast\" (0.5/1/2), on MatrixFx, WeatherFx, ParticleFx, CelebrationFx, Effect, Scroller auto, GlitchFx and LetterFx; RevealFx/ShineFx/CountFx speed is duration and TypeFx speed is charDuration since 3.0.",
     "components": [
       "RevealFx",
       "ShineFx",
@@ -32,7 +32,6 @@
       "FlipFx",
       "Animation",
       "HoverCard",
-      "Hover",
       "Skeleton"
     ]
   },
@@ -44,8 +43,8 @@
     "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
     "components": ["LogoCloud"]
   },
-  "StatusIndicator.color": {
-    "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
+  "StatusIndicator.scheme": {
+    "rule": "StatusIndicator takes scheme=\"green\" | \"red\" | \"orange\" | \"gray\" etc., a palette hue — not a tone (brand, danger…) and not color, its 2.x name. Avatar's statusIndicator is { scheme }.",
     "components": ["StatusIndicator"]
   },
   "Icon.names": {
@@ -69,27 +68,27 @@
     "components": ["NumberInput"]
   },
   "Select.closed": {
-    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from DropdownWrapper and Options to get this.",
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.",
     "components": ["Select"]
   },
   "Button.trigger": {
-    "rule": "Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
-    "components": ["Button", "IconButton", "DropdownWrapper"]
+    "rule": "Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
+    "components": ["Button", "IconButton", "Dropdown"]
   },
-  "ContextMenu.contents": {
-    "rule": "Fixed in 2.1: ContextMenu is a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. Its wrapper is a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use ContextMenu with contents instead of a hand-made right-click menu.",
-    "components": ["ContextMenu"]
+  "Dropdown.contents": {
+    "rule": "Fixed in 2.1: a context menu is <Dropdown openOn=\"contextmenu\" trigger={region}>{options}</Dropdown> (2.x ContextMenu): a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. The trigger region gets a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use it instead of a hand-made right-click menu.",
+    "components": ["Dropdown"]
   },
-  "Badge.duplicate": {
-    "rule": "Do not pass the same text as both title prop and children — it renders twice.",
-    "components": ["Badge"]
+  "Tag.duplicate": {
+    "rule": "Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.",
+    "components": ["Tag"]
   },
   "Timeline.notScrubber": {
     "rule": "Timeline lays a sequence of steps down the page. For a video or audio editor's timeline — a playhead over stacked tracks of movable, trimmable blocks — use Scrubber. Do not build one out of Flex and absolute positioning.",
     "components": ["Timeline", "Scrubber"]
   },
   "color.tokens": {
-    "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
+    "rule": "Colors are semantic tokens ({tone}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
     "components": ["Column", "Row", "Text", "Button"]
   },
   "color.svgPaint": {
@@ -101,7 +100,7 @@
     "components": ["Background"]
   },
   "api.renamed": {
-    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
+    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone=\"danger\" (not variant=\"danger\"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
     "components": [
       "SegmentedControl",
       "Dialog",
@@ -118,7 +117,7 @@
     "components": ["Row", "Column", "Flex", "Grid"]
   },
   "theme.typedProps": {
-    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, Badge, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
+    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
     "components": ["Row", "Column", "Flex", "Grid", "Background"]
   },
   "layout.defaults": {

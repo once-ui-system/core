@@ -50,10 +50,10 @@ export const Features5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               gap="8"
             >
               <Icon name={item.icon} marginBottom="12" size="s" onBackground="brand-weak" />
-              <Heading as="h3" variant="label-default-l">
+              <Heading as="h3" textVariant="label-default-l">
                 {item.title}
               </Heading>
-              <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
+              <Text wrap="balance" textVariant="body-default-s" onBackground="neutral-weak">
                 {item.description}
               </Text>
             </Column>

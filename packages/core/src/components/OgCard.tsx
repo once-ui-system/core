@@ -217,7 +217,7 @@ const OgCard = ({
               (loading ? (
                 <Skeleton shape="line" width="25%" size="xs" />
               ) : (
-                <Text variant="label-default-s" onBackground="neutral-weak" truncate>
+                <Text textVariant="label-default-s" onBackground="neutral-weak" truncate>
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
               ))}
@@ -230,7 +230,7 @@ const OgCard = ({
             ) : (
               resolvedTitle && (
                 <Text
-                  variant={
+                  textVariant={
                     size === "s"
                       ? "label-default-s"
                       : size === "m"
@@ -250,7 +250,7 @@ const OgCard = ({
               </Column>
             ) : resolvedDescription ? (
               <Text
-                variant={
+                textVariant={
                   size === "s"
                     ? "label-default-s"
                     : size === "m"

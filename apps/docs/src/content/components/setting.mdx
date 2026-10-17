@@ -50,16 +50,14 @@ own for use anywhere else.
   previewPadding="24"
   preview={
     <Row gap="8" vertical="center">
-      <Text variant="label-default-s">Bitrate</Text>
-      <InfoTip>Higher bitrates keep more detail in fast motion, at a larger file size.</InfoTip>
+      <Text textVariant="label-default-s">Bitrate</Text>
+      <Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />
     </Row>
   }
   codes={[
     {
       code:
-`<InfoTip>
-    Higher bitrates keep more detail in fast motion, at a larger file size.
-</InfoTip>`,
+`<Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />`,
       language: "tsx",
       label: "InfoTip"
     }

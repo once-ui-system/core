@@ -38,7 +38,7 @@ export function SubscriptionRadioGroup() {
         onCheckedChange={() => handleToggle("lifetime")}
       />
       <Text 
-        variant="body-default-s" 
+        textVariant="body-default-s" 
         onBackground="neutral-medium"
         marginTop="8"
       >

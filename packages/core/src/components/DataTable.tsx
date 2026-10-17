@@ -385,7 +385,10 @@ function DataTable<T>({
 
     const content = (
       <Row gap="8" vertical="center" horizontal={align.row}>
-        <Text variant="label-strong-s" onBackground={active ? "neutral-strong" : "neutral-medium"}>
+        <Text
+          textVariant="label-strong-s"
+          onBackground={active ? "neutral-strong" : "neutral-medium"}
+        >
           {column.header}
         </Text>
         {sortable && (
@@ -495,8 +498,8 @@ function DataTable<T>({
           <Column center padding="xl" gap="m">
             <Icon name="inbox" size="l" onBackground="neutral-weak" />
             <Column center gap="4">
-              <Text variant="heading-strong-s">No data available</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="heading-strong-s">No data available</Text>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 There are no items to display
               </Text>
             </Column>

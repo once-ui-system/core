@@ -5,7 +5,7 @@ import { describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
 import { Column } from "../components/Column";
-import { DropdownWrapper } from "../components/DropdownWrapper";
+import { Dropdown } from "../components/Dropdown";
 import { IconButton } from "../components/IconButton";
 import { Option } from "../components/Option";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -38,7 +38,7 @@ describe("a Button as a dropdown trigger", () => {
     render(
       <>
         <button type="button">Before</button>
-        <DropdownWrapper trigger={<Button variant="secondary">Options</Button>} dropdown={menu} />
+        <Dropdown trigger={<Button variant="secondary">Options</Button>}>{menu}</Dropdown>
       </>,
       { wrapper: wrap },
     );
@@ -56,7 +56,7 @@ describe("a Button as a dropdown trigger", () => {
 
   it("opens with Enter, closes with Escape and gets focus back", async () => {
     const user = userEvent.setup();
-    render(<DropdownWrapper trigger={<Button>Options</Button>} dropdown={menu} />, {
+    render(<Dropdown trigger={<Button>Options</Button>}>{menu}</Dropdown>, {
       wrapper: wrap,
     });
 
@@ -74,7 +74,7 @@ describe("a Button as a dropdown trigger", () => {
 
   it("opens with Space", async () => {
     const user = userEvent.setup();
-    render(<DropdownWrapper trigger={<Button>Options</Button>} dropdown={menu} />, {
+    render(<Dropdown trigger={<Button>Options</Button>}>{menu}</Dropdown>, {
       wrapper: wrap,
     });
 
@@ -88,10 +88,9 @@ describe("a Button as a dropdown trigger", () => {
   it("does the same for an IconButton with a tooltip", async () => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper
-        trigger={<IconButton icon="chevronDown" tooltip="More" variant="secondary" />}
-        dropdown={menu}
-      />,
+      <Dropdown trigger={<IconButton icon="chevronDown" tooltip="More" variant="secondary" />}>
+        {menu}
+      </Dropdown>,
       { wrapper: wrap },
     );
 
@@ -107,7 +106,7 @@ describe("a Button as a dropdown trigger", () => {
     const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
     render(
       <form onSubmit={onSubmit}>
-        <DropdownWrapper trigger={<Button>Options</Button>} dropdown={menu} />
+        <Dropdown trigger={<Button>Options</Button>}>{menu}</Dropdown>
       </form>,
       { wrapper: wrap },
     );
@@ -119,7 +118,7 @@ describe("a Button as a dropdown trigger", () => {
   it("keeps a caller's explicit type", () => {
     render(
       <form>
-        <DropdownWrapper trigger={<Button type="submit">Save as</Button>} dropdown={menu} />
+        <Dropdown trigger={<Button type="submit">Save as</Button>}>{menu}</Dropdown>
       </form>,
       { wrapper: wrap },
     );
@@ -129,12 +128,9 @@ describe("a Button as a dropdown trigger", () => {
   it("has no axe violations, and no button nested in a button", async () => {
     const { container } = render(
       <>
-        <DropdownWrapper trigger={<Button>Options</Button>} dropdown={menu} />
-        <DropdownWrapper trigger={<Button onClick={() => {}}>Actions</Button>} dropdown={menu} />
-        <DropdownWrapper
-          trigger={<IconButton icon="chevronDown" tooltip="More" />}
-          dropdown={menu}
-        />
+        <Dropdown trigger={<Button>Options</Button>}>{menu}</Dropdown>
+        <Dropdown trigger={<Button onClick={() => {}}>Actions</Button>}>{menu}</Dropdown>
+        <Dropdown trigger={<IconButton icon="chevronDown" tooltip="More" />}>{menu}</Dropdown>
       </>,
       { wrapper: wrap },
     );
@@ -159,14 +155,15 @@ describe("a Button with nothing to do, outside a trigger", () => {
         <Card href="/plans" padding="16">
           Plans <Button>Read more</Button>
         </Card>
-        <DropdownWrapper
+        <Dropdown
           trigger={
             <Card onClick={() => {}} padding="16">
               Workspace <Button>Switch</Button>
             </Card>
           }
-          dropdown={menu}
-        />
+        >
+          {menu}
+        </Dropdown>
       </>,
       { wrapper: wrap },
     );

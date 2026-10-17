@@ -90,10 +90,10 @@ export function ListPageExample({
           s={{ direction: "column", horizontal: "start" }}
         >
           <Column gap="8">
-            <Heading as="h1" variant="display-strong-xs">
+            <Heading as="h1" textVariant="display-strong-xs">
               Members
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Everyone with access to this workspace.
             </Text>
           </Column>
@@ -128,13 +128,13 @@ export function ListPageExample({
             ],
             rows: visible.map((member) => [
               <Column key="name" gap="4">
-                <Text variant="label-default-s">{member.name}</Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="label-default-s">{member.name}</Text>
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   {member.email}
                 </Text>
               </Column>,
               member.role,
-              <Tag key="status" size="s" scheme={statusTag[member.status].scheme}>
+              <Tag key="status" size="s" tone={statusTag[member.status].scheme}>
                 {statusTag[member.status].label}
               </Tag>,
               member.lastActive,
@@ -149,13 +149,14 @@ export function ListPageExample({
             {
               icon: "trash",
               tooltip: "Remove member",
-              variant: "danger",
+              variant: "primary",
+              tone: "danger",
               onClick: (row) => onRemove?.(visible[row]),
             },
           ]}
           emptyState={
             <Column center gap="12" padding="32">
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No members match this filter.
               </Text>
               <Button size="s" variant="secondary" onClick={() => setFilter("all")}>

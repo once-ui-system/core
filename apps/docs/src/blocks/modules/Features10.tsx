@@ -33,7 +33,7 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
       />
       <Row fillWidth vertical="center" gap="l" m={{ direction: "column" }}>
         <Column fillWidth paddingLeft="xl">
-          <Heading as="h2" variant="display-strong-s" marginBottom="48" paddingLeft="20">
+          <Heading as="h2" textVariant="display-strong-s" marginBottom="48" paddingLeft="20">
             Ready-to-use ecommerce solution
           </Heading>
           <Grid fillWidth columns={2} m={{ columns: 2 }} gap="32">
@@ -50,8 +50,8 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
                 >
                   0{index + 1}
                 </Row>
-                <Text variant="label-strong-m">{feature.title}</Text>
-                <Text wrap="balance" variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="label-strong-m">{feature.title}</Text>
+                <Text wrap="balance" textVariant="body-default-s" onBackground="neutral-medium">
                   {feature.description}
                 </Text>
               </Column>

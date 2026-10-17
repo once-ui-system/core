@@ -1,29 +1,35 @@
 "use client";
 
 import { forwardRef, ReactNode } from "react";
-import { ColorScheme, CondensedTShirtSizes, TShirtSizes } from "../types";
+import { Tone, TShirtSizes } from "../types";
 import styles from "./Pulse.module.scss";
 import { Row } from "./Row";
 
 interface PulseProps extends React.ComponentProps<typeof Row> {
-  scheme?: ColorScheme;
-  size?: CondensedTShirtSizes;
+  /** The palette. 2.x called this `scheme`. */
+  tone?: Tone;
+  size?: TShirtSizes;
   pulseSize?: string | number;
   children?: ReactNode;
   className?: string;
   style?: React.CSSProperties;
 }
 
+// The box, the ring that pulses and the dot, per size: s, m and l are 2.x's.
+const BOX = { xs: "12", s: "16", m: "24", l: "32", xl: "40" } as const;
+const RING = { xs: "24", s: "32", m: "48", l: "64", xl: "80" } as const;
+const DOT = { xs: "2", s: "4", m: "8", l: "12", xl: "16" } as const;
+
 const Pulse = forwardRef<HTMLDivElement, PulseProps>(
   (
-    { children, className, style, size = "m", pulseSize, scheme = "brand", ...flex }: PulseProps,
+    { children, className, style, size = "m", pulseSize, tone = "brand", ...flex }: PulseProps,
     ref,
   ) => {
     return (
       <Row
         ref={ref}
-        minWidth={size === "s" ? "16" : size === "m" ? "24" : "32"}
-        minHeight={size === "s" ? "16" : size === "m" ? "24" : "32"}
+        minWidth={BOX[size]}
+        minHeight={BOX[size]}
         center
         data-solid="color"
         className={className}
@@ -32,20 +38,15 @@ const Pulse = forwardRef<HTMLDivElement, PulseProps>(
       >
         <Row position="absolute" className={styles.position}>
           <Row
-            solid={`${scheme}-medium`}
+            solid={`${tone}-medium`}
             radius="full"
             className={styles.dot}
-            width={size === "s" ? "32" : size === "m" ? "48" : "64"}
-            height={size === "s" ? "32" : size === "m" ? "48" : "64"}
+            width={RING[size]}
+            height={RING[size]}
             style={pulseSize != null ? { width: pulseSize, height: pulseSize } : undefined}
           />
         </Row>
-        <Row
-          solid={`${scheme}-strong`}
-          minWidth={size === "s" ? "4" : size === "m" ? "8" : "12"}
-          minHeight={size === "s" ? "4" : size === "m" ? "8" : "12"}
-          radius="full"
-        />
+        <Row solid={`${tone}-strong`} minWidth={DOT[size]} minHeight={DOT[size]} radius="full" />
       </Row>
     );
   },

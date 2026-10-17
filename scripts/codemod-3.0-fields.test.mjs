@@ -69,7 +69,10 @@ describe("Select onSelect → onValueChange", () => {
   it("keeps onSelect on menus, where it is an action", () => {
     for (const tag of ["DropdownWrapper", "ContextMenu", "EmojiPicker"]) {
       const src = `${core(tag)}<${tag} onSelect={pick} />`;
-      assert.equal(transform(src).out, src, tag);
+      // F5 folds DropdownWrapper and ContextMenu into Dropdown; onSelect stays either way.
+      const { out } = transform(src);
+      assert.match(out, /onSelect=\{pick\}/, tag);
+      assert.doesNotMatch(out, /onValueChange/, tag);
     }
   });
 });

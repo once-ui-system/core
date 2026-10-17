@@ -66,17 +66,17 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
     <Column fillWidth horizontal="center" gap="40" {...flex}>
       <Column maxWidth="l" gap="24">
         <Column fillWidth gap="8" paddingX="16">
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             From the journal
           </Heading>
-          <Text onBackground="neutral-medium" variant="body-default-l">
+          <Text onBackground="neutral-medium" textVariant="body-default-l">
             Notes on product, engineering, and the craft of building software.
           </Text>
         </Column>
 
         <Row fillWidth gap="8" paddingX="16" wrap>
           {topics.map((topic, index) => (
-            <Tag key={topic} size="l" scheme={index === 0 ? "brand" : "neutral"}>
+            <Tag key={topic} size="l" tone={index === 0 ? "brand" : "neutral"}>
               {topic}
             </Tag>
           ))}
@@ -99,15 +99,15 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
               background="overlay"
             >
               <Tag size="s">{featured.tag}</Tag>
-              <Heading as="h2" variant="display-strong-xs" onBackground="neutral-strong">
+              <Heading as="h2" textVariant="display-strong-xs" onBackground="neutral-strong">
                 {featured.title}
               </Heading>
-              <Text onBackground="neutral-weak" variant="body-default-m" wrap="balance">
+              <Text onBackground="neutral-weak" textVariant="body-default-m" wrap="balance">
                 {featured.excerpt}
               </Text>
               <Row gap="8" vertical="center" paddingTop="4">
                 <Avatar src={featured.author.avatar} size="s" />
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {featured.author.name} · {featured.publishedAt}
                 </Text>
               </Row>
@@ -136,18 +136,18 @@ export const Blog2 = (flex: React.ComponentProps<typeof Column>) => {
                 aspectRatio="16 / 9"
               />
               <Column paddingTop="16" gap="12" fillWidth>
-                <Text variant="label-strong-s" onBackground="neutral-weak">
+                <Text textVariant="label-strong-s" onBackground="neutral-weak">
                   {post.tag}
                 </Text>
-                <Heading as="h3" variant="heading-strong-m">
+                <Heading as="h3" textVariant="heading-strong-m">
                   {post.title}
                 </Heading>
-                <Text onBackground="neutral-weak" variant="body-default-s" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="body-default-s" wrap="balance">
                   {post.excerpt}
                 </Text>
                 <Row gap="8" vertical="center" paddingTop="4">
                   <Avatar src={post.author.avatar} size="s" />
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {post.author.name} · {post.publishedAt}
                   </Text>
                 </Row>

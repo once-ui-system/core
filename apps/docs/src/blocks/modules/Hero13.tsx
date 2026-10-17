@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  Background,
-  Badge,
-  Button,
-  Column,
-  Heading,
-  InlineCode,
-  Line,
-  Media,
-  Row,
-  Tag,
-  Text,
-} from "@once-ui-system/core";
+import { Background, Button, Column, Heading, InlineCode, Line, Media, Row, Tag, Text } from "@once-ui-system/core";
 
 export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
   return (
@@ -32,7 +20,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
       />
       <Row maxWidth="xl" gap="48" vertical="center" m={{ direction: "column" }}>
         <Column fill gap="24" maxWidth="48rem">
-          <Badge
+          <Tag variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="20"
@@ -41,19 +29,19 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
             themeBorder="rounded"
           >
             <Row vertical="center" gap="8">
-              <Tag scheme="brand" size="s">
+              <Tag tone="brand" size="s">
                 Pro
               </Tag>
-              <Text variant="code-default-s" onBackground="brand-medium">
+              <Text textVariant="code-default-s" onBackground="brand-medium">
                 140+ copy-paste blocks
               </Text>
             </Row>
-          </Badge>
-          <Heading variant="display-default-l">
+          </Tag>
+          <Heading textVariant="display-default-l">
             Ship polished interfaces without reinventing layout every sprint
             <Text onBackground="brand-medium">.</Text>
           </Heading>
-          <Text variant="heading-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="heading-default-l" onBackground="neutral-weak" wrap="balance">
             Compose pages with semantic <InlineCode>Row</InlineCode>,{" "}
             <InlineCode>Column</InlineCode>, and production-ready Pro blocks — then customize
             everything from a single theme file.
@@ -109,7 +97,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
           <Row maxWidth="48rem" paddingTop="12" gap="8" vertical="center">
             <Line flex={1} background="neutral-alpha-weak" />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               Built with Once UI Pro
             </Text>
             <Line flex={1} background="neutral-alpha-weak" />

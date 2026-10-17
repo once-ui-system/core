@@ -40,7 +40,7 @@ convention, which is what the default `m:ss` formatter assumes. Pass
 
 Each track is a row of blocks. `movable` lets the body be dragged along the
 track, `resizable` puts trim handles on the edges, and `onAdd` turns a click on
-empty track space into a new block. Blocks colour themselves from a `scheme`,
+empty track space into a new block. Blocks colour themselves from a `tone`,
 so layers stay distinguishable.
 
 <CodeBlock
@@ -129,7 +129,7 @@ what belongs in it is entirely your application's business.
     ["id", "string"],
     ["blocks", "ScrubberBlock[]"],
     ["height", "SpacingToken", "40"],
-    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
     ["movable", "boolean", "false"],
     ["resizable", "boolean", "false"],
     ["onAdd", "(time: number) => void"]
@@ -144,7 +144,7 @@ what belongs in it is entirely your application's business.
     ["start", "number"],
     ["end", "number"],
     ["label", "ReactNode"],
-    ["scheme", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
+    ["tone", ["neutral", "brand", "accent", "info", "danger", "warning", "success"]],
     ["locked", "boolean", "false"]
   ]}
 />

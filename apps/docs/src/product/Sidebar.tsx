@@ -232,7 +232,7 @@ const NavigationItemComponent: React.FC<{
           if (item.status) {
             const { tag, scheme } = AVAILABILITY[item.status];
             return (
-              <Tag scheme={scheme} size="s">
+              <Tag tone={scheme} size="s">
                 {tag}
               </Tag>
             );
@@ -248,8 +248,8 @@ const NavigationItemComponent: React.FC<{
              says which it is. */
           const recency = (variant: ColorScheme | undefined) => (
             <Row gap="4" vertical="center" flex={0}>
-              <Pulse scheme={variant} size="s" />
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Pulse tone={variant} size="s" />
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
                 {item.navTag}
               </Text>
             </Row>
@@ -315,8 +315,8 @@ const ResourceLinkComponent: React.FC<{
       </Row>
       {tag && (
         <Row gap="4" vertical="center" flex={0}>
-          <Pulse scheme="brand" size="s" />
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Pulse tone="brand" size="s" />
+          <Text textVariant="label-default-xs" onBackground="neutral-weak">
             {tag}
           </Text>
         </Row>

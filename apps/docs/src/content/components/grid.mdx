@@ -25,7 +25,7 @@ objects. Only the two below are its own.
     <Grid fillWidth columns="3" m={{ columns: 2 }} s={{ columns: 1 }} gap="12">
       {["1", "2", "3", "4", "5", "6"].map((n) => (
         <Flex key={n} height="64" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" center>
-          <Text variant="label-default-s" onBackground="neutral-weak">{n}</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">{n}</Text>
         </Flex>
       ))}
     </Grid>
@@ -67,7 +67,7 @@ changes — inside a sidebar, a dialog or a full page alike.
     <Grid fillWidth minColumnWidth="10rem" gap="12">
       {["1", "2", "3", "4", "5"].map((n) => (
         <Flex key={n} height="64" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" center>
-          <Text variant="label-default-s" onBackground="neutral-weak">{n}</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">{n}</Text>
         </Flex>
       ))}
     </Grid>

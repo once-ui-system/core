@@ -219,12 +219,12 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           {(hasLabel || hasDescription) && (
             <Column gap="4">
               {hasLabel && (
-                <Text id={labelId} variant="label-strong-s" onBackground="neutral-strong">
+                <Text id={labelId} textVariant="label-strong-s" onBackground="neutral-strong">
                   {label}
                 </Text>
               )}
               {hasDescription && (
-                <Text id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
+                <Text id={descriptionId} textVariant="body-default-s" onBackground="neutral-weak">
                   {description}
                 </Text>
               )}

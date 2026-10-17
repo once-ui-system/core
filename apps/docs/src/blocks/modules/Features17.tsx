@@ -25,14 +25,14 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
             <Row flex={1} l={{ hide: true }} />
             <Column fillWidth flex={5} l={{ style: { flex: 0 } }}>
               <Column maxWidth="64rem" gap="16" paddingX="24" paddingY="80">
-                <Text variant="heading-default-xl" onBackground="brand-weak">
+                <Text textVariant="heading-default-xl" onBackground="brand-weak">
                   Theme once, ship everywhere
                 </Text>
-                <Heading as="h2" variant="display-default-m" marginBottom="16">
+                <Heading as="h2" textVariant="display-default-m" marginBottom="16">
                   Manage colors, typography, and surfaces from a single semantic config.
                 </Heading>
                 <Text
-                  variant="body-default-l"
+                  textVariant="body-default-l"
                   onBackground="neutral-weak"
                   wrap="balance"
                   marginBottom="24"

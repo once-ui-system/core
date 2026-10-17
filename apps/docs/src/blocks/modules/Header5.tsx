@@ -2,7 +2,7 @@ import {
   Avatar,
   Button,
   Column,
-  DropdownWrapper,
+  Dropdown,
   Icon,
   IconButton,
   Kbar,
@@ -13,7 +13,7 @@ import {
   Row,
   Text,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 
 const kbarItems = [
@@ -82,14 +82,12 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
             href="#"
           />
           <Line vert height="20" background="neutral-alpha-weak" />
-          <DropdownWrapper
+          <Dropdown
             trigger={
               <Button size="s" variant="tertiary" weight="default" suffixIcon="chevronDown">
                 Acme Inc
               </Button>
-            }
-            dropdown={
-              <Column padding="4" gap="2" minWidth="12rem">
+            }><Column padding="4" gap="2" minWidth="12rem">
                 {workspaces.map((workspace) => (
                   <Option
                     key={workspace.value}
@@ -104,9 +102,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                   value="create"
                   prefix={<Icon size="xs" name="plus" onBackground="neutral-weak" />}
                 />
-              </Column>
-            }
-          />
+              </Column></Dropdown>
         </Row>
       </Row>
 
@@ -154,7 +150,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
             />
           </Row>
         </Row>
-        <UserMenu
+        <User
           placement="bottom-end"
           avatarProps={{ src: "/images/creators/lorant.jpg" }}
           dropdown={
@@ -162,8 +158,8 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
               <Row padding="8" gap="8" vertical="center">
                 <Avatar src="/images/creators/lorant.jpg" size="s" />
                 <Column gap="0">
-                  <Text variant="label-strong-s">Lorant One</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-strong-s">Lorant One</Text>
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     lorant@acme.com
                   </Text>
                 </Column>

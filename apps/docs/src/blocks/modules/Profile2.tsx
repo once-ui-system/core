@@ -60,14 +60,14 @@ export const Profile2 = () => {
           <Avatar
             src="/images/creators/lorant.jpg"
             size="xl"
-            statusIndicator={{ color: "green" }}
+            statusIndicator={{ scheme: "green" }}
           />
           <Column fill gap="4" minWidth="16rem">
-            <Heading variant="heading-strong-l">Lorant One</Heading>
-            <Text onBackground="neutral-weak" variant="body-default-m">
+            <Heading textVariant="heading-strong-l">Lorant One</Heading>
+            <Text onBackground="neutral-weak" textVariant="body-default-m">
               Design Engineer · Once UI
             </Text>
-            <Text onBackground="neutral-medium" variant="body-default-s" wrap="balance">
+            <Text onBackground="neutral-medium" textVariant="body-default-s" wrap="balance">
               Building semantic design systems and shipping production-ready blocks for modern
               product teams.
             </Text>
@@ -87,8 +87,8 @@ export const Profile2 = () => {
           {stats.map((stat, index) => (
             <Row key={stat.label} gap="24" vertical="center">
               <Column gap="2">
-                <Heading variant="heading-strong-m">{stat.value}</Heading>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Heading textVariant="heading-strong-m">{stat.value}</Heading>
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {stat.label}
                 </Text>
               </Column>
@@ -100,7 +100,7 @@ export const Profile2 = () => {
         </Row>
 
         <Column fillWidth gap="12">
-          <Text variant="label-strong-s" onBackground="neutral-weak">
+          <Text textVariant="label-strong-s" onBackground="neutral-weak">
             Highlights
           </Text>
           <Scroller fadeColor="page">
@@ -117,7 +117,7 @@ export const Profile2 = () => {
                       width="5rem"
                     />
                   </Row>
-                  <Text variant="label-default-s">{item.label}</Text>
+                  <Text textVariant="label-default-s">{item.label}</Text>
                 </Column>
               ))}
             </Row>
@@ -126,7 +126,7 @@ export const Profile2 = () => {
 
         <Column fillWidth gap="12">
           <Row fillWidth horizontal="between" vertical="center">
-            <Text variant="label-strong-s" onBackground="neutral-weak">
+            <Text textVariant="label-strong-s" onBackground="neutral-weak">
               Recent posts
             </Text>
             <Button href="#" size="s" variant="tertiary" weight="default">
@@ -157,20 +157,20 @@ export const Profile2 = () => {
                   maxWidth="8rem"
                 />
                 <Column fill gap="8" vertical="center">
-                  <Heading as="h3" variant="heading-strong-s">
+                  <Heading as="h3" textVariant="heading-strong-s">
                     {post.title}
                   </Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                     {post.excerpt}
                   </Text>
                   <Row gap="12" vertical="center">
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s" onBackground="neutral-weak">
                       {post.time}
                     </Text>
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s" onBackground="neutral-weak">
                       ·
                     </Text>
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s" onBackground="neutral-weak">
                       {post.likes} likes
                     </Text>
                   </Row>

@@ -90,11 +90,11 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
           size="l"
           icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
         />
-        <Heading marginTop="12" variant="display-strong-xs">
+        <Heading marginTop="12" textVariant="display-strong-xs">
           Building the future together
         </Heading>
         <Text
-          variant="body-default-l"
+          textVariant="body-default-l"
           wrap="balance"
           marginBottom="l"
           onBackground="neutral-medium"

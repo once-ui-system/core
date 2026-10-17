@@ -51,7 +51,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
     >
       {label && (
         <Row fillWidth paddingX="12">
-          <Text variant="label-default-s" onBackground="neutral-strong">
+          <Text textVariant="label-default-s" onBackground="neutral-strong">
             {formattedLabel}
           </Text>
         </Row>
@@ -63,11 +63,11 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
               {showSwatches && (
                 <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />
               )}
-              <Text onBackground="neutral-weak" variant="label-default-s">
+              <Text onBackground="neutral-weak" textVariant="label-default-s">
                 {DataTooltip && index === 0 ? DataTooltip : entry.name}
               </Text>
             </Row>
-            <Text onBackground="neutral-strong" variant="label-default-s">
+            <Text onBackground="neutral-strong" textVariant="label-default-s">
               {typeof entry.value === "number" ? (
                 <CountUp value={entry.value} separator="," duration={500} easing="ease-in-out" />
               ) : (

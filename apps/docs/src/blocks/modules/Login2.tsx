@@ -69,7 +69,7 @@ export const Login2 = () => {
               size="l"
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             />
-            <Heading marginTop="24" variant="display-strong-xs" align="center">
+            <Heading marginTop="24" textVariant="display-strong-xs" align="center">
               Welcome to Once UI
             </Heading>
             <Row onBackground="neutral-medium" marginBottom="24" gap="4" align="center">

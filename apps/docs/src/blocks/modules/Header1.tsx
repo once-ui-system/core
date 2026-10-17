@@ -15,7 +15,7 @@ import {
   SmartLink,
   Text,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import type React from "react";
@@ -309,9 +309,9 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
           </Row>
           <Row vertical="center" gap="16" horizontal="end" maxWidth="10rem">
             <SmartLink prefixIcon="book" href="#">
-              <Text variant="label-default-s">Docs</Text>
+              <Text textVariant="label-default-s">Docs</Text>
             </SmartLink>
-            <UserMenu
+            <User
               placement="bottom-end"
               avatarProps={{
                 empty: !avatar,

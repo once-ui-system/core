@@ -263,7 +263,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {label && (
               <Text
                 as="label"
-                variant="label-default-m"
+                textVariant="label-default-m"
                 htmlFor={id}
                 className={classNames(styles.label, styles.inputLabel, {
                   [styles.floating]: isFocused || isFilled || placeholder,
@@ -277,7 +277,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {characterCount && props.maxLength && (
             <Row paddingRight="12" className={styles.suffix} position="static">
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 onBackground={
                   props.maxLength - text.length <= 5
                     ? "danger-weak"

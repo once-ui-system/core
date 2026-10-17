@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Column, DropdownWrapper, Option, Row, Select, Text } from "@once-ui-system/core";
+import { Button, Column, Dropdown, Option, Row, Select, Text } from "@once-ui-system/core";
 
 /**
  * DropdownWrapper check page — permanent regression fixture.
@@ -31,22 +31,18 @@ export default function DropdownCheck() {
     <Row fillWidth gap="24" padding="24" data-testid="root">
       {/* Case 1: org-switcher style — wide fillWidth trigger */}
       <Column width="30rem" gap="12" data-testid="case-fill">
-        <Text variant="label-strong-s">Case 1: fillWidth (org switcher)</Text>
-        <DropdownWrapper
+        <Text textVariant="label-strong-s">Case 1: fillWidth (org switcher)</Text>
+        <Dropdown
           fillWidth
           trigger={
             <Button fillWidth variant="secondary" suffixIcon="chevronDown" data-testid="trigger-fill">
               Dopler
             </Button>
-          }
-          dropdown={
-            <Column fillWidth padding="4" gap="2">
+          }><Column fillWidth padding="4" gap="2">
               <Option value="quasar" label="Quasar" />
               <Option value="dopler" label="Dopler" selected />
               <Option value="jx" label="JExcellence2" />
-            </Column>
-          }
-        />
+            </Column></Dropdown>
       </Column>
 
       {/* Case 2: Adjustable style — rows in a scrollable panel, bottom-end */}
@@ -60,7 +56,7 @@ export default function DropdownCheck() {
         gap="8"
         data-testid="panel"
       >
-        <Text variant="label-strong-s">Case 2: scrollable panel (Adjustable)</Text>
+        <Text textVariant="label-strong-s">Case 2: scrollable panel (Adjustable)</Text>
         {Array.from({ length: 10 }).map((_, i) => (
           <Row
             key={i}
@@ -73,13 +69,13 @@ export default function DropdownCheck() {
             border
           >
             <Column gap="2" paddingLeft="8">
-              <Text variant="label-default-s">Row {i + 1}</Text>
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Text textVariant="label-default-s">Row {i + 1}</Text>
+              <Text textVariant="label-default-xs" onBackground="neutral-weak">
                 path-{i + 1}
               </Text>
             </Column>
             <Row horizontal="end" gap="8">
-              <DropdownWrapper
+              <Dropdown
                 fillWidth
                 placement="bottom-end"
                 trigger={
@@ -92,14 +88,10 @@ export default function DropdownCheck() {
                   >
                     Default
                   </Button>
-                }
-                dropdown={
-                  <Column fillWidth padding="4" gap="2">
+                }><Column fillWidth padding="4" gap="2">
                     <Option value="default" label="Default" selected />
                     <Option value="blog" label="Blog" />
-                  </Column>
-                }
-              />
+                  </Column></Dropdown>
             </Row>
           </Row>
         ))}
@@ -107,7 +99,7 @@ export default function DropdownCheck() {
 
       {/* Case 4: where a list opens */}
       <Column width="20rem" gap="12" data-testid="case-select">
-        <Text variant="label-strong-s">Case 4: opens on the selection</Text>
+        <Text textVariant="label-strong-s">Case 4: opens on the selection</Text>
         <Select
           id="select-plain"
           label="Plain"
@@ -129,20 +121,16 @@ export default function DropdownCheck() {
 
       {/* Case 3: content-sized (no fillWidth) — must stay content width */}
       <Column gap="12" data-testid="case-content">
-        <Text variant="label-strong-s">Case 3: content-sized</Text>
-        <DropdownWrapper
+        <Text textVariant="label-strong-s">Case 3: content-sized</Text>
+        <Dropdown
           trigger={
             <Button size="s" variant="secondary" suffixIcon="chevronDown" data-testid="trigger-content">
               Menu
             </Button>
-          }
-          dropdown={
-            <Column padding="4" gap="2">
+          }><Column padding="4" gap="2">
               <Option value="a" label="Settings" />
               <Option value="b" label="Log out" />
-            </Column>
-          }
-        />
+            </Column></Dropdown>
       </Column>
     </Row>
   );

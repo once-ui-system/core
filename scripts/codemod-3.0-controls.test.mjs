@@ -94,8 +94,9 @@ describe("Pagination and Scrubber", () => {
   });
 
   it("leaves a menu's onSelect alone: it is an action", () => {
+    // F5 renames the element itself (DropdownWrapper → Dropdown); onSelect stays.
     const src = `${core("DropdownWrapper")}<DropdownWrapper onSelect={pick} />`;
-    assert.equal(transform(src).out, src);
+    assert.equal(transform(src).out, `${core("Dropdown")}<Dropdown onSelect={pick} />`);
   });
 });
 

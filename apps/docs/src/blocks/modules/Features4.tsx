@@ -43,11 +43,11 @@ export const Features4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           borderBottom="neutral-medium"
           overflow="hidden"
         >
-          <Heading variant="display-strong-s" align="center">
+          <Heading textVariant="display-strong-s" align="center">
             A product workflow that compounds
           </Heading>
           <Text
-            variant="body-default-xl"
+            textVariant="body-default-xl"
             align="center"
             onBackground="neutral-medium"
             wrap="balance"
@@ -81,10 +81,10 @@ export const Features4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                   border="brand-alpha-medium"
                   background="brand-alpha-weak"
                 />
-                <Heading variant="heading-strong-l" marginTop="12">
+                <Heading textVariant="heading-strong-l" marginTop="12">
                   {feature.title}
                 </Heading>
-                <Text onBackground="neutral-weak" variant="body-default-s" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="body-default-s" wrap="balance">
                   {feature.description}
                 </Text>
               </Column>

@@ -5,10 +5,10 @@ export const Pricing1 = () => {
   return (
     <Column as="section" fillWidth fitHeight horizontal="center" gap="xl">
       <Column maxWidth="40rem" gap="12" horizontal="center">
-        <Heading as="h2" align="center" variant="display-strong-m">
+        <Heading as="h2" align="center" textVariant="display-strong-m">
           Pricing
         </Heading>
-        <Text align="center" onBackground="neutral-medium" variant="body-default-xl" wrap="balance">
+        <Text align="center" onBackground="neutral-medium" textVariant="body-default-xl" wrap="balance">
           Use our product free. Upgrade for advanced features.
         </Text>
       </Column>

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { Row } from "../components/Row";
 import type { Speed } from "../types";
 import { speedFactor } from "../utils/speed";
-import styles from "./AutoScroll.module.scss";
-import { Row } from "./Row";
+import styles from "./Marquee.module.scss";
 
-interface AutoScrollProps extends React.ComponentProps<typeof Row> {
+interface MarqueeProps extends React.ComponentProps<typeof Row> {
   children: React.ReactNode;
   /**
    * A multiplier on the 20-second loop (`2` is twice as fast), or
@@ -23,7 +23,11 @@ interface AutoScrollProps extends React.ComponentProps<typeof Row> {
 /** Milliseconds one loop takes at speed 1. */
 const LOOP_MS = 20000;
 
-const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
+/**
+ * Scroller `auto` (2.x `AutoScroll`): the children loop across on their own,
+ * a marquee with no controls. Internal: render it through `<Scroller auto>`.
+ */
+const Marquee = forwardRef<HTMLDivElement, MarqueeProps>(
   (
     {
       children,
@@ -258,6 +262,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
   },
 );
 
-AutoScroll.displayName = "AutoScroll";
+Marquee.displayName = "Marquee";
 
-export { AutoScroll };
+export type { MarqueeProps };
+export { Marquee };

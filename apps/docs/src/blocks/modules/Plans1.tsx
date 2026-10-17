@@ -95,17 +95,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
             )}
             <Column fill gap="8">
               <Column fillWidth gap="8" marginBottom="24">
-                <Heading as="h3" align="left" variant="heading-strong-l">
+                <Heading as="h3" align="left" textVariant="heading-strong-l">
                   {plan.name}
                 </Heading>
-                <Text align="left" onBackground={textColor} variant="display-default-xs">
+                <Text align="left" onBackground={textColor} textVariant="display-default-xs">
                   {plan.price.original !== plan.price.discounted && (
                     <Text onBackground="neutral-weak" style={{ textDecoration: "line-through" }}>
                       ${plan.price.original}
                     </Text>
                   )}{" "}
                   ${plan.price.discounted}{" "}
-                  <Text onBackground="neutral-strong" variant="body-default-s">
+                  <Text onBackground="neutral-strong" textVariant="body-default-s">
                     / year
                   </Text>
                 </Text>
@@ -114,7 +114,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
                 {plan.features.map((feature, index) => (
                   <Row key={index} vertical="center" gap="8">
                     <Icon name="check" size="s" onBackground="neutral-medium" />
-                    <Text align="left" onBackground="neutral-medium" variant="body-default-m">
+                    <Text align="left" onBackground="neutral-medium" textVariant="body-default-m">
                       {feature}
                     </Text>
                   </Row>

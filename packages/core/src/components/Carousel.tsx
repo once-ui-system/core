@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useRef, useState } from "react";
 import { Reveal } from "../internal/Reveal";
+import { SnapCarousel } from "../internal/SnapCarousel";
 import { CSSUnit, SpacingToken } from "../types";
 import styles from "./Carousel.module.scss";
 import { Column } from "./Column";
@@ -25,7 +26,16 @@ interface ThumbnailItem {
 
 interface CarouselProps extends React.ComponentProps<typeof Flex> {
   items: CarouselItem[];
-  controls?: boolean;
+  /**
+   * How slides change. `"fade"` (the default) cross-fades one slide into the
+   * next, with line or thumbnail indicators and autoplay. `"snap"` is a
+   * touch-first track the slides scroll along with native snapping, drag and
+   * dots (2.x `Swiper`); its `aspectRatio` defaults to `"16 / 9"`, and
+   * `translateY`, `defaultRevealed`, `thumbnail` and `play` do not apply.
+   */
+  mode?: "fade" | "snap";
+  /** Show the previous/next arrows. `"contained"` (snap mode) draws the dots over the slides. */
+  controls?: boolean | "contained";
   priority?: boolean;
   /**
    * Drop the intrinsic aspect ratio and let the slides stretch to whatever box
@@ -50,7 +60,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   };
 }
 
-const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
+const FadeCarousel = forwardRef<HTMLDivElement, CarouselProps>(
   (
     {
       items = [],
@@ -469,6 +479,26 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
   },
 );
 
+FadeCarousel.displayName = "FadeCarousel";
+
+/**
+ * One slide at a time, from an `items` list of image URLs or nodes.
+ * `mode="snap"` swaps the cross-fade for a swipeable, snapping track.
+ */
+const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({ mode = "fade", ...props }, ref) => {
+  if (mode !== "snap") return <FadeCarousel ref={ref} {...props} />;
+  const {
+    indicator,
+    translateY: _translateY,
+    defaultRevealed: _defaultRevealed,
+    thumbnail: _thumbnail,
+    play: _play,
+    ...snap
+  } = props;
+  return <SnapCarousel ref={ref} indicator={indicator !== false} {...snap} />;
+});
+
 Carousel.displayName = "Carousel";
 
+export type { CarouselItem, CarouselProps };
 export { Carousel };

@@ -14,14 +14,14 @@ ShineFx creates a smooth, animated shine effect that sweeps across text. The eff
   marginTop="16"
   marginBottom="24"
   preview={
-    <ShineFx variant="heading-default-xl" duration={750}>
+    <ShineFx textVariant="heading-default-xl" duration={750}>
       Thinking...
     </ShineFx>
   }
   codes={[
     {
       code:
-`<ShineFx variant="heading-default-xl">
+`<ShineFx textVariant="heading-default-xl">
     Shine bright like a diamond
 </ShineFx>`,
       language: "tsx",
@@ -39,13 +39,13 @@ Set how long one pass takes with `duration`, in milliseconds. Higher values make
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="heading-default-l" duration={1000}>
+      <ShineFx textVariant="heading-default-l" duration={1000}>
         Fast shine - default (1s)
       </ShineFx>
-      <ShineFx variant="heading-default-l" duration={5000}>
+      <ShineFx textVariant="heading-default-l" duration={5000}>
         Medium shine (5s)
       </ShineFx>
-      <ShineFx variant="heading-default-l" duration={10000}>
+      <ShineFx textVariant="heading-default-l" duration={10000}>
         Slow shine (10s)
       </ShineFx>
     </Column>
@@ -79,7 +79,7 @@ Use the `inverse` prop to invert the shine effect.
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="heading-default-l" inverse>
+      <ShineFx textVariant="heading-default-l" inverse>
         Inverse shine
       </ShineFx>
     </Column>
@@ -105,16 +105,16 @@ Control the base text visibility with the `baseOpacity` prop (0-1). Higher value
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="heading-default-l" baseOpacity={0.1}>
+      <ShineFx textVariant="heading-default-l" baseOpacity={0.1}>
         Subtle (0.1)
       </ShineFx>
-      <ShineFx variant="heading-default-l" baseOpacity={0.3}>
+      <ShineFx textVariant="heading-default-l" baseOpacity={0.3}>
         Default (0.3)
       </ShineFx>
-      <ShineFx variant="heading-default-l" baseOpacity={0.6}>
+      <ShineFx textVariant="heading-default-l" baseOpacity={0.6}>
         More visible (0.6)
       </ShineFx>
-      <ShineFx variant="heading-default-l" baseOpacity={0.9}>
+      <ShineFx textVariant="heading-default-l" baseOpacity={0.9}>
         High visibility (0.9)
       </ShineFx>
     </Column>
@@ -152,10 +152,10 @@ Disable the animation with the `disabled` prop to show static text without the s
   marginBottom="24"
   preview={
     <Row gap="16" wrap>
-      <ShineFx variant="heading-default-l">
+      <ShineFx textVariant="heading-default-l">
         Animated
       </ShineFx>
-      <ShineFx variant="heading-default-l" disabled>
+      <ShineFx textVariant="heading-default-l" disabled>
         Disabled
       </ShineFx>
     </Row>
@@ -185,13 +185,13 @@ ShineFx works with all Text component variants and styling props.
   marginBottom="24"
   preview={
     <Column gap="16">
-      <ShineFx variant="display-default-xs">
+      <ShineFx textVariant="display-default-xs">
         Display variant
       </ShineFx>
-      <ShineFx variant="heading-default-l" onBackground="brand-medium">
+      <ShineFx textVariant="heading-default-l" onBackground="brand-medium">
         Heading with color
       </ShineFx>
-      <ShineFx variant="body-default-m" onBackground="danger-weak">
+      <ShineFx textVariant="body-default-m" onBackground="danger-weak">
         Body with color
       </ShineFx>
     </Column>
@@ -199,15 +199,15 @@ ShineFx works with all Text component variants and styling props.
   codes={[
     {
       code:
-`<ShineFx variant="display-default-xs">
+`<ShineFx textVariant="display-default-xs">
     Display variant
 </ShineFx>
 
-<ShineFx variant="heading-default-l" onBackground="brand-medium">
+<ShineFx textVariant="heading-default-l" onBackground="brand-medium">
     Heading with color
 </ShineFx>
 
-<ShineFx variant="body-default-m" onBackground="danger-weak">
+<ShineFx textVariant="body-default-m" onBackground="danger-weak">
     Body with color
 </ShineFx>`,
       language: "tsx",

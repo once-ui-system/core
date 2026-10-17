@@ -113,7 +113,7 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
             right="16"
             zIndex={1}
             themeBorder="rounded"
-            scheme="brand"
+            tone="brand"
           >
             Best value
           </Tag>
@@ -134,20 +134,20 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
       />
       <Column gap="8">
         <Text
-          variant="label-default-s"
+          textVariant="label-default-s"
           onBackground={tier.featured ? "brand-weak" : "neutral-weak"}
         >
           {tier.name}
         </Text>
         <Row vertical="end" gap="4">
-          <Heading as="h3" variant="display-strong-xs">
+          <Heading as="h3" textVariant="display-strong-xs">
             $<CountFx value={price} />
           </Heading>
-          <Text variant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
+          <Text textVariant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
             {period}
           </Text>
         </Row>
-        <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
           {tier.description}
         </Text>
       </Column>
@@ -155,7 +155,7 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
         {tier.features.map((feature) => (
           <Row key={feature} vertical="center" gap="8">
             <Icon name="check" size="xs" onBackground="brand-weak" />
-            <Text variant="label-default-s">{feature}</Text>
+            <Text textVariant="label-default-s">{feature}</Text>
           </Row>
         ))}
       </Column>
@@ -178,13 +178,13 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
       <Column maxWidth="48rem" gap="12" horizontal="center" align="center">
-        <Tag size="s" scheme="brand" themeBorder="rounded">
+        <Tag size="s" tone="brand" themeBorder="rounded">
           Pricing
         </Tag>
-        <Heading as="h2" variant="display-strong-m" align="center">
+        <Heading as="h2" textVariant="display-strong-m" align="center">
           Plans that grow with your product
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
           Switch billing anytime. Save 20% when you pay annually.
         </Text>
         <Row gap="12" wrap center>
@@ -197,7 +197,7 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
             onValueChange={(value) => setBilling(value as BillingPeriod)}
           />
           {billing === "annual" && (
-            <Tag size="s" scheme="success" themeBorder="rounded">
+            <Tag size="s" tone="success" themeBorder="rounded">
               Save 20%
             </Tag>
           )}

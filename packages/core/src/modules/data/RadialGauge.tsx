@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
 import { Text } from "../../components/Text";
 import { CountUp } from "../../internal/CountUp";
+import { cssColor } from "../../internal/cssColor";
 import { ColorValue } from "../../types";
 import styles from "./Gauge.module.css";
 
@@ -30,23 +31,32 @@ export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Colum
   direction?: "cw" | "ccw"; // default 'cw' (arc rotation direction)
   edgePad?: number; // default 0, number of ticks to trim at both ends
   children?: React.ReactNode;
-  hue?: "success" | "neutral" | "danger" | [number, number];
+  /**
+   * Colours the active lines on a hue ramp for the tone: `success` blue to
+   * green, `warning` and `neutral` orange to yellow, `danger` red to orange.
+   * 2.x called this `hue`.
+   */
+  tone?: "success" | "neutral" | "warning" | "danger";
+  /** A hue ramp of your own, from start to end (0–360). Wins over `tone`. */
+  hueRange?: [number, number];
   color?: ColorValue;
 }
 
-const resolveHueRange = (hue: RadialGaugeProps["hue"]): [number, number] => {
-  if (hue && typeof hue !== "string") {
-    const [start = 200, end = 120] = hue;
+const resolveHueRange = (
+  tone?: RadialGaugeProps["tone"],
+  hueRange?: [number, number],
+): [number, number] => {
+  if (hueRange) {
+    const [start = 200, end = 120] = hueRange;
     return [start, end];
   }
 
-  if (hue === "danger") return [0, 30];
-  if (hue === "neutral") return [30, 60];
-  if (hue === "success") return [200, 120];
+  if (tone === "danger") return [0, 30];
+  if (tone === "neutral" || tone === "warning") return [30, 60];
+  if (tone === "success") return [200, 120];
 
   return [200, 120];
 };
-
 export const RadialGauge = ({
   width = 300,
   height = 300,
@@ -60,7 +70,8 @@ export const RadialGauge = ({
   edgePad = 0,
   unit,
   children,
-  hue,
+  tone,
+  hueRange,
   color = "contrast",
   ...flex
 }: RadialGaugeProps) => {
@@ -119,8 +130,8 @@ export const RadialGauge = ({
   // Transform user angles to intuitive system: 0°=left, 90°=top, 180°=right
   // SVG rotation: 0°=up, 90°=right, so user's angle - 90 maps correctly
   const internalStartAngle = angle.start - 90;
-  const hasHue = hue !== undefined;
-  const [startHue, endHue] = resolveHueRange(hue);
+  const hasHue = tone !== undefined || hueRange !== undefined;
+  const [startHue, endHue] = resolveHueRange(tone, hueRange);
 
   const renderLines = () => {
     const lines = [];
@@ -152,7 +163,7 @@ export const RadialGauge = ({
               isActive && hasHue
                 ? `hsl(${finalHue}, 100%, 50%)`
                 : isActive && color
-                  ? `var(--data-${color})`
+                  ? cssColor(color, "data-")
                   : "var(--neutral-alpha-medium)",
           }}
         />,
@@ -183,14 +194,14 @@ export const RadialGauge = ({
         {children || (
           <CountUp
             as="div"
-            variant="display-strong-m"
+            textVariant="display-strong-m"
             style={{ fontFamily: "var(--font-code)", display: "flex" }}
             value={value}
             duration={5000}
           >
             <Text
               onBackground="neutral-weak"
-              variant="label-default-xl"
+              textVariant="label-default-xl"
               marginLeft="4"
               marginTop="4"
             >

@@ -108,12 +108,12 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
         {(label || showValue) && (
           <Row fillWidth horizontal="between" vertical="center">
             {label && (
-              <Text id={labelId} variant="label-default-s" onBackground="neutral-weak">
+              <Text id={labelId} textVariant="label-default-s" onBackground="neutral-weak">
                 {label}
               </Text>
             )}
             {showValue && (
-              <Text variant="label-default-s" onBackground="neutral-medium">
+              <Text textVariant="label-default-s" onBackground="neutral-medium">
                 {current}
               </Text>
             )}

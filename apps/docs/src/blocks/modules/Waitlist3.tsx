@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  Avatar,
-  Badge,
-  Button,
-  Column,
-  CountFx,
-  Grid,
-  Icon,
-  Input,
-  Line,
-  Row,
-  Text,
-} from "@once-ui-system/core";
+import { Avatar, Tag, Button, Column, CountFx, Grid, Icon, Input, Line, Row, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 const leaderboard = [
@@ -46,19 +34,19 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column maxWidth="48rem" gap="32" padding="40" radius="xl" border background="page" {...flex}>
       <Column gap="16" horizontal="center">
-        <Badge
+        <Tag variant="announce"
           background="brand-alpha-weak"
           onBackground="brand-medium"
           textVariant="label-default-s"
           paddingX="16"
         >
           Early access
-        </Badge>
+        </Tag>
         <Column gap="12" horizontal="center" maxWidth="36rem">
-          <Text align="center" variant="display-strong-xs">
+          <Text align="center" textVariant="display-strong-xs">
             Join the waitlist. Climb the leaderboard.
           </Text>
-          <Text align="center" variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text align="center" textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Invite friends to move up the queue. Top referrers get priority access when we launch.
           </Text>
         </Column>
@@ -76,7 +64,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
               border="brand-alpha-weak"
             >
               <Row horizontal="between" vertical="center">
-                <Text variant="label-default-m" onBackground="brand-medium">
+                <Text textVariant="label-default-m" onBackground="brand-medium">
                   You&apos;re on the list
                 </Text>
                 <Row gap="4" vertical="center" textVariant="heading-strong-m">
@@ -84,7 +72,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                   <CountFx value={847} duration={1200} effect="smooth" />
                 </Row>
               </Row>
-              <Text variant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-xs" onBackground="neutral-weak">
                 Share your link to climb the leaderboard and unlock early perks.
               </Text>
             </Column>
@@ -116,8 +104,8 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
 
           <Column fillWidth gap="12" padding="16" radius="l" border>
             <Row horizontal="between" vertical="center">
-              <Text variant="label-strong-s">Your streak</Text>
-              <Text variant="label-default-s" onBackground="brand-weak">
+              <Text textVariant="label-strong-s">Your streak</Text>
+              <Text textVariant="label-default-s" onBackground="brand-weak">
                 {completedDays}/30 days
               </Text>
             </Row>
@@ -132,7 +120,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                   border={day <= completedDays ? "brand-alpha-medium" : "neutral-alpha-weak"}
                 >
                   <Text
-                    variant="body-default-xs"
+                    textVariant="body-default-xs"
                     onBackground={day <= completedDays ? "brand-medium" : "neutral-weak"}
                   >
                     {day}
@@ -140,7 +128,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                 </Row>
               ))}
             </Grid>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Complete a 30-day streak to unlock priority onboarding.
             </Text>
           </Column>
@@ -156,7 +144,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           background="surface"
         >
           <Row horizontal="between" vertical="center">
-            <Text variant="label-strong-s">Top referrers</Text>
+            <Text textVariant="label-strong-s">Top referrers</Text>
             <Row
               gap="4"
               vertical="center"
@@ -170,7 +158,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           {leaderboard.map((person) => (
             <Row key={person.name} fillWidth vertical="center" gap="12" paddingY="8">
               <Text
-                variant="label-strong-s"
+                textVariant="label-strong-s"
                 onBackground={person.rank <= 3 ? "brand-medium" : "neutral-weak"}
                 style={{ width: "1.5rem" }}
               >
@@ -178,10 +166,10 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
               </Text>
               <Avatar size="s" src={person.avatar} />
               <Column fillWidth gap="0">
-                <Text variant="label-default-s" truncate>
+                <Text textVariant="label-default-s" truncate>
                   {person.name}
                 </Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   {person.referrals} referrals
                 </Text>
               </Column>

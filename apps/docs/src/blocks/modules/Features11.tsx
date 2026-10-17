@@ -30,14 +30,14 @@ export const Features11: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex
           ]}
         />
         <Column maxWidth="40rem" padding="16" background="page" border>
-          <Heading as="h2" variant="display-strong-s" marginBottom="32">
+          <Heading as="h2" textVariant="display-strong-s" marginBottom="32">
             Watch your orders skyrocket
           </Heading>
-          <Text marginBottom="24" variant="heading-default-l" wrap="balance">
+          <Text marginBottom="24" textVariant="heading-default-l" wrap="balance">
             Focus on marketing and sales, not design, maintenance and inventory management.
             Everything is handled for you.
           </Text>
-          <Text variant="label-default-s" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="label-default-s" onBackground="neutral-weak" wrap="balance">
             No more stress, no more worries.
           </Text>
         </Column>

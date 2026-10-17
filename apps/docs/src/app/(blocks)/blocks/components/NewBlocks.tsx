@@ -80,7 +80,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                 />
                 <Column fillWidth gap="16" vertical="center" padding="24">
                   <Column gap="4">
-                    <Text variant="label-default-l" onBackground="neutral-strong">
+                    <Text textVariant="label-default-l" onBackground="neutral-strong">
                       {example.title}
                     </Text>
                     <Row
@@ -96,7 +96,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                     </Row>
                   </Column>
                   {example.description && (
-                    <Text variant="label-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-xs" onBackground="neutral-weak">
                       {example.description}
                     </Text>
                   )}

@@ -15,8 +15,8 @@ export function useCopySectionLink(id: string) {
     if (typeof navigator === "undefined" || !navigator.clipboard) return;
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
     navigator.clipboard.writeText(url).then(
-      () => addToast?.({ variant: "success", message: "Link copied to clipboard." }),
-      () => addToast?.({ variant: "danger", message: "Failed to copy link." }),
+      () => addToast?.({ tone: "success", message: "Link copied to clipboard." }),
+      () => addToast?.({ tone: "danger", message: "Failed to copy link." }),
     );
   }, [addToast, id]);
 }

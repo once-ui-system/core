@@ -411,7 +411,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "deleted" || line.type === "context") &&
                 line.oldLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.oldLineNumber}
                   </Text>
                 )}
@@ -419,7 +419,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "added" || line.type === "context") &&
                 line.newLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.newLineNumber}
                   </Text>
                 )}
@@ -751,7 +751,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Reload"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleRefresh}
                     icon="refresh"
@@ -767,7 +766,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 >
                   <IconButton
                     size="m"
-                    color="neutral-weak"
                     tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                     tooltipPosition="bottom"
                     variant="tertiary"
@@ -784,12 +782,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     background={background}
                     style={{ backgroundColor: styleBackgroundColor }}
                   >
-                    <IconButton
-                      variant="tertiary"
-                      icon="sparkle"
-                      aria-label="Explain this code"
-                      color="neutral-weak"
-                    />
+                    <IconButton variant="tertiary" icon="sparkle" aria-label="Explain this code" />
                   </Flex>
                 </StyleOverlay>
               )}
@@ -804,7 +797,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Copy"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleCopy}
                     icon={copyIcon}
@@ -969,7 +961,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
-                color="neutral-weak"
                 aria-label="Copy code"
                 onClick={handleCopy}
                 icon={copyIcon}

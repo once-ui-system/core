@@ -21,7 +21,7 @@ export function AgentGeneration({ text, active = false }: AgentGenerationProps) 
       paddingY="8"
       border
     >
-      <Text variant="body-default-s" onBackground="neutral-strong">
+      <Text textVariant="body-default-s" onBackground="neutral-strong">
         {text}
         {active ? (
           <Text as="span" onBackground="brand-medium">

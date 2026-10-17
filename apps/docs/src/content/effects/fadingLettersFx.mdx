@@ -21,7 +21,7 @@ FadingLettersFx creates beautiful letter-by-letter animations with precise timin
       align="center"
       text="Welcome to Once UI"
       animationState="entering"
-      variant="display-strong-m"
+      textVariant="display-strong-m"
     />
   }
   codes={[
@@ -31,7 +31,7 @@ FadingLettersFx creates beautiful letter-by-letter animations with precise timin
     align="center"
     text="Welcome to Once UI"
     animationState="entering"
-    variant="display-strong-l" />`,
+    textVariant="display-strong-l" />`,
       language: "tsx",
       label: "FadingLettersFx"
     }
@@ -48,18 +48,18 @@ The component supports three distinct animation states: `entering`, `visible`, a
   reloadButton
   preview={
     <Column fillWidth gap="16">
-      <Row fillWidth><FadingLettersFx text="Entering Animation" animationState="entering" variant="heading-strong-m" /></Row>
-      <Row fillWidth><FadingLettersFx text="Visible State" animationState="visible" variant="heading-strong-m" /></Row>
-      <Row fillWidth><FadingLettersFx text="Exiting Animation" animationState="exiting" variant="heading-strong-m" /></Row>
+      <Row fillWidth><FadingLettersFx text="Entering Animation" animationState="entering" textVariant="heading-strong-m" /></Row>
+      <Row fillWidth><FadingLettersFx text="Visible State" animationState="visible" textVariant="heading-strong-m" /></Row>
+      <Row fillWidth><FadingLettersFx text="Exiting Animation" animationState="exiting" textVariant="heading-strong-m" /></Row>
     </Column>
   }
   codes={[
     {
       code:
 `<Column gap="16">
-    <FadingLettersFx text="Entering Animation" animationState="entering" variant="heading-strong-m" />
-    <FadingLettersFx text="Visible State" animationState="visible" variant="heading-strong-m" />
-    <FadingLettersFx text="Exiting Animation" animationState="exiting" variant="heading-strong-m" />
+    <FadingLettersFx text="Entering Animation" animationState="entering" textVariant="heading-strong-m" />
+    <FadingLettersFx text="Visible State" animationState="visible" textVariant="heading-strong-m" />
+    <FadingLettersFx text="Exiting Animation" animationState="exiting" textVariant="heading-strong-m" />
 </Column>`,
       language: "tsx",
       label: "Animation States"
@@ -86,18 +86,18 @@ Use the `messageIdx` prop to create staggered animations across multiple message
   reloadButton
   preview={
     <Column fillWidth gap="12">
-      <Row fillWidth><FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} variant="body-default-l" /></Row>
-      <Row fillWidth><FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} variant="body-default-l" /></Row>
-      <Row fillWidth><FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} variant="body-default-l" /></Row>
+      <Row fillWidth><FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} textVariant="body-default-l" /></Row>
+      <Row fillWidth><FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} textVariant="body-default-l" /></Row>
+      <Row fillWidth><FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} textVariant="body-default-l" /></Row>
     </Column>
   }
   codes={[
     {
       code:
 `<Column gap="12">
-    <FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} variant="body-default-l" />
-    <FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} variant="body-default-l" />
-    <FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} variant="body-default-l" />
+    <FadingLettersFx text="First message appears" animationState="entering" messageIdx={0} textVariant="body-default-l" />
+    <FadingLettersFx text="Second message appears" animationState="entering" messageIdx={1} textVariant="body-default-l" />
+    <FadingLettersFx text="Third message appears" animationState="entering" messageIdx={2} textVariant="body-default-l" />
 </Column>`,
       language: "tsx",
       label: "Staggering"
@@ -117,7 +117,7 @@ FadingLettersFx extends the Once UI Text component, so you can use all Text prop
     <FadingLettersFx
       text="Custom styled text"
       animationState="entering"
-      variant="display-strong-s"
+      textVariant="display-strong-s"
       onBackground="brand-weak"
     />
   }
@@ -127,7 +127,7 @@ FadingLettersFx extends the Once UI Text component, so you can use all Text prop
 `<FadingLettersFx
     text="Custom styled text"
     animationState="entering"
-    variant="display-strong-s"
+    textVariant="display-strong-s"
     onBackground="brand-weak" />`,
       language: "tsx",
       label: "Custom Styling"

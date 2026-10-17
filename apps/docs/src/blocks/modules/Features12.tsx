@@ -95,10 +95,10 @@ export const Features12 = (flex: React.ComponentProps<typeof Column>) => {
             />
             <Column fillWidth center padding="xl">
               <Column maxWidth="m" gap="24">
-                <Heading as="h2" variant="display-strong-m">
+                <Heading as="h2" textVariant="display-strong-m">
                   {card.title}
                 </Heading>
-                <Text onBackground="neutral-weak" variant="heading-default-xl" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="heading-default-xl" wrap="balance">
                   {card.description}
                 </Text>
               </Column>

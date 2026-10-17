@@ -15,7 +15,7 @@ export function RadioGroupControlledExample() {
   return (
     <Column gap="16">
       <RadioGroup label="Plan" name="plan" options={PLANS} value={plan} onValueChange={setPlan} />
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Selected: {plan}
       </Text>
     </Column>

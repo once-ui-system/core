@@ -4,7 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef, useCallback, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons";
 import { useControllableState } from "../internal/useControllableState";
-import { CondensedTShirtSizes } from "../types";
+import { TShirtSizes } from "../types";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -23,7 +23,7 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   children: React.ReactNode;
   icon?: IconName;
   iconRotation?: number;
-  size?: CondensedTShirtSizes;
+  size?: TShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
   /** Open or not, controlled. Leave it out to let the accordion keep its own
    *  state, starting from `defaultOpen`. */
@@ -38,6 +38,10 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   contentProps?: React.ComponentProps<typeof Column>;
   toggleOnHeaderClick?: boolean;
 }
+
+// Paddings per size; s, m and l are 2.x's.
+const HEADER_PADDING_Y = { xs: "4", s: "8", m: "12", l: "16", xl: "20" } as const;
+const PADDING_X = { xs: "8", s: "12", m: "16", l: "20", xl: "24" } as const;
 
 const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   (
@@ -123,9 +127,9 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       }
     };
 
-    const headerPaddingY = size === "s" ? "8" : size === "m" ? "12" : "16";
-    const headerPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
-    const contentPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
+    const headerPaddingY = HEADER_PADDING_Y[size];
+    const headerPaddingX = PADDING_X[size];
+    const contentPaddingX = PADDING_X[size];
 
     return (
       <Column fillWidth>
@@ -153,7 +157,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           </Row>
           <Icon
             name={icon}
-            size={size === "s" ? "xs" : "s"}
+            size={size === "s" || size === "xs" ? "xs" : "s"}
             onBackground={isAccordionOpen ? "neutral-strong" : "neutral-weak"}
             style={{
               display: "flex",

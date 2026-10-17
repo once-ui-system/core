@@ -7,12 +7,12 @@ import { mergeLabels } from "../internal/labels";
 import { useControllableState } from "../internal/useControllableState";
 import type { Placement } from "../types";
 import { Column } from "./Column";
+import { Dropdown, type DropdownProps } from "./Dropdown";
 import {
   DropdownComboboxContext,
   DropdownTriggerContext,
   useDropdownCombobox,
 } from "./DropdownTriggerContext";
-import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
@@ -37,7 +37,7 @@ const DEFAULT_LABELS: Required<SelectLabels> = {
 
 interface SelectProps
   extends Omit<InputProps, "onSelect" | "value" | "defaultValue" | "onChange" | "onValueChange">,
-    Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
+    Pick<DropdownProps, "minHeight" | "minWidth" | "maxWidth"> {
   options: SelectOptionType[];
   /** The picked option's value (an array with `multiple`), controlled. Leave
    *  it out to let the Select keep its own, starting from `defaultValue`. */
@@ -67,7 +67,7 @@ interface SelectProps
  * The field: a combobox, which keeps focus while its list is open and points
  * at the active option with `aria-activedescendant`.
  *
- * Its own component because it has to render inside DropdownWrapper's trigger
+ * Its own component because it has to render inside Dropdown's trigger
  * to report that option to the panel, which keeps it scrolled into view. It
  * also hides the trigger context from what it contains, so a Button in its
  * prefix or suffix stays a plain control instead of announcing the list too.
@@ -250,7 +250,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
      * Set while focus is on its way back to the trigger from a dropdown that
      * just closed.
      *
-     * Closing hands focus back to the field (DropdownWrapper and FocusTrap
+     * Closing hands focus back to the field (Dropdown and FocusTrap
      * both restore it), and the field opens on focus, so every pick, Escape
      * and outside click reopened the list it had just closed. This replaced
      * a `justSelectedRef` that was written on every pick and never read.
@@ -435,7 +435,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     /**
      * Where the list opens: on the option it is already showing, else on its
-     * first enabled one — the rule DropdownWrapper applies to every list.
+     * first enabled one — the rule Dropdown applies to every list.
      */
     const openIndex = () => {
       const selected = filteredOptions.findIndex(
@@ -520,7 +520,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       // Tells the wrapper its trigger is a combobox: no `role="button"` around
       // the field, and focus stays in it (see DropdownComboboxContext).
       <DropdownComboboxContext.Provider value={true}>
-        <DropdownWrapper
+        <Dropdown
           fillWidth={fillWidth}
           minWidth={minWidth}
           maxWidth={maxWidth}
@@ -570,77 +570,76 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
               aria-activedescendant={activeOptionId}
             />
           }
-          dropdown={
-            <Column fillWidth padding="4" data-dropdown="true">
-              {searchable && (
-                <SearchInput
-                  ref={searchRef}
-                  id={`select-search-${searchInputId}`}
-                  searchQuery={searchQuery}
-                  onQueryChange={handleQueryChange}
-                  onOpen={() => setOpen(true)}
-                  onClear={handleClearSearch}
-                  onEscape={() => {
-                    setOpen(false);
-                    handleQueryChange("");
-                    fieldRef.current?.focus();
-                  }}
-                  onListKey={handleListKey}
-                  handleBlur={handleBlur}
-                  selectRef={selectRef}
-                  listboxId={listboxId}
-                  activeOptionId={activeOptionId}
-                  names={names}
-                />
-              )}
-
-              <Column
-                id={listboxId}
-                role="listbox"
-                aria-label={listboxLabel}
-                aria-multiselectable={multiple || undefined}
-                fillWidth
-                paddingTop="4"
-                gap="2"
-                // The highlight follows the pointer, as it did when the options
-                // took focus, so the active option is the one under it.
-                onMouseOver={(event: React.MouseEvent<HTMLDivElement>) => {
-                  const option = (event.target as Element).closest('[role="option"]');
-                  if (!option?.id.startsWith(optionIdPrefix)) return;
-                  const index = Number(option.id.slice(optionIdPrefix.length));
-                  if (index !== currentActive && !filteredOptions[index]?.disabled) {
-                    setActiveIndex(index);
-                  }
+        >
+          <Column fillWidth padding="4" data-dropdown="true">
+            {searchable && (
+              <SearchInput
+                ref={searchRef}
+                id={`select-search-${searchInputId}`}
+                searchQuery={searchQuery}
+                onQueryChange={handleQueryChange}
+                onOpen={() => setOpen(true)}
+                onClear={handleClearSearch}
+                onEscape={() => {
+                  setOpen(false);
+                  handleQueryChange("");
+                  fieldRef.current?.focus();
                 }}
-              >
-                {filteredOptions.map((option, index) => (
-                  <Option
-                    key={option.value}
-                    {...option}
-                    id={optionId(index)}
-                    // handleSelect closes a single Select. A multiple one stays
-                    // open to pick more, as it already did from the keyboard;
-                    // a click used to close it too, and only looked open
-                    // because the returning focus reopened it at once.
-                    onClick={() => {
-                      option.onClick?.(option.value);
-                      handleSelect(option.value);
-                    }}
-                    selected={isSelected(option)}
-                    highlighted={index === currentActive}
-                    tabIndex={-1}
-                    prefix={optionPrefix(option)}
-                  />
-                ))}
-              </Column>
-              {searchQuery && filteredOptions.length === 0 && (
-                <Flex fillWidth center paddingX="16" paddingY="32">
-                  {emptyState}
-                </Flex>
-              )}
+                onListKey={handleListKey}
+                handleBlur={handleBlur}
+                selectRef={selectRef}
+                listboxId={listboxId}
+                activeOptionId={activeOptionId}
+                names={names}
+              />
+            )}
+
+            <Column
+              id={listboxId}
+              role="listbox"
+              aria-label={listboxLabel}
+              aria-multiselectable={multiple || undefined}
+              fillWidth
+              paddingTop="4"
+              gap="2"
+              // The highlight follows the pointer, as it did when the options
+              // took focus, so the active option is the one under it.
+              onMouseOver={(event: React.MouseEvent<HTMLDivElement>) => {
+                const option = (event.target as Element).closest('[role="option"]');
+                if (!option?.id.startsWith(optionIdPrefix)) return;
+                const index = Number(option.id.slice(optionIdPrefix.length));
+                if (index !== currentActive && !filteredOptions[index]?.disabled) {
+                  setActiveIndex(index);
+                }
+              }}
+            >
+              {filteredOptions.map((option, index) => (
+                <Option
+                  key={option.value}
+                  {...option}
+                  id={optionId(index)}
+                  // handleSelect closes a single Select. A multiple one stays
+                  // open to pick more, as it already did from the keyboard;
+                  // a click used to close it too, and only looked open
+                  // because the returning focus reopened it at once.
+                  onClick={() => {
+                    option.onClick?.(option.value);
+                    handleSelect(option.value);
+                  }}
+                  selected={isSelected(option)}
+                  highlighted={index === currentActive}
+                  tabIndex={-1}
+                  prefix={optionPrefix(option)}
+                />
+              ))}
             </Column>
-          }
-        />
+            {searchQuery && filteredOptions.length === 0 && (
+              <Flex fillWidth center paddingX="16" paddingY="32">
+                {emptyState}
+              </Flex>
+            )}
+          </Column>
+        </Dropdown>
       </DropdownComboboxContext.Provider>
     );
   },

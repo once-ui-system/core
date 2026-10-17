@@ -18,15 +18,15 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       <Column paddingX="l" fillWidth horizontal="center" gap="m">
         <Column maxWidth="s" horizontal="center" align="center">
           <RevealFx paddingTop="24" translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading variant="display-strong-l">Design an independent future</Heading>
+            <Heading textVariant="display-strong-l">Design an independent future</Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={200} fillWidth horizontal="center" paddingBottom="40">
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+            <Text wrap="balance" onBackground="neutral-weak" textVariant="heading-default-xl">
               Build your solo business and live on your own terms
             </Text>
           </RevealFx>
           <RevealFx direction="column" gap="16" translateY="12" delay={400} horizontal="center">
-            <Text wrap="balance" onBackground="neutral-weak" variant="label-default-s">
+            <Text wrap="balance" onBackground="neutral-weak" textVariant="label-default-s">
               By the creator of Once UI
             </Text>
             <Column
@@ -64,7 +64,7 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
                   { src: "/images/creators/div.jpg" },
                 ]}
               />
-              <Text variant="code-default-s">Join 3.5k+ readers</Text>
+              <Text textVariant="code-default-s">Join 3.5k+ readers</Text>
             </Row>
           </RevealFx>
         </Column>

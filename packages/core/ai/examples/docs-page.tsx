@@ -58,10 +58,10 @@ export function DocsPageExample({
           paddingBottom="24"
         />
         <Column gap="12" paddingBottom="16">
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             {title}
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak">
+          <Text textVariant="body-default-l" onBackground="neutral-weak">
             {summary}
           </Text>
         </Column>

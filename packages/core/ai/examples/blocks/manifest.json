@@ -8,15 +8,7 @@
       "file": "Header1.tsx",
       "title": "App header with MegaMenu + Kbar",
       "tags": ["navigation", "header", "marketing"],
-      "components": [
-        "MegaMenu",
-        "MobileMegaMenu",
-        "Kbar",
-        "Logo",
-        "UserMenu",
-        "NavIcon",
-        "SmartLink"
-      ],
+      "components": ["MegaMenu", "MobileMegaMenu", "Kbar", "Logo", "User", "NavIcon", "SmartLink"],
       "patterns": ["sticky header", "mega menu sections with featured links", "command palette ⌘K"],
       "tasks": ["marketing-hero", "dashboard"],
       "standalone": true
@@ -35,7 +27,7 @@
       "file": "Header3.tsx",
       "title": "Streaming/media header",
       "tags": ["navigation", "header", "streaming"],
-      "components": ["Logo", "IconButton", "UserMenu"],
+      "components": ["Logo", "IconButton", "User"],
       "tasks": ["streaming"],
       "standalone": true
     },
@@ -44,7 +36,7 @@
       "file": "Header4.tsx",
       "title": "Compact docs-style header",
       "tags": ["navigation", "header", "docs"],
-      "components": ["Logo", "UserMenu", "ToggleButton", "SmartLink"],
+      "components": ["Logo", "User", "ToggleButton", "SmartLink"],
       "tasks": ["settings"],
       "standalone": true
     },
@@ -89,7 +81,7 @@
       "file": "Waitlist1.tsx",
       "title": "Waitlist / coming-soon hero",
       "tags": ["marketing", "hero", "waitlist"],
-      "components": ["RevealFx", "CountFx", "AvatarGroup", "Input", "Badge", "Background"],
+      "components": ["RevealFx", "CountFx", "AvatarGroup", "Input", "Tag", "Background"],
       "patterns": [
         "custom cursor SVG",
         "subscriber count animation",
@@ -146,14 +138,7 @@
       "file": "Table1.tsx",
       "title": "Data table with search, pagination, selection",
       "tags": ["data", "dashboard", "table"],
-      "components": [
-        "Input",
-        "Checkbox",
-        "DropdownWrapper",
-        "CountFx",
-        "IconButton",
-        "ToggleButton"
-      ],
+      "components": ["Input", "Checkbox", "Dropdown", "CountFx", "IconButton", "ToggleButton"],
       "patterns": ["custom render columns", "selectable rows", "items per page"],
       "tasks": ["dashboard", "chat"],
       "standalone": true
@@ -174,7 +159,7 @@
       "file": "Feed3.tsx",
       "title": "Chat message feed + composer",
       "tags": ["chat", "social"],
-      "components": ["Avatar", "Textarea", "EmojiPickerDropdown", "Media", "OgCard", "IconButton"],
+      "components": ["Avatar", "Textarea", "EmojiPicker", "Media", "OgCard", "IconButton"],
       "patterns": [
         "thread messages without bubbles",
         "attachment grid",
@@ -203,7 +188,7 @@
       "file": "Sidebar5.tsx",
       "title": "Chat members panel",
       "tags": ["chat", "sidebar"],
-      "components": ["Card", "Avatar", "DropdownWrapper", "Heading"],
+      "components": ["Card", "Avatar", "Dropdown", "Heading"],
       "tasks": ["chat"],
       "standalone": true
     },
@@ -236,7 +221,7 @@
       "file": "Sidebar2.tsx",
       "title": "Workspace sidebar with account switcher",
       "tags": ["navigation", "sidebar", "productivity"],
-      "components": ["DropdownWrapper", "User", "Option", "Avatar", "ToggleButton"],
+      "components": ["Dropdown", "User", "Option", "Avatar", "ToggleButton"],
       "patterns": ["account switcher dropdown", "prefixIcon ToggleButton nav"],
       "standalone": true
     },

@@ -5,8 +5,8 @@ import { useControllableState } from "../internal/useControllableState";
 import { fieldLocale } from "../utils/calendarLocale";
 import type { DatePickerLabels } from "./DatePicker";
 import { DateRange, DateRangePicker } from "./DateRangePicker";
+import { Dropdown } from "./Dropdown";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
-import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
 import { Row } from "./Row";
@@ -64,7 +64,7 @@ const formatDateRange = (range: DateRange, locale?: string): LocalizedDateRange 
 
 /**
  * Two fields, start and end, each a combobox that opens the same range picker
- * dialog: see DateInput. They used to sit inside DropdownWrapper's two
+ * dialog: see DateInput. They used to sit inside Dropdown's two
  * `role="button"` wrappers (axe "nested-interactive"), and the picker inside
  * a listbox with no options.
  */
@@ -219,12 +219,11 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
 
     return (
       <DropdownComboboxContext.Provider value={true}>
-        <DropdownWrapper
+        <Dropdown
           ref={ref}
           fillWidth={false}
           trigger={trigger}
           minHeight={minHeight}
-          dropdown={dropdown}
           open={isOpen}
           closeAfterClick={false}
           disableTriggerClick={true}
@@ -232,7 +231,9 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
           style={{ ...style }}
           onOpenChange={setIsOpen}
           handleArrowNavigation={false}
-        />
+        >
+          {dropdown}
+        </Dropdown>
       </DropdownComboboxContext.Provider>
     );
   },

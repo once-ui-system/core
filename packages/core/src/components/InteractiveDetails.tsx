@@ -48,7 +48,7 @@ const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
           <Text
             as="span"
             id={labelId}
-            variant="label-default-m"
+            textVariant="label-default-m"
             onBackground={disabled ? "neutral-weak" : "neutral-strong"}
           >
             {label}
@@ -66,7 +66,12 @@ const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
           )}
         </Row>
         {description && (
-          <Text as="span" id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
+          <Text
+            as="span"
+            id={descriptionId}
+            textVariant="body-default-s"
+            onBackground="neutral-weak"
+          >
             {description}
           </Text>
         )}

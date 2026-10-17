@@ -8,7 +8,7 @@ import {
   Row,
   SmartLink,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
@@ -72,7 +72,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
                 <ToggleButton label="Resources" />
               </Row>
             </Row>
-            <UserMenu
+            <User
               placement="bottom-end"
               avatarProps={{
                 value: avatar ? undefined : "L",

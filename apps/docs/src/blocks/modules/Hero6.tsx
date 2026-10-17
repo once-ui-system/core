@@ -1,15 +1,4 @@
-import {
-  Background,
-  Badge,
-  Button,
-  Column,
-  Heading,
-  Mask,
-  MatrixFx,
-  Media,
-  RevealFx,
-  Row,
-} from "@once-ui-system/core";
+import { Background, Tag, Button, Column, Heading, Mask, MatrixFx, Media, RevealFx, Row } from "@once-ui-system/core";
 
 export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -40,7 +29,7 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       </Mask>
       <Column maxWidth="l" gap="32" paddingX="l" paddingTop="xl">
         <Column maxWidth="s" gap="24">
-          <Badge background="brand-weak" marginBottom="12" href="#">
+          <Tag variant="announce" background="brand-weak" marginBottom="12" href="#">
             <Background
               position="absolute"
               left="0"
@@ -56,9 +45,9 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               pointerEvents="none"
             />
             <Row>Claim your gift</Row>
-          </Badge>
-          <Heading variant="display-strong-l">We speak CSS natively</Heading>
-          <Heading onBackground="neutral-weak" variant="heading-default-m" marginBottom="8">
+          </Tag>
+          <Heading textVariant="display-strong-l">We speak CSS natively</Heading>
+          <Heading onBackground="neutral-weak" textVariant="heading-default-m" marginBottom="8">
             Once UI Pro is a collection of ready-to-use templates and building blocks that you can
             use to create your next project.
           </Heading>

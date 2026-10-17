@@ -69,7 +69,7 @@ export const Sidebar4: React.FC<
               .map((section, sIdx) => (
                 <Column key={sIdx} fillWidth gap="2">
                   <Text
-                    variant="label-default-s"
+                    textVariant="label-default-s"
                     onBackground="neutral-weak"
                     marginLeft="16"
                     marginTop="4"
@@ -110,12 +110,12 @@ export const Sidebar4: React.FC<
           gap="16"
           background="neutral-alpha-weak"
         >
-          <Avatar src="/images/creators/lorant.jpg" statusIndicator={{ color: "green" }} />
+          <Avatar src="/images/creators/lorant.jpg" statusIndicator={{ scheme: "green" }} />
           <Column fillWidth gap="2">
-            <Text variant="label-strong-s" truncate>
+            <Text textVariant="label-strong-s" truncate>
               Lorant
             </Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
               Coding something...
             </Text>
           </Column>

@@ -129,10 +129,10 @@ export const Dashboard2 = () => {
                 >
                   <Column gap="4">
                     <Row vertical="center" gap="12">
-                      <Heading variant="display-strong-s">Workspace pulse</Heading>
+                      <Heading textVariant="display-strong-s">Workspace pulse</Heading>
                       <Pulse size="s" />
                     </Row>
-                    <Text variant="body-default-m" onBackground="neutral-medium">
+                    <Text textVariant="body-default-m" onBackground="neutral-medium">
                       Real-time health across your projects and deployments.
                     </Text>
                   </Column>
@@ -152,7 +152,7 @@ export const Dashboard2 = () => {
                       background="transparent"
                     >
                       <Row fillWidth horizontal="between" vertical="center">
-                        <Text variant="label-default-s" onBackground="neutral-medium">
+                        <Text textVariant="label-default-s" onBackground="neutral-medium">
                           {metric.title}
                         </Text>
                         <Row
@@ -161,10 +161,10 @@ export const Dashboard2 = () => {
                           onBackground={metric.positive ? "success-weak" : "danger-weak"}
                         >
                           <Icon size="xs" name={metric.positive ? "trendUp" : "trendDown"} />
-                          <Text variant="body-default-xs">{metric.change}</Text>
+                          <Text textVariant="body-default-xs">{metric.change}</Text>
                         </Row>
                       </Row>
-                      <Heading variant="display-strong-xs">
+                      <Heading textVariant="display-strong-xs">
                         {metric.suffix === "%" ? (
                           <>
                             {metric.value}
@@ -196,7 +196,7 @@ export const Dashboard2 = () => {
                       gap="12"
                       wrap
                     >
-                      <Heading variant="heading-strong-s">Recent deployments</Heading>
+                      <Heading textVariant="heading-strong-s">Recent deployments</Heading>
                       <Button size="s" variant="secondary" weight="default">
                         View pipeline
                       </Button>
@@ -214,22 +214,22 @@ export const Dashboard2 = () => {
                         >
                           <Avatar size="xs" src={deployment.author} />
                           <Column fillWidth gap="4">
-                            <Text variant="label-default-s">{deployment.name}</Text>
+                            <Text textVariant="label-default-s">{deployment.name}</Text>
                             <Row gap="8" vertical="center">
-                              <Text variant="body-default-xs" onBackground="neutral-weak">
+                              <Text textVariant="body-default-xs" onBackground="neutral-weak">
                                 {deployment.environment}
                               </Text>
-                              <Text variant="body-default-xs" onBackground="neutral-weak">
+                              <Text textVariant="body-default-xs" onBackground="neutral-weak">
                                 · {deployment.time}
                               </Text>
                             </Row>
                           </Column>
                           <Row gap="8" vertical="center">
-                            <Text variant="body-default-xs" onBackground="neutral-weak">
+                            <Text textVariant="body-default-xs" onBackground="neutral-weak">
                               {deployment.status}
                             </Text>
                             <StatusIndicator
-                              color={
+                              scheme={
                                 deployment.status === "Live"
                                   ? "green"
                                   : deployment.status === "Building"
@@ -254,7 +254,7 @@ export const Dashboard2 = () => {
                       gap="12"
                       wrap
                     >
-                      <Heading variant="heading-strong-s">System health</Heading>
+                      <Heading textVariant="heading-strong-s">System health</Heading>
                       <AvatarGroup
                         size="xs"
                         avatars={[
@@ -277,13 +277,13 @@ export const Dashboard2 = () => {
                         >
                           <Row gap="12" vertical="center">
                             <Icon name="chip" size="xs" onBackground="neutral-weak" />
-                            <Text variant="body-default-s">{service.name}</Text>
+                            <Text textVariant="body-default-s">{service.name}</Text>
                           </Row>
                           <Row gap="8" vertical="center">
-                            <Text variant="body-default-xs" onBackground="neutral-weak">
+                            <Text textVariant="body-default-xs" onBackground="neutral-weak">
                               {service.status}
                             </Text>
-                            <StatusIndicator color={service.color} />
+                            <StatusIndicator scheme={service.color} />
                           </Row>
                         </Row>
                       ))}

@@ -95,7 +95,7 @@ TRANSLOG:
             fillWidth
           />
           <Column fill padding="xl" zIndex={2} pointerEvents="none">
-            <Heading as="h2" variant="display-strong-m" align="center">
+            <Heading as="h2" textVariant="display-strong-m" align="center">
               Enter your vault
             </Heading>
           </Column>
@@ -107,7 +107,7 @@ TRANSLOG:
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             size="l"
           />
-          <Heading variant="display-strong-xs" align="center">
+          <Heading textVariant="display-strong-xs" align="center">
             Welcome to Once UI
           </Heading>
           <Row onBackground="neutral-medium" marginBottom="24" gap="4" align="center">

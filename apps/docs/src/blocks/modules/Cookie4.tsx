@@ -50,8 +50,8 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
           onBackground="brand-weak"
         />
         <Column gap="4" fillWidth>
-          <Text variant="heading-strong-s">We value your privacy</Text>
-          <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="heading-strong-s">We value your privacy</Text>
+          <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
             Choose how we use cookies to improve your experience. Read our{" "}
             <SmartLink href="#">Privacy Policy</SmartLink>.
           </Text>
@@ -61,8 +61,8 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
       <Column fillWidth gap="12" padding="16" radius="m" border>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
-            <Text variant="label-default-s">Analytics</Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-s">Analytics</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Help us understand usage patterns
             </Text>
           </Column>
@@ -70,8 +70,8 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         </Row>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
-            <Text variant="label-default-s">Marketing</Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-s">Marketing</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Personalized offers and updates
             </Text>
           </Column>

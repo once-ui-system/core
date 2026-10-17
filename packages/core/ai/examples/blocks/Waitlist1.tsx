@@ -2,7 +2,6 @@
 
 import {
   AvatarGroup,
-  Badge,
   Column,
   CountFx,
   Heading,
@@ -12,6 +11,7 @@ import {
   Logo,
   RevealFx,
   Row,
+  Tag,
   Text,
 } from "@once-ui-system/core";
 import { useEffect, useState } from "react";
@@ -78,7 +78,8 @@ export const Waitlist1 = () => {
       <Background6 />
       <Column horizontal="center" gap="40" maxWidth="xs">
         <RevealFx horizontal="center">
-          <Badge
+          <Tag
+            variant="announce"
             paddingX="24"
             background="brand-alpha-weak"
             pointerEvents="none"
@@ -95,16 +96,16 @@ export const Waitlist1 = () => {
             />
             <Line vert marginX="16" height="20" background="brand-alpha-medium" />
             <Text paddingX="4">Arriving soon</Text>
-          </Badge>
+          </Tag>
         </RevealFx>
         <Column horizontal="center" align="center" gap="24">
           <RevealFx horizontal="center" delay={400}>
-            <Heading variant="display-strong-xl" onBackground="neutral-strong">
+            <Heading textVariant="display-strong-xl" onBackground="neutral-strong">
               The all-in-one course platform
             </Heading>
           </RevealFx>
           <RevealFx horizontal="center" delay={600}>
-            <Text onBackground="neutral-medium" variant="heading-default-xl">
+            <Text onBackground="neutral-medium" textVariant="heading-default-xl">
               Launch and sell your courses with ease. We handle enrollment, payments and analytics.
               You focus on creating.
             </Text>
@@ -136,14 +137,14 @@ export const Waitlist1 = () => {
               border="brand-alpha-weak"
               gap="20"
             >
-              <Text variant="label-default-m" onBackground="brand-medium">
+              <Text textVariant="label-default-m" onBackground="brand-medium">
                 You're on the list!
               </Text>
               <Row vertical="center" textVariant="heading-strong-l" gap="16">
                 That makes it{" "}
                 <CountFx
                   value={subscribers}
-                  variant="code-default-xl"
+                  textVariant="code-default-xl"
                   duration={4000}
                   effect="smooth"
                 />
@@ -175,7 +176,7 @@ export const Waitlist1 = () => {
               />
               <Row vertical="center" gap="4" textVariant="label-default-s">
                 <Text>Join</Text>
-                <CountFx value={subscribers} variant="code-default-s" effect="smooth" />
+                <CountFx value={subscribers} textVariant="code-default-s" effect="smooth" />
                 <Text>others</Text>
               </Row>
             </RevealFx>

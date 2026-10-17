@@ -6,7 +6,7 @@ import {
   Checkbox,
   Column,
   CountFx,
-  DropdownWrapper,
+  Dropdown,
   Icon,
   IconButton,
   Input,
@@ -127,7 +127,7 @@ export function Table1<T = Record<string, unknown>>({
         <Row fillWidth gap="12" vertical="center" horizontal="between">
           {selectable && someCurrentSelected ? (
             <CountFx
-              variant="label-default-m"
+              textVariant="label-default-m"
               paddingY="12"
               paddingLeft="8"
               value={selectedItems.size}
@@ -137,7 +137,7 @@ export function Table1<T = Record<string, unknown>>({
               <Text marginLeft="8">selected</Text>
             </CountFx>
           ) : typeof heading === "string" ? (
-            <Text variant="label-default-m" paddingY="12" paddingLeft="8">
+            <Text textVariant="label-default-m" paddingY="12" paddingLeft="8">
               {heading}
             </Text>
           ) : (
@@ -255,7 +255,7 @@ export function Table1<T = Record<string, unknown>>({
             </Column>
             {paginatedItems.length === 0 && (
               <Column fill center padding="l" gap="24">
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   No results{search ? ` for "${search}"` : ""}
                 </Text>
                 {showSearch && (
@@ -285,7 +285,7 @@ export function Table1<T = Record<string, unknown>>({
               variant={currentPage === 1 ? "primary" : "secondary"}
               onClick={() => setCurrentPage(1)}
             >
-              <Text variant="label-strong-s">1</Text>
+              <Text textVariant="label-strong-s">1</Text>
             </IconButton>
 
             {/* Page 2 (if exists) */}
@@ -295,17 +295,15 @@ export function Table1<T = Record<string, unknown>>({
                 variant={currentPage === 2 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(2)}
               >
-                <Text variant="label-strong-s">2</Text>
+                <Text textVariant="label-strong-s">2</Text>
               </IconButton>
             )}
 
             {/* More dropdown for middle pages when > 4 total pages */}
             {totalitemsPerPage > 4 && (
-              <DropdownWrapper
+              <Dropdown
                 placement="bottom-end"
-                trigger={<IconButton icon="moreHorizontal" size="s" variant="ghost" />}
-                dropdown={
-                  <Column padding="4" gap="2" width="4rem">
+                trigger={<IconButton icon="moreHorizontal" size="s" variant="ghost" />}><Column padding="4" gap="2" width="4rem">
                     {Array.from({ length: totalitemsPerPage - 4 }, (_, i) => i + 3).map(
                       (pageNum) => (
                         <ToggleButton
@@ -319,9 +317,7 @@ export function Table1<T = Record<string, unknown>>({
                         </ToggleButton>
                       ),
                     )}
-                  </Column>
-                }
-              />
+                  </Column></Dropdown>
             )}
 
             {/* Last-1 and Last */}
@@ -332,14 +328,14 @@ export function Table1<T = Record<string, unknown>>({
                   variant={currentPage === totalitemsPerPage - 1 ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage - 1)}
                 >
-                  <Text variant="label-strong-s">{totalitemsPerPage - 1}</Text>
+                  <Text textVariant="label-strong-s">{totalitemsPerPage - 1}</Text>
                 </IconButton>
                 <IconButton
                   key={`page-${totalitemsPerPage}`}
                   variant={currentPage === totalitemsPerPage ? "primary" : "secondary"}
                   onClick={() => setCurrentPage(totalitemsPerPage)}
                 >
-                  <Text variant="label-strong-s">{totalitemsPerPage}</Text>
+                  <Text textVariant="label-strong-s">{totalitemsPerPage}</Text>
                 </IconButton>
               </>
             ) : totalitemsPerPage === 3 ? (
@@ -348,7 +344,7 @@ export function Table1<T = Record<string, unknown>>({
                 variant={currentPage === 3 ? "primary" : "secondary"}
                 onClick={() => setCurrentPage(3)}
               >
-                <Text variant="label-strong-s">3</Text>
+                <Text textVariant="label-strong-s">3</Text>
               </IconButton>
             ) : null}
           </Row>
@@ -361,15 +357,13 @@ export function Table1<T = Record<string, unknown>>({
           />
         </Row>
 
-        <DropdownWrapper
+        <Dropdown
           placement="bottom-end"
           trigger={
             <Button size="s" variant="secondary" prefixIcon="chevronDown">
-              <Text variant="label-strong-s">{itemsPerPage}</Text>
+              <Text textVariant="label-strong-s">{itemsPerPage}</Text>
             </Button>
-          }
-          dropdown={
-            <Column padding="4" gap="2" width="4rem">
+          }><Column padding="4" gap="2" width="4rem">
               {itemsPerPageOptions.map((option) => (
                 <ToggleButton
                   key={option}
@@ -380,9 +374,7 @@ export function Table1<T = Record<string, unknown>>({
                   {option}
                 </ToggleButton>
               ))}
-            </Column>
-          }
-        />
+            </Column></Dropdown>
       </Row>
     </Column>
   );

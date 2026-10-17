@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  Badge,
-  Button,
-  IconButton,
-  Line,
-  Logo,
-  NavIcon,
-  Pulse,
-  Row,
-  SmartLink,
-  Text,
-  ToggleButton,
-} from "@once-ui-system/core";
+import { Tag, Button, IconButton, Line, Logo, NavIcon, Pulse, Row, SmartLink, Text, ToggleButton } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 
 const nav = [
@@ -42,11 +30,11 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         background="brand-alpha-weak"
       >
         <Pulse size="s" />
-        <Text variant="label-default-s" onBackground="brand-medium">
+        <Text textVariant="label-default-s" onBackground="brand-medium">
           Pro blocks now install via CLI
         </Text>
         <SmartLink href="#">
-          <Badge title="Learn more" arrow={false} effect={false} />
+          <Tag variant="announce" label="Learn more" arrow={false} effect={false} />
         </SmartLink>
       </Row>
 
@@ -67,7 +55,7 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
               href="#"
             />
             <Line vert height="20" background="neutral-alpha-weak" />
-            <Text variant="label-strong-s" wrap="nowrap">
+            <Text textVariant="label-strong-s" wrap="nowrap">
               Once UI
             </Text>
           </Row>

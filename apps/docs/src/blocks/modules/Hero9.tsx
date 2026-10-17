@@ -36,12 +36,12 @@ export const Hero9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       />
       <Column fillWidth horizontal="center" paddingX="l" paddingBottom="104">
         <Column maxWidth="m" horizontal="center" paddingX="l">
-          <Heading variant="display-strong-l" align="center" marginBottom="32">
+          <Heading textVariant="display-strong-l" align="center" marginBottom="32">
             Launch apps without writing a single line of code
           </Heading>
           <Text
             wrap="balance"
-            variant="heading-default-xl"
+            textVariant="heading-default-xl"
             align="center"
             onBackground="neutral-medium"
             marginBottom="40"

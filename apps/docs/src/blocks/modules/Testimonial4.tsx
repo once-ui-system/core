@@ -51,7 +51,7 @@ export const Testimonial4: React.FC<Testimonial4Props> = ({
         gap="12"
         border
       >
-        <Text wrap="balance" variant="heading-default-m">
+        <Text wrap="balance" textVariant="heading-default-m">
           {content}
         </Text>
         {social && <IconButton size="l" variant="tertiary" icon={social.icon} href={social.link} />}

@@ -36,9 +36,49 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
   `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
   `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
+- **Components that merged** (F1, F2, F4, F5). The codemod rewrites each one; see
+  [MIGRATING.md § 10](MIGRATING.md#10-components-that-merged).
+  - `Modal` → `Dialog variant="sheet"`, with a `backdrop` slot on both variants.
+  - `Swiper` → `Carousel mode="snap"`.
+  - `ScrollContainer` → `Scroller` track mode (`draggable`, `infinite`, `markers`,
+    `proximity`, `active`, `tile`); `AutoScroll` → `Scroller auto={{ speed, hover, reverse }}`.
+  - `InfoTip` → `Tooltip content`; a Tooltip with no children renders the info icon.
+  - `Hover` → `HoverCard placement="cover"`; `CursorCard` → `HoverCard placement="cursor"`
+    (`cursorPlacement`, `delay`, `hideDelay`).
+  - `DropdownWrapper` → `Dropdown`, whose menu is now the children; the 2.x bare
+    `Dropdown` panel is internal. `ContextMenu` → `Dropdown openOn="contextmenu"`.
+  - `EmojiPickerDropdown` → `EmojiPicker trigger`; `UserMenu` → `User dropdown`.
+- **`Badge` and `Chip`** (F3): both are `Tag` now. Badge is `<Tag variant="announce">`
+  (`title` → `label`, `icon` → `prefixIcon`), Chip is a Tag with `selected`, `onClick` or
+  `onRemove` (`iconButtonProps` → `removeButtonProps`). The codemod rewrites both; see
+  [MIGRATING.md § 9](MIGRATING.md#9-badge-and-chip-are-tag).
+- **Button and IconButton `variant="quaternary"`, `"danger"`, `"success"` and `"warning"`**
+  and their icon-only `color`. `quaternary` is `ghost`; the rest are a `tone`.
 
 ### Changed
 
+- **`tone` is the semantic palette and `variant` is appearance only** (E1, E2):
+  `brand | accent | neutral | info | success | warning | danger`. It replaces Button and
+  IconButton's tone variants, Feedback and Toast `variant` (and `addToast({ variant })`),
+  Tag and Pulse `scheme`, Timeline items' `state`, Scrubber tracks' `scheme`, Table
+  actions' `variant="danger"`, and the gauges' named `hue` (a hue pair is `hueRange`).
+  StatusIndicator and Avatar `statusIndicator` take the palette hue as `scheme` (was
+  `color`). See [MIGRATING.md § 8](MIGRATING.md#8-tone-and-variant).
+- **Text, Heading and everything built on them take `textVariant`** (E2) for the type
+  style: Text, Heading, ListItem, CountFx, ShineFx, TypeFx and FadingLettersFx `variant`.
+- **One colour resolver** (E3): Background, ParticleFx, the charts and the gauges read a
+  colour the same way: a token (`brand-weak`), a data hue, a `--custom-property` or any
+  raw CSS colour. `#fff` and `brand-weak` used to be dropped in some of them.
+- **Sizes run `xs` to `xl`** (E4) on Tag, StatusIndicator, Pulse, Accordion and Pagination.
+- **Tag `selected` defaults to false** (core#198). 2.x's Chip defaulted to true, so a
+  Chip with no `selected` was drawn and announced as pressed.
+- **Dialog and Drawer share one overlay core.** Escape closes only the innermost open
+  overlay, focus returns as an overlay starts closing (Dialog waited for its 300ms
+  exit), the panel's Tab containment is FocusTrap's, and the dialog is described by
+  its `description` (`aria-describedby`). The sheet variant takes `description` and
+  `footer` like the centred one.
+- **An uncontrolled `EmojiPicker trigger` closes on a pick**; 2.x's
+  `EmojiPickerDropdown` closed only when controlled.
 - **React 19 is the floor** for `react` and `react-dom`.
 - **Fields and pickers report their value through `onValueChange`.** NumberInput,
   ColorInput, TagInput, DateInput, DateRangeInput, DatePicker and DateRangePicker
@@ -114,6 +154,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   a number too; GlitchFx `speed` now takes effect (its classes never reached the
   animated layers), and the shared scale moves GlitchFx `"slow"` to a 5s cycle (was
   3.5s) and `"fast"` to 1.25s (was 1.5s), and LetterFx `"fast"` to 15ms steps (was 10ms).
+
+### Fixed
+
+- **Several announcement tags on one page** no longer share `id="badge"`; each arrow
+  follows hover on its own tag (2.x Badge).
 
 ## [Unreleased]
 

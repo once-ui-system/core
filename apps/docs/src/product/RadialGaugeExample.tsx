@@ -28,7 +28,7 @@ export function RadialGaugeSpeedDemo() {
       width={260}
       height={260}
       value={value}
-      hue={value < 50 ? "danger" : value < 80 ? "neutral" : "success"}
+      tone={value < 50 ? "danger" : value < 80 ? "neutral" : "success"}
       unit="km/h"
       angle={{
         start: -20,

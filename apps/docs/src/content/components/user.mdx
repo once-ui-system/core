@@ -66,10 +66,10 @@ You can override the default layout using `children`. This is useful for inline 
   preview={
     <User avatarProps={{ value: "Q" }}>
       <Column paddingX="8">
-        <Text variant="label-default-m">
+        <Text textVariant="label-default-m">
           Quasar
         </Text>
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           Cyberforge
         </Text>
       </Column>
@@ -80,10 +80,10 @@ You can override the default layout using `children`. This is useful for inline 
       code:
 `<User avatarProps={{ value: "Q" }}>
     <Column paddingX="8">
-      <Text variant="label-default-m">
+      <Text textVariant="label-default-m">
         Quasar
       </Text>
-      <Text variant="body-default-xs" onBackground="neutral-weak">
+      <Text textVariant="body-default-xs" onBackground="neutral-weak">
         Cyberforge
       </Text>
     </Column>
@@ -94,12 +94,82 @@ You can override the default layout using `children`. This is useful for inline 
   ]}
 />
 
+## Menu
+
+With `dropdown`, the User is the trigger of an account menu; `selected`, `placement`, `minWidth`, `maxWidth` and `minHeight` set the trigger state and the menu. It was `UserMenu` in 2.x.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <User
+      name="Lorant One"
+      subline="Design Engineer"
+      placement="right-end"
+      avatarProps={{ src: "/images/avatar.jpg" }}
+      dropdown={
+        <Column gap="4" padding="4" minWidth="10rem">
+          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
+          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
+        </Column>
+      }
+    />
+  }
+  codes={[
+    {
+      code:
+`<User
+    name="Lorant One"
+    subline="Design Engineer"
+    placement="right-end"
+    avatarProps={{ src: "/images/avatar.jpg" }}
+    dropdown={
+      <Column gap="4" padding="4" minWidth="10rem">
+        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
+        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
+      </Column>
+    }
+/>`,
+      language: "tsx",
+      label: "UserMenu"
+    }
+  ]}
+/>
+
+### Loading state
+
+You can show skeleton content while loading profile data by setting `loading={true}`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <User loading dropdown={null} />
+  }
+  codes={[
+    {
+      code:
+`<User loading dropdown={null} />`,
+      language: "tsx",
+      label: "Loading"
+    }
+  ]}
+/>
+
+
 ## API reference
 
 <PropsTable
   component="User"
   describe={{
     tag: "Short label shown next to the name.",
+    dropdown: "A menu opened from the user: it becomes a Dropdown trigger (2.x UserMenu).",
+    selected: "With dropdown: draw the trigger as selected.",
+    placement: "With dropdown: where the menu opens.",
+    minWidth: "With dropdown: the menu minimum width.",
+    maxWidth: "With dropdown: the menu maximum width.",
+    minHeight: "With dropdown: the menu minimum height, in px.",
+    style: "With dropdown: the trigger inline style.",
   }}
   content={[
     ["children"],

@@ -124,13 +124,13 @@ export const Streaming3 = () => {
             wrap
           >
             <Column gap="8" maxWidth="40rem">
-              <Tag size="s" scheme="brand">
+              <Tag size="s" tone="brand">
                 Now playing
               </Tag>
-              <Heading variant="display-default-xs" onSolid="neutral-strong">
+              <Heading textVariant="display-default-xs" onSolid="neutral-strong">
                 {nowPlaying.episode}
               </Heading>
-              <Text variant="body-default-s" onSolid="neutral-weak">
+              <Text textVariant="body-default-s" onSolid="neutral-weak">
                 {nowPlaying.title} · {nowPlaying.duration}
               </Text>
             </Column>
@@ -149,7 +149,7 @@ export const Streaming3 = () => {
 
         <Column fillWidth gap="16">
           <Row fillWidth horizontal="between" vertical="center" wrap gap="12">
-            <Heading variant="heading-strong-m">Continue listening</Heading>
+            <Heading textVariant="heading-strong-m">Continue listening</Heading>
             <Button size="s" variant="tertiary">
               View history
             </Button>
@@ -175,8 +175,8 @@ export const Streaming3 = () => {
                     radius="m"
                   />
                   <Column gap="4">
-                    <Text variant="label-default-s">{item.title}</Text>
-                    <Text variant="label-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s">{item.title}</Text>
+                    <Text textVariant="label-default-xs" onBackground="neutral-weak">
                       {item.episode}
                     </Text>
                     <ProgressBar showLabel={false} value={item.progress} />
@@ -189,7 +189,7 @@ export const Streaming3 = () => {
 
         <Column fillWidth gap="16">
           <Row fillWidth horizontal="between" vertical="center" wrap gap="12">
-            <Heading variant="heading-strong-m">Browse shows</Heading>
+            <Heading textVariant="heading-strong-m">Browse shows</Heading>
             <SegmentedControl
               buttons={topics.map((item) => ({ label: item.label, value: item.value }))}
               value={topic}
@@ -220,10 +220,10 @@ export const Streaming3 = () => {
                   />
                   <Column gap="4" fillWidth>
                     <Row gap="8" vertical="center">
-                      <Text variant="label-default-s">{show.title}</Text>
+                      <Text textVariant="label-default-s">{show.title}</Text>
                       <Tag size="s">{show.tag}</Tag>
                     </Row>
-                    <Text variant="label-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-xs" onBackground="neutral-weak">
                       {show.host} · {show.episodes} episodes
                     </Text>
                   </Column>
@@ -256,7 +256,7 @@ export const Streaming3 = () => {
             style={{ width: "3rem" }}
           />
           <Column fillWidth gap="4">
-            <Text variant="label-default-s">{nowPlaying.episode}</Text>
+            <Text textVariant="label-default-s">{nowPlaying.episode}</Text>
             <ProgressBar showLabel={false} value={nowPlaying.progress} />
           </Column>
           <Row gap="4" vertical="center">

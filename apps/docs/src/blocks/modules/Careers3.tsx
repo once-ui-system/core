@@ -1,23 +1,6 @@
 "use client";
 
-import {
-  AvatarGroup,
-  Background,
-  Badge,
-  BlobFx,
-  Button,
-  Column,
-  CountFx,
-  Grid,
-  Heading,
-  Icon,
-  Line,
-  Pulse,
-  Row,
-  Scroller,
-  Tag,
-  Text,
-} from "@once-ui-system/core";
+import { AvatarGroup, Background, BlobFx, Button, Column, CountFx, Grid, Heading, Icon, Line, Pulse, Row, Scroller, Tag, Text } from "@once-ui-system/core";
 import { useMemo, useState } from "react";
 
 const perks = [
@@ -124,16 +107,16 @@ export const Careers3 = () => {
           wrap
         >
           <Row gap="8" vertical="center">
-            <Badge arrow={false} effect={false} gap="8" paddingLeft="12">
+            <Tag variant="announce" arrow={false} effect={false} gap="8" paddingLeft="12">
               <Pulse size="s" />
               <Text onBackground="brand-weak">We're hiring</Text>
-            </Badge>
+            </Tag>
           </Row>
           <Row gap="8" vertical="center">
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               Open roles
             </Text>
-            <Heading variant="heading-strong-s">
+            <Heading textVariant="heading-strong-s">
               <CountFx value={roles.length} />
             </Heading>
           </Row>
@@ -152,10 +135,10 @@ export const Careers3 = () => {
           >
             <BlobFx position="absolute" top="0" left="0" translateY="50%" s={{ hide: true }} />
             <Column gap="12">
-              <Heading as="h2" variant="display-strong-s">
+              <Heading as="h2" textVariant="display-strong-s">
                 Build the future of design systems
               </Heading>
-              <Text variant="body-default-m" onBackground="neutral-medium" wrap="balance">
+              <Text textVariant="body-default-m" onBackground="neutral-medium" wrap="balance">
                 Join a small, ambitious team shipping tools used by thousands of design engineers
                 worldwide.
               </Text>
@@ -173,10 +156,10 @@ export const Careers3 = () => {
                   background="page"
                 >
                   <Icon name={perk.icon} size="s" onBackground="brand-weak" />
-                  <Heading as="h3" variant="body-default-m">
+                  <Heading as="h3" textVariant="body-default-m">
                     {perk.title}
                   </Heading>
-                  <Text variant="label-default-s" wrap="balance" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" wrap="balance" onBackground="neutral-weak">
                     {perk.description}
                   </Text>
                 </Column>
@@ -195,7 +178,7 @@ export const Careers3 = () => {
                   { src: "/images/creators/chander.jpg" },
                 ]}
               />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 40+ teammates across 12 countries
               </Text>
             </Row>
@@ -205,10 +188,10 @@ export const Careers3 = () => {
 
           <Column fillWidth flex={1} minWidth="24rem" s={{ minWidth: 0 }} padding="l" gap="16">
             <Column gap="8">
-              <Heading as="h3" variant="heading-strong-m">
+              <Heading as="h3" textVariant="heading-strong-m">
                 Open positions
               </Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Filter by department to find your next role
               </Text>
             </Column>
@@ -246,12 +229,12 @@ export const Careers3 = () => {
                   >
                     <Column gap="16" fillWidth>
                       <Row gap="8" vertical="center" wrap>
-                        <Heading as="h4" variant="heading-default-xs">
+                        <Heading as="h4" textVariant="heading-default-xs">
                           {role.title}
                         </Heading>
                         {role.isNew && (
                           <Row gap="4" vertical="center">
-                            <Text variant="label-default-s" onBackground="brand-medium">
+                            <Text textVariant="label-default-s" onBackground="brand-medium">
                               New
                             </Text>
                           </Row>
@@ -270,11 +253,11 @@ export const Careers3 = () => {
                       m={{ direction: "column", horizontal: "start" }}
                     >
                       {role.location === "Remote" ? (
-                        <Text variant="label-default-s" onBackground="brand-weak">
+                        <Text textVariant="label-default-s" onBackground="brand-weak">
                           Remote
                         </Text>
                       ) : (
-                        <Text variant="label-default-s" onBackground="neutral-weak">
+                        <Text textVariant="label-default-s" onBackground="neutral-weak">
                           {role.location}
                         </Text>
                       )}
@@ -299,8 +282,8 @@ export const Careers3 = () => {
                   horizontal="center"
                 >
                   <Icon name="search" onBackground="neutral-weak" />
-                  <Heading variant="heading-strong-s">No roles in this department</Heading>
-                  <Text variant="body-default-s" onBackground="neutral-medium" align="center">
+                  <Heading textVariant="heading-strong-s">No roles in this department</Heading>
+                  <Text textVariant="body-default-s" onBackground="neutral-medium" align="center">
                     Try another filter or check back soon for new openings.
                   </Text>
                 </Column>

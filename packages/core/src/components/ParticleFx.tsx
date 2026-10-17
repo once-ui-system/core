@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from "react";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DisplayProps } from "../interfaces";
+import { cssColor } from "../internal/cssColor";
 import { ColorValue, SpacingToken, Speed } from "../types";
 import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
@@ -100,7 +101,7 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
         el.style.cssText = `
           position:absolute;left:0;top:0;
           width:${parsedSize};height:${parsedSize};
-          background:var(--${color});
+          background:${cssColor(color)};
           border-radius:50%;
           pointer-events:none;
           opacity:${parsedOpacity};

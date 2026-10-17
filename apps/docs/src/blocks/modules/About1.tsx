@@ -68,15 +68,15 @@ export const About1 = () => {
     <Column fillWidth fitHeight horizontal="center">
       <Column maxWidth="m" horizontal="center" gap="24">
         <Column maxWidth="xs" horizontal="center" gap="24">
-          <Text variant="body-default-s" align="center" onBackground="brand-weak" marginBottom="12">
+          <Text textVariant="body-default-s" align="center" onBackground="brand-weak" marginBottom="12">
             Our Story
           </Text>
-          <Heading variant="display-strong-m" align="center">
+          <Heading textVariant="display-strong-m" align="center">
             Redefining Creativity for the Future
           </Heading>
           <Text
             marginBottom="48"
-            variant="body-default-xl"
+            textVariant="body-default-xl"
             align="center"
             wrap="balance"
             onBackground="neutral-weak"
@@ -97,14 +97,14 @@ export const About1 = () => {
               border
             >
               <Icon name={feature.icon} onBackground="brand-weak" />
-              <Text wrap="balance" variant="body-default-l">
+              <Text wrap="balance" textVariant="body-default-l">
                 {feature.title} <Text onBackground="neutral-weak">{feature.description}</Text>
               </Text>
             </Column>
           ))}
         </Grid>
         <Line width="24" background="neutral-alpha-strong" marginTop="64" marginBottom="24" />
-        <Heading variant="display-strong-xs" align="center" marginBottom="24">
+        <Heading textVariant="display-strong-xs" align="center" marginBottom="24">
           Meet the Team
         </Heading>
         <Grid fillWidth columns="3" m={{ columns: 2 }} s={{ columns: 1 }} gap="8">
@@ -122,11 +122,11 @@ export const About1 = () => {
               border
             >
               <Avatar size="l" src={profile.avatar} />
-              <Text variant="label-default-m" align="center" marginTop="16">
+              <Text textVariant="label-default-m" align="center" marginTop="16">
                 {profile.name}
               </Text>
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 align="center"
                 marginBottom="16"
                 onBackground="neutral-weak"
@@ -160,7 +160,7 @@ export const About1 = () => {
         >
           <BlobFx position="absolute" right="0" bottom="0" />
           <Row maxWidth="40rem">
-            <Text variant="heading-default-xl" wrap="balance">
+            <Text textVariant="heading-default-xl" wrap="balance">
               Join our community and be part of the next generation of creators.
             </Text>
           </Row>

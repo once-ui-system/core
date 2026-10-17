@@ -120,7 +120,7 @@ export function Sidebar7() {
                                 transform: "scale(0.8)",
                                 transformOrigin: "right center",
                               }}
-                              scheme="brand"
+                              tone="brand"
                               size="s"
                             >
                               {child.navTag}
@@ -217,8 +217,8 @@ export function Sidebar7() {
               pointerEvents="none"
             />
             <Column fillWidth padding="20" gap="12">
-              <Text variant="heading-strong-s">Get Once UI Pro</Text>
-              <Text variant="label-default-s" onBackground="neutral-weak" marginBottom="8">
+              <Text textVariant="heading-strong-s">Get Once UI Pro</Text>
+              <Text textVariant="label-default-s" onBackground="neutral-weak" marginBottom="8">
                 Build a digital presence with deployment-ready apps
               </Text>
               <Button rounded size="s" id="get-pro-banner" arrowIcon>

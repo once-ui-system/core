@@ -184,11 +184,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         >
           {prefix && <Row className={styles.prefix}>{prefix}</Row>}
           <Column fillWidth align="left">
-            <Text onBackground="neutral-strong" variant="label-default-s" truncate>
+            <Text onBackground="neutral-strong" textVariant="label-default-s" truncate>
               {label || children}
             </Text>
             {description && (
-              <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+              <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
                 {description}
               </Text>
             )}

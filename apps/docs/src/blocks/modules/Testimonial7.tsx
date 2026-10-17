@@ -105,7 +105,7 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
           }}
         />
         <Column fill vertical="center" paddingX="xl" paddingY="80">
-          <Heading variant="display-default-xs">{testimonial.heading}</Heading>
+          <Heading textVariant="display-default-xs">{testimonial.heading}</Heading>
           <BlockQuote
             align="left"
             separator="none"
@@ -113,7 +113,7 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
             author={testimonial.quote.author}
             link={testimonial.quote.link}
           >
-            <Text variant="heading-default-l" onBackground="neutral-weak">
+            <Text textVariant="heading-default-l" onBackground="neutral-weak">
               {testimonial.quote.text}
             </Text>
           </BlockQuote>

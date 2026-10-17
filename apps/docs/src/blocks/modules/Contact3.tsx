@@ -38,8 +38,8 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
       <Column fill minWidth="28rem" m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
-          <Heading variant="display-strong-s">Contact support</Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Heading textVariant="display-strong-s">Contact support</Heading>
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Tell us what you need help with and we'll route your message to the right team.
           </Text>
         </Column>
@@ -59,7 +59,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
               <Icon name="check" size="s" />
               Message sent
             </Row>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Thanks for reaching out. A team member will follow up over email shortly.
             </Text>
           </Column>
@@ -90,12 +90,12 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
         s={{ hide: true }}
       >
         <Column gap="4">
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Average response time
           </Text>
           <Row vertical="center" gap="4" textVariant="display-strong-xs">
             <CountFx value={2} effect="smooth" />
-            <Text variant="display-strong-xs">h</Text>
+            <Text textVariant="display-strong-xs">h</Text>
           </Row>
         </Column>
 
@@ -109,7 +109,7 @@ export const Contact3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
               { src: "/images/creators/chander.jpg" },
             ]}
           />
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Our support team
           </Text>
         </Row>

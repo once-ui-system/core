@@ -4,7 +4,7 @@ import {
   Avatar,
   Button,
   Column,
-  EmojiPickerDropdown,
+  EmojiPicker,
   IconButton,
   Media,
   OgCard,
@@ -55,9 +55,9 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
         vertical="center"
         gap="12"
       >
-        <Text variant="label-default-s">👋 | intro</Text>
+        <Text textVariant="label-default-s">👋 | intro</Text>
         <Row minWidth="4" minHeight="4" background="neutral-strong" radius="full" />
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           Let us know a bit about you!
         </Text>
       </Row>
@@ -68,14 +68,14 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
               <Avatar src={messages.author.avatar} />
               <Column fillWidth gap="4">
                 <Row fillWidth gap="8" vertical="center">
-                  <Text variant="label-strong-s" onBackground="brand-medium">
+                  <Text textVariant="label-strong-s" onBackground="brand-medium">
                     {messages.author.name}
                   </Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     {formatTime(messages.postedAt)}
                   </Text>
                 </Row>
-                {messages.message && <Text variant="body-default-s">{messages.message}</Text>}
+                {messages.message && <Text textVariant="body-default-s">{messages.message}</Text>}
 
                 {/* Attachments */}
                 {/* If multiple media, show as a grid-like row, else handle individually */}
@@ -158,7 +158,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             style={{ padding: "0.75rem" }}
             value={message}
             prefix={
-              <EmojiPickerDropdown
+              <EmojiPicker
                 onSelect={(emoji) => setMessage(message + emoji)}
                 trigger={
                   <Row fillWidth themeBorder="rounded" style={{ marginLeft: "-0.25rem" }}>

@@ -20,13 +20,13 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
       <Column maxWidth="40rem" gap="12" horizontal="center">
-        <Tag scheme="brand" size="s">
+        <Tag tone="brand" size="s">
           Pricing
         </Tag>
-        <Heading as="h1" align="center" variant="display-strong-m">
+        <Heading as="h1" align="center" textVariant="display-strong-m">
           Compare plans side by side
         </Heading>
-        <Text align="center" onBackground="neutral-medium" variant="body-default-l" wrap="balance">
+        <Text align="center" onBackground="neutral-medium" textVariant="body-default-l" wrap="balance">
           Every plan includes the essentials. Upgrade when your team needs more power.
         </Text>
       </Column>
@@ -35,10 +35,10 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
         <Row fillWidth borderBottom>
           <Row flex="2" paddingX="24" paddingY="20" />
           <Column flex="1" paddingX="24" paddingY="20" horizontal="center" gap="4" borderLeft>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               Free
             </Text>
-            <Text variant="heading-strong-m">$0</Text>
+            <Text textVariant="heading-strong-m">$0</Text>
           </Column>
           <Column
             flex="1"
@@ -49,12 +49,12 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
             borderLeft
             background="brand-alpha-weak"
           >
-            <Text variant="label-default-s" onBackground="brand-medium">
+            <Text textVariant="label-default-s" onBackground="brand-medium">
               Pro
             </Text>
             <Row gap="4" vertical="end">
-              <Text variant="heading-strong-m">$29</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak" paddingBottom="4">
+              <Text textVariant="heading-strong-m">$29</Text>
+              <Text textVariant="body-default-s" onBackground="neutral-weak" paddingBottom="4">
                 /mo
               </Text>
             </Row>
@@ -67,7 +67,7 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
             borderBottom={index !== features.length - 1 ? "neutral-alpha-weak" : undefined}
           >
             <Row flex="2" paddingX="24" paddingY="16" vertical="center">
-              <Text variant="body-default-s">{row.label}</Text>
+              <Text textVariant="body-default-s">{row.label}</Text>
             </Row>
             <Row flex="1" paddingX="24" paddingY="16" center borderLeft>
               <Icon
@@ -96,10 +96,10 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
 
       <Row maxWidth="m" gap="16" s={{ direction: "column" }}>
         <Column flex="1" fillWidth padding="24" radius="l" border gap="12">
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Stay on Free
           </Text>
-          <Text variant="body-default-s" onBackground="neutral-medium" wrap="balance">
+          <Text textVariant="body-default-s" onBackground="neutral-medium" wrap="balance">
             Perfect for solo projects and getting started without a credit card.
           </Text>
           <Row>
@@ -131,10 +131,10 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
               colorStart: "brand-solid-medium",
             }}
           />
-          <Text variant="label-default-s" onBackground="brand-medium">
+          <Text textVariant="label-default-s" onBackground="brand-medium">
             Go Pro
           </Text>
-          <Text variant="body-default-s" wrap="balance">
+          <Text textVariant="body-default-s" wrap="balance">
             Unlock team collaboration, advanced analytics, and priority support.
           </Text>
           <Row>

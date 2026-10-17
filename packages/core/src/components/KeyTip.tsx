@@ -57,7 +57,7 @@ const KeyTip = forwardRef<HTMLDivElement, KeyTipProps>(({ keys, label, ...flex }
     .join(" or ");
 
   const word = (text: string) => (
-    <Text as="span" variant="label-default-s" onBackground="neutral-weak">
+    <Text as="span" textVariant="label-default-s" onBackground="neutral-weak">
       {text}
     </Text>
   );

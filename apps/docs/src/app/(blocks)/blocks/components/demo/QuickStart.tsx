@@ -1,18 +1,6 @@
 "use client";
 
-import {
-  AutoScroll,
-  Badge,
-  BlobFx,
-  Button,
-  Column,
-  Dialog,
-  Heading,
-  Icon,
-  Row,
-  ShineFx,
-  Text,
-} from "@once-ui-system/core";
+import { Scroller, Tag, BlobFx, Button, Column, Dialog, Heading, Icon, Row, ShineFx, Text } from "@once-ui-system/core";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { BlockCategories } from "../BlockCategories";
@@ -48,7 +36,7 @@ const Docs: React.FC = () => {
         >
           <BlobFx position="absolute" top="0" left="0" translateY="50%" />
           <Column flex={1} padding="l" gap="24" vertical="center">
-            <Badge
+            <Tag variant="announce"
               effect={false}
               tabIndex={0}
               paddingY="8"
@@ -80,8 +68,8 @@ const Docs: React.FC = () => {
               <ShineFx duration={3000} inverse baseOpacity={0.6}>
                 What's new?
               </ShineFx>
-            </Badge>
-            <Heading variant="display-default-s" style={{ lineHeight: "1.125" }}>
+            </Tag>
+            <Heading textVariant="display-default-s" style={{ lineHeight: "1.125" }}>
               Let Once UI fight
               <br /> your <Text onBackground="brand-medium">CSS battles</Text>
             </Heading>
@@ -112,7 +100,7 @@ const Docs: React.FC = () => {
                 left="0"
                 style={{ transform: "scale(0.5)", transformOrigin: "top left", width: "200%" }}
               >
-                <AutoScroll speed="slow">
+                <Scroller auto={{ speed: "slow" }}>
                   <Row
                     background="page"
                     marginRight="16"
@@ -159,7 +147,7 @@ const Docs: React.FC = () => {
                   >
                     <About3 />
                   </Row>
-                </AutoScroll>
+                </Scroller>
               </Column>
             </Column>
           </Column>

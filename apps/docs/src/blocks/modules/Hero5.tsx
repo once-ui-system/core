@@ -51,8 +51,8 @@ export const Hero5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
                   </Button>
                 </Row>
                 <Column align="center" gap="16">
-                  <Heading variant="display-strong-l">{title}</Heading>
-                  <Text onBackground="neutral-weak" variant="heading-default-l">
+                  <Heading textVariant="display-strong-l">{title}</Heading>
+                  <Text onBackground="neutral-weak" textVariant="heading-default-l">
                     {subtitle}
                   </Text>
                 </Column>

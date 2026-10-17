@@ -7,7 +7,7 @@ import { useAdapters } from "../contexts/AdapterProvider";
 import { useToast } from "../contexts/ToastProvider";
 import type { SpacingToken, TShirtSizes } from "../types";
 import { Column } from "./Column";
-import { ContextMenu } from "./ContextMenu";
+import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { Line } from "./Line";
@@ -97,7 +97,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const copyIconToClipboard = async () => {
       if (!icon) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "No icon available to copy",
         });
         return;
@@ -109,12 +109,12 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         await navigator.clipboard.writeText(svgText);
 
         addToast({
-          variant: "success",
+          tone: "success",
           message: "Icon copied to clipboard as SVG",
         });
       } catch (error) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "Failed to copy icon to clipboard",
         });
         console.error("Error copying icon:", error);
@@ -124,7 +124,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const copyWordmarkToClipboard = async () => {
       if (!wordmark) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "No wordmark available to copy",
         });
         return;
@@ -136,12 +136,12 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         await navigator.clipboard.writeText(svgText);
 
         addToast({
-          variant: "success",
+          tone: "success",
           message: "Wordmark copied to clipboard as SVG",
         });
       } catch (error) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "Failed to copy wordmark to clipboard",
         });
         console.error("Error copying wordmark:", error);
@@ -226,9 +226,9 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     };
 
     return enableContext ? (
-      <ContextMenu dropdown={renderDropdownContent()} placement="bottom-start">
-        {renderLogo()}
-      </ContextMenu>
+      <Dropdown openOn="contextmenu" trigger={renderLogo()} placement="bottom-start">
+        {renderDropdownContent()}
+      </Dropdown>
     ) : (
       renderLogo()
     );

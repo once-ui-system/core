@@ -51,12 +51,12 @@ export const Testimonial2: React.FC<Testimonial> = ({
     <Column flex={1} s={{ direction: "column" }}>
       <Column flex={1} padding="xl" gap="16" vertical="center">
         {title && (
-          <Heading variant="display-default-s" style={{ lineHeight: 1 }}>
+          <Heading textVariant="display-default-s" style={{ lineHeight: 1 }}>
             <b>{title}</b>
           </Heading>
         )}
         {content && (
-          <Text wrap="balance" variant="label-default-m" onBackground="neutral-medium">
+          <Text wrap="balance" textVariant="label-default-m" onBackground="neutral-medium">
             <b>{content}</b>
           </Text>
         )}

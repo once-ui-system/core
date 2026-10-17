@@ -13,7 +13,7 @@ export function PaginationControlledExample() {
 
   return (
     <Column gap="16" horizontal="center">
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Articles {first}–{last} of {ARTICLES}
       </Text>
       <Pagination

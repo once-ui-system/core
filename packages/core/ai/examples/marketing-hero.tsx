@@ -76,16 +76,16 @@ export function MarketingHeroExample() {
         <Column zIndex={1} horizontal="center" gap="24" maxWidth="48rem">
           <RevealFx translateY="16">
             <Column horizontal="center" gap="16">
-              <Text variant="label-default-s" onBackground="brand-medium">
+              <Text textVariant="label-default-s" onBackground="brand-medium">
                 v1.7 — Discover what's new
               </Text>
-              <Heading as="h1" variant="display-strong-l" align="center">
+              <Heading as="h1" textVariant="display-strong-l" align="center">
                 Write 70% less code with human-readable, machine-writable syntax
               </Heading>
             </Column>
           </RevealFx>
           <RevealFx delay={100} translateY="16">
-            <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
               Build semantic layouts with Row, Column and Grid. Add 100+ pre-styled components.
               Manage themes in a single file.
             </Text>
@@ -105,10 +105,10 @@ export function MarketingHeroExample() {
       <Column fillWidth horizontal="center">
         <Column maxWidth="l" gap="40">
           <Column gap="12" maxWidth="32rem">
-            <Text variant="label-default-s" onBackground="brand-medium">
+            <Text textVariant="label-default-s" onBackground="brand-medium">
               Components
             </Text>
-            <Heading as="h2" variant="display-strong-xs">
+            <Heading as="h2" textVariant="display-strong-xs">
               Copy and paste. Insert from 100+ open-source, pre-styled components.
             </Heading>
           </Column>
@@ -132,10 +132,10 @@ export function MarketingHeroExample() {
                 >
                   <Icon name={feature.icon} size="s" onBackground="brand-medium" />
                 </Row>
-                <Heading as="h3" variant="heading-strong-s">
+                <Heading as="h3" textVariant="heading-strong-s">
                   {feature.title}
                 </Heading>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   {feature.description}
                 </Text>
               </Column>

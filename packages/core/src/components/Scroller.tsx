@@ -3,7 +3,10 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
-import { RadiusSize } from "../types";
+import { Marquee } from "../internal/Marquee";
+import { ScrollTrack, type ScrollTrackControlPlacement } from "../internal/ScrollTrack";
+import type { RadiusSize, Speed } from "../types";
+import type { Column } from "./Column";
 import { BaseColor, Fade } from "./Fade";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
@@ -22,7 +25,52 @@ const DEFAULT_LABELS: Required<ScrollerLabels> = {
   next: "Scroll Next",
 };
 
-interface ScrollerProps extends React.ComponentProps<typeof Flex> {
+/** Scroller `auto`: the children loop across on their own (2.x AutoScroll). */
+interface ScrollerAuto {
+  /**
+   * A multiplier on the 20-second loop (`2` is twice as fast), or
+   * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2). Defaults to `"medium"`.
+   */
+  speed?: Speed;
+  /** What hovering does: slow the loop (the default), pause it, or nothing. */
+  hover?: "slow" | "pause" | "none";
+  /** Run the other way. */
+  reverse?: boolean;
+  /** Space after each copy of the children: a number is px, a string a CSS length. */
+  gap?: number | string;
+}
+
+/**
+ * Track mode (2.x ScrollContainer): set any of these and the children become
+ * a run of tiles moved by a transform, with controls, drag, optional
+ * wrap-around, markers and proximity scaling, instead of a scroll box.
+ */
+interface ScrollerTrackProps {
+  /** Where the previous/next controls sit, above or below the track. */
+  controlPlacement?: ScrollTrackControlPlacement;
+  /** Wrap around: past the last item the track continues into the first. */
+  infinite?: boolean;
+  /** Markers for how many items there are and which is in front; `true` puts them opposite the controls. */
+  markers?: boolean | "top" | "bottom";
+  /** Drag the track with a pointer (mouse, pen or finger). On by default in track mode. */
+  draggable?: boolean;
+  /** Items moved per control press. */
+  step?: number;
+  /** Clip the track at its edges instead of letting tiles paint past them. */
+  clip?: boolean;
+  /** Scale tiles by their distance from the one in front; a number is the shrink per step (`0.08`). */
+  proximity?: boolean | number;
+  /** The item to bring to the front, by index. A command, not a lock: pair it with `onActiveChange`. */
+  active?: number;
+  /** Called with the index of the item that came to the front, however it got there. */
+  onActiveChange?: (index: number) => void;
+  /** Props for the box each item sits in: its size, aspect ratio, padding. */
+  tile?: React.ComponentProps<typeof Column>;
+}
+
+interface ScrollerProps
+  extends Omit<React.ComponentProps<typeof Flex>, "draggable">,
+    ScrollerTrackProps {
   children?: React.ReactNode;
   direction?: "row" | "column";
   fadeColor?: BaseColor;
@@ -30,14 +78,36 @@ interface ScrollerProps extends React.ComponentProps<typeof Flex> {
   radius?: RadiusSize;
   /** The scroll buttons' accessible names, for a translated interface. */
   labels?: ScrollerLabels;
+  /**
+   * Loop the children across on their own, a marquee with no controls (2.x
+   * AutoScroll). `true` uses the defaults; an object sets `speed`, `hover`,
+   * `reverse` and `gap`.
+   */
+  auto?: boolean | ScrollerAuto;
 }
+
+const TRACK_PROPS = [
+  "controlPlacement",
+  "infinite",
+  "markers",
+  "draggable",
+  "step",
+  "clip",
+  "proximity",
+  "active",
+  "onActiveChange",
+  "tile",
+] as const;
 
 interface ScrollableChildProps {
   onClick?: (e: React.MouseEvent) => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;
 }
 
-const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
+const ScrollBox = forwardRef<
+  HTMLDivElement,
+  Omit<ScrollerProps, "auto" | keyof ScrollerTrackProps>
+>(
   (
     {
       children,
@@ -232,7 +302,59 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
   },
 );
 
+ScrollBox.displayName = "ScrollBox";
+
+/**
+ * A run of items wider (or taller) than its box. Three modes, one component:
+ * - by default a scroll box with edge fades and previous/next buttons;
+ * - `auto`: a marquee that loops the children on its own (2.x AutoScroll);
+ * - track mode, when any of `infinite`, `markers`, `draggable`, `step`,
+ *   `clip`, `proximity`, `active`, `onActiveChange`, `controlPlacement` or
+ *   `tile` is set: a draggable carousel track (2.x ScrollContainer).
+ */
+const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(({ auto, ...props }, ref) => {
+  if (auto) {
+    const {
+      children,
+      direction: _direction,
+      fadeColor: _fadeColor,
+      onItemClick: _onItemClick,
+      labels: _labels,
+      ...flex
+    } = props;
+    for (const key of TRACK_PROPS) delete (flex as Record<string, unknown>)[key];
+    const options = auto === true ? {} : auto;
+    return (
+      <Marquee
+        ref={ref}
+        speed={options.speed}
+        hover={options.hover}
+        reverse={options.reverse}
+        scrollGap={options.gap}
+        {...flex}
+      >
+        {children}
+      </Marquee>
+    );
+  }
+  if (TRACK_PROPS.some((key) => props[key] !== undefined)) {
+    const {
+      children,
+      direction: _direction,
+      fadeColor: _fadeColor,
+      onItemClick: _onItemClick,
+      labels: _labels,
+      radius: _radius,
+      ...track
+    } = props;
+    return <ScrollTrack ref={ref} items={React.Children.toArray(children)} {...track} />;
+  }
+  const box = { ...props };
+  for (const key of TRACK_PROPS) delete (box as Record<string, unknown>)[key];
+  return <ScrollBox ref={ref} {...box} />;
+});
+
 Scroller.displayName = "Scroller";
 
-export type { ScrollerLabels, ScrollerProps };
+export type { ScrollerAuto, ScrollerLabels, ScrollerProps, ScrollerTrackProps };
 export { Scroller };

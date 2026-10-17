@@ -4,7 +4,7 @@ import {
   Avatar,
   Button,
   Column,
-  EmojiPickerDropdown,
+  EmojiPicker,
   IconButton,
   Row,
   Spinner,
@@ -191,7 +191,7 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
                 transition="micro-medium"
               >
                 <Row fillWidth horizontal="between" paddingX="8" paddingBottom="8">
-                  <EmojiPickerDropdown
+                  <EmojiPicker
                     onSelect={(emoji) => setComment(comment + emoji)}
                     trigger={
                       <Row fillWidth themeBorder="rounded">
@@ -218,7 +218,7 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
         {isLoading ? (
           <Spinner minHeight="12rem" center align="center" fillWidth size="s" />
         ) : error ? (
-          <Text variant="body-default-s" onBackground="danger-weak" align="center" paddingY="l">
+          <Text textVariant="body-default-s" onBackground="danger-weak" align="center" paddingY="l">
             {error}
           </Text>
         ) : comments.length > 0 ? (
@@ -262,7 +262,7 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
             return nodes;
           })()
         ) : (
-          <Text variant="body-default-s" onBackground="neutral-weak" align="center" paddingY="l">
+          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center" paddingY="l">
             No comments yet. Be the first to share your thoughts!
           </Text>
         )}

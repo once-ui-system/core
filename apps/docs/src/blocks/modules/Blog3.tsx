@@ -84,10 +84,10 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
       <Row maxWidth="l" gap="40" s={{ direction: "column" }} paddingX="16">
         <Column minWidth="20rem" maxWidth="24rem" gap="24">
           <Column gap="8">
-            <Heading as="h1" variant="display-strong-xs">
+            <Heading as="h1" textVariant="display-strong-xs">
               Journal
             </Heading>
-            <Text onBackground="neutral-medium" variant="body-default-m" wrap="balance">
+            <Text onBackground="neutral-medium" textVariant="body-default-m" wrap="balance">
               Essays on product craft, design systems, and shipping software that lasts.
             </Text>
           </Column>
@@ -118,10 +118,10 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
             border="brand-alpha-weak"
             background="brand-alpha-weak"
           >
-            <Heading as="h2" variant="heading-strong-s">
+            <Heading as="h2" textVariant="heading-strong-s">
               Weekly digest
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-medium" wrap="balance">
+            <Text textVariant="body-default-s" onBackground="neutral-medium" wrap="balance">
               One email with new posts, block drops, and builder stories.
             </Text>
             <Input id="blog3-email" label="Email" placeholder="you@company.com" />
@@ -153,30 +153,30 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
                 radius="m"
               />
               <Column fill gap="12" vertical="center">
-                <Text variant="label-strong-s" onBackground="brand-medium">
+                <Text textVariant="label-strong-s" onBackground="brand-medium">
                   {article.topic}
                 </Text>
-                <Heading as="h3" variant="heading-strong-m">
+                <Heading as="h3" textVariant="heading-strong-m">
                   {article.title}
                 </Heading>
-                <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                   {article.excerpt}
                 </Text>
                 <Row gap="8" vertical="center" wrap>
                   <Avatar src={article.author.avatar} size="s" />
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {article.author.name}
                   </Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     ·
                   </Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {article.publishedAt}
                   </Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     ·
                   </Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {article.readTime}
                   </Text>
                 </Row>

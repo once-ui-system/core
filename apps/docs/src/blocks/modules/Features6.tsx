@@ -69,15 +69,15 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           <Media radius="l" src={section.image} alt="Once UI for Next.js" />
           <Column fillWidth>
             <Column fillWidth paddingY="24" paddingX="48" gap="12">
-              <Text onBackground="brand-weak" variant="label-strong-m">
+              <Text onBackground="brand-weak" textVariant="label-strong-m">
                 {section.title}
               </Text>
-              <Heading as="h2" variant="display-default-m">
+              <Heading as="h2" textVariant="display-default-m">
                 {section.subtitle}
               </Heading>
               <Text
                 wrap="balance"
-                variant="body-default-m"
+                textVariant="body-default-m"
                 onBackground="neutral-weak"
                 marginBottom="12"
               >
@@ -102,10 +102,10 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                   borderTop="brand-alpha-strong"
                   borderLeft="brand-alpha-strong"
                 />
-                <Text variant="label-default-m" onBackground="brand-weak">
+                <Text textVariant="label-default-m" onBackground="brand-weak">
                   {feature.title}
                 </Text>
-                <Text wrap="balance" variant="label-default-s">
+                <Text wrap="balance" textVariant="label-default-s">
                   {feature.description}
                 </Text>
               </Column>

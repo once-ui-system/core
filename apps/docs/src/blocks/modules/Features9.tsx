@@ -30,10 +30,10 @@ export const Features9: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         />
         <BlobFx position="absolute" top="0" left="0" translateY="65%" />
         <Column horizontal="center" gap="16" fillWidth>
-          <Heading align="center" as="h2" variant="display-default-l">
+          <Heading align="center" as="h2" textVariant="display-default-l">
             Quick start
           </Heading>
-          <Text align="center" variant="body-default-l" marginBottom="48">
+          <Text align="center" textVariant="body-default-l" marginBottom="48">
             With the design system built for indie creators
           </Text>
           <Button arrowIcon id="feature-9" weight="default" label="Launch your project" href="#" />

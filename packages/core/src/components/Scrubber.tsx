@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import type { ColorScheme, SpacingToken } from "../types";
+import type { SpacingToken, Tone } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Row } from "./Row";
@@ -17,8 +17,8 @@ interface ScrubberBlock {
   start: number;
   end: number;
   label?: React.ReactNode;
-  /** Colour scheme for the block. Defaults to the track's, then `brand`. */
-  scheme?: ColorScheme;
+  /** The block's palette. Defaults to the track's, then `brand`. 2.x called this `scheme`. */
+  tone?: Tone;
   /** Blocks out of moving and trimming without dimming the label. */
   locked?: boolean;
 }
@@ -27,7 +27,8 @@ interface ScrubberTrack {
   id: string;
   blocks: ScrubberBlock[];
   height?: SpacingToken;
-  scheme?: ColorScheme;
+  /** The palette of the track's blocks. 2.x called this `scheme`. */
+  tone?: Tone;
   /** Allow the block body to be dragged along the track. */
   movable?: boolean;
   /** Allow the block edges to be dragged to trim it. */
@@ -273,7 +274,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
             >
               {track.blocks.map((block) => {
                 const isSelected = block.id === selected;
-                const scheme = block.scheme ?? track.scheme ?? "brand";
+                const tone = block.tone ?? track.tone ?? "brand";
                 const movable = track.movable && !block.locked;
                 const resizable = track.resizable && !block.locked;
                 return (
@@ -289,8 +290,8 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                     // Selection has to read at a glance on a dense track, so it
                     // moves both the fill and the border a full step rather
                     // than nudging one of them.
-                    background={isSelected ? `${scheme}-medium` : `${scheme}-alpha-weak`}
-                    border={isSelected ? `${scheme}-strong` : `${scheme}-alpha-medium`}
+                    background={isSelected ? `${tone}-medium` : `${tone}-alpha-weak`}
+                    border={isSelected ? `${tone}-strong` : `${tone}-alpha-medium`}
                     cursor={movable ? "grab" : "pointer"}
                     transition="micro-medium"
                     style={{
@@ -320,8 +321,8 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                   >
                     {block.label && (
                       <Text
-                        variant="label-default-xs"
-                        onBackground={`${scheme}-medium`}
+                        textVariant="label-default-xs"
+                        onBackground={`${tone}-medium`}
                         truncate
                         style={{ userSelect: "none" }}
                       >
@@ -337,7 +338,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           left="0"
                           width="8"
                           cursor="ew-resize"
-                          background={isSelected ? `${scheme}-alpha-strong` : "transparent"}
+                          background={isSelected ? `${tone}-alpha-strong` : "transparent"}
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
                             onSelectedChange?.(block.id);
@@ -360,7 +361,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
                           right="0"
                           width="8"
                           cursor="ew-resize"
-                          background={isSelected ? `${scheme}-alpha-strong` : "transparent"}
+                          background={isSelected ? `${tone}-alpha-strong` : "transparent"}
                           transition="micro-medium"
                           onPointerDown={(event: React.PointerEvent) => {
                             onSelectedChange?.(block.id);

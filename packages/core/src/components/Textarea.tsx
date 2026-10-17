@@ -277,7 +277,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             {label && (
               <Text
                 as="label"
-                variant="label-default-m"
+                textVariant="label-default-m"
                 htmlFor={id}
                 className={classNames(styles.label, styles.textareaLabel, {
                   // `|| placeholder` is the whole point of the pairing: a
@@ -294,7 +294,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             {characterCount && props.maxLength && (
               <Row fillWidth paddingLeft="12" paddingY="4" className={styles.suffix}>
                 <Text
-                  variant="label-default-s"
+                  textVariant="label-default-s"
                   onBackground={
                     props.maxLength - text.length <= 5
                       ? "danger-weak"

@@ -54,14 +54,14 @@ export const Goal1 = (flex: React.ComponentProps<typeof Column>) => {
           width={200}
           height={200}
           value={progress}
-          hue="success"
+          tone="success"
           unit="%"
           line={{ count: 40, width: 2, length: 18 }}
         />
-        <Text variant="heading-strong-l" marginTop="12">
+        <Text textVariant="heading-strong-l" marginTop="12">
           $24,800
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           of $40,000 target
         </Text>
       </Column>
@@ -70,14 +70,14 @@ export const Goal1 = (flex: React.ComponentProps<typeof Column>) => {
           fillWidth
           height={8}
           value={progress}
-          hue="success"
+          tone="success"
           line={{ count: 60, width: 1.5, length: 8 }}
         />
         <Row fillWidth horizontal="between">
           {milestones.map((milestone) => (
             <Column key={milestone.label} gap="8" horizontal="center">
               <Text
-                variant="code-default-xs"
+                textVariant="code-default-xs"
                 onBackground={milestone.achieved ? "brand-medium" : "neutral-weak"}
               >
                 {milestone.label}

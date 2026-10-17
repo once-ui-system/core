@@ -66,10 +66,10 @@ export const Careers4 = () => {
             <Pulse />
             <Text onBackground="brand-weak">Culture</Text>
           </Row>
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             How we work before what we ship
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Once UI is a small team of design engineers building tools for independent creators.
             These principles guide every hire, review, and release.
           </Text>
@@ -93,10 +93,10 @@ export const Careers4 = () => {
                   <Media src={pillar.image} alt={pillar.alt} aspectRatio="1" radius="l" />
                 </Animation>
                 <Column fillWidth padding="16" gap="12">
-                  <Heading as="h3" variant="heading-default-xs">
+                  <Heading as="h3" textVariant="heading-default-xs">
                     {pillar.title}
                   </Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                     {pillar.description}
                   </Text>
                 </Column>
@@ -118,7 +118,7 @@ export const Careers4 = () => {
                 border="neutral-alpha-medium"
               >
                 <Icon name={perk.icon} size="xs" onBackground="neutral-weak" />
-                <Text variant="label-default-s">{perk.label}</Text>
+                <Text textVariant="label-default-s">{perk.label}</Text>
               </Row>
             ))}
           </Row>

@@ -28,18 +28,18 @@ export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
       >
         <Row vertical="center" gap="8">
           <Pulse size="s" />
-          <Text variant="code-default-s" onBackground="brand-medium">
+          <Text textVariant="code-default-s" onBackground="brand-medium">
             Now shipping v3.0
           </Text>
         </Row>
       </Row>
       <Column maxWidth="l" horizontal="center" gap="32" paddingBottom="xl">
         <Column maxWidth="m" gap="16" horizontal="center">
-          <Heading variant="display-default-l" align="center">
+          <Heading textVariant="display-default-l" align="center">
             Software that grows with your team<Text onBackground="brand-medium">.</Text>
           </Heading>
           <Text
-            variant="heading-default-l"
+            textVariant="heading-default-l"
             onBackground="neutral-weak"
             align="center"
             wrap="balance"
@@ -59,29 +59,29 @@ export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Row fillWidth horizontal="center" gap="40" paddingTop="24" wrap>
           <Column gap="4" horizontal="center">
-            <Heading variant="display-default-s">
+            <Heading textVariant="display-default-s">
               <CountFx value={28400} separator="," />+
             </Heading>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               teams onboard
             </Text>
           </Column>
           <Line vert height="40" background="neutral-alpha-weak" s={{ hide: true }} />
           <Column gap="4" horizontal="center">
-            <Heading variant="display-default-s">
+            <Heading textVariant="display-default-s">
               <CountFx value={99} />%
             </Heading>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               uptime SLA
             </Text>
           </Column>
           <Line vert height="40" background="neutral-alpha-weak" s={{ hide: true }} />
           <Column gap="4" horizontal="center">
-            <Heading variant="display-default-s">
+            <Heading textVariant="display-default-s">
               <CountFx value={4.9} decimals={1} />
               /5
             </Heading>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               average rating
             </Text>
           </Column>

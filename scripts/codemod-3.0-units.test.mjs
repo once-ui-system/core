@@ -56,7 +56,8 @@ describe("D2: a number that was rem becomes a rem string", () => {
           `<CodeBlock codeHeight={24} /><Carousel thumbnail={{ height: 6, sizes: "120px" }} />`,
       ),
       `<Avatar size="4rem" /><Media height="20rem" /><Animation slideUp="1rem" blur={4} />` +
-        `<DropdownWrapper minWidth="12rem" minHeight={200} /><Setting controlWidth="14rem" />` +
+        // Converted as DropdownWrapper's, then renamed by F5.
+        `<Dropdown minWidth="12rem" minHeight={200} /><Setting controlWidth="14rem" />` +
         `<CodeBlock codeHeight="24rem" /><Carousel thumbnail={{ height: "6rem", sizes: "120px" }} />`,
     );
   });
@@ -66,7 +67,13 @@ describe("D2: a number that was rem becomes a rem string", () => {
       `${core("Dialog, LinearGauge, AutoScroll, Media")}` +
       `<Dialog minHeight={400} /><LinearGauge width={400} height={80} />` +
       `<AutoScroll scrollGap={24} /><Media sizes={320} />`;
-    assert.equal(transform(src).out, src);
+    // F2 then folds AutoScroll into Scroller `auto`, its px gap unchanged.
+    assert.equal(
+      transform(src).out,
+      src
+        .replace("AutoScroll,", "Scroller,")
+        .replace("<AutoScroll scrollGap={24} />", "<Scroller auto={{ gap: 24 }} />"),
+    );
   });
 
   it("leaves elements that are not Once UI's alone", () => {
@@ -193,7 +200,13 @@ describe("D5: speed is a multiplier; lengths of time are duration", () => {
 
   it("leaves speed alone where it is already a multiplier or a keyword", () => {
     const src = `${core("MatrixFx, AutoScroll, LetterFx")}<MatrixFx speed={2} /><AutoScroll speed="slow" /><LetterFx speed="fast" />`;
-    assert.equal(transform(src).out, src);
+    // F2 then folds AutoScroll into Scroller `auto`, its speed keyword unchanged.
+    assert.equal(
+      transform(src).out,
+      src
+        .replace("AutoScroll,", "Scroller,")
+        .replace('<AutoScroll speed="slow" />', '<Scroller auto={{ speed: "slow" }} />'),
+    );
   });
 });
 

@@ -42,7 +42,7 @@ export function SettingGroupExample() {
       >
         <Setting label="Opacity">
           <Slider value={opacity} min={0} max={100} onValueChange={setOpacity} />
-          <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
+          <Text wrap="nowrap" textVariant="label-default-xs" onBackground="neutral-weak">
             {opacity}%
           </Text>
         </Setting>

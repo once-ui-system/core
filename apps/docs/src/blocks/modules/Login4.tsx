@@ -51,7 +51,7 @@ export const Login4 = () => {
                 <Row background="page" radius="m">
                   <IconButton icon="chevronLeft" variant="secondary" tooltip="Back" />
                 </Row>
-                <Text variant="label-default-s" onSolid="neutral-strong">
+                <Text textVariant="label-default-s" onSolid="neutral-strong">
                   Back
                 </Text>
               </Row>
@@ -76,7 +76,7 @@ export const Login4 = () => {
                 </RevealFx>
                 <RevealFx horizontal="start">
                   <Heading
-                    variant="display-default-xs"
+                    textVariant="display-default-xs"
                     marginLeft="4"
                     onBackground="neutral-strong"
                   >
@@ -94,7 +94,7 @@ export const Login4 = () => {
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
               size="l"
             />
-            <Heading variant="display-default-xs" align="center" marginTop="20">
+            <Heading textVariant="display-default-xs" align="center" marginTop="20">
               {isSignup ? "Create your account" : "Sign in to Once UI"}
             </Heading>
             <Row textVariant="body-default-s" onBackground="neutral-medium">
@@ -184,7 +184,7 @@ export const Login4 = () => {
             </Button>
 
             <Text
-              variant="label-default-s"
+              textVariant="label-default-s"
               onBackground="neutral-weak"
               align="center"
               wrap="balance"

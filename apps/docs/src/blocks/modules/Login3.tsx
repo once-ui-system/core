@@ -31,10 +31,10 @@ const Login3 = () => {
           </Row>
           <Column center gap="32" padding="l" maxWidth="32rem">
             <Column horizontal="center" fillWidth gap="4">
-              <Heading variant="heading-strong-xl" marginTop="24">
+              <Heading textVariant="heading-strong-xl" marginTop="24">
                 Welcome to Once UI
               </Heading>
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Access your account
               </Text>
             </Column>

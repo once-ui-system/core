@@ -21,8 +21,9 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   loading?: boolean;
   empty?: boolean;
   icon?: IconName;
+  /** A status dot; `scheme` is its palette hue (2.x called it `color`). */
   statusIndicator?: {
-    color: "green" | "yellow" | "red" | "gray";
+    scheme: "green" | "yellow" | "red" | "gray";
   };
   style?: React.CSSProperties;
   className?: string;
@@ -138,7 +139,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <Text
             as="span"
             onBackground="neutral-weak"
-            variant={`body-default-${scale ?? "m"}`}
+            textVariant={`body-default-${scale ?? "m"}`}
             className={styles.value}
             aria-label={`Avatar with initials ${value}`}
           >
@@ -168,9 +169,9 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <StatusIndicator
             position="absolute"
             size={scale ? statusIndicatorSizeMapping[scale] : "l"}
-            color={statusIndicator.color}
+            scheme={statusIndicator.scheme}
             className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
-            aria-label={`Status: ${statusIndicator.color}`}
+            aria-label={`Status: ${statusIndicator.scheme}`}
           />
         )}
       </Flex>

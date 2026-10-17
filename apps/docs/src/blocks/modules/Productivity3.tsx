@@ -68,8 +68,8 @@ export const Productivity3 = () => {
     <Column paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
       <Row as="header" fillWidth paddingX="16" horizontal="between" vertical="center" wrap gap="16">
         <Column gap="4">
-          <Text variant="body-strong-m">Weekly planner</Text>
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-strong-m">Weekly planner</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             {totalBlocks} time blocks this week
           </Text>
         </Column>
@@ -111,13 +111,13 @@ export const Productivity3 = () => {
               onClick={() => setActiveDay(day as DayKey)}
             >
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 onBackground={isActive ? "brand-medium" : "neutral-weak"}
                 align="center"
               >
                 {day}
               </Text>
-              <Text variant="code-default-xs" onBackground="neutral-weak" align="center">
+              <Text textVariant="code-default-xs" onBackground="neutral-weak" align="center">
                 {dayBlocks.length || "—"}
               </Text>
             </Column>
@@ -134,10 +134,10 @@ export const Productivity3 = () => {
           vertical="center"
           borderBottom
         >
-          <Heading variant="heading-strong-s">{activeDay}&apos;s schedule</Heading>
+          <Heading textVariant="heading-strong-s">{activeDay}&apos;s schedule</Heading>
           <Row gap="8" vertical="center" onBackground="neutral-weak">
             <Icon name="time" size="xs" />
-            <Text variant="label-default-s">{blocks.length} blocks</Text>
+            <Text textVariant="label-default-s">{blocks.length} blocks</Text>
           </Row>
         </Row>
 
@@ -145,7 +145,7 @@ export const Productivity3 = () => {
           {blocks.length === 0 ? (
             <Column fillWidth center paddingY="32" gap="8">
               <Icon name="calendar" onBackground="neutral-weak" />
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 No blocks scheduled — enjoy the free time
               </Text>
             </Column>
@@ -164,16 +164,16 @@ export const Productivity3 = () => {
                   background={block.active ? colors.background : undefined}
                 >
                   <Column minWidth="6rem" gap="4">
-                    <Text variant="code-default-s" onBackground={colors.text}>
+                    <Text textVariant="code-default-s" onBackground={colors.text}>
                       {block.time}
                     </Text>
-                    <Text variant="body-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="body-default-xs" onBackground="neutral-weak">
                       {block.duration}
                     </Text>
                   </Column>
                   <Column fillWidth gap="4">
-                    <Text variant="label-default-s">{block.title}</Text>
-                    <Text variant="body-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s">{block.title}</Text>
+                    <Text textVariant="body-default-xs" onBackground="neutral-weak">
                       Focus block
                     </Text>
                   </Column>

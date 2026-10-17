@@ -774,6 +774,22 @@ describe("api.renamed: 1.x prop names", () => {
     ]);
   });
 
+  it("names tone and textVariant for 2.x's variant, scheme and color", () => {
+    const found = issues(
+      `<Button variant="danger">Delete</Button>\n<IconButton variant="quaternary" icon="close" aria-label="Close" />\n<Tag scheme="brand" label="New" />\n<Text variant="body-default-s">Hi</Text>\n<StatusIndicator color="green" />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'Button takes tone="danger" in 3.0; variant="danger" is the 2.x spelling',
+      'IconButton takes variant="ghost" in 3.0; variant="quaternary" is the 2.x spelling',
+      "Tag takes tone in 3.0; scheme is the 2.x name",
+      "Text takes textVariant in 3.0; variant is the 2.x name",
+      "StatusIndicator takes scheme in 3.0; color is the 2.x name",
+    ]);
+    expect(
+      rules(`<Button tone="danger">Delete</Button>\n<Tag variant="announce" label="New" />`),
+    ).not.toContain("api.renamed");
+  });
+
   it("leaves the 2.x names, and old names 2.x reuses, alone", () => {
     expect(
       rules(

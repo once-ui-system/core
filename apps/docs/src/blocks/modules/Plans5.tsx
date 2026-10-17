@@ -153,7 +153,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
               left="l"
               translateY="-50%"
               themeBorder="rounded"
-              scheme="brand"
+              tone="brand"
             >
               Best value
             </Tag>
@@ -197,18 +197,18 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             }}
           />
           <Column fillWidth>
-            <Text variant="heading-strong-xl">{bundle.title}</Text>
-            <Text variant="label-default-s" onBackground="neutral-medium" marginTop="4">
+            <Text textVariant="heading-strong-xl">{bundle.title}</Text>
+            <Text textVariant="label-default-s" onBackground="neutral-medium" marginTop="4">
               {bundle.subtitle}
             </Text>
-            <Text variant="label-strong-s" onBackground="brand-weak" marginTop="12">
+            <Text textVariant="label-strong-s" onBackground="brand-weak" marginTop="12">
               $<CountFx value={calculatePrice(bundleIndex, bundle)} separator="," />
             </Text>
             <Column fillWidth gap="12" paddingTop="24" paddingBottom="40">
               {bundle.features.map((feature, featureIndex) => (
                 <Row key={featureIndex} vertical="center" gap="8">
                   <Icon name="check" size="xs" onBackground="brand-weak" />
-                  <Text variant="label-default-s">{feature}</Text>
+                  <Text textVariant="label-default-s">{feature}</Text>
                 </Row>
               ))}
             </Column>
@@ -225,14 +225,14 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                 gap="12"
                 marginTop="20"
               >
-                <Text variant="label-default-s" onBackground="brand-weak">
+                <Text textVariant="label-default-s" onBackground="brand-weak">
                   Extras
                 </Text>
                 {bundle.extras.map((extra) => (
                   <Row key={extra.id} fillWidth horizontal="between" vertical="center">
                     <Column gap="4">
-                      <Text variant="label-default-s">{extra.label}</Text>
-                      <Text variant="label-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="label-default-s">{extra.label}</Text>
+                      <Text textVariant="label-default-xs" onBackground="neutral-weak">
                         +${extra.price.toLocaleString()}
                       </Text>
                     </Column>

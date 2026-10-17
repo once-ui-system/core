@@ -131,8 +131,8 @@ export function DialogFlush() {
           aspectRatio="16/9"
         />
         <Column padding="l" fillWidth gap="12">
-          <Heading variant="heading-strong-s">Flush dialog</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="heading-strong-s">Flush dialog</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Header removed. Content is flush to the edges.
           </Text>
         </Column>
@@ -146,7 +146,7 @@ export function CustomizedDialog() {
   
   return (
     <>
-      <Button variant="danger" onClick={() => setIsOpen(true)}>Customized dialog</Button>
+      <Button tone="danger" onClick={() => setIsOpen(true)}>Customized dialog</Button>
       <Dialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
@@ -156,12 +156,12 @@ export function CustomizedDialog() {
         border="danger-medium"
       >
         <Column fillWidth gap="16">
-          <Feedback vertical="center" variant="danger">
+          <Feedback vertical="center" tone="danger">
             This dialog has custom styling applied through Flex props.
             You can customize the background, border, and other properties.
           </Feedback>
           <Text onBackground="danger-weak">Custom content can be added inside the dialog body.</Text>
-          <Button variant="danger" onClick={() => setIsOpen(false)}>Close</Button>
+          <Button tone="danger" onClick={() => setIsOpen(false)}>Close</Button>
         </Column>
       </Dialog>
     </>

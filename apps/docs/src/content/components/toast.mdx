@@ -16,23 +16,23 @@ The `Toast` component displays temporary notification messages that automaticall
 
 ## Variants
 
-Toast supports four variants: `success` for positive feedback, `danger` for errors, `warning` for cautionary messages, and `info` for informational notices.
+Toast takes a `tone` (2.x called it `variant`): `success` for positive feedback, `danger` for errors, `warning` for cautionary messages, and `info` for informational notices.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="16" fillWidth>
-      <Toast variant="success">
+      <Toast tone="success">
         Your changes have been saved successfully!
       </Toast>
-      <Toast variant="danger">
+      <Toast tone="danger">
         Failed to save changes. Please try again.
       </Toast>
-      <Toast variant="warning">
+      <Toast tone="warning">
         Your session is about to expire.
       </Toast>
-      <Toast variant="info">
+      <Toast tone="info">
         New update available. Refresh to see the latest.
       </Toast>
     </Column>
@@ -40,16 +40,16 @@ Toast supports four variants: `success` for positive feedback, `danger` for erro
   codes={[
     {
       code:
-`<Toast variant="success">
+`<Toast tone="success">
     Your changes have been saved successfully!
 </Toast>
-<Toast variant="danger">
+<Toast tone="danger">
     Failed to save changes. Please try again.
 </Toast>
-<Toast variant="warning">
+<Toast tone="warning">
     Your session is about to expire.
 </Toast>
-<Toast variant="info">
+<Toast tone="info">
     New update available. Refresh to see the latest.
 </Toast>`,
       language: "tsx",
@@ -68,7 +68,7 @@ Add interactive elements like buttons to allow users to take action on the notif
   preview={
     <Column gap="16" fillWidth>
       <Toast 
-        variant="danger"
+        tone="danger"
         action={
           <Button size="s">
             Retry
@@ -83,7 +83,7 @@ Add interactive elements like buttons to allow users to take action on the notif
     {
       code:
 `<Toast 
-    variant="danger"
+    tone="danger"
     action={
       <Button size="s">
         Retry
@@ -100,14 +100,14 @@ Add interactive elements like buttons to allow users to take action on the notif
 
 ## Without icon
 
-Hide the default variant icon by setting `icon={false}`.
+Hide the tone's icon by setting `icon={false}`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="16" fillWidth>
-      <Toast variant="success" showIcon={false}>
+      <Toast tone="success" showIcon={false}>
         Task completed
       </Toast>
     </Column>
@@ -115,7 +115,7 @@ Hide the default variant icon by setting `icon={false}`.
   codes={[
     {
       code:
-`<Toast variant="success" showIcon={false}>
+`<Toast tone="success" showIcon={false}>
     Task completed
 </Toast>`,
       language: "tsx",
@@ -149,9 +149,9 @@ Toast components include proper ARIA attributes:
 <PropsTable
   component="Toast"
   describe={{
-    variant: "Severity, which sets the colour and the icon.",
+    tone: "Severity, which sets the colour and the icon. 2.x called it variant.",
     children: "The message.",
-    showIcon: "Show the icon for the variant.",
+    showIcon: "Show the icon for the tone.",
     action: "A control in the toast — undo, retry, view.",
     onClose: "Called when it is dismissed.",
     duration: "Milliseconds before it closes, paused while hovered or focused. Infinity keeps it up until it is closed.",

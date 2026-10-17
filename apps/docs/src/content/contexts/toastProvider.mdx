@@ -92,7 +92,7 @@ export function ToastExample() {
     const { addToast } = useToast();
     const [count, setCount] = useState(0);
 
-    const handleAddToast = (variant: 'success' | 'danger' | 'warning' | 'info') => {
+    const handleAddToast = (tone: 'success' | 'danger' | 'warning' | 'info') => {
       setCount(prev => prev + 1);
       const labels: Record<string, string> = {
         success: 'Success!',
@@ -101,10 +101,10 @@ export function ToastExample() {
         info: 'Info',
       };
       addToast({
-        variant,
-        message: "Toast #" + (count + 1) + " - " + labels[variant],
-        action: (variant === 'danger' || variant === 'warning') ? (
-          <Button size="s" onClick={() => addToast({ variant: 'success', message: 'Retry successful!' })}>
+        tone,
+        message: "Toast #" + (count + 1) + " - " + labels[tone],
+        action: (tone === 'danger' || tone === 'warning') ? (
+          <Button size="s" onClick={() => addToast({ tone: 'success', message: 'Retry successful!' })}>
             Retry
           </Button>
         ) : undefined,
@@ -148,10 +148,10 @@ label: "useToast"
 `const { addToast, removeToast } = useToast();
 
 async function save() {
-  const saving = addToast({ variant: "info", message: "Saving…", duration: Infinity });
+  const saving = addToast({ tone: "info", message: "Saving…", duration: Infinity });
   await saveDocument();
   removeToast(saving);
-  addToast({ variant: "success", message: "Saved" });
+  addToast({ tone: "success", message: "Saved" });
 }`,
       language: "tsx",
       label: "Save with progress",
@@ -174,7 +174,7 @@ The `ToastProvider` renders the toast stack itself, from the current list of toa
     ["toasts", "Toast[]"],
     [
       "addToast",
-      "(toast: { message: ReactNode; variant: 'success' | 'danger' | 'warning' | 'info'; action?: ReactNode; duration?: number }) => string",
+      "(toast: { message: ReactNode; tone: 'success' | 'danger' | 'warning' | 'info'; action?: ReactNode; duration?: number }) => string",
     ],
     ["removeToast", "(id: string) => void"],
   ]}
@@ -185,7 +185,7 @@ The `ToastProvider` renders the toast stack itself, from the current list of toa
 <PropsTable
   content={[
     ["id", "string"],
-    ["variant", ["success", "danger", "warning", "info"]],
+    ["tone", ["brand", "accent", "neutral", "info", "success", "warning", "danger"]],
     ["message", "ReactNode"],
     ["action", "ReactNode"],
     ["duration", "number", "6000", "Milliseconds before it closes. Infinity keeps it up until it is closed."],

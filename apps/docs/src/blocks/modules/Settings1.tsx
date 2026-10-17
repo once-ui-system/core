@@ -33,8 +33,8 @@ export const Settings1 = () => {
             <Fade fillWidth position="absolute" top="104" height="3rem" base="surface" />
             <Column fillWidth background="surface" paddingTop="16">
               <Column fillWidth paddingLeft="16">
-                <Heading variant="heading-strong-xl">Settings</Heading>
-                <Text onBackground="neutral-medium" variant="body-default-s" marginBottom="24">
+                <Heading textVariant="heading-strong-xl">Settings</Heading>
+                <Text onBackground="neutral-medium" textVariant="body-default-s" marginBottom="24">
                   Manage your preferences and data
                 </Text>
               </Column>
@@ -60,8 +60,8 @@ export const Settings1 = () => {
           {selectedOption === "profile" && (
             <>
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Avatar</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Avatar</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Your avatar is visible to everyone
                 </Text>
               </Column>
@@ -73,8 +73,8 @@ export const Settings1 = () => {
                 initialPreviewImage="/images/creators/lorant.jpg"
               />
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Cover</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Cover</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Your cover is visible to everyone
                 </Text>
               </Column>
@@ -89,8 +89,8 @@ export const Settings1 = () => {
           {selectedOption === "security" && (
             <>
               <Column fillWidth paddingTop="12" paddingLeft="16" gap="4" marginBottom="16">
-                <Text variant="heading-strong-s">Access</Text>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="heading-strong-s">Access</Text>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Manage your credentials
                 </Text>
               </Column>

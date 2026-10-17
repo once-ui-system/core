@@ -150,7 +150,7 @@ export function Sidebar6() {
                 title={
                   item.href ? (
                     <SmartLink href={item.href} unstyled>
-                      <Text variant="label-default-m" onBackground="neutral-strong">
+                      <Text textVariant="label-default-m" onBackground="neutral-strong">
                         <Row vertical="center" gap="12">
                           {item.icon && <Icon size="s" name={item.icon} />}
                           {item.label}
@@ -217,7 +217,7 @@ export function Sidebar6() {
             <Row fillWidth gap="12" vertical="center" left="-0.5rem">
               <Avatar src="/images/creators/lorant.jpg" />
               <Column fillWidth gap="2">
-                <Text variant="label-default-m">Lorant</Text>
+                <Text textVariant="label-default-m">Lorant</Text>
                 <Row
                   textVariant="label-default-xs"
                   onBackground="neutral-weak"

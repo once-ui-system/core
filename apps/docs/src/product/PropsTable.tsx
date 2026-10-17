@@ -67,7 +67,7 @@ const EXTENDS_SPREAD: Record<string, string> = {
   Card: "card",
   Scroller: "scroller",
   Input: "input",
-  DropdownWrapper: "dropdownWrapper",
+  Dropdown: "dropdown",
   User: "user",
 };
 

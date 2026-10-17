@@ -531,12 +531,12 @@ Returns all style options plus `setStyle`.
               <Flex fillWidth gap="24" s={{ direction: "column" }}>
                 <Column gap="12">
                   <Text
-                    variant="heading-strong-l"
+                    textVariant="heading-strong-l"
                     onBackground="neutral-strong"
                   >
                     {article.title}
                   </Text>
-                  <Text variant="body-default-m" onBackground="neutral-weak">
+                  <Text textVariant="body-default-m" onBackground="neutral-weak">
                     {article.subtitle}
                   </Text>
                 </Column>
@@ -557,7 +557,7 @@ Returns all style options plus `setStyle`.
               </Flex>
               <Flex gap="8" paddingTop="8" vertical="center">
                 <Icon size="xs" name="document" />
-                <Text variant="body-default-xs" onBackground="neutral-medium">
+                <Text textVariant="body-default-xs" onBackground="neutral-medium">
                   Because you follow{" "}
                   <SmartLink
                     className="brand-on-background-weak"

@@ -722,7 +722,7 @@ const MILLISECOND_PROPS = {
   WeatherFx: ["duration"],
   FlipFx: ["timing", "autoFlipInterval"],
   Animation: ["delay", "duration"],
-  Hover: ["delay", "hideDelay"],
+  HoverCard: ["hideDelay"],
   Skeleton: ["delay"],
 };
 
@@ -778,7 +778,7 @@ function pixelBoxSize(source, tag) {
   if (close < 0) return 0;
   const body = source.slice(tag.end + 1, close);
   if (body.length > 400 || /<(Row|Column|Flex|Grid|Media|Background)\b/.test(body)) return 0;
-  return /<(Icon|Avatar|Text|Heading|Badge|Tag)\b|\{[^}]*\}/.test(body) ? size : 0;
+  return /<(Icon|Avatar|Text|Heading|Tag)\b|\{[^}]*\}/.test(body) ? size : 0;
 }
 
 const POSITIONED = /(?:^|\s)position=\{?\s*["'](?:absolute|fixed|sticky)["']\s*\}?/;
@@ -830,10 +830,9 @@ const PRE_2_PROPS = {
   RadioButton: { isChecked: "checked" },
   Switch: { isChecked: "checked" },
   Dialog: { isOpen: "open" },
-  Modal: { isOpen: "open" },
   DatePicker: { isOpen: "open", isNested: "nested" },
-  DropdownWrapper: { isOpen: "open", isNested: "nested" },
-  EmojiPickerDropdown: { isOpen: "open", isNested: "nested" },
+  Dropdown: { isOpen: "open", isNested: "nested" },
+  EmojiPicker: { isOpen: "open" },
   Input: FIELD,
   Textarea: FIELD,
   Option: { hasPrefix: "prefix", hasSuffix: "suffix" },
@@ -844,8 +843,9 @@ const PRE_2_PROPS = {
   DateInput: FIELD,
   DateRangeInput: FIELD,
   PasswordInput: FIELD,
-  Pulse: { variant: "scheme" },
-  Tag: { variant: "scheme" },
+  // 1.x `variant` was the colour; it is `tone` in 3.0, and Tag's `variant`
+  // is its look again (default, gradient, announce).
+  Pulse: { variant: "tone" },
   Button: { radius: "corners" },
   IconButton: { radius: "corners" },
 };
@@ -860,7 +860,7 @@ const PRE_3_PROPS = {
   Dialog: { hideClose: "showClose" },
   IconButton: { ariaLabel: "aria-label" },
   Spinner: { ariaLabel: "aria-label" },
-  StatusIndicator: { ariaLabel: "aria-label" },
+  StatusIndicator: { ariaLabel: "aria-label", color: "scheme" },
   Switch: { ariaLabel: "aria-label", onToggle: "onCheckedChange" },
   Checkbox: { onToggle: "onCheckedChange" },
   RadioButton: { onToggle: "onCheckedChange" },
@@ -880,9 +880,31 @@ const PRE_3_PROPS = {
   Carousel: { revealedByDefault: "defaultRevealed" },
   Kbar: { inputSize: "size" },
   // D5: a `speed` that was a length of time.
-  ShineFx: { speed: "duration" },
-  CountFx: { speed: "duration" },
+  ShineFx: { speed: "duration", variant: "textVariant" },
+  CountFx: { speed: "duration", variant: "textVariant" },
   TypeFx: { speed: "charDuration" },
+  // E1/E2: `tone` is the palette, `variant` the look, `scheme` a palette hue;
+  // Text and Heading take `textVariant`, as Flex does.
+  Text: { variant: "textVariant" },
+  Heading: { variant: "textVariant" },
+  ListItem: { variant: "textVariant" },
+  Feedback: { variant: "tone" },
+  Toast: { variant: "tone" },
+  Tag: { scheme: "tone" },
+  Pulse: { scheme: "tone" },
+  LinearGauge: { hue: "tone" },
+  RadialGauge: { hue: "tone" },
+};
+
+/**
+ * E2: Button and IconButton `variant` values that are a tone (or a twin) in
+ * 3.0, with what to write instead.
+ */
+const PRE_3_BUTTON_VARIANTS = {
+  danger: 'tone="danger"',
+  success: 'tone="success"',
+  warning: 'tone="warning"',
+  quaternary: 'variant="ghost"',
 };
 
 function validate(source, spec, iconNames, options = {}) {
@@ -906,6 +928,21 @@ function validate(source, spec, iconNames, options = {}) {
       if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
       renamed.add(`${t.name}.${old}`);
       add("api.renamed", `${t.name} takes ${now} in 3.0; ${old} is the 2.x name`);
+    }
+    if (t.name === "Button" || t.name === "IconButton") {
+      const v = stringValue(propValue(t.attrs, "variant"));
+      const now = v && PRE_3_BUTTON_VARIANTS[v];
+      if (now && !renamed.has(`${t.name}.variant.${v}`)) {
+        renamed.add(`${t.name}.variant.${v}`);
+        add("api.renamed", `${t.name} takes ${now} in 3.0; variant="${v}" is the 2.x spelling`);
+      }
+      if (hasProp(t.attrs, "color") && !renamed.has(`${t.name}.color`)) {
+        renamed.add(`${t.name}.color`);
+        add(
+          "api.renamed",
+          `${t.name} takes tone in 3.0 (it colours the label and icons); color is the 2.x name`,
+        );
+      }
     }
   }
 
@@ -1075,7 +1112,7 @@ function validate(source, spec, iconNames, options = {}) {
     // Spread props may well carry the handler; there is no telling from here.
     if (hasSpread(tag.attrs)) continue;
     // A card handed to a `trigger` prop is operated by whatever owns it
-    // (DropdownWrapper, Dialog), so it carries no handler of its own and is
+    // (Dropdown, Dialog), so it carries no handler of its own and is
     // not the static-panel misuse this rule is looking for.
     if (insidePropValue(source, tag.start, "trigger")) continue;
     add(

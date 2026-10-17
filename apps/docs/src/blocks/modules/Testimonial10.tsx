@@ -140,7 +140,7 @@ function CaseStudySlideShow({
                       textOrientation: "mixed",
                     }}
                   >
-                    <Text variant="heading-strong-l">{slide.label}</Text>
+                    <Text textVariant="heading-strong-l">{slide.label}</Text>
                     <Mask
                       pointerEvents="none"
                       position="absolute"
@@ -253,7 +253,7 @@ export const Testimonial10 = (flex: React.ComponentProps<typeof Flex>) => {
   return (
     <Column fillWidth horizontal="center" padding="l" {...flex}>
       <Column maxWidth="l" gap="24">
-        <Heading paddingLeft="24" as="h2" variant="display-default-s">
+        <Heading paddingLeft="24" as="h2" textVariant="display-default-s">
           Solo founders and small teams scale faster when their design system does not fight back.
         </Heading>
         <CaseStudySlideShow aspectRatio="8/3" minHeight={36} activeIndex={0} />

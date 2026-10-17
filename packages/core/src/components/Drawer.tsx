@@ -2,18 +2,9 @@
 
 import classNames from "clsx";
 import type React from "react";
-import {
-  forwardRef,
-  type ReactNode,
-  type RefObject,
-  useCallback,
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { forwardRef, type ReactNode, type RefObject, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
+import { useOverlay } from "../internal/useOverlay";
 import { Column } from "./Column";
 import styles from "./Drawer.module.scss";
 import { Flex } from "./Flex";
@@ -32,9 +23,6 @@ type DrawerSize = NonNullable<DrawerProps["size"]>;
 
 /** How long the panel takes to slide out, matching the `macro-medium` transition. */
 const EXIT_MS = 300;
-
-// Layout effects warn during a server render; these only matter in the browser.
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title"> {
   /** Whether the drawer is open. The drawer never closes itself: `onClose` asks. */
@@ -79,9 +67,10 @@ interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title">
  * A panel that slides in from an edge of the viewport over an overlay: a
  * mobile navigation, a filter panel, a detail view beside a list.
  *
- * It is a modal dialog, built on the same pieces as Dialog: rendered into a
+ * It is a modal dialog on the same overlay core as Dialog: rendered into a
  * portal, the rest of the page made inert, page scroll locked, Tab kept inside
- * by FocusTrap, and focus returned to where it came from on close.
+ * by FocusTrap, Escape answered by the innermost overlay only, and focus
+ * returned to where it came from on close.
  */
 const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
   (
@@ -110,15 +99,13 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const descriptionId = `${id}-description`;
     const overlayRef = useRef<HTMLDivElement | null>(null);
     const panelRef = useRef<HTMLDivElement | null>(null);
-    const returnFocusTo = useRef<HTMLElement | null>(null);
-    const wasOpen = useRef(false);
-    const [mounted, setMounted] = useState(false);
-    const [visible, setVisible] = useState(open);
-    const [entered, setEntered] = useState(false);
-
-    // `document` exists only after mount; a drawer rendered open on the server
-    // appears on the first client pass instead of throwing.
-    useEffect(() => setMounted(true), []);
+    const { mounted, visible, entered } = useOverlay({
+      open,
+      onClose,
+      overlayRef,
+      returnFocusRef,
+      exitMs: EXIT_MS,
+    });
 
     const setPanelRef = useCallback(
       (node: HTMLDivElement | null) => {
@@ -129,98 +116,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
       [ref],
     );
 
-    // Mount, then slide in on the next tick; slide out, then unmount.
-    useEffect(() => {
-      if (open) {
-        setVisible(true);
-        const timer = setTimeout(() => setEntered(true), 0);
-        return () => clearTimeout(timer);
-      }
-      setEntered(false);
-      const timer = setTimeout(() => setVisible(false), EXIT_MS);
-      return () => clearTimeout(timer);
-    }, [open]);
-
-    // Everything outside the drawer is inert while it is open, and the drawer
-    // itself is inert while it slides out. Only nodes this drawer made inert are
-    // restored, so a drawer over another overlay leaves that one as it found it.
-    // A layout effect, so the page is interactive again before focus returns to it.
-    useIsomorphicLayoutEffect(() => {
-      const overlay = overlayRef.current;
-      if (!overlay || !visible) return;
-      overlay.inert = !open;
-      if (!open) return;
-      const madeInert: HTMLElement[] = [];
-      for (const node of Array.from(document.body.children)) {
-        if (node instanceof HTMLElement && node !== overlay && !node.inert) {
-          node.inert = true;
-          madeInert.push(node);
-        }
-      }
-      return () => {
-        for (const node of madeInert) node.inert = false;
-      };
-    }, [open, visible, mounted]);
-
-    // Remember where focus was on open and give it back on close, after the
-    // page is interactive again (the effect above) and before the exit finishes.
-    useIsomorphicLayoutEffect(() => {
-      if (open) {
-        wasOpen.current = true;
-        const active = document.activeElement;
-        if (active instanceof HTMLElement && !overlayRef.current?.contains(active)) {
-          returnFocusTo.current = active;
-        }
-        return;
-      }
-      if (!wasOpen.current) return;
-      wasOpen.current = false;
-      const target = returnFocusRef?.current ?? returnFocusTo.current;
-      returnFocusTo.current = null;
-      target?.focus({ preventScroll: true });
-    }, [open, returnFocusRef]);
-
-    // Unmounted while open: still give focus back.
-    const latestReturnFocusRef = useRef(returnFocusRef);
-    latestReturnFocusRef.current = returnFocusRef;
-    useEffect(
-      () => () => {
-        if (!wasOpen.current) return;
-        (latestReturnFocusRef.current?.current ?? returnFocusTo.current)?.focus({
-          preventScroll: true,
-        });
-      },
-      [],
-    );
-
-    // Escape normally lands on the panel (below). If focus fell back to the
-    // body, from a removed element or a click on a non-focusable spot, it
-    // should still close.
-    useEffect(() => {
-      if (!open) return;
-      const onDocumentKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape" && event.target === document.body && !event.defaultPrevented) {
-          onClose();
-        }
-      };
-      document.addEventListener("keydown", onDocumentKeyDown);
-      return () => document.removeEventListener("keydown", onDocumentKeyDown);
-    }, [open, onClose]);
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      onKeyDown?.(event);
-      // A dropdown or picker inside the drawer handles its own Escape first.
-      if (event.key !== "Escape" || event.defaultPrevented || !open) return;
-      event.preventDefault();
-      event.stopPropagation();
-      onClose();
-    };
-
     if (!mounted || !visible) return null;
 
     const titleNode =
       title === undefined ? null : typeof title === "string" ? (
-        <Heading id={titleId} variant="heading-strong-l">
+        <Heading id={titleId} textVariant="heading-strong-l">
           {title}
         </Heading>
       ) : (
@@ -281,7 +181,7 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
               entered && styles.open,
               className,
             )}
-            onKeyDown={handleKeyDown}
+            onKeyDown={onKeyDown}
           >
             <FocusTrap
               active={open}
@@ -303,7 +203,11 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
                   <Column gap="4" minWidth={0}>
                     {titleNode}
                     {description !== undefined && (
-                      <Text id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
+                      <Text
+                        id={descriptionId}
+                        textVariant="body-default-s"
+                        onBackground="neutral-weak"
+                      >
                         {description}
                       </Text>
                     )}

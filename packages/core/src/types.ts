@@ -103,6 +103,13 @@ export type ColorScheme =
   | "warning"
   | "success";
 
+/**
+ * Which semantic palette a component draws in. It is the only prop that
+ * carries this meaning in 3.0: `variant` says how a component looks
+ * (`primary`, `ghost`…), and `scheme` names a palette hue (`blue`, `green`…).
+ */
+export type Tone = ColorScheme;
+
 export type ColorCategory = "on-solid" | "on-background";
 
 export type ColorWeight = "weak" | "medium" | "strong";

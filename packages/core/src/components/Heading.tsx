@@ -38,7 +38,7 @@ interface HeadingComponent {
 const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementType = "h1">(
   {
     as,
-    variant,
+    textVariant,
     size,
     weight,
     family,
@@ -94,8 +94,8 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
 ) {
   const Component = as || "h1";
 
-  if (variant && (size || weight)) {
-    console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
+  if (textVariant && (size || weight)) {
+    console.warn("When 'textVariant' is set, 'size' and 'weight' are ignored.");
   }
 
   if (onBackground && onSolid) {
@@ -115,7 +115,7 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
   const sizeClass = size ? `font-${size}` : "font-m";
   const weightClass = weight ? `font-${weight}` : "font-strong";
 
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
+  const classes = textVariant ? getVariantClasses(textVariant) : [sizeClass, weightClass];
 
   let colorClass = "neutral-on-background-strong";
   if (onBackground) {

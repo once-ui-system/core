@@ -4,9 +4,9 @@ import React from "react";
 import type { CSSUnit } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
-import { InfoTip } from "./InfoTip";
 import { Row } from "./Row";
 import { Text } from "./Text";
+import { Tooltip } from "./Tooltip";
 
 /**
  * The settings row that Aveiro, Frametic and Scenetic each grew their own copy
@@ -21,7 +21,7 @@ import { Text } from "./Text";
 /** Renders a label that may be a plain string or arbitrary nodes. */
 function renderLabel(label: React.ReactNode) {
   return typeof label === "string" || typeof label === "number" ? (
-    <Text wrap="nowrap" variant="label-default-s">
+    <Text wrap="nowrap" textVariant="label-default-s">
       {label}
     </Text>
   ) : (
@@ -68,10 +68,10 @@ const Setting: React.FC<SettingProps> = ({
         <Column gap="4" paddingLeft="8" paddingRight="4" paddingY="4">
           <Row vertical="center" gap="8">
             {renderLabel(label)}
-            {info && <InfoTip>{info}</InfoTip>}
+            {info && <Tooltip content={info} />}
           </Row>
           {description && (
-            <Text variant="label-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-xs" onBackground="neutral-weak">
               {description}
             </Text>
           )}
@@ -135,10 +135,10 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
       <Column gap="4" paddingLeft="8" paddingY="4">
         <Row vertical="center" gap="8">
           {renderLabel(label)}
-          {info && <InfoTip>{info}</InfoTip>}
+          {info && <Tooltip content={info} />}
         </Row>
         {description && (
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Text textVariant="label-default-xs" onBackground="neutral-weak">
             {description}
           </Text>
         )}
@@ -187,12 +187,12 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
     <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
       {renderLabel(label)}
-      {info && <InfoTip>{info}</InfoTip>}
+      {info && <Tooltip content={info} />}
     </Row>
     <Row fillWidth gap="12" wrap>
       {axes.map((axis, index) => (
         <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
-          <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
+          <Text wrap="nowrap" textVariant="label-default-xs" onBackground="neutral-weak">
             {axis.label}
           </Text>
           {axis.control}

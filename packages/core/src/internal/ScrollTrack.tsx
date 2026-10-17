@@ -2,13 +2,13 @@
 
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
-import styles from "./ScrollContainer.module.scss";
+import { Column } from "../components/Column";
+import { Flex } from "../components/Flex";
+import { IconButton } from "../components/IconButton";
+import { Row } from "../components/Row";
+import styles from "./ScrollTrack.module.scss";
 
-export type ScrollContainerControlPlacement =
+export type ScrollTrackControlPlacement =
   | "top-start"
   | "top-center"
   | "top-end"
@@ -18,9 +18,15 @@ export type ScrollContainerControlPlacement =
   | "bottom-end"
   | "bottom-between";
 
-export interface ScrollContainerProps extends React.ComponentProps<typeof Row> {
+export interface ScrollTrackProps extends Omit<React.ComponentProps<typeof Column>, "children"> {
   items: React.ReactNode[];
-  controlPlacement?: ScrollContainerControlPlacement;
+  /**
+   * Props for the box each item sits in (2.x ScrollContainer took these as its
+   * own rest props): its size, aspect ratio, padding. The rest props style the
+   * outer column.
+   */
+  tile?: React.ComponentProps<typeof Column>;
+  controlPlacement?: ScrollTrackControlPlacement;
   /**
    * Wrap around: past the last item the track continues into the first, in the
    * same direction, with no rewind.
@@ -61,7 +67,7 @@ export interface ScrollContainerProps extends React.ComponentProps<typeof Row> {
   onActiveChange?: (index: number) => void;
 }
 
-const getHorizontalAlignment = (placement: ScrollContainerControlPlacement) => {
+const getHorizontalAlignment = (placement: ScrollTrackControlPlacement) => {
   if (placement.endsWith("-end")) return "end";
   if (placement.endsWith("-center")) return "center";
   if (placement.endsWith("-between")) return "between";
@@ -109,7 +115,7 @@ const PROXIMITY_FLOOR = 0.72;
  * contributes only what a track item cannot do without, which is refusing to
  * shrink. Sizing stays with the caller, through those same rest props.
  */
-const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
+const ScrollTrack = forwardRef<HTMLDivElement, ScrollTrackProps>(
   (
     {
       items,
@@ -122,7 +128,8 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
       proximity = false,
       active,
       onActiveChange,
-      ...tile
+      tile = {},
+      ...rest
     },
     ref,
   ) => {
@@ -484,7 +491,7 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
     const offset = -(index + origin) * tileStep + dragPx;
 
     return (
-      <Column ref={ref} fillWidth gap="8" aria-roledescription="carousel">
+      <Column ref={ref} fillWidth gap="8" aria-roledescription="carousel" {...rest}>
         {/*
           Laid out in the order it is read, rather than as a column reversed
           when the controls sit underneath. Reversing the column reverses
@@ -582,6 +589,6 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
   },
 );
 
-ScrollContainer.displayName = "ScrollContainer";
+ScrollTrack.displayName = "ScrollTrack";
 
-export { ScrollContainer };
+export { ScrollTrack };

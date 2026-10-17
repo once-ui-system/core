@@ -4,8 +4,8 @@ import React, { forwardRef, useCallback, useId, useRef } from "react";
 import { useControllableState } from "../internal/useControllableState";
 import { fieldLocale } from "../utils/calendarLocale";
 import { DatePicker, type DatePickerLabels } from "./DatePicker";
+import { Dropdown } from "./Dropdown";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
-import { DropdownWrapper } from "./DropdownWrapper";
 import { Input } from "./Input";
 
 interface DateInputProps
@@ -59,11 +59,11 @@ const formatDate = (date: Date, timePicker: boolean, locale?: string) => {
 
 /**
  * The field is a combobox that opens a date picker dialog (`aria-haspopup`
- * "dialog"). It used to be a read-only input inside DropdownWrapper's two
+ * "dialog"). It used to be a read-only input inside Dropdown's two
  * `role="button"` wrappers: an input inside a button (axe
  * "nested-interactive"), announced twice, with no popup state of its own.
  *
- * As with Select, DropdownWrapper learns at render that its trigger is a
+ * As with Select, Dropdown learns at render that its trigger is a
  * combobox (DropdownComboboxContext), so no markup nests the field. Unlike
  * Select's list, the picker is a dialog: opening it moves focus onto its
  * selected day (DatePicker's `autoFocus`), and Escape or a pick brings focus
@@ -167,7 +167,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
 
     return (
       <DropdownComboboxContext.Provider value={true}>
-        <DropdownWrapper
+        <Dropdown
           ref={ref}
           trigger={
             <Input
@@ -193,35 +193,6 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               {...rest}
             />
           }
-          dropdown={
-            <DatePicker
-              /*
-               * Keyed on open state ONLY. Including value.getTime() here remounted
-               * the whole picker on every time edit — each hour, minute or AM/PM
-               * change fires onValueChange, which changes value, which changed the key.
-               * The remount reset isTimeSelector, so the time panel vanished and
-               * the calendar came back mid-edit. DatePicker already syncs to a
-               * changed `value` in an effect, so the key never needed it.
-               */
-              key={`datepicker-${isOpen ? "open" : "closed"}`}
-              id={dialogId}
-              role="dialog"
-              aria-modal="true"
-              aria-label={dialogLabel}
-              aria-labelledby={labelledBy}
-              onKeyDown={handleDialogKeyDown}
-              padding="20"
-              value={date}
-              onValueChange={handleDateChange}
-              timePicker={timePicker}
-              minDate={minDate}
-              maxDate={maxDate}
-              autoFocus={true}
-              open={isOpen}
-              locale={locale}
-              labels={labels}
-            />
-          }
           fillWidth={false}
           minHeight={minHeight}
           open={isOpen}
@@ -231,7 +202,35 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
           disableTriggerClick={true}
           style={{ ...style }}
           handleArrowNavigation={false}
-        />
+        >
+          <DatePicker
+            /*
+             * Keyed on open state ONLY. Including value.getTime() here remounted
+             * the whole picker on every time edit — each hour, minute or AM/PM
+             * change fires onValueChange, which changes value, which changed the key.
+             * The remount reset isTimeSelector, so the time panel vanished and
+             * the calendar came back mid-edit. DatePicker already syncs to a
+             * changed `value` in an effect, so the key never needed it.
+             */
+            key={`datepicker-${isOpen ? "open" : "closed"}`}
+            id={dialogId}
+            role="dialog"
+            aria-modal="true"
+            aria-label={dialogLabel}
+            aria-labelledby={labelledBy}
+            onKeyDown={handleDialogKeyDown}
+            padding="20"
+            value={date}
+            onValueChange={handleDateChange}
+            timePicker={timePicker}
+            minDate={minDate}
+            maxDate={maxDate}
+            autoFocus={true}
+            open={isOpen}
+            locale={locale}
+            labels={labels}
+          />
+        </Dropdown>
       </DropdownComboboxContext.Provider>
     );
   },

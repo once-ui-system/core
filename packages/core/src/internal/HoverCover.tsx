@@ -9,11 +9,11 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Flex } from "./Flex";
-import styles from "./Hover.module.scss";
-import { Row } from "./Row";
+import { Flex } from "../components/Flex";
+import { Row } from "../components/Row";
+import styles from "./HoverCover.module.scss";
 
-export interface HoverProps extends React.ComponentProps<typeof Flex> {
+export interface HoverCoverProps extends React.ComponentProps<typeof Flex> {
   trigger: ReactNode;
   overlay: ReactNode;
   interactive?: boolean;
@@ -23,7 +23,7 @@ export interface HoverProps extends React.ComponentProps<typeof Flex> {
   touch?: "disable" | "enable" | "display";
 }
 
-const Hover = forwardRef<HTMLDivElement, HoverProps>(
+const HoverCover = forwardRef<HTMLDivElement, HoverCoverProps>(
   (
     {
       trigger,
@@ -162,6 +162,6 @@ const Hover = forwardRef<HTMLDivElement, HoverProps>(
   },
 );
 
-Hover.displayName = "Hover";
+HoverCover.displayName = "HoverCover";
 
-export { Hover };
+export { HoverCover };

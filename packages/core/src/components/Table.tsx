@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import { ReactNode, useMemo, useState } from "react";
 import { ShineText } from "../internal/ShineText";
+import type { Tone } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -27,7 +28,9 @@ type TableAction = {
   icon: string;
   label?: string;
   tooltip?: string;
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
+  /** The action's palette. 2.x's `variant: "danger"` is `variant: "primary", tone: "danger"`. */
+  tone?: Tone;
   onClick: (rowIndex: number) => void;
   disabled?: (rowIndex: number) => boolean;
 };
@@ -184,7 +187,7 @@ function Table({
         }
       >
         <Text
-          variant="label-strong-s"
+          textVariant="label-strong-s"
           onBackground={isActive ? "neutral-strong" : "neutral-medium"}
         >
           {header.content}
@@ -272,6 +275,7 @@ function Table({
                   icon={action.icon as any}
                   size="l"
                   variant={action.variant || "tertiary"}
+                  tone={action.tone}
                   tooltip={action.tooltip || action.label}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
@@ -294,8 +298,8 @@ function Table({
           <Column center padding="xl" gap="m">
             <Icon name="inbox" size="l" onBackground="neutral-weak" />
             <Column center gap="4">
-              <Text variant="heading-strong-s">No data available</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="heading-strong-s">No data available</Text>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {searchQuery ? "Try adjusting your search" : "There are no items to display"}
               </Text>
             </Column>
@@ -310,7 +314,7 @@ function Table({
       <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.loading}>
         {loadingState || (
           <Column center padding="xl" gap="m">
-            <ShineText variant="label-default-s">Loading data...</ShineText>
+            <ShineText textVariant="label-default-s">Loading data...</ShineText>
           </Column>
         )}
       </td>
@@ -354,7 +358,7 @@ function Table({
               {data.headers.map((header, index) => renderHeader(header, index))}
               {actions && actions.length > 0 && (
                 <th className={classNames(styles.th, styles.thActions)}>
-                  <Text variant="label-strong-s" onBackground="neutral-medium">
+                  <Text textVariant="label-strong-s" onBackground="neutral-medium">
                     Actions
                   </Text>
                 </th>
@@ -394,7 +398,7 @@ function Table({
                 }))}
               />
             </Row>
-            <Text variant="label-default-s" onBackground="neutral-medium">
+            <Text textVariant="label-default-s" onBackground="neutral-medium">
               {currentPage} / {totalPages}
             </Text>
           </Row>
@@ -415,7 +419,7 @@ function Table({
       {!paginated && !loading && sortedRows.length > 0 && sortConfig && (
         <Row horizontal="end" vertical="center" paddingX="s">
           <Row gap="4" vertical="center">
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Sorted by {data.headers.find((h) => h.key === sortConfig.key)?.content}
             </Text>
             <IconButton

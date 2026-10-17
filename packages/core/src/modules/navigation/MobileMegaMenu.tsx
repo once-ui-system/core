@@ -66,7 +66,7 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
                   cursor="pointer"
                   transition="macro-medium"
                 >
-                  <Text variant="heading-strong-s" onBackground="neutral-strong">
+                  <Text textVariant="heading-strong-s" onBackground="neutral-strong">
                     {group.label}
                   </Text>
                   {group.suffixIcon && (

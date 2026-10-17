@@ -2,17 +2,17 @@ import { act, render } from "@testing-library/react";
 import type React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { AutoScroll } from "../components/AutoScroll";
 import { Avatar } from "../components/Avatar";
 import { Background } from "../components/Background";
 import { Column } from "../components/Column";
-import { ContextMenu } from "../components/ContextMenu";
+import { Dropdown } from "../components/Dropdown";
 import { Flex } from "../components/Flex";
 import { GlitchFx } from "../components/GlitchFx";
 import { Grid } from "../components/Grid";
 import { Mask } from "../components/Mask";
 import { Media } from "../components/Media";
 import { RevealFx } from "../components/RevealFx";
+import { Scroller } from "../components/Scroller";
 import { ShineFx } from "../components/ShineFx";
 import { Text } from "../components/Text";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -167,8 +167,14 @@ describe("the outliers have one unit too", () => {
     expect(html).toContain("--gradient-height:400px");
   });
 
-  it("ContextMenu keeps its 12rem default width as a string", () => {
-    expect(() => ssr(<ContextMenu dropdown={<div />}>x</ContextMenu>)).not.toThrow();
+  it("Dropdown openOn=contextmenu (2.x ContextMenu) keeps its 12rem default width as a string", () => {
+    expect(() =>
+      ssr(
+        <Dropdown openOn="contextmenu" trigger="x">
+          <div />
+        </Dropdown>,
+      ),
+    ).not.toThrow();
   });
 });
 
@@ -207,12 +213,12 @@ describe("time is milliseconds, speed a multiplier", () => {
     expect(el.style.getPropertyValue("--glitch-duration")).toBe("1250ms");
   });
 
-  it("AutoScroll accepts a multiplier as well as a keyword", () => {
+  it("Scroller auto (2.x AutoScroll) accepts a multiplier as well as a keyword", () => {
     expect(() =>
       ssr(
         <>
-          <AutoScroll speed={1.5}>a</AutoScroll>
-          <AutoScroll speed="fast">a</AutoScroll>
+          <Scroller auto={{ speed: 1.5 }}>a</Scroller>
+          <Scroller auto={{ speed: "fast" }}>a</Scroller>
         </>,
       ),
     ).not.toThrow();

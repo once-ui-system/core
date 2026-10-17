@@ -21,10 +21,10 @@ export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ .
               background="page"
               zIndex={1}
             >
-              <Text as="span" variant="heading-strong-s">
+              <Text as="span" textVariant="heading-strong-s">
                 {section.title}
               </Text>
-              <Tag size="m" scheme="brand">
+              <Tag size="m" tone="brand">
                 Pro
               </Tag>
             </Row>
@@ -62,7 +62,7 @@ export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ .
     return (
       <Card fillWidth key={key} direction="column" href={item.href} border background="overlay">
         <Row paddingY="24" paddingLeft="32" paddingRight="8" gap="12" fillWidth vertical="center">
-          <Text variant="heading-strong-xs" truncate>
+          <Text textVariant="heading-strong-xs" truncate>
             {item.label}
           </Text>
           <Row gap="8">
@@ -78,7 +78,7 @@ export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ .
             >
               {examplesCount}
             </Row>
-            {hasNewTag && <Tag scheme="brand">NEW</Tag>}
+            {hasNewTag && <Tag tone="brand">NEW</Tag>}
           </Row>
         </Row>
         <Row paddingLeft="16" fillWidth>

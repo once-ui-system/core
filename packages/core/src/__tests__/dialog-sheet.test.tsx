@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { createRef, useState } from "react";
 import { beforeEach, describe, expect, it } from "vitest";
-import { Modal } from "../components/Modal";
+import { Dialog } from "../components/Dialog";
+import { Drawer } from "../components/Drawer";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -20,10 +21,10 @@ const Harness = () => {
       <button type="button" onClick={() => setOpen(true)}>
         Open profile
       </button>
-      <Modal open={open} onClose={() => setOpen(false)} title="Edit profile">
+      <Dialog variant="sheet" open={open} onClose={() => setOpen(false)} title="Edit profile">
         <button type="button">Save</button>
         <button type="button">Discard</button>
-      </Modal>
+      </Dialog>
     </>
   );
 };
@@ -42,8 +43,11 @@ beforeEach(() => {
   resetDialogState();
 });
 
-/** Focus, naming and ref contract for Modal (ROADMAP W3). */
-describe("Modal accessibility", () => {
+/**
+ * Focus, naming and ref contract of the sheet: 2.x `Modal`, folded into
+ * Dialog in 3.0 (F1). Every check Modal passed still holds for the sheet.
+ */
+describe('Dialog variant="sheet" (2.x Modal)', () => {
   it("is a modal dialog named by its title", async () => {
     const { dialog } = await openModal();
     expect(dialog).toHaveAttribute("aria-modal", "true");
@@ -100,11 +104,11 @@ describe("Modal accessibility", () => {
             Show
           </button>
           {show && (
-            <Modal open onClose={() => setShow(false)} title="Transient">
+            <Dialog variant="sheet" open onClose={() => setShow(false)} title="Transient">
               <button type="button" onClick={() => setShow(false)}>
                 Remove
               </button>
-            </Modal>
+            </Dialog>
           )}
         </>
       );
@@ -120,12 +124,116 @@ describe("Modal accessibility", () => {
   it("forwards its ref to the dialog element", async () => {
     const ref = createRef<HTMLDivElement>();
     render(
-      <Modal ref={ref} open onClose={() => {}} title="With ref">
+      <Dialog variant="sheet" ref={ref} open onClose={() => {}} title="With ref">
         <p>Body</p>
-      </Modal>,
+      </Dialog>,
       { wrapper: wrap },
     );
     const dialog = await screen.findByRole("dialog");
     expect(ref.current).toBe(dialog);
+  });
+});
+
+describe('Dialog variant="sheet" keeps Modal\'s look and slots', () => {
+  it("renders the backdrop inside the overlay, behind the panel", async () => {
+    render(
+      <Dialog
+        variant="sheet"
+        open
+        onClose={() => {}}
+        title="With backdrop"
+        backdrop={<div data-testid="backdrop" />}
+      >
+        <p>Body</p>
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    const dialog = await screen.findByRole("dialog");
+    const backdrop = screen.getByTestId("backdrop");
+    expect(backdrop.parentElement).toBe(dialog);
+    expect(dialog.firstElementChild).toBe(backdrop);
+  });
+
+  it("titles the sheet with a display heading, as Modal did", async () => {
+    render(
+      <Dialog variant="sheet" open onClose={() => {}} title="Display title">
+        <p>Body</p>
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    const heading = await screen.findByRole("heading", { name: "Display title", level: 2 });
+    expect(heading).toHaveClass("font-display", "font-xs");
+  });
+
+  it("closes on a click outside the sheet, as Modal always did", async () => {
+    let closed = 0;
+    render(
+      <Dialog variant="sheet" open onClose={() => closed++} title="Click away">
+        <button type="button">Inside</button>
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    const dialog = await screen.findByRole("dialog");
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    screen
+      .getByRole("button", { name: "Inside" })
+      .dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    expect(closed).toBe(0);
+    dialog.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    expect(closed).toBe(1);
+  });
+
+  it("has no axe violations with a description and a footer", async () => {
+    render(
+      <Dialog
+        variant="sheet"
+        open
+        onClose={() => {}}
+        title="Full sheet"
+        description="Everything Dialog has, on a sheet"
+        footer={<button type="button">Done</button>}
+      >
+        <p>Body</p>
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    const dialog = await screen.findByRole("dialog");
+    expect(dialog).toHaveAccessibleDescription("Everything Dialog has, on a sheet");
+    expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
+    await expectNoAxeViolations(document.body);
+  });
+});
+
+describe("one overlay core for Dialog and Drawer", () => {
+  it("answers Escape in the innermost overlay only", async () => {
+    const user = userEvent.setup();
+    const closed: string[] = [];
+    const Nested = () => {
+      const [dialog, setDialog] = useState(false);
+      return (
+        <Drawer open onClose={() => closed.push("drawer")} title="Drawer">
+          <button type="button" onClick={() => setDialog(true)}>
+            Open dialog
+          </button>
+          <Dialog
+            open={dialog}
+            onClose={() => {
+              closed.push("dialog");
+              setDialog(false);
+            }}
+            title="Dialog"
+          >
+            <p>Inner</p>
+          </Dialog>
+        </Drawer>
+      );
+    };
+    render(<Nested />, { wrapper: wrap });
+    await user.click(await screen.findByRole("button", { name: "Open dialog" }));
+    await screen.findByRole("dialog", { name: "Dialog" });
+    await user.keyboard("{Escape}");
+    expect(closed).toEqual(["dialog"]);
+    await user.keyboard("{Escape}");
+    expect(closed).toEqual(["dialog", "drawer"]);
   });
 });

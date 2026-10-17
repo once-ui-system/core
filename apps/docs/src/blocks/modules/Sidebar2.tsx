@@ -1,7 +1,7 @@
 import {
   Avatar,
   Column,
-  DropdownWrapper,
+  Dropdown,
   Icon,
   Line,
   Option,
@@ -15,7 +15,7 @@ export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
   return (
     <Column as="nav" maxWidth="16rem" fitHeight paddingTop="2" gap="2" s={{ hide: true }} {...flex}>
       <Row paddingBottom="16" paddingTop="8" fillWidth>
-        <DropdownWrapper
+        <Dropdown
           fillWidth
           trigger={
             <Row fillWidth padding="8" horizontal="between" vertical="center" cursor="interactive">
@@ -26,16 +26,15 @@ export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                 }}
               >
                 <Column paddingX="12">
-                  <Text variant="label-strong-s">Lorant One</Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="label-strong-s">Lorant One</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     Dopler
                   </Text>
                 </Column>
               </User>
               <Icon name="chevronUpDown" onBackground="neutral-weak" />
             </Row>
-          }
-          dropdown={[
+          }>{[
             <>
               <Row padding="4" fillWidth key="once-ui">
                 <Option
@@ -51,7 +50,7 @@ export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                       <Row width="8" height="8" vertical="center">
                         <Row width="4" height="4" radius="full" solid="brand-strong"></Row>
                       </Row>
-                      <Text variant="body-default-xs">3 notifications</Text>
+                      <Text textVariant="body-default-xs">3 notifications</Text>
                     </Row>
                   }
                 />
@@ -71,21 +70,20 @@ export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                       <Row width="8" height="8" vertical="center">
                         <Row width="4" height="4" radius="full" solid="brand-strong"></Row>
                       </Row>
-                      <Text variant="body-default-xs">1 notification</Text>
+                      <Text textVariant="body-default-xs">1 notification</Text>
                     </Row>
                   }
                 />
               </Row>
             </>,
-          ]}
-        />
+          ]}</Dropdown>
       </Row>
       <ToggleButton prefixIcon="cube" label="Projects" horizontal="start" fillWidth selected />
       <ToggleButton prefixIcon="check" label="My tasks" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="bookmark" label="Saved" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="eye" label="Watching" horizontal="start" fillWidth />
       <Text
-        variant="label-default-s"
+        textVariant="label-default-s"
         onBackground="neutral-weak"
         paddingTop="m"
         paddingBottom="12"

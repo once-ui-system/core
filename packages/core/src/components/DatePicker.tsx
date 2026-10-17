@@ -15,7 +15,7 @@ import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationCon
 import { Button } from "./Button";
 import { Column } from "./Column";
 import styles from "./DatePicker.module.scss";
-import { DropdownWrapper } from "./DropdownWrapper";
+import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
@@ -699,7 +699,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               onClick={(e: React.MouseEvent) => {
                 if (!isDisabled) {
                   if (timePicker) {
-                    // Stop propagation to prevent DropdownWrapper from closing
+                    // Stop propagation to prevent Dropdown from closing
                     e.stopPropagation();
                   }
                   handleDateSelect(currentDate);
@@ -783,7 +783,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 horizontal="center"
                 marginBottom="16"
               >
-                <Text variant="label-default-m" onBackground="neutral-medium" align="center">
+                <Text textVariant="label-default-m" onBackground="neutral-medium" align="center">
                   {day}
                 </Text>
               </Row>
@@ -819,7 +819,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         <Flex fillWidth center>
           {isTimeSelector ? (
             <Column horizontal="center" fillWidth gap="8">
-              <Text variant={`label-default-${size}`} onBackground="neutral-strong">
+              <Text textVariant={`label-default-${size}`} onBackground="neutral-strong">
                 {gridLabel}
               </Text>
               <Row
@@ -858,7 +858,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               )}
               <Column fillWidth horizontal="center" gap="8">
                 <Row gap="4" horizontal="center">
-                  <DropdownWrapper
+                  <Dropdown
                     nested={nested}
                     placement="bottom-start"
                     open={isMonthOpen}
@@ -897,45 +897,44 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         </Row>
                       </Button>
                     }
-                    dropdown={
-                      <Column
-                        fillWidth
-                        gap="2"
-                        padding="4"
-                        onClick={(event: React.MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                      >
-                        {monthNames.map((month, index) => {
-                          const monthDisabled = isMonthDisabled(index, currentYear);
-                          return (
-                            <Option
-                              key={month}
-                              value={index.toString()}
-                              disabled={monthDisabled}
-                              label={
-                                <Text color={monthDisabled ? "neutral-weak" : undefined}>
-                                  {month}
-                                </Text>
-                              }
-                              selected={index === currentMonth}
-                              onClick={(value) => {
-                                if (!monthDisabled) {
-                                  handleMonthSelect(index);
-                                  setIsMonthOpen(false);
-                                  clearLastOpenedDropdown();
-                                }
-                              }}
-                            />
-                          );
-                        })}
-                      </Column>
-                    }
                     data-dropdown-id="month-dropdown"
-                  />
+                  >
+                    <Column
+                      fillWidth
+                      gap="2"
+                      padding="4"
+                      onClick={(event: React.MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                    >
+                      {monthNames.map((month, index) => {
+                        const monthDisabled = isMonthDisabled(index, currentYear);
+                        return (
+                          <Option
+                            key={month}
+                            value={index.toString()}
+                            disabled={monthDisabled}
+                            label={
+                              <Text color={monthDisabled ? "neutral-weak" : undefined}>
+                                {month}
+                              </Text>
+                            }
+                            selected={index === currentMonth}
+                            onClick={(value) => {
+                              if (!monthDisabled) {
+                                handleMonthSelect(index);
+                                setIsMonthOpen(false);
+                                clearLastOpenedDropdown();
+                              }
+                            }}
+                          />
+                        );
+                      })}
+                    </Column>
+                  </Dropdown>
 
-                  <DropdownWrapper
+                  <Dropdown
                     nested={nested}
                     open={isYearOpen}
                     dropdownId="year-dropdown"
@@ -969,52 +968,51 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         </Row>
                       </Button>
                     }
-                    dropdown={
-                      <Column
-                        fillWidth
-                        padding="4"
-                        gap="2"
-                        overflowY="auto"
-                        style={{ maxHeight: "16rem" }}
-                        onClick={(event: React.MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                      >
-                        {generateYearOptions().map((year) => {
-                          // Check if all months in this year are disabled
-                          const allMonthsDisabled = Array.from({ length: 12 }, (_, i) => i).every(
-                            (month) => isMonthDisabled(month, year),
-                          );
-
-                          return (
-                            <Option
-                              key={year}
-                              value={year.toString()}
-                              disabled={allMonthsDisabled}
-                              label={
-                                <Text color={allMonthsDisabled ? "neutral-weak" : undefined}>
-                                  {year}
-                                </Text>
-                              }
-                              selected={year === currentYear}
-                              onClick={(value) => {
-                                if (!allMonthsDisabled) {
-                                  handleYearSelect(year);
-                                  setIsYearOpen(false);
-                                  clearLastOpenedDropdown();
-                                }
-                              }}
-                            />
-                          );
-                        })}
-                      </Column>
-                    }
                     data-dropdown-id="year-dropdown"
-                  />
+                  >
+                    <Column
+                      fillWidth
+                      padding="4"
+                      gap="2"
+                      overflowY="auto"
+                      style={{ maxHeight: "16rem" }}
+                      onClick={(event: React.MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                    >
+                      {generateYearOptions().map((year) => {
+                        // Check if all months in this year are disabled
+                        const allMonthsDisabled = Array.from({ length: 12 }, (_, i) => i).every(
+                          (month) => isMonthDisabled(month, year),
+                        );
+
+                        return (
+                          <Option
+                            key={year}
+                            value={year.toString()}
+                            disabled={allMonthsDisabled}
+                            label={
+                              <Text color={allMonthsDisabled ? "neutral-weak" : undefined}>
+                                {year}
+                              </Text>
+                            }
+                            selected={year === currentYear}
+                            onClick={(value) => {
+                              if (!allMonthsDisabled) {
+                                handleYearSelect(year);
+                                setIsYearOpen(false);
+                                clearLastOpenedDropdown();
+                              }
+                            }}
+                          />
+                        );
+                      })}
+                    </Column>
+                  </Dropdown>
                 </Row>
                 {timePicker && selectedTime && (
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {formatTime(selectedTime.hours, selectedTime.minutes, [amLabel, pmLabel])}
                   </Text>
                 )}

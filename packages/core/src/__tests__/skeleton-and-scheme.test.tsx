@@ -40,12 +40,12 @@ describe("Skeleton", () => {
 
 describe("scheme replaces variant for colour-scheme props", () => {
   it("Pulse colours from scheme", () => {
-    const { container } = render(<Pulse scheme="danger" />, { wrapper: wrap });
+    const { container } = render(<Pulse tone="danger" />, { wrapper: wrap });
     expect(container.innerHTML).toMatch(/danger/);
   });
 
   it("Tag colours from scheme", () => {
-    const { container } = render(<Tag scheme="success" label="Live" />, { wrapper: wrap });
+    const { container } = render(<Tag tone="success" label="Live" />, { wrapper: wrap });
     expect(container.innerHTML).toMatch(/success/);
   });
 
@@ -53,8 +53,8 @@ describe("scheme replaces variant for colour-scheme props", () => {
     // The gradient path takes a different branch: it applies the module's
     // gradient class instead of a scheme-derived background, so assert the
     // branch rather than a colour token that branch deliberately omits.
-    const { container } = render(<Tag scheme="gradient" label="New" />, { wrapper: wrap });
-    const plain = render(<Tag scheme="neutral" label="New" />, { wrapper: wrap });
+    const { container } = render(<Tag variant="gradient" label="New" />, { wrapper: wrap });
+    const plain = render(<Tag tone="neutral" label="New" />, { wrapper: wrap });
     expect(container.firstElementChild?.className).not.toEqual(
       plain.container.firstElementChild?.className,
     );

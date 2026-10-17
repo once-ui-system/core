@@ -15,12 +15,12 @@ export function PromptLibrary() {
         <Column key={section.id} fillWidth gap="20">
           <Column gap="4">
             <Row vertical="center" gap="12" wrap>
-              <Heading as="h2" variant="display-default-xs">
+              <Heading as="h2" textVariant="display-default-xs">
                 {section.title}
               </Heading>
               {section.id === "pro" && <Tag size="s">Pro</Tag>}
             </Row>
-            <Text onBackground="neutral-weak" variant="body-default-s">
+            <Text onBackground="neutral-weak" textVariant="body-default-s">
               {section.description}
             </Text>
           </Column>
@@ -37,8 +37,8 @@ export function PromptLibrary() {
                 background="overlay"
               >
                 <Column gap="4">
-                  <Text variant="heading-strong-xs">{prompt.title}</Text>
-                  <Text onBackground="neutral-weak" variant="body-default-s">
+                  <Text textVariant="heading-strong-xs">{prompt.title}</Text>
+                  <Text onBackground="neutral-weak" textVariant="body-default-s">
                     {prompt.description}
                   </Text>
                 </Column>

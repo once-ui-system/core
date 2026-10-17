@@ -61,10 +61,10 @@ export const Login5 = () => {
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             size="l"
           />
-          <Heading variant="display-strong-xs" align="center" marginTop="8">
+          <Heading textVariant="display-strong-xs" align="center" marginTop="8">
             {step === "email" ? "Sign in with a magic link" : "Check your inbox"}
           </Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak" align="center" wrap="balance">
+          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center" wrap="balance">
             {step === "email"
               ? "Enter your email and we'll send a one-time code — or use your passkey."
               : `We sent a 6-digit code to ${email || "your email"}.`}
@@ -84,7 +84,7 @@ export const Login5 = () => {
                 background={step === item ? "brand-strong" : "neutral-alpha-weak"}
               >
                 <Text
-                  variant="label-default-xs"
+                  textVariant="label-default-xs"
                   onSolid={step === item ? "brand-strong" : undefined}
                   onBackground={step === item ? undefined : "neutral-weak"}
                 >
@@ -131,7 +131,7 @@ export const Login5 = () => {
               Verify and sign in
             </Button>
             <Row fillWidth horizontal="center" gap="4">
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 Didn't get it?
               </Text>
               <SmartLink href="#" onClick={() => setStep("email")}>
@@ -141,7 +141,7 @@ export const Login5 = () => {
           </Column>
         )}
 
-        <Text variant="label-default-xs" onBackground="neutral-weak" align="center" wrap="balance">
+        <Text textVariant="label-default-xs" onBackground="neutral-weak" align="center" wrap="balance">
           By continuing, you agree to our <SmartLink href="#">Terms</SmartLink> and{" "}
           <SmartLink href="#">Privacy Policy</SmartLink>.
         </Text>

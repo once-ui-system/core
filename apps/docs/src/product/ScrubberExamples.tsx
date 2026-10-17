@@ -16,8 +16,8 @@ export function ScrubberTracksExample() {
     { id: "z2", start: 20000, end: 26000, label: "Zoom" },
   ]);
   const scenes: ScrubberBlock[] = [
-    { id: "s1", start: 0, end: 15000, label: "Intro", scheme: "accent" },
-    { id: "s2", start: 15000, end: 40000, label: "Walkthrough", scheme: "accent" },
+    { id: "s1", start: 0, end: 15000, label: "Intro", tone: "accent" },
+    { id: "s2", start: 15000, end: 40000, label: "Walkthrough", tone: "accent" },
   ];
 
   return (
@@ -45,7 +45,7 @@ export function ScrubberTracksExample() {
         ]}
       />
       <Row fillWidth horizontal="center">
-        <Text variant="label-default-xs" onBackground="neutral-weak">
+        <Text textVariant="label-default-xs" onBackground="neutral-weak">
           {selected ? `Selected: ${selected}` : "Nothing selected"}
         </Text>
       </Row>

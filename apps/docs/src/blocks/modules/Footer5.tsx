@@ -82,8 +82,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
             }}
           />
           <Column gap="8" maxWidth="32rem">
-            <Text variant="heading-strong-s">Stay in the loop</Text>
-            <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+            <Text textVariant="heading-strong-s">Stay in the loop</Text>
+            <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
               Product updates, new blocks, and design system releases — delivered monthly.
             </Text>
           </Column>
@@ -142,12 +142,12 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
           <Row fillWidth wrap gap="32" horizontal="between">
             {navigation.map((section) => (
               <Column key={section.title} gap="12" minWidth="12rem">
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {section.title}
                 </Text>
                 {section.items.map((item) => (
                   <SmartLink key={item.label} href={item.href} unstyled>
-                    <Text variant="body-default-s">{item.label}</Text>
+                    <Text textVariant="body-default-s">{item.label}</Text>
                   </SmartLink>
                 ))}
               </Column>

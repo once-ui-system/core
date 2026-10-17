@@ -1,16 +1,4 @@
-import {
-  AutoScroll,
-  Background,
-  Badge,
-  Button,
-  Column,
-  Fade,
-  Heading,
-  Logo,
-  Row,
-  Tag,
-  Text,
-} from "@once-ui-system/core";
+import { Scroller, Background, Button, Column, Fade, Heading, Logo, Row, Tag, Text } from "@once-ui-system/core";
 
 export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -24,7 +12,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       />
       <Column maxWidth="xs" gap="32" fitHeight horizontal="center" {...flex}>
         <Column fillWidth horizontal="center" gap="24" marginBottom="32">
-          <Badge
+          <Tag variant="announce"
             href="#"
             id="badge-3"
             paddingY="4"
@@ -35,17 +23,17 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             arrow
             effect={false}
           >
-            <Tag size="l" scheme="brand" marginRight="12">
-              <Text variant="body-strong-xs">WWUI</Text>
+            <Tag size="l" tone="brand" marginRight="12">
+              <Text textVariant="body-strong-xs">WWUI</Text>
             </Tag>
-            <Text variant="label-default-s">Claim your ticket</Text>
-          </Badge>
-          <Heading variant="display-default-l" marginTop="12">
+            <Text textVariant="label-default-s">Claim your ticket</Text>
+          </Tag>
+          <Heading textVariant="display-default-l" marginTop="12">
             Start with templates
             <br />
             <Text onBackground="brand-weak">Customize with blocks</Text>
           </Heading>
-          <Heading onBackground="neutral-medium" variant="body-default-l" marginBottom="16">
+          <Heading onBackground="neutral-medium" textVariant="body-default-l" marginBottom="16">
             Once UI provides out-of-the-box solutions for advanced UI challenges. You can launch a
             functional business with Once UI — not just a shiny site.
           </Heading>
@@ -56,7 +44,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             </Button>
           </Row>
           <Row paddingY="24" maxWidth="40rem">
-            <AutoScroll marginTop="xl" opacity={50}>
+            <Scroller auto marginTop="xl" opacity={50}>
               <Logo
                 wordmark={{
                   light: "/trademarks/wordmark-light.svg",
@@ -87,7 +75,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
                   dark: "/trademarks/wordmark-dark.svg",
                 }}
               />
-            </AutoScroll>
+            </Scroller>
             <Fade
               position="absolute"
               top="0"
@@ -107,7 +95,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               to="left"
             />
           </Row>
-          <Text onBackground="neutral-weak" variant="label-strong-s">
+          <Text onBackground="neutral-weak" textVariant="label-strong-s">
             Trusted by top brands around the globe
           </Text>
         </Column>

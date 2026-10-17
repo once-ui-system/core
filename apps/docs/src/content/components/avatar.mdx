@@ -133,20 +133,20 @@ Use the T-shirt size model, a number in px, or a CSS length such as `"4rem"`.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <Avatar value="G" statusIndicator={{ color: "green" }} />
-      <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
-      <Avatar value="R" statusIndicator={{ color: "red" }} />
-      <Avatar value="G" statusIndicator={{ color: "gray" }} />
+      <Avatar value="G" statusIndicator={{ scheme: "green" }} />
+      <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+      <Avatar value="R" statusIndicator={{ scheme: "red" }} />
+      <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
     </Row>
   }
   codes={[
     {
       code:
 `<Row gap="16">
-    <Avatar value="G" statusIndicator={{ color: "green" }} />
-    <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
-    <Avatar value="R" statusIndicator={{ color: "red" }} />
-    <Avatar value="G" statusIndicator={{ color: "gray" }} />
+    <Avatar value="G" statusIndicator={{ scheme: "green" }} />
+    <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+    <Avatar value="R" statusIndicator={{ scheme: "red" }} />
+    <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
 </Row>`,
       language: "tsx",
       label: "Status indicator"

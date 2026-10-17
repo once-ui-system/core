@@ -2,9 +2,9 @@
 
 import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
 import { useControllableState } from "../internal/useControllableState";
-import { Chip } from "./Chip";
 import { Flex } from "./Flex";
 import { Input, InputProps } from "./Input";
+import { Tag } from "./Tag";
 
 interface TagInputProps extends Omit<InputProps, "value" | "defaultValue" | "onValueChange"> {
   /** The tags, controlled. Leave it out to let TagInput keep its own list,
@@ -84,14 +84,16 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
             paddingY="16"
           >
             {value.map((tag, index) => (
-              <Chip
+              <Tag
                 key={index}
                 label={tag}
+                // Tags keep 2.x's look: Chip's `selected` defaulted to true.
+                selected
                 onRemove={() => handleRemoveTag(index)}
                 // The name goes on the button that removes the tag. On the
-                // Chip it named the chip itself, and every remove button was
+                // tag it named the tag itself, and every remove button was
                 // just "Remove".
-                iconButtonProps={{ "aria-label": `Remove tag ${tag}` }}
+                removeButtonProps={{ "aria-label": `Remove tag ${tag}` }}
               />
             ))}
           </Flex>

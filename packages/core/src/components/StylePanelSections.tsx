@@ -497,12 +497,12 @@ function Group({ title, description, children, ...rest }: StyleGroupProps) {
       {(title !== false || description !== false) && (
         <Column fillWidth paddingTop="12" paddingLeft="16" gap="4">
           {title !== false && (
-            <Text variant="heading-strong-s" onBackground="neutral-strong">
+            <Text textVariant="heading-strong-s" onBackground="neutral-strong">
               {title}
             </Text>
           )}
           {description !== false && (
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               {description}
             </Text>
           )}

@@ -1,4 +1,4 @@
-import { Badge, Button, Column, Heading, Mask, Media, Row, Tag, Text } from "@once-ui-system/core";
+import { Button, Column, Heading, Mask, Media, Row, Tag, Text } from "@once-ui-system/core";
 import { Background6 } from ".";
 
 export const Hero1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
@@ -17,7 +17,7 @@ export const Hero1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
           />
         </Mask>
         <Column maxWidth="30rem" vertical="center" gap="24" paddingLeft="32" paddingY="32">
-          <Badge
+          <Tag variant="announce"
             paddingY="4"
             paddingLeft="4"
             paddingRight="16"
@@ -29,14 +29,14 @@ export const Hero1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
             arrow={false}
           >
             <Tag>
-              <Text variant="body-strong-xs">NEW</Text>
+              <Text textVariant="body-strong-xs">NEW</Text>
             </Tag>
             Instant presence with Once UI
-          </Badge>
-          <Heading variant="display-strong-l" marginTop="12">
+          </Tag>
+          <Heading textVariant="display-strong-l" marginTop="12">
             The flexible SaaS template that speaks your brand language
           </Heading>
-          <Heading onBackground="neutral-medium" variant="body-default-l" marginBottom="16">
+          <Heading onBackground="neutral-medium" textVariant="body-default-l" marginBottom="16">
             A clean foundation to tell your story, convert users, and scale without limits. Launch a
             fully functional business with Once UI — not just a shiny site
           </Heading>

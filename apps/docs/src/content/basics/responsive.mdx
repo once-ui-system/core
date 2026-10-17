@@ -55,10 +55,10 @@ Supports layout, spacing, sizing, colors, typography, and effects.
   preview={
     <Row fillWidth gap="16" s={{direction: "column"}}>
       <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
-        <Text variant="body-default-s">Item 1</Text>
+        <Text textVariant="body-default-s">Item 1</Text>
       </Flex>
       <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
-        <Text variant="body-default-s">Item 2</Text>
+        <Text textVariant="body-default-s">Item 2</Text>
       </Flex>
     </Row>
   }
@@ -115,13 +115,13 @@ Supports grid-specific, spacing, sizing, colors, typography, and effects. Does *
   preview={
     <Row fillWidth gap="16" s={{direction: "column"}}>
       <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
-        <Text variant="body-default-s">Cell 1</Text>
+        <Text textVariant="body-default-s">Cell 1</Text>
       </Flex>
       <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
-        <Text variant="body-default-s">Cell 2</Text>
+        <Text textVariant="body-default-s">Cell 2</Text>
       </Flex>
       <Flex fillWidth padding="16" background="surface" radius="l" s={{padding: "8"}}>
-        <Text variant="body-default-s">Cell 3</Text>
+        <Text textVariant="body-default-s">Cell 3</Text>
       </Flex>
     </Row>
   }
@@ -182,7 +182,7 @@ These extend `Flex` and inherit all Flex breakpoint props.
       xl={{ padding: "32" }}
       m={{ padding: "16" }}
     >
-      <Text variant="body-default-s">Card content</Text>
+      <Text textVariant="body-default-s">Card content</Text>
     </Card>
   }
   codes={[
@@ -255,7 +255,7 @@ type GridBreakpointProps = BreakpointProps<AllGridProps,
       background="surface"
       radius="l"
     >
-      <Text variant="body-default-s">Visible on mobile only</Text>
+      <Text textVariant="body-default-s">Visible on mobile only</Text>
     </Flex>
   }
   codes={[
@@ -286,10 +286,10 @@ type GridBreakpointProps = BreakpointProps<AllGridProps,
       m={{ direction: "column" }}
     >
       <Flex padding="16" background="surface" radius="l">
-        <Text variant="body-default-s">Left content</Text>
+        <Text textVariant="body-default-s">Left content</Text>
       </Flex>
       <Flex padding="16" background="surface" radius="l">
-        <Text variant="body-default-s">Right content</Text>
+        <Text textVariant="body-default-s">Right content</Text>
       </Flex>
     </Flex>
   }

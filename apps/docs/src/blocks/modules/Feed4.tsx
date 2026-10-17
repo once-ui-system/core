@@ -9,7 +9,7 @@ import {
   Media,
   OgCard,
   Row,
-  Swiper,
+  Carousel,
   Text,
 } from "@once-ui-system/core";
 
@@ -90,14 +90,14 @@ function PostCard({ post }: { post: FeedPost }) {
           <Row fillWidth vertical="center" wrap gap="8">
             <Row gap="8" vertical="center">
               <Avatar size="1.5rem" src={post.author.avatar} />
-              <Text variant="label-default-s">{post.author.name}</Text>
+              <Text textVariant="label-default-s">{post.author.name}</Text>
             </Row>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               s/{post.space}
             </Text>
             <Row vertical="center" gap="8">
               <Row minWidth="4" minHeight="4" radius="full" solid="neutral-medium" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {post.time}
               </Text>
             </Row>
@@ -105,13 +105,13 @@ function PostCard({ post }: { post: FeedPost }) {
         </Row>
 
         <Row fillWidth paddingBottom="16" paddingX="20">
-          <Text variant="heading-strong-m">{post.title}</Text>
+          <Text textVariant="heading-strong-m">{post.title}</Text>
         </Row>
 
         {post.attachment && (
           <Row fillWidth paddingX="4">
             {post.attachment.type === "carousel" && post.attachment.urls && (
-              <Swiper
+              <Carousel mode="snap"
                 radius="l"
                 maxWidth="40rem"
                 aspectRatio="3/4"
@@ -148,8 +148,8 @@ function PostCard({ post }: { post: FeedPost }) {
 
         <Row gap="16" vertical="center" fillWidth paddingTop="12" paddingX="20">
           <Row vertical="center" gap="8">
-            <Text variant="label-default-s">⚡🔥🚀</Text>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s">⚡🔥🚀</Text>
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {post.likes}
             </Text>
           </Row>
@@ -157,14 +157,14 @@ function PostCard({ post }: { post: FeedPost }) {
           <Row gap="16">
             <Row vertical="center" gap="8">
               <Icon size="xs" name="chat" onBackground="neutral-weak" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {post.comments}
               </Text>
             </Row>
             <Line minHeight="20" vert />
             <Row vertical="center" gap="8">
               <Icon size="xs" name="eye" onBackground="neutral-weak" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {post.views}k
               </Text>
             </Row>

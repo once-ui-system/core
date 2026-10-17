@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import React, {
   forwardRef,
@@ -10,19 +10,20 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { Flex } from "../components/Flex";
 import type { Placement } from "../types";
-import styles from "./CursorCard.module.scss";
-import { Flex } from "./Flex";
+import styles from "./CursorFollower.module.scss";
 
-export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
+export interface CursorFollowerProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
   overlay?: ReactNode;
-  placement?: Placement;
+  /** Which side of the pointer the card sits on; `"bottom-left"` by default. */
+  placement?: Placement | "top-left" | "top-right" | "bottom-left" | "bottom-right";
   className?: string;
   style?: React.CSSProperties;
 }
 
-const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
+const CursorFollower = forwardRef<HTMLDivElement, CursorFollowerProps>(
   ({ trigger, overlay, placement = "bottom-left", className, style, ...flex }, ref) => {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -119,6 +120,6 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
   },
 );
 
-CursorCard.displayName = "CursorCard";
+CursorFollower.displayName = "CursorFollower";
 
-export { CursorCard };
+export { CursorFollower };

@@ -6,7 +6,7 @@ import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
 import { Column } from "../components/Column";
-import { DropdownWrapper } from "../components/DropdownWrapper";
+import { Dropdown } from "../components/Dropdown";
 import { IconButton } from "../components/IconButton";
 import { Option } from "../components/Option";
 import { Select } from "../components/Select";
@@ -282,19 +282,18 @@ describe("Select accessibility", () => {
  * Every DropdownWrapper list nested a listbox (the Dropdown panel) inside
  * another (ArrowNavigation), the outer one owning no options of its own.
  */
-describe("a DropdownWrapper list", () => {
+describe("a Dropdown list (2.x DropdownWrapper)", () => {
   it("is one listbox when open, with no axe violations", async () => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper
-        trigger={<Button>Options</Button>}
-        dropdown={
+      <Dropdown trigger={<Button>Options</Button>}>
+        {
           <Column padding="4" gap="2">
             <Option value="rename" label="Rename" />
             <Option value="delete" label="Delete" />
           </Column>
         }
-      />,
+      </Dropdown>,
       { wrapper: wrap },
     );
 
@@ -311,14 +310,13 @@ describe("a DropdownWrapper list", () => {
   const openList = async (trigger: React.ReactElement, name: string) => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper
-        trigger={trigger}
-        dropdown={
+      <Dropdown trigger={trigger}>
+        {
           <Column padding="4" gap="2">
             <Option value="rename" label="Rename" />
           </Column>
         }
-      />,
+      </Dropdown>,
       { wrapper: wrap },
     );
     const button = screen.getByRole("button", { name });

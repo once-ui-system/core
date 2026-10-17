@@ -117,7 +117,7 @@ const Legend: React.FC<LegendProps> = ({
         return (
           <Row key={index} vertical="center" gap="8">
             <Swatch color={color} size="m" variant={chartVariant} />
-            <Text variant="label-default-s" wrap="nowrap">
+            <Text textVariant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>
           </Row>

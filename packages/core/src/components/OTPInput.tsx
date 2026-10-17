@@ -163,7 +163,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
         </Flex>
         {showsErrorMessage && (
           <Flex paddingX="8" id={errorId}>
-            <Text variant="body-default-s" onBackground="danger-weak">
+            <Text textVariant="body-default-s" onBackground="danger-weak">
               {errorMessage}
             </Text>
           </Flex>

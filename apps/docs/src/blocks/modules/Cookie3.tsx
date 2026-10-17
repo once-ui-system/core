@@ -23,7 +23,7 @@ export const Cookie3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
     >
       <Row gap="12" vertical="center" minWidth="20rem" fillWidth>
         <Tag size="s" label="Privacy" />
-        <Text variant="body-default-s" onBackground="neutral-medium" wrap="balance">
+        <Text textVariant="body-default-s" onBackground="neutral-medium" wrap="balance">
           We use cookies to improve your experience. Read our{" "}
           <SmartLink href="#">Privacy Policy</SmartLink>.
         </Text>

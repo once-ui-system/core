@@ -1,102 +1,285 @@
 ---
 title: "Tag"
-summary: "Tag displays a compact label with optional icons, used to annotate content with status, metadata, or category information."
-updatedAt: "2026-10-11"
+summary: "Tag is a compact label: a static status or category, an announcement pill that links somewhere, or a toggle that can be selected and removed."
+updatedAt: "2026-10-17"
 docs: "once-ui/components/tag.mdx"
 github: "components/Tag.tsx"
 navLabel: "Tag"
 navIcon: "components"
 ---
 
-`Tag` is a flexible label component that supports color variants, sizes, and optional icons on either side. Useful for tokens, filters, statuses, and tags.
+`Tag` is a compact label with optional icons on either side. It comes in three kinds:
+
+- a **static label** for a status, a category or a piece of metadata;
+- an **announcement** (`variant="announce"`), the pill above a hero that links to what is new;
+- a **toggle** (`selected`, `onClick` or `onRemove`), a choice in a filter row or a value in `TagInput`.
 
 <Feedback
   marginTop="16"
   marginBottom="24"
-  title="Badge, Tag or Chip"
-  description={<><SmartLink href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
+  title="Badge and Chip are Tag in 3.0"
+  description={<>2.x had three components for this. <InlineCode>Badge</InlineCode> is <InlineCode>{'<Tag variant="announce">'}</InlineCode> (<InlineCode>title</InlineCode> is <InlineCode>label</InlineCode>, <InlineCode>icon</InlineCode> is <InlineCode>prefixIcon</InlineCode>), and <InlineCode>Chip</InlineCode> is a Tag with <InlineCode>selected</InlineCode>, <InlineCode>onClick</InlineCode> or <InlineCode>onRemove</InlineCode>. <InlineCode>selected</InlineCode> now defaults to false. Tag's <InlineCode>scheme</InlineCode> is <InlineCode>tone</InlineCode>. The 3.0 codemod rewrites all of it.</>}
 />
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="12">
-      <Tag scheme="brand" label="New" />
-      <Tag scheme="success" label="Passed" prefixIcon="check" />
-      <Tag scheme="danger" label="Error" suffixIcon="close" />
+    <Row gap="12" wrap center>
+      <Tag tone="brand" label="New" />
+      <Tag tone="success" label="Passed" prefixIcon="check" />
+      <Tag variant="announce" label="Version 3.0 is out" href="#" />
+      <BasicChipExample />
     </Row>
   }
   codes={[
     {
       code:
-`<Tag scheme="brand" label="New" />
-<Tag scheme="success" label="Passed" prefixIcon="check" />
-<Tag scheme="danger" label="Error" suffixIcon="close" />`,
+`<Tag tone="brand" label="New" />
+<Tag tone="success" label="Passed" prefixIcon="check" />
+<Tag variant="announce" label="Version 3.0 is out" href="/changelog" />
+<Tag label="Selected" selected />`,
       language: "tsx",
       label: "Tag"
     }
   ]}
 />
 
-## Sizes
+## Tone
 
-Tag is available in three sizes for flexibility in dense or prominent layouts.
+`tone` is the palette: `brand`, `accent`, `neutral` (the default), `info`, `success`, `warning` or `danger`. The gradient look is a `variant`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row gap="16" vertical="center">
-      <Tag size="s" label="Small" />
-      <Tag size="m" label="Medium" />
-      <Tag size="l" label="Large" />
+    <Row wrap gap="8" center>
+      <Tag tone="brand">Brand</Tag>
+      <Tag tone="accent">Accent</Tag>
+      <Tag tone="info">Info</Tag>
+      <Tag tone="warning">Warning</Tag>
+      <Tag tone="success">Success</Tag>
+      <Tag tone="danger">Danger</Tag>
+      <Tag tone="neutral">Neutral</Tag>
+      <Tag variant="gradient">Gradient</Tag>
     </Row>
   }
   codes={[
     {
       code:
-`<Tag size="s" label="Small" />
+`<Tag tone="brand">Brand</Tag>
+<Tag tone="accent">Accent</Tag>
+<Tag tone="info">Info</Tag>
+<Tag tone="warning">Warning</Tag>
+<Tag tone="success">Success</Tag>
+<Tag tone="danger">Danger</Tag>
+<Tag tone="neutral">Neutral</Tag>
+<Tag variant="gradient">Gradient</Tag>`,
+      language: "tsx",
+      label: "Tone"
+    }
+  ]}
+/>
+
+## Sizes
+
+Every kind of Tag takes the full size scale, `xs` to `xl`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" vertical="center" center wrap>
+      <Tag size="xs" label="Extra small" />
+      <Tag size="s" label="Small" />
+      <Tag size="m" label="Medium" />
+      <Tag size="l" label="Large" />
+      <Tag size="xl" label="Extra large" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tag size="xs" label="Extra small" />
+<Tag size="s" label="Small" />
 <Tag size="m" label="Medium" />
-<Tag size="l" label="Large" />`,
+<Tag size="l" label="Large" />
+<Tag size="xl" label="Extra large" />`,
       language: "tsx",
       label: "Sizes"
     }
   ]}
 />
 
-## Variants
+## Announcement
 
-Supports all Once UI design tokens including brand, neutral, danger, success, and info.
+`variant="announce"` is the pill that announces something: a rounded tag with a shine that sweeps across it now and then. It draws in `brand` unless given a `tone`. This was `Badge` in 2.x.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row wrap gap="8">
-      <Tag scheme="brand">Brand</Tag>
-      <Tag scheme="accent">Accent</Tag>
-      <Tag scheme="info">Info</Tag>
-      <Tag scheme="warning">Warning</Tag>
-      <Tag scheme="success">Success</Tag>
-      <Tag scheme="danger">Danger</Tag>
-      <Tag scheme="neutral">Neutral</Tag>
-      <Tag scheme="gradient">Gradient</Tag>
+    <Row gap="16" center wrap>
+      <Tag variant="announce" label="New release" prefixIcon="rocket" />
+      <Tag variant="announce" label="Coming soon" prefixIcon="calendar" effect={false} />
+      <Tag variant="announce" tone="accent" label="Beta" />
     </Row>
   }
   codes={[
     {
       code:
-`<Tag scheme="brand">Brand</Tag>
-<Tag scheme="accent">Accent</Tag>
-<Tag scheme="info">Info</Tag>
-<Tag scheme="warning">Warning</Tag>
-<Tag scheme="success">Success</Tag>
-<Tag scheme="danger">Danger</Tag>
-<Tag scheme="neutral">Neutral</Tag>
-<Tag scheme="gradient">Gradient</Tag>`,
+`<Tag variant="announce" label="New release" prefixIcon="rocket" />
+<Tag variant="announce" label="Coming soon" prefixIcon="calendar" effect={false} />
+<Tag variant="announce" tone="accent" label="Beta" />`,
       language: "tsx",
-      label: "Variants"
+      label: "Announcement"
+    }
+  ]}
+/>
+
+### Link and arrow
+
+`href` makes any Tag a link, and turns on an `arrow` that slides in on hover. Each tag's arrow follows hover on that tag alone, so a page can hold as many as it needs without giving them ids.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="16" center wrap>
+      <Tag variant="announce" href="#" label="Read the changelog" />
+      <Tag variant="announce" href="#" label="Documentation" prefixIcon="pages" arrow={false} />
+      <Tag href="#" tone="brand" label="Docs" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Tag variant="announce" href="/changelog" label="Read the changelog" />
+<Tag variant="announce" href="/docs" label="Documentation" prefixIcon="pages" arrow={false} />
+<Tag href="/docs" tone="brand" label="Docs" />`,
+      language: "tsx",
+      label: "Link"
+    }
+  ]}
+/>
+
+### Custom content
+
+An announcement lays its children out in the pill itself, so they take its `gap` and padding.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Tag variant="announce" paddingY="4" paddingLeft="4" paddingRight="16" radius="m" gap="12" textVariant="label-default-s" border="neutral-medium" background="neutral-alpha-weak">
+      <Tag tone="brand">New</Tag>
+      Custom content
+    </Tag>
+  }
+  codes={[
+    {
+      code:
+`<Tag variant="announce" paddingY="4" paddingLeft="4" paddingRight="16" radius="m" gap="12" textVariant="label-default-s" border="neutral-medium" background="neutral-alpha-weak">
+  <Tag tone="brand">New</Tag>
+  Custom content
+</Tag>`,
+      language: "tsx",
+      label: "Custom content"
+    }
+  ]}
+/>
+
+## Toggle
+
+With `selected`, `onClick` or `onRemove` a Tag is a toggle: a `role="button"` with `aria-pressed`, pressed by a click, Enter or Space. Selected, it draws in its tone (`brand` unless given one); unselected, in neutral. `selected` defaults to false. This was `Chip` in 2.x, where it defaulted to true.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <InteractiveChipExample />
+  }
+  codes={[
+    {
+      code:
+`const [selected, setSelected] = useState(true);
+
+<Tag
+  label="Clickable"
+  selected={selected}
+  onClick={() => setSelected(!selected)}
+/>`,
+      language: "tsx",
+      label: "Toggle"
+    }
+  ]}
+/>
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <ChipWithIconsExample />
+  }
+  codes={[
+    {
+      code:
+`<Tag selected label="Date" prefixIcon="calendar" />
+<Tag selected label="Discord" prefixIcon="discord" />
+<Tag selected label="Style" prefixIcon="style" />
+<Tag selected label="Favorite" prefixIcon="like" />`,
+      language: "tsx",
+      label: "With icons"
+    }
+  ]}
+/>
+
+### Removable
+
+`onRemove` adds a remove button beside the tag. Removing never counts as a click on the tag, and `removeButtonProps` reaches the button, for its `aria-label` or icon. A tag with only `onRemove` is a plain label beside its button, not a toggle; `TagInput` renders its values this way, with `selected`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" center>
+      <RemovableChipsExample />
+      <CustomRemovableChipExample />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`const { addToast } = useToast();
+const [tags, setTags] = useState([
+  { id: "1", label: "React", icon: "code" },
+  { id: "2", label: "TypeScript", icon: "code" },
+  { id: "3", label: "Next.js" },
+]);
+
+<Row gap="8" wrap>
+  {tags.map((tag) => (
+    <Tag
+      selected
+      key={tag.id}
+      label={tag.label}
+      prefixIcon={tag.icon}
+      onRemove={() => {
+        setTags(tags.filter((t) => t.id !== tag.id));
+        addToast({ tone: "danger", message: \`Removed \${tag.label}\` });
+      }}
+    />
+  ))}
+</Row>
+
+<Tag
+  selected
+  label="Custom Remove"
+  onRemove={remove}
+  removeButtonProps={{ icon: "trash", tooltip: "Delete" }}
+/>`,
+      language: "tsx",
+      label: "Removable"
     }
   ]}
 />
@@ -106,15 +289,22 @@ Supports all Once UI design tokens including brand, neutral, danger, success, an
 <PropsTable
   component="Tag"
   describe={{
-    scheme: "Colour scheme. This was called variant before 2.0.",
-    size: "Tag size.",
+    tone: "The palette. Neutral on a static tag, brand on an announcement and on a selected toggle. 2.x called it scheme.",
+    variant: "default, gradient, or announce (2.x's Badge).",
+    size: "xs to xl.",
     label: "The text.",
+    children: "The text, when it needs markup. Shown when there is no label.",
     prefixIcon: "Icon before the label.",
     suffixIcon: "Icon after the label.",
-    children: "The text, when it needs markup.",
+    href: "Makes it a link.",
+    arrow: "An arrow that slides in on hover. On by default with href.",
+    effect: "A shine that sweeps across now and then. On by default with variant=\"announce\".",
+    selected: "Makes it a toggle, pressed when true. Defaults to false.",
+    onClick: "Makes it a toggle, called on a click, Enter or Space.",
+    onRemove: "Adds a remove button, called when it is used.",
+    removeButtonProps: "Passed to the remove button.",
   }}
   content={[
-    ["children"],
     ["className"],
     ["style"]
   ]}

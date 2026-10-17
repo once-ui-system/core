@@ -88,7 +88,11 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
 
 export interface TextProps<T extends ElementType = "span"> extends HTMLAttributes<T> {
   as?: T;
-  variant?: TextVariant;
+  /**
+   * The typography preset, `${family}-${weight}-${size}` (`"body-default-m"`).
+   * The same name as on Flex; 2.x called it `variant` on Text and Heading.
+   */
+  textVariant?: TextVariant;
   wrap?: CSSProperties["textWrap"];
   size?: TextSize;
   weight?: TextWeight;
@@ -519,7 +523,7 @@ export type GridBreakpointProps = BreakpointProps<
 export type TextBreakpointProps = BreakpointProps<
   AllTextProps,
   // Typography
-  | "variant"
+  | "textVariant"
   | "size"
   | "weight"
   | "family"

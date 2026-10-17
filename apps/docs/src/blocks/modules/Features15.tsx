@@ -17,16 +17,16 @@ export const Features15 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Row gap="20" fillWidth vertical="center">
           <Column fillWidth horizontal="center" align="center" gap="16">
-            <Text variant="code-default-s" onBackground="brand-medium">
+            <Text textVariant="code-default-s" onBackground="brand-medium">
               TRUSTED AT SCALE
             </Text>
 
-            <CountFx variant="display-strong-l" value={12400} separator=",">
+            <CountFx textVariant="display-strong-l" value={12400} separator=",">
               +
             </CountFx>
 
             <Text
-              variant="heading-default-s"
+              textVariant="heading-default-s"
               onBackground="neutral-weak"
               wrap="balance"
               marginTop="16"

@@ -3,13 +3,13 @@
 import React, { useState } from "react";
 import {
   Button,
-  DropdownWrapper,
+  Dropdown,
   Flex,
   Text,
   Column,
   Option,
   Icon,
-  Input
+  Input,
 } from "@once-ui-system/core";
 
 export function BasicDropdown() {
@@ -28,7 +28,7 @@ export function BasicDropdown() {
   };
   
   return (
-    <DropdownWrapper
+    <Dropdown
       open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
@@ -39,9 +39,7 @@ export function BasicDropdown() {
         >
           {selected ? options.find(opt => opt.value === selected)?.label : "Select an option"}
         </Button>
-      }
-      dropdown={
-        <Column minWidth="10rem" padding="4" gap="2">
+      }><Column minWidth="10rem" padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -51,9 +49,7 @@ export function BasicDropdown() {
               onClick={handleSelect}
             />
           ))}
-        </Column>
-      }
-    />
+        </Column></Dropdown>
   );
 }
 
@@ -73,7 +69,7 @@ export function DropdownWithIcons() {
   };
   
   return (
-    <DropdownWrapper
+    <Dropdown
       open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
@@ -84,9 +80,7 @@ export function DropdownWithIcons() {
         >
           Actions
         </Button>
-      }
-      dropdown={
-        <Column fillWidth padding="4" gap="2">
+      }><Column fillWidth padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -98,9 +92,7 @@ export function DropdownWithIcons() {
               onClick={handleSelect}
             />
           ))}
-        </Column>
-      }
-    />
+        </Column></Dropdown>
   );
 }
 
@@ -120,7 +112,7 @@ export function CustomPositionDropdown() {
   };
   
   return (
-    <DropdownWrapper
+    <Dropdown
       open={isOpen}
       onOpenChange={setIsOpen}
       placement="right-start"
@@ -130,9 +122,7 @@ export function CustomPositionDropdown() {
         >
           Open right
         </Button>
-      }
-      dropdown={
-        <Column fillWidth padding="4" gap="2">
+      }><Column fillWidth padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -142,9 +132,7 @@ export function CustomPositionDropdown() {
               onClick={handleSelect}
             />
           ))}
-        </Column>
-      }
-    />
+        </Column></Dropdown>
   );
 }
 
@@ -171,7 +159,7 @@ export function SearchableDropdown() {
   );
   
   return (
-    <DropdownWrapper
+    <Dropdown
       open={isOpen}
       onOpenChange={setIsOpen}
       trigger={
@@ -182,9 +170,7 @@ export function SearchableDropdown() {
         >
           {selected ? options.find(opt => opt.value === selected)?.label : "Search items"}
         </Button>
-      }
-      dropdown={
-        <Column fillWidth minWidth="12rem">
+      }><Column fillWidth minWidth="12rem">
           <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
               size="s"
@@ -214,8 +200,6 @@ export function SearchableDropdown() {
               </Flex>
             )}
           </Column>
-        </Column>
-      }
-    />
+        </Column></Dropdown>
   );
 }

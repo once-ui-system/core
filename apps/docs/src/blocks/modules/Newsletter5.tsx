@@ -37,8 +37,8 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
     <Row fillWidth radius="xl" border overflow="hidden" m={{ direction: "column" }} {...flex}>
       <Column fill minWidth="24rem" padding="40" gap="20">
         <Column gap="8">
-          <Heading variant="display-strong-xs">Once UI Digest</Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Heading textVariant="display-strong-xs">Once UI Digest</Heading>
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Pick the topics you care about and get a short, no-fluff email whenever we ship
             something worth reading.
           </Text>
@@ -52,7 +52,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
                 key={topic}
                 onClick={() => toggleTopic(topic)}
                 cursor="interactive"
-                scheme={selected ? "brand" : "neutral"}
+                tone={selected ? "brand" : "neutral"}
                 prefixIcon={selected ? "check" : undefined}
               >
                 {topic}
@@ -105,7 +105,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
               { src: "/images/creators/suhaib.jpg" },
             ]}
           />
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Joined by 5,200+ designers and engineers
           </Text>
         </Row>
@@ -114,7 +114,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
       <Line vert background="neutral-alpha-weak" s={{ hide: true }} />
 
       <Column fill minWidth="20rem" background="surface" padding="32" gap="16" s={{ hide: true }}>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Latest issues
         </Text>
         <Column fillWidth gap="4">
@@ -129,10 +129,10 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
               cursor="interactive"
             >
               <Column gap="2" fillWidth>
-                <Text variant="label-default-s" truncate>
+                <Text textVariant="label-default-s" truncate>
                   {issue.title}
                 </Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   {issue.date}
                 </Text>
               </Column>

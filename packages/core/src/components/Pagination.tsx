@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination";
+import type { TShirtSizes } from "../types";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import styles from "./Pagination.module.scss";
@@ -34,8 +35,9 @@ const DEFAULT_LABELS: PaginationLabels = {
 
 // Buttons and icon buttons share a height one size apart: an `s` page button
 // is 32px, as an `m` icon button is. The field is the closest height above.
-const ICON_BUTTON_SIZE = { s: "m", m: "l", l: "xl" } as const;
-const SELECT_SIZE = { s: "xs", m: "xs", l: "s" } as const;
+// xs and xl have no icon button a size apart, so they share s's and l's.
+const ICON_BUTTON_SIZE = { xs: "s", s: "m", m: "l", l: "xl", xl: "xl" } as const;
+const SELECT_SIZE = { xs: "xs", s: "xs", m: "xs", l: "s", xl: "m" } as const;
 
 interface PaginationProps
   extends Omit<React.ComponentProps<typeof Row>, "onChange" | "children" | "defaultValue"> {
@@ -67,7 +69,7 @@ interface PaginationProps
   /** Add buttons that jump to the first and the last page. */
   showFirstLast?: boolean;
   /** The buttons' size. */
-  size?: "s" | "m" | "l";
+  size?: TShirtSizes;
   /** Disable every control, such as while the next page loads. */
   disabled?: boolean;
   /** The buttons' names and the per-page label, to translate them. */
@@ -208,7 +210,11 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       <Row ref={setRefs} as="nav" aria-label={ariaLabel} gap="16" vertical="center" wrap {...flex}>
         {perPageOptions && perPageOptions.length > 0 && (
           <Row gap="8" vertical="center">
-            <Text id={`${perPageId}-label`} variant="label-default-s" onBackground="neutral-medium">
+            <Text
+              id={`${perPageId}-label`}
+              textVariant="label-default-s"
+              onBackground="neutral-medium"
+            >
               {text.perPage}
             </Text>
             <Row width="5rem">

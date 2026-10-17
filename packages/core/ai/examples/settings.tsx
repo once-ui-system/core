@@ -52,10 +52,10 @@ export function SettingsExample() {
     <Column as="main" fillWidth horizontal="center" paddingY="48" paddingX="24">
       <Column maxWidth="l" gap="40">
         <Column gap="12">
-          <Text variant="label-default-s" onBackground="brand-medium">
+          <Text textVariant="label-default-s" onBackground="brand-medium">
             Settings
           </Text>
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             Manage your workspace
           </Heading>
         </Column>
@@ -75,7 +75,7 @@ export function SettingsExample() {
 
           <TabPanel value="profile" keepMounted>
             <Column background="surface" border radius="l" padding="24" gap="24">
-              <Heading as="h2" variant="heading-strong-m">
+              <Heading as="h2" textVariant="heading-strong-m">
                 Profile
               </Heading>
               <Row gap="16" vertical="center">
@@ -84,7 +84,7 @@ export function SettingsExample() {
                   <Button size="s" variant="secondary">
                     Upload photo
                   </Button>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     JPG or PNG, max 2 MB
                   </Text>
                 </Column>
@@ -109,7 +109,7 @@ export function SettingsExample() {
                 />
               </Form>
               <Row gap="12">
-                <Button onClick={() => addToast({ variant: "success", message: "Profile saved" })}>
+                <Button onClick={() => addToast({ tone: "success", message: "Profile saved" })}>
                   Save changes
                 </Button>
                 <Button variant="secondary">Cancel</Button>
@@ -118,7 +118,7 @@ export function SettingsExample() {
           </TabPanel>
 
           <TabPanel value="notifications" gap="8">
-            <Heading as="h2" variant="heading-strong-m" paddingBottom="8">
+            <Heading as="h2" textVariant="heading-strong-m" paddingBottom="8">
               Notifications
             </Heading>
             <Setting label="Product updates" description="Release notes and changelog">
@@ -160,14 +160,14 @@ export function SettingsExample() {
               padding="24"
               gap="16"
             >
-              <Heading as="h2" variant="heading-strong-m" onBackground="danger-medium">
+              <Heading as="h2" textVariant="heading-strong-m" onBackground="danger-medium">
                 Danger zone
               </Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Permanently delete your workspace and all associated data.
               </Text>
               <Row>
-                <Button variant="danger" size="s">
+                <Button tone="danger" size="s">
                   Delete workspace
                 </Button>
               </Row>

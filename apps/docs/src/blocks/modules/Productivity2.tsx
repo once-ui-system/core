@@ -72,8 +72,8 @@ export const Productivity2 = () => {
     <Column paddingX="8" paddingY="12" gap="24" maxWidth="xl" horizontal="center">
       <Row as="header" fillWidth paddingX="16" horizontal="between" vertical="center" wrap gap="16">
         <Column gap="4">
-          <Text variant="body-strong-m">Focus mode</Text>
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-strong-m">Focus mode</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             {completedCount} of {agenda.length} sessions complete
           </Text>
         </Column>
@@ -105,20 +105,20 @@ export const Productivity2 = () => {
             border="brand-alpha-medium"
             background="brand-alpha-weak"
           >
-            <Heading variant="display-strong-m">25:00</Heading>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Heading textVariant="display-strong-m">25:00</Heading>
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               Deep work session
             </Text>
           </Column>
 
           <Column fillWidth gap="8" horizontal="center" align="center">
-            <Tag scheme="brand" size="s">
+            <Tag tone="brand" size="s">
               In progress
             </Tag>
-            <Heading variant="heading-strong-s" align="center">
+            <Heading textVariant="heading-strong-s" align="center">
               {activeTask.title}
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               {activeTask.project} · {activeTask.duration}
             </Text>
           </Column>
@@ -145,7 +145,7 @@ export const Productivity2 = () => {
             vertical="center"
             borderBottom
           >
-            <Heading variant="heading-strong-s">Today&apos;s agenda</Heading>
+            <Heading textVariant="heading-strong-s">Today&apos;s agenda</Heading>
             <Button size="s" variant="secondary" prefixIcon="plus">
               Add block
             </Button>
@@ -165,7 +165,7 @@ export const Productivity2 = () => {
               >
                 <Row minWidth="6rem">
                   <Text
-                    variant="code-default-s"
+                    textVariant="code-default-s"
                     onBackground={item.active ? "brand-medium" : "neutral-weak"}
                   >
                     {item.time}
@@ -177,7 +177,7 @@ export const Productivity2 = () => {
                 />
                 <Column fillWidth gap="4">
                   <Text
-                    variant="label-default-s"
+                    textVariant="label-default-s"
                     onBackground={checked[index] ? "neutral-weak" : "neutral-strong"}
                     style={checked[index] ? { textDecoration: "line-through" } : undefined}
                   >
@@ -185,10 +185,10 @@ export const Productivity2 = () => {
                   </Text>
                   <Row gap="8" vertical="center">
                     <Icon name="folder" size="xs" onBackground="neutral-weak" />
-                    <Text variant="body-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="body-default-xs" onBackground="neutral-weak">
                       {item.project}
                     </Text>
-                    <Text variant="body-default-xs" onBackground="neutral-weak">
+                    <Text textVariant="body-default-xs" onBackground="neutral-weak">
                       · {item.duration}
                     </Text>
                   </Row>

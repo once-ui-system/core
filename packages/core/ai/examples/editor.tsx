@@ -27,7 +27,7 @@ const DURATION = 30;
 const initialTracks: Track[] = [
   {
     id: "video",
-    scheme: "brand",
+    tone: "brand",
     movable: true,
     resizable: true,
     blocks: [
@@ -38,7 +38,7 @@ const initialTracks: Track[] = [
   },
   {
     id: "audio",
-    scheme: "accent",
+    tone: "accent",
     blocks: [{ id: "music", start: 0, end: 30, label: "Music", locked: true }],
   },
 ];
@@ -70,7 +70,7 @@ export function EditorExample() {
             tooltip={playing ? "Pause" : "Play"}
             onClick={() => setPlaying(!playing)}
           />
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Untitled project
           </Text>
         </Row>
@@ -102,7 +102,7 @@ export function EditorExample() {
         rightPanel={
           <Column fill overflowY="auto" padding="24" center background="surface">
             <Column maxWidth="40rem" aspectRatio="16/9" radius="l" border background="page" center>
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {current ? current.label : "Nothing selected"}
               </Text>
             </Column>

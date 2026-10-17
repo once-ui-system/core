@@ -35,8 +35,9 @@ const TestProviders = ({ children }: { children: React.ReactNode }) => (
 const renderDialog = (props: Partial<React.ComponentProps<typeof Dialog>> = {}) =>
   render(<Dialog {...defaultProps} {...props} />, { wrapper: TestProviders });
 
+/** The panel: the box FocusTrap's container (the first `tabindex="-1"`) sits in. */
 const getDialogPanel = (root: ParentNode = document.body) =>
-  root.querySelector('[tabindex="-1"]') as HTMLElement | null;
+  (root.querySelector('[tabindex="-1"]')?.parentElement ?? null) as HTMLElement | null;
 
 const getOverlay = () => screen.getByRole("dialog");
 
@@ -360,8 +361,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       last.focus();
+      expect(panel).toContainElement(last);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab" });
+        fireEvent.keyDown(last, { key: "Tab" });
       });
 
       expect(document.activeElement).toBe(first);
@@ -383,8 +385,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       first.focus();
+      expect(panel).toContainElement(first);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab", shiftKey: true });
+        fireEvent.keyDown(first, { key: "Tab", shiftKey: true });
       });
 
       expect(document.activeElement).toBe(last);
@@ -418,7 +421,7 @@ describe("Dialog", () => {
       }
     });
 
-    it("restores focus to the opener after the close animation completes", () => {
+    it("restores focus to the opener as soon as it closes, while it animates out", () => {
       vi.useFakeTimers();
       const opener = document.createElement("button");
       opener.textContent = "Open dialog";
@@ -431,10 +434,12 @@ describe("Dialog", () => {
 
         rerender(<Dialog {...defaultProps} open={false} />);
 
-        expect(document.activeElement).not.toBe(opener);
+        // The overlay core (shared with Drawer) hands focus back on close, not
+        // after the exit transition: the closing dialog is already inert.
+        expect(document.activeElement).toBe(opener);
+        expect(screen.getByRole("dialog", { hidden: true }).inert).toBe(true);
 
         advanceTimers(299);
-        expect(document.activeElement).not.toBe(opener);
 
         advanceTimers(1);
         expect(document.activeElement).toBe(opener);

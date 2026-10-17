@@ -141,16 +141,16 @@ const MediaList = ({
                   <IconButton size="l" icon="dislike" variant="secondary" />
                 </Row>
               </Row>
-              <Heading as="h3" variant="heading-strong-l">
+              <Heading as="h3" textVariant="heading-strong-l">
                 {title}
               </Heading>
-              <Text variant="body-default-m" onBackground="neutral-weak">
+              <Text textVariant="body-default-m" onBackground="neutral-weak">
                 {description}
               </Text>
               <Row paddingTop="12" gap="16" vertical="center">
                 {categories?.map((category, index) => (
                   <React.Fragment key={index}>
-                    <Text variant="label-default-s" onBackground="neutral-medium">
+                    <Text textVariant="label-default-s" onBackground="neutral-medium">
                       {category}
                     </Text>
                     {index < categories.length - 1 && (
@@ -189,7 +189,7 @@ const FeedSection = ({
     <Column fillWidth padding="l">
       <Column fillWidth gap="24">
         <Column fillWidth paddingX="24">
-          <Heading as="h2" variant="display-strong-s">
+          <Heading as="h2" textVariant="display-strong-s">
             {title}
           </Heading>
         </Column>
@@ -372,10 +372,10 @@ export const Streaming1: React.FC = () => {
             items={featured.map((item) => ({
               slide: (
                 <Column fillHeight maxWidth="48rem" vertical="end" padding="xl" gap="l">
-                  <Heading variant="display-strong-m" onSolid="neutral-strong">
+                  <Heading textVariant="display-strong-m" onSolid="neutral-strong">
                     #1 in Movies Today
                   </Heading>
-                  <Text variant="heading-default-xl" onSolid="neutral-weak" wrap="balance">
+                  <Text textVariant="heading-default-xl" onSolid="neutral-weak" wrap="balance">
                     {item.description}
                   </Text>
                   <Row gap="8" pointerEvents="all" s={{ direction: "column" }}>

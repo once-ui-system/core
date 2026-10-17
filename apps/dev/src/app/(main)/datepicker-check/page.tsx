@@ -28,7 +28,7 @@ export default function DatePickerCheck() {
   return (
     <Row fillWidth gap="24" padding="24" data-testid="root">
       <Column gap="12" data-testid="case-standalone">
-        <Text variant="label-strong-s">Standalone DatePicker</Text>
+        <Text textVariant="label-strong-s">Standalone DatePicker</Text>
         <Column
           border="neutral-alpha-medium"
           radius="l"
@@ -41,7 +41,7 @@ export default function DatePickerCheck() {
       </Column>
 
       <Column gap="12" width="20rem" data-testid="case-nested">
-        <Text variant="label-strong-s">DateInput (picker in a dropdown)</Text>
+        <Text textVariant="label-strong-s">DateInput (picker in a dropdown)</Text>
         <DateInput
           id="datepicker-check-input"
           label="Date"

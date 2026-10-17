@@ -86,14 +86,14 @@ export const Store2 = () => {
           <Column gap="8">
             <Row gap="8" vertical="center">
               <Tag size="s">New arrival</Tag>
-              <Tag size="s" scheme="success">
+              <Tag size="s" tone="success">
                 In stock
               </Tag>
             </Row>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {product.brand}
             </Text>
-            <Heading variant="display-strong-xs">{product.name}</Heading>
+            <Heading textVariant="display-strong-xs">{product.name}</Heading>
             <Row gap="12" vertical="center">
               <Row gap="4" vertical="center">
                 {Array.from({ length: 5 }).map((_, index) => (
@@ -107,14 +107,14 @@ export const Store2 = () => {
                   />
                 ))}
               </Row>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {product.rating} ({product.reviews} reviews)
               </Text>
             </Row>
             <Row gap="12" vertical="end">
-              <Heading variant="heading-strong-xl">${product.price}</Heading>
+              <Heading textVariant="heading-strong-xl">${product.price}</Heading>
               <Text
-                variant="body-default-s"
+                textVariant="body-default-s"
                 onBackground="neutral-weak"
                 style={{ textDecoration: "line-through" }}
               >
@@ -126,7 +126,7 @@ export const Store2 = () => {
           <Line />
 
           <Column gap="12">
-            <Text variant="heading-strong-s">Color</Text>
+            <Text textVariant="heading-strong-s">Color</Text>
             <Row gap="8" wrap>
               {product.colors.map((color) => (
                 <Button
@@ -152,7 +152,7 @@ export const Store2 = () => {
 
           <Column gap="12">
             <Row fillWidth horizontal="between" vertical="center">
-              <Text variant="heading-strong-s">Size</Text>
+              <Text textVariant="heading-strong-s">Size</Text>
               <Button size="s" variant="tertiary">
                 Size guide
               </Button>
@@ -173,7 +173,7 @@ export const Store2 = () => {
           </Column>
 
           <Column gap="12">
-            <Text variant="heading-strong-s">Quantity</Text>
+            <Text textVariant="heading-strong-s">Quantity</Text>
             <Row gap="8" vertical="center">
               <Row gap="4" vertical="center" background="surface" border radius="l" padding="4">
                 <IconButton
@@ -184,7 +184,7 @@ export const Store2 = () => {
                   onClick={() => setQuantity(Math.max(1, quantity - 1))}
                 />
                 <Row minWidth="32" center>
-                  <Text variant="label-strong-s" align="center">
+                  <Text textVariant="label-strong-s" align="center">
                     {quantity}
                   </Text>
                 </Row>
@@ -195,13 +195,13 @@ export const Store2 = () => {
                   onClick={() => setQuantity(quantity + 1)}
                 />
               </Row>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Ships in 2–4 business days
               </Text>
             </Row>
           </Column>
 
-          <Text variant="body-default-m" onBackground="neutral-medium">
+          <Text textVariant="body-default-m" onBackground="neutral-medium">
             {product.description}
           </Text>
 
@@ -223,8 +223,8 @@ export const Store2 = () => {
               <Card key={item.label} fillWidth padding="12" radius="l" border>
                 <Column gap="8">
                   <Icon name={item.icon} size="s" onBackground="brand-medium" />
-                  <Text variant="label-strong-s">{item.label}</Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="label-strong-s">{item.label}</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     {item.detail}
                   </Text>
                 </Column>

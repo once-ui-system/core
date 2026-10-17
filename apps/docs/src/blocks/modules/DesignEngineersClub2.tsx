@@ -95,17 +95,17 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
             <Column fill gap="40" horizontal="center" vertical="between">
               <Row gap="m" vertical="center">
                 <Icon name="discord" />
-                <Text variant="label-default-s">/</Text>
-                <Text variant="label-default-s">Once UI</Text>
+                <Text textVariant="label-default-s">/</Text>
+                <Text textVariant="label-default-s">Once UI</Text>
               </Row>
               <Column gap="4" fillWidth horizontal="center">
-                <Heading align="center" as="h2" variant="display-strong-xs">
+                <Heading align="center" as="h2" textVariant="display-strong-xs">
                   Design Engineers Club
                 </Heading>
                 <Text
                   align="center"
                   onBackground="neutral-medium"
-                  variant="heading-default-xs"
+                  textVariant="heading-default-xs"
                   wrap="balance"
                 >
                   Break boundaries. Build with intention.
@@ -119,7 +119,7 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
                       pointerEvents: "all",
                     }}
                   >
-                    <Text variant="code-default-s">
+                    <Text textVariant="code-default-s">
                       <LetterFx>Join 1k+ creators</LetterFx>
                     </Text>
                   </Button>

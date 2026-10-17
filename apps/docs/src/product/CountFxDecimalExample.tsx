@@ -20,7 +20,7 @@ export const CountFxDecimalExample = () => {
     <Row fillWidth m={{direction:"column"}} gap="32">
       <Row fillWidth>
         <CountFx 
-          variant="display-strong-m" 
+          textVariant="display-strong-m" 
           value={value1} 
           decimals={2}
           duration={2000} 
@@ -30,7 +30,7 @@ export const CountFxDecimalExample = () => {
       </Row>
       <Row fillWidth>
         <CountFx 
-          variant="display-strong-m" 
+          textVariant="display-strong-m" 
           value={value2} 
           decimals={2}
           duration={2000} 

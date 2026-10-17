@@ -64,10 +64,10 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
         />
         <Column fillWidth>
           <Column fillWidth horizontal="center" padding="32">
-            <Heading as="h2" variant="heading-strong-l" align="center" marginBottom="8">
+            <Heading as="h2" textVariant="heading-strong-l" align="center" marginBottom="8">
               Platform foundations
             </Heading>
-            <Text align="center" onBackground="neutral-strong" variant="body-default-s">
+            <Text align="center" onBackground="neutral-strong" textVariant="body-default-s">
               The capabilities teams need to operate reliable products at scale
             </Text>
           </Column>
@@ -103,11 +103,11 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                 border="brand-alpha-medium"
                 background="brand-alpha-weak"
               />
-              <Heading as="h3" variant="label-default-m" onBackground="brand-weak">
+              <Heading as="h3" textVariant="label-default-m" onBackground="brand-weak">
                 {feature.title}
               </Heading>
             </Row>
-            <Text wrap="balance" onBackground="neutral-weak" variant="body-default-s">
+            <Text wrap="balance" onBackground="neutral-weak" textVariant="body-default-s">
               {feature.description}
             </Text>
           </Column>

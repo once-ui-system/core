@@ -14,9 +14,9 @@ export const CountFxExample = () => {
 
   return (
     <Row fillWidth m={{direction:"column"}} gap="32">
-      <Row fillWidth><CountFx variant="display-strong-m" value={value} duration={5000} effect="wheel" easing="ease-out" /></Row>
-      <Row fillWidth><CountFx variant="display-strong-m" value={value} duration={5000} effect="smooth" easing="ease-out" /></Row>
-      <Row fillWidth><CountFx variant="display-strong-m" separator="," value={value} duration={5000} effect="simple" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx textVariant="display-strong-m" value={value} duration={5000} effect="wheel" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx textVariant="display-strong-m" value={value} duration={5000} effect="smooth" easing="ease-out" /></Row>
+      <Row fillWidth><CountFx textVariant="display-strong-m" separator="," value={value} duration={5000} effect="simple" easing="ease-out" /></Row>
     </Row>
   );
 };
@@ -38,7 +38,7 @@ export const ScrollCountExample = () => {
   return (
     <CountFx
       ref={ref}
-      variant="display-strong-l"
+      textVariant="display-strong-l"
       value={value}
       duration={2000}
       effect="wheel"

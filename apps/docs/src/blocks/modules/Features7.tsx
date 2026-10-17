@@ -36,12 +36,12 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column fillWidth horizontal="center" {...flex}>
       <Column maxWidth="m" align="center" gap="20" paddingBottom="64" paddingX="20">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           {section.subtitle}
         </Heading>
         <Text
           wrap="balance"
-          variant="heading-default-xl"
+          textVariant="heading-default-xl"
           onBackground="neutral-medium"
           marginBottom="12"
         >
@@ -157,7 +157,7 @@ export const Features7: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         <Row maxWidth="l" gap="-1" s={{ direction: "column" }}>
           {features.map((feature, index) => (
             <Column fillWidth gap="12" padding="l" borderLeft borderRight key={index}>
-              <Text wrap="balance" variant="heading-default-m" onBackground="neutral-medium">
+              <Text wrap="balance" textVariant="heading-default-m" onBackground="neutral-medium">
                 {feature.title} <Text onBackground="neutral-weak">{feature.description}</Text>
               </Text>
             </Column>

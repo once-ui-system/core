@@ -2,7 +2,7 @@
 import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
-import { DropdownWrapper } from "./DropdownWrapper";
+import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
@@ -213,7 +213,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
               >
                 {" "}
                 {supportAlpha && (
-                  <DropdownWrapper
+                  <Dropdown
                     open={isAlphaDropdownOpen}
                     onOpenChange={setIsAlphaDropdownOpen}
                     placement="top-end"
@@ -225,21 +225,20 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                         icon="opacity"
                       />
                     }
-                    dropdown={
-                      <Column padding="16" gap="12" fillWidth minWidth="12rem">
-                        {" "}
-                        <Slider
-                          value={alpha}
-                          onValueChange={handleAlphaChange}
-                          min={0}
-                          max={100}
-                          step={1}
-                          label={text.opacity}
-                          showValue
-                        />{" "}
-                      </Column>
-                    }
-                  />
+                  >
+                    <Column padding="16" gap="12" fillWidth minWidth="12rem">
+                      {" "}
+                      <Slider
+                        value={alpha}
+                        onValueChange={handleAlphaChange}
+                        min={0}
+                        max={100}
+                        step={1}
+                        label={text.opacity}
+                        showValue
+                      />{" "}
+                    </Column>
+                  </Dropdown>
                 )}{" "}
                 <IconButton
                   onClick={handleReset}

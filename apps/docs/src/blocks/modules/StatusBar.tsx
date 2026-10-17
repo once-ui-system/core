@@ -24,20 +24,20 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
     >
       <Row gap="12" vertical="center" wrap>
         <Pulse size="s" />
-        <Text variant="label-default-s" onBackground="brand-medium">
+        <Text textVariant="label-default-s" onBackground="brand-medium">
           Live
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           ·
         </Text>
-        <Text variant="label-default-s">
+        <Text textVariant="label-default-s">
           $<CountFx value={value} separator="," />
           /mo
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           ·
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           {progress}% to next tier
         </Text>
       </Row>
@@ -45,7 +45,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
         <LinearGauge
           fillWidth
           value={progress}
-          hue="success"
+          tone="success"
           height={20}
           line={{ count: 60, width: 1.5, length: 8 }}
         />

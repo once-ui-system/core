@@ -10,11 +10,11 @@ export const Newsletter2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             size="l"
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
           />
-          <Heading marginTop="12" align="center" variant="heading-strong-l">
+          <Heading marginTop="12" align="center" textVariant="heading-strong-l">
             The product brief, once a month
           </Heading>
           <Text
-            variant="body-default-m"
+            textVariant="body-default-m"
             align="center"
             wrap="balance"
             marginBottom="20"

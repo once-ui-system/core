@@ -160,7 +160,7 @@ instead, and changes the code only where the replacement is exact
 | `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action | reports |
 | `InteractiveDetails`, `InteractiveDetailsProps` | `label` and `description` on Checkbox, RadioButton and Switch | reports |
 | `Toaster` | nothing: `ToastProvider` renders it; show toasts with `useToast()` | reports |
-| `Arrow` | Button `arrowIcon`, Badge `arrow` | reports |
+| `Arrow` | Button `arrowIcon`, Tag `arrow` | reports |
 | `ArrowNavigation`, `ArrowNavigationProps`, `useArrowNavigationContext`, `withArrowNavigation` | the `useArrowNavigation` hook on your own container: pass `containerRef`, call `handleKeyDown` from `onKeyDown` | reports |
 | `DialogProvider` | nothing: a `stack` Dialog makes the one beneath it inert by itself (the provider's state was never read) | drops the import, `<DialogProvider>` becomes `<>` |
 | `generateMetadata` | `createMetadata` (or `Meta.generate`, unchanged). The old name is Next's route-segment convention, so a page that re-exported it had it called by Next | renames the import and every call; keeps a re-export's public name and reports it |
@@ -174,6 +174,99 @@ DataTooltip count up, Carousel and DatePicker reveal, and Table's loading text
 shines with internal parts of their own instead of `CountFx`, `RevealFx` and
 `ShineFx`. Nothing changes in how they look or what you pass them; it is what
 lets the effects move to `@once-ui-system/fx` later.
+
+### 8. Tone and variant
+
+Each visual prop has one meaning now. **`tone`** is the semantic palette,
+`brand | accent | neutral | info | success | warning | danger`, on every
+component that had one, whatever 2.x called it. **`variant`** is how a
+component looks, never its colour. **`scheme`** is a palette hue (`blue`,
+`green`…). Text and Heading take **`textVariant`**, the name Flex already used,
+so `variant` never means typography.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| Button, IconButton `variant="danger"` / `"success"` / `"warning"` | `tone="danger"` (on the default `primary` variant; any variant takes any tone) | rewrites a literal; reports a variable |
+| Button, IconButton `variant="quaternary"` | `variant="ghost"` | rewrites, also inside a ternary |
+| Button, IconButton `color="brand-strong"` (it tinted only the icons) | `tone="brand"`, which colours the label and icons together | rewrites and reports, because the label changes colour |
+| Table `actions[].variant: "danger"` | `variant: "primary", tone: "danger"` | rewrites an inline array; reports one built elsewhere in the file |
+| Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames; `addToast({ variant })` shorthand is reported |
+| Tag, Pulse `scheme`; Tag `scheme="gradient"` | `tone`; `variant="gradient"` | rewrites |
+| Scrubber `tracks[].scheme`, `blocks[].scheme` | `tone` | rewrites an inline array; reports a variable |
+| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`) | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array; reports one built elsewhere in the file |
+| LinearGauge, RadialGauge `hue="success"` / `hue={[a, b]}` | `tone="success"` (also `"warning"`) / `hueRange={[a, b]}` | rewrites a literal or a ternary of tones; reports a variable |
+| StatusIndicator `color`, Avatar `statusIndicator={{ color }}` | `scheme` | renames |
+| Text, Heading, ListItem, CountFx, ShineFx, TypeFx, FadingLettersFx `variant` | `textVariant` | renames |
+| Tag, StatusIndicator, Pulse, Accordion, Pagination `size`: `s` to `l` | `xs` to `xl` | nothing to rewrite |
+
+`subtle` stays a Button and IconButton variant. A free colour prop (Background's
+`gradient`, `dots`, `lines` and `grid` colours, ParticleFx `color`, chart series
+and gauge `color`) now goes through one resolver: a raw CSS colour (`#fff`,
+`rgb()`, `hsl()`, `oklch()`, `white`) passes through, a token name becomes its
+custom property, and `brand-weak` is `--brand-on-background-weak`. 2.x wrapped
+every value in `var(--…)`, so `#fff` painted nothing; nothing to migrate.
+
+Looks that change: a toned non-primary Button colours its label as well as its
+icons; `quaternary` lost its hover fill as `ghost`; CodeBlock's toolbar buttons
+draw their icons in `neutral-on-background-strong` rather than `weak`.
+
+### 9. Badge and Chip are Tag
+
+`Badge` and `Chip` are no longer exported. `Tag` takes over both jobs:
+
+- `<Tag variant="announce">` is the announcement pill (2.x Badge), with `href`,
+  `arrow` (on by default with `href`) and `effect` (the shine, on by default on
+  `announce`). Each tag's arrow follows its own hover, so the `id` that 2.x
+  needed on every Badge of a page can go (every Badge defaulted to
+  `id="badge"`).
+- A Tag with `selected`, `onClick` or `onRemove` is the toggle (2.x Chip):
+  `role="button"` with `aria-pressed`, a remove button beside it, drawn
+  selected in its tone (`brand` by default). **`selected` defaults to false**;
+  Chip's defaulted to true, so a 2.x `<Chip label="x" />` was drawn and
+  announced as selected.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `<Badge title="New" icon="rocket" href="/blog" />` | `<Tag variant="announce" label="New" prefixIcon="rocket" href="/blog" />` | rewrites the element, closing tag, import, `BadgeProps` and `typeof Badge` |
+| Badge with both `title` and children | Tag shows its `label`, or its children without one | reports |
+| `<Chip label="A" onRemove={drop} iconButtonProps={…} />` | `<Tag selected label="A" onRemove={drop} removeButtonProps={…} />` | rewrites, and writes `selected` where it was left out so the chip keeps its look |
+| `Chip` / `Badge` passed as a value (a component map) | `Tag` | reports |
+| TagInput's chips | TagInput renders `Tag selected` with a remove button | nothing to do |
+
+A Tag with only `onRemove` is a plain label beside its remove button rather
+than a toggle; add `selected` or `onClick` to make it one.
+
+### 10. Components that merged
+
+Eleven components fold into the one that already did most of their job. Each
+2.x behaviour is a mode or a prop of the survivor and looks and behaves the
+same; the old exports are gone. The codemod rewrites the element, its props and
+the import (keeping an alias, adding the survivor once), renames the prop types
+(`ModalProps` → `DialogProps`, `DropdownWrapperProps` → `DropdownProps`,
+`HoverProps` / `CursorCardProps` → `HoverCardProps`, and so on), and reports any
+other use of an old name, such as passing it as a value.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `Modal` | `Dialog variant="sheet"`; `backdrop` is a slot of both variants | renames; every prop carries over |
+| `Swiper` | `Carousel mode="snap"` | renames; `indicator` (a boolean) becomes Carousel's: `true` is the default, `false` stays, an expression becomes `x ? "line" : false` |
+| `ScrollContainer` | `Scroller` in track mode: `draggable`, `infinite`, `markers`, `proximity`, `active` / `onActiveChange`, `step`, `clip`; per-tile props in `tile` | `items` become the children (an inline array is split); tile props move into `tile={{…}}`; adds `draggable` when no track option is set; reports a spread, whose props went to every tile in 2.x |
+| `AutoScroll` | `Scroller auto={{ speed, hover, reverse, gap }}` (`auto` alone for the defaults) | collects `speed`, `hover`, `reverse` and `scrollGap` into `auto` |
+| `InfoTip` | `Tooltip content={…}`: a Tooltip with `content` and no children renders the info icon; with children it describes them | moves the children into `content` and closes the tag |
+| `Hover` | `HoverCard placement="cover"`, with `delay`, `hideDelay` | moves `overlay` into the children; reports when the element had children of its own, which 2.x ignored |
+| `CursorCard` | `HoverCard placement="cursor"`, its corner as `cursorPlacement` | moves `overlay` into the children and `placement` to `cursorPlacement` |
+| `DropdownWrapper` | `Dropdown`: the wrapper's API under the short name; the menu is the children (`dropdown` stays as a deprecated alias) | renames; moves `dropdown` into the children, unwrapping a fragment |
+| `Dropdown` (2.x, the bare panel) | internal; use `Dropdown` with a `trigger`, or a `Column` for a static panel | reports each `<Dropdown>` without `trigger`, and `DropdownProps`, whose meaning changed |
+| `ContextMenu` | `Dropdown openOn="contextmenu"`, with `disabled` and `contents` | the children become `trigger`, `dropdown` the children |
+| `EmojiPickerDropdown` | `EmojiPicker trigger={…}`, with `open` / `defaultOpen` / `onOpenChange`, `placement`, `closeAfterClick` and `dropdownProps` | renames; props that were the dropdown's move into `dropdownProps` |
+| `UserMenu` | `User dropdown={…}`, with `selected`, `placement` and the menu's size props | renames; adds `dropdown={null}` when there was none, so the user still renders as a trigger |
+
+Two things work better and you may notice them. Dialog and Drawer share one
+overlay core, so Escape closes only the innermost open overlay (a Dialog opened
+from a Drawer closes alone), and focus goes back to the trigger as the overlay
+starts closing rather than after its exit animation. An uncontrolled
+`EmojiPicker trigger` now closes on a pick; 2.x's `EmojiPickerDropdown` closed
+only when controlled.
 
 ---
 

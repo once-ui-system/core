@@ -83,8 +83,8 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
         m={{ hide: true }}
       >
         <Column fillWidth padding="24" gap="4" borderBottom>
-          <Heading variant="heading-strong-l">Account</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="heading-strong-l">Account</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Notifications, billing, and privacy controls
           </Text>
         </Column>
@@ -109,10 +109,10 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
           {section !== "billing" && (
             <>
               <Column gap="8">
-                <Heading variant="heading-strong-xl">
+                <Heading textVariant="heading-strong-xl">
                   {section === "notifications" ? "Notifications" : "Privacy"}
                 </Heading>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Choose what you want to hear about and what stays private.
                 </Text>
               </Column>
@@ -128,8 +128,8 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
                   >
                     <Row fillWidth horizontal="between" vertical="center" gap="16">
                       <Column gap="4" flex={1}>
-                        <Text variant="label-strong-s">{item.title}</Text>
-                        <Text variant="body-default-s" onBackground="neutral-weak">
+                        <Text textVariant="label-strong-s">{item.title}</Text>
+                        <Text textVariant="body-default-s" onBackground="neutral-weak">
                           {item.description}
                         </Text>
                       </Column>
@@ -152,8 +152,8 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
           {section === "billing" && (
             <>
               <Column gap="8">
-                <Heading variant="heading-strong-xl">Billing</Heading>
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Heading textVariant="heading-strong-xl">Billing</Heading>
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Manage your subscription, payment method, and invoices.
                 </Text>
               </Column>
@@ -162,12 +162,12 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
                 <Column gap="16">
                   <Row fillWidth horizontal="between" vertical="center">
                     <Column gap="4">
-                      <Text variant="label-strong-s">Pro plan</Text>
-                      <Text variant="body-default-s" onBackground="neutral-weak">
+                      <Text textVariant="label-strong-s">Pro plan</Text>
+                      <Text textVariant="body-default-s" onBackground="neutral-weak">
                         Renews on Aug 19, 2026
                       </Text>
                     </Column>
-                    <Text variant="heading-strong-m">$149/yr</Text>
+                    <Text textVariant="heading-strong-m">$149/yr</Text>
                   </Row>
                   <Line />
                   <Row gap="12" vertical="center">
@@ -182,8 +182,8 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
                       <Icon name="payment" size="s" />
                     </Row>
                     <Column gap="2" flex={1}>
-                      <Text variant="label-strong-s">Visa ending in 4242</Text>
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="label-strong-s">Visa ending in 4242</Text>
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         Expires 09/28
                       </Text>
                     </Column>
@@ -195,7 +195,7 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
               </Card>
 
               <Column gap="12">
-                <Text variant="heading-strong-s">Recent invoices</Text>
+                <Text textVariant="heading-strong-s">Recent invoices</Text>
                 {[
                   { date: "Jul 19, 2026", amount: "$149.00", status: "Paid" },
                   { date: "Jul 19, 2025", amount: "$149.00", status: "Paid" },
@@ -213,15 +213,15 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
                       <Row gap="12" vertical="center">
                         <Avatar size="s" value={invoice.date.charAt(0)} />
                         <Column gap="2">
-                          <Text variant="label-strong-s">{invoice.date}</Text>
-                          <Text variant="body-default-xs" onBackground="neutral-weak">
+                          <Text textVariant="label-strong-s">{invoice.date}</Text>
+                          <Text textVariant="body-default-xs" onBackground="neutral-weak">
                             Annual subscription
                           </Text>
                         </Column>
                       </Row>
                       <Row gap="12" vertical="center">
-                        <Text variant="label-strong-s">{invoice.amount}</Text>
-                        <Text variant="label-default-s" onBackground="success-medium">
+                        <Text textVariant="label-strong-s">{invoice.amount}</Text>
+                        <Text textVariant="label-default-s" onBackground="success-medium">
                           {invoice.status}
                         </Text>
                         <Button size="s" variant="tertiary" prefixIcon="download" />

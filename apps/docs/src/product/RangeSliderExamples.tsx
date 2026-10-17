@@ -21,7 +21,7 @@ export function RangeSliderPriceExample() {
         formatValue={price}
         showValue
       />
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         Showing products from {price(range[0])} to {price(range[1])}
       </Text>
     </Column>

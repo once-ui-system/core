@@ -86,12 +86,12 @@ export const Streaming2 = () => {
           wrap
         >
           <Row gap="8" vertical="center">
-            <Pulse size="s" scheme="danger" />
-            <Tag scheme="danger" size="s" label="Live now" />
-            <Text variant="label-default-s">Design Systems Summit — Keynote</Text>
+            <Pulse size="s" tone="danger" />
+            <Tag tone="danger" size="s" label="Live now" />
+            <Text textVariant="label-default-s">Design Systems Summit — Keynote</Text>
           </Row>
           <Row gap="8" vertical="center">
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               <CountFx value={2847} separator="," /> watching
             </Text>
             <Button size="s" variant="secondary">
@@ -121,10 +121,10 @@ export const Streaming2 = () => {
               >
                 <Fade fillWidth height="16rem" to="top" position="absolute" bottom="0" left="0" />
                 <Column gap="4" fillWidth>
-                  <Heading variant="heading-strong-l" onSolid="neutral-strong">
+                  <Heading textVariant="heading-strong-l" onSolid="neutral-strong">
                     {featured.title}
                   </Heading>
-                  <Text variant="body-default-s" onSolid="neutral-weak">
+                  <Text textVariant="body-default-s" onSolid="neutral-weak">
                     {featured.episode} · {featured.duration} remaining
                   </Text>
                 </Column>
@@ -147,7 +147,7 @@ export const Streaming2 = () => {
             background="page"
             fillWidth
           >
-            <Heading variant="heading-strong-s">Up next</Heading>
+            <Heading textVariant="heading-strong-s">Up next</Heading>
             {queue.slice(1).map((item) => (
               <Row
                 key={item.title}
@@ -167,8 +167,8 @@ export const Streaming2 = () => {
                   style={{ width: "5rem" }}
                 />
                 <Column gap="4" fillWidth>
-                  <Text variant="label-default-s">{item.title}</Text>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s">{item.title}</Text>
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {item.episode} · {item.duration}
                   </Text>
                   {item.progress > 0 && <ProgressBar showLabel={false} value={item.progress} />}
@@ -180,7 +180,7 @@ export const Streaming2 = () => {
 
         <Column fillWidth gap="16">
           <Row fillWidth horizontal="between" vertical="center" wrap gap="12">
-            <Heading variant="heading-strong-m">Because you watched {featured.title}</Heading>
+            <Heading textVariant="heading-strong-m">Because you watched {featured.title}</Heading>
             <SegmentedControl
               buttons={genres.map((genre) => ({ label: genre.label, value: genre.value }))}
               value={selectedGenre}
@@ -199,7 +199,7 @@ export const Streaming2 = () => {
                     sizes="200px"
                     radius="l"
                   />
-                  <Text variant="label-default-s">{item.title}</Text>
+                  <Text textVariant="label-default-s">{item.title}</Text>
                 </Column>
               ))}
             </Row>

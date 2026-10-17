@@ -27,16 +27,16 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
     <Column maxWidth="28rem" radius="l" border padding="24" gap="20" {...flex}>
       <Row fillWidth horizontal="between" vertical="center">
         <Column gap="2">
-          <Text variant="heading-strong-s">Achievements</Text>
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="heading-strong-s">Achievements</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Milestones unlocked as you grow
           </Text>
         </Column>
         <Column horizontal="end" gap="2">
-          <Text variant="code-default-s" onBackground="brand-medium">
+          <Text textVariant="code-default-s" onBackground="brand-medium">
             {unlockedCount}/{achievements.length}
           </Text>
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Text textVariant="label-default-xs" onBackground="neutral-weak">
             {completion}% complete
           </Text>
         </Column>
@@ -60,7 +60,7 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
             />
             <Text
               align="center"
-              variant="label-default-xs"
+              textVariant="label-default-xs"
               onBackground={item.unlocked ? "neutral-strong" : "neutral-weak"}
               wrap="balance"
             >
@@ -68,7 +68,7 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
             </Text>
             <Text
               align="center"
-              variant="code-default-xs"
+              textVariant="code-default-xs"
               onBackground={item.unlocked ? "brand-weak" : "neutral-weak"}
             >
               {item.detail}
@@ -81,9 +81,9 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
           <Row fillWidth horizontal="between" vertical="center" gap="12">
             <Row gap="8" vertical="center">
               <Icon name={nextAchievement.icon} size="s" onBackground="brand-medium" />
-              <Text variant="label-strong-s">Next: {nextAchievement.label}</Text>
+              <Text textVariant="label-strong-s">Next: {nextAchievement.label}</Text>
             </Row>
-            <Text variant="code-default-xs" onBackground="neutral-weak">
+            <Text textVariant="code-default-xs" onBackground="neutral-weak">
               {nextAchievement.detail}
             </Text>
           </Row>
@@ -91,7 +91,7 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
             fillWidth
             value={72}
             height={8}
-            hue="success"
+            tone="success"
             line={{ count: 40, width: 1.5, length: 8 }}
           />
         </Column>

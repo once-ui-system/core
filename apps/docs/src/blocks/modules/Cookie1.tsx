@@ -32,7 +32,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         gap="8"
         {...flex}
       >
-        <Text variant="body-default-s" marginBottom="12">
+        <Text textVariant="body-default-s" marginBottom="12">
           This site uses tracking technologies. You may opt in or opt out of the use of these
           technologies.
         </Text>
@@ -78,7 +78,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 </button>
               }
             >
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Marketing cookies and services are used to deliver personalized advertisements,
                 promotions, and offers. These technologies enable targeted advertising and marketing
                 campaigns by collecting information about users' interests, preferences, and online
@@ -97,7 +97,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 </button>
               }
             >
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Analytics cookies and services are used for collecting statistical information about
                 how visitors interact with a website. These technologies provide insights into
                 website usage, visitor behavior, and site performance to understand and improve the
@@ -116,7 +116,7 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 </button>
               }
             >
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Functional cookies and services are used to offer enhanced and personalized
                 functionalities. These technologies provide additional features and improved user
                 experiences, such as remembering your language preferences, font sizes, region
@@ -132,13 +132,13 @@ export const Cookie1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
                 </button>
               }
             >
-              <Text onBackground="neutral-medium" variant="body-default-s">
+              <Text onBackground="neutral-medium" textVariant="body-default-s">
                 Essential cookies and services are used to enable core website features, such as
                 ensuring the security of the website.
               </Text>
             </Accordion>
           </Column>
-          <Text onBackground="neutral-weak" variant="body-default-s">
+          <Text onBackground="neutral-weak" textVariant="body-default-s">
             Read how we handle your data in our <SmartLink href="#">Privacy Policy</SmartLink>
           </Text>
         </Column>

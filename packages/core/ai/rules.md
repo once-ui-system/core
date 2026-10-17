@@ -74,7 +74,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Color and surfaces
 
-7. Colors are semantic tokens, never hex/rgb: `{scheme}-{weight}` or `{scheme}-alpha-{weight}` where scheme = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`.
+7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, Pulse, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on StatusIndicator and Avatar's `statusIndicator`.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
    - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
@@ -87,7 +87,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Text
 
-9. Use `Text` and `Heading` with `variant="{type}-{weight}-{size}"`: type = `body | heading | display | label | code`, weight = `default | strong`, size = `xs | s | m | l | xl`. Examples: `body-default-m`, `heading-strong-s`, `label-default-s`, `display-strong-m`.
+9. Use `Text` and `Heading` with `textVariant="{type}-{weight}-{size}"` (the same prop as on Flex; `variant` was 2.x): type = `body | heading | display | label | code`, weight = `default | strong`, size = `xs | s | m | l | xl`. Examples: `body-default-m`, `heading-strong-s`, `label-default-s`, `display-strong-m`.
 
 10. If a layout component only wraps text, put `textVariant` (and `onBackground`) directly on it instead of nesting a `Text`:
 
@@ -95,7 +95,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 // Good
 <Row textVariant="label-default-s" onBackground="neutral-weak">Updated today</Row>
 // Bad
-<Row><Text variant="label-default-s" onBackground="neutral-weak">Updated today</Text></Row>
+<Row><Text textVariant="label-default-s" onBackground="neutral-weak">Updated today</Text></Row>
 ```
 
 ## Responsive
@@ -114,7 +114,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Image/video → `Media`, not `img`
     - Links → `SmartLink` / `Button href`, not `a`
     - Status dot → `StatusIndicator`; progress → `ProgressBar`; loading → `Spinner` / `Skeleton`
-    - Labels/metadata → `Tag`, `Chip`, `Badge`, `Kbd`, `InlineCode`
+    - Labels/metadata → `Tag` (`variant="announce"` + `href` for the "New" pill above a hero; `selected`/`onClick`/`onRemove` for a filter toggle), `Kbd`, `InlineCode`. Badge and Chip are Tag in 3.0
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
@@ -123,12 +123,12 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
 13. Use the distinctive features when the design calls for them — they exist and are cheap:
-    - `Dialog` supports `stack` (stacked dialogs) and `base` props
+    - `Dialog` supports `stack` (stacked dialogs) and `base` props, and `variant="sheet"` (a full-height sheet from the bottom, with a `backdrop` slot)
     - Effects: `RevealFx`, `LetterFx`, `TypeFx`, `CountFx`, `GlitchFx`, `HoloFx`, `TiltFx`, `FlipFx`, `MatrixFx`, `BlobFx`, `ParticleFx`, `ShineFx`, `CelebrationFx`
-    - `CursorCard`, `HoverCard`, `ContextMenu`, `EmojiPicker`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
-    - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Chip`
+    - `HoverCard` (`placement="cursor"` follows the pointer, `"cover"` draws over the trigger), `Dropdown openOn="contextmenu"` (a right-click menu), `Tooltip content` with no children (an info icon), `EmojiPicker trigger`, `Scroller` (track mode with `infinite`/`markers`/`proximity`, or `auto` for a marquee), `Carousel mode="snap"`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
+    - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Tag selected`
 
-14. Buttons: `variant` = `primary | secondary | tertiary | quaternary | subtle | danger | success | warning | ghost | link` (the slice is authoritative; `primary` is the default); pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
+14. Buttons: `variant` is the appearance, `primary | secondary | tertiary | ghost | link | subtle` (`primary` is the default), and `tone` the palette, `brand | accent | neutral | info | success | warning | danger`: a destructive button is `<Button tone="danger">`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
 14b. Icon names must come from `iconNames` in catalog.json (spec.json carries the same list). In 2.0 `IconName` is a real union, so an unregistered name is a type error rather than a blank space — do not guess a plausible one, and never reach for `as IconName` to silence the check. If no registered icon fits, omit the icon. The registry is 99 icons; brand marks (github, discord, google) are deliberately not among them, so an app registers its own.
 
@@ -136,9 +136,9 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ```tsx
 // Good
-<Badge>{unread}</Badge>  or  <Tag size="s">Save 20%</Tag>
-// Bad: renders "2 unread2" / "Save 20%Save 20%"
-<Badge title={`${unread} unread`}>{unread}</Badge>
+<Tag size="s">{unread}</Tag>  or  <Tag size="s" label="Save 20%" />
+// Bad: one of the two is dropped
+<Tag label={`${unread} unread`}>{unread}</Tag>
 <Tag label="Save 20%">Save 20%</Tag>
 ```
 
@@ -158,7 +158,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
     `maxWidth` conventions: primary page containers `"xl"`–`"m"` (marketing/landing toward `"xl"`/`"l"`, app and docs content `"m"`). `"s"` is only for narrow reading content (about, legal); `"xs"` for special surfaces (drawers, popovers).
 
-16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid`, and on every component built on them whose slice lists the typed props (`Background`, `Tag`, `Badge`, `RevealFx`, `BlobFx`, …), use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`, and `data-border="rounded"` on `Button` and `IconButton`, which have no typed prop. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
+16. One-off theme overrides on a subtree, not custom CSS. On `Flex`/`Row`/`Column`/`Grid`, and on every component built on them whose slice lists the typed props (`Background`, `Tag`, `RevealFx`, `BlobFx`, …), use the typed props: `theme="dark"`, `themeBorder="rounded"`, `themeSolid="contrast"`, `themeSurface="translucent"` (they write `data-theme`, `data-border`, `data-solid`, `data-surface`). Attributes without a prop stay raw: `data-brand="emerald"`, and `data-border="rounded"` on `Button` and `IconButton`, which have no typed prop. `theme="dark"` makes a subtree dark; the `dark` boolean only shows an element in a dark theme.
 
 ## Scale and hierarchy (marketing/landing pages)
 
@@ -172,9 +172,9 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ```tsx
 // Good eyebrow
-<Text variant="label-default-s" onBackground="brand-medium">Pricing</Text>
+<Text textVariant="label-default-s" onBackground="brand-medium">Pricing</Text>
 // Bad eyebrow
-<Tag scheme="neutral" prefixIcon="sparkle">Pricing</Tag>
+<Tag tone="neutral" prefixIcon="sparkle">Pricing</Tag>
 ```
 
 20b. **Proportion is a decision, not a leftover.** Two columns in a row finish at
@@ -241,7 +241,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 ## Effect units
 
-24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `Hover` `delay` and `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `AutoScroll`, `GlitchFx` and `LetterFx`. `translateY` as a number is in **px** — use a token like `"16"` (1rem) or `translateY={16}`.
+24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `HoverCard placement="cover"` `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx` and `LetterFx`. `translateY` as a number is in **px** — use a token like `"16"` (1rem) or `translateY={16}`.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo dark>` beside a `<Logo light>`. Keep `dark` or `light` for a logo that should only appear in one theme.

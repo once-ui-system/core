@@ -40,7 +40,7 @@ function DashboardPreviewPanel() {
   return (
     <Column fillWidth gap="16" padding="m">
       <Row vertical="center" fillWidth horizontal="between" gap="8" wrap>
-        <Heading variant="display-strong-xs">Dashboard</Heading>
+        <Heading textVariant="display-strong-xs">Dashboard</Heading>
         <Button prefixIcon="plus" size="s" data-border="rounded">
           New
         </Button>
@@ -77,7 +77,7 @@ function DashboardPreviewPanel() {
                 }}
               />
               <Row vertical="center" gap="8">
-                <Text variant="label-default-s" onBackground="neutral-medium">
+                <Text textVariant="label-default-s" onBackground="neutral-medium">
                   {stat.title}
                 </Text>
                 <Row
@@ -86,10 +86,10 @@ function DashboardPreviewPanel() {
                   onBackground={stat.positive ? "success-weak" : "danger-weak"}
                 >
                   <Icon size="xs" name={stat.positive ? "trendUp" : "trendDown"} />
-                  <Text variant="body-default-xs">{stat.change}</Text>
+                  <Text textVariant="body-default-xs">{stat.change}</Text>
                 </Row>
               </Row>
-              <Heading variant="display-strong-xs">{stat.value}</Heading>
+              <Heading textVariant="display-strong-xs">{stat.value}</Heading>
             </Card>
           ))}
         </Row>
@@ -145,21 +145,21 @@ function DashboardPreviewPanel() {
             mask={{ x: "50%", y: 0, radius: "30vh" }}
           />
           <Column fill center gap="8" padding="24">
-            <Text variant="label-default-xs" onBackground="brand-medium" align="center">
+            <Text textVariant="label-default-xs" onBackground="brand-medium" align="center">
               16d left
             </Text>
             <RadialGauge
               width={180}
               height={180}
               value={42}
-              hue="success"
+              tone="success"
               unit="%"
               line={{ count: 48, width: 2, length: 24 }}
             />
-            <Text variant="label-default-s" onBackground="neutral-weak" align="center">
+            <Text textVariant="label-default-s" onBackground="neutral-weak" align="center">
               Monthly target
             </Text>
-            <Text variant="heading-strong-m" align="center">
+            <Text textVariant="heading-strong-m" align="center">
               $27,000
             </Text>
           </Column>
@@ -175,7 +175,7 @@ function DashboardPreviewPanel() {
           paddingRight="12"
           paddingY="12"
         >
-          <Heading variant="heading-strong-s">Project status</Heading>
+          <Heading textVariant="heading-strong-s">Project status</Heading>
         </Row>
         <Column fillWidth borderTop="neutral-medium">
           {projects.map((project) => (
@@ -189,13 +189,13 @@ function DashboardPreviewPanel() {
             >
               <Row vertical="center" gap="12">
                 <Icon name={project.icon} size="xs" onBackground="neutral-weak" />
-                <Text variant="body-default-s">{project.name}</Text>
+                <Text textVariant="body-default-s">{project.name}</Text>
               </Row>
               <Row vertical="center" gap="8">
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   {project.status}
                 </Text>
-                <StatusIndicator color={statusColor(project.status)} />
+                <StatusIndicator scheme={statusColor(project.status)} />
               </Row>
             </Row>
           ))}
@@ -220,10 +220,10 @@ export const Dashboard3 = (flex: React.ComponentProps<typeof Column>) => {
           <Row flex={1} l={{ hide: true }} />
           <Column fillWidth flex={5} l={{ style: { flex: 0 } }}>
             <Column maxWidth="64rem" gap="16" paddingX="24" paddingY="48">
-              <Text variant="heading-default-xl" onBackground="brand-weak">
+              <Text textVariant="heading-default-xl" onBackground="brand-weak">
                 Design tokens, without the chaos
               </Text>
-              <Heading as="h2" variant="display-default-s" marginBottom="8">
+              <Heading as="h2" textVariant="display-default-s" marginBottom="8">
                 Live theming beside a masked dashboard preview
               </Heading>
               <Button data-border="rounded" suffixIcon="chevronRight">

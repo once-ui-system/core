@@ -84,10 +84,10 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
       <Row fillWidth padding="16" vertical="center" gap="12">
         <Avatar size="s" src="/images/creators/lorant.jpg" />
         <Column fillWidth gap="2">
-          <Text variant="label-strong-s" truncate>
+          <Text textVariant="label-strong-s" truncate>
             Nova Studio
           </Text>
-          <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+          <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
             Free workspace
           </Text>
         </Column>
@@ -106,7 +106,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
         {favoriteItems.length > 0 && (
           <Column fillWidth gap="2">
             <Text
-              variant="body-default-xs"
+              textVariant="body-default-xs"
               onBackground="neutral-weak"
               marginBottom="4"
               marginLeft="12"
@@ -120,7 +120,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
         {sections.map((section) => (
           <Column key={section} fillWidth gap="2">
             <Text
-              variant="body-default-xs"
+              textVariant="body-default-xs"
               onBackground="neutral-weak"
               marginBottom="4"
               marginLeft="12"
@@ -134,7 +134,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
         {filteredItems.length === 0 && (
           <Column fillWidth center gap="8" paddingY="32">
             <Icon name="search" onBackground="neutral-weak" />
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               No results for &ldquo;{query}&rdquo;
             </Text>
           </Column>

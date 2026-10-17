@@ -2,6 +2,7 @@
 
 import React, { forwardRef, ReactNode } from "react";
 import type { IconName } from "../icons";
+import type { Tone } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -9,9 +10,10 @@ import { IconButton } from "./IconButton";
 import { Text } from "./Text";
 
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
-  variant?: "info" | "danger" | "warning" | "success";
+  /** The palette, and the icon that goes with it. Defaults to `info`. */
+  tone?: Tone;
   showIcon?: boolean;
-  /** Overrides the variant's icon. Custom names work once registered through
+  /** Overrides the tone's icon. Custom names work once registered through
    *  the `IconLibraryOverrides` interface, which is what widens `IconName`. */
   icon?: IconName;
   title?: string;
@@ -23,9 +25,7 @@ interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title">
   children?: ReactNode;
 }
 
-const variantIconMap: {
-  [key in "info" | "danger" | "warning" | "success"]: IconName;
-} = {
+const toneIconMap: Partial<Record<Tone, IconName>> = {
   info: "info",
   danger: "danger",
   warning: "warning",
@@ -35,7 +35,7 @@ const variantIconMap: {
 const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
   (
     {
-      variant = "info",
+      tone = "info",
       showIcon = true,
       icon,
       title,
@@ -54,8 +54,8 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         fillWidth
         radius="l"
         ref={ref}
-        border={`${variant}-medium`}
-        background={`${variant}-medium`}
+        border={`${tone}-medium`}
+        background={`${tone}-medium`}
         vertical={title || children ? "start" : "center"}
         role="alert"
         aria-live="assertive"
@@ -68,8 +68,8 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
             <Icon
               padding="2"
               radius="m"
-              onBackground={`${variant}-medium`}
-              name={icon ?? variantIconMap[variant]}
+              onBackground={`${tone}-medium`}
+              name={icon ?? toneIconMap[tone] ?? "info"}
               aria-hidden="true"
             />
           </Flex>
@@ -81,8 +81,8 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 <Flex fillWidth gap="16">
                   <Flex fillWidth paddingY="4">
                     <Text
-                      variant="heading-strong-xs"
-                      onBackground={`${variant}-medium`}
+                      textVariant="heading-strong-xs"
+                      onBackground={`${tone}-medium`}
                       role="heading"
                       aria-level={2}
                     >
@@ -103,7 +103,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                 </Flex>
               )}
               {description && (
-                <Text marginBottom="2" variant="body-default-s" onBackground={`${variant}-strong`}>
+                <Text marginBottom="2" textVariant="body-default-s" onBackground={`${tone}-strong`}>
                   {description}
                 </Text>
               )}

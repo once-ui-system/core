@@ -92,13 +92,13 @@ export const Feed2 = () => {
             >
               <Row gap="12" vertical="center">
                 <Icon onSolid="neutral-strong" name="heart" />
-                <Text onSolid="neutral-strong" variant="label-default-s">
+                <Text onSolid="neutral-strong" textVariant="label-default-s">
                   {image.likes}
                 </Text>
               </Row>
               <Row gap="12" vertical="center">
                 <Icon onSolid="neutral-strong" name="chat" />
-                <Text onSolid="neutral-strong" variant="label-default-s">
+                <Text onSolid="neutral-strong" textVariant="label-default-s">
                   {image.comments}
                 </Text>
               </Row>

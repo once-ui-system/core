@@ -18,7 +18,7 @@ export const CountdownFxFormats = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           HH:MM:SS
         </Text>
         <CountdownFx
@@ -28,7 +28,7 @@ export const CountdownFxFormats = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           MM:SS
         </Text>
         <CountdownFx
@@ -38,7 +38,7 @@ export const CountdownFxFormats = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           DD:HH:MM:SS
         </Text>
         <CountdownFx
@@ -55,7 +55,7 @@ export const CountdownFxEffects = () => {
   return (
     <Column gap="24" fill>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Wheel Effect
         </Text>
         <CountdownFx
@@ -65,7 +65,7 @@ export const CountdownFxEffects = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Smooth Effect
         </Text>
         <CountdownFx
@@ -75,7 +75,7 @@ export const CountdownFxEffects = () => {
         />
       </Column>
       <Column gap="8">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Simple Effect
         </Text>
         <CountdownFx
@@ -98,7 +98,7 @@ export const CountdownFxLaunch = () => {
       data-solid="contrast"
       radius="l"
     >
-      <Heading variant="display-strong-xl" align="center">
+      <Heading textVariant="display-strong-xl" align="center">
         Launching Soon
       </Heading>
       <CountdownFx
@@ -107,7 +107,7 @@ export const CountdownFxLaunch = () => {
         format="DD:HH:MM:SS"
         onBackground="brand-medium"
       />
-      <Text variant="body-default-m" onBackground="neutral-weak" align="center">
+      <Text textVariant="body-default-m" onBackground="neutral-weak" align="center">
         Get ready for something amazing
       </Text>
     </Column>

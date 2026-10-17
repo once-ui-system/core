@@ -1,4 +1,4 @@
-import { Background, Badge, Button, Column, Heading, Media, Row, Tag } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Media, Row, Tag } from "@once-ui-system/core";
 
 export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -21,7 +21,7 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       />
       <Column maxWidth="xl" horizontal="center">
         <Column maxWidth="l" gap="24" paddingX="s" paddingBottom="l" paddingTop="m">
-          <Badge
+          <Tag variant="announce"
             background="overlay"
             paddingLeft="8"
             paddingRight="16"
@@ -30,15 +30,15 @@ export const Hero8: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             href="#"
           >
             <Row vertical="center" gap="8">
-              <Tag themeBorder="rounded" size="s" scheme="brand">
+              <Tag themeBorder="rounded" size="s" tone="brand">
                 Blog
               </Tag>
               <Row textVariant="code-default-s" gap="8" vertical="center">
                 The new service model
               </Row>
             </Row>
-          </Badge>
-          <Heading variant="display-default-l" marginTop="8">
+          </Tag>
+          <Heading textVariant="display-default-l" marginTop="8">
             Sell $5k–$20k frontend systems. Without starting from scratch.
           </Heading>
           <Row gap="16" vertical="center" paddingTop="16" paddingLeft="8">

@@ -62,10 +62,10 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
           >
             <Column gap="4" vertical="center" paddingLeft="8">
               <Row gap="8" vertical="center">
-                <Text variant="body-strong-s" onBackground="neutral-strong">
+                <Text textVariant="body-strong-s" onBackground="neutral-strong">
                   {user.name}
                 </Text>
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   3h
                 </Text>
               </Row>
@@ -114,7 +114,7 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
               ]}
               reverse
             />
-            <Text variant="body-default-xs" onBackground="neutral-medium">
+            <Text textVariant="body-default-xs" onBackground="neutral-medium">
               Liked by <Text onBackground="neutral-strong">Milo</Text> and 126 others
             </Text>
           </Row>

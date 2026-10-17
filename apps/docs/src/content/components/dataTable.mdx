@@ -32,7 +32,7 @@ const columns: DataTableColumn<Invoice>[] = [
   {
     key: "status",
     header: "Status",
-    cell: (invoice) => <Tag size="s" scheme={scheme[invoice.status]}>{invoice.status}</Tag>,
+    cell: (invoice) => <Tag size="s" tone={scheme[invoice.status]}>{invoice.status}</Tag>,
   },
   { key: "issued", header: "Issued", sortable: true },
   {

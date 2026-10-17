@@ -40,13 +40,13 @@ describe("aria-label lands on the named element", () => {
 
   describe("StatusIndicator", () => {
     it("is an image named by its default label", async () => {
-      const { container } = render(<StatusIndicator color="green" />, { wrapper: wrap });
+      const { container } = render(<StatusIndicator scheme="green" />, { wrapper: wrap });
       expect(screen.getByRole("img", { name: "green status indicator" })).toBeInTheDocument();
       await expectNoAxeViolations(container);
     });
 
     it("takes aria-label", async () => {
-      const { container } = render(<StatusIndicator color="red" aria-label="Offline" />, {
+      const { container } = render(<StatusIndicator scheme="red" aria-label="Offline" />, {
         wrapper: wrap,
       });
       expect(screen.getByRole("img", { name: "Offline" })).toBeInTheDocument();

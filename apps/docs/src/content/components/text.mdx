@@ -17,18 +17,18 @@ The `Text` component provides consistent typography throughout your UI, with sup
   marginBottom="24"
   preview={
     <Column gap="12">
-      <Text variant="body-default-m">This is default body text.</Text>
-      <Text variant="label-strong-s">This is a strong label.</Text>
+      <Text textVariant="body-default-m">This is default body text.</Text>
+      <Text textVariant="label-strong-s">This is a strong label.</Text>
       <Text size="s" weight="strong">This is small, strong text.</Text>
     </Column>
   }
   codes={[
     {
       code:
-`<Text variant="body-default-m">
+`<Text textVariant="body-default-m">
     This is default body text.
 </Text>
-<Text variant="label-strong-s">
+<Text textVariant="label-strong-s">
     This is a strong label.
 </Text>
 <Text size="s" weight="strong">
@@ -49,40 +49,40 @@ Use `variant` to apply a named combination of `type`, `weight`, and `size`.
   marginBottom="24"
   preview={
     <Column gap="12" fillWidth>
-      <Text variant="label-default-s">Label Default S</Text>
-      <Text variant="label-default-m">Label Default M</Text>
-      <Text variant="label-default-l">Label Default L</Text>
-      <Text variant="label-strong-s">Label Strong S</Text>
-      <Text variant="label-strong-m">Label Strong M</Text>
-      <Text variant="label-strong-l">Label Strong L</Text>
-      <Text variant="body-default-xs">Body Default XS</Text>
-      <Text variant="body-default-s">Body Default S</Text>
-      <Text variant="body-default-m">Body Default M</Text>
-      <Text variant="body-default-l">Body Default L</Text>
-      <Text variant="body-default-xl">Body Default XL</Text>
-      <Text variant="body-strong-xs">Body Strong XS</Text>
-      <Text variant="body-strong-s">Body Strong S</Text>
-      <Text variant="body-strong-m">Body Strong M</Text>
-      <Text variant="body-strong-l">Body Strong L</Text>
-      <Text variant="body-strong-xl">Body Strong XL</Text>
-      <Text variant="code-default-xs">Code Default XS</Text>
-      <Text variant="code-default-s">Code Default S</Text>
-      <Text variant="code-default-m">Code Default M</Text>
-      <Text variant="code-default-l">Code Default L</Text>
-      <Text variant="code-default-xl">Code Default XL</Text>
-      <Text variant="code-strong-xs">Code Strong XS</Text>
-      <Text variant="code-strong-s">Code Strong S</Text>
-      <Text variant="code-strong-m">Code Strong M</Text>
-      <Text variant="code-strong-l">Code Strong L</Text>
-      <Text variant="code-strong-xl">Code Strong XL</Text>
+      <Text textVariant="label-default-s">Label Default S</Text>
+      <Text textVariant="label-default-m">Label Default M</Text>
+      <Text textVariant="label-default-l">Label Default L</Text>
+      <Text textVariant="label-strong-s">Label Strong S</Text>
+      <Text textVariant="label-strong-m">Label Strong M</Text>
+      <Text textVariant="label-strong-l">Label Strong L</Text>
+      <Text textVariant="body-default-xs">Body Default XS</Text>
+      <Text textVariant="body-default-s">Body Default S</Text>
+      <Text textVariant="body-default-m">Body Default M</Text>
+      <Text textVariant="body-default-l">Body Default L</Text>
+      <Text textVariant="body-default-xl">Body Default XL</Text>
+      <Text textVariant="body-strong-xs">Body Strong XS</Text>
+      <Text textVariant="body-strong-s">Body Strong S</Text>
+      <Text textVariant="body-strong-m">Body Strong M</Text>
+      <Text textVariant="body-strong-l">Body Strong L</Text>
+      <Text textVariant="body-strong-xl">Body Strong XL</Text>
+      <Text textVariant="code-default-xs">Code Default XS</Text>
+      <Text textVariant="code-default-s">Code Default S</Text>
+      <Text textVariant="code-default-m">Code Default M</Text>
+      <Text textVariant="code-default-l">Code Default L</Text>
+      <Text textVariant="code-default-xl">Code Default XL</Text>
+      <Text textVariant="code-strong-xs">Code Strong XS</Text>
+      <Text textVariant="code-strong-s">Code Strong S</Text>
+      <Text textVariant="code-strong-m">Code Strong M</Text>
+      <Text textVariant="code-strong-l">Code Strong L</Text>
+      <Text textVariant="code-strong-xl">Code Strong XL</Text>
     </Column>
   }
   codes={[
     {
       code:
-`<Text variant="label-default-s">Label Default S</Text>
-<Text variant="body-strong-xl">Body Strong XL</Text>
-<Text variant="code-default-m">Code Default M</Text>`,
+`<Text textVariant="label-default-s">Label Default S</Text>
+<Text textVariant="body-strong-xl">Body Strong XL</Text>
+<Text textVariant="code-default-m">Code Default M</Text>`,
       language: "tsx",
       label: "Variants"
     }
@@ -98,7 +98,7 @@ You can override the default `font-family` that comes with the variant with the 
   marginBottom="24"
   preview={
     <Column gap="16">
-      <Text variant="body-strong-m" family="code">
+      <Text textVariant="body-strong-m" family="code">
         Body Strong M, but monospace
       </Text>
     </Column>
@@ -106,7 +106,7 @@ You can override the default `font-family` that comes with the variant with the 
   codes={[
     {
       code:
-`<Text variant="body-strong-m" family="code">
+`<Text textVariant="body-strong-m" family="code">
     Body Strong M, but monospace
 </Text>`,
       language: "tsx",
@@ -124,7 +124,7 @@ You can override the default `font-weight` inside a variant with the `weight` pr
   marginBottom="24"
   preview={
     <Column gap="16">
-      <Text variant="body-strong-xl">
+      <Text textVariant="body-strong-xl">
         Body Strong XL, <Text weight="default">but this is default</Text>
       </Text>
     </Column>
@@ -132,7 +132,7 @@ You can override the default `font-weight` inside a variant with the `weight` pr
   codes={[
     {
       code:
-`<Text variant="heading-strong-xl">
+`<Text textVariant="heading-strong-xl">
     Text Strong XL, <Text weight="default">but this is default</Text>
 </Text>`,
       language: "tsx",
