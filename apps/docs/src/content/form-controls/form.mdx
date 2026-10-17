@@ -166,13 +166,30 @@ In a stacked group the fields overlap by a pixel, so a focused field has to pain
 
 ## Submitting
 
-Pass `as="form"` to render a real `<form>` and take `onSubmit`.
+Pass `as="form"` to render a real `<form>` and take `onSubmit`. Return a promise from `onSubmit` and the form is pending until it settles: it is marked `aria-busy`, a [SubmitButton](/form-controls/submitButton) inside it shows a spinner, and a second submit is ignored. For a submit that does not run through `onSubmit`, pass `pending`.
 
 ```tsx
-<Form as="form" density="stacked" onSubmit={handleSubmit}>
+<Form
+  as="form"
+  density="stacked"
+  onSubmit={async (event) => {
+    event.preventDefault();
+    await save(new FormData(event.currentTarget));
+  }}
+>
   <Input id="email" placeholder="Email" />
+  <SubmitButton>Save</SubmitButton>
 </Form>
 ```
+
+## Building blocks
+
+`Form` lays fields out. The pieces around them are separate components that work inside it:
+
+- [Field](/form-controls/field) puts a label, hint and error around any control and wires its ids and aria attributes.
+- [Fieldset](/form-controls/fieldset) names a section of the form and lays out its own group of fields.
+- [SubmitButton](/form-controls/submitButton) follows the form's pending state.
+- [FormErrorSummary](/form-controls/formErrorSummary) lists every error after a failed submit and links to each field.
 
 ## API reference
 
@@ -183,7 +200,8 @@ Pass `as="form"` to render a real `<form>` and take `onSubmit`.
     columns: "Grid columns — a number, or a per-breakpoint map like { xs: 1, m: 2 }.",
     size: "Size for every field in the group. A field that sets its own size keeps it.",
     as: "Render a real <form> rather than a <div>.",
-    onSubmit: "Submit handler. Only attached when as is \"form\".",
+    onSubmit: "Submit handler. Only attached when as is \"form\". Return a promise and the form is pending until it settles.",
+    pending: "Mark the form as submitting from outside. Wins over the state onSubmit tracks.",
     className: "",
     style: "",
     children: "The fields. Conditional children that render nothing are ignored, and the corners follow.",
