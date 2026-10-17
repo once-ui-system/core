@@ -19,20 +19,35 @@ const PACKAGE_ROOT = path.join(__dirname, "..");
 const MARKER_START = "<!-- once-ui-agent-harness:start -->";
 const MARKER_END = "<!-- once-ui-agent-harness:end -->";
 
+// The bundle table from the package's AGENTS.md, so an agent goes straight
+// from this section to its task's bundle without another read first.
+function bundleTable() {
+  try {
+    const agents = fs.readFileSync(path.join(PACKAGE_ROOT, "AGENTS.md"), "utf8");
+    const start = agents.indexOf("<!-- tasks:start -->");
+    const end = agents.indexOf("<!-- tasks:end -->");
+    if (start < 0 || end < 0) return "";
+    return `${agents
+      .slice(start + "<!-- tasks:start -->".length, end)
+      .trim()
+      .replaceAll("`ai/", "`node_modules/@once-ui-system/core/ai/")}\n\n`;
+  } catch {
+    return "";
+  }
+}
+
 const PROJECT_AGENTS_SECTION = `${MARKER_START}
 ## Once UI codegen harness
 
-Before generating Once UI code, load the harness from your installed package (not full doc pages):
+Before generating Once UI code, pick the task bundle below closest to what you are building and read it, with any
+project files you need, in one step. A bundle is complete (rules, component props, types, gotchas and a gold example),
+so write from it; open \`ai/components/<Name>.json\` only for a component it does not list, all in one step. When
+nothing fits, start from \`node_modules/@once-ui-system/core/AGENTS.md\`. Never open \`ai/spec.json\`.
 
-1. Read \`node_modules/@once-ui-system/core/ai/manifest.json\`
-2. Load bootstrap: \`ai/rules.compact.md\` + \`ai/catalog.json\`
-3. Match intent via \`ai/tasks/index.json\` → read the task's bundle, \`ai/bundles/{id}.json\` (slices, types and gotchas in one file); read everything in one step, and never \`ai/spec.json\`
-4. Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
+${bundleTable()}Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
 
 In a Next.js app, import \`LayoutProvider\` from \`@once-ui-system/core/next\`, not the package root —
 the root export renders links and images as plain \`<a>\` and \`<img>\`.
-
-npm exports: \`@once-ui-system/core/ai/manifest.json\`
 
 Remote fallback: https://docs.once-ui.com/ai/manifest.json
 ${MARKER_END}

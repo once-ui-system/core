@@ -42,6 +42,21 @@ item (see `ROADMAP.md`, Week 4).
   this. A new `size.rem` gotcha is in every task bundle, `rules.compact.md` shows the
   token string (`width="32"`, 32 px) to write instead, and `validate-ai-code` reports an
   icon, avatar or label box sized with a repeated pixel-like number.
+- **Leaving a breakpoint restores the base value it overrode.** `ClientFlex` and
+  `ClientGrid` cleared each inline value a breakpoint object had written, so
+  `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40rem on the way back up; they now
+  put back whatever inline value the breakpoint wrote over.
+- **A translate prop survives a component's own `transform`.** `TiltFx`, `FlipFx`, `Arrow`
+  and `CursorCard` wrote a transform (tilt, flip, scale, cursor position) that replaced the
+  `translate()` from `translateX`/`translateY`; the two are composed now.
+- **`FadingLettersFx` forwards `ref`** to the `Text` it renders. It typed `ref` and
+  dropped it on React 18.
+- **Breakpoint borders apply.** `m={{ borderLeft: "brand-strong" }}` (and `border`, the
+  other sides, `borderStyle`, `borderWidth`) type-checked, stayed on the server and drew
+  nothing, as no border class has a breakpoint variant. They move the component to the
+  client, which writes the colour, style and width inline at that breakpoint.
+- **`Fade` honours `blur` outside pattern mode.** It blurred at a fixed 0.5rem unless
+  `pattern.display` was on.
 
 ## [2.1.0] — 2026-10-15
 
