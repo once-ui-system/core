@@ -15,7 +15,7 @@ Read everything you need in one step, before writing: every file you read is sen
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `width="32" height="32"` (32 px) | `width={32} height={32}` (a number is rem: 512 px) |
+| `width="32" height="32"` (32 px, a spacing token); `height={20}` (320 px: past `"160"` there is no token, use rem) | `width={32} height={32}` (a number is rem: 512 px), `height="320"` (not a token) |
 | `border` | `border="neutral-alpha-weak"` |
 | `<Logo wordmark={{ light, dark }} />` | a `<Logo dark>` and a `<Logo light>` |
 

@@ -1095,9 +1095,16 @@ function emitArtifacts(spec, version, entryTypes) {
     fs.writeFileSync(path.join(bundlesDir, `${id}.json`), JSON.stringify(bundle));
     fs.writeFileSync(
       path.join(bundlesDir, `${id}.md`),
-      bundleMarkdown(task, slices, gotchas, typesFor, rulesBody),
+      bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, spec.functions),
     );
   }
+  // The bundle for a page no task matches: the rules and the common
+  // components, so the fallback is one read plus the slices a page adds,
+  // instead of the rules, the catalog and then a slice or two per turn.
+  fs.writeFileSync(
+    path.join(bundlesDir, `${BASE_BUNDLE.id}.md`),
+    bundleMarkdown(BASE_BUNDLE, slices, gotchas, typesFor, rulesBody, spec.functions),
+  );
   writeAgentsTaskTable(taskIndex);
 
   // Which specifier each export comes from. The rules say it in prose; this
@@ -1182,6 +1189,16 @@ const COMMON_COMPONENTS = [
   "VisuallyHidden",
 ];
 
+const COMMON_HOOKS = ["useToast"];
+
+const BASE_BUNDLE = {
+  id: "page",
+  title: "Any other page",
+  description:
+    "The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step",
+  components: [],
+};
+
 // `!T` marks a required prop in the spec; Markdown bundles write TypeScript.
 const propLine = (name, type) =>
   type.startsWith("!") ? `- ${name}: ${type.slice(1)}` : `- ${name}?: ${type}`;
@@ -1241,7 +1258,7 @@ const typeLine = (name, type) => {
 // re-sent 20k–60k tokens of docs to fetch one or two more files; that tail,
 // not any one file, was most of the 3.7x total over shadcn/ui. JSON keys and
 // escaped quotes cost tokens too, and tags or pairings help no one writing.
-function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
+function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = {}) {
   const names = [...new Set([...task.components, ...COMMON_COMPONENTS])].filter((n) => slices[n]);
   const mixins = {};
   const types = {};
@@ -1269,7 +1286,8 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
     Object.assign(mixins, slice.resolvedMixins);
     Object.assign(types, slice.types);
   }
-  Object.assign(types, typesFor(mixins));
+  const hooks = COMMON_HOOKS.filter((name) => functions[name]);
+  Object.assign(types, typesFor(mixins), typesFor(hooks.map((name) => functions[name])));
 
   const nameSet = new Set(names);
   const gotchaIds = [
@@ -1290,9 +1308,11 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
     "",
     task.description,
     "",
-    "This file is complete for this task: the rules, the props of every component below, their mixins and types, the gotchas, the quality bar and a gold example. Write the page from it. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
+    "This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
     "",
-    rulesBody.trim(),
+    "## Rules",
+    "",
+    rulesBody.trim().replace(/^## /gm, "### "),
     "",
     "## Components",
     "",
@@ -1300,6 +1320,14 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
     "",
     sections.join("\n\n"),
     "",
+    ...(hooks.length
+      ? [
+          "## Hooks",
+          "",
+          ...hooks.map((name) => `- \`${name}\`: \`${functions[name].signature}\``),
+          "",
+        ]
+      : []),
     "## Mixins",
     "",
     Object.entries(mixins)
@@ -1325,10 +1353,67 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
   if (task.quality && Object.keys(task.quality).length) {
     out.push("", "## Quality bar", "", ...Object.values(task.quality).map((q) => `- ${q}`));
   }
+  const recipes = (task.recipes ?? [])
+    .map((id) => markdownSection("recipes.md", id))
+    .filter(Boolean);
+  if (recipes.length) out.push("", "## Recipes", "", ...recipes);
+  if (task.layout) {
+    const [file, anchor] = task.layout.split("#");
+    const layout = markdownSection(file, anchor);
+    if (layout) out.push("", "## Layout shell", "", layout);
+  }
   if (example) {
     out.push("", `## Gold example (\`${task.example}\`)`, "", "```tsx", example, "```");
   }
-  return `${out.join("\n")}\n`;
+  return selfContained(`${out.join("\n")}\n`);
+}
+
+// One `## ` section of a hand-written Markdown file, demoted to `### `, found
+// by a task's recipe id ("reveal-stagger" for "## 7. Reveal stagger (entry,
+// not ambient)") or layout anchor ("1-app-shell-with-a-sidebar").
+function markdownSection(file, id) {
+  const text = fs.readFileSync(path.join(OUT_DIR, file), "utf8");
+  const sections = text.split(/\n(?=## )/).slice(1);
+  const words = id.toLowerCase().split("-");
+  const slug = (heading) =>
+    heading
+      .toLowerCase()
+      .replace(/[^a-z0-9 -]/g, "")
+      .trim()
+      .replace(/ +/g, "-");
+  const found = sections.find((section) => {
+    const heading = section.slice(3, section.indexOf("\n"));
+    return slug(heading) === id || words.every((w) => heading.toLowerCase().includes(w));
+  });
+  if (!found) {
+    console.warn(`${file} has no section for "${id}"`);
+    return null;
+  }
+  return found.trim().replace(/^## /, "### ");
+}
+
+// The rules and gotchas send a reader without a bundle to other files for
+// icon names, spacing tokens and import paths. In a bundle those are in the
+// Types section and the slices, and each pointer cost a 20k-token turn in a
+// test run (an agent opened catalog.json for icon names it already had).
+function selfContained(text) {
+  return text
+    .replace(/,? ?from `iconNames` in `catalog\.json`( only)?/g, " (the IconName type below)$1")
+    .replace(
+      /take names from `iconNames` in `catalog\.json`/g,
+      "take names from the IconName type below",
+    )
+    .replace(
+      /from iconNames in catalog\.json \(spec\.json has the same list\)/g,
+      "from the IconName type below",
+    )
+    .replace(/the tokens in `tokens\.json`/g, "the SpacingToken values below")
+    .replace(/the layouts\.md shell/g, "the layout shell below")
+    .replace(/ \(rules\.md #[\d–-]+\)/g, "")
+    .replace(
+      /the manifest's\n`imports` lists every entry point with its exports, and each slice, catalog\nentry and `functions\.json` entry says `importFrom` when it is not the root:/,
+      "each component below says where it\ncomes from when it is not the root:",
+    );
 }
 
 // AGENTS.md routes an agent straight to its task's bundle, so the task table
@@ -1344,6 +1429,9 @@ function writeAgentsTaskTable(taskIndex) {
     const task = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), "utf8"));
     return `| \`ai/bundles/${id}.md\` | ${task.title}: ${task.description} |`;
   });
+  rows.push(
+    `| \`ai/bundles/${BASE_BUNDLE.id}.md\` | ${BASE_BUNDLE.title}: ${BASE_BUNDLE.description} |`,
+  );
   const table = ["| Bundle | For |", "|---|---|", ...rows].join("\n");
   const next = `${text.slice(0, text.indexOf(start) + start.length)}\n${table}\n${text.slice(text.indexOf(end))}`;
   if (next !== text) fs.writeFileSync(agentsPath, next);

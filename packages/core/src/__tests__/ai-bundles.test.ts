@@ -85,7 +85,8 @@ describe("ai task bundles as one Markdown read", () => {
       for (const name of [...task.components, "Button", "IconButton", "Input", "Dialog"]) {
         if (Object.hasOwn(spec.components, name)) expect(md).toContain(`\n### ${name}`);
       }
-      for (const id of task.gotchas ?? []) expect(md).toContain(gotchas[id].rule);
+      // The end of each rule: the start may point at a file the bundle replaces.
+      for (const id of task.gotchas ?? []) expect(md).toContain(gotchas[id].rule.slice(-60));
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);
