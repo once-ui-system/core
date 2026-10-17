@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import { Flex } from "./Flex";
 import styles from "./TiltFx.module.scss";
 
@@ -31,6 +32,12 @@ const TiltFx = forwardRef<HTMLDivElement, TiltFxProps>(
     const isTouchDeviceRef = useRef(false);
 
     const { shouldAnimate } = useReducedMotion(reducedMotion);
+
+    // The tilt is written over the element's transform, which Flex resolves
+    // from `translateX`/`translateY`: keep the translate in front of it, or a
+    // hover moves the element back to where the props had not put it.
+    const tiltTransform = (tilt: string) =>
+      composeTransform(translateTransform(rest.translateX, rest.translateY), tilt) ?? "";
 
     useEffect(() => {
       isTouchDeviceRef.current = "ontouchstart" in window;
@@ -66,7 +73,9 @@ const TiltFx = forwardRef<HTMLDivElement, TiltFxProps>(
       const translateZ = 30 * intensity;
 
       window.requestAnimationFrame(() => {
-        element.style.transform = `perspective(1000px) translate3d(0, 0, ${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+        element.style.transform = tiltTransform(
+          `perspective(1000px) translate3d(0, 0, ${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+        );
       });
     };
 
@@ -76,8 +85,9 @@ const TiltFx = forwardRef<HTMLDivElement, TiltFxProps>(
       const element = internalRef.current;
       if (element) {
         resetTimeoutRef.current = setTimeout(() => {
-          element.style.transform =
-            "perspective(1000px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)";
+          element.style.transform = tiltTransform(
+            "perspective(1000px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)",
+          );
           resetTimeoutRef.current = null;
         }, 100);
       }

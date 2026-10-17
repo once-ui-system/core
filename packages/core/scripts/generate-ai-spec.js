@@ -428,11 +428,30 @@ async function main() {
   const entryTypes = new Map(); // importFrom -> Set<type name>
   const warnings = [];
 
+  /**
+   * A declaration's initializer without `as` casts, `satisfies` and
+   * parentheses: `forwardRef(...) as unknown as Signature` is still a
+   * forwardRef call, and without this it resolved no props and dropped out
+   * of the spec.
+   */
+  function initializerOf(decl) {
+    let init = decl.initializer;
+    while (
+      init &&
+      (ts.isAsExpression(init) ||
+        ts.isParenthesizedExpression(init) ||
+        (ts.isSatisfiesExpression && ts.isSatisfiesExpression(init)))
+    ) {
+      init = init.expression;
+    }
+    return init;
+  }
+
   /** Resolve the function node (arrow/function expr) implementing a component */
   function getComponentFunction(decl) {
     if (ts.isFunctionDeclaration(decl)) return decl;
     if (ts.isVariableDeclaration(decl) && decl.initializer) {
-      let init = decl.initializer;
+      let init = initializerOf(decl);
       // unwrap forwardRef(...) / memo(forwardRef(...))
       while (ts.isCallExpression(init)) {
         const arg = init.arguments[0];
@@ -496,8 +515,29 @@ async function main() {
     const defaults = {};
     if (!fn || !fn.parameters.length) return defaults;
     const param = fn.parameters[0];
-    if (!ts.isObjectBindingPattern(param.name)) return defaults;
-    for (const el of param.name.elements) {
+    let pattern = param.name;
+    // `(props, ref) => { const { a = 1, ...rest } = props as P; ... }`
+    if (ts.isIdentifier(pattern) && fn.body && ts.isBlock(fn.body)) {
+      for (const st of fn.body.statements) {
+        if (!ts.isVariableStatement(st)) continue;
+        for (const d of st.declarationList.declarations) {
+          let init = d.initializer;
+          while (init && (ts.isAsExpression(init) || ts.isParenthesizedExpression(init))) {
+            init = init.expression;
+          }
+          if (
+            ts.isObjectBindingPattern(d.name) &&
+            init &&
+            ts.isIdentifier(init) &&
+            init.text === pattern.text
+          ) {
+            pattern = d.name;
+          }
+        }
+      }
+    }
+    if (!ts.isObjectBindingPattern(pattern)) return defaults;
+    for (const el of pattern.elements) {
       if (el.initializer && ts.isIdentifier(el.propertyName ?? el.name)) {
         const key = (el.propertyName ?? el.name).getText();
         defaults[key] = cleanDefault(el.initializer.getText());
@@ -512,9 +552,9 @@ async function main() {
     if (
       ts.isVariableDeclaration(decl) &&
       decl.initializer &&
-      ts.isCallExpression(decl.initializer)
+      ts.isCallExpression(initializerOf(decl))
     ) {
-      const call = decl.initializer;
+      const call = initializerOf(decl);
       if (call.typeArguments && call.typeArguments.length >= 2) {
         return checker.getTypeFromTypeNode(call.typeArguments[1]);
       }

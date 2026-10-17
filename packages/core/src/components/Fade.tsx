@@ -70,10 +70,13 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
                   : to === "bottom"
                     ? "180deg"
                     : "270deg",
+            // The `.mask` class blurs at a fixed 0.5rem; only pattern mode
+            // used to write `blur`, so outside it the prop did nothing.
+            backdropFilter: `blur(${blur}rem)`,
+            WebkitBackdropFilter: `blur(${blur}rem)`,
             ...(pattern.display && {
               backgroundImage: `linear-gradient(var(--gradient-direction), var(--base-color), transparent), radial-gradient(transparent 1px, var(--base-color) 1px)`,
               backgroundSize: `100% 100%, var(--static-space-${pattern.size}) var(--static-space-${pattern.size})`,
-              backdropFilter: `blur(${blur}rem)`,
             }),
             ...style,
           } as React.CSSProperties
