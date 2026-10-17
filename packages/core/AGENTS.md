@@ -19,7 +19,7 @@ Never open `ai/spec.json`: it is the full machine spec, for tooling.
 | `ai/bundles/pricing.md` | Pricing page: Three tiers, highlighted middle tier, feature comparison table, FAQ accordion |
 | `ai/bundles/settings.md` | Settings page: Vertical section tabs, profile form, settings rows with one control each, grouped sub-settings, danger zone |
 | `ai/bundles/dashboard.md` | Analytics dashboard: KPI stat cards, charts area, recent-activity list |
-| `ai/bundles/chat.md` | Chat UI: Message list with avatars, streaming indicator, input bar with emoji picker |
+| `ai/bundles/chat.md` | Chat UI: Message list with avatars, typing indicator, composer with send and attach, conversation list |
 | `ai/bundles/auth.md` | Auth flow: Sign-up / login with social auth, email form, stacked dialog for OTP |
 | `ai/bundles/roadmap.md` | Product roadmap: Kanban-style roadmap with status columns and task cards |
 | `ai/bundles/list-page.md` | List / table page: A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state |

@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.2.0] — 2026-10-17
+
 ### Added
 
 - **`labels` on the date components and `Select`.** `DatePicker`, `DateInput`,
@@ -26,7 +28,7 @@ item (see `ROADMAP.md`, Week 4).
   written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
   `labels.pm` override the words. Without `locale` the time reads as before
   (`01:14 PM`).
-- **Mobile-ready core (2.3).** Components work on a phone and in a Capacitor app
+- **Mobile-ready core.** Components work on a phone and in a Capacitor app
   without changing how they look on a desktop:
   - **Touch targets.** On a coarse pointer, `Button`, `IconButton`, `ToggleButton`
     (and `SegmentedControl`, `Pagination`), `Checkbox`, `RadioButton`, `Switch`,
@@ -49,7 +51,7 @@ item (see `ROADMAP.md`, Week 4).
     `Mask` sizes its radius in `svh`.
   - A test (`mobile-ready.test.ts`) fails on unguarded `:hover`, `vh`/`vw` lengths,
     fixed UI without safe areas, and the touch targets above going missing.
-- **Form building blocks** (planned for 2.3). `Field` puts a label, hint and error
+- **Form building blocks.** `Field` puts a label, hint and error
   around any control and wires its `id`, `aria-describedby`, `aria-invalid` and
   `aria-required`; `Input`, `Textarea` and the fields built on them also draw their
   error styling from it. `Fieldset` is a real `<fieldset>` with a legend and
@@ -59,7 +61,7 @@ item (see `ROADMAP.md`, Week 4).
   `onSubmit` can return a promise, which keeps the form pending (`aria-busy`) until it
   settles, and `pending` sets that state from outside. `useField()` and
   `useFormPending()` expose both states to custom controls.
-- **Chat building blocks** (planned for 2.3). Five components for chat interfaces, from the root
+- **Chat building blocks.** Five components for chat interfaces, from the root
   package: `ChatMessage` (a bubble with its author, time and delivery state;
   `from="self"` sits on the right, `grouped` lines up follow-ups, a failed
   message can offer a retry), `ChatMessageList` (a `log` live region that
@@ -72,6 +74,18 @@ item (see `ROADMAP.md`, Week 4).
   inbox row with the last message, its time and an unread count, as a link or
   a button). Every label can be replaced for another language. The AI
   harness's `chat` task lists them first. Docs: Modules → Chat.
+
+- **Design tokens as JSON.** `@once-ui-system/core/tokens.json` is the token cascade as
+  one JSON file (colours as hex, references kept), for native apps and design tools. The
+  React Native preview, `@once-ui-system/native`, reads it; that package ships on `next`
+  only.
+
+### Changed
+
+- **AI harness: one read per task.** `AGENTS.md` routes a task to
+  `ai/bundles/{id}.md`, one Markdown file with the task, its components, rules and
+  gotchas, instead of a JSON bundle plus spec lookups, so an agent reads far less to
+  build a page. The JSON bundles stay.
 
 ### Fixed
 

@@ -1,6 +1,6 @@
 # Chat UI
 
-Message list with avatars, streaming indicator, input bar with emoji picker
+Message list with avatars, typing indicator, composer with send and attach, conversation list
 
 This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
@@ -127,6 +127,74 @@ If design intent unclear, ask: content style, layout width, color approach, deco
 
 Props marked `?` are optional; `= x` is the default. A component's mixins add the props listed under Mixins.
 
+### ChatMessageList
+Extends Column, Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- stickToBottom?: boolean = true
+- onReachStart?: () => void
+- ariaLabel?: string = Messages
+
+### ChatMessage
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- children?: ReactNode
+- from?: "self" | "other" = other
+- name?: ReactNode
+- avatarProps?: AvatarProps
+- time?: ChatTime
+- status?: ChatMessageStatus
+- statusLabels?: Partial<Record<ChatMessageStatus, string>>
+- onRetry?: () => void
+- retryLabel?: string = Retry
+- grouped?: boolean = false
+- variant?: "bubble" | "plain" = bubble
+- attachments?: ReactNode
+- footer?: ReactNode
+- actions?: ReactNode
+
+### ChatComposer
+Extends Column, Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- onSend: (message: ChatComposerMessage) => void | Promise<void>
+- value?: string
+- defaultValue?: string = ""
+- onValueChange?: (value: string) => void
+- placeholder?: string = Write a message
+- attach?: boolean | { accept?: string; multiple?: boolean } = false
+- sendOnEnter?: boolean = true
+- loading?: boolean = false
+- disabled?: boolean = false
+- ariaLabel?: string = Message
+- sendLabel?: string = Send
+- attachLabel?: string = Attach files
+- removeLabel?: (fileName: string) => string = (fileName) => `Remove ${fileName}`
+- prefix?: ReactNode
+- actions?: ReactNode
+- maxLength?: number
+- id?: string
+
+### TypingIndicator
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- label?: ReactNode
+- ariaLabel?: string = Typing
+- bubble?: boolean = true
+
+### ConversationItem
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- name: ReactNode
+- preview?: ReactNode
+- time?: ChatTime
+- avatarProps?: AvatarProps
+- unread?: number | boolean
+- unreadLabel?: (count: number | true) => string = defaultUnreadLabel
+- selected?: boolean = false
+- typing?: boolean = false
+- typingLabel?: ReactNode = typing…
+- href?: string
+- onClick?: (event: React.MouseEvent<HTMLElement>) => void
+
 ### Column
 Extends Flex with direction="column".
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
@@ -167,27 +235,6 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Text
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
 
-### Input
-- id: string
-- label?: string
-- placeholder?: string
-- size?: TShirtSizes
-- error?: boolean = false
-- errorMessage?: ReactNode
-- description?: ReactNode
-- corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- className?: string
-- style?: React.CSSProperties
-- prefix?: ReactNode
-- suffix?: ReactNode
-- variant?: "default" | "ghost" = default
-- focusRing?: boolean = false
-- characterCount?: boolean
-- cursor?: undefined | "interactive"
-- validate?: (value: ReactNode) => ReactNode | null
-- loading?: boolean = false
-- span?: number
-
 ### IconButton
 - icon?: IconName = refresh
 - id?: string
@@ -223,14 +270,6 @@ Avoid: Wrapping content — it is an absolute edge overlay, not a container
 - pattern?: { display?: boolean; size?: SpacingToken; } = { display: false, size: "4", }
 - style?: React.CSSProperties
 - children?: ReactNode
-
-### Spinner
-Extends Flex.
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- size?: TShirtSizes = m
-- ariaLabel?: string = Loading
-- className?: string
-- style?: React.CSSProperties
 
 ### Kbd
 Extends Flex.
@@ -301,6 +340,27 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
 - className?: string
 - style?: React.CSSProperties
+
+### Input
+- id: string
+- label?: string
+- placeholder?: string
+- size?: TShirtSizes
+- error?: boolean = false
+- errorMessage?: ReactNode
+- description?: ReactNode
+- corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
+- className?: string
+- style?: React.CSSProperties
+- prefix?: ReactNode
+- suffix?: ReactNode
+- variant?: "default" | "ghost" = default
+- focusRing?: boolean = false
+- characterCount?: boolean
+- cursor?: undefined | "interactive"
+- validate?: (value: ReactNode) => ReactNode | null
+- loading?: boolean = false
+- span?: number
 
 ### Textarea
 - id: string
@@ -508,12 +568,16 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ```ts
 type AvatarProps = Avatar props
+type AwaitedReactNode = "undefined" | "null" | "string" | "number" | "bigint" | "false" | "true" | "ReactPortal" | ReactElement<unknown, string | JSXElementConstructor<any>> | "Iterable<ReactNode>"
 type BaseColor = "page" | "surface" | "overlay" | "transparent" | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type BlendMode = "color" | "normal" | "screen" | "overlay" | "multiply" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "xl" | "l" | "m" | "s" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreakpointKey = "xl" | "l" | "m" | "s" | "xs"
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
+type ChatComposerMessage = { text: string; files: File[] }
+type ChatMessageStatus = "sending" | "sent" | "delivered" | "read" | "failed"
+type ChatTime = "undefined" | "null" | "string" | "number" | "bigint" | "false" | "true" | ReactElement<unknown, string | JSXElementConstructor<any>> | "Iterable<ReactNode>" | "ReactPortal" | "Promise<AwaitedReactNode>" | "Date"
 type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`

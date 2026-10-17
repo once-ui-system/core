@@ -1,6 +1,6 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.2.0-rc.0",
+ "version": "2.2.0",
  "generated": "2026-10-17",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
@@ -297,6 +297,18 @@
    "disableHighlighting": "boolean"
   },
   "AvatarProps": "Avatar props",
+  "AwaitedReactNode": [
+   "undefined",
+   "null",
+   "string",
+   "number",
+   "bigint",
+   "false",
+   "true",
+   "ReactPortal",
+   "ReactElement<unknown, string | JSXElementConstructor<any>>",
+   "Iterable<ReactNode>"
+  ],
   "BarWidth": [
    "number",
    "xl",
@@ -470,6 +482,31 @@
    "flat",
    "outline",
    "gradient"
+  ],
+  "ChatComposerMessage": {
+   "text": "!string",
+   "files": "!File[]"
+  },
+  "ChatMessageStatus": [
+   "sending",
+   "sent",
+   "delivered",
+   "read",
+   "failed"
+  ],
+  "ChatTime": [
+   "undefined",
+   "null",
+   "string",
+   "number",
+   "bigint",
+   "false",
+   "true",
+   "ReactElement<unknown, string | JSXElementConstructor<any>>",
+   "Iterable<ReactNode>",
+   "ReactPortal",
+   "Promise<AwaitedReactNode>",
+   "Date"
   ],
   "CodeInstance": {
    "code": "!string | { content: string; error: string | null }",
@@ -4777,6 +4814,136 @@
     "as": "!\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
     "children": "!React.ReactNode",
     "style": "React.CSSProperties"
+   }
+  },
+  "ChatComposer": {
+   "group": "modules",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "onSend": "!(message: ChatComposerMessage) => void | Promise<void>",
+    "value": "string",
+    "defaultValue": "string = \"\"",
+    "onValueChange": "(value: string) => void",
+    "placeholder": "string = Write a message",
+    "attach": "boolean | { accept?: string; multiple?: boolean } = false",
+    "sendOnEnter": "boolean = true",
+    "loading": "boolean = false",
+    "disabled": "boolean = false",
+    "ariaLabel": "string = Message",
+    "sendLabel": "string = Send",
+    "attachLabel": "string = Attach files",
+    "removeLabel": "(fileName: string) => string = (fileName) => `Remove ${fileName}`",
+    "prefix": "ReactNode",
+    "actions": "ReactNode",
+    "maxLength": "number",
+    "id": "string"
+   }
+  },
+  "ChatMessage": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "ReactNode",
+    "from": "\"self\" | \"other\" = other",
+    "name": "ReactNode",
+    "avatarProps": "AvatarProps",
+    "time": "ChatTime",
+    "status": "ChatMessageStatus",
+    "statusLabels": "Partial<Record<ChatMessageStatus, string>>",
+    "onRetry": "() => void",
+    "retryLabel": "string = Retry",
+    "grouped": "boolean = false",
+    "variant": "\"bubble\" | \"plain\" = bubble",
+    "attachments": "ReactNode",
+    "footer": "ReactNode",
+    "actions": "ReactNode"
+   }
+  },
+  "ChatMessageList": {
+   "group": "modules",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "stickToBottom": "boolean = true",
+    "onReachStart": "() => void",
+    "ariaLabel": "string = Messages"
+   }
+  },
+  "ConversationItem": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "name": "!ReactNode",
+    "preview": "ReactNode",
+    "time": "ChatTime",
+    "avatarProps": "AvatarProps",
+    "unread": "number | boolean",
+    "unreadLabel": "(count: number | true) => string = defaultUnreadLabel",
+    "selected": "boolean = false",
+    "typing": "boolean = false",
+    "typingLabel": "ReactNode = typing…",
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
+   }
+  },
+  "TypingIndicator": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode",
+    "ariaLabel": "string = Typing",
+    "bubble": "boolean = true"
    }
   },
   "Meta": {
