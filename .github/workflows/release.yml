@@ -3,6 +3,8 @@
 #
 #   v2.2.0, v2.2.0-rc.0   ->  @once-ui-system/core  (packages/core)
 #   cli-v0.2.0            ->  @once-ui-system/cli   (packages/cli)
+#   native-v0.1.0-preview.1 -> @once-ui-system/native (packages/native),
+#                            prereleases only: it is a preview, never `latest`
 #
 # A prerelease version (anything with a "-") goes to the `next` dist-tag and
 # publishes straight away. A stable version goes to `latest` and waits in the
@@ -16,6 +18,7 @@ on:
     tags:
       - "v*"
       - "cli-v*"
+      - "native-v*"
 
 permissions:
   contents: read
@@ -45,6 +48,7 @@ jobs:
         run: |
           case "$TAG" in
             cli-v*) dir=packages/cli;  version="${TAG#cli-v}" ;;
+            native-v*) dir=packages/native; version="${TAG#native-v}" ;;
             v*)     dir=packages/core; version="${TAG#v}" ;;
             *) echo "::error::Unrecognised release tag $TAG"; exit 1 ;;
           esac
@@ -52,6 +56,10 @@ jobs:
           pkg_version=$(node -p "require('./$dir/package.json').version")
           if [ "$pkg_version" != "$version" ]; then
             echo "::error::Tag $TAG says $version but $dir/package.json says $pkg_version"
+            exit 1
+          fi
+          if [ "$dir" = packages/native ] && [ "${version#*-}" = "$version" ]; then
+            echo "::error::@once-ui-system/native is a preview: tag a prerelease (e.g. 0.1.0-preview.1), never a stable version"
             exit 1
           fi
           if [ "${version#*-}" != "$version" ]; then

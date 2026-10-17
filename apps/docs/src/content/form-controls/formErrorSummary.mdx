@@ -1,0 +1,79 @@
+---
+title: "FormErrorSummary"
+summary: "Every error in a form in one alert after a failed submit, each one linking to its field."
+updatedAt: "2026-10-17"
+docs: "once-ui/form-controls/formErrorSummary.mdx"
+github: "components/FormErrorSummary.tsx"
+navLabel: "FormErrorSummary"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`FormErrorSummary` lists a form's errors at the top after a failed submit. Each entry links to its field, and activating it moves focus into the control. When the summary appears, or its errors change, it takes focus itself, so a keyboard or screen reader user is brought to it rather than left on the submit button wondering why nothing happened. With no errors it renders nothing, so it can stay in the form.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <FormErrorSummary
+        autoFocus={false}
+        errors={{
+          "summary-email": "Enter an email address, like you@example.com",
+          "summary-plan": "Pick a plan",
+        }}
+      />
+      <Field label="Email" error="Enter an email address, like you@example.com">
+        <Input id="summary-email" />
+      </Field>
+      <Field label="Plan" error="Pick a plan">
+        <Input id="summary-plan" />
+      </Field>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Form as="form" onSubmit={submit}>
+    <FormErrorSummary errors={errors} />
+    <Field label="Email" error={errors.email}>
+        <Input id="email" />
+    </Field>
+    <Field label="Plan" error={errors.plan}>
+        <Input id="plan" />
+    </Field>
+    <SubmitButton>Continue</SubmitButton>
+</Form>`,
+      language: "tsx",
+      label: "FormErrorSummary"
+    }
+  ]}
+/>
+
+## Errors
+
+`errors` takes either a map from control id to message, which is the shape most validation libraries return, or a list of `{ id, message }`. Empty messages are skipped. An entry without an `id`, such as a server error that belongs to no field, is listed as plain text.
+
+```tsx
+<FormErrorSummary errors={[{ message: "The server could not be reached. Try again." }]} />
+```
+
+The ids are the controls' ids, the same ones a `Field` uses, so the link lands on the right element.
+
+## Focus
+
+`autoFocus` is on by default. Turn it off when the summary is on screen from the first render, like the preview above, because taking focus on page load moves a screen reader away from the top of the page.
+
+## API reference
+
+<PropsTable
+  component="FormErrorSummary"
+  describe={{
+    errors: "A map from control id to message, or a list of { id, message }.",
+    title: "Heading above the list. Defaults to \"Check the highlighted fields\".",
+    autoFocus: "Move focus to the summary when it appears or its errors change.",
+    span: "Columns to occupy inside a Form grid.",
+  }}
+/>

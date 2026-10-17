@@ -9,7 +9,8 @@ const path = require("path");
 //         resolving their relative `../styles/*.scss` imports inside dist/.
 //   css:  copies foundations' compiled tokens.css/styles.css into dist/css/
 //         so the deprecated `@once-ui-system/core/css/*.css` entries keep
-//         working for one major.
+//         working for one major, and the token export (tokens.json, the
+//         same tokens as JSON for platforms without CSS) into dist/.
 
 const foundationsRoot = path.dirname(require.resolve("@once-ui-system/foundations/package.json"));
 
@@ -35,7 +36,11 @@ if (mode === "scss") {
       path.join(__dirname, "..", "dist", "css", file),
     );
   }
-  console.log("Copied foundations CSS into dist/css (deprecated compat entries)");
+  copy(
+    path.join(foundationsRoot, "tokens", "once-ui.tokens.json"),
+    path.join(__dirname, "..", "dist", "tokens.json"),
+  );
+  console.log("Copied foundations CSS into dist/css (deprecated compat entries) and tokens.json");
 } else {
   console.error("Usage: node scripts/sync-foundations.js <scss|css>");
   process.exit(1);
