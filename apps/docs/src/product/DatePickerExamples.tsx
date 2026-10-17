@@ -26,11 +26,27 @@ export function DateTimePickerExample() {
   return <DatePicker value={dateTime} onChange={handleDateTimeChange} timePicker />;
 }
 
-// DatePicker with month and weekday names in another locale
+// DatePicker in another locale, with its own words translated through labels
 export function LocalizedDatePickerExample() {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
 
-  return <DatePicker value={selectedDate} onChange={setSelectedDate} locale="de" />;
+  return (
+    <DatePicker
+      value={selectedDate}
+      onChange={setSelectedDate}
+      timePicker
+      locale="de"
+      labels={{
+        previousMonth: "Vorheriger Monat",
+        nextMonth: "Nächster Monat",
+        month: (month) => `Monat: ${month}, Monat ändern`,
+        year: (year) => `Jahr: ${year}, Jahr ändern`,
+        backToCalendar: "Zurück zum Kalender",
+        hours: "Stunden",
+        minutes: "Minuten",
+      }}
+    />
+  );
 }
 
 // DateRangePicker example

@@ -15,6 +15,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`labels` on the date components and `Select`.** `DatePicker`, `DateInput`,
+  `DateRangePicker` and `DateRangeInput` take `labels` for the picker's own words:
+  `previousMonth`, `nextMonth`, `backToCalendar`, `hours`, `minutes`, `am`, `pm`, and
+  `month` and `year`, functions that name the month and year buttons from the value
+  they show. `Select` takes `labels={{ search, clear }}` for its search field and clear
+  button. Omitted fields keep the English default, as `Scroller`'s and `StylePanel`'s
+  `labels` do.
+- **`locale` reaches the time picker.** The header time and the AM/PM control are
+  written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
+  `labels.pm` override the words. Without `locale` the time reads as before
+  (`01:14 PM`).
 - **Form building blocks** (planned for 2.3). `Field` puts a label, hint and error
   around any control and wires its `id`, `aria-describedby`, `aria-invalid` and
   `aria-required`; `Input`, `Textarea` and the fields built on them also draw their
@@ -28,6 +39,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
+  and description ids. The fields are now `{id}-start` and `{id}-end`.
+- **The date picker's month and year buttons were named by their value alone**
+  ("March", "2026"), which does not say what they do. They are now named
+  "Month: March, change month" and "Year: 2026, change year", which `labels.month`
+  and `labels.year` translate.
 - **`Textarea` ignored `error` and dropped the caller's `aria-describedby`.** `error`
   now marks it invalid and draws the error state, as it does on `Input`, and a
   description passed in is kept ahead of the error message.

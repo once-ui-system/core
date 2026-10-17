@@ -264,7 +264,7 @@ describe("DateRangePicker", () => {
       // The list closes, and the grids are drawn again.
       await waitFor(() => expect(screen.queryByRole("listbox")).toBeNull());
     };
-    const yearButtons = () => screen.getAllByRole("button", { name: /^\d{4}$/ });
+    const yearButtons = () => screen.getAllByRole("button", { name: /^Year: \d{4}, change year$/ });
 
     it("move both calendars from the first calendar's lists", async () => {
       const user = userEvent.setup();
@@ -274,7 +274,11 @@ describe("DateRangePicker", () => {
       await pick(user, yearButtons()[0], "2027");
       await waitFor(() => expect(grids()).toEqual(["January 2027", "February 2027"]));
 
-      await pick(user, screen.getByRole("button", { name: "January" }), "March");
+      await pick(
+        user,
+        screen.getByRole("button", { name: "Month: January, change month" }),
+        "March",
+      );
       await waitFor(() => expect(grids()).toEqual(["March 2027", "April 2027"]));
 
       // The arrows go on from there.
@@ -290,7 +294,11 @@ describe("DateRangePicker", () => {
       await pick(user, yearButtons()[1], "2025");
       await waitFor(() => expect(grids()).toEqual(["January 2025", "February 2025"]));
 
-      await pick(user, screen.getByRole("button", { name: "February" }), "January");
+      await pick(
+        user,
+        screen.getByRole("button", { name: "Month: February, change month" }),
+        "January",
+      );
       await waitFor(() => expect(grids()).toEqual(["December 2024", "January 2025"]));
 
       await user.click(screen.getByRole("button", { name: "Previous month" }));
