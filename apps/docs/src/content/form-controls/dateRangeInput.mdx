@@ -39,13 +39,14 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
 <PropsTable
   component="DateRangeInput"
   describe={{
-    id: "Ties the labels to the fields.",
+    id: "Base of the two fields' ids: the start field is {id}-start and the end field {id}-end.",
     startLabel: "Label on the start field.",
     endLabel: "Label on the end field.",
     value: "The range, as start and end.",
     onChange: "Called with the new range.",
     minHeight: "Lower bound on the picker's height, in rem.",
     locale: "Locale for the fields' dates and the calendar's names, such as \"de\". US English when left out.",
+    labels: "The calendar's own words, for a translated interface: the same { previousMonth, nextMonth, month, year, ... } as DatePicker's labels. Omitted fields stay English.",
   }}
   content={[
     ["className"],
@@ -66,3 +67,4 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
 - Clear visual indication of selected date range
 - Keyboard navigation support for calendar interface
 - Proper labeling for screen readers
+- Each field has an id of its own, `{id}-start` and `{id}-end`, so a page never holds the same id twice

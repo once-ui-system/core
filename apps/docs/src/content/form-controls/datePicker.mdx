@@ -53,7 +53,9 @@ The DatePicker component provides an interactive calendar interface for selectin
 
 ## Localization
 
-Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekday names in that language. The names come from the browser's `Intl` API, so no locale data is bundled. Without `locale` the names are in English.
+Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekday names, and the time picker's time and AM/PM, in that language. The names come from the browser's `Intl` API, so no locale data is bundled. Without `locale` they are in English.
+
+The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backToCalendar`, `hours`, `minutes`, `am` and `pm` are strings, and `month` and `year` are functions that name the month and year buttons from the value they show (`"Month: March, change month"` by default; keep the value in the name, as it is the button's text). Any label left out stays English, and `am` and `pm` default to the locale's words. `DateInput`, `DateRangePicker` and `DateRangeInput` take the same `labels` and pass them to their calendars.
 
 <CodeBlock
   marginTop="16"
@@ -67,7 +69,17 @@ Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekd
 `<DatePicker
     value={selectedDate}
     onChange={setSelectedDate}
+    timePicker
     locale="de"
+    labels={{
+        previousMonth: "Vorheriger Monat",
+        nextMonth: "Nächster Monat",
+        month: (month) => \`Monat: \${month}, Monat ändern\`,
+        year: (year) => \`Jahr: \${year}, Jahr ändern\`,
+        backToCalendar: "Zurück zum Kalender",
+        hours: "Stunden",
+        minutes: "Minuten",
+    }}
 />`,
       language: "tsx",
       label: "Localization"
@@ -82,7 +94,8 @@ Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekd
   describe={{
     currentMonth: "Current month",
     currentYear: "Current year",
-    locale: "Locale for month and weekday names, such as \"de\". English when left out.",
+    locale: "Locale for month and weekday names and the time picker's time, such as \"de\". English when left out.",
+    labels: "The picker's own words, for a translated interface: { previousMonth, nextMonth, month, year, backToCalendar, hours, minutes, am, pm }. month and year are functions of the value shown. Omitted fields stay English.",
   }}
   content={[
     ["className"],
@@ -95,3 +108,4 @@ Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekd
 - Keyboard navigation support for date selection
 - Clear visual indicators for selected dates
 - Proper ARIA attributes for screen readers
+- The month and year buttons say what they do as well as what they show ("Month: March, change month"); `labels` translates them

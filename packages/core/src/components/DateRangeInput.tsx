@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { fieldLocale } from "../utils/calendarLocale";
+import type { DatePickerLabels } from "./DatePicker";
 import { DateRange, DateRangePicker } from "./DateRangePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
@@ -25,6 +26,8 @@ interface DateRangeInputProps
    * tag the platform does not accept) they are in US English, as before.
    */
   locale?: string;
+  /** The calendar's buttons and names, for a translated interface: see DatePicker. */
+  labels?: DatePickerLabels;
 }
 
 interface LocalizedDateRange {
@@ -63,6 +66,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       className,
       style,
       locale,
+      labels,
       onClick,
       onKeyDown,
       ...rest
@@ -135,7 +139,6 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       style: {
         textOverflow: "ellipsis",
       },
-      id,
       error,
       readOnly: true,
       onClick: handleFieldClick,
@@ -150,6 +153,9 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       <Row fillWidth horizontal="center" gap="-1">
         <Input
           {...field}
+          // One id per field: both used to take `id`, and so did the error and
+          // description ids Input derives from it.
+          id={`${id}-start`}
           corners={"left"}
           placeholder={startLabel}
           // The placeholder is all that shows of the label, and only while
@@ -160,6 +166,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
         />
         <Input
           {...field}
+          id={`${id}-end`}
           corners={"right"}
           placeholder={endLabel}
           aria-label={endLabel}
@@ -179,7 +186,13 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
         aria-label={rest["aria-label"] || `${startLabel} – ${endLabel}`}
         onKeyDown={handleDialogKeyDown}
       >
-        <DateRangePicker value={value} onChange={handleDateChange} autoFocus locale={locale} />
+        <DateRangePicker
+          value={value}
+          onChange={handleDateChange}
+          autoFocus
+          locale={locale}
+          labels={labels}
+        />
       </Flex>
     );
 
