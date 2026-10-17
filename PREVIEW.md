@@ -7,8 +7,9 @@ and approves them; nothing technical waits on them.
    own PR once CI is green. Label it `no-demo` when nothing visible changes
    (CI, tests, tooling, refactors with no behaviour change, dependency bumps,
    typo fixes). Leave it unlabeled when it needs a demo.
-2. **`preview` deploys to a stable URL** (Vercel builds only `main` and
-   `preview`). Everything on it must be safe to ship: unfinished work stays
+2. **`preview` deploys to a stable URL**,
+   https://core-docs-git-preview-dopler.vercel.app (Vercel builds only
+   `main` and `preview`). Everything on it must be safe to ship: unfinished work stays
    unlinked or behind a flag.
 3. **Demo per milestone, not per PR**: one message with screenshots of the
    preview site (desktop and phone), a short video for interactions, or a few
