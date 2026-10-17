@@ -12,7 +12,6 @@ import {
   Input,
   Line,
   Media,
-  PasswordInput,
   Row,
   SmartLink,
   Text,
@@ -81,7 +80,7 @@ export function AuthExample() {
 
           <Column fillWidth gap="16">
             <Input id="email" label="Email" placeholder="you@company.com" />
-            <PasswordInput id="password" label="Password" placeholder="••••••••" />
+            <Input id="password" label="Password" placeholder="••••••••" type="password" />
             <Row fillWidth horizontal="end">
               <SmartLink href="/forgot">Forgot password?</SmartLink>
             </Row>

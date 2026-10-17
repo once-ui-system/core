@@ -1,5 +1,5 @@
-import type { DateRange } from "../../components/DateRangePicker";
-import type { Flex } from "../../components/Flex";
+import type { DateRange } from "../../components/DatePicker";
+import type { FlexElementProps } from "../../interfaces";
 import type { ColorValue, TShirtSizes } from "../../types";
 
 /**
@@ -33,13 +33,22 @@ type ChartMode = "categorical" | "divergent" | "sequential";
 type BarWidth = TShirtSizes | "fill" | number;
 type curveType = CurveType;
 
+/**
+ * A row of chart data when no row type is given: a label on the x axis and a
+ * value per series. Charts take your own row type too — `data: T[]` — so an
+ * `interface RevenueRow { month: string; revenue: number }` needs no cast.
+ */
 interface DataPoint {
   [key: string]: string | number | Date | undefined;
   label?: string;
 }
 
-interface SeriesConfig {
-  key: string;
+/** The string keys of a row type: what a series can plot. */
+type SeriesKey<T> = Extract<keyof T, string>;
+
+/** One series: the row key it plots (`"revenue"`), and an optional colour. */
+interface SeriesConfig<T = DataPoint> {
+  key: SeriesKey<T>;
   color?: ColorValue;
 }
 
@@ -72,11 +81,16 @@ interface LegendConfig {
     | "bottom-center";
 }
 
-interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "description"> {
+/**
+ * What every chart takes. `T` is the row type, inferred from `data`: `series`
+ * keys are checked against it, so a typo in a key is a type error.
+ */
+interface ChartProps<T extends object = DataPoint>
+  extends Omit<FlexElementProps, "title" | "description"> {
   title?: React.ReactNode;
   description?: React.ReactNode;
-  series: SeriesConfig | SeriesConfig[];
-  data: DataPoint[];
+  series: SeriesConfig<T> | SeriesConfig<T>[];
+  data: T[];
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
@@ -99,4 +113,5 @@ export type {
   DateConfig,
   PresetsConfig,
   SeriesConfig,
+  SeriesKey,
 };

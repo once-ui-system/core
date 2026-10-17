@@ -226,17 +226,15 @@ export function PricingExample() {
           </Heading>
           <Table
             fillWidth
-            data={{
-              headers: [
-                { content: "Feature", key: "feature" },
-                { content: "Starter", key: "starter" },
-                { content: "Pro", key: "pro" },
-              ],
-              rows: [
-                ["Projects", "3", "Unlimited"],
-                ["API access", "—", "✓"],
-              ],
-            }}
+            columns={[
+              { header: "Feature", key: "feature" },
+              { header: "Starter", key: "starter" },
+              { header: "Pro", key: "pro" },
+            ]}
+            rows={[
+              ["Projects", "3", "Unlimited"],
+              ["API access", "—", "✓"],
+            ]}
           />
         </Column>
       </Column>

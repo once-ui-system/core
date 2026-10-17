@@ -27,6 +27,7 @@ import {
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
+import { transformTypes } from "./codemod-3.0-types.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -923,6 +924,7 @@ const TONE_RENAMES = {
   // Components whose props are Text's, which pass `variant` on to it.
   ListItem: { variant: "textVariant" },
   CountFx: { variant: "textVariant" },
+  CountdownFx: { variant: "textVariant" },
   ShineFx: { variant: "textVariant" },
   TypeFx: { variant: "textVariant" },
   FadingLettersFx: { variant: "textVariant" },
@@ -1410,6 +1412,12 @@ export function transform(src) {
   out = merges.out;
   hits.push(...merges.hits);
   warnings.push(...merges.warnings);
+  // G1, G4, G5: types, resets and aliases (./codemod-3.0-types.mjs). After
+  // the merges, so it reads 3.0's component names.
+  const types = transformTypes(out);
+  out = types.out;
+  hits.push(...types.hits);
+  warnings.push(...types.warnings);
   return { out, hits, warnings };
 }
 

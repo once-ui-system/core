@@ -4,7 +4,6 @@ import type React from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -155,8 +154,9 @@ describe("DatePicker grid", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
-        dual
+      <DatePicker
+        range
+        months={2}
         value={{ startDate: jan(28), endDate: undefined }}
         onValueChange={onChange}
       />,

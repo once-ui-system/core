@@ -377,24 +377,24 @@ Tiles carry no appearance of their own: no border, no radius, no aspect ratio. T
   previewPadding="0"
   preview={
     <Scroller auto paddingY="40">
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
     </Scroller>
   }
   codes={[
     {
       code:
 `<Scroller auto>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
 </Scroller>`,
       language: "tsx",
       label: "AutoScroll"
@@ -412,24 +412,24 @@ The `speed` prop controls the speed of the scrolling: a multiplier on the 20-sec
   previewPadding="0"
   preview={
     <Scroller auto={{ speed: "fast" }} paddingY="40">
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
-      <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
-      <Logo light wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
+      <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="/"/>
+      <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="/"/>
     </Scroller>
   }
   codes={[
     {
       code:
 `<Scroller auto={{ speed: "fast" }}>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
-    <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-    <Logo wordmark="/logo.svg" size="s" href="#" light/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+    <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
 </Scroller>`,
       language: "tsx",
       label: "Speed"
@@ -449,12 +449,12 @@ Combine with the `<Fade>` component to create a fade-in and fade-out effect.
     <>
       <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0" pointerEvents="none"/>
       <Scroller auto paddingY="40">
-        <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
-        <Logo light wordmark="/trademarks/type-light.svg" size="s" href="#"/>
-        <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
-        <Logo light wordmark="/trademarks/type-light.svg" size="s" href="#"/>
-        <Logo dark wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
-        <Logo light wordmark="/trademarks/type-light.svg" size="s" href="#"/>
+        <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
+        <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="#"/>
+        <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
+        <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="#"/>
+        <Logo showIn="dark" wordmark="/trademarks/type-dark.svg" size="s" href="#"/>
+        <Logo showIn="light" wordmark="/trademarks/type-light.svg" size="s" href="#"/>
       </Scroller>
       <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0" pointerEvents="none"/>
     </>
@@ -465,12 +465,12 @@ Combine with the `<Fade>` component to create a fade-in and fade-out effect.
 `<>
     <Fade zIndex="1" to="right" fillHeight width="64" position="absolute" left="0" top="0"/>
     <Scroller auto paddingY="40">
-      <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-      <Logo wordmark="/logo.svg" size="s" href="#" light/>
-      <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-      <Logo wordmark="/logo.svg" size="s" href="#" light/>
-      <Logo wordmark="/logo.svg" size="s" href="#" dark/>
-      <Logo wordmark="/logo.svg" size="s" href="#" light/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="dark"/>
+      <Logo wordmark="/logo.svg" size="s" href="#" showIn="light"/>
     </Scroller>
     <Fade zIndex="1" to="left" fillHeight width="64" position="absolute" right="0" top="0"/>
 </>`,

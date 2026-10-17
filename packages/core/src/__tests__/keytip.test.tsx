@@ -3,7 +3,7 @@ import type React from "react";
 import { hydrateRoot } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { KeyTip } from "../components/KeyTip";
+import { Kbd } from "../components/Kbd";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -22,24 +22,24 @@ const caps = (root: ParentNode = document) =>
  * to everyone; the headers print "Cmd" or "Ctrl" after an effect. This takes
  * the hotkey string useHotkeys registers and draws it for the platform.
  */
-describe("KeyTip", () => {
+describe("Kbd keys", () => {
   it("draws mod as Ctrl and spells modifiers out off Apple platforms", () => {
     setPlatform("Win32");
-    const { container } = render(<KeyTip keys="mod+shift+z" />, { wrapper: wrap });
+    const { container } = render(<Kbd keys="mod+shift+z" />, { wrapper: wrap });
     expect(caps(container)).toEqual(["Ctrl", "Shift", "Z"]);
     expect(container).toHaveTextContent("Control+Shift+Z");
   });
 
   it("draws Apple symbols on Apple platforms", () => {
     setPlatform("MacIntel");
-    const { container } = render(<KeyTip keys="mod+alt+enter" />, { wrapper: wrap });
+    const { container } = render(<Kbd keys="mod+alt+enter" />, { wrapper: wrap });
     expect(caps(container)).toEqual(["⌘", "⌥", "↵"]);
     expect(container).toHaveTextContent("Command+Option+Return");
   });
 
   it("names arrows, escape and space, and capitalises letters", () => {
     setPlatform("Linux x86_64");
-    const { container } = render(<KeyTip keys={["esc", "space", "up", "k"]} />, {
+    const { container } = render(<Kbd keys={["esc", "space", "up", "k"]} />, {
       wrapper: wrap,
     });
     expect(caps(container)).toEqual(["Esc", "Space", "↑", "K"]);
@@ -47,7 +47,7 @@ describe("KeyTip", () => {
 
   it("joins sequence steps with then and alternatives with or", () => {
     setPlatform("Win32");
-    const { container } = render(<KeyTip keys={["g i", "down"]} />, { wrapper: wrap });
+    const { container } = render(<Kbd keys={["g i", "down"]} />, { wrapper: wrap });
     expect(caps(container)).toEqual(["G", "I", "↓"]);
     expect(container).toHaveTextContent("GthenI");
     expect(container).toHaveTextContent("or↓");
@@ -56,7 +56,7 @@ describe("KeyTip", () => {
 
   it("shows the label before the keys", () => {
     setPlatform("Win32");
-    render(<KeyTip label="Undo" keys="mod+z" />, { wrapper: wrap });
+    render(<Kbd label="Undo" keys="mod+z" />, { wrapper: wrap });
     const tip = screen.getByText("Undo");
     expect(tip.textContent?.startsWith("Undo")).toBe(true);
   });
@@ -65,7 +65,7 @@ describe("KeyTip", () => {
     setPlatform("MacIntel");
     render(
       <button type="button">
-        <KeyTip label="Search" keys="mod+k" />
+        <Kbd label="Search" keys="mod+k" />
       </button>,
       { wrapper: wrap },
     );
@@ -79,7 +79,7 @@ describe("KeyTip", () => {
     setPlatform("MacIntel");
     const tree = (
       <LayoutProvider>
-        <KeyTip keys="mod+k" />
+        <Kbd keys="mod+k" />
       </LayoutProvider>
     );
     const html = renderToString(tree);
@@ -105,10 +105,10 @@ describe("KeyTip", () => {
     const { container } = render(
       <>
         <p>
-          Press <KeyTip keys="shift+?" /> for help.
+          Press <Kbd keys="shift+?" /> for help.
         </p>
         <button type="button">
-          <KeyTip label="Save" keys="mod+s" />
+          <Kbd label="Save" keys="mod+s" />
         </button>
       </>,
       { wrapper: wrap },

@@ -1,7 +1,9 @@
+import classNames from "clsx";
 import React, { forwardRef } from "react";
+import type { FlexPropsOf } from "../interfaces";
 import { Column } from "./Column";
 
-interface ListProps extends React.ComponentProps<typeof Column> {
+interface ListProps extends Omit<FlexPropsOf<"ul">, "ref"> {
   as?: "ul" | "ol";
   /** The first item's number, for a numbered list that does not count from 1. Ignored on `ul`. */
   start?: number;
@@ -10,7 +12,12 @@ interface ListProps extends React.ComponentProps<typeof Column> {
   style?: React.CSSProperties;
 }
 
-const List = forwardRef<HTMLDivElement, ListProps>(
+/**
+ * A bulleted (`ul`) or numbered (`ol`) list. Unlike `<Column as="ul">`, which
+ * drops the browser's markers, it keeps them: the marker classes win over the
+ * list reset layout primitives apply.
+ */
+const List = forwardRef<HTMLUListElement | HTMLOListElement, ListProps>(
   ({ as = "ul", start, className, children, style, ...props }, ref) => {
     if (as === "ol") {
       return (
@@ -24,10 +31,10 @@ const List = forwardRef<HTMLDivElement, ListProps>(
           paddingY="0"
           paddingRight="0"
           paddingLeft="20"
-          ref={ref}
-          className={className}
+          ref={ref as React.Ref<HTMLOListElement>}
+          className={classNames("list-decimal", className)}
           style={style}
-          {...props}
+          {...(props as Omit<FlexPropsOf<"ol">, "ref">)}
         >
           {children}
         </Column>
@@ -42,8 +49,8 @@ const List = forwardRef<HTMLDivElement, ListProps>(
         paddingY="0"
         paddingRight="0"
         paddingLeft="20"
-        ref={ref}
-        className={className}
+        ref={ref as React.Ref<HTMLUListElement>}
+        className={classNames("list-disc", className)}
         style={style}
         {...props}
       >

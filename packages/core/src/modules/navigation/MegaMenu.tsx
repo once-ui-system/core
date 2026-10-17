@@ -11,6 +11,7 @@ import { ToggleButton } from "../../components/ToggleButton";
 import { useAdapters } from "../../contexts/AdapterProvider";
 import type { IconName } from "../../icons";
 import styles from "./MegaMenu.module.scss";
+import { MegaMenuAccordion } from "./MegaMenuAccordion";
 
 export interface MenuLink {
   label: ReactNode;
@@ -35,9 +36,20 @@ export interface MenuGroup {
   content?: ReactNode;
 }
 
+type Breakpoint = "xl" | "l" | "m" | "s" | "xs";
+
 export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
   menuGroups: MenuGroup[];
   className?: string;
+  /**
+   * Where the bar of dropdown panels gives way to accordions (2.x's
+   * MobileMegaMenu): at the breakpoint and below, the same groups render as
+   * one accordion each. `"always"` renders the accordions at every width, for
+   * a menu inside a mobile drawer. Left out, the bar shows at every width.
+   */
+  collapseBelow?: Breakpoint | "always";
+  /** Called when a link in the accordions is followed, to close the drawer they sit in. */
+  onClose?: () => void;
 }
 
 /**
@@ -52,7 +64,34 @@ const DROPDOWN_CHROME = 26;
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...rest }) => {
+/**
+ * A navigation bar whose groups open panels of links, collapsing into
+ * accordions at `collapseBelow`.
+ */
+export const MegaMenu: React.FC<MegaMenuProps> = ({ collapseBelow, onClose, ...props }) => {
+  if (collapseBelow === undefined) return <MegaMenuBar {...props} />;
+  if (collapseBelow === "always") return <MegaMenuAccordion onClose={onClose} {...props} />;
+  const own = props[collapseBelow];
+  return (
+    <>
+      <MegaMenuBar {...props} {...{ [collapseBelow]: { ...own, hide: true } }} />
+      <MegaMenuAccordion
+        menuGroups={props.menuGroups}
+        onClose={onClose}
+        hide
+        {...{ [collapseBelow]: { hide: false } }}
+      />
+    </>
+  );
+};
+
+MegaMenu.displayName = "MegaMenu";
+
+const MegaMenuBar: React.FC<Omit<MegaMenuProps, "collapseBelow" | "onClose">> = ({
+  menuGroups,
+  className,
+  ...rest
+}) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -616,4 +655,4 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
   );
 };
 
-MegaMenu.displayName = "MegaMenu";
+MegaMenuBar.displayName = "MegaMenuBar";

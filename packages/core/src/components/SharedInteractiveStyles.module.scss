@@ -93,3 +93,24 @@
     width: var(--static-space-12);
     height: var(--static-space-2);
 }
+/* Sizes: m is the 20px box above; a Form's size reaches it through
+   useFieldSize, as it reaches Input. */
+.s .element {
+    width: var(--static-space-16);
+    height: var(--static-space-16);
+    min-width: var(--static-space-16);
+    min-height: var(--static-space-16);
+}
+
+.l .element {
+    width: var(--static-space-24);
+    height: var(--static-space-24);
+    min-width: var(--static-space-24);
+    min-height: var(--static-space-24);
+}
+
+/* `error` / `errorMessage`: the danger border Input draws. */
+.error .element:not(.checked) {
+    border-color: var(--danger-border-medium);
+    background-color: var(--danger-background-medium);
+}

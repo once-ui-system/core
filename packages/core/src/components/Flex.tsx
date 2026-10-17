@@ -1,32 +1,10 @@
 import { forwardRef } from "react";
-import {
-  CommonProps,
-  DisplayProps,
-  FlexBreakpointProps,
-  FlexProps,
-  SizeProps,
-  SpacingProps,
-  StyleProps,
-} from "../interfaces";
+import type { FlexLayoutProps, PolymorphicComponent } from "../interfaces";
 import { isClassExpressible } from "../utils/layoutClasses";
 import { ClientFlex } from "./ClientFlex";
-import { ServerFlex } from "./ServerFlex";
+import { ServerFlex, type ServerFlexProps } from "./ServerFlex";
 
-interface SmartFlexProps
-  extends FlexProps,
-    StyleProps,
-    SpacingProps,
-    SizeProps,
-    CommonProps,
-    DisplayProps {
-  xl?: FlexBreakpointProps;
-  l?: FlexBreakpointProps;
-  m?: FlexBreakpointProps;
-  s?: FlexBreakpointProps;
-  xs?: FlexBreakpointProps;
-}
-
-const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
+const FlexImpl = forwardRef<HTMLElement, ServerFlexProps>(
   ({ cursor, xl, l, m, s, xs, style, hide, ...props }, ref) => {
     // Check if we need client-side functionality
     const needsClientSide = () => {
@@ -88,6 +66,12 @@ const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
   },
 );
 
-Flex.displayName = "Flex";
+FlexImpl.displayName = "Flex";
+
+/**
+ * A flex container. `as` picks the element and types its attributes and ref:
+ * `<Flex as="a" href="/x">`, `<Flex as="ul">` with a `Ref<HTMLUListElement>`.
+ */
+const Flex = FlexImpl as unknown as PolymorphicComponent<FlexLayoutProps, "div">;
 
 export { Flex };

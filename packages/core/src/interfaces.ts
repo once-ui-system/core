@@ -1,4 +1,10 @@
-import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
+import type {
+  ComponentPropsWithRef,
+  CSSProperties,
+  ElementType,
+  HTMLAttributes,
+  ReactNode,
+} from "react";
 import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider";
 import {
   BlendMode,
@@ -12,7 +18,6 @@ import {
   RadiusSize,
   ShadowSize,
   SpacingToken,
-  TextSize,
   TextType,
   TextVariant,
   TextWeight,
@@ -45,7 +50,7 @@ export interface ResponsiveGridProps extends ResponsiveProps {
   rows?: GridSize;
 }
 
-export interface GridProps extends HTMLAttributes<HTMLDivElement> {
+export interface GridProps {
   /** How many equal columns. Set it per breakpoint to reflow. */
   columns?: GridSize;
   /**
@@ -67,15 +72,23 @@ export interface GridProps extends HTMLAttributes<HTMLDivElement> {
    * follow from the content. Set it per breakpoint to reflow, as `columns`.
    */
   rows?: GridSize;
+  xl?: GridBreakpointProps;
   l?: GridBreakpointProps;
   m?: GridBreakpointProps;
   s?: GridBreakpointProps;
+  xs?: GridBreakpointProps;
 }
 
-export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
+export interface FlexProps {
   direction?: "row" | "column" | "row-reverse" | "column-reverse";
   horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
-  vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
+  /**
+   * Alignment on the vertical axis. `"baseline"` lines the children up on
+   * their first line of text (`align-items: baseline`), for a price beside its
+   * unit or a label beside a large number; it is a cross-axis value, so on a
+   * column it applies to the horizontal axis.
+   */
+  vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch" | "baseline";
   center?: boolean;
   wrap?: boolean;
   flex?: FlexValue;
@@ -86,21 +99,54 @@ export interface FlexProps extends HTMLAttributes<HTMLDivElement> {
   xs?: FlexBreakpointProps;
 }
 
-export interface TextProps<T extends ElementType = "span"> extends HTMLAttributes<T> {
+export interface TextProps<T extends ElementType = "span"> {
   as?: T;
   /**
-   * The typography preset, `${family}-${weight}-${size}` (`"body-default-m"`).
-   * The same name as on Flex; 2.x called it `variant` on Text and Heading.
+   * The typography preset, `${family}-${weight}-${size}` (`"body-default-m"`):
+   * family, weight and size in one value. The same name as on Flex; 2.x called
+   * it `variant` on Text and Heading, and also took `size` apart.
    */
   textVariant?: TextVariant;
   wrap?: CSSProperties["textWrap"];
-  size?: TextSize;
-  weight?: TextWeight;
+  /**
+   * Swap the font family and keep the preset's size and weight:
+   * `textVariant="display-strong-m" family="code"`.
+   */
   family?: TextType;
+  /**
+   * Swap the weight and keep the rest: the preset's family and size beside a
+   * `textVariant`, or the surrounding text's without one, for an inline
+   * emphasis such as `<Text weight="strong">` inside a sentence.
+   */
+  weight?: TextWeight;
   truncate?: boolean;
 }
 
-export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
+/**
+ * The elements a component built on Text or Heading (CountFx, TypeFx,
+ * ShineFx, ListItem) can render as. Text and Heading themselves take any
+ * element, typed by it; a component that spreads its props onto one keeps to
+ * the elements whose attributes are a span's.
+ */
+export type TextElement =
+  | "span"
+  | "p"
+  | "div"
+  | "label"
+  | "li"
+  | "strong"
+  | "em"
+  | "small"
+  | "code"
+  | "time"
+  | "h1"
+  | "h2"
+  | "h3"
+  | "h4"
+  | "h5"
+  | "h6";
+
+export interface SizeProps {
   /**
    * A number is px (`320`); a string is a spacing token (`"16"` is
    * `--static-space-16`), a t-shirt size, or a CSS length (`"40rem"`,
@@ -136,7 +182,7 @@ export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
  * px and a CSS length (`"1.5rem"`) is written inline. `top={2}` is 2px, while
  * `top="2"` is the 0.125rem token.
  */
-export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
+export interface SpacingProps {
   padding?: SpacingToken | number | CSSUnit;
   paddingLeft?: SpacingToken | number | CSSUnit;
   paddingRight?: SpacingToken | number | CSSUnit;
@@ -144,13 +190,17 @@ export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
   paddingBottom?: SpacingToken | number | CSSUnit;
   paddingX?: SpacingToken | number | CSSUnit;
   paddingY?: SpacingToken | number | CSSUnit;
-  margin?: SpacingToken | number | CSSUnit;
-  marginLeft?: SpacingToken | number | CSSUnit;
-  marginRight?: SpacingToken | number | CSSUnit;
-  marginTop?: SpacingToken | number | CSSUnit;
-  marginBottom?: SpacingToken | number | CSSUnit;
-  marginX?: SpacingToken | number | CSSUnit;
-  marginY?: SpacingToken | number | CSSUnit;
+  /**
+   * Margins also take `"auto"`, as a class: `marginLeft="auto"` pushes an
+   * item to the end of a row, `marginX="auto"` centres a block.
+   */
+  margin?: SpacingToken | number | CSSUnit | "auto";
+  marginLeft?: SpacingToken | number | CSSUnit | "auto";
+  marginRight?: SpacingToken | number | CSSUnit | "auto";
+  marginTop?: SpacingToken | number | CSSUnit | "auto";
+  marginBottom?: SpacingToken | number | CSSUnit | "auto";
+  marginX?: SpacingToken | number | CSSUnit | "auto";
+  marginY?: SpacingToken | number | CSSUnit | "auto";
   gap?: SpacingToken | number | CSSUnit | "-1";
   top?: SpacingToken | number | CSSUnit;
   right?: SpacingToken | number | CSSUnit;
@@ -169,11 +219,9 @@ export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
  * it stays in `style`. For a static offset, `translateX`/`translateY` do the
  * same job without one.
  */
-export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
+export interface StyleProps {
+  /** The typography preset for the text inside, `${family}-${weight}-${size}`. */
   textVariant?: TextVariant;
-  textSize?: TextSize;
-  textType?: TextType;
-  textWeight?: TextWeight;
   background?: Colors | "surface" | "overlay" | "page" | "transparent";
   solid?: Colors;
   borderTop?: Colors | "surface" | "transparent" | boolean;
@@ -216,9 +264,9 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   backdropBlur?: BlurSize | number | CSSUnit;
   /**
    * Render this subtree in the light or dark theme, whatever the page is in:
-   * `data-theme` on this element, typed. Not the same as the `dark` and
-   * `light` booleans, which show or hide an element depending on the theme
-   * around it and change nothing about its colours.
+   * `data-theme` on this element, typed. Not the same as `showIn`, which
+   * shows or hides an element depending on the theme around it and changes
+   * nothing about its colours.
    *
    * @example <Column theme="dark" background="page">…</Column>
    */
@@ -237,8 +285,7 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   themeSurface?: SurfaceStyle;
 }
 
-export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
-  as?: ElementType;
+export interface DisplayProps {
   inline?: boolean;
   hide?: boolean;
   pointerEvents?: "none" | "all" | "auto";
@@ -294,25 +341,83 @@ export interface DisplayProps extends HTMLAttributes<HTMLDivElement> {
     | "9"
     | "10";
   /**
-   * Show this element only while the theme around it is dark. It changes
-   * nothing about the element's colours: to render a subtree dark, use
-   * `theme="dark"`.
+   * Show this element only while the theme around it is dark, or only while
+   * it is light: one Logo for each, a screenshot per theme. It changes nothing
+   * about the element's colours; to render a subtree dark, use `theme="dark"`.
+   * 2.x spelled it as the `dark` and `light` booleans.
    */
-  dark?: boolean;
-  /**
-   * Show this element only while the theme around it is light. To render a
-   * subtree light, use `theme="light"`.
-   */
-  light?: boolean;
+  showIn?: "dark" | "light";
 }
 
-export interface CommonProps extends Omit<HTMLAttributes<HTMLDivElement>, "style"> {
+export interface CommonProps {
   onBackground?: Colors;
   onSolid?: Colors;
   align?: CSSProperties["textAlign"];
   className?: string;
   children?: ReactNode;
   style?: React.CSSProperties;
+}
+
+/**
+ * Everything `Flex`, `Row` and `Column` read, apart from the attributes of the
+ * element they render.
+ */
+export interface FlexLayoutProps
+  extends FlexProps,
+    StyleProps,
+    SpacingProps,
+    SizeProps,
+    CommonProps,
+    DisplayProps {}
+
+/** Everything `Grid` reads, apart from the attributes of the element it renders. */
+export interface GridLayoutProps
+  extends GridProps,
+    StyleProps,
+    SpacingProps,
+    SizeProps,
+    CommonProps,
+    DisplayProps {}
+
+/**
+ * A component's own props on the element `as` names: `as="a"` takes `href`,
+ * `as="form"` types `onSubmit` with `HTMLFormElement`, `as="ul"` types the
+ * ref as `HTMLUListElement`. A component (`as={Link}`) brings its own props.
+ * Where an element attribute shares a name with an own prop (`width`, `wrap`),
+ * the own prop wins.
+ */
+export type PolymorphicProps<T extends ElementType, Own> = Own & {
+  /** The element (or component) to render, in place of the default one. */
+  as?: T;
+} & Omit<ComponentPropsWithRef<T>, keyof Own | "as">;
+
+/**
+ * `Flex`'s props on its default `div`, without `as`: what a component built on
+ * Flex, Row or Column takes and spreads onto it.
+ */
+export type FlexElementProps = FlexPropsOf<"div">;
+
+/**
+ * `Flex`'s props on one element, without `as`: for a component that always
+ * renders `<Flex as="blockquote">` and takes that element's attributes.
+ */
+export type FlexPropsOf<E extends ElementType> = FlexLayoutProps &
+  Omit<ComponentPropsWithRef<E>, keyof FlexLayoutProps>;
+
+/** `Grid`'s props on its default `div`, without `as`. */
+export type GridElementProps = GridLayoutProps &
+  Omit<ComponentPropsWithRef<"div">, keyof GridLayoutProps>;
+
+/**
+ * The call signatures of a polymorphic layout primitive. The generic one is
+ * what JSX resolves; the last, non-generic one is what
+ * `React.ComponentProps<typeof Flex>` reads, so a component that extends it
+ * gets the `div` props rather than `any`.
+ */
+export interface PolymorphicComponent<Own, Default extends ElementType> {
+  <T extends ElementType = Default>(props: PolymorphicProps<T, Own>): ReactNode;
+  (props: Own & Omit<ComponentPropsWithRef<Default>, keyof Own>): ReactNode;
+  displayName?: string;
 }
 
 // ============================================================================
@@ -409,17 +514,12 @@ export type FlexBreakpointProps = BreakpointProps<
   // Typography
   | "align"
   | "textVariant"
-  | "textSize"
-  | "textWeight"
-  | "textType"
   // Effects / state
   | "opacity"
   | "zIndex"
   | "pointerEvents"
   | "transition"
   | "scrollbar"
-  | "dark"
-  | "light"
   // Display / position
   | "position"
   | "hide"
@@ -494,17 +594,12 @@ export type GridBreakpointProps = BreakpointProps<
   // Typography
   | "align"
   | "textVariant"
-  | "textSize"
-  | "textWeight"
-  | "textType"
   // Effects / state
   | "opacity"
   | "zIndex"
   | "pointerEvents"
   | "transition"
   | "scrollbar"
-  | "dark"
-  | "light"
   // Display / position
   | "position"
   | "hide"
@@ -524,7 +619,6 @@ export type TextBreakpointProps = BreakpointProps<
   AllTextProps,
   // Typography
   | "textVariant"
-  | "size"
   | "weight"
   | "family"
   | "align"
@@ -556,8 +650,6 @@ export type TextBreakpointProps = BreakpointProps<
   | "pointerEvents"
   | "transition"
   | "scrollbar"
-  | "dark"
-  | "light"
   // Display / position
   | "position"
   | "hide"
@@ -610,17 +702,12 @@ export type ButtonBreakpointProps = BreakpointProps<
   // Typography
   | "align"
   | "textVariant"
-  | "textSize"
-  | "textWeight"
-  | "textType"
   // Effects / state
   | "opacity"
   | "zIndex"
   | "pointerEvents"
   | "transition"
   | "scrollbar"
-  | "dark"
-  | "light"
   // Escape hatch
   | "style"
 >;
@@ -667,17 +754,12 @@ export type InputBreakpointProps = BreakpointProps<
   // Typography
   | "align"
   | "textVariant"
-  | "textSize"
-  | "textWeight"
-  | "textType"
   // Effects / state
   | "opacity"
   | "zIndex"
   | "pointerEvents"
   | "transition"
   | "scrollbar"
-  | "dark"
-  | "light"
   // Escape hatch
   | "style"
 >;

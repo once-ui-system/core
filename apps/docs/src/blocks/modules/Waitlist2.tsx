@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Tag, BlobFx, Button, Column, CountFx, Fade, Icon, IconButton, Input, Line, Pulse, Row, Text } from "@once-ui-system/core";
+import { Avatar, Tag, BlobFx, Button, Column, CountFx, Fade, Icon, IconButton, Input, Line, StatusIndicator, Row, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 const recentJoins = [
@@ -133,7 +133,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
       >
         <Row horizontal="between" vertical="center">
           <Row gap="8" vertical="center">
-            <Pulse tone="success" size="s" />
+            <StatusIndicator pulse tone="success" size="s" />
             <Text textVariant="label-default-s">Live queue</Text>
           </Row>
           <Row gap="4" vertical="center" textVariant="label-strong-s">

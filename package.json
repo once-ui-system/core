@@ -21,7 +21,7 @@
     "typecheck:core": "pnpm --filter @once-ui-system/core typecheck",
     "test": "pnpm test:codemod && turbo test",
     "test:core": "pnpm --filter @once-ui-system/core test",
-    "test:codemod": "node --test scripts/codemod-2.0.test.mjs scripts/codemod-3.0.test.mjs scripts/codemod-3.0-fields.test.mjs scripts/codemod-3.0-controls.test.mjs scripts/codemod-3.0-exports.test.mjs scripts/codemod-3.0-units.test.mjs scripts/codemod-3.0-tone.test.mjs scripts/codemod-3.0-merges.test.mjs",
+    "test:codemod": "node --test scripts/codemod-2.0.test.mjs scripts/codemod-3.0.test.mjs scripts/codemod-3.0-fields.test.mjs scripts/codemod-3.0-controls.test.mjs scripts/codemod-3.0-exports.test.mjs scripts/codemod-3.0-units.test.mjs scripts/codemod-3.0-tone.test.mjs scripts/codemod-3.0-merges.test.mjs scripts/codemod-3.0-merges2.test.mjs scripts/codemod-3.0-types.test.mjs",
     "clean": "turbo clean",
     "clean:core": "pnpm --filter @once-ui-system/core clean",
     "start": "turbo start"

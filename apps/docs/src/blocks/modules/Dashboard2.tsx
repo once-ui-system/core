@@ -11,7 +11,6 @@ import {
   Heading,
   Icon,
   ProgressBar,
-  Pulse,
   Row,
   SegmentedControl,
   StatusIndicator,
@@ -130,7 +129,7 @@ export const Dashboard2 = () => {
                   <Column gap="4">
                     <Row vertical="center" gap="12">
                       <Heading textVariant="display-strong-s">Workspace pulse</Heading>
-                      <Pulse size="s" />
+                      <StatusIndicator pulse size="s" />
                     </Row>
                     <Text textVariant="body-default-m" onBackground="neutral-medium">
                       Real-time health across your projects and deployments.

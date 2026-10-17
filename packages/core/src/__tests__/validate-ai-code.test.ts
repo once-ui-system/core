@@ -281,7 +281,27 @@ describe("Logo.themes", () => {
     expect(
       rules(`<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} href="/" />`),
     ).not.toContain("Logo.themes");
-    expect(rules(`<Logo dark icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+    expect(rules(`<Logo showIn="dark" icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+  });
+
+  it("flags the 3.0 spelling too", () => {
+    expect(
+      rules(`<Row>
+  <Logo showIn="dark" wordmark="/logo-dark.svg" href="/" />
+  <Logo showIn="light" wordmark="/logo-light.svg" href="/" />
+</Row>`),
+    ).toContain("Logo.themes");
+  });
+});
+
+describe("G5 renames", () => {
+  it("names showIn and textVariant for the 2.x aliases", () => {
+    const messages = issues(`<Row dark textSize="m" /><Text size="l" />`)
+      .map((issue) => issue.message)
+      .join("\n");
+    expect(messages).toMatch(/Row takes showIn in 3.0; dark is the 2.x name/);
+    expect(messages).toMatch(/Row takes textVariant in 3.0; textSize is the 2.x name/);
+    expect(messages).toMatch(/Text takes textVariant in 3.0; size is the 2.x name/);
   });
 });
 
@@ -788,6 +808,17 @@ describe("api.renamed: 1.x prop names", () => {
     expect(
       rules(`<Button tone="danger">Delete</Button>\n<Tag variant="announce" label="New" />`),
     ).not.toContain("api.renamed");
+  });
+
+  it("names the 3.0 survivor for a 2.x component that merged (F6), and 2.x Table data", () => {
+    const found = issues(
+      `<PasswordInput id="p" label="Password" />\n<KeyTip keys="mod+z" />\n<Table data={{ headers: h, rows: r }} />\n<Table columns={c} rows={r} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'PasswordInput is Input type="password" (it has the show/hide toggle) in 3.0',
+      'KeyTip is Kbd keys="mod+k" label="…" in 3.0',
+      "Table takes columns and rows in 3.0; data={{ headers, rows }} is the 2.x shape (a header's content is a column's header, array rows read by position)",
+    ]);
   });
 
   it("leaves the 2.x names, and old names 2.x reuses, alone", () => {

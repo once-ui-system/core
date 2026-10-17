@@ -225,17 +225,10 @@ Sets the `border-width` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-1", sortable: false },
-      { content: "Preview", key: "preview-1", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-1", sortable: false }, { header: "Preview", key: "preview-1", sortable: false }]} rows={[
       [".border-1", <Flex width="64" height="20" border="neutral-strong" radius="xs"/>],
       [".border-2", <Flex width="64" height="20" border="neutral-strong" borderWidth="2" radius="xs"/>]
-    ]
-  }}
+    ]}
 />
 
 ## Border style
@@ -244,17 +237,10 @@ Sets the `border-style` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-2", sortable: false },
-      { content: "Preview", key: "preview-2", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-2", sortable: false }, { header: "Preview", key: "preview-2", sortable: false }]} rows={[
       [".border-solid", <Flex width="64" height="20" border="neutral-strong" radius="xs"/>],
       [".border-dashed", <Flex width="64" height="20" border="neutral-strong" borderStyle="dashed" radius="xs"/>]
-    ]
-  }}
+    ]}
 />
 
 ## Border color
@@ -263,14 +249,7 @@ Sets the `border-color` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-3", sortable: false },
-      { content: "Value", key: "value", sortable: false },
-      { content: <Row gap="8" key="header-icons"><Icon padding="2" name="dark" size="xs"/><Icon padding="2" name="light" size="xs"/></Row>, key: "preview", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-3", sortable: false }, { header: "Value", key: "value", sortable: false }, { header: <Row gap="8" key="header-icons"><Icon padding="2" name="dark" size="xs"/><Icon padding="2" name="light" size="xs"/></Row>, key: "preview", sortable: false }]} rows={[
       // Generate rows for each color scheme and variant combination
       ...[
         "neutral",
@@ -307,6 +286,5 @@ Sets the `border-color` property.
           </Row>
         ])
       ])
-    ]
-  }}
+    ]}
 />

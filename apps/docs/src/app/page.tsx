@@ -1,5 +1,5 @@
 import React from "react";
-import { Column, Row, Heading, Text, Button, Grid, Media, StatusIndicator, Tag, Meta, Schema, MatrixFx, Background, Pulse, Card, BlobFx } from "@once-ui-system/core";
+import { Column, Row, Heading, Text, Button, Grid, Media, StatusIndicator, Tag, Meta, Schema, MatrixFx, Background, Card, BlobFx } from "@once-ui-system/core";
 import corePackage from "@once-ui-system/core/package.json";
 import { PromptLibrary } from "@/product/PromptLibrary";
 import { baseURL, meta, schema, layout } from "@/resources";
@@ -47,7 +47,7 @@ export default function Home() {
                 href="https://github.com/once-ui-system/core/releases"
               >
                 <Row vertical="center">
-                  <Pulse size="s"/>
+                  <StatusIndicator pulse size="s"/>
                   <Row
                     marginLeft="12"
                     textVariant="label-default-s"

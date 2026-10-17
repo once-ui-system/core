@@ -8,7 +8,7 @@ import {
   Icon,
   type IconName,
   Line,
-  Pulse,
+  StatusIndicator,
   Row,
   Schemes,
   Skeleton,
@@ -248,7 +248,7 @@ const NavigationItemComponent: React.FC<{
              says which it is. */
           const recency = (variant: ColorScheme | undefined) => (
             <Row gap="4" vertical="center" flex={0}>
-              <Pulse tone={variant} size="s" />
+              <StatusIndicator pulse tone={variant} size="s" />
               <Text textVariant="label-default-xs" onBackground="neutral-weak">
                 {item.navTag}
               </Text>
@@ -315,7 +315,7 @@ const ResourceLinkComponent: React.FC<{
       </Row>
       {tag && (
         <Row gap="4" vertical="center" flex={0}>
-          <Pulse tone="brand" size="s" />
+          <StatusIndicator pulse tone="brand" size="s" />
           <Text textVariant="label-default-xs" onBackground="neutral-weak">
             {tag}
           </Text>

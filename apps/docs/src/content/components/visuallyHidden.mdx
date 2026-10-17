@@ -77,6 +77,9 @@ focus, and hides again when focus moves on. Put it first in the page, so the fir
 Tab offers a way past the header and navigation. It stays absolutely positioned when
 revealed, so it draws over the page instead of pushing the layout down.
 
+`as` types the element's own attributes, so the link can be the hidden element
+itself: `<VisuallyHidden as="a" href="#main" focusable>Skip to content</VisuallyHidden>`.
+
 <CodeBlock
   marginTop="16"
   marginBottom="24"
@@ -108,7 +111,7 @@ revealed, so it draws over the page instead of pushing the layout down.
   component="VisuallyHidden"
   describe={{
     children: "What a screen reader announces and a sighted user does not see.",
-    as: "The element to render. A span sits inside a line of text; use div for a block, such as a live region.",
+    as: "The element to render, typed by it (as=\"a\" takes href). A span sits inside a line of text; use div for a block, such as a live region.",
     focusable: "Show the content while it, or anything inside it, has keyboard focus. For skip links.",
   }}
 />

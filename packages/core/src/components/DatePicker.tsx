@@ -70,7 +70,16 @@ const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
   pm: undefined,
 };
 
-export interface DatePickerProps
+/** A range of dates, as `<DatePicker range>` and `<DateInput range>` take it. */
+export interface DateRange {
+  /** Unset until the first date is picked. */
+  startDate?: Date;
+  /** Unset until the second date is picked. */
+  endDate?: Date;
+}
+
+/** One month's calendar: the single-date DatePicker, and each month of a range. */
+interface CalendarProps
   extends Omit<React.ComponentProps<typeof Flex>, "onChange" | "defaultValue"> {
   /** The date, controlled. Leave it out to let the picker keep its own,
    *  starting from `defaultValue`. */
@@ -95,7 +104,8 @@ export interface DatePickerProps
   currentMonth?: number;
   currentYear?: number;
   onMonthChange?: (increment: number) => void;
-  range?: {
+  /** The range to draw on this month: a range picker's selection, or its hover preview. */
+  highlight?: {
     startDate?: Date;
     endDate?: Date;
   };
@@ -149,7 +159,7 @@ const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement
   return null;
 };
 
-const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
+const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
   (
     {
       value,
@@ -168,7 +178,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       currentMonth: propCurrentMonth,
       currentYear: propCurrentYear,
       onMonthChange,
-      range,
+      highlight: range,
       onHover,
       autoFocus = false,
       open,
@@ -1148,6 +1158,182 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   },
 );
 
+Calendar.displayName = "Calendar";
+
+/** One date, on one month's calendar (with `timePicker`, a date and time). */
+interface SingleDatePickerProps extends Omit<CalendarProps, "highlight"> {
+  /** Pick a `{ startDate, endDate }` range instead of one date. */
+  range?: false;
+}
+
+/**
+ * A range of dates (2.x's DateRangePicker): the first pick is the start, the
+ * second the end, with a hover preview between them.
+ */
+interface RangeDatePickerProps
+  extends Omit<
+    React.ComponentProps<typeof Flex>,
+    "onChange" | "defaultValue" | "value" | "onValueChange"
+  > {
+  range: true;
+  /** The range, controlled. Leave it out to let the picker keep its own,
+   *  starting from `defaultValue`. */
+  value?: DateRange;
+  /** The starting range of an uncontrolled range picker (no `value`). */
+  defaultValue?: DateRange;
+  /** Receives the range after each pick: the start alone, then both ends. */
+  onValueChange?: (range: DateRange) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  /** How many months show side by side: 1 (the default) or 2. 2.x's `dual` was `months={2}`. */
+  months?: 1 | 2;
+  size?: CondensedTShirtSizes;
+  /**
+   * Moves focus onto the first calendar's start day (else its first day that
+   * can be picked) as it appears, as for a picker that has just been opened.
+   */
+  autoFocus?: boolean;
+  /** The locale month and weekday names are shown in: see the single picker. */
+  locale?: string;
+  /** Every calendar's buttons and names, for a translated interface. */
+  labels?: DatePickerLabels;
+}
+
+type DatePickerProps = SingleDatePickerProps | RangeDatePickerProps;
+
+const RangeCalendars = forwardRef<HTMLDivElement, RangeDatePickerProps>(
+  (
+    {
+      range: _range,
+      value,
+      defaultValue,
+      onValueChange,
+      minDate,
+      maxDate,
+      size = "m",
+      months = 1,
+      autoFocus,
+      locale,
+      labels,
+      ...rest
+    },
+    ref,
+  ) => {
+    const dual = months === 2;
+    const initial = value ?? defaultValue;
+    const [internalValue, setInternalValue] = useState<DateRange>({
+      startDate: initial?.startDate || undefined,
+      endDate: initial?.endDate || undefined,
+    });
+
+    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
+    // The first calendar starts on the range's start month, else this month.
+    const [currentMonth, setCurrentMonth] = useState(
+      initial?.startDate ? initial.startDate.getMonth() : new Date().getMonth(),
+    );
+    const [currentYear, setCurrentYear] = useState(
+      initial?.startDate ? initial.startDate.getFullYear() : new Date().getFullYear(),
+    );
+
+    useEffect(() => {
+      if (value) {
+        setInternalValue({ startDate: value.startDate, endDate: value.endDate });
+        if (value.startDate) {
+          setCurrentMonth(value.startDate.getMonth());
+          setCurrentYear(value.startDate.getFullYear());
+        }
+      }
+    }, [value]);
+
+    const handleDateChange = (date: Date) => {
+      if (!internalValue.startDate || (internalValue.startDate && internalValue.endDate)) {
+        // A new selection starts.
+        const newRange = { startDate: date, endDate: undefined };
+        setInternalValue(newRange);
+        onValueChange?.(newRange);
+      } else {
+        const newRange = { startDate: internalValue.startDate, endDate: date };
+        if (newRange.startDate > date) {
+          newRange.startDate = date;
+          newRange.endDate = internalValue.startDate;
+        }
+        setInternalValue(newRange);
+        onValueChange?.(newRange);
+      }
+    };
+
+    const handleMonthChange = (increment: number) => {
+      const newDate = new Date(currentYear, currentMonth + increment, 1);
+      setCurrentMonth(newDate.getMonth());
+      setCurrentYear(newDate.getFullYear());
+      setInternalValue({ startDate: internalValue.startDate, endDate: internalValue.endDate });
+    };
+
+    const secondMonth = new Date(currentYear, currentMonth + 1, 1);
+
+    const preview =
+      !internalValue.startDate || internalValue.endDate || !hoveredDate
+        ? null
+        : {
+            startDate: internalValue.startDate,
+            endDate: hoveredDate > internalValue.startDate ? hoveredDate : internalValue.startDate,
+          };
+
+    return (
+      <Flex ref={ref} gap="24" {...rest}>
+        <Calendar
+          value={internalValue.startDate}
+          onValueChange={handleDateChange}
+          highlight={preview || internalValue}
+          minDate={minDate}
+          maxDate={maxDate}
+          size={size}
+          nextMonth={!dual}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+          onMonthChange={handleMonthChange}
+          onHover={setHoveredDate}
+          autoFocus={autoFocus}
+          locale={locale}
+          labels={labels}
+        />
+        {dual && (
+          <Calendar
+            value={internalValue.endDate}
+            onValueChange={handleDateChange}
+            highlight={preview || internalValue}
+            minDate={minDate}
+            maxDate={maxDate}
+            previousMonth={false}
+            size={size}
+            currentMonth={secondMonth.getMonth()}
+            currentYear={secondMonth.getFullYear()}
+            onMonthChange={handleMonthChange}
+            onHover={setHoveredDate}
+            locale={locale}
+            labels={labels}
+          />
+        )}
+      </Flex>
+    );
+  },
+);
+
+RangeCalendars.displayName = "RangeCalendars";
+
+/**
+ * A calendar for one date (and time, with `timePicker`), or with `range` a
+ * `{ startDate, endDate }` range over one or two months (`months`).
+ */
+const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) =>
+  props.range ? (
+    <RangeCalendars {...props} ref={ref} />
+  ) : (
+    <Calendar {...(({ range: _range, ...rest }) => rest)(props)} ref={ref} />
+  ),
+);
+
 DatePicker.displayName = "DatePicker";
 
+export type { DatePickerProps };
 export { DatePicker };

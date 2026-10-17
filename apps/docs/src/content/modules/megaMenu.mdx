@@ -464,9 +464,53 @@ You can use the `content` prop to render custom JSX instead of the default secti
   ]}
 />
 
+## Collapsing
+
+`collapseBelow` folds the bar into an accordion, a list of groups that each expand in place, for narrow screens (2.x's `MobileMegaMenu`). Name a breakpoint and both are rendered, the bar shown above it and the accordion at and below it, switched by CSS, so nothing shifts on hydration. `"always"` renders only the accordion, for a mobile drawer of your own. `onClose` is called when a link in the accordion is chosen, to close the drawer around it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth minHeight="16rem" overflow="hidden">
+      <MegaMenu
+        collapseBelow="always"
+        menuGroups={[
+          {
+            id: "products",
+            label: "Products",
+            sections: [
+              {
+                title: "Featured",
+                links: [
+                  { label: "Analytics", href: "#", icon: "analytics", description: "Get insights into your data" },
+                  { label: "Security", href: "#", icon: "security", description: "Protect your assets" },
+                ],
+              },
+            ],
+          },
+          { id: "pricing", label: "Pricing", href: "#" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`// The bar above m, the accordion at m and below
+<MegaMenu collapseBelow="m" menuGroups={menuGroups} />
+
+// Only the accordion, inside a drawer of your own
+<MegaMenu collapseBelow="always" menuGroups={menuGroups} onClose={() => setOpen(false)} />`,
+      language: "tsx",
+      label: "Collapsing"
+    }
+  ]}
+/>
+
 ## Usage
 
-The `MegaMenu` component is designed for desktop screens. You can hide it at the medium breakpoint by adding the `m={{hide: true}}` prop directly to the component.
+The bar is designed for desktop screens. Use `collapseBelow` (above) for the small ones, or hide it at a breakpoint yourself with `m={{hide: true}}`.
 
 ## Accessibility
 
@@ -486,6 +530,8 @@ Custom `content` takes part as well: any link, button or form field inside it is
   component="MegaMenu"
   describe={{
     menuGroups: "The top-level items, each with the sections and links underneath it.",
+    collapseBelow: "Show the accordion instead of the bar at this breakpoint and below; \"always\" shows only the accordion.",
+    onClose: "Called when a link in the accordion is chosen, to dismiss the drawer around it.",
   }}
   content={[
     ["className"],

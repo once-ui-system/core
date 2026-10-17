@@ -11,7 +11,6 @@ import {
   Line,
   Logo,
   Media,
-  PasswordInput,
   RevealFx,
   Row,
   SmartLink,
@@ -153,18 +152,18 @@ export const Login4 = () => {
 
             <Column fillWidth gap="-1">
               <Input corners="top" placeholder="Email" id="email" name="email" />
-              <PasswordInput
+              <Input
                 corners={isSignup ? "none" : "bottom"}
                 placeholder="Password"
                 id="password"
-                name="password"
+                name="password" type="password"
               />
               {isSignup && (
-                <PasswordInput
+                <Input
                   corners="bottom"
                   placeholder="Confirm password"
                   id="confirm-password"
-                  name="confirm-password"
+                  name="confirm-password" type="password"
                 />
               )}
             </Column>

@@ -2,6 +2,7 @@
 
 import React, { Suspense } from "react";
 import { MissingDependency } from "../../utils/MissingDependency";
+import type { DataPoint } from "./interfaces";
 import type { PieChartProps } from "./PieChart.impl";
 
 const PieChartImpl = React.lazy(() =>
@@ -15,9 +16,13 @@ const PieChartImpl = React.lazy(() =>
   }),
 );
 
-const PieChart: React.FC<PieChartProps> = (props) => (
+/**
+ * Generic over the row type: `<PieChart data={rows} series={{ key: "revenue" }} />`
+ * takes your own `interface Row` as is, and checks `series` keys against it.
+ */
+const PieChart = <T extends object = DataPoint>(props: PieChartProps<T>) => (
   <Suspense fallback={null}>
-    <PieChartImpl {...props} />
+    <PieChartImpl {...(props as unknown as PieChartProps)} />
   </Suspense>
 );
 

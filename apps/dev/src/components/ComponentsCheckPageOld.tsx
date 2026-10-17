@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, Flex, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Card, Fade, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ToggleButton, ScrollToTop, CompareImage, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, Flex, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, TagInput, Avatar, Background, Card, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ToggleButton, ScrollToTop, CompareImage, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, useToast } from "@once-ui-system/core";
 import { BarChart, LineChart } from "@once-ui-system/core/data";
 
 interface ComponentDemo {
@@ -217,10 +217,10 @@ export default function ComponentsCheckOld() {
         {
           name: "PasswordInput",
           element: (
-            <PasswordInput
+            <Input
               id="demo-password"
               label="Password"
-              placeholder="Enter password"
+              placeholder="Enter password" type="password"
             />
           ),
         },
@@ -301,19 +301,11 @@ export default function ComponentsCheckOld() {
         {
           name: "Table",
           element: (
-            <Table
-              data={{
-                headers: [
-                  { content: "Name", key: "name" },
-                  { content: "Role", key: "role" },
-                  { content: "Status", key: "status" },
-                ],
-                rows: [
+            <Table columns={[{ header: "Name", key: "name" }, { header: "Role", key: "role" }, { header: "Status", key: "status" }]} rows={[
                   ["Alice", "Engineer", "Active"],
                   ["Bob", "Designer", "Away"],
                   ["Carol", "Manager", "Active"],
-                ],
-              }}
+                ]}
             />
           ),
         },
@@ -681,9 +673,9 @@ export default function ComponentsCheckOld() {
         {
           name: "Pulse",
           element: (
-            <Pulse>
+            <StatusIndicator pulse>
               <Text>Pulse Effect</Text>
-            </Pulse>
+            </StatusIndicator>
           ),
         },
         {
@@ -757,9 +749,9 @@ export default function ComponentsCheckOld() {
         {
           name: "FadingLettersFx",
           element: (
-            <FadingLettersFx
-              text="Fading Letters Effect"
-              animationState="entering"
+            <TypeFx mode="fade"
+              words="Fading Letters Effect"
+              state="entering"
               textVariant="heading-strong-m"
             />
           ),
@@ -785,7 +777,7 @@ export default function ComponentsCheckOld() {
         {
           name: "DateRangeInput",
           element: (
-            <DateRangeInput
+            <DateInput range
               id="demo-date-range"
               startLabel="Start"
               endLabel="End"
@@ -991,7 +983,7 @@ export default function ComponentsCheckOld() {
         {
           name: "MasonryGrid",
           element: (
-            <MasonryGrid columns={3}>
+            <Grid masonry columns={3}>
               {[4, 8, 6, 5, 7, 4].map((h, i) => (
                 <Flex
                   key={i}
@@ -1004,7 +996,7 @@ export default function ComponentsCheckOld() {
                   <Text textVariant="label-default-s">{i + 1}</Text>
                 </Flex>
               ))}
-            </MasonryGrid>
+            </Grid>
           ),
         },
         {

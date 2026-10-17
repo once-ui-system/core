@@ -14,7 +14,7 @@ import {
 } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { DateRange, DateRangePicker } from "../../components/DateRangePicker";
+import { DatePicker, type DateRange } from "../../components/DatePicker";
 import { Dropdown } from "../../components/Dropdown";
 import { IconButton } from "../../components/IconButton";
 import { Row } from "../../components/Row";
@@ -220,14 +220,15 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
                     ))}
                 </Column>
               )}
-              <DateRangePicker
+              <DatePicker
+                range
                 size="s"
                 padding="16"
                 gap="24"
                 id="chart-date-range"
                 maxDate={date?.max}
                 minDate={date?.min}
-                dual={date?.dual}
+                months={date?.dual ? 2 : 1}
                 value={dateRange}
                 onValueChange={handleDateRangeChange}
               />

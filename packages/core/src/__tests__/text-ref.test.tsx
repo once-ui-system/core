@@ -62,7 +62,7 @@ describe("Text and Heading refs", () => {
     // `ComponentProps<typeof Text>`; it still carries every Text prop.
     type Props = ComponentProps<typeof Text>;
     expectTypeOf<Props>().toHaveProperty("as");
-    expectTypeOf<Props>().toHaveProperty("variant");
+    expectTypeOf<Props>().toHaveProperty("textVariant");
     expectTypeOf<Props>().toHaveProperty("translateX");
     expectTypeOf<Props>().toHaveProperty("onBackground");
     expectTypeOf<ComponentProps<typeof ListItem>["ref"]>().toEqualTypeOf<

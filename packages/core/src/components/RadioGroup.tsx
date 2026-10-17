@@ -12,8 +12,15 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  CONTROL_TEXT,
+  type ControlChromeProps,
+  describedBy,
+  useControlChrome,
+} from "../internal/controlChrome";
 import { useControllableState } from "../internal/useControllableState";
 import { Column } from "./Column";
+import { FormFieldContext } from "./FormContext";
 import type { IconButtonProps } from "./IconButton";
 import { RadioButton } from "./RadioButton";
 import { RadioGroupContext } from "./RadioGroupContext";
@@ -32,7 +39,8 @@ interface RadioGroupOption {
 }
 
 interface RadioGroupProps
-  extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children"> {
+  extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children">,
+    ControlChromeProps {
   /** One RadioButton per option, in order. RadioButton `children` render after them. */
   options?: RadioGroupOption[];
   /** The selected option's `value`, when the host owns the state. Pair with `onValueChange`. */
@@ -94,6 +102,9 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       description,
       disabled = false,
       orientation = "vertical",
+      size,
+      error,
+      errorMessage,
       children,
       onKeyDown,
       ...flex
@@ -102,6 +113,8 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   ) => {
     const labelId = useId();
     const descriptionId = useId();
+    const chrome = useControlChrome({ size, error, errorMessage });
+    const fieldDefaults = useMemo(() => ({ size: chrome.size }), [chrome.size]);
     const groupRef = useRef<HTMLDivElement | null>(null);
     const [current, setCurrent] = useControllableState<string | undefined>({
       value,
@@ -209,9 +222,11 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           // The visible label names the group, unless the caller named it
           // another way: aria-labelledby would override an aria-label.
           aria-labelledby={flex["aria-labelledby"] ?? (hasLabel && !named ? labelId : undefined)}
-          aria-describedby={
-            flex["aria-describedby"] ?? (hasDescription ? descriptionId : undefined)
-          }
+          aria-describedby={describedBy(
+            flex["aria-describedby"] ?? (hasDescription ? descriptionId : undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
           aria-orientation={orientation}
           aria-disabled={disabled || undefined}
           onKeyDown={handleKeyDown}
@@ -230,12 +245,24 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
               )}
             </Column>
           )}
-          {orientation === "horizontal" ? (
-            <Row gap="24" wrap>
-              {radios}
-            </Row>
-          ) : (
-            <Column gap="16">{radios}</Column>
+          {/* The group's size reaches each radio the way a Form's does. */}
+          <FormFieldContext.Provider value={fieldDefaults}>
+            {orientation === "horizontal" ? (
+              <Row gap="24" wrap>
+                {radios}
+              </Row>
+            ) : (
+              <Column gap="16">{radios}</Column>
+            )}
+          </FormFieldContext.Provider>
+          {chrome.showsError && (
+            <Text
+              id={chrome.errorId}
+              textVariant={CONTROL_TEXT[chrome.size].body}
+              onBackground="danger-weak"
+            >
+              {errorMessage}
+            </Text>
           )}
         </Column>
       </RadioGroupContext.Provider>

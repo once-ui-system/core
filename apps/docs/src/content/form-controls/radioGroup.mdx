@@ -1,7 +1,7 @@
 ---
 title: "RadioGroup"
 summary: "One choice from a set of radio buttons, as a single labelled form field with the keyboard behaviour screen readers expect."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/radioGroup.mdx"
 github: "components/RadioGroup.tsx"
 navLabel: "RadioGroup"
@@ -215,11 +215,43 @@ while none is selected, so Tab moves past the whole group in one step.
 Selection follows focus, as it does for native radios: a radio group is one choice,
 and moving through it is how you make it.
 
+## Validation and size
+
+`error` marks the RadioGroup invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioGroup label="Plan" errorMessage="Choose a plan" options={[{ value: "basic", label: "Basic" }, { value: "pro", label: "Pro" }]} />
+  }
+  codes={[
+    {
+      code:
+`<Form size="s">
+    <RadioGroup
+        label="Plan"
+        errorMessage="Choose a plan"
+        options={plans}
+    />
+</Form>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="RadioGroup"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     options: "One RadioButton per option, in order.",
     value: "The selected option's value, when the host owns the state. Pair with onValueChange.",
     defaultValue: "The option selected first when the group keeps its own state.",

@@ -2,6 +2,7 @@
 
 import React, { Suspense } from "react";
 import { MissingDependency } from "../../utils/MissingDependency";
+import type { DataPoint } from "./interfaces";
 import type { LineBarChartProps } from "./LineBarChart.impl";
 
 const LineBarChartImpl = React.lazy(() =>
@@ -15,9 +16,13 @@ const LineBarChartImpl = React.lazy(() =>
   }),
 );
 
-const LineBarChart: React.FC<LineBarChartProps> = (props) => (
+/**
+ * Generic over the row type: `<LineBarChart data={rows} series={{ key: "revenue" }} />`
+ * takes your own `interface Row` as is, and checks `series` keys against it.
+ */
+const LineBarChart = <T extends object = DataPoint>(props: LineBarChartProps<T>) => (
   <Suspense fallback={null}>
-    <LineBarChartImpl {...props} />
+    <LineBarChartImpl {...(props as unknown as LineBarChartProps)} />
   </Suspense>
 );
 

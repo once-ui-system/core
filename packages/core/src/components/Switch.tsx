@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
+import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput";
 import { useControllableState } from "../internal/useControllableState";
 
@@ -12,10 +13,17 @@ import { Spinner } from "./Spinner";
 import styles from "./Switch.module.scss";
 
 interface SwitchProps
-  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
+  extends Omit<
+      InteractiveDetailsProps,
+      "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
+    >,
+    ControlChromeProps,
     // `onToggle` is the DOM's `toggle` event of popovers and `<details>`,
     // which an input never fires.
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "defaultChecked" | "onToggle"> {
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "checked" | "defaultChecked" | "onToggle" | "size"
+    > {
   style?: React.CSSProperties;
   className?: string;
   /** On or off, controlled. Leave it out to let the switch keep its own
@@ -50,10 +58,14 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       description,
       iconButtonProps,
       id,
+      size: sizeProp,
+      error,
+      errorMessage,
       ...rest
     },
     ref,
   ) => {
+    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(label);
@@ -93,7 +105,8 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         vertical="center"
         horizontal={reverse ? "between" : undefined}
         fillWidth={reverse}
-        className={classNames(styles.container, className, {
+        className={classNames(styles.container, className, styles[chrome.size], {
+          [styles.error]: chrome.invalid,
           [styles.reverse]: reverse,
           [styles.disabled]: disabled,
         })}
@@ -130,11 +143,13 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             aria-checked={checked}
             aria-labelledby={hasLabel ? labelId : undefined}
             aria-label={hasLabel ? undefined : ariaLabel}
-            aria-describedby={
+            aria-describedby={describedBy(
               hasLabel && description
                 ? descriptionId
-                : (aria["aria-describedby"] as string | undefined)
-            }
+                : (aria["aria-describedby"] as string | undefined),
+              chrome.showsError && chrome.errorId,
+            )}
+            aria-invalid={chrome.invalid || undefined}
             aria-disabled={disabled}
             onKeyDown={handleKeyDown}
             onFocus={relay(onFocus)}
@@ -148,7 +163,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             {loading && <Spinner size="xs" />}
           </div>
         </Flex>
-        {label && (
+        {(label || chrome.showsError) && (
           <InteractiveDetails
             disabled={disabled}
             label={label}
@@ -157,6 +172,9 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             id={id}
             labelId={labelId}
             descriptionId={descriptionId}
+            size={chrome.size}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            errorId={chrome.errorId}
             onClick={() => {}}
           />
         )}

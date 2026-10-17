@@ -19,6 +19,7 @@
 .accent-solid-medium
 .accent-solid-strong
 .accent-solid-weak
+.align-baseline
 .align-center
 .align-end
 .align-start
@@ -265,6 +266,7 @@
 .justify-even
 .justify-start
 .justify-stretch
+.l-align-baseline
 .l-align-center
 .l-align-end
 .l-align-start
@@ -394,6 +396,7 @@
 .l-m-72
 .l-m-8
 .l-m-80
+.l-m-auto
 .l-m-l
 .l-m-m
 .l-m-s
@@ -418,6 +421,7 @@
 .l-mb-72
 .l-mb-8
 .l-mb-80
+.l-mb-auto
 .l-mb-l
 .l-mb-m
 .l-mb-s
@@ -442,6 +446,7 @@
 .l-ml-72
 .l-ml-8
 .l-ml-80
+.l-ml-auto
 .l-ml-l
 .l-ml-m
 .l-ml-s
@@ -466,6 +471,7 @@
 .l-mr-72
 .l-mr-8
 .l-mr-80
+.l-mr-auto
 .l-mr-l
 .l-mr-m
 .l-mr-s
@@ -490,6 +496,7 @@
 .l-mt-72
 .l-mt-8
 .l-mt-80
+.l-mt-auto
 .l-mt-l
 .l-mt-m
 .l-mt-s
@@ -514,6 +521,7 @@
 .l-mx-72
 .l-mx-8
 .l-mx-80
+.l-mx-auto
 .l-mx-l
 .l-mx-m
 .l-mx-s
@@ -538,6 +546,7 @@
 .l-my-72
 .l-my-8
 .l-my-80
+.l-my-auto
 .l-my-l
 .l-my-m
 .l-my-s
@@ -833,6 +842,8 @@
 .left-72
 .left-8
 .left-80
+.list-decimal
+.list-disc
 .m-0
 .m-1
 .m-104
@@ -852,10 +863,12 @@
 .m-72
 .m-8
 .m-80
+.m-align-baseline
 .m-align-center
 .m-align-end
 .m-align-start
 .m-align-stretch
+.m-auto
 .m-bottom-0
 .m-bottom-1
 .m-bottom-104
@@ -983,6 +996,7 @@
 .m-m-72
 .m-m-8
 .m-m-80
+.m-m-auto
 .m-m-l
 .m-m-m
 .m-m-s
@@ -1007,6 +1021,7 @@
 .m-mb-72
 .m-mb-8
 .m-mb-80
+.m-mb-auto
 .m-mb-l
 .m-mb-m
 .m-mb-s
@@ -1031,6 +1046,7 @@
 .m-ml-72
 .m-ml-8
 .m-ml-80
+.m-ml-auto
 .m-ml-l
 .m-ml-m
 .m-ml-s
@@ -1055,6 +1071,7 @@
 .m-mr-72
 .m-mr-8
 .m-mr-80
+.m-mr-auto
 .m-mr-l
 .m-mr-m
 .m-mr-s
@@ -1079,6 +1096,7 @@
 .m-mt-72
 .m-mt-8
 .m-mt-80
+.m-mt-auto
 .m-mt-l
 .m-mt-m
 .m-mt-s
@@ -1103,6 +1121,7 @@
 .m-mx-72
 .m-mx-8
 .m-mx-80
+.m-mx-auto
 .m-mx-l
 .m-mx-m
 .m-mx-s
@@ -1127,6 +1146,7 @@
 .m-my-72
 .m-my-8
 .m-my-80
+.m-my-auto
 .m-my-l
 .m-my-m
 .m-my-s
@@ -1431,6 +1451,7 @@
 .mb-72
 .mb-8
 .mb-80
+.mb-auto
 .mb-l
 .mb-m
 .mb-s
@@ -1458,6 +1479,7 @@
 .ml-72
 .ml-8
 .ml-80
+.ml-auto
 .ml-l
 .ml-m
 .ml-s
@@ -1482,6 +1504,7 @@
 .mr-72
 .mr-8
 .mr-80
+.mr-auto
 .mr-l
 .mr-m
 .mr-s
@@ -1506,6 +1529,7 @@
 .mt-72
 .mt-8
 .mt-80
+.mt-auto
 .mt-l
 .mt-m
 .mt-s
@@ -1530,6 +1554,7 @@
 .mx-72
 .mx-8
 .mx-80
+.mx-auto
 .mx-l
 .mx-m
 .mx-s
@@ -1554,6 +1579,7 @@
 .my-72
 .my-8
 .my-80
+.my-auto
 .my-l
 .my-m
 .my-s
@@ -1849,7 +1875,9 @@
 .radius-xs-top
 .radius-xs-top-left
 .radius-xs-top-right
+.reset-button
 .reset-button-styles
+.reset-list
 .right-0
 .right-1
 .right-104
@@ -1881,6 +1909,7 @@
 .rows-7
 .rows-8
 .rows-9
+.s-align-baseline
 .s-align-center
 .s-align-end
 .s-align-start
@@ -2010,6 +2039,7 @@
 .s-m-72
 .s-m-8
 .s-m-80
+.s-m-auto
 .s-m-l
 .s-m-m
 .s-m-s
@@ -2034,6 +2064,7 @@
 .s-mb-72
 .s-mb-8
 .s-mb-80
+.s-mb-auto
 .s-mb-l
 .s-mb-m
 .s-mb-s
@@ -2058,6 +2089,7 @@
 .s-ml-72
 .s-ml-8
 .s-ml-80
+.s-ml-auto
 .s-ml-l
 .s-ml-m
 .s-ml-s
@@ -2082,6 +2114,7 @@
 .s-mr-72
 .s-mr-8
 .s-mr-80
+.s-mr-auto
 .s-mr-l
 .s-mr-m
 .s-mr-s
@@ -2106,6 +2139,7 @@
 .s-mt-72
 .s-mt-8
 .s-mt-80
+.s-mt-auto
 .s-mt-l
 .s-mt-m
 .s-mt-s
@@ -2130,6 +2164,7 @@
 .s-mx-72
 .s-mx-8
 .s-mx-80
+.s-mx-auto
 .s-mx-l
 .s-mx-m
 .s-mx-s
@@ -2154,6 +2189,7 @@
 .s-my-72
 .s-my-8
 .s-my-80
+.s-my-auto
 .s-my-l
 .s-my-m
 .s-my-s
@@ -2514,6 +2550,7 @@
 .warning-solid-medium
 .warning-solid-strong
 .warning-solid-weak
+.xl-align-baseline
 .xl-align-center
 .xl-align-end
 .xl-align-start
@@ -2643,6 +2680,7 @@
 .xl-m-72
 .xl-m-8
 .xl-m-80
+.xl-m-auto
 .xl-m-l
 .xl-m-m
 .xl-m-s
@@ -2667,6 +2705,7 @@
 .xl-mb-72
 .xl-mb-8
 .xl-mb-80
+.xl-mb-auto
 .xl-mb-l
 .xl-mb-m
 .xl-mb-s
@@ -2691,6 +2730,7 @@
 .xl-ml-72
 .xl-ml-8
 .xl-ml-80
+.xl-ml-auto
 .xl-ml-l
 .xl-ml-m
 .xl-ml-s
@@ -2715,6 +2755,7 @@
 .xl-mr-72
 .xl-mr-8
 .xl-mr-80
+.xl-mr-auto
 .xl-mr-l
 .xl-mr-m
 .xl-mr-s
@@ -2739,6 +2780,7 @@
 .xl-mt-72
 .xl-mt-8
 .xl-mt-80
+.xl-mt-auto
 .xl-mt-l
 .xl-mt-m
 .xl-mt-s
@@ -2763,6 +2805,7 @@
 .xl-mx-72
 .xl-mx-8
 .xl-mx-80
+.xl-mx-auto
 .xl-mx-l
 .xl-mx-m
 .xl-mx-s
@@ -2787,6 +2830,7 @@
 .xl-my-72
 .xl-my-8
 .xl-my-80
+.xl-my-auto
 .xl-my-l
 .xl-my-m
 .xl-my-s
@@ -3063,6 +3107,7 @@
 .xl-z-index-7
 .xl-z-index-8
 .xl-z-index-9
+.xs-align-baseline
 .xs-align-center
 .xs-align-end
 .xs-align-start
@@ -3192,6 +3237,7 @@
 .xs-m-72
 .xs-m-8
 .xs-m-80
+.xs-m-auto
 .xs-m-l
 .xs-m-m
 .xs-m-s
@@ -3216,6 +3262,7 @@
 .xs-mb-72
 .xs-mb-8
 .xs-mb-80
+.xs-mb-auto
 .xs-mb-l
 .xs-mb-m
 .xs-mb-s
@@ -3240,6 +3287,7 @@
 .xs-ml-72
 .xs-ml-8
 .xs-ml-80
+.xs-ml-auto
 .xs-ml-l
 .xs-ml-m
 .xs-ml-s
@@ -3264,6 +3312,7 @@
 .xs-mr-72
 .xs-mr-8
 .xs-mr-80
+.xs-mr-auto
 .xs-mr-l
 .xs-mr-m
 .xs-mr-s
@@ -3288,6 +3337,7 @@
 .xs-mt-72
 .xs-mt-8
 .xs-mt-80
+.xs-mt-auto
 .xs-mt-l
 .xs-mt-m
 .xs-mt-s
@@ -3312,6 +3362,7 @@
 .xs-mx-72
 .xs-mx-8
 .xs-mx-80
+.xs-mx-auto
 .xs-mx-l
 .xs-mx-m
 .xs-mx-s
@@ -3336,6 +3387,7 @@
 .xs-my-72
 .xs-my-8
 .xs-my-80
+.xs-my-auto
 .xs-my-l
 .xs-my-m
 .xs-my-s

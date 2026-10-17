@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, RangeSlider, Text } from "@once-ui-system/core";
+import { Column, Slider, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 const price = (value: number) => `$${value}`;
@@ -10,7 +10,8 @@ export function RangeSliderPriceExample() {
 
   return (
     <Column gap="16" fillWidth>
-      <RangeSlider
+      <Slider
+        range
         label="Price"
         min={0}
         max={600}

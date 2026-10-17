@@ -74,7 +74,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 
 ## Color and surfaces
 
-7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, Pulse, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on StatusIndicator and Avatar's `statusIndicator`.
+7. Colors are semantic tokens, never hex/rgb: `{tone}-{weight}` or `{tone}-alpha-{weight}` where tone = `neutral | brand | accent | info | danger | warning | success` and weight = `weak | medium | strong`. A component's palette is its `tone` prop (Button, IconButton, Tag, Feedback, Toast, `addToast`, `StatusIndicator pulse`, gauges, Timeline items); `scheme` is a palette hue (`blue`, `green`…) on the plain StatusIndicator dot and Avatar's `statusIndicator`.
    - `background` also accepts `surface | overlay | page | transparent`
    - `onBackground` colors text/icons on a background
    - Inline SVG paint too: `fill="currentColor"` (colour the wrapper with `onBackground`) or a token, `stroke="var(--brand-solid-strong)"` — never `fill="#15D9EF"`
@@ -118,15 +118,15 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page
-    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `KeyTip keys="mod+k"`
+    - Keyboard shortcuts → `useHotkeys("mod+k", fn)` (it skips while the user types), shown with `Kbd keys="mod+k" label="Search"`
     - Text for screen readers only, skip links → `VisuallyHidden` (`focusable` for a skip link)
     - Markdown/MDX content → `mdxComponents` or `createMdxComponents({...})` from `/mdx` (rule 30), never a hand-written element map
 
 13. Use the distinctive features when the design calls for them — they exist and are cheap:
     - `Dialog` supports `stack` (stacked dialogs) and `base` props, and `variant="sheet"` (a full-height sheet from the bottom, with a `backdrop` slot)
     - Effects: `RevealFx`, `LetterFx`, `TypeFx`, `CountFx`, `GlitchFx`, `HoloFx`, `TiltFx`, `FlipFx`, `MatrixFx`, `BlobFx`, `ParticleFx`, `ShineFx`, `CelebrationFx`
-    - `HoverCard` (`placement="cursor"` follows the pointer, `"cover"` draws over the trigger), `Dropdown openOn="contextmenu"` (a right-click menu), `Tooltip content` with no children (an info icon), `EmojiPicker trigger`, `Scroller` (track mode with `infinite`/`markers`/`proximity`, or `auto` for a marquee), `Carousel mode="snap"`, `CompareImage`, `OgCard`, `Timeline`, `MasonryGrid`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
-    - Forms: `Input`, `PasswordInput`, `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker`, `DateRangePicker`, `ColorInput`, `Slider`, `Switch`, `Checkbox`, `Tag selected`
+    - `HoverCard` (`placement="cursor"` follows the pointer, `"cover"` draws over the trigger), `Dropdown openOn="contextmenu"` (a right-click menu), `Tooltip content` with no children (an info icon), `EmojiPicker trigger`, `Scroller` (track mode with `infinite`/`markers`/`proximity`, or `auto` for a marquee), `Carousel mode="snap"`, `CompareImage`, `OgCard`, `Timeline`, `Grid masonry`, `InfiniteScroll`, `SegmentedControl`, `Kbar` (command palette)
+    - Forms: `Input` (`type="password"` has a show/hide toggle), `OTPInput`, `NumberInput`, `TagInput`, `Select`, `DatePicker` (`range` for a date range), `DateInput` (`range`), `ColorInput`, `Slider` (`range` for a `[min, max]` pair), `Switch`, `Checkbox`, `Tag selected`
 
 14. Buttons: `variant` is the appearance, `primary | secondary | tertiary | ghost | link | subtle` (`primary` is the default), and `tone` the palette, `brand | accent | neutral | info | success | warning | danger`: a destructive button is `<Button tone="danger">`; pair with `prefixIcon`/`suffixIcon` (icon names, not elements). `IconButton` for icon-only actions with `tooltip`.
 
@@ -244,7 +244,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `HoverCard placement="cover"` `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx` and `LetterFx`. `translateY` as a number is in **px** — use a token like `"16"` (1rem) or `translateY={16}`.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
-   A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo dark>` beside a `<Logo light>`. Keep `dark` or `light` for a logo that should only appear in one theme.
+   A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
 
 26. Use decoration recipes from `recipes.md` verbatim, then adjust. Application shells — a dashboard with a sidebar, a data-driven nav, a two-pane editor — come from `layouts.md` the same way. Budget: at most one ambient background layer per section, ambient motion in at most the hero and final CTA, one accent color family per page.
 

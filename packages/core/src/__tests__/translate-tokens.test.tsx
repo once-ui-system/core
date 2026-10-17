@@ -32,12 +32,13 @@ const attributesOf = (html: string) =>
     m[1].toLowerCase(),
   );
 
-const COMPONENTS = [
+// Each is overloaded, so their union is not callable as JSX.
+const COMPONENTS: [string, React.ElementType][] = [
   ["Flex", Flex],
   ["Grid", Grid],
   ["Text", Text],
   ["Heading", Heading],
-] as const;
+];
 
 describe("translate values", () => {
   it("reads every spacing token as a variable foundations defines", () => {

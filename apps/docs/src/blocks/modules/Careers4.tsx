@@ -9,7 +9,7 @@ import {
   Heading,
   Icon,
   Media,
-  Pulse,
+  StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -63,7 +63,7 @@ export const Careers4 = () => {
 
         <Column fillWidth padding="l" gap="16" borderBottom>
           <Row gap="8" vertical="center">
-            <Pulse />
+            <StatusIndicator pulse />
             <Text onBackground="brand-weak">Culture</Text>
           </Row>
           <Heading as="h1" textVariant="display-strong-s">

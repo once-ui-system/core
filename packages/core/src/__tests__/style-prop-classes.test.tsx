@@ -87,7 +87,8 @@ describe("enumerable style props as classes", () => {
   });
 
   it("maps each prop to its class on Flex and Grid, on the server", () => {
-    for (const Component of [Flex, Grid]) {
+    // Flex and Grid are each overloaded, so their union is not callable as JSX.
+    for (const Component of [Flex, Grid] as React.ElementType[]) {
       // No LayoutProvider: the client path would throw.
       const html = renderToStaticMarkup(
         <Component userSelect="none" blendMode="color-dodge" blur="xl" backdropBlur="s">

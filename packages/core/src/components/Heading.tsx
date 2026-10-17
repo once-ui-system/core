@@ -8,15 +8,21 @@ import {
   type ReactNode,
 } from "react";
 
-import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import {
+  CommonProps,
+  DisplayProps,
+  SpacingProps,
+  type TextElement,
+  TextProps,
+} from "../interfaces";
 import { ColorScheme, ColorWeight, TextVariant } from "../types";
-import { spacingClass, textLayout } from "../utils/layoutClasses";
+import { spacingClass, textLayout, withWeight } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 type HeadingProps<T extends ElementType> = TextProps<T> &
   CommonProps &
   SpacingProps &
-  Omit<DisplayProps, "as"> &
+  DisplayProps &
   ComponentPropsWithoutRef<T>;
 
 /**
@@ -32,6 +38,10 @@ type HeadingRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
  */
 interface HeadingComponent {
   <T extends ElementType = "h1">(props: HeadingProps<T> & { ref?: HeadingRef<T> }): ReactNode;
+  /** What `React.ComponentProps<typeof Heading>` reads: the default element's props. */
+  // No ref here: with `as` loosened to the text elements, a span ref would
+  // also type-check on an `li`. A ref goes through the generic signature.
+  (props: Omit<HeadingProps<"h1">, "as"> & { as?: TextElement; ref?: never }): ReactNode;
   displayName?: string;
 }
 
@@ -39,7 +49,6 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
   {
     as,
     textVariant,
-    size,
     weight,
     family,
     onBackground,
@@ -82,21 +91,16 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     transition,
     zIndex,
     // Typed through `DisplayProps`, with no class that fits text: `inline`,
-    // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
+    // `hide` and `showIn` are display modes of Flex and Grid. Taken out
     // so they stop reaching the DOM as attributes.
     inline: _inline,
     hide: _hide,
-    dark: _dark,
-    light: _light,
+    showIn: _showIn,
     ...props
   }: HeadingProps<T>,
   ref: ForwardedRef<HTMLHeadingElement>,
 ) {
   const Component = as || "h1";
-
-  if (textVariant && (size || weight)) {
-    console.warn("When 'textVariant' is set, 'size' and 'weight' are ignored.");
-  }
 
   if (onBackground && onSolid) {
     console.warn(
@@ -112,10 +116,11 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 
-  const sizeClass = size ? `font-${size}` : "font-m";
-  const weightClass = weight ? `font-${weight}` : "font-strong";
-
-  const classes = textVariant ? getVariantClasses(textVariant) : [sizeClass, weightClass];
+  // With no preset a heading is medium and strong in the family around it.
+  // `weight` swaps the weight in either case.
+  const classes = textVariant
+    ? getVariantClasses(withWeight(textVariant, weight))
+    : ["font-m", `font-${weight ?? "strong"}`];
 
   let colorClass = "neutral-on-background-strong";
   if (onBackground) {

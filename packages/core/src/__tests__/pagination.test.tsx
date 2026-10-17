@@ -281,19 +281,32 @@ describe("Pagination", () => {
 
 describe("Table pagination", () => {
   const rows = Array.from({ length: 23 }, (_, index) => [`Item ${index + 1}`]);
-  const data = { headers: [{ content: "Name", key: "name" }], rows };
+  const data = { columns: [{ header: "Name", key: "name" }], rows };
   const firstCell = () => screen.getAllByRole("row")[1]?.querySelector("td")?.textContent ?? null;
 
   it("pages its rows through Pagination", async () => {
     const user = userEvent.setup();
-    render(<Table paginated defaultPageSize={5} data={data} />, { wrapper: wrap });
+    render(
+      <Table
+        paginated
+        defaultPerPage={5}
+        perPageOptions={[5, 10, 20, 50]}
+        showFirstLast
+        {...data}
+      />,
+      { wrapper: wrap },
+    );
 
     expect(shown()).toEqual(["1", "2", "3", "4", "5"]);
     expect(firstCell()).toBe("Item 1");
 
     await user.click(within(nav()).getByRole("button", { name: "3" }));
     expect(firstCell()).toBe("Item 11");
-    expect(screen.getByText("3 / 5")).toBeInTheDocument();
+    // 2.x's "3 / 5" beside the page-size select is gone: the page buttons say it.
+    expect(within(nav()).getByRole("button", { name: "3" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
 
     await user.click(within(nav()).getByRole("button", { name: "Last page" }));
     expect(firstCell()).toBe("Item 21");
@@ -304,7 +317,7 @@ describe("Table pagination", () => {
   });
 
   it("draws no page buttons for a single page", () => {
-    render(<Table paginated defaultPageSize={50} data={data} />, { wrapper: wrap });
+    render(<Table paginated defaultPerPage={50} {...data} />, { wrapper: wrap });
     expect(screen.queryByRole("navigation")).toBeNull();
   });
 });

@@ -17,6 +17,25 @@
  *   EmojiPickerDropdown → <EmojiPicker trigger>; Dropdown-only props → `dropdownProps`
  *   UserMenu            → <User dropdown>
  *
+ * And twelve more, with 2.x Table's `data` shape (F6):
+ *
+ *   DataTable           → <Table> (its API under the short name)
+ *   Table data={{ headers, rows }} → <Table columns rows>; a header's `content`
+ *                         is `header`, array rows are read by position;
+ *                         `defaultPageSize` / `pageSizeOptions` → `defaultPerPage` /
+ *                         `perPageOptions`; row callbacks take `(row, index)`
+ *   DateRangePicker     → <DatePicker range>, `dual` → `months={2}`
+ *   DateRangeInput      → <DateInput range>
+ *   RangeSlider         → <Slider range>
+ *   PasswordInput       → <Input type="password"> (the eye toggle is Input's)
+ *   KeyTip              → <Kbd keys>
+ *   MasonryGrid         → <Grid masonry>
+ *   Pulse               → <StatusIndicator pulse>
+ *   FadingLettersFx     → <TypeFx mode="fade">; `text` → `words`,
+ *                         `animationState` → `state`, `messageIdx` → `delay`
+ *   SettingAxes         → <Setting axes>; SettingGroup → <Setting control open>
+ *   MobileMegaMenu      → <MegaMenu collapseBelow="always">
+ *
  * Each rewrite is exact: the migrated element renders what the 2.x one did.
  * What cannot be seen from the source (a spread whose keys decide where they
  * belong, an old name still used as a value or a type) is reported instead.
@@ -263,6 +282,18 @@ export const MERGED_EXPORTS = {
   ContextMenu: "Dropdown",
   EmojiPickerDropdown: "EmojiPicker",
   UserMenu: "User",
+  DataTable: "Table",
+  DateRangePicker: "DatePicker",
+  DateRangeInput: "DateInput",
+  RangeSlider: "Slider",
+  PasswordInput: "Input",
+  KeyTip: "Kbd",
+  MasonryGrid: "Grid",
+  Pulse: "StatusIndicator",
+  FadingLettersFx: "TypeFx",
+  SettingAxes: "Setting",
+  SettingGroup: "Setting",
+  MobileMegaMenu: "MegaMenu",
 };
 
 /** Old type export → the survivor's, or a note when there is no one-for-one type. */
@@ -275,12 +306,28 @@ const MERGED_TYPES = {
   ContextMenuProps: "DropdownProps",
   EmojiPickerDropdownProps: "EmojiPickerProps",
   InfoTipProps: "TooltipProps",
+  DataTableProps: "TableProps",
+  DataTableColumn: "TableColumn",
+  DataTableSort: "TableSort",
+  DataTableLabels: "TableLabels",
+  DateRangePickerProps: "DatePickerProps",
+  RangeSliderProps: "SliderProps",
+  KeyTipProps: "KbdProps",
+  FadingLettersFxProps: "TypeFxProps",
+  SettingAxesProps: "SettingProps",
+  SettingGroupProps: "SettingProps",
+  MobileMegaMenuProps: "MegaMenuProps",
 };
 
 const TYPE_NOTES = {
   ScrollContainerControlPlacement: 'removed; use ScrollerProps["controlPlacement"]',
   DropdownProps:
     "now the props of the trigger-and-panel Dropdown (2.x DropdownWrapperProps); the 2.x panel's props are internal",
+  TableHeader: "removed; a 2.x header is a TableColumn with `header` for `content`",
+  TableProps:
+    "now the props of the columns/rows Table (2.x DataTableProps), generic over the row: TableProps<Row>",
+  TableAction: "its onClick and disabled now receive (row, index); 2.x passed the index alone",
+  AnimationState: 'removed with FadingLettersFx; use TypeFxProps["state"]',
 };
 
 /** ScrollContainer's own options, which stay on the element; the rest were tile props. */
@@ -309,6 +356,116 @@ const EMOJI_OWN = new Set([
   "key",
   "ref",
 ]);
+
+/** The entries of an object literal `{ a: 1, b }`, with offsets into `text`; null when not one. */
+function objectLiteral(text) {
+  const t = text;
+  let s0 = 0;
+  while (/\s/.test(t[s0] ?? "")) s0++;
+  if (t[s0] !== "{" || skipGroup(t, s0) !== t.trimEnd().length) return null;
+  const close = skipGroup(t, s0) - 1;
+  const entries = [];
+  let opaque = false;
+  let start = s0 + 1;
+  let i = start;
+  const push = (from, to) => {
+    let a = from;
+    let b = to;
+    while (a < b && /\s/.test(t[a])) a++;
+    while (b > a && /\s/.test(t[b - 1])) b--;
+    if (a === b) return;
+    const seg = t.slice(a, b);
+    const m = /^([A-Za-z_$][\w$]*|"[^"]*"|'[^']*')\s*:\s*/.exec(seg);
+    if (!m) {
+      opaque = true;
+      entries.push({ key: null, at: a, end: b, keyEnd: a, valueAt: a, value: seg });
+      return;
+    }
+    const key = m[1].replace(/^["']|["']$/g, "");
+    entries.push({
+      key,
+      at: a,
+      keyEnd: a + m[1].length,
+      valueAt: a + m[0].length,
+      end: b,
+      value: t.slice(a + m[0].length, b),
+    });
+  };
+  while (i < close) {
+    if (t[i] === ",") {
+      push(start, i);
+      start = i + 1;
+      i++;
+      continue;
+    }
+    i = skipToken(t, i);
+  }
+  push(start, close);
+  return { entries, opaque };
+}
+
+/** An expression that is a plain name or a member chain, safe to repeat: `data`, `props.table`. */
+const isPlainReference = (expr) => /^[A-Za-z_$][\w$]*(\??\.[A-Za-z_$][\w$]*)*$/.test(expr.trim());
+
+/**
+ * `fn` as a callback that takes the row first: `(i) => …` becomes
+ * `(_row, i) => …`; anything else is wrapped, `(_row, ...args) => fn(...args)`.
+ */
+function rowFirst(fn) {
+  const t = fn.trim();
+  let m = /^(async\s+)?\(([^()]*)\)(\s*(?::[^=]*)?=>)/.exec(t);
+  if (m) {
+    const params = m[2].trim();
+    return `${m[1] ?? ""}(${params ? `_row, ${params}` : "_row"})${m[3]}${t.slice(m[0].length)}`;
+  }
+  m = /^(async\s+)?([A-Za-z_$][\w$]*)(\s*=>)/.exec(t);
+  if (m) return `${m[1] ?? ""}(_row, ${m[2]})${m[3]}${t.slice(m[0].length)}`;
+  m = /^(async\s+)?function\b([^(]*)\(([^()]*)\)/.exec(t);
+  if (m) {
+    const params = m[3].trim();
+    return `${m[1] ?? ""}function${m[2]}(${params ? `_row, ${params}` : "_row"})${t.slice(m[0].length)}`;
+  }
+  const callee = isPlainReference(t) ? t : `(${t})`;
+  return `(_row, ...args) => ${callee}(...args)`;
+}
+
+/** Each 2.x header `{ content, key, … }` as a column `{ header, key, … }`, or null when not inline. */
+function headersAsColumns(headers) {
+  const entries = arrayEntries(headers);
+  if (!entries) return null;
+  const out = [];
+  for (const entry of entries) {
+    const obj = objectLiteral(entry);
+    if (!obj || obj.opaque) return null;
+    let text = entry.trim();
+    const base = entry.indexOf(text);
+    const content = obj.entries.find((e) => e.key === "content");
+    if (content) {
+      const at = content.at - base;
+      text = `${text.slice(0, at)}header${text.slice(content.keyEnd - base)}`;
+    }
+    out.push(text);
+  }
+  return `[${out.join(", ")}]`;
+}
+
+/** Rewrite the `onClick` and `disabled` of each inline action to take the row first. */
+function actionsRowFirst(actions) {
+  const entries = arrayEntries(actions);
+  if (!entries) return null;
+  const out = [];
+  for (const entry of entries) {
+    const obj = objectLiteral(entry);
+    if (!obj) return null;
+    let text = entry;
+    for (const e of [...obj.entries].reverse()) {
+      if (e.key !== "onClick" && e.key !== "disabled") continue;
+      text = `${text.slice(0, e.valueAt)}${rowFirst(e.value)}${text.slice(e.end)}`;
+    }
+    out.push(text.trim());
+  }
+  return `[${out.join(", ")}]`;
+}
 
 /** Attributes that stay on an element whatever it becomes. */
 const ELEMENT_ONLY = new Set(["key", "ref"]);
@@ -431,12 +588,147 @@ const REWRITE = {
     return result;
   },
 
+  DataTable: () => ({}),
+
+  Table: (tag) => rewriteOldTable(tag),
+
+  DateRangePicker: (tag) => {
+    const dual = tag.attrs.find((a) => a.name === "dual");
+    const result = { add: ["range"], drop: [], append: [] };
+    if (dual) {
+      const expr = expressionOf(dual);
+      result.drop.push(dual);
+      if (expr === "true") result.append.push("months={2}");
+      else if (expr !== "false") result.append.push(`months={${expr} ? 2 : 1}`);
+    }
+    return result;
+  },
+
+  DateRangeInput: () => ({ add: ["range"] }),
+
+  RangeSlider: () => ({ add: ["range"] }),
+
+  PasswordInput: (tag) => {
+    const type = tag.attrs.find((a) => a.name === "type");
+    const warnings = [];
+    if (tag.attrs.some((a) => a.name === "suffix"))
+      warnings.push("suffix: PasswordInput replaced it with the eye button; Input shows both");
+    // Last, as PasswordInput set it after the props it was given.
+    return { drop: type ? [type] : [], append: ['type="password"'], warnings };
+  },
+
+  KeyTip: () => ({}),
+
+  MasonryGrid: (tag) => ({
+    add: ["masonry"],
+    warnings: tag.attrs.some((a) => a.name === "xl")
+      ? ["xl: a masonry Grid reads columns at l, m, s and xs only, as MasonryGrid did"]
+      : [],
+  }),
+
+  Pulse: () => ({ add: ["pulse"] }),
+
+  FadingLettersFx: (tag) => {
+    const result = { add: ['mode="fade"'], drop: [], append: [], attrRename: [] };
+    const text = tag.attrs.find((a) => a.name === "text");
+    const state = tag.attrs.find((a) => a.name === "animationState");
+    const idx = tag.attrs.find((a) => a.name === "messageIdx");
+    if (text) result.attrRename.push([text, "words"]);
+    if (state) result.attrRename.push([state, "state"]);
+    if (idx) {
+      const expr = expressionOf(idx);
+      result.drop.push(idx);
+      if (/^\d+$/.test(expr)) {
+        if (Number(expr) !== 0) result.append.push(`delay={${Number(expr) * 2500}}`);
+      } else result.append.push(`delay={(${expr}) * 2500}`);
+    }
+    return result;
+  },
+
+  SettingAxes: () => ({}),
+
+  SettingGroup: (tag) => {
+    // A Setting is a group once it has `control` or `open`; 2.x's SettingGroup was one without either.
+    if (tag.attrs.some((a) => a.name === "control" || a.name === "open")) return {};
+    if (tag.attrs.some((a) => a.spread))
+      return {
+        append: ["open={false}"],
+        warnings: [
+          "a spread: open={false} was added after it so the group stays closed; move it before the spread if the spread sets open",
+        ],
+      };
+    return { append: ["open={false}"] };
+  },
+
+  MobileMegaMenu: () => ({ add: ['collapseBelow="always"'] }),
+
   UserMenu: (tag) => {
     // UserMenu was always a dropdown trigger; User is one only with `dropdown`.
     if (tag.attrs.some((a) => a.name === "dropdown" || a.spread)) return {};
     return { append: ["dropdown={null}"] };
   },
 };
+
+/** 2.x Table's own props that DataTable's API names differently, or that take the row first now. */
+function rewriteOldTable(tag) {
+  const result = { drop: [], append: [], attrRename: [], warnings: [] };
+  const attr = (name) => tag.attrs.find((a) => a.name === name);
+  const data = attr("data");
+  const expr = expressionOf(data);
+  const obj = objectLiteral(expr);
+  let headers = null;
+  let rows = null;
+  if (obj && !obj.opaque && obj.entries.length === 2) {
+    headers = obj.entries.find((e) => e.key === "headers")?.value ?? null;
+    rows = obj.entries.find((e) => e.key === "rows")?.value ?? null;
+  } else if (isPlainReference(expr)) {
+    headers = `${expr.trim()}.headers`;
+    rows = `${expr.trim()}.rows`;
+  }
+  if (headers === null || rows === null) {
+    result.warnings.push(
+      "data: not an inline { headers, rows } or a plain name; set columns={headers.map(({ content, ...c }) => ({ ...c, header: content }))} and rows={rows} by hand",
+    );
+    return result;
+  }
+  const columns =
+    headersAsColumns(headers) ??
+    `${isPlainReference(headers) ? headers : `(${headers})`}.map(({ content, ...column }) => ({ ...column, header: content }))`;
+  result.drop.push(data);
+  result.append.push(`columns={${columns}}`, `rows={${rows}}`);
+  for (const [old, to] of [
+    ["defaultPageSize", "defaultPerPage"],
+    ["pageSizeOptions", "perPageOptions"],
+  ]) {
+    const a = attr(old);
+    if (a) result.attrRename.push([a, to]);
+  }
+  // 2.x always offered a page-size select, and first and last buttons, when paginated.
+  const paginated = attr("paginated");
+  if (paginated && expressionOf(paginated) !== "false") {
+    if (!attr("pageSizeOptions")) result.append.push("perPageOptions={[5, 10, 20, 50]}");
+    result.append.push("showFirstLast");
+  }
+  for (const name of ["onRowClick", "rowClassName", "cellClassName"]) {
+    const a = attr(name);
+    if (!a) continue;
+    result.drop.push(a);
+    result.append.push(`${name}={${rowFirst(expressionOf(a))}}`);
+  }
+  const actions = attr("actions");
+  if (actions) {
+    const rewritten = actionsRowFirst(expressionOf(actions));
+    if (rewritten) {
+      result.drop.push(actions);
+      result.append.push(`actions={${rewritten}}`);
+    } else {
+      result.warnings.push(
+        "actions: not an inline array; each action's onClick and disabled now receive (row, index), not the index",
+      );
+    }
+  }
+  return result;
+}
 
 /** Hover and CursorCard: `overlay` becomes the children, under `placement`. */
 function overlayToChildren(tag, children, placement) {
@@ -503,7 +795,7 @@ function rewriteElement(src, lt, tag, local, to) {
 }
 
 /** Rename the merged names in `import`/`export { … } from "@once-ui-system/core…"`. */
-function rewriteMergedImports(src, warnings, hits) {
+function rewriteMergedImports(src, warnings, hits, typeRenames = new Map()) {
   const re =
     /(import|export)\s+(type\s+)?\{([^}]*)\}\s*from\s*(["'])(@once-ui-system\/core[^"']*)\4/g;
   return src.replace(re, (whole, keyword, typeOnly, clause, q, source) => {
@@ -522,6 +814,7 @@ function rewriteMergedImports(src, warnings, hits) {
       changed = true;
       hits.push(`${s.name} → ${to}`);
       const aliased = /\s+as\s+/.test(s.text);
+      if (!aliased && keyword === "import" && MERGED_TYPES[s.name]) typeRenames.set(s.name, to);
       if (keyword === "export" && !aliased) {
         out.push(`${s.text.replace(s.name, to)} as ${s.name}`);
         continue;
@@ -564,6 +857,35 @@ export function transformMerges(src) {
     }
   }
 
+  // 2.x Table's `data` shape, before DataTable takes the name. A Table this
+  // file defines itself is not Once UI's.
+  const ownTable = /\b(function|class)\s+Table\b|\b(const|let|var)\s+Table\s*=/.test(out);
+  for (const local of localNamesFor("Table", bindings)) {
+    if (local === "Table" && !bindings.has("Table") && ownTable) continue;
+    const re = new RegExp(`<${local}(?=[\\s/>])`, "g");
+    let from = 0;
+    for (;;) {
+      re.lastIndex = from;
+      const m = re.exec(out);
+      if (!m) break;
+      from = m.index + 1;
+      const tag = parseTag(out, m.index);
+      if (!tag) continue;
+      if (!tag.attrs.some((a) => a.name === "data")) {
+        if (tag.attrs.some((a) => a.spread) && !tag.attrs.some((a) => a.name === "columns"))
+          warnings.push(
+            `<${local}> with a spread and no columns: if the spread carries 2.x data={{ headers, rows }}, Table takes columns and rows in 3.0`,
+          );
+        continue;
+      }
+      const done = rewriteElement(out, m.index, "Table", local, "Table");
+      if (!done) continue;
+      out = out.slice(0, m.index) + done.text + out.slice(done.end);
+      hits.push("<Table data> → <Table columns rows>");
+      for (const w of done.warnings) warnings.push(`<Table> ${w}`);
+    }
+  }
+
   for (const [tag, to] of Object.entries(MERGED_EXPORTS)) {
     for (const local of localNamesFor(tag, bindings)) {
       const re = new RegExp(`<${local.replace(".", "\\.")}(?=[\\s/>])`, "g");
@@ -585,7 +907,27 @@ export function transformMerges(src) {
     }
   }
 
-  out = rewriteMergedImports(out, warnings, hits);
+  // A renamed prop type is renamed where it is used, too: it only ever names a type.
+  const typeRenames = new Map();
+  out = rewriteMergedImports(out, warnings, hits, typeRenames);
+  if (typeRenames.size) {
+    const importRe = /(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g;
+    const parts = [];
+    let last = 0;
+    for (const m of out.matchAll(importRe)) {
+      parts.push([out.slice(last, m.index), true], [m[0], false]);
+      last = m.index + m[0].length;
+    }
+    parts.push([out.slice(last), true]);
+    out = parts
+      .map(([text, code]) => {
+        if (!code) return text;
+        for (const [from, to] of typeRenames)
+          text = text.replace(new RegExp(`(?<![\\w$.])${from}(?![\\w$])`, "g"), to);
+        return text;
+      })
+      .join("");
+  }
 
   // An old name still used some other way: as a value, in `typeof`, in a type.
   const code = out.replace(/(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, "");

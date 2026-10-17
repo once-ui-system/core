@@ -1,7 +1,7 @@
 ---
 title: "Flex"
 summary: "The layout primitive every other component is built on: one element, a direction, and token-driven spacing, size and surface."
-updatedAt: "2026-10-10"
+updatedAt: "2026-10-17"
 docs: "once-ui/components/flex.mdx"
 github: "components/Flex.tsx"
 navLabel: "Flex"
@@ -33,6 +33,37 @@ with `direction` preset, and reading `<Column gap="16">` beats reading
 
 Reach for `Flex` directly when the direction is conditional — a row on desktop
 that stacks on a phone — since that is the one thing a preset cannot express.
+
+## Element
+
+`as` picks the element, and the types follow it: `as="a"` takes `href`,
+`as="form"` types `onSubmit` for a form, and a ref is typed by the element.
+A list loses its bullets and indent and a button its browser chrome, at zero
+specificity, so any spacing, background or border prop still applies; a
+button is `type="button"` unless you set `type`. For a list that keeps its
+markers, use `List`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column as="ul" gap="8">              // no bullets, no indent
+    <Row as="li">...</Row>
+</Column>
+<Row as="a" href="/pricing" gap="8">...</Row>
+<Row as="button" padding="12" radius="m" onClick={open}>...</Row>
+<Column as="form" onSubmit={(event) => save(event.currentTarget)}>...</Column>`,
+      language: "tsx",
+      label: "as"
+    }
+  ]}
+/>
+
+Only `Flex`, `Row`, `Column`, `Grid`, `Text`, `Heading` and `VisuallyHidden`
+take `as`. A component built on them (Card, Tag, Avatar…) renders its own
+element; wrap it to place it in a list: `<Column as="li"><Card /></Column>`.
 
 ## Direction and alignment
 
@@ -67,7 +98,7 @@ runs.
   describe={{
     direction: "Which way children run. Row and Column preset this.",
     horizontal: "Alignment along the horizontal axis, whatever the direction.",
-    vertical: "Alignment along the vertical axis, whatever the direction.",
+    vertical: "Alignment along the vertical axis, whatever the direction. \"baseline\" lines children up on their first line of text.",
     center: "Shorthand for horizontal and vertical both centred.",
     wrap: "Let children flow onto another line instead of shrinking.",
     flex: "This element's own grow/shrink value inside its parent.",
@@ -111,7 +142,9 @@ when a child is added, removed or reordered.
     {
       code:
 `<Column gap="16" padding="24">    // space between children, space inside
-<Column marginBottom="16">        // last resort: space against a sibling`,
+<Column marginBottom="16">        // last resort: space against a sibling
+<Row marginLeft="auto">           // push to the end of a row
+<Column maxWidth="40rem" marginX="auto">  // centre a block`,
       language: "tsx",
       label: "Gap over margin"
     }
@@ -124,7 +157,7 @@ when a child is added, removed or reordered.
     padding: "Space inside, all four sides.",
     paddingX: "Space inside, left and right.",
     paddingY: "Space inside, top and bottom.",
-    margin: "Space outside, all four sides.",
+    margin: "Space outside, all four sides. Margins also take \"auto\".",
     marginX: "Space outside, left and right.",
     marginY: "Space outside, top and bottom.",
     gap: "Space between children. \"-1\" collapses the gap to overlap borders.",
@@ -219,7 +252,7 @@ frame, so it stays in `style`; for a static shift, `translateX` and
 `theme`, `themeBorder`, `themeSolid` and `themeSurface` restyle everything
 inside, the way `ThemeProvider` restyles the page: they write `data-theme`,
 `data-border`, `data-solid` and `data-surface`, typed with the provider's own
-values. `theme="dark"` renders the subtree dark; the `dark` boolean only shows
+values. `theme="dark"` renders the subtree dark; `showIn="dark"` only shows
 or hides an element depending on the theme around it.
 
 <CodeBlock
@@ -242,7 +275,6 @@ or hides an element depending on the theme around it.
 <PropsTable
   mixin="DisplayProps"
   describe={{
-    as: "Render a different element — section, article, nav, ul.",
     inline: "Lay out inline rather than as a block.",
     hide: "Remove from the layout. Most useful per breakpoint.",
     position: "relative is the default, so it never needs writing.",
@@ -255,8 +287,7 @@ or hides an element depending on the theme around it.
     zIndex: "Stacking order.",
     pointerEvents: "\"none\" lets clicks fall through a decorative layer.",
     userSelect: "\"none\" keeps a handle or a timeline label from being selected mid-drag.",
-    dark: "Show only while the theme around it is dark. To make a subtree dark, use theme=\"dark\".",
-    light: "Show only while the theme around it is light.",
+    showIn: "\"dark\" or \"light\": show only while the theme around it is that one. To make a subtree dark, use theme=\"dark\".",
   }}
 />
 

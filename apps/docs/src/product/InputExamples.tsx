@@ -1,34 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
 import {
-  Input,
+  ColorInput,
+  Column,
+  DateInput,
   Icon,
   IconButton,
-  ColorInput,
-  DateInput,
+  Input,
+  Kbd,
   NumberInput,
   OTPInput,
-  PasswordInput,
   TagInput,
   Text,
-  Kbd,
   useToast,
-  Column
 } from "@once-ui-system/core";
+import React, { useState } from "react";
 
 // Search input with managed state and conditional clear button
 export function SearchInput() {
   const [searchValue, setSearchValue] = useState<string>("");
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
-  
+
   const handleClear = () => {
     setSearchValue("");
   };
-  
+
   return (
     <Input
       id="search-input"
@@ -58,12 +57,12 @@ export function ValidationInputExample() {
 
   const validateEmail = (email: any) => {
     if (!email) return null;
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return "Please enter a valid email address";
     }
-    
+
     return null;
   };
 
@@ -80,11 +79,11 @@ export function ValidationInputExample() {
 
 export function CharacterCountExample() {
   const [bio, setBio] = useState<string>("");
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBio(e.target.value);
   };
-  
+
   return (
     <Input
       id="character-count-input"
@@ -100,11 +99,11 @@ export function CharacterCountExample() {
 // Color input example with managed state
 export function ColorInputExample() {
   const [colorValue, setColorValue] = useState("#4287f5");
-  
+
   const handleColorChange = (value: string) => {
     setColorValue(value);
   };
-  
+
   return (
     <ColorInput
       id="color-input-example"
@@ -118,11 +117,11 @@ export function ColorInputExample() {
 // Color input with alpha support
 export function ColorInputAlphaExample() {
   const [colorValue, setColorValue] = useState("rgba(66, 135, 245, 0.8)");
-  
+
   const handleColorChange = (value: string) => {
     setColorValue(value);
   };
-  
+
   return (
     <ColorInput
       id="color-input-alpha-example"
@@ -137,11 +136,11 @@ export function ColorInputAlphaExample() {
 // Date input example with managed state
 export function DateInputExample() {
   const [date, setDate] = useState<Date | undefined>(new Date());
-  
+
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
   };
-  
+
   return (
     <DateInput
       prefix={<Icon marginLeft="4" name="calendar" size="xs" />}
@@ -156,11 +155,11 @@ export function DateInputExample() {
 // Date and time input example
 export function DateTimeInputExample() {
   const [dateTime, setDateTime] = useState<Date | undefined>(new Date());
-  
+
   const handleDateTimeChange = (newDateTime: Date) => {
     setDateTime(newDateTime);
   };
-  
+
   return (
     <DateInput
       id="date-time-input-example"
@@ -175,11 +174,11 @@ export function DateTimeInputExample() {
 // NumberInput example with min, max, and step
 export function NumberInputExample() {
   const [value, setValue] = useState<number>(0);
-  
+
   const handleChange = (newValue: number) => {
     setValue(newValue);
   };
-  
+
   return (
     <NumberInput
       id="number-input-example"
@@ -196,17 +195,22 @@ export function NumberInputExample() {
 
 export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
   const { addToast } = useToast();
-  
+
   const handleComplete = (code: string) => {
     addToast({
       tone: "success",
-      message: `Verification code ${code} submitted successfully`
+      message: `Verification code ${code} submitted successfully`,
     });
   };
-  
+
   return (
     <Column gap="16">
-      <Text as="label" htmlFor="otp-input-example" textVariant="label-default-s" onBackground="neutral-weak">
+      <Text
+        as="label"
+        htmlFor="otp-input-example"
+        textVariant="label-default-s"
+        onBackground="neutral-weak"
+      >
         Verification Code
       </Text>
       <OTPInput
@@ -226,13 +230,14 @@ export function PasswordInputExample() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
-  
+
   return (
-    <PasswordInput
+    <Input
       id="password-input-example"
+      label="Password"
+      type="password"
       value={password}
       onChange={handleChange}
-      placeholder="Password"
     />
   );
 }
@@ -244,14 +249,18 @@ export function TagInputExample() {
   const handleChange = (newTags: string[]) => {
     setTags(newTags);
   };
-  
+
   return (
     <TagInput
       id="tag-input-example"
       value={tags}
       onValueChange={handleChange}
       placeholder="Add interest"
-      suffix={<Kbd position="absolute" top="16" right="12">Enter</Kbd>}
+      suffix={
+        <Kbd position="absolute" top="16" right="12">
+          Enter
+        </Kbd>
+      }
     />
   );
 }

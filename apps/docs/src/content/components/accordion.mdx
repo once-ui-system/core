@@ -75,16 +75,9 @@ The Accordion component exposes the following methods through a ref:
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Method", key: "method" },
-      { content: "Description", key: "description" }
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Method", key: "method" }, { header: "Description", key: "description" }]} rows={[
       ["toggle()", "Toggles the accordion between open and closed states"],
       ["open()", "Opens the accordion, making its content visible"],
       ["close()", "Closes the accordion, hiding its content"]
-    ]
-  }}
+    ]}
 />

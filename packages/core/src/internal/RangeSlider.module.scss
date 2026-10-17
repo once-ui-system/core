@@ -26,7 +26,7 @@
   top: 50%;
   transform: translateY(-50%);
   inset-inline: 0;
-  height: var(--static-space-4);
+  height: var(--slider-track, var(--static-space-4));
   background-color: var(--neutral-alpha-medium);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -43,12 +43,12 @@
 .thumb {
   position: absolute;
   top: 50%;
-  width: var(--static-space-16);
-  height: var(--static-space-16);
+  width: var(--slider-thumb, var(--static-space-16));
+  height: var(--slider-thumb, var(--static-space-16));
   // Centred on its value by margins rather than a translate, which would
   // have to flip sign in a right-to-left layout.
-  margin-top: calc(var(--static-space-16) / -2);
-  margin-inline-start: calc(var(--static-space-16) / -2);
+  margin-top: calc(var(--slider-thumb, var(--static-space-16)) / -2);
+  margin-inline-start: calc(var(--slider-thumb, var(--static-space-16)) / -2);
   background-color: var(--brand-on-solid-strong);
   border: var(--static-space-2) solid var(--brand-solid-medium);
   border-radius: var(--radius-full);
@@ -74,4 +74,15 @@
 .wrapper:not(.disabled):hover .thumb,
 .thumb.active {
   transform: scale(1.2);
+}
+
+// The error state (`error`, or an `errorMessage`): the fill and the thumbs' ring turn danger.
+.error {
+  .fill {
+    background-color: var(--danger-solid-medium);
+  }
+
+  .thumb {
+    border-color: var(--danger-solid-medium);
+  }
 }

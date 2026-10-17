@@ -1,7 +1,7 @@
 ---
 title: "RadioButton"
 summary: "RadioButton provides a selectable control for mutually exclusive options with customizable labels and styling."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/radioButton.mdx"
 github: "components/RadioButton.tsx"
 navLabel: "RadioButton"
@@ -140,11 +140,42 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
   ]}
 />
 
+## Validation and size
+
+`error` marks the RadioButton invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <RadioButton label="Annual" value="annual" size="l" errorMessage="Pick a billing period" />
+  }
+  codes={[
+    {
+      code:
+`<RadioButton
+    label="Annual"
+    value="annual"
+    size="l"
+    errorMessage="Pick a billing period"
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="RadioButton"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     checked: "Whether this one is chosen, controlled. Leave it out and the radio keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     onCheckedChange: "Called with the new state when it is picked: true when it becomes the chosen one.",

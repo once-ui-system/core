@@ -8,7 +8,6 @@ import {
   Line,
   Logo,
   ParticleFx,
-  PasswordInput,
   Row,
   SmartLink,
 } from "@once-ui-system/core";
@@ -101,7 +100,7 @@ export const Login2 = () => {
             </Row>
             <Column gap="-1" fillWidth>
               <Input id="email" placeholder="Email" corners="top" />
-              <PasswordInput id="password" placeholder="Password" corners="bottom" />
+              <Input id="password" placeholder="Password" corners="bottom" type="password" />
             </Column>
             <Button type="button" id="login-2" label="Log in" arrowIcon fillWidth href="#" />
           </Column>

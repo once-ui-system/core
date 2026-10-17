@@ -314,7 +314,7 @@ export default function PricingPage() {
               Every feature, side by side
             </Heading>
           </Column>
-          <Table fillWidth data={comparisonData} />
+          <Table fillWidth columns={comparisonData.headers.map(({ content, ...column }) => ({ ...column, header: content }))} rows={comparisonData.rows} />
         </Column>
       </Column>
 

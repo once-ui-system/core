@@ -7,7 +7,7 @@ import {
   CountFx,
   Heading,
   Line,
-  Pulse,
+  StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -27,7 +27,7 @@ export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
         }}
       >
         <Row vertical="center" gap="8">
-          <Pulse size="s" />
+          <StatusIndicator pulse size="s" />
           <Text textVariant="code-default-s" onBackground="brand-medium">
             Now shipping v3.0
           </Text>

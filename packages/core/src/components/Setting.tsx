@@ -29,7 +29,7 @@ function renderLabel(label: React.ReactNode) {
   );
 }
 
-interface SettingProps extends React.ComponentProps<typeof Flex> {
+interface SettingRowProps extends React.ComponentProps<typeof Flex> {
   label?: React.ReactNode;
   description?: React.ReactNode;
   /** Hover explainer behind an info icon beside the label. */
@@ -43,7 +43,7 @@ interface SettingProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 
-const Setting: React.FC<SettingProps> = ({
+const SettingRow: React.FC<SettingRowProps> = ({
   label,
   description,
   info,
@@ -92,8 +92,6 @@ const Setting: React.FC<SettingProps> = ({
   );
 };
 
-Setting.displayName = "Setting";
-
 interface SettingGroupProps extends React.ComponentProps<typeof Flex> {
   label?: React.ReactNode;
   description?: React.ReactNode;
@@ -107,7 +105,7 @@ interface SettingGroupProps extends React.ComponentProps<typeof Flex> {
 }
 
 /**
- * A Setting whose sub-settings live *inside* its box rather than beside it, so
+ * `<Setting control open>`: a Setting whose sub-settings live *inside* its box rather than beside it, so
  * the relationship survives when the group is one of ten in a scrolling panel.
  */
 const SettingGroup: React.FC<SettingGroupProps> = ({
@@ -157,8 +155,6 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
   </Column>
 );
 
-SettingGroup.displayName = "SettingGroup";
-
 interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
   label?: React.ReactNode;
   info?: React.ReactNode;
@@ -172,7 +168,7 @@ interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
 }
 
 /**
- * One row carrying the axes of a single property — "Tilt" as X and Y side by
+ * `<Setting axes>`: one row carrying the axes of a single property — "Tilt" as X and Y side by
  * side, rather than two rows that read as unrelated settings. Each axis holds
  * `axisWidth` and the row wraps when the panel is narrower, so the controls
  * stay usable instead of collapsing to a few pixels.
@@ -202,7 +198,30 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   </Column>
 );
 
-SettingAxes.displayName = "SettingAxes";
+/**
+ * One settings row, in three shapes:
+ *
+ * - a label and one control, the control as `children` (the default);
+ * - with `axes`, one row carrying the axes of a single property (2.x's
+ *   SettingAxes): "Tilt" as X and Y side by side;
+ * - with `control` (and `open`), a group (2.x's SettingGroup): the header
+ *   control gates the sub-settings, which are the `children`, shown inside
+ *   the same box while `open`.
+ */
+type SettingProps =
+  | (SettingRowProps & { axes?: undefined; control?: undefined; open?: undefined })
+  | (SettingAxesProps & { control?: undefined; open?: undefined; children?: undefined })
+  | (SettingGroupProps & { axes?: undefined; control: React.ReactNode })
+  | (SettingGroupProps & { axes?: undefined; open: boolean });
 
-export type { SettingAxesProps, SettingGroupProps, SettingProps };
-export { Setting, SettingAxes, SettingGroup };
+const Setting: React.FC<SettingProps> = (props) => {
+  if (props.axes !== undefined) return <SettingAxes {...(props as SettingAxesProps)} />;
+  if (props.control !== undefined || props.open !== undefined)
+    return <SettingGroup {...(props as SettingGroupProps)} />;
+  return <SettingRow {...(props as SettingRowProps)} />;
+};
+
+Setting.displayName = "Setting";
+
+export type { SettingProps };
+export { Setting };

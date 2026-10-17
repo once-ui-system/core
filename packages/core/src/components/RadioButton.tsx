@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
+import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput";
 import { useControllableState } from "../internal/useControllableState";
 import { Flex } from "./Flex";
@@ -10,10 +11,17 @@ import { useRadioGroupItem } from "./RadioGroupContext";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
-  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
+  extends Omit<
+      InteractiveDetailsProps,
+      "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
+    >,
+    ControlChromeProps,
     // `onToggle` is the DOM's `toggle` event of popovers and `<details>`,
     // which an input never fires.
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "defaultChecked" | "onToggle"> {
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "checked" | "defaultChecked" | "onToggle" | "size"
+    > {
   style?: React.CSSProperties;
   className?: string;
   /** Chosen or not, controlled. Leave it out to let the radio keep its own
@@ -29,6 +37,9 @@ interface RadioButtonProps
   onCheckedChange?: (checked: boolean) => void;
   hoverable?: boolean;
 }
+
+/** The chosen dot, per size: m is 2.x's 12. */
+const DOT = { s: "8", m: "12", l: "16" } as const;
 
 const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
@@ -49,6 +60,9 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       description,
       iconButtonProps,
       id,
+      size: sizeProp,
+      error,
+      errorMessage,
       ...rest
     },
     ref,
@@ -75,6 +89,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     });
     const { setRef, activate, relay } = useHiddenInput(ref);
     const { aria, native } = splitAria(rest);
+    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(label);
@@ -100,7 +115,8 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
         vertical="center"
         gap="16"
         zIndex={1}
-        className={classNames(styles.container, className, {
+        className={classNames(styles.container, className, styles[chrome.size], {
+          [styles.error]: chrome.invalid,
           [styles.disabled]: disabled,
           [styles.noHover]: !hoverable,
         })}
@@ -130,11 +146,13 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
           // button beside it); `aria-label` only when there is no label.
           aria-labelledby={hasLabel ? labelId : undefined}
           aria-label={hasLabel ? undefined : (aria["aria-label"] as string | undefined)}
-          aria-describedby={
+          aria-describedby={describedBy(
             hasLabel && description
               ? descriptionId
-              : (aria["aria-describedby"] as string | undefined)
-          }
+              : (aria["aria-describedby"] as string | undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
           aria-disabled={disabled}
           horizontal="center"
           vertical="center"
@@ -158,13 +176,13 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
                 backgroundColor: "var(--neutral-on-solid-strong)",
               }}
               radius="full"
-              width="12"
-              height="12"
+              width={DOT[chrome.size]}
+              height={DOT[chrome.size]}
               className={styles.icon}
             />
           )}
         </Flex>
-        {label && (
+        {(label || chrome.showsError) && (
           <InteractiveDetails
             disabled={disabled}
             label={label}
@@ -173,6 +191,9 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             id={id}
             labelId={labelId}
             descriptionId={descriptionId}
+            size={chrome.size}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            errorId={chrome.errorId}
             onClick={disabled ? () => {} : activate}
           />
         )}

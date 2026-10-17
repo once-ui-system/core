@@ -3,12 +3,12 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { type DateRange, DateRangePicker } from "../components/DateRangePicker";
+import { DatePicker, type DateRange } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { axeViolations, expectNoAxeViolations } from "../test/axe";
 
 /**
- * DateRangePicker picks a range in clicks: the first sets the start, the
+ * DatePicker range picks a range in clicks: the first sets the start, the
  * second the end (in either order, earliest first), and a third starts over.
  * It opens on the month of `value.startDate`, follows `value` when the parent
  * changes it, shows two months side by side with `dual`, and refuses days
@@ -42,9 +42,9 @@ const showing = (month: string, year: string) => {
   expect(screen.getAllByText(year).length).toBeGreaterThan(0);
 };
 
-describe("DateRangePicker", () => {
+describe("DatePicker range", () => {
   it("opens on the month of the start date", async () => {
-    render(<DateRangePicker value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range value={january} onValueChange={vi.fn()} />, { wrapper });
     expect(await day(jan(31))).toBeInTheDocument();
     showing("January", "2026");
   });
@@ -53,7 +53,7 @@ describe("DateRangePicker", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker value={{ startDate: jan(1), endDate: jan(2) }} onValueChange={onChange} />,
+      <DatePicker range value={{ startDate: jan(1), endDate: jan(2) }} onValueChange={onChange} />,
       {
         wrapper,
       },
@@ -68,7 +68,7 @@ describe("DateRangePicker", () => {
   it("starts from nothing: the first click sets the start", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<DateRangePicker onValueChange={onChange} />, { wrapper });
+    render(<DatePicker range onValueChange={onChange} />, { wrapper });
     // Without a value it opens on the current month.
     const now = new Date();
     const third = new Date(now.getFullYear(), now.getMonth(), 3);
@@ -80,7 +80,8 @@ describe("DateRangePicker", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: jan(20), endDate: undefined }}
         onValueChange={onChange}
       />,
@@ -93,7 +94,7 @@ describe("DateRangePicker", () => {
   });
 
   it("marks the days of the range", async () => {
-    render(<DateRangePicker value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range value={january} onValueChange={vi.fn()} />, { wrapper });
     const inRange = async (date: Date) =>
       /alpha-weak/.test((await day(date)).parentElement?.className ?? "");
     const marks = [];
@@ -103,12 +104,13 @@ describe("DateRangePicker", () => {
 
   it("follows `value` when the parent changes it, moving to its month", async () => {
     const onChange = vi.fn();
-    const { rerender } = render(<DateRangePicker value={january} onValueChange={onChange} />, {
+    const { rerender } = render(<DatePicker range value={january} onValueChange={onChange} />, {
       wrapper,
     });
     await day(jan(5));
     rerender(
-      <DateRangePicker
+      <DatePicker
+        range
         value={{ startDate: new Date(2026, 4, 1), endDate: new Date(2026, 4, 3) }}
         onValueChange={onChange}
       />,
@@ -120,7 +122,7 @@ describe("DateRangePicker", () => {
 
   it("moves between months with the month buttons", async () => {
     const user = userEvent.setup();
-    render(<DateRangePicker value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range value={january} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await user.click(screen.getByRole("button", { name: "Next month" }));
     expect(await day(new Date(2026, 1, 28))).toBeInTheDocument();
@@ -134,8 +136,9 @@ describe("DateRangePicker", () => {
 
   it("shows two consecutive months with `dual`, one arrow on each outer side", async () => {
     render(
-      <DateRangePicker
-        dual
+      <DatePicker
+        range
+        months={2}
         value={{ startDate: jan(5), endDate: undefined }}
         onValueChange={vi.fn()}
       />,
@@ -155,8 +158,9 @@ describe("DateRangePicker", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
-        dual
+      <DatePicker
+        range
+        months={2}
         value={{ startDate: jan(28), endDate: undefined }}
         onValueChange={onChange}
       />,
@@ -173,7 +177,8 @@ describe("DateRangePicker", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
+      <DatePicker
+        range
         value={january}
         onValueChange={onChange}
         minDate={jan(3)}
@@ -194,7 +199,7 @@ describe("DateRangePicker", () => {
   // selectors were DropdownWrapper triggers inside another interactive
   // element ("nested-interactive"). See datepicker-grid.test.tsx.
   it("has no axe violations", async () => {
-    const { container } = render(<DateRangePicker value={january} onValueChange={vi.fn()} />, {
+    const { container } = render(<DatePicker range value={january} onValueChange={vi.fn()} />, {
       wrapper,
     });
     await day(jan(5));
@@ -204,8 +209,9 @@ describe("DateRangePicker", () => {
   it("has no axe violations with `dual`, mid-selection", async () => {
     const user = userEvent.setup();
     const { container } = render(
-      <DateRangePicker
-        dual
+      <DatePicker
+        range
+        months={2}
         value={{ startDate: jan(28), endDate: undefined }}
         onValueChange={vi.fn()}
       />,
@@ -222,7 +228,7 @@ describe("DateRangePicker", () => {
   // A calendar whose month is the caller's (currentMonth, currentYear and
   // onMonthChange) no longer follows its value.
   it("shows the next month beside a range that ends in the same month", async () => {
-    render(<DateRangePicker dual value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range months={2} value={january} onValueChange={vi.fn()} />, { wrapper });
     expect(await day(new Date(2026, 1, 28))).toBeInTheDocument();
     showing("January", "2026");
     showing("February", "2026");
@@ -238,7 +244,7 @@ describe("DateRangePicker", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     // Not echoed back as `value`: the picker's own state moves on alone.
-    render(<DateRangePicker dual value={january} onValueChange={onChange} />, { wrapper });
+    render(<DatePicker range months={2} value={january} onValueChange={onChange} />, { wrapper });
     await user.click(await day(new Date(2026, 1, 10)));
 
     expect(onChange).toHaveBeenLastCalledWith({
@@ -256,7 +262,7 @@ describe("DateRangePicker", () => {
 
   it("moves both calendars of a dual picker together", async () => {
     const user = userEvent.setup();
-    render(<DateRangePicker dual value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range months={2} value={january} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await user.click(screen.getByRole("button", { name: "Next month" }));
     expect(await day(new Date(2026, 2, 31))).toBeInTheDocument();
@@ -266,7 +272,7 @@ describe("DateRangePicker", () => {
 
   // A calendar's month and year lists set that calendar's month alone. In a
   // dual picker the two came apart (or showed one month twice), and the
-  // arrows then moved on from the month DateRangePicker still had.
+  // arrows then moved on from the month DatePicker range still had.
   describe("the month and year lists of a dual picker", () => {
     const grids = () => screen.getAllByRole("grid").map((grid) => grid.getAttribute("aria-label"));
     const pick = async (
@@ -283,7 +289,7 @@ describe("DateRangePicker", () => {
 
     it("move both calendars from the first calendar's lists", async () => {
       const user = userEvent.setup();
-      render(<DateRangePicker dual value={january} onValueChange={vi.fn()} />, { wrapper });
+      render(<DatePicker range months={2} value={january} onValueChange={vi.fn()} />, { wrapper });
       await day(jan(5));
 
       await pick(user, yearButtons()[0], "2027");
@@ -303,7 +309,7 @@ describe("DateRangePicker", () => {
 
     it("move the first calendar to the month before from the second calendar's lists", async () => {
       const user = userEvent.setup();
-      render(<DateRangePicker dual value={january} onValueChange={vi.fn()} />, { wrapper });
+      render(<DatePicker range months={2} value={january} onValueChange={vi.fn()} />, { wrapper });
       await day(jan(5));
 
       await pick(user, yearButtons()[1], "2025");
@@ -322,7 +328,7 @@ describe("DateRangePicker", () => {
 
     it("keep a single calendar's arrows in step with the lists", async () => {
       const user = userEvent.setup();
-      render(<DateRangePicker value={january} onValueChange={vi.fn()} />, { wrapper });
+      render(<DatePicker range value={january} onValueChange={vi.fn()} />, { wrapper });
       await day(jan(5));
 
       await pick(user, yearButtons()[0], "2028");
@@ -332,10 +338,10 @@ describe("DateRangePicker", () => {
     });
   });
 
-  // DateRangePicker took a ref through forwardRef but never attached it.
+  // DatePicker range took a ref through forwardRef but never attached it.
   it("forwards its ref to the root", async () => {
     const ref = createRef<HTMLDivElement>();
-    render(<DateRangePicker ref={ref} value={january} onValueChange={vi.fn()} />, { wrapper });
+    render(<DatePicker range ref={ref} value={january} onValueChange={vi.fn()} />, { wrapper });
     expect(ref.current).toContainElement(await day(jan(5)));
   });
 });

@@ -6,7 +6,6 @@ import {
   Input,
   Line,
   Logo,
-  PasswordInput,
   Row,
   SmartLink,
 } from "@once-ui-system/core";
@@ -139,7 +138,7 @@ TRANSLOG:
           </Row>
           <Column gap="-1" fillWidth>
             <Input id="email" placeholder="Email" corners="top" />
-            <PasswordInput id="password" placeholder="Password" corners="bottom" />
+            <Input id="password" placeholder="Password" corners="bottom" type="password" />
           </Column>
           <Button id="login" label="Log in" arrowIcon fillWidth />
         </Column>

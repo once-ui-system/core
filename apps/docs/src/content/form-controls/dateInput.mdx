@@ -73,6 +73,34 @@ const handleDateTimeChange = (newDateTime: Date) => {
   ]}
 />
 
+## Range
+
+With `range`, the field becomes two, a start and an end, over one calendar that picks both (2.x's `DateRangeInput`). `value`, `defaultValue` and `onValueChange` then take a `DateRange`, `{ startDate, endDate }`; `startLabel` and `endLabel` name the fields, and `id` is the base of their ids, `{id}-start` and `{id}-end`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height="24rem" horizontal="center" vertical="start">
+      <BasicDateRangeInputExample />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<DateInput range
+    id="trip"
+    startLabel="Start date"
+    endLabel="End date"
+    value={dateRange}
+    onValueChange={setDateRange}
+/>`,
+      language: "tsx",
+      label: "Range"
+    }
+  ]}
+/>
+
 ## Features
 
 - **Calendar Interface**: Visual calendar for easy date selection
@@ -89,6 +117,9 @@ const handleDateTimeChange = (newDateTime: Date) => {
     defaultValue: "The starting date when `value` is left out.",
     onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x.",
     onChange: "The native change event of the field, as on Input.",
+    range: "Two fields, start and end, over one calendar. value, defaultValue and onValueChange then take a DateRange.",
+    startLabel: "With range, the label on the start field.",
+    endLabel: "With range, the label on the end field.",
     open: "Whether the picker is open, controlled.",
     defaultOpen: "Whether the picker starts open, when `open` is left out.",
     onOpenChange: "Called with every open and close.",

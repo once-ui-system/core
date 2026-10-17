@@ -841,11 +841,6 @@ const PRE_2_PROPS = {
   TagInput: FIELD,
   ColorInput: FIELD,
   DateInput: FIELD,
-  DateRangeInput: FIELD,
-  PasswordInput: FIELD,
-  // 1.x `variant` was the colour; it is `tone` in 3.0, and Tag's `variant`
-  // is its look again (default, gradient, announce).
-  Pulse: { variant: "tone" },
   Button: { radius: "corners" },
   IconButton: { radius: "corners" },
 };
@@ -864,13 +859,10 @@ const PRE_3_PROPS = {
   Switch: { ariaLabel: "aria-label", onToggle: "onCheckedChange" },
   Checkbox: { onToggle: "onCheckedChange" },
   RadioButton: { onToggle: "onCheckedChange" },
-  DateRangeInput: { onChange: "onValueChange" },
-  DateRangePicker: { onChange: "onValueChange" },
   DatePicker: { onChange: "onValueChange", defaultDate: "defaultValue" },
   RadioGroup: { onChange: "onValueChange" },
   SegmentedControl: { onChange: "onValueChange" },
   Tabs: { onChange: "onValueChange" },
-  RangeSlider: { onChange: "onValueChange" },
   ThemeSwitcher: { onChange: "onValueChange" },
   Pagination: { onChange: "onPageChange" },
   Scrubber: { ariaLabel: "aria-label", onChange: "onValueChange", onSelect: "onSelectedChange" },
@@ -891,9 +883,43 @@ const PRE_3_PROPS = {
   Feedback: { variant: "tone" },
   Toast: { variant: "tone" },
   Tag: { scheme: "tone" },
-  Pulse: { scheme: "tone" },
   LinearGauge: { hue: "tone" },
   RadialGauge: { hue: "tone" },
+};
+
+// G5: one name per prop. `dark`/`light` are `showIn`; the pieces of a text
+// preset are `textVariant` (Text and Heading keep `weight` and `family`).
+for (const name of ["Flex", "Row", "Column", "Grid", "Logo"]) {
+  PRE_3_PROPS[name] = { ...PRE_3_PROPS[name], dark: "showIn", light: "showIn" };
+}
+for (const name of ["Flex", "Row", "Column", "Grid"]) {
+  Object.assign(PRE_3_PROPS[name], {
+    textSize: "textVariant",
+    textWeight: "textVariant",
+    textType: "textVariant",
+  });
+}
+for (const name of ["Text", "Heading"])
+  PRE_3_PROPS[name] = { ...PRE_3_PROPS[name], size: "textVariant" };
+
+/**
+ * 2.x components that folded into another in 3.0 (F6), with what to write.
+ * The earlier merges (Modal, Swiper, DropdownWrapper…) are not in the spec
+ * either; these are the ones an agent trained on 2.x docs reaches for most.
+ */
+const PRE_3_COMPONENTS = {
+  DataTable: "Table (DataTable's API under the short name)",
+  DateRangePicker: "DatePicker range (dual is months={2})",
+  DateRangeInput: "DateInput range",
+  RangeSlider: "Slider range",
+  PasswordInput: 'Input type="password" (it has the show/hide toggle)',
+  KeyTip: 'Kbd keys="mod+k" label="…"',
+  MasonryGrid: "Grid masonry",
+  Pulse: "StatusIndicator pulse tone=…",
+  FadingLettersFx: 'TypeFx mode="fade"',
+  SettingAxes: "Setting axes={…}",
+  SettingGroup: "Setting control={…} open={…}",
+  MobileMegaMenu: 'MegaMenu collapseBelow="always" (or a breakpoint)',
 };
 
 /**
@@ -919,6 +945,17 @@ function validate(source, spec, iconNames, options = {}) {
 
   const renamed = new Set();
   for (const t of tags) {
+    if (PRE_3_COMPONENTS[t.name] && !renamed.has(t.name)) {
+      renamed.add(t.name);
+      add("api.renamed", `${t.name} is ${PRE_3_COMPONENTS[t.name]} in 3.0`);
+    }
+    if (t.name === "Table" && hasProp(t.attrs, "data") && !renamed.has("Table.data")) {
+      renamed.add("Table.data");
+      add(
+        "api.renamed",
+        "Table takes columns and rows in 3.0; data={{ headers, rows }} is the 2.x shape (a header's content is a column's header, array rows read by position)",
+      );
+    }
     for (const [old, now] of Object.entries(PRE_2_PROPS[t.name] ?? {})) {
       if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
       renamed.add(`${t.name}.${old}`);
@@ -1035,12 +1072,17 @@ function validate(source, spec, iconNames, options = {}) {
   // Two Logos, one `dark` and one `light`, double the elements, leave two
   // places to keep in sync, and put a hidden link in every focus order.
   const logos = tags.filter((t) => t.name === "Logo");
-  const logoIn = (prop) =>
-    logos.some((t) => hasProp(t.attrs, prop) && /(?:^|\s)(icon|wordmark)=/.test(ownProps(t.attrs)));
+  // `showIn="dark"` in 3.0; the 2.x `dark`/`light` booleans count too.
+  const logoIn = (theme) =>
+    logos.some(
+      (t) =>
+        (hasProp(t.attrs, theme) || stringValue(propValue(t.attrs, "showIn")) === theme) &&
+        /(?:^|\s)(icon|wordmark)=/.test(ownProps(t.attrs)),
+    );
   if (logoIn("dark") && logoIn("light")) {
     add(
       "Logo.themes",
-      'a Logo drawn twice, once with `dark` and once with `light` — draw it once with a source per theme: <Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} /> (icon takes the same pair)',
+      'a Logo drawn twice, once with showIn="dark" and once with showIn="light" — draw it once with a source per theme: <Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} /> (icon takes the same pair)',
     );
   }
 

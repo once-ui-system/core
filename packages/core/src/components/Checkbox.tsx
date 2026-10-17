@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
+import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput";
 import { useControllableState } from "../internal/useControllableState";
 import { Flex } from "./Flex";
@@ -10,10 +11,17 @@ import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetail
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
-  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
+  extends Omit<
+      InteractiveDetailsProps,
+      "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
+    >,
+    ControlChromeProps,
     // `onToggle` is the DOM's `toggle` event of popovers and `<details>`,
     // which an input never fires.
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "defaultChecked" | "onToggle"> {
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "checked" | "defaultChecked" | "onToggle" | "size"
+    > {
   /** Ticked or not, controlled. Leave it out to let the checkbox keep its
    *  own state, starting from `defaultChecked`. */
   checked?: boolean;
@@ -44,6 +52,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       description,
       iconButtonProps,
       id,
+      size: sizeProp,
+      error,
+      errorMessage,
       ...rest
     },
     ref,
@@ -55,6 +66,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     });
     const { setRef, activate, relay } = useHiddenInput(ref);
     const { aria, native } = splitAria(rest);
+    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
     const labelId = useId();
     const descriptionId = useId();
     const hasLabel = Boolean(label);
@@ -79,7 +91,8 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       <Flex
         vertical="center"
         gap="16"
-        className={classNames(styles.container, className, {
+        className={classNames(styles.container, className, styles[chrome.size], {
+          [styles.error]: chrome.invalid,
           [styles.disabled]: disabled,
           [styles.noHover]: !hoverable,
         })}
@@ -115,11 +128,13 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           // button beside it); `aria-label` only when there is no label.
           aria-labelledby={hasLabel ? labelId : undefined}
           aria-label={hasLabel ? undefined : (aria["aria-label"] as string | undefined)}
-          aria-describedby={
+          aria-describedby={describedBy(
             hasLabel && description
               ? descriptionId
-              : (aria["aria-describedby"] as string | undefined)
-          }
+              : (aria["aria-describedby"] as string | undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
           aria-disabled={disabled}
           onClick={disabled ? undefined : activate}
           onKeyDown={handleKeyDown}
@@ -141,7 +156,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             </Flex>
           )}
         </Flex>
-        {label && (
+        {(label || chrome.showsError) && (
           <InteractiveDetails
             disabled={disabled}
             label={label}
@@ -150,6 +165,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             id={id}
             labelId={labelId}
             descriptionId={descriptionId}
+            size={chrome.size}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            errorId={chrome.errorId}
             onClick={disabled ? () => {} : activate}
           />
         )}

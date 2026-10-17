@@ -90,11 +90,120 @@ Supports full Once UI palette for flexibility.
   ]}
 />
 
+## Pulse
+
+With `pulse`, the dot sits in a ring that keeps pulsing outward, to draw the eye to something live (2.x's `Pulse`). A pulsing dot takes its palette from `tone` (default `"brand"`) rather than `scheme`, and `pulseSize` overrides the ring's size. It is decorative unless you give it an `aria-label`, which makes it an image like the plain dot.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="s" />
+      <StatusIndicator pulse size="m" tone="danger" />
+      <StatusIndicator pulse size="l" tone="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="s"/>
+<StatusIndicator pulse size="m" tone="danger"/>
+<StatusIndicator pulse size="l" tone="success"/>`,
+      language: "tsx",
+      label: "Pulse",
+    },
+  ]}
+/>
+
+### Tone
+
+Set the palette of the pulse with `tone`; 2.x's Pulse called it `scheme`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse tone="brand" />
+      <StatusIndicator pulse tone="accent" />
+      <StatusIndicator pulse tone="neutral" />
+      <StatusIndicator pulse tone="info" />
+      <StatusIndicator pulse tone="warning" />
+      <StatusIndicator pulse tone="danger" />
+      <StatusIndicator pulse tone="success" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse tone="brand"/>
+<StatusIndicator pulse tone="accent"/>
+<StatusIndicator pulse tone="neutral"/>
+<StatusIndicator pulse tone="info"/>
+<StatusIndicator pulse tone="warning"/>
+<StatusIndicator pulse tone="danger"/>
+<StatusIndicator pulse tone="success"/>`,
+      language: "tsx",
+      label: "Color",
+    },
+  ]}
+/>
+
+### Pulse dot size
+
+Set the size of the pulse using the `size` prop.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="s" />
+      <StatusIndicator pulse size="m" />
+      <StatusIndicator pulse size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="s"/>
+<StatusIndicator pulse size="m"/>
+<StatusIndicator pulse size="l"/>`,
+      language: "tsx",
+      label: "Size",
+    },
+  ]}
+/>
+
+### Pulse size
+
+Customize the pulse ring dimensions with the `pulseSize` prop, accepting a number or string value.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="40" fillWidth center>
+      <StatusIndicator pulse size="m" pulseSize={80} />
+      <StatusIndicator pulse size="m" pulseSize="4rem" />
+    </Row>
+  }
+  codes={[
+    {
+      code: `<StatusIndicator pulse size="m" pulseSize={80} />
+<StatusIndicator pulse size="m" pulseSize="4rem" />`,
+      language: "tsx",
+      label: "Pulse size",
+    },
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="StatusIndicator"
   describe={{
+    pulse: "Pulse a ring out from the dot. Decorative unless aria-label is set.",
+    tone: "The pulsing dot's palette. Only with pulse; the plain dot takes scheme.",
+    pulseSize: "How far the ring travels, overriding the size's default. Only with pulse.",
     scheme: "The palette hue of the dot (2.x called it color).",
     size: "Dot size.",
     "aria-label": "What assistive tech announces. Set it to the meaning, not the colour.",

@@ -8,4 +8,3 @@ export {
   type MenuLink,
   type MenuSection,
 } from "./MegaMenu";
-export { MobileMegaMenu, type MobileMegaMenuProps } from "./MobileMegaMenu";

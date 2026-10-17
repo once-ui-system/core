@@ -1,18 +1,11 @@
 import classNames from "clsx";
-import { CSSProperties, forwardRef } from "react";
+import { type CSSProperties, type ElementType, forwardRef, type HTMLAttributes } from "react";
 
-import {
-  CommonProps,
-  DisplayProps,
-  GridBreakpointProps,
-  GridProps,
-  SizeProps,
-  SpacingProps,
-  StyleProps,
-} from "../interfaces";
+import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces";
 import { ColorScheme, ColorWeight } from "../types";
 import {
   BELOW_HEADER,
+  elementReset,
   isCSSUnit,
   offsetClasses,
   offsetValue,
@@ -27,19 +20,9 @@ import {
 } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
-interface ServerGridProps
-  extends GridProps,
-    SpacingProps,
-    SizeProps,
-    StyleProps,
-    CommonProps,
-    DisplayProps {
-  xl?: GridBreakpointProps;
-  l?: GridBreakpointProps;
-  m?: GridBreakpointProps;
-  s?: GridBreakpointProps;
-  xs?: GridBreakpointProps;
-}
+/** What the two halves of Grid take; `Grid` is the typed face. */
+export type ServerGridProps = GridLayoutProps &
+  Omit<HTMLAttributes<HTMLElement>, keyof GridLayoutProps> & { as?: ElementType };
 
 /**
  * Every class one breakpoint object resolves to.
@@ -76,7 +59,15 @@ function breakpointClasses(
   ];
 }
 
-const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
+/** `${family}-${weight}-${size}` as its three font classes. */
+function variantClasses(variant: string): string[] {
+  const parts = variant.split("-");
+  const size = parts.pop();
+  const weight = parts.pop();
+  return [`font-${parts.join("-")}`, `font-${weight}`, `font-${size}`];
+}
+
+const ServerGrid = forwardRef<HTMLElement, ServerGridProps>(
   (
     {
       as: Component = "div",
@@ -95,9 +86,6 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       aspectRatio,
       align,
       textVariant,
-      textSize,
-      textWeight,
-      textType,
       padding,
       paddingLeft,
       paddingRight,
@@ -112,8 +100,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       marginBottom,
       marginX,
       marginY,
-      dark,
-      light,
+      showIn,
       width,
       height,
       maxWidth,
@@ -217,6 +204,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     let classes = classNames(
       position && `position-${position}`,
       inline ? "display-inline-grid" : "display-grid",
+      elementReset(Component),
       hide && "grid-hide",
       fit && "fit",
       fitWidth && "fit-width",
@@ -303,7 +291,9 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       transition && `transition-${transition}`,
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
-      textType && `font-${textType}`,
+      // The preset's three classes, as Flex writes them. 2.x typed
+      // `textVariant` here and never applied it.
+      ...(textVariant ? variantClasses(textVariant) : []),
       typeof cursor === "string" && `cursor-${cursor}`,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
@@ -311,8 +301,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       typeof backdropBlur === "string" &&
         !isCSSUnit(backdropBlur) &&
         `backdrop-blur-${backdropBlur}`,
-      dark && "dark-grid",
-      light && "light-grid",
+      showIn === "dark" && "dark-grid",
+      showIn === "light" && "light-grid",
       className,
     );
 
@@ -377,6 +367,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     return (
       <Component
         ref={ref}
+        {...(Component === "button" && { type: "button" })}
         className={classes}
         style={combinedStyle}
         {...rest}

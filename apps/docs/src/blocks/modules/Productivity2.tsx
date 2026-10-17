@@ -7,7 +7,7 @@ import {
   Heading,
   Icon,
   IconButton,
-  Pulse,
+  StatusIndicator,
   Row,
   SegmentedControl,
   Tag,
@@ -193,7 +193,7 @@ export const Productivity2 = () => {
                     </Text>
                   </Row>
                 </Column>
-                {item.active && <Pulse size="s" />}
+                {item.active && <StatusIndicator pulse size="s" />}
               </Row>
             ))}
           </Column>

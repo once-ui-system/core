@@ -178,3 +178,26 @@
     background: var(--surface-background);
   }
 }
+
+// Sortable headers, selection and the selected row.
+
+// The sort button reaches across its whole header cell, padding included, so
+// the cell stays the pointer target.
+.sortableTh {
+  position: relative;
+}
+
+.sortButton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+// The selection column is as narrow as its checkbox.
+.selectCell {
+  width: 1px;
+}
+
+.selectedRow {
+  background: var(--brand-alpha-weak);
+}

@@ -6,12 +6,9 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { ColorInput } from "../components/ColorInput";
 import { DateInput } from "../components/DateInput";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangeInput } from "../components/DateRangeInput";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { Input } from "../components/Input";
 import { NumberInput } from "../components/NumberInput";
 import { OTPInput } from "../components/OTPInput";
-import { PasswordInput } from "../components/PasswordInput";
 import { Select } from "../components/Select";
 import { TagInput } from "../components/TagInput";
 import { Textarea } from "../components/Textarea";
@@ -65,7 +62,7 @@ describe("Input, Textarea and PasswordInput onValueChange", () => {
   it("PasswordInput reports the text", async () => {
     const user = userEvent.setup();
     const onValueChange = vi.fn();
-    render(<PasswordInput id="pw" label="Password" onValueChange={onValueChange} />, {
+    render(<Input type="password" id="pw" label="Password" onValueChange={onValueChange} />, {
       wrapper,
     });
 
@@ -269,10 +266,11 @@ describe("DateInput", () => {
   });
 });
 
-describe("DateRangeInput", () => {
+describe("DateInput range", () => {
   it("shows defaultValue and opens from defaultOpen", () => {
     render(
-      <DateRangeInput
+      <DateInput
+        range
         id="r"
         startLabel="From"
         endLabel="To"
@@ -291,7 +289,7 @@ describe("DateRangeInput", () => {
   it("reports open changes", async () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
-    render(<DateRangeInput id="r" startLabel="From" endLabel="To" onOpenChange={onOpenChange} />, {
+    render(<DateInput range id="r" startLabel="From" endLabel="To" onOpenChange={onOpenChange} />, {
       wrapper,
     });
     await user.click(screen.getByRole("combobox", { name: "From" }));
@@ -299,7 +297,7 @@ describe("DateRangeInput", () => {
   });
 });
 
-describe("DatePicker and DateRangePicker defaultValue", () => {
+describe("DatePicker and DatePicker range defaultValue", () => {
   const selectedDays = () =>
     Array.from(document.querySelectorAll('[role="gridcell"][aria-selected="true"]')).map(
       (cell) => cell.textContent,
@@ -327,8 +325,8 @@ describe("DatePicker and DateRangePicker defaultValue", () => {
     await waitFor(() => expect(selectedDays()).toEqual(["20"]));
   });
 
-  it("DateRangePicker starts on defaultValue", async () => {
-    render(<DateRangePicker defaultValue={{ startDate: jan(5), endDate: undefined }} />, {
+  it("DatePicker range starts on defaultValue", async () => {
+    render(<DatePicker range defaultValue={{ startDate: jan(5), endDate: undefined }} />, {
       wrapper,
     });
     await screen.findByRole("grid", { name: "January 2026" });

@@ -9,7 +9,6 @@ import {
   Line,
   Logo,
   MegaMenu,
-  MobileMegaMenu,
   NavIcon,
   Option,
   Row,
@@ -394,7 +393,8 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
               />
             </Column>
           ) : (
-            <MobileMegaMenu
+            <MegaMenu
+              collapseBelow="always"
               padding="8"
               background="surface"
               border="surface"

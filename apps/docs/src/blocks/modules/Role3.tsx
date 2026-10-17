@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, AvatarGroup, Background, Button, Column, Grid, Heading, Icon, Input, Pulse, Row, Tag, Text, Textarea, Timeline, type TimelineItem } from "@once-ui-system/core";
+import { Avatar, AvatarGroup, Background, Button, Column, Grid, Heading, Icon, Input, StatusIndicator, Row, Tag, Text, Textarea, Timeline, type TimelineItem } from "@once-ui-system/core";
 
 const roleDetails = {
   title: "Senior Frontend Engineer",
@@ -166,7 +166,7 @@ export const Role3 = () => {
               <Row horizontal="between" vertical="center" paddingTop="24">
                 <Text textVariant="label-strong-m">Hiring manager</Text>
                 <Tag variant="announce" arrow={false} effect={false} gap="12" paddingLeft="12" paddingY="8">
-                  <Pulse size="s" />
+                  <StatusIndicator pulse size="s" />
                   Active
                 </Tag>
               </Row>

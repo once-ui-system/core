@@ -3,10 +3,10 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import { Column } from "./Column";
+import { Column } from "../components/Column";
+import { Row } from "../components/Row";
+import { Text } from "../components/Text";
 import styles from "./RangeSlider.module.scss";
-import { Row } from "./Row";
-import { Text } from "./Text";
 
 interface RangeSliderProps
   extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children"> {
@@ -36,6 +36,14 @@ interface RangeSliderProps
    */
   name?: string | [string, string];
   disabled?: boolean;
+  /** Draws the track in the error state and marks both thumbs invalid. */
+  invalid?: boolean;
+  /** The id of the message that describes both thumbs (Slider's `errorMessage`). */
+  describedBy?: string;
+  /** The size class Slider resolved (its `size`, else the Form's). */
+  sizeClassName?: string;
+  /** Rendered after the track: Slider's error message. */
+  footer?: React.ReactNode;
 }
 
 type Thumb = 0 | 1;
@@ -53,7 +61,7 @@ const decimals = (n: number) => {
 };
 
 /**
- * RangeSlider: two thumbs on one track, selecting a `[start, end]` range,
+ * The two-thumb mode of `Slider` (`<Slider range>`), 2.x's RangeSlider: two thumbs on one track, selecting a `[start, end]` range,
  * such as a price filter.
  *
  * Each thumb is a `slider` with its own name ("Minimum" and "Maximum" unless
@@ -78,6 +86,10 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
       thumbLabels = ["Minimum", "Maximum"],
       name,
       disabled = false,
+      invalid = false,
+      describedBy,
+      sizeClassName,
+      footer,
       className,
       ...flex
     },
@@ -255,7 +267,7 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
         gap="8"
         {...flex}
         ref={ref}
-        className={classNames(styles.container, className)}
+        className={classNames(styles.container, sizeClassName, className)}
         role="group"
         // The visible label names the pair, unless the caller named it another way.
         aria-labelledby={flex["aria-labelledby"] ?? (label && !named ? labelId : undefined)}
@@ -281,6 +293,7 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
           className={classNames(styles.wrapper, {
             [styles.disabled]: disabled,
             [styles.dragging]: active,
+            [styles.error]: invalid,
           })}
           onPointerDown={handlePointerDown}
         >
@@ -307,6 +320,8 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
               aria-valuenow={values[thumb]}
               aria-valuetext={formatValue(values[thumb])}
               aria-disabled={disabled || undefined}
+              aria-invalid={invalid || undefined}
+              aria-describedby={describedBy}
               className={classNames(styles.thumb, { [styles.active]: dragging === thumb })}
               // The thumb being dragged sits on top of the other one.
               style={{
@@ -323,6 +338,7 @@ const RangeSlider = forwardRef<HTMLDivElement, RangeSliderProps>(
             </>
           )}
         </Row>
+        {footer}
       </Column>
     );
   },

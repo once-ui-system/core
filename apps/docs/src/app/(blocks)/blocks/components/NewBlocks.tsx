@@ -64,7 +64,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
               >
                 <Media
                   border
-                  light
+                  showIn="light"
                   src={example.image?.light ?? ""}
                   sizes="64px"
                   aspectRatio="1"
@@ -72,7 +72,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
                 />
                 <Media
                   border
-                  dark
+                  showIn="dark"
                   src={example.image?.dark ?? ""}
                   sizes="64px"
                   aspectRatio="1"

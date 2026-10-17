@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Pulse } from "../components/Pulse";
 import { Skeleton } from "../components/Skeleton";
+import { StatusIndicator } from "../components/StatusIndicator";
 import { Tag } from "../components/Tag";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
@@ -39,8 +39,8 @@ describe("Skeleton", () => {
 });
 
 describe("scheme replaces variant for colour-scheme props", () => {
-  it("Pulse colours from scheme", () => {
-    const { container } = render(<Pulse tone="danger" />, { wrapper: wrap });
+  it("StatusIndicator pulse colours from tone", () => {
+    const { container } = render(<StatusIndicator pulse tone="danger" />, { wrapper: wrap });
     expect(container.innerHTML).toMatch(/danger/);
   });
 

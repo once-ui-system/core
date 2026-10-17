@@ -6,7 +6,6 @@ import { Button } from "../components/Button";
 import { Feedback } from "../components/Feedback";
 import { Heading } from "../components/Heading";
 import { IconButton } from "../components/IconButton";
-import { Pulse } from "../components/Pulse";
 import { StatusIndicator } from "../components/StatusIndicator";
 import { Text } from "../components/Text";
 import { Timeline } from "../components/Timeline";
@@ -109,8 +108,8 @@ describe("tone on the other components", () => {
     expect(container.innerHTML).toMatch(/neutral-background-weak/);
   });
 
-  it("Pulse takes tone", () => {
-    const { container } = render(<Pulse tone="danger" />, { wrapper });
+  it("StatusIndicator pulse takes tone", () => {
+    const { container } = render(<StatusIndicator pulse tone="danger" />, { wrapper });
     expect(container.innerHTML).toMatch(/danger-solid-strong/);
   });
 });

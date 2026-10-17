@@ -1,4 +1,5 @@
 import { forwardRef } from "react";
+import type { FlexPropsOf } from "../interfaces";
 import { Avatar } from "./Avatar";
 import { Column } from "./Column";
 import { Line } from "./Line";
@@ -6,7 +7,7 @@ import { Row } from "./Row";
 import { SmartLink } from "./SmartLink";
 import { Text } from "./Text";
 
-interface BlockQuoteProps extends React.ComponentProps<typeof Column> {
+interface BlockQuoteProps extends FlexPropsOf<"blockquote"> {
   children: React.ReactNode;
   preline?: React.ReactNode;
   subline?: React.ReactNode;
@@ -21,7 +22,7 @@ interface BlockQuoteProps extends React.ComponentProps<typeof Column> {
   align?: "center" | "left" | "right";
 }
 
-const BlockQuote = forwardRef<HTMLDivElement, BlockQuoteProps>(
+const BlockQuote = forwardRef<HTMLQuoteElement, BlockQuoteProps>(
   (
     {
       children,

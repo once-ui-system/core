@@ -9,7 +9,7 @@ import {
   IconButton,
   Media,
   ProgressBar,
-  Pulse,
+  StatusIndicator,
   Row,
   Scroller,
   SegmentedControl,
@@ -86,7 +86,7 @@ export const Streaming2 = () => {
           wrap
         >
           <Row gap="8" vertical="center">
-            <Pulse size="s" tone="danger" />
+            <StatusIndicator pulse size="s" tone="danger" />
             <Tag tone="danger" size="s" label="Live now" />
             <Text textVariant="label-default-s">Design Systems Summit — Keynote</Text>
           </Row>

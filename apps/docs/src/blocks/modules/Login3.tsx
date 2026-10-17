@@ -5,7 +5,6 @@ import {
   Column,
   Heading,
   Input,
-  PasswordInput,
   Row,
   SmartLink,
   Text,
@@ -84,7 +83,7 @@ const Login3 = () => {
               <Column fillWidth gap="24" horizontal="center">
                 <Column gap="-1" fillWidth>
                   <Input corners="top" id="email" label="Email" size="s" />
-                  <PasswordInput corners="bottom" id="password" label="Password" size="s" />
+                  <Input corners="bottom" id="password" label="Password" size="s" type="password" />
                   <Row
                     fillWidth
                     horizontal="end"

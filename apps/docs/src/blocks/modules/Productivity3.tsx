@@ -6,7 +6,7 @@ import {
   Heading,
   Icon,
   IconButton,
-  Pulse,
+  StatusIndicator,
   Row,
   Tag,
   Text,
@@ -177,7 +177,7 @@ export const Productivity3 = () => {
                       Focus block
                     </Text>
                   </Column>
-                  {block.active && <Pulse size="s" />}
+                  {block.active && <StatusIndicator pulse size="s" />}
                 </Row>
               );
             })

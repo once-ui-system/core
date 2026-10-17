@@ -1,7 +1,7 @@
 ---
 title: "Checkbox"
 summary: "Checkbox provides a selectable control for binary or indeterminate states with customizable labels and styling."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/checkbox.mdx"
 github: "components/Checkbox.tsx"
 navLabel: "Checkbox"
@@ -171,11 +171,40 @@ Disable the hover pulse animation by setting `hoverable` to `false`.
   ]}
 />
 
+## Validation and size
+
+`error` marks the Checkbox invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Checkbox label="I accept the terms" errorMessage="Accept the terms to continue" />
+  }
+  codes={[
+    {
+      code:
+`<Checkbox
+    label="I accept the terms"
+    errorMessage="Accept the terms to continue"
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="Checkbox"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     checked: "Whether it is ticked, controlled. Leave it out and the checkbox keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     indeterminate: "The third state, for a parent whose children are partly ticked.",

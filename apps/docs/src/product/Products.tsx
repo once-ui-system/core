@@ -65,8 +65,8 @@ export function Products() {
             paddingX="4"
           >
             <Row paddingX="16" paddingY="12" gap="12" vertical="center">
-              <AvatarGroup dark reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-dark.svg"}]} size="s" />
-              <AvatarGroup light reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-light.svg"}]} size="s" />
+              <AvatarGroup showIn="dark" reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-dark.svg"}]} size="s" />
+              <AvatarGroup showIn="light" reverse avatars={[{src: "/images/avatar.jpg"}, {src: "/trademarks/icon-light.svg"}]} size="s" />
               <Text textVariant="label-default-s">Once UI</Text>
             </Row>
             <Media

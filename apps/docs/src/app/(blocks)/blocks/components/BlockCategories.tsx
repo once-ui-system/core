@@ -84,7 +84,7 @@ export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ .
         <Row paddingLeft="16" fillWidth>
           <Media
             sizes="280px"
-            dark
+            showIn="dark"
             src={item.image?.dark || ""}
             alt={`Illustration for ${item.label} copy-paste block`}
             borderLeft
@@ -94,7 +94,7 @@ export const BlockCategories: React.FC<React.ComponentProps<typeof Grid>> = ({ .
           />
           <Media
             sizes="280px"
-            light
+            showIn="light"
             src={item.image?.light || ""}
             alt={`Illustration for ${item.label} copy-paste block`}
             borderLeft

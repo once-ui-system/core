@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
-import { DatePicker, DateRangePicker } from "@once-ui-system/core";
 import type { DateRange } from "@once-ui-system/core";
+import { DatePicker } from "@once-ui-system/core";
+import React, { useState } from "react";
 
 // Basic DatePicker example with managed state
 export function BasicDatePickerExample() {
@@ -60,7 +60,7 @@ export function DateRangePickerExample() {
     setDateRange(range);
   };
 
-  return <DateRangePicker value={dateRange} onValueChange={handleRangeChange} />;
+  return <DatePicker range value={dateRange} onValueChange={handleRangeChange} />;
 }
 
 // DateRangePicker with custom styling example
@@ -75,7 +75,8 @@ export function DateRangePickerPresetsExample() {
   };
 
   return (
-    <DateRangePicker
+    <DatePicker
+      range
       value={dateRange}
       onValueChange={handleRangeChange}
       size="l"

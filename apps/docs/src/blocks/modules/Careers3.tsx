@@ -1,6 +1,6 @@
 "use client";
 
-import { AvatarGroup, Background, BlobFx, Button, Column, CountFx, Grid, Heading, Icon, Line, Pulse, Row, Scroller, Tag, Text } from "@once-ui-system/core";
+import { AvatarGroup, Background, BlobFx, Button, Column, CountFx, Grid, Heading, Icon, Line, StatusIndicator, Row, Scroller, Tag, Text } from "@once-ui-system/core";
 import { useMemo, useState } from "react";
 
 const perks = [
@@ -108,7 +108,7 @@ export const Careers3 = () => {
         >
           <Row gap="8" vertical="center">
             <Tag variant="announce" arrow={false} effect={false} gap="8" paddingLeft="12">
-              <Pulse size="s" />
+              <StatusIndicator pulse size="s" />
               <Text onBackground="brand-weak">We're hiring</Text>
             </Tag>
           </Row>

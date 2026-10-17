@@ -1,211 +1,500 @@
 "use client";
 
 import classNames from "clsx";
-import { ReactNode, useMemo, useState } from "react";
-import { ShineText } from "../internal/ShineText";
+import type React from "react";
+import { isValidElement, type ReactNode, useEffect, useId, useMemo, useState } from "react";
+import { pageCount, withDefaultLabels } from "../internal/pagination";
 import type { Tone } from "../types";
+import { dev } from "../utils/devLogger";
+import { Checkbox } from "./Checkbox";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input } from "./Input";
-import { Pagination } from "./Pagination";
+import { Pagination, type PaginationLabels } from "./Pagination";
 import { Row } from "./Row";
-import { Select } from "./Select";
-import { Spinner } from "./Spinner";
-import styles from "./Table.module.scss";
+import { Skeleton } from "./Skeleton";
+import tableStyles from "./Table.module.scss";
+
+const styles = tableStyles;
+
 import { Text } from "./Text";
 
-type TableHeader = {
-  content: ReactNode;
+interface TableColumn<T> {
+  /**
+   * Names the column: its React key, the `key` a sort reports and, when the
+   * column has no `cell`, the field of the row it shows and sorts by. A row
+   * that is an array is read by position instead: column n shows `row[n]`
+   * (2.x Table's `rows: ReactNode[][]`).
+   */
   key: string;
+  /** The header cell's content. */
+  header: ReactNode;
+  /** Renders this column's cell for a row. Without it the cell shows `row[key]`. */
+  cell?: (row: T, index: number) => ReactNode;
+  /** Let the reader sort by this column from its header. */
   sortable?: boolean;
-  width?: string;
+  /**
+   * Orders two rows, ascending; the table reverses it for descending. Without
+   * it rows compare by `row[key]`: numbers, dates and text in natural order
+   * ("Item 2" before "Item 10"), elements by their text, empty values last
+   * either way.
+   */
+  sort?: (a: T, b: T) => number;
+  /** Aligns the header and the cells. */
   align?: "left" | "center" | "right";
-};
+  /** A CSS width for the column, such as `"12rem"` or `"20%"`. */
+  width?: string;
+}
 
-type TableAction = {
+/** A button in the actions column at the end of every row. */
+interface TableAction<T = unknown> {
   icon: string;
   label?: string;
   tooltip?: string;
   variant?: "primary" | "secondary" | "tertiary" | "ghost";
   /** The action's palette. 2.x's `variant: "danger"` is `variant: "primary", tone: "danger"`. */
   tone?: Tone;
-  onClick: (rowIndex: number) => void;
-  disabled?: (rowIndex: number) => boolean;
+  /** Called with the row and its index in `rows`. 2.x passed the index alone. */
+  onClick: (row: T, index: number) => void;
+  disabled?: (row: T, index: number) => boolean;
+}
+
+interface TableSort {
+  /** The `key` of the sorted column. */
+  key: string;
+  direction: "asc" | "desc";
+}
+
+interface TableLabels extends PaginationLabels {
+  /**
+   * The select-all checkbox's accessible name. Defaults to "Select all rows",
+   * or "Select all rows on this page" when paginated, which is what it does.
+   */
+  selectAll: string;
+  /** Each row checkbox's accessible name, unless `getRowLabel` names it. */
+  selectRow: string;
+  /** The pagination landmark's name. */
+  pagination: string;
+  /** The search field's accessible name, unless `searchPlaceholder` names it. Default "Search". */
+  search: string;
+  /** The actions column's header. Default "Actions". */
+  actions: string;
+}
+
+const DEFAULT_LABELS: Pick<
+  TableLabels,
+  "selectRow" | "pagination" | "perPage" | "search" | "actions"
+> = {
+  selectRow: "Select row",
+  pagination: "Pagination",
+  perPage: "Rows per page",
+  search: "Search",
+  actions: "Actions",
 };
 
-type TableProps = React.ComponentProps<typeof Flex> & {
-  data: {
-    headers: TableHeader[];
-    rows: ReactNode[][];
-  };
-  onRowClick?: (rowIndex: number) => void;
+interface TableProps<T>
+  extends Omit<React.ComponentProps<typeof Column>, "children" | "onChange" | "defaultValue"> {
+  /** The columns, in order. */
+  columns: TableColumn<T>[];
+  /** The rows: every row, or with `count` or `total` only the current page's. */
+  rows: T[];
+  /** Called with the row the reader clicks, and its index in `rows`. */
+  onRowClick?: (row: T, index: number) => void;
+  /** A filter field above the table: rows whose cells' text holds the query stay. */
   searchable?: boolean;
+  /** The search field's placeholder. Default "Search...". */
   searchPlaceholder?: string;
-  striped?: boolean;
-  hoverable?: boolean;
-  compact?: boolean;
-  loading?: boolean;
-  emptyState?: ReactNode;
-  actions?: TableAction[];
-  stickyHeader?: boolean;
-  maxHeight?: string;
-  rowClassName?: (rowIndex: number) => string;
-  cellClassName?: (rowIndex: number, cellIndex: number) => string;
-  paginated?: boolean;
-  defaultPageSize?: number;
-  pageSizeOptions?: number[];
+  /** Icon buttons in a last column, for each row. */
+  actions?: TableAction<T>[];
+  /** A class for a row, given the row and its index in `rows`. */
+  rowClassName?: (row: T, index: number) => string | undefined;
+  /** A class for a cell, given the row, its index and the column's index. */
+  cellClassName?: (row: T, index: number, columnIndex: number) => string | undefined;
+  /** What shows in place of the skeleton rows while `loading`. */
   loadingState?: ReactNode;
+  /**
+   * A stable id for a row, which selection reports. Without it a row's `id`
+   * field is used when it is a string or a number, and its index otherwise.
+   */
+  getRowId?: (row: T, index: number) => string;
+
+  /** The sorted column and direction, when the host owns it; `null` for unsorted. */
+  sort?: TableSort | null;
+  /** The sort to start with when Table owns it. */
+  defaultSort?: TableSort | null;
+  /** Called with the new sort, or `null` when the reader clears it. */
+  onSortChange?: (sort: TableSort | null) => void;
+
+  /** Add a checkbox column, with a select-all checkbox for the rows on screen. */
+  selectable?: boolean;
+  /** The selected rows' ids, when the host owns them. */
+  selected?: string[];
+  /** The ids selected to start with when Table owns the selection. */
+  defaultSelected?: string[];
+  /** Called with every selected id after each change. */
+  onSelectionChange?: (selected: string[]) => void;
+  /** The accessible name of a row's checkbox, such as `row => \`Select ${row.name}\``. */
+  getRowLabel?: (row: T) => string;
+
+  /** Show the rows a page at a time, with Pagination below. */
+  paginated?: boolean;
+  /** The current page, from 1, when the host owns it. */
+  page?: number;
+  /** The page to start on when Table owns it. */
+  defaultPage?: number;
+  /** Called with the new page. */
+  onPageChange?: (page: number) => void;
+  /** Rows per page, when the host owns it. */
+  perPage?: number;
+  /** Rows per page when Table owns it. */
+  defaultPerPage?: number;
+  /** Page sizes to offer in a select beside the pages. */
+  perPageOptions?: number[];
+  /** First- and last-page buttons beside the pages, as 2.x Table drew them. */
+  showFirstLast?: boolean;
+  /** Called with the new page size. */
+  onPerPageChange?: (perPage: number) => void;
+  /**
+   * The number of rows on the server. Set it (or `total`) when `rows` holds
+   * only the current page: Table then neither sorts nor slices the rows
+   * itself, and reports page and sort changes for the host to fetch.
+   */
+  count?: number;
+  /** The number of pages on the server, when it reports pages rather than rows. As `count`. */
+  total?: number;
+
+  /** Swap the rows for skeleton rows, and disable the controls, while data loads. */
+  loading?: boolean;
+  /** What to show when there are no rows. */
+  emptyState?: ReactNode;
+
+  /**
+   * Keep the header row in view while the rows scroll. Pair with `maxHeight`,
+   * which on Table caps the table's scroll area rather than the whole
+   * component.
+   */
+  stickyHeader?: boolean;
+  /** Alternate row backgrounds. */
+  striped?: boolean;
+  /** Highlight the row under the pointer. */
+  hoverable?: boolean;
+  /** Tighter rows, for dense data. */
+  compact?: boolean;
+  /** The checkbox, pagination and per-page names, to translate them. */
+  labels?: Partial<TableLabels>;
+  /** The table's accessible name. */
+  "aria-label"?: string;
+  /** The id of the element that names the table, such as a heading above it. */
+  "aria-labelledby"?: string;
+}
+
+type Entry<T> = { row: T; index: number; id: string };
+
+const fieldOf = (row: unknown, key: string, position = -1): unknown => {
+  if (Array.isArray(row)) return position >= 0 ? row[position] : undefined;
+  return row !== null && typeof row === "object"
+    ? (row as Record<string, unknown>)[key]
+    : undefined;
 };
 
-function extractText(node: ReactNode): string {
-  if (node == null) return "";
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(extractText).join(" ");
-  if (typeof node === "object" && "props" in node) {
-    return extractText((node as any).props?.children);
-  }
+/** The text a cell reads as, for sorting and search: an element's text, an array's joined. */
+function textOf(node: unknown): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number" || typeof node === "bigint")
+    return String(node);
+  if (node instanceof Date) return Number.isNaN(node.getTime()) ? "" : node.toISOString();
+  if (Array.isArray(node)) return node.map(textOf).join(" ");
+  if (isValidElement<{ children?: ReactNode }>(node)) return textOf(node.props.children);
   return "";
 }
 
-function Table({
-  data,
+const defaultRowId = (row: unknown, index: number): string => {
+  const id = fieldOf(row, "id");
+  return typeof id === "string" || typeof id === "number" ? String(id) : String(index);
+};
+
+const isEmpty = (value: unknown) =>
+  value === null ||
+  value === undefined ||
+  value === "" ||
+  (typeof value === "number" && Number.isNaN(value)) ||
+  (value instanceof Date && Number.isNaN(value.getTime()));
+
+function compareValues(a: unknown, b: unknown): number {
+  if (isValidElement(a) || isValidElement(b) || Array.isArray(a) || Array.isArray(b))
+    return textOf(a).localeCompare(textOf(b), undefined, { numeric: true, sensitivity: "base" });
+  if (typeof a === "number" && typeof b === "number") return a - b;
+  if (typeof a === "bigint" && typeof b === "bigint") return a < b ? -1 : a > b ? 1 : 0;
+  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
+  if (typeof a === "boolean" && typeof b === "boolean") return Number(a) - Number(b);
+  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+}
+
+/** A field as cell content. Dates print as YYYY-MM-DD, the same on the server and in every locale. */
+function renderField(value: unknown): ReactNode {
+  if (value === null || value === undefined) return null;
+  if (isValidElement(value)) return value;
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value.toISOString().slice(0, 10);
+  }
+  if (Array.isArray(value))
+    return value.some((item) => isValidElement(item))
+      ? (value as ReactNode[])
+      : value.map(String).join(", ");
+  return String(value);
+}
+
+const ALIGN = {
+  left: { th: tableStyles.thAlignLeft, td: tableStyles.tdAlignLeft, row: "start" },
+  center: { th: tableStyles.thAlignCenter, td: tableStyles.tdAlignCenter, row: "center" },
+  right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
+} as const;
+
+const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
+
+/**
+ * A table of typed rows: column definitions instead of pre-rendered cells,
+ * sorting, row selection, pagination, search, row actions, and empty and
+ * loading states. 2.x's DataTable, under the short name; 2.x Table's
+ * `data={{ headers, rows }}` is `columns` (each header's `content` as
+ * `header`) and `rows`, its array rows read by position.
+ *
+ * Sorting, selection and the page each work on Table's own state or the
+ * host's (`sort`, `selected`, `page` with their change handlers). With `count`
+ * or `total` the rows are one server page, and Table leaves sorting and
+ * slicing to the host. It draws the same table as `Table`, with sortable
+ * headers as buttons and `aria-sort` on the sorted one.
+ */
+function Table<T>({
+  columns,
+  rows,
   onRowClick,
   searchable = false,
   searchPlaceholder = "Search...",
+  actions,
+  rowClassName,
+  cellClassName,
+  loadingState,
+  getRowId,
+  sort,
+  defaultSort = null,
+  onSortChange,
+  selectable = false,
+  selected,
+  defaultSelected,
+  onSelectionChange,
+  getRowLabel,
+  paginated = false,
+  page,
+  defaultPage = 1,
+  onPageChange,
+  perPage,
+  defaultPerPage = 10,
+  perPageOptions,
+  showFirstLast = false,
+  onPerPageChange,
+  count,
+  total,
+  loading = false,
+  emptyState,
+  stickyHeader = false,
+  maxHeight,
   striped = false,
   hoverable = true,
   compact = false,
-  loading = false,
-  emptyState,
-  actions,
-  stickyHeader = false,
-  maxHeight,
-  rowClassName,
-  cellClassName,
-  paginated = false,
-  defaultPageSize = 10,
-  pageSizeOptions = [5, 10, 20, 50],
-  loadingState,
+  labels,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...flex
-}: TableProps) {
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: "asc" | "desc";
-  } | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
+}: TableProps<T>) {
+  const text = withDefaultLabels<Partial<TableLabels>>(DEFAULT_LABELS, labels);
+  const server = count !== undefined || total !== undefined;
+  const searchId = useId();
+  const [query, setQuery] = useState("");
+  const paged = paginated || server;
 
-  const handleSort = (key: string, sortable?: boolean) => {
-    if (!sortable) return;
+  const [uncontrolledSort, setUncontrolledSort] = useState<TableSort | null>(defaultSort);
+  const sortControlled = sort !== undefined;
+  const currentSort = (sortControlled ? sort : uncontrolledSort) ?? null;
 
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key) {
-      direction = sortConfig.direction === "asc" ? "desc" : "asc";
+  const [uncontrolledSelected, setUncontrolledSelected] = useState<string[]>(
+    () => defaultSelected ?? [],
+  );
+  const selectionControlled = selected !== undefined;
+  const currentSelected = selectionControlled ? selected : uncontrolledSelected;
+  const selectedSet = useMemo(() => new Set(currentSelected), [currentSelected]);
+
+  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
+  const [uncontrolledPerPage, setUncontrolledPerPage] = useState(defaultPerPage);
+  const pageControlled = page !== undefined;
+  const currentPerPage = Math.max(1, Math.floor(perPage ?? uncontrolledPerPage));
+
+  // An id that is missing would be shared by every row missing one, and
+  // selecting one of them would select them all: those rows fall back to
+  // their index instead.
+  const { entries, missingIds, duplicateIds } = useMemo(() => {
+    const seen = new Set<string>();
+    let missing = 0;
+    let duplicates = 0;
+    const list = rows.map((row, index): Entry<T> => {
+      const raw: unknown = (getRowId ?? defaultRowId)(row, index);
+      const valid = (typeof raw === "string" && raw !== "") || typeof raw === "number";
+      if (!valid) missing++;
+      const id = valid ? String(raw) : String(index);
+      if (seen.has(id)) duplicates++;
+      seen.add(id);
+      return { row, index, id };
+    });
+    return { entries: list, missingIds: missing, duplicateIds: duplicates };
+  }, [rows, getRowId]);
+
+  useEffect(() => {
+    if (missingIds > 0) {
+      dev.warn(
+        `Table: getRowId returned no id for ${missingIds} row(s); they fall back to their index.`,
+      );
     }
-    setSortConfig({ key, direction });
-  };
+    if (duplicateIds > 0) {
+      dev.warn(
+        `Table: ${duplicateIds} row id(s) repeat; selecting one of those rows selects all of them.`,
+      );
+    }
+  }, [missingIds, duplicateIds]);
 
-  const filteredRows = useMemo(() => {
-    if (!searchable || !searchQuery.trim()) return data.rows;
-
-    const query = searchQuery.toLowerCase();
-    return data.rows.filter((row) =>
-      row.some((cell) => extractText(cell).toLowerCase().includes(query)),
+  // Search keeps the rows any of whose cells reads as holding the query.
+  const filtered = useMemo(() => {
+    const needle = query.trim().toLowerCase();
+    if (!searchable || !needle) return entries;
+    return entries.filter((entry) =>
+      columns.some((column, position) =>
+        textOf(
+          column.cell
+            ? column.cell(entry.row, entry.index)
+            : fieldOf(entry.row, column.key, position),
+        )
+          .toLowerCase()
+          .includes(needle),
+      ),
     );
-  }, [data.rows, searchQuery, searchable]);
+  }, [entries, columns, query, searchable]);
 
-  const sortedRows = useMemo(() => {
-    if (!sortConfig) return filteredRows;
+  const sortedEntries = useMemo(() => {
+    if (server || currentSort === null) return filtered;
+    const position = columns.findIndex(
+      (candidate) => Boolean(candidate.key) && candidate.key === currentSort.key,
+    );
+    const column = columns[position];
+    if (!column) return filtered;
+    const direction = currentSort.direction === "desc" ? -1 : 1;
+    const { sort: compareRows, key } = column;
+    const compare = compareRows
+      ? (a: Entry<T>, b: Entry<T>) => direction * compareRows(a.row, b.row)
+      : (a: Entry<T>, b: Entry<T>) => {
+          const left = fieldOf(a.row, key, position);
+          const right = fieldOf(b.row, key, position);
+          const leftEmpty = isEmpty(left);
+          const rightEmpty = isEmpty(right);
+          if (leftEmpty || rightEmpty) return leftEmpty === rightEmpty ? 0 : leftEmpty ? 1 : -1;
+          return direction * compareValues(left, right);
+        };
+    return [...filtered].sort(compare);
+  }, [filtered, columns, currentSort, server]);
 
-    const headerIndex = data.headers.findIndex((h) => h.key === sortConfig.key);
-    if (headerIndex === -1) return filteredRows;
+  const pages =
+    total !== undefined
+      ? Math.max(1, Math.floor(total))
+      : pageCount(count ?? sortedEntries.length, currentPerPage);
+  const currentPage = Math.min(
+    pages,
+    Math.max(1, Math.floor((pageControlled ? page : uncontrolledPage) || 1)),
+  );
 
-    return [...filteredRows].sort((a, b) => {
-      const aValue = extractText(a[headerIndex]);
-      const bValue = extractText(b[headerIndex]);
+  const visible =
+    paged && !server
+      ? sortedEntries.slice((currentPage - 1) * currentPerPage, currentPage * currentPerPage)
+      : sortedEntries;
 
-      const comparison = aValue.localeCompare(bValue, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
-
-      return sortConfig.direction === "asc" ? comparison : -comparison;
-    });
-  }, [filteredRows, sortConfig, data.headers]);
-
-  const paginatedRows = useMemo(() => {
-    if (!paginated) return sortedRows;
-
-    const start = (page - 1) * pageSize;
-    const end = start + pageSize;
-    return sortedRows.slice(start, end);
-  }, [sortedRows, paginated, page, pageSize]);
-
-  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
-
-  useMemo(() => {
-    setPage(1);
-  }, [searchQuery, sortConfig]);
-
-  const tableClasses = classNames(styles.table, {
-    [styles.striped]: striped,
-    [styles.hoverable]: hoverable,
-    [styles.compact]: compact,
-    [styles.clickable]: !!onRowClick,
-    [styles.stickyHeader]: stickyHeader,
-  });
-
-  const getAlignClass = (align: TableHeader["align"], prefix: "th" | "td") => {
-    const key = align || "left";
-    const map = {
-      left: styles[`${prefix}AlignLeft`],
-      center: styles[`${prefix}AlignCenter`],
-      right: styles[`${prefix}AlignRight`],
-    } as const;
-    return map[key];
+  const setPage = (next: number) => {
+    if (next === currentPage) return;
+    if (!pageControlled) setUncontrolledPage(next);
+    onPageChange?.(next);
   };
 
-  const renderHeader = (header: TableHeader, index: number) => {
-    // A header without a key (untyped MDX tables omit it) is never the
-    // sorted one, even before anything is sorted.
-    const isActive = sortConfig !== null && sortConfig.key === header.key;
-    const thClasses = classNames(styles.th, getAlignClass(header.align, "th"), {
-      [styles.thSortable]: header.sortable,
-      [styles.thActive]: isActive,
-    });
+  const setPerPage = (next: number) => {
+    if (perPage === undefined) setUncontrolledPerPage(next);
+    onPerPageChange?.(next);
+  };
+
+  // Ascending, then descending, then back to the rows' own order. A new
+  // order starts again from the first page.
+  const cycleSort = (key: string) => {
+    const next: TableSort | null =
+      currentSort === null || currentSort.key !== key
+        ? { key, direction: "asc" }
+        : currentSort.direction === "asc"
+          ? { key, direction: "desc" }
+          : null;
+    if (!sortControlled) setUncontrolledSort(next);
+    onSortChange?.(next);
+    if (paged) setPage(1);
+  };
+
+  const commitSelection = (next: string[]) => {
+    if (!selectionControlled) setUncontrolledSelected(next);
+    onSelectionChange?.(next);
+  };
+
+  const toggleRow = (id: string) =>
+    commitSelection(
+      selectedSet.has(id)
+        ? currentSelected.filter((candidate) => candidate !== id)
+        : [...currentSelected, id],
+    );
+
+  // Select-all covers the rows on screen: the current page, or every row
+  // when the table is not paginated.
+  const visibleIds = loading ? [] : visible.map((entry) => entry.id);
+  const selectedOnScreen = visibleIds.filter((id) => selectedSet.has(id)).length;
+  const allSelected = visibleIds.length > 0 && selectedOnScreen === visibleIds.length;
+  const someSelected = selectedOnScreen > 0 && !allSelected;
+
+  const toggleAll = () => {
+    if (allSelected) {
+      const onScreen = new Set(visibleIds);
+      commitSelection(currentSelected.filter((id) => !onScreen.has(id)));
+    } else {
+      commitSelection([...currentSelected, ...visibleIds.filter((id) => !selectedSet.has(id))]);
+    }
+  };
+
+  const hasActions = Boolean(actions?.length);
+  const columnCount = columns.length + (selectable ? 1 : 0) + (hasActions ? 1 : 0);
+  const rowTotal = server ? (count ?? (total ?? 0) * currentPerPage) : sortedEntries.length;
+  const showPagination = paged && rowTotal > 0 && (pages > 1 || (perPageOptions?.length ?? 0) > 0);
+
+  const renderHeader = (column: TableColumn<T>, index: number) => {
+    const sortable = Boolean(column.sortable && column.key);
+    // A column without a key is never the sorted one, even before anything is sorted.
+    const active = currentSort !== null && Boolean(column.key) && currentSort.key === column.key;
+    const direction = active ? currentSort?.direction : undefined;
+    const align = ALIGN[column.align ?? "left"];
 
     const content = (
-      <Row
-        gap="8"
-        vertical="center"
-        horizontal={
-          header.align === "center" ? "center" : header.align === "right" ? "end" : "start"
-        }
-      >
+      <Row gap="8" vertical="center" horizontal={align.row}>
         <Text
           textVariant="label-strong-s"
-          onBackground={isActive ? "neutral-strong" : "neutral-medium"}
+          onBackground={active ? "neutral-strong" : "neutral-medium"}
         >
-          {header.content}
+          {column.header}
         </Text>
-        {header.sortable && (
+        {sortable && (
           <Icon
-            name={
-              isActive
-                ? sortConfig.direction === "asc"
-                  ? "chevronUp"
-                  : "chevronDown"
-                : "chevronUp"
-            }
+            name={direction === "desc" ? "chevronDown" : "chevronUp"}
             size="xs"
-            onBackground={isActive ? "neutral-strong" : "neutral-weak"}
-            style={{
-              transform: !isActive ? "rotate(90deg)" : undefined,
-            }}
+            onBackground={active ? "neutral-strong" : "neutral-weak"}
+            style={{ transform: active ? undefined : "rotate(90deg)" }}
           />
         )}
       </Row>
@@ -213,23 +502,27 @@ function Table({
 
     return (
       <th
-        key={header.key}
-        className={thClasses}
-        style={{ width: header.width }}
-        // Only the sorted column says so: ARIA wants aria-sort on one header
-        // at a time, and an unsorted column is the default.
-        aria-sort={
-          isActive ? (sortConfig.direction === "asc" ? "ascending" : "descending") : undefined
-        }
-        onClick={() => handleSort(header.key, header.sortable)}
+        key={column.key || index}
+        scope="col"
+        className={classNames(tableStyles.th, align.th, {
+          [tableStyles.thSortable]: sortable,
+          [tableStyles.thActive]: active,
+          [styles.sortableTh]: sortable,
+        })}
+        style={{ width: column.width }}
+        aria-sort={active ? (direction === "asc" ? "ascending" : "descending") : undefined}
       >
-        {header.sortable ? (
-          // A real button gives the column a tab stop, a role and Enter/Space.
-          // Its click bubbles to the cell, so the whole cell, padding
-          // included, stays the pointer target it always was.
+        {sortable ? (
           <button
             type="button"
-            className={classNames("reset-button-styles", "focus-ring", styles.thButton)}
+            className={classNames(
+              "reset-button-styles",
+              "focus-ring",
+              tableStyles.thButton,
+              styles.sortButton,
+            )}
+            disabled={loading}
+            onClick={() => cycleSort(column.key)}
           >
             {content}
           </button>
@@ -240,48 +533,67 @@ function Table({
     );
   };
 
-  const renderRow = (row: ReactNode[], originalIndex: number, displayIndex: number) => {
-    const rowClasses = classNames(styles.row, rowClassName?.(originalIndex));
-
+  const renderRow = (entry: Entry<T>) => {
+    const isSelected = selectable && selectedSet.has(entry.id);
     return (
       <tr
-        key={displayIndex}
-        className={rowClasses}
-        onClick={onRowClick ? () => onRowClick(originalIndex) : undefined}
+        key={entry.id}
+        className={classNames(
+          tableStyles.row,
+          { [styles.selectedRow]: isSelected },
+          rowClassName?.(entry.row, entry.index),
+        )}
+        data-selected={isSelected ? "true" : undefined}
+        onClick={onRowClick ? () => onRowClick(entry.row, entry.index) : undefined}
       >
-        {row.map((cell, cellIndex) => {
-          const header = data.headers[cellIndex];
-          const tdClasses = classNames(
-            styles.td,
-            getAlignClass(header?.align, "td"),
-            cellClassName?.(originalIndex, cellIndex),
-          );
-
-          return (
-            <td key={cellIndex} className={tdClasses}>
-              {cell}
-            </td>
-          );
-        })}
-        {actions && actions.length > 0 && (
+        {selectable && (
+          <td className={classNames(tableStyles.td, styles.selectCell)}>
+            <Checkbox
+              aria-label={getRowLabel ? getRowLabel(entry.row) : text.selectRow}
+              checked={isSelected}
+              onCheckedChange={() => toggleRow(entry.id)}
+            />
+          </td>
+        )}
+        {columns.map((column, columnIndex) => (
           <td
-            className={classNames(styles.td, styles.tdActions)}
-            style={{ width: `${actions.length * 32}px`, minWidth: `${actions.length * 32}px` }}
+            key={column.key || columnIndex}
+            className={classNames(
+              tableStyles.td,
+              ALIGN[column.align ?? "left"].td,
+              cellClassName?.(entry.row, entry.index, columnIndex),
+            )}
           >
+            {column.cell
+              ? column.cell(entry.row, entry.index)
+              : renderField(fieldOf(entry.row, column.key, columnIndex))}
+          </td>
+        ))}
+        {hasActions && (
+          <td
+            className={classNames(tableStyles.td, tableStyles.tdActions)}
+            style={{
+              width: `${(actions?.length ?? 0) * 32}px`,
+              minWidth: `${(actions?.length ?? 0) * 32}px`,
+            }}
+          >
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: stops a row click, it handles none itself */}
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above */}
             <Row gap="8" horizontal="start" vertical="center" onClick={(e) => e.stopPropagation()}>
-              {actions.map((action, actionIndex) => (
+              {actions?.map((action, actionIndex) => (
                 <IconButton
                   key={actionIndex}
-                  icon={action.icon as any}
+                  icon={action.icon as React.ComponentProps<typeof IconButton>["icon"]}
                   size="l"
                   variant={action.variant || "tertiary"}
                   tone={action.tone}
                   tooltip={action.tooltip || action.label}
+                  aria-label={action.label || action.tooltip}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
-                    action.onClick(originalIndex);
+                    action.onClick(entry.row, entry.index);
                   }}
-                  disabled={action.disabled?.(originalIndex)}
+                  disabled={action.disabled?.(entry.row, entry.index)}
                 />
               ))}
             </Row>
@@ -291,16 +603,42 @@ function Table({
     );
   };
 
-  const renderEmptyState = () => (
+  // Placeholders with nothing to read: the table says it is busy, and the
+  // rows stay out of the accessibility tree rather than reading as empty.
+  const skeletonRows = Array.from({ length: paged ? currentPerPage : 5 }, (_, n) => n).map(
+    (rowNumber) => (
+      // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and these hold no controls
+      <tr key={`skeleton-${rowNumber}`} className={tableStyles.row} aria-hidden="true">
+        {selectable && <td className={classNames(tableStyles.td, styles.selectCell)} />}
+        {columns.map((column, columnIndex) => (
+          <td
+            key={column.key || columnIndex}
+            className={classNames(tableStyles.td, ALIGN[column.align ?? "left"].td)}
+          >
+            <Skeleton
+              shape="line"
+              size="s"
+              width={SKELETON_WIDTHS[(rowNumber + columnIndex) % SKELETON_WIDTHS.length]}
+              maxWidth="100%"
+              delay={rowNumber * 80}
+            />
+          </td>
+        ))}
+        {hasActions && <td className={classNames(tableStyles.td, tableStyles.tdActions)} />}
+      </tr>
+    ),
+  );
+
+  const emptyRow = (
     <tr>
-      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.empty}>
-        {emptyState || (
+      <td colSpan={columnCount} className={tableStyles.empty}>
+        {emptyState ?? (
           <Column center padding="xl" gap="m">
             <Icon name="inbox" size="l" onBackground="neutral-weak" />
             <Column center gap="4">
               <Text textVariant="heading-strong-s">No data available</Text>
               <Text textVariant="body-default-s" onBackground="neutral-weak">
-                {searchQuery ? "Try adjusting your search" : "There are no items to display"}
+                {query.trim() ? "Try adjusting your search" : "There are no items to display"}
               </Text>
             </Column>
           </Column>
@@ -309,128 +647,119 @@ function Table({
     </tr>
   );
 
-  const renderLoadingState = () => (
+  const loadingRow = (
     <tr>
-      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.loading}>
-        {loadingState || (
-          <Column center padding="xl" gap="m">
-            <ShineText textVariant="label-default-s">Loading data...</ShineText>
-          </Column>
-        )}
+      <td colSpan={columnCount} className={tableStyles.loading}>
+        {loadingState}
       </td>
     </tr>
   );
 
   return (
     <Column fillWidth gap="m" {...flex}>
-      {/* Search Bar */}
       {searchable && (
         <Row horizontal="between" vertical="center" gap="m" maxWidth="12rem">
           <Input
-            id="table-search"
+            id={`${searchId}-search`}
             placeholder={searchPlaceholder}
-            value={searchQuery}
+            aria-label={searchPlaceholder || text.search}
+            value={query}
             size="xs"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
+            onValueChange={(next) => {
+              setQuery(next);
+              if (paged && !server) setPage(1);
+            }}
           />
-          {sortedRows.length !== data.rows.length && (
+          {sortedEntries.length !== entries.length && (
             <Text onBackground="neutral-weak">
-              {sortedRows.length} of {data.rows.length}
+              {sortedEntries.length} of {entries.length}
             </Text>
           )}
         </Row>
       )}
-
-      {/* Table Container */}
       <Flex
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
         background="surface"
         overflowX="auto"
-        overflowY={maxHeight ? "auto" : "visible"}
-        style={{ maxHeight }}
-        className={styles.container}
+        overflowY={maxHeight !== undefined ? "auto" : "visible"}
+        maxHeight={maxHeight}
+        className={tableStyles.container}
       >
-        <table className={tableClasses}>
-          <thead className={styles.thead}>
+        <table
+          className={classNames(tableStyles.table, {
+            [tableStyles.striped]: striped,
+            [tableStyles.hoverable]: hoverable,
+            [tableStyles.compact]: compact,
+            [tableStyles.stickyHeader]: stickyHeader,
+            [tableStyles.clickable]: Boolean(onRowClick),
+          })}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-busy={loading || undefined}
+        >
+          <thead className={tableStyles.thead}>
             <tr>
-              {data.headers.map((header, index) => renderHeader(header, index))}
-              {actions && actions.length > 0 && (
-                <th className={classNames(styles.th, styles.thActions)}>
+              {selectable && (
+                <th scope="col" className={classNames(tableStyles.th, styles.selectCell)}>
+                  <Checkbox
+                    aria-label={
+                      text.selectAll ?? (paged ? "Select all rows on this page" : "Select all rows")
+                    }
+                    checked={allSelected}
+                    indeterminate={someSelected}
+                    disabled={visibleIds.length === 0}
+                    onCheckedChange={toggleAll}
+                  />
+                </th>
+              )}
+              {columns.map(renderHeader)}
+              {hasActions && (
+                <th scope="col" className={classNames(tableStyles.th, tableStyles.thActions)}>
                   <Text textVariant="label-strong-s" onBackground="neutral-medium">
-                    Actions
+                    {text.actions}
                   </Text>
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className={styles.tbody}>
+          <tbody className={tableStyles.tbody}>
             {loading
-              ? renderLoadingState()
-              : sortedRows.length === 0
-                ? renderEmptyState()
-                : paginatedRows.map((row, index) => {
-                    const originalIndex = data.rows.indexOf(row);
-                    return renderRow(row, originalIndex, index);
-                  })}
+              ? loadingState !== undefined
+                ? loadingRow
+                : skeletonRows
+              : visible.length === 0
+                ? emptyRow
+                : visible.map(renderRow)}
           </tbody>
         </table>
       </Flex>
 
-      {/* Pagination */}
-      {paginated && !loading && sortedRows.length > 0 && (
-        <Row horizontal="between" vertical="center" paddingX="s" gap="m" wrap>
-          <Row gap="8" vertical="center">
-            <Row maxWidth="5rem">
-              <Select
-                id="page-size"
-                placeholder="Select page size"
-                value={String(pageSize)}
-                size="xs"
-                onValueChange={(value) => {
-                  setPageSize(Number(value));
-                  setPage(1);
-                }}
-                options={pageSizeOptions.map((size) => ({
-                  label: String(size),
-                  value: String(size),
-                }))}
-              />
-            </Row>
-            <Text textVariant="label-default-s" onBackground="neutral-medium">
-              {currentPage} / {totalPages}
-            </Text>
-          </Row>
-
-          {totalPages > 1 && (
-            <Pagination
-              page={currentPage}
-              total={totalPages}
-              onPageChange={setPage}
-              size="s"
-              showFirstLast
-            />
-          )}
-        </Row>
-      )}
-
-      {/* Footer Info */}
-      {!paginated && !loading && sortedRows.length > 0 && sortConfig && (
-        <Row horizontal="end" vertical="center" paddingX="s">
-          <Row gap="4" vertical="center">
-            <Text textVariant="body-default-s" onBackground="neutral-weak">
-              Sorted by {data.headers.find((h) => h.key === sortConfig.key)?.content}
-            </Text>
-            <IconButton
-              icon="close"
-              size="s"
-              variant="tertiary"
-              onClick={() => setSortConfig(null)}
-              tooltip="Clear sort"
-            />
-          </Row>
-        </Row>
+      {showPagination && (
+        <Pagination
+          fillWidth
+          paddingX="s"
+          horizontal={perPageOptions?.length ? "between" : "end"}
+          size="s"
+          aria-label={text.pagination}
+          labels={{
+            previous: text.previous,
+            next: text.next,
+            first: text.first,
+            last: text.last,
+            perPage: text.perPage,
+          }}
+          page={currentPage}
+          onPageChange={setPage}
+          count={server ? count : sortedEntries.length}
+          total={server ? total : undefined}
+          perPage={currentPerPage}
+          perPageOptions={perPageOptions}
+          showFirstLast={showFirstLast}
+          onPerPageChange={setPerPage}
+          disabled={loading}
+        />
       )}
     </Column>
   );
@@ -438,5 +767,5 @@ function Table({
 
 Table.displayName = "Table";
 
-export type { TableAction, TableHeader, TableProps };
+export type { TableAction, TableColumn, TableLabels, TableProps, TableSort };
 export { Table };

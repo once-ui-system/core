@@ -1,4 +1,4 @@
-import { Avatar, AvatarGroup, Background, Tag, Button, Card, Column, CompareImage, Heading, Icon, Mask, MatrixFx, Media, Pulse, Row, Text } from "@once-ui-system/core";
+import { Avatar, AvatarGroup, Background, Tag, Button, Card, Column, CompareImage, Heading, Icon, Mask, MatrixFx, Media, StatusIndicator, Row, Text } from "@once-ui-system/core";
 
 export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -124,7 +124,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                 href="#"
               >
                 <Row vertical="center">
-                  <Pulse size="s" />
+                  <StatusIndicator pulse size="s" />
                   <Row
                     marginLeft="12"
                     textVariant="code-default-s"

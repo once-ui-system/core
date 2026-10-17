@@ -461,3 +461,40 @@ export function textLayout({
     },
   };
 }
+
+/**
+ * The class for a `vertical` value: on a row it is `align-items`, on a column
+ * `justify-content`. `"baseline"` is an `align-items` value only, so it stays
+ * there whatever the direction (`justify-content: baseline` does not exist).
+ */
+export function crossAxisClass(
+  prefix: string,
+  value: string,
+  direction: string | undefined,
+): string {
+  const row = direction === undefined || direction === "row" || direction === "row-reverse";
+  return value === "baseline" || row ? `${prefix}align-${value}` : `${prefix}justify-${value}`;
+}
+
+const LIST_ELEMENTS = new Set<unknown>(["ul", "ol", "menu"]);
+
+/**
+ * The reset for an element a layout primitive renders that carries browser
+ * chrome a layout box should not: a list's bullets and indent (`as="ul"`), a
+ * button's background, border, padding and font (`as="button"`). The rules sit
+ * in `:where()`, at zero specificity, so every utility class on the element
+ * (`padding`, `background`, `border`, `textVariant`) still wins over them.
+ */
+export function elementReset(element: unknown): string | undefined {
+  if (LIST_ELEMENTS.has(element)) return "reset-list";
+  if (element === "button") return "reset-button";
+  return undefined;
+}
+
+/** A text preset with its weight swapped: `("body-default-m", "strong")` is `body-strong-m`. */
+export function withWeight<V extends string>(variant: V, weight: string | undefined): V {
+  if (!weight) return variant;
+  const parts = variant.split("-");
+  parts[parts.length - 2] = weight;
+  return parts.join("-") as V;
+}

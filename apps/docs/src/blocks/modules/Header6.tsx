@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag, Button, IconButton, Line, Logo, NavIcon, Pulse, Row, SmartLink, Text, ToggleButton } from "@once-ui-system/core";
+import { Tag, Button, IconButton, Line, Logo, NavIcon, StatusIndicator, Row, SmartLink, Text, ToggleButton } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 
 const nav = [
@@ -29,7 +29,7 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         borderBottom
         background="brand-alpha-weak"
       >
-        <Pulse size="s" />
+        <StatusIndicator pulse size="s" />
         <Text textVariant="label-default-s" onBackground="brand-medium">
           Pro blocks now install via CLI
         </Text>

@@ -16,6 +16,28 @@ item (see `ROADMAP.md`, Week 4).
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
 lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
+### Added
+
+- **`vertical="baseline"`** on Flex, Row and Column, and **`"auto"` margins**
+  (`marginLeft="auto"`, `marginX="auto"`, also in breakpoint objects), as classes.
+- **`error`, `errorMessage` and `size`** on Checkbox, Switch, RadioButton and
+  RadioGroup, as on Input: `aria-invalid`, a linked message, and a `Form size` that
+  reaches them (C6).
+- **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
+  thumb turn danger, the thumb is `aria-invalid` and described by the message, and
+  `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
+  suffix, as PasswordInput did.
+- **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
+  `actions`, `onRowClick`, `rowClassName`, `cellClassName`, a custom `loadingState`,
+  `showFirstLast`, and rows given as arrays, read by column position.
+- **Mode props on survivors** (F6): DatePicker and DateInput `range` (DatePicker
+  `months`), Slider `range`, Kbd `keys`, Grid `masonry`, StatusIndicator `pulse` (with
+  `tone`, `pulseSize`), TypeFx `mode="fade"` (with `state`), Setting `control`/`open`
+  and `axes`, MegaMenu `collapseBelow` (with `onClose`).
+- **`FlexLayoutProps`, `GridLayoutProps`, `FlexElementProps`, `FlexPropsOf<E>`,
+  `PolymorphicProps<T, Own>`** for components built on the layout primitives.
+
 ### Removed
 
 - **`Particle`**, the 2.0 alias of `ParticleFx`.
@@ -36,7 +58,7 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
   `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
   `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
-- **Components that merged** (F1, F2, F4, F5). The codemod rewrites each one; see
+- **Components that merged** (F1, F2, F4, F5, F6). The codemod rewrites each one; see
   [MIGRATING.md § 10](MIGRATING.md#10-components-that-merged).
   - `Modal` → `Dialog variant="sheet"`, with a `backdrop` slot on both variants.
   - `Swiper` → `Carousel mode="snap"`.
@@ -48,6 +70,19 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   - `DropdownWrapper` → `Dropdown`, whose menu is now the children; the 2.x bare
     `Dropdown` panel is internal. `ContextMenu` → `Dropdown openOn="contextmenu"`.
   - `EmojiPickerDropdown` → `EmojiPicker trigger`; `UserMenu` → `User dropdown`.
+  - `DataTable` → `Table`, and 2.x `Table data={{ headers, rows }}` → `Table columns rows`
+    (F6). Sorting cycles on the header and the "Sorted by" line is gone; paging is
+    Pagination's with its per-page select; default loading is skeleton rows.
+  - `DateRangePicker` → `DatePicker range` (`dual` → `months={2}`); `DateRangeInput`
+    → `DateInput range`; `RangeSlider` → `Slider range`.
+  - `PasswordInput` → `Input type="password"`, toggle kept. Every password Input now
+    has the toggle; `reveal={false}` restores the plain field.
+  - `KeyTip` → `Kbd keys label`; `MasonryGrid` → `Grid masonry`; `Pulse` →
+    `StatusIndicator pulse`; `FadingLettersFx` → `TypeFx mode="fade"` (`text` →
+    `words`, `animationState` → `state`, `messageIdx` → `delay`).
+  - `SettingGroup` → `Setting control open`; `SettingAxes` → `Setting axes`.
+  - `MobileMegaMenu` → `MegaMenu collapseBelow="always"`; `collapseBelow="m"` renders
+    the bar and the accordion and switches with CSS.
 - **`Badge` and `Chip`** (F3): both are `Tag` now. Badge is `<Tag variant="announce">`
   (`title` → `label`, `icon` → `prefixIcon`), Chip is a Tag with `selected`, `onClick` or
   `onRemove` (`iconButtonProps` → `removeButtonProps`). The codemod rewrites both; see
@@ -56,6 +91,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   and their icon-only `color`. `quaternary` is `ghost`; the rest are a `tone`.
 
 ### Changed
+
+- **`as` is typed by the element** on Flex, Row, Column, Grid and VisuallyHidden (G1):
+  `<Row as="a" href>`, `<Column as="form" onSubmit>` and `<Column as="ul" ref>` type
+  their attributes and ref. Other components no longer accept an untyped `as`
+  inherited from `DisplayProps`; wrap them. `React.ComponentProps<typeof Text>` (and
+  Heading) is no longer `any`.
+- **Lists and buttons reset** (G4): `as="ul"`/`"ol"` renders without bullets or
+  indent, `as="button"` without browser chrome and with `type="button"` by default.
+  `List` keeps its markers.
+- **Charts are generic over the row type** (G3): `data: T[]`, `series.key: keyof T`.
+  `DateRange`'s fields are optional.
+- **Prop aliases collapsed** (G5): `dark`/`light` are `showIn`; `textSize`,
+  `textWeight` and `textType` are `textVariant`; Text/Heading `size` is `textVariant`,
+  and `weight` now swaps a `textVariant`'s weight instead of being ignored beside it.
 
 - **`tone` is the semantic palette and `variant` is appearance only** (E1, E2):
   `brand | accent | neutral | info | success | warning | danger`. It replaces Button and

@@ -4,7 +4,7 @@ import type React from "react";
 import { useState } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
-import { RangeSlider } from "../components/RangeSlider";
+import { Slider, type SliderProps } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -37,14 +37,14 @@ function stubTrack(width = 1000, left = 0) {
   } as DOMRect);
 }
 
-const Controlled = (props: Partial<React.ComponentProps<typeof RangeSlider>>) => {
+const Controlled = (props: Partial<Omit<Extract<SliderProps, { range: true }>, "range">>) => {
   const [value, setValue] = useState<[number, number]>([20, 80]);
-  return <RangeSlider label="Price" value={value} onValueChange={setValue} {...props} />;
+  return <Slider range label="Price" value={value} onValueChange={setValue} {...props} />;
 };
 
-describe("RangeSlider: structure", () => {
+describe("Slider range: structure", () => {
   it("is a group named by its label, holding a Minimum and a Maximum slider", () => {
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} />, { wrapper: wrap });
+    render(<Slider range label="Price" defaultValue={[20, 80]} />, { wrapper: wrap });
     const group = screen.getByRole("group", { name: "Price" });
     expect(group).toContainElement(startThumb());
     expect(group).toContainElement(endThumb());
@@ -52,7 +52,7 @@ describe("RangeSlider: structure", () => {
   });
 
   it("bounds each thumb by the other, so neither can cross it", () => {
-    render(<RangeSlider label="Price" min={0} max={200} defaultValue={[20, 80]} />, {
+    render(<Slider range label="Price" min={0} max={200} defaultValue={[20, 80]} />, {
       wrapper: wrap,
     });
     expect(startThumb()).toHaveAttribute("aria-valuenow", "20");
@@ -65,7 +65,7 @@ describe("RangeSlider: structure", () => {
 
   it("formats the readout and each thumb's value text with formatValue", () => {
     render(
-      <RangeSlider label="Price" defaultValue={[20, 80]} showValue formatValue={(v) => `$${v}`} />,
+      <Slider range label="Price" defaultValue={[20, 80]} showValue formatValue={(v) => `$${v}`} />,
       { wrapper: wrap },
     );
     expect(screen.getByText("$20 – $80")).toBeInTheDocument();
@@ -74,7 +74,7 @@ describe("RangeSlider: structure", () => {
   });
 
   it("takes the thumbs' names from thumbLabels and the group's from aria-label", () => {
-    render(<RangeSlider aria-label="Duration" thumbLabels={["From", "To"]} />, { wrapper: wrap });
+    render(<Slider range aria-label="Duration" thumbLabels={["From", "To"]} />, { wrapper: wrap });
     expect(screen.getByRole("group", { name: "Duration" })).toBeInTheDocument();
     expect(thumb("From")).toHaveAttribute("aria-valuenow", "0");
     expect(thumb("To")).toHaveAttribute("aria-valuenow", "100");
@@ -82,7 +82,7 @@ describe("RangeSlider: structure", () => {
 
   it("draws the fill between the thumbs", () => {
     const { container } = render(
-      <RangeSlider label="Price" min={100} max={300} defaultValue={[150, 250]} />,
+      <Slider range label="Price" min={100} max={300} defaultValue={[150, 250]} />,
       { wrapper: wrap },
     );
     expect(startThumb().style.insetInlineStart).toBe("25%");
@@ -94,7 +94,8 @@ describe("RangeSlider: structure", () => {
   it("forwards its ref to the group", () => {
     let node: HTMLDivElement | null = null;
     render(
-      <RangeSlider
+      <Slider
+        range
         ref={(el) => {
           node = el;
         }}
@@ -106,9 +107,9 @@ describe("RangeSlider: structure", () => {
   });
 });
 
-describe("RangeSlider: value", () => {
+describe("Slider range: value", () => {
   it("covers the whole range without a value or defaultValue", () => {
-    render(<RangeSlider label="Price" min={10} max={40} />, { wrapper: wrap });
+    render(<Slider range label="Price" min={10} max={40} />, { wrapper: wrap });
     expect(startThumb()).toHaveAttribute("aria-valuenow", "10");
     expect(endThumb()).toHaveAttribute("aria-valuenow", "40");
   });
@@ -116,7 +117,7 @@ describe("RangeSlider: value", () => {
   it("keeps its own state from defaultValue and reports each change as [start, end]", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
+    render(<Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -132,7 +133,7 @@ describe("RangeSlider: value", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const { rerender } = render(
-      <RangeSlider label="Price" value={[20, 80]} onValueChange={onChange} />,
+      <Slider range label="Price" value={[20, 80]} onValueChange={onChange} />,
       {
         wrapper: wrap,
       },
@@ -142,7 +143,7 @@ describe("RangeSlider: value", () => {
     expect(onChange).toHaveBeenCalledWith([21, 80]);
     expect(startThumb()).toHaveAttribute("aria-valuenow", "20");
 
-    rerender(<RangeSlider label="Price" value={[21, 80]} onValueChange={onChange} />);
+    rerender(<Slider range label="Price" value={[21, 80]} onValueChange={onChange} />);
     expect(startThumb()).toHaveAttribute("aria-valuenow", "21");
   });
 
@@ -156,16 +157,16 @@ describe("RangeSlider: value", () => {
   });
 
   it("orders and clamps a value it is given", () => {
-    render(<RangeSlider label="Price" value={[90, -10]} />, { wrapper: wrap });
+    render(<Slider range label="Price" value={[90, -10]} />, { wrapper: wrap });
     expect(startThumb()).toHaveAttribute("aria-valuenow", "0");
     expect(endThumb()).toHaveAttribute("aria-valuenow", "90");
   });
 });
 
-describe("RangeSlider: keyboard", () => {
+describe("Slider range: keyboard", () => {
   it("steps with the arrow keys, by a tenth with Page Up and Down, to the ends with Home and End", async () => {
     const user = userEvent.setup();
-    render(<RangeSlider label="Price" min={0} max={200} step={2} defaultValue={[40, 160]} />, {
+    render(<Slider range label="Price" min={0} max={200} step={2} defaultValue={[40, 160]} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -194,7 +195,7 @@ describe("RangeSlider: keyboard", () => {
 
   it("never lets the thumbs cross, and keeps minDistance between them", async () => {
     const user = userEvent.setup();
-    render(<RangeSlider label="Price" defaultValue={[40, 50]} minDistance={5} />, {
+    render(<Slider range label="Price" defaultValue={[40, 50]} minDistance={5} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -210,7 +211,7 @@ describe("RangeSlider: keyboard", () => {
 
   it("lands on the step grid without floating-point noise", async () => {
     const user = userEvent.setup();
-    render(<RangeSlider label="Opacity" min={0} max={1} step={0.1} defaultValue={[0.2, 0.8]} />, {
+    render(<Slider range label="Opacity" min={0} max={1} step={0.1} defaultValue={[0.2, 0.8]} />, {
       wrapper: wrap,
     });
     await user.tab();
@@ -222,7 +223,7 @@ describe("RangeSlider: keyboard", () => {
     const user = userEvent.setup();
     render(
       <div dir="rtl">
-        <RangeSlider label="Price" defaultValue={[20, 80]} />
+        <Slider range label="Price" defaultValue={[20, 80]} />
       </div>,
       { wrapper: wrap },
     );
@@ -236,7 +237,7 @@ describe("RangeSlider: keyboard", () => {
   it("does not report a key that changes nothing", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" onValueChange={onChange} />, { wrapper: wrap });
+    render(<Slider range label="Price" onValueChange={onChange} />, { wrapper: wrap });
     await user.tab();
     await user.keyboard("{Home}{ArrowLeft}");
     expect(onChange).not.toHaveBeenCalled();
@@ -247,7 +248,7 @@ describe("RangeSlider: keyboard", () => {
     const onChange = vi.fn();
     render(
       <>
-        <RangeSlider label="Price" disabled onValueChange={onChange} />
+        <Slider range label="Price" disabled onValueChange={onChange} />
         <button type="button">After</button>
       </>,
       { wrapper: wrap },
@@ -261,10 +262,10 @@ describe("RangeSlider: keyboard", () => {
   });
 });
 
-describe("RangeSlider: pointer", () => {
+describe("Slider range: pointer", () => {
   it("moves the nearer thumb to a press on the track and drags it", () => {
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
+    render(<Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     stubTrack();
@@ -286,7 +287,7 @@ describe("RangeSlider: pointer", () => {
   });
 
   it("stops a dragged thumb at the other one", () => {
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} minDistance={10} />, {
+    render(<Slider range label="Price" defaultValue={[20, 80]} minDistance={10} />, {
       wrapper: wrap,
     });
     stubTrack();
@@ -300,7 +301,7 @@ describe("RangeSlider: pointer", () => {
 
   it("grabs a thumb where it is, without jumping on the press", () => {
     const onChange = vi.fn();
-    render(<RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
+    render(<Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     stubTrack();
@@ -313,7 +314,7 @@ describe("RangeSlider: pointer", () => {
   });
 
   it("lets the first move decide which of two stacked thumbs a press grabs", () => {
-    render(<RangeSlider label="Price" defaultValue={[100, 100]} />, { wrapper: wrap });
+    render(<Slider range label="Price" defaultValue={[100, 100]} />, { wrapper: wrap });
     stubTrack();
 
     // Both at the top: only the start thumb can move, and it is the one that does.
@@ -328,7 +329,7 @@ describe("RangeSlider: pointer", () => {
   it("measures from the right in a right-to-left layout", () => {
     render(
       <div dir="rtl">
-        <RangeSlider label="Price" defaultValue={[20, 80]} />
+        <Slider range label="Price" defaultValue={[20, 80]} />
       </div>,
       { wrapper: wrap },
     );
@@ -340,13 +341,13 @@ describe("RangeSlider: pointer", () => {
   it("ignores the pointer while disabled, and buttons other than the main one", () => {
     const onChange = vi.fn();
     const { rerender } = render(
-      <RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} />,
+      <Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} />,
       { wrapper: wrap },
     );
     stubTrack();
     fireEvent.pointerDown(track(), { button: 2, clientX: 500 });
     rerender(
-      <RangeSlider label="Price" defaultValue={[20, 80]} onValueChange={onChange} disabled />,
+      <Slider range label="Price" defaultValue={[20, 80]} onValueChange={onChange} disabled />,
     );
     fireEvent.pointerDown(track(), { button: 0, clientX: 500 });
     fireEvent.pointerMove(document, { clientX: 600 });
@@ -354,7 +355,7 @@ describe("RangeSlider: pointer", () => {
   });
 });
 
-describe("RangeSlider: forms", () => {
+describe("Slider range: forms", () => {
   const values = (container: HTMLElement) =>
     new FormData(container.querySelector("form") as HTMLFormElement);
 
@@ -362,7 +363,7 @@ describe("RangeSlider: forms", () => {
     const user = userEvent.setup();
     const { container } = render(
       <form>
-        <RangeSlider label="Price" name="price" defaultValue={[20, 80]} />
+        <Slider range label="Price" name="price" defaultValue={[20, 80]} />
       </form>,
       { wrapper: wrap },
     );
@@ -375,7 +376,7 @@ describe("RangeSlider: forms", () => {
   it("submits each value under its own name", () => {
     const { container } = render(
       <form>
-        <RangeSlider label="Price" name={["minPrice", "maxPrice"]} defaultValue={[20, 80]} />
+        <Slider range label="Price" name={["minPrice", "maxPrice"]} defaultValue={[20, 80]} />
       </form>,
       { wrapper: wrap },
     );
@@ -386,7 +387,7 @@ describe("RangeSlider: forms", () => {
   it("submits nothing while disabled", () => {
     const { container } = render(
       <form>
-        <RangeSlider label="Price" name="price" disabled />
+        <Slider range label="Price" name="price" disabled />
       </form>,
       { wrapper: wrap },
     );
@@ -394,11 +395,11 @@ describe("RangeSlider: forms", () => {
   });
 });
 
-describe("RangeSlider: rendering", () => {
+describe("Slider range: rendering", () => {
   it("renders both thumbs on the server", () => {
     const html = renderToString(
       <LayoutProvider>
-        <RangeSlider label="Price" defaultValue={[25, 75]} />
+        <Slider range label="Price" defaultValue={[25, 75]} />
       </LayoutProvider>,
     );
     expect(html.match(/role="slider"/g)).toHaveLength(2);
@@ -408,13 +409,13 @@ describe("RangeSlider: rendering", () => {
 
   it("has no axe violations: labelled, named by aria-label, and disabled", async () => {
     const { container, rerender } = render(
-      <RangeSlider label="Price" defaultValue={[20, 80]} showValue />,
+      <Slider range label="Price" defaultValue={[20, 80]} showValue />,
       { wrapper: wrap },
     );
     await expectNoAxeViolations(container);
-    rerender(<RangeSlider aria-label="Price" thumbLabels={["From", "To"]} />);
+    rerender(<Slider range aria-label="Price" thumbLabels={["From", "To"]} />);
     await expectNoAxeViolations(container);
-    rerender(<RangeSlider label="Price" disabled />);
+    rerender(<Slider range label="Price" disabled />);
     await expectNoAxeViolations(container);
   });
 });

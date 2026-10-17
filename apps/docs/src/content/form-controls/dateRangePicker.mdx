@@ -1,60 +1,11 @@
 ---
 title: "DateRangePicker"
-summary: "A standalone calendar component for selecting date ranges with a clean, intuitive interface."
-updatedAt: "2025-05-13"
+summary: "Merged into DatePicker in 3.0."
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/dateRangePicker.mdx"
-github: "components/DateRangePicker.tsx"
+github: "components/DatePicker.tsx"
 navLabel: "DateRangePicker"
 navIcon: "switch"
 ---
 
-The `DateRangePicker` component provides a standalone calendar interface for selecting date ranges. Unlike the `DateRangeInput`, this component is a pure calendar picker without input fields, making it ideal for embedding directly in forms or modals.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={<DateRangePickerExample />}
-  codes={[
-    {
-      code:
-`<DateRangePicker
-    value={dateRange}
-    onValueChange={handleRangeChange}
-/>`,
-      language: "tsx",
-      label: "DateRangePicker"
-    }
-  ]}
-/>
-
-## API reference
-
-<PropsTable
-  component="DateRangePicker"
-  describe={{
-    value: "The range, controlled. Leave it out and the picker keeps its own.",
-    defaultValue: "The starting range when `value` is left out.",
-    onValueChange: "Called with the range after each pick: the start alone, then both ends. Was onChange in 2.x.",
-    dual: "Show two months side by side.",
-    locale: "Locale for month and weekday names, such as \"de\". English when left out.",
-    labels: "Both calendars' own words, for a translated interface: the same { previousMonth, nextMonth, month, year, ... } as DatePicker's labels. Omitted fields stay English.",
-  }}
-  content={[
-    ["className"],
-    ["style"]
-  ]}
-/>
-
-## Features
-
-- **Dual calendar display**: Shows two months side by side for easier date range selection
-- **Range highlighting**: Visual indication of the selected date range
-- **Flexible sizing**: Supports small, medium, and large size variants
-- **Standalone component**: Can be used independently without input fields
-- **Customizable**: Supports custom styling through className and style props
-
-## Accessibility
-
-- Keyboard navigation support for calendar interface
-- ARIA attributes for screen reader compatibility
-- Focus management for improved usability
+`DateRangePicker` folded into [`DatePicker`](/form-controls/datePicker#range) in 3.0: use `<DatePicker range>`, and `months={2}` for 2.x's `dual`. The 3.0 codemod rewrites it (see the migration guide, "Components that merged").

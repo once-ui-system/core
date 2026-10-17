@@ -13,6 +13,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 import { Column } from "./Column";
 import { useFieldSize } from "./FormContext";
+import { IconButton } from "./IconButton";
 import styles from "./Input.module.scss";
 import { Row } from "./Row";
 import { Spinner } from "./Spinner";
@@ -55,6 +56,12 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
   /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   loading?: boolean;
+  /**
+   * With `type="password"`, an eye button after the field shows and hides the
+   * text (2.x's PasswordInput). On by default; `reveal={false}` leaves a plain
+   * password field.
+   */
+  reveal?: boolean;
   /** How many columns to occupy inside a `Form` grid. `Form` reads this off
    *  the child and strips it; outside a `Form` it does nothing. */
   span?: number;
@@ -82,6 +89,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       // Consumed by `Form`, never rendered. Destructured so it cannot reach
       // the DOM when an `Input` carrying it is used on its own.
       span,
+      reveal = true,
       children,
       onFocus,
       onBlur,
@@ -97,6 +105,8 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    const [revealed, setRevealed] = useState(false);
+    const revealable = props.type === "password" && reveal;
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
@@ -204,7 +214,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
         [styles.withPrefix]: prefix,
-        [styles.withSuffix]: suffix,
+        [styles.withSuffix]: suffix || revealable,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
         [styles.error]: displayError && styledValue !== "",
@@ -246,6 +256,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <Column fillWidth padding="4">
             <input
               {...props}
+              type={revealable && revealed ? "text" : props.type}
               ref={ref}
               id={id}
               placeholder={placeholder}
@@ -298,6 +309,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {suffix && !loading && (
             <Row paddingRight="12" className={styles.suffix} position="static">
               {suffix}
+            </Row>
+          )}
+          {revealable && (
+            <Row paddingRight="12" className={styles.suffix} position="static">
+              <IconButton
+                onClick={() => setRevealed((shown) => !shown)}
+                variant="ghost"
+                icon={revealed ? "eyeOff" : "eye"}
+                aria-label={revealed ? "Hide password" : "Show password"}
+                size="s"
+                type="button"
+              />
             </Row>
           )}
         </Row>

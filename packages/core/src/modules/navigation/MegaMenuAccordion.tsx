@@ -9,36 +9,19 @@ import { Icon } from "../../components/Icon";
 import { Option } from "../../components/Option";
 import { OptionRoleContext } from "../../components/OptionRoleContext";
 import { Text } from "../../components/Text";
-import type { IconName } from "../../icons";
+import type { MenuGroup } from "./MegaMenu";
 
-export interface MenuLink {
-  label: React.ReactNode;
-  href: string;
-  icon?: IconName;
-  description?: React.ReactNode;
-  selected?: boolean;
-}
-
-export interface MenuSection {
-  title?: React.ReactNode;
-  links: MenuLink[];
-}
-
-export interface MenuGroup {
-  id: string;
-  label: React.ReactNode;
-  suffixIcon?: IconName;
-  href?: string;
-  selected?: boolean;
-  sections?: MenuSection[];
-}
-
-export interface MobileMegaMenuProps extends React.ComponentProps<typeof Flex> {
+export interface MegaMenuAccordionProps extends React.ComponentProps<typeof Flex> {
   menuGroups: MenuGroup[];
   onClose?: () => void;
 }
 
-const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ...flex }) => {
+/** The collapsed form of `MegaMenu` (`collapseBelow`), 2.x's MobileMegaMenu: one accordion per group. */
+export const MegaMenuAccordion: React.FC<MegaMenuAccordionProps> = ({
+  menuGroups,
+  onClose,
+  ...flex
+}) => {
   const handleLinkClick = (href: string) => {
     onClose?.();
   };
@@ -146,6 +129,4 @@ const MobileMegaMenu: React.FC<MobileMegaMenuProps> = ({ menuGroups, onClose, ..
   );
 };
 
-MobileMegaMenu.displayName = "MobileMegaMenu";
-
-export { MobileMegaMenu };
+MegaMenuAccordion.displayName = "MegaMenuAccordion";

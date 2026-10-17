@@ -1,18 +1,20 @@
 import classNames from "clsx";
 import type { CSSProperties, ReactNode } from "react";
 import React, { forwardRef } from "react";
+import { Column } from "../components/Column";
+import { Flex } from "../components/Flex";
 import { SpacingToken } from "../types";
 import { sizeValue } from "../utils/layoutClasses";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import styles from "./MasonryGrid.module.scss";
+import styles from "./Masonry.module.scss";
 
-interface MasonryBreakpointProps {
+export interface MasonryBreakpointProps {
   columns?: number;
   hide?: boolean;
 }
 
-interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, "l" | "m" | "s" | "xs"> {
+/** `<Grid masonry>` (2.x's MasonryGrid): children flow down `columns` CSS columns. */
+export interface MasonryProps
+  extends Omit<React.ComponentProps<typeof Flex>, "l" | "m" | "s" | "xs"> {
   children: ReactNode;
   gap?: SpacingToken | "-1" | undefined;
   columns?: number;
@@ -24,7 +26,7 @@ interface MasonryGridProps extends Omit<React.ComponentProps<typeof Flex>, "l" |
   xs?: MasonryBreakpointProps;
 }
 
-const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
+const Masonry = forwardRef<HTMLDivElement, MasonryProps>(
   ({ children, gap = "8", columns = 3, style, className, l, m, s, xs, ...flex }, ref) => {
     const gapValue = sizeValue(gap, "width") ?? "var(--static-space-8)";
 
@@ -67,6 +69,6 @@ const MasonryGrid = forwardRef<HTMLDivElement, MasonryGridProps>(
   },
 );
 
-export { MasonryGrid };
+export { Masonry };
 
-MasonryGrid.displayName = "MasonryGrid";
+Masonry.displayName = "Masonry";

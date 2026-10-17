@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, CountFx, Pulse, Row, Text } from "@once-ui-system/core";
+import { Button, CountFx, StatusIndicator, Row, Text } from "@once-ui-system/core";
 import { LinearGauge } from "@once-ui-system/core/data";
 
 export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
@@ -23,7 +23,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
       {...flex}
     >
       <Row gap="12" vertical="center" wrap>
-        <Pulse size="s" />
+        <StatusIndicator pulse size="s" />
         <Text textVariant="label-default-s" onBackground="brand-medium">
           Live
         </Text>

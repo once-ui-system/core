@@ -1,7 +1,7 @@
 "use client";
 
-import React, { ReactNode } from "react";
 import { Column, InlineCode, Row, SmartLink, Table, Text } from "@once-ui-system/core";
+import React, { ReactNode } from "react";
 
 type PropType = string | string[] | ReactNode;
 
@@ -154,8 +154,15 @@ function PropsTableView({ content, label = "Prop" }: PropsTableViewProps) {
     }),
   };
 
-  return <Table marginTop="16" marginBottom="24" data={data} />;
+  return (
+    <Table
+      marginTop="16"
+      marginBottom="24"
+      columns={data.headers.map(({ content, ...column }) => ({ ...column, header: content }))}
+      rows={data.rows}
+    />
+  );
 }
 
-export { PropsTableView };
 export type { PropData, PropType };
+export { PropsTableView };

@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef, useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { Slider } from "../components/Slider";
+import { Slider, type SliderProps } from "../components/Slider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -17,7 +17,7 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
 );
 
-const ControlledSlider = (props: Partial<React.ComponentProps<typeof Slider>>) => {
+const ControlledSlider = (props: Partial<Extract<SliderProps, { range?: false }>>) => {
   const [value, setValue] = useState(20);
   return <Slider aria-label="Volume" value={value} onValueChange={setValue} {...props} />;
 };

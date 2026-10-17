@@ -1,7 +1,7 @@
 ---
 title: "Switch"
 summary: "Switch provides a toggle control for binary states with a sliding animation and optional loading state."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/switch.mdx"
 github: "components/Switch.tsx"
 navLabel: "Switch"
@@ -173,11 +173,41 @@ Place the switch on the right side of the label.
   ]}
 />
 
+## Validation and size
+
+`error` marks the Switch invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Switch label="Two-factor authentication" error errorMessage="Required for admins" />
+  }
+  codes={[
+    {
+      code:
+`<Switch
+    label="Two-factor authentication"
+    error
+    errorMessage="Required for admins"
+/>`,
+      language: "tsx",
+      label: "Validation"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="Switch"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     checked: "Whether it is on, controlled. Leave it out and the switch keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     onCheckedChange: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",

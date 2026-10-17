@@ -2,29 +2,20 @@
 
 import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
-import { DisplayProps, GridBreakpointProps, GridProps, StyleProps } from "../interfaces";
 import { breakpointStyle } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
-import { ServerGrid } from "./ServerGrid";
+import { ServerGrid, type ServerGridProps } from "./ServerGrid";
 
-interface ClientGridProps extends GridProps, StyleProps, DisplayProps {
-  cursor?: StyleProps["cursor"];
-  xl?: GridBreakpointProps;
-  l?: GridBreakpointProps;
-  m?: GridBreakpointProps;
-  s?: GridBreakpointProps;
-  xs?: GridBreakpointProps;
-  hide?: boolean;
-}
+type ClientGridProps = ServerGridProps;
 
-const ClientGrid = forwardRef<HTMLDivElement, ClientGridProps>(
+const ClientGrid = forwardRef<HTMLElement, ClientGridProps>(
   ({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
-    const elementRef = useRef<HTMLDivElement>(null);
+    const elementRef = useRef<HTMLElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const { currentBreakpoint } = useLayout();
 
     // Combine refs
-    const combinedRef = (node: HTMLDivElement) => {
+    const combinedRef = (node: HTMLElement) => {
       elementRef.current = node;
       if (typeof ref === "function") {
         ref(node);

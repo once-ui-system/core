@@ -10,7 +10,7 @@ import {
   Heading,
   Icon,
   Input,
-  Pulse,
+  StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -48,7 +48,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
 
       <Column maxWidth="36rem" gap="24" horizontal="center" zIndex={1}>
         <Row vertical="center" gap="8">
-          <Pulse size="s" />
+          <StatusIndicator pulse size="s" />
           <Text textVariant="code-default-s" onBackground="brand-medium">
             Community updates
           </Text>

@@ -16,8 +16,7 @@ export type {
   MenuGroup,
   MenuLink,
   MenuSection,
-  MobileMegaMenuProps,
 } from "./navigation";
-export { HeadingNav, Kbar, MegaMenu, MobileMegaMenu } from "./navigation";
+export { HeadingNav, Kbar, MegaMenu } from "./navigation";
 export { HeadingLink } from "./navigation/HeadingLink";
 export * from "./seo";

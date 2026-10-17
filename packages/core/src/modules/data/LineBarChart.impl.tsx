@@ -4,21 +4,29 @@ import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { RadiusSize } from "@/types";
 import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
+import type { DateRange } from "../../components/DatePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import type { SizeProps } from "../../interfaces";
 import { cssColor } from "../../internal/cssColor";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { LinearGradient } from "./Gradient";
-import { BarWidth, ChartProps, ChartVariant, curveType, SeriesConfig } from "./interfaces";
+import {
+  BarWidth,
+  ChartProps,
+  ChartVariant,
+  curveType,
+  DataPoint,
+  SeriesConfig,
+} from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { formatDate } from "./utils/formatDate";
 
-export interface LineBarChartProps extends ChartProps {
+export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
   curve?: curveType;
   reverseY?: boolean;
@@ -204,7 +212,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}

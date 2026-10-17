@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { DataTable, type DataTableColumn, type DataTableSort } from "../components/DataTable";
+import { Table, type TableColumn, type TableSort } from "../components/Table";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -19,7 +19,7 @@ const people: Person[] = [
   { id: "p3", name: "Cy", role: "Product", age: 28 },
 ];
 
-const columns: DataTableColumn<Person>[] = [
+const columns: TableColumn<Person>[] = [
   { key: "name", header: "Name", sortable: true },
   { key: "role", header: "Role", cell: (row) => <strong>{row.role}</strong> },
   { key: "age", header: "Age", sortable: true, align: "right" },
@@ -33,12 +33,11 @@ const column = (index: number) =>
 
 const header = (name: string) => screen.getByRole("columnheader", { name });
 
-describe("DataTable", () => {
+describe("Table", () => {
   it("renders typed rows through the column definitions", async () => {
-    const { container } = render(
-      <DataTable aria-label="People" columns={columns} rows={people} />,
-      { wrapper: wrap },
-    );
+    const { container } = render(<Table aria-label="People" columns={columns} rows={people} />, {
+      wrapper: wrap,
+    });
 
     expect(screen.getByRole("table", { name: "People" })).toBeInTheDocument();
     expect(screen.getAllByRole("columnheader").map((cell) => cell.textContent)).toEqual([
@@ -58,7 +57,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onSortChange = vi.fn();
       const { container } = render(
-        <DataTable columns={columns} rows={people} onSortChange={onSortChange} />,
+        <Table columns={columns} rows={people} onSortChange={onSortChange} />,
         { wrapper: wrap },
       );
 
@@ -83,7 +82,7 @@ describe("DataTable", () => {
 
     it("sorts from the keyboard, and only the sorted header carries aria-sort", async () => {
       const user = userEvent.setup();
-      render(<DataTable columns={columns} rows={people} />, { wrapper: wrap });
+      render(<Table columns={columns} rows={people} />, { wrapper: wrap });
 
       await user.tab();
       expect(within(header("Name")).getByRole("button")).toHaveFocus();
@@ -106,7 +105,7 @@ describe("DataTable", () => {
         { id: "d", name: "", age: 100 },
       ];
       render(
-        <DataTable
+        <Table
           columns={[
             { key: "name", header: "Name", sortable: true },
             { key: "age", header: "Age", sortable: true },
@@ -129,13 +128,13 @@ describe("DataTable", () => {
 
     it("uses a column's own comparator, reversed for descending", async () => {
       const user = userEvent.setup();
-      const byRoleLength: DataTableColumn<Person> = {
+      const byRoleLength: TableColumn<Person> = {
         key: "role",
         header: "Role",
         sortable: true,
         sort: (a, b) => a.role.length - b.role.length,
       };
-      render(<DataTable columns={[columns[0], byRoleLength]} rows={people} />, { wrapper: wrap });
+      render(<Table columns={[columns[0], byRoleLength]} rows={people} />, { wrapper: wrap });
 
       await user.click(screen.getByRole("button", { name: "Role" }));
       expect(column(1)).toEqual(["Design", "Product", "Engineering"]);
@@ -146,11 +145,10 @@ describe("DataTable", () => {
     it("follows the host's sort when controlled", async () => {
       const user = userEvent.setup();
       const onSortChange = vi.fn();
-      const sort: DataTableSort = { key: "age", direction: "desc" };
-      render(
-        <DataTable columns={columns} rows={people} sort={sort} onSortChange={onSortChange} />,
-        { wrapper: wrap },
-      );
+      const sort: TableSort = { key: "age", direction: "desc" };
+      render(<Table columns={columns} rows={people} sort={sort} onSortChange={onSortChange} />, {
+        wrapper: wrap,
+      });
 
       expect(header("Age")).toHaveAttribute("aria-sort", "descending");
       expect(column(2)).toEqual(["36", "31", "28"]);
@@ -166,8 +164,8 @@ describe("DataTable", () => {
       const loose = [
         { header: "First", sortable: true },
         { header: "Second" },
-      ] as unknown as DataTableColumn<Person>[];
-      render(<DataTable columns={loose} rows={people} />, { wrapper: wrap });
+      ] as unknown as TableColumn<Person>[];
+      render(<Table columns={loose} rows={people} />, { wrapper: wrap });
 
       for (const cell of screen.getAllByRole("columnheader")) {
         expect(cell).not.toHaveAttribute("aria-sort");
@@ -181,7 +179,7 @@ describe("DataTable", () => {
       const onSubmit = vi.fn((event: React.FormEvent) => event.preventDefault());
       render(
         <form onSubmit={onSubmit}>
-          <DataTable columns={columns} rows={people} />
+          <Table columns={columns} rows={people} />
         </form>,
         { wrapper: wrap },
       );
@@ -195,7 +193,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
       const { container } = render(
-        <DataTable
+        <Table
           aria-label="People"
           columns={columns}
           rows={people}
@@ -230,7 +228,7 @@ describe("DataTable", () => {
 
     it("selects from the keyboard", async () => {
       const user = userEvent.setup();
-      render(<DataTable columns={columns} rows={people} selectable />, { wrapper: wrap });
+      render(<Table columns={columns} rows={people} selectable />, { wrapper: wrap });
 
       const boxes = screen.getAllByRole("checkbox", { name: "Select row" });
       boxes[2].focus();
@@ -242,7 +240,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
       render(
-        <DataTable
+        <Table
           columns={columns}
           rows={people}
           selectable
@@ -268,8 +266,8 @@ describe("DataTable", () => {
       const onSelectionChange = vi.fn();
       const anonymous = people.map(({ id: _id, ...rest }) => rest);
       render(
-        <DataTable
-          columns={columns as unknown as DataTableColumn<(typeof anonymous)[number]>[]}
+        <Table
+          columns={columns as unknown as TableColumn<(typeof anonymous)[number]>[]}
           rows={anonymous}
           // Returns undefined at runtime: every row would share the id "undefined".
           getRowId={(row) => (row as { uuid?: string }).uuid as string}
@@ -296,7 +294,7 @@ describe("DataTable", () => {
       name: `Item ${index + 1}`,
       size: 23 - index,
     }));
-    const manyColumns: DataTableColumn<(typeof many)[number]>[] = [
+    const manyColumns: TableColumn<(typeof many)[number]>[] = [
       { key: "name", header: "Name" },
       { key: "size", header: "Size", sortable: true },
     ];
@@ -306,7 +304,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onPageChange = vi.fn();
       const { container } = render(
-        <DataTable
+        <Table
           columns={manyColumns}
           rows={many}
           paginated
@@ -329,13 +327,7 @@ describe("DataTable", () => {
     it("returns to the first page when the sort changes", async () => {
       const user = userEvent.setup();
       render(
-        <DataTable
-          columns={manyColumns}
-          rows={many}
-          paginated
-          defaultPerPage={5}
-          defaultPage={3}
-        />,
+        <Table columns={manyColumns} rows={many} paginated defaultPerPage={5} defaultPage={3} />,
         {
           wrapper: wrap,
         },
@@ -351,7 +343,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onPerPageChange = vi.fn();
       render(
-        <DataTable
+        <Table
           columns={manyColumns}
           rows={many}
           paginated
@@ -372,7 +364,7 @@ describe("DataTable", () => {
       const user = userEvent.setup();
       const onSelectionChange = vi.fn();
       render(
-        <DataTable
+        <Table
           columns={manyColumns}
           rows={many}
           paginated
@@ -405,7 +397,7 @@ describe("DataTable", () => {
       const Server = () => {
         const [page, setPage] = useState(1);
         return (
-          <DataTable
+          <Table
             columns={manyColumns}
             rows={pageRows}
             count={95}
@@ -437,7 +429,7 @@ describe("DataTable", () => {
     });
 
     it("draws no pagination for a single page without page sizes", () => {
-      render(<DataTable columns={manyColumns} rows={many.slice(0, 3)} paginated />, {
+      render(<Table columns={manyColumns} rows={many.slice(0, 3)} paginated />, {
         wrapper: wrap,
       });
       expect(screen.queryByRole("navigation")).toBeNull();
@@ -447,7 +439,7 @@ describe("DataTable", () => {
       render(
         <>
           <h2 id="people-heading">Leute</h2>
-          <DataTable
+          <Table
             aria-labelledby="people-heading"
             columns={manyColumns}
             rows={many}
@@ -469,16 +461,14 @@ describe("DataTable", () => {
 
   describe("empty and loading", () => {
     it("shows the default empty state, or the one given", () => {
-      const { rerender } = render(<DataTable columns={columns} rows={[]} paginated />, {
+      const { rerender } = render(<Table columns={columns} rows={[]} paginated />, {
         wrapper: wrap,
       });
       expect(screen.getByText("No data available")).toBeInTheDocument();
       expect(within(bodyRows()[0]).getByRole("cell")).toHaveAttribute("colspan", "3");
       expect(screen.queryByRole("navigation")).toBeNull();
 
-      rerender(
-        <DataTable columns={columns} rows={[]} selectable emptyState={<p>No people yet</p>} />,
-      );
+      rerender(<Table columns={columns} rows={[]} selectable emptyState={<p>No people yet</p>} />);
       expect(screen.getByText("No people yet")).toBeInTheDocument();
       expect(within(bodyRows()[0]).getByRole("cell")).toHaveAttribute("colspan", "4");
       expect(screen.getByRole("checkbox", { name: "Select all rows" })).toHaveAttribute(
@@ -495,7 +485,7 @@ describe("DataTable", () => {
         age: index,
       }));
       const { container } = render(
-        <DataTable columns={columns} rows={many} paginated defaultPerPage={5} selectable loading />,
+        <Table columns={columns} rows={many} paginated defaultPerPage={5} selectable loading />,
         { wrapper: wrap },
       );
 

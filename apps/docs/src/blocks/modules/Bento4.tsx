@@ -3,7 +3,7 @@ import {
   Column,
   Heading,
   HoverCard,
-  MasonryGrid,
+  Grid,
   Media,
   Row,
   SmartLink,
@@ -106,7 +106,7 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
         </Button>
       </Row>
 
-      <MasonryGrid fillWidth columns={4} paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
+      <Grid masonry fillWidth columns={4} paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
         {columns.map((columnItems, columnIndex) => {
           const { aspectRatios, flex: flexValues } = COLUMN_LAYOUT[columnIndex];
           return (
@@ -152,7 +152,7 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
             </Column>
           );
         })}
-      </MasonryGrid>
+      </Grid>
 
       <Row as="nav" aria-label="Featured showcase sites" wrap gap="8" paddingX="l">
         {showcaseItems.slice(0, 8).map((item) => (

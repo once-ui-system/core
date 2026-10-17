@@ -55,7 +55,7 @@ describe("E1: tone where 2.x said variant, scheme, state or hue", () => {
 
 	it("renames Tag and Pulse scheme, and makes Tag's gradient a variant", () => {
 		const { out } = run('<Tag scheme="brand" label="a" />\n<Tag scheme="gradient" label="b" />\n<Pulse scheme="danger" />\n');
-		assert.equal(body(out), '<Tag tone="brand" label="a" />\n<Tag variant="gradient" label="b" />\n<Pulse tone="danger" />\n');
+		assert.equal(body(out), '<Tag tone="brand" label="a" />\n<Tag variant="gradient" label="b" />\n<StatusIndicator pulse tone="danger" />\n');
 	});
 
 	it("gives StatusIndicator and Avatar status a scheme, the palette hue", () => {

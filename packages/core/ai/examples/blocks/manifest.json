@@ -8,7 +8,7 @@
       "file": "Header1.tsx",
       "title": "App header with MegaMenu + Kbar",
       "tags": ["navigation", "header", "marketing"],
-      "components": ["MegaMenu", "MobileMegaMenu", "Kbar", "Logo", "User", "NavIcon", "SmartLink"],
+      "components": ["MegaMenu", "Kbar", "Logo", "User", "NavIcon", "SmartLink"],
       "patterns": ["sticky header", "mega menu sections with featured links", "command palette ⌘K"],
       "tasks": ["marketing-hero", "dashboard"],
       "standalone": true

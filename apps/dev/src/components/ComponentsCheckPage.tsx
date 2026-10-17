@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Flex, Fade, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, TagInput, Avatar, Background, Flex, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, useToast } from "@once-ui-system/core";
 import { BarChart, LineChart } from "@once-ui-system/core/data";
 import { CodeBlock } from "@once-ui-system/core/code";
 
@@ -357,7 +357,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default (300)",
               element: (
-                <Text weight="default" size="l">
+                <Text textVariant="body-default-l">
                   Light weight text — default
                 </Text>
               ),
@@ -366,7 +366,7 @@ export default function ComponentsCheck() {
               value: "bold",
               label: "Bold (400)",
               element: (
-                <Text weight="normal" size="l">
+                <Text textVariant="body-normal-l">
                   Normal weight text — bold
                 </Text>
               ),
@@ -375,7 +375,7 @@ export default function ComponentsCheck() {
               value: "bolder",
               label: "Bolder (500)",
               element: (
-                <Text weight="medium" size="l">
+                <Text textVariant="body-medium-l">
                   Medium weight text — bolder
                 </Text>
               ),
@@ -384,7 +384,7 @@ export default function ComponentsCheck() {
               value: "strong",
               label: "Strong (600)",
               element: (
-                <Text weight="strong" size="l">
+                <Text textVariant="body-strong-l">
                   Semi-bold weight text — strong
                 </Text>
               ),
@@ -603,10 +603,10 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <PasswordInput
+                <Input
                   id="pwd"
                   label="Password"
-                  placeholder="Enter password"
+                  placeholder="Enter password" type="password"
                 />
               ),
             },
@@ -1000,19 +1000,11 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Table
-                  data={{
-                    headers: [
-                      { content: "Name", key: "name" },
-                      { content: "Role", key: "role" },
-                      { content: "Status", key: "status" },
-                    ],
-                    rows: [
+                <Table columns={[{ header: "Name", key: "name" }, { header: "Role", key: "role" }, { header: "Status", key: "status" }]} rows={[
                       ["Alice", "Engineer", "Active"],
                       ["Bob", "Designer", "Away"],
                       ["Carol", "Manager", "Active"],
-                    ],
-                  }}
+                    ]}
                 />
               ),
             },
@@ -1020,19 +1012,11 @@ export default function ComponentsCheck() {
               value: "sortable",
               label: "Sortable",
               element: (
-                <Table
-                  data={{
-                    headers: [
-                      { content: "Name", key: "name", sortable: true },
-                      { content: "Score", key: "score", sortable: true },
-                      { content: "Status", key: "status", sortable: true },
-                    ],
-                    rows: [
+                <Table columns={[{ header: "Name", key: "name", sortable: true }, { header: "Score", key: "score", sortable: true }, { header: "Status", key: "status", sortable: true }]} rows={[
                       ["Alice", "95", "Active"],
                       ["Bob", "82", "Away"],
                       ["Carol", "91", "Active"],
-                    ],
-                  }}
+                    ]}
                 />
               ),
             },
@@ -2005,27 +1989,27 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Pulse>
+                <StatusIndicator pulse>
                   <Text>Pulse Effect</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
             {
               value: "large",
               label: "Large pulse",
               element: (
-                <Pulse pulseSize={80}>
+                <StatusIndicator pulse pulseSize={80}>
                   <Text>Large pulse</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
             {
               value: "small",
               label: "Small pulse",
               element: (
-                <Pulse pulseSize={40}>
+                <StatusIndicator pulse pulseSize={40}>
                   <Text>Small pulse</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
           ],
@@ -2153,9 +2137,9 @@ export default function ComponentsCheck() {
               value: "entering",
               label: "Entering",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="entering"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="entering"
                   textVariant="heading-strong-m"
                 />
               ),
@@ -2164,9 +2148,9 @@ export default function ComponentsCheck() {
               value: "visible",
               label: "Visible",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="visible"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="visible"
                   textVariant="heading-strong-m"
                 />
               ),
@@ -2175,9 +2159,9 @@ export default function ComponentsCheck() {
               value: "exiting",
               label: "Exiting",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="exiting"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="exiting"
                   textVariant="heading-strong-m"
                 />
               ),
@@ -2249,7 +2233,7 @@ export default function ComponentsCheck() {
               label: "Large (100%)",
               element: (
                 <Flex fillWidth>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-lg"
                     startLabel="Start"
                     endLabel="End"
@@ -2263,7 +2247,7 @@ export default function ComponentsCheck() {
               label: "Medium (50%)",
               element: (
                 <Flex style={{ width: "50%" }}>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-md"
                     startLabel="Start"
                     endLabel="End"
@@ -2277,7 +2261,7 @@ export default function ComponentsCheck() {
               label: "Small (25%)",
               element: (
                 <Flex style={{ width: "25%" }}>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-sm"
                     startLabel="Start"
                     endLabel="End"
@@ -2684,7 +2668,7 @@ export default function ComponentsCheck() {
               value: "3col",
               label: "3 columns",
               element: (
-                <MasonryGrid columns={3}>
+                <Grid masonry columns={3}>
                   {[4, 8, 6, 5, 7, 4].map((h, i) => (
                     <Flex
                       key={i}
@@ -2697,14 +2681,14 @@ export default function ComponentsCheck() {
                       <Text textVariant="label-default-s">{i + 1}</Text>
                     </Flex>
                   ))}
-                </MasonryGrid>
+                </Grid>
               ),
             },
             {
               value: "2col",
               label: "2 columns",
               element: (
-                <MasonryGrid columns={2}>
+                <Grid masonry columns={2}>
                   {[6, 8, 5, 7].map((h, i) => (
                     <Flex
                       key={i}
@@ -2717,7 +2701,7 @@ export default function ComponentsCheck() {
                       <Text textVariant="label-default-s">{i + 1}</Text>
                     </Flex>
                   ))}
-                </MasonryGrid>
+                </Grid>
               ),
             },
           ],

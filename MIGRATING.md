@@ -81,7 +81,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | Checkbox, RadioButton, Switch `onToggle(checked)` | `onCheckedChange(checked)`; `onChange` is now the input's native event | renames |
 | RadioGroup, SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher `onChange(value)` | `onValueChange(value)` (SegmentedControl keeps its `(value, event?)`) | renames |
 | StylePanel and `StylePanel.Root` `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
-| Pagination `onChange(page)` | `onPageChange(page)`, as on DataTable | renames |
+| Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
 | Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
 | Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
 | Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | reports every `open` |
@@ -243,12 +243,13 @@ than a toggle; add `selected` or `onClick` to make it one.
 
 ### 10. Components that merged
 
-Eleven components fold into the one that already did most of their job. Each
-2.x behaviour is a mode or a prop of the survivor and looks and behaves the
-same; the old exports are gone. The codemod rewrites the element, its props and
+Twenty-three components fold into the one that already did most of their job.
+Each 2.x behaviour is a mode or a prop of the survivor and, except where noted
+below the table, looks and behaves the same; the old exports are gone. The codemod rewrites the element, its props and
 the import (keeping an alias, adding the survivor once), renames the prop types
 (`ModalProps` → `DialogProps`, `DropdownWrapperProps` → `DropdownProps`,
-`HoverProps` / `CursorCardProps` → `HoverCardProps`, and so on), and reports any
+`HoverProps` / `CursorCardProps` → `HoverCardProps`, `DataTableColumn` →
+`TableColumn`, `RangeSliderProps` → `SliderProps`, and so on), and reports any
 other use of an old name, such as passing it as a value.
 
 | 2.x | 3.0 | Codemod |
@@ -265,6 +266,19 @@ other use of an old name, such as passing it as a value.
 | `ContextMenu` | `Dropdown openOn="contextmenu"`, with `disabled` and `contents` | the children become `trigger`, `dropdown` the children |
 | `EmojiPickerDropdown` | `EmojiPicker trigger={…}`, with `open` / `defaultOpen` / `onOpenChange`, `placement`, `closeAfterClick` and `dropdownProps` | renames; props that were the dropdown's move into `dropdownProps` |
 | `UserMenu` | `User dropdown={…}`, with `selected`, `placement` and the menu's size props | renames; adds `dropdown={null}` when there was none, so the user still renders as a trigger |
+| `DataTable` | `Table`: the DataTable API under the short name (`columns`, `rows`, sorting, selection, `pagination`, `loading`, `emptyState`), plus `searchable`, `actions`, `onRowClick`, `rowClassName`, `cellClassName`, `loadingState` and `showFirstLast` | renames, with the `DataTable*` types |
+| `Table` (2.x, `data={{ headers, rows }}`) | `Table columns={…} rows={…}`: a header's `content` is the column's `header`; rows may still be arrays, read by position | splits an inline `data` or a plain variable (`x.headers.map(…)`, `rows={x.rows}`); `defaultPageSize` → `defaultPerPage`, `pageSizeOptions` → `perPageOptions`; keeps 2.x's page-size select and first/last buttons when paginated; `onRowClick`, `rowClassName`, `cellClassName` and inline `actions` callbacks get the row first; reports any other `data` |
+| `DateRangePicker` | `DatePicker range`; `dual` is `months={2}` | adds `range`; `dual` becomes `months={2}` (an expression `x ? 2 : 1`, `false` dropped) |
+| `DateRangeInput` | `DateInput range` | adds `range`; every prop carries over |
+| `RangeSlider` | `Slider range` | adds `range`; every prop carries over |
+| `PasswordInput` | `Input type="password"`, which keeps the show/hide toggle (`reveal={false}` drops it) | renames and sets `type="password"`; reports a `suffix`, which now sits beside the toggle |
+| `KeyTip` | `Kbd keys="mod+k" label="Search"` | renames; `keys` and `label` carry over |
+| `MasonryGrid` | `Grid masonry` | adds `masonry`; reports `xl`, which MasonryGrid never had |
+| `Pulse` | `StatusIndicator pulse`, with `tone`, `size`, `pulseSize` | adds `pulse` |
+| `FadingLettersFx` | `TypeFx mode="fade"`, with `state` | `text` → `words`, `animationState` → `state`, `messageIdx={n}` → `delay={n * 2500}` |
+| `SettingGroup` | `Setting control={…} open={…}` | renames; adds `open={false}` when neither was set; reports a spread |
+| `SettingAxes` | `Setting axes={…}` | renames; every prop carries over |
+| `MobileMegaMenu` | `MegaMenu collapseBelow="always"`; `collapseBelow="m"` gives one menu that switches at a breakpoint | renames and adds `collapseBelow="always"` |
 
 Two things work better and you may notice them. Dialog and Drawer share one
 overlay core, so Escape closes only the innermost open overlay (a Dialog opened
@@ -272,6 +286,83 @@ from a Drawer closes alone), and focus goes back to the trigger as the overlay
 starts closing rather than after its exit animation. An uncontrolled
 `EmojiPicker trigger` now closes on a pick; 2.x's `EmojiPickerDropdown` closed
 only when controlled.
+
+A few merges look different, by design:
+
+- `Table` (both 2.x Tables) sorts on a click of the header, cycling ascending,
+  descending and unsorted; 2.x's "Sorted by X ✕" line under the table is gone.
+  Its page controls are Pagination's, with the per-page select beside them,
+  instead of the "page / total" text and a separate page-size Select. Loading
+  without `loadingState` shows skeleton rows, not the "Loading data..." text.
+- `Input type="password"` now shows the reveal toggle everywhere, not only in a
+  PasswordInput. The codemod does not add `reveal={false}`: add it where a
+  plain masked field was meant.
+- A `suffix` on a 2.x PasswordInput was dropped; it now shows, before the toggle.
+- `MegaMenu collapseBelow` at a breakpoint renders both the bar and the
+  accordion and hides one with CSS.
+
+### 11. Types, resets and aliases
+
+**`as` is typed by the element.** On `Flex`, `Row`, `Column`, `Grid` and
+`VisuallyHidden`, `as` decides the attributes and the ref: `<Row as="a"
+href="/x">`, `<Column as="form" onSubmit={…}>` with a `FormEvent<HTMLFormElement>`,
+`<Row as="button" type="submit">`, and `<Column as="ul" ref={listRef}>` with a
+`Ref<HTMLUListElement>`. Code that compiled before still compiles, except
+where it relied on the element being typed as a `div`:
+
+- A ref of the wrong element is now an error (`<Column as="ul" ref={divRef}>`).
+  Type the ref by the element.
+- A component of your own that spreads div props onto `<Column as="ul">` may
+  need its props typed for that element: `FlexPropsOf<"ul">`.
+- `React.ComponentProps<typeof Flex>` (and `Row`, `Column`, `Grid`) is the
+  `div` form, without `as`; `PolymorphicProps<"a", FlexLayoutProps>` is the
+  props on another element. `React.ComponentProps<typeof Text>` was `any` and
+  is now Text's real props, so a wrapper built on it may find a prop it never
+  had (CountFx's 2.x `speed` is `duration`).
+- **Components other than those five, Text, Heading, List and Form take no
+  `as`.** 2.x let Card, Tag, Avatar and the other Flex-based components accept
+  an untyped `as` and pass it on. Wrap them instead:
+  `<Column as="li"><Card … /></Column>`. The codemod reports each use.
+
+**Lists and buttons reset.** `<Column as="ul">`, `<Row as="ol">` and `<Grid
+as="ul">` render without bullets, indent or margin, and `as="button"` without
+the browser's background, border, padding and font, and with `type="button"`
+unless you pass `type`. The resets have zero specificity, so every prop still
+applies. Remove the `style={{ listStyle: "none", margin: 0, padding: 0 }}` and
+`all: "unset"` workarounds: the codemod removes the list ones (keeping a
+`padding: 0` that beat a `padding` prop beside it). For a list that keeps its
+markers, use `List`, which now sets them explicitly.
+
+**New values.** `vertical="baseline"` aligns children on their first line of
+text (a class, also in breakpoint objects). Margins take `"auto"`:
+`marginLeft="auto"`, `marginX="auto"`. `DateRange`'s `startDate` and `endDate`
+are optional, so a `{ startDate?: Date }` of your own is a `DateRange`.
+
+**Charts take your row type.** `BarChart`, `LineChart`, `LineBarChart` and
+`PieChart` are generic over `data`: `data={rows}` with `rows: RevenueRow[]` needs
+no cast, and `series={{ key: "revnue" }}` is a type error. `SeriesConfig<T>`,
+`ChartProps<T>` and the chart prop types take the row type; left out, they are
+the 2.x `DataPoint` shapes. PieChart `dataKey`/`nameKey` are row keys.
+
+**Checkbox, Switch, RadioButton and RadioGroup** take `error`, `errorMessage`
+and `size` (`s`/`m`/`l`; `xs` and `xl` draw as `s` and `l`), as Input does: a
+`Form size` reaches them, and a RadioGroup's size reaches its radios. Nothing
+changes until you set one; the default is the 2.x look.
+
+**One name per prop.**
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `dark` / `light` (Flex, Row, Column, Grid, Logo and the components built on them) | `showIn="dark"` / `showIn="light"` | rewrites; `dark={cond}` becomes `showIn={cond ? "dark" : undefined}`; reports both at once |
+| `textSize`, `textWeight`, `textType` on layout components | `textVariant="type-weight-size"` | folds three literals; removes size and weight beside a `textVariant`, which overrode them; reports the rest |
+| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it; reports the rest with the preset to write |
+| Text / Heading `weight` beside `textVariant` | kept; it now swaps the preset's weight (2.x ignored it there) | removes it beside `textVariant`, so the page renders as before |
+
+`weight` and `family` stay on Text and Heading as overrides of the preset, and
+the layout shorthands stay (`fill`, `fit`, `center`, `paddingX`/`Y`,
+`marginX`/`Y`, `borderX`/`Y`, `topRadius` and its siblings): they set two
+props in one and are the most-written props in Once UI code. `Grid` now applies
+`textVariant`, which 2.x typed and dropped.
 
 ---
 

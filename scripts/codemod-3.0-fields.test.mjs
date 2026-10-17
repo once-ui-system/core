@@ -25,15 +25,22 @@ describe("value onChange → onValueChange on fields and pickers", () => {
   it("renames it on each, keeping the handler as written", () => {
     for (const tag of tags) {
       const out = body(`${core(tag)}<${tag} value={v} onChange={(next) => setV(next)} />`);
-      assert.equal(out, `<${tag} value={v} onValueChange={(next) => setV(next)} />`, tag);
+      // The range ones are DateInput and DatePicker `range` in 3.0 (the merges pass).
+      const to = { DateRangeInput: "DateInput range", DateRangePicker: "DatePicker range" }[tag] ?? tag;
+      assert.equal(out, `<${to} value={v} onValueChange={(next) => setV(next)} />`, tag);
     }
   });
 
   it("leaves Input, Textarea and PasswordInput's native onChange alone", () => {
-    for (const tag of ["Input", "Textarea", "PasswordInput"]) {
+    for (const tag of ["Input", "Textarea"]) {
       const src = `${core(tag)}<${tag} id="a" onChange={(e) => setV(e.target.value)} />`;
       assert.equal(transform(src).out, src, tag);
     }
+    // PasswordInput is Input type="password" in 3.0 (the merges pass); onChange stays.
+    assert.match(
+      transform(`${core("PasswordInput")}<PasswordInput id="a" onChange={(e) => setV(e.target.value)} />`).out,
+      /<Input id="a" onChange=\{\(e\) => setV\(e\.target\.value\)\} type="password" \/>/,
+    );
   });
 
   it("follows an aliased import and leaves another library's component alone", () => {

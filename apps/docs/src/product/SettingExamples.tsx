@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Setting,
-  SettingAxes,
-  SettingGroup,
-  Column,
-  SegmentedControl,
-  Slider,
-  Switch,
-  Text,
-} from "@once-ui-system/core";
+import { Column, SegmentedControl, Setting, Slider, Switch, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 export function SettingBasicExample() {
@@ -35,7 +26,7 @@ export function SettingGroupExample() {
 
   return (
     <Column fillWidth gap="8" maxWidth="32rem">
-      <SettingGroup
+      <Setting
         label="Watermark"
         control={<Switch checked={enabled} onCheckedChange={() => setEnabled(!enabled)} />}
         open={enabled}
@@ -57,7 +48,7 @@ export function SettingGroupExample() {
             ]}
           />
         </Setting>
-      </SettingGroup>
+      </Setting>
     </Column>
   );
 }
@@ -67,7 +58,7 @@ export function SettingAxesExample() {
 
   return (
     <Column fillWidth maxWidth="32rem">
-      <SettingAxes
+      <Setting
         label="Tilt"
         info="Rotates the frame in 3D. Both axes are degrees."
         axes={[

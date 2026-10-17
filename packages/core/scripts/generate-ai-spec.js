@@ -218,11 +218,33 @@ function cleanDefault(text) {
 /** Compact a type-node source text: collapse whitespace, strip leading pipe */
 function typeText(node) {
   if (!node) return "unknown";
-  return node
-    .getText()
+  return atDefaults(node, node.getText())
     .replace(/\s*\n\s*/g, " ")
     .replace(/\s{2,}/g, " ")
     .replace(/^\|\s*/, "");
+}
+
+/**
+ * A member of a generic declaration reads at its defaults: `ChartProps<T =
+ * DataPoint>`'s `data: T[]` is documented as `DataPoint[]`, the shape a caller
+ * who passes no row type gets, rather than a `T` the spec never defines.
+ */
+function atDefaults(node, text) {
+  for (let n = node.parent; n; n = n.parent) {
+    // Interfaces and type aliases only: a generic function keeps its own `<T>` signature.
+    if (!n.typeParameters?.length || "parameters" in n || !("members" in n || "type" in n))
+      continue;
+    // A bare parameter (`as?: T`) is any of its constraint, not just the default.
+    const bare = n.typeParameters.find((p) => p.name.getText() === text.trim());
+    if (bare?.constraint) return bare.constraint.getText();
+    let out = text;
+    for (const p of n.typeParameters) {
+      if (!p.default) continue;
+      out = out.replace(new RegExp(`\\b${p.name.getText()}\\b`, "g"), p.default.getText());
+    }
+    return out;
+  }
+  return text;
 }
 
 /**
@@ -289,6 +311,18 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
     if (!symbol) return null;
     const type = checker.getDeclaredTypeOfSymbol(symbol);
     if (type.isUnion()) return null;
+    // A short generic alias over its parameter (`SeriesKey<T> = Extract<keyof
+    // T, string>`) has no shape of its own until applied: its text is the answer.
+    if (
+      ts.isTypeAliasDeclaration(node) &&
+      node.typeParameters?.length &&
+      node.type &&
+      !ts.isMappedTypeNode(node.type) &&
+      !ts.isTypeLiteralNode(node.type)
+    ) {
+      const text = typeText(node.type);
+      if (text.length <= 120) return text;
+    }
 
     const shape = {};
     for (const index of checker.getIndexInfosOfType(type) ?? []) {
@@ -433,6 +467,16 @@ async function main() {
     if (ts.isFunctionDeclaration(decl)) return decl;
     if (ts.isVariableDeclaration(decl) && decl.initializer) {
       let init = decl.initializer;
+      // `Impl as unknown as Signature`: the function is Impl's.
+      if (ts.isAsExpression(init)) {
+        while (ts.isAsExpression(init) || ts.isParenthesizedExpression(init))
+          init = init.expression;
+        if (ts.isIdentifier(init)) {
+          const base = checker.getSymbolAtLocation(init);
+          const baseDecl = base?.valueDeclaration ?? base?.declarations?.[0];
+          return baseDecl && baseDecl !== decl ? getComponentFunction(baseDecl) : undefined;
+        }
+      }
       // unwrap forwardRef(...) / memo(forwardRef(...))
       while (ts.isCallExpression(init)) {
         const arg = init.arguments[0];
@@ -508,6 +552,22 @@ async function main() {
 
   /** Get the props type for a component declaration */
   function getPropsType(decl) {
+    // const X = Impl as unknown as SomeSignature: the props are Impl's. Slider
+    // casts its forwardRef to one call signature per mode, so that the ref is
+    // typed per mode.
+    if (ts.isVariableDeclaration(decl) && decl.initializer && ts.isAsExpression(decl.initializer)) {
+      let inner = decl.initializer;
+      while (ts.isAsExpression(inner) || ts.isParenthesizedExpression(inner))
+        inner = inner.expression;
+      if (ts.isIdentifier(inner)) {
+        const base = checker.getSymbolAtLocation(inner);
+        const baseDecl = base?.valueDeclaration ?? base?.declarations?.[0];
+        if (baseDecl && baseDecl !== decl) {
+          const resolved = getPropsType(baseDecl);
+          if (resolved) return resolved;
+        }
+      }
+    }
     // forwardRef<Ref, Props>(...)
     if (
       ts.isVariableDeclaration(decl) &&
@@ -682,9 +742,18 @@ async function main() {
     // For union props (e.g. ButtonProps | AnchorProps) merge member properties
     const typesToScan = propsType.isUnion() ? propsType.types : [propsType];
     const seen = new Map(); // propName -> symbol
+    // Every member's declaration of a prop, so a prop whose type differs by
+    // mode (Slider's `value`: a number, or with `range` a tuple) lists each.
+    const variants = new Map();
     for (const t of typesToScan) {
       for (const p of checker.getPropertiesOfType(t)) {
         if (!seen.has(p.getName())) seen.set(p.getName(), p);
+        const d = p.valueDeclaration ?? p.declarations?.[0];
+        if (d && (ts.isPropertySignature(d) || ts.isPropertyDeclaration(d)) && d.type) {
+          if (!variants.has(p.getName())) variants.set(p.getName(), []);
+          const text = typeText(d.type);
+          if (!variants.get(p.getName()).includes(text)) variants.get(p.getName()).push(text);
+        }
       }
     }
 
@@ -779,6 +848,25 @@ async function main() {
       for (const [propName, propSym, pDecl] of taken) {
         props[propName] = propString(propSym, pDecl, defaults);
       }
+    }
+
+    for (const [propName, value] of Object.entries(props)) {
+      const types = variants.get(propName);
+      if (!types || types.length < 2) continue;
+      const split = value.lastIndexOf(" = ");
+      const fallback = split === -1 ? "" : value.slice(split);
+      // `undefined` is how a member says "not in this mode"; the prop is optional anyway.
+      let merged = [
+        ...new Set(types.map((t) => t.replace(/^React\.ReactNode$/, "ReactNode"))),
+      ].filter((t) => t !== "undefined");
+      if (merged.includes("false") && merged.includes("true"))
+        merged = ["boolean", ...merged.filter((t) => t !== "true" && t !== "false")];
+      if (merged.length < 2) {
+        if (merged.length === 1) props[propName] = `${merged[0]}${fallback}`;
+        continue;
+      }
+      props[propName] =
+        `${merged.map((t) => (t.includes("=>") ? `(${t})` : t)).join(" | ")}${fallback}`;
     }
 
     const entry = { group };

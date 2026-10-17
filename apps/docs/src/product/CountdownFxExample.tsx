@@ -7,7 +7,7 @@ export const CountdownFxBasic = () => {
     <Column gap="16" fill center>
       <CountdownFx
         targetDate={new Date(Date.now() + 24 * 60 * 60 * 1000)}
-        variant="display-strong-l"
+        textVariant="display-strong-l"
         format="HH:MM:SS"
       />
     </Column>
@@ -23,7 +23,7 @@ export const CountdownFxFormats = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 5 * 60 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="HH:MM:SS"
         />
       </Column>
@@ -33,7 +33,7 @@ export const CountdownFxFormats = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 10 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="MM:SS"
         />
       </Column>
@@ -43,7 +43,7 @@ export const CountdownFxFormats = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)}
-          variant="heading-strong-l"
+          textVariant="heading-strong-l"
           format="DD:HH:MM:SS"
         />
       </Column>
@@ -60,7 +60,7 @@ export const CountdownFxEffects = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="wheel"
         />
       </Column>
@@ -70,7 +70,7 @@ export const CountdownFxEffects = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="smooth"
         />
       </Column>
@@ -80,7 +80,7 @@ export const CountdownFxEffects = () => {
         </Text>
         <CountdownFx
           targetDate={new Date(Date.now() + 2 * 60 * 60 * 1000)}
-          variant="display-strong-m"
+          textVariant="display-strong-m"
           effect="simple"
         />
       </Column>
@@ -103,7 +103,7 @@ export const CountdownFxLaunch = () => {
       </Heading>
       <CountdownFx
         targetDate={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
-        variant="display-strong-l"
+        textVariant="display-strong-l"
         format="DD:HH:MM:SS"
         onBackground="brand-medium"
       />
@@ -122,7 +122,7 @@ export const CountdownFxOnComplete = () => {
   return (
     <CountdownFx
       targetDate={new Date(Date.now() + 5000)}
-      variant="heading-strong-l"
+      textVariant="heading-strong-l"
       format="MM:SS"
       onComplete={handleComplete}
     />

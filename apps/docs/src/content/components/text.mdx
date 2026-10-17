@@ -19,7 +19,7 @@ The `Text` component provides consistent typography throughout your UI, with sup
     <Column gap="12">
       <Text textVariant="body-default-m">This is default body text.</Text>
       <Text textVariant="label-strong-s">This is a strong label.</Text>
-      <Text size="s" weight="strong">This is small, strong text.</Text>
+      <Text textVariant="body-strong-s">This is small, strong text.</Text>
     </Column>
   }
   codes={[
@@ -31,7 +31,7 @@ The `Text` component provides consistent typography throughout your UI, with sup
 <Text textVariant="label-strong-s">
     This is a strong label.
 </Text>
-<Text size="s" weight="strong">
+<Text textVariant="body-strong-s">
     This is small, strong text.
 </Text>`,
       language: "tsx",
@@ -357,9 +357,8 @@ Control the rendered tag using the `as` prop.
 <PropsTable
   content={[
     ["as", "ElementType", `"span"`],
-    ["variant", "TextVariant"],
-    ["size", ["xs", "s", "m", "l", "xl"]],
-    ["weight", ["default", "strong"]],
+    ["textVariant", "TextVariant"],
+    ["weight", ["default", "normal", "medium", "strong"]],
     ["family", ["display", "heading", "body", "label", "code"]],
     ["onBackground", "`${ColorScheme}-${ColorWeight}`"],
     ["onSolid", "`${ColorScheme}-${ColorWeight}`"],

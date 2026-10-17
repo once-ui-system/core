@@ -45,7 +45,6 @@ describe("onChange → onValueChange on value controls", () => {
       "SegmentedControl",
       "Tabs",
       "Slider",
-      "RangeSlider",
       "ThemeSwitcher",
       "StylePanel",
     ]) {
@@ -54,6 +53,11 @@ describe("onChange → onValueChange on value controls", () => {
         `<${tag} value={v} onValueChange={setV} />`,
       );
     }
+    // RangeSlider is Slider range in 3.0 (the merges pass).
+    assert.equal(
+      body(`${core("RangeSlider")}<RangeSlider value={v} onChange={setV} />`),
+      "<Slider range value={v} onValueChange={setV} />",
+    );
   });
 
   it("renames it on StylePanel.Root, keeping both arguments", () => {

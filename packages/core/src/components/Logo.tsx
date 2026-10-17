@@ -38,13 +38,16 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   icon?: LogoSource;
   wordmark?: LogoSource;
   href?: string;
-  dark?: boolean;
-  light?: boolean;
+  /**
+   * Show this logo only in one theme. For a logo that changes with the
+   * theme, pass `{ light, dark }` sources instead. 2.x: `dark` / `light`.
+   */
+  showIn?: "dark" | "light";
   brand?: { copy?: boolean; url?: string };
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ size = "m", href, icon, wordmark, className, style, dark, light, brand, ...props }, ref) => {
+  ({ size = "m", href, icon, wordmark, className, style, showIn, brand, ...props }, ref) => {
     useEffect(() => {
       if (!icon && !wordmark) {
         console.warn(
@@ -55,7 +58,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
 
     /**
      * One <img> for a plain source; for a per-theme source, both, each gated by
-     * the same light-flex / dark-flex classes the `light` and `dark` props use.
+     * the same light-flex / dark-flex classes `showIn` uses.
      * Rendering both rather than reading the theme at runtime keeps the
      * component server-renderable and avoids a flash on first paint.
      */
@@ -196,8 +199,8 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
               "radius-l",
               "display-flex",
               "fit-height",
-              dark ? "dark-flex" : "",
-              light ? "light-flex" : "",
+              showIn === "dark" && "dark-flex",
+              showIn === "light" && "light-flex",
               className,
             )}
             style={style}
@@ -212,8 +215,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         return (
           <Flex
             className={classNames(className)}
-            dark={dark}
-            light={light}
+            showIn={showIn}
             radius="l"
             fitHeight
             style={style}

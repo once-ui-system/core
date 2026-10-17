@@ -8,15 +8,21 @@ import {
   type ReactNode,
 } from "react";
 
-import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import {
+  CommonProps,
+  DisplayProps,
+  SpacingProps,
+  type TextElement,
+  TextProps,
+} from "../interfaces";
 import { ColorScheme, ColorWeight, TextVariant } from "../types";
-import { spacingClass, textLayout } from "../utils/layoutClasses";
+import { spacingClass, textLayout, withWeight } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
   CommonProps &
   SpacingProps &
-  Omit<DisplayProps, "as"> &
+  DisplayProps &
   ComponentPropsWithoutRef<T>;
 
 /**
@@ -32,6 +38,10 @@ type TextRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
  */
 interface TextComponent {
   <T extends ElementType = "span">(props: TypeProps<T> & { ref?: TextRef<T> }): ReactNode;
+  /** What `React.ComponentProps<typeof Text>` reads: the default element's props. */
+  // No ref here: with `as` loosened to the text elements, a span ref would
+  // also type-check on an `li`. A ref goes through the generic signature.
+  (props: Omit<TypeProps<"span">, "as"> & { as?: TextElement; ref?: never }): ReactNode;
   displayName?: string;
 }
 
@@ -39,7 +49,6 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
   {
     as,
     textVariant,
-    size,
     weight,
     family,
     onBackground,
@@ -82,21 +91,16 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     transition,
     zIndex,
     // Typed through `DisplayProps`, with no class that fits text: `inline`,
-    // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
+    // `hide` and `showIn` are display modes of Flex and Grid. Taken out
     // so they stop reaching the DOM as attributes.
     inline: _inline,
     hide: _hide,
-    dark: _dark,
-    light: _light,
+    showIn: _showIn,
     ...props
   }: TypeProps<T>,
   ref: ForwardedRef<HTMLSpanElement>,
 ) {
   const Component = as || "span";
-
-  if (textVariant && (size || weight)) {
-    console.warn("When 'textVariant' is set, 'size' and 'weight' are ignored.");
-  }
 
   if (onBackground && onSolid) {
     console.warn(
@@ -112,10 +116,10 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 
-  const sizeClass = size ? `font-${size}` : "";
-  const weightClass = weight ? `font-${weight}` : "";
-
-  const classes = textVariant ? getVariantClasses(textVariant) : [sizeClass, weightClass];
+  // `weight` swaps the preset's weight, or alone sets only the weight.
+  const classes = textVariant
+    ? getVariantClasses(withWeight(textVariant, weight))
+    : [weight && `font-${weight}`];
 
   let colorClass = "";
   if (onBackground) {

@@ -1,6 +1,6 @@
 // Core components, modules and charts as explicit named imports: Turbopack's
 // frozen module proxy rejects a namespace import here.
-import { Accordion, AccordionGroup, Animation, Avatar, AvatarGroup, Background, Banner, BlobFx, BlockQuote, Book, Breadcrumbs, Button, Card, Carousel, CelebrationFx, Checkbox, ColorInput, Column, CompareImage, CountdownFx, CountFx, DataTable, DateInput, DatePicker, DateRangeInput, DateRangePicker, Dialog, Drawer, Dropdown, Effect, EmojiPicker, Fade, FadingLettersFx, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HeadingLink, HeadingNav, HoloFx, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, KeyTip, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MasonryGrid, MatrixFx, Media, MegaMenu, MobileMegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ParticleFx, PasswordInput, ProgressBar, Pulse, RadioButton, RadioGroup, RangeSlider, RevealFx, Row, Scroller, ScrollLock, ScrollToTop, Scrubber, SegmentedControl, Select, Setting, SettingAxes, SettingGroup, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, ToggleButton, Tooltip, TypeFx, User, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Animation, Avatar, AvatarGroup, Background, Banner, BlobFx, BlockQuote, Book, Breadcrumbs, Button, Card, Carousel, CelebrationFx, Checkbox, ColorInput, Column, CompareImage, CountdownFx, CountFx, DateInput, DatePicker, Dialog, Drawer, Dropdown, Effect, EmojiPicker, Fade, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HeadingLink, HeadingNav, HoloFx, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MatrixFx, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ParticleFx, ProgressBar, RadioButton, RadioGroup, RevealFx, Row, Scroller, ScrollLock, ScrollToTop, Scrubber, SegmentedControl, Select, Setting, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, ToggleButton, Tooltip, TypeFx, User, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import {
   BarChart,
@@ -150,7 +150,6 @@ const mdxComponents = createMdxComponents({
   Logo,
   LogoCloud,
   Kbd,
-  KeyTip,
   Icon,
   VisuallyHidden,
 
@@ -159,7 +158,6 @@ const mdxComponents = createMdxComponents({
   Background,
   Mask,
   Carousel,
-  MasonryGrid,
   CompareImage,
   MediaUpload,
 
@@ -197,7 +195,6 @@ const mdxComponents = createMdxComponents({
   Form,
   Input,
   NumberInput,
-  PasswordInput,
   OTPInput,
   Textarea,
   Select,
@@ -207,8 +204,6 @@ const mdxComponents = createMdxComponents({
   Slider,
   DatePicker,
   DateInput,
-  DateRangeInput,
-  DateRangePicker,
   ColorInput,
   TagInput,
   SegmentedControl,
@@ -230,7 +225,6 @@ const mdxComponents = createMdxComponents({
   SplitView,
   Kbar,
   MegaMenu,
-  MobileMegaMenu,
 
   // ─── Core overlay ───
   Dialog,
@@ -254,9 +248,7 @@ const mdxComponents = createMdxComponents({
   HoloFx,
   TiltFx,
   ShineFx,
-  Pulse,
   LetterFx,
-  FadingLettersFx,
   TypeFx,
   CountFx,
   CountdownFx,
@@ -268,8 +260,6 @@ const mdxComponents = createMdxComponents({
   Effect,
   Scrubber,
   Setting,
-  SettingAxes,
-  SettingGroup,
 
   // ─── Core data visualization ───
   BarChart,
@@ -380,9 +370,7 @@ const mdxComponents = createMdxComponents({
   ChipWithIconsExample,
   RemovableChipsExample,
   CustomRemovableChipExample,
-  DataTable,
   RadioGroup,
-  RangeSlider,
   Pagination,
   PaginationControlledExample,
   DataTableExample,

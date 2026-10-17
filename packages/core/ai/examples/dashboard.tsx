@@ -30,12 +30,13 @@ const stats = [
   { label: "Support tickets", value: 34, change: "+4", up: false },
 ];
 
+// Rows as arrays of cells: each column shows the cell at its position.
 const activity = {
-  headers: [
-    { content: "Event", key: "event" },
-    { content: "User", key: "user" },
-    { content: "Status", key: "status" },
-    { content: "Time", key: "time" },
+  columns: [
+    { header: "Event", key: "event" },
+    { header: "User", key: "user" },
+    { header: "Status", key: "status" },
+    { header: "Time", key: "time" },
   ],
   rows: [
     [
@@ -167,7 +168,12 @@ export function DashboardExample() {
             <Button variant="tertiary" size="s" label="View all" />
           </Row>
           <Line />
-          <Table fillWidth data={activity} />
+          <Table
+            fillWidth
+            aria-label="Recent activity"
+            columns={activity.columns}
+            rows={activity.rows}
+          />
         </Column>
       </Column>
     </Column>

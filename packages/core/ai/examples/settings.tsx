@@ -15,7 +15,7 @@
  *
  * `Setting` is the row — label and description on the left, one control on
  * the right — and stacks into a panel on its own, so a list of them needs no
- * surface around it. `SettingGroup` keeps its sub-settings inside its box,
+ * surface around it. With `control` and `open` it is a group that keeps its sub-settings inside its box,
  * which is what keeps the relationship readable in a long panel.
  */
 import {
@@ -29,7 +29,6 @@ import {
   Row,
   Select,
   Setting,
-  SettingGroup,
   Switch,
   Tab,
   TabList,
@@ -128,7 +127,7 @@ export function SettingsExample() {
                 aria-label="Product updates"
               />
             </Setting>
-            <SettingGroup
+            <Setting
               label="Weekly digest"
               info="A summary of the week's activity, sent once."
               control={
@@ -149,7 +148,7 @@ export function SettingsExample() {
                   onValueChange={setDigestHour}
                 />
               </Setting>
-            </SettingGroup>
+            </Setting>
           </TabPanel>
 
           <TabPanel value="workspace">

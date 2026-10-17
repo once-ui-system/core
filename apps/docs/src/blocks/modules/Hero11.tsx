@@ -1,4 +1,4 @@
-import { Tag, Button, Column, Heading, Line, Pulse, Row, ShineFx, Text } from "@once-ui-system/core";
+import { Tag, Button, Column, Heading, Line, StatusIndicator, Row, ShineFx, Text } from "@once-ui-system/core";
 
 export const Hero11: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -15,7 +15,7 @@ export const Hero11: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
               paddingRight="20"
               pointerEvents="none"
             >
-              <Pulse marginRight="8" opacity={60} />
+              <StatusIndicator pulse marginRight="8" opacity={60} />
               <Text wrap="nowrap" weight="default">
                 <ShineFx inverse duration={3000} baseOpacity={0.7}>
                   Launch your product ecosystem
