@@ -63,6 +63,9 @@ item (see `ROADMAP.md`, Week 4).
   still see each digit's event as it bubbles.
 - **Every `Badge` without an `id` got `id="badge"`**, so badges on one page shared
   it and each arrow followed the first. Each badge now gets its own.
+- **`Chip` was selected by default**, so `<Chip label="Unselected" />`, as the docs
+  write it, was drawn and announced as pressed. `selected` now defaults to `false`;
+  pass `selected` where a chip should start selected.
 - **`width="320px"`, `maxWidth="40rem"` and other px, rem and em strings failed the
   type and rendered no size.** `CSSUnit` now takes them, on sizes, offsets and
   `translateX`/`translateY`, at every breakpoint. A number is still rem.

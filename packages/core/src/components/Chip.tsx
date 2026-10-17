@@ -52,7 +52,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
   (
     {
       label,
-      selected = true,
+      selected = false,
       prefixIcon,
       onRemove,
       onClick,
