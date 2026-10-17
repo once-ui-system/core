@@ -37,6 +37,32 @@ const TRANSFORMS = {
   StatusIndicator: { ariaLabel: "aria-label" },
 };
 
+/**
+ * C: one value contract. State `X` is `X` / `defaultX` / `onXChange(next)`,
+ * and `onChange` only ever means the native DOM event. Each handler below
+ * keeps its 2.x signature, so renaming the attribute is the whole migration.
+ * Merged into TRANSFORMS per component.
+ */
+const VALUE_CONTRACT_FIELDS = {
+  // C1/C2: text-like fields and pickers.
+};
+
+const VALUE_CONTRACT_CONTROLS = {
+  // C3/C4: toggles, groups, disclosure.
+};
+
+for (const table of [VALUE_CONTRACT_FIELDS, VALUE_CONTRACT_CONTROLS]) {
+  for (const [tag, map] of Object.entries(table)) TRANSFORMS[tag] = { ...TRANSFORMS[tag], ...map };
+}
+
+/**
+ * Props kept by name whose meaning changed, so a rename cannot carry them:
+ * component → { prop: note }. Every use is reported.
+ */
+const FLAGGED = {
+  // C: entries appended by the value-contract passes.
+};
+
 /** The `{…}` contents of an attribute value, or the quoted string as written. */
 const expressionOf = (raw) => {
   const v = String(raw).trim();
@@ -190,7 +216,7 @@ export function transform(src) {
   const warnings = [...exp.warnings];
   let out = exp.out;
   const bindings = importBindings(out);
-  const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(REWRITES)]);
+  const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(REWRITES), ...Object.keys(FLAGGED)]);
   for (const tag of tags) {
     const map = TRANSFORMS[tag] ?? {};
     const edits = [];
@@ -202,6 +228,8 @@ export function transform(src) {
         if (end < 0) continue;
         const attrs = attributesOf(out, m.index + name.length + 1, end);
         for (const a of attrs) {
+          const note = FLAGGED[tag]?.[a.name];
+          if (note) warnings.push(`<${tag}> ${a.name}: ${note}`);
           const to = map[a.name];
           if (!to) continue;
           if (attrs.some((b) => b.name === to)) {
