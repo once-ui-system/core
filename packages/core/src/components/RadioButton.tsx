@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useId, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { assignRefs, retarget } from "../internal/toggleInput";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import { useRadioGroupItem } from "./RadioGroupContext";
@@ -41,7 +42,14 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       disabled: disabledProp,
       hoverable = true,
       "aria-label": ariaLabel,
-      ...props
+      label,
+      description,
+      iconButtonProps,
+      id,
+      onChange,
+      onBlur,
+      onFocus,
+      ...inputProps
     },
     ref,
   ) => {
@@ -63,7 +71,12 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
     const labelId = useId();
     const descriptionId = useId();
-    const hasLabel = Boolean(props.label);
+    const hasLabel = Boolean(label);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const setInputRef = useCallback(
+      (node: HTMLInputElement | null) => assignRefs(node, inputRef, ref),
+      [ref],
+    );
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {
@@ -80,11 +93,26 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       onToggle?.(next);
     };
 
+    // Choosing the radio clicks the hidden input, so its `change` event (and a
+    // caller's `onChange`, e.g. react-hook-form's) fires with the new state. A
+    // chosen radio fires no `change` when clicked, so un-choosing stays direct.
+    const activate = () => {
+      if (disabled) return;
+      const current = controlledIsChecked !== undefined ? controlledIsChecked : isChecked;
+      if (inputRef.current && !current) inputRef.current.click();
+      else toggleItem();
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      toggleItem();
+      onChange?.(event);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent) => {
       if (disabled) return;
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        toggleItem();
+        activate();
       }
     };
 
@@ -103,12 +131,13 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             the control people reach, so this stays out of the accessibility
             tree rather than standing beside it as a second, unlabelled radio. */}
         <input
+          {...inputProps}
           type="radio"
-          ref={ref}
+          ref={setInputRef}
           name={name}
           value={value}
           checked={controlledIsChecked !== undefined ? controlledIsChecked : isChecked}
-          onChange={toggleItem}
+          onChange={handleInputChange}
           disabled={disabled}
           className={styles.hidden}
           tabIndex={-1}
@@ -121,15 +150,17 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
           // button beside it); `aria-label` only when there is no label.
           aria-labelledby={hasLabel ? labelId : undefined}
           aria-label={hasLabel ? undefined : ariaLabel}
-          aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+          aria-describedby={hasLabel && description ? descriptionId : undefined}
           aria-disabled={disabled}
           horizontal="center"
           vertical="center"
           radius="full"
-          onClick={toggleItem}
+          onClick={activate}
           onKeyDown={handleKeyDown}
           tabIndex={disabled ? -1 : 0}
           {...focusProps}
+          onFocus={onFocus && ((event) => onFocus(retarget(event, inputRef.current)))}
+          onBlur={onBlur && ((event) => onBlur(retarget(event, inputRef.current)))}
           cursor={disabled ? "not-allowed" : undefined}
           style={style}
           className={classNames(styles.element, {
@@ -149,13 +180,16 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             />
           )}
         </Flex>
-        {props.label && (
+        {label && (
           <InteractiveDetails
             disabled={disabled}
-            {...props}
+            label={label}
+            description={description}
+            iconButtonProps={iconButtonProps}
+            id={id}
             labelId={labelId}
             descriptionId={descriptionId}
-            onClick={toggleItem}
+            onClick={activate}
           />
         )}
       </Flex>

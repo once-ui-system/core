@@ -6,6 +6,7 @@ import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import { cssColor } from "../../internal/cssColor";
 import { RadiusSize, schemes } from "../../types";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
@@ -14,7 +15,6 @@ import { RadialGradient } from "./Gradient";
 import { ChartProps, ChartVariant } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
-
 import { getDistributedColor } from "./utils/colorDistribution";
 
 export interface PieChartProps extends ChartProps {
@@ -90,11 +90,11 @@ const PieChart: React.FC<PieChartProps> = ({
   };
 
   const colorPalette = React.useMemo(() => {
-    if (!data || data.length === 0) return schemes.map((c) => `var(--data-${c})`);
+    if (!data || data.length === 0) return schemes.map((c) => cssColor(c, "data-"));
 
     return Array.from({ length: data.length }, (_, index) => {
       const colorKey = getDistributedColor(index, data.length);
-      return `var(--data-${colorKey})`;
+      return cssColor(String(colorKey), "data-");
     });
   }, [data]);
 
@@ -206,7 +206,7 @@ const PieChart: React.FC<PieChartProps> = ({
                         }),
                       ),
                     ).map((colorKey) => {
-                      const baseColor = `var(--data-${colorKey})`;
+                      const baseColor = cssColor(String(colorKey), "data-");
                       const patternId = getGradientId(colorKey as string);
                       return (
                         <pattern
@@ -278,7 +278,7 @@ const PieChart: React.FC<PieChartProps> = ({
                     {filteredData.map((entry, index) => {
                       const colorKey =
                         entry.color || getDistributedColor(index, filteredData.length);
-                      const baseColor = `var(--data-${colorKey})`;
+                      const baseColor = cssColor(String(colorKey), "data-");
                       const gradientId = getGradientId(String(colorKey));
                       return (
                         <Cell
@@ -302,7 +302,7 @@ const PieChart: React.FC<PieChartProps> = ({
                           const colorKey =
                             filteredData[index]?.color ||
                             getDistributedColor(index, filteredData.length);
-                          props.payload[0].color = `var(--data-${colorKey})`;
+                          props.payload[0].color = cssColor(String(colorKey), "data-");
                         }
                         return (
                           <DataTooltip

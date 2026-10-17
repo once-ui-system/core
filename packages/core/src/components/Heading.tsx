@@ -94,11 +94,12 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
 ) {
   const Component = as || "h1";
 
-  if (variant && (size || weight)) {
+  // Prop-misuse hints are for development; production logged them on every render.
+  if (process.env.NODE_ENV !== "production" && variant && (size || weight)) {
     console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
   }
 
-  if (onBackground && onSolid) {
+  if (process.env.NODE_ENV !== "production" && onBackground && onSolid) {
     console.warn(
       "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
     );

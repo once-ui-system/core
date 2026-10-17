@@ -7,11 +7,14 @@ import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Input } from "./Input";
 
-interface DateInputProps extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value"> {
+interface DateInputProps
+  extends Omit<React.ComponentProps<typeof Input>, "onChange" | "value" | "defaultValue"> {
   id: string;
   label?: string;
   placeholder?: string;
   value?: Date;
+  /** The starting date when there is no `value`. */
+  defaultValue?: Date;
   onChange?: (date: Date) => void;
   minHeight?: number;
   className?: string;
@@ -63,6 +66,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
       label,
       placeholder,
       value,
+      defaultValue,
       onChange,
       error,
       minHeight,
@@ -80,21 +84,33 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
     ref,
   ) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [inputValue, setInputValue] = useState(
-      value ? formatDate(value, timePicker, locale) : "",
-    );
+    // Uncontrolled (no `value`), the field keeps the date picked last. The
+    // native `defaultValue` used to reach the input beside its own `value`.
+    const [uncontrolledDate, setUncontrolledDate] = useState(defaultValue);
+    const date = value ?? uncontrolledDate;
+    const [inputValue, setInputValue] = useState(date ? formatDate(date, timePicker, locale) : "");
     const fieldRef = useRef<HTMLInputElement>(null);
     const dialogId = `${useId()}-dialog`;
 
+    // Follows `value`, including back to undefined once it was set: the field
+    // used to sync only to a date, so a form reset could not clear it.
+    const valueSeen = useRef(false);
     useEffect(() => {
       if (value) {
+        valueSeen.current = true;
         setInputValue(formatDate(value, timePicker, locale));
+      } else if (valueSeen.current) {
+        setUncontrolledDate(undefined);
+        setInputValue("");
+      } else if (uncontrolledDate) {
+        setInputValue(formatDate(uncontrolledDate, timePicker, locale));
       }
-    }, [value, timePicker, locale]);
+    }, [value, uncontrolledDate, timePicker, locale]);
 
     const handleDateChange = useCallback(
       (date: Date) => {
         setInputValue(formatDate(date, timePicker, locale));
+        setUncontrolledDate(date);
         onChange?.(date);
         if (!timePicker) {
           setIsOpen(false);
@@ -188,7 +204,7 @@ export const DateInput = forwardRef<HTMLDivElement, DateInputProps>(
               aria-labelledby={labelledBy}
               onKeyDown={handleDialogKeyDown}
               padding="20"
-              value={value}
+              value={date}
               onChange={handleDateChange}
               timePicker={timePicker}
               minDate={minDate}

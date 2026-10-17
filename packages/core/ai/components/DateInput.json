@@ -9,6 +9,7 @@
   "label": "string",
   "placeholder": "string",
   "value": "Date",
+  "defaultValue": "Date",
   "onChange": "(date: Date) => void",
   "minHeight": "number",
   "className": "string",

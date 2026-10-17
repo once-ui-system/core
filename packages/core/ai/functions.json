@@ -1,9 +1,21 @@
 {
  "functions": {
+  "useField": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => FieldControl | null",
+   "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
+  },
   "useStylePanel": {
    "group": "components",
    "kind": "hook",
    "signature": "() => StylePanelContextValue"
+  },
+  "useFormPending": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => boolean",
+   "doc": "Whether the enclosing `Form` is submitting."
   },
   "useArrowNavigation": {
    "group": "hooks",
@@ -280,6 +292,12 @@
    "17",
    "18"
   ],
+  "FieldControl": {
+   "id": "!string",
+   "invalid": "!boolean",
+   "required": "!boolean",
+   "describedBy": "string"
+  },
   "IconComponent": [
    "ComponentClass<SVGProps<SVGSVGElement>, any>",
    "FunctionComponent<SVGProps<SVGSVGElement>>"

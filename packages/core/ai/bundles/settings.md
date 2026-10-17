@@ -200,7 +200,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - columns?: FormColumns
 - size?: TShirtSizes
 - as?: "div" | "form" = div
-- onSubmit?: React.FormEventHandler<HTMLFormElement>
+- onSubmit?: (event: React.FormEvent<HTMLFormElement>) => unknown
+- pending?: boolean
 - className?: string
 - style?: React.CSSProperties
 - children?: React.ReactNode
@@ -303,6 +304,7 @@ Extends InteractiveDetails.
 ### NumberInput
 Extends Input.
 - value?: number
+- defaultValue?: number | string
 - onChange?: (value: number) => void
 - min?: number
 - max?: number
@@ -600,7 +602,7 @@ type BlendMode = "color" | "normal" | "screen" | "overlay" | "multiply" | "darke
 type BlurSize = "xl" | "l" | "m" | "s" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type Breakpoint = "xl" | "l" | "m" | "s" | "xs"
-type CSSUnit = `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
+type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
 type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`

@@ -1,8 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useId, useState } from "react";
-
+import React, { forwardRef, useCallback, useId, useRef, useState } from "react";
+import { assignRefs, retarget } from "../internal/toggleInput";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import commonStyles from "./SharedInteractiveStyles.module.scss";
@@ -46,13 +46,25 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       disabled,
       name,
       value,
-      ...props
+      label,
+      description,
+      iconButtonProps,
+      id,
+      onChange,
+      onBlur,
+      onFocus,
+      ...inputProps
     },
     ref,
   ) => {
     const labelId = useId();
     const descriptionId = useId();
-    const hasLabel = Boolean(props.label);
+    const hasLabel = Boolean(label);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const setInputRef = useCallback(
+      (node: HTMLInputElement | null) => assignRefs(node, inputRef, ref),
+      [ref],
+    );
     const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
     const isControlled = controlledChecked !== undefined;
     const checked = isControlled ? controlledChecked : uncontrolledChecked;
@@ -64,10 +76,23 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       onToggle?.(next);
     };
 
+    // The switch clicks the hidden input, so its `change` event (and a
+    // caller's `onChange`, e.g. react-hook-form's) fires with the new state.
+    const activate = () => {
+      if (disabled) return;
+      if (inputRef.current) inputRef.current.click();
+      else toggle();
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      toggle();
+      onChange?.(event);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!disabled && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        toggle();
+        activate();
       }
     };
 
@@ -81,18 +106,23 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           [styles.reverse]: reverse,
           [styles.disabled]: disabled,
         })}
-        onClick={toggle}
+        onClick={(event) => {
+          // The input's own click bubbles up here; it has already toggled.
+          if (event.target !== inputRef.current) activate();
+        }}
       >
         {/* Carries the value for form submission only. The thumb below is the
             control people reach, so this stays out of the accessibility tree
             rather than standing beside it as a second, unnamed switch. */}
         <input
-          ref={ref}
+          {...inputProps}
+          ref={setInputRef}
           type="checkbox"
           name={name}
           value={value}
           checked={checked}
-          onChange={toggle}
+          onChange={handleInputChange}
+          disabled={disabled}
           className={commonStyles.hidden}
           tabIndex={-1}
           aria-hidden="true"
@@ -112,9 +142,11 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             aria-checked={checked}
             aria-labelledby={hasLabel ? labelId : undefined}
             aria-label={hasLabel ? undefined : (nativeAriaLabel ?? ariaLabel)}
-            aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+            aria-describedby={hasLabel && description ? descriptionId : undefined}
             aria-disabled={disabled}
             onKeyDown={handleKeyDown}
+            onFocus={onFocus && ((event) => onFocus(retarget(event, inputRef.current)))}
+            onBlur={onBlur && ((event) => onBlur(retarget(event, inputRef.current)))}
             tabIndex={disabled ? -1 : 0}
             className={classNames(styles.element, {
               [styles.checked]: checked,
@@ -124,10 +156,13 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             {loading && <Spinner size="xs" />}
           </div>
         </Flex>
-        {props.label && (
+        {label && (
           <InteractiveDetails
             disabled={disabled}
-            {...props}
+            label={label}
+            description={description}
+            iconButtonProps={iconButtonProps}
+            id={id}
             labelId={labelId}
             descriptionId={descriptionId}
             onClick={() => {}}

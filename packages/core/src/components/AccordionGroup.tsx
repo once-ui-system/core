@@ -24,21 +24,11 @@ const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
   ({ items, size = "m", style, className, autoCollapse = true, ...rest }, ref) => {
     const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
-    const handleAccordionToggle = useCallback(
-      (index: number) => {
-        if (autoCollapse) {
-          // If clicking the same accordion, close it
-          if (openAccordion === index) {
-            setOpenAccordion(null);
-          } else {
-            // Otherwise, open the clicked accordion and close others
-            setOpenAccordion(index);
-          }
-        }
-        // If autoCollapse is false, let each accordion handle its own state
-      },
-      [autoCollapse, openAccordion],
-    );
+    const handleAccordionToggle = useCallback((index: number) => {
+      // Clicking the open accordion closes it; any other opens and closes the rest.
+      // Only used when autoCollapse is on: otherwise each Accordion keeps its own state.
+      setOpenAccordion((current) => (current === index ? null : index));
+    }, []);
 
     if (!items || items.length === 0) {
       return null;
@@ -74,8 +64,12 @@ const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
               <Accordion
                 title={item.title}
                 size={size}
-                open={autoCollapse ? openAccordion === index : undefined}
-                onToggle={() => handleAccordionToggle(index)}
+                {...(autoCollapse
+                  ? {
+                      open: openAccordion === index,
+                      onToggle: () => handleAccordionToggle(index),
+                    }
+                  : {})}
                 headerProps={radiusStyle ? { style: radiusStyle } : undefined}
               >
                 {item.content}

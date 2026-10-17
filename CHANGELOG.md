@@ -86,6 +86,37 @@ item (see `ROADMAP.md`, Week 4).
   ("March", "2026"), which does not say what they do. They are now named
   "Month: March, change month" and "Year: 2026, change year", which `labels.month`
   and `labels.year` translate.
+- **`AccordionGroup` with `autoCollapse={false}` never opened.** Each item now keeps
+  its own open state, so several can be open at once.
+- **`Checkbox`, `RadioButton` and `Switch` dropped native input props.** `onChange`,
+  `onBlur`, `onFocus`, `required`, `form` and the rest went to the label beside the
+  control (and nowhere without a label). They now reach the hidden input, clicks and
+  keys fire its `change` event, and blur reports the input as its target, so
+  react-hook-form's `register()` works. `onToggle` is unchanged.
+- **`OTPInput` spread its div props onto every digit field**, after the field's own
+  handlers: a caller's `onChange` broke typing, an `id` repeated on each field, and
+  `className` was dropped. They now go on the wrapper; `onChange` and `onKeyDown`
+  still see each digit's event as it bubbles.
+- **Every `Badge` without an `id` got `id="badge"`**, so badges on one page shared
+  it and each arrow followed the first. Each badge now gets its own.
+- **`width="320px"`, `maxWidth="40rem"` and other px, rem and em strings failed the
+  type and rendered no size.** `CSSUnit` now takes them, on sizes, offsets and
+  `translateX`/`translateY`, at every breakpoint. A number is still rem.
+- **Raw CSS colours on `Background`, `ParticleFx`, the charts and the gauges painted
+  nothing.** `ColorValue` takes `#fff`, `rgb(...)` or `var(...)`, but they were
+  wrapped as `var(--#fff)`. They now pass through as written; tokens resolve as before.
+- **`DatePicker` ignored `defaultDate`.** It is now the starting selection and month
+  when there is no `value`.
+- **`NumberInput` and `DateInput` passed the native `defaultValue` to an input that
+  also had a `value`**: React warned and the default never showed. `NumberInput`
+  takes `defaultValue` as a number (a string is parsed), `DateInput` as a `Date`.
+- **`DateInput` could not be cleared from outside.** Setting `value` back to
+  `undefined` now empties the field.
+- **`Input` and `Textarea` ran `validate` only on a controlled `value`.** An
+  uncontrolled field now validates what was typed.
+- **`EmojiPickerDropdown` closed after a pick only when `open` was controlled.**
+- **`Text`, `Heading` and `Flex` logged prop-misuse warnings on every render in
+  production.** They now warn outside production only.
 - **`Textarea` ignored `error` and dropped the caller's `aria-describedby`.** `error`
   now marks it invalid and draws the error state, as it does on `Input`, and a
   description passed in is kept ahead of the error message.

@@ -7,6 +7,7 @@ import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import { cssColor } from "../../internal/cssColor";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
@@ -123,7 +124,7 @@ const BarChart: React.FC<BarChartProps> = ({
           color: getDistributedColor(index, autoKeys.length),
         }));
 
-  const barColors = autoSeries.map((s) => `var(--data-${s.color})`);
+  const barColors = autoSeries.map((s) => cssColor(s.color, "data-"));
 
   const legendContent = useCallback(
     (props: any) => {
