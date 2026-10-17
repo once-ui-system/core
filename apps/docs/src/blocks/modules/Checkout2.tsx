@@ -40,8 +40,8 @@ export const Checkout2 = () => {
             {steps.map((item, index) => (
               <Row key={item.label} fillWidth gap="8" vertical="center">
                 <Row
-                  minWidth={8}
-                  minHeight={8}
+                  minWidth="8rem"
+                  minHeight="8rem"
                   radius="full"
                   center
                   border={index <= step ? "brand-alpha-strong" : "neutral-alpha-weak"}
@@ -151,8 +151,8 @@ export const Checkout2 = () => {
                       src={item.image}
                       alt={item.name}
                       aspectRatio="1/1"
-                      minWidth={5}
-                      maxWidth={5}
+                      minWidth="5rem"
+                      maxWidth="5rem"
                       radius="m"
                       border
                       sizes="80px"
@@ -195,7 +195,7 @@ export const Checkout2 = () => {
           <Column fillWidth gap="12">
             {cartItems.map((item) => (
               <Row key={item.name} fillWidth gap="12" vertical="center">
-                <Row minWidth={5} minHeight={5}>
+                <Row minWidth="5rem" minHeight="5rem">
                   <Media
                     src={item.image}
                     alt={item.name}

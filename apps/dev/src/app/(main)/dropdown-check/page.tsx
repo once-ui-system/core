@@ -30,7 +30,7 @@ export default function DropdownCheck() {
   return (
     <Row fillWidth gap="24" padding="24" data-testid="root">
       {/* Case 1: org-switcher style — wide fillWidth trigger */}
-      <Column width={30} gap="12" data-testid="case-fill">
+      <Column width="30rem" gap="12" data-testid="case-fill">
         <Text variant="label-strong-s">Case 1: fillWidth (org switcher)</Text>
         <DropdownWrapper
           fillWidth
@@ -51,8 +51,8 @@ export default function DropdownCheck() {
 
       {/* Case 2: Adjustable style — rows in a scrollable panel, bottom-end */}
       <Column
-        width={32}
-        height={24}
+        width="32rem"
+        height="24rem"
         overflowY="auto"
         border="neutral-alpha-medium"
         radius="l"
@@ -106,7 +106,7 @@ export default function DropdownCheck() {
       </Column>
 
       {/* Case 4: where a list opens */}
-      <Column width={20} gap="12" data-testid="case-select">
+      <Column width="20rem" gap="12" data-testid="case-select">
         <Text variant="label-strong-s">Case 4: opens on the selection</Text>
         <Select
           id="select-plain"

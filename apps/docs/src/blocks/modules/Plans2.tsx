@@ -63,11 +63,11 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
               position="absolute"
               mask={{
                 cursor: true,
-                radius: 75,
+                radius: "75vh",
               }}
               gradient={{
-                x: 50,
-                y: 100,
+                x: "50%",
+                y: "100%",
                 opacity: 70,
                 display: true,
                 colorStart: "accent-background-strong",
@@ -80,13 +80,13 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
               left="0"
               position="absolute"
               mask={{
-                x: 50,
-                y: 100,
-                radius: 75,
+                x: "50%",
+                y: "100%",
+                radius: "75vh",
               }}
               gradient={{
-                x: 50,
-                y: 100,
+                x: "50%",
+                y: "100%",
                 opacity: 50,
                 display: true,
                 colorStart: gradientColor,
@@ -151,7 +151,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
 export const Plans2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row fillWidth gap="-1" overflowX="auto" {...flex}>
-      <Row fillWidth paddingY="24" minWidth={20}>
+      <Row fillWidth paddingY="24" minWidth="20rem">
         <PlanCard id="free" plan={plans.free} radius={undefined} leftRadius="l" />
       </Row>
       <PlanCard id="pro" plan={plans.pro} zIndex={1} minWidth={20} />

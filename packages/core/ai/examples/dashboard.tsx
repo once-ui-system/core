@@ -118,7 +118,7 @@ export function DashboardExample() {
                   <CountFx
                     variant="display-strong-xs"
                     value={seen ? stat.value : 0}
-                    speed={1200}
+                    duration={1200}
                     separator=","
                   />
                   {stat.suffix && <Text variant="display-strong-xs">{stat.suffix}</Text>}
@@ -135,7 +135,7 @@ export function DashboardExample() {
         </Grid>
 
         <Grid columns="2" gap="24" s={{ columns: 1 }}>
-          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight="32rem">
             <Heading as="h2" variant="heading-strong-s">
               Revenue trend
             </Heading>
@@ -146,7 +146,7 @@ export function DashboardExample() {
               </Text>
             </Column>
           </Column>
-          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight="32rem">
             <Heading as="h2" variant="heading-strong-s">
               Signups by channel
             </Heading>

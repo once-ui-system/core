@@ -109,7 +109,7 @@ export const Bento1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                     {tile.description}
                   </Text>
                 </Column>
-                <Row fillWidth height={20} paddingLeft="m">
+                <Row fillWidth height="20rem" paddingLeft="m">
                   <Row
                     theme="light"
                     themeSolid="contrast"

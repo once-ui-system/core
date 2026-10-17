@@ -32,28 +32,28 @@ const { baseURL, style, dataStyle } = defineConfig({
   },
 });
 
-const layout = {
-  // units are set in REM
+const layout = /** @type {const} */ ({
+  // A number is px; a string is a CSS length (rem follows the root font size).
   header: {
-    width: 200, // max-width of the content inside the header
+    width: "200rem", // max-width of the content inside the header
   },
   body: {
-    width: 200, // max-width of the body
+    width: "200rem", // max-width of the body
   },
   sidebar: {
-    width: 17, // width of the sidebar
+    width: "17rem", // width of the sidebar
     collapsible: true, // accordion or static render
   },
   content: {
-    width: 44, // width of the main content block
+    width: "44rem", // width of the main content block
   },
   sideNav: {
-    width: 17, // width of the sideNav on document pages
+    width: "17rem", // width of the sideNav on document pages
   },
   footer: {
-    width: 44, // width of the content inside the footer
+    width: "44rem", // width of the content inside the footer
   },
-};
+});
 
 /**
  * Links are automatically displayed. Register new icons in icons.ts.

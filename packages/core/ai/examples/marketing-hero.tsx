@@ -65,15 +65,15 @@ export function MarketingHeroExample() {
             display: true,
             colorStart: "brand-alpha-medium",
             colorEnd: "static-transparent",
-            x: 50,
+            x: "50%",
             y: 0,
-            width: 150,
-            height: 80,
+            width: "150%",
+            height: "80%",
             opacity: 60,
           }}
           dots={{ display: true, color: "neutral-alpha-weak", size: "2", opacity: 40 }}
         />
-        <Column zIndex={1} horizontal="center" gap="24" maxWidth={48}>
+        <Column zIndex={1} horizontal="center" gap="24" maxWidth="48rem">
           <RevealFx translateY="16">
             <Column horizontal="center" gap="16">
               <Text variant="label-default-s" onBackground="brand-medium">
@@ -104,7 +104,7 @@ export function MarketingHeroExample() {
       {/* Feature grid — left-aligned section header, not repeated centered blocks */}
       <Column fillWidth horizontal="center">
         <Column maxWidth="l" gap="40">
-          <Column gap="12" maxWidth={32}>
+          <Column gap="12" maxWidth="32rem">
             <Text variant="label-default-s" onBackground="brand-medium">
               Components
             </Text>
@@ -124,8 +124,8 @@ export function MarketingHeroExample() {
               >
                 <Row
                   center
-                  width={10}
-                  height={10}
+                  width="10rem"
+                  height="10rem"
                   radius="m"
                   background="brand-alpha-weak"
                   border="brand-alpha-medium"

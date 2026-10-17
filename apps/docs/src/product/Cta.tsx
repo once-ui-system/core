@@ -3,7 +3,7 @@ import { Row, Button, Mask, ParticleFx, Column, TypeFx, Background } from "@once
 export const Cta = () => {
   return (
     <Row fillWidth horizontal="center">
-      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{ hide: true }} />
+      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth="4rem" l={{ hide: true }} />
       <Column
         maxWidth="xl"
         height="m"
@@ -28,8 +28,8 @@ export const Cta = () => {
         <Row
           overflow="hidden"
           position="absolute"
-          minWidth={80}
-          minHeight={28}
+          minWidth="80rem"
+          minHeight="28rem"
           radius="full"
           border="neutral-alpha-medium"
         >
@@ -41,10 +41,10 @@ export const Cta = () => {
             data-solid="color"
             gradient={{
               display: true,
-              x: 50,
-              y: 100,
-              width: 100,
-              height: 50,
+              x: "50%",
+              y: "100%",
+              width: "100%",
+              height: "50%",
               colorStart: "brand-solid-strong",
               colorEnd: "page-background",
             }}
@@ -57,10 +57,10 @@ export const Cta = () => {
             style={{ filter: "blur(1rem)", transform: "scale(1.1)" }}
             gradient={{
               display: true,
-              x: 50,
-              y: 100,
-              width: 100,
-              height: 30,
+              x: "50%",
+              y: "100%",
+              width: "100%",
+              height: "30%",
               colorStart: "brand-on-background-strong",
             }}
           />
@@ -68,28 +68,28 @@ export const Cta = () => {
         <Row
           overflow="hidden"
           position="absolute"
-          minWidth={58}
-          minHeight={28}
+          minWidth="58rem"
+          minHeight="28rem"
           radius="full"
           border="neutral-alpha-medium"
         />
         <Row
           overflow="hidden"
           position="absolute"
-          minWidth={42}
-          minHeight={28}
+          minWidth="42rem"
+          minHeight="28rem"
           radius="full"
           border="neutral-alpha-medium"
         />
         <Row
           overflow="hidden"
           position="absolute"
-          minWidth={28}
-          minHeight={28}
+          minWidth="28rem"
+          minHeight="28rem"
           radius="full"
           border="neutral-alpha-medium"
         >
-          <Mask fill position="absolute" x={50} y={50} radius={25}>
+          <Mask fill position="absolute" x="50%" y="50%" radius="25vh">
             <ParticleFx
               style={{ transform: "scale(1.1)" }}
               opacity={70}
@@ -98,7 +98,7 @@ export const Cta = () => {
               left="0"
               fill
               interactive
-              speed={1.5}
+              speed={5}
               density={100}
               size="2"
               intensity={20}
@@ -110,7 +110,7 @@ export const Cta = () => {
           <TypeFx
             variant="display-strong-m"
             words={["Ship your product.", "Build a presence.", "Launch seamlessly."]}
-            speed={80}
+            charDuration={80}
             hold={2000}
             trigger="instant"
           />
@@ -124,7 +124,7 @@ export const Cta = () => {
           </Button>
         </Column>
       </Column>
-      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth={4} l={{ hide: true }} />
+      <Row flex={1} border="neutral-alpha-medium" radius="full" minWidth="4rem" l={{ hide: true }} />
     </Row>
   );
 };

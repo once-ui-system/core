@@ -36,7 +36,7 @@ const Grid = forwardRef<HTMLDivElement, SmartGridProps>(
       // A breakpoint object stays on the server whenever every value in it is
       // a class — `m={{ columns: 2 }}` is `.m-columns-2`, `s={{ gap: "4" }}`
       // is `.s-g-4` — under the same rule Flex uses. Only a value a class
-      // cannot express (a width, a rem number, `style`) needs the runtime pass.
+      // cannot express (a width, a px number, `style`) needs the runtime pass.
       if ([xl, l, m, s, xs].some((bp) => bp && !isClassExpressible(bp))) return true;
 
       // Dynamic styles require client-side

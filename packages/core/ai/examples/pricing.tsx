@@ -71,7 +71,7 @@ export function PricingExample() {
           size={1.5}
           spacing={8}
           colors={["brand-solid-strong"]}
-          bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+          bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
         />
         <Background
           position="absolute"
@@ -83,12 +83,12 @@ export function PricingExample() {
             display: true,
             colorStart: "page-background",
             x: 0,
-            y: 50,
-            width: 150,
-            height: 300,
+            y: "50%",
+            width: "150%",
+            height: "300%",
           }}
         />
-        <Column zIndex={1} center gap="24" padding="48" maxWidth={48}>
+        <Column zIndex={1} center gap="24" padding="48" maxWidth="48rem">
           <Text variant="label-default-s" onBackground="brand-medium">
             Pricing
           </Text>
@@ -151,10 +151,10 @@ export function PricingExample() {
                         display: true,
                         colorStart: "brand-alpha-medium",
                         colorEnd: "static-transparent",
-                        x: 50,
+                        x: "50%",
                         y: 0,
-                        width: 200,
-                        height: 60,
+                        width: "200%",
+                        height: "60%",
                         opacity: 50,
                       }}
                     />
@@ -176,7 +176,7 @@ export function PricingExample() {
                           variant="display-strong-s"
                           value={tier.price[billing]}
                           effect="wheel"
-                          speed={400}
+                          duration={400}
                         />
                         <Text
                           variant="label-default-s"
@@ -244,7 +244,7 @@ export function PricingExample() {
       <Column fillWidth horizontal="center">
         <Column maxWidth="l" radius="xl" border overflow="hidden" padding="64" center>
           <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
-          <Column zIndex={1} center gap="24" maxWidth={40}>
+          <Column zIndex={1} center gap="24" maxWidth="40rem">
             <Heading as="h2" variant="display-strong-s" align="center">
               Ship your next launch on Pro
             </Heading>

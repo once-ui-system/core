@@ -546,7 +546,7 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
                   // parent — so the out-of-the-box carousel would depend on what
                   // was put in it. `minWidth` is a floor, not a shape: content
                   // wider than this still sets the tile's width.
-                  minWidth={20}
+                  minWidth="20rem"
                   // Only the middle copy is the real run; the other two are
                   // scenery and must not be read out or tabbed into.
                   aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}

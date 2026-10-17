@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { 
   Button, 
   Dialog,
-  DialogProvider,
   Text,
   Row,
   Feedback,
@@ -72,7 +71,7 @@ export function StackedDialogs() {
   const [isStackedOpen, setIsStackedOpen] = useState(false);
   
   return (
-    <DialogProvider>
+    <>
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>Open stacked dialogs</Button>
       
       <Dialog
@@ -106,7 +105,7 @@ export function StackedDialogs() {
           Notice how the base dialog is dimmed in the background.
         </Text>
       </Dialog>
-    </DialogProvider>
+    </>
   );
 }
 
@@ -121,7 +120,7 @@ export function DialogFlush() {
         onClose={() => setIsOpen(false)}
         flush
         showClose={false}
-        maxWidth={32}
+        maxWidth="32rem"
         title=""
         description=""
       >
@@ -152,7 +151,7 @@ export function CustomizedDialog() {
         open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Customized dialog"
-        maxWidth={48}
+        maxWidth="48rem"
         background="danger-weak"
         border="danger-medium"
       >

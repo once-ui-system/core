@@ -53,7 +53,7 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           fillWidth
           s={{ hide: true }}
           borderRight="neutral-medium"
-          mask={{ x: 100, y: 50, radius: 50 }}
+          mask={{ x: "100%", y: "50%", radius: "50vh" }}
           lines={{
             display: true,
             size: "8",
@@ -77,7 +77,7 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           fillWidth
           s={{ hide: true }}
           borderLeft="neutral-medium"
-          mask={{ x: 0, y: 50, radius: 50 }}
+          mask={{ x: 0, y: "50%", radius: "50vh" }}
           lines={{
             display: true,
             size: "8",
@@ -90,7 +90,7 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
       <Grid borderLeft borderTop columns="3" m={{ columns: 2 }} s={{ columns: 1 }}>
         {features.map((feature, index) => (
           <Column padding="40" borderBottom borderRight key={index} fillWidth gap="24">
-            <Mask position="absolute" left="0" top="0" radius={33} x={25} y={0}>
+            <Mask position="absolute" left="0" top="0" radius="33vh" x="25%" y={0}>
               <MatrixFx size={1.5} colors={["brand-background-strong"]} flicker />
             </Mask>
             <Row vertical="center" gap="16">

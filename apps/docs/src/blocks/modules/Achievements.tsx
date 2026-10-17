@@ -24,7 +24,7 @@ export const Achievements = (flex: React.ComponentProps<typeof Column>) => {
   const nextAchievement = achievements.find((item) => !item.unlocked);
 
   return (
-    <Column maxWidth={28} radius="l" border padding="24" gap="20" {...flex}>
+    <Column maxWidth="28rem" radius="l" border padding="24" gap="20" {...flex}>
       <Row fillWidth horizontal="between" vertical="center">
         <Column gap="2">
           <Text variant="heading-strong-s">Achievements</Text>

@@ -93,7 +93,7 @@ export const Features16 = (flex: React.ComponentProps<typeof Row>) => {
             src={card.image}
             alt={card.alt}
           />
-          <Row maxWidth={24} horizontal="center" padding="32">
+          <Row maxWidth="24rem" horizontal="center" padding="32">
             <Button fillWidth data-border="rounded" href={card.href} arrowIcon>
               {card.cta}
             </Button>

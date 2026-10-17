@@ -166,7 +166,7 @@ export const About5 = () => {
                 borderRight={index < stats.length - 1 ? "neutral-alpha-weak" : undefined}
               >
                 <Heading variant="display-strong-xs">
-                  <CountFx value={stat.value} speed={800} separator="," />
+                  <CountFx value={stat.value} duration={800} separator="," />
                   {stat.suffix}
                 </Heading>
                 <Text variant="label-default-s" onBackground="neutral-weak">
@@ -185,7 +185,7 @@ export const About5 = () => {
                 padding="24"
                 borderRight={index % 2 === 0 ? "neutral-alpha-weak" : undefined}
                 borderBottom={index < 2 ? "neutral-alpha-weak" : undefined}
-                minHeight={4}
+                minHeight="4rem"
               >
                 <Logo wordmark={{ light: partner.light, dark: partner.dark }} />
               </Row>

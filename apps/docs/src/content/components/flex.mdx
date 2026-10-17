@@ -76,14 +76,14 @@ runs.
 
 ## Size
 
-Sizes take a spacing token, a number (read as rem), or any CSS unit. `fill` and
+Sizes take a spacing token, a number (read as px), or a CSS length such as `"40rem"` or `"50%"`. `fill` and
 `fit` are the two you want most: fill the parent, or shrink to the content.
 
 <PropsTable
   mixin="SizeProps"
   describe={{
-    width: "Fixed width. A token, a number in rem, or a CSS unit.",
-    height: "Fixed height. A token, a number in rem, or a CSS unit. \"below-header\" is the viewport below the app header.",
+    width: "Fixed width. A token, a number in px, or a CSS length (\"40rem\", \"50%\").",
+    height: "Fixed height. A token, a number in px, or a CSS length. \"below-header\" is the viewport below the app header.",
     maxWidth: "Upper bound. The usual way to cap a text column.",
     minWidth: "Lower bound.",
     minHeight: "Lower bound.",
@@ -177,7 +177,7 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
     cursor: "Pointer style. \"interactive\" is the one to use for anything clickable.",
     textVariant: "Set the text style for everything inside in one prop.",
     blendMode: "mix-blend-mode, as a class. color-dodge and plus-lighter are the glow modes.",
-    blur: "filter: blur(). xs (0.25rem) to xl (3rem) is a class; a number is rem.",
+    blur: "filter: blur(). xs (0.25rem) to xl (3rem) is a class; a number is px.",
     backdropBlur: "backdrop-filter: blur(), for what shows through a translucent fill. Same scale as blur.",
     theme: "Render this subtree light or dark: data-theme, typed.",
     themeBorder: "The subtree's corner style (ThemeProvider's border): data-border.",
@@ -191,7 +191,7 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
 `blendMode`, `blur`, `backdropBlur` and `userSelect` are classes, so setting
 them keeps `Flex` and `Grid` server components — a `style` object does not.
 The blur scale is the static spacing steps: `xs` 0.25rem, `s` 0.5rem, `m`
-1rem, `l` 2rem, `xl` 3rem; a number is rem, written inline on the server.
+1rem, `l` 2rem, `xl` 3rem; a number is px, written inline on the server.
 `blur` sets the whole `filter`, so a blur combined with another filter
 function still goes in `style`.
 

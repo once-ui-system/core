@@ -64,10 +64,10 @@ const demoTiles: {
           position="absolute"
           fill
           dots={{ display: true, size: "2", color: "brand-background-strong" }}
-          mask={{ x: 50, y: 50, radius: 25 }}
+          mask={{ x: "50%", y: "50%", radius: "25vh" }}
         />
-        <Row radius="full" border="brand-medium" width={6} height={6} overflow="hidden" center>
-          <Mask fill position="absolute" x={50} y={50} radius={6}>
+        <Row radius="full" border="brand-medium" width="6rem" height="6rem" overflow="hidden" center>
+          <Mask fill position="absolute" x="50%" y="50%" radius="6vh">
             <MatrixFx flicker size={1.5} colors={["brand-on-background-medium"]} />
           </Mask>
         </Row>
@@ -85,7 +85,7 @@ const demoTiles: {
           fill
           gradient={{
             display: true,
-            x: 100,
+            x: "100%",
             y: 0,
             colorStart: "neutral-background-strong",
           }}
@@ -96,7 +96,7 @@ const demoTiles: {
         </Text>
         <LineChart
           fillWidth
-          height={8}
+          height="8rem"
           border="transparent"
           grid="none"
           axis="none"
@@ -174,8 +174,8 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
           mask={{ cursor: true }}
           gradient={{
             display: true,
-            x: 25,
-            y: 25,
+            x: "25%",
+            y: "25%",
             colorStart: "brand-solid-medium",
             colorEnd: "accent-solid-medium",
           }}
@@ -190,7 +190,7 @@ export const Features18 = (flex: React.ComponentProps<typeof Column>) => {
                 background="page"
                 flex={tile.flex}
                 radius="xl"
-                minHeight={24}
+                minHeight="24rem"
                 paddingLeft="l"
                 paddingTop="l"
               >

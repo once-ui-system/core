@@ -18,10 +18,10 @@ export const Hero2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         position="absolute"
         gradient={{
           display: true,
-          x: 50,
-          y: 50,
-          width: 50,
-          height: 50,
+          x: "50%",
+          y: "50%",
+          width: "50%",
+          height: "50%",
           colorStart: "brand-solid-strong",
           colorEnd: "static-transparent",
         }}

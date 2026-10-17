@@ -132,7 +132,7 @@ export function Table1<T = Record<string, unknown>>({
               paddingLeft="8"
               value={selectedItems.size}
               effect="smooth"
-              speed={250}
+              duration={250}
             >
               <Text marginLeft="8">selected</Text>
             </CountFx>
@@ -147,7 +147,7 @@ export function Table1<T = Record<string, unknown>>({
           )}
         </Row>
         {showSearch && (
-          <Row maxWidth={16}>
+          <Row maxWidth="16rem">
             <Input
               size="s"
               id="search"
@@ -187,7 +187,7 @@ export function Table1<T = Record<string, unknown>>({
               <Row
                 key={`head-${col.key}-${cIdx}`}
                 fillWidth
-                minWidth={8}
+                minWidth="8rem"
                 textVariant="label-default-s"
                 vertical="center"
                 horizontal={
@@ -235,7 +235,7 @@ export function Table1<T = Record<string, unknown>>({
                         <Row
                           key={`cell-${id}-${col.key}-${cIdx}`}
                           fillWidth
-                          minWidth={8}
+                          minWidth="8rem"
                           horizontal={
                             col.align === "end"
                               ? "end"
@@ -305,7 +305,7 @@ export function Table1<T = Record<string, unknown>>({
                 placement="bottom-end"
                 trigger={<IconButton icon="moreHorizontal" size="s" variant="ghost" />}
                 dropdown={
-                  <Column padding="4" gap="2" width={4}>
+                  <Column padding="4" gap="2" width="4rem">
                     {Array.from({ length: totalitemsPerPage - 4 }, (_, i) => i + 3).map(
                       (pageNum) => (
                         <ToggleButton
@@ -369,7 +369,7 @@ export function Table1<T = Record<string, unknown>>({
             </Button>
           }
           dropdown={
-            <Column padding="4" gap="2" width={4}>
+            <Column padding="4" gap="2" width="4rem">
               {itemsPerPageOptions.map((option) => (
                 <ToggleButton
                   key={option}

@@ -22,7 +22,6 @@ export * from "./DropdownWrapperExample";
 export * from "./EmojiPickerDropdownExample";
 export * from "./InfiniteScrollExample";
 export * from "./InputExamples";
-export * from "./InteractiveDetailsExamples";
 export * from "./NavIconExample";
 export * from "./PageList";
 export * from "./ProgressBarExample";

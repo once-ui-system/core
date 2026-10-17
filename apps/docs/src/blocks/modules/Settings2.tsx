@@ -21,8 +21,8 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
   return (
     <Row fill radius="l" overflow="hidden" gap="8" {...flex}>
       <Column
-        minWidth={24}
-        maxWidth={24}
+        minWidth="24rem"
+        maxWidth="24rem"
         fill
         background="surface"
         border="surface"
@@ -51,7 +51,7 @@ export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {
             Live preview
           </Text>
           <Column
-            maxWidth={32}
+            maxWidth="32rem"
             background="surface"
             border
             radius="l"

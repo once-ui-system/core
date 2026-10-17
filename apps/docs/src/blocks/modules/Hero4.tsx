@@ -18,14 +18,14 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         left="0"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 50,
-          height: 100,
+          width: "50%",
+          height: "100%",
           colorStart: "accent-background-strong",
           colorEnd: "static-transparent",
         }}
-        height={32}
+        height="32rem"
       />
       <Background
         themeSolid="inverse"
@@ -34,14 +34,14 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         left="0"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 50,
-          height: 100,
+          width: "50%",
+          height: "100%",
           colorStart: "brand-solid-medium",
           colorEnd: "static-transparent",
         }}
-        height={24}
+        height="24rem"
       />
       <Column fillWidth gap="32" fitHeight horizontal="center" {...flex}>
         <Column fillWidth horizontal="center" gap="24" marginBottom="32">
@@ -107,7 +107,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               left="0"
               fillHeight
-              width={12}
+              width="12rem"
               to="right"
             />
             <Fade
@@ -116,7 +116,7 @@ export const Hero4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               right="0"
               fillHeight
-              width={12}
+              width="12rem"
               to="left"
             />
           </Column>

@@ -101,7 +101,7 @@ export const Productivity3 = () => {
             <Column
               key={day}
               fillWidth
-              minWidth={8}
+              minWidth="8rem"
               gap="8"
               padding="12"
               radius="l"
@@ -163,7 +163,7 @@ export const Productivity3 = () => {
                   border={colors.border}
                   background={block.active ? colors.background : undefined}
                 >
-                  <Column minWidth={6} gap="4">
+                  <Column minWidth="6rem" gap="4">
                     <Text variant="code-default-s" onBackground={colors.text}>
                       {block.time}
                     </Text>

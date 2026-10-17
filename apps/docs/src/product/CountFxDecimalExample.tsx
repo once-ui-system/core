@@ -23,7 +23,7 @@ export const CountFxDecimalExample = () => {
           variant="display-strong-m" 
           value={value1} 
           decimals={2}
-          speed={2000} 
+          duration={2000} 
           effect="simple" 
           easing="ease-out" 
         />
@@ -33,7 +33,7 @@ export const CountFxDecimalExample = () => {
           variant="display-strong-m" 
           value={value2} 
           decimals={2}
-          speed={2000} 
+          duration={2000} 
           separator="," 
           effect="simple" 
           easing="ease-out"

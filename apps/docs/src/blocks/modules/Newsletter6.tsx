@@ -38,15 +38,15 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
         left="0"
         gradient={{
           display: true,
-          x: 50,
-          y: 100,
-          width: 100,
-          height: 60,
+          x: "50%",
+          y: "100%",
+          width: "100%",
+          height: "60%",
           colorStart: "brand-background-strong",
         }}
       />
 
-      <Column maxWidth={36} gap="24" horizontal="center" zIndex={1}>
+      <Column maxWidth="36rem" gap="24" horizontal="center" zIndex={1}>
         <Row vertical="center" gap="8">
           <Pulse size="s" />
           <Text variant="code-default-s" onBackground="brand-medium">
@@ -101,7 +101,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
             You're on the list — welcome aboard
           </Row>
         ) : (
-          <Row maxWidth={24}>
+          <Row maxWidth="24rem">
             <Input
               id="community-email"
               placeholder="Email address"

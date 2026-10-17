@@ -175,7 +175,7 @@ export function Header() {
             <Animation
               triggerType="click"
               active={sidebarVisible}
-              slideDown={1}
+              slideDown="1rem"
               scale={0.9}
               blur={0.5}
               duration={200}
@@ -189,7 +189,7 @@ export function Header() {
               }
             >
               <Row
-                width={24}
+                width="24rem"
                 style={{
                   height: "calc(100vh - var(--static-space-64))",
                   top: "3.25rem",

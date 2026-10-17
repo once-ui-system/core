@@ -52,7 +52,7 @@ const InfoTip: React.FC<InfoTipProps> = ({
       <Column
         id={tipId}
         role="tooltip"
-        maxWidth={18}
+        maxWidth="18rem"
         paddingY="8"
         paddingX="12"
         background="page"

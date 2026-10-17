@@ -74,8 +74,8 @@ export const Settings3 = (flex: React.ComponentProps<typeof Row>) => {
   return (
     <Row fill radius="l" overflow="hidden" gap="8" {...flex}>
       <Column
-        minWidth={24}
-        maxWidth={24}
+        minWidth="24rem"
+        maxWidth="24rem"
         fill
         background="surface"
         border="surface"

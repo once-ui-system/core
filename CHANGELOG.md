@@ -26,6 +26,16 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`BaseBreakpointProps`**, unused since 2.0.
 - **Internal exports** that reached the root barrel: `resetScrollLockState`,
   `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
+- **Exports that were parts of other components** (F7): `ServerFlex`, `ClientFlex`,
+  `ServerGrid`, `ClientGrid`, `Cursor`, `ElementType`, `InteractiveDetails`, `Toaster`,
+  `Arrow`, `ArrowNavigation` (use the `useArrowNavigation` hook), with
+  `useArrowNavigationContext` and `withArrowNavigation`. The modules stay inside the
+  package; the codemod reports each import with what to use instead.
+- **`DialogProvider`.** Stacked dialogs never read its state; a `stack` Dialog makes
+  the one beneath it inert by itself. The codemod unwraps it.
+- **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
+  `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
+  `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
 
 ### Changed
 
@@ -66,6 +76,44 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **RevealFx and Carousel `revealedByDefault` is `defaultRevealed`.**
 - **SegmentedControl** takes a group `disabled`, its handler is optional, and a
   controlled one stays on `value` until the parent changes it.
+- **`generateMetadata` is `createMetadata`** (G6): the old name is Next's route-segment
+  convention, so re-exporting it from a page made Next call it. `Meta.generate` is
+  unchanged; the codemod renames the import and every call.
+- **ProgressBar, RadialGauge, DataTooltip, Carousel, DatePicker and Table no longer use
+  `CountFx`, `RevealFx` or `ShineFx`** (F8 prerequisite): internal count-up, reveal and
+  shine parts look and time the same, so the effects can move to `@once-ui-system/fx`.
+- **A number is px on every size, spacing and offset prop** (D2): `width`, `height`
+  and their min/max, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/
+  `bottom`/`left`, `translateX`/`Y`, `blur` and `backdropBlur` on Flex, Grid, Text,
+  Heading and everything built on them, in breakpoint objects too. They were rem, so
+  `maxWidth={40}` was 640px and is 40px now; the codemod writes `maxWidth="40rem"`,
+  which renders exactly as before. Tokens stay strings (`"16"` is the spacing step).
+- **Any CSS length string works**: `CSSUnit` and the size parsers accept px, rem, em,
+  ch, %, vh/vw/dvh/svh/lvh and their widths, vmin/vmax, cqw/cqh, and `calc()`, `min()`,
+  `max()`, `clamp()` and `var()`. `width="320px"` and `maxWidth="40rem"` were type
+  errors that rendered no width at all; spacing (`padding="1.5rem"`) takes them too.
+- **One unit per kind on the outliers** (D3): Avatar `size`, Media `height`, Carousel
+  `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and
+  ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`,
+  CodeBlock `codeHeight` and Fade `blur` read a number as px (was rem) and also take a
+  CSS length. Mask `x`/`y` (was a percentage) and `radius` (was vh) and Background
+  `gradient.x`/`y` (a percentage) and `gradient.width`/`height` (a quarter-percent of
+  the gradient layer) read a number as px; percentages are strings, of the element
+  (`x="50%"`, `width: "100%"`, the default). LinearGauge and RadialGauge
+  `width`/`height` stay the drawing's px size.
+- **Durations, delays and intervals are milliseconds everywhere** (D4): CelebrationFx
+  and WeatherFx `duration`, MatrixFx `bulge.duration` and FlipFx `autoFlipInterval`
+  were seconds. The codemod multiplies literals by 1000.
+- **`speed` is only a multiplier** (D5), `1` being the designed pace, with
+  `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 on every effect that takes it (MatrixFx,
+  WeatherFx, CelebrationFx, ParticleFx, Effect, AutoScroll, GlitchFx, LetterFx). Where
+  it was a length of time it is renamed: RevealFx `speed` (ms, or `"fast"` 1000,
+  `"medium"` 2000, `"slow"` 3000), ShineFx and CountFx `speed` become `duration` (ms),
+  and TypeFx `speed` (ms per character) becomes `charDuration`. ParticleFx's default
+  is now `1` for the same drift as 2.x's `0.3`. AutoScroll, GlitchFx and LetterFx take
+  a number too; GlitchFx `speed` now takes effect (its classes never reached the
+  animated layers), and the shared scale moves GlitchFx `"slow"` to a 5s cycle (was
+  3.5s) and `"fast"` to 1.25s (was 1.5s), and LetterFx `"fast"` to 15ms steps (was 10ms).
 
 ## [Unreleased]
 

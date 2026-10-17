@@ -107,26 +107,7 @@ return (
 
 ## Stacked dialogs
 
-Dialogs can be stacked on top of each other for multi-step interactions. Wrap your app (or the dialog subtree) in `DialogProvider` so stacked dialogs can coordinate focus and inert behavior on the base dialog.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  codeHeight={12}
-  lineNumbers
-  codes={[
-    {
-      code:
-`import { DialogProvider } from '@once-ui-system/core';
-
-export default function Layout({ children }) {
-  return <DialogProvider>{children}</DialogProvider>;
-}`,
-      language: "tsx",
-      label: "app/layout.tsx"
-    }
-  ]}
-/>
+Dialogs can be stacked on top of each other for multi-step interactions. Give the dialog on top `stack` and the one beneath `base`: the base dialog dims and turns inert until the stacked one closes. No provider is needed (2.x needed a `DialogProvider`; 3.0 removed it).
 
 <CodeBlock
   marginTop="16"
@@ -141,7 +122,7 @@ export default function Layout({ children }) {
 const [isStackedOpen, setIsStackedOpen] = useState(false);
 
 return (
-    <DialogProvider>
+    <>
       <Button variant="secondary" onClick={() => setIsBaseOpen(true)}>
         Open stacked dialogs
       </Button>
@@ -181,7 +162,7 @@ return (
           Notice how the base dialog is dimmed in the background.
         </Text>
       </Dialog>
-    </DialogProvider>
+    </>
 );`,
       language: "tsx",
       label: "Stacked dialogs"
@@ -213,7 +194,7 @@ return (
         open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Customized dialog"
-        maxWidth={48}
+        maxWidth="48rem"
         background="danger-weak"
         border="danger-medium"
       >
@@ -263,7 +244,7 @@ return (
         onClose={() => setIsOpen(false)}
         flush
         showClose={false}
-        maxWidth={32}
+        maxWidth="32rem"
         title=""
         description=""
       >
@@ -356,19 +337,9 @@ The Dialog component follows accessibility best practices:
     showClose: "Show the close button. Turn it off when only an action should dismiss the dialog.",
     closeOnClickaway: "Close on a click outside.",
     onHeightChange: "Called when the body resizes — useful for animating a stack.",
-    minHeight: "Lower bound on the body height, in rem.",
+    minHeight: "Lower bound on the body height, in px.",
   }}
   content={[
     ["children"]
-  ]}
-/>
-
-### DialogProvider
-
-Wrap your application (or a subtree) when using stacked dialogs.
-
-<PropsTable
-  content={[
-    ["children", "ReactNode"]
   ]}
 />

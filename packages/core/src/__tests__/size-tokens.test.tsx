@@ -50,7 +50,7 @@ describe("size tokens", () => {
     }
     expect(sizeValue("m", "width")).toBe("var(--responsive-width-m)");
     expect(sizeValue("m", "height")).toBe("var(--responsive-height-m)");
-    expect(sizeValue(12, "width")).toBe("12rem");
+    expect(sizeValue(12, "width")).toBe("12px");
     expect(sizeValue("50%", "width")).toBe("50%");
     expect(sizeValue("calc(100% - 1rem)", "height")).toBe("calc(100% - 1rem)");
     expect(sizeValue("73", "width")).toBeUndefined();

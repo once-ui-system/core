@@ -44,7 +44,7 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
       overflowY="auto"
       {...flex}
     >
-      <Row maxWidth={32} aspectRatio="3 / 4" horizontal="center">
+      <Row maxWidth="32rem" aspectRatio="3 / 4" horizontal="center">
         <Media
           sizes="(max-width: 768px) 100vw, (max-width: 768px) 768px"
           border
@@ -53,7 +53,7 @@ export const MediaPost2 = ({ user, media, content, ...flex }: MediaPost2Props) =
           src={media}
         />
       </Row>
-      <Column maxWidth={32} maxHeight={64} gap="8" paddingY="l">
+      <Column maxWidth="32rem" maxHeight="64rem" gap="8" paddingY="l">
         <Row marginBottom="12" horizontal="between" vertical="center">
           <User
             avatarProps={{

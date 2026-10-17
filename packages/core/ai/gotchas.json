@@ -20,12 +20,16 @@
     "components": ["Fade"]
   },
   "RevealFx.delay": {
-    "rule": "Timing props on RevealFx (delay, speed), ShineFx (speed), CountFx (speed), TypeFx (speed, delay), Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay) are milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger). speed on MatrixFx, WeatherFx, ParticleFx, CelebrationFx and Effect is a multiplier, where 0.5 is half speed.",
+    "rule": "Time is milliseconds everywhere in 3.0: RevealFx (duration, delay), ShineFx and CountFx (duration), TypeFx (charDuration, delay, hold), CelebrationFx and WeatherFx (duration — 5000, not 5), MatrixFx bulge.duration, FlipFx autoFlipInterval, Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay). Stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 0.1 is a tenth of a millisecond, i.e. no stagger). speed is only a multiplier (1 the default, 0.5 half) or \"slow\"/\"medium\"/\"fast\" (0.5/1/2), on MatrixFx, WeatherFx, ParticleFx, CelebrationFx, Effect, AutoScroll, GlitchFx and LetterFx; RevealFx/ShineFx/CountFx speed is duration and TypeFx speed is charDuration since 3.0.",
     "components": [
       "RevealFx",
       "ShineFx",
       "CountFx",
       "TypeFx",
+      "CelebrationFx",
+      "WeatherFx",
+      "MatrixFx",
+      "FlipFx",
       "Animation",
       "HoverCard",
       "Hover",
@@ -33,7 +37,7 @@
     ]
   },
   "RevealFx.translateY": {
-    "rule": "translateY as a number is in rem. Use translateY={1} or token \"16\" (1rem); 16 means 16rem.",
+    "rule": "translateY as a number is px. Use a token such as \"16\" (1rem) or translateY={16}; translateY=\"1rem\" also works.",
     "components": ["RevealFx"]
   },
   "LogoCloud.columns": {
@@ -58,7 +62,7 @@
   },
   "Toast.stable": {
     "rule": "Fixed in 2.1: useToast()'s addToast and removeToast keep one identity for the provider's lifetime, so list addToast in an effect's dependencies like any stable callback. Do not hold it in a ref, or leave it out of the deps, to stop the effect re-running when a toast appears. addToast returns the toast's id for removeToast(id); duration is in milliseconds (default 6000, Infinity until closed).",
-    "components": ["Toast", "Toaster"]
+    "components": ["Toast", "ToastProvider"]
   },
   "NumberInput.value": {
     "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onValueChange; do not remount it with a key to push a new value in.",
@@ -178,11 +182,11 @@
     "components": ["Checkbox", "Switch", "RadioButton"]
   },
   "RevealFx.primaryContent": {
-    "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with speed=\"fast\".",
+    "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with duration={1000}.",
     "components": ["RevealFx"]
   },
   "size.rem": {
-    "rule": "A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width=\"32\" (32 px), or the rem value, width={2}. An icon or avatar box is usually \"24\" to \"48\".",
+    "rule": "A number on any size, spacing or offset prop is px in 3.0 (it was rem in 2.x): width={32} is 32 px, maxWidth={40} is 40 px. For rem write the string, maxWidth=\"40rem\"; a digit string is the spacing token, width=\"32\" (2rem). An icon or avatar box is usually \"24\" to \"48\", or 24 to 48 as px.",
     "components": ["Flex", "Row", "Column", "Grid"]
   }
 }

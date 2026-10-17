@@ -82,7 +82,7 @@ export const Blog3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" paddingY="24" {...flex}>
       <Row maxWidth="l" gap="40" s={{ direction: "column" }} paddingX="16">
-        <Column minWidth={20} maxWidth={24} gap="24">
+        <Column minWidth="20rem" maxWidth="24rem" gap="24">
           <Column gap="8">
             <Heading as="h1" variant="display-strong-xs">
               Journal

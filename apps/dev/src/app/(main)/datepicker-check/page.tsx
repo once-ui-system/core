@@ -33,14 +33,14 @@ export default function DatePickerCheck() {
           border="neutral-alpha-medium"
           radius="l"
           padding="16"
-          width={24}
+          width="24rem"
           data-testid="standalone"
         >
           <DatePicker value={standalone} onValueChange={setStandalone} />
         </Column>
       </Column>
 
-      <Column gap="12" width={20} data-testid="case-nested">
+      <Column gap="12" width="20rem" data-testid="case-nested">
         <Text variant="label-strong-s">DateInput (picker in a dropdown)</Text>
         <DateInput
           id="datepicker-check-input"

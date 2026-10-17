@@ -43,7 +43,7 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
   return (
     <Row
       fillHeight
-      maxWidth={22}
+      maxWidth="22rem"
       background="surface"
       border
       radius="l"
@@ -52,8 +52,8 @@ export const Sidebar9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }
     >
       <Column
         fillHeight
-        width={6}
-        minWidth={6}
+        width="6rem"
+        minWidth="6rem"
         paddingY="12"
         gap="8"
         center

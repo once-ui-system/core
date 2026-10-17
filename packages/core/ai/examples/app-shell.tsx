@@ -54,7 +54,7 @@ export const Shell = ({
         {/* logo, search, account */}
       </Row>
       <Row fill paddingX="8">
-        <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
+        <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
           <Nav nav={nav} pathname={pathname} />
         </Column>
         <Row fill horizontal="center" topRadius="l" overflow="hidden">

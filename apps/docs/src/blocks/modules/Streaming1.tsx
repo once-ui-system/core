@@ -91,7 +91,7 @@ const MediaList = ({
 
   return (
     <Column
-      minWidth={24}
+      minWidth="24rem"
       gap="24"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -104,7 +104,7 @@ const MediaList = ({
         (isHovered || isVisible) &&
         createPortal(
           <Column
-            maxWidth={28}
+            maxWidth="28rem"
             background="surface"
             transition="macro-short"
             gap="24"
@@ -153,7 +153,7 @@ const MediaList = ({
                       {category}
                     </Text>
                     {index < categories.length - 1 && (
-                      <Row height={0.4} width={0.4} radius="full" background="neutral-strong" />
+                      <Row height="0.4rem" width="0.4rem" radius="full" background="neutral-strong" />
                     )}
                   </React.Fragment>
                 ))}
@@ -350,7 +350,7 @@ export const Streaming1: React.FC = () => {
             pointerEvents="none"
             bottom="0"
             to="top"
-            height={32}
+            height="32rem"
             pattern={{ display: true, size: "2" }}
           />
           <Carousel
@@ -365,7 +365,7 @@ export const Streaming1: React.FC = () => {
             play={{ auto: true, interval: 10000, controls: false, progress: false }}
             items={featured.map((item) => ({
               slide: (
-                <Column fillHeight maxWidth={48} vertical="end" padding="xl" gap="l">
+                <Column fillHeight maxWidth="48rem" vertical="end" padding="xl" gap="l">
                   <Heading variant="display-strong-m" onSolid="neutral-strong">
                     #1 in Movies Today
                   </Heading>

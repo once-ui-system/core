@@ -29,7 +29,7 @@ const Login3 = () => {
           <Row fill position="absolute" top="0" left="0" style={{ transform: "scale(1.5)" }}>
             <Background4 />
           </Row>
-          <Column center gap="32" padding="l" maxWidth={32}>
+          <Column center gap="32" padding="l" maxWidth="32rem">
             <Column horizontal="center" fillWidth gap="4">
               <Heading variant="heading-strong-xl" marginTop="24">
                 Welcome to Once UI

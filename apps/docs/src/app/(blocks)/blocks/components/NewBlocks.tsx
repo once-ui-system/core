@@ -42,7 +42,7 @@ export function NewBlocks({ onNavigate }: NewBlocksProps = {}) {
   }, []);
 
   return (
-    <Column fillWidth border radius="l" minHeight={24} overflow="hidden">
+    <Column fillWidth border radius="l" minHeight="24rem" overflow="hidden">
       <Scroller fill direction="column" fadeColor="page">
         <Grid fillWidth columns={2}>
           {allExamples.map((example, index) => {

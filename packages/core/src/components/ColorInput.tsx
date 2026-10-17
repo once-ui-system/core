@@ -226,7 +226,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                       />
                     }
                     dropdown={
-                      <Column padding="16" gap="12" fillWidth minWidth={12}>
+                      <Column padding="16" gap="12" fillWidth minWidth="12rem">
                         {" "}
                         <Slider
                           value={alpha}

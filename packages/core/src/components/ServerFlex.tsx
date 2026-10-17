@@ -13,10 +13,15 @@ import {
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import {
   BELOW_HEADER,
+  isCSSUnit,
   offsetClasses,
+  offsetValue,
+  px,
   scrollsOn,
   sizeValue,
+  spacingClass,
   spacingClasses,
+  spacingValue,
   themeAttributes,
   translateTransform,
 } from "../utils/layoutClasses";
@@ -215,60 +220,33 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       inline ? "display-inline-flex" : "display-flex",
       position && `position-${position}`,
       hide && "flex-hide",
-      typeof padding !== "number" && padding && `p-${padding}`,
-      typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
-      typeof paddingRight !== "number" && paddingRight && `pr-${paddingRight}`,
-      typeof paddingTop !== "number" && paddingTop && `pt-${paddingTop}`,
-      typeof paddingBottom !== "number" && paddingBottom && `pb-${paddingBottom}`,
-      typeof paddingX !== "number" && paddingX && `px-${paddingX}`,
-      typeof paddingY !== "number" && paddingY && `py-${paddingY}`,
-      typeof margin !== "number" && margin && `m-${margin}`,
-      typeof marginLeft !== "number" && marginLeft && `ml-${marginLeft}`,
-      typeof marginRight !== "number" && marginRight && `mr-${marginRight}`,
-      typeof marginTop !== "number" && marginTop && `mt-${marginTop}`,
-      typeof marginBottom !== "number" && marginBottom && `mb-${marginBottom}`,
-      typeof marginX !== "number" && marginX && `mx-${marginX}`,
-      typeof marginY !== "number" && marginY && `my-${marginY}`,
+      spacingClass("p", padding),
+      spacingClass("pl", paddingLeft),
+      spacingClass("pr", paddingRight),
+      spacingClass("pt", paddingTop),
+      spacingClass("pb", paddingBottom),
+      spacingClass("px", paddingX),
+      spacingClass("py", paddingY),
+      spacingClass("m", margin),
+      spacingClass("ml", marginLeft),
+      spacingClass("mr", marginRight),
+      spacingClass("mt", marginTop),
+      spacingClass("mb", marginBottom),
+      spacingClass("mx", marginX),
+      spacingClass("my", marginY),
       gap === "-1"
         ? direction === "column" || direction === "column-reverse"
           ? "g-vertical--1"
           : "g-horizontal--1"
-        : typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" &&
-        !top.endsWith("%") &&
-        !top.endsWith("vh") &&
-        !top.endsWith("dvh") &&
-        !top.endsWith("vw") &&
-        !top.startsWith("calc(") &&
-        top
+        : spacingClass("g", gap),
+      typeof top === "string" && !isCSSUnit(top) && top
         ? `top-${top}`
         : position === "sticky" && top === undefined
           ? "top-0"
           : undefined,
-      typeof right === "string" &&
-        !right.endsWith("%") &&
-        !right.endsWith("vh") &&
-        !right.endsWith("dvh") &&
-        !right.endsWith("vw") &&
-        !right.startsWith("calc(") &&
-        right &&
-        `right-${right}`,
-      typeof bottom === "string" &&
-        !bottom.endsWith("%") &&
-        !bottom.endsWith("vh") &&
-        !bottom.endsWith("dvh") &&
-        !bottom.endsWith("vw") &&
-        !bottom.startsWith("calc(") &&
-        bottom &&
-        `bottom-${bottom}`,
-      typeof left === "string" &&
-        !left.endsWith("%") &&
-        !left.endsWith("vh") &&
-        !left.endsWith("dvh") &&
-        !left.endsWith("vw") &&
-        !left.startsWith("calc(") &&
-        left &&
-        `left-${left}`,
+      typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
+      typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
+      typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
@@ -352,8 +330,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       typeof cursor === "string" && `cursor-${cursor}`,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
-      typeof blur === "string" && `blur-${blur}`,
-      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
+      typeof blur === "string" && !isCSSUnit(blur) && `blur-${blur}`,
+      typeof backdropBlur === "string" &&
+        !isCSSUnit(backdropBlur) &&
+        `backdrop-blur-${backdropBlur}`,
       dark && "dark-flex",
       light && "light-flex",
       colorClass,
@@ -370,7 +350,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
         // Offsets cascade with the rest. Only a static step is a class
-        // (`.m-top-16`); a rem number or a CSS unit is inline, on ClientFlex.
+        // (`.m-top-16`); a px number or a CSS length is inline, on ClientFlex.
         ...offsetClasses("xl", cascadedXl),
         ...offsetClasses("l", cascadedL),
         ...offsetClasses("m", cascadedM),
@@ -496,26 +476,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
       );
 
-    const parsePosition = (
-      value: number | SpacingToken | string | undefined,
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-      }
-      return undefined;
-    };
-
     // A spacing token as well as a number or a CSS unit: `translateY="16"`
     // used to write no transform at all.
     const transform = translateTransform(translateX, translateY);
@@ -548,17 +508,17 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         marginBottom,
         marginLeft,
       }),
-      gap: typeof gap === "number" ? `${gap}rem` : undefined,
-      top: parsePosition(top),
-      right: parsePosition(right),
-      bottom: parsePosition(bottom),
-      left: parsePosition(left),
+      gap: spacingValue(gap),
+      top: offsetValue(top),
+      right: offsetValue(right),
+      bottom: offsetValue(bottom),
+      left: offsetValue(left),
       transform,
-      // A size is a class; a number is rem, and has no class to reach for.
-      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
-      ...(typeof backdropBlur === "number" && {
-        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
-        backdropFilter: `blur(${backdropBlur}rem)`,
+      // A size is a class; a number is px, and has no class to reach for.
+      filter: spacingValue(blur) ? `blur(${spacingValue(blur)})` : undefined,
+      ...(spacingValue(backdropBlur) && {
+        WebkitBackdropFilter: `blur(${spacingValue(backdropBlur)})`,
+        backdropFilter: `blur(${spacingValue(backdropBlur)})`,
       }),
       ...style,
     };

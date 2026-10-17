@@ -82,7 +82,7 @@ export const Careers4 = () => {
               fillWidth
               horizontal={index === 1 ? "center" : index === 2 ? "end" : "start"}
             >
-              <Column maxWidth={24} border radius="xl" padding="8" gap="8" background="page">
+              <Column maxWidth="24rem" border radius="xl" padding="8" gap="8" background="page">
                 <Animation
                   triggerType="hover"
                   easing="spring"

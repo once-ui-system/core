@@ -92,7 +92,7 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
       <Row fillWidth horizontal="between" vertical="end" wrap gap="24" paddingX="l">
-        <Column gap="12" maxWidth={56}>
+        <Column gap="12" maxWidth="56rem">
           <Heading as="h2" variant="display-strong-m">
             Sites built with Once UI
           </Heading>

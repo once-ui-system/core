@@ -47,7 +47,7 @@ export const Forum1 = () => {
         <Header1 borderBottom="transparent" maxWidth="l" />
       </Row>
       <Row maxWidth="l" style={{ minHeight: "100%" }}>
-        <Column maxWidth={16} style={{ minHeight: "100%" }} borderRight>
+        <Column maxWidth="16rem" style={{ minHeight: "100%" }} borderRight>
           <Column fillWidth padding="16" gap="12">
             <Text onBackground="neutral-weak" marginLeft="12" variant="label-default-s">
               Home
@@ -174,7 +174,7 @@ export const Forum1 = () => {
                 {post.participants.length > 1 && (
                   <AvatarGroup s={{ hide: true }} reverse size="s" avatars={post.participants} />
                 )}
-                <Column gap="4" horizontal="end" minWidth={8}>
+                <Column gap="4" horizontal="end" minWidth="8rem">
                   <Text variant="label-default-s" onBackground="neutral-weak">
                     {post.date}
                   </Text>

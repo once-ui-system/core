@@ -28,8 +28,8 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
         left="0"
         top="0"
         aspectRatio="16/9"
-        gradient={{ display: true, width: 100, y: 80, colorStart: "brand-solid-strong" }}
-        mask={{ x: 50, y: 60, radius: 40 }}
+        gradient={{ display: true, width: "100%", y: "80%", colorStart: "brand-solid-strong" }}
+        mask={{ x: "50%", y: "60%", radius: "40vh" }}
       />
       <Row fillWidth vertical="center" gap="l" m={{ direction: "column" }}>
         <Column fillWidth paddingLeft="xl">
@@ -58,7 +58,7 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
             ))}
           </Grid>
         </Column>
-        <Mask marginRight="32" maxWidth={32} aspectRatio="1/1" x={30} y={40} radius={60}>
+        <Mask marginRight="32" maxWidth="32rem" aspectRatio="1/1" x="30%" y="40%" radius="60vh">
           <Media
             style={{ filter: "grayscale(40%)" }}
             src="/images/global/swag-promo-01.png"

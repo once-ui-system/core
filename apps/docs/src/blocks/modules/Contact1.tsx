@@ -38,7 +38,7 @@ const contacts = [
 export const Contact1 = () => {
   return (
     <Column fillWidth fitHeight horizontal="center" gap="64">
-      <Column maxWidth={40} gap="12" horizontal="center">
+      <Column maxWidth="40rem" gap="12" horizontal="center">
         <Heading as="h2" align="center" variant="display-strong-m">
           Get in touch
         </Heading>
@@ -64,7 +64,7 @@ export const Contact1 = () => {
               top="0"
               gradient={{
                 display: true,
-                x: 100,
+                x: "100%",
                 y: 0,
                 colorStart: "brand-background-medium",
                 colorEnd: "static-transparent",
@@ -135,7 +135,7 @@ export const Contact1 = () => {
           </Button>
         </Column>
 
-        <Column flex={1} minHeight={32} radius="l" overflow="hidden">
+        <Column flex={1} minHeight="32rem" radius="l" overflow="hidden">
           <iframe
             title="Map showing Once UI location"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2689.2891732781513!2d-122.35198712346974!3d47.62050127118443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490151f4ed5b7f9%3A0xdb2ba8689ed0920d!2sSpace%20Needle!5e0!3m2!1sen!2sus!4v1708762160575!5m2!1sen!2sus"

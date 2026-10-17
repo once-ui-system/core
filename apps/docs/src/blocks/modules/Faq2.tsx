@@ -29,7 +29,7 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row fillWidth borderBottom="neutral-medium">
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
+        <Column maxWidth="s" minWidth="24rem" flex={3} horizontal="center">
           {(title || description) && (
             <Column fillWidth padding="32">
               {title && (
@@ -49,7 +49,7 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row horizontal="center" borderBottom="neutral-medium">
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} fitHeight background="surface">
+        <Column maxWidth="s" minWidth="24rem" flex={3} fitHeight background="surface">
           {content.map((item, index) => (
             <React.Fragment key={index}>
               <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
@@ -65,7 +65,7 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row fillWidth>
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
+        <Column maxWidth="s" minWidth="24rem" flex={3} horizontal="center">
           <Row padding="32" fillWidth horizontal="center">
             <Text
               align="center"

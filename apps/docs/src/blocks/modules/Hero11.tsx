@@ -27,7 +27,7 @@ export const Hero11: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
             >
               <Pulse marginRight="8" opacity={60} />
               <Text wrap="nowrap" weight="default">
-                <ShineFx inverse speed={3000} baseOpacity={0.7}>
+                <ShineFx inverse duration={3000} baseOpacity={0.7}>
                   Launch your product ecosystem
                 </ShineFx>
               </Text>

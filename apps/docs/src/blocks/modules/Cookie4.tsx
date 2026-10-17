@@ -18,7 +18,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
 
   return (
     <Column
-      maxWidth={32}
+      maxWidth="32rem"
       padding="24"
       gap="20"
       radius="l"
@@ -34,7 +34,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         top="0"
         gradient={{
           display: true,
-          x: 100,
+          x: "100%",
           y: 0,
           colorStart: "brand-background-medium",
           colorEnd: "static-transparent",

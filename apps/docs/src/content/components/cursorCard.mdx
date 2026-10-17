@@ -23,7 +23,7 @@ A component that displays floating content that follows the user's cursor when h
           </Button>
         }
         overlay={
-          <Card maxWidth={24} radius="l-4" direction="column" border="neutral-alpha-medium">
+          <Card maxWidth="24rem" radius="l-4" direction="column" border="neutral-alpha-medium">
             <Row fillWidth paddingX="20" paddingY="12" gap="8" vertical="center">
               <Avatar size="xs" src="/images/avatar.jpg"/>
               <Text variant="label-default-s">Lorant One</Text>
@@ -73,14 +73,14 @@ A component that displays floating content that follows the user's cursor when h
       code:
 `<CursorCard
     placement="bottom-right"
-    maxWidth={24}
+    maxWidth="24rem"
     trigger={
       <Button weight="default" variant="secondary">
         See details
       </Button>
     }
     overlay={
-      <Card maxWidth={24} radius="l-4" direction="column" border="neutral-alpha-medium">
+      <Card maxWidth="24rem" radius="l-4" direction="column" border="neutral-alpha-medium">
         {children}
       </Card>
     }

@@ -143,7 +143,7 @@ export const Careers3 = () => {
           <Column
             fillWidth
             flex={1}
-            minWidth={24}
+            minWidth="24rem"
             s={{ minWidth: 0 }}
             padding="l"
             gap="24"
@@ -203,7 +203,7 @@ export const Careers3 = () => {
 
           <Line vert background="neutral-alpha-weak" s={{ hide: true }} />
 
-          <Column fillWidth flex={1} minWidth={24} s={{ minWidth: 0 }} padding="l" gap="16">
+          <Column fillWidth flex={1} minWidth="24rem" s={{ minWidth: 0 }} padding="l" gap="16">
             <Column gap="8">
               <Heading as="h3" variant="heading-strong-m">
                 Open positions

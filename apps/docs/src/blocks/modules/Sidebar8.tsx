@@ -80,7 +80,7 @@ export const Sidebar8: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
   );
 
   return (
-    <Column fillHeight maxWidth={18} background="surface" border radius="l" {...flex}>
+    <Column fillHeight maxWidth="18rem" background="surface" border radius="l" {...flex}>
       <Row fillWidth padding="16" vertical="center" gap="12">
         <Avatar size="s" src="/images/creators/lorant.jpg" />
         <Column fillWidth gap="2">

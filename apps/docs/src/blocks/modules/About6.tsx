@@ -61,7 +61,7 @@ export const About6 = () => {
                 borderRight={index < stats.length - 1 ? "neutral-alpha-weak" : undefined}
               >
                 <Heading variant="display-strong-xs">
-                  <CountFx value={stat.value} speed={800} separator="," />
+                  <CountFx value={stat.value} duration={800} separator="," />
                   {stat.suffix}
                 </Heading>
                 <Text variant="label-default-s" onBackground="neutral-weak">

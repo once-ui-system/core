@@ -236,7 +236,7 @@ type GridBreakpointProps = BreakpointProps<AllGridProps,
 
 1. **Values with a class (server-rendered):** a breakpoint value that maps to a utility class — a spacing token, a direction, an alignment — renders as that class on the server (e.g. `m-padding-l`, `s-flex-column`), so the layout is right in the first paint.
 
-2. **Values without a class (client-rendered):** `width`, `height` and their min/max siblings, `aspectRatio`, `style`, and spacing given as a number (rem) have no class behind them. An element that sets one of these at a breakpoint renders through `ClientFlex`/`ClientGrid`, which applies it as an inline style after hydration, for the breakpoint `LayoutProvider` reports. Prefer tokens where you can.
+2. **Values without a class (client-rendered):** `width`, `height` and their min/max siblings, `aspectRatio`, `style`, and spacing given as a number (px) or a CSS length have no class behind them. An element that sets one of these at a breakpoint renders through `ClientFlex`/`ClientGrid`, which applies it as an inline style after hydration, for the breakpoint `LayoutProvider` reports. Prefer tokens where you can.
 
 3. **Cascade order:** `xl` → `l` → `m` → `s` → `xs`. Larger breakpoints flow down to smaller ones. Setting `xl={{ padding: "32" }}` applies `padding: 32` at all sizes unless a smaller breakpoint overrides it.
 

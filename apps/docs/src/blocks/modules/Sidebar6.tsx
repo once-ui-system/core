@@ -100,7 +100,7 @@ export function Sidebar6() {
   const toggle = (key: string) => setOpenMap((s) => ({ ...s, [key]: !s[key] }));
 
   return (
-    <Column maxWidth={16} fillHeight padding="2" gap="8" background="surface" radius="l" border>
+    <Column maxWidth="16rem" fillHeight padding="2" gap="8" background="surface" radius="l" border>
       <Row paddingX="24" paddingY="16">
         <Logo
           wordmark={{
@@ -201,8 +201,8 @@ export function Sidebar6() {
             fill
             gradient={{
               display: true,
-              width: 200,
-              x: 50,
+              width: "200%",
+              x: "50%",
               y: 0,
               colorStart: "neutral-background-strong",
             }}
@@ -214,7 +214,7 @@ export function Sidebar6() {
             fillWidth
             style={{ minHeight: "var(--static-space-56)" }}
           >
-            <Row fillWidth gap="12" vertical="center" left={-0.5}>
+            <Row fillWidth gap="12" vertical="center" left="-0.5rem">
               <Avatar src="/images/creators/lorant.jpg" />
               <Column fillWidth gap="2">
                 <Text variant="label-default-m">Lorant</Text>

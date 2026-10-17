@@ -21,7 +21,7 @@ GlitchFx applies a glitch animation to any nested content. You can control the s
             src="/images/docs/once-ui/earth.png"
             alt="Earth"
             aspectRatio="1 / 1"
-            maxWidth={24}
+            maxWidth="24rem"
             sizes="640px"
           />
           <Text align="center" variant="display-default-xs">
@@ -43,7 +43,7 @@ GlitchFx applies a glitch animation to any nested content. You can control the s
         src="/images/docs/once-ui/earth.png"
         alt="Earth"
         aspectRatio="1 / 1"
-        maxWidth={24}
+        maxWidth="24rem"
         sizes="640px"
       />
       <Heading as="h2" align="center" variant="display-default-xs">
@@ -68,7 +68,7 @@ GlitchFx applies a glitch animation to any nested content. You can control the s
     trigger: "What starts the effect.",
     continuous: "Keep glitching rather than running once.",
     interval: "Time between bursts, in milliseconds.",
-    speed: "Pace of a single burst.",
+    speed: "Multiplier on the 2.5s glitch cycle (2 is twice as fast), or \"slow\", \"medium\", \"fast\" (0.5, 1, 2).",
   }}
   content={[
     ["children"],

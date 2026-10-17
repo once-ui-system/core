@@ -1,11 +1,11 @@
-import { Column, Heading, Row, Text } from "@once-ui-system/core";
+import { type CSSUnit, Column, Heading, Row, Text } from "@once-ui-system/core";
 import type { ReactNode } from "react";
 import { Pagination } from "./Pagination";
 
 interface DocsLayoutProps {
   title?: string;
   description?: ReactNode;
-  maxWidth?: number | "xs" | "s" | "m" | "l" | "xl";
+  maxWidth?: number | CSSUnit | "xs" | "s" | "m" | "l" | "xl";
   children: ReactNode;
   pagination?: boolean;
   align?: "center";
@@ -14,7 +14,7 @@ interface DocsLayoutProps {
 const DocsLayout: React.FC<DocsLayoutProps> = ({
   title,
   description,
-  maxWidth = 96,
+  maxWidth = "96rem",
   children,
   pagination = true,
   align,

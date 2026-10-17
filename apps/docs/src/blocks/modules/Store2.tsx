@@ -72,8 +72,8 @@ export const Store2 = () => {
                     src={image}
                     alt={`${product.name} view ${index + 1}`}
                     aspectRatio="1/1"
-                    minWidth={5}
-                    maxWidth={5}
+                    minWidth="5rem"
+                    maxWidth="5rem"
                     sizes="80px"
                   />
                 </Row>

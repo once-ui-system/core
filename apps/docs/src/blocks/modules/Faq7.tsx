@@ -73,8 +73,8 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
     <Column fillWidth horizontal="center" paddingX="l" {...flex}>
       <Row maxWidth="l" gap="32" s={{ direction: "column" }} vertical="start">
         <Column
-          minWidth={18}
-          maxWidth={22}
+          minWidth="18rem"
+          maxWidth="22rem"
           gap="24"
           padding="24"
           radius="xl"
@@ -87,9 +87,9 @@ export const Faq7 = (flex: React.ComponentProps<typeof Column>) => {
             gradient={{
               display: true,
               x: 0,
-              y: 100,
-              width: 100,
-              height: 100,
+              y: "100%",
+              width: "100%",
+              height: "100%",
               colorStart: "brand-background-medium",
               colorEnd: "static-transparent",
             }}

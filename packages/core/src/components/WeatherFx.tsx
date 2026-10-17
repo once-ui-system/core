@@ -2,16 +2,20 @@
 
 import React, { useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
 
 type WeatherType = "rain" | "snow" | "leaves" | "lightning";
 
 interface WeatherFxProps extends React.ComponentProps<typeof Flex> {
   type?: WeatherType;
-  speed?: number;
+  /** A multiplier on the designed pace (`1`), or `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2). */
+  speed?: Speed;
   colors?: string[];
   intensity?: number;
   angle?: number;
+  /** Milliseconds to keep emitting before the weather stops (seconds until 3.0). Unset runs forever. */
   duration?: number;
   trigger?: "mount" | "hover" | "click" | "manual";
   active?: boolean;
@@ -85,7 +89,7 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
   (
     {
       type = "rain",
-      speed = 1,
+      speed: speedProp,
       colors = ["brand-solid-medium"],
       intensity = 50,
       angle = 0,
@@ -98,6 +102,7 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
     },
     forwardedRef,
   ) => {
+    const speed = speedFactor(speedProp);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -441,7 +446,7 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
 
         // Check duration limit
         if (duration && isEmittingRef.current) {
-          const elapsed = (Date.now() - emitStartTimeRef.current) / 1000;
+          const elapsed = Date.now() - emitStartTimeRef.current;
           if (elapsed > duration) {
             isEmittingRef.current = false;
           }

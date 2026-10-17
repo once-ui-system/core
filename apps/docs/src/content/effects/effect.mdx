@@ -24,15 +24,15 @@ one setting, and `type="none"` renders the content with no layer at all.
   previewPadding="0"
   preview={
     <Row fillWidth gap="16" m={{direction: "column"}}>
-      <Effect type="blob" height={12} radius="l" />
-      <Effect type="matrix" height={12} radius="l" />
-      <Effect type="particle" height={12} radius="l" />
+      <Effect type="blob" height="12rem" radius="l" />
+      <Effect type="matrix" height="12rem" radius="l" />
+      <Effect type="particle" height="12rem" radius="l" />
     </Row>
   }
   codes={[
     {
       code:
-`<Effect type={theme.effect} height={12} radius="l" />`,
+`<Effect type={theme.effect} height="12rem" radius="l" />`,
       language: "tsx",
       label: "Effect"
     }
@@ -50,7 +50,7 @@ effect changes the look and nothing else about the layout.
   marginBottom="24"
   previewPadding="0"
   preview={
-    <Effect type="matrix" height={20} radius="l" colors={["brand-solid-medium"]}>
+    <Effect type="matrix" height="20rem" radius="l" colors={["brand-solid-medium"]}>
       <Column fillWidth center gap="8">
         <Heading variant="display-strong-l" onBackground="neutral-strong">
           One setting
@@ -64,7 +64,7 @@ effect changes the look and nothing else about the layout.
   codes={[
     {
       code:
-`<Effect type="matrix" height={20} radius="l" colors={["brand-solid-medium"]}>
+`<Effect type="matrix" height="20rem" radius="l" colors={["brand-solid-medium"]}>
     <Column fillWidth center gap="8">
       <Heading variant="display-strong-l">One setting</Heading>
       <Text variant="body-default-m">
@@ -93,7 +93,7 @@ and still switched with one prop.
   preview={
     <Effect
       type="weather"
-      height={16}
+      height="16rem"
       radius="l"
       colors={["accent-solid-medium"]}
       weather={{ type: "snow", intensity: 0.6 }}
@@ -123,7 +123,7 @@ and still switched with one prop.
     type: "Which ambient layer to render. \"none\" renders the children alone.",
     children: "Content drawn above the layer.",
     colors: "Palette for the layer, when it takes one.",
-    speed: "Multiplier on the layer's own motion. Not a duration.",
+    speed: "Multiplier on the layer's own motion: 1 is each effect's default. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",
     blob: "Props passed through when type is \"blob\".",
     matrix: "Props passed through when type is \"matrix\".",

@@ -20,7 +20,7 @@ A simple dropdown with a button trigger and custom content.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth height={10} horizontal="center" vertical="start">
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
       <BasicDropdown />
     </Row>
   }
@@ -55,7 +55,7 @@ return (
         </Button>
       }
       dropdown={
-        <Column minWidth={10} padding="4" gap="2">
+        <Column minWidth="10rem" padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -83,7 +83,7 @@ Control the placement of the dropdown relative to its trigger element.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth height={10} horizontal="center" vertical="start">
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
       <CustomPositionDropdown />
     </Row>
   }
@@ -139,7 +139,7 @@ Control the dimensions of the dropdown menu.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth height={10} horizontal="center" vertical="start">
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
       <SearchableDropdown />
     </Row>
   }
@@ -182,7 +182,7 @@ return (
         </Button>
       }
       dropdown={
-        <Column fillWidth minWidth={12}>
+        <Column fillWidth minWidth="12rem">
           <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
               size="s"
@@ -262,9 +262,9 @@ open the dropdown.
     disableTriggerClick: "Stop the trigger opening it, when something else does.",
     dropdownId: "Id for the dropdown element, to reference from a label.",
     fillWidth: "Match the trigger's width.",
-    minWidth: "Lower bound on the dropdown's width, in rem.",
-    maxWidth: "Upper bound on the dropdown's width, in rem.",
-    minHeight: "Lower bound on the dropdown's height, in rem.",
+    minWidth: "Lower bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
+    maxWidth: "Upper bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
+    minHeight: "Lower bound on the dropdown's height, in px.",
   }}
   content={[
     ["style", "React.CSSProperties"],

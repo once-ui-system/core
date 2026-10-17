@@ -159,7 +159,7 @@ export const About1 = () => {
           overflow="hidden"
         >
           <BlobFx position="absolute" right="0" bottom="0" />
-          <Row maxWidth={40}>
+          <Row maxWidth="40rem">
             <Text variant="heading-default-xl" wrap="balance">
               Join our community and be part of the next generation of creators.
             </Text>

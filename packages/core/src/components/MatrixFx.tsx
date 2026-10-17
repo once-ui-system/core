@@ -2,13 +2,17 @@
 
 import React, { useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
 
 interface BulgeConfig {
   type?: "ripple" | "wave";
+  /** Milliseconds one bulge wave takes (seconds until 3.0). Default 3000. */
   duration?: number;
   intensity?: number;
   repeat?: boolean;
+  /** Milliseconds between waves. */
   delay?: number;
 }
 
@@ -29,7 +33,8 @@ interface Dot {
 }
 
 interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
-  speed?: number;
+  /** A multiplier on the designed pace (`1`), or `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2). */
+  speed?: Speed;
   colors?: string[];
   size?: number;
   spacing?: number;
@@ -46,7 +51,7 @@ interface MatrixFxProps extends React.ComponentProps<typeof Flex> {
 const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
   (
     {
-      speed = 1,
+      speed: speedProp,
       colors = ["brand-solid-medium"],
       size = 3,
       spacing = 3,
@@ -62,6 +67,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
     },
     forwardedRef,
   ) => {
+    const speed = speedFactor(speedProp);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -249,7 +255,8 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
         const bulgeEnabled = !!bulge;
         const bulgeType = bulge?.type ?? "ripple";
-        const bulgeDuration = bulge?.duration ?? 3;
+        // In seconds below, like the elapsed time it is compared with.
+        const bulgeDuration = (bulge?.duration ?? 3000) / 1000;
         const bulgeIntensity = bulge?.intensity ?? 10;
         const bulgeRepeat = bulge?.repeat ?? true;
         const bulgeDelay = bulge?.delay ?? 0;

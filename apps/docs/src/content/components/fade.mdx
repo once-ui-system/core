@@ -22,7 +22,7 @@ The Fade component creates a gradient fade effect that transitions from a base c
         position="absolute"
         top="0"
         to="bottom"
-        height={12}
+        height="12rem"
         pattern={{ display: true, size: "2" }}
       />
       <Fade
@@ -31,7 +31,7 @@ The Fade component creates a gradient fade effect that transitions from a base c
         position="absolute"
         bottom="0"
         to="top"
-        height={12}
+        height="12rem"
         pattern={{ display: true, size: "2" }}
       />
     </Flex>
@@ -47,7 +47,7 @@ The Fade component creates a gradient fade effect that transitions from a base c
       top="0"
       to="bottom"
       topRadius="l"
-      height={12}
+      height="12rem"
       pattern={{ display: true, size: "2" }}
     />
     <Fade
@@ -56,7 +56,7 @@ The Fade component creates a gradient fade effect that transitions from a base c
       bottom="0"
       to="top"
       bottomRadius="l"
-      height={12}
+      height="12rem"
       pattern={{ display: true, size: "2" }}
     />
 </Flex>`,
@@ -201,7 +201,7 @@ Add a blur effect to the fade.
         base="page"
         bottom="0"
         to="top"
-        blur={2}
+        blur="2rem"
         bottomRadius="l"
       />
       Blur size
@@ -217,7 +217,7 @@ Add a blur effect to the fade.
       base="page"
       bottom="0"
       to="top"
-      blur={2}
+      blur="2rem"
       bottomRadius="l"
     />
     Blur size
@@ -235,7 +235,7 @@ Add a blur effect to the fade.
   describe={{
     to: "Which way it fades out.",
     base: "The colour it fades from. Match the surface behind it, or the fade shows as a band of the wrong colour.",
-    blur: "Backdrop blur behind the fade, in rem.",
+    blur: "Backdrop blur behind the fade, in px. Default 0.5rem.",
     pattern: "Overlay a dot pattern in the base colour, and at what spacing.",
     children: "Content drawn above the fade.",
   }}

@@ -134,7 +134,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
             {backdrop}
             <Column
               ref={dialogRef}
-              maxWidth={52}
+              maxWidth="52rem"
               fillHeight
               background="page"
               topRadius="xl"

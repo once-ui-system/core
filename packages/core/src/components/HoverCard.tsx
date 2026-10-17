@@ -10,7 +10,7 @@ const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(({ children, ...pro
     <Animation
       ref={ref}
       fade={0}
-      slideUp={0.5}
+      slideUp="0.5rem"
       scale={0.9}
       duration={200}
       triggerType="hover"

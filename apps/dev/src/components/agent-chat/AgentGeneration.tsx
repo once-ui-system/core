@@ -12,8 +12,8 @@ export function AgentGeneration({ text, active = false }: AgentGenerationProps) 
 
   return (
     <Column
-      maxWidth={48}
-      maxHeight={12}
+      maxWidth="48rem"
+      maxHeight="12rem"
       overflowY="auto"
       background="neutral-alpha-weak"
       radius="m"

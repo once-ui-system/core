@@ -110,11 +110,11 @@ export const About4 = () => {
             >
               <Media
                 stretch
-                minHeight={20}
+                minHeight="20rem"
                 sizes="(max-width: 768px) 100vw, 640px"
                 src="/images/creators/lorant.jpg"
               />
-              <Mask position="absolute" fill x={50} y={0}>
+              <Mask position="absolute" fill x="50%" y={0}>
                 <MatrixFx
                   flicker
                   fps={24}
@@ -167,7 +167,7 @@ export const About4 = () => {
                       }}
                     />
                     <Row fillWidth borderX gap="4">
-                      <Row padding="4" width={18}>
+                      <Row padding="4" width="18rem">
                         <Button fillWidth size="s" rounded arrowIcon href="https://lorant.one">
                           About the creator
                         </Button>
@@ -190,12 +190,12 @@ export const About4 = () => {
           </Row>
 
           <Grid columns={4} s={{ columns: 2 }} fillWidth background="page">
-            <Row fill center borderRight borderBottom minHeight={4}>
+            <Row fill center borderRight borderBottom minHeight="4rem">
               <Logo
                 icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
               />
             </Row>
-            <Row fill center borderRight borderBottom minHeight={4}>
+            <Row fill center borderRight borderBottom minHeight="4rem">
               <Logo
                 wordmark={{
                   light: "/trademarks/icon-light.svg",
@@ -203,7 +203,7 @@ export const About4 = () => {
                 }}
               />
             </Row>
-            <Row fill center borderRight borderBottom minHeight={4}>
+            <Row fill center borderRight borderBottom minHeight="4rem">
               <Logo
                 wordmark={{
                   light: "/trademarks/icon-light.svg",
@@ -211,7 +211,7 @@ export const About4 = () => {
                 }}
               />
             </Row>
-            <Row fill borderBottom minHeight={4}>
+            <Row fill borderBottom minHeight="4rem">
               <Card href="#" fill center textVariant="label-strong-s" border="transparent">
                 Become a sponsor
               </Card>

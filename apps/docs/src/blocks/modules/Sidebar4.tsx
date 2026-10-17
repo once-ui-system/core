@@ -24,10 +24,10 @@ export const Sidebar4: React.FC<
   const [activeRoom, setActiveRoom] = useState<string | null>("👋 ┃ intro");
 
   return (
-    <Column fillHeight maxWidth={18} background="surface" {...flex}>
+    <Column fillHeight maxWidth="18rem" background="surface" {...flex}>
       <Row fillWidth aspectRatio="2/1">
         <Media src="/images/blocks/vibe-coding-dark.jpg" stretch sizes="240px" />
-        <Fade position="absolute" top="0" fillWidth height={6} opacity={70} />
+        <Fade position="absolute" top="0" fillWidth height="6rem" opacity={70} />
         <Row
           fillWidth
           paddingY="12"

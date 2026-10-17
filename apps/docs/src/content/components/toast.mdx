@@ -124,13 +124,11 @@ Hide the default variant icon by setting `icon={false}`.
   ]}
 />
 
-## Toaster
+## Where toasts appear
 
-<Feedback marginBottom="24" title="Automatic rendering" description={<>You don't need to manually render the Toaster component. It's automatically included when you wrap your app with <InlineCode>ToastProvider</InlineCode>. See the <SmartLink href="/contexts/toastProvider">ToastProvider documentation</SmartLink> for setup instructions.</>}/>
+<Feedback marginBottom="24" title="Automatic rendering" description={<>Toasts render on their own once your app is wrapped in <InlineCode>ToastProvider</InlineCode>; show one with <InlineCode>useToast()</InlineCode>. See the <SmartLink href="/contexts/toastProvider">ToastProvider documentation</SmartLink> for setup instructions.</>}/>
 
-The `Toaster` component manages multiple toast notifications, handling positioning, stacking animations, and portal rendering. It's automatically included when using `ToastProvider`.
-
-The Toaster:
+`ToastProvider` renders the toast stack itself (an internal part; 2.x exported it as `Toaster`). The stack:
 - Renders toasts in a fixed position at the bottom center of the screen
 - Stacks multiple toasts with scale and opacity animations
 - Uses React portals to render outside the normal DOM hierarchy
@@ -161,14 +159,5 @@ Toast components include proper ARIA attributes:
   content={[
     ["children", "ReactNode"],
     ["className", "string"]
-  ]}
-/>
-
-### Toaster element
-
-<PropsTable
-  content={[
-    ["toasts", "{ id: string; variant: 'success' | 'danger' | 'warning' | 'info'; message: ReactNode; action?: ReactNode; duration?: number }[]"],
-    ["removeToast", "(id: string) => void"]
   ]}
 />

@@ -6,7 +6,8 @@ import { Text } from "./Text";
 
 export interface CountFxProps extends React.ComponentProps<typeof Text> {
   value: number;
-  speed?: number;
+  /** Milliseconds one count from the old value to the new one takes. Was `speed` until 3.0. */
+  duration?: number;
   easing?: "linear" | "ease-out" | "ease-in-out";
   format?: (value: number) => string;
   separator?: string;
@@ -19,7 +20,7 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(
   (
     {
       value,
-      speed = 1000,
+      duration = 1000,
       easing = "ease-out",
       format,
       separator,
@@ -255,7 +256,7 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(
         if (!startTime) startTime = timestamp;
 
         const elapsed = timestamp - startTime;
-        const progress = Math.min(elapsed / speed, 1);
+        const progress = Math.min(elapsed / duration, 1);
         const easedProgress = getEasing(progress);
 
         if (effect === "wheel") {
@@ -302,7 +303,7 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(
           cancelAnimationFrame(animationRef.current);
         }
       };
-    }, [value, speed, easing, effect]);
+    }, [value, duration, easing, effect]);
 
     // Cleanup on unmount
     useEffect(() => {

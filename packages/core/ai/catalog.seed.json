@@ -19,11 +19,6 @@
     "tags": ["effect", "motion", "overlay"],
     "pairsWith": ["HoverCard", "Column"]
   },
-  "Arrow": {
-    "purpose": "Small animated arrow that slides when the element its trigger selector names is hovered — the arrow on a CTA",
-    "tags": ["decoration", "action"],
-    "pairsWith": ["Button", "SmartLink"]
-  },
   "AutoScroll": {
     "purpose": "Endless auto-scrolling marquee of its children that slows or pauses on hover",
     "tags": ["layout", "marketing", "motion"],
@@ -158,11 +153,6 @@
     "tags": ["effect", "data", "marketing"],
     "pairsWith": ["Text", "Row"]
   },
-  "Cursor": {
-    "purpose": "Custom cursor element that follows the pointer while it is over a referenced element",
-    "tags": ["effect"],
-    "pairsWith": ["CursorCard"]
-  },
   "CursorCard": {
     "purpose": "Floating card that follows the pointer while it hovers a trigger — rich previews on hover",
     "tags": ["effect", "overlay", "marketing"],
@@ -206,12 +196,7 @@
   "Dialog": {
     "purpose": "Modal dialog with title, description, footer and focus handling; stackable over a base dialog",
     "tags": ["overlay", "auth"],
-    "pairsWith": ["DialogProvider", "Button", "Column", "OTPInput"]
-  },
-  "DialogProvider": {
-    "purpose": "Context that lets a stacked Dialog dim and disable the base Dialog beneath it",
-    "tags": ["overlay", "provider"],
-    "pairsWith": ["Dialog"]
+    "pairsWith": ["Button", "Column", "OTPInput"]
   },
   "Drawer": {
     "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock — mobile navigation, filters and side panels",
@@ -353,11 +338,6 @@
     "purpose": "Text field with label, description, error, prefix/suffix and validation",
     "tags": ["form"],
     "pairsWith": ["PasswordInput", "Select", "Switch", "Form"]
-  },
-  "InteractiveDetails": {
-    "purpose": "Label and description block that Checkbox, RadioButton and Switch render beside their control",
-    "tags": ["form"],
-    "pairsWith": ["Checkbox", "RadioButton", "Switch"]
   },
   "Kbar": {
     "purpose": "Command palette opened with ⌘K: searchable sections of links and actions",
@@ -853,17 +833,12 @@
     "purpose": "One notification message with variant, icon, action and close; shown through useToast",
     "tags": ["feedback"],
     "avoid": "Rendering it directly — call addToast from useToast",
-    "pairsWith": ["Toaster", "useToast"]
+    "pairsWith": ["ToastProvider", "useToast"]
   },
   "ToastProvider": {
-    "purpose": "Root provider for toast notifications: renders the Toaster and gives useToast its addToast",
+    "purpose": "Root provider for toast notifications: renders the toast stack and gives useToast its addToast",
     "tags": ["provider", "feedback"],
     "pairsWith": ["Toast", "LayoutProvider"]
-  },
-  "Toaster": {
-    "purpose": "The stack ToastProvider renders its toasts into, positioned per breakpoint",
-    "tags": ["feedback", "provider"],
-    "pairsWith": ["Toast", "useToast"]
   },
   "ToggleButton": {
     "purpose": "Button with a selected state, for toolbars, segmented choices and nav rows",

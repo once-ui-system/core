@@ -17,7 +17,7 @@ A component for providing users with contextual options / information on right c
     <Column gap="16" fillWidth>
       <ContextMenu
         dropdown={
-          <Column gap="2" padding="4" minWidth={10}>
+          <Column gap="2" padding="4" minWidth="10rem">
             <Row paddingBottom="8" paddingTop="12" paddingX="16" onBackground="neutral-weak">
               <Text variant="label-default-s">Context Menu</Text>
             </Row>
@@ -62,7 +62,7 @@ A component for providing users with contextual options / information on right c
 `<ContextMenu
     placement="bottom-start"
     dropdown={
-      <Column gap="2" padding="4" minWidth={10}>
+      <Column gap="2" padding="4" minWidth="10rem">
         <Option
           prefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />}
           label="Edit"
@@ -143,9 +143,9 @@ The menu opens at the pointer, or at the element when it is opened from the keyb
     onOpenChange: "Called whenever it opens or closes.",
     disabled: "Stop the menu opening at all.",
     fillWidth: "Stretch the region that opens the menu to the width of its container.",
-    minWidth: "Lower bound on the menu's width, in rem.",
-    maxWidth: "Upper bound on the menu's width, in rem.",
-    minHeight: "Lower bound on the menu's height, in rem.",
+    minWidth: "Lower bound on the menu's width: a number is px, a string a CSS length (\"12rem\").",
+    maxWidth: "Upper bound on the menu's width: a number is px, a string a CSS length (\"12rem\").",
+    minHeight: "Lower bound on the menu's height, in px.",
     contents: "Render no wrapper box (display: contents), so the children keep their own layout.",
   }}
   content={[

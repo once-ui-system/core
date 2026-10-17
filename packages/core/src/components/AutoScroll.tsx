@@ -1,12 +1,18 @@
 "use client";
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import styles from "./AutoScroll.module.scss";
 import { Row } from "./Row";
 
 interface AutoScrollProps extends React.ComponentProps<typeof Row> {
   children: React.ReactNode;
-  speed?: "slow" | "medium" | "fast";
+  /**
+   * A multiplier on the 20-second loop (`2` is twice as fast), or
+   * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2).
+   */
+  speed?: Speed;
   hover?: "slow" | "pause" | "none";
   reverse?: boolean;
   className?: string;
@@ -14,11 +20,8 @@ interface AutoScrollProps extends React.ComponentProps<typeof Row> {
   scrollGap?: number | string;
 }
 
-const DURATIONS = {
-  slow: 40000,
-  medium: 20000,
-  fast: 10000,
-};
+/** Milliseconds one loop takes at speed 1. */
+const LOOP_MS = 20000;
 
 const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
   (
@@ -102,7 +105,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
       if (!wrapperRef.current || contentWidth <= 0) return;
 
       const element = wrapperRef.current;
-      const duration = DURATIONS[speed];
+      const duration = LOOP_MS / speedFactor(speed);
       const parentWidth = element.parentElement?.clientWidth || 0;
 
       // Save current animation state if it exists

@@ -100,6 +100,81 @@ never open); `open`/`defaultOpen`/`onOpenChange` on Kbar; `onValueCommit` on
 Slider, on pointer release and after each key; a group `disabled` on
 SegmentedControl, whose `onValueChange` is no longer required.
 
+### 6. Numbers mean px
+
+A bare number has one meaning per kind now: a length is **px**, a time is
+**milliseconds**, and `speed` is a **multiplier**. In 2.x a number was rem on
+sizes, spacing and offsets (and vh, a percentage or seconds on a few props),
+so `maxWidth={40}` was 640px; in 3.0 it is 40px. Run the codemod: it writes
+the rem you had as a string, `maxWidth="40rem"`, which renders exactly as
+before and still follows the root font size. Tokens are unchanged
+(`padding="16"` is the spacing step), and any CSS length string now works
+where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
+`"100dvh"`, `calc(…)`), so write whichever you prefer for new code.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
+| Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
+| Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
+| Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
+| CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
+| RevealFx `speed` (`"fast"`/`"medium"`/`"slow"` or ms) | `duration` in ms (1000/2000/3000) | rewrites |
+| ShineFx, CountFx `speed` (ms) | `duration` | renames |
+| TypeFx `speed` (ms per character) | `charDuration` | renames |
+| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | reports |
+| AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
+
+Left as they were, because they were already px: Dialog, DropdownWrapper,
+ContextMenu, DateInput and DateRangeInput `minHeight`; Animation `blur`;
+`sizes`; AutoScroll `scrollGap`; Pulse `pulseSize`; `borderWidth`; MatrixFx
+`size`/`spacing`; Background `lines.thickness`; LinearGauge and RadialGauge
+`width`/`height` (the drawing's size: the gauge scales to its box, so set the
+box with `maxWidth`).
+
+What the codemod reports, for you to finish: a variable, arithmetic or a call
+on one of these props (`maxWidth={layout.content.width}`: write
+``{`${layout.content.width}rem`}``, or change the value at its source to a rem
+string or px), a breakpoint object passed by name, and spreads. Values in a
+config object (`layout.content.width: 44`) are not Once UI props, so the
+codemod cannot see them: change them to `"44rem"` there.
+
+Behaviour to check: keyword speeds that did not divide evenly moved to the
+shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
+1.25s rather than 1.5s, and its `speed` now takes effect at all; LetterFx
+`"fast"` steps every 15ms rather than 10ms).
+
+### 7. Exports that became internal
+
+The root barrel drops the parts other components are built from, so what is
+left is what an app composes. The modules still exist inside the package; only
+the exports are gone. The codemod reports every import of one, with what to use
+instead, and changes the code only where the replacement is exact
+(`DialogProvider`, `generateMetadata`).
+
+| 2.x export | 3.0 | Codemod |
+| --- | --- | --- |
+| `ServerFlex`, `ClientFlex` | `Flex`, which already picks its server or client half | reports |
+| `ServerGrid`, `ClientGrid` | `Grid`, likewise | reports |
+| `Cursor` | Flex's or Grid's `cursor` prop, given an element | reports |
+| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action | reports |
+| `InteractiveDetails`, `InteractiveDetailsProps` | `label` and `description` on Checkbox, RadioButton and Switch | reports |
+| `Toaster` | nothing: `ToastProvider` renders it; show toasts with `useToast()` | reports |
+| `Arrow` | Button `arrowIcon`, Badge `arrow` | reports |
+| `ArrowNavigation`, `ArrowNavigationProps`, `useArrowNavigationContext`, `withArrowNavigation` | the `useArrowNavigation` hook on your own container: pass `containerRef`, call `handleKeyDown` from `onKeyDown` | reports |
+| `DialogProvider` | nothing: a `stack` Dialog makes the one beneath it inert by itself (the provider's state was never read) | drops the import, `<DialogProvider>` becomes `<>` |
+| `generateMetadata` | `createMetadata` (or `Meta.generate`, unchanged). The old name is Next's route-segment convention, so a page that re-exported it had it called by Next | renames the import and every call; keeps a re-export's public name and reports it |
+| `dev` | a `process.env.NODE_ENV` check of your own | reports |
+| `getLastOpenedDropdown`, `setLastOpenedDropdown`, `clearLastOpenedDropdown` | nothing: dropdowns close each other | reports |
+| `MissingDependency` | nothing: the fallback a chart, CodeBlock or MediaUpload shows when its peer is missing | reports |
+| `escapeHtml`, `safeScriptJson`, `sanitizeHref` | a sanitiser of your own; `Schema`, `ThemeInit` and `SmartLink` keep using them | reports |
+
+The rest of core no longer depends on the effects: ProgressBar, RadialGauge and
+DataTooltip count up, Carousel and DatePicker reveal, and Table's loading text
+shines with internal parts of their own instead of `CountFx`, `RevealFx` and
+`ShineFx`. Nothing changes in how they look or what you pass them; it is what
+lets the effects move to `@once-ui-system/fx` later.
+
 ---
 
 ## 1.8.x → 2.0

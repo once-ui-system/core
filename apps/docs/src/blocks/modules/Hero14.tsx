@@ -83,7 +83,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                   colorStart: "brand-solid-strong",
                   colorEnd: "accent-solid-weak",
                 }}
-                mask={{ cursor: true, radius: 20 }}
+                mask={{ cursor: true, radius: "20vh" }}
               />
               <Row background="page" radius="l">
                 <Button href="#" variant="secondary" size="l">
@@ -108,18 +108,18 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                   position="absolute"
                   top="0"
                   left="0"
-                  gradient={{ display: true, x: 0, y: 100, colorStart: "brand-solid-medium" }}
+                  gradient={{ display: true, x: 0, y: "100%", colorStart: "brand-solid-medium" }}
                 />
                 <Column fill m={{ hide: true }} borderRight="brand-alpha-weak">
                   <Row flex={1}>
                     <Row flex={1} />
-                    <Row maxWidth={24} borderX="brand-alpha-weak" />
+                    <Row maxWidth="24rem" borderX="brand-alpha-weak" />
                     <Row flex={1} />
                   </Row>
                   <Row flex={1} borderY="brand-alpha-weak">
                     <Row flex={1} />
                     <Row
-                      maxWidth={24}
+                      maxWidth="24rem"
                       borderX="brand-alpha-weak"
                       center
                       textVariant="code-default-s"
@@ -132,19 +132,19 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                   </Row>
                   <Row flex={1}>
                     <Row flex={1} />
-                    <Row maxWidth={24} borderX="brand-alpha-weak" />
+                    <Row maxWidth="24rem" borderX="brand-alpha-weak" />
                     <Row flex={1} />
                   </Row>
                 </Column>
                 <Column fill>
                   <Row flex={1}>
                     <Row flex={1} />
-                    <Row maxWidth={24} borderX="brand-alpha-weak" />
+                    <Row maxWidth="24rem" borderX="brand-alpha-weak" />
                     <Row flex={1} />
                   </Row>
                   <Row flex={1} borderY="brand-alpha-weak">
                     <Row flex={1} />
-                    <Row maxWidth={24} borderX="brand-alpha-weak">
+                    <Row maxWidth="24rem" borderX="brand-alpha-weak">
                       <Row fillWidth padding="4">
                         <TiltFx>
                           <Row
@@ -152,7 +152,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                             data-scaling="110"
                             radius="l"
                             background="overlay"
-                            backdropBlur={0.125}
+                            backdropBlur="0.125rem"
                           >
                             <Card
                               fillWidth
@@ -216,7 +216,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
                   </Row>
                   <Row flex={1}>
                     <Row flex={1} />
-                    <Row maxWidth={24} borderX="brand-alpha-weak" />
+                    <Row maxWidth="24rem" borderX="brand-alpha-weak" />
                     <Row flex={1} />
                   </Row>
                 </Column>

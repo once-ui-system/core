@@ -35,7 +35,7 @@ describe("chart plot height", () => {
       const { container } = render(chart);
       const card = container.firstElementChild as HTMLElement;
       const plot = card.lastElementChild as HTMLElement;
-      expect(card.style.height).toBe("24rem");
+      expect(card.style.height).toBe("24px");
       expect(card.style.minHeight).toBe("");
       expect(plot.style.minHeight).toBe("");
     });

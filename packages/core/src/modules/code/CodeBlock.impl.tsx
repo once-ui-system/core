@@ -14,7 +14,7 @@ import { StyleOverlay } from "../../components/StyleOverlay";
 import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import type { IconName } from "../../icons";
-import { SpacingToken } from "../../types";
+import { CSSUnit, SpacingToken } from "../../types";
 import { escapeHtml } from "../../utils/safe-html";
 import styles from "./CodeBlock.module.scss";
 
@@ -449,7 +449,11 @@ type CodeInstance = {
 };
 
 export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
-  codeHeight?: number;
+  /**
+   * Cap on the code area's height before it scrolls: a number is px, a string
+   * a CSS length (`"20rem"`). Was rem until 3.0.
+   */
+  codeHeight?: number | CSSUnit;
   fillHeight?: boolean;
   previewPadding?: SpacingToken;
   codes?: CodeInstance[];
@@ -668,7 +672,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       vertical="center"
       fillWidth
       radius="m"
-      minHeight={2.5}
+      minHeight="2.5rem"
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
       })}
@@ -860,7 +864,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <div
                       className={classNames(styles.pre, `language-diff`)}
                       style={{
-                        maxHeight: `${codeHeight}rem`,
+                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
                         overflow: "auto",
                         width: "100%",
                       }}
@@ -879,7 +883,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       key={`${selectedInstance}-${highlight || "no-highlight"}`}
                       suppressHydrationWarning
                       tabIndex={-1}
-                      style={{ maxHeight: `${codeHeight}rem` }}
+                      style={{
+                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
+                      }}
                       data-line={highlight}
                       ref={preRef}
                       className={classNames(
@@ -919,7 +925,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       }
                       to="top"
                       height={"100%"}
-                      blur={100}
+                      blur="100rem"
                     />
                     <Flex
                       position="absolute"

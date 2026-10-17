@@ -9,7 +9,13 @@ import { ColorValue } from "../../types";
 import styles from "./Gauge.module.css";
 
 export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
+  /**
+   * The drawing's width in px. The gauge scales to fit its container, so this
+   * sets its proportions; it is px like every other size, but it is not the
+   * box's `width` (put `maxWidth` on the gauge for that).
+   */
   width?: number;
+  /** The drawing's height in px; see `width`. */
   height?: number;
   line?: {
     count?: number;

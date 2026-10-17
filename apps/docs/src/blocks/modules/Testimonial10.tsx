@@ -200,8 +200,8 @@ function CaseStudySlideShow({
                         colorStart: "brand-solid-weak",
                         x: 0,
                         y: 0,
-                        width: 125,
-                        height: 125,
+                        width: "125%",
+                        height: "125%",
                       }}
                     />
                     <Testimonial2
@@ -222,9 +222,9 @@ function CaseStudySlideShow({
                         fill
                         left="0"
                         bottom="0"
-                        minHeight={32}
+                        minHeight="32rem"
                         x={0}
-                        y={100}
+                        y="100%"
                       >
                         <MatrixFx
                           flicker

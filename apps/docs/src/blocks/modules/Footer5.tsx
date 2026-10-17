@@ -59,8 +59,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderRight="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
         <Column
@@ -81,13 +81,13 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
           />
-          <Column gap="8" maxWidth={32}>
+          <Column gap="8" maxWidth="32rem">
             <Text variant="heading-strong-s">Stay in the loop</Text>
             <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
               Product updates, new blocks, and design system releases — delivered monthly.
             </Text>
           </Column>
-          <Row gap="8" s={{ direction: "column" }} maxWidth={32}>
+          <Row gap="8" s={{ direction: "column" }} maxWidth="32rem">
             <Input id="footer5-email" label="Email" placeholder="you@company.com" />
             <Button data-border="rounded" arrowIcon>
               Subscribe
@@ -102,8 +102,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderLeft="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
       </Row>
@@ -141,7 +141,7 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
 
           <Row fillWidth wrap gap="32" horizontal="between">
             {navigation.map((section) => (
-              <Column key={section.title} gap="12" minWidth={12}>
+              <Column key={section.title} gap="12" minWidth="12rem">
                 <Text variant="label-default-s" onBackground="neutral-weak">
                   {section.title}
                 </Text>
@@ -167,8 +167,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
             borderRight="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
           />
         </Row>
         <Row
@@ -195,8 +195,8 @@ export const Footer5 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
             borderLeft="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
           />
         </Row>
       </Row>

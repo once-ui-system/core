@@ -22,7 +22,7 @@ export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...
       s={{ direction: "column" }}
       {...flex}
     >
-      <Mask position="absolute" left="0" top="0" x={50} y={50} aspectRatio="1/1" center>
+      <Mask position="absolute" left="0" top="0" x="50%" y="50%" aspectRatio="1/1" center>
         <MatrixFx
           themeSolid="color"
           flicker
@@ -30,7 +30,7 @@ export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...
           size={2}
           colors={["brand-solid-strong"]}
           bulge={{
-            duration: 4,
+            duration: 4000,
             intensity: 12,
             repeat: true,
           }}
@@ -47,7 +47,7 @@ export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         <Text wrap="balance" marginBottom="32" onBackground="neutral-weak">
           Get the latest news and updates about Once UI
         </Text>
-        <Row maxWidth={18}>
+        <Row maxWidth="18rem">
           <Input
             placeholder="Email"
             id="newsletter-email"

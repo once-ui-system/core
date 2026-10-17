@@ -109,7 +109,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         step={step}
         suffix={
           <>
-            <Flex position="static" minWidth={1.25}></Flex>
+            <Flex position="static" minWidth="1.25rem"></Flex>
             <Column
               position="absolute"
               right="0"

@@ -38,7 +38,7 @@ describe("Grid minColumnWidth", () => {
       </Grid>,
     );
     expect(classesOf(html)).toContain("columns-auto-fit");
-    expect(html).toContain("--grid-min-column-width:13rem");
+    expect(html).toContain("--grid-min-column-width:13px");
   });
 
   it("reads a value the way minWidth does", () => {
@@ -46,8 +46,8 @@ describe("Grid minColumnWidth", () => {
       renderToStaticMarkup(<Grid minColumnWidth={value} />).match(
         /--grid-min-column-width:([^;"]+)/,
       )?.[1];
-    expect(width(16)).toBe("16rem");
-    expect(width(12.5)).toBe("12.5rem");
+    expect(width(16)).toBe("16px");
+    expect(width(12.5)).toBe("12.5px");
     expect(width("160")).toBe("var(--static-space-160)");
     expect(width("30%")).toBe("30%");
     expect(width("calc(10rem + 2vw)")).toBe("calc(10rem + 2vw)");
@@ -85,6 +85,6 @@ describe("Grid minColumnWidth", () => {
     );
     const el = container.firstElementChild as HTMLElement | null;
     expect(el?.className).toContain("columns-auto-fit");
-    expect(el?.style.getPropertyValue("--grid-min-column-width")).toBe("10rem");
+    expect(el?.style.getPropertyValue("--grid-min-column-width")).toBe("10px");
   });
 });

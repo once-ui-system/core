@@ -43,8 +43,8 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
       {...flex}
     >
       <Column
-        minWidth={14}
-        minHeight={14}
+        minWidth="14rem"
+        minHeight="14rem"
         fillHeight
         center
         radius="xl"
@@ -103,8 +103,8 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
               marginRight="8"
               padding="24"
               gap="16"
-              minWidth={16}
-              maxWidth={16}
+              minWidth="16rem"
+              maxWidth="16rem"
             >
               <Row gap="4">
                 {Array.from({ length: 5 }).map((_, starIndex) => (
@@ -128,7 +128,7 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
         <Fade
           pointerEvents="none"
           fillHeight
-          width={4}
+          width="4rem"
           s={{ hide: true }}
           top="0"
           to="right"
@@ -138,7 +138,7 @@ export const Testimonial6: React.FC<TestimonialsSectionProps> = ({
         <Fade
           pointerEvents="none"
           fillHeight
-          width={4}
+          width="4rem"
           s={{ hide: true }}
           top="0"
           to="left"

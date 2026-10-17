@@ -11,7 +11,7 @@ interface SkeletonProps extends React.ComponentProps<typeof Flex> {
    *
    * Width is deliberately not here. Skeleton extends Flex, so width is a
    * layout concern expressed the same way as on any other element —
-   * `width="80%"`, `maxWidth={24}` — instead of a second five-step scale that
+   * `width="80%"`, `maxWidth={384}` — instead of a second five-step scale that
    * only meant percentages.
    */
   size?: "xl" | "l" | "m" | "s" | "xs";

@@ -3,7 +3,7 @@ import { Column, Icon, IconButton, Line, Row, Tag, Text, ToggleButton } from "@o
 export const Sidebar1: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
     <Column
-      maxWidth={16}
+      maxWidth="16rem"
       fillHeight
       paddingX="16"
       paddingY="24"

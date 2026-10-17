@@ -85,7 +85,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column maxWidth={48} gap="12" paddingX="l">
+      <Column maxWidth="48rem" gap="12" paddingX="l">
         <Tag size="s" scheme="brand" themeBorder="rounded">
           Case studies
         </Tag>
@@ -126,7 +126,7 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
           data-brand={active.brand}
           themeSolid="color"
           flex={1}
-          minHeight={24}
+          minHeight="24rem"
           overflow="hidden"
         >
           <Background
@@ -138,8 +138,8 @@ export const Testimonial9 = (flex: React.ComponentProps<typeof Column>) => {
               colorStart: "brand-solid-weak",
               x: 0,
               y: 0,
-              width: 125,
-              height: 125,
+              width: "125%",
+              height: "125%",
             }}
           />
           <Mask pointerEvents="none" position="absolute" fill left="0" bottom="0" x={0} y={0}>

@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { ReactNode, useMemo, useState } from "react";
+import { ShineText } from "../internal/ShineText";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -10,7 +11,6 @@ import { Input } from "./Input";
 import { Pagination } from "./Pagination";
 import { Row } from "./Row";
 import { Select } from "./Select";
-import { ShineFx } from "./ShineFx";
 import { Spinner } from "./Spinner";
 import styles from "./Table.module.scss";
 import { Text } from "./Text";
@@ -310,7 +310,7 @@ function Table({
       <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.loading}>
         {loadingState || (
           <Column center padding="xl" gap="m">
-            <ShineFx variant="label-default-s">Loading data...</ShineFx>
+            <ShineText variant="label-default-s">Loading data...</ShineText>
           </Column>
         )}
       </td>
@@ -321,7 +321,7 @@ function Table({
     <Column fillWidth gap="m" {...flex}>
       {/* Search Bar */}
       {searchable && (
-        <Row horizontal="between" vertical="center" gap="m" maxWidth={12}>
+        <Row horizontal="between" vertical="center" gap="m" maxWidth="12rem">
           <Input
             id="table-search"
             placeholder={searchPlaceholder}
@@ -378,7 +378,7 @@ function Table({
       {paginated && !loading && sortedRows.length > 0 && (
         <Row horizontal="between" vertical="center" paddingX="s" gap="m" wrap>
           <Row gap="8" vertical="center">
-            <Row maxWidth={5}>
+            <Row maxWidth="5rem">
               <Select
                 id="page-size"
                 placeholder="Select page size"

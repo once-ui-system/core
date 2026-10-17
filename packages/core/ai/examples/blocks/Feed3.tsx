@@ -82,12 +82,12 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                 {messages.attachments &&
                   messages.attachments.length > 0 &&
                   (messages.attachments.length > 1 ? (
-                    <Row maxWidth={48} marginTop="16" gap="8" wrap>
+                    <Row maxWidth="48rem" marginTop="16" gap="8" wrap>
                       {messages.attachments.map((att, aIdx) =>
                         att?.media ? (
                           <Media
                             key={aIdx}
-                            maxWidth={20}
+                            maxWidth="20rem"
                             src={att.media}
                             border
                             radius="l"
@@ -101,7 +101,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                     (messages.attachments[0].media.includes("youtube.com") ||
                     messages.attachments[0].media.includes("youtu.be") ? (
                       <Media
-                        maxWidth={32}
+                        maxWidth="32rem"
                         border
                         aspectRatio="16/9"
                         marginTop="16"
@@ -111,7 +111,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                       />
                     ) : messages.attachments[0].media.match(/\.(png|jpg|jpeg|gif|webp)$/i) ? (
                       <Media
-                        maxWidth={32}
+                        maxWidth="32rem"
                         border
                         marginTop="16"
                         src={messages.attachments[0].media}
@@ -119,7 +119,7 @@ export const Feed3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }
                         sizes="320px"
                       />
                     ) : (
-                      <Row maxWidth={24} marginTop="16">
+                      <Row maxWidth="24rem" marginTop="16">
                         <OgCard url={messages.attachments[0].media} description={false} />
                       </Row>
                     ))

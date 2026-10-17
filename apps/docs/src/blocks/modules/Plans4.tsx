@@ -61,7 +61,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...rest }) => {
   const textColor = `${plan.color}-weak` as const;
 
   return (
-    <Column id={plan.name} border minWidth={16} fillWidth {...rest}>
+    <Column id={plan.name} border minWidth="16rem" fillWidth {...rest}>
       <Column fill>
         <Column paddingX="l" paddingY="24" gap="4" fillWidth borderBottom>
           <Heading as="h3" align="left" onBackground={textColor} variant="heading-default-xs">

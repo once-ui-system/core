@@ -5,7 +5,6 @@ import React, {
   forwardRef,
   type ReactNode,
   useCallback,
-  useContext,
   useEffect,
   useId,
   useRef,
@@ -29,6 +28,8 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   children?: ReactNode;
   footer?: ReactNode;
   base?: boolean;
+  /** Open on top of another dialog: the dialogs beneath turn inert until this
+   *  one closes. Needs no provider (3.0 removed `DialogProvider`). */
   stack?: boolean;
   flush?: boolean;
   /** Show the close button. On by default, as on `Drawer`; turn it off when
@@ -38,31 +39,6 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   minHeight?: number;
   closeOnClickaway?: boolean;
 }
-
-const DialogContext = React.createContext<{
-  stackedDialogOpen: boolean;
-  setStackedDialogOpen: (open: boolean) => void;
-}>({
-  stackedDialogOpen: false,
-  setStackedDialogOpen: () => {},
-});
-
-export const DialogProvider: React.FC<{
-  children: React.ReactNode;
-}> = ({ children }) => {
-  const [stackedDialogOpen, setStackedDialogOpen] = useState(false);
-
-  return (
-    <DialogContext.Provider
-      value={{
-        stackedDialogOpen,
-        setStackedDialogOpen,
-      }}
-    >
-      {children}
-    </DialogContext.Provider>
-  );
-};
 
 const Dialog = forwardRef<HTMLDivElement, DialogProps>(
   (
@@ -91,14 +67,6 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
     const dialogTitleId = `${dialogId}-title`;
     const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
-    const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
-
-    useEffect(() => {
-      if (stack) {
-        setStackedDialogOpen(open);
-      }
-    }, [stack, open, setStackedDialogOpen]);
-
     useEffect(() => {
       if (dialogRef.current && isVisible) {
         const height = dialogRef.current.offsetHeight;

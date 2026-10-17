@@ -67,8 +67,8 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
                   src={item}
                   radius="l"
                   border
-                  minWidth={28}
-                  maxWidth={28}
+                  minWidth="28rem"
+                  maxWidth="28rem"
                   aspectRatio={aspectRatio}
                   sizes="(max-width: 768px) 100vw, 560px"
                 />

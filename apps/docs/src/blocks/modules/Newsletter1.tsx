@@ -20,17 +20,17 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         left="0"
         position="absolute"
         mask={{
-          x: 100,
+          x: "100%",
           y: 0,
-          radius: 150,
+          radius: "150vh",
         }}
         gradient={{
           display: true,
-          x: 100,
-          y: 20,
+          x: "100%",
+          y: "20%",
           tilt: -5,
-          width: 100,
-          height: 50,
+          width: "100%",
+          height: "50%",
           colorStart: "danger-solid-strong",
           colorEnd: "static-transparent",
         }}
@@ -41,10 +41,10 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         position="absolute"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 75,
-          height: 50,
+          width: "75%",
+          height: "50%",
           colorStart: "brand-background-strong",
           colorEnd: "static-transparent",
         }}
@@ -56,15 +56,15 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         mask={{
           x: 0,
           y: 0,
-          radius: 150,
+          radius: "150vh",
         }}
         gradient={{
           display: true,
-          x: 25,
+          x: "25%",
           y: 0,
           tilt: -30,
-          width: 100,
-          height: 50,
+          width: "100%",
+          height: "50%",
           colorStart: "accent-solid-strong",
           colorEnd: "static-transparent",
         }}
@@ -74,9 +74,9 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         left="0"
         position="absolute"
         mask={{
-          x: 50,
+          x: "50%",
           y: 0,
-          radius: 100,
+          radius: "100vh",
         }}
         dots={{
           display: true,
@@ -103,7 +103,7 @@ export const Newsletter1: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         </Text>
       </Column>
       <Row center gap="8" fillWidth s={{ direction: "column" }} horizontal="center">
-        <Row maxWidth={20}>
+        <Row maxWidth="20rem">
           <Input placeholder="Email" id="newsletter-email" type="email" required />
         </Row>
         <Button id="newsletter-button" arrowIcon>

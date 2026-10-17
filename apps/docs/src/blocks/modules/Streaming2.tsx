@@ -101,7 +101,7 @@ export const Streaming2 = () => {
         </Row>
 
         <Row fillWidth gap="16" s={{ direction: "column" }}>
-          <Column fill minWidth={24} gap="12">
+          <Column fill minWidth="24rem" gap="12">
             <Column fillWidth radius="l" overflow="hidden" border>
               <Media
                 aspectRatio="16/9"
@@ -119,7 +119,7 @@ export const Streaming2 = () => {
                 vertical="end"
                 horizontal="between"
               >
-                <Fade fillWidth height={16} to="top" position="absolute" bottom="0" left="0" />
+                <Fade fillWidth height="16rem" to="top" position="absolute" bottom="0" left="0" />
                 <Column gap="4" fillWidth>
                   <Heading variant="heading-strong-l" onSolid="neutral-strong">
                     {featured.title}
@@ -138,7 +138,7 @@ export const Streaming2 = () => {
           </Column>
 
           <Column
-            minWidth={20}
+            minWidth="20rem"
             fill
             gap="8"
             padding="12"
@@ -191,7 +191,7 @@ export const Streaming2 = () => {
           <Scroller fitWidth style={{ maxWidth: "100%" }}>
             <Row fitWidth gap="12">
               {recommendations.map((item) => (
-                <Column key={item.title} minWidth={16} gap="8" cursor="interactive">
+                <Column key={item.title} minWidth="16rem" gap="8" cursor="interactive">
                   <Media
                     aspectRatio="16/9"
                     src={item.image}

@@ -16,7 +16,7 @@ The `MatrixFx` component creates an animated dot matrix reveal effect using the 
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       fps={30}
       colors={["accent-solid-strong", "accent-solid-weak"]}
       trigger="mount"
@@ -27,7 +27,7 @@ The `MatrixFx` component creates an animated dot matrix reveal effect using the 
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["brand-solid-strong", "accent-solid-strong"]}
     trigger="mount"
     flicker
@@ -49,7 +49,7 @@ Control the reveal animation speed with the `speed` prop. Higher values make the
   reloadButton
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       trigger="mount"
       speed={2}
       colors={["accent-solid-medium"]}
@@ -59,7 +59,7 @@ Control the reveal animation speed with the `speed` prop. Higher values make the
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     trigger="mount"
     speed={2}
     colors={["accent-solid-medium"]}
@@ -80,7 +80,7 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={[
         "brand-solid-strong",
         "brand-background-strong",
@@ -92,7 +92,7 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={[
       "brand-solid-medium",
       "accent-solid-medium",
@@ -116,7 +116,7 @@ Customize the size of dots and spacing between them.
   preview={
     <MatrixFx
       fill
-      height={24}
+      height="24rem"
       size={6}
       spacing={8}
       colors={["accent-solid-strong"]}
@@ -127,7 +127,7 @@ Customize the size of dots and spacing between them.
       code:
 `<MatrixFx
     fill
-    height={24}
+    height="24rem"
     size={6}
     spacing={8}
     colors={["brand-solid-strong"]}
@@ -149,7 +149,7 @@ Control where the reveal animation starts from.
   reloadButton
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       revealFrom="top"
       trigger="mount"
       colors={["brand-solid-strong"]}
@@ -159,7 +159,7 @@ Control where the reveal animation starts from.
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     revealFrom="top"
     colors={["brand-solid-strong"]}
 />`,
@@ -179,7 +179,7 @@ Place content inside the reveal effect.
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={["neutral-solid-medium"]}
     >
       <Column gap="16" fill center>
@@ -196,7 +196,7 @@ Place content inside the reveal effect.
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["neutral-solid-medium"]}
 >
     <Column gap="16" fill center>
@@ -224,7 +224,7 @@ Add a subtle animated flicker to create a dynamic, alive feeling.
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={["danger-solid-strong"]}
       fps={30}
       flicker
@@ -234,7 +234,7 @@ Add a subtle animated flicker to create a dynamic, alive feeling.
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["danger-solid-strong"]}
     flicker
 />`,
@@ -254,11 +254,11 @@ Add dynamic wave effects to create fluid, organic motion. Choose between `ripple
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={["accent-solid-strong"]}
       bulge={{
         type: "ripple",
-        duration: 4,
+        duration: 4000,
         intensity: 15,
         repeat: true
       }}
@@ -268,11 +268,11 @@ Add dynamic wave effects to create fluid, organic motion. Choose between `ripple
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["accent-solid-strong"]}
     bulge={{
       type: "ripple",   // Circular wave from center
-      duration: 4,      // Wave duration in seconds
+      duration: 4000,      // Wave duration in milliseconds
       intensity: 15,    // Displacement strength
       repeat: true      // Continuous cycles
     }}
@@ -291,11 +291,11 @@ The `wave` type creates an organic, flowing S-curve that travels diagonally from
   previewPadding="0"
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={["success-solid-strong"]}
       bulge={{
         type: "wave",
-        duration: 3,
+        duration: 3000,
         intensity: 20,
         repeat: true
       }}
@@ -305,11 +305,11 @@ The `wave` type creates an organic, flowing S-curve that travels diagonally from
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["success-solid-strong"]}
     bulge={{
       type: "wave",     // S-curve diagonal flow
-      duration: 3,
+      duration: 3000,
       intensity: 20,
       repeat: true
     }}
@@ -329,10 +329,10 @@ Use `repeat: false` for a single wave that plays once. Add `delay` for a pause b
   reloadButton
   preview={
     <MatrixFx
-      height={24}
+      height="24rem"
       colors={["danger-solid-strong"]}
       bulge={{
-        duration: 3,
+        duration: 3000,
         intensity: 12,
         repeat: false
       }}
@@ -342,10 +342,10 @@ Use `repeat: false` for a single wave that plays once. Add `delay` for a pause b
     {
       code:
 `<MatrixFx
-    height={24}
+    height="24rem"
     colors={["danger-solid-strong"]}
     bulge={{
-      duration: 3,
+      duration: 3000,
       intensity: 12,
       repeat: false   // Single wave only
     }}
@@ -364,9 +364,9 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
   marginTop="16"
   marginBottom="24"
   previewPadding="0"
-  codeHeight={24}
+  codeHeight="24rem"
   preview={
-    <Row gap="16" fillWidth height={24}>
+    <Row gap="16" fillWidth height="24rem">
       <Row
         fill
         center
@@ -386,7 +386,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
           flicker
           fps={30}
           bulge={{
-            duration: 2,
+            duration: 2000,
             intensity: 10,
             repeat: false
           }}
@@ -467,7 +467,7 @@ Use `trigger="hover"` for native hover support. Dots progressively appear on hov
       spacing={2}
       flicker
       bulge={{
-        duration: 3,
+        duration: 3000,
         intensity: 12,
         repeat: false
       }}
@@ -538,7 +538,7 @@ Use `trigger="click"` to toggle the effect on click.
   previewPadding="0"
   preview={
     <MatrixFx
-      height={16}
+      height="16rem"
       trigger="click"
       colors={["brand-solid-medium"]}
     >
@@ -551,7 +551,7 @@ Use `trigger="click"` to toggle the effect on click.
     {
       code:
 `<MatrixFx
-    height={16}
+    height="16rem"
     trigger="click"
     colors={["brand-solid-medium"]}
 />`,
@@ -585,7 +585,7 @@ export function Demo() {
         <ToggleButton onClick={() => setOn((v) => !v)}>
           {on ? "Stop" : "Start"}
         </ToggleButton>
-        <MatrixFx height={16} trigger="manual" active={on} colors={["brand-solid-medium"]} />
+        <MatrixFx height="16rem" trigger="manual" active={on} colors={["brand-solid-medium"]} />
       </Row>
     );
 }
@@ -607,7 +607,7 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 <PropsTable
   component="MatrixFx"
   describe={{
-    speed: "Animation multiplier. Not a duration.",
+    speed: "Animation multiplier: 1 is the default. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
     colors: "Palette for the dots.",
     size: "Dot size, in pixels.",
     spacing: "Gap between dots, in pixels.",

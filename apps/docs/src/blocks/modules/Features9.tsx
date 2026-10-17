@@ -17,9 +17,9 @@ export const Features9: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           top="0"
           left="0"
           mask={{
-            x: 50,
+            x: "50%",
             y: 0,
-            radius: 40,
+            radius: "40vh",
           }}
           grid={{
             display: true,

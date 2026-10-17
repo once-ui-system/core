@@ -117,11 +117,11 @@ describe.each([
         </Component>,
       ),
     );
-    expect(style).toContain("gap:0.5rem");
-    expect(style).toContain("top:2rem");
+    expect(style).toContain("gap:0.5px");
+    expect(style).toContain("top:2px");
     expect(style).toContain("right:50%");
     expect(style).toContain("bottom:calc(100% - 1rem)");
-    expect(style).toContain("transform:translate(1rem, 0)");
+    expect(style).toContain("transform:translate(1px, 0)");
   });
 
   it("lets style win over a resolved value", () => {
@@ -133,7 +133,7 @@ describe.each([
       ),
     );
     expect(style).toContain("top:3px");
-    expect(style).not.toContain("top:2rem");
+    expect(style).not.toContain("top:2px");
   });
 
   it("puts none of them on the DOM as an attribute", () => {
@@ -188,7 +188,7 @@ describe.each([
     );
     const el = container.firstElementChild as HTMLElement;
     expect(el.getAttributeNames().filter((attr) => LEAKED.includes(attr))).toEqual([]);
-    expect(el.style.transform).toBe("translate(0, 1rem)");
+    expect(el.style.transform).toBe("translate(0, 1px)");
     const warnings = error.mock.calls.map((call) => String(call[0]));
     expect(warnings.filter((w) => /does not recognize|non-boolean attribute/.test(w))).toEqual([]);
   });

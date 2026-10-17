@@ -94,14 +94,14 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
         left="0"
         top="0"
         mask={{
-          x: 50,
-          y: -50,
-          radius: 100,
+          x: "50%",
+          y: "-50%",
+          radius: "100vh",
         }}
         gradient={{
           display: true,
           opacity: 50,
-          x: 50,
+          x: "50%",
           y: 0,
           colorStart: "brand-background-strong",
           colorEnd: "static-transparent",
@@ -132,7 +132,7 @@ export const MusicPlayer: React.FC<React.ComponentProps<typeof Column>> = ({ ...
                 priority
                 sizes="320px"
                 radius="l"
-                maxWidth={16}
+                maxWidth="16rem"
                 aspectRatio="1/1"
                 border
                 src="/images/docs/vibe-coding-dark.jpg"

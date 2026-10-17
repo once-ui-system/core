@@ -143,7 +143,7 @@ export const Role3 = () => {
               left="0"
               gradient={{
                 display: true,
-                x: 100,
+                x: "100%",
                 y: 0,
                 colorStart: "brand-alpha-weak",
               }}
@@ -165,7 +165,7 @@ export const Role3 = () => {
         </Column>
 
         <Column
-          maxWidth={28}
+          maxWidth="28rem"
           fitHeight
           position="sticky"
           top="80"

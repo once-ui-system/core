@@ -17,11 +17,11 @@ A versatile component for creating decorative backgrounds with various visual ef
     <Column fillWidth radius="l" border="neutral-alpha-medium" overflow="hidden">
       <Background
         fill
-        height={16}
+        height="16rem"
         gradient={{ 
           display: true, 
           opacity: 1,
-          x: 50,
+          x: "50%",
           y: 0,
           colorStart: "accent-background-strong",
           colorEnd: "static-transparent"
@@ -36,13 +36,13 @@ A versatile component for creating decorative backgrounds with various visual ef
 			<Background
         position="absolute"
 				fill
-        height={16}
+        height="16rem"
         gradient={{ 
           display: true, 
           opacity: 1,
-          x: 50,
-          y: 100,
-					width: 50,
+          x: "50%",
+          y: "100%",
+					width: "50%",
           colorStart: "brand-background-weak",
           colorEnd: "static-transparent"
         }}
@@ -58,7 +58,7 @@ A versatile component for creating decorative backgrounds with various visual ef
     gradient={{ 
 			display: true, 
 			opacity: 1,
-			x: 50,
+			x: "50%",
 			y: 0,
 			colorStart: "accent-background-strong",
 			colorEnd: "static-transparent"
@@ -81,13 +81,13 @@ A versatile component for creating decorative backgrounds with various visual ef
 <Background
 		position="absolute"
 		fill
-		height={16}
+		height="16rem"
 		gradient={{ 
 			display: true, 
 			opacity: 1,
-			x: 50,
-			y: 100,
-			width: 50,
+			x: "50%",
+			y: "100%",
+			width: "50%",
 			colorStart: "brand-background-weak",
 			colorEnd: "static-transparent"
 		}}
@@ -110,11 +110,11 @@ Create beautiful gradient backgrounds with customizable position, size, and colo
     <Column fillWidth>
       <Background
         fill
-				height={16}
+				height="16rem"
         gradient={{ 
           display: true, 
           opacity: 1,
-          x: 50,
+          x: "50%",
           y: 0,
           colorStart: "brand-background-strong",
           colorEnd: "accent-background-weak"
@@ -127,11 +127,11 @@ Create beautiful gradient backgrounds with customizable position, size, and colo
       code:
 `<Background
 		fill
-		height={16}
+		height="16rem"
 		gradient={{ 
 			display: true, 
 			opacity: 1,
-			x: 50,
+			x: "50%",
 			y: 0,
 			colorStart: "brand-background-strong",
 			colorEnd: "accent-background-weak"
@@ -154,7 +154,7 @@ Add a dotted pattern to your backgrounds with customizable size, color, and opac
   preview={
 		<Background
 			fill
-			height={16}
+			height="16rem"
 			dots={{
 				display: true,
 				opacity: 0.6,
@@ -168,7 +168,7 @@ Add a dotted pattern to your backgrounds with customizable size, color, and opac
       code:
 `<Background
 		fill
-		height={16}
+		height="16rem"
 		dots={{
 			display: true,
 			opacity: 0.6,
@@ -194,7 +194,7 @@ Create grid backgrounds with customizable color, opacity, and dimensions.
     <Background
       fill
       border="neutral-alpha-medium"
-      height={16}
+      height="16rem"
       grid={{
         display: true,
         opacity: 1,
@@ -209,7 +209,7 @@ Create grid backgrounds with customizable color, opacity, and dimensions.
       code:
 `<Background
 		fill
-		height={16}
+		height="16rem"
 		grid={{
 			display: true,
 			opacity: 1,
@@ -236,7 +236,7 @@ Add diagonal or straight lines to your backgrounds with customizable angle, thic
     <Column fillWidth gap="16">
       <Background
         fill
-        height={16}
+        height="16rem"
         lines={{
           display: true,
           opacity: 0.5,
@@ -253,7 +253,7 @@ Add diagonal or straight lines to your backgrounds with customizable angle, thic
       code:
 `<Background
 		fill
-		height={16}
+		height="16rem"
 		lines={{
 			display: true,
 			opacity: 0.5,
@@ -280,11 +280,11 @@ Combine multiple background effects to create unique and visually interesting ba
   preview={
     <Background
 			fill
-			height={16}
+			height="16rem"
 			gradient={{ 
 				display: true, 
 				opacity: 1,
-				x: 50,
+				x: "50%",
 				y: 0,
 				colorStart: "accent-background-strong",
 				colorEnd: "static-transparent"
@@ -310,11 +310,11 @@ Combine multiple background effects to create unique and visually interesting ba
       code:
 `<Background
     fill
-    height={16}
+    height="16rem"
     gradient={{ 
       display: true, 
       opacity: 1,
-      x: 50,
+      x: "50%",
       y: 0,
       colorStart: "accent-background-strong",
       colorEnd: "static-transparent"
@@ -351,11 +351,11 @@ Create a spotlight or reveal effect with the mask property.
   preview={
     <Background
 			fill
-			height={16}
+			height="16rem"
 			gradient={{ 
 				display: true, 
 				opacity: 1,
-				x: 50,
+				x: "50%",
 				y: 0,
 				colorStart: "accent-background-strong",
 				colorEnd: "static-transparent"
@@ -369,9 +369,9 @@ Create a spotlight or reveal effect with the mask property.
 				color: "accent-background-strong"
 			}}
 			mask={{
-				x: 50,
+				x: "50%",
 				y: 0,
-				radius: 50
+				radius: "50vh"
 			}}
 		/>
   }
@@ -380,11 +380,11 @@ Create a spotlight or reveal effect with the mask property.
       code:
 `<Background
 		fill
-		height={16}
+		height="16rem"
 		gradient={{ 
 			display: true, 
 			opacity: 1,
-			x: 50,
+			x: "50%",
 			y: 0,
 			colorStart: "accent-background-strong",
 			colorEnd: "static-transparent"
@@ -398,9 +398,9 @@ Create a spotlight or reveal effect with the mask property.
 			color: "accent-background-strong"
 		}}
 		mask={{
-			x: 50,
+			x: "50%",
 			y: 0,
-			radius: 50
+			radius: "50vh"
 		}}
 />`,
       language: "tsx",

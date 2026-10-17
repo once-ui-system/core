@@ -31,7 +31,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
         fillWidth
         position="absolute"
         top="0"
-        height={8}
+        height="8rem"
         pattern={{ display: true, size: "2" }}
       />
       <Row
@@ -79,7 +79,7 @@ export const Header2: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
                 src: avatar,
               }}
               dropdown={
-                <Column gap="2" padding="4" width={8}>
+                <Column gap="2" padding="4" width="8rem">
                   <Option label="Profile" value="profile" />
                   <Option label="Settings" value="settings" />
                   <Option label="Log out" value="logout" />

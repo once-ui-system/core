@@ -94,7 +94,7 @@ export const Modal = ({ children, backdrop, title, isOpen, onClose }: ModalProps
         {backdrop}
         <Column
           ref={dialogRef}
-          maxWidth={52}
+          maxWidth="52rem"
           fillHeight
           background="page"
           topRadius="xl"

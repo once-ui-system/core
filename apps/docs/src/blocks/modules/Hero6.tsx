@@ -19,9 +19,9 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         aspectRatio="16 / 9"
         position="absolute"
         left="0"
-        x={50}
-        y={50}
-        radius={75}
+        x="50%"
+        y="50%"
+        radius="75vh"
       >
         <MatrixFx
           flicker
@@ -32,7 +32,7 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           size={2}
           spacing={4}
           bulge={{
-            duration: 2,
+            duration: 2000,
             intensity: 10,
             repeat: false,
           }}
@@ -49,9 +49,9 @@ export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               gradient={{
                 display: true,
                 colorStart: "brand-background-strong",
-                y: 100,
-                width: 50,
-                height: 80,
+                y: "100%",
+                width: "50%",
+                height: "80%",
               }}
               pointerEvents="none"
             />

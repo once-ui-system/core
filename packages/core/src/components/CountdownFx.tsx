@@ -65,7 +65,7 @@ const CountdownFx = forwardRef<HTMLDivElement, CountdownFxProps>(
               key={`${key}-${index}`}
               value={parseInt(digit)}
               effect={effect}
-              speed={400}
+              duration={400}
               {...countFxProps}
             />
           ))}

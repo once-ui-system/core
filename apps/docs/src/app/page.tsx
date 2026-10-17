@@ -37,7 +37,7 @@ export default function Home() {
   return (
     <Row fillWidth horizontal="center">
       <Row fillWidth horizontal="center" padding="l">
-      <BlobFx maxWidth="l" data-solid="color" height={32} fillWidth position="absolute" translateY="-60%" />
+      <BlobFx maxWidth="l" data-solid="color" height="32rem" fillWidth position="absolute" translateY="-60%" />
         <Column fillWidth gap="xl" horizontal="center">
           <Schema
             as="webPage"
@@ -51,7 +51,7 @@ export default function Home() {
           />
           
           {/* Hero Section */}
-          <Column maxWidth={96} minHeight="s" gap="12" center overflow="hidden">
+          <Column maxWidth="96rem" minHeight="s" gap="12" center overflow="hidden">
             <Column maxWidth="m" horizontal="center" align="center" gap="16" padding="48">
               <Badge
                 background="overlay"
@@ -84,7 +84,7 @@ export default function Home() {
           </Column>
 
           {/* Two ways in: an agent writes the code, or you do */}
-          <Grid maxWidth={56} columns="2" s={{columns: 1}} gap="8">
+          <Grid maxWidth="56rem" columns="2" s={{columns: 1}} gap="8">
             <Card fillWidth radius="l" border padding="24" background="overlay" href="/ai-coding">
               <Column fillWidth gap="12">
                 <Text variant="heading-strong-xs">Build with an agent</Text>
@@ -110,7 +110,7 @@ export default function Home() {
           <PromptLibrary />
 
           {/* The dozen components most builds actually use */}
-          <Column maxWidth={56} gap="16" fillWidth>
+          <Column maxWidth="56rem" gap="16" fillWidth>
             <Column gap="4">
               <Heading as="h2" variant="display-default-xs">Start here</Heading>
               <Text onBackground="neutral-weak" variant="body-default-s">
@@ -200,7 +200,7 @@ export default function Home() {
           </Column>
 
           {/* Templates and products */}
-          <Grid maxWidth={56} columns="3" s={{columns: 1}} gap="8">
+          <Grid maxWidth="56rem" columns="3" s={{columns: 1}} gap="8">
             <Card fillWidth radius="l" border padding="24" background="overlay" href="/about">
               <Column fillWidth gap="16">
                 <Text variant="heading-strong-xs">About Once UI</Text>

@@ -57,9 +57,9 @@ export const Features6: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
           }}
           gradient={{
             display: true,
-            x: 50,
-            y: -20,
-            height: 75,
+            x: "50%",
+            y: "-20%",
+            height: "75%",
             colorStart: "brand-solid-strong",
           }}
         />

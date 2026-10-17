@@ -64,7 +64,12 @@ export interface MetaProps {
   ogRoutes?: Partial<OgRoutes>;
 }
 
-export function generateMetadata({
+/**
+ * Build a Next.js metadata object (also `Meta.generate`). Named
+ * `generateMetadata` until 3.0, which Next reads as its route-segment
+ * convention when a page re-exports it.
+ */
+export function createMetadata({
   title,
   description,
   baseURL,
@@ -135,7 +140,7 @@ export function generateMetadata({
 }
 
 export const Meta = {
-  generate: generateMetadata,
+  generate: createMetadata,
 };
 
 export default Meta;

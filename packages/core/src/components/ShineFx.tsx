@@ -7,8 +7,8 @@ import styles from "./ShineFx.module.scss";
 import { Text } from "./Text";
 
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
-  /** Sweep duration in milliseconds. Was seconds until 2.0. */
-  speed?: number;
+  /** Milliseconds one sweep takes. Was `speed` until 3.0 (and seconds until 2.0). */
+  duration?: number;
   disabled?: boolean;
   inverse?: boolean;
   baseOpacity?: number;
@@ -19,7 +19,7 @@ export interface ShineFxProps extends React.ComponentProps<typeof Text> {
 const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(
   (
     {
-      speed = 1000,
+      duration = 1000,
       disabled = false,
       inverse = false,
       baseOpacity = 0.3,
@@ -33,7 +33,7 @@ const ShineFx = forwardRef<HTMLSpanElement, ShineFxProps>(
   ) => {
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const isDisabled = disabled || !shouldAnimate;
-    const animationDuration = `${speed}ms`;
+    const animationDuration = `${duration}ms`;
 
     return (
       <Text

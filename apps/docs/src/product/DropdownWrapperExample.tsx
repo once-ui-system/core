@@ -41,7 +41,7 @@ export function BasicDropdown() {
         </Button>
       }
       dropdown={
-        <Column minWidth={10} padding="4" gap="2">
+        <Column minWidth="10rem" padding="4" gap="2">
           {options.map((option) => (
             <Option
               key={option.value}
@@ -184,7 +184,7 @@ export function SearchableDropdown() {
         </Button>
       }
       dropdown={
-        <Column fillWidth minWidth={12}>
+        <Column fillWidth minWidth="12rem">
           <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
             <Input
               size="s"

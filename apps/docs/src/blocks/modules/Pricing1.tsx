@@ -4,7 +4,7 @@ import { Background1, Faq3, Plans3, Testimonial4 } from ".";
 export const Pricing1 = () => {
   return (
     <Column as="section" fillWidth fitHeight horizontal="center" gap="xl">
-      <Column maxWidth={40} gap="12" horizontal="center">
+      <Column maxWidth="40rem" gap="12" horizontal="center">
         <Heading as="h2" align="center" variant="display-strong-m">
           Pricing
         </Heading>

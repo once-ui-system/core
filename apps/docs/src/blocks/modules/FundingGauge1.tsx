@@ -20,7 +20,7 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column
-      maxWidth={48}
+      maxWidth="48rem"
       horizontal="center"
       padding="l"
       border="brand-alpha-strong"
@@ -61,9 +61,9 @@ export const FundingGauge1 = (flex: React.ComponentProps<typeof Column>) => {
         gradient={{
           display: true,
           colorStart: "page-background",
-          width: 200,
-          height: 150,
-          y: 100,
+          width: "200%",
+          height: "150%",
+          y: "100%",
         }}
       />
 

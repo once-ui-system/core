@@ -14,7 +14,7 @@ The `Animation` component provides a simple way to add animations to any element
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight="20rem">
       <Animation fade={0} triggerType="hover" center
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
@@ -35,7 +35,7 @@ The `Animation` component provides a simple way to add animations to any element
           Scale
         </Row>
       </Animation>
-      <Animation slideUp={1.5} triggerType="hover" center
+      <Animation slideUp="1.5rem" triggerType="hover" center
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
             Trigger slide
@@ -74,7 +74,7 @@ The `Animation` component provides a simple way to add animations to any element
     </Row>
 </Animation>
 
-<Animation slideUp={1.5} triggerType="hover" center
+<Animation slideUp="1.5rem" triggerType="hover" center
     trigger={
       <Row padding="16" radius="m" border="neutral-medium" fit>
         Trigger slide
@@ -96,7 +96,7 @@ All animations are value-based - the value represents the initial state, and it 
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight="20rem">
       <Animation blur={8} triggerType="hover" center duration={400}
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
@@ -117,7 +117,7 @@ All animations are value-based - the value represents the initial state, and it 
           <Icon name="search" />
         </Row>
       </Animation>
-      <Animation slideUp={1.5} triggerType="hover" center duration={400}
+      <Animation slideUp="1.5rem" triggerType="hover" center duration={400}
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
             Slide up
@@ -154,7 +154,7 @@ All animations are value-based - the value represents the initial state, and it 
       <Icon name="search" />
     </Row>
 </Animation>
-<Animation slideUp={1.5} triggerType="hover" center duration={400}
+<Animation slideUp="1.5rem" triggerType="hover" center duration={400}
     trigger={
       <Row padding="16" radius="m" border="neutral-medium" fit>
         Slide up
@@ -176,7 +176,7 @@ Use the `trigger` prop with interactive elements like NavIcon or Button. For con
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth horizontal="around" minHeight={16}>
+    <Row fillWidth horizontal="around" minHeight="16rem">
       <AnimationNavIconExample />
     </Row>
   }
@@ -198,7 +198,7 @@ function NavIconMenu() {
         trigger={
           <NavIcon onClick={() => setIsActive(!isActive)} active={isActive} />
         }
-        slideDown={1}
+        slideDown="1rem"
         triggerType="manual"
         active={isActive}
         duration={300}
@@ -223,7 +223,7 @@ Customize animation feel with different easing curves: `linear`, `ease`, `ease-i
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight="20rem">
       <Animation scale={0.8} triggerType="hover" easing="spring" center duration={500}
         trigger={
           <Row padding="16" radius="m" border="neutral-medium" fit>
@@ -394,7 +394,7 @@ Enable portal rendering to display animated content in a positioned overlay usin
       portal
       placement="top-end"
       fade={0}
-      slideUp={1}
+      slideUp="1rem"
       scale={0.8}
       duration={200}
       trigger={
@@ -403,7 +403,7 @@ Enable portal rendering to display animated content in a positioned overlay usin
         </Button>
       }
     >
-      <Card padding="m" radius="l" maxWidth={20}>
+      <Card padding="m" radius="l" maxWidth="20rem">
         <Column gap="8">
           <Text variant="heading-strong-s">Portal Content</Text>
           <Text variant="body-default-s" onBackground="neutral-weak">
@@ -423,7 +423,7 @@ Enable portal rendering to display animated content in a positioned overlay usin
     placement="top-end"
     portal
     fade={0}
-    slideUp={1}
+    slideUp="1rem"
     scale={0.8}
     duration={200}
     trigger={
@@ -432,7 +432,7 @@ Enable portal rendering to display animated content in a positioned overlay usin
       </Button>
     }
   >
-    <Card padding="m" radius="l" maxWidth={20}>
+    <Card padding="m" radius="l" maxWidth="20rem">
       <Column gap="8">
         <Text variant="heading-strong-s">Portal Content</Text>
         <Text variant="body-default-s" onBackground="neutral-weak">
@@ -453,7 +453,7 @@ Stack multiple animations by providing multiple props. Each value represents the
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight={20}>
+    <Row fillWidth horizontal="around" gap="16" s={{direction: "column"}} minHeight="20rem">
       <Animation 
         fade={0}
         scale={0.8}
@@ -473,7 +473,7 @@ Stack multiple animations by providing multiple props. Each value represents the
       <Animation 
         blur={10}
         scale={0.85}
-        slideUp={1}
+        slideUp="1rem"
         triggerType="hover" 
         center
         duration={400}
@@ -513,7 +513,7 @@ Stack multiple animations by providing multiple props. Each value represents the
 <Animation 
     blur={10}
     scale={0.85}
-    slideUp={1}
+    slideUp="1rem"
     triggerType="hover" 
     center
     duration={400}

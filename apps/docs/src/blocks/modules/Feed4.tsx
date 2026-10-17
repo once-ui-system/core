@@ -89,7 +89,7 @@ function PostCard({ post }: { post: FeedPost }) {
         <Row fillWidth gap="12" vertical="center" paddingBottom="16" paddingX="20">
           <Row fillWidth vertical="center" wrap gap="8">
             <Row gap="8" vertical="center">
-              <Avatar size={1.5} src={post.author.avatar} />
+              <Avatar size="1.5rem" src={post.author.avatar} />
               <Text variant="label-default-s">{post.author.name}</Text>
             </Row>
             <Text variant="label-default-s" onBackground="neutral-weak">
@@ -113,7 +113,7 @@ function PostCard({ post }: { post: FeedPost }) {
             {post.attachment.type === "carousel" && post.attachment.urls && (
               <Swiper
                 radius="l"
-                maxWidth={40}
+                maxWidth="40rem"
                 aspectRatio="3/4"
                 controls="contained"
                 items={post.attachment.urls.map((imageUrl, index) => ({
@@ -133,7 +133,7 @@ function PostCard({ post }: { post: FeedPost }) {
             )}
             {post.attachment.type === "link" && post.attachment.url && (
               <Row fillWidth horizontal="center">
-                <Row maxWidth={40} paddingLeft="8">
+                <Row maxWidth="40rem" paddingLeft="8">
                   <OgCard
                     url={post.attachment.url}
                     description={false}

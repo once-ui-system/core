@@ -41,7 +41,7 @@ export const Careers2 = () => {
 
   return (
     <Column fillWidth fitHeight horizontal="center">
-      <Column maxWidth={40} padding="l" gap="12" horizontal="center">
+      <Column maxWidth="40rem" padding="l" gap="12" horizontal="center">
         <Heading as="h2" align="center" variant="display-strong-m">
           Join our team
         </Heading>

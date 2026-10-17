@@ -53,7 +53,7 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
           left="0"
           fillWidth
           interactive
-          speed={1}
+          speed={3.33}
           density={20}
           intensity={40}
           color="brand-on-background-strong"
@@ -67,7 +67,7 @@ export function DesignEngineersClub2({ children, ...flex }: DesignEngineersClub2
           left="0"
           fillWidth
           interactive
-          speed={1}
+          speed={3.33}
           size="1"
           density={40}
           intensity={40}

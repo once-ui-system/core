@@ -181,8 +181,8 @@ const OgCard = ({
     >
       {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
-          minWidth={isRow ? 16 : undefined}
-          maxWidth={isRow ? 24 : undefined}
+          minWidth={isRow ? "16rem" : undefined}
+          maxWidth={isRow ? "24rem" : undefined}
           loading={loading}
           radius="l"
           sizes={sizes}

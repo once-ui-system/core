@@ -134,8 +134,8 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
           mask={{ cursor: true }}
           gradient={{
             display: true,
-            x: 25,
-            y: 25,
+            x: "25%",
+            y: "25%",
             colorStart: "brand-solid-medium",
             colorEnd: "accent-solid-medium",
           }}
@@ -166,7 +166,7 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                     {tile.description}
                   </Text>
                 </Column>
-                <Row fillWidth height={20} paddingLeft="m">
+                <Row fillWidth height="20rem" paddingLeft="m">
                   <Row
                     theme="light"
                     themeSolid="contrast"

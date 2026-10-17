@@ -67,7 +67,7 @@ export function DocsPageExample({
         </Column>
         <Content components={components} />
       </Column>
-      <Column as="aside" maxWidth={16} fitHeight position="sticky" top="80" m={{ hide: true }}>
+      <Column as="aside" maxWidth="16rem" fitHeight position="sticky" top="80" m={{ hide: true }}>
         <HeadingNav />
       </Column>
     </Row>

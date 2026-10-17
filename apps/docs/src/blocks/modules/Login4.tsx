@@ -57,7 +57,7 @@ export const Login4 = () => {
               </Row>
               <Fade
                 fillWidth
-                height={28}
+                height="28rem"
                 to="top"
                 position="absolute"
                 bottom="0"

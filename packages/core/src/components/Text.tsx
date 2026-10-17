@@ -9,8 +9,8 @@ import {
 } from "react";
 
 import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
-import { textLayout } from "../utils/layoutClasses";
+import { ColorScheme, ColorWeight, TextVariant } from "../types";
+import { spacingClass, textLayout } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
@@ -126,9 +126,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, value: SpacingToken | number | undefined) => {
-    return typeof value === "string" ? `${prefix}-${value}` : undefined;
-  };
+  const generateClassName = (prefix: string, value: unknown) => spacingClass(prefix, value);
 
   const layout = textLayout({
     gap,

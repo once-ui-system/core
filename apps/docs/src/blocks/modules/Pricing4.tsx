@@ -83,7 +83,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
-      <Column maxWidth={40} gap="12" horizontal="center">
+      <Column maxWidth="40rem" gap="12" horizontal="center">
         <Tag scheme="brand" size="s">
           Compare plans
         </Tag>
@@ -95,7 +95,7 @@ export const Pricing4 = (flex: React.ComponentProps<typeof Column>) => {
         </Text>
       </Column>
 
-      <Column maxWidth="l" translateY={-2} border radius="xl" background="page">
+      <Column maxWidth="l" translateY="-2rem" border radius="xl" background="page">
         <Row
           hide
           s={{ hide: false }}

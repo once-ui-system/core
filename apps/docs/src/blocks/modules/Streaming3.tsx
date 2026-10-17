@@ -111,7 +111,7 @@ export const Streaming3 = () => {
             alt={nowPlaying.title}
             sizes="(max-width: 768px) 100vw, 960px"
           />
-          <Fade fillWidth height={20} to="top" position="absolute" bottom="0" left="0" />
+          <Fade fillWidth height="20rem" to="top" position="absolute" bottom="0" left="0" />
           <Row
             fillWidth
             position="absolute"
@@ -123,7 +123,7 @@ export const Streaming3 = () => {
             horizontal="between"
             wrap
           >
-            <Column gap="8" maxWidth={40}>
+            <Column gap="8" maxWidth="40rem">
               <Tag size="s" scheme="brand">
                 Now playing
               </Tag>
@@ -159,7 +159,7 @@ export const Streaming3 = () => {
               {continueListening.map((item) => (
                 <Column
                   key={item.episode}
-                  minWidth={18}
+                  minWidth="18rem"
                   gap="12"
                   padding="12"
                   radius="l"
@@ -201,7 +201,7 @@ export const Streaming3 = () => {
               <Column
                 key={show.title}
                 flex={1}
-                minWidth={16}
+                minWidth="16rem"
                 gap="12"
                 padding="12"
                 radius="l"

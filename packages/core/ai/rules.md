@@ -68,7 +68,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <div style={{ gap: 8, padding: 24 }}>
 ```
 
-5. `width`/`height`/`maxWidth`/`minHeight` accept numbers (rem), tokens, or CSS units. Prefer numbers/tokens.
+5. `width`/`height`/`maxWidth`/`minHeight` (and every spacing and offset prop) accept a number in **px** (`width={320}`), a spacing token string (`"16"`), or a CSS length string (`"40rem"`, `"50%"`, `"100dvh"`, `calc(…)`). Prefer tokens; write rem as a string when a size should follow the root font size. `maxWidth={40}` is 40 px, not 40rem (2.x).
 
 6. Only use `style={{}}` for things no token prop covers (e.g. `isolation`, custom filters). If a prop exists, the prop wins.
 
@@ -191,7 +191,7 @@ the card it was meant to support.
 ```tsx
 // Bad: a tall card and 20 chips, most of the row empty
 <Row fillWidth gap="32">
-  <Column flex={1} maxWidth={26}><FeatureCard /></Column>
+  <Column flex={1} maxWidth="26rem"><FeatureCard /></Column>
   <Column flex={1}><Row wrap gap="4">{items.map(i => <Button key={i} size="s">{i}</Button>)}</Row></Column>
 </Row>
 
@@ -231,17 +231,17 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 // Good: full-bleed section, narrow content inside
 <Column fillWidth horizontal="center" paddingY="80">
   <Background position="absolute" top="0" left="0" fill pointerEvents="none" gradient={{...}} />
-  <Column zIndex={1} maxWidth={48}>...</Column>
+  <Column zIndex={1} maxWidth="48rem">...</Column>
 </Column>
 ```
 
-22. `Background` gradient units: `x`/`y` are percent positions of the container (50/50 = center). `width`/`height` are quarter-percent units: `400` = 100% of the container, `100` = 25%. A soft corner glow is `width: 100–200`; `width: 500` overshoots the container.
+22. `Background` gradient units: `x`/`y` place the centre as a percentage string of the container (`"50%"`/`"50%"` = center) or px as a number. `width`/`height` are the ellipse's radii, as a percentage string of the container (`"100%"`, the default) or px. A soft corner glow is `width: "100%"`–`"200%"`; `"500%"` overshoots the container. `Mask` is the same: `x`/`y` percentage strings, `radius` a CSS length (`"50vh"`, the default) or px.
 
 23. Color visibility: `*-background-weak` is nearly the page color — it is invisible as an accent. For tints and glows use alpha tokens (`brand-alpha-medium`, `brand-alpha-strong`) or solid tokens (`brand-solid-strong`) and do not stack a low `opacity` on top of an already-weak color.
 
 ## Effect units
 
-24. `RevealFx`: `delay` is in **milliseconds** — stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). The same holds for every timing prop measured in milliseconds: `RevealFx` `speed`, `ShineFx` `speed`, `CountFx` `speed`, `TypeFx` `speed` and `delay`, `Animation`/`HoverCard` `delay` and `duration`, `Hover` `delay` and `hideDelay`, `Skeleton` `delay`. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx` and `Effect` is a **multiplier** instead — `1` is normal, `0.5` half speed. `translateY` as a number is in **rem** — use `translateY={1}` or a token like `"16"` (1rem); `16` means 16rem.
+24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `Hover` `delay` and `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `AutoScroll`, `GlitchFx` and `LetterFx`. `translateY` as a number is in **px** — use a token like `"16"` (1rem) or `translateY={16}`.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo dark>` beside a `<Logo light>`. Keep `dark` or `light` for a logo that should only appear in one theme.
@@ -250,7 +250,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 ## Motion
 
-27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
+27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem, or 8–16 as px numbers), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
 
 28. Do **not** wrap every section in `RevealFx` — uniform entrance animation on everything reads dated and makes scrolling feel slow. Entry-animation budget per page: the hero, plus at most one or two key moments (stats, a card set). Everything else just renders.
 
@@ -268,7 +268,7 @@ useEffect(() => {
 
 <Column ref={ref} gap="16">
   <RevealFx revealed={seen} translateY="8">...</RevealFx>
-  <CountFx value={seen ? 2400 : 0} speed={1500} separator="," variant="display-strong-m" />
+  <CountFx value={seen ? 2400 : 0} duration={1500} separator="," variant="display-strong-m" />
 </Column>
 ```
 

@@ -90,7 +90,7 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
             translateX="30%"
             translateY="-30%"
           />
-          <Mask position="absolute" fill left="0" top="0" x={100} y={0}>
+          <Mask position="absolute" fill left="0" top="0" x="100%" y={0}>
             <MatrixFx
               themeSolid="color"
               pointerEvents="none"
@@ -101,7 +101,7 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
               flicker
               bulge={{
                 type: "wave",
-                duration: 4,
+                duration: 4000,
                 intensity: 15,
                 repeat: true,
               }}
@@ -127,7 +127,7 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
         left="0"
         gradient={{
           display: true,
-          x: 100,
+          x: "100%",
           y: 0,
           colorStart: tier.featured ? "page-background" : "static-transparent",
         }}
@@ -177,7 +177,7 @@ export const Plans7 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
-      <Column maxWidth={48} gap="12" horizontal="center" align="center">
+      <Column maxWidth="48rem" gap="12" horizontal="center" align="center">
         <Tag size="s" scheme="brand" themeBorder="rounded">
           Pricing
         </Tag>

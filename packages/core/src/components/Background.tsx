@@ -3,7 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef } from "react";
 import { DisplayProps } from "../interfaces";
-import { ColorValue, SpacingToken } from "../types";
+import { ColorValue, CSSUnit, SpacingToken } from "../types";
 import styles from "./Background.module.scss";
 import { Flex } from "./Flex";
 import { Mask, MaskProps } from "./Mask";
@@ -19,10 +19,23 @@ function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
 interface GradientProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
+  /**
+   * Where the gradient's centre sits across the element: a number is px from
+   * the left edge, a string a CSS length (`"50%"`, the default, is the
+   * middle). Was a bare percentage until 3.0 (`x: 50` is `x: "50%"` now).
+   */
+  x?: number | CSSUnit;
+  /** As `x`, from the top edge. */
+  y?: number | CSSUnit;
+  /**
+   * The gradient ellipse's horizontal radius: a number is px, a string a CSS
+   * length, a percentage of the element's width (`"100%"`, the default).
+   * Until 3.0 a bare number was a quarter-percent (`width: 100` is
+   * `width: "100%"` now).
+   */
+  width?: number | CSSUnit;
+  /** As `width`, vertically, as a percentage of the element's height. */
+  height?: number | CSSUnit;
   tilt?: number;
   colorStart?: ColorValue;
   colorEnd?: ColorValue;
@@ -77,18 +90,23 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
       setRef(forwardedRef, backgroundRef.current);
     }, [forwardedRef]);
 
-    const remap = (
-      value: number,
-      inputMin: number,
-      inputMax: number,
-      outputMin: number,
-      outputMax: number,
-    ) => {
-      return ((value - inputMin) / (inputMax - inputMin)) * (outputMax - outputMin) + outputMin;
+    // The gradient layer is four times the element and starts 1.5 widths
+    // before it (Background.module.scss), so a position or radius given
+    // against the element is converted to that layer here: a percentage is a
+    // quarter of itself plus the 37.5% offset, and a fixed length is unchanged.
+    const position = (value: number | string | undefined) => {
+      if (value == null) return "50%";
+      if (typeof value === "number") return `calc(37.5% + ${value}px)`;
+      const percent = /^(-?\d*\.?\d+)%$/.exec(value);
+      if (percent) return `${37.5 + Number(percent[1]) / 4}%`;
+      return `calc(37.5% + ${value})`;
     };
-
-    const adjustedX = gradient.x != null ? remap(gradient.x, 0, 100, 37.5, 62.5) : 50;
-    const adjustedY = gradient.y != null ? remap(gradient.y, 0, 100, 37.5, 62.5) : 50;
+    const extent = (value: number | string | undefined) => {
+      if (value == null) return "25%";
+      if (typeof value === "number") return `${value}px`;
+      const percent = /^(-?\d*\.?\d+)%$/.exec(value);
+      return percent ? `${Number(percent[1]) / 4}%` : value;
+    };
 
     const renderContent = () => (
       <>
@@ -99,12 +117,10 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             opacity={gradient.opacity}
             pointerEvents="none"
             style={{
-              ["--gradient-position-x" as string]: `${adjustedX}%`,
-              ["--gradient-position-y" as string]: `${adjustedY}%`,
-              ["--gradient-width" as string]:
-                gradient.width != null ? `${gradient.width / 4}%` : "25%",
-              ["--gradient-height" as string]:
-                gradient.height != null ? `${gradient.height / 4}%` : "25%",
+              ["--gradient-position-x" as string]: position(gradient.x),
+              ["--gradient-position-y" as string]: position(gradient.y),
+              ["--gradient-width" as string]: extent(gradient.width),
+              ["--gradient-height" as string]: extent(gradient.height),
               ["--gradient-tilt" as string]: gradient.tilt != null ? `${gradient.tilt}deg` : "0deg",
               ["--gradient-color-start" as string]: gradient.colorStart
                 ? `var(--${gradient.colorStart})`

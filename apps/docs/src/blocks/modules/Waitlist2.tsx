@@ -62,7 +62,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
       {...flex}
     >
       <BlobFx position="absolute" bottom="0" left="0" />
-      <Column fill minWidth={24} padding="40" gap="24" horizontal="start">
+      <Column fill minWidth="24rem" padding="40" gap="24" horizontal="start">
         <Badge
           background="brand-alpha-weak"
           onBackground="brand-medium"
@@ -94,7 +94,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               </Text>
               <Row vertical="center" gap="4" textVariant="heading-strong-m">
                 #
-                <CountFx value={position} speed={1200} effect="smooth" />
+                <CountFx value={position} duration={1200} effect="smooth" />
               </Row>
             </Row>
             <Row fillWidth vertical="center" gap="8">
@@ -111,7 +111,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             </Text>
           </Column>
         ) : (
-          <Column gap="12" maxWidth={22}>
+          <Column gap="12" maxWidth="22rem">
             <Input
               id="waitlist-email"
               placeholder="Enter your email"
@@ -139,7 +139,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
 
       <Column
         fill
-        minWidth={20}
+        minWidth="20rem"
         background="surface"
         borderLeft
         padding="24"
@@ -152,7 +152,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
             <Text variant="label-default-s">Live queue</Text>
           </Row>
           <Row gap="4" vertical="center" textVariant="label-strong-s">
-            <CountFx value={38} speed={2000} effect="smooth" />
+            <CountFx value={38} duration={2000} effect="smooth" />
             <Text onBackground="neutral-weak" variant="label-default-s">
               joined today
             </Text>
@@ -180,7 +180,7 @@ export const Waitlist2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               </Text>
             </Row>
           ))}
-          <Fade position="absolute" bottom="0" fillWidth height={5} />
+          <Fade position="absolute" bottom="0" fillWidth height="5rem" />
         </Column>
       </Column>
     </Row>

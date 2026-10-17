@@ -77,10 +77,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan, ...flex }) => {
             left="0"
             position="absolute"
             gradient={{
-              x: 50,
-              y: 30,
-              width: 60,
-              height: 100,
+              x: "50%",
+              y: "30%",
+              width: "60%",
+              height: "100%",
               tilt: 45,
               opacity: 100,
               display: true,
@@ -135,10 +135,10 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
   return (
     <Scroller maxWidth="m">
       <Row gap="-1" {...flex}>
-        <Row fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth="20rem">
           <PlanCard id="free" plan={plans.free} leftRadius="l" />
         </Row>
-        <Column fillWidth minWidth={20}>
+        <Column fillWidth minWidth="20rem">
           <Row
             paddingX="16"
             minHeight="40"
@@ -155,7 +155,7 @@ export const Plans3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           </Row>
           <PlanCard id="pro" plan={plans.pro} zIndex={1} />
         </Column>
-        <Row fillWidth paddingTop="40" minWidth={20}>
+        <Row fillWidth paddingTop="40" minWidth="20rem">
           <PlanCard id="team" plan={plans.team} rightRadius="l" />
         </Row>
       </Row>

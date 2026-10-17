@@ -89,7 +89,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
               </Button>
             }
             dropdown={
-              <Column padding="4" gap="2" minWidth={12}>
+              <Column padding="4" gap="2" minWidth="12rem">
                 {workspaces.map((workspace) => (
                   <Option
                     key={workspace.value}
@@ -144,7 +144,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
             tooltipPosition="bottom"
             icon="bell"
           />
-          <Row position="absolute" top={0.15} right={0.15}>
+          <Row position="absolute" top="0.15rem" right="0.15rem">
             <Row
               style={{ borderColor: "var(--page-background)" }}
               height="8"
@@ -158,7 +158,7 @@ export const Header5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
           placement="bottom-end"
           avatarProps={{ src: "/images/creators/lorant.jpg" }}
           dropdown={
-            <Column padding="4" gap="2" minWidth={10}>
+            <Column padding="4" gap="2" minWidth="10rem">
               <Row padding="8" gap="8" vertical="center">
                 <Avatar src="/images/creators/lorant.jpg" size="s" />
                 <Column gap="0">

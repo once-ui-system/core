@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { ColorScheme, ColorWeight, SpacingToken } from "../types";
+import { ColorScheme, ColorWeight, CSSUnit, SpacingToken } from "../types";
 import styles from "./Fade.module.scss";
 import { Flex } from "./Flex";
 
@@ -16,7 +16,8 @@ interface FadeProps extends React.ComponentProps<typeof Flex> {
   className?: string;
   to?: "bottom" | "top" | "left" | "right";
   base?: BaseColor;
-  blur?: number;
+  /** Backdrop blur: a number is px, a string a CSS length. Default 0.5rem (a number was rem until 3.0). */
+  blur?: number | CSSUnit;
   pattern?: {
     display?: boolean;
     size?: SpacingToken;
@@ -34,7 +35,7 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
         display: false,
         size: "4",
       },
-      blur = 0.5,
+      blur,
       children,
       className,
       style,
@@ -73,7 +74,7 @@ const Fade = forwardRef<HTMLDivElement, FadeProps>(
             ...(pattern.display && {
               backgroundImage: `linear-gradient(var(--gradient-direction), var(--base-color), transparent), radial-gradient(transparent 1px, var(--base-color) 1px)`,
               backgroundSize: `100% 100%, var(--static-space-${pattern.size}) var(--static-space-${pattern.size})`,
-              backdropFilter: `blur(${blur}rem)`,
+              backdropFilter: `blur(${blur === undefined ? "0.5rem" : typeof blur === "number" ? `${blur}px` : blur})`,
             }),
             ...style,
           } as React.CSSProperties

@@ -13,7 +13,7 @@ import {
 
 export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
-    <Column as="nav" maxWidth={16} fitHeight paddingTop="2" gap="2" s={{ hide: true }} {...flex}>
+    <Column as="nav" maxWidth="16rem" fitHeight paddingTop="2" gap="2" s={{ hide: true }} {...flex}>
       <Row paddingBottom="16" paddingTop="8" fillWidth>
         <DropdownWrapper
           fillWidth

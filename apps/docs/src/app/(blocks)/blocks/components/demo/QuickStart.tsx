@@ -77,7 +77,7 @@ const Docs: React.FC = () => {
                 name="sparkle"
                 size="xs"
               />
-              <ShineFx speed={3000} inverse baseOpacity={0.6}>
+              <ShineFx duration={3000} inverse baseOpacity={0.6}>
                 What's new?
               </ShineFx>
             </Badge>
@@ -116,7 +116,7 @@ const Docs: React.FC = () => {
                   <Row
                     background="page"
                     marginRight="16"
-                    minWidth={72}
+                    minWidth="72rem"
                     fillWidth
                     radius="l"
                     overflow="hidden"
@@ -127,7 +127,7 @@ const Docs: React.FC = () => {
                   <Row
                     background="page"
                     marginRight="16"
-                    minWidth={72}
+                    minWidth="72rem"
                     fillWidth
                     radius="l"
                     padding="l"
@@ -139,7 +139,7 @@ const Docs: React.FC = () => {
                   <Row
                     background="page"
                     marginRight="16"
-                    minWidth={72}
+                    minWidth="72rem"
                     fillWidth
                     radius="l"
                     overflow="hidden"
@@ -150,7 +150,7 @@ const Docs: React.FC = () => {
                   <Row
                     background="page"
                     marginRight="16"
-                    minWidth={72}
+                    minWidth="72rem"
                     fillWidth
                     radius="l"
                     padding="l"

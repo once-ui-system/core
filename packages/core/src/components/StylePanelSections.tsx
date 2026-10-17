@@ -464,7 +464,7 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
 
 function RowLabel({ children }: { children: ReactNode }) {
   return (
-    <Flex textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
+    <Flex textVariant="label-default-s" minWidth="3rem" onBackground="neutral-strong">
       {children}
     </Flex>
   );
@@ -810,7 +810,7 @@ function Options({ buttons, ...rest }: Omit<SegmentedControlProps, "labels">) {
   const labels = useStylePanelLabels();
   return (
     <SegmentedControl
-      maxWidth={stacked ? undefined : 22}
+      maxWidth={stacked ? undefined : "22rem"}
       minWidth={0}
       labels={labels.scroller}
       buttons={buttons.map((button) => ({ size: stacked ? "m" : "l", ...button }))}

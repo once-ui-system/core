@@ -2,6 +2,8 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
@@ -15,29 +17,15 @@ function createEventHandler(
   setText: React.Dispatch<React.SetStateAction<string>>,
   inProgress: boolean,
   setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
-  speed: "fast" | "medium" | "slow",
+  speed: Speed,
   charset: string[],
   setHasAnimated?: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
-  const speedSettings = {
-    fast: {
-      BASE_DELAY: 10,
-      REVEAL_DELAY: 10,
-      INITIAL_RANDOM_DURATION: 100,
-    },
-    medium: {
-      BASE_DELAY: 30,
-      REVEAL_DELAY: 30,
-      INITIAL_RANDOM_DURATION: 300,
-    },
-    slow: {
-      BASE_DELAY: 60,
-      REVEAL_DELAY: 60,
-      INITIAL_RANDOM_DURATION: 600,
-    },
-  };
-
-  const { BASE_DELAY, REVEAL_DELAY, INITIAL_RANDOM_DURATION } = speedSettings[speed];
+  // The designed pace (speed 1): a 30ms step and 300ms of scrambling first.
+  const factor = speedFactor(speed);
+  const BASE_DELAY = 30 / factor;
+  const REVEAL_DELAY = 30 / factor;
+  const INITIAL_RANDOM_DURATION = 300 / factor;
 
   const generateRandomText = () =>
     originalText
@@ -74,7 +62,11 @@ function createEventHandler(
 type LetterFxProps = {
   children: ReactNode;
   trigger?: "hover" | "instant" | "custom";
-  speed?: "fast" | "medium" | "slow";
+  /**
+   * A multiplier on the scramble's pace (`2` is twice as fast), or
+   * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2).
+   */
+  speed?: Speed;
   charset?: string[];
   onTrigger?: (triggerFn: () => void) => void;
   className?: string;

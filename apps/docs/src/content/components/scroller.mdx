@@ -29,8 +29,8 @@ The `Scroller` component creates a scrollable container with automatic navigatio
           <Background
             key={i}
             fillWidth
-            height={6}
-            width={12}
+            height="6rem"
+            width="12rem"
             background="neutral-alpha-weak"
             border="neutral-alpha-medium" radius="l"
             lines={{display: true, color: "neutral-alpha-weak"}}/>
@@ -62,14 +62,14 @@ The `Scroller` can be configured to scroll vertically by setting the `direction`
   marginTop="16"
   marginBottom="24"
   preview={
-    <Scroller direction="column" height={24} fadeColor="transparent">
+    <Scroller direction="column" height="24rem" fadeColor="transparent">
       <Column gap="16" horizontal="center" fillWidth>
         {Array(6).fill(0).map((_, i) => (
           <Background
             key={i}
             fillWidth
-            height={6}
-            width={12}
+            height="6rem"
+            width="12rem"
             background="neutral-alpha-weak"
             border="neutral-alpha-medium" radius="l"
             lines={{display: true, color: "neutral-alpha-weak"}}/>
@@ -80,7 +80,7 @@ The `Scroller` can be configured to scroll vertically by setting the `direction`
   codes={[
     {
       code:
-`<Scroller direction="column" height={24} fadeColor="transparent">
+`<Scroller direction="column" height="24rem" fadeColor="transparent">
     <Column gap="16" horizontal="center" fillWidth>
       {Array(6).fill(0).map((_, i) => (
         <Flex key={i} />
@@ -107,8 +107,8 @@ You can customize the color of the fade effect that appears behind the scroll bu
           <Background
             key={i}
             fillWidth
-            height={6}
-            width={12}
+            height="6rem"
+            width="12rem"
             background="neutral-alpha-weak"
             border="neutral-alpha-medium" radius="l"
             lines={{display: true, color: "neutral-alpha-weak"}}/>

@@ -51,7 +51,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
 
   return (
     <Card
-      minWidth={12}
+      minWidth="12rem"
       href={href}
       paddingX="20"
       paddingTop="20"
@@ -68,7 +68,7 @@ const StatCard: React.FC<StatCardProps> = ({ title, value, change, positive = tr
         opacity={30}
         left="0"
         bottom="0"
-        height={6}
+        height="6rem"
         border="transparent"
         axis="none"
         tooltip={false}
@@ -272,7 +272,7 @@ export const Dashboard1: React.FC = () => {
     <Column fill>
       <Header1 authenticated avatar="/images/creators/lorant.jpg" borderBottom="transparent" />
       <Row fill>
-        <Row m={{ hide: true }} maxWidth={16} horizontal="center">
+        <Row m={{ hide: true }} maxWidth="16rem" horizontal="center">
           <Sidebar1 background="transparent" radius={undefined} fitHeight />
         </Row>
         <Row fill padding="8">
@@ -322,7 +322,7 @@ export const Dashboard1: React.FC = () => {
                 </Scroller>
 
                 <LineChart
-                  minHeight={20}
+                  minHeight="20rem"
                   border
                   axis="x"
                   grid="y"
@@ -360,7 +360,7 @@ export const Dashboard1: React.FC = () => {
                 />
 
                 <Grid columns="2" m={{ columns: 1 }} gap="m" fillWidth>
-                  <Column fillWidth border radius="l" overflow="hidden" height={20}>
+                  <Column fillWidth border radius="l" overflow="hidden" height="20rem">
                     <Row
                       vertical="center"
                       horizontal="between"
@@ -414,7 +414,7 @@ export const Dashboard1: React.FC = () => {
                     </Column>
                   </Column>
 
-                  <Column border radius="l" fillWidth overflow="hidden" height={20}>
+                  <Column border radius="l" fillWidth overflow="hidden" height="20rem">
                     <Row
                       fillWidth
                       vertical="center"

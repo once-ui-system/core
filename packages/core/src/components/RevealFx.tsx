@@ -1,17 +1,26 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { SpacingToken } from "../types";
+import { CSSUnit, SpacingToken } from "../types";
+import { translateValue as resolveTranslate } from "../utils/layoutClasses";
 import { Flex } from "./Flex";
 import styles from "./RevealFx.module.scss";
 
 interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   children: React.ReactNode;
-  speed?: "slow" | "medium" | "fast" | number;
+  /**
+   * Milliseconds the reveal takes. Was `speed` until 3.0 (`"fast"` 1000,
+   * `"medium"` 2000, `"slow"` 3000).
+   */
+  duration?: number;
   /** Milliseconds before the reveal starts. Was seconds until 2.0. */
   delay?: number;
   defaultRevealed?: boolean;
-  translateY?: number | SpacingToken;
+  /**
+   * How far the content travels up as it reveals: a number is px, a string a
+   * spacing token (`"16"`) or a CSS length (`"1rem"`).
+   */
+  translateY?: number | SpacingToken | CSSUnit;
   revealed?: boolean;
   style?: React.CSSProperties;
   className?: string;
@@ -21,7 +30,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
   (
     {
       children,
-      speed = "medium",
+      duration = 2000,
       delay = 0,
       defaultRevealed = false,
       translateY,
@@ -36,28 +45,6 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
     const [maskRemoved, setMaskRemoved] = useState(false);
     const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const getSpeedDurationMs = () => {
-      if (typeof speed === "number") {
-        return speed;
-      }
-
-      switch (speed) {
-        case "fast":
-          return 1000;
-        case "medium":
-          return 2000;
-        case "slow":
-          return 3000;
-        default:
-          return 2000;
-      }
-    };
-
-    const getSpeedDuration = () => {
-      const ms = getSpeedDurationMs();
-      return `${ms / 1000}s`;
-    };
-
     useEffect(() => {
       const timer = setTimeout(() => {
         setIsRevealed(true);
@@ -65,7 +52,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
         // Always set a timeout to remove the mask after transition completes
         transitionTimeoutRef.current = setTimeout(() => {
           setMaskRemoved(true);
-        }, getSpeedDurationMs());
+        }, duration);
       }, delay);
 
       return () => {
@@ -91,24 +78,15 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
 
           transitionTimeoutRef.current = setTimeout(() => {
             setMaskRemoved(true);
-          }, getSpeedDurationMs());
+          }, duration);
         }
       }
     }, [revealed]);
 
-    const getTranslateYValue = () => {
-      if (typeof translateY === "number") {
-        return `${translateY}rem`;
-      } else if (typeof translateY === "string") {
-        return `var(--static-space-${translateY})`;
-      }
-      return undefined;
-    };
-
-    const translateValue = getTranslateYValue();
+    const translateValue = resolveTranslate(translateY);
 
     const revealStyle: React.CSSProperties = {
-      transitionDuration: getSpeedDuration(),
+      transitionDuration: `${duration}ms`,
       transform: isRevealed ? "translateY(0)" : `translateY(${translateValue})`,
       ...style,
     };

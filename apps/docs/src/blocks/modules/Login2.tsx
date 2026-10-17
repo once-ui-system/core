@@ -23,7 +23,7 @@ export const Login2 = () => {
           left="0"
           fill
           interactive
-          speed={4}
+          speed={13.33}
           size="1"
           density={200}
           intensity={40}
@@ -45,7 +45,7 @@ export const Login2 = () => {
             gradient={{
               display: true,
               x: 0,
-              y: 125,
+              y: "125%",
               colorStart: "accent-solid-strong",
               colorEnd: "static-transparent",
             }}
@@ -53,17 +53,17 @@ export const Login2 = () => {
           <Background
             gradient={{
               display: true,
-              x: 125,
-              y: 100,
-              width: 150,
-              height: 150,
+              x: "125%",
+              y: "100%",
+              width: "150%",
+              height: "150%",
               colorStart: "brand-background-strong",
               colorEnd: "static-transparent",
             }}
           />
         </HoloFx>
         <Column fill center padding="16">
-          <Column center gap="16" padding="40" maxWidth={32} radius="xl" background="surface">
+          <Column center gap="16" padding="40" maxWidth="32rem" radius="xl" background="surface">
             <Logo
               href="/"
               size="l"

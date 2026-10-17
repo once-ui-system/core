@@ -84,7 +84,7 @@ function CopyPage({ path }: CopyPageProps) {
           />
         }
         dropdown={
-          <Column maxWidth={12} padding="4" gap="2">
+          <Column maxWidth="12rem" padding="4" gap="2">
             <Option
               value="markdown"
               prefix={<Icon name="document" size="xs" onBackground="neutral-weak" />}

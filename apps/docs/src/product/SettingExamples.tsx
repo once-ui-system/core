@@ -17,7 +17,7 @@ export function SettingBasicExample() {
   const [loop, setLoop] = useState(false);
 
   return (
-    <Column fillWidth gap="8" maxWidth={32}>
+    <Column fillWidth gap="8" maxWidth="32rem">
       <Setting label="Autoplay" description="Start playing on load">
         <Switch checked={autoplay} onCheckedChange={() => setAutoplay(!autoplay)} />
       </Setting>
@@ -34,7 +34,7 @@ export function SettingGroupExample() {
   const [position, setPosition] = useState("bottom-right");
 
   return (
-    <Column fillWidth gap="8" maxWidth={32}>
+    <Column fillWidth gap="8" maxWidth="32rem">
       <SettingGroup
         label="Watermark"
         control={<Switch checked={enabled} onCheckedChange={() => setEnabled(!enabled)} />}
@@ -46,7 +46,7 @@ export function SettingGroupExample() {
             {opacity}%
           </Text>
         </Setting>
-        <Setting label="Position" controlWidth={18}>
+        <Setting label="Position" controlWidth="18rem">
           <SegmentedControl
             fillWidth
             value={position}
@@ -66,7 +66,7 @@ export function SettingAxesExample() {
   const [tilt, setTilt] = useState({ x: 12, y: -6 });
 
   return (
-    <Column fillWidth maxWidth={32}>
+    <Column fillWidth maxWidth="32rem">
       <SettingAxes
         label="Tilt"
         info="Rotates the frame in 3D. Both axes are degrees."

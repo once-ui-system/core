@@ -707,17 +707,20 @@ function rawThemeAttributes(spec, tags) {
 }
 
 /**
- * Timing props measured in milliseconds, per component. Everything else named
- * `speed` is a multiplier (`MatrixFx`, `WeatherFx`, `ParticleFx`,
- * `CelebrationFx`, `Effect`), where `0.5` is exactly right, or a named pace
- * (`LetterFx`, `GlitchFx`, `AutoScroll`). A component that extends one of
- * these in the spec (`HoverCard` extends `Animation`) inherits its props.
+ * Timing props measured in milliseconds, per component: in 3.0 every
+ * duration, delay and interval is. `speed` is always a multiplier (`1` the
+ * default, `0.5` half) or `"slow"`/`"medium"`/`"fast"`, so it is never here.
+ * A component that extends one of these in the spec (`HoverCard` extends
+ * `Animation`) inherits its props.
  */
 const MILLISECOND_PROPS = {
-  RevealFx: ["delay", "speed"],
-  ShineFx: ["speed"],
-  CountFx: ["speed"],
-  TypeFx: ["delay", "speed"],
+  RevealFx: ["delay", "duration"],
+  ShineFx: ["duration"],
+  CountFx: ["duration"],
+  TypeFx: ["delay", "charDuration", "hold"],
+  CelebrationFx: ["duration"],
+  WeatherFx: ["duration"],
+  FlipFx: ["timing", "autoFlipInterval"],
   Animation: ["delay", "duration"],
   Hover: ["delay", "hideDelay"],
   Skeleton: ["delay"],
@@ -731,34 +734,45 @@ function millisecondProps(spec, name) {
   return props;
 }
 
+/** Lengths of time where a small whole number can only be seconds. */
+const WHOLE_SECONDS_PROPS = new Set(["duration", "timing", "autoFlipInterval"]);
+
 /**
  * A timing value written in seconds: a fraction on its own (`{0.3}`), or a
  * fraction it is multiplied by (`{index * 0.1}`) with nothing in the
  * expression big enough to be milliseconds already (`{index * 0.1 * 1000}`).
  */
-function looksLikeSeconds(value) {
+function looksLikeSeconds(value, prop) {
   if (!value?.startsWith("{")) return false;
   const expr = value.slice(1, -1).trim();
+  // `duration={5}`: a whole number of seconds, as CelebrationFx and WeatherFx took in 2.x.
+  if (
+    WHOLE_SECONDS_PROPS.has(prop) &&
+    /^\d+$/.test(expr) &&
+    Number(expr) >= 1 &&
+    Number(expr) <= 20
+  )
+    return true;
   const numbers = (expr.match(/\d*\.?\d+/g) || []).map(Number);
   if (numbers.some((n) => n >= 10)) return false;
   return /^\d*\.\d+$/.test(expr) || /\*\s*\d*\.\d+|\d*\.\d+\s*\*/.test(expr);
 }
 
-const BOX_SIZE = /\b(width|height|minWidth|minHeight)=\{\s*(\d+)\s*\}/g;
-/** Spacing tokens, in px, that read as a box size when written as a number. */
-const PIXEL_TOKENS = new Set([16, 20, 24, 32, 40, 48, 56, 64, 72, 80, 104, 128, 160]);
+const BOX_SIZE = /\b(width|height|minWidth|minHeight)=\{\s*(\d*\.?\d+)\s*\}/g;
+/** Below this many px, a box around an icon or a label cannot hold it. */
+const REM_HABIT_BELOW = 10;
 
 /**
- * A box sized as if numbers were pixels: two of `width`, `height`, `minWidth`,
- * `minHeight` set to the same spacing-token number (`width={32} height={32}`)
- * on an element that holds only an icon, avatar or a line of text. A number
- * is rem, so that box is 512 px. Large rem boxes holding layout (a hero, a
- * decorative blob, a 14rem timer dial) are left alone. Returns the number, or 0.
+ * A box sized as if numbers were still rem (2.x): two of `width`, `height`,
+ * `minWidth`, `minHeight` set to the same small number (`width={2}
+ * height={2}`) on an element that holds only an icon, avatar or a line of
+ * text. A number is px in 3.0, so that box is 2 px. Boxes holding layout are
+ * left alone. Returns the number, or 0.
  */
 function pixelBoxSize(source, tag) {
   if (!RELATIVE_BY_DEFAULT.has(tag.name) || tag.attrs.trimEnd().endsWith("/")) return 0;
   const values = [...tag.attrs.matchAll(BOX_SIZE)].map((m) => Number(m[2]));
-  const size = values.find((v, i) => PIXEL_TOKENS.has(v) && values.indexOf(v) !== i);
+  const size = values.find((v, i) => v > 0 && v < REM_HABIT_BELOW && values.indexOf(v) !== i);
   if (!size) return 0;
   const close = source.indexOf(`</${tag.name}>`, tag.end);
   if (close < 0) return 0;
@@ -862,9 +876,13 @@ const PRE_3_PROPS = {
   Scrubber: { ariaLabel: "aria-label", onChange: "onValueChange", onSelect: "onSelectedChange" },
   Accordion: { onToggle: "onOpenChange" },
   NavGroup: { onToggle: "onOpenChange" },
-  RevealFx: { revealedByDefault: "defaultRevealed" },
+  RevealFx: { revealedByDefault: "defaultRevealed", speed: "duration" },
   Carousel: { revealedByDefault: "defaultRevealed" },
   Kbar: { inputSize: "size" },
+  // D5: a `speed` that was a length of time.
+  ShineFx: { speed: "duration" },
+  CountFx: { speed: "duration" },
+  TypeFx: { speed: "charDuration" },
 };
 
 function validate(source, spec, iconNames, options = {}) {
@@ -1116,7 +1134,7 @@ function validate(source, spec, iconNames, options = {}) {
 
   const seconds = tags
     .flatMap((t) => [...millisecondProps(spec, t.name)].map((prop) => [t.name, prop, t.attrs]))
-    .find(([, prop, attrs]) => looksLikeSeconds(propValue(attrs, prop)));
+    .find(([, prop, attrs]) => looksLikeSeconds(propValue(attrs, prop), prop));
   if (seconds) {
     add(
       "RevealFx.delay",
@@ -1129,7 +1147,7 @@ function validate(source, spec, iconNames, options = {}) {
     const [tag, size] = pixelBox;
     add(
       "size.rem",
-      `${tag.name} sized ${size} around an icon or label is ${size}rem (${size * 16} px) — a number is rem. For ${size} px write the token string, width="${size}"`,
+      `${tag.name} sized ${size} around an icon or label is ${size} px — a number is px in 3.0 (it was rem in 2.x). For ${size}rem write width="${size}rem", or the px it was: width={${size * 16}}`,
     );
   }
 

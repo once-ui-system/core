@@ -20,7 +20,7 @@ The `UserMenu` component renders a user avatar and name, and opens a dropdown fo
       placement="right-end"
       avatarProps={{ src: "/images/avatar.jpg" }}
       dropdown={
-        <Column gap="4" padding="4" minWidth={10}>
+        <Column gap="4" padding="4" minWidth="10rem">
           <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
           <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
         </Column>
@@ -36,7 +36,7 @@ The `UserMenu` component renders a user avatar and name, and opens a dropdown fo
     placement="right-end"
     avatarProps={{ src: "/images/avatar.jpg" }}
     dropdown={
-      <Column gap="4" padding="4" minWidth={10}>
+      <Column gap="4" padding="4" minWidth="10rem">
         <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
         <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
       </Column>

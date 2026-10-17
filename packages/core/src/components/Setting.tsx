@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { CSSUnit } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { InfoTip } from "./InfoTip";
@@ -33,8 +34,11 @@ interface SettingProps extends React.ComponentProps<typeof Flex> {
   description?: React.ReactNode;
   /** Hover explainer behind an info icon beside the label. */
   info?: React.ReactNode;
-  /** Cap (rem) on the trailing control area, so long rows stay readable. */
-  controlWidth?: number;
+  /**
+   * Cap on the trailing control area, so long rows stay readable: a number is
+   * px, a string a CSS length. Default `"14rem"` (a bare number was rem until 3.0).
+   */
+  controlWidth?: number | CSSUnit;
   /** The control. */
   children?: React.ReactNode;
 }
@@ -43,7 +47,7 @@ const Setting: React.FC<SettingProps> = ({
   label,
   description,
   info,
-  controlWidth = 14,
+  controlWidth = "14rem",
   children,
   ...flex
 }) => {
@@ -160,8 +164,11 @@ interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
   info?: React.ReactNode;
   /** One entry per axis: a short axis name and its control. */
   axes: { label: React.ReactNode; control: React.ReactNode }[];
-  /** Width (rem) each axis holds before the row wraps. */
-  axisWidth?: number;
+  /**
+   * Width each axis holds before the row wraps: a number is px, a string a
+   * CSS length. Default `"13rem"` (a bare number was rem until 3.0).
+   */
+  axisWidth?: number | CSSUnit;
 }
 
 /**
@@ -174,7 +181,7 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   label,
   info,
   axes,
-  axisWidth = 13,
+  axisWidth = "13rem",
   ...flex
 }) => (
   <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>

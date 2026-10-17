@@ -44,7 +44,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   };
 
   return (
-    <Column maxWidth={48} gap="32" padding="40" radius="xl" border background="page" {...flex}>
+    <Column maxWidth="48rem" gap="32" padding="40" radius="xl" border background="page" {...flex}>
       <Column gap="16" horizontal="center">
         <Badge
           background="brand-alpha-weak"
@@ -54,7 +54,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
         >
           Early access
         </Badge>
-        <Column gap="12" horizontal="center" maxWidth={36}>
+        <Column gap="12" horizontal="center" maxWidth="36rem">
           <Text align="center" variant="display-strong-xs">
             Join the waitlist. Climb the leaderboard.
           </Text>
@@ -65,7 +65,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
       </Column>
 
       <Row fillWidth gap="24" m={{ direction: "column" }}>
-        <Column fill gap="16" minWidth={20}>
+        <Column fill gap="16" minWidth="20rem">
           {joined ? (
             <Column
               fillWidth
@@ -81,7 +81,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                 </Text>
                 <Row gap="4" vertical="center" textVariant="heading-strong-m">
                   #
-                  <CountFx value={847} speed={1200} effect="smooth" />
+                  <CountFx value={847} duration={1200} effect="smooth" />
                 </Row>
               </Row>
               <Text variant="body-default-xs" onBackground="neutral-weak">
@@ -148,7 +148,7 @@ export const Waitlist3: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
 
         <Column
           fill
-          minWidth={18}
+          minWidth="18rem"
           gap="12"
           padding="16"
           radius="l"

@@ -123,7 +123,7 @@ export const Waitlist1 = () => {
           />
         </RevealFx>
 
-        <Column maxWidth={24} horizontal="center" align="center">
+        <Column maxWidth="24rem" horizontal="center" align="center">
           {subscribed ? (
             <RevealFx
               key="waitlist"
@@ -144,7 +144,7 @@ export const Waitlist1 = () => {
                 <CountFx
                   value={subscribers}
                   variant="code-default-xl"
-                  speed={4000}
+                  duration={4000}
                   effect="smooth"
                 />
               </Row>

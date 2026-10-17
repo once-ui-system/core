@@ -165,7 +165,7 @@ export default function PricingPage() {
           size={1.5}
           spacing={8}
           colors={["brand-solid-strong"]}
-          bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+          bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
         />
         <Background
           position="absolute"
@@ -173,9 +173,9 @@ export default function PricingPage() {
           left="0"
           fill
           pointerEvents="none"
-          gradient={{ display: true, colorStart: "page-background", x: 0, y: 50, width: 150, height: 300 }}
+          gradient={{ display: true, colorStart: "page-background", x: 0, y: "50%", width: "150%", height: "300%" }}
         />
-        <Column zIndex={1} center gap="24" padding="48" maxWidth={48}>
+        <Column zIndex={1} center gap="24" padding="48" maxWidth="48rem">
           <RevealFx translateY="16">
             <Column center gap="16">
               <Text variant="label-default-s" onBackground="brand-medium">
@@ -246,10 +246,10 @@ export default function PricingPage() {
                         display: true,
                         colorStart: "brand-alpha-medium",
                         colorEnd: "static-transparent",
-                        x: 50,
+                        x: "50%",
                         y: 0,
-                        width: 200,
-                        height: 60,
+                        width: "200%",
+                        height: "60%",
                         opacity: 50,
                       }}
                     />
@@ -271,7 +271,7 @@ export default function PricingPage() {
                           variant="display-strong-s"
                           value={tier.price[billing]}
                           effect="wheel"
-                          speed={400}
+                          duration={400}
                         />
                         <Text variant="label-default-s" onBackground="neutral-weak" paddingBottom="4" paddingLeft="4">
                           / mo
@@ -321,7 +321,7 @@ export default function PricingPage() {
       {/* FAQ — split layout */}
       <Column fillWidth horizontal="center">
         <Row fillWidth maxWidth="l" gap="40" s={{ direction: "column" }}>
-          <Column gap="16" maxWidth={20}>
+          <Column gap="16" maxWidth="20rem">
             <Text variant="label-default-s" onBackground="brand-medium">
               FAQ
             </Text>
@@ -353,7 +353,7 @@ export default function PricingPage() {
           center
         >
           <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
-          <Column zIndex={1} center gap="24" maxWidth={40}>
+          <Column zIndex={1} center gap="24" maxWidth="40rem">
             <Heading as="h2" variant="display-strong-s" align="center">
               Ship your next launch on Pro
             </Heading>

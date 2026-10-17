@@ -1,5 +1,4 @@
 import {
-  Arrow,
   Avatar,
   AvatarGroup,
   Background,
@@ -28,14 +27,14 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 80,
-            width: 75,
-            height: 70,
+            x: "50%",
+            y: "80%",
+            width: "75%",
+            height: "70%",
             colorStart: "brand-background-strong",
           }}
         />
-        <Mask fill position="absolute" top="0" left="0" x={50} y={70} radius={100}>
+        <Mask fill position="absolute" top="0" left="0" x="50%" y="70%" radius="100vh">
           <MatrixFx
             fill
             themeSolid="inverse"
@@ -45,7 +44,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
             size={1.5}
             spacing={6}
             bulge={{
-              duration: 3,
+              duration: 3000,
               intensity: 20,
               repeat: false,
             }}
@@ -57,9 +56,9 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 110,
-            height: 65,
+            x: "50%",
+            y: "110%",
+            height: "65%",
             colorStart: "brand-solid-strong",
           }}
         />
@@ -72,9 +71,9 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 100,
-            height: 50,
+            x: "50%",
+            y: "100%",
+            height: "50%",
             colorStart: "brand-solid-strong",
           }}
         />
@@ -85,7 +84,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           vertical="end"
           m={{ direction: "column", horizontal: "start" }}
         >
-          <Column zIndex={1} maxWidth={40} gap="24" paddingY="xl" fillHeight vertical="between">
+          <Column zIndex={1} maxWidth="40rem" gap="24" paddingY="xl" fillHeight vertical="between">
             <Card
               fillWidth
               direction="column"
@@ -105,8 +104,8 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
               >
                 <Media
                   xs={{ hide: true }}
-                  minWidth={12}
-                  maxWidth={12}
+                  minWidth="12rem"
+                  maxWidth="12rem"
                   sizes="400px"
                   priority
                   src="/images/blog/iqon-app-02.jpg"
@@ -130,12 +129,13 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     Lorant One · Founder @Once UI
                   </Row>
                 </Column>
-                <Arrow
+                <Icon
+                  name="arrowUpRight"
+                  size="s"
                   position="absolute"
                   top="40"
                   right="40"
-                  trigger="#case-study-arrow-trigger"
-                  scale={1}
+                  onBackground="neutral-weak"
                 />
               </Row>
             </Card>

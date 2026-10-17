@@ -41,10 +41,10 @@ export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
               gradient={{
                 display: true,
                 tilt: -45,
-                height: 150,
-                width: 100,
-                x: 75,
-                y: -50,
+                height: "150%",
+                width: "100%",
+                x: "75%",
+                y: "-50%",
                 colorStart: "brand-solid-strong",
                 colorEnd: "accent-solid-weak",
               }}

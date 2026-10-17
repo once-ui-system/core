@@ -1,5 +1,4 @@
 import {
-  Arrow,
   Background,
   Column,
   Heading,
@@ -64,7 +63,7 @@ interface PlanCardProps {
   plan: (typeof plans)[keyof typeof plans];
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
   const borderColor = `${plan.color}-medium` as const;
   const textColor = `${plan.color}-strong` as const;
   const gradientColor = `${plan.color}-background-strong` as const;
@@ -82,10 +81,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
                 mask={{
                   x: 0,
                   y: 0,
-                  radius: 75,
+                  radius: "75vh",
                 }}
                 gradient={{
-                  x: 75,
+                  x: "75%",
                   y: 0,
                   opacity: 100,
                   display: true,
@@ -135,7 +134,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
           >
             <Row vertical="center">
               Create your account and get started
-              <Arrow trigger={`#${id}`} />
+              <Icon name="chevronRight" size="xs" marginLeft="4" />
             </Row>
           </Row>
         </Column>

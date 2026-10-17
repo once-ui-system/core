@@ -86,7 +86,7 @@ export const About3 = () => {
             left="0"
             fill
             interactive
-            speed={4}
+            speed={13.33}
             intensity={40}
             pointerEvents="none"
           />
@@ -97,7 +97,7 @@ export const About3 = () => {
             gradient={{
               display: true,
               x: 0,
-              y: 125,
+              y: "125%",
               colorStart: "accent-solid-strong",
               colorEnd: "static-transparent",
             }}
@@ -108,16 +108,16 @@ export const About3 = () => {
             left="0"
             gradient={{
               display: true,
-              x: 125,
-              y: 100,
-              width: 150,
-              height: 150,
+              x: "125%",
+              y: "100%",
+              width: "150%",
+              height: "150%",
               colorStart: "brand-background-strong",
               colorEnd: "static-transparent",
             }}
           />
           <Row fillWidth s={{ direction: "column" }} gap="16" vertical="center">
-            <Mask x={60} y={60} radius={40} style={{ mixBlendMode: "luminosity" }}>
+            <Mask x="60%" y="60%" radius="40vh" style={{ mixBlendMode: "luminosity" }}>
               <Media
                 priority
                 sizes="(max-width: 768px) 100vw, 560px"
@@ -215,7 +215,7 @@ export const About3 = () => {
           background="overlay"
           border="neutral-alpha-medium"
         >
-          <Row maxWidth={40}>
+          <Row maxWidth="40rem">
             <Text variant="display-default-xs" wrap="balance">
               Join the next generation of creators
             </Text>

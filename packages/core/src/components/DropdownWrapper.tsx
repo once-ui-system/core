@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { NavigationLayout } from "../hooks/useArrowNavigation";
-import type { Placement } from "../types";
+import type { CSSUnit, Placement } from "../types";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
@@ -40,10 +40,16 @@ import { IconButton } from "./IconButton";
 import { Row } from "./Row";
 import { ScrollLock } from "./ScrollLock";
 
+/** A number as px, a CSS length as written. */
+const cssLength = (value: number | string) => (typeof value === "number" ? `${value}px` : value);
+
 export interface DropdownWrapperProps {
   fillWidth?: boolean;
-  minWidth?: number;
-  maxWidth?: number;
+  /** The panel's minimum width: a number is px, a string a CSS length (`"12rem"`). */
+  minWidth?: number | CSSUnit;
+  /** As `minWidth`; unset, the panel is capped at the space available. */
+  maxWidth?: number | CSSUnit;
+  /** The panel's minimum height in px. */
   minHeight?: number;
   placement?: Placement;
   trigger: ReactNode;
@@ -243,14 +249,14 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
               // placements, which reads as broken positioning.
               const w = `${triggerRef.current.getBoundingClientRect().width}px`;
               floatingStyle.width = w;
-              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : w;
+              floatingStyle.minWidth = minWidth ? cssLength(minWidth) : w;
             } else {
               // Let content determine width; only apply an explicit minWidth
               floatingStyle.width = "";
-              floatingStyle.minWidth = minWidth ? `${minWidth}rem` : "";
+              floatingStyle.minWidth = minWidth ? cssLength(minWidth) : "";
             }
 
-            floatingStyle.maxWidth = maxWidth ? `${maxWidth}rem` : `${availableWidth}px`;
+            floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
             floatingStyle.minHeight = `${Math.min(minHeight || 0)}px`;
             floatingStyle.maxHeight = `${availableHeight}px`;
           },

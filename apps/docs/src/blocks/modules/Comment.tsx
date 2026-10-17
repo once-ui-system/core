@@ -145,7 +145,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
                 </SmartLink>
                 {after}
               </Text>
-              <Row maxWidth={24}>
+              <Row maxWidth="24rem">
                 <OgCard
                   size="s"
                   url={hit.url}
@@ -197,7 +197,7 @@ export function Comment({ comment, onReply, isReply = false }: CommentProps) {
           <DropdownWrapper
             placement="right-start"
             dropdown={
-              <Column padding="4" gap="2" minWidth={8}>
+              <Column padding="4" gap="2" minWidth="8rem">
                 <Option
                   value="delete"
                   prefix={<Icon name="trash" size="xs" />}

@@ -6,7 +6,7 @@ import { Plans5, plans } from "./Plans5";
 export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
-      <Column maxWidth={40} gap="12" horizontal="center">
+      <Column maxWidth="40rem" gap="12" horizontal="center">
         <Tag scheme="brand" size="s">
           Services
         </Tag>
@@ -32,7 +32,7 @@ export const Pricing3 = (flex: React.ComponentProps<typeof Column>) => {
         wrap
         gap="16"
       >
-        <Column gap="4" maxWidth={32}>
+        <Column gap="4" maxWidth="32rem">
           <Text variant="label-default-s" onBackground="neutral-weak">
             Need something custom?
           </Text>

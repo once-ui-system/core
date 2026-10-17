@@ -41,7 +41,7 @@ const User = forwardRef<HTMLDivElement, UserProps>(
         {name && (
           <Column paddingLeft="4" paddingRight="12">
             {loading ? (
-              <Flex minWidth={6} paddingY="4">
+              <Flex minWidth="6rem" paddingY="4">
                 <Skeleton width="100%" size="m" shape="line" aria-label="Loading name" />
               </Flex>
             ) : (

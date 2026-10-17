@@ -113,7 +113,7 @@ const CompareImage = ({
       <Flex
         position="absolute"
         horizontal="center"
-        width={3}
+        width="3rem"
         className={styles.hitArea}
         top="0"
         bottom="0"

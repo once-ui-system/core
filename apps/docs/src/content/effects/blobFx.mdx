@@ -17,12 +17,12 @@ The `BlobFx` component creates animated blob gradients with smooth horizontal mo
   marginBottom="24"
   previewPadding="0"
   preview={
-    <BlobFx height={24} />
+    <BlobFx height="24rem" />
   }
   codes={[
     {
       code:
-`<BlobFx height={24} />`,
+`<BlobFx height="24rem" />`,
       language: "tsx",
       label: "BlobFx"
     }
@@ -39,17 +39,17 @@ Use the `seed` prop to generate different pseudo-random variations. Each seed pr
   previewPadding="0"
   preview={
     <Row fillWidth gap="16" m={{direction: "column"}}>
-      <BlobFx height={16} seed={0} />
-      <BlobFx height={16} seed={42} />
-      <BlobFx height={16} seed={123} />
+      <BlobFx height="16rem" seed={0} />
+      <BlobFx height="16rem" seed={42} />
+      <BlobFx height="16rem" seed={123} />
     </Row>
   }
   codes={[
     {
       code:
-`<BlobFx height={16} seed={0} />
-<BlobFx height={16} seed={42} />
-<BlobFx height={16} seed={123} />`,
+`<BlobFx height="16rem" seed={0} />
+<BlobFx height="16rem" seed={42} />
+<BlobFx height="16rem" seed={123} />`,
       language: "tsx",
       label: "Seed Variation"
     }
@@ -65,7 +65,7 @@ Combine with other components to create layered backgrounds. The effect uses `po
   marginBottom="24"
   previewPadding="0"
   preview={
-    <Row fillWidth height={24} overflow="hidden">
+    <Row fillWidth height="24rem" overflow="hidden">
       <BlobFx position="absolute" fill seed={7} translateY="50%" />
       <Column fillWidth center gap="8">
         <Heading variant="display-strong-xl" onBackground="neutral-strong">
@@ -80,7 +80,7 @@ Combine with other components to create layered backgrounds. The effect uses `po
   codes={[
     {
       code:
-`<Row fillWidth height={24} overflow="hidden">
+`<Row fillWidth height="24rem" overflow="hidden">
     <BlobFx position="absolute" fill seed={7} translateY="50%" />
     <Column fillWidth center gap="8">
       <Heading variant="display-strong-xl">

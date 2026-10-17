@@ -100,31 +100,44 @@ describe("color.svgPaint", () => {
 describe("RevealFx.delay", () => {
   it("flags seconds, which is what 1.8.x took", () => {
     expect(rules(`<RevealFx delay={index * 0.1} />`)).toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={0.75} />`)).toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={0.75} />`)).toContain("RevealFx.delay");
+  });
+
+  it("flags whole seconds on a duration, which CelebrationFx and WeatherFx took in 2.x", () => {
+    expect(rules(`<CelebrationFx duration={5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<WeatherFx duration={4} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CelebrationFx duration={5000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("leaves milliseconds alone", () => {
     expect(rules(`<RevealFx delay={index * 100} />`)).not.toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={750} />`)).not.toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={750} />`)).not.toContain("RevealFx.delay");
     expect(rules(`<RevealFx delay={index * 0.1 * 1000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("covers every effect whose timing is in milliseconds, and what extends one", () => {
-    expect(rules(`<CountFx value={9} speed={1.5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CountFx value={9} duration={1.5} />`)).toContain("RevealFx.delay");
     expect(rules(`<TypeFx words={w} delay={0.4} />`)).toContain("RevealFx.delay");
     // HoverCard extends Animation, whose delay is milliseconds.
     expect(rules(`<HoverCard trigger={t} delay={0.2} />`)).toContain("RevealFx.delay");
   });
 
-  it("does not flag speed on effects where it is a multiplier", () => {
-    for (const fx of ["MatrixFx", "WeatherFx", "ParticleFx", "CelebrationFx", "Effect"]) {
+  it("does not flag speed, which is a multiplier on every effect", () => {
+    for (const fx of [
+      "MatrixFx",
+      "WeatherFx",
+      "ParticleFx",
+      "CelebrationFx",
+      "Effect",
+      "AutoScroll",
+    ]) {
       expect(rules(`<${fx} speed={0.5} />`)).not.toContain("RevealFx.delay");
     }
   });
 
   it("names the component and prop it found", () => {
-    const [issue] = issues(`<ShineFx speed={0.75}>Shine</ShineFx>`);
-    expect(issue.message).toMatch(/^ShineFx speed is in milliseconds/);
+    const [issue] = issues(`<ShineFx duration={0.75}>Shine</ShineFx>`);
+    expect(issue.message).toMatch(/^ShineFx duration is in milliseconds/);
   });
 });
 
@@ -799,38 +812,38 @@ describe("api.renamed: 1.x prop names", () => {
 });
 
 describe("size.rem", () => {
-  it("flags an icon box sized in pixels, which a number turns into rem", () => {
-    expect(rules(`<Row width={32} height={32} center><Icon name="check" /></Row>`)).toContain(
+  it("flags an icon box sized as if numbers were still rem, which 3.0 reads as px", () => {
+    expect(rules(`<Row width={2} height={2} center><Icon name="check" /></Row>`)).toContain(
       "size.rem",
     );
     expect(
-      rules(`<Row minWidth={40} minHeight={40} center><Icon name={item.icon} /></Row>`),
+      rules(`<Row minWidth={2.5} minHeight={2.5} center><Icon name={item.icon} /></Row>`),
     ).toContain("size.rem");
-    expect(rules(`<Column width={32} minWidth={32}><Avatar value="MO" /></Column>`)).toContain(
+    expect(rules(`<Column width={3} minWidth={3}><Avatar value="MO" /></Column>`)).toContain(
       "size.rem",
     );
   });
 
-  it("names the size in rem and pixels and the token to write instead", () => {
-    const issue = issues(`<Row width={40} height={40}><Icon name="check" /></Row>`).find(
+  it("names the size in px and the rem string to write instead", () => {
+    const issue = issues(`<Row width={2} height={2}><Icon name="check" /></Row>`).find(
       (i) => i.rule === "size.rem",
     );
-    expect(issue?.message).toMatch(/40rem \(640 px\).*width="40"/);
+    expect(issue?.message).toMatch(/2 px.*width="2rem".*width=\{32\}/);
   });
 
-  it("leaves rem sizes that hold layout, and tokens, alone", () => {
-    expect(rules(`<Column minWidth={14} gap="8"><Text>Name</Text></Column>`)).not.toContain(
+  it("leaves px sizes, rem strings, tokens and boxes that hold layout alone", () => {
+    expect(rules(`<Row width={32} height={32}><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(rules(`<Row width="32" height="32"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
-    expect(rules(`<Row width={2} height={2}><Icon name="check" /></Row>`)).not.toContain(
+    expect(rules(`<Row width="2rem" height="2rem"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(
-      rules(`<Column width={32} height={32}><Row gap="8"><Text>Hero</Text></Row></Column>`),
+      rules(`<Column width={2} height={2}><Row gap="8"><Text>Hero</Text></Row></Column>`),
     ).not.toContain("size.rem");
-    expect(rules(`<Background width={40} height={40} />`)).not.toContain("size.rem");
+    expect(rules(`<Background width={4} height={4} />`)).not.toContain("size.rem");
   });
 });

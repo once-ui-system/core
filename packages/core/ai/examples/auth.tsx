@@ -30,7 +30,7 @@ export function AuthExample() {
         background="surface"
         s={{ columns: 1 }}
       >
-        <Column minHeight={40} s={{ hide: true }}>
+        <Column minHeight="40rem" s={{ hide: true }}>
           <Media
             stretch
             fillHeight

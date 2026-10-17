@@ -384,7 +384,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
             />
           </Row>
           <Column
-            maxHeight={32}
+            maxHeight="32rem"
             fillWidth
             padding="4"
             gap="2"

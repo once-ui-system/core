@@ -2,13 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { CountFx } from "../../components/CountFx";
 import { Text } from "../../components/Text";
+import { CountUp } from "../../internal/CountUp";
 import { ColorValue } from "../../types";
 import styles from "./Gauge.module.css";
 
 export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, "direction"> {
+  /**
+   * The drawing's width in px. The gauge scales to fit its container, so this
+   * sets its proportions; it is px like every other size, but it is not the
+   * box's `width` (put `maxWidth` on the gauge for that).
+   */
   width?: number;
+  /** The drawing's height in px; see `width`. */
   height?: number;
   line?: {
     count?: number;
@@ -175,12 +181,12 @@ export const RadialGauge = ({
 
       <Column fill position="absolute" horizontal="center" vertical="center" gap="2" {...flex}>
         {children || (
-          <CountFx
+          <CountUp
             as="div"
             variant="display-strong-m"
             style={{ fontFamily: "var(--font-code)", display: "flex" }}
             value={value}
-            speed={5000}
+            duration={5000}
           >
             <Text
               onBackground="neutral-weak"
@@ -190,7 +196,7 @@ export const RadialGauge = ({
             >
               {unit}
             </Text>
-          </CountFx>
+          </CountUp>
         )}
       </Column>
     </Column>

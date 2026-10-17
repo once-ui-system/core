@@ -30,7 +30,7 @@ export const Settings1 = () => {
       >
         <Column maxWidth="s">
           <Column position="sticky" marginTop="16" top="0" zIndex={1} marginBottom="16">
-            <Fade fillWidth position="absolute" top="104" height={3} base="surface" />
+            <Fade fillWidth position="absolute" top="104" height="3rem" base="surface" />
             <Column fillWidth background="surface" paddingTop="16">
               <Column fillWidth paddingLeft="16">
                 <Heading variant="heading-strong-xl">Settings</Heading>
@@ -66,7 +66,7 @@ export const Settings1 = () => {
                 </Text>
               </Column>
               <MediaUpload
-                maxWidth={8}
+                maxWidth="8rem"
                 radius="full"
                 aspectRatio="1 / 1"
                 marginBottom="16"
@@ -79,7 +79,7 @@ export const Settings1 = () => {
                 </Text>
               </Column>
               <MediaUpload
-                maxWidth={16}
+                maxWidth="16rem"
                 aspectRatio="16 / 9"
                 initialPreviewImage="/images/blocks/vibe-coding-dark.jpg"
               />
@@ -106,8 +106,8 @@ export const Settings1 = () => {
                         right="0"
                         top="0"
                         to="left"
-                        height={3}
-                        width={16}
+                        height="3rem"
+                        width="16rem"
                         base="surface"
                         rightRadius="l"
                       />
@@ -131,8 +131,8 @@ export const Settings1 = () => {
                         right="0"
                         top="0"
                         to="left"
-                        height={3}
-                        width={16}
+                        height="3rem"
+                        width="16rem"
                         base="surface"
                         rightRadius="l"
                       />

@@ -12,7 +12,7 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import type { Placement } from "../types";
+import type { CSSUnit, Placement } from "../types";
 import styles from "./ContextMenu.module.scss";
 import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
@@ -35,8 +35,11 @@ export interface ContextMenuProps {
    * `contents`, which has no box.
    */
   fillWidth?: boolean;
-  minWidth?: number;
-  maxWidth?: number;
+  /** The panel's minimum width: a number is px, a string a CSS length (`"12rem"`, the default). */
+  minWidth?: number | CSSUnit;
+  /** As `minWidth`; unset, the panel is capped at the space available. */
+  maxWidth?: number | CSSUnit;
+  /** The panel's minimum height in px. */
   minHeight?: number;
   style?: React.CSSProperties;
   className?: string;
@@ -106,7 +109,7 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
       closeAfterClick = true,
       open,
       onOpenChange,
-      minWidth = 12,
+      minWidth = "12rem",
       maxWidth,
       fillWidth = false,
       // "bottom-start" is where the menu has always opened: its top-left

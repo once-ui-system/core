@@ -211,7 +211,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
             <Text id={`${perPageId}-label`} variant="label-default-s" onBackground="neutral-medium">
               {text.perPage}
             </Text>
-            <Row width={5}>
+            <Row width="5rem">
               <Select
                 id={`${perPageId}-select`}
                 aria-labelledby={`${perPageId}-label`}

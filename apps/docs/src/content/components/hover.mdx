@@ -17,7 +17,7 @@ The `Hover` component wraps any element and displays an overlay on top when the 
       <Hover
         tabIndex={-1}
         trigger={
-          <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+          <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
             <Media
               fillWidth
               aspectRatio="16 / 9"
@@ -49,7 +49,7 @@ The `Hover` component wraps any element and displays an overlay on top when the 
 `<Hover
     tabIndex={-1}
     trigger={
-      <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+      <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
         <Media
           fillWidth
           aspectRatio="16 / 9"
@@ -89,7 +89,7 @@ Add a delay before the overlay appears or disappears with the `delay` and `hideD
       delay={500}
       hideDelay={1000}
       trigger={
-        <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+        <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
           <Media
             fillWidth
             aspectRatio="16 / 9"
@@ -108,7 +108,7 @@ Add a delay before the overlay appears or disappears with the `delay` and `hideD
       }
       overlay={
         <Row fill horizontal="center" padding="32">
-          <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: 300, height: 50}} radius="l-8"/>
+          <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: "300%", height: "50%"}} radius="l-8"/>
           <Row textVariant="heading-strong-m">Read article</Row>
         </Row>
       }
@@ -124,7 +124,7 @@ Add a delay before the overlay appears or disappears with the `delay` and `hideD
     delay={500}
     hideDelay={1000}
     trigger={
-      <Card maxWidth={24} padding="8" direction="column" radius="l-8" href="#">
+      <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
         <Media
           fillWidth
           aspectRatio="16 / 9"
@@ -143,7 +143,7 @@ Add a delay before the overlay appears or disappears with the `delay` and `hideD
     }
     overlay={
       <Row fill horizontal="center" padding="32">
-        <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: 300, height: 50}} radius="l-8"/>
+        <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: "300%", height: "50%"}} radius="l-8"/>
         <Row textVariant="heading-strong-m">Read article</Row>
       </Row>
     }
@@ -162,7 +162,7 @@ The component supports keyboard navigation. For non-focusable triggers, add `tab
   preview={
     <Hover
       trigger={
-        <Card padding="l" direction="column" gap="12" maxWidth={24} center align="center" radius="l" tabIndex={0}>
+        <Card padding="l" direction="column" gap="12" maxWidth="24rem" center align="center" radius="l" tabIndex={0}>
           <Text variant="heading-strong-m">Keyboard accessible</Text>
           <Text onBackground="neutral-weak" variant="body-default-s">
             Tab to this card to see the overlay
@@ -188,7 +188,7 @@ The component supports keyboard navigation. For non-focusable triggers, add `tab
       code:
 `<Hover
     trigger={
-      <Card padding="l" direction="column" gap="12" maxWidth={24} center align="center" radius="l" tabIndex={0}>
+      <Card padding="l" direction="column" gap="12" maxWidth="24rem" center align="center" radius="l" tabIndex={0}>
         <Text variant="heading-strong-m">Keyboard accessible</Text>
         <Text onBackground="neutral-weak" variant="body-default-s">
           Tab to this card to see the overlay
@@ -226,7 +226,7 @@ By default, the overlay is not interactive and click events are passed through t
       tabIndex={-1}
       interactive
       trigger={
-        <Card maxWidth={24} padding="8" direction="column" radius="l-8">
+        <Card maxWidth="24rem" padding="8" direction="column" radius="l-8">
           <Media
             fillWidth
             aspectRatio="16 / 9"
@@ -261,7 +261,7 @@ By default, the overlay is not interactive and click events are passed through t
     tabIndex={-1}
     interactive
     trigger={
-      <Card maxWidth={24} padding="8" direction="column" radius="l-8">
+      <Card maxWidth="24rem" padding="8" direction="column" radius="l-8">
         <Media
           fillWidth
           aspectRatio="16 / 9"

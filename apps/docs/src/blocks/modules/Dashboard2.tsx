@@ -104,7 +104,7 @@ export const Dashboard2 = () => {
     <Column fill>
       <Header1 authenticated avatar="/images/creators/lorant.jpg" borderBottom="transparent" />
       <Row fill>
-        <Row m={{ hide: true }} maxWidth={16} horizontal="center">
+        <Row m={{ hide: true }} maxWidth="16rem" horizontal="center">
           <Sidebar1 background="transparent" radius={undefined} fitHeight />
         </Row>
         <Row fill padding="8">
@@ -172,11 +172,11 @@ export const Dashboard2 = () => {
                           </>
                         ) : metric.suffix === "ms" ? (
                           <>
-                            <CountFx value={metric.value} speed={600} />
+                            <CountFx value={metric.value} duration={600} />
                             {metric.suffix}
                           </>
                         ) : (
-                          <CountFx value={metric.value} speed={800} separator="," />
+                          <CountFx value={metric.value} duration={800} separator="," />
                         )}
                       </Heading>
                       <ProgressBar showLabel={false} value={metric.progress} />

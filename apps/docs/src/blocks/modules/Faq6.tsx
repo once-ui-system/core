@@ -94,7 +94,7 @@ export const Faq6 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
-      <Column maxWidth={48} gap="8" paddingX="l">
+      <Column maxWidth="48rem" gap="8" paddingX="l">
         <Heading as="h2" variant="display-strong-m">
           Questions, answered
         </Heading>
@@ -104,7 +104,7 @@ export const Faq6 = (flex: React.ComponentProps<typeof Column>) => {
       </Column>
 
       <Row maxWidth="l" gap="24" paddingX="l" s={{ direction: "column" }}>
-        <Column minWidth={16} maxWidth={20} gap="8">
+        <Column minWidth="16rem" maxWidth="20rem" gap="8">
           {categories.map((category) => (
             <Row
               key={category.id}

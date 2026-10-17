@@ -171,7 +171,7 @@ function CustomTierCard({ tier }: { tier: CustomTier }) {
 export const Plans6 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
-      <Column gap="16" maxWidth={48}>
+      <Column gap="16" maxWidth="48rem">
         <Heading as="h2" variant="display-strong-m">
           Simple pricing for every stage
         </Heading>

@@ -5,8 +5,14 @@ import { Text } from "./Text";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "children"> {
   words: string | string[];
-  speed?: number;
+  /**
+   * Milliseconds each character takes to type (higher is slower); erasing
+   * runs at half of it. Was `speed` until 3.0.
+   */
+  charDuration?: number;
+  /** Milliseconds before typing starts. */
   delay?: number;
+  /** Milliseconds a finished word stays before it is erased. */
   hold?: number;
   trigger?: "instant" | "custom";
   onTrigger?: (triggerFn: () => void) => void;
@@ -18,7 +24,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
   (
     {
       words,
-      speed = 100,
+      charDuration = 100,
       delay = 0,
       hold = 2000,
       trigger = "instant",
@@ -78,7 +84,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           for (let i = 0; i <= currentWord.length; i++) {
             if (!active) return;
             setDisplayText(currentWord.substring(0, i));
-            await sleep(speed);
+            await sleep(charDuration);
           }
 
           if (isSingleWord) {
@@ -92,7 +98,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           for (let i = currentWord.length; i >= 0; i--) {
             if (!active) return;
             setDisplayText(currentWord.substring(0, i));
-            await sleep(speed / 2);
+            await sleep(charDuration / 2);
           }
 
           currentIndex = (currentIndex + 1) % wordsArray.length;
@@ -100,7 +106,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           if (!loop && currentIndex === 0) return;
 
           if (!active) return;
-          await sleep(speed);
+          await sleep(charDuration);
         }
       };
 
@@ -113,7 +119,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
         }
         if (pendingResolve) pendingResolve();
       };
-    }, [triggered, wordsHash, speed, delay, hold, loop]);
+    }, [triggered, wordsHash, charDuration, delay, hold, loop]);
 
     return (
       <Text {...text} ref={ref}>

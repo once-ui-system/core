@@ -35,8 +35,8 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
         gradient={{
           display: true,
           colorStart: "accent-solid-weak",
-          width: 38,
-          height: 35,
+          width: "38%",
+          height: "35%",
         }}
         style={{
           animation: `blob2-${seed} ${duration2}s ease-in-out infinite`,
@@ -52,8 +52,8 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
         gradient={{
           display: true,
           colorStart: "accent-solid-medium",
-          width: 42,
-          height: 25,
+          width: "42%",
+          height: "25%",
         }}
         style={{
           animation: `blob3-${seed} ${duration3}s ease-in-out infinite`,
@@ -70,8 +70,8 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
         gradient={{
           display: true,
           colorStart: "brand-solid-strong",
-          width: 50,
-          height: 35,
+          width: "50%",
+          height: "35%",
         }}
         style={{
           animation: `blob1-${seed} ${duration1}s ease-in-out infinite`,

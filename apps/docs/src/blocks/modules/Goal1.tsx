@@ -17,7 +17,7 @@ export const Goal1 = (flex: React.ComponentProps<typeof Column>) => {
   const progress = 62;
 
   return (
-    <Column maxWidth={24} radius="l" border overflow="hidden" {...flex}>
+    <Column maxWidth="24rem" radius="l" border overflow="hidden" {...flex}>
       <Column
         fillWidth
         horizontal="center"
@@ -32,13 +32,13 @@ export const Goal1 = (flex: React.ComponentProps<typeof Column>) => {
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: -20,
-            width: 80,
-            height: 80,
+            x: "50%",
+            y: "-20%",
+            width: "80%",
+            height: "80%",
             colorStart: "brand-solid-medium",
           }}
-          mask={{ x: 50, y: 0, radius: 40 }}
+          mask={{ x: "50%", y: 0, radius: "40vh" }}
         />
         <Row
           textVariant="label-default-s"

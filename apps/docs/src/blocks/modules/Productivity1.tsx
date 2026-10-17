@@ -177,7 +177,7 @@ export const Productivity1 = () => {
                 tooltipPosition="bottom"
                 icon="bell"
               />
-              <Row position="absolute" top={0.15} right={0.15}>
+              <Row position="absolute" top="0.15rem" right="0.15rem">
                 <Row
                   style={{ borderColor: "var(--page-background)" }}
                   height="12"
@@ -219,7 +219,7 @@ export const Productivity1 = () => {
           {issues.map((column, index) => (
             <Column
               key={index}
-              minWidth={20}
+              minWidth="20rem"
               border
               fillWidth
               paddingX="4"

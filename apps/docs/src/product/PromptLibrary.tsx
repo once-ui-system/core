@@ -10,7 +10,7 @@ import { promptSections } from "@/resources/prompts";
  */
 export function PromptLibrary() {
   return (
-    <Column fillWidth gap="48" maxWidth={56}>
+    <Column fillWidth gap="48" maxWidth="56rem">
       {promptSections.map((section) => (
         <Column key={section.id} fillWidth gap="20">
           <Column gap="4">

@@ -15,7 +15,7 @@ import { Background3 } from "./Background3";
 export const Login1 = () => {
   return (
     <Row fill>
-      <Row m={{ hide: true }} fill maxWidth={48} padding="8">
+      <Row m={{ hide: true }} fill maxWidth="48rem" padding="8">
         <Row fill radius="l" overflow="hidden" background="page" theme="dark">
           <Row fill position="absolute">
             <Background3 />
@@ -91,7 +91,7 @@ TRANSLOG:
             position="absolute"
             top="0"
             topRadius="l"
-            height={32}
+            height="32rem"
             fillWidth
           />
           <Column fill padding="xl" zIndex={2} pointerEvents="none">
@@ -102,7 +102,7 @@ TRANSLOG:
         </Row>
       </Row>
       <Column fill center>
-        <Column center gap="16" padding="32" maxWidth={32}>
+        <Column center gap="16" padding="32" maxWidth="32rem">
           <Logo
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             size="l"

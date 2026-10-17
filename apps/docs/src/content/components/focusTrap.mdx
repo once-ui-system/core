@@ -16,9 +16,7 @@ makes a dialog keyboard-safe: without it Tab walks straight out of the panel
 into the page behind, which for a screen-reader or keyboard user means the
 dialog effectively is not modal.
 
-[`DropdownWrapper`](/components/dropdownWrapper) uses it, and so does
-[`ArrowNavigation`](/components/arrowNavigation) when you set
-`trapFocus`. Reach for it directly when you are building an overlay of your
+[`DropdownWrapper`](/components/dropdownWrapper) uses it. Reach for it directly when you are building an overlay of your
 own.
 
 <CodeBlock
@@ -54,9 +52,9 @@ DOM order. Two consequences worth knowing:
 - A region with **no** focusable elements focuses the container itself, so focus
   is still inside rather than left on the page behind.
 - Arrow keys are deliberately **not** handled — they pass through, so
-  [`ArrowNavigation`](/components/arrowNavigation) can own them. The two
-  compose: `FocusTrap` decides what Tab may reach, `ArrowNavigation` decides
-  what the arrows move between.
+  [`useArrowNavigation`](/hooks/useArrowNavigation) can own them. The two
+  compose: `FocusTrap` decides what Tab may reach, `useArrowNavigation`
+  decides what the arrows move between.
 
 ## Controlling where focus lands
 

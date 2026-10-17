@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
+import { Reveal } from "../internal/Reveal";
 import { CondensedTShirtSizes } from "../types";
 import { getCalendarNames } from "../utils/calendarLocale";
 import {
@@ -20,7 +21,6 @@ import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { NumberInput } from "./NumberInput";
 import { Option } from "./Option";
-import { RevealFx } from "./RevealFx";
 import { Row } from "./Row";
 import { SegmentedControl } from "./SegmentedControl";
 import { Text } from "./Text";
@@ -1036,15 +1036,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           )}
         </Flex>
 
-        <RevealFx
+        <Reveal
           fillWidth
           center
           key={isTimeSelector ? "time" : "date"}
           revealed={isTransitioning}
-          speed={250}
+          duration={250}
         >
           {isTimeSelector ? (
-            <Column maxWidth={24} center padding="32" gap="32">
+            <Column maxWidth="24rem" center padding="32" gap="32">
               <SegmentedControl
                 buttons={[
                   {
@@ -1144,7 +1144,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               </ArrowNavigation>
             )
           )}
-        </RevealFx>
+        </Reveal>
       </Column>
     );
   },

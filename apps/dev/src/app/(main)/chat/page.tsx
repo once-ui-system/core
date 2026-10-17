@@ -151,8 +151,8 @@ function UnreadCount({ count }: { count: number }) {
   return (
     <Row
       center
-      minWidth={5}
-      height={5}
+      minWidth="5rem"
+      height="5rem"
       paddingX="8"
       radius="full"
       background="brand-strong"
@@ -189,13 +189,13 @@ function ConversationItem({
     >
       {active && (
         <Column
-          width={0.25}
-          height={8}
+          width="0.25rem"
+          height="8rem"
           background="brand-strong"
           radius="full"
         />
       )}
-      {!active && <Column width={0.25} />}
+      {!active && <Column width="0.25rem" />}
       <Avatar
         size="s"
         value={conversation.value}
@@ -245,7 +245,7 @@ function MessageRow({
       paddingTop={showHeader ? "16" : "2"}
       paddingBottom="2"
     >
-      <Column width={8} horizontal="start">
+      <Column width="8rem" horizontal="start">
         {showHeader && <Avatar size="m" value={message.value} />}
       </Column>
       <Column flex={1} gap="4" minWidth={0} paddingTop={showHeader ? undefined : "2"}>
@@ -264,7 +264,7 @@ function MessageRow({
             radius="m"
             background="brand-alpha-weak"
             border="brand-alpha-weak"
-            maxWidth={48}
+            maxWidth="48rem"
             fitWidth
           >
             <Text variant="body-default-s" onBackground="neutral-strong">
@@ -294,7 +294,7 @@ function AgentMessage({
 }) {
   return (
     <Row gap="12" paddingX="20" paddingY="16">
-      <Column width={8} horizontal="start">
+      <Column width="8rem" horizontal="start">
         <Avatar size="m" value="AI" icon="sparkle" />
       </Column>
       <Column flex={1} gap="8" minWidth={0}>
@@ -387,7 +387,7 @@ export default function ChatPage() {
     clearedUnread[conversation.id] ? 0 : (conversation.unread ?? 0);
 
   return (
-    <Column as="main" fill fillWidth maxWidth="xl" minHeight={36}>
+    <Column as="main" fill fillWidth maxWidth="xl" minHeight="36rem">
       <SplitView
         fill
         defaultSplit={0.28}
@@ -502,7 +502,7 @@ export default function ChatPage() {
                     })
                   )}
 
-                  <Column ref={messagesEndRef} height={1} />
+                  <Column ref={messagesEndRef} height="1rem" />
                 </Column>
               </Fade>
             </Column>

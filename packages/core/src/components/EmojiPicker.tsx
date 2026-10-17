@@ -277,7 +277,7 @@ const EmojiPicker = ({
       className={className}
       style={style}
       data-testid="emoji-picker"
-      height={24}
+      height="24rem"
       {...flex}
     >
       <Input

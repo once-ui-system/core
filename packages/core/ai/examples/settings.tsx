@@ -61,7 +61,7 @@ export function SettingsExample() {
         </Column>
 
         <Tabs defaultValue="profile" orientation="vertical" gap="32" s={{ direction: "column" }}>
-          <TabList aria-label="Settings sections" minWidth={14} s={{ direction: "row" }}>
+          <TabList aria-label="Settings sections" minWidth="14rem" s={{ direction: "row" }}>
             <Tab value="profile" size="l" prefixIcon="person">
               Profile
             </Tab>

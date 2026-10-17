@@ -82,9 +82,9 @@ export const Testimonial2: React.FC<Testimonial> = ({
       </Column>
     </Column>
     {src && (
-      <Row flex={1} fill minHeight={20}>
+      <Row flex={1} fill minHeight="20rem">
         <Row flex={1} fillHeight paddingTop="24" paddingLeft="24" vertical="end">
-          <Background mask={{ x: 100, y: 50, radius: 150 }} aspectRatio="8/7" fitHeight>
+          <Background mask={{ x: "100%", y: "50%", radius: "150vh" }} aspectRatio="8/7" fitHeight>
             <Media
               stretch
               sizes="(max-width: 1024px) 90vw, 960px"

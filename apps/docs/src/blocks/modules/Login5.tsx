@@ -35,20 +35,20 @@ export const Login5 = () => {
         position="absolute"
         fill
         dots={{ display: true, size: "2", color: "brand-background-strong" }}
-        mask={{ x: 50, y: 40, radius: 40 }}
+        mask={{ x: "50%", y: "40%", radius: "40vh" }}
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 80,
-          height: 80,
+          width: "80%",
+          height: "80%",
           colorStart: "brand-background-medium",
           colorEnd: "static-transparent",
         }}
       />
 
       <Column
-        maxWidth={36}
+        maxWidth="36rem"
         gap="24"
         padding="32"
         radius="xl"

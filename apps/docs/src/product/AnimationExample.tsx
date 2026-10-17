@@ -1,10 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import { Animation, NavIcon, Dropdown, Option, ArrowNavigation } from "@once-ui-system/core";
+import { useRef, useState } from "react";
+import {
+  Animation,
+  Column,
+  NavIcon,
+  Dropdown,
+  Option,
+  useArrowNavigation,
+} from "@once-ui-system/core";
 
 export function AnimationNavIconExample() {
   const [isActive, setIsActive] = useState(false);
+  const listRef = useRef<HTMLDivElement>(null);
+  const navigation = useArrowNavigation({ layout: "column", itemCount: 3, containerRef: listRef });
 
   const handleToggle = () => {
     setIsActive(!isActive);
@@ -19,7 +28,7 @@ export function AnimationNavIconExample() {
       trigger={
         <NavIcon onClick={handleToggle} active={isActive} />
       }
-      slideDown={1}
+      slideDown="1rem"
       triggerType="manual"
       duration={300}
       active={isActive}
@@ -31,7 +40,7 @@ export function AnimationNavIconExample() {
         gap="2"
         radius="l"
       >
-        <ArrowNavigation layout="column" itemCount={3}>
+        <Column ref={listRef} role="listbox" tabIndex={-1} onKeyDown={navigation.handleKeyDown}>
         <Option
           href="#"
           value="option-1"
@@ -50,7 +59,7 @@ export function AnimationNavIconExample() {
           label="Option 3"
           onClick={handleOptionClick}
         />
-        </ArrowNavigation>
+        </Column>
       </Dropdown>
     </Animation>
   );

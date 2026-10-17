@@ -55,7 +55,7 @@ export const Features3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           >
             <Row fillWidth>
               <Column
-                maxWidth={32}
+                maxWidth="32rem"
                 paddingX="48"
                 gap="12"
                 horizontal={index % 2 === 0 ? "start" : "end"}

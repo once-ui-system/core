@@ -44,7 +44,7 @@ export const Hero5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <Row fill>
               <Media src={src} alt={title} />
               <Row position="absolute" fill padding="xl" horizontal="center" vertical="end">
-                <Fade position="absolute" bottom="0" to="top" fillWidth height={12} />
+                <Fade position="absolute" bottom="0" to="top" fillWidth height="12rem" />
                 <Row themeBorder="rounded" position="absolute" top="20" right="20" zIndex={1} fit>
                   <Button size="s" href={href} prefixIcon="cart" weight="default">
                     {cta}

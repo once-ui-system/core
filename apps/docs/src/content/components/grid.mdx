@@ -64,7 +64,7 @@ changes — inside a sidebar, a dialog or a full page alike.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Grid fillWidth minColumnWidth={10} gap="12">
+    <Grid fillWidth minColumnWidth="10rem" gap="12">
       {["1", "2", "3", "4", "5"].map((n) => (
         <Flex key={n} height="64" radius="m" background="neutral-alpha-weak" border="neutral-alpha-medium" center>
           <Text variant="label-default-s" onBackground="neutral-weak">{n}</Text>
@@ -75,7 +75,7 @@ changes — inside a sidebar, a dialog or a full page alike.
   codes={[
     {
       code:
-`<Grid fillWidth minColumnWidth={10} gap="12">
+`<Grid fillWidth minColumnWidth="10rem" gap="12">
     ...
 </Grid>`,
       language: "tsx",
@@ -84,8 +84,8 @@ changes — inside a sidebar, a dialog or a full page alike.
   ]}
 />
 
-It takes what `minWidth` takes: a number is rem, a string is a spacing token or
-a CSS unit. The grid stays a server component — the value is a
+It takes what `minWidth` takes: a number is px, a string is a spacing token or
+a CSS length (`"16rem"`). The grid stays a server component — the value is a
 `.columns-auto-fit` class plus a `--grid-min-column-width` custom property on
 the same element, not a `style` object. A narrow container never overflows: a
 single column shrinks below the minimum rather than spilling out.
@@ -98,7 +98,7 @@ everywhere except on a phone.
   mixin="GridProps"
   describe={{
     columns: "How many equal columns. Set it per breakpoint to reflow.",
-    minColumnWidth: "As many columns as fit, each at least this wide. A number is rem; a token or CSS unit also works. Wins over columns.",
+    minColumnWidth: "As many columns as fit, each at least this wide. A number is px; a token or CSS length (\"16rem\") also works. Wins over columns.",
     rows: "How many equal rows. Usually left alone — rows follow from the content.",
   }}
 />

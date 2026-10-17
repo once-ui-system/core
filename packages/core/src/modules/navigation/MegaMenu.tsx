@@ -554,7 +554,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                   {group.content
                     ? group.content
                     : group.sections?.map((section, sectionIndex) => (
-                        <Column key={`section-${sectionIndex}`} minWidth={12} gap="4">
+                        <Column key={`section-${sectionIndex}`} minWidth="12rem" gap="4">
                           {section.title && (
                             <Text
                               marginLeft="8"

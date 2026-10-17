@@ -19,7 +19,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         position="absolute"
         top="0"
         left="0"
-        mask={{ x: 50, y: 0, radius: 50 }}
+        mask={{ x: "50%", y: 0, radius: "50vh" }}
         dots={{ display: true, color: "neutral-alpha-weak", size: "2" }}
       />
       <Column maxWidth="xs" gap="32" fitHeight horizontal="center" {...flex}>
@@ -55,7 +55,7 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               Request a demo
             </Button>
           </Row>
-          <Row paddingY="24" maxWidth={40}>
+          <Row paddingY="24" maxWidth="40rem">
             <AutoScroll marginTop="xl" opacity={50}>
               <Logo
                 wordmark={{
@@ -93,8 +93,8 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               left="0"
               fillHeight
-              width={12}
-              s={{ width: 4 }}
+              width="12rem"
+              s={{ width: "4rem" }}
               to="right"
             />
             <Fade
@@ -102,8 +102,8 @@ export const Hero3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               top="0"
               right="0"
               fillHeight
-              width={12}
-              s={{ width: 4 }}
+              width="12rem"
+              s={{ width: "4rem" }}
               to="left"
             />
           </Row>

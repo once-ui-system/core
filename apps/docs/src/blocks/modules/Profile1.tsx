@@ -55,7 +55,7 @@ export const Profile1 = () => {
           </Text>
           <SegmentedControl
             marginTop="40"
-            maxWidth={24}
+            maxWidth="24rem"
             buttons={[
               {
                 prefixIcon: "bookmark",

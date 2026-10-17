@@ -52,15 +52,17 @@ describe("translate values", () => {
     }
   });
 
-  it("keeps a number as rem and a CSS unit as written", () => {
-    expect(translateValue(1.5)).toBe("1.5rem");
-    expect(translateValue(-2)).toBe("-2rem");
-    expect(translateValue(0)).toBe("0rem");
+  it("keeps a number as px and a CSS unit as written", () => {
+    expect(translateValue(1.5)).toBe("1.5px");
+    expect(translateValue(-2)).toBe("-2px");
+    expect(translateValue(0)).toBe("0px");
     expect(translateValue("-50%")).toBe("-50%");
     expect(translateValue("10vw")).toBe("10vw");
     expect(translateValue("calc(100% - 1rem)")).toBe("calc(100% - 1rem)");
+    expect(translateValue("16px")).toBe("16px");
+    expect(translateValue("2.5rem")).toBe("2.5rem");
     // Not a token, not a unit: nothing, as before.
-    expect(translateValue("16px")).toBeUndefined();
+    expect(translateValue("16pixels")).toBeUndefined();
     expect(translateValue("")).toBeUndefined();
     expect(translateValue(undefined)).toBeUndefined();
   });
@@ -68,7 +70,7 @@ describe("translate values", () => {
   it("writes one translate, the unset axis 0", () => {
     expect(translateTransform("16", undefined)).toBe("translate(var(--static-space-16), 0)");
     expect(translateTransform(undefined, "m")).toBe("translate(0, var(--responsive-space-m))");
-    expect(translateTransform("8", -1)).toBe("translate(var(--static-space-8), -1rem)");
+    expect(translateTransform("8", -1)).toBe("translate(var(--static-space-8), -1px)");
     expect(translateTransform(undefined, undefined)).toBeUndefined();
     expect(translateTransform("nope", undefined)).toBeUndefined();
   });
@@ -106,12 +108,12 @@ describe.each(COMPONENTS)("%s translateX / translateY", (_name, Component) => {
           </Component>,
         ),
       ),
-    ).toContain("transform:translate(var(--static-space-72), -1rem)");
+    ).toContain("transform:translate(var(--static-space-72), -1px)");
   });
 
-  it("still writes a number as rem and a CSS unit as written", () => {
+  it("still writes a number as px and a CSS unit as written", () => {
     expect(styleOf(renderToStaticMarkup(<Component translateX={1.5}>x</Component>))).toContain(
-      "transform:translate(1.5rem, 0)",
+      "transform:translate(1.5px, 0)",
     );
     expect(
       styleOf(renderToStaticMarkup(<Component translateY="calc(100% - 1rem)">x</Component>)),

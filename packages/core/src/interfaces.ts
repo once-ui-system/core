@@ -51,15 +51,15 @@ export interface GridProps extends HTMLAttributes<HTMLDivElement> {
   /**
    * As many columns as fit, each at least this wide: the grid reflows on its
    * own, with no breakpoint objects. Takes the same values as `minWidth` — a
-   * number is rem, a string is a spacing token or a CSS unit
-   * (`%`, `vw`, `calc(…)`).
+   * number is px, a string is a spacing token or a CSS length
+   * (`"16rem"`, `"40%"`, `calc(…)`).
    *
    * Renders on the server: a `.columns-auto-fit` class plus the
    * `--grid-min-column-width` custom property on the same element. It takes
    * precedence over `columns`; a breakpoint `columns` still overrides it at
-   * that width, e.g. `minColumnWidth={16} s={{ columns: 1 }}`.
+   * that width, e.g. `minColumnWidth={256} s={{ columns: 1 }}`.
    *
-   * @example <Grid minColumnWidth={13} gap="8">…</Grid>
+   * @example <Grid minColumnWidth={208} gap="8">…</Grid>
    */
   minColumnWidth?: number | SpacingToken | CSSUnit;
   /**
@@ -97,9 +97,14 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
+  /**
+   * A number is px (`320`); a string is a spacing token (`"16"` is
+   * `--static-space-16`), a t-shirt size, or a CSS length (`"40rem"`,
+   * `"50%"`, `"100dvh"`, `calc(…)`). Write rem to follow the root font size.
+   */
   width?: number | SpacingToken | CSSUnit;
   /**
-   * A number is rem; a string is a spacing token or a CSS unit.
+   * As `width`.
    * `"below-header"` is the viewport below the app header,
    * `calc(100dvh - var(--header-height))`, for an app shell's scrolling pane.
    */
@@ -122,22 +127,27 @@ export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
   aspectRatio?: CSSProperties["aspectRatio"];
 }
 
+/**
+ * Spacing and offsets. A spacing token (`"16"`, `"m"`) is a class; a number is
+ * px and a CSS length (`"1.5rem"`) is written inline. `top={2}` is 2px, while
+ * `top="2"` is the 0.125rem token.
+ */
 export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
-  padding?: SpacingToken | number;
-  paddingLeft?: SpacingToken | number;
-  paddingRight?: SpacingToken | number;
-  paddingTop?: SpacingToken | number;
-  paddingBottom?: SpacingToken | number;
-  paddingX?: SpacingToken | number;
-  paddingY?: SpacingToken | number;
-  margin?: SpacingToken | number;
-  marginLeft?: SpacingToken | number;
-  marginRight?: SpacingToken | number;
-  marginTop?: SpacingToken | number;
-  marginBottom?: SpacingToken | number;
-  marginX?: SpacingToken | number;
-  marginY?: SpacingToken | number;
-  gap?: SpacingToken | number | "-1";
+  padding?: SpacingToken | number | CSSUnit;
+  paddingLeft?: SpacingToken | number | CSSUnit;
+  paddingRight?: SpacingToken | number | CSSUnit;
+  paddingTop?: SpacingToken | number | CSSUnit;
+  paddingBottom?: SpacingToken | number | CSSUnit;
+  paddingX?: SpacingToken | number | CSSUnit;
+  paddingY?: SpacingToken | number | CSSUnit;
+  margin?: SpacingToken | number | CSSUnit;
+  marginLeft?: SpacingToken | number | CSSUnit;
+  marginRight?: SpacingToken | number | CSSUnit;
+  marginTop?: SpacingToken | number | CSSUnit;
+  marginBottom?: SpacingToken | number | CSSUnit;
+  marginX?: SpacingToken | number | CSSUnit;
+  marginY?: SpacingToken | number | CSSUnit;
+  gap?: SpacingToken | number | CSSUnit | "-1";
   top?: SpacingToken | number | CSSUnit;
   right?: SpacingToken | number | CSSUnit;
   bottom?: SpacingToken | number | CSSUnit;
@@ -189,16 +199,17 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   blendMode?: BlendMode;
   /**
    * `filter: blur()`. A size (`xs` 0.25rem to `xl` 3rem) is a class; a number
-   * is rem, written inline by the server. It sets the whole `filter`, so
-   * combine it with other filter functions in `style` instead.
+   * is px and a CSS length (`"1rem"`) is as written, inline by the server. It
+   * sets the whole `filter`, so combine it with other filter functions in
+   * `style` instead.
    */
-  blur?: BlurSize | number;
+  blur?: BlurSize | number | CSSUnit;
   /**
    * `backdrop-filter: blur()` — frosts what shows through a translucent
-   * background. Same scale as `blur`; a number is rem. Wins over the backdrop
+   * background. Same scale as `blur`; a number is px. Wins over the backdrop
    * blur `background="surface"` brings with a translucent theme.
    */
-  backdropBlur?: BlurSize | number;
+  backdropBlur?: BlurSize | number | CSSUnit;
   /**
    * Render this subtree in the light or dark theme, whatever the page is in:
    * `data-theme` on this element, typed. Not the same as the `dark` and

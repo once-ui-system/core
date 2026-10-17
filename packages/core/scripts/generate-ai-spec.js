@@ -127,7 +127,7 @@ const FUNCTION_EXCLUDE = new Set([
   "withArrowNavigation",
   "useArrowNavigationContext",
   "resetScrollLockState",
-  "generateMetadata",
+  "createMetadata",
 ]);
 
 // Internal/low-level exports that AI should not use directly. `ThemeInit`,

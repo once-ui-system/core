@@ -15,7 +15,7 @@ export function BasicDateRangeInputExample() {
   };
   
   return (
-    <Flex fillWidth padding="16" height={25} horizontal="center" vertical="start">
+    <Flex fillWidth padding="16" height="25rem" horizontal="center" vertical="start">
       <DateRangeInput
         id="basic-date-range-example"
         startLabel="Start"

@@ -44,8 +44,8 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderRight="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
         <Column
@@ -56,7 +56,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
           borderX="neutral-alpha-medium"
           horizontal="center"
         >
-          <Column gap="8" maxWidth={40} horizontal="center">
+          <Column gap="8" maxWidth="40rem" horizontal="center">
             <Text align="center" variant="heading-default-xl">
               Powering creative minds.
             </Text>
@@ -69,7 +69,7 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
               Used by professionals working at leading companies worldwide.
             </Text>
           </Column>
-          <Grid columns="4" m={{ columns: 2 }} maxWidth={48}>
+          <Grid columns="4" m={{ columns: 2 }} maxWidth="48rem">
             {trademarks.map((mark) => (
               <Row key={mark.id} center padding="24">
                 <Logo wordmark={{ light: mark.light, dark: mark.dark }} />
@@ -85,8 +85,8 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
             size: "4",
           }}
           borderLeft="neutral-alpha-medium"
-          width={12}
-          minWidth={12}
+          width="12rem"
+          minWidth="12rem"
           m={{ hide: true }}
         />
       </Row>
@@ -144,8 +144,8 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
             borderRight="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
           />
         </Row>
         <Row
@@ -167,8 +167,8 @@ export const Footer6 = (flex: React.ComponentProps<typeof Column>) => {
               size: "4",
             }}
             borderLeft="neutral-alpha-medium"
-            width={12}
-            minWidth={12}
+            width="12rem"
+            minWidth="12rem"
           />
         </Row>
       </Row>

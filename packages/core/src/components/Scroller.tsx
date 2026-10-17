@@ -163,8 +163,8 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
             horizontal={direction === "column" ? "center" : undefined}
             vertical={direction === "column" ? "start" : "center"}
             to={direction === "row" ? "right" : "bottom"}
-            width={direction === "row" ? 4 : undefined}
-            height={direction === "column" ? 4 : undefined}
+            width={direction === "row" ? "4rem" : undefined}
+            height={direction === "column" ? "4rem" : undefined}
             fillHeight={direction === "row"}
             fillWidth={direction === "column"}
             left={direction === "row" ? "0" : undefined}
@@ -204,8 +204,8 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
             horizontal={direction === "column" ? "center" : "end"}
             vertical={direction === "column" ? "end" : "center"}
             to={direction === "row" ? "left" : "top"}
-            width={direction === "row" ? 4 : undefined}
-            height={direction === "column" ? 4 : undefined}
+            width={direction === "row" ? "4rem" : undefined}
+            height={direction === "column" ? "4rem" : undefined}
             fillHeight={direction === "row"}
             fillWidth={direction === "column"}
             right={direction === "row" ? "0" : undefined}

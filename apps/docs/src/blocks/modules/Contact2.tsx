@@ -86,7 +86,7 @@ export const Contact2 = () => {
                 position="absolute"
                 left="0"
                 top="0"
-                mask={{ x: 75, y: -50, radius: 20 }}
+                mask={{ x: "75%", y: "-50%", radius: "20vh" }}
                 grid={{
                   display: true,
                   width: "8px",
@@ -168,7 +168,7 @@ export const Contact2 = () => {
             </Column>
           </Column>
 
-          <Column fillWidth minHeight={32}>
+          <Column fillWidth minHeight="32rem">
             <iframe
               title="Map showing Once UI location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2689.2891732781513!2d-122.35198712346974!3d47.62050127118443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x5490151f4ed5b7f9%3A0xdb2ba8689ed0920d!2sSpace%20Needle!5e0!3m2!1sen!2sus!4v1708762160575!5m2!1sen!2sus"

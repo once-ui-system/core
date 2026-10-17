@@ -97,7 +97,7 @@ export function Roadmap1() {
                 border
                 background="overlay"
                 fillWidth
-                minWidth={20}
+                minWidth="20rem"
               >
                 <Row fillWidth vertical="center" gap="8" paddingY="8" paddingX="16">
                   <Text variant="label-default-m">{column.title}</Text>

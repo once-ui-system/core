@@ -54,11 +54,11 @@ export const OnThisPage = () => {
   if (!ready) return null;
 
   return (
-    <Column paddingX="8" horizontal="end" maxWidth={14} paddingTop="40" gap="24">
-      <Row paddingLeft="2" maxWidth={12} textVariant="label-strong-m">
+    <Column paddingX="8" horizontal="end" maxWidth="14rem" paddingTop="40" gap="24">
+      <Row paddingLeft="2" maxWidth="12rem" textVariant="label-strong-m">
         Browse
       </Row>
-      <HeadingNav key={pathname} maxWidth={12} header={false} />
+      <HeadingNav key={pathname} maxWidth="12rem" header={false} />
     </Column>
   );
 };

@@ -186,7 +186,7 @@ const ALIGN = {
   right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
 } as const;
 
-const SKELETON_WIDTHS = [8, 6, 10, 5, 7];
+const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
 
 /**
  * A table of typed rows: column definitions instead of pre-rendered cells,

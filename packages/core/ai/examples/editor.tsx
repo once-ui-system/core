@@ -101,7 +101,7 @@ export function EditorExample() {
         }
         rightPanel={
           <Column fill overflowY="auto" padding="24" center background="surface">
-            <Column maxWidth={40} aspectRatio="16/9" radius="l" border background="page" center>
+            <Column maxWidth="40rem" aspectRatio="16/9" radius="l" border background="page" center>
               <Text variant="label-default-s" onBackground="neutral-weak">
                 {current ? current.label : "Nothing selected"}
               </Text>

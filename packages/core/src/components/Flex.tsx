@@ -34,7 +34,7 @@ const Flex = forwardRef<HTMLDivElement, SmartFlexProps>(
       if (typeof cursor === "object" && cursor) return true;
 
       // Every other breakpoint value is a class if it has one. A token gap is
-      // `.s-g-4`; a numeric gap is a rem value with no class behind it, and
+      // `.s-g-4`; a px number or CSS-length gap is a value with no class behind it, and
       // `width`/`aspectRatio`/`style` are inline by nature. Only those need
       // the runtime pass, so only those pay for it — the rest of the tree
       // stays a server component and is laid out correctly in the first paint

@@ -62,7 +62,7 @@ export const Profile2 = () => {
             size="xl"
             statusIndicator={{ color: "green" }}
           />
-          <Column fill gap="4" minWidth={16}>
+          <Column fill gap="4" minWidth="16rem">
             <Heading variant="heading-strong-l">Lorant One</Heading>
             <Text onBackground="neutral-weak" variant="body-default-m">
               Design Engineer · Once UI
@@ -106,7 +106,7 @@ export const Profile2 = () => {
           <Scroller fadeColor="page">
             <Row gap="16" paddingBottom="4">
               {highlights.map((item) => (
-                <Column key={item.label} gap="8" horizontal="center" minWidth={6}>
+                <Column key={item.label} gap="8" horizontal="center" minWidth="6rem">
                   <Row radius="full" border="brand-alpha-weak" padding="2" overflow="hidden">
                     <Media
                       sizes="80px"
@@ -114,7 +114,7 @@ export const Profile2 = () => {
                       alt={item.label}
                       aspectRatio="1"
                       radius="full"
-                      width={5}
+                      width="5rem"
                     />
                   </Row>
                   <Text variant="label-default-s">{item.label}</Text>
@@ -153,8 +153,8 @@ export const Profile2 = () => {
                   alt={post.title}
                   aspectRatio="1"
                   radius="m"
-                  minWidth={8}
-                  maxWidth={8}
+                  minWidth="8rem"
+                  maxWidth="8rem"
                 />
                 <Column fill gap="8" vertical="center">
                   <Heading as="h3" variant="heading-strong-s">

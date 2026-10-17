@@ -64,7 +64,7 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
       <Column
         zIndex={10}
         fillWidth
-        maxWidth={32}
+        maxWidth="32rem"
         position="fixed"
         className={classNames(styles.toastContainer, styles[actualPosition])}
       >

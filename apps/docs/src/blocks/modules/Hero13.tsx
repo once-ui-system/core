@@ -23,15 +23,15 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
         left="0"
         gradient={{
           display: true,
-          x: 50,
+          x: "50%",
           y: 0,
-          width: 80,
-          height: 60,
+          width: "80%",
+          height: "60%",
           colorStart: "brand-background-medium",
         }}
       />
       <Row maxWidth="xl" gap="48" vertical="center" m={{ direction: "column" }}>
-        <Column fill gap="24" maxWidth={48}>
+        <Column fill gap="24" maxWidth="48rem">
           <Badge
             background="overlay"
             paddingLeft="8"
@@ -72,7 +72,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
                   colorStart: "brand-solid-strong",
                   colorEnd: "accent-solid-weak",
                 }}
-                mask={{ cursor: true, radius: 20 }}
+                mask={{ cursor: true, radius: "20vh" }}
               />
               <Row background="page" radius="l">
                 <Button href="#" size="l" variant="secondary">
@@ -85,7 +85,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
 
         <Column fill horizontal="center">
           <Row
-            maxWidth={48}
+            maxWidth="48rem"
             radius="xl"
             border="brand-alpha-weak"
             overflow="hidden"
@@ -107,7 +107,7 @@ export const Hero13 = (flex: React.ComponentProps<typeof Column>) => {
               />
             </Column>
           </Row>
-          <Row maxWidth={48} paddingTop="12" gap="8" vertical="center">
+          <Row maxWidth="48rem" paddingTop="12" gap="8" vertical="center">
             <Line flex={1} background="neutral-alpha-weak" />
             <Text variant="label-default-s" onBackground="neutral-weak">
               Built with Once UI Pro

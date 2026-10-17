@@ -65,7 +65,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" maxWidth="60rem" horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -107,7 +107,7 @@ export default async function Docs({
           <Row gap="16" maxWidth={layout.content.width} horizontal="between" s={{direction: "column"}}>              
             {prevPage ? (
               <Row fillWidth>
-              <Row maxWidth={20}>
+              <Row maxWidth="20rem">
               <Card
                 fillWidth
                 border="neutral-alpha-medium"
@@ -133,7 +133,7 @@ export default async function Docs({
             ) : <Row/>}
             {nextPage ? (
               <Row fillWidth horizontal="end">
-                <Row maxWidth={20}>
+                <Row maxWidth="20rem">
                   <Card
                     fillWidth
                     border="neutral-alpha-medium"

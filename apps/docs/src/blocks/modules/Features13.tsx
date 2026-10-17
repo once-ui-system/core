@@ -37,7 +37,7 @@ export const Features13 = (flex: React.ComponentProps<typeof Row>) => {
               description: "Same system. New client. Scalable revenue.",
             },
           ].map((step, index) => (
-            <Row maxWidth={28} key={index} gap="32">
+            <Row maxWidth="28rem" key={index} gap="32">
               <Column flex={1} minWidth="48" horizontal="center">
                 <Row flex={1} horizontal="center">
                   {index === 0 && (

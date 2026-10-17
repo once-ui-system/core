@@ -19,7 +19,7 @@ const features: FeatureRow[] = [
 export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
-      <Column maxWidth={40} gap="12" horizontal="center">
+      <Column maxWidth="40rem" gap="12" horizontal="center">
         <Tag scheme="brand" size="s">
           Pricing
         </Tag>
@@ -124,10 +124,10 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
             left="0"
             gradient={{
               display: true,
-              x: 100,
+              x: "100%",
               y: 0,
-              width: 100,
-              height: 100,
+              width: "100%",
+              height: "100%",
               colorStart: "brand-solid-medium",
             }}
           />

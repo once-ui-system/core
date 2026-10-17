@@ -41,7 +41,7 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row fillWidth gap="xl" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={28} m={{ minWidth: 0 }} gap="24">
+      <Column fill minWidth="28rem" m={{ minWidth: 0 }} gap="24">
         <Column gap="8">
           <Tag scheme="brand" size="s">
             Sales
@@ -86,7 +86,7 @@ export const Contact4 = (flex: React.ComponentProps<typeof Row>) => {
         </Grid>
       </Column>
 
-      <Column fill minWidth={22} gap="16" padding="24" radius="xl" background="surface" border>
+      <Column fill minWidth="22rem" gap="16" padding="24" radius="xl" background="surface" border>
         <Column gap="4">
           <Heading variant="heading-strong-s">Send an inquiry</Heading>
           <Text variant="body-default-s" onBackground="neutral-weak">

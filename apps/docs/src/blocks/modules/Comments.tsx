@@ -216,7 +216,7 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
       {/* Comments list */}
       <Column gap="16" marginTop="8" fillWidth>
         {isLoading ? (
-          <Spinner minHeight={12} center align="center" fillWidth size="s" />
+          <Spinner minHeight="12rem" center align="center" fillWidth size="s" />
         ) : error ? (
           <Text variant="body-default-s" onBackground="danger-weak" align="center" paddingY="l">
             {error}

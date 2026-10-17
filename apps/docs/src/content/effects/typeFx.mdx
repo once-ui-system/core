@@ -17,7 +17,7 @@ TypeFx creates a realistic typewriter animation that types out text character-by
     <Row gap="8" vertical="center">
       <TypeFx
         words={["amazing products", "stunning websites", "modern apps"]}
-        speed={80}
+        charDuration={80}
         hold={2000}
         trigger="instant"
       >Build{" "}</TypeFx>
@@ -32,7 +32,7 @@ TypeFx creates a realistic typewriter animation that types out text character-by
   </Text>
   <TypeFx
     words={["amazing products", "stunning websites", "modern apps"]}
-    speed={80}
+    charDuration={80}
     hold={2000}
     trigger="instant"
   />
@@ -54,7 +54,7 @@ TypeFx can also display a single word that types out once without looping.
   preview={
     <TypeFx
       words="Welcome to the future"
-      speed={100}
+      charDuration={100}
       delay={500}
       trigger="instant"
     />
@@ -64,7 +64,7 @@ TypeFx can also display a single word that types out once without looping.
       code:
 `<TypeFx
   words="Welcome to the future"
-  speed={100}
+  charDuration={100}
   delay={500}
   trigger="instant"
 />`,
@@ -96,7 +96,7 @@ Use the `custom` trigger to programmatically control when the typing animation s
     <>
       <TypeFx
         words={["Click the button", "to start typing", "this animation"]}
-        speed={60}
+        charDuration={60}
         hold={1500}
         trigger="custom"
         onTrigger={(fn) => {
@@ -121,7 +121,7 @@ Use the `custom` trigger to programmatically control when the typing animation s
   component="TypeFx"
   describe={{
     words: "One string to type, or several to cycle through.",
-    speed: "Milliseconds per character.",
+    charDuration: "Milliseconds per character (higher is slower). Was speed until 3.0.",
     delay: "Milliseconds before typing starts.",
     hold: "Milliseconds a finished word stays before the next one.",
     loop: "Cycle back to the first word instead of stopping.",

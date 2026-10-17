@@ -13,7 +13,7 @@ import { chatMembers } from "./content/chat1content";
 
 export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
-    <Column fillHeight maxWidth={18} background="surface" gap="20" {...flex}>
+    <Column fillHeight maxWidth="18rem" background="surface" gap="20" {...flex}>
       <Row paddingX="24" paddingTop="12">
         <Heading as="h2" variant="label-strong-m">
           Members
@@ -65,7 +65,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                   </Card>
                 }
                 dropdown={
-                  <Column maxWidth={20} fitHeight tabIndex={-1}>
+                  <Column maxWidth="20rem" fitHeight tabIndex={-1}>
                     <Row fillWidth>
                       <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
                       <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
@@ -77,7 +77,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                         left="12"
                         bottom="0"
                         src={member.avatar}
-                        size={6}
+                        size="6rem"
                         statusIndicator={{ color: member.statusColor }}
                         translateY="50%"
                         borderWidth={4}

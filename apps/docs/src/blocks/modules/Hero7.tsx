@@ -33,7 +33,7 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
               radius="l"
               horizontal="center"
               align="center"
-              maxWidth={20}
+              maxWidth="20rem"
               themeBorder="rounded"
             >
               <Input
@@ -78,9 +78,9 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           gradient={{
             display: true,
             colorStart: "brand-solid-strong",
-            y: 100,
-            width: 100,
-            height: 90,
+            y: "100%",
+            width: "100%",
+            height: "90%",
           }}
           pointerEvents="none"
         />

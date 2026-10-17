@@ -141,7 +141,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             left="0"
             gradient={{
               display: true,
-              x: 100,
+              x: "100%",
               y: 0,
               colorStart: "page-background",
             }}
@@ -158,7 +158,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
               Best value
             </Tag>
           )}
-          <Mask position="absolute" fill left="0" top="0" x={100} y={0}>
+          <Mask position="absolute" fill left="0" top="0" x="100%" y={0}>
             {bundle.featured && (
               <MatrixFx
                 themeSolid="color"
@@ -171,7 +171,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                 flicker
                 bulge={{
                   type: "wave",
-                  duration: 4,
+                  duration: 4000,
                   intensity: 15,
                   repeat: true,
                 }}
@@ -185,14 +185,14 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             themeSolid="color"
             mask={{
               cursor: true,
-              radius: 60,
+              radius: "60vh",
             }}
             gradient={{
               display: true,
-              height: 50,
-              width: 50,
-              x: 50,
-              y: 100,
+              height: "50%",
+              width: "50%",
+              x: "50%",
+              y: "100%",
               colorStart: "brand-solid-strong",
             }}
           />

@@ -10,7 +10,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
 
   return (
     <Row
-      maxWidth={56}
+      maxWidth="56rem"
       border="brand-alpha-weak"
       radius="l"
       paddingX="16"
@@ -41,7 +41,7 @@ export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {
           {progress}% to next tier
         </Text>
       </Row>
-      <Row minWidth={24} flex={1} s={{ hide: true }}>
+      <Row minWidth="24rem" flex={1} s={{ hide: true }}>
         <LinearGauge
           fillWidth
           value={progress}

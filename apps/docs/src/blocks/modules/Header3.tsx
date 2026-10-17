@@ -22,7 +22,7 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         position="absolute"
         pointerEvents="none"
         top="0"
-        height={5}
+        height="5rem"
         pattern={{ display: true, size: "2" }}
       />
       <Row as="header" fillWidth paddingX="l" height="64" vertical="center">
@@ -79,7 +79,7 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                 src: "/images/creators/lorant.jpg",
               }}
               dropdown={
-                <Column minWidth={14} background="page">
+                <Column minWidth="14rem" background="page">
                   <Background
                     position="absolute"
                     fill
@@ -87,9 +87,9 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                     left="0"
                     gradient={{
                       display: true,
-                      width: 200,
-                      height: 100,
-                      x: 50,
+                      width: "200%",
+                      height: "100%",
+                      x: "50%",
                       y: 0,
                       colorStart: "brand-background-medium",
                       colorEnd: "static-transparent",

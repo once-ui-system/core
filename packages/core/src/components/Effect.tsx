@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
+import type { Speed } from "../types";
 import { BlobFx } from "./BlobFx";
 import { CelebrationFx } from "./CelebrationFx";
 import { Flex } from "./Flex";
@@ -29,8 +30,12 @@ interface EffectProps extends React.ComponentProps<typeof Flex> {
    * from the accent scheme and ignores this.
    */
   colors?: string[];
-  /** Shared animation speed. Ignored by `blob`, which is seeded, not timed. */
-  speed?: number;
+  /**
+   * Shared speed multiplier (`1` is each effect's designed pace), or
+   * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2). Ignored by `blob`, which is
+   * seeded, not timed.
+   */
+  speed?: Speed;
   reducedMotion?: boolean | "auto";
   /**
    * Per-effect settings. Only the block matching `type` is read, so a template

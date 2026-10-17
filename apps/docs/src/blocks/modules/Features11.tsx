@@ -29,7 +29,7 @@ export const Features11: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex
             { value: 9, performance: 128 },
           ]}
         />
-        <Column maxWidth={40} padding="16" background="page" border>
+        <Column maxWidth="40rem" padding="16" background="page" border>
           <Heading as="h2" variant="display-strong-s" marginBottom="32">
             Watch your orders skyrocket
           </Heading>

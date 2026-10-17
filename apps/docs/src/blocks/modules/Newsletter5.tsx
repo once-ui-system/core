@@ -35,7 +35,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
 
   return (
     <Row fillWidth radius="xl" border overflow="hidden" m={{ direction: "column" }} {...flex}>
-      <Column fill minWidth={24} padding="40" gap="20">
+      <Column fill minWidth="24rem" padding="40" gap="20">
         <Column gap="8">
           <Heading variant="display-strong-xs">Once UI Digest</Heading>
           <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
@@ -74,7 +74,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             {selectedTopics.length === 1 ? "" : "s"}
           </Row>
         ) : (
-          <Row maxWidth={22}>
+          <Row maxWidth="22rem">
             <Input
               id="digest-email"
               placeholder="Email"
@@ -113,7 +113,7 @@ export const Newsletter5: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
 
       <Line vert background="neutral-alpha-weak" s={{ hide: true }} />
 
-      <Column fill minWidth={20} background="surface" padding="32" gap="16" s={{ hide: true }}>
+      <Column fill minWidth="20rem" background="surface" padding="32" gap="16" s={{ hide: true }}>
         <Text variant="label-default-s" onBackground="neutral-weak">
           Latest issues
         </Text>

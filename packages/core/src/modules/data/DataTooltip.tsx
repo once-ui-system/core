@@ -2,9 +2,9 @@
 
 import React from "react";
 import { Column } from "../../components/Column";
-import { CountFx } from "../../components/CountFx";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
+import { CountUp } from "../../internal/CountUp";
 import { ChartVariant, DateConfig } from "./interfaces";
 import { Swatch } from "./Swatch";
 import { formatDate } from "./utils/formatDate";
@@ -69,7 +69,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
             </Row>
             <Text onBackground="neutral-strong" variant="label-default-s">
               {typeof entry.value === "number" ? (
-                <CountFx value={entry.value} separator="," speed={500} easing="ease-in-out" />
+                <CountUp value={entry.value} separator="," duration={500} easing="ease-in-out" />
               ) : (
                 entry.value
               )}

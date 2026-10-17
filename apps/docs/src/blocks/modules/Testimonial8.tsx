@@ -44,7 +44,7 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
 
   return (
     <Column fillWidth horizontal="center" gap="32" {...flex}>
-      <Column horizontal="center" align="center" gap="16" maxWidth={32}>
+      <Column horizontal="center" align="center" gap="16" maxWidth="32rem">
         <Tag size="s" scheme="brand" themeBorder="rounded">
           Social proof
         </Tag>
@@ -71,7 +71,7 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
               open={open}
               onClose={() => setOpen(false)}
               title={`${members.length} builders shipping with Once UI`}
-              maxHeight={40}
+              maxHeight="40rem"
               footer={
                 <Button variant="secondary" onClick={() => setOpen(false)}>
                   Close
@@ -97,7 +97,7 @@ export const Testimonial8 = (flex: React.ComponentProps<typeof Column>) => {
       </Row>
 
       <Column fillWidth gap="24" horizontal="center">
-        <Line maxWidth={4} background="neutral-alpha-medium" />
+        <Line maxWidth="4rem" background="neutral-alpha-medium" />
         <AutoScroll fillWidth gap="40" speed="slow">
           {logos.map((logo, index) => (
             <Logo key={index} wordmark={logo} />

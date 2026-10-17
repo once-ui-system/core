@@ -2,15 +2,19 @@
 
 import React, { useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
 
 type CelebrationType = "confetti" | "fireworks";
 
 interface CelebrationFxProps extends React.ComponentProps<typeof Flex> {
   type?: CelebrationType;
-  speed?: number;
+  /** A multiplier on the designed pace (`1`), or `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2). */
+  speed?: Speed;
   colors?: string[];
   intensity?: number;
+  /** Milliseconds to keep emitting (seconds until 3.0). */
   duration?: number;
   trigger?: "mount" | "hover" | "manual" | "click";
   active?: boolean; // For manual trigger
@@ -59,7 +63,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
   (
     {
       type = "confetti",
-      speed = 1,
+      speed: speedProp,
       colors = ["brand-solid-medium", "accent-solid-medium"],
       intensity = 50,
       duration,
@@ -71,6 +75,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
     },
     forwardedRef,
   ) => {
+    const speed = speedFactor(speedProp);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
     const containerRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -221,7 +226,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
 
         // Check duration limit
         if (duration && isEmittingRef.current && trigger !== "manual") {
-          const elapsed = (Date.now() - emitStartTimeRef.current) / 1000;
+          const elapsed = Date.now() - emitStartTimeRef.current;
           if (elapsed > duration) {
             isEmittingRef.current = false;
           }

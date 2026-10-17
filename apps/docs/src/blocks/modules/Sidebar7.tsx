@@ -55,7 +55,7 @@ export function Sidebar7() {
   const pathname = usePathname();
 
   return (
-    <Column fillHeight width={16} minWidth={16} paddingY="4">
+    <Column fillHeight width="16rem" minWidth="16rem" paddingY="4">
       <Column
         position="sticky"
         fillHeight
@@ -211,8 +211,8 @@ export function Sidebar7() {
                 display: true,
                 colorStart: "neutral-background-weak",
                 y: 0,
-                width: 300,
-                height: 300,
+                width: "300%",
+                height: "300%",
               }}
               pointerEvents="none"
             />
