@@ -303,7 +303,7 @@ function AgentMessage({
           <Text variant="label-default-xs" onBackground="neutral-weak">
             now
           </Text>
-          {active ? <Spinner size="xs" ariaLabel="Nexus AI is responding" /> : null}
+          {active ? <Spinner size="xs" aria-label="Nexus AI is responding" /> : null}
         </Row>
         <AgentActivityBar toolCalls={toolCalls} updates={updates} />
         <AgentGeneration text={text} active={active} />

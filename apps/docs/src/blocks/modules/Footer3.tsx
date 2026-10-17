@@ -135,7 +135,7 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
                 size="l"
                 key={item.label}
                 href={item.href}
-                ariaLabel={item.label}
+                aria-label={item.label}
               />
             ))}
           </Row>

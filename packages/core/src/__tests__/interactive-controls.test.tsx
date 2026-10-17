@@ -102,7 +102,7 @@ describe("Switch", () => {
   it("fires onToggle from pointer and keyboard", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(<Switch checked={false} onToggle={onToggle} ariaLabel="Enable feature" />);
+    renderWithProviders(<Switch checked={false} onToggle={onToggle} aria-label="Enable feature" />);
 
     const control = screen.getByRole("switch", { name: /enable feature/i });
     await user.click(control);
@@ -117,18 +117,20 @@ describe("Switch", () => {
 
   it("reflects the controlled isChecked value", () => {
     const { rerender } = renderWithProviders(
-      <Switch checked={false} onToggle={() => {}} ariaLabel="State" />,
+      <Switch checked={false} onToggle={() => {}} aria-label="State" />,
     );
     expect(screen.getByRole("switch", { name: /state/i })).not.toBeChecked();
 
-    rerender(<Switch checked onToggle={() => {}} ariaLabel="State" />);
+    rerender(<Switch checked onToggle={() => {}} aria-label="State" />);
     expect(screen.getByRole("switch", { name: /state/i })).toBeChecked();
   });
 
   it("does not fire onToggle when disabled", async () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
-    renderWithProviders(<Switch checked={false} onToggle={onToggle} disabled ariaLabel="Locked" />);
+    renderWithProviders(
+      <Switch checked={false} onToggle={onToggle} disabled aria-label="Locked" />,
+    );
 
     await user.click(screen.getByRole("switch", { name: /locked/i }));
     expect(onToggle).not.toHaveBeenCalled();

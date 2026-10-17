@@ -26,7 +26,6 @@ interface SwitchProps
   value?: string;
   disabled?: boolean;
   reverse?: boolean;
-  ariaLabel?: string;
   /** Called with the state the switch moves to: `true` when it turns on.
    *  A callback that takes no argument still works. */
   onToggle?: (checked: boolean) => void;
@@ -41,8 +40,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       reverse = false,
       loading = false,
       onToggle,
-      ariaLabel = "Toggle switch",
-      "aria-label": nativeAriaLabel,
+      "aria-label": ariaLabel = "Toggle switch",
       disabled,
       name,
       value,
@@ -105,13 +103,13 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           })}
         >
           {/* The element that takes focus is the switch. It is named by the
-              visible label when there is one; `aria-label` (or `ariaLabel`)
+              visible label when there is one; `aria-label`
               only stands in when there is nothing on screen to point at. */}
           <div
             role="switch"
             aria-checked={checked}
             aria-labelledby={hasLabel ? labelId : undefined}
-            aria-label={hasLabel ? undefined : (nativeAriaLabel ?? ariaLabel)}
+            aria-label={hasLabel ? undefined : ariaLabel}
             aria-describedby={hasLabel && props.description ? descriptionId : undefined}
             aria-disabled={disabled}
             onKeyDown={handleKeyDown}

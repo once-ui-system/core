@@ -223,10 +223,4 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
 
 ParticleFx.displayName = "ParticleFx";
 
-/**
- * @deprecated Renamed to `ParticleFx`, in line with the other effects. This
- * name keeps working through 2.x and is removed in 3.0.
- */
-const Particle = ParticleFx;
-
-export { Particle, ParticleFx };
+export { ParticleFx };

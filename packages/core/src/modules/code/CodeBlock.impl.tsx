@@ -464,18 +464,12 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
-  /**
-   * @deprecated Set `highlight` on each entry of `codes` instead, so every tab
-   * marks its own lines. This one still applies to an entry that sets none.
-   */
-  highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
   hideCode?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
-  highlight: deprecatedHighlight,
   codeHeight,
   fillHeight,
   previewPadding = "l",
@@ -510,10 +504,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     code: "",
     language: "",
   };
-  const { code, language, startLineNumber } = codeInstance;
-
-  const highlight =
-    codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
+  const { code, language, startLineNumber, highlight } = codeInstance;
 
   useEffect(() => {
     const loadDependencies = async () => {
@@ -885,11 +876,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     </div>
                   ) : (
                     <pre
-                      key={`${selectedInstance}-${highlight || deprecatedHighlight || "no-highlight"}`}
+                      key={`${selectedInstance}-${highlight || "no-highlight"}`}
                       suppressHydrationWarning
                       tabIndex={-1}
                       style={{ maxHeight: `${codeHeight}rem` }}
-                      data-line={highlight || deprecatedHighlight}
+                      data-line={highlight}
                       ref={preRef}
                       className={classNames(
                         lineNumbers ? styles.lineNumberPadding : styles.padding,

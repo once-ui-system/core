@@ -66,21 +66,13 @@ describe("Switch accessibility", () => {
     expect(screen.getByRole("switch", { name: "Wi-Fi" })).toBeChecked();
   });
 
-  it("is named by ariaLabel when there is no visible label", async () => {
+  it("is named by aria-label when there is no visible label", async () => {
     const { container } = render(
-      <Switch ariaLabel="Dark mode" checked={false} onToggle={() => {}} />,
+      <Switch aria-label="Dark mode" checked={false} onToggle={() => {}} />,
       { wrapper: wrap },
     );
     expect(screen.getByRole("switch", { name: "Dark mode" })).toBeInTheDocument();
     await expectNoAxeViolations(container);
-  });
-
-  it("accepts native aria-label, which wins over ariaLabel", () => {
-    render(
-      <Switch aria-label="Native name" ariaLabel="Prop name" checked={false} onToggle={() => {}} />,
-      { wrapper: wrap },
-    );
-    expect(screen.getByRole("switch", { name: "Native name" })).toBeInTheDocument();
   });
 
   it("keeps the documented fallback name when given nothing else", () => {

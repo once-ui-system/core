@@ -82,7 +82,6 @@ interface ScrubberProps extends Omit<React.ComponentProps<typeof Flex>, "onChang
   formatTime?: (time: number) => string;
   /** Keyboard step for the playhead. Defaults to 1/100th of `duration`. */
   step?: number;
-  ariaLabel?: string;
 }
 
 /** `m:ss` — enough for a clip, and it grows its own hours field if needed. */
@@ -110,8 +109,7 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
       showTime = true,
       formatTime = defaultFormatTime,
       step,
-      ariaLabel = "Seek",
-      "aria-label": nativeAriaLabel,
+      "aria-label": ariaLabel = "Seek",
       ...flex
     },
     ref,
@@ -214,8 +212,8 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
           role="slider"
           tabIndex={0}
           // The slider is what gets named, not the outer column the rest of
-          // the props land on. Native aria-label wins over ariaLabel.
-          aria-label={nativeAriaLabel ?? ariaLabel}
+          // the props land on.
+          aria-label={ariaLabel}
           aria-valuemin={0}
           aria-valuemax={duration}
           aria-valuenow={value}

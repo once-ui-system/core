@@ -9,6 +9,40 @@ The changelog is the record of *what* changed and why
 
 ---
 
+## 2.x → 3.0
+
+3.0 is in progress on the `feat/3-0-breaking-cleanup` branch and ships first on
+the `next` tag. This section grows with the branch; each step lists what the
+codemod does and what it reports for you to finish.
+
+### 1. Run the codemod
+
+```sh
+node scripts/codemod-3.0.mjs src --dry   # see what it would change
+node scripts/codemod-3.0.mjs src
+```
+
+It only touches Once UI's own components (found through your imports, or by
+name in MDX), never a same-named component of yours, and running it twice
+changes nothing. Lines marked `!` are for you to fix by hand.
+
+### 2. React 19
+
+`react` and `react-dom` 19 are the floor. Upgrade them before anything else.
+
+### 3. Removed names
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `Particle` | `ParticleFx` | renames the import and every element |
+| Dialog `hideClose` | `showClose={false}` (an expression is negated) | rewrites |
+| CodeBlock `highlight` on the root | `highlight` on each entry of `codes` | rewrites an inline `codes` array, reports any other |
+| `ariaLabel` on IconButton, Spinner, Switch, Scrubber, StatusIndicator | `aria-label` | renames |
+| `BaseBreakpointProps` | `FlexBreakpointProps`, `GridBreakpointProps` or `TextBreakpointProps` | reports |
+| `resetScrollLockState`, `resetAdapterWarning`, `warnIfFrameworkUnadapted` | none: they were test-only or internal | reports |
+
+---
+
 ## 1.8.x → 2.0
 
 Eight steps. Most apps finish in the first two, and the codemod does the bulk

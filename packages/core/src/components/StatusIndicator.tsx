@@ -21,7 +21,6 @@ interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
     | "aqua"
     | "cyan"
     | "gray";
-  ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -31,8 +30,7 @@ const StatusIndicator = forwardRef<HTMLDivElement, StatusIndicatorProps>(
     {
       size = "m",
       color = "blue",
-      ariaLabel = `${color} status indicator`,
-      "aria-label": nativeAriaLabel,
+      "aria-label": ariaLabel = `${color} status indicator`,
       className,
       style,
       ...rest
@@ -45,10 +43,10 @@ const StatusIndicator = forwardRef<HTMLDivElement, StatusIndicatorProps>(
         style={style}
         className={classNames(styles.statusIndicator, styles[size], styles[color], className)}
         // A label on a plain div is not exposed (axe: aria-prohibited-attr);
-        // as an image the dot is announced by it. Native aria-label wins over
-        // ariaLabel, and `role` can still be overridden through the rest.
+        // as an image the dot is announced by it. `role` can still be
+        // overridden through the rest.
         role="img"
-        aria-label={nativeAriaLabel ?? ariaLabel}
+        aria-label={ariaLabel}
         radius="full"
         {...rest}
       />

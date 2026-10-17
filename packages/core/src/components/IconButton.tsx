@@ -50,9 +50,6 @@ interface IconButtonCommonProps {
   href?: string;
   children?: ReactNode;
   color?: `${ColorScheme}-${ColorWeight}`;
-  /** The button's accessible name, like the `ariaLabel` the other components
-   *  take. Native `aria-label` wins when both are given. */
-  ariaLabel?: string;
 }
 
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -76,8 +73,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
       color,
       className,
       style,
-      ariaLabel,
-      "aria-label": nativeAriaLabel,
+      "aria-label": ariaLabel,
       ...props
     },
     ref,
@@ -85,11 +81,10 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     const radiusSize = size === "s" || size === "m" ? "m" : "l";
     const trigger = useDropdownTrigger();
 
-    // The name is what the caller wrote for people: aria-label, ariaLabel, or
+    // The name is what the caller wrote for people: aria-label, or
     // a tooltip that is plain text. Never the icon key ("chevronRight" is not
     // a name), and never a tooltip node cast to a string ("[object Object]").
-    const accessibleName =
-      nativeAriaLabel ?? ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
+    const accessibleName = ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
     const namedOtherwise =
       Boolean(children) ||
       Boolean(props["aria-labelledby"]) ||

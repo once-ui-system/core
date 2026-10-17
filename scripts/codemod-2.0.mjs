@@ -144,7 +144,7 @@ const SKELETON_LINE_WIDTH = { xs: "25%", s: "33%", m: "50%", l: "75%", xl: "100%
 const SCALE = /^["'](xs|s|m|l|xl)["']$/;
 
 /** The literal behind `"m"` or `{"m"}`, or null when it is not a literal. */
-function literal(raw) {
+export function literal(raw) {
   if (raw === null || raw === undefined) return null;
   const inner = String(raw).trim().replace(/^\{|\}$/g, "").trim();
   return SCALE.test(inner) || /^["'][^"']*["']$/.test(inner) ? inner.slice(1, -1) : null;
@@ -152,7 +152,7 @@ function literal(raw) {
 
 /** Widen an edit's start to swallow the whitespace before it, so removing an
  *  attribute does not leave a double space or a dangling newline. */
-const withLeadingSpace = (src, at) => {
+export const withLeadingSpace = (src, at) => {
   let i = at;
   while (i > 0 && /[ \t]/.test(src[i - 1])) i--;
   if (src[i - 1] === "\n" && /^\s*$/.test(src.slice(i, at))) i--;
@@ -327,7 +327,7 @@ function skipComment(src, i) {
 }
 
 /** Find the end of the opening tag, skipping strings, comments and nested {...}. */
-function openingTagEnd(src, from) {
+export function openingTagEnd(src, from) {
   let i = from, depth = 0, quote = null;
   while (i < src.length) {
     const c = src[i];
@@ -382,7 +382,7 @@ function readValue(src, i) {
  * and rewriting it would rename the caller's local variable. So values are
  * skipped wholesale and only names sitting at depth 0 are returned.
  */
-function attributesOf(src, from, to) {
+export function attributesOf(src, from, to) {
   const attrs = [];
   let i = from;
   while (i < to) {
@@ -420,7 +420,7 @@ function attributesOf(src, from, to) {
  * and they also carry aliases: `{ Modal as Sheet }` means `<Sheet>` is the
  * element to migrate and `<Modal>` is not.
  */
-function importBindings(src) {
+export function importBindings(src) {
   const bindings = new Map();
   const re = /import\s+(?:type\s+)?(?:\{([^}]*)\}|(\w+)|\*\s+as\s+(\w+))\s*from\s*["']([^"']+)["']/g;
   let m;
@@ -439,7 +439,7 @@ function importBindings(src) {
   return bindings;
 }
 
-const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
+export const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
 
 /**
  * The element names in this file that mean Once UI's `tag`.
@@ -450,7 +450,7 @@ const isCoreSource = (source) => /^@once-ui-system\/core(\/|$)/.test(source);
  * imported at all (migrate it by name, which is what MDX depends on, since
  * there components arrive through the provider rather than an import).
  */
-function localNamesFor(tag, bindings) {
+export function localNamesFor(tag, bindings) {
   const aliases = [];
   for (const [local, { source, canonical }] of bindings)
     if (canonical === tag && isCoreSource(source)) aliases.push(local);
@@ -491,7 +491,7 @@ const MOVED_TO = new Map(
  * text. An inline `type` modifier stays in the text but not in the name, or
  * `{ type ChartMode, DataThemeProvider }` would never match a moved export.
  */
-function specifiersOf(clause) {
+export function specifiersOf(clause) {
   return clause
     .split(",")
     .map((raw) => raw.trim())

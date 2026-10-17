@@ -11,6 +11,26 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.0.0] - Unreleased
+
+Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
+lists what to do and `scripts/codemod-3.0.mjs` does most of it.
+
+### Removed
+
+- **`Particle`**, the 2.0 alias of `ParticleFx`.
+- **Dialog `hideClose`.** Use `showClose={false}`, the name `Drawer` uses.
+- **CodeBlock's root `highlight`.** Set it on each entry of `codes`.
+- **`ariaLabel`** on `IconButton`, `Spinner`, `Switch`, `Scrubber` and `StatusIndicator`.
+  The native `aria-label` names the same element, with the same defaults.
+- **`BaseBreakpointProps`**, unused since 2.0.
+- **Internal exports** that reached the root barrel: `resetScrollLockState`,
+  `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
+
+### Changed
+
+- **React 19 is the floor** for `react` and `react-dom`.
+
 ## [Unreleased]
 
 ### Added

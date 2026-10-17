@@ -94,7 +94,7 @@ export * from "./RevealFx";
 export * from "./Row";
 export * from "./ScrollContainer";
 export * from "./Scroller";
-export * from "./ScrollLock";
+export { ScrollLock } from "./ScrollLock";
 export * from "./ScrollToTop";
 export * from "./Scrubber";
 export * from "./SegmentedControl";

@@ -34,11 +34,6 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   /** Show the close button. On by default, as on `Drawer`; turn it off when
    *  only an action in the dialog should dismiss it. */
   showClose?: boolean;
-  /**
-   * @deprecated Use `showClose={false}`, the name `Drawer` uses. Still works
-   * through 2.x; when both are set, `showClose` wins.
-   */
-  hideClose?: boolean;
   onHeightChange?: (height: number) => void;
   minHeight?: number;
   closeOnClickaway?: boolean;
@@ -82,8 +77,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       base,
       footer,
       flush = false,
-      hideClose = false,
-      showClose = !hideClose,
+      showClose = true,
       onHeightChange,
       minHeight,
       ...rest
