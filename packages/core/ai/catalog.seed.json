@@ -289,15 +289,30 @@
     "tags": ["effect", "marketing"],
     "pairsWith": ["Column", "Media"]
   },
+  "Field": {
+    "purpose": "Label, hint and error around one control, with the id, aria-describedby, aria-invalid and aria-required wired for you",
+    "tags": ["form", "a11y"],
+    "pairsWith": ["Input", "Select", "Textarea", "Form"]
+  },
+  "Fieldset": {
+    "purpose": "Titled form section: a real fieldset with legend and description, laying its fields out like a Form grid",
+    "tags": ["form", "layout"],
+    "pairsWith": ["Form", "Field", "Input"]
+  },
   "FocusTrap": {
     "purpose": "Keeps Tab focus inside a region while active, with Escape handling and focus restore on close",
     "tags": ["utility", "overlay", "a11y"],
     "pairsWith": ["ScrollLock"]
   },
   "Form": {
-    "purpose": "Grid of form fields with one density setting for their gap and grouping, and an onSubmit",
+    "purpose": "Grid of form fields with one density setting for their gap and grouping, and an onSubmit whose promise drives a pending state",
     "tags": ["form", "layout"],
     "pairsWith": ["Input", "Select", "Textarea", "Button"]
+  },
+  "FormErrorSummary": {
+    "purpose": "Every form error in one alert after a failed submit, each linking to and focusing its field",
+    "tags": ["form", "feedback", "a11y"],
+    "pairsWith": ["Form", "Field", "SubmitButton"]
   },
   "GlitchFx": {
     "purpose": "Glitch distortion on any block, on hover or continuous",
@@ -782,6 +797,11 @@
     "purpose": "Live theming controls for theme, brand and accent colours, shape and density",
     "tags": ["settings", "theme"],
     "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
+  },
+  "SubmitButton": {
+    "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
+    "tags": ["form", "action"],
+    "pairsWith": ["Form", "FormErrorSummary", "Button"]
   },
   "Swatch": {
     "purpose": "Small colour chip marking a chart series",

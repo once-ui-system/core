@@ -26,7 +26,17 @@ item (see `ROADMAP.md`, Week 4).
   written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
   `labels.pm` override the words. Without `locale` the time reads as before
   (`01:14 PM`).
-- **Chat building blocks.** Five components for chat interfaces, from the root
+- **Form building blocks** (planned for 2.3). `Field` puts a label, hint and error
+  around any control and wires its `id`, `aria-describedby`, `aria-invalid` and
+  `aria-required`; `Input`, `Textarea` and the fields built on them also draw their
+  error styling from it. `Fieldset` is a real `<fieldset>` with a legend and
+  description that lays its fields out like a `Form`. `SubmitButton` shows a spinner
+  and ignores repeat presses while its form submits. `FormErrorSummary` lists every
+  error after a failed submit, takes focus, and links to each field. `Form`'s
+  `onSubmit` can return a promise, which keeps the form pending (`aria-busy`) until it
+  settles, and `pending` sets that state from outside. `useField()` and
+  `useFormPending()` expose both states to custom controls.
+- **Chat building blocks** (planned for 2.3). Five components for chat interfaces, from the root
   package: `ChatMessage` (a bubble with its author, time and delivery state;
   `from="self"` sits on the right, `grouped` lines up follow-ups, a failed
   message can offer a retry), `ChatMessageList` (a `log` live region that
@@ -42,12 +52,22 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **DatePicker: the week starts on the locale's first day.** With `locale="de"` the
+  calendar showed German names in a week that started on Sunday. It now starts on the
+  locale's first day (Monday in most of Europe), read from `Intl`. Without `locale`,
+  and in browsers with no week info (Firefox), it still starts on Sunday.
+
 - **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
   and description ids. The fields are now `{id}-start` and `{id}-end`.
 - **The date picker's month and year buttons were named by their value alone**
   ("March", "2026"), which does not say what they do. They are now named
   "Month: March, change month" and "Year: 2026, change year", which `labels.month`
   and `labels.year` translate.
+- **`Textarea` ignored `error` and dropped the caller's `aria-describedby`.** `error`
+  now marks it invalid and draws the error state, as it does on `Input`, and a
+  description passed in is kept ahead of the error message.
+- **A `Form` nested in another `Form` reset the size** the outer one set; it now
+  inherits it unless it sets its own.
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an

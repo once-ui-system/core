@@ -4,7 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef } from "react";
 import type { GridSize, SpacingToken, TShirtSizes } from "../types";
 import styles from "./Form.module.scss";
-import { FormFieldContext } from "./FormContext";
+import { FormFieldContext, FormStatusContext } from "./FormContext";
 import { Grid } from "./Grid";
 
 /**
@@ -49,7 +49,18 @@ interface FormProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSubmit
   size?: TShirtSizes;
   /** Render a real `<form>` rather than a `<div>`. */
   as?: "div" | "form";
-  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  /**
+   * Submit handler, attached when `as="form"`. Return a promise and the form
+   * is pending until it settles: `SubmitButton` shows its spinner and ignores
+   * further clicks, and the form is marked `aria-busy`.
+   */
+  onSubmit?: (event: React.FormEvent<HTMLFormElement>) => unknown;
+  /**
+   * Mark the form as submitting from outside, for a submit that does not run
+   * through `onSubmit` (a server action, a mutation hook). Wins over the state
+   * `onSubmit` tracks.
+   */
+  pending?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
@@ -198,9 +209,64 @@ const scoped = (bp: Breakpoint | undefined, name: string) => styles[bp ? `${bp}-
 
 const Form = forwardRef<HTMLDivElement, FormProps>(
   (
-    { density = "tight", columns, size, as = "div", onSubmit, className, style, children, ...rest },
+    {
+      density = "tight",
+      columns,
+      size,
+      as = "div",
+      onSubmit,
+      pending,
+      className,
+      style,
+      children,
+      ...rest
+    },
     ref,
   ) => {
+    // A nested `Form` — the grid inside a `Fieldset` — inherits the outer
+    // form's size rather than resetting it to nothing.
+    const inheritedSize = React.useContext(FormFieldContext).size;
+    const resolvedSize = size ?? inheritedSize;
+
+    // Counts submits in flight rather than holding a boolean, so a second
+    // submit that settles first does not clear the first one's pending state.
+    const [inFlight, setInFlight] = React.useState(0);
+    const mounted = React.useRef(true);
+    React.useEffect(() => {
+      mounted.current = true;
+      return () => {
+        mounted.current = false;
+      };
+    }, []);
+
+    const isPending = pending ?? inFlight > 0;
+    // Only a form that can submit, or one told it is pending, says anything
+    // about submitting. A layout-only `Form` inside a `Fieldset` must not
+    // provide `pending: false` over the real form around it.
+    const providesStatus = as === "form" || pending !== undefined;
+    const status = React.useMemo(() => ({ pending: isPending }), [isPending]);
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+      if (!onSubmit) return;
+      // A submit that started while one is still running — Enter in a field,
+      // a `requestSubmit()` — is dropped rather than sent twice.
+      if (isPending) {
+        event.preventDefault();
+        return;
+      }
+      const result = onSubmit(event);
+      if (!result || typeof (result as Promise<unknown>).then !== "function") return;
+      setInFlight((count) => count + 1);
+      const settle = () => {
+        if (mounted.current) setInFlight((count) => Math.max(0, count - 1));
+      };
+      // The caller's promise is theirs to handle; a rejection still ends the
+      // pending state, and is passed on rather than swallowed.
+      (result as Promise<unknown>).then(settle, (error: unknown) => {
+        settle();
+        throw error;
+      });
+    };
     // `toArray` drops the `null`, `undefined` and `false` a conditionally
     // rendered field leaves behind, so everything below is computed over the
     // fields that actually rendered — which is the whole point.
@@ -211,7 +277,7 @@ const Form = forwardRef<HTMLDivElement, FormProps>(
       return typeof span === "number" && Number.isFinite(span) ? span : 1;
     });
 
-    const fieldDefaults = React.useMemo(() => ({ size }), [size]);
+    const fieldDefaults = React.useMemo(() => ({ size: resolvedSize }), [resolvedSize]);
 
     const { base, perBreakpoint } = resolveColumns(columns);
     const stacked = density === "stacked";
@@ -293,8 +359,9 @@ const Form = forwardRef<HTMLDivElement, FormProps>(
         // Only a real `<form>` has a submit event; handing one to a `<div>`
         // would just be a dead listener.
         {...(as === "form" && onSubmit
-          ? { onSubmit: onSubmit as unknown as React.FormEventHandler<HTMLDivElement> }
+          ? { onSubmit: handleSubmit as unknown as React.FormEventHandler<HTMLDivElement> }
           : {})}
+        aria-busy={providesStatus && isPending ? true : undefined}
         fillWidth
         columns={String(base) as GridSize}
         gap={DENSITY_GAP[density]}
@@ -303,7 +370,13 @@ const Form = forwardRef<HTMLDivElement, FormProps>(
         data-density={density}
         {...rest}
       >
-        <FormFieldContext.Provider value={fieldDefaults}>{cells}</FormFieldContext.Provider>
+        <FormFieldContext.Provider value={fieldDefaults}>
+          {providesStatus ? (
+            <FormStatusContext.Provider value={status}>{cells}</FormStatusContext.Provider>
+          ) : (
+            cells
+          )}
+        </FormFieldContext.Provider>
       </Grid>
     );
   },
