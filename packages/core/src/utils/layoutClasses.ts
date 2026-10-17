@@ -46,9 +46,14 @@ export const STATIC_SPACING_TOKENS = Object.keys(STATIC_SPACE) as StaticSpacingT
 const STATIC_SPACING = new Set<unknown>(STATIC_SPACING_TOKENS);
 const RESPONSIVE_SIZES = new Set<unknown>(["xs", "s", "m", "l", "xl"]);
 
-/** A CSS length a class cannot hold, passed through as written. */
+/**
+ * A CSS length a class cannot hold, passed through as written. `px`, `rem` and
+ * `em` joined the list in 2.3: `width="320px"` used to fail the type and then
+ * render no width at all. (`rem` and `em` both end in `em`.)
+ */
 export function isCSSUnit(value: string): boolean {
   return (
+    /^-?(\d+\.?\d*|\.\d+)(px|r?em)$/.test(value) ||
     value.endsWith("%") ||
     value.endsWith("vh") ||
     value.endsWith("dvh") ||

@@ -35,6 +35,28 @@ item (see `ROADMAP.md`, Week 4).
   ("March", "2026"), which does not say what they do. They are now named
   "Month: March, change month" and "Year: 2026, change year", which `labels.month`
   and `labels.year` translate.
+- **`AccordionGroup` with `autoCollapse={false}` never opened.** Each item now keeps
+  its own open state, so several can be open at once.
+- **`Checkbox`, `RadioButton` and `Switch` dropped native input props.** `onChange`,
+  `onBlur`, `onFocus`, `required`, `form` and the rest went to the label beside the
+  control (and nowhere without a label). They now reach the hidden input, clicks and
+  keys fire its `change` event, and blur reports the input as its target, so
+  react-hook-form's `register()` works. `onToggle` is unchanged.
+- **`OTPInput` spread its div props onto every digit field**, after the field's own
+  handlers: a caller's `onChange` broke typing, an `id` repeated on each field, and
+  `className` was dropped. They now go on the wrapper; `onChange` and `onKeyDown`
+  still see each digit's event as it bubbles.
+- **Every `Badge` without an `id` got `id="badge"`**, so badges on one page shared
+  it and each arrow followed the first. Each badge now gets its own.
+- **`Chip` was selected by default**, so `<Chip label="Unselected" />`, as the docs
+  write it, was drawn and announced as pressed. `selected` now defaults to `false`;
+  pass `selected` where a chip should start selected.
+- **`width="320px"`, `maxWidth="40rem"` and other px, rem and em strings failed the
+  type and rendered no size.** `CSSUnit` now takes them, on sizes, offsets and
+  `translateX`/`translateY`, at every breakpoint. A number is still rem.
+- **Raw CSS colours on `Background`, `ParticleFx`, the charts and the gauges painted
+  nothing.** `ColorValue` takes `#fff`, `rgb(...)` or `var(...)`, but they were
+  wrapped as `var(--#fff)`. They now pass through as written; tokens resolve as before.
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an

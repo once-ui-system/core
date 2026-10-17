@@ -14,7 +14,7 @@
  ],
  "props": {
   "label": "!string",
-  "selected": "boolean = true",
+  "selected": "boolean = false",
   "prefixIcon": "IconName",
   "onRemove": "() => void",
   "onClick": "MouseEventHandler<HTMLDivElement>",

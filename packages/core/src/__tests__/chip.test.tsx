@@ -19,16 +19,18 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe("Chip", () => {
-  it("renders a focusable toggle button named by its label, selected by default", () => {
+  // `selected` used to default to true, so `<Chip label="Unselected" />`, as
+  // the docs write it, was announced and drawn as pressed.
+  it("renders a focusable toggle button named by its label, unselected by default", () => {
     render(<Chip label="Design" />, { wrapper });
     const chip = screen.getByRole("button", { name: "Design" });
     expect(chip).toHaveAttribute("tabindex", "0");
-    expect(chip).toHaveAttribute("aria-pressed", "true");
+    expect(chip).toHaveAttribute("aria-pressed", "false");
   });
 
-  it("reflects `selected={false}` in aria-pressed", () => {
-    render(<Chip label="Design" selected={false} />, { wrapper });
-    expect(screen.getByRole("button", { name: "Design" })).toHaveAttribute("aria-pressed", "false");
+  it("reflects `selected` in aria-pressed", () => {
+    render(<Chip label="Design" selected />, { wrapper });
+    expect(screen.getByRole("button", { name: "Design" })).toHaveAttribute("aria-pressed", "true");
   });
 
   it("calls onClick on a pointer click, Enter and Space", async () => {
@@ -138,6 +140,7 @@ describe("Chip", () => {
     const { container } = render(
       <Chip
         label="Design"
+        selected
         className="custom"
         aria-label="Design filter"
         onRemove={vi.fn()}

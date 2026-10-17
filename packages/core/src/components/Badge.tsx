@@ -1,5 +1,5 @@
 import classNames from "clsx";
-import React, { forwardRef } from "react";
+import React, { forwardRef, useId } from "react";
 import { IconName } from "../icons";
 import { Arrow } from "./Arrow";
 import styles from "./Badge.module.scss";
@@ -35,9 +35,14 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
     },
     ref,
   ) => {
+    // Every Badge used to fall back to `id="badge"`, so a page with several
+    // had duplicate ids and each arrow followed the first badge's hover.
+    const generatedId = useId();
+    const badgeId = id || generatedId;
+
     const content = (
       <Flex
-        id={id || "badge"}
+        id={badgeId}
         paddingX="20"
         paddingY="12"
         fitWidth
@@ -54,7 +59,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         {icon && <Icon marginRight="8" size="s" name={icon} onBackground="brand-medium" />}
         {title}
         {children}
-        {arrow && <Arrow trigger={`#${id || "badge"}`} />}
+        {arrow && <Arrow trigger={`[id="${badgeId}"]`} />}
       </Flex>
     );
 
