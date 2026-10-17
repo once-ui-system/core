@@ -121,8 +121,8 @@ Status: `[ ]` open, `[~]` in progress, `[x]` merged on the release branch.
 - [x] Dropdown leftovers: `DateInput`/`DateRangeInput` are comboboxes opening a dialog; DatePicker no longer takes focus by itself; a `dual` picker's month/year lists move both calendars; dropdown lists are named after their trigger.
 - [ ] 2.2: a locale approach for DatePicker's English text and en-US formatting (month and day names, "Previous/Next month", "Hours", AM/PM) and Select's "Search"/"Clear"; `DateRangeInput` gives both fields the same `id`; month and year buttons are named by their value only.
 - [x] Layout leftovers: `Grid inline` has a rule; `translateX`/`translateY` read spacing tokens; `ClientGrid` applies a breakpoint `width` and numeric spacing.
-- [ ] 2.2: leaving a breakpoint clears a base inline value it had overridden (`ClientFlex`, `ClientGrid`); TiltFx, FlipFx, Arrow and CursorCard's own `transform` overrides a translate prop; `FadingLettersFx` types `ref` without forwarding it.
-- [ ] 2.2: border colours in a breakpoint object (`m={{ borderLeft: … }}`) type-check but are never applied (`ClientFlex`'s `generateBorderClass` is unused); `Fade` blurs at a fixed 0.5rem whatever its `blur` prop unless it is in pattern mode.
+- [x] 2.2: leaving a breakpoint clears a base inline value it had overridden (`ClientFlex`, `ClientGrid`); TiltFx, FlipFx, Arrow and CursorCard's own `transform` overrides a translate prop; `FadingLettersFx` types `ref` without forwarding it.
+- [x] 2.2: border colours in a breakpoint object (`m={{ borderLeft: … }}`) type-check but are never applied (`ClientFlex`'s `generateBorderClass` is unused); `Fade` blurs at a fixed 0.5rem whatever its `blur` prop unless it is in pattern mode.
 
 ### W10 · API hygiene, additive (P1)
 - [x] `onToggle` passes the new checked state (Checkbox, RadioButton, Switch); `defaultChecked`/`defaultValue` for uncontrolled use on Switch, Slider, TagInput.
