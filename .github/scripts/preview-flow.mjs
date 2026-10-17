@@ -154,7 +154,11 @@ async function gate() {
 
   const [ship] = await api("GET", `/pulls?state=open&base=${MAIN}&head=${REPO.split("/")[0]}:${PREVIEW}`);
   if (ship) {
-    await api("PATCH", `/pulls/${ship.number}`, { body });
+    // Keep whatever sits above the marker (e.g. an attribution line).
+    const current = ship.body ?? "";
+    const at = current.indexOf(MARKER);
+    const prefix = (at >= 0 ? current.slice(0, at) : current.replace(/The preview workflow keeps.*$/m, "")).trimEnd();
+    await api("PATCH", `/pulls/${ship.number}`, { body: prefix ? `${prefix}\n\n${body}` : body });
   } else if (ahead > 0) {
     // Fails when Actions may not open PRs in this repo; a Claude session opens it then.
     await api("POST", "/pulls", { title: SHIP_TITLE, head: PREVIEW, base: MAIN, body }).catch((e) =>
