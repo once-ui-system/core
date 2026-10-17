@@ -10,6 +10,7 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { cannotHover } from "../internal/pointer";
 import type { Placement } from "../types";
 import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import styles from "./CursorCard.module.scss";
@@ -46,11 +47,7 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
     useImperativeHandle(ref, () => cardRef.current as HTMLDivElement);
 
     useEffect(() => {
-      const checkTouchDevice = () => {
-        return "ontouchstart" in window;
-      };
-
-      setIsTouchDevice(checkTouchDevice());
+      setIsTouchDevice(cannotHover());
     }, []);
 
     const handleMouseMove = useCallback(

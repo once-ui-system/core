@@ -1,0 +1,21 @@
+{
+ "name": "SubmitButton",
+ "group": "components",
+ "extends": [
+  "Button"
+ ],
+ "props": {
+  "pendingLabel": "ReactNode",
+  "pending": "boolean"
+ },
+ "tags": [
+  "form",
+  "action"
+ ],
+ "pairsWith": [
+  "Form",
+  "FormErrorSummary",
+  "Button"
+ ],
+ "mixinsRef": []
+}

@@ -1,6 +1,12 @@
 .container {
-    &:hover, &:focus {
+    &:focus {
         background-color: var(--neutral-background-strong);
+    }
+
+    @media (hover: hover) {
+        &:hover {
+            background-color: var(--neutral-background-strong);
+        }
     }
 }
 
@@ -11,14 +17,16 @@
 }
 
 .upload {
-    &:hover {
-        background: var(--backdrop);
-        backdrop-filter: blur(0.25rem);
+    @media (hover: hover) {
+        &:hover {
+            background: var(--backdrop);
+            backdrop-filter: blur(0.25rem);
 
-        .text {
-            display: block;
-            visibility: visible;
-            opacity: 1;
+            .text {
+                display: block;
+                visibility: visible;
+                opacity: 1;
+            }
         }
     }
 }

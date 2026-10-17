@@ -1,9 +1,15 @@
+@use "../styles/touch.scss" as touch;
+
 .container {
     cursor: var(--cursor-interactive);
     isolation: isolate;
 
-    &:hover, &:focus {
-        .element.checked .element::before {
+    &:focus .element.checked .element::before {
+        display: none;
+    }
+
+    @media (hover: hover) {
+        &:hover .element.checked .element::before {
             display: none;
         }
     }
@@ -39,12 +45,13 @@
     }
 }
 
-.noHover:hover .element::before {
-    display: none;
+@media (hover: hover) {
+    .noHover:hover .element::before {
+        display: none;
+    }
 }
 
-.container:hover .element::before,
-.element:focus-visible::before {
+@mixin ring {
     content: '';
     position: absolute;
     top: 50%;
@@ -56,6 +63,16 @@
     border-radius: var(--radius-full);
     z-index: -1;
     animation: scaleInCenter 0.2s forwards;
+}
+
+.element:focus-visible::before {
+    @include ring;
+}
+
+@media (hover: hover) {
+    .container:hover .element::before {
+        @include ring;
+    }
 }
 
 @keyframes scaleInCenter {
@@ -92,4 +109,9 @@
     background: var(--brand-on-solid-strong);
     width: var(--static-space-12);
     height: var(--static-space-2);
+}
+
+// A 20px box is a small target for a finger: it takes taps from 44px around it.
+.element {
+    @include touch.target;
 }

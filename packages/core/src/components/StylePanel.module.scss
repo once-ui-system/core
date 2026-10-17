@@ -7,9 +7,11 @@
     border-style: solid;
     background: var(--static-transparent);
   
-    &:hover {
-		background: var(--neutral-alpha-medium);
-		border-color: var(--neutral-alpha-medium);
+    @media (hover: hover) {
+        &:hover {
+            background: var(--neutral-alpha-medium);
+            border-color: var(--neutral-alpha-medium);
+        }
     }
   
     &.selected {

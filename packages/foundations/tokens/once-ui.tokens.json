@@ -1197,7 +1197,12 @@
         "responsive-space-m": "{static-space-24}",
         "responsive-space-s": "{static-space-16}",
         "responsive-space-xs": "{static-space-12}",
-        "header-height": "{static-space-56}"
+        "header-height": "{static-space-56}",
+        "safe-area-top": "env(safe-area-inset-top, 0px)",
+        "safe-area-right": "env(safe-area-inset-right, 0px)",
+        "safe-area-bottom": "env(safe-area-inset-bottom, 0px)",
+        "safe-area-left": "env(safe-area-inset-left, 0px)",
+        "touch-target": "2.75rem"
       }
     },
     {

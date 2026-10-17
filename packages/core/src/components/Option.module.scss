@@ -1,3 +1,20 @@
+@mixin active {
+    background: var(--neutral-alpha-weak);
+    border-color: var(--neutral-alpha-medium);
+    outline: none;
+
+    &:disabled {
+        background: var(--neutral-alpha-weak);
+        color: var(--neutral-on-background-weak);
+    }
+}
+
+@mixin danger-active {
+    background: var(--danger-solid-strong);
+    color: var(--danger-on-solid-strong);
+    border-color: var(--danger-border-strong);
+}
+
 .option {
     border-color: var(--static-transparent);
   
@@ -14,24 +31,29 @@
     }
   
     // Hover/Focus state (highest priority - always overrides highlighted and selected)
-    &:hover, &:focus {
-        background: var(--neutral-alpha-weak);
-        border-color: var(--neutral-alpha-medium);
-        outline: none;
+    // (On touch only focus: a tapped option would keep `:hover` and look
+    // highlighted after the finger has gone.)
+    &:focus {
+        @include active;
+    }
 
-        &:disabled {
-            background: var(--neutral-alpha-weak);
-            color: var(--neutral-on-background-weak);
+    @media (hover: hover) {
+        &:hover {
+            @include active;
         }
     }
   
     &.danger {
         color: var(--danger-on-background-medium);
   
-        &:hover, &:focus {
-            background: var(--danger-solid-strong);
-            color: var(--danger-on-solid-strong);
-            border-color: var(--danger-border-strong);
+        &:focus {
+            @include danger-active;
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                @include danger-active;
+            }
         }
     }
 }

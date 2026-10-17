@@ -24,10 +24,23 @@
 
     @include breakpoints.m {
         position: fixed;
-        bottom: var(--static-space-8);
-        left: var(--static-space-8);
-        right: var(--static-space-8);
-        top: var(--static-space-8);
-        max-width: calc(100% - var(--static-space-16)) !important;
+        bottom: max(var(--static-space-8), var(--safe-area-bottom, 0px));
+        left: max(var(--static-space-8), var(--safe-area-left, 0px));
+        right: max(var(--static-space-8), var(--safe-area-right, 0px));
+        top: max(var(--static-space-8), var(--safe-area-top, 0px));
+        max-width: calc(
+            100% - max(var(--static-space-8), var(--safe-area-left, 0px)) -
+                max(var(--static-space-8), var(--safe-area-right, 0px))
+        ) !important;
     }
+}
+
+/* The overlay's `padding="l"`, pushed out to the safe areas where they are
+   wider. Doubled to win over the padding utility on the same element. */
+.overlay.overlay {
+    padding:
+        max(var(--responsive-space-l), var(--safe-area-top, 0px))
+        max(var(--responsive-space-l), var(--safe-area-right, 0px))
+        max(var(--responsive-space-l), var(--safe-area-bottom, 0px))
+        max(var(--responsive-space-l), var(--safe-area-left, 0px));
 }

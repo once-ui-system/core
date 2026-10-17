@@ -2,6 +2,7 @@
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import { cannotHover } from "../internal/pointer";
 import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import { Flex } from "./Flex";
 import styles from "./TiltFx.module.scss";
@@ -40,7 +41,7 @@ const TiltFx = forwardRef<HTMLDivElement, TiltFxProps>(
       composeTransform(translateTransform(rest.translateX, rest.translateY), tilt) ?? "";
 
     useEffect(() => {
-      isTouchDeviceRef.current = "ontouchstart" in window;
+      isTouchDeviceRef.current = cannotHover();
     }, []);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {

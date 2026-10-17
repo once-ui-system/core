@@ -19,7 +19,9 @@
   .book {
     transition: none;
   }
+}
 
+@media (hover: hover) and (prefers-reduced-motion: reduce) {
   .wrapper:hover .book {
     transform: none;
   }

@@ -1,0 +1,34 @@
+{
+ "name": "Field",
+ "group": "components",
+ "props": {
+  "label": "ReactNode",
+  "hint": "ReactNode",
+  "error": "ReactNode",
+  "required": "boolean = false",
+  "controlId": "string",
+  "span": "number",
+  "children": "!ReactNode | ((control: FieldControlProps) => ReactNode)",
+  "className": "string",
+  "style": "React.CSSProperties"
+ },
+ "tags": [
+  "form",
+  "a11y"
+ ],
+ "pairsWith": [
+  "Input",
+  "Select",
+  "Textarea",
+  "Form"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "FieldControlProps": {
+   "id": "!string",
+   "aria-describedby": "string",
+   "aria-invalid": "true",
+   "aria-required": "true"
+  }
+ }
+}

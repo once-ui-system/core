@@ -29,8 +29,10 @@ a:not(.button) {
     text-underline-offset: 0.25em;
     text-decoration-color: var(--neutral-border-strong) !important;
 
-    &:hover {
-        text-decoration: none;
-        color: var(--brand-on-background-strong);
+    @media (hover: hover) {
+        &:hover {
+            text-decoration: none;
+            color: var(--brand-on-background-strong);
+        }
     }
 }
