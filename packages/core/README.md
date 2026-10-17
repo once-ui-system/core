@@ -45,7 +45,7 @@ This package includes an agent-first harness under `ai/` for generating Once UI 
 | Compact rules | `@once-ui-system/core/ai/rules.compact.md` |
 | Component catalog | `@once-ui-system/core/ai/catalog.json` |
 | Task index | `@once-ui-system/core/ai/tasks/index.json` |
-| Task bundles (task + slices + types) | `@once-ui-system/core/ai/bundles/{id}.json` |
+| Task bundles (rules, slices, types, gotchas and example in one read) | `@once-ui-system/core/ai/bundles/{id}.md` |
 
 **One-time setup in your app** (writes project `AGENTS.md`, `CLAUDE.md` and a Cursor rule):
 

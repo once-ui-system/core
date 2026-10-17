@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import type { Placement } from "../types";
 import { Column } from "./Column";
 import {
@@ -20,6 +21,19 @@ import { Option, type OptionProps } from "./Option";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 
+/** The search field's words, for a translated interface. Omitted fields keep the English default. */
+interface SelectLabels {
+  /** The search field's name and placeholder. Defaults to `"Search"`. */
+  search?: string;
+  /** The button that empties the search field. Defaults to `"Clear"`. */
+  clear?: string;
+}
+
+const DEFAULT_LABELS: Required<SelectLabels> = {
+  search: "Search",
+  clear: "Clear",
+};
+
 interface SelectProps
   extends Omit<InputProps, "onSelect" | "value">,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
@@ -33,6 +47,8 @@ interface SelectProps
   style?: React.CSSProperties;
   fillWidth?: boolean;
   multiple?: boolean;
+  /** The search field's name and its clear button's, for a translated interface. */
+  labels?: SelectLabels;
 }
 
 /**
@@ -77,6 +93,7 @@ const SearchInput = forwardRef<
     selectRef: React.RefObject<HTMLDivElement | null>;
     listboxId: string;
     activeOptionId?: string;
+    names: Required<SelectLabels>;
   }
 >(
   (
@@ -92,6 +109,7 @@ const SearchInput = forwardRef<
       selectRef,
       listboxId,
       activeOptionId,
+      names,
     },
     ref,
   ) => (
@@ -99,8 +117,8 @@ const SearchInput = forwardRef<
       ref={ref}
       data-scaling="90"
       id={id}
-      placeholder="Search"
-      aria-label="Search"
+      placeholder={names.search}
+      aria-label={names.search}
       role="combobox"
       aria-autocomplete="list"
       aria-expanded
@@ -110,7 +128,7 @@ const SearchInput = forwardRef<
       suffix={
         searchQuery ? (
           <IconButton
-            tooltip="Clear"
+            tooltip={names.clear}
             tooltipPosition="left"
             icon="close"
             variant="ghost"
@@ -169,10 +187,12 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       fillWidth = true,
       style,
       multiple = false,
+      labels,
       ...rest
     },
     ref,
   ) => {
+    const names = mergeLabels(DEFAULT_LABELS, labels);
     /**
      * Focus for the whole control, not the trigger.
      *
@@ -555,6 +575,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   selectRef={selectRef}
                   listboxId={listboxId}
                   activeOptionId={activeOptionId}
+                  names={names}
                 />
               )}
 
@@ -612,4 +633,5 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
 
 Select.displayName = "Select";
 
+export type { SelectLabels };
 export { Select };

@@ -2,7 +2,7 @@
 
 import React, { forwardRef, useEffect, useState } from "react";
 import { CondensedTShirtSizes } from "../types";
-import { DatePicker } from "./DatePicker";
+import { DatePicker, type DatePickerLabels } from "./DatePicker";
 import { Flex } from "./Flex";
 
 export interface DateRange {
@@ -29,10 +29,15 @@ export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof F
    * the names are in English, as before.
    */
   locale?: string;
+  /** Both calendars' buttons and names, for a translated interface: see DatePicker. */
+  labels?: DatePickerLabels;
 }
 
 const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
-  ({ value, onChange, minDate, maxDate, size = "m", dual, autoFocus, locale, ...rest }, ref) => {
+  (
+    { value, onChange, minDate, maxDate, size = "m", dual, autoFocus, locale, labels, ...rest },
+    ref,
+  ) => {
     const [internalValue, setInternalValue] = useState<DateRange>({
       startDate: value?.startDate || undefined,
       endDate: value?.endDate || undefined,
@@ -129,6 +134,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
           onHover={setHoveredDate}
           autoFocus={autoFocus}
           locale={locale}
+          labels={labels}
         />
         {dual && (
           <DatePicker
@@ -144,6 +150,7 @@ const DateRangePicker = forwardRef<HTMLDivElement, DateRangePickerProps>(
             onMonthChange={handleMonthChange}
             onHover={setHoveredDate}
             locale={locale}
+            labels={labels}
           />
         )}
       </Flex>

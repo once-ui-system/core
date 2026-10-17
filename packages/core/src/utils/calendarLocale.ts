@@ -12,7 +12,16 @@ export interface CalendarNames {
   weekdayLabels: string[];
   /** A month with its year, in the locale's order ("October 2026", "2026年10月"). */
   monthYear: (month: number, year: number) => string;
+  /** The words for the two halves of a 12-hour clock: "AM" and "PM" in English. */
+  dayPeriods: [am: string, pm: string];
+  /**
+   * A time on a 12-hour clock, in the locale's order ("01:14 PM", "午後01:14"),
+   * with `dayPeriods` in place of the locale's own words when given.
+   */
+  time: (hours: number, minutes: number, dayPeriods?: [string, string]) => string;
 }
+
+const pad = (value: number) => value.toString().padStart(2, "0");
 
 const ENGLISH_MONTHS = [
   "January",
@@ -34,6 +43,11 @@ const ENGLISH: CalendarNames = {
   weekdays: ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
   weekdayLabels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
   monthYear: (month, year) => `${ENGLISH_MONTHS[month]} ${year}`,
+  dayPeriods: ["AM", "PM"],
+  time: (hours, minutes, [am, pm] = ["AM", "PM"]) => {
+    const hours12 = hours % 12 === 0 ? 12 : hours % 12;
+    return `${pad(hours12)}:${pad(minutes)} ${hours >= 12 ? pm : am}`;
+  },
 };
 
 /** The locale as the platform resolves it, or undefined when it is missing or not a valid tag. */
@@ -70,6 +84,13 @@ export const getCalendarNames = (locale?: string): CalendarNames => {
   const weekday = format({ weekday: "short" });
   const weekdayLong = format({ weekday: "long" });
   const monthYear = format({ month: "long", year: "numeric" });
+  // The picker's hour field runs 1 to 12, so its time is on a 12-hour clock in every locale.
+  const clock = format({ hour: "2-digit", minute: "2-digit", hourCycle: "h12" });
+  const clockParts = (hours: number, minutes: number) =>
+    clock.formatToParts(new Date(Date.UTC(2000, 0, 1, hours, minutes)));
+  const dayPeriodAt = (hours: number, fallback: string) =>
+    clockParts(hours, 0).find((part) => part.type === "dayPeriod")?.value ?? fallback;
+  const dayPeriods: [string, string] = [dayPeriodAt(9, "AM"), dayPeriodAt(21, "PM")];
 
   // 1 January 2023 was a Sunday.
   const sunday = (offset: number) => new Date(Date.UTC(2023, 0, 1 + offset));
@@ -85,6 +106,17 @@ export const getCalendarNames = (locale?: string): CalendarNames => {
       // Date.UTC reads years 0 to 99 as 1900 to 1999.
       date.setUTCFullYear(year);
       return capitalize(monthYear.format(date), resolved);
+    },
+    dayPeriods,
+    time: (hours, minutes, [am, pm] = dayPeriods) => {
+      const parts: { type: string; value: string }[] = clockParts(hours, minutes);
+      // The hour alone is ambiguous on a 12-hour clock: add the period if the locale left it out.
+      if (!parts.some((part) => part.type === "dayPeriod")) {
+        parts.push({ type: "literal", value: " " }, { type: "dayPeriod", value: "" });
+      }
+      return parts
+        .map((part) => (part.type === "dayPeriod" ? (hours >= 12 ? pm : am) : part.value))
+        .join("");
     },
   };
   cache.set(resolved, names);

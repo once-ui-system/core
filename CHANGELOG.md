@@ -15,6 +15,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`labels` on the date components and `Select`.** `DatePicker`, `DateInput`,
+  `DateRangePicker` and `DateRangeInput` take `labels` for the picker's own words:
+  `previousMonth`, `nextMonth`, `backToCalendar`, `hours`, `minutes`, `am`, `pm`, and
+  `month` and `year`, functions that name the month and year buttons from the value
+  they show. `Select` takes `labels={{ search, clear }}` for its search field and clear
+  button. Omitted fields keep the English default, as `Scroller`'s and `StylePanel`'s
+  `labels` do.
+- **`locale` reaches the time picker.** The header time and the AM/PM control are
+  written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
+  `labels.pm` override the words. Without `locale` the time reads as before
+  (`01:14 PM`).
 - **Mobile-ready core (2.3).** Components work on a phone and in a Capacitor app
   without changing how they look on a desktop:
   - **Touch targets.** On a coarse pointer, `Button`, `IconButton`, `ToggleButton`
@@ -41,12 +52,34 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
+  and description ids. The fields are now `{id}-start` and `{id}-end`.
+- **The date picker's month and year buttons were named by their value alone**
+  ("March", "2026"), which does not say what they do. They are now named
+  "Month: March, change month" and "Year: 2026, change year", which `labels.month`
+  and `labels.year` translate.
+
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an
   icon renders a 512 px box. The 2.1.0 benchmark traced most of its lowest-polish pages to
   this. A new `size.rem` gotcha is in every task bundle, `rules.compact.md` shows the
   token string (`width="32"`, 32 px) to write instead, and `validate-ai-code` reports an
   icon, avatar or label box sized with a repeated pixel-like number.
+- **Leaving a breakpoint restores the base value it overrode.** `ClientFlex` and
+  `ClientGrid` cleared each inline value a breakpoint object had written, so
+  `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40rem on the way back up; they now
+  put back whatever inline value the breakpoint wrote over.
+- **A translate prop survives a component's own `transform`.** `TiltFx`, `FlipFx`, `Arrow`
+  and `CursorCard` wrote a transform (tilt, flip, scale, cursor position) that replaced the
+  `translate()` from `translateX`/`translateY`; the two are composed now.
+- **`FadingLettersFx` forwards `ref`** to the `Text` it renders. It typed `ref` and
+  dropped it on React 18.
+- **Breakpoint borders apply.** `m={{ borderLeft: "brand-strong" }}` (and `border`, the
+  other sides, `borderStyle`, `borderWidth`) type-checked, stayed on the server and drew
+  nothing, as no border class has a breakpoint variant. They move the component to the
+  client, which writes the colour, style and width inline at that breakpoint.
+- **`Fade` honours `blur` outside pattern mode.** It blurred at a fixed 0.5rem unless
+  `pattern.display` was on.
 
 ## [2.1.0] — 2026-10-15
 

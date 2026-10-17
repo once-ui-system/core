@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import { CondensedTShirtSizes } from "../types";
 import { getCalendarNames } from "../utils/calendarLocale";
 import {
@@ -23,6 +24,51 @@ import { RevealFx } from "./RevealFx";
 import { Row } from "./Row";
 import { SegmentedControl } from "./SegmentedControl";
 import { Text } from "./Text";
+
+/**
+ * The picker's own words, for a translated interface. Omitted fields keep the
+ * English default; month and weekday names and the time's AM/PM come from
+ * `locale` instead.
+ */
+export interface DatePickerLabels {
+  /** Defaults to `"Previous month"`. */
+  previousMonth?: string;
+  /** Defaults to `"Next month"`. */
+  nextMonth?: string;
+  /**
+   * The month button's accessible name, given the month it shows. Defaults to
+   * `"Month: March, change month"`. Keep the month in it: it is the button's visible text.
+   */
+  month?: (month: string) => string;
+  /**
+   * The year button's accessible name, given the year it shows. Defaults to
+   * `"Year: 2026, change year"`. Keep the year in it: it is the button's visible text.
+   */
+  year?: (year: number) => string;
+  /** The time panel's way back to the days. Defaults to `"Back to calendar"`. */
+  backToCalendar?: string;
+  /** The hour field's name and placeholder. Defaults to `"Hours"`. */
+  hours?: string;
+  /** The minute field's name and placeholder. Defaults to `"Minutes"`. */
+  minutes?: string;
+  /** The morning half of the 12-hour clock. Defaults to the locale's word ("AM" in English). */
+  am?: string;
+  /** The afternoon half of the 12-hour clock. Defaults to the locale's word ("PM" in English). */
+  pm?: string;
+}
+
+const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
+  Pick<DatePickerLabels, "am" | "pm"> = {
+  previousMonth: "Previous month",
+  nextMonth: "Next month",
+  month: (month) => `Month: ${month}, change month`,
+  year: (year) => `Year: ${year}, change year`,
+  backToCalendar: "Back to calendar",
+  hours: "Hours",
+  minutes: "Minutes",
+  am: undefined,
+  pm: undefined,
+};
 
 export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
   value?: Date;
@@ -58,11 +104,13 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   autoFocus?: boolean;
   open?: boolean;
   /**
-   * The locale month and weekday names are shown in, as a BCP 47 tag such as
-   * "de" or "pt-BR". Without it (or with a tag the platform does not accept)
-   * the names are in English, as before.
+   * The locale month and weekday names, and the time picker's time and AM/PM,
+   * are shown in, as a BCP 47 tag such as "de" or "pt-BR". Without it (or
+   * with a tag the platform does not accept) they are in English, as before.
    */
   locale?: string;
+  /** The picker's buttons, fields and names, for a translated interface. */
+  labels?: DatePickerLabels;
 }
 
 /** The days the grid's keys move through: this month's, that can be picked. */
@@ -120,10 +168,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       autoFocus = false,
       open,
       locale,
+      labels,
       ...rest
     },
     ref,
   ) => {
+    const names = mergeLabels(DEFAULT_LABELS, labels);
     const today = new Date();
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
     const [selectedTime, setSelectedTime] = useState<
@@ -300,7 +350,10 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       /** What the column headers are called: "Mo" is what fits, not what to read out. */
       weekdayLabels: dayLabels,
       monthYear,
+      dayPeriods,
+      time: formatTime,
     } = getCalendarNames(locale);
+    const [amLabel, pmLabel] = [names.am ?? dayPeriods[0], names.pm ?? dayPeriods[1]];
     const cellSize = size === "s" ? "32" : size === "m" ? "40" : "48";
     /** The grid's name: the month it shows, which tells two calendars side by side apart. */
     const gridLabel = monthYear(currentMonth, currentYear);
@@ -764,9 +817,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   }
                 }}
                 role="button"
-                aria-label="Back to calendar"
               >
-                Back to calendar
+                {names.backToCalendar}
               </Row>
             </Column>
           ) : (
@@ -776,7 +828,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronLeft"
-                  aria-label="Previous month"
+                  aria-label={names.previousMonth}
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -816,6 +868,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         }}
                         variant="secondary"
                         size="s"
+                        // What the button is for, not only the month it shows.
+                        aria-label={names.month(monthNames[currentMonth])}
                       >
                         <Row vertical="center" gap="4">
                           {monthNames[currentMonth]}
@@ -879,6 +933,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       <Button
                         variant="secondary"
                         size="s"
+                        aria-label={names.year(currentYear)}
                         onClick={(event: React.MouseEvent) => {
                           event.preventDefault();
                           event.stopPropagation();
@@ -940,7 +995,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 </Row>
                 {timePicker && selectedTime && (
                   <Text variant="label-default-s" onBackground="neutral-weak">
-                    {`${convert24to12(selectedTime.hours).toString().padStart(2, "0")}:${selectedTime.minutes.toString().padStart(2, "0")} ${isPM ? "PM" : "AM"}`}
+                    {formatTime(selectedTime.hours, selectedTime.minutes, [amLabel, pmLabel])}
                   </Text>
                 )}
               </Column>
@@ -949,7 +1004,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   variant="tertiary"
                   size={size}
                   icon="chevronRight"
-                  aria-label="Next month"
+                  aria-label={names.nextMonth}
                   onClick={(event: React.MouseEvent) => {
                     event.preventDefault();
                     event.stopPropagation();
@@ -974,11 +1029,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 buttons={[
                   {
                     value: "AM",
-                    label: "AM",
+                    label: amLabel,
                   },
                   {
                     value: "PM",
-                    label: "PM",
+                    label: pmLabel,
                   },
                 ]}
                 value={isPM ? "PM" : "AM"}
@@ -993,7 +1048,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               <Flex fillWidth gap="16" vertical="center" data-scaling="110">
                 <NumberInput
                   id="hours"
-                  placeholder="Hours"
+                  placeholder={names.hours}
                   min={1}
                   max={12}
                   value={selectedTime?.hours ? convert24to12(selectedTime.hours) : 12}
@@ -1002,12 +1057,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       handleTimeChange(value, selectedTime?.minutes ?? 0);
                     }
                   }}
-                  aria-label="Hours"
+                  aria-label={names.hours}
                 />
                 :
                 <NumberInput
                   id="minutes"
-                  placeholder="Minutes"
+                  placeholder={names.minutes}
                   min={0}
                   max={59}
                   padStart={2}
@@ -1017,7 +1072,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                       handleTimeChange(convert24to12(selectedTime?.hours ?? 0), value);
                     }
                   }}
-                  aria-label="Minutes"
+                  aria-label={names.minutes}
                 />
               </Flex>
             </Column>

@@ -12,6 +12,7 @@ import React, {
 import { createPortal } from "react-dom";
 import { cannotHover } from "../internal/pointer";
 import type { Placement } from "../types";
+import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import styles from "./CursorCard.module.scss";
 import { Flex } from "./Flex";
 
@@ -24,7 +25,19 @@ export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
 }
 
 const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
-  ({ trigger, overlay, placement = "bottom-left", className, style, ...flex }, ref) => {
+  (
+    {
+      trigger,
+      overlay,
+      placement = "bottom-left",
+      className,
+      style,
+      translateX,
+      translateY,
+      ...flex
+    },
+    ref,
+  ) => {
     const [isHovering, setIsHovering] = useState(false);
     const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
     const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -102,7 +115,12 @@ const CursorCard = forwardRef<HTMLDivElement, CursorCardProps>(
               className={`${styles.fadeIn} ${className || ""}`}
               style={{
                 isolation: "isolate",
-                transform: `translate(calc(${mousePosition.x}px ${placement.includes("left") ? "- 100%" : placement.includes("right") ? "" : "- 50%"}), calc(${mousePosition.y}px ${placement.includes("top") ? "- 100%" : placement.includes("bottom") ? "" : "- 50%"}))`,
+                // The cursor position, then a translate prop on top of it,
+                // which this transform used to replace.
+                transform: composeTransform(
+                  `translate(calc(${mousePosition.x}px ${placement.includes("left") ? "- 100%" : placement.includes("right") ? "" : "- 50%"}), calc(${mousePosition.y}px ${placement.includes("top") ? "- 100%" : placement.includes("bottom") ? "" : "- 50%"}))`,
+                  translateTransform(translateX, translateY),
+                ),
                 ...style,
               }}
               {...flex}
