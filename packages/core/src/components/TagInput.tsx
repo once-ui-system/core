@@ -73,8 +73,6 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
               <Chip
                 key={index}
                 label={tag}
-                // Chip's `selected` used to default to true; tags keep that look.
-                selected
                 onRemove={() => handleRemoveTag(index)}
                 // The name goes on the button that removes the tag. On the
                 // Chip it named the chip itself, and every remove button was
