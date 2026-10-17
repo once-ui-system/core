@@ -223,3 +223,26 @@ describe("Select labels", () => {
     expect(screen.getByRole("button", { name: "Clear" })).toBeInTheDocument();
   });
 });
+
+describe("DatePicker week start", () => {
+  const headers = () => screen.getAllByRole("columnheader").map((h) => h.getAttribute("aria-label"));
+  const leadingDays = (g: HTMLElement) =>
+    Array.from(g.querySelectorAll('[role="row"]')[1].querySelectorAll("button[disabled]")).length;
+
+  it("starts on Sunday without a locale, as it always has", async () => {
+    render(<DatePicker value={oct(17)} />, { wrapper });
+    const g = await grid();
+    expect(headers()[0]).toBe("Sunday");
+    // 1 October 2026 is a Thursday.
+    expect(leadingDays(g)).toBe(4);
+  });
+
+  it("starts on the locale's first day of the week", async () => {
+    render(<DatePicker value={oct(17)} locale="de" />, { wrapper });
+    const g = await grid();
+    expect(headers()[0]).toBe("Montag");
+    expect(headers()[6]).toBe("Sonntag");
+    expect(leadingDays(g)).toBe(3);
+    expect(getCalendarNames("en-US").firstDayOfWeek).toBe(0);
+  });
+});
