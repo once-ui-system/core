@@ -20,7 +20,8 @@
   "dual": "boolean",
   "size": "CondensedTShirtSizes = m",
   "autoFocus": "boolean",
-  "locale": "string"
+  "locale": "string",
+  "labels": "DatePickerLabels"
  },
  "tags": [
   "form",
@@ -151,6 +152,17 @@
    "m",
    "s"
   ],
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
+  },
   "DateRange": {
    "startDate": "!Date | undefined",
    "endDate": "!Date | undefined"

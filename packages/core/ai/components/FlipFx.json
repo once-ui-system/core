@@ -13,11 +13,11 @@
   "StyleProps"
  ],
  "props": {
-  "flipDirection": "\"horizontal\" | \"vertical\"",
-  "timing": "number",
+  "flipDirection": "\"horizontal\" | \"vertical\" = horizontal",
+  "timing": "number = 2000",
   "flipped": "boolean",
   "onFlip": "(flipped: boolean) => void",
-  "disableClickFlip": "boolean",
+  "disableClickFlip": "boolean = false",
   "autoFlipInterval": "number",
   "front": "!React.ReactNode",
   "back": "!React.ReactNode",

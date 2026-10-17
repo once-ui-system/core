@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.1.0",
- "generated": "2026-10-16",
+ "version": "2.2.0-rc.0",
+ "generated": "2026-10-17",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -667,6 +667,17 @@
    "presets": "PresetsConfig",
    "selector": "boolean",
    "onChange": "(range: DateRange) => void"
+  },
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
   },
   "DateRange": {
    "startDate": "!Date | undefined",
@@ -1344,6 +1355,10 @@
    "movable": "boolean",
    "resizable": "boolean",
    "onAdd": "(time: number) => void"
+  },
+  "SelectLabels": {
+   "search": "string",
+   "clear": "string"
   },
   "SelectOptionType": "Omit<OptionProps, \"selected\">",
   "SeriesConfig": {
@@ -2512,7 +2527,8 @@
     "timePicker": "boolean = false",
     "minDate": "Date",
     "maxDate": "Date",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DatePicker": {
@@ -2549,7 +2565,8 @@
     "onHover": "(date: Date | null) => void",
     "autoFocus": "boolean = false",
     "open": "boolean",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DateRangeInput": {
@@ -2566,7 +2583,8 @@
     "minHeight": "number",
     "className": "string",
     "style": "React.CSSProperties",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DateRangePicker": {
@@ -2590,7 +2608,8 @@
     "dual": "boolean",
     "size": "CondensedTShirtSizes = m",
     "autoFocus": "boolean",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DialogProvider": {
@@ -2864,11 +2883,11 @@
     "StyleProps"
    ],
    "props": {
-    "flipDirection": "\"horizontal\" | \"vertical\"",
-    "timing": "number",
+    "flipDirection": "\"horizontal\" | \"vertical\" = horizontal",
+    "timing": "number = 2000",
     "flipped": "boolean",
     "onFlip": "(flipped: boolean) => void",
-    "disableClickFlip": "boolean",
+    "disableClickFlip": "boolean = false",
     "autoFlipInterval": "number",
     "front": "!React.ReactNode",
     "back": "!React.ReactNode",
@@ -3932,7 +3951,8 @@
     "className": "string",
     "style": "React.CSSProperties",
     "fillWidth": "boolean = true",
-    "multiple": "boolean = false"
+    "multiple": "boolean = false",
+    "labels": "SelectLabels"
    }
   },
   "Setting": {

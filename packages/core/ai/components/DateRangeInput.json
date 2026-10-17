@@ -13,7 +13,8 @@
   "minHeight": "number",
   "className": "string",
   "style": "React.CSSProperties",
-  "locale": "string"
+  "locale": "string",
+  "labels": "DatePickerLabels"
  },
  "tags": [
   "form",
@@ -25,6 +26,17 @@
  ],
  "mixinsRef": [],
  "types": {
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
+  },
   "DateRange": {
    "startDate": "!Date | undefined",
    "endDate": "!Date | undefined"

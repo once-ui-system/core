@@ -1,6 +1,6 @@
 # Once UI — compact codegen rules
 
-Load with the task's bundle, `@once-ui-system/core/ai/bundles/{intent}.json`: one file with the task, every component slice it names, their types and its gotchas. For an app shell, a sidebar nav or an editor, read `ai/layouts.md` first — those are the shapes that are hard to get right from props alone. For production-quality composition, read matching Pro blocks from `examples/blocks/manifest.json`. Fetch a slice from `components/` only for a component the bundle does not have.
+Every task bundle, `ai/bundles/{id}.md`, already carries these rules with its components, types, gotchas and gold example, so with a bundle you don't need this file. Read it when no bundle fits, together with `catalog.json` and the `components/` slices you need. For an app shell, a sidebar nav or an editor, `ai/layouts.md` has the shapes that are hard to get right from props alone.
 
 Read everything you need in one step, before writing: every file you read is sent again on every later turn, so a dozen small reads cost far more than one or two large ones. Never open `spec.json` — it is the full machine spec for tooling, and the bundles, slices, `tokens.json` and `functions.json` already hold everything in it.
 
@@ -15,7 +15,7 @@ Read everything you need in one step, before writing: every file you read is sen
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `width="32" height="32"` (32 px) | `width={32} height={32}` (a number is rem: 512 px) |
+| `width="32" height="32"` (32 px, a spacing token); `height={20}` (320 px: past `"160"` there is no token, use rem) | `width={32} height={32}` (a number is rem: 512 px), `height="320"` (not a token) |
 | `border` | `border="neutral-alpha-weak"` |
 | `<Logo wordmark={{ light, dark }} />` | a `<Logo dark>` and a `<Logo light>` |
 
