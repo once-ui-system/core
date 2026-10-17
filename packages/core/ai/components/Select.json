@@ -15,7 +15,8 @@
   "className": "string",
   "style": "React.CSSProperties",
   "fillWidth": "boolean = true",
-  "multiple": "boolean = false"
+  "multiple": "boolean = false",
+  "labels": "SelectLabels"
  },
  "tags": [
   "form",
@@ -43,6 +44,10 @@
    "left-start",
    "left-end"
   ],
+  "SelectLabels": {
+   "search": "string",
+   "clear": "string"
+  },
   "SelectOptionType": "Omit<OptionProps, \"selected\">"
  }
 }
