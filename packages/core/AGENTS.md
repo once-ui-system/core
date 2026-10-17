@@ -1,55 +1,39 @@
 # @once-ui-system/core — agent harness
 
-This package ships an agent-first codegen harness under `ai/`. Use it when **writing Once UI code**, not full MDX documentation pages.
+This package ships an agent-first codegen harness under `ai/`, next to this file. Use it when **writing Once UI code**, not full MDX documentation pages. Paths below are relative to this file (in an app: `node_modules/@once-ui-system/core/`).
 
-## Entry point
+## Writing a page or feature
 
-```
-@once-ui-system/core/ai/manifest.json
-```
+Every file you read is sent again on every later turn, so read what you need in one step, then write.
 
-Or from disk:
+1. Pick the bundle below closest to what you are building and read it, together with any project files you need, in a single step. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Then write the code.
+2. Need a component the bundle does not list? Read its `ai/components/<Name>.json`, all of them in one step. `ai/catalog.json` names every component with its purpose.
+3. Nothing below fits? Read `ai/rules.compact.md`, `ai/catalog.json` and the `ai/components/<Name>.json` slices you need, in one step.
 
-```
-node_modules/@once-ui-system/core/ai/manifest.json
-```
+Never open `ai/spec.json`: it is the full machine spec, for tooling.
 
-## Bootstrap workflow
+<!-- tasks:start -->
+| Bundle | For |
+|---|---|
+| `ai/bundles/marketing-hero.md` | Marketing hero: Headline with text effect, CTA pair, social proof logos, background effect |
+| `ai/bundles/pricing.md` | Pricing page: Three tiers, highlighted middle tier, feature comparison table, FAQ accordion |
+| `ai/bundles/settings.md` | Settings page: Vertical section tabs, profile form, settings rows with one control each, grouped sub-settings, danger zone |
+| `ai/bundles/dashboard.md` | Analytics dashboard: KPI stat cards, charts area, recent-activity list |
+| `ai/bundles/chat.md` | Chat UI: Message list with avatars, streaming indicator, input bar with emoji picker |
+| `ai/bundles/auth.md` | Auth flow: Sign-up / login with social auth, email form, stacked dialog for OTP |
+| `ai/bundles/roadmap.md` | Product roadmap: Kanban-style roadmap with status columns and task cards |
+| `ai/bundles/list-page.md` | List / table page: A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state |
+| `ai/bundles/editor.md` | Editor shell: A toolbar, a resizable two-pane split (layers and canvas) and a timeline spanning both — video editor, page builder, diff view |
+| `ai/bundles/docs-page.md` | Docs or blog article: An MDX article: breadcrumb trail, title and summary, Markdown rendered through the /mdx component map, and an on-page heading nav |
+<!-- tasks:end -->
 
-1. Read `ai/manifest.json`
-2. Load bootstrap files: `ai/rules.compact.md` + `ai/catalog.json` (about 30KB together)
-3. Match intent via `ai/tasks/index.json`, then read that task's bundle, e.g. `ai/bundles/pricing.json`: the task with every component slice, type and gotcha it names, in one file
-4. Fetch a slice from `ai/components/*.json` only for a component the bundle does not have. Read what you need in one step; never open `spec.json` (it is for tooling)
-5. Read the gold example referenced by the task; for production fidelity, read Pro blocks from `ai/examples/blocks/manifest.json`
-6. Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`
+Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`. For production-fidelity composition, Pro blocks are listed in `ai/examples/blocks/manifest.json`; app shells, sidebars and editors are in `ai/layouts.md`.
 
-## npm exports
+## Imports
 
-```tsx
-// Readable paths (version-pinned to your install)
-import manifest from '@once-ui-system/core/ai/manifest.json';
-```
+- Most things come from `@once-ui-system/core`. Charts come from `/data`, `CodeBlock` from `/code`, `MediaUpload` from `/media`, the MDX map from `/mdx`, `defineConfig` from `/config`; `ai/manifest.json` → `imports` lists every entry point with its exports.
+- In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next`: the root export renders links and images as plain `<a>` and `<img>`. The OG route handlers come from there too.
 
-```bash
-# One-time project setup (writes AGENTS.md, CLAUDE.md and a Cursor rule in the consumer app)
-npx once-ui-init-agent
-```
+## Setup and remote fallback
 
-## Remote fallback
-
-If you cannot read `node_modules`, use the docs host (may not match your installed version exactly):
-
-- https://docs.once-ui.com/ai/manifest.json
-- https://docs.once-ui.com/ai/rules.compact.md
-- https://docs.once-ui.com/once-ui/ai-coding
-
-## Key rules (summary)
-
-- Use `Column` / `Row`, not `Flex` unless direction changes at breakpoints
-- Use `fill`, not `fillWidth fillHeight`; use `center`, not `horizontal="center" vertical="center"`
-- Static panels: `Column background="surface" border radius="l" padding="24"`
-- `Card` is interactive only (`href` or `onClick`)
-- In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next` — the root export renders links and images as plain `<a>` and `<img>`; the OG route handlers (`createOgFetchRoute`, `createOgProxyRoute`) come from there too
-- Not everything is on the root: charts from `/data`, `CodeBlock` from `/code`, `MediaUpload` from `/media`, the MDX map (`mdxComponents`, `createMdxComponents`) from `/mdx`, `defineConfig` from `/config`. `ai/manifest.json` → `imports` lists every entry point with its exports
-
-Full rules: `@once-ui-system/core/ai/rules.compact.md`
+`npx once-ui-init-agent` writes AGENTS.md, CLAUDE.md and a Cursor rule into a consumer app. Without `node_modules`, use https://docs.once-ui.com/ai/manifest.json (may not match your installed version exactly).

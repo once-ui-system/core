@@ -1060,6 +1060,10 @@ function emitArtifacts(spec, version, entryTypes) {
   fs.rmSync(bundlesDir, { recursive: true, force: true });
   fs.mkdirSync(bundlesDir, { recursive: true });
   const gotchas = JSON.parse(fs.readFileSync(path.join(OUT_DIR, "gotchas.json"), "utf8"));
+  // The rules ride inside every Markdown bundle, minus their opening
+  // paragraphs about which files to load, which a bundle reader has done.
+  const rulesCompact = fs.readFileSync(path.join(OUT_DIR, "rules.compact.md"), "utf8");
+  const rulesBody = rulesCompact.slice(rulesCompact.indexOf("\n## ") + 1);
   const taskIndex = JSON.parse(fs.readFileSync(path.join(OUT_DIR, "tasks/index.json"), "utf8"));
   for (const { id, file } of taskIndex.tasks) {
     const task = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), "utf8"));
@@ -1089,7 +1093,12 @@ function emitArtifacts(spec, version, entryTypes) {
       ),
     };
     fs.writeFileSync(path.join(bundlesDir, `${id}.json`), JSON.stringify(bundle));
+    fs.writeFileSync(
+      path.join(bundlesDir, `${id}.md`),
+      bundleMarkdown(task, slices, gotchas, typesFor, rulesBody),
+    );
   }
+  writeAgentsTaskTable(taskIndex);
 
   // Which specifier each export comes from. The rules say it in prose; this
   // is the same table with the export lists generated, so a new subpath or
@@ -1134,16 +1143,210 @@ function emitArtifacts(spec, version, entryTypes) {
       blocks: "examples/blocks/manifest.json",
       components: "components/",
     },
+    // Without a task bundle, an agent starts from the rules and the catalog.
     bootstrap: ["rules.compact.md", "catalog.json"],
     resolve: "tasks/index.json",
-    // The task's bundle has the task plus every slice, type and gotcha it
-    // names, so one read replaces the task file and its slices.
-    bundle: "bundles/{id}.json",
+    // The task's bundle has the rules, the task and every slice, type and
+    // gotcha it names, and the gold example, so one read replaces the
+    // bootstrap, the task file, its slices and the example. The JSON copy is
+    // for tooling.
+    bundle: "bundles/{id}.md",
+    bundleJson: "bundles/{id}.json",
   };
   fs.writeFileSync(path.join(OUT_DIR, "manifest.json"), JSON.stringify(manifest, null, 1));
 
   syncDocsPublic();
   console.log(`AI artifacts: catalog + ${Object.keys(spec.components).length} component slices`);
+}
+
+// Components nearly every page reaches for whatever its task. In the 2.1.0
+// benchmark, 116 of 200 slice reads after a bundle were for a component the
+// bundle lacked, most of them these; each read added a turn that re-sent
+// everything read so far.
+const COMMON_COMPONENTS = [
+  "Column",
+  "Row",
+  "Grid",
+  "Heading",
+  "Text",
+  "Button",
+  "IconButton",
+  "Icon",
+  "Input",
+  "Textarea",
+  "Tag",
+  "Badge",
+  "Avatar",
+  "Dialog",
+  "Skeleton",
+  "VisuallyHidden",
+];
+
+// `!T` marks a required prop in the spec; Markdown bundles write TypeScript.
+const propLine = (name, type) =>
+  type.startsWith("!") ? `- ${name}: ${type.slice(1)}` : `- ${name}?: ${type}`;
+
+// A member that is already a type expression (`string & {}`, a template
+// literal) stays as it is; anything else is a literal value.
+const literal = (v) => (/^["`]|[ &|(]/.test(v) ? v : JSON.stringify(v));
+
+// Token unions like TextVariant are every combination of a few parts
+// ("label-default-xl", "label-default-l", …): 2 KB spelled out, one line as
+// a template literal. Values are grouped by how many dash-separated parts
+// they have, and by first part, and a group becomes a template only when it
+// is the full product of its parts, so the type stays exact.
+function compressUnion(values) {
+  const product = (group) => {
+    const parts = group[0]
+      .split("-")
+      .map((_, i) => [...new Set(group.map((v) => v.split("-")[i]))]);
+    const size = parts.reduce((n, p) => n * p.length, 1);
+    if (size !== group.length || parts.every((p) => p.length === 1)) return null;
+    return `\`${parts
+      .map((p) => (p.length === 1 ? p[0] : `\${${p.map((x) => JSON.stringify(x)).join(" | ")}}`))
+      .join("-")}\``;
+  };
+  const plain = values.filter((v) => !/^[a-z0-9]+(-[a-z0-9]+)+$/.test(v));
+  const dashed = values.filter((v) => !plain.includes(v));
+  const out = plain.map(literal);
+  const byCount = Map.groupBy(dashed, (v) => v.split("-").length);
+  for (const group of byCount.values()) {
+    const whole = product(group);
+    if (whole) {
+      out.push(whole);
+      continue;
+    }
+    for (const sub of Map.groupBy(group, (v) => v.split("-")[0]).values()) {
+      out.push(product(sub) ?? sub.map(literal).join(" | "));
+    }
+  }
+  return out.join(" | ");
+}
+
+const typeLine = (name, type) => {
+  if (Array.isArray(type)) return `type ${name} = ${compressUnion(type)}`;
+  if (typeof type === "string") return `type ${name} = ${type}`;
+  const fields = Object.entries(type).map(([key, value]) => {
+    const required = value.startsWith("!");
+    const field = /^[A-Za-z_$][\w$]*$/.test(key) || key.startsWith("[") ? key : JSON.stringify(key);
+    return `${field}${required ? "" : "?"}: ${required ? value.slice(1) : value}`;
+  });
+  return `type ${name} = { ${fields.join("; ")} }`;
+};
+
+// The task as one Markdown file an agent reads once and then writes from:
+// the rules, every component it names plus the common ones, their mixins
+// and types, the gotchas, the quality bar and the gold example. In the 2.1.0
+// benchmark an agent made 10 calls a run, and from the bundle on each call
+// re-sent 20k–60k tokens of docs to fetch one or two more files; that tail,
+// not any one file, was most of the 3.7x total over shadcn/ui. JSON keys and
+// escaped quotes cost tokens too, and tags or pairings help no one writing.
+function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody) {
+  const names = [...new Set([...task.components, ...COMMON_COMPONENTS])].filter((n) => slices[n]);
+  const mixins = {};
+  const types = {};
+  const sections = [];
+  for (const name of names) {
+    const slice = slices[name];
+    let head = `### ${name}`;
+    if (slice.importFrom) head += ` (from \`${slice.importFrom}\`)`;
+    const lines = [head];
+    if (slice.extends?.length) {
+      const preset = slice.preset
+        ? ` with ${Object.entries(slice.preset)
+            .map(([k, v]) => `${k}="${v}"`)
+            .join(" ")}`
+        : "";
+      lines.push(`Extends ${slice.extends.join(", ")}${preset}.`);
+    }
+    if (slice.mixins?.length) lines.push(`Mixins: ${slice.mixins.join(", ")}.`);
+    if (slice.preferOver) lines.push(`Use instead of ${slice.preferOver}.`);
+    if (slice.avoid) lines.push(`Avoid: ${slice.avoid}`);
+    if (slice.call) lines.push(`Call: \`${slice.call}\``);
+    for (const [prop, type] of Object.entries(slice.props ?? {})) lines.push(propLine(prop, type));
+    if (slice.returns) lines.push(`Returns: ${JSON.stringify(slice.returns)}`);
+    sections.push(lines.join("\n"));
+    Object.assign(mixins, slice.resolvedMixins);
+    Object.assign(types, slice.types);
+  }
+  Object.assign(types, typesFor(mixins));
+
+  const nameSet = new Set(names);
+  const gotchaIds = [
+    ...new Set([
+      ...(task.gotchas ?? []),
+      ...Object.keys(gotchas).filter((id) => gotchas[id].components?.some((c) => nameSet.has(c))),
+    ]),
+  ].filter((id) => gotchas[id]);
+
+  let example = "";
+  if (task.example) {
+    const examplePath = path.join(OUT_DIR, task.example);
+    if (fs.existsSync(examplePath)) example = fs.readFileSync(examplePath, "utf8").trim();
+  }
+
+  const out = [
+    `# ${task.title}`,
+    "",
+    task.description,
+    "",
+    "This file is complete for this task: the rules, the props of every component below, their mixins and types, the gotchas, the quality bar and a gold example. Write the page from it. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
+    "",
+    rulesBody.trim(),
+    "",
+    "## Components",
+    "",
+    "Props marked `?` are optional; `= x` is the default. A component's mixins add the props listed under Mixins.",
+    "",
+    sections.join("\n\n"),
+    "",
+    "## Mixins",
+    "",
+    Object.entries(mixins)
+      .map(([name, props]) =>
+        [`### ${name}`, ...Object.entries(props).map(([prop, type]) => propLine(prop, type))].join(
+          "\n",
+        ),
+      )
+      .join("\n\n"),
+    "",
+    "## Types",
+    "",
+    "```ts",
+    ...Object.keys(types)
+      .sort()
+      .map((name) => typeLine(name, types[name])),
+    "```",
+    "",
+    "## Gotchas",
+    "",
+    ...gotchaIds.map((id) => `- ${gotchas[id].rule}`),
+  ];
+  if (task.quality && Object.keys(task.quality).length) {
+    out.push("", "## Quality bar", "", ...Object.values(task.quality).map((q) => `- ${q}`));
+  }
+  if (example) {
+    out.push("", `## Gold example (\`${task.example}\`)`, "", "```tsx", example, "```");
+  }
+  return `${out.join("\n")}\n`;
+}
+
+// AGENTS.md routes an agent straight to its task's bundle, so the task table
+// lives in it, between markers, generated from tasks/.
+function writeAgentsTaskTable(taskIndex) {
+  const agentsPath = path.join(ROOT, "AGENTS.md");
+  if (!fs.existsSync(agentsPath)) return;
+  const start = "<!-- tasks:start -->";
+  const end = "<!-- tasks:end -->";
+  const text = fs.readFileSync(agentsPath, "utf8");
+  if (!text.includes(start) || !text.includes(end)) return;
+  const rows = taskIndex.tasks.map(({ id, file }) => {
+    const task = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), "utf8"));
+    return `| \`ai/bundles/${id}.md\` | ${task.title}: ${task.description} |`;
+  });
+  const table = ["| Bundle | For |", "|---|---|", ...rows].join("\n");
+  const next = `${text.slice(0, text.indexOf(start) + start.length)}\n${table}\n${text.slice(text.indexOf(end))}`;
+  if (next !== text) fs.writeFileSync(agentsPath, next);
 }
 
 function syncDocsPublic() {
