@@ -125,7 +125,7 @@ export function SettingsExample() {
               <Switch
                 checked={updates}
                 onToggle={() => setUpdates(!updates)}
-                ariaLabel="Product updates"
+                aria-label="Product updates"
               />
             </Setting>
             <SettingGroup
@@ -135,7 +135,7 @@ export function SettingsExample() {
                 <Switch
                   checked={digest}
                   onToggle={() => setDigest(!digest)}
-                  ariaLabel="Weekly digest"
+                  aria-label="Weekly digest"
                 />
               }
               open={digest}
