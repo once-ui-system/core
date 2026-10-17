@@ -20,10 +20,16 @@
 .message {
   position: relative;
 
-  &:hover .actions,
   &:focus-within .actions {
     opacity: 1;
     pointer-events: auto;
+  }
+
+  @media (hover: hover) {
+    &:hover .actions {
+      opacity: 1;
+      pointer-events: auto;
+    }
   }
 }
 
