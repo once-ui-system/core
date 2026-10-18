@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useId, useRef, useState } from "react";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled";
 import { assignRefs, retarget } from "../internal/toggleInput";
 import { useControlLabel } from "./ControlLabelContext";
 import { Flex } from "./Flex";
@@ -44,7 +45,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
       onToggle,
       ariaLabel = "Toggle switch",
       "aria-label": nativeAriaLabel,
-      disabled,
+      disabled: disabledProp,
       name,
       value,
       label,
@@ -58,6 +59,7 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     },
     ref,
   ) => {
+    const disabled = useFieldsetDisabled(disabledProp);
     const labelId = useId();
     // Inside a Setting row, the row's label names a switch that has none.
     const outerLabelId = useControlLabel();

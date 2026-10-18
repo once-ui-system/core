@@ -133,6 +133,9 @@ that view's padding: the native side of core's `--safe-area-*` tokens. Without
   `unoptimized`. Without an `aspectRatio` the box is `height` rem tall (or the
   `80` step) until React Native reports the image's size.
 - **Tabs** have no arrow-key focus, so `activation` is accepted and ignored.
+- **Core 3.0 names:** `Accordion` also takes `defaultOpen` and `onOpenChange`,
+  `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code
+  written for 3.0 works here too.
 - **List** draws its own bullets and numbers, since React Native has no list markers.
 - **Safe areas:** read from `ThemeProvider`'s `insets` rather than CSS `env()`;
   see [Safe areas](#safe-areas).

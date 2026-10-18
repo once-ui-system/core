@@ -4,6 +4,7 @@ import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { prefersReducedMotionNow } from "../internal/reducedMotion";
 import { Text } from "./Text";
+import { VisuallyHidden } from "./VisuallyHidden";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "children"> {
   words: string | string[];
@@ -135,8 +136,14 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
     return (
       <Text {...text} ref={ref}>
         {children}
-        {displayText}
-        {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
+        {/* The words are typed and erased letter by letter, which a screen
+            reader would follow one fragment at a time; it reads them whole,
+            and the cursor not at all. */}
+        <VisuallyHidden>{(Array.isArray(words) ? words : [words]).join(", ")}</VisuallyHidden>
+        <span aria-hidden="true">
+          {displayText}
+          {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
+        </span>
       </Text>
     );
   },

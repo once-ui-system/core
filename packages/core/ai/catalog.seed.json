@@ -586,10 +586,15 @@
     "avoid": "Ordinary dialogs and confirmations — use Dialog",
     "pairsWith": ["Column"]
   },
+  "Nav": {
+    "purpose": "Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["NavItem", "NavGroup", "NavSection"]
+  },
   "NavGroup": {
     "purpose": "Collapsible group of NavItems in a sidebar, indented behind a rail",
     "tags": ["navigation"],
-    "pairsWith": ["NavItem", "Column"]
+    "pairsWith": ["NavItem", "Nav"]
   },
   "NavIcon": {
     "purpose": "Hamburger button that toggles to a close icon, for opening mobile navigation",
@@ -599,7 +604,12 @@
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],
-    "pairsWith": ["NavGroup", "Column"]
+    "pairsWith": ["Nav", "NavGroup"]
+  },
+  "NavSection": {
+    "purpose": "Titled block of sidebar rows with an optional heading action, such as Projects with an add button",
+    "tags": ["navigation"],
+    "pairsWith": ["Nav", "NavItem"]
   },
   "NextAdapterProvider": {
     "purpose": "Installs the next/link and next/image adapters alone, for an app that composes its own LayoutProvider",

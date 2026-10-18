@@ -66,6 +66,7 @@ const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) =
  * and choosing never fight over focus.
  */
 const KbarSearchInput: React.FC<{
+  id: string;
   placeholder: string;
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -76,6 +77,7 @@ const KbarSearchInput: React.FC<{
   listboxId?: string;
   activeOptionId?: string;
 }> = ({
+  id,
   placeholder,
   searchQuery,
   onSearchChange,
@@ -86,7 +88,7 @@ const KbarSearchInput: React.FC<{
   activeOptionId,
 }) => (
   <Input
-    id="kbar-search"
+    id={id}
     placeholder={placeholder}
     aria-label={placeholder}
     role="combobox"
@@ -371,6 +373,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         >
           <Row fillWidth padding="8">
             <KbarSearchInput
+              id={`${baseId}-search`}
               placeholder={placeholder}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}

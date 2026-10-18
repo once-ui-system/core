@@ -7,7 +7,9 @@ import type { RefComponent, ViewRef } from "./refs";
 
 export interface StatusIndicatorProps extends FlexProps {
   size?: CondensedTShirtSizes;
-  color: Schemes | "gray";
+  /** Core 3.0's name for `color`. */
+  scheme?: Schemes | "gray";
+  color?: Schemes | "gray";
   /** Read out by screen readers; defaults to `"<color> status indicator"`, as in core. */
   ariaLabel?: string;
 }
@@ -19,10 +21,8 @@ const SIZES = { s: "4", m: "8", l: "16" } as const;
 export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forwardRef<
   ViewRef,
   StatusIndicatorProps
->(function StatusIndicator(
-  { size = "m", color = "blue", ariaLabel = `${color} status indicator`, ...props },
-  ref,
-) {
+>(function StatusIndicator({ size = "m", scheme, color: colorProp, ariaLabel, ...props }, ref) {
+  const color = scheme ?? colorProp ?? "blue";
   const theme = useTheme();
   const { style, rest, userStyle, hidden } = flexStyle(theme, { radius: "full", ...props });
   if (hidden) return null;
@@ -31,7 +31,7 @@ export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forw
     <View
       ref={ref}
       accessibilityRole="image"
-      aria-label={ariaLabel}
+      aria-label={ariaLabel ?? `${color} status indicator`}
       {...rest}
       style={[
         style,

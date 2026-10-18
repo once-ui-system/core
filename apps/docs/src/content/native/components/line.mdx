@@ -1,0 +1,95 @@
+---
+title: "Line"
+summary: "A 1 point divider for React Native layouts, horizontal or vertical."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/line.mdx"
+github: "packages/native/src/components/Line.tsx"
+navLabel: "Line"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Line` draws a 1 point divider in `neutral-alpha-medium`. It is horizontal and fills its parent's width by default. See the [web Line page](/components/line).
+
+## Horizontal
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Line, Text } from "@once-ui-system/native";
+
+export function Section() {
+  return (
+    <Column gap="12" fillWidth>
+      <Text>Account</Text>
+      <Line />
+      <Text>Notifications</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Section.tsx"
+  }
+]} />
+
+## Vertical
+
+`vert` makes the line vertical. It fills the height of its parent, so give the row a height or content to measure against.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Line, Row, Text } from "@once-ui-system/native";
+
+export function Stats() {
+  return (
+    <Row gap="16" height="40" vertical="center">
+      <Text>7 stamps</Text>
+      <Line vert />
+      <Text>2 rewards</Text>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Stats.tsx"
+  }
+]} />
+
+## Colour and spacing
+
+`background` takes any colour token. `Line` has no spacing props: set the space with the parent's `gap`, or pass a `style`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Line, Text } from "@once-ui-system/native";
+
+export function Divider() {
+  return (
+    <Column fillWidth>
+      <Text>Above</Text>
+      <Line background="brand-alpha-strong" style={{ marginVertical: 16 }} />
+      <Text>Below</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Divider.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **Fewer props.** The native `Line` takes only `vert`, `background` and `style`. It has no spacing, size or `Flex` props, so set its spacing on the parent or in `style`.
+- **No accessibility role.** It is a plain view, so screen readers pass over it.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `vert` | `boolean` | | Vertical, filling the parent's height. |
+| `background` | `Colors` | `"neutral-alpha-medium"` | Line colour token. |
+| `style` | `ViewStyle` | | Applied after the line's own style. |

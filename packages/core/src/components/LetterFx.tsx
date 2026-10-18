@@ -4,6 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { prefersReducedMotionNow } from "../internal/reducedMotion";
+import { VisuallyHidden } from "./VisuallyHidden";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
@@ -150,7 +151,18 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
         style={style}
         onMouseOver={trigger === "hover" ? eventHandler : undefined}
       >
-        {typeof children === "string" ? text : children}
+        {/* While it scrambles, a screen reader gets the real words once
+            instead of every random frame. At rest the text is just text. */}
+        {typeof children !== "string" ? (
+          children
+        ) : inProgress ? (
+          <>
+            <VisuallyHidden>{originalText.current}</VisuallyHidden>
+            <span aria-hidden="true">{text}</span>
+          </>
+        ) : (
+          text
+        )}
       </span>
     );
   },

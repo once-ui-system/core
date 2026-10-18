@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useRangeFromToday } from "./useNow";
 import { DateRangeInput, DateRange, Flex, Column } from "@once-ui-system/core";
 
 // Basic DateRangeInput example with managed state
 export function BasicDateRangeInputExample() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 7))
-  });
+  const [dateRange, setDateRange] = useRangeFromToday(7);
   
   const handleDateRangeChange = (newRange: DateRange) => {
     setDateRange(newRange);
@@ -29,10 +27,7 @@ export function BasicDateRangeInputExample() {
 
 // DateRangeInput with custom labels
 export function CustomLabelDateRangeInputExample() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 14))
-  });
+  const [dateRange, setDateRange] = useRangeFromToday(14);
   
   const handleDateRangeChange = (newRange: DateRange) => {
     setDateRange(newRange);

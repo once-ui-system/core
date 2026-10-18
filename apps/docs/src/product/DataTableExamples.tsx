@@ -80,7 +80,7 @@ export function DataTableSelectionExample() {
         </Button>
       </Row>
       <DataTable
-        aria-label="Invoices"
+        aria-label="Selectable invoices"
         columns={columns}
         rows={INVOICES}
         getRowId={(invoice) => invoice.id}
@@ -137,7 +137,7 @@ export function DataTableServerExample() {
 
   return (
     <DataTable
-      aria-label="Invoices"
+      aria-label="Server-paginated invoices"
       columns={columns}
       rows={data.rows}
       count={data.count}

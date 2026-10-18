@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.2.0",
- "generated": "2026-10-17",
+ "generated": "2026-10-18",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -640,6 +640,16 @@
    "`${number}vw`",
    "`calc(${string})`"
   ],
+  "CursorPlacement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ],
   "curveType": [
    "step",
    "linear",
@@ -1104,8 +1114,8 @@
    "id": "!string",
    "name": "!string",
    "section": "!string",
-   "shortcut": "!string[]",
-   "keywords": "!string",
+   "shortcut": "string[]",
+   "keywords": "string",
    "href": "string",
    "perform": "() => void",
    "icon": "IconName",
@@ -1182,10 +1192,20 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
+  "NavDensity": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NavigationLayout": [
    "grid",
    "row",
    "column"
+  ],
+  "NavVariant": [
+   "solid",
+   "subtle",
+   "minimal"
   ],
   "NeutralColor": [
    "sand",
@@ -2515,7 +2535,7 @@
    "props": {
     "trigger": "ReactNode",
     "overlay": "ReactNode",
-    "placement": "Placement = bottom-left",
+    "placement": "CursorPlacement = bottom-left",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -2948,7 +2968,9 @@
     "l": "FlexBreakpointProps",
     "m": "FlexBreakpointProps",
     "s": "FlexBreakpointProps",
-    "xs": "FlexBreakpointProps"
+    "xs": "FlexBreakpointProps",
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
   },
   "FlipFx": {
@@ -3063,7 +3085,9 @@
     "l": "GridBreakpointProps",
     "m": "GridBreakpointProps",
     "s": "GridBreakpointProps",
-    "xs": "GridBreakpointProps"
+    "xs": "GridBreakpointProps",
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
   },
   "Heading": {
@@ -3274,7 +3298,7 @@
     "description": "React.ReactNode",
     "disabled": "boolean",
     "iconButtonProps": "IconButtonProps",
-    "onClick": "!() => void",
+    "onClick": "() => void",
     "className": "string",
     "id": "string",
     "labelId": "string",
@@ -3325,7 +3349,7 @@
     "children": "!ReactNode",
     "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
     "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
-    "charset": "string[] = defaultCharset",
+    "charset": "string | string[] = defaultCharset",
     "onTrigger": "(triggerFn: () => void) => void",
     "className": "string",
     "style": "React.CSSProperties"
@@ -3542,6 +3566,45 @@
     "title": "!React.ReactNode",
     "open": "!boolean",
     "onClose": "!() => void"
+   }
+  },
+  "Nav": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "density": "NavDensity = normal",
+    "variant": "NavVariant = solid",
+    "rail": "boolean = true"
+   }
+  },
+  "NavSection": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode",
+    "action": "ReactNode"
    }
   },
   "NavGroup": {
@@ -4031,7 +4094,7 @@
    ],
    "props": {
     "buttons": "!ButtonOption[]",
-    "onChange": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+    "onChange": "(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
     "defaultValue": "string",
     "fillWidth": "boolean = true",
     "value": "string",
@@ -4048,7 +4111,7 @@
    ],
    "props": {
     "options": "!SelectOptionType[]",
-    "value": "string | string[] = \"\"",
+    "value": "string | string[]",
     "emptyState": "ReactNode = No results",
     "onSelect": "(value: string | string[]) => void",
     "placement": "Placement",
@@ -4157,7 +4220,7 @@
     "StyleProps"
    ],
    "props": {
-    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
     "style": "React.CSSProperties",
@@ -4254,7 +4317,7 @@
    ],
    "props": {
     "size": "CondensedTShirtSizes = m",
-    "color": "!\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+    "color": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
     "ariaLabel": "string = `${color} status indicator`",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4599,7 +4662,8 @@
     "onClose": "() => void",
     "action": "React.ReactNode",
     "children": "!React.ReactNode",
-    "duration": "number = 6000"
+    "duration": "number = 6000",
+    "announce": "boolean = true"
    }
   },
   "Toaster": {
@@ -5596,6 +5660,12 @@
    "kind": "hook",
    "signature": "() => FieldControl | null",
    "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
+  },
+  "useNavStyle": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: NavVariant; rail...",
+   "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "useStylePanel": {
    "group": "components",

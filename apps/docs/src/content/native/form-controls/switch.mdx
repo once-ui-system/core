@@ -1,0 +1,111 @@
+---
+title: "Switch"
+summary: "A toggle with a sliding knob, a label and an optional loading state, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/switch.mdx"
+github: "packages/native/src/components/Switch.tsx"
+navLabel: "Switch"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`Switch` is a 40 by 24 track with a knob that slides to the end when on. A tap anywhere on the row, label included, toggles it. See the [web Switch](/form-controls/switch) for the same component in the browser.
+
+## Controlled
+
+Pass `checked` and update it in `onToggle`, which gets the next state.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Switch } from "@once-ui-system/native";
+
+export function Notifications() {
+  const [on, setOn] = useState(true);
+  return (
+    <Switch
+      label="Notifications"
+      description="Order updates and offers"
+      checked={on}
+      onToggle={setOn}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Notifications.tsx"
+  }
+]} />
+
+## Uncontrolled
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Switch } from "@once-ui-system/native";
+
+export function DarkMode() {
+  return <Switch label="Dark mode" defaultChecked={false} />;
+}`,
+    language: "tsx",
+    label: "DarkMode.tsx"
+  }
+]} />
+
+## Loading and reversed
+
+`loading` shows a spinner in the knob and ignores taps, for a setting that is saving. `reverse` puts the switch after the label, as a settings list does.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Switch } from "@once-ui-system/native";
+
+export function Sync() {
+  const [on, setOn] = useState(false);
+  const [saving, setSaving] = useState(false);
+  return (
+    <Switch
+      label="Sync contacts"
+      reverse
+      checked={on}
+      loading={saving}
+      onToggle={(next) => {
+        setSaving(true);
+        setTimeout(() => {
+          setOn(next);
+          setSaving(false);
+        }, 800);
+      }}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Sync.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- The handler is `onToggle(checked)`. There is no `name`, `value` or form submission.
+- The knob widens while pressed, in place of the hover state.
+- A switch without a label takes taps from 44pt around it. Give it `ariaLabel` so screen readers can name it.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | | The state, when the screen owns it. |
+| `defaultChecked` | `boolean` | `false` | The first state when the switch keeps its own. |
+| `onToggle` | `(checked: boolean) => void` | | Called with the next state. |
+| `label` | `ReactNode` | | Text beside the switch. A string is also the accessibility label. |
+| `description` | `ReactNode` | | A line under the label. |
+| `loading` | `boolean` | `false` | Shows a spinner in the knob and ignores taps. |
+| `disabled` | `boolean` | `false` | Dims the switch and ignores taps. |
+| `reverse` | `boolean` | `false` | Puts the switch after the label. |
+| `ariaLabel` | `string` | `"Toggle switch"` | The accessibility label when `label` is not a string. |
+| `style` | `ViewStyle` | | Style for the row. |
