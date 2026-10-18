@@ -1,11 +1,13 @@
 "use client";
 
-import React, { forwardRef, ReactNode, useState } from "react";
-import { IconName } from "../icons";
+import type React from "react";
+import { forwardRef, type ReactNode, useState } from "react";
+import type { IconName } from "../icons";
 import { Accordion } from "./Accordion";
 import { Column } from "./Column";
 import { Icon } from "./Icon";
 import { Line } from "./Line";
+import { useNavStyle } from "./Nav";
 import { Row } from "./Row";
 
 interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" | "onToggle"> {
@@ -32,6 +34,9 @@ interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" |
  * stops reading as hierarchy once a label wraps. The open group takes a faint
  * background so the collapsed ones recede.
  *
+ * Inside a Nav, the header takes the nav's row height, the rail follows its
+ * `rail`, and a `minimal` nav drops the tint.
+ *
  * Uncontrolled by default. Pass `open` and `onToggle` to drive it — which is
  * what a sidebar does when it opens the group containing the current route.
  */
@@ -40,6 +45,8 @@ const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
     { label, icon, children, open, onToggle, defaultOpen = false, selected = false, ...row },
     ref,
   ) => {
+    const { variant, rail, sizes } = useNavStyle();
+    const emphasis = variant !== "solid";
     const [uncontrolled, setUncontrolled] = useState(defaultOpen);
     const isOpen = open ?? uncontrolled;
     const toggle = () => {
@@ -53,24 +60,40 @@ const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
         fillWidth
         radius="m"
         transition="micro-medium"
-        background={isOpen || selected ? "neutral-alpha-weak" : undefined}
+        background={
+          (isOpen || selected) && variant !== "minimal" ? "neutral-alpha-weak" : undefined
+        }
         {...row}
       >
         <Accordion
           open={isOpen}
           onToggle={toggle}
-          paddingX="16"
-          style={{ height: "var(--static-space-40)" }}
+          size={sizes.group.size}
+          headerProps={{ paddingLeft: sizes.group.inset }}
+          contentProps={{ paddingTop: sizes.group.top, paddingBottom: sizes.group.bottom }}
+          style={{ height: `var(--static-space-${sizes.height})` }}
           title={
-            <Row fillWidth gap="12" vertical="center" textVariant="label-default-m">
+            <Row
+              fillWidth
+              gap={sizes.iconGap}
+              vertical="center"
+              textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
+              onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
+            >
               {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
               {label}
             </Row>
           }
         >
           <Row fillWidth gap="8" paddingX="12">
-            <Line vert background="neutral-alpha-medium" />
-            <Column fillWidth gap="4">
+            {/* Without the rail the children keep the indent, so switching it
+                off never shifts a label. */}
+            {rail ? (
+              <Line vert background="neutral-alpha-medium" />
+            ) : (
+              <Row minWidth="1" aria-hidden="true" />
+            )}
+            <Column fillWidth gap={sizes.gap}>
               {children}
             </Column>
           </Row>

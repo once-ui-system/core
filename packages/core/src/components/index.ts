@@ -78,6 +78,7 @@ export * from "./MasonryGrid";
 export * from "./MatrixFx";
 export * from "./Media";
 export * from "./Modal";
+export * from "./Nav";
 export * from "./NavGroup";
 export * from "./NavIcon";
 export * from "./NavItem";

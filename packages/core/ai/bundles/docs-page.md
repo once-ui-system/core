@@ -213,6 +213,8 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - m?: GridBreakpointProps
 - s?: GridBreakpointProps
 - xs?: GridBreakpointProps
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 
 ### Button
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
@@ -367,7 +369,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties

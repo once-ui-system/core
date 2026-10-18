@@ -1,6 +1,6 @@
 {
  "version": "2.2.0",
- "generated": "2026-10-17",
+ "generated": "2026-10-18",
  "iconNames": ["adjustments","arrowLeft","arrowRight","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","minimize","minus","moreHorizontal","opacity","organization","pause","paw","payment","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "Accordion": {"purpose":"One collapsible section: a clickable title row that shows and hides its content"},
@@ -80,6 +80,8 @@
   "MatrixFx": {"purpose":"Canvas dot-matrix field with reveal, flicker and an optional bulge wave"},
   "Media": {"purpose":"Image, YouTube or MP4 by src, with aspect ratio, loading state, caption and enlarge","avoid":"Raw img elements"},
   "Modal": {"purpose":"Full-screen modal with a title and an optional backdrop","avoid":"Ordinary dialogs and confirmations — use Dialog"},
+  "Nav": {"purpose":"Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside"},
+  "NavSection": {"purpose":"Titled block of sidebar rows with an optional heading action, such as Projects with an add button"},
   "NavGroup": {"purpose":"Collapsible group of NavItems in a sidebar, indented behind a rail"},
   "NavIcon": {"purpose":"Hamburger button that toggles to a close icon, for opening mobile navigation"},
   "NavItem": {"purpose":"One sidebar navigation row: label, icon, selected state, count badge or unread dot"},

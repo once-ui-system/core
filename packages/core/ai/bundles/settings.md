@@ -230,7 +230,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Select
 Extends Input, DropdownWrapper.
 - options: SelectOptionType[]
-- value?: string | string[] = ""
+- value?: string | string[]
 - emptyState?: ReactNode = No results
 - onSelect?: (value: string | string[]) => void
 - placement?: Placement
@@ -361,6 +361,8 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - m?: GridBreakpointProps
 - s?: GridBreakpointProps
 - xs?: GridBreakpointProps
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 
 ### IconButton
 - icon?: IconName = refresh
@@ -459,7 +461,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties
