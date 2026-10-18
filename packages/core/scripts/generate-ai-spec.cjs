@@ -1244,6 +1244,13 @@ function emitArtifacts(spec, version, entryTypes) {
     slices[name] = slice;
     fs.writeFileSync(path.join(componentsDir, `${name}.json`), JSON.stringify(slice, null, 1));
   }
+  // A slice for a component the spec no longer has (removed or renamed
+  // since it was written) would still be read as the API: drop it.
+  for (const file of fs.readdirSync(componentsDir)) {
+    if (file.endsWith(".json") && !(file.slice(0, -5) in spec.components)) {
+      fs.rmSync(path.join(componentsDir, file));
+    }
+  }
 
   // What the slices point at instead of spec.json: the design tokens, mixins
   // and shorthands, and the hooks and functions with the types they name.
@@ -1412,6 +1419,29 @@ const BASE_BUNDLE = {
 const propLine = (name, type) =>
   type.startsWith("!") ? `- ${name}: ${type.slice(1)}` : `- ${name}?: ${type}`;
 
+// Neighbouring optional props of one type share a line (`- width?, height?:
+// T`): a size mixin's six lengths read once, not six times.
+const propLines = (props) => {
+  const out = [];
+  let run = [];
+  const flush = () => {
+    if (!run.length) return;
+    out.push(`- ${run.map(([name]) => `${name}?`).join(", ")}: ${run[0][1]}`);
+    run = [];
+  };
+  for (const [name, type] of Object.entries(props ?? {})) {
+    if (type.startsWith("!") || type.includes("=")) {
+      flush();
+      out.push(propLine(name, type));
+      continue;
+    }
+    if (run.length && run[0][1] !== type) flush();
+    run.push([name, type]);
+  }
+  flush();
+  return out;
+};
+
 // A member that is already a type expression (`string & {}`, a template
 // literal) stays as it is; anything else is a literal value.
 const literal = (v) => (/^["`]|[ &|(]/.test(v) ? v : JSON.stringify(v));
@@ -1519,7 +1549,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     if (slice.preferOver) lines.push(`Use instead of ${slice.preferOver}.`);
     if (slice.avoid) lines.push(`Avoid: ${slice.avoid}`);
     if (slice.call) lines.push(`Call: \`${slice.call}\``);
-    for (const [prop, type] of Object.entries(slice.props ?? {})) lines.push(propLine(prop, type));
+    lines.push(...propLines(slice.props));
     if (slice.returns) lines.push(`Returns: ${JSON.stringify(slice.returns)}`);
     sections.push(lines.join("\n"));
     Object.assign(mixins, slice.resolvedMixins);
@@ -1570,11 +1600,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "## Mixins",
     "",
     Object.entries(mixins)
-      .map(([name, props]) =>
-        [`### ${name}`, ...Object.entries(props).map(([prop, type]) => propLine(prop, type))].join(
-          "\n",
-        ),
-      )
+      .map(([name, props]) => [`### ${name}`, ...propLines(props)].join("\n"))
       .join("\n\n"),
     "",
     "## Types",
@@ -1689,8 +1715,12 @@ function syncDocsPublic() {
   console.log(`Synced AI artifacts -> ${path.relative(ROOT, docsAi)}`);
 }
 
+// A mirror: what the source no longer has is removed from the copy too.
 function copyDir(src, dest) {
   if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+  for (const name of fs.readdirSync(dest)) {
+    if (!fs.existsSync(path.join(src, name))) fs.rmSync(path.join(dest, name), { recursive: true });
+  }
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);

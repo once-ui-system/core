@@ -10,7 +10,7 @@
   "StyleProps"
  ],
  "props": {
-  "density": "NavDensity = normal",
+  "density": "NavDensity",
   "variant": "NavVariant = solid",
   "rail": "boolean = true"
  },

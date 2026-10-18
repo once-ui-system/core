@@ -1563,6 +1563,27 @@
    "slow",
    "fast"
   ],
+  "StaticSpacingToken": [
+   "0",
+   "32",
+   "1",
+   "2",
+   "4",
+   "64",
+   "160",
+   "12",
+   "8",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128"
+  ],
   "StreamingOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -2923,7 +2944,7 @@
     "StyleProps"
    ],
    "props": {
-    "density": "NavDensity = normal",
+    "density": "NavDensity",
     "variant": "NavVariant = solid",
     "rail": "boolean = true"
    }
@@ -3298,6 +3319,12 @@
     "StyleProps"
    ],
    "props": {
+    "width": "number | StaticSpacingToken | CSSUnit",
+    "height": "number | StaticSpacingToken | CSSUnit",
+    "minWidth": "number | StaticSpacingToken | CSSUnit",
+    "maxWidth": "number | StaticSpacingToken | CSSUnit",
+    "minHeight": "number | StaticSpacingToken | CSSUnit",
+    "maxHeight": "number | StaticSpacingToken | CSSUnit",
     "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",

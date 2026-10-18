@@ -10,6 +10,12 @@
   "StyleProps"
  ],
  "props": {
+  "width": "number | StaticSpacingToken | CSSUnit",
+  "height": "number | StaticSpacingToken | CSSUnit",
+  "minWidth": "number | StaticSpacingToken | CSSUnit",
+  "maxWidth": "number | StaticSpacingToken | CSSUnit",
+  "minHeight": "number | StaticSpacingToken | CSSUnit",
+  "maxHeight": "number | StaticSpacingToken | CSSUnit",
   "shape": "\"line\" | \"circle\" | \"block\" = line",
   "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
   "delay": "number",
@@ -141,5 +147,52 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
+ },
+ "types": {
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
+  "StaticSpacingToken": [
+   "0",
+   "32",
+   "1",
+   "2",
+   "4",
+   "64",
+   "160",
+   "12",
+   "8",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128"
+  ]
  }
 }

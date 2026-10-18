@@ -159,20 +159,17 @@ Mixins: LeafProps.
 - label?: string
 - weight?: "default" | "strong" = strong
 - rounded?: boolean
-- prefixIcon?: IconName
-- suffixIcon?: IconName
+- prefixIcon?, suffixIcon?: IconName
 - loading?: boolean = false
 - disabled?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
-- href?: string
-- id?: string
+- href?, id?: string
 - arrowIcon?: boolean = false
 
 ### Tabs
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- value?: string
-- defaultValue?: string
+- value?, defaultValue?: string
 - onValueChange?: (value: string) => void
 - orientation?: "horizontal" | "vertical" = horizontal
 - activation?: "automatic" | "manual" = automatic
@@ -209,15 +206,12 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Input
 Mixins: LeafProps.
 - id: string
-- label?: string
-- placeholder?: string
+- label?, placeholder?: string
 - size?: TShirtSizes
 - error?: boolean = false
-- errorMessage?: ReactNode
-- description?: ReactNode
+- errorMessage?, description?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- prefix?: ReactNode
-- suffix?: ReactNode
+- prefix?, suffix?: ReactNode
 - variant?: "default" | "ghost" = default
 - focusRing?: boolean = false
 - characterCount?: boolean
@@ -233,8 +227,7 @@ Mixins: LeafProps.
 Extends Input, Dropdown.
 Mixins: LeafProps.
 - options: SelectOptionType[]
-- value?: string | string[]
-- defaultValue?: string | string[]
+- value?, defaultValue?: string | string[]
 - onValueChange?: (value: string | string[]) => void
 - open?: boolean
 - defaultOpen?: boolean = false
@@ -248,9 +241,7 @@ Mixins: LeafProps.
 
 ### Setting
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- label?: React.ReactNode
-- description?: React.ReactNode
-- info?: React.ReactNode
+- label?, description?, info?: React.ReactNode
 - controlWidth?: number | CSSUnit
 - children?: ReactNode
 - axes?: { label: React.ReactNode; control: React.ReactNode }[]
@@ -260,14 +251,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Tooltip
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- label?: ReactNode
-- content?: ReactNode
-- children?: ReactNode
+- label?, content?, children?: ReactNode
 - size?: React.ComponentProps<typeof Icon>["size"]
 - placement?: Placement
 - delay?: number
-- prefixIcon?: IconName
-- suffixIcon?: IconName
+- prefixIcon?, suffixIcon?: IconName
 - className?: string
 - style?: React.CSSProperties
 
@@ -280,12 +268,10 @@ Mixins: LeafProps.
 - id?: string
 - description?: React.ReactNode
 - iconButtonProps?: IconButtonProps
-- auto?: boolean
-- checked?: boolean
+- auto?, checked?: boolean
 - defaultChecked?: boolean = false
 - loading?: boolean = false
-- name?: string
-- value?: string
+- name?, value?: string
 - disabled?: boolean
 - reverse?: boolean = false
 - onCheckedChange?: (checked: boolean) => void
@@ -293,8 +279,7 @@ Mixins: LeafProps.
 ### Slider
 Mixins: LeafProps.
 - range?: boolean
-- value?: number | [number, number]
-- defaultValue?: number | [number, number]
+- value?, defaultValue?: number | [number, number]
 - onValueChange?: ((value: number) => void) | ((value: [number, number]) => void)
 - onValueCommit?: (value: number) => void
 - min?: number = 0
@@ -313,11 +298,9 @@ Mixins: LeafProps.
 ### NumberInput
 Extends Input.
 Mixins: LeafProps.
-- value?: number
-- defaultValue?: number
+- value?, defaultValue?: number
 - onValueChange?: (value: number) => void
-- min?: number
-- max?: number
+- min?, max?: number
 - step?: number = 1
 - padStart?: number
 
@@ -331,8 +314,7 @@ Mixins: LeafProps.
 - description?: React.ReactNode
 - disabled?: boolean
 - iconButtonProps?: IconButtonProps
-- auto?: boolean
-- checked?: boolean
+- auto?, checked?: boolean
 - defaultChecked?: boolean = false
 - indeterminate?: boolean = false
 - onCheckedChange?: (checked: boolean) => void
@@ -361,11 +343,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Avatar
 Mixins: LeafProps.
 - size?: TShirtSizes | number | CSSUnit = m
-- value?: string
-- src?: string
-- unoptimized?: boolean
-- loading?: boolean
-- empty?: boolean
+- value?, src?: string
+- unoptimized?, loading?, empty?: boolean
 - icon?: IconName
 - statusIndicator?: { scheme: "green" | "yellow" | "red" | "gray"; }
 - style?: CSSProperties = {}
@@ -396,8 +375,7 @@ Mixins: LeafProps.
 ### Icon
 Mixins: LeafProps.
 - name: IconName
-- onBackground?: `${ColorScheme}-${ColorWeight}`
-- onSolid?: `${ColorScheme}-${ColorWeight}`
+- onBackground?, onSolid?: `${ColorScheme}-${ColorWeight}`
 - size?: TShirtSizes = m
 - decorative?: boolean = true
 - tooltip?: ReactNode
@@ -406,16 +384,13 @@ Mixins: LeafProps.
 ### Textarea
 Mixins: LeafProps.
 - id: string
-- label?: string
-- placeholder?: string
+- label?, placeholder?: string
 - lines?: number | "auto" = auto
 - size?: TShirtSizes
 - error?: boolean = false
-- errorMessage?: ReactNode
-- description?: ReactNode
+- errorMessage?, description?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- prefix?: ReactNode
-- suffix?: ReactNode
+- prefix?, suffix?: ReactNode
 - variant?: "default" | "ghost" = default
 - focusRing?: boolean = false
 - characterCount?: boolean
@@ -433,8 +408,7 @@ Avoid: Passing the same text as label and children — the children are dropped
 - variant?: "default" | "gradient" | "announce" = default
 - size?: TShirtSizes
 - label?: string = ""
-- prefixIcon?: IconName
-- suffixIcon?: IconName
+- prefixIcon?, suffixIcon?: IconName
 - href?: string
 - arrow?: boolean
 - effect?: boolean = variant === "announce"
@@ -449,13 +423,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - open: boolean
 - onClose: () => void
 - title: ReactNode | string
-- description?: ReactNode
-- children?: ReactNode
-- footer?: ReactNode
+- description?, children?, footer?: ReactNode
 - variant?: "center" | "sheet" = center
 - backdrop?: ReactNode
-- base?: boolean
-- stack?: boolean
+- base?, stack?: boolean
 - flush?: boolean = false
 - showClose?: boolean = true
 - onHeightChange?: (height: number) => void
@@ -464,6 +435,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Skeleton
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- width?, height?, minWidth?, maxWidth?, minHeight?, maxHeight?: number | StaticSpacingToken | CSSUnit
 - shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
@@ -484,16 +456,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ## Mixins
 
 ### CommonProps
-- onBackground?: Colors
-- onSolid?: Colors
+- onBackground?, onSolid?: Colors
 - align?: CSSProperties["textAlign"]
 - children?: ReactNode
 - className?: string
 - style?: React.CSSProperties
 
 ### DisplayProps
-- inline?: boolean
-- hide?: boolean
+- inline?, hide?: boolean
 - pointerEvents?: "none" | "all" | "auto"
 - userSelect?: UserSelect
 - position?: CSSProperties["position"]
@@ -514,75 +484,34 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch" | "baseline"
 - wrap?: boolean
 - flex?: FlexValue
-- xl?: FlexBreakpointProps
-- l?: FlexBreakpointProps
-- m?: FlexBreakpointProps
-- xs?: FlexBreakpointProps
+- xl?, l?, m?, xs?: FlexBreakpointProps
 
 ### SizeProps
 - width?: number | SpacingToken | CSSUnit
 - height?: number | SpacingToken | CSSUnit | "below-header"
-- maxWidth?: number | SpacingToken | CSSUnit
-- minWidth?: number | SpacingToken | CSSUnit
-- minHeight?: number | SpacingToken | CSSUnit | "below-header"
-- maxHeight?: number | SpacingToken | CSSUnit | "below-header"
-- fit?: boolean
-- fitWidth?: boolean
-- fitHeight?: boolean
-- fill?: boolean
-- fillWidth?: boolean
-- fillHeight?: boolean
+- maxWidth?, minWidth?: number | SpacingToken | CSSUnit
+- minHeight?, maxHeight?: number | SpacingToken | CSSUnit | "below-header"
+- fit?, fitWidth?, fitHeight?, fill?, fillWidth?, fillHeight?: boolean
 - aspectRatio?: CSSProperties["aspectRatio"]
 
 ### SpacingProps
-- padding?: SpacingToken | number | CSSUnit
-- paddingLeft?: SpacingToken | number | CSSUnit
-- paddingRight?: SpacingToken | number | CSSUnit
-- paddingTop?: SpacingToken | number | CSSUnit
-- paddingBottom?: SpacingToken | number | CSSUnit
-- paddingX?: SpacingToken | number | CSSUnit
-- paddingY?: SpacingToken | number | CSSUnit
-- margin?: SpacingToken | number | CSSUnit | "auto"
-- marginLeft?: SpacingToken | number | CSSUnit | "auto"
-- marginRight?: SpacingToken | number | CSSUnit | "auto"
-- marginTop?: SpacingToken | number | CSSUnit | "auto"
-- marginBottom?: SpacingToken | number | CSSUnit | "auto"
-- marginX?: SpacingToken | number | CSSUnit | "auto"
-- marginY?: SpacingToken | number | CSSUnit | "auto"
+- padding?, paddingLeft?, paddingRight?, paddingTop?, paddingBottom?, paddingX?, paddingY?: SpacingToken | number | CSSUnit
+- margin?, marginLeft?, marginRight?, marginTop?, marginBottom?, marginX?, marginY?: SpacingToken | number | CSSUnit | "auto"
 - gap?: SpacingToken | number | CSSUnit | "-1"
-- top?: SpacingToken | number | CSSUnit
-- right?: SpacingToken | number | CSSUnit
-- bottom?: SpacingToken | number | CSSUnit
-- left?: SpacingToken | number | CSSUnit
-- translateX?: SpacingToken | number | CSSUnit
-- translateY?: SpacingToken | number | CSSUnit
+- top?, right?, bottom?, left?, translateX?, translateY?: SpacingToken | number | CSSUnit
 
 ### StyleProps
 - textVariant?: TextVariant
 - background?: Colors | "surface" | "overlay" | "page" | "transparent"
 - solid?: Colors
-- borderTop?: Colors | "surface" | "transparent" | boolean
-- borderRight?: Colors | "surface" | "transparent" | boolean
-- borderBottom?: Colors | "surface" | "transparent" | boolean
-- borderLeft?: Colors | "surface" | "transparent" | boolean
-- borderX?: Colors | "surface" | "transparent" | boolean
-- borderY?: Colors | "surface" | "transparent" | boolean
-- border?: Colors | "surface" | "transparent" | boolean
+- borderTop?, borderRight?, borderBottom?, borderLeft?, borderX?, borderY?, border?: Colors | "surface" | "transparent" | boolean
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
-- topRadius?: RadiusSize
-- rightRadius?: RadiusSize
-- bottomRadius?: RadiusSize
-- leftRadius?: RadiusSize
-- topLeftRadius?: RadiusSize
-- topRightRadius?: RadiusSize
-- bottomLeftRadius?: RadiusSize
-- bottomRightRadius?: RadiusSize
+- topRadius?, rightRadius?, bottomRadius?, leftRadius?, topLeftRadius?, topRightRadius?, bottomLeftRadius?, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
 - cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
 - blendMode?: BlendMode
-- blur?: BlurSize | number | CSSUnit
-- backdropBlur?: BlurSize | number | CSSUnit
+- blur?, backdropBlur?: BlurSize | number | CSSUnit
 - theme?: "light" | "dark"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
@@ -590,20 +519,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`
 
 ### LeafProps
-- margin?: SpacingToken | number | CSSUnit | "auto"
-- marginTop?: SpacingToken | number | CSSUnit | "auto"
-- marginRight?: SpacingToken | number | CSSUnit | "auto"
-- marginBottom?: SpacingToken | number | CSSUnit | "auto"
-- marginLeft?: SpacingToken | number | CSSUnit | "auto"
-- marginX?: SpacingToken | number | CSSUnit | "auto"
-- marginY?: SpacingToken | number | CSSUnit | "auto"
+- margin?, marginTop?, marginRight?, marginBottom?, marginLeft?, marginX?, marginY?: SpacingToken | number | CSSUnit | "auto"
 - flex?: FlexValue
 - fillWidth?: boolean
 - position?: CSSProperties["position"]
-- top?: SpacingToken | number | CSSUnit
-- right?: SpacingToken | number | CSSUnit
-- bottom?: SpacingToken | number | CSSUnit
-- left?: SpacingToken | number | CSSUnit
+- top?, right?, bottom?, left?: SpacingToken | number | CSSUnit
 - className?: string
 - style?: CSSProperties
 
@@ -619,11 +539,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - columns?: GridSize
 - minColumnWidth?: number | SpacingToken | CSSUnit
 - rows?: GridSize
-- xl?: GridBreakpointProps
-- l?: GridBreakpointProps
-- m?: GridBreakpointProps
-- s?: GridBreakpointProps
-- xs?: GridBreakpointProps
+- xl?, l?, m?, s?, xs?: GridBreakpointProps
 
 ## Types
 
@@ -656,6 +572,7 @@ type SelectOptionType = Omit<OptionProps, "selected">
 type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 type SpacingToken = "s" | "xl" | "l" | "m" | "xs" | "0" | "32" | "1" | "2" | "4" | "64" | "160" | "12" | "8" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
+type StaticSpacingToken = Exclude<SpacingToken, "s" | "xl" | "l" | "m" | "xs">
 type StyleProps = the StyleProps mixin above
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
