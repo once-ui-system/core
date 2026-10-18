@@ -12,7 +12,7 @@
     "scripts/init-agent.js",
     "scripts/validate-ai-code.js"
   ],
-  "description": "Once UI for Next.js NPM package",
+  "description": "The open-source, agentic design system for React",
   "keywords": [
     "once-ui",
     "react",
