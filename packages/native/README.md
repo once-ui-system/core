@@ -54,6 +54,12 @@ follows the device.
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
 | `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As in core. |
+| `Media` | An image at `aspectRatio` (`"16 / 9"`, or `"original"` for the image's own) with `radius`, `border` and the other `Flex` props, a `Skeleton` until it loads, `objectFit`, `caption`, `onPress`. |
+| `List`, `ListItem` | Bullets, or numbers with `as="ol"` and `start`, drawn in core's indent in `neutral-on-background-weak`. |
+| `Tabs`, `TabList`, `Tab`, `TabPanel` | As in core: `value`/`defaultValue` and `onChange`, `orientation`, `keepMounted`; without a value the first enabled tab is selected. |
+| `ToggleButton` | Core's `ghost`, `outline` and `subtle` variants, five sizes, `selected`; `Tab` is built on it. |
+| `Accordion` | `title`, `open` with `onToggle` (or its own state), `icon`, `iconRotation`, `size`; eases open and shut with `LayoutAnimation`. A ref gives `toggle()`, `open()`, `close()`. |
+| `AvatarGroup`, `StatusIndicator` | As in core. |
 
 `useTheme()` gives the resolved theme to your own components:
 `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`,
@@ -67,6 +73,12 @@ follows the device.
   core's `--touch-target` (2.75rem) around them without being drawn larger.
 - **Clipping:** `radius` does not clip children, as on the web; pass
   `overflow="hidden"` when it should (on iOS that also hides the view's shadow).
+- **Media** draws images only: core's enlarge-on-click overlay, video files
+  and YouTube embeds are left out, as are the web-only `sizes`, `priority` and
+  `unoptimized`. Without an `aspectRatio` the box is `height` rem tall (or the
+  `80` step) until React Native reports the image's size.
+- **Tabs** have no arrow-key focus, so `activation` is accepted and ignored.
+- **List** draws its own bullets and numbers, since React Native has no list markers.
 - **No responsive props** (`s`, `m`, …) yet; the phone breakpoint's token values
   apply on phones automatically.
 
