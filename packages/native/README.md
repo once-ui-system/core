@@ -48,6 +48,11 @@ follows the device.
 | `Input`, `Textarea` | Floating label, `error` + `errorMessage`, `description`, `prefix`/`suffix`, `characterCount`. |
 | `Switch`, `Checkbox` | Controlled (`checked`) or not (`defaultChecked`), `onToggle`, label and description. |
 | `Icon`, `IconButton`, `IconProvider` | Core's built-in icons, drawn with `react-native-svg`. `prefixIcon`/`suffixIcon` on `Button` and `Tag` take a name as in core, or any element. `IconProvider` adds icons: core's SVG data or a component taking `size` and `color` (for example from `@expo/vector-icons`). |
+| `Dialog` | A bottom sheet with core's props (`open`, `onClose`, `title`, `description`, `footer`); the back button and a tap on the backdrop close it. |
+| `ToastProvider`, `useToast`, `Toast` | `addToast({ variant, message })` as in core; toasts stack at the bottom and hide after 6 s. |
+| `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `multiple`, `searchable`. |
+| `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
+| `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As in core. |
 
 `useTheme()` gives the resolved theme to your own components:

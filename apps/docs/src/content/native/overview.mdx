@@ -74,6 +74,11 @@ export default function App() {
 | `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
 | `Switch`, `Checkbox` | Controlled or not, with a label and description. |
 | `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
+| `Dialog` | Opens as a bottom sheet. The back button and a tap outside close it. |
+| `ToastProvider`, `useToast` | `addToast({ variant, message })`, as on the web. Toasts stack at the bottom of the screen. |
+| `Select` | Opens its options in a bottom sheet, with `multiple` and `searchable`. |
+| `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
+| `Chip`, `Badge`, `ProgressBar` | As on the web. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
 
 `IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
