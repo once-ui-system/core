@@ -20,6 +20,8 @@ item (see `ROADMAP.md`, Week 4).
 - **`npx once-ui-init-agent` and `npx once-ui-validate-ai-code` are back.** 2.2.0 was
   published with npm 11, which drops `bin` entries written as `./scripts/...`, so the
   package shipped without its two commands. The paths are now written without `./`.
+- **`RevealFx` clears its mask timer on unmount.** Unmounting it while `revealed` was
+  animating set state on an unmounted component.
 
 ## [2.2.0] — 2026-10-18
 
