@@ -2,6 +2,7 @@ import { existsSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { dirname, relative } from "node:path";
 import { type ApiClient, CliError, failureFrom } from "../lib/api.js";
+import { downloadAssets } from "../lib/assets.js";
 import { hasBlockIcons, iconsHint, registerBlockIcons } from "../lib/icons.js";
 import { hashContent, type Lock, lockPath, readLock, writeLock } from "../lib/lock.js";
 import { detectPackageManager, install, missingDependencies } from "../lib/package-manager.js";
@@ -13,6 +14,8 @@ export type RegistryItem = {
   dependencies?: string[];
   registryDependencies?: string[];
   files: { path: string; target?: string; content: string }[];
+  /** Images and videos the block shows, as paths on the server (`/images/…`). */
+  meta?: { assets?: string[] };
 };
 
 const NAMESPACE = "@once-ui/";
@@ -93,6 +96,15 @@ export async function installMissing(cwd: string, items: RegistryItem[], allowed
   }
 }
 
+/** Fetch the images and videos the blocks show into `public/`, and say so. */
+export async function fetchAssets(client: ApiClient, cwd: string, items: RegistryItem[]) {
+  const assets = items.flatMap((item) => item.meta?.assets ?? []);
+  if (!assets.length) return;
+  const { written, failed } = await downloadAssets(client, cwd, assets);
+  if (written.length) console.log(`  media  ${written.length} image(s) and video(s) into public/`);
+  if (failed.length) console.log(`  media  could not download: ${failed.join(", ")}`);
+}
+
 /** After writing blocks that bring the icons file, make sure the app registers it. */
 export async function wireBlockIcons(cwd: string, paths: Iterable<string>) {
   const iconsFile = hasBlockIcons(paths);
@@ -156,6 +168,7 @@ export async function add(client: ApiClient, names: string[], flags: AddFlags) {
   }
   await writeLock(cwd, lock);
   await wireBlockIcons(cwd, planned.keys());
+  await fetchAssets(client, cwd, items);
 
   await installMissing(cwd, items, flags.install !== false);
 

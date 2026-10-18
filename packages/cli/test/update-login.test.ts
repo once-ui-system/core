@@ -44,6 +44,10 @@ beforeAll(async () => {
     const bearer = req.headers.authorization?.replace("Bearer ", "") ?? "";
     const known = bearer === TOKEN || approved.has(hashContent(bearer));
 
+    if (req.url === "/images/a.png") {
+      res.writeHead(200, { "content-type": "image/png" });
+      return res.end("png");
+    }
     if (req.url === "/api/cli/whoami") {
       if (!known) return json(401, { error: "Not signed in." });
       return json(200, {
@@ -97,6 +101,24 @@ describe("add", () => {
     const lock = await readLock(dir);
     expect(Object.keys(lock.blocks).sort()).toEqual(["chat1", "sidebar4"]);
     expect(lock.blocks.sidebar4.files[`${PRO}/chat1content.ts`]).toBe(hashContent("data v1"));
+  });
+});
+
+describe("media", () => {
+  it("downloads the images a block shows into public/, keeping files already there", async () => {
+    const dir = tmp();
+    registry.pic = {
+      ...item("pic", { "Pic.tsx": "pic" }),
+      meta: { assets: ["/images/a.png", "/images/missing.png", "/../etc/passwd"] },
+    };
+    await add(client(), ["pic"], { cwd: dir, install: false });
+    expect(readFileSync(join(dir, "public/images/a.png"), "utf8")).toBe("png");
+    expect(existsSync(join(dir, "public/images/missing.png"))).toBe(false);
+    expect(output.join("\n")).toMatch(/1 image\(s\) and video\(s\) into public/);
+
+    writeFileSync(join(dir, "public/images/a.png"), "mine");
+    await add(client(), ["pic"], { cwd: dir, install: false });
+    expect(readFileSync(join(dir, "public/images/a.png"), "utf8")).toBe("mine");
   });
 });
 

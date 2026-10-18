@@ -7,6 +7,7 @@ import { resolveTarget } from "../lib/paths.js";
 import {
   blockId,
   blockList,
+  fetchAssets,
   fetchBlock,
   installMissing,
   plannedFiles,
@@ -98,6 +99,7 @@ export async function update(client: ApiClient, names: string[], flags: UpdateFl
     recordInLock(cwd, lock, items);
     await writeLock(cwd, lock);
     await wireBlockIcons(cwd, planned.keys());
+    await fetchAssets(client, cwd, items);
     await installMissing(cwd, items, flags.install !== false);
   }
 

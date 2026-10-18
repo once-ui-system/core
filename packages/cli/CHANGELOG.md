@@ -25,6 +25,9 @@ Changes to `@once-ui-system/cli`. Releases are tagged `cli-vX.Y.Z`.
   name; app-local imports such as `@/utils/dev-logger` were tried as packages too.
 - **Blocks that need icons beyond the built-in set render them.** `add` writes
   `blockIcons.ts` and registers it in your `IconProvider`.
+- **Blocks show their images.** `add` downloads the images and videos a block uses
+  (avatars, covers, textures) into `public/`; 107 blocks showed broken images before.
+  Files already there are kept.
 - **A file two blocks share is written once**, not reported as skipped the second time.
 
 ### Changed
