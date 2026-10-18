@@ -81,6 +81,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
 | Screen-reader text, skip link | `VisuallyHidden` |
+| Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
 ### Imports
@@ -188,6 +189,26 @@ Extends ToggleButton.
 - children?: ReactNode
 - disabled?: boolean = false
 
+### ToggleButton
+- label?: ReactNode
+- selected?: boolean = false
+- variant?: "ghost" | "outline" | "subtle" = ghost
+- size?: TShirtSizes = m
+- radius?: RadiusSize
+- corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
+- rounded?: boolean = false
+- horizontal?: "start" | "center" | "end" | "between" = center
+- fillWidth?: boolean = false
+- weight?: "default" | "strong" = default
+- truncate?: boolean = false
+- disabled?: boolean = false
+- prefixIcon?: IconName
+- suffixIcon?: IconName
+- className?: string
+- style?: React.CSSProperties
+- children?: ReactNode
+- href?: string
+
 ### TabPanel
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
@@ -230,7 +251,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Select
 Extends Input, DropdownWrapper.
 - options: SelectOptionType[]
-- value?: string | string[] = ""
+- value?: string | string[]
 - emptyState?: ReactNode = No results
 - onSelect?: (value: string | string[]) => void
 - placement?: Placement
@@ -240,6 +261,31 @@ Extends Input, DropdownWrapper.
 - fillWidth?: boolean = true
 - multiple?: boolean = false
 - labels?: SelectLabels
+
+### DropdownWrapper
+- fillWidth?: boolean = false
+- minWidth?: number
+- maxWidth?: number
+- minHeight?: number
+- placement?: Placement = bottom-start
+- trigger: ReactNode
+- dropdown: ReactNode
+- selectedOption?: string
+- style?: React.CSSProperties
+- className?: string
+- onSelect?: (value: string) => void
+- closeAfterClick?: boolean = true
+- handleArrowNavigation?: boolean = true
+- open?: boolean
+- onOpenChange?: (open: boolean) => void
+- nested?: boolean = false
+- navigationLayout?: NavigationLayout
+- columns?: number | string = 8
+- optionsCount?: number
+- dropdownId?: string
+- disableTriggerClick?: boolean = false
+- onFocusCapture?: React.FocusEventHandler<HTMLDivElement>
+- onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
 
 ### Setting
 Extends Flex.
@@ -287,6 +333,17 @@ Extends InteractiveDetails.
 - reverse?: boolean = false
 - ariaLabel?: string = Toggle switch
 - onToggle?: (checked: boolean) => void
+
+### InteractiveDetails
+- label?: React.ReactNode
+- description?: React.ReactNode
+- disabled?: boolean
+- iconButtonProps?: IconButtonProps
+- onClick?: () => void
+- className?: string
+- id?: string
+- labelId?: string
+- descriptionId?: string
 
 ### Slider
 - value?: number
@@ -361,6 +418,8 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - m?: GridBreakpointProps
 - s?: GridBreakpointProps
 - xs?: GridBreakpointProps
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 
 ### IconButton
 - icon?: IconName = refresh
@@ -459,7 +518,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties
@@ -607,13 +666,13 @@ type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type CondensedTShirtSizes = "l" | "m" | "s"
-type DisplayProps = { as?: ElementType; inline?: boolean; hide?: boolean; pointerEvents?: "none" | "all" | "auto"; userSelect?: UserSelect; position?: CSSProperties["position"]; overflow?: CSSProperties["overflow"]; overflowX?: CSSProperties["overflowX"]; overflowY?: CSSProperties["overflowY"]; scrollbar?: "default" | "minimal"; transition?: "micro-short" | "micro-medium" | "micro-long" | "macro-short" | "macro-medium" | "macro-long"; opacity?: Opacity; zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"; dark?: boolean; light?: boolean }
 type FlexValue = "0" | "1" | "8" | "10" | "2" | "3" | "4" | "12" | "5" | "6" | "7" | "9" | "11"
 type FormColumns = "number" | Partial<Record<Breakpoint, number>>
 type GridBreakpointProps = "style" | "textVariant" | "textSize" | "textType" | "textWeight" | "background" | "solid" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "padding" | "paddingLeft" | "paddingRight" | "paddingTop" | "paddingBottom" | "paddingX" | "paddingY" | "margin" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom" | "marginX" | "marginY" | "gap" | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "onBackground" | "onSolid" | "align" | "hide" | "pointerEvents" | "position" | "overflow" | "overflowX" | "overflowY" | "scrollbar" | "transition" | "opacity" | "zIndex" | "dark" | "light" | "columns" | "rows"
-type GridProps = Grid props
 type GridSize = "1" | "8" | "10" | "2" | "3" | "4" | "12" | "5" | "6" | "7" | "9" | "11"
+type IconButtonProps = IconButton props
 type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
+type NavigationLayout = "grid" | "row" | "column"
 type Opacity = "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100"
 type OptionProps = Option props
 type Placement = "top" | "right" | "bottom" | "left" | `${"top" | "right" | "bottom" | "left"}-${"start" | "end"}`
@@ -624,7 +683,6 @@ type SelectOptionType = Omit<OptionProps, "selected">
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "32" | "1" | "2" | "4" | "64" | "160" | "8" | "12" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
-type StyleProps = { textVariant?: TextVariant; textSize?: TextSize; textType?: TextType; textWeight?: TextWeight; background?: Colors | "surface" | "overlay" | "page" | "transparent"; solid?: Colors; borderTop?: Colors | "surface" | "transparent" | boolean; borderRight?: Colors | "surface" | "transparent" | boolean; borderBottom?: Colors | "surface" | "transparent" | boolean; borderLeft?: Colors | "surface" | "transparent" | boolean; borderX?: Colors | "surface" | "transparent" | boolean; borderY?: Colors | "surface" | "transparent" | boolean; border?: Colors | "surface" | "transparent" | boolean; borderStyle?: "solid" | "dashed"; borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"; topRadius?: RadiusSize; rightRadius?: RadiusSize; bottomRadius?: RadiusSize; leftRadius?: RadiusSize; topLeftRadius?: RadiusSize; topRightRadius?: RadiusSize; bottomLeftRadius?: RadiusSize; bottomRightRadius?: RadiusSize; radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`; shadow?: ShadowSize; cursor?: CSSProperties["cursor"] | "interactive" | ReactNode; blendMode?: BlendMode; blur?: BlurSize | number; backdropBlur?: BlurSize | number; theme?: "light" | "dark"; themeBorder?: BorderStyle; themeSolid?: SolidType; themeSurface?: SurfaceStyle }
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
 type TextSize = "xl" | "l" | "m" | "s" | "xs"

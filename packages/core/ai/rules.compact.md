@@ -79,6 +79,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
 | Screen-reader text, skip link | `VisuallyHidden` |
+| Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
 ## Imports
