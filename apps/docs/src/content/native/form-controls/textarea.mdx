@@ -9,7 +9,7 @@ navIcon: "switch"
 status: "unreleased"
 ---
 
-`Textarea` is an [Input](/native/form-controls/input) that takes several lines. It takes every Input prop, with `multiline` set and the text aligned to the top. `lines` sets how tall the field is when it is empty. See the [web Textarea](/form-controls/textarea) for the same component in the browser.
+`Textarea` is an [Input](/native/form-controls/input) that takes several lines. It takes every Input prop, with `multiline` set and the text aligned to the top. By default it grows with its text; a number in `lines` fixes its height to that many lines, and the text scrolls past them, as on the web. See the [web Textarea](/form-controls/textarea) for the same component in the browser.
 
 ## Controlled
 
@@ -83,7 +83,7 @@ export function Review() {
 
 ## Differences from the web
 
-- There is no `resize` prop or handle. `lines` sets the empty field's height.
+- There is no `resize` prop or handle.
 - Use `onChangeText` for the value, as with `Input`.
 
 ## API reference
@@ -92,7 +92,7 @@ Takes every [Input](/native/form-controls/input) prop.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `lines` | `number` | `3` | The field's height when empty, in lines of `body-default-m`. |
+| `lines` | `number \| "auto"` | `"auto"` | `"auto"` grows with the text; a number fixes the height to that many lines of `body-default-m`. |
 | `label` | `string` | | Floats above the text once the field is focused or filled. |
 | `error` | `boolean` | `false` | Draws the field in the danger colour and shows `errorMessage`. |
 | `errorMessage` | `ReactNode` | | Shown under the field while `error` is true. |
