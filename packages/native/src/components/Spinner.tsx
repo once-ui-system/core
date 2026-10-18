@@ -6,7 +6,8 @@ export interface SpinnerProps {
   size?: TShirtSizes;
   /** Defaults to `neutral-on-background-medium`. */
   color?: string;
-  ariaLabel?: string;
+  /** The name read out while it spins; `"Loading"` by default. Core 3.0 removed `ariaLabel`. */
+  "aria-label"?: string;
   style?: ViewStyle;
 }
 
@@ -14,7 +15,12 @@ export interface SpinnerProps {
 const SIZES = { xs: "16", s: "20", m: "24", l: "32", xl: "40" } as const;
 
 /** Core's `Spinner`, drawn by the platform's activity indicator. */
-export function Spinner({ size = "m", color, ariaLabel = "Loading", style }: SpinnerProps) {
+export function Spinner({
+  size = "m",
+  color,
+  "aria-label": ariaLabel = "Loading",
+  style,
+}: SpinnerProps) {
   const theme = useTheme();
   const px = theme.space(SIZES[size]);
   return (

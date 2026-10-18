@@ -1,14 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { AccessibilityInfo, Animated, type DimensionValue, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import type { TShirtSizes } from "../types";
+import type { SpacingToken, TShirtSizes } from "../types";
+import type { Length } from "./spacing";
 
 export interface SkeletonProps {
   shape?: "line" | "circle" | "block";
   size?: TShirtSizes;
-  /** Overrides, in points. */
-  width?: DimensionValue;
-  height?: DimensionValue;
+  /**
+   * Overrides: a number of points (px, as in core 3.0), a token, `"320px"`,
+   * `"20rem"` or `"50%"`.
+   */
+  width?: number | SpacingToken | Length | `${number}%`;
+  height?: number | SpacingToken | Length | `${number}%`;
   /** Milliseconds before the pulse starts, to stagger several skeletons. */
   delay?: number;
   style?: ViewStyle;
@@ -63,13 +67,21 @@ export function Skeleton({
       aria-busy
       style={[
         box,
-        width !== undefined && { width },
-        height !== undefined && { height },
+        width !== undefined && { width: dimension(theme, width) },
+        height !== undefined && { height: dimension(theme, height) },
         { backgroundColor: theme.color("neutral-background-strong"), opacity },
         style,
       ]}
     />
   );
+}
+
+function dimension(
+  theme: ReturnType<typeof useTheme>,
+  value: number | SpacingToken | Length | `${number}%`,
+): DimensionValue {
+  if (typeof value === "string" && value.endsWith("%")) return value as DimensionValue;
+  return theme.space(value as number | SpacingToken | Length);
 }
 
 /** The device's reduce-motion setting: the pulse holds still while it is on. */

@@ -1,4 +1,5 @@
 import type { TextStyle, ViewStyle } from "react-native";
+import type { Length } from "../components/spacing";
 import type {
   ColorScheme,
   Colors,
@@ -44,8 +45,11 @@ export interface OnceTheme {
   /** `on-background` / `on-solid` text colour for a `"brand-strong"`-style value. */
   onBackground: (value: `${ColorScheme}-${ColorWeight}`) => string;
   onSolid: (value: `${ColorScheme}-${ColorWeight}`) => string;
-  /** A spacing token, or a number of rem, in points. */
-  space: (value: SpacingToken | number) => number;
+  /**
+   * A spacing token (`"16"`, `"m"`), a number of points (px, as a number is
+   * in core 3.0), or a `"24px"` / `"1.5rem"` string, in points.
+   */
+  space: (value: SpacingToken | number | Length) => number;
   radius: (size: RadiusSize) => number;
   shadow: (size: ShadowSize) => ViewStyle;
   text: (variant: TextVariant) => TextStyle;
@@ -77,9 +81,13 @@ export function createTheme(
     return color(`${scheme}-${kind}-${weight}`);
   };
 
-  const space = (value: SpacingToken | number) => {
-    if (typeof value === "number") return value * rem;
-    return /^\d+$/.test(value) ? px(`static-space-${value}`) : px(`responsive-space-${value}`);
+  const space = (value: SpacingToken | number | Length) => {
+    // 3.0: a number is px (density-independent points here), never rem.
+    if (typeof value === "number") return value;
+    if (/^\d+$/.test(value)) return px(`static-space-${value}`);
+    const length = toPx(value, rem);
+    if (length !== undefined) return length;
+    return px(`responsive-space-${value}`);
   };
 
   const radius = (size: RadiusSize) => {

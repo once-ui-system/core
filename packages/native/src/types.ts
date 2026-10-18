@@ -40,6 +40,12 @@ export type ColorScheme =
   | "danger"
   | "warning"
   | "success";
+/**
+ * Which semantic palette a component draws in, as core 3.0's `tone` on Button,
+ * IconButton, Tag, Feedback and Toast. `variant` says how it looks.
+ */
+export type Tone = ColorScheme;
+
 export type ColorWeight = "weak" | "medium" | "strong";
 export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`;
 

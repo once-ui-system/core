@@ -1,9 +1,12 @@
 export { Avatar, type AvatarProps } from "./components/Avatar";
-export { Badge, type BadgeProps } from "./components/Badge";
-export { Button, type ButtonProps, type ButtonVariant } from "./components/Button";
+export {
+  Button,
+  type ButtonCorners,
+  type ButtonProps,
+  type ButtonVariant,
+} from "./components/Button";
 export { Card, type CardProps } from "./components/Card";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox";
-export { Chip, type ChipProps } from "./components/Chip";
 export { Dialog, type DialogProps } from "./components/Dialog";
 export { Feedback, type FeedbackProps } from "./components/Feedback";
 export {
@@ -27,7 +30,13 @@ export {
   useIcons,
 } from "./components/Icon";
 export { IconButton, type IconButtonProps } from "./components/IconButton";
-export { Input, type InputProps, Textarea, type TextareaProps } from "./components/Input";
+export {
+  Input,
+  type InputProps,
+  type InputType,
+  Textarea,
+  type TextareaProps,
+} from "./components/Input";
 export { Line, type LineProps } from "./components/Line";
 export { ProgressBar, type ProgressBarProps } from "./components/ProgressBar";
 export {
@@ -38,6 +47,7 @@ export {
   type RadioGroupProps,
 } from "./components/RadioGroup";
 export {
+  type ButtonOption,
   SegmentedControl,
   type SegmentedControlButton,
   type SegmentedControlProps,
@@ -46,6 +56,7 @@ export { Option, type OptionProps, Select, type SelectProps } from "./components
 export { Skeleton, type SkeletonProps } from "./components/Skeleton";
 export { Spinner, type SpinnerProps } from "./components/Spinner";
 export { Switch, type SwitchProps } from "./components/Switch";
+export type { Length, SpacingValue } from "./components/spacing";
 export { Tag, type TagProps } from "./components/Tag";
 export { Heading, type HeadingProps, Text, type TextProps } from "./components/Text";
 export {
@@ -53,7 +64,6 @@ export {
   type ToastOptions,
   type ToastProps,
   ToastProvider,
-  type ToastVariant,
   useToast,
 } from "./components/Toast";
 export { touchSlop } from "./components/touch";

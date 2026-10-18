@@ -13,12 +13,14 @@ status: "unreleased"
 
 It is a preview. Most apps should keep shipping Once UI on phones as the web build wrapped in a native shell (the Stack mobile target); use this package when the app itself has to be native.
 
+**Props follow core 3.0.** The components take the 3.0 props of `@once-ui-system/core`, not the 2.x ones: state is `checked` / `defaultChecked` / `onCheckedChange`, `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`; accessible names are `aria-label`; colour is `tone` and look is `variant`; Text and Heading take `textVariant`; Badge and Chip are `Tag`; and a number on a spacing or size prop is px. The renames are listed under "Coming from the 2.x props" below.
+
 <Row fillWidth horizontal="center" marginY="24">
   <Media
     src="/images/native/loyalty-card.png"
     alt="A loyalty-card screen built with @once-ui-system/native"
     aspectRatio="390 / 740"
-    maxWidth={20}
+    maxWidth="20rem"
     radius="l"
     border="neutral-alpha-weak"
   />
@@ -68,18 +70,18 @@ export default function App() {
 | Component | Notes |
 | --- | --- |
 | `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow and sizes. `Flex` is a row, as on the web. |
-| `Text`, `Heading` | `variant`, `onBackground`, `onSolid`, `truncate`. |
-| `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`. |
-| `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
-| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
-| `Switch`, `Checkbox` | Controlled or not, with a label and description. |
-| `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
-| `Dialog` | Opens as a bottom sheet. The back button and a tap outside close it. |
-| `ToastProvider`, `useToast` | `addToast({ variant, message })`, as on the web. Toasts stack at the bottom of the screen. |
-| `Select` | Opens its options in a bottom sheet, with `multiple` and `searchable`. |
-| `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
-| `Chip`, `Badge`, `ProgressBar` | As on the web. |
-| `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+| `Text`, `Heading` | `textVariant`, with `weight` and `family` as overrides; `onBackground`, `onSolid`, `truncate`. |
+| `Button` | Six variants in any `tone`, five sizes, `corners`, `loading`, `disabled`, `fillWidth`. Takes `onPress` or the web's `onClick`. |
+| `Card` | Pressable with `onPress` (or `onClick`), `href`, `selected`. |
+| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count, `onValueChange`. `type="password"` shows a show/hide button, as on the web. |
+| `Switch`, `Checkbox` | `checked`, `defaultChecked` and `onCheckedChange`, with a label, description, `size` and `errorMessage`. |
+| `Icon`, `IconButton` | The same built-in icons as the web. `IconButton` takes `tone`, `variant` and `aria-label`. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
+| `Dialog` | Opens as a bottom sheet, or a centred card with `variant="center"`; `showClose`, `backdrop`. The back button and a tap outside close it. |
+| `ToastProvider`, `useToast` | `addToast({ tone, message })`, as on the web. Toasts stack at the bottom of the screen. |
+| `Select` | Opens its options in a bottom sheet: `value`, `defaultValue`, `onValueChange`, `open` and `onOpenChange`, `multiple`, `searchable`. |
+| `RadioGroup`, `SegmentedControl` | One choice out of several, with `onValueChange`, as on the web. |
+| `Tag` | A label in its `tone`. `variant="announce"` is the announcement pill, and `selected`, `onClick` and `onRemove` make it a toggle with a remove button, as on the web. |
+| `Avatar`, `Feedback`, `ProgressBar`, `Line`, `Spinner`, `Skeleton` | As on the web. |
 
 `IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
 
@@ -87,10 +89,31 @@ export default function App() {
 
 ## Differences from the web
 
-- **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
+- **Units.** A number on a spacing or size prop is px, as on the web in 3.0, and px here are density-independent points. Tokens work as on the web, and so do `"24px"` and `"1.5rem"` strings; rem follows the screen size, 15pt on phones and 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
 - **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
+- **Dialog** opens as a bottom sheet unless `variant="center"`; the web's default is the centred card.
+- **Tag** `variant="gradient"` is a flat brand tint, and `effect` draws no shine.
+
+## Coming from the 2.x props
+
+The first preview took the 2.x props. Rename them as core's 3.0 codemod does on the web:
+
+| 2.x | 3.0 |
+| --- | --- |
+| `onToggle` on Checkbox, RadioButton and Switch | `onCheckedChange` |
+| `onChange` on RadioGroup and SegmentedControl, `onSelect` on Select | `onValueChange` |
+| `ariaLabel` | `aria-label` |
+| Button and IconButton `variant="danger"`, `"success"`, `"warning"` | `tone="danger"`, and so on |
+| `variant="quaternary"` | `variant="ghost"` |
+| Tag `scheme`; Feedback, Toast and `addToast` `variant` | `tone` |
+| Text and Heading `variant` | `textVariant` |
+| `Badge` | `Tag variant="announce"`, with `label` for `title` and `prefixIcon` for `icon` |
+| `Chip` | `Tag selected`; `selected` now defaults to false |
+| Dialog `hideClose` | `showClose={false}` |
+| Avatar `statusIndicator={{ color }}` | `statusIndicator={{ scheme }}` |
+| A number on spacing or sizes: rem | px; write `"20rem"` to keep the old size |
 
 ## Design tokens
 

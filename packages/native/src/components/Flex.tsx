@@ -4,13 +4,14 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
 import type { Colors, RadiusSize, ShadowSize, SpacingToken } from "../types";
 import type { RefComponent, ViewRef, Writable } from "./refs";
-import { type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
+import { type Length, type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
 import { Text } from "./Text";
 
 export { type SpacingProps, spacingStyle, splitSpacing };
 
 type Alignment = "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
-type Size = number | SpacingToken | `${number}%`;
+/** A size: a token, a number of points (px, as in core 3.0), `"320px"`, `"20rem"` or `"50%"`. */
+type Size = number | SpacingToken | Length | `${number}%`;
 
 /** Core's `FlexProps`, `SizeProps` and the `StyleProps` that have a native equivalent. */
 export interface FlexProps extends SpacingProps, Omit<ViewProps, "style"> {
@@ -66,7 +67,7 @@ const ALIGN: Record<Alignment, ViewStyle["alignItems"]> = {
 function size(theme: OnceTheme, value: Size | undefined): DimensionValue | undefined {
   if (value === undefined) return undefined;
   if (typeof value === "string" && value.endsWith("%")) return value as DimensionValue;
-  return theme.space(value as SpacingToken | number);
+  return theme.space(value as Exclude<Size, `${number}%`>);
 }
 
 /** Every `FlexProps` style prop as a `ViewStyle`, the rest passed through. */

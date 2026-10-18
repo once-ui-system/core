@@ -73,7 +73,7 @@ describe("components", () => {
 
   it("Text resolves its variant and colour from the theme", () => {
     inLight(
-      <Text variant="body-strong-l" onBackground="brand-medium">
+      <Text textVariant="body-strong-l" onBackground="brand-medium">
         Hello
       </Text>,
     );
@@ -104,17 +104,17 @@ describe("components", () => {
   });
 
   it("Switch and Checkbox toggle, controlled or not", () => {
-    const onToggle = vi.fn();
+    const onCheckedChange = vi.fn();
     inLight(
       <>
-        <Switch label="Wi-Fi" onToggle={onToggle} />
+        <Switch label="Wi-Fi" onCheckedChange={onCheckedChange} />
         <Checkbox label="Accept" defaultChecked />
       </>,
     );
     const sw = screen.getByRole("switch", { name: "Wi-Fi" });
     expect(sw.getAttribute("aria-checked")).toBe("false");
     fireEvent.click(sw);
-    expect(onToggle).toHaveBeenCalledWith(true);
+    expect(onCheckedChange).toHaveBeenCalledWith(true);
     expect(sw.getAttribute("aria-checked")).toBe("true");
     const box = screen.getByRole("checkbox", { name: "Accept" });
     expect(box.getAttribute("aria-checked")).toBe("true");
@@ -137,7 +137,7 @@ describe("components", () => {
   });
 
   it("Feedback is an alert", () => {
-    inLight(<Feedback variant="danger" title="Payment failed" description="Try another card" />);
+    inLight(<Feedback tone="danger" title="Payment failed" description="Try another card" />);
     expect(screen.getByRole("alert")).toBeTruthy();
     expect(screen.getByText("Payment failed")).toBeTruthy();
   });
@@ -150,8 +150,8 @@ describe("components", () => {
           <Text>Card</Text>
         </Card>
         <Line />
-        <Tag scheme="success" label="Paid" />
-        <Avatar value="LT" statusIndicator={{ color: "green" }} />
+        <Tag tone="success" label="Paid" />
+        <Avatar value="LT" statusIndicator={{ scheme: "green" }} />
         <Avatar loading />
         <Textarea label="Notes" lines={4} />
         <Spinner size="l" />
@@ -234,7 +234,7 @@ describe("overlays", () => {
       return (
         <Button
           label="Save"
-          onPress={() => addToast({ variant: "success", message: "Saved", duration: 1000 })}
+          onPress={() => addToast({ tone: "success", message: "Saved", duration: 1000 })}
         />
       );
     }
@@ -253,13 +253,13 @@ describe("overlays", () => {
   });
 
   it("opens Select's options in a sheet and picks one", () => {
-    const onSelect = vi.fn();
+    const onValueChange = vi.fn();
     render(
       <ThemeProvider theme="light">
         <Select
           label="Venue"
           value="kazinczy"
-          onSelect={onSelect}
+          onValueChange={onValueChange}
           options={[
             { value: "kazinczy", label: "Kazinczy utca" },
             { value: "andrassy", label: "Andrássy út" },
@@ -269,6 +269,6 @@ describe("overlays", () => {
     );
     fireEvent.click(screen.getByRole("combobox", { name: "Venue" }));
     fireEvent.click(screen.getByText("Andrássy út"));
-    expect(onSelect).toHaveBeenCalledWith("andrassy");
+    expect(onValueChange).toHaveBeenCalledWith("andrassy");
   });
 });

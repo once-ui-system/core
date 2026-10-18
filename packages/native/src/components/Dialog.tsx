@@ -12,8 +12,24 @@ export interface DialogProps {
   description?: ReactNode;
   children?: ReactNode;
   footer?: ReactNode;
-  /** Hides the close button. The back gesture and a tap on the backdrop still close it. */
-  hideClose?: boolean;
+  /**
+   * Shows the close button. On by default, as in core 3.0 (2.x's
+   * `hideClose` is `showClose={false}`); the back gesture and a tap on the
+   * backdrop still close it.
+   */
+  showClose?: boolean;
+  /**
+   * The dialog's shape. `"sheet"` (the default on a phone) rises from the
+   * bottom edge; `"center"` is a card in the middle of the screen, core's
+   * default on the web.
+   */
+  variant?: "center" | "sheet";
+  /** Drawn inside the overlay, behind the panel: an image or a tint. Position it yourself. */
+  backdrop?: ReactNode;
+  /** The panel's minimum height, in points (px, as in core). */
+  minHeight?: number;
+  /** Called with the panel's height whenever it changes. */
+  onHeightChange?: (height: number) => void;
   /** A tap on the backdrop closes the dialog. Defaults to true, as in core. */
   closeOnClickaway?: boolean;
   /** Edge to edge, without the sheet's padding, as core's `flush`. */
@@ -22,8 +38,9 @@ export interface DialogProps {
 }
 
 /**
- * Core's `Dialog`, shown as a bottom sheet: the shape phones use for a modal
- * task. Same props (`open`, `onClose`, `title`, `description`, `footer`); the
+ * Core's `Dialog`, shown as a bottom sheet by default: the shape phones use
+ * for a modal task (`variant="center"` for a card in the middle). Same props
+ * (`open`, `onClose`, `title`, `description`, `footer`, `showClose`); the
  * Android back button closes it.
  */
 export function Dialog({
@@ -33,17 +50,33 @@ export function Dialog({
   description,
   children,
   footer,
-  hideClose = false,
+  showClose = true,
+  variant = "sheet",
+  backdrop,
+  minHeight,
+  onHeightChange,
   closeOnClickaway = true,
   flush = false,
   style,
 }: DialogProps) {
   const theme = useTheme();
   const pad = flush ? 0 : theme.space("24");
+  const sheet = variant === "sheet";
 
   return (
-    <Modal visible={open} transparent animationType="slide" onRequestClose={onClose}>
-      <View style={{ flex: 1, justifyContent: "flex-end" }}>
+    <Modal
+      visible={open}
+      transparent
+      animationType={sheet ? "slide" : "fade"}
+      onRequestClose={onClose}
+    >
+      <View
+        style={{
+          flex: 1,
+          justifyContent: sheet ? "flex-end" : "center",
+          padding: sheet ? 0 : theme.space("16"),
+        }}
+      >
         <Pressable
           accessibilityLabel="Close"
           accessible={closeOnClickaway}
@@ -57,46 +90,61 @@ export function Dialog({
             backgroundColor: theme.color("backdrop"),
           }}
         />
+        {backdrop}
         <View
           accessibilityViewIsModal
           aria-modal
           role="dialog"
+          onLayout={onHeightChange ? (e) => onHeightChange(e.nativeEvent.layout.height) : undefined}
           style={[
             {
               maxHeight: "90%",
+              minHeight,
               backgroundColor: theme.color("page-background"),
               borderColor: theme.color("neutral-border-medium"),
               borderWidth: 1,
-              borderBottomWidth: 0,
-              borderTopLeftRadius: theme.radius("xl"),
-              borderTopRightRadius: theme.radius("xl"),
               paddingTop: theme.space("8"),
             },
+            sheet
+              ? {
+                  borderBottomWidth: 0,
+                  borderTopLeftRadius: theme.radius("xl"),
+                  borderTopRightRadius: theme.radius("xl"),
+                }
+              : { borderRadius: theme.radius("xl"), ...theme.shadow("xl") },
             style,
           ]}
         >
           {/* The grabber, so the sheet reads as one on both platforms. */}
-          <View
-            style={{
-              alignSelf: "center",
-              width: theme.space("40"),
-              height: theme.space("4"),
-              borderRadius: 9999,
-              backgroundColor: theme.color("neutral-alpha-medium"),
-            }}
-          />
-          {(title || description || !hideClose) && (
+          {sheet && (
+            <View
+              style={{
+                alignSelf: "center",
+                width: theme.space("40"),
+                height: theme.space("4"),
+                borderRadius: 9999,
+                backgroundColor: theme.color("neutral-alpha-medium"),
+              }}
+            />
+          )}
+          {(title || description || showClose) && (
             <Row paddingX="24" paddingTop="16" gap="12" vertical="start">
               <Column flex={1} gap="4">
-                {title && <Heading variant="heading-strong-l">{title}</Heading>}
+                {title && <Heading textVariant="heading-strong-l">{title}</Heading>}
                 {description && (
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
                     {description}
                   </Text>
                 )}
               </Column>
-              {!hideClose && (
-                <IconButton icon="close" variant="tertiary" ariaLabel="Close" onPress={onClose} />
+              {showClose && (
+                <IconButton
+                  icon="close"
+                  size="m"
+                  variant="tertiary"
+                  tooltip="Close"
+                  onPress={onClose}
+                />
               )}
             </Row>
           )}
@@ -110,7 +158,7 @@ export function Dialog({
             <Row
               paddingX="24"
               paddingTop="16"
-              paddingBottom="32"
+              paddingBottom={sheet ? "32" : "24"}
               gap="8"
               horizontal="end"
               style={{ borderTopWidth: 1, borderColor: theme.color("neutral-border-weak") }}

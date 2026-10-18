@@ -93,7 +93,8 @@ export interface IconProps {
   color?: string;
   /** Hidden from screen readers unless `false`, as in core. */
   decorative?: boolean;
-  ariaLabel?: string;
+  /** The name of a non-decorative icon; its `name` by default, as in core. */
+  "aria-label"?: string;
   style?: ViewStyle;
 }
 
@@ -105,7 +106,7 @@ export function Icon({
   onSolid,
   color,
   decorative = true,
-  ariaLabel,
+  "aria-label": ariaLabel,
   style,
 }: IconProps) {
   const theme = useTheme();
