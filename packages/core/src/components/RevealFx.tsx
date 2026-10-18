@@ -99,6 +99,12 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
           }, getSpeedDurationMs());
         }
       }
+
+      return () => {
+        if (transitionTimeoutRef.current) {
+          clearTimeout(transitionTimeoutRef.current);
+        }
+      };
     }, [revealed]);
 
     const getTranslateYValue = () => {
