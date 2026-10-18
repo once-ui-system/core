@@ -459,7 +459,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties

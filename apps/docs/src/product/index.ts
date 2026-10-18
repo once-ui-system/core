@@ -2,6 +2,7 @@ export * from "./PromptLibrary";
 export * from "./Header";
 export * from "./Footer";
 export * from "./Sidebar";
+export * from "./ContentPanel";
 export * from "./Providers";
 export * from "./AnimationExample";
 export * from "./ChatExamples";

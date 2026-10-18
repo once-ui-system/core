@@ -22,7 +22,9 @@ item (see `ROADMAP.md`, Week 4).
   to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
   mode is unchanged. Light solid fills (buttons, badges, `data-solid="color"` brand
   solids and `--brand-color-*`) move from step 600 to 500, the same step dark mode
-  uses: white labels on 600 measured 3:1, below AA. Apps that set `background="page"` on white-only artwork may want
+  uses: white labels on 600 measured 3:1, below AA. In light mode `Input`, `Textarea`
+  and the fields built on them are white with a `neutral-border-strong` edge instead of a
+  gray fill, which read as disabled. Apps that set `background="page"` on white-only artwork may want
   `surface` instead.
 
 ### Fixed

@@ -4,12 +4,12 @@ import '../resources/custom.scss';
 
 import classNames from "clsx";
 
-import { Footer, Header, Sidebar } from "@/product";
+import { ContentPanel, Footer, Header, Sidebar } from "@/product";
 import { baseURL } from "@/resources";
 
 import { Analytics } from "@vercel/analytics/react"
 
-import { Background, Column, Flex, Meta, Row, ThemeInit } from "@once-ui-system/core";
+import { Background, Column, Flex, Meta, ThemeInit } from "@once-ui-system/core";
 import { dataStyle, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
 import { currentVersion } from "@/resources/versions";
@@ -114,9 +114,7 @@ export default function RootLayout({
             >
               <Flex horizontal="center" maxWidth={layout.body.width} minHeight="0">
                 <Sidebar m={{hide: true}} paddingRight="2" />
-                <Row fillWidth>
-                  {children}
-                </Row>
+                <ContentPanel>{children}</ContentPanel>
               </Flex>
             </Flex>
             <Footer />

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.2.0",
- "generated": "2026-10-17",
+ "generated": "2026-10-18",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -640,6 +640,16 @@
    "`${number}vw`",
    "`calc(${string})`"
   ],
+  "CursorPlacement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ],
   "curveType": [
    "step",
    "linear",
@@ -1104,8 +1114,8 @@
    "id": "!string",
    "name": "!string",
    "section": "!string",
-   "shortcut": "!string[]",
-   "keywords": "!string",
+   "shortcut": "string[]",
+   "keywords": "string",
    "href": "string",
    "perform": "() => void",
    "icon": "IconName",
@@ -2515,7 +2525,7 @@
    "props": {
     "trigger": "ReactNode",
     "overlay": "ReactNode",
-    "placement": "Placement = bottom-left",
+    "placement": "CursorPlacement = bottom-left",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -3274,7 +3284,7 @@
     "description": "React.ReactNode",
     "disabled": "boolean",
     "iconButtonProps": "IconButtonProps",
-    "onClick": "!() => void",
+    "onClick": "() => void",
     "className": "string",
     "id": "string",
     "labelId": "string",
@@ -3325,7 +3335,7 @@
     "children": "!ReactNode",
     "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
     "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
-    "charset": "string[] = defaultCharset",
+    "charset": "string | string[] = defaultCharset",
     "onTrigger": "(triggerFn: () => void) => void",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4031,7 +4041,7 @@
    ],
    "props": {
     "buttons": "!ButtonOption[]",
-    "onChange": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+    "onChange": "(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
     "defaultValue": "string",
     "fillWidth": "boolean = true",
     "value": "string",
@@ -4157,7 +4167,7 @@
     "StyleProps"
    ],
    "props": {
-    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
     "style": "React.CSSProperties",
@@ -4254,7 +4264,7 @@
    ],
    "props": {
     "size": "CondensedTShirtSizes = m",
-    "color": "!\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+    "color": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
     "ariaLabel": "string = `${color} status indicator`",
     "className": "string",
     "style": "React.CSSProperties"
