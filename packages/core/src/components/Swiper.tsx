@@ -1,12 +1,12 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
 import { Media } from "./Media";
 import { Row } from "./Row";
-import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import styles from "./Swiper.module.scss";
 
 interface SwiperItem {

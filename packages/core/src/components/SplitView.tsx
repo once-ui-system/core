@@ -3,10 +3,10 @@
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Card } from "./Card";
 import { Column } from "./Column";
 import { Row } from "./Row";
-import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { SegmentedControl } from "./SegmentedControl";
 
 interface SplitViewProps extends React.ComponentProps<typeof Row> {
