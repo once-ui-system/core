@@ -1,9 +1,10 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { fieldLocale } from "../utils/calendarLocale";
 import type { DatePickerLabels } from "./DatePicker";
-import { DateRange, DateRangePicker } from "./DateRangePicker";
+import { type DateRange, DateRangePicker } from "./DateRangePicker";
 import { DropdownComboboxContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
@@ -69,6 +70,9 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
       labels,
       onClick,
       onKeyDown,
+      // Names the dialog. Spread onto both fields, it replaced their own
+      // names and the start and end fields were announced alike.
+      "aria-label": ariaLabel,
       ...rest
     },
     ref,
@@ -183,7 +187,7 @@ const DateRangeInput = forwardRef<HTMLDivElement, DateRangeInputProps>(
         id={dialogId}
         role="dialog"
         aria-modal="true"
-        aria-label={rest["aria-label"] || `${startLabel} – ${endLabel}`}
+        aria-label={ariaLabel || `${startLabel} – ${endLabel}`}
         onKeyDown={handleDialogKeyDown}
       >
         <DateRangePicker

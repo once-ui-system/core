@@ -1,12 +1,13 @@
 "use client";
-import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
-import { Input, InputProps } from "./Input";
+import { Input, type InputProps } from "./Input";
 import { Slider } from "./Slider";
 
 /** The field's own controls. Omitted fields keep the English default. */
@@ -111,6 +112,9 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
       setHexValue("");
       setAlpha(100);
       onChange("");
+      // The clear button unmounts with the colour; without this, focus
+      // dropped to the page and a keyboard user lost their place.
+      colorInputRef.current?.focus();
     };
     return (
       <Input

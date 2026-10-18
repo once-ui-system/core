@@ -233,6 +233,8 @@ const HeadingNav = forwardRef<HTMLDivElement, HeadingNavProps>(
                       <SmartLink
                         fillWidth
                         href={"#" + heading.id}
+                        // The current section was told by colour and weight alone.
+                        aria-current={isActive ? "location" : undefined}
                         onClick={(e) => {
                           e.preventDefault();
                           const target = document.getElementById(heading.id);

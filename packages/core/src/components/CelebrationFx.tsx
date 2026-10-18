@@ -67,6 +67,7 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
       active = true,
       reducedMotion = "auto",
       children,
+      style,
       ...rest
     },
     forwardedRef,
@@ -214,7 +215,9 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
           trigger === "hover"
             ? isHoveredRef.current
             : trigger === "manual"
-              ? active
+              ? // Read from the ref the manual-trigger effect keeps in step with
+                // `active`: this loop's closure holds the `active` it started with.
+                isEmittingRef.current
               : trigger === "click"
                 ? clickPositionRef.current !== null
                 : isEmittingRef.current;
@@ -410,14 +413,16 @@ const CelebrationFx = React.forwardRef<HTMLDivElement, CelebrationFxProps>(
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
+        {...rest}
         style={{
           cursor: trigger === "click" ? "pointer" : undefined,
-          ...rest.style,
+          ...style,
         }}
-        {...rest}
       >
+        {/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: a canvas without tabIndex is not focusable; this one is decoration */}
         <canvas
           ref={canvasRef}
+          aria-hidden="true"
           style={{
             position: "absolute",
             top: 0,
