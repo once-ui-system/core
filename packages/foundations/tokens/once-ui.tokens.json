@@ -2139,7 +2139,7 @@
         "theme": "light"
       },
       "tokens": {
-        "page-background": "{function-neutral-1100}",
+        "page-background": "{function-neutral-1200}",
         "backdrop": "{static-white-medium}",
         "solid-border-color-brand": "{brand-alpha-strong}",
         "solid-border-color-neutral": "{neutral-alpha-strong}",
