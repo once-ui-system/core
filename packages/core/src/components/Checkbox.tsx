@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useId, useState } from "react";
+import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { assignRefs, retarget } from "../internal/toggleInput";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -38,14 +39,26 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       name,
       value,
       "aria-label": ariaLabel,
-      ...props
+      label,
+      description,
+      iconButtonProps,
+      id,
+      onChange,
+      onBlur,
+      onFocus,
+      ...inputProps
     },
     ref,
   ) => {
     const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
     const labelId = useId();
     const descriptionId = useId();
-    const hasLabel = Boolean(props.label);
+    const hasLabel = Boolean(label);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const setInputRef = useCallback(
+      (node: HTMLInputElement | null) => assignRefs(node, inputRef, ref),
+      [ref],
+    );
 
     useEffect(() => {
       if (controlledIsChecked !== undefined) {
@@ -62,11 +75,24 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       onToggle?.(next);
     };
 
+    // The box and label click the hidden input, so its `change` event (and a
+    // caller's `onChange`, e.g. react-hook-form's) fires with the new state.
+    const activate = () => {
+      if (disabled) return;
+      if (inputRef.current) inputRef.current.click();
+      else toggleItem();
+    };
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      toggleItem();
+      onChange?.(event);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent) => {
       if (disabled) return;
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        toggleItem();
+        activate();
       }
     };
 
@@ -84,8 +110,9 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             control people reach, so this stays out of the accessibility tree
             rather than standing beside it as a second, unlabelled checkbox. */}
         <input
+          {...inputProps}
           type="checkbox"
-          ref={ref}
+          ref={setInputRef}
           name={name}
           value={value}
           aria-hidden="true"
@@ -97,7 +124,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
                 : isChecked
           }
           checked={controlledIsChecked !== undefined ? controlledIsChecked : isChecked}
-          onChange={toggleItem}
+          onChange={handleInputChange}
           disabled={disabled}
           className={styles.hidden}
           tabIndex={-1}
@@ -123,10 +150,12 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           // button beside it); `aria-label` only when there is no label.
           aria-labelledby={hasLabel ? labelId : undefined}
           aria-label={hasLabel ? undefined : ariaLabel}
-          aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+          aria-describedby={hasLabel && description ? descriptionId : undefined}
           aria-disabled={disabled}
-          onClick={toggleItem}
+          onClick={activate}
           onKeyDown={handleKeyDown}
+          onFocus={onFocus && ((event) => onFocus(retarget(event, inputRef.current)))}
+          onBlur={onBlur && ((event) => onBlur(retarget(event, inputRef.current)))}
           className={classNames(styles.element, {
             [styles.checked]:
               controlledIsChecked !== undefined ? controlledIsChecked || indeterminate : isChecked,
@@ -145,13 +174,16 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
             </Flex>
           )}
         </Flex>
-        {props.label && (
+        {label && (
           <InteractiveDetails
             disabled={disabled}
-            {...props}
+            label={label}
+            description={description}
+            iconButtonProps={iconButtonProps}
+            id={id}
             labelId={labelId}
             descriptionId={descriptionId}
-            onClick={toggleItem}
+            onClick={activate}
           />
         )}
       </Flex>

@@ -1,0 +1,22 @@
+{
+ "name": "Fieldset",
+ "group": "components",
+ "extends": [
+  "Form"
+ ],
+ "props": {
+  "legend": "ReactNode",
+  "description": "ReactNode",
+  "span": "number"
+ },
+ "tags": [
+  "form",
+  "layout"
+ ],
+ "pairsWith": [
+  "Form",
+  "Field",
+  "Input"
+ ],
+ "mixinsRef": []
+}

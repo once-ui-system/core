@@ -2,6 +2,7 @@
 const baseURL = "https://dev.once-ui.com";
 
 // default customization applied to the HTML in the main layout.tsx
+/** @satisfies {import("@once-ui-system/core").OnceUIStyleConfig} */
 const style = {
   theme: "system", // dark | light | system
   neutral: "gray", // sand | gray | slate
@@ -15,6 +16,7 @@ const style = {
   scaling: "100", // 90 | 95 | 100 | 105 | 110
 };
 
+/** @satisfies {import("@once-ui-system/core").OnceUIDataStyleConfig} */
 const dataStyle = {
   variant: "gradient", // flat | gradient | outline
   mode: "categorical", // categorical | divergent | sequential

@@ -4,6 +4,22 @@
   touch-action: none;
 }
 
+/* A 4px bar is too thin to find with a finger. On touch it grows to the 44px
+   touch target with transparent borders, which take the taps, while the
+   negative margins keep the row the height it was and `background-clip`
+   keeps the bar drawn 4px thick. (The bar clips its overflow, so a
+   pseudo-element hit area would be clipped with it.) Doubled to win over the
+   background and radius utilities on the same element. */
+@media (pointer: coarse) {
+  .progressTrack.progressTrack {
+    --track-reach: calc((var(--touch-target, 2.75rem) - 0.25rem) / 2);
+    height: var(--touch-target, 2.75rem);
+    margin-block: calc(-1 * var(--track-reach));
+    border-block: var(--track-reach) solid transparent;
+    background-clip: padding-box;
+  }
+}
+
 .progressFill {
   height: 100%;
   background: var(--brand-solid-strong);
@@ -20,10 +36,15 @@
   transition: opacity var(--transition-micro-medium);
 }
 
-.progressTrack:hover .progressHandle,
 .progressTrack:focus-visible .progressHandle,
 .seeking .progressHandle {
   opacity: 1;
+}
+
+@media (hover: hover) {
+  .progressTrack:hover .progressHandle {
+    opacity: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

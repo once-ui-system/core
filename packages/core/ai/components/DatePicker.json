@@ -33,7 +33,8 @@
   "onHover": "(date: Date | null) => void",
   "autoFocus": "boolean = false",
   "open": "boolean",
-  "locale": "string"
+  "locale": "string",
+  "labels": "DatePickerLabels"
  },
  "tags": [
   "form"
@@ -161,6 +162,17 @@
    "l",
    "m",
    "s"
-  ]
+  ],
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
+  }
  }
 }

@@ -71,7 +71,12 @@
   }
 }
 
-.wrapper:not(.disabled):hover .thumb,
 .thumb.active {
   transform: scale(1.2);
+}
+
+@media (hover: hover) {
+  .wrapper:not(.disabled):hover .thumb {
+    transform: scale(1.2);
+  }
 }

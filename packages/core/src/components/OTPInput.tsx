@@ -100,7 +100,11 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
     };
 
     return (
-      <Column gap="8" ref={ref}>
+      // The div props (`className`, `id`, `onChange`…) belong to the wrapper. On
+      // each digit they overrode the field's own handlers and duplicated ids;
+      // a caller's `onChange` or `onKeyDown` still sees every digit's event as
+      // it bubbles up, after the field has handled it.
+      <Column gap="8" ref={ref} className={className} {...props}>
         <Flex gap="8" center onClick={handleContainerClick}>
           {Array.from({ length }, (_, index) => (
             <Input
@@ -121,7 +125,6 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               onKeyDown={(e) => handleKeyDown(index, e)}
               aria-label={`OTP digit ${index + 1} of ${length}`}
               className={styles.inputs}
-              {...props}
             />
           ))}
         </Flex>

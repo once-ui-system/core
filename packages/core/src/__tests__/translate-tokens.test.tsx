@@ -59,8 +59,11 @@ describe("translate values", () => {
     expect(translateValue("-50%")).toBe("-50%");
     expect(translateValue("10vw")).toBe("10vw");
     expect(translateValue("calc(100% - 1rem)")).toBe("calc(100% - 1rem)");
+    // px, rem and em are CSS units since 2.3.
+    expect(translateValue("16px")).toBe("16px");
+    expect(translateValue("0.5rem")).toBe("0.5rem");
     // Not a token, not a unit: nothing, as before.
-    expect(translateValue("16px")).toBeUndefined();
+    expect(translateValue("16pt")).toBeUndefined();
     expect(translateValue("")).toBeUndefined();
     expect(translateValue(undefined)).toBeUndefined();
   });

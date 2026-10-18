@@ -1,0 +1,36 @@
+/* A fieldset's user-agent styles (the etched border, the inset padding, the
+   legend notched into the top edge, and `min-width: min-content`, which stops
+   a grid inside it from shrinking) are all things a form section does not
+   want. A rendered legend also sits outside the fieldset's content box, so
+   `display: flex` and `gap` on the fieldset never reach it; spacing is done
+   with margins instead, and the legend is floated full width — the usual
+   reset — so it flows like an ordinary block. */
+.fieldset {
+  display: block;
+  min-width: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  float: left;
+  width: 100%;
+  margin: 0 0 var(--static-space-16);
+  padding: 0 var(--static-space-4);
+
+  + * {
+    clear: both;
+  }
+}
+
+/* With a description under it, the legend's gap moves below the description. */
+.legend:has(+ .description) {
+  margin-bottom: var(--static-space-4);
+}
+
+.description {
+  margin: 0 0 var(--static-space-16);
+  padding: 0 var(--static-space-4);
+}

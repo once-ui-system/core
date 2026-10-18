@@ -13,6 +13,7 @@ import {
 import { ColorScheme, ColorWeight } from "../types";
 import {
   BELOW_HEADER,
+  isCSSUnit,
   offsetClasses,
   scrollsOn,
   sizeValue,
@@ -249,38 +250,10 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       typeof marginX !== "number" && marginX && `mx-${marginX}`,
       typeof marginY !== "number" && marginY && `my-${marginY}`,
       typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" &&
-        !top.endsWith("%") &&
-        !top.endsWith("vh") &&
-        !top.endsWith("dvh") &&
-        !top.endsWith("vw") &&
-        !top.startsWith("calc(") &&
-        top &&
-        `top-${top}`,
-      typeof right === "string" &&
-        !right.endsWith("%") &&
-        !right.endsWith("vh") &&
-        !right.endsWith("dvh") &&
-        !right.endsWith("vw") &&
-        !right.startsWith("calc(") &&
-        right &&
-        `right-${right}`,
-      typeof bottom === "string" &&
-        !bottom.endsWith("%") &&
-        !bottom.endsWith("vh") &&
-        !bottom.endsWith("dvh") &&
-        !bottom.endsWith("vw") &&
-        !bottom.startsWith("calc(") &&
-        bottom &&
-        `bottom-${bottom}`,
-      typeof left === "string" &&
-        !left.endsWith("%") &&
-        !left.endsWith("vh") &&
-        !left.endsWith("dvh") &&
-        !left.endsWith("vw") &&
-        !left.startsWith("calc(") &&
-        left &&
-        `left-${left}`,
+      typeof top === "string" && !isCSSUnit(top) && top && `top-${top}`,
+      typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
+      typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
+      typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
@@ -351,13 +324,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       if (value === undefined) return undefined;
       if (typeof value === "number") return `${value}rem`;
       if (typeof value === "string") {
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
+        if (isCSSUnit(value)) {
           return value;
         }
       }

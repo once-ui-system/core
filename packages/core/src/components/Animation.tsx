@@ -12,6 +12,7 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { cannotHover } from "../internal/pointer";
 import type { Placement, SpacingToken } from "../types";
 import { Flex } from "./Flex";
 
@@ -101,7 +102,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
 
     useEffect(() => {
       setMounted(true);
-      setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+      setIsTouchDevice(cannotHover());
       if (portal) {
         setIsBrowser(true);
       }

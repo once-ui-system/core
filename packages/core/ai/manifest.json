@@ -1,6 +1,6 @@
 {
- "version": "2.1.0",
- "generated": "2026-10-16",
+ "version": "2.2.0",
+ "generated": "2026-10-17",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -165,5 +165,6 @@
   "catalog.json"
  ],
  "resolve": "tasks/index.json",
- "bundle": "bundles/{id}.json"
+ "bundle": "bundles/{id}.md",
+ "bundleJson": "bundles/{id}.json"
 }

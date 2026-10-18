@@ -12,7 +12,7 @@ import React, {
 import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 import { Column } from "./Column";
-import { useFieldSize } from "./FormContext";
+import { useFieldInvalid, useFieldSize } from "./FormContext";
 import styles from "./Input.module.scss";
 import { Row } from "./Row";
 import { Text } from "./Text";
@@ -95,6 +95,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    // `error` used to be accepted and ignored here. It now marks the field
+    // invalid the way it does on `Input`, and so does an enclosing `Field`.
+    const fieldInvalid = useFieldInvalid(id);
+    const invalid = error || fieldInvalid;
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
@@ -102,7 +106,11 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    // `validate` reads the field's text. Uncontrolled there is no `value`, so
+    // the field tracks what was typed itself; it used to validate nothing.
+    const [uncontrolledValue, setUncontrolledValue] = useState(props.defaultValue);
+    const fieldValue = props.value !== undefined ? props.value : uncontrolledValue;
+    const debouncedValue = useDebounce(fieldValue, 1000);
 
     const adjustHeight = () => {
       if (textareaRef.current) {
@@ -114,6 +122,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (props.value === undefined) setUncontrolledValue(event.target.value);
       if (lines === "auto") {
         adjustHeight();
       }
@@ -183,6 +192,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     }, [props.value, lines]);
 
     const displayError = validationError || errorMessage;
+    const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
 
     const textareaClassNames = classNames(
       styles.input,
@@ -202,7 +212,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: displayError && debouncedValue !== "",
+          [styles.error]: invalid || (displayError && debouncedValue !== ""),
         })}
       >
         <Row
@@ -250,8 +260,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               onBlur={handleBlur}
               onAnimationStart={handleAnimationStart}
               className={`${textareaClassNames} scrollbar-minimal`}
-              aria-describedby={displayError ? `${id}-error` : undefined}
-              aria-invalid={!!displayError}
+              // The caller's own description comes first; it used to be
+              // overwritten, the same bug Input had.
+              aria-describedby={
+                [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+                  .filter(Boolean)
+                  .join(" ") || undefined
+              }
+              aria-invalid={invalid || !!displayError}
               style={{
                 ...style,
                 resize: lines === "auto" ? "none" : resize,
@@ -298,7 +314,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             </Row>
           )}
         </Row>
-        {displayError && errorMessage !== false && (
+        {showsErrorMessage && (
           <Row
             paddingX="16"
             id={`${id}-error`}

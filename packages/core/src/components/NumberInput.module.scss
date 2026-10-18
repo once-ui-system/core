@@ -12,7 +12,16 @@
 
 .stepper {
   pointer-events: visibleFill;
-  &:hover {
-    background-color: var(--neutral-alpha-medium);
+  @media (hover: hover) {
+    &:hover {
+      background-color: var(--neutral-alpha-medium);
+    }
+  }
+}
+// The two steppers sit one above the other inside the field. Their tap areas
+// keep to the steppers' own height, so neither reaches over the other.
+@media (pointer: coarse) {
+  .stepper > :global(.button)::after {
+    height: 100%;
   }
 }

@@ -6,7 +6,8 @@
   "columns": "FormColumns",
   "size": "TShirtSizes",
   "as": "\"div\" | \"form\" = div",
-  "onSubmit": "React.FormEventHandler<HTMLFormElement>",
+  "onSubmit": "(event: React.FormEvent<HTMLFormElement>) => unknown",
+  "pending": "boolean",
   "className": "string",
   "style": "React.CSSProperties",
   "children": "React.ReactNode"

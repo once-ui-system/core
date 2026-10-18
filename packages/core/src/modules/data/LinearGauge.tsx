@@ -5,6 +5,7 @@ import { Column } from "../../components/Column";
 import { Flex } from "../../components/Flex";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
+import { cssColor } from "../../internal/cssColor";
 import { ColorValue } from "../../types";
 import styles from "./Gauge.module.css";
 
@@ -106,7 +107,7 @@ export const LinearGauge = ({
               isActive && hasHue
                 ? `hsl(${finalHue}, 100%, 50%)`
                 : isActive && color
-                  ? `var(--data-${color})`
+                  ? cssColor(color, "data-")
                   : "var(--neutral-alpha-medium)",
           }}
         />,

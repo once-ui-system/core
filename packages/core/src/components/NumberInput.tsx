@@ -9,8 +9,10 @@ import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
 
 interface NumberInputProps
-  extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "onChange"> {
+  extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "defaultValue" | "onChange"> {
   value?: number;
+  /** The starting number when there is no `value`. A string is parsed. */
+  defaultValue?: number | string;
   onChange?: (value: number) => void;
   min?: number;
   max?: number;
@@ -26,8 +28,15 @@ const shows = (text: string, value: number | undefined) =>
   value === undefined ? text === "" : parseFloat(text) === value;
 
 const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
-  ({ value, onChange, min, max, step = 1, padStart, ...props }, ref) => {
-    const [localValue, setLocalValue] = useState<string>(() => format(value, padStart));
+  ({ value, defaultValue, onChange, min, max, step = 1, padStart, ...props }, ref) => {
+    // `defaultValue` used to fall through to the native input next to `value`:
+    // React warned about a controlled-and-uncontrolled field, and the default
+    // never showed.
+    const [localValue, setLocalValue] = useState<string>(() => {
+      if (value !== undefined) return format(value, padStart);
+      const initial = typeof defaultValue === "string" ? parseFloat(defaultValue) : defaultValue;
+      return format(initial === undefined || Number.isNaN(initial) ? undefined : initial, padStart);
+    });
 
     /**
      * Follow `value` after mount. The text used to be seeded from it once and

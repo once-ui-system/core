@@ -13,6 +13,7 @@ import {
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import {
   BELOW_HEADER,
+  isCSSUnit,
   offsetClasses,
   scrollsOn,
   sizeValue,
@@ -142,13 +143,14 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     },
     ref,
   ) => {
-    if (onBackground && onSolid) {
+    // Prop-misuse hints are for development; production logged them on every render.
+    if (process.env.NODE_ENV !== "production" && onBackground && onSolid) {
       console.warn(
         "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
       );
     }
 
-    if (background && solid) {
+    if (process.env.NODE_ENV !== "production" && background && solid) {
       console.warn(
         "You cannot use both 'background' and 'solid' props simultaneously. Only one will be applied.",
       );
@@ -234,41 +236,14 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
           ? "g-vertical--1"
           : "g-horizontal--1"
         : typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" &&
-        !top.endsWith("%") &&
-        !top.endsWith("vh") &&
-        !top.endsWith("dvh") &&
-        !top.endsWith("vw") &&
-        !top.startsWith("calc(") &&
-        top
+      typeof top === "string" && !isCSSUnit(top) && top
         ? `top-${top}`
         : position === "sticky" && top === undefined
           ? "top-0"
           : undefined,
-      typeof right === "string" &&
-        !right.endsWith("%") &&
-        !right.endsWith("vh") &&
-        !right.endsWith("dvh") &&
-        !right.endsWith("vw") &&
-        !right.startsWith("calc(") &&
-        right &&
-        `right-${right}`,
-      typeof bottom === "string" &&
-        !bottom.endsWith("%") &&
-        !bottom.endsWith("vh") &&
-        !bottom.endsWith("dvh") &&
-        !bottom.endsWith("vw") &&
-        !bottom.startsWith("calc(") &&
-        bottom &&
-        `bottom-${bottom}`,
-      typeof left === "string" &&
-        !left.endsWith("%") &&
-        !left.endsWith("vh") &&
-        !left.endsWith("dvh") &&
-        !left.endsWith("vw") &&
-        !left.startsWith("calc(") &&
-        left &&
-        `left-${left}`,
+      typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
+      typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
+      typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
@@ -503,13 +478,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       if (typeof value === "number") return `${value}rem`;
       if (typeof value === "string") {
         // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
+        if (isCSSUnit(value)) {
           return value;
         }
       }

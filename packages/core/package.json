@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "publishConfig": {
     "access": "public"
   },
@@ -12,7 +12,7 @@
     "scripts/init-agent.js",
     "scripts/validate-ai-code.js"
   ],
-  "description": "Once UI for Next.js NPM package",
+  "description": "The open-source, agentic design system for React",
   "keywords": [
     "once-ui",
     "react",
@@ -99,6 +99,7 @@
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
     "./utils": {
       "types": "./dist/utils/index.d.ts",
       "import": "./dist/utils/index.js",
