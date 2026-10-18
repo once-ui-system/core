@@ -10,9 +10,9 @@ import type { ColorScheme } from "@once-ui-system/core";
  * ships it. Something can also be both at once, which one field could not
  * express.
  *
- * Absent means available on the `latest` dist-tag. That is the common case, so
- * it costs nothing to write. 2.0.0 retired the `"alpha"` status along with the
- * alpha dist-tag: everything it marked is on `latest` now.
+ * Nobody writes it. `published.ts` reads it from the package on npm, so it
+ * cannot outlive the release the way a hand-kept frontmatter flag did. Absent
+ * means available on the dist-tag readers install from.
  */
 export type Availability = "unreleased";
 
@@ -34,11 +34,6 @@ export const AVAILABILITY: Record<Availability, AvailabilityCopy> = {
     tag: "Soon",
     scheme: "warning",
     headline: "Not released yet.",
-    detail: "This is on main and is not in any published version yet. It will not install today.",
+    detail: "The published package does not include this yet, so it will not install today.",
   },
 };
-
-/** Narrow an arbitrary frontmatter value to a status we know how to render. */
-export function toAvailability(value: unknown): Availability | undefined {
-  return value === "unreleased" ? value : undefined;
-}

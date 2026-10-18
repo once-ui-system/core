@@ -6,10 +6,14 @@ import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { CopyPage } from "@/product/CopyPage";
 import { AvailabilityNotice } from "@/product/AvailabilityNotice";
+import { availabilityOf } from "@/product/published";
 import { VersionNotice } from "@/product/VersionNotice";
 import { platformOfSlug } from "@/resources/platforms";
 import { currentVersion } from "@/resources/versions";
 import { Metadata } from "next";
+
+// Release marks come from npm; see product/published.ts.
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const docs = await getPages();
@@ -55,6 +59,12 @@ export default async function Docs({
     notFound();
   }
   
+  const status = await availabilityOf({
+    slug: doc.slug,
+    title: doc.metadata.title,
+    exportName: doc.metadata.exportName,
+  });
+
   const { prevPage, nextPage } = getAdjacentPages(slugPath, 'section');
   
   const titleCase = (segment: string) =>
@@ -105,9 +115,7 @@ export default async function Docs({
               <CopyPage path={`/${doc.slug}`} />
             </Row>
             <VersionNotice path={`/${doc.slug}`} />
-            {doc.metadata.status && (
-              <AvailabilityNotice status={doc.metadata.status} />
-            )}
+            {status && <AvailabilityNotice status={status} />}
           </Column>
           {doc.metadata.image && (
             <Media marginY="24" border enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
