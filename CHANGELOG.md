@@ -13,6 +13,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **One look for a whole sidebar: `Nav` and `NavSection`.** Wrap NavItems and NavGroups
+  in `Nav` and set `density` (`compact` 32px rows with the small label, `normal` 40px,
+  `spacious` 48px), `variant` (`solid` fills the current row, `subtle` also dims the
+  rest, `minimal` marks it by weight alone) and `rail` (the line down an open group)
+  once. `NavSection` is the small dim heading over a block of rows, with an optional
+  `action`. Rows outside a `Nav` look as before; an explicit `size` on a NavItem still
+  wins. A selected NavItem with an `href` now carries `aria-current="page"`, and a
+  NavGroup header's icon lines up with the NavItems beside it.
+
 ### Fixed
 
 - **Types that refused what the components already do.** `SegmentedControl`'s

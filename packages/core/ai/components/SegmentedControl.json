@@ -15,7 +15,7 @@
  ],
  "props": {
   "buttons": "!ButtonOption[]",
-  "onChange": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+  "onChange": "(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
   "defaultValue": "string",
   "fillWidth": "boolean = true",
   "value": "string",
