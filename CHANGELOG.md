@@ -13,6 +13,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Changed
+
+- **Light mode has depth, like dark mode.** The light page background is now a soft
+  off-white (`neutral-1100`) and surfaces stay white, so cards, dialogs and panels lift
+  off the page instead of relying on borders alone. Neutral text is a step darker
+  (`on-background-medium` 400 → 300, `weak` 500 → 400) and coloured `weak` text moves
+  to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
+  mode is unchanged. Apps that set `background="page"` on white-only artwork may want
+  `surface` instead.
+
 ### Fixed
 
 - **Types that refused what the components already do.** `SegmentedControl`'s
