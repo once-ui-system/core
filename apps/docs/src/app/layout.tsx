@@ -12,6 +12,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { Background, Column, Flex, Meta, Row, ThemeInit } from "@once-ui-system/core";
 import { dataStyle, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
+import { currentVersion } from "@/resources/versions";
 import { Providers } from '@/product/Providers';
 
 import { Geist } from "next/font/google";
@@ -65,11 +66,13 @@ export async function generateMetadata() {
       siteName: meta.home.title,
       locale: schema.locale,
     },
+    // Only the stable version is indexed, so search results land on the docs
+    // for the release people install by default.
     robots: {
-      index: true,
+      index: currentVersion.status === "stable",
       follow: true,
       googleBot: {
-        index: true,
+        index: currentVersion.status === "stable",
         follow: true,
         "max-video-preview": -1,
         "max-image-preview": "large",
