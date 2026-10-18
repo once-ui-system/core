@@ -20,7 +20,10 @@ export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radi
   y?: number | CSSUnit;
   /**
    * The mask's radius: a number is px, a string a CSS length. Default
-   * `"50vh"`. Was a bare `vh` count until 3.0 (`radius={50}` is `radius="50vh"`).
+   * `"50svh"`: `svh`, the viewport with a phone's toolbars shown, holds still
+   * as they slide away, where `vh` would make the mask jump; on a desktop the
+   * two are the same. Was a bare `vh` count until 3.0: write a 2.x
+   * `radius={50}` as a string, `"50"` followed by the unit.
    */
   radius?: number | CSSUnit;
   reducedMotion?: boolean | "auto";
@@ -37,7 +40,7 @@ const Mask = ({
   cursor = false,
   x,
   y,
-  radius = "50vh",
+  radius = "50svh",
   reducedMotion = "auto",
   children,
   className,

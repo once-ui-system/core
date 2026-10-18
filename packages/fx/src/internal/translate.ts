@@ -48,3 +48,24 @@ export function translateValue(value: unknown): string | undefined {
   if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-space-${value})`;
   return undefined;
 }
+
+/**
+ * `translateX` and `translateY` as the one `transform` core's layout props
+ * write, the unset axis `0` (core's `translateTransform`).
+ */
+export function translateTransform(x: unknown, y: unknown): string | undefined {
+  const tx = translateValue(x);
+  const ty = translateValue(y);
+  return tx || ty ? `translate(${tx || "0"}, ${ty || "0"})` : undefined;
+}
+
+/**
+ * Transform functions joined in order, skipping the empty ones; `undefined`
+ * when none is left (core's `composeTransform`). An effect that writes its own
+ * `transform` (a flip, a tilt) composes it with the `translate()` its
+ * `translateX`/`translateY` props resolve to, rather than replacing it.
+ */
+export function composeTransform(...parts: (string | undefined | false)[]): string | undefined {
+  const transform = parts.filter(Boolean).join(" ");
+  return transform || undefined;
+}

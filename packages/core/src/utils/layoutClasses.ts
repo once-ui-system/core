@@ -222,6 +222,20 @@ export function translateTransform(x: unknown, y: unknown): string | undefined {
 }
 
 /**
+ * Transform functions joined in order, skipping the empty ones; `undefined`
+ * when none is left.
+ *
+ * For a component that writes its own `transform` (a scale, a flip, a tilt, a
+ * cursor position): the one it writes replaced the `translate()` its
+ * `translateX`/`translateY` props resolve to, so `<Arrow translateX={2}>`
+ * did not move. Composing the two keeps both.
+ */
+export function composeTransform(...parts: (string | undefined | false)[]): string | undefined {
+  const transform = parts.filter(Boolean).join(" ");
+  return transform || undefined;
+}
+
+/**
  * Breakpoint offsets, as classes: `m={{ top: "16" }}` is `.m-top-16`. The
  * classes were always generated; `ServerFlex` never wrote them, so a token
  * offset in a breakpoint object stayed on the server and did nothing.
@@ -284,6 +298,74 @@ const BREAKPOINT_SPACING: [prop: string, properties: string[]][] = [
   ["gap", ["gap"]],
 ];
 
+/** The side border props and the sides each one draws. */
+const BORDER_SIDES = [
+  ["borderTop", ["Top"]],
+  ["borderRight", ["Right"]],
+  ["borderBottom", ["Bottom"]],
+  ["borderLeft", ["Left"]],
+  ["borderX", ["Left", "Right"]],
+  ["borderY", ["Top", "Bottom"]],
+] as const;
+
+const BORDER_PROPS = [
+  "border",
+  ...BORDER_SIDES.map(([prop]) => prop),
+  "borderStyle",
+  "borderWidth",
+];
+
+/**
+ * A border colour as the variable its class reads: `true` is the default
+ * border, `"brand-strong"` is `--brand-border-strong` and `"brand-alpha-weak"`
+ * is `--brand-alpha-weak`, as `.brand-border-strong` and
+ * `.brand-border-alpha-weak` map them in the foundations.
+ */
+export function borderColorValue(value: unknown): string | undefined {
+  if (value === true) return "var(--default-border)";
+  if (typeof value !== "string" || !value) return undefined;
+  if (value === "transparent") return "var(--static-transparent)";
+  if (value === "surface") return "var(--surface-border)";
+  const parts = value.split("-");
+  if (parts.includes("alpha")) return `var(--${parts[0]}-alpha-${parts[2]})`;
+  return `var(--${parts[0]}-border-${parts[1]})`;
+}
+
+/**
+ * A breakpoint object's border, inline.
+ *
+ * The base border is a set of classes (`.brand-border-strong`, `.border-1`,
+ * `.border-reset` with `.border-left-1`, `.border-solid`), none of which has
+ * a breakpoint variant, so `m={{ borderLeft: "brand-strong" }}` type-checked,
+ * stayed on the server and drew nothing. The client components write the
+ * same result inline at the current breakpoint instead: the colour, the style
+ * (`solid` unless one is given) and the width, on every side for `border` and
+ * on the named sides only (the others 0) for a side prop.
+ */
+function breakpointBorderStyle(props: Record<string, unknown>): [string, string][] {
+  const entries: [string, string][] = [];
+  const width = props.borderWidth !== undefined ? `${props.borderWidth}px` : undefined;
+  const sides = new Set<string>();
+  let color = borderColorValue(props.border);
+  for (const [prop, propSides] of BORDER_SIDES) {
+    if (!props[prop]) continue;
+    color ??= borderColorValue(props[prop]);
+    for (const side of propSides) sides.add(side);
+  }
+  const bordered = Boolean(props.border) || sides.size > 0;
+  if (color) entries.push(["borderColor", color]);
+  if (props.borderStyle) entries.push(["borderStyle", String(props.borderStyle)]);
+  else if (bordered) entries.push(["borderStyle", "solid"]);
+  if (sides.size > 0) {
+    for (const side of ["Top", "Right", "Bottom", "Left"]) {
+      entries.push([`border${side}Width`, sides.has(side) ? (width ?? "1px") : "0"]);
+    }
+  } else if (bordered || width) {
+    entries.push(["borderWidth", width ?? "1px"]);
+  }
+  return entries;
+}
+
 /**
  * Everything one cascaded breakpoint object sets inline, as `[property,
  * value]` pairs in the order `ClientFlex` and `ClientGrid` apply them at the
@@ -308,6 +390,7 @@ export function breakpointStyle(props: Record<string, unknown>): [string, unknow
   if (props.style && typeof props.style === "object") {
     for (const [property, value] of Object.entries(props.style)) add(property, value);
   }
+  for (const [property, value] of breakpointBorderStyle(props)) add(property, value);
   add("aspectRatio", props.aspectRatio);
   for (const [prop, axis] of BREAKPOINT_SIZES) {
     const value = props[prop];
@@ -319,6 +402,62 @@ export function breakpointStyle(props: Record<string, unknown>): [string, unknow
   }
   for (const [side, value] of Object.entries(offsetStyle(props))) add(side, value);
   return entries;
+}
+
+/** What one breakpoint pass wrote inline, and what it wrote over. */
+export interface BreakpointOverride {
+  /** Every inline declaration before the pass: value and priority. */
+  before: Map<string, [string, string]>;
+  /** Each declaration the pass changed, with the value it left. */
+  after: Map<string, string>;
+}
+
+function inlineDeclarations(style: CSSStyleDeclaration): Map<string, [string, string]> {
+  const declarations = new Map<string, [string, string]>();
+  for (let i = 0; i < style.length; i++) {
+    const name = style.item(i);
+    declarations.set(name, [style.getPropertyValue(name), style.getPropertyPriority(name)]);
+  }
+  return declarations;
+}
+
+/**
+ * Applies a `breakpointStyle` result to an element, first undoing the
+ * previous pass.
+ *
+ * The client components used to clear each property they had written and
+ * then re-apply only `style`, so leaving a breakpoint emptied a base value it
+ * had overridden: `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40px
+ * maximum on the way back up. Now each pass records the inline declarations
+ * it wrote over and puts them back, longhand by longhand so a shorthand
+ * (`padding`) restores the sides beneath it. A declaration React has rewritten
+ * since (a base prop that changed) is left as React wrote it.
+ */
+export function applyBreakpointStyle(
+  element: HTMLElement,
+  entries: [string, unknown][],
+  previous: BreakpointOverride | null,
+): BreakpointOverride | null {
+  const { style } = element;
+  if (previous) {
+    for (const [name, written] of previous.after) {
+      if (style.getPropertyValue(name) !== written) continue;
+      const base = previous.before.get(name);
+      if (base) style.setProperty(name, base[0], base[1]);
+      else style.removeProperty(name);
+    }
+  }
+  if (entries.length === 0) return null;
+  const before = inlineDeclarations(style);
+  for (const [property, value] of entries) {
+    (style as unknown as Record<string, unknown>)[property] = value;
+  }
+  const after = new Map<string, string>();
+  for (const name of new Set([...before.keys(), ...inlineDeclarations(style).keys()])) {
+    const value = style.getPropertyValue(name);
+    if (value !== (before.get(name)?.[0] ?? "")) after.set(name, value);
+  }
+  return { before, after };
 }
 
 /**
@@ -337,6 +476,8 @@ const INLINE_ONLY = new Set([
   "minHeight",
   "aspectRatio",
   "style",
+  // A border has no breakpoint class; `breakpointBorderStyle` writes it inline.
+  ...BORDER_PROPS,
 ]);
 
 /** Props that take a real number and still resolve to a class. */

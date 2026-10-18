@@ -1,0 +1,120 @@
+---
+title: "Field"
+summary: "A label, a hint and an error around one control, with the ids and aria attributes wired for you."
+updatedAt: "2026-10-17"
+docs: "once-ui/form-controls/field.mdx"
+github: "components/Field.tsx"
+navLabel: "Field"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Field` puts a label above a control, a hint under it and an error when there is one, and connects them. The control gets its `id`, `aria-describedby`, `aria-invalid` and `aria-required` from the field, merged with any it already has, so a screen reader hears the error the moment it appears.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="24">
+      <Field label="Email" hint="We only use it to send receipts." required>
+        <Input id="field-email" placeholder="you@example.com" />
+      </Field>
+      <Field label="Workspace" error="That name is taken. Try another." hint="Lowercase letters and dashes.">
+        <Input id="field-workspace" defaultValue="acme" />
+      </Field>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Field label="Email" hint="We only use it to send receipts." required>
+    <Input id="email" placeholder="you@example.com" />
+</Field>
+
+<Field label="Workspace" error={errors.workspace} hint="Lowercase letters and dashes.">
+    <Input id="workspace" />
+</Field>`,
+      language: "tsx",
+      label: "Field"
+    }
+  ]}
+/>
+
+## What it wires
+
+- The label's `htmlFor` points at the control's `id`. The control keeps its own `id`; a control without one gets a generated id.
+- `aria-describedby` lists the control's own description first, then the error, then the hint.
+- While `error` is set the control is `aria-invalid`. `Input` (with any `type`, `"password"` included), `Textarea` and the fields built on them, such as `Select` and `NumberInput`, also draw their error styling, with no separate `error` prop.
+- `required` adds `aria-required` and an asterisk after the label. The asterisk is hidden from screen readers so it is not read out twice.
+
+The hint stays visible while the error shows, so the instruction is still there when the user goes back to fix the value.
+
+## Any control
+
+Native elements and third-party controls get the same props. For a control that needs them somewhere other than its root, pass a function: it receives the props to spread.
+
+```tsx
+<Field label="Plan" error={errors.plan}>
+  {(control) => <MyPlanPicker inputProps={control} />}
+</Field>
+```
+
+A custom control can also read the field from context with `useField()`, which returns the `id`, `invalid`, `required` and `describedBy` of the enclosing field, or `null` outside one.
+
+## In a Form
+
+A `Field` takes `span` like any other field, and lays out in a `Form` grid. With `density="stacked"` the controls still fuse; the labels and messages sit outside the group's border.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Form columns={2}>
+      <Field label="First name">
+        <Input id="field-first" />
+      </Field>
+      <Field label="Last name">
+        <Input id="field-last" />
+      </Field>
+      <Field label="Bio" hint="Shown on your profile." span={2}>
+        <Textarea id="field-bio" lines={3} />
+      </Field>
+    </Form>
+  }
+  codes={[
+    {
+      code:
+`<Form columns={2}>
+    <Field label="First name"><Input id="first" /></Field>
+    <Field label="Last name"><Input id="last" /></Field>
+    <Field label="Bio" hint="Shown on your profile." span={2}>
+        <Textarea id="bio" lines={3} />
+    </Field>
+</Form>`,
+      language: "tsx",
+      label: "Form"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Field"
+  describe={{
+    label: "Visible label above the control, linked to it with htmlFor.",
+    hint: "Helper text under the control, read out as part of its description.",
+    error: "The error message. While it is set the control is marked invalid.",
+    required: "Adds aria-required and an asterisk after the label.",
+    controlId: "The control's id. Defaults to the control's own id, then to a generated one.",
+    span: "Columns to occupy inside a Form grid.",
+    children: "One control element, or a function that receives the control's props.",
+    className: "",
+    style: "",
+  }}
+  content={[
+    ["...HTMLAttributes"]
+  ]}
+/>

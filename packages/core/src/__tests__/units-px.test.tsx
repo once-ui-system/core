@@ -149,8 +149,8 @@ describe("the outliers have one unit too", () => {
     expect(el.style.getPropertyValue("--mask-radius")).toBe("300px");
     rerender(<Mask x="50%" y="0%" />);
     expect(el.style.getPropertyValue("--mask-position-x")).toBe("50%");
-    // The default is the 2.x default, 50vh.
-    expect(el.style.getPropertyValue("--mask-radius")).toBe("50vh");
+    // The default is 2.2's default, 50svh (2.x before 2.2 used 50vh).
+    expect(el.style.getPropertyValue("--mask-radius")).toBe("50svh");
   });
 
   it("Background gradient: a percentage of the element, or px", () => {

@@ -175,6 +175,7 @@ const Dialog = ({
           position="fixed"
           background="overlay"
           zIndex={10}
+          className={styles.sheetOverlay}
           style={{
             backdropFilter: "blur(0.5rem)",
             opacity: isAnimating ? 1 : 0,
@@ -204,7 +205,14 @@ const Dialog = ({
             {...rest}
           >
             <FocusTrap active={open} restoreFocus={false} className={styles.trap}>
-              <Column ref={contentRef} fill overflowY="auto" padding="l" tabIndex={-1}>
+              <Column
+                ref={contentRef}
+                fill
+                overflowY="auto"
+                padding="l"
+                className={styles.sheetContent}
+                tabIndex={-1}
+              >
                 {showClose && (
                   <Row
                     position="absolute"

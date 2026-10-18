@@ -24,13 +24,17 @@
 
     @include breakpoints.m {
         position: fixed;
-        bottom: var(--static-space-8);
-        left: var(--static-space-8);
-        right: var(--static-space-8);
-        top: var(--static-space-8);
-        max-width: calc(100% - var(--static-space-16)) !important;
+        bottom: max(var(--static-space-8), var(--safe-area-bottom, 0px));
+        left: max(var(--static-space-8), var(--safe-area-left, 0px));
+        right: max(var(--static-space-8), var(--safe-area-right, 0px));
+        top: max(var(--static-space-8), var(--safe-area-top, 0px));
+        max-width: calc(
+            100% - max(var(--static-space-8), var(--safe-area-left, 0px)) -
+                max(var(--static-space-8), var(--safe-area-right, 0px))
+        ) !important;
     }
 }
+
 /* FocusTrap's box inside the panel: the column the header, the scrolling
    section and the footer stack in, as the panel itself did before. */
 .trap {
@@ -40,4 +44,29 @@
     min-height: 0;
     width: 100%;
     outline: none;
+}
+
+/* The overlay's `padding="l"`, pushed out to the safe areas where they are
+   wider. Doubled to win over the padding utility on the same element. */
+.overlay.overlay {
+    padding:
+        max(var(--responsive-space-l), var(--safe-area-top, 0px))
+        max(var(--responsive-space-l), var(--safe-area-right, 0px))
+        max(var(--responsive-space-l), var(--safe-area-bottom, 0px))
+        max(var(--responsive-space-l), var(--safe-area-left, 0px));
+}
+
+/* `variant="sheet"` (2.x Modal): the overlay's `paddingX="l"` and
+   `paddingTop="xl"`, kept clear of the notch and a landscape phone's side
+   insets. Doubled to win over the padding utilities on the same element. */
+.sheetOverlay.sheetOverlay {
+    padding-top: calc(var(--responsive-space-xl) + var(--safe-area-top, 0px));
+    padding-left: max(var(--responsive-space-l), var(--safe-area-left, 0px));
+    padding-right: max(var(--responsive-space-l), var(--safe-area-right, 0px));
+}
+
+/* The sheet runs to the bottom edge, so its last line scrolls clear of the
+   home indicator. */
+.sheetContent.sheetContent {
+    padding-bottom: calc(var(--responsive-space-l) + var(--safe-area-bottom, 0px));
 }

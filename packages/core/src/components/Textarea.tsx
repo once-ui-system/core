@@ -7,7 +7,7 @@ import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
-import { useFieldSize } from "./FormContext.js";
+import { useFieldInvalid, useFieldSize } from "./FormContext.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
@@ -95,6 +95,10 @@ const Textarea = ({
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);
+  // `error` used to be accepted and ignored here. It now marks the field
+  // invalid the way it does on `Input`, and so does an enclosing `Field`.
+  const fieldInvalid = useFieldInvalid(id);
+  const invalid = error || fieldInvalid;
   const [isFocused, setIsFocused] = useState(false);
   // Seeded from `defaultValue` too: an uncontrolled field — how a settings
   // form normally renders saved data — has no `value`, so the label never
@@ -194,6 +198,7 @@ const Textarea = ({
   }, [props.value, lines]);
 
   const displayError = validationError || errorMessage;
+  const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
 
   const textareaClassNames = classNames(
     styles.input,
@@ -214,7 +219,7 @@ const Textarea = ({
       fillWidth={fillWidth}
       fitHeight
       className={classNames(className, {
-        [styles.error]: displayError && styledValue !== "",
+        [styles.error]: invalid || (displayError && styledValue !== ""),
       })}
     >
       <Row
@@ -262,8 +267,14 @@ const Textarea = ({
             onBlur={handleBlur}
             onAnimationStart={handleAnimationStart}
             className={`${textareaClassNames} scrollbar-minimal`}
-            aria-describedby={displayError ? `${id}-error` : undefined}
-            aria-invalid={!!displayError}
+            // The caller's own description comes first; it used to be
+            // overwritten, the same bug Input had.
+            aria-describedby={
+              [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
+            aria-invalid={invalid || !!displayError}
             style={{
               ...style,
               resize: lines === "auto" ? "none" : resize,
@@ -310,7 +321,7 @@ const Textarea = ({
           </Row>
         )}
       </Row>
-      {displayError && errorMessage !== false && (
+      {showsErrorMessage && (
         <Row
           paddingX="16"
           id={`${id}-error`}

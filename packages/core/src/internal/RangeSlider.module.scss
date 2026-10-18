@@ -71,7 +71,6 @@
   }
 }
 
-.wrapper:not(.disabled):hover .thumb,
 .thumb.active {
   transform: scale(1.2);
 }
@@ -84,5 +83,11 @@
 
   .thumb {
     border-color: var(--danger-solid-medium);
+  }
+}
+
+@media (hover: hover) {
+  .wrapper:not(.disabled):hover .thumb {
+    transform: scale(1.2);
   }
 }

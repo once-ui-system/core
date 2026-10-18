@@ -53,6 +53,8 @@ const Fade = ({
       : `var(--${scheme}-background-${weight})`;
   };
 
+  const backdropBlur = `blur(${blur === undefined ? "0.5rem" : typeof blur === "number" ? `${blur}px` : blur})`;
+
   return (
     <Flex
       ref={ref}
@@ -68,10 +70,13 @@ const Fade = ({
                 : to === "bottom"
                   ? "180deg"
                   : "270deg",
+          // The `.mask` class blurs at a fixed 0.5rem; only pattern mode
+          // used to write `blur`, so outside it the prop did nothing.
+          backdropFilter: backdropBlur,
+          WebkitBackdropFilter: backdropBlur,
           ...(pattern.display && {
             backgroundImage: `linear-gradient(var(--gradient-direction), var(--base-color), transparent), radial-gradient(transparent 1px, var(--base-color) 1px)`,
             backgroundSize: `100% 100%, var(--static-space-${pattern.size}) var(--static-space-${pattern.size})`,
-            backdropFilter: `blur(${blur === undefined ? "0.5rem" : typeof blur === "number" ? `${blur}px` : blur})`,
           }),
           ...style,
         } as React.CSSProperties

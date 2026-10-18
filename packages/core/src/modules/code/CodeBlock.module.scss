@@ -32,12 +32,18 @@
 }
 
 .fullscreen {
+    /* A step in from each edge, or clear of the device's safe area there
+       (the notch, the home indicator) where that is wider. */
+    --fullscreen-top: max(var(--static-space-8), var(--safe-area-top, 0px));
+    --fullscreen-right: max(var(--static-space-8), var(--safe-area-right, 0px));
+    --fullscreen-bottom: max(var(--static-space-8), var(--safe-area-bottom, 0px));
+    --fullscreen-left: max(var(--static-space-8), var(--safe-area-left, 0px));
     position: fixed;
-    left: var(--static-space-8);
-    top: var(--static-space-8);
-    right: var(--static-space-8);
-    bottom: var(--static-space-8);
-    width: calc(100% - var(--static-space-16)) !important;
-    height: calc(100% - var(--static-space-16)) !important;
+    left: var(--fullscreen-left);
+    top: var(--fullscreen-top);
+    right: var(--fullscreen-right);
+    bottom: var(--fullscreen-bottom);
+    width: calc(100% - var(--fullscreen-left) - var(--fullscreen-right)) !important;
+    height: calc(100% - var(--fullscreen-top) - var(--fullscreen-bottom)) !important;
     z-index: 9;
 }

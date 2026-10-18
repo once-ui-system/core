@@ -374,11 +374,14 @@ const Calendar = ({
     weekdays: dayNames,
     /** What the column headers are called: "Mo" is what fits, not what to read out. */
     weekdayLabels: dayLabels,
+    firstDayOfWeek,
     monthYear,
     dayPeriods,
     time: formatTime,
   } = getCalendarNames(locale);
   const [amLabel, pmLabel] = [names.am ?? dayPeriods[0], names.pm ?? dayPeriods[1]];
+  /** The weekday indexes (0 is Sunday) in the order the columns show them. */
+  const weekOrder = Array.from({ length: 7 }, (_, column) => (column + firstDayOfWeek) % 7);
   const cellSize = size === "s" ? "32" : size === "m" ? "40" : "48";
   /** The grid's name: the month it shows, which tells two calendars side by side apart. */
   const gridLabel = monthYear(currentMonth, currentYear);
@@ -555,7 +558,9 @@ const Calendar = ({
    * as the CSS grid did, so nothing moves.
    */
   const renderCalendarGrid = () => {
-    const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+    // The days before the 1st in its first week: the week starts on the
+    // locale's first day (Monday in "de"), Sunday without a locale.
+    const firstDay = (new Date(currentYear, currentMonth, 1).getDay() - firstDayOfWeek + 7) % 7;
     const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
     const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
@@ -771,7 +776,7 @@ const Calendar = ({
         }}
       >
         <Row role="row">
-          {dayNames.map((day, index) => (
+          {weekOrder.map((index) => (
             <Row
               key={dayLabels[index]}
               role="columnheader"
@@ -781,7 +786,7 @@ const Calendar = ({
               marginBottom="16"
             >
               <Text textVariant="label-default-m" onBackground="neutral-medium" align="center">
-                {day}
+                {dayNames[index]}
               </Text>
             </Row>
           ))}

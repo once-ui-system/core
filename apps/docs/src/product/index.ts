@@ -4,6 +4,7 @@ export * from "./Footer";
 export * from "./Sidebar";
 export * from "./Providers";
 export * from "./AnimationExample";
+export * from "./ChatExamples";
 export * from "./CheckboxExample";
 export * from "./ChipExamples";
 export * from "./ClientOption";

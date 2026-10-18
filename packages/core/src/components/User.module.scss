@@ -2,13 +2,17 @@
     border: 1px solid var(--static-transparent);
     transition: var(--transition-micro-medium);
 
-    &:hover {
-        background-color: var(--neutral-alpha-weak);
-        border: 1px solid var(--neutral-alpha-medium);
+    @media (hover: hover) {
+        &:hover {
+            background-color: var(--neutral-alpha-weak);
+            border: 1px solid var(--neutral-alpha-medium);
+        }
     }
 
-    &.selected:hover {
-        background-color: var(--neutral-background-strong);
-        border: 1px solid var(--neutral-border-strong);
+    @media (hover: hover) {
+        &.selected:hover {
+            background-color: var(--neutral-background-strong);
+            border: 1px solid var(--neutral-border-strong);
+        }
     }
 }

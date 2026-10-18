@@ -1,6 +1,6 @@
 // Core components, modules and charts as explicit named imports: Turbopack's
 // frozen module proxy rejects a namespace import here.
-import { Accordion, AccordionGroup, Animation, Arrow, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, Checkbox, ColorInput, Column, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Flex, FocusTrap, Form, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, User, VisuallyHidden } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Animation, Arrow, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, ChatComposer, ChatMessage, ChatMessageList, Checkbox, ColorInput, Column, ConversationItem, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Field, Fieldset, Flex, FocusTrap, Form, FormErrorSummary, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, SubmitButton, Switch, Tab, Table, TabList, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, TypingIndicator, User, VisuallyHidden } from "@once-ui-system/core";
 import { Banner, Book, LogoCloud, ScrollToTop, StyleOverlay, StylePanel } from "@once-ui-system/blocks";
 import { BlobFx, CelebrationFx, CountdownFx, CountFx, Effect, FlipFx, GlitchFx, HoloFx, LetterFx, MatrixFx, ParticleFx, RevealFx, ShineFx, TiltFx, TypeFx, WeatherFx } from "@once-ui-system/fx";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
@@ -34,6 +34,8 @@ import {
   BasicSwitch,
   CelebrationFxExample,
   CharacterCountExample,
+  ChatComposerExample,
+  ChatConversationExample,
   ChipWithIconsExample,
   ClientOption,
   ClientSwitch,
@@ -41,6 +43,7 @@ import {
   ColorInputExample,
   ColorSchemeGrid,
   ControlledEmojiPickerDropdown,
+  ConversationListExample,
   CountdownFxBasic,
   CountdownFxEffects,
   CountdownFxFormats,
@@ -196,6 +199,10 @@ const mdxComponents = createMdxComponents({
 
   // ─── Core form controls ───
   Form,
+  Field,
+  Fieldset,
+  FormErrorSummary,
+  SubmitButton,
   Input,
   NumberInput,
   OTPInput,
@@ -228,6 +235,16 @@ const mdxComponents = createMdxComponents({
   SplitView,
   Kbar,
   MegaMenu,
+
+  // ─── Core chat ───
+  ChatMessage,
+  ChatMessageList,
+  ChatComposer,
+  TypingIndicator,
+  ConversationItem,
+  ChatConversationExample,
+  ChatComposerExample,
+  ConversationListExample,
 
   // ─── Core overlay ───
   Dialog,

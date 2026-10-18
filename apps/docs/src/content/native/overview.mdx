@@ -1,0 +1,97 @@
+---
+title: "React Native"
+summary: "The basic Once UI components for React Native apps, with the same props and the same design tokens as the web package."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/overview.mdx"
+github: "packages/native/README.md"
+navLabel: "Overview"
+navIcon: "components"
+status: "unreleased"
+---
+
+`@once-ui-system/native` brings Once UI's basic components to iOS and Android apps built with React Native. They take the same props as the web components and read the same design tokens, so a screen written with Once UI looks and reads the same on a phone.
+
+It is a preview. Most apps should keep shipping Once UI on phones as the web build wrapped in a native shell (the Stack mobile target); use this package when the app itself has to be native.
+
+<Row fillWidth horizontal="center" marginY="24">
+  <Media
+    src="/images/native/loyalty-card.png"
+    alt="A loyalty-card screen built with @once-ui-system/native"
+    aspectRatio="390 / 740"
+    maxWidth={20}
+    radius="l"
+    border="neutral-alpha-weak"
+  />
+</Row>
+
+## Install
+
+Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code: "npm install @once-ui-system/native@next",
+    language: "bash",
+    label: "npm"
+  }
+]} />
+
+## Usage
+
+Wrap the app in `ThemeProvider`. It takes the same style options as on the web, with the same defaults; `theme="system"` follows the device.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, Column, Heading, Text, ThemeProvider } from "@once-ui-system/native";
+
+export default function App() {
+  return (
+    <ThemeProvider brand="orange" neutral="sand" solid="color">
+      <Column padding="20" gap="12" background="page" fill>
+        <Heading>Morning Coffee</Heading>
+        <Text onBackground="neutral-weak">Three more coffees and the next one is on us.</Text>
+        <Button label="Add stamp" onPress={() => {}} />
+      </Column>
+    </ThemeProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+## Components
+
+| Component | Notes |
+| --- | --- |
+| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow and sizes. `Flex` is a row, as on the web. |
+| `Text`, `Heading` | `variant`, `onBackground`, `onSolid`, `truncate`. |
+| `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`. |
+| `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
+| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
+| `Switch`, `Checkbox` | Controlled or not, with a label and description. |
+| `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
+| `Dialog` | Opens as a bottom sheet. The back button and a tap outside close it. |
+| `ToastProvider`, `useToast` | `addToast({ variant, message })`, as on the web. Toasts stack at the bottom of the screen. |
+| `Select` | Opens its options in a bottom sheet, with `multiple` and `searchable`. |
+| `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
+| `Chip`, `Badge`, `ProgressBar` | As on the web. |
+| `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+
+`IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
+
+`useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
+
+## Differences from the web
+
+- **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
+- **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
+- **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
+- **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
+
+## Design tokens
+
+Both packages read one token export generated from the web package's SCSS tokens, so a token change reaches the web and native apps together. The same file ships as `@once-ui-system/core/tokens.json` for other tools, such as Figma or Swift and Kotlin code generators.

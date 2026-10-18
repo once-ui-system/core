@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .button {
   display: flex;
   align-items: center;
@@ -12,6 +14,8 @@
   &:focus-visible {
     z-index: 1;
   }
+
+  @include touch.target;
 }
 
 // `tone` picks the palette, `variant` how it is drawn. Each tone class sets

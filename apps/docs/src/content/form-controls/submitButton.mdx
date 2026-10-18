@@ -1,0 +1,77 @@
+---
+title: "SubmitButton"
+summary: "A Button that shows a spinner and ignores repeat presses while its form submits."
+updatedAt: "2026-10-17"
+docs: "once-ui/form-controls/submitButton.mdx"
+github: "components/SubmitButton.tsx"
+navLabel: "SubmitButton"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`SubmitButton` is a `Button` with `type="submit"` that follows its form. When a `Form`'s `onSubmit` returns a promise, the form is pending until it settles: the button shows a spinner, can swap its label for `pendingLabel`, and ignores further presses, so a double click sends one request. The form is marked `aria-busy` meanwhile.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="12">
+      <Form as="form" pending>
+        <SubmitButton pendingLabel="Saving…">Save</SubmitButton>
+      </Form>
+      <Form as="form">
+        <SubmitButton variant="secondary">Save</SubmitButton>
+      </Form>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Form
+    as="form"
+    onSubmit={async (event) => {
+        event.preventDefault();
+        await save(new FormData(event.currentTarget));
+    }}
+>
+    <Input id="name" placeholder="Name" />
+    <SubmitButton pendingLabel="Saving…">Save</SubmitButton>
+</Form>`,
+      language: "tsx",
+      label: "SubmitButton"
+    }
+  ]}
+/>
+
+## Pending from outside
+
+When the submit does not run through `onSubmit`, such as a server action or a mutation hook, pass `pending` to the `Form`, or to the button itself.
+
+```tsx
+const { mutate, isPending } = useSaveProfile();
+
+<Form as="form" pending={isPending} onSubmit={(event) => { event.preventDefault(); mutate(); }}>
+  <SubmitButton>Save</SubmitButton>
+</Form>
+```
+
+`useFormPending()` returns the same state for anything else in the form that should react to it.
+
+## Why aria-disabled
+
+While pending the button is `aria-disabled`, not `disabled`. A natively disabled button drops focus to the page the moment it is pressed with the keyboard, and the user loses their place in the form. This one keeps focus and refuses the second press. Enter in a text field is refused the same way.
+
+## API reference
+
+<PropsTable
+  component="SubmitButton"
+  describe={{
+    pendingLabel: "Label while the form is submitting. Defaults to the usual label.",
+    pending: "Force the pending look, for a submit the form does not track.",
+  }}
+  content={[
+    ["...ButtonProps"]
+  ]}
+/>

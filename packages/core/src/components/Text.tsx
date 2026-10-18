@@ -77,7 +77,8 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
 }: TypeProps<T> & { ref?: TextRef<T> }) {
   const Component = as || "span";
 
-  if (onBackground && onSolid) {
+  // Prop-misuse hints are for development; production logged them on every render.
+  if (process.env.NODE_ENV !== "production" && onBackground && onSolid) {
     console.warn(
       "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
     );

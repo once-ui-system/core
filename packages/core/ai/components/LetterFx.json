@@ -1,10 +1,11 @@
 {
  "name": "LetterFx",
- "group": "components",
+ "group": "fx",
+ "importFrom": "@once-ui-system/fx",
  "props": {
   "children": "!ReactNode",
   "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
-  "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
+  "speed": "Speed = medium",
   "charset": "string[] = defaultCharset",
   "onTrigger": "(triggerFn: () => void) => void",
   "className": "string",
@@ -18,5 +19,13 @@
   "Heading",
   "Column"
  ],
- "mixinsRef": []
+ "mixinsRef": [],
+ "types": {
+  "Speed": [
+   "number",
+   "medium",
+   "slow",
+   "fast"
+  ]
+ }
 }

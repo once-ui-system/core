@@ -1,7 +1,7 @@
 {
  "name": "MediaVideoPlayer",
- "group": "components",
- "importFrom": "@once-ui-system/core/components/MediaVideoPlayer",
+ "group": "media",
+ "importFrom": "@once-ui-system/core/media",
  "props": {
   "src": "!string",
   "autoplay": "boolean = false",

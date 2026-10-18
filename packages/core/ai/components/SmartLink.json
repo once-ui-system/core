@@ -1,17 +1,17 @@
 {
  "name": "SmartLink",
  "group": "components",
+ "mixins": [
+  "LeafProps"
+ ],
  "props": {
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",
-  "fillWidth": "boolean = false",
   "iconSize": "TShirtSizes = xs",
   "selected": "boolean",
   "unstyled": "boolean = false",
   "children": "!ReactNode",
-  "href": "string",
-  "style": "React.CSSProperties",
-  "className": "string"
+  "href": "string"
  },
  "tags": [
   "navigation",
@@ -22,30 +22,45 @@
   "Row"
  ],
  "avoid": "Raw a elements",
- "mixinsRef": [],
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ },
  "types": {
   "IconName": [
    "symbol",
-   "security",
-   "opacity",
-   "dark",
-   "light",
-   "copy",
-   "help",
-   "filter",
-   "info",
-   "danger",
-   "warning",
    "code",
    "link",
    "search",
    "time",
    "video",
+   "filter",
    "image",
-   "enter",
-   "send",
-   "checkbox",
-   "document",
+   "security",
+   "opacity",
+   "info",
+   "danger",
+   "warning",
    "adjustments",
    "arrowLeft",
    "arrowRight",
@@ -61,6 +76,7 @@
    "cart",
    "chat",
    "check",
+   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -71,9 +87,13 @@
    "clipboard",
    "close",
    "computer",
+   "copy",
+   "dark",
    "dislike",
+   "document",
    "download",
    "edit",
+   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -85,8 +105,10 @@
    "gift",
    "globe",
    "heart",
+   "help",
    "home",
    "inbox",
+   "light",
    "like",
    "linearGauge",
    "lock",
@@ -108,6 +130,7 @@
    "refresh",
    "return",
    "screen",
+   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -126,10 +149,10 @@
    "world"
   ],
   "TShirtSizes": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ]
  }

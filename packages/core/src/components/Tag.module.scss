@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .tag {
     white-space: nowrap;
     user-select: none;
@@ -37,9 +39,11 @@
         animation: shineDefault 9s ease-in-out infinite;
     }
 
-    &:hover {
-        &::before {
-            animation: shineHover 3s ease-in-out infinite;
+    @media (hover: hover) {
+        &:hover {
+            &::before {
+                animation: shineHover 3s ease-in-out infinite;
+            }
         }
     }
 }
@@ -122,9 +126,14 @@
         background: var(--tag-selected);
         color: var(--tag-on-selected);
 
-        &:hover,
         &:focus {
             background: var(--tag-selected);
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: var(--tag-selected);
+            }
         }
 
         &:active {
@@ -137,9 +146,14 @@
         background: var(--neutral-alpha-weak);
         color: var(--neutral-on-background-medium);
 
-        &:hover,
         &:focus {
             background: var(--neutral-alpha-medium);
+        }
+
+        @media (hover: hover) {
+            &:hover {
+                background: var(--neutral-alpha-medium);
+            }
         }
 
         &:active {
@@ -152,6 +166,16 @@
         background: var(--neutral-solid-weak);
         cursor: not-allowed;
     }
+
+    // A toggle without a remove button is the control itself.
+    &[role="button"] {
+        @include touch.target;
+    }
+}
+
+// With one, the toggle beside the remove button is.
+.action {
+    @include touch.target;
 }
 
 // A removable toggle takes focus on its own control, beside the remove

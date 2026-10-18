@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
+import { composeTransform, translateTransform } from "../utils/layoutClasses.js";
 import styles from "./Arrow.module.scss";
 import { Flex } from "./Flex.js";
 
@@ -31,6 +32,8 @@ const Arrow = ({
   color = "onBackground",
   style,
   className,
+  translateX,
+  translateY,
   ...flex
 }: ArrowProps) => {
   const node = useRef<HTMLDivElement | null>(null);
@@ -67,7 +70,9 @@ const Arrow = ({
       aria-hidden="true"
       className={classNames(styles.arrowContainer, className)}
       style={{
-        transform: `scale(${scale})`,
+        // The scale composes with a translate prop instead of replacing the
+        // transform Flex would have written for it.
+        transform: composeTransform(translateTransform(translateX, translateY), `scale(${scale})`),
         ...style,
       }}
       {...flex}

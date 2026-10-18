@@ -77,7 +77,8 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
 }: HeadingProps<T> & { ref?: HeadingRef<T> }) {
   const Component = as || "h1";
 
-  if (onBackground && onSolid) {
+  // Prop-misuse hints are for development; production logged them on every render.
+  if (process.env.NODE_ENV !== "production" && onBackground && onSolid) {
     console.warn(
       "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
     );

@@ -177,4 +177,30 @@ describe("OTPInput", () => {
     expect(new Set(ids).size).toBe(ids.length);
     await expectNoAxeViolations(container);
   });
+
+  // The div props were spread onto every digit field after its own handlers,
+  // so a caller's handler replaced the field's and typing stopped working,
+  // an `id` repeated on each field, and `className` was dropped. (3.0 omits
+  // the div's `onChange`, the code arrives through `onValueChange`, so a
+  // bubbling `onKeyDown` stands in for the caller's div handler.)
+  it("keeps typing working with a caller's div handler, and puts div props on the wrapper", async () => {
+    const user = userEvent.setup();
+    const onKeyDown = vi.fn();
+    const onComplete = vi.fn();
+    const { container } = render(
+      <OTPInput id="code" className="custom" onKeyDown={onKeyDown} onComplete={onComplete} />,
+      { wrapper },
+    );
+
+    await user.click(digit(1));
+    await user.keyboard("1234");
+    expect(values()).toEqual(["1", "2", "3", "4"]);
+    expect(onComplete).toHaveBeenCalledWith("1234");
+    // Each digit's key still reaches the caller, bubbling up to the wrapper.
+    expect(onKeyDown).toHaveBeenCalledTimes(4);
+
+    expect(container.querySelectorAll("#code")).toHaveLength(1);
+    expect(container.querySelector("#code")).toHaveClass("custom");
+    expect(digit(1).id).not.toBe("code");
+  });
 });

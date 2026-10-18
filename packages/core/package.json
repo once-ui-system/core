@@ -14,7 +14,7 @@
     "scripts/init-agent.cjs",
     "scripts/validate-ai-code.cjs"
   ],
-  "description": "Once UI for Next.js NPM package",
+  "description": "The open-source, agentic design system for React",
   "keywords": [
     "once-ui",
     "react",
@@ -64,6 +64,7 @@
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
+    "./tokens.json": "./dist/tokens.json",
     "./config": {
       "types": "./dist/config.d.ts",
       "default": "./dist/config.js"

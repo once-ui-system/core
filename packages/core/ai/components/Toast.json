@@ -3,7 +3,7 @@
  "group": "components",
  "props": {
   "className": "string",
-  "variant": "!\"success\" | \"danger\" | \"warning\" | \"info\"",
+  "tone": "!Tone",
   "showIcon": "boolean = true",
   "onClose": "() => void",
   "action": "React.ReactNode",
@@ -14,9 +14,20 @@
   "feedback"
  ],
  "pairsWith": [
-  "Toaster",
+  "ToastProvider",
   "useToast"
  ],
  "avoid": "Rendering it directly — call addToast from useToast",
- "mixinsRef": []
+ "mixinsRef": [],
+ "types": {
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
 }

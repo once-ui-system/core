@@ -1,16 +1,18 @@
 "use client";
 
-import React, {
-  ReactNode,
+import type React from "react";
+import {
+  type ReactNode,
   useCallback,
   useEffect,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
-import { Flex } from "../components/Flex.js";
+import type { Flex } from "../components/Flex.js";
 import { Row } from "../components/Row.js";
 import styles from "./HoverCover.module.scss";
+import { cannotHover } from "./pointer.js";
 
 export interface HoverCoverProps extends React.ComponentProps<typeof Flex> {
   trigger: ReactNode;
@@ -46,7 +48,7 @@ const HoverCover = ({
 
   useEffect(() => {
     setMounted(true);
-    setIsTouchDevice("ontouchstart" in window || navigator.maxTouchPoints > 0);
+    setIsTouchDevice(cannotHover());
   }, []);
 
   const showOverlay = useCallback(() => {

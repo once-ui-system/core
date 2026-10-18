@@ -1,7 +1,8 @@
 "use client";
 
-import React, {
-  ReactNode,
+import type React from "react";
+import {
+  type ReactNode,
   useCallback,
   useEffect,
   useImperativeHandle,
@@ -11,7 +12,9 @@ import React, {
 import { createPortal } from "react-dom";
 import { Flex } from "../components/Flex.js";
 import type { Placement } from "../types.js";
+import { composeTransform, translateTransform } from "../utils/layoutClasses.js";
 import styles from "./CursorFollower.module.scss";
+import { cannotHover } from "./pointer.js";
 
 export interface CursorFollowerProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
@@ -29,6 +32,8 @@ const CursorFollower = ({
   placement = "bottom-left",
   className,
   style,
+  translateX,
+  translateY,
   ...flex
 }: CursorFollowerProps) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -40,11 +45,7 @@ const CursorFollower = ({
   useImperativeHandle(ref, () => cardRef.current as HTMLDivElement);
 
   useEffect(() => {
-    const checkTouchDevice = () => {
-      return "ontouchstart" in window;
-    };
-
-    setIsTouchDevice(checkTouchDevice());
+    setIsTouchDevice(cannotHover());
   }, []);
 
   const handleMouseMove = useCallback(
@@ -112,7 +113,12 @@ const CursorFollower = ({
             className={`${styles.fadeIn} ${className || ""}`}
             style={{
               isolation: "isolate",
-              transform: `translate(calc(${mousePosition.x}px ${placement.includes("left") ? "- 100%" : placement.includes("right") ? "" : "- 50%"}), calc(${mousePosition.y}px ${placement.includes("top") ? "- 100%" : placement.includes("bottom") ? "" : "- 50%"}))`,
+              // The cursor position, then a translate prop on top of it,
+              // which this transform used to replace.
+              transform: composeTransform(
+                `translate(calc(${mousePosition.x}px ${placement.includes("left") ? "- 100%" : placement.includes("right") ? "" : "- 50%"}), calc(${mousePosition.y}px ${placement.includes("top") ? "- 100%" : placement.includes("bottom") ? "" : "- 50%"}))`,
+                translateTransform(translateX, translateY),
+              ),
               ...style,
             }}
             {...flex}

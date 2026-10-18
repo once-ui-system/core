@@ -3,6 +3,7 @@
 import { Flex } from "@once-ui-system/core";
 import type React from "react";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { composeTransform, translateTransform } from "./internal/translate.js";
 
 export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
   flipDirection?: "horizontal" | "vertical";
@@ -30,6 +31,8 @@ const FlipFx = ({ ref, ...props }: FlipFxProps) => {
     back,
     className,
     style,
+    translateX,
+    translateY,
     ...flex
   } = props;
 
@@ -96,11 +99,12 @@ const FlipFx = ({ ref, ...props }: FlipFxProps) => {
       style={{
         transformStyle: "preserve-3d",
         transition: `transform ${timing}ms cubic-bezier(0.22, 1, 0.36, 1)`,
-        transform: flippedState
-          ? flipDirection === "vertical"
-            ? "rotateX(180deg)"
-            : "rotateY(180deg)"
-          : "none",
+        // The flip composes with a translate prop instead of replacing it.
+        transform:
+          composeTransform(
+            translateTransform(translateX, translateY),
+            flippedState && (flipDirection === "vertical" ? "rotateX(180deg)" : "rotateY(180deg)"),
+          ) ?? "none",
         perspective: "1000px",
         ...style,
       }}

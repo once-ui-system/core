@@ -1,9 +1,16 @@
 {
  "functions": {
-  "useStylePanel": {
+  "useField": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => StylePanelContextValue"
+   "signature": "() => FieldControl | null",
+   "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
+  },
+  "useFormPending": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => boolean",
+   "doc": "Whether the enclosing `Form` is submitting."
   },
   "useArrowNavigation": {
    "group": "hooks",
@@ -62,21 +69,10 @@
    "kind": "value",
    "type": "OnceUIAdapters"
   },
-  "resetAdapterWarning": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "() => void",
-   "doc": "Exported for tests; resets the once-per-session latch."
-  },
   "useAdapters": {
    "group": "contexts",
    "kind": "hook",
    "signature": "() => OnceUIAdapters"
-  },
-  "warnIfFrameworkUnadapted": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "(adapters: OnceUIAdapters) => void"
   },
   "useDataTheme": {
    "group": "contexts",
@@ -190,6 +186,12 @@
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
    "doc": "Type an app's `once-ui.config`."
+  },
+  "useStylePanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "() => StylePanelContextValue"
   }
  },
  "types": {
@@ -240,13 +242,37 @@
    "sharp"
   ],
   "BreakpointKey": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ],
   "Breakpoints": "Record<BreakpointKey, number>",
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
   "ChartMode": [
    "categorical",
    "divergent",
@@ -255,7 +281,7 @@
   "ChartOptions": {
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -268,7 +294,7 @@
    "setChartOptions": "!(options: Partial<ChartOptions>) => void",
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -280,6 +306,12 @@
    "17",
    "18"
   ],
+  "FieldControl": {
+   "id": "!string",
+   "invalid": "!boolean",
+   "required": "!boolean",
+   "describedBy": "string"
+  },
   "IconComponent": [
    "ComponentClass<SVGProps<SVGSVGElement>, any>",
    "FunctionComponent<SVGProps<SVGSVGElement>>"
@@ -287,26 +319,18 @@
   "IconLibrary": "Record<IconName, IconComponent>",
   "IconName": [
    "symbol",
-   "security",
-   "opacity",
-   "dark",
-   "light",
-   "copy",
-   "help",
-   "filter",
-   "info",
-   "danger",
-   "warning",
    "code",
    "link",
    "search",
    "time",
    "video",
+   "filter",
    "image",
-   "enter",
-   "send",
-   "checkbox",
-   "document",
+   "security",
+   "opacity",
+   "info",
+   "danger",
+   "warning",
    "adjustments",
    "arrowLeft",
    "arrowRight",
@@ -322,6 +346,7 @@
    "cart",
    "chat",
    "check",
+   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -332,9 +357,13 @@
    "clipboard",
    "close",
    "computer",
+   "copy",
+   "dark",
    "dislike",
+   "document",
    "download",
    "edit",
+   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -346,8 +375,10 @@
    "gift",
    "globe",
    "heart",
+   "help",
    "home",
    "inbox",
+   "light",
    "like",
    "linearGauge",
    "lock",
@@ -369,6 +400,7 @@
    "refresh",
    "return",
    "screen",
+   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -419,9 +451,7 @@
    "mint",
    "dusk"
   ],
-  "NumericKeys": {
-   "[key: number]": "Extract<keyof T, string>"
-  },
+  "NumericKeys": "Array<Extract<keyof T, string>>",
   "OgData": {
    "title": "!string",
    "description": "!string",
@@ -481,7 +511,7 @@
   "OnceUIDataStyleConfig": {
    "variant": "ChartVariant",
    "mode": "ChartMode",
-   "height": "number",
+   "height": "number | CSSUnit",
    "axis": "{ stroke: string; }",
    "tick": "{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -564,6 +594,7 @@
    "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
    "reset": "!() => void"
   },
+  "StreamingTarget": "Partial<Record<Extract<keyof T, string>, number>>",
   "StreamingViewportOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",

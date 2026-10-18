@@ -1,6 +1,9 @@
 {
  "name": "ToggleButton",
  "group": "components",
+ "mixins": [
+  "LeafProps"
+ ],
  "props": {
   "label": "ReactNode",
   "selected": "boolean = false",
@@ -10,14 +13,11 @@
   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "rounded": "boolean = false",
   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = center",
-  "fillWidth": "boolean = false",
   "weight": "\"default\" | \"strong\" = default",
   "truncate": "boolean = false",
   "disabled": "boolean = false",
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",
-  "className": "string",
-  "style": "React.CSSProperties",
   "children": "ReactNode",
   "href": "string"
  },
@@ -29,30 +29,45 @@
   "Row",
   "SegmentedControl"
  ],
- "mixinsRef": [],
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ },
  "types": {
   "IconName": [
    "symbol",
-   "security",
-   "opacity",
-   "dark",
-   "light",
-   "copy",
-   "help",
-   "filter",
-   "info",
-   "danger",
-   "warning",
    "code",
    "link",
    "search",
    "time",
    "video",
+   "filter",
    "image",
-   "enter",
-   "send",
-   "checkbox",
-   "document",
+   "security",
+   "opacity",
+   "info",
+   "danger",
+   "warning",
    "adjustments",
    "arrowLeft",
    "arrowRight",
@@ -68,6 +83,7 @@
    "cart",
    "chat",
    "check",
+   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -78,9 +94,13 @@
    "clipboard",
    "close",
    "computer",
+   "copy",
+   "dark",
    "dislike",
+   "document",
    "download",
    "edit",
+   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -92,8 +112,10 @@
    "gift",
    "globe",
    "heart",
+   "help",
    "home",
    "inbox",
+   "light",
    "like",
    "linearGauge",
    "lock",
@@ -115,6 +137,7 @@
    "refresh",
    "return",
    "screen",
+   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -133,19 +156,19 @@
    "world"
   ],
   "RadiusSize": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs",
    "none",
    "full"
   ],
   "TShirtSizes": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ]
  }

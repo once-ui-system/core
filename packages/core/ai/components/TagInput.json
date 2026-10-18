@@ -4,17 +4,43 @@
  "extends": [
   "Input"
  ],
+ "mixins": [
+  "LeafProps"
+ ],
  "props": {
   "value": "string[]",
   "defaultValue": "readonly string[]",
-  "onChange": "(value: string[]) => void"
+  "onValueChange": "(value: string[]) => void"
  },
  "tags": [
   "form"
  ],
  "pairsWith": [
   "Input",
-  "Chip"
+  "Tag"
  ],
- "mixinsRef": []
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ }
 }

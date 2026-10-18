@@ -7,7 +7,7 @@ import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
-import { useFieldSize } from "./FormContext.js";
+import { useFieldInvalid, useFieldSize } from "./FormContext.js";
 import { IconButton } from "./IconButton.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
@@ -99,6 +99,10 @@ const Input = ({
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);
+  // A `Field` around this input marks it invalid while its error shows, the
+  // same as passing `error`; the message itself renders in the Field.
+  const fieldInvalid = useFieldInvalid(id);
+  const invalid = error || fieldInvalid;
   const [revealed, setRevealed] = useState(false);
   const revealable = props.type === "password" && reveal;
   const [isFocused, setIsFocused] = useState(false);
@@ -223,7 +227,7 @@ const Input = ({
       fillWidth={fillWidth}
       fitHeight
       className={classNames(className, {
-        [styles.error]: (error || (displayError && styledValue !== "")) && props.value !== "",
+        [styles.error]: (invalid || (displayError && styledValue !== "")) && props.value !== "",
       })}
     >
       <Row
@@ -264,7 +268,7 @@ const Input = ({
             // `error` alone marks the field invalid too: a field whose
             // message is rendered elsewhere (OTPInput's, a form's summary)
             // was drawn in the error state but announced as valid.
-            aria-invalid={error || !!displayError}
+            aria-invalid={invalid || !!displayError}
           />
           {label && (
             <Text

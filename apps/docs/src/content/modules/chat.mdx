@@ -1,0 +1,304 @@
+---
+title: "Chat"
+summary: "Building blocks for chat interfaces: message bubbles, a message list that follows the conversation, a composer with send and attach, a typing indicator and inbox rows."
+updatedAt: "2026-10-17"
+docs: "once-ui/modules/chat.mdx"
+github: "modules/chat/ChatMessage.tsx"
+navLabel: "Chat"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Five components cover the parts every chat has: `ChatMessage`, `ChatMessageList`, `ChatComposer`, `TypingIndicator` and `ConversationItem`. They work for conversations between people and for an assistant that streams its replies.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ChatConversationExample />}
+  codes={[
+    {
+      code:
+`import {
+  ChatComposer,
+  ChatMessage,
+  ChatMessageList,
+  Column,
+  TypingIndicator,
+} from "@once-ui-system/core";
+
+<Column fillWidth height="448px">
+  <ChatMessageList aria-label="Chat with Lorant">
+    {messages.map((message, index) => (
+      <ChatMessage
+        key={message.id}
+        from={message.from}
+        name={message.from === "other" ? "Lorant" : undefined}
+        avatarProps={message.from === "other" ? { src: "/images/avatar.jpg" } : undefined}
+        grouped={index > 0 && messages[index - 1].from === message.from}
+        time={message.time}
+        status={message.from === "self" ? "read" : undefined}
+      >
+        {message.text}
+      </ChatMessage>
+    ))}
+    {typing && <TypingIndicator aria-label="Lorant is typing" marginLeft="48" />}
+  </ChatMessageList>
+  <ChatComposer onSend={({ text, files }) => send(text, files)} attach />
+</Column>`,
+      language: "tsx",
+      label: "Conversation"
+    }
+  ]}
+/>
+
+## ChatMessage
+
+One message: the bubble, its author, the time and the delivery state. `from="self"` puts it on the right with the brand tint. Set `grouped` on a follow-up from the same author: the name is dropped and the avatar keeps its space, so the bubbles line up. A `Date` in `time` is formatted for the reader and rendered as a `<time>` element.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <ChatMessage name="Lorant" avatarProps={{ src: "/images/avatar.jpg" }} time="9:05">
+        Did the new build go out?
+      </ChatMessage>
+      <ChatMessage grouped avatarProps={{ src: "/images/avatar.jpg" }} time="9:05">
+        The release notes look good.
+      </ChatMessage>
+      <ChatMessage from="self" time="9:07" status="read">
+        It did, about an hour ago.
+      </ChatMessage>
+      <ChatMessage from="self" time="9:08" status="failed">
+        Here is the link
+      </ChatMessage>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ChatMessage name="Lorant" avatarProps={{ src: "/images/avatar.jpg" }} time="9:05">
+  Did the new build go out?
+</ChatMessage>
+<ChatMessage grouped avatarProps={{ src: "/images/avatar.jpg" }} time="9:05">
+  The release notes look good.
+</ChatMessage>
+<ChatMessage from="self" time="9:07" status="read">
+  It did, about an hour ago.
+</ChatMessage>
+<ChatMessage from="self" time="9:08" status="failed" onRetry={retry}>
+  Here is the link
+</ChatMessage>`,
+      language: "tsx",
+      label: "ChatMessage"
+    }
+  ]}
+/>
+
+`variant="plain"` drops the bubble for a flat, team-chat layout where every message reads left to right. `attachments` takes media or link previews under the text, `footer` takes reactions, and `actions` takes controls that show while the message is hovered or focused (they are always shown on touch screens).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <ChatMessage
+        variant="plain"
+        name="Lorant"
+        avatarProps={{ src: "/images/avatar.jpg" }}
+        time="9:05"
+        footer={<Row gap="4"><Tag size="s">👍 3</Tag><Tag size="s">🎉 1</Tag></Row>}
+        actions={<IconButton icon="chat" variant="tertiary" size="s" tooltip="Reply" />}
+      >
+        Shipping the chat blocks today.
+      </ChatMessage>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ChatMessage
+  variant="plain"
+  name="Lorant"
+  avatarProps={{ src: "/images/avatar.jpg" }}
+  time="9:05"
+  footer={
+    <Row gap="4">
+      <Tag size="s">👍 3</Tag>
+      <Tag size="s">🎉 1</Tag>
+    </Row>
+  }
+  actions={<IconButton icon="chat" variant="tertiary" size="s" tooltip="Reply" />}
+>
+  Shipping the chat blocks today.
+</ChatMessage>`,
+      language: "tsx",
+      label: "Plain"
+    }
+  ]}
+/>
+
+<PropsTable
+  component="ChatMessage"
+  describe={{
+    children: "The message body: text, or any content.",
+    from: "Whose message it is. `self` sits on the right.",
+    name: "The author's name, shown above the first message of a group.",
+    avatarProps: "The author's avatar. Leave it out for no avatar column.",
+    time: "When it was sent. A `Date` is formatted; anything else renders as given.",
+    status: "Delivery state, shown next to the time.",
+    statusLabels: "Replaces the status words, for another language.",
+    onRetry: "Adds a retry button to a failed message.",
+    retryLabel: "The retry button's label.",
+    grouped: "A follow-up from the same author.",
+    variant: "A tinted bubble, or a flat row.",
+    attachments: "Content under the bubble.",
+    footer: "A row under the attachments, such as reactions.",
+    actions: "Controls shown on hover or focus.",
+  }}
+/>
+
+## ChatMessageList
+
+The scrolling column a conversation lives in. It starts at the newest message and follows new ones, including content that grows on its own like a streamed reply, while the reader is at the bottom. Once they scroll up to read history it stays where they are. `onReachStart` fires when they reach the top, to load older messages. The list is a `log` live region, so screen readers announce new messages.
+
+Give it a parent with a fixed or flexible height; it fills the space and scrolls inside it.
+
+<PropsTable
+  component="ChatMessageList"
+  describe={{
+    stickToBottom: "Start at the newest message and follow new ones while the reader is at the bottom.",
+    onReachStart: "Called when the reader scrolls to the top.",
+    "aria-label": "The list's accessible name, such as who the chat is with.",
+  }}
+/>
+
+## ChatComposer
+
+The input bar. The field grows with the draft up to about eight lines, Enter sends and Shift+Enter starts a new line (an Enter that confirms an IME composition never sends). `onSend` gets the trimmed text and the attached files. If it returns a promise the send button shows loading; the field clears when the promise resolves and keeps the draft when it rejects, so showing the error is up to you.
+
+`attach` adds a button that opens the file picker. Pasted images are attached too. Pass `{ accept, multiple }` to limit what can be picked.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ChatComposerExample />}
+  codes={[
+    {
+      code:
+`<ChatComposer
+  attach={{ accept: "image/*,.pdf" }}
+  onSend={async ({ text, files }) => {
+    await api.send(text, files);
+  }}
+/>`,
+      language: "tsx",
+      label: "ChatComposer"
+    }
+  ]}
+/>
+
+<PropsTable
+  component="ChatComposer"
+  describe={{
+    onSend: "Called with `{ text, files }`. Return a promise to show loading.",
+    value: "The draft, when the parent owns it.",
+    defaultValue: "The first draft, when the composer owns it.",
+    onValueChange: "Called on every edit.",
+    placeholder: "Text shown in the empty field.",
+    attach: "Show the attach button; an object sets `accept` and `multiple`.",
+    sendOnEnter: "Enter sends. Off, Enter starts a new line.",
+    loading: "Show the send button loading and block another send.",
+    disabled: "Disable the field and buttons.",
+    "aria-label": "The field's accessible name.",
+    sendLabel: "The send button's label.",
+    attachLabel: "The attach button's label.",
+    removeLabel: "The label of an attachment's remove button, from its file name.",
+    prefix: "Content before the field, such as an emoji picker.",
+    actions: "More controls before the send button.",
+    maxLength: "The longest draft allowed.",
+    id: "The field's id. One is generated when it is left out.",
+  }}
+/>
+
+## TypingIndicator
+
+Three pulsing dots for someone typing or a reply being generated. It is a `status` region, so its label is announced once. With reduced motion the dots fade instead of bouncing.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <TypingIndicator aria-label="Lorant is typing" />
+      <TypingIndicator bubble={false} label="Lorant is typing" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<TypingIndicator aria-label="Lorant is typing" />
+<TypingIndicator bubble={false} label="Lorant is typing" />`,
+      language: "tsx",
+      label: "TypingIndicator"
+    }
+  ]}
+/>
+
+<PropsTable
+  component="TypingIndicator"
+  describe={{
+    label: "Visible text next to the dots.",
+    "aria-label": "What a screen reader announces when there is no label.",
+    bubble: "Draw the dots in a bubble, to stand in for a reply.",
+  }}
+/>
+
+## ConversationItem
+
+One row of an inbox: the avatar, the name, the last message and its time, and an unread count. It is a button with `onClick` and a link with `href`, and `selected` marks the open conversation with `aria-current`. A `Date` in `time` shows the time today, the weekday this week and the date before that.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ConversationListExample />}
+  codes={[
+    {
+      code:
+`<Column maxWidth="384px" gap="2">
+  {conversations.map((conversation) => (
+    <ConversationItem
+      key={conversation.id}
+      name={conversation.name}
+      preview={conversation.lastMessage}
+      time={conversation.updatedAt}
+      unread={conversation.unread}
+      avatarProps={{ src: conversation.avatar }}
+      selected={conversation.id === openId}
+      href={"/chat/" + conversation.id}
+    />
+  ))}
+</Column>`,
+      language: "tsx",
+      label: "ConversationItem"
+    }
+  ]}
+/>
+
+<PropsTable
+  component="ConversationItem"
+  describe={{
+    name: "Who the conversation is with, or its title.",
+    preview: "The last message, cut to one line.",
+    time: "When the last message was sent.",
+    avatarProps: "The avatar on the left.",
+    unread: "Unread messages: a number shows a count, `true` a dot.",
+    unreadLabel: "What a screen reader hears for the unread count.",
+    selected: "The open conversation.",
+    typing: "Show the typing label in place of the preview.",
+    typingLabel: "The typing label.",
+    href: "Open the conversation as a link.",
+    onClick: "Open the conversation as a button.",
+  }}
+/>

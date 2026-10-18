@@ -1,0 +1,98 @@
+---
+title: "Fieldset"
+summary: "A titled section of a form: a real fieldset with a legend, laying its fields out like a Form."
+updatedAt: "2026-10-17"
+docs: "once-ui/form-controls/fieldset.mdx"
+github: "components/Fieldset.tsx"
+navLabel: "Fieldset"
+navIcon: "switch"
+navTag: "New"
+navTagVariant: "success"
+status: "unreleased"
+---
+
+`Fieldset` groups related fields under a name. It renders a real `<fieldset>` and `<legend>`, so a screen reader announces the section on entering it, and `disabled` turns off every native control inside at once. The fields are laid out by a `Form` grid, so a section takes the same `density`, `columns` and `span`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Fieldset legend="Billing address" description="Where we send invoices." density="stacked" columns={2}>
+      <Input id="fs-street" placeholder="Street" span={2} />
+      <Input id="fs-city" placeholder="City" />
+      <Input id="fs-zip" placeholder="Postal code" />
+    </Fieldset>
+  }
+  codes={[
+    {
+      code:
+`<Fieldset legend="Billing address" description="Where we send invoices." density="stacked" columns={2}>
+    <Input id="street" placeholder="Street" span={2} />
+    <Input id="city" placeholder="City" />
+    <Input id="zip" placeholder="Postal code" />
+</Fieldset>`,
+      language: "tsx",
+      label: "Fieldset"
+    }
+  ]}
+/>
+
+## Sections in a form
+
+Put several sections in one `Form`. Each one fuses its own group of corners, and takes the form's `size` unless it sets its own.
+
+```tsx
+<Form as="form" density="spacious" onSubmit={save}>
+  <Fieldset legend="Account" density="stacked">
+    <Input id="email" placeholder="Email" />
+    <Input id="password" placeholder="Password" type="password" />
+  </Fieldset>
+  <Fieldset legend="Profile" columns={{ xs: 1, m: 2 }}>
+    <Field label="First name"><Input id="first" /></Field>
+    <Field label="Last name"><Input id="last" /></Field>
+  </Fieldset>
+  <SubmitButton>Save</SubmitButton>
+</Form>
+```
+
+## Disabled
+
+`disabled` disables every native control in the section, the way a disabled `<fieldset>` always has. Use it for a section that does not apply yet, such as a shipping address while "same as billing" is checked.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Fieldset legend="Shipping address" description="Same as billing." disabled>
+      <Input id="fs-ship-street" placeholder="Street" />
+    </Fieldset>
+  }
+  codes={[
+    {
+      code:
+`<Fieldset legend="Shipping address" description="Same as billing." disabled>
+    <Input id="ship-street" placeholder="Street" />
+</Fieldset>`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Fieldset"
+  describe={{
+    legend: "The section's name, rendered as its legend.",
+    description: "A line under the legend, read out as the section's description.",
+    span: "Columns to occupy inside an outer Form grid.",
+  }}
+  content={[
+    ["disabled", "boolean", "-", "Disable every native control in the section."],
+    ["name", "string", "-", "The fieldset's name, for form.elements."],
+    ["density", "\"stacked\" | \"tight\" | \"spacious\"", "\"tight\"", "Gap and grouping for the section's fields, as on Form."],
+    ["columns", "FormColumns", "1", "Grid columns, as on Form."],
+    ["size", "TShirtSizes", "-", "Size for every field in the section. Defaults to the outer form's."],
+  ]}
+/>

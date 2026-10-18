@@ -3,6 +3,8 @@
 import { Flex, useReducedMotion } from "@once-ui-system/core";
 import type React from "react";
 import { useCallback, useEffect, useRef } from "react";
+import { cannotHover } from "./internal/pointer.js";
+import { composeTransform, translateTransform } from "./internal/translate.js";
 import styles from "./TiltFx.module.scss";
 
 interface TiltFxProps extends React.ComponentProps<typeof Flex> {
@@ -31,8 +33,14 @@ const TiltFx = ({ ref, children, intensity = 1, reducedMotion = "auto", ...rest 
 
   const { shouldAnimate } = useReducedMotion(reducedMotion);
 
+  // The tilt is written over the element's transform, which Flex resolves
+  // from `translateX`/`translateY`: keep the translate in front of it, or a
+  // hover moves the element back to where the props had not put it.
+  const tiltTransform = (tilt: string) =>
+    composeTransform(translateTransform(rest.translateX, rest.translateY), tilt) ?? "";
+
   useEffect(() => {
-    isTouchDeviceRef.current = "ontouchstart" in window;
+    isTouchDeviceRef.current = cannotHover();
   }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -65,7 +73,9 @@ const TiltFx = ({ ref, children, intensity = 1, reducedMotion = "auto", ...rest 
     const translateZ = 30 * intensity;
 
     window.requestAnimationFrame(() => {
-      element.style.transform = `perspective(1000px) translate3d(0, 0, ${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+      element.style.transform = tiltTransform(
+        `perspective(1000px) translate3d(0, 0, ${translateZ}px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`,
+      );
     });
   };
 
@@ -75,8 +85,9 @@ const TiltFx = ({ ref, children, intensity = 1, reducedMotion = "auto", ...rest 
     const element = internalRef.current;
     if (element) {
       resetTimeoutRef.current = setTimeout(() => {
-        element.style.transform =
-          "perspective(1000px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)";
+        element.style.transform = tiltTransform(
+          "perspective(1000px) translate3d(0, 0, 0) rotateX(0deg) rotateY(0deg)",
+        );
         resetTimeoutRef.current = null;
       }, 100);
     }

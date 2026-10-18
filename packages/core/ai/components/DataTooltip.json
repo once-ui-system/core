@@ -40,8 +40,8 @@
    "onChange": "(range: DateRange) => void"
   },
   "DateRange": {
-   "startDate": "!Date | undefined",
-   "endDate": "!Date | undefined"
+   "startDate": "Date",
+   "endDate": "Date"
   },
   "PresetsConfig": {
    "display": "!boolean",

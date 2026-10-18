@@ -60,6 +60,7 @@ describe("translate values", () => {
     expect(translateValue("2.5rem")).toBe("2.5rem");
     // Not a token, not a unit: nothing, as before.
     expect(translateValue("16pixels")).toBeUndefined();
+    expect(translateValue("16pt")).toBeUndefined();
     expect(translateValue("")).toBeUndefined();
     expect(translateValue(undefined)).toBeUndefined();
   });

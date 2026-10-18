@@ -110,3 +110,46 @@ jobs:
 
       - name: Build docs
         run: pnpm --filter @once-ui-system/docs build
+
+  native:
+    name: Native preview and token export
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm's version comes from `packageManager` in the root package.json (10.14.0).
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      # Installing builds packages/foundations (and core) through `prepare`.
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      # tokens/once-ui.tokens.json must match scss/tokens/, since native and
+      # core's tokens.json both ship it.
+      - name: Token export up to date
+        run: pnpm --filter @once-ui-system/foundations check:tokens
+
+      - name: Foundations tests
+        run: pnpm --filter @once-ui-system/foundations test
+
+      # src/icons/data.ts is a copy of core's built-in icons.
+      - name: Icon copy up to date
+        run: pnpm --filter @once-ui-system/native check:icons
+
+      - name: Lint
+        run: pnpm --filter @once-ui-system/native lint
+
+      - name: Typecheck
+        run: pnpm --filter @once-ui-system/native typecheck
+
+      - name: Test
+        run: pnpm --filter @once-ui-system/native test
+
+      - name: Build
+        run: pnpm --filter @once-ui-system/native build
