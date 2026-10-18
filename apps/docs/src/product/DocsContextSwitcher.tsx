@@ -135,8 +135,14 @@ export function DocsContextSwitcher({ slugs }: { slugs: string[] }) {
                     value={`version-${version.id}`}
                     selected={isCurrent}
                     disabled={unavailable}
-                    href={isCurrent || unavailable ? undefined : versionHref(version, pathname)}
-                    onClick={() => setOpen(false)}
+                    // Each version is its own build, so this is a full page
+                    // load in the same tab; a link to another origin would
+                    // open a new one.
+                    onClick={() => {
+                      setOpen(false);
+                      if (!isCurrent && !unavailable)
+                        window.location.assign(versionHref(version, pathname));
+                    }}
                     label={version.label}
                     description={
                       unavailable
