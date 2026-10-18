@@ -29,7 +29,7 @@ const navigation = [
       { label: "Pricing", href: "https://once-ui.com/pricing" },
       { label: "Canvas", href: "https://once-ui.com/canvas" },
       { label: "Documentation", href: "/" },
-      { label: "Changelog", href: "/changelog" },
+      { label: "Changelog", href: "https://github.com/once-ui-system/core/releases" },
       { label: "Handbook", href: "https://handbook.once-ui.com" },
       // 1.8.x is the archive now that 2.0 is `latest`.
       { label: "1.x docs", href: "https://v1.docs.once-ui.com" },

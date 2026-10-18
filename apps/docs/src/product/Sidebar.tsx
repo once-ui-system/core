@@ -476,6 +476,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         fillHeight
         gap="4"
         as="nav"
+        aria-label="Documentation"
         overflowY="auto"
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}

@@ -2,16 +2,27 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { Avatar } from "../components/Avatar";
+import { Checkbox } from "../components/Checkbox";
 import { CompareImage } from "../components/CompareImage";
+import { Dialog } from "../components/Dialog";
 import { EmojiPicker } from "../components/EmojiPicker";
+import { Feedback } from "../components/Feedback";
+import { Fieldset } from "../components/Fieldset";
 import { Icon } from "../components/Icon";
+import { NumberInput } from "../components/NumberInput";
 import { ProgressBar } from "../components/ProgressBar";
+import { RadioGroup } from "../components/RadioGroup";
 import { Setting, SettingAxes } from "../components/Setting";
 import { Skeleton } from "../components/Skeleton";
 import { Slider } from "../components/Slider";
 import { Switch } from "../components/Switch";
+import { Table } from "../components/Table";
 import { Textarea } from "../components/Textarea";
+import { Timeline } from "../components/Timeline";
+import { ToggleButton } from "../components/ToggleButton";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { LinearGauge } from "../modules/data/LinearGauge";
+import { RadialGauge } from "../modules/data/RadialGauge";
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
@@ -152,5 +163,115 @@ describe("accessibility drill", () => {
     const { container } = render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
     expect(screen.queryAllByRole("gridcell")).toHaveLength(0);
     await expectNoAxeViolations(container);
+  });
+
+  it("interrupts only for problems: danger is an alert, info a polite status", () => {
+    render(
+      <>
+        <Feedback variant="danger" title="Payment failed" />
+        <Feedback variant="info" title="Heads up" />
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("Payment failed");
+    expect(screen.getByRole("status")).toHaveTextContent("Heads up");
+  });
+
+  it("gives a ToggleButton a pressed state and keeps it out of forms", () => {
+    render(<ToggleButton label="Bold" selected />, { wrapper: wrap });
+    const button = screen.getByRole("button", { name: "Bold" });
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(button).toHaveAttribute("type", "button");
+  });
+
+  it("exposes both gauges as named meters", async () => {
+    const { container } = render(
+      <>
+        <LinearGauge value={40} aria-label="Disk" />
+        <RadialGauge value={70} aria-label="CPU" />
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("meter", { name: "Disk" })).toHaveAttribute("aria-valuenow", "40");
+    expect(screen.getByRole("meter", { name: "CPU" })).toHaveAttribute("aria-valuenow", "70");
+    await expectNoAxeViolations(container);
+  });
+
+  it("moves focus into a Dialog when it opens", async () => {
+    render(
+      <Dialog open onClose={() => {}} title="Rename">
+        <input aria-label="Name" />
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    await screen.findByRole("dialog");
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.contains(document.activeElement)).toBe(true);
+  });
+
+  it("disables custom controls inside a disabled Fieldset", () => {
+    render(
+      <Fieldset legend="Plan" disabled>
+        <Checkbox label="Agree" />
+        <Switch label="Notify" checked={false} />
+        <RadioGroup
+          aria-label="Tier"
+          options={[
+            { value: "free", label: "Free" },
+            { value: "pro", label: "Pro" },
+          ]}
+        />
+      </Fieldset>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("checkbox", { name: "Agree" })).toHaveAttribute(
+      "aria-disabled",
+      "true",
+    );
+    for (const radio of screen.getAllByRole("radio")) {
+      expect(radio).toHaveAttribute("aria-disabled", "true");
+    }
+  });
+
+  it("keeps NumberInput's stepper buttons out of the Tab order", () => {
+    render(<NumberInput id="qty" label="Quantity" />, { wrapper: wrap });
+    expect(screen.getByRole("button", { name: "Increment value" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+    expect(screen.getByRole("button", { name: "Decrement value" })).toHaveAttribute(
+      "tabindex",
+      "-1",
+    );
+  });
+
+  it("gives two searchable Tables their own control ids", () => {
+    const data = { headers: [{ content: "Name", key: "name" }], rows: [["Ada"]] };
+    const { container } = render(
+      <>
+        <Table data={data} searchable />
+        <Table data={data} searchable />
+      </>,
+      { wrapper: wrap },
+    );
+    const ids = Array.from(container.querySelectorAll("input[id]")).map((input) => input.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("reads a Timeline as a list with the active step marked", () => {
+    render(
+      <Timeline
+        items={[
+          { label: "Ordered", state: "success" },
+          { label: "Shipped", state: "active" },
+          { label: "Delivered" },
+        ]}
+      />,
+      { wrapper: wrap },
+    );
+    const items = screen.getAllByRole("listitem");
+    expect(items).toHaveLength(3);
+    expect(items[1]).toHaveAttribute("aria-current", "step");
   });
 });

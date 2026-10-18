@@ -120,6 +120,33 @@ function packageExports() {
 
 const EXPORTS = packageExports();
 
+/**
+ * The React Native pages (`native/`) teach `@once-ui-system/native`, whose
+ * components share core's names but not all its props (`safeArea`, a
+ * `ThemeProvider` taking `insets`). Their examples resolve against its source,
+ * which needs no build.
+ */
+const NATIVE_ENTRY = path.resolve(root, "..", "..", "packages", "native", "src", "index.ts");
+function nativeExports() {
+  const program = ts.createProgram([NATIVE_ENTRY], {
+    skipLibCheck: true,
+    noEmit: true,
+    jsx: ts.JsxEmit.ReactJSX,
+    moduleResolution: ts.ModuleResolutionKind.Bundler,
+    module: ts.ModuleKind.ESNext,
+  });
+  const checker = program.getTypeChecker();
+  const source = program.getSourceFile(NATIVE_ENTRY);
+  const symbol = source && checker.getSymbolAtLocation(source);
+  const byName = new Map();
+  for (const exp of symbol ? checker.getExportsOfModule(symbol) : []) {
+    byName.set(exp.name, { from: "@once-ui-system/native", imported: exp.name });
+  }
+  return byName;
+}
+const NATIVE_EXPORTS = nativeExports();
+const isNativePage = (page) => page.startsWith(`native${path.sep}`) || page.startsWith("native/");
+
 const REACT_NAMES = new Set([
   "useState",
   "useEffect",
@@ -494,7 +521,7 @@ function boundNames(code) {
   return bound;
 }
 
-function buildFile(example) {
+function buildFile(example, native = false) {
   const shaped =
     example.kind === "preview"
       ? (() => {
@@ -535,8 +562,11 @@ function buildFile(example) {
       reactNames.push(name);
       continue;
     }
-    const scoped =
-      example.kind === "preview" ? SCOPE.get(name) : (SCOPE.get(name) ?? EXPORTS.get(name));
+    const scoped = native
+      ? NATIVE_EXPORTS.get(name)
+      : example.kind === "preview"
+        ? SCOPE.get(name)
+        : (SCOPE.get(name) ?? EXPORTS.get(name));
     if (scoped && !bound.has(name)) {
       const list = byModule.get(scoped.from) ?? [];
       list.push(scoped.imported === name ? name : `${scoped.imported} as ${name}`);
@@ -566,7 +596,13 @@ function compilerOptions() {
   const configPath = path.join(root, "tsconfig.json");
   const config = ts.readConfigFile(configPath, ts.sys.readFile);
   const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root);
-  return { ...parsed.options, noEmit: true, incremental: false, skipLibCheck: true };
+  return {
+    ...parsed.options,
+    noEmit: true,
+    incremental: false,
+    skipLibCheck: true,
+    paths: { ...parsed.options.paths, "@once-ui-system/native": [NATIVE_ENTRY] },
+  };
 }
 
 function check(files) {
@@ -615,7 +651,7 @@ function outsidePackage(d) {
   const module = /['"]([^'"]+)['"]/.exec(text)?.[1] ?? "";
   if (d.code === 5097) return true;
   if (/\.(s?css)$/.test(module)) return true;
-  return !module.startsWith("@once-ui-system/core");
+  return !/^@once-ui-system\/(core|native)(\/|$)/.test(module);
 }
 
 /**
@@ -681,7 +717,7 @@ function run() {
     read(text)
       .flatMap(splitFiles)
       .forEach((example, i) => {
-        const built = buildFile(example);
+        const built = buildFile(example, isNativePage(rel));
         const name = path.join(virtualDir, `${rel.replace(/[\\/.]/g, "_")}__${i}.tsx`);
         files.set(path.resolve(name), {
           ...example,
@@ -737,9 +773,10 @@ function run() {
       // page elided on purpose; only what it does say is checked.
       if ((entry.fragmentary || entry.kind === "inline") && FRAGMENT_EXEMPT.has(d.code)) continue;
       if (outsidePackage(d)) continue;
-      // Previews render on the server, and a server component can't hand a
-      // function to a client one, so a live preview leaves its required
-      // callbacks off. The copyable code beside it is where they belong.
+      // A preview renders on the server and can't hand a client component a
+      // function, so one that needs a callback renders a client wrapper from
+      // `src/product` (`ClientEmojiPicker`). A required `onSelect` left off
+      // is an error: the bare EmojiPicker preview threw on every click.
       // MDX is JavaScript, with no `as const`: a value mapped out of an
       // array literal arrives widened to `string`. That is the checker's
       // blind spot, not the page's.
@@ -749,12 +786,6 @@ function run() {
         /^Type '(string|number)' is not assignable/.test(
           ts.flattenDiagnosticMessageText(d.messageText, "\n"),
         )
-      )
-        continue;
-      if (
-        entry.kind === "preview" &&
-        d.code === 2741 &&
-        /^Property 'on[A-Z]/.test(ts.flattenDiagnosticMessageText(d.messageText, "\n"))
       )
         continue;
       const message = ts.flattenDiagnosticMessageText(d.messageText, "\n");

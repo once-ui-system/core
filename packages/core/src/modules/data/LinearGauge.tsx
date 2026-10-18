@@ -137,10 +137,23 @@ export const LinearGauge = ({
   };
 
   return (
-    <Column fillWidth gap="8" textVariant="label-default-s" onBackground="neutral-weak" {...flex}>
+    <Column
+      fillWidth
+      gap="8"
+      textVariant="label-default-s"
+      onBackground="neutral-weak"
+      // A gauge is a meter: without the role its value was only lit ticks.
+      role="meter"
+      aria-label="Gauge"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={value}
+      {...flex}
+    >
       {renderLabels()}
       <Column fillWidth fill>
         <svg
+          aria-hidden="true"
           width="100%"
           height="100%"
           viewBox={`0 0 ${width} ${lineLength}`}

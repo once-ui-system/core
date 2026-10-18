@@ -147,6 +147,18 @@ export function Header() {
     },
   ];
 
+  // Escape closes the phone menu and puts focus back on its button.
+  useEffect(() => {
+    if (!sidebarVisible) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      setSidebarVisible(false);
+      document.querySelector<HTMLElement>('header [aria-label="Menu"]')?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [sidebarVisible]);
+
   useEffect(() => {
     if (sidebarVisible) {
       // Save current scroll position
