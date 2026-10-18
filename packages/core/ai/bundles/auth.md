@@ -178,7 +178,7 @@ Mixins: LeafProps.
 Mixins: LeafProps.
 - id: string
 - label?, placeholder?: string
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?, description?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
@@ -288,7 +288,7 @@ Mixins: LeafProps.
 - id: string
 - label?, placeholder?: string
 - lines?: number | "auto" = auto
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?, description?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
@@ -449,6 +449,7 @@ type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
 type DisplayProps = the DisplayProps mixin above
+type FieldSize = "s" | "xl" | "l" | "m" | "xs" | "xxs"
 type FlexBreakpointProps = Exclude<GridBreakpointProps, "columns" | "rows"> | "center" | "direction" | "horizontal" | "vertical" | "wrap" | "flex"
 type FlexValue = "0" | "1" | "10" | "2" | "3" | "4" | "9" | "12" | "5" | "8" | "6" | "7" | "11"
 type GridBreakpointProps = Exclude<FlexBreakpointProps, "center" | "direction" | "horizontal" | "vertical" | "wrap" | "flex"> | "columns" | "rows"
@@ -488,6 +489,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - In a Next.js app, import LayoutProvider from "@once-ui-system/core/next", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.
+- Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.
 - Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.

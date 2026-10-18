@@ -8,7 +8,7 @@
   "id": "!string",
   "label": "string",
   "placeholder": "string",
-  "size": "TShirtSizes",
+  "size": "FieldSize",
   "error": "boolean = false",
   "errorMessage": "ReactNode",
   "description": "ReactNode",
@@ -59,12 +59,13 @@
   }
  },
  "types": {
-  "TShirtSizes": [
+  "FieldSize": [
    "s",
    "xl",
    "l",
    "m",
-   "xs"
+   "xs",
+   "xxs"
   ]
  }
 }

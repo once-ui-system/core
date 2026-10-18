@@ -4,7 +4,7 @@
  "props": {
   "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
   "columns": "FormColumns",
-  "size": "TShirtSizes",
+  "size": "FieldSize",
   "as": "\"div\" | \"form\" = div",
   "onSubmit": "(event: React.FormEvent<HTMLFormElement>) => unknown",
   "pending": "boolean",
@@ -31,16 +31,17 @@
    "m",
    "xs"
   ],
-  "FormColumns": [
-   "number",
-   "Partial<Record<Breakpoint, number>>"
-  ],
-  "TShirtSizes": [
+  "FieldSize": [
    "s",
    "xl",
    "l",
    "m",
-   "xs"
+   "xs",
+   "xxs"
+  ],
+  "FormColumns": [
+   "number",
+   "Partial<Record<Breakpoint, number>>"
   ]
  }
 }
