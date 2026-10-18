@@ -1,0 +1,96 @@
+---
+title: "RangeSlider"
+summary: "Two thumbs on one track for picking a start and an end, such as a price filter, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/rangeSlider.mdx"
+github: "packages/native/src/components/RangeSlider.tsx"
+navLabel: "RangeSlider"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`RangeSlider` selects a `[start, end]` range. A press on the track brings the nearer thumb to your finger and drags it. The two thumbs never cross, and `minDistance` keeps them apart. Each thumb is its own adjustable element for screen readers, bounded by the other one. See the [web RangeSlider](/components/rangeSlider) for the browser version.
+
+## Basic usage
+
+Without `value` the range starts at `defaultValue`, or the whole track.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { RangeSlider } from "@once-ui-system/native";
+
+export function PriceFilter() {
+  return (
+    <RangeSlider
+      label="Price"
+      min={0}
+      max={50}
+      defaultValue={[5, 20]}
+      showValue
+      formatValue={(v) => "€" + v}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "PriceFilter.tsx"
+  }
+]} />
+
+## Controlled with a gap
+
+Pass `value` and `onChange` to own the range. `onChange` always gets the start first. `minDistance` is the smallest gap the thumbs keep.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { RangeSlider } from "@once-ui-system/native";
+
+export function Hours() {
+  const [hours, setHours] = useState<[number, number]>([8, 17]);
+  return (
+    <RangeSlider
+      label="Opening hours"
+      min={0}
+      max={24}
+      minDistance={2}
+      value={hours}
+      onChange={setHours}
+      showValue
+      formatValue={(h) => h + ":00"}
+      thumbLabels={["Opens", "Closes"]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Hours.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- Drags go through a `PanResponder` on the track. When both thumbs sit on the same value, the first move decides which one moves, as on the web.
+- There is no `name` prop and no hidden inputs, since React Native has no forms. Read the range from `onChange`.
+- Screen readers move a thumb with the increment and decrement actions instead of the arrow, Page and Home/End keys.
+- `RangeSlider` does not take Flex props. Use `style` for the outer view.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `[number, number]` | | The range, when the host owns the state. Pair with `onChange`. |
+| `defaultValue` | `[number, number]` | `[min, max]` | The starting range when the slider keeps its own state. |
+| `onChange` | `(value: [number, number]) => void` | | Called with the new range, start first. |
+| `min` | `number` | `0` | The lowest value. |
+| `max` | `number` | `100` | The highest value. |
+| `step` | `number` | `1` | Values land on multiples of this from `min`. |
+| `minDistance` | `number` | `0` | The smallest gap the thumbs keep. |
+| `label` | `string` | | A label above the track. |
+| `showValue` | `boolean` | `false` | Shows the range beside the label. |
+| `formatValue` | `(value: number) => string` | `String` | How a value reads in the readout and to screen readers. |
+| `thumbLabels` | `[string, string]` | `["Minimum", "Maximum"]` | The thumbs' accessible names, start first. |
+| `disabled` | `boolean` | `false` | Dims the slider. It ignores drags and actions. |
+| `style` | `ViewStyle` | | Style for the outer view. |

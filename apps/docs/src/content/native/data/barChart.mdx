@@ -1,0 +1,198 @@
+---
+title: "BarChart"
+summary: "A bar chart for comparing values across categories, with a tap-to-show tooltip, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/data/barChart.mdx"
+github: "packages/native/src/components/charts/BarChart.tsx"
+navLabel: "BarChart"
+navIcon: "barChart"
+status: "unreleased"
+---
+
+`BarChart` draws a bar for each series in each row of `data`, grouped by the row's x value. It sits on a bordered card with an optional title and description, a legend and axis labels, and draws with react-native-svg. It takes the same `data` and `series` as the [web BarChart](/data/barChart). Tap a row to see its values.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+const data = [
+  { month: "Jan", coffee: 120, tea: 80 },
+  { month: "Feb", coffee: 150, tea: 60 },
+  { month: "Mar", coffee: 90, tea: 110 },
+];
+
+export function Sales() {
+  return (
+    <BarChart
+      title="Cups sold"
+      description="First quarter"
+      data={data}
+      series={[
+        { key: "coffee", color: "orange" },
+        { key: "tea", color: "emerald" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "BarChart"
+  }
+]} />
+
+## Data and series
+
+Each row of `data` is an object. The x value is the first key that is not a series, here `month`. Each entry in `series` names a key that holds a number and gives it a `color`. A color can be a data color (`"blue"`, `"emerald"` and the other schemes), any theme color token such as `"brand-solid-strong"`, or a raw `#hex` value. If you leave out `color`, the series gets a distinct scheme, as on the web. Give a row a `label` to show it instead of the x value.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+export function Visits() {
+  return (
+    <BarChart
+      data={[
+        { day: "mon", label: "Monday", visits: 32 },
+        { day: "tue", label: "Tuesday", visits: 41 },
+        { day: "wed", label: "Wednesday", visits: 28 },
+      ]}
+      series={{ key: "visits" }}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Labels"
+  }
+]} />
+
+## Bar width and variant
+
+`barWidth` sets each bar's width: `xs` (12), `s` (16), `m` (24), `l` (40, the default), `xl` (64), a number of points, or `fill` for the whole slot. A bar never gets wider than its share of the row. `variant` fills the bars with a fading `gradient` (the default), a solid `flat` color or only an `outline`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+export function Compact({ data }: { data: { month: string; orders: number }[] }) {
+  return <BarChart data={data} series={{ key: "orders" }} barWidth="s" variant="flat" />;
+}`,
+    language: "tsx",
+    label: "Bar width"
+  }
+]} />
+
+## Axis, grid and legend
+
+`axis` shows the labels on the `x` axis, the `y` axis, `both` (the default) or `none`. `grid` draws lines across the `y` ticks (the default), down the `x` rows, `both` or `none`. `legend.position` puts the legend above the plot (`top-left`, `top-center`, `top-right`) or below it (`bottom-*`). `legend.direction="column"` stacks the entries and `legend.display={false}` hides it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+export function Minimal({ data }: { data: { month: string; orders: number }[] }) {
+  return (
+    <BarChart
+      data={data}
+      series={{ key: "orders" }}
+      axis="x"
+      grid="none"
+      legend={{ position: "bottom-center" }}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Axis and legend"
+  }
+]} />
+
+## Tooltip
+
+Tap a row to show a tooltip with its label and each series' value. Tap the same row again to hide it, or another row to move it. Add `hover` to shade the tapped row's band. `tooltip={false}` turns tapping off. Screen readers read each row as a button labelled with its values, such as "Feb: coffee 150, tea 60".
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+export function Highlight({ data }: { data: { month: string; orders: number }[] }) {
+  return <BarChart data={data} series={{ key: "orders" }} hover />;
+}`,
+    language: "tsx",
+    label: "Hover"
+  }
+]} />
+
+## Loading, empty and error states
+
+`loading` shows a spinner instead of the plot. With no rows, the chart shows `emptyState`, and with `error` it shows `errorState`. Both take a string or your own element.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BarChart } from "@once-ui-system/native";
+
+export function Orders({ data, loading, failed }: { data: { month: string; orders: number }[]; loading: boolean; failed: boolean }) {
+  return (
+    <BarChart
+      title="Orders"
+      data={data}
+      series={{ key: "orders" }}
+      loading={loading}
+      error={failed}
+      emptyState="No orders yet"
+      errorState="Could not load orders"
+    />
+  );
+}`,
+    language: "tsx",
+    label: "States"
+  }
+]} />
+
+## Size
+
+The chart fills its parent's width, measured with `onLayout`, so the plot redraws when the screen rotates. The card is `24` rem tall by default. Set `height` (a number of rem, a spacing token or a percentage, as on Flex) to change it. The header and legend take their own height and the plot takes the rest. BarChart takes the other Flex props too, such as `marginTop` or `border`.
+
+## Differences from the web
+
+- Tapping a row shows the tooltip, instead of hovering. `hover` shades the tapped row.
+- The legend sits above or below the plot, instead of over it.
+- There is no date range picker. `date.start` and `date.end` still filter the rows, and `date.format` writes date x values with the common date-fns tokens (`yyyy`, `yy`, `MMMM`, `MMM`, `MM`, `M`, `dd`, `d`, `EEEE`, `EEE`, `HH`, `mm`). `date.selector`, `presets`, `dual`, `min`, `max` and `onChange` are not taken.
+- There is no `DataThemeProvider`. `variant` is a prop (`gradient` by default), and `data-viz-style` sets the color mode per chart.
+- `reverseX` and `reverseY` are not taken. The x labels are always below and the y labels on the left.
+- The y labels take only the width they need, instead of a fixed 64px column. When x labels would overlap, every second (or third, and so on) label is shown.
+- Without `series`, only the keys that hold numbers become series.
+- Tooltip values don't count up.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `data` | `DataPoint[]` | | The rows. Each is an object with an x value and a number per series. |
+| `series` | `SeriesConfig \| SeriesConfig[]` | | The keys to draw, each `{ key, color? }`. |
+| `title` | `ReactNode` | | The heading above the plot. |
+| `description` | `ReactNode` | | A line under the title. |
+| `barWidth` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| "fill" \| number` | `"l"` | The width of each bar. |
+| `variant` | `"gradient" \| "flat" \| "outline"` | `"gradient"` | How the bars are filled. |
+| `axis` | `"x" \| "y" \| "both" \| "none"` | `"both"` | Which axes show labels. |
+| `grid` | `"x" \| "y" \| "both" \| "none"` | `"y"` | Which grid lines to draw. |
+| `legend` | `{ display?, position?, direction? }` | `{ display: true, position: "top-left" }` | The legend's visibility, place and direction. |
+| `tooltip` | `boolean` | `true` | Tap a row to show its values. |
+| `hover` | `boolean` | `false` | Shades the tapped row's band. |
+| `date` | `{ start?, end?, format? }` | | Filters date rows and formats date labels. |
+| `loading` | `boolean` | `false` | Shows a spinner instead of the plot. |
+| `error` | `boolean` | `false` | Shows `errorState` instead of the plot. |
+| `emptyState` | `ReactNode` | `"No data available for the selected period"` | Shown when there are no rows. |
+| `errorState` | `ReactNode` | `"An error occurred while fetching data"` | Shown when `error` is set. |
+| `data-viz-style` | `"categorical" \| "divergent" \| "sequential"` | `"categorical"` | The color mode. `sequential` draws in brand shades. |
+| `height` | `number \| SpacingToken \| \`${number}%\`` | `24` | The card's height, in rem as on Flex. |
+| ...Flex props | `FlexProps` | | Margin, border, radius and the other Flex props. |

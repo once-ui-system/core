@@ -1,0 +1,104 @@
+---
+title: "Grid"
+summary: "Children in equal columns that reflow per breakpoint or by a minimum column width, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/grid.mdx"
+github: "packages/native/src/components/Grid.tsx"
+navLabel: "Grid"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Grid` lays its children out in `columns` equal columns, `gap` apart in both directions. Like [Flex](/native/components/flex) it takes spacing, size and surface props and the `xl` to `xs` breakpoint objects, so the column count can change with the screen width. See the [web Grid](/components/grid) for the browser version.
+
+## Columns and gap
+
+Each child sits in a cell `1 / columns` of the width. Cells in a row are as tall as the tallest one; give a child `flex={1}` to fill its cell's height.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, Grid, Text } from "@once-ui-system/native";
+
+export function Menu() {
+  return (
+    <Grid columns={2} gap="12" padding="16">
+      {["Espresso", "Flat white", "Cortado", "Mocha"].map((drink) => (
+        <Card key={drink} padding="16" flex={1}>
+          <Text variant="label-default-m">{drink}</Text>
+        </Card>
+      ))}
+    </Grid>
+  );
+}`,
+    language: "tsx",
+    label: "Menu.tsx"
+  }
+]} />
+
+## Responsive
+
+A breakpoint object applies at and below its width, as on the web. Here the grid has four columns on a tablet, two on a phone and one on a narrow phone.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Grid, Media } from "@once-ui-system/native";
+
+export function Gallery({ photos }: { photos: string[] }) {
+  return (
+    <Grid columns={4} gap="8" s={{ columns: 2 }} xs={{ columns: 1 }}>
+      {photos.map((src) => (
+        <Media key={src} src={src} aspectRatio="1 / 1" radius="l" />
+      ))}
+    </Grid>
+  );
+}`,
+    language: "tsx",
+    label: "Gallery.tsx"
+  }
+]} />
+
+## Minimum column width
+
+`minColumnWidth` fits as many columns as it can, each at least that wide, and reflows on its own. It takes a spacing token or a number of rem. A breakpoint's `columns` still overrides it at that width.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Grid, Tag } from "@once-ui-system/native";
+
+export function Origins() {
+  return (
+    <Grid minColumnWidth={8} gap="8" xs={{ columns: 2 }}>
+      <Tag label="Ethiopia" />
+      <Tag label="Colombia" />
+      <Tag label="Kenya" />
+      <Tag label="Brazil" />
+    </Grid>
+  );
+}`,
+    language: "tsx",
+    label: "AutoFit"
+  }
+]} />
+
+## Differences from the web
+
+- React Native has no CSS grid. `Grid` wraps each child in a cell view, so a child's own width and `gridColumn` styles do not span cells.
+- `rows` is not supported: rows follow from the content.
+- `direction`, `horizontal`, `vertical`, `center` and `wrap` are left out, since the grid places its children itself.
+- `minColumnWidth` takes a spacing token or rem, not CSS units such as `%` or `calc()`. It measures the grid once laid out, and counts from the screen width until then.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `columns` | `GridSize` | `1` | How many equal columns, `1` to `12` as a number or string. |
+| `minColumnWidth` | `number \| SpacingToken` | | As many columns as fit, each at least this wide. Takes precedence over `columns`. |
+| `gap` | `SpacingToken \| number` | | Space between rows and columns. |
+| `xl, l, m, s, xs` | `GridBreakpointProps` | | Props, including `columns` and `minColumnWidth`, that apply on screens up to that breakpoint. |
+| `...FlexProps` | `FlexProps` | | Spacing, size, surface and position props, as on `Flex`. |

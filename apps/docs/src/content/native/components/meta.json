@@ -27,6 +27,20 @@
     "accordion": 23,
     "toast": 24,
     "segmentedControl": 25,
-    "option": 26
+    "option": 26,
+    "dropdownWrapper": 27,
+    "contextMenu": 28,
+    "codeBlock": 29,
+    "inlineCode": 30,
+    "kbd": 31,
+    "grid": 32,
+    "tooltip": 33,
+    "infoTip": 34,
+    "user": 35,
+    "banner": 36,
+    "blockquote": 37,
+    "breadcrumbs": 38,
+    "pagination": 39,
+    "timeline": 40
   }
 }

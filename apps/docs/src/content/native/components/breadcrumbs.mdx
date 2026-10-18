@@ -1,0 +1,85 @@
+---
+title: "Breadcrumbs"
+summary: "A trail of links to where the current screen sits, collapsible when long, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/breadcrumbs.mdx"
+github: "packages/native/src/components/Breadcrumbs.tsx"
+navLabel: "Breadcrumbs"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Breadcrumbs` shows where the current screen sits, as a trail from the root. The last item is the current screen, drawn stronger and not pressable. A long trail wraps onto more lines, or collapses with `maxItems`. See the [web Breadcrumbs](/components/breadcrumbs) for the browser version.
+
+## Basic usage
+
+There is no URL routing on a phone, so `onNavigate` gets a crumb's `href` and hands it to your router. A crumb can also have its own `onPress`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Breadcrumbs } from "@once-ui-system/native";
+
+export function Trail({ navigate }: { navigate: (href: string) => void }) {
+  return (
+    <Breadcrumbs
+      onNavigate={navigate}
+      items={[
+        { label: "Home", href: "/", prefixIcon: "home" },
+        { label: "Beans", href: "/beans" },
+        { label: "Ethiopia Guji" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Trail.tsx"
+  }
+]} />
+
+## Collapsed
+
+With `maxItems`, a longer trail shows the first crumb, a "more" button and the last `maxItems - 1` crumbs. The button expands the trail in place.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Breadcrumbs } from "@once-ui-system/native";
+
+export function Deep({ navigate }: { navigate: (href: string) => void }) {
+  return (
+    <Breadcrumbs
+      maxItems={3}
+      onNavigate={navigate}
+      items={[
+        { label: "Home", href: "/" },
+        { label: "Shop", href: "/shop" },
+        { label: "Coffee", href: "/shop/coffee" },
+        { label: "Beans", href: "/shop/coffee/beans" },
+        { label: "Ethiopia" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Collapsed"
+  }
+]} />
+
+## Differences from the web
+
+- `href` does not navigate by itself: it goes to `onNavigate`, so the app's router decides. A crumb's `onPress` wins over it.
+- There is no `nav` landmark or ordered list in React Native, so there is no `aria-label`. Crumbs are links, and the current one is announced as selected in place of `aria-current="page"`.
+- Focus does not move to the first revealed crumb when the trail expands.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` | `BreadcrumbItem[]` | | The trail, each with `label` and optional `href`, `onPress` and `prefixIcon`. Required. |
+| `onNavigate` | `(href: string, item: BreadcrumbItem) => void` | | Called with a pressed crumb's `href`, when it has no `onPress`. |
+| `separator` | `ReactNode` | `chevronRight icon` | What sits between crumbs. Hidden from screen readers. |
+| `maxItems` | `number` | | Collapse a longer trail behind a "more" button. At least 2. |
+| `...FlexProps` | `FlexProps` | | Spacing, size and surface props for the row, as on `Flex`. |
