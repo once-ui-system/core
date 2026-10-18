@@ -1,0 +1,132 @@
+---
+title: "Text"
+summary: "Body text for React Native screens, set from the same typography and colour tokens as the web."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/text.mdx"
+github: "packages/native/src/components/Text.tsx"
+navLabel: "Text"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Text` renders a React Native `Text` with a Once UI type style and colour. Set the style with one `variant`, such as `"body-default-m"`, or with `family`, `size` and `weight`. Without any of them it is `body-default-m` in `neutral-strong`. See the [web Text page](/components/text) for the full set of variants.
+
+## Variants
+
+A variant is `family-weight-size`. The families are `body`, `heading`, `display`, `label` and `code`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Text } from "@once-ui-system/native";
+
+export function Variants() {
+  return (
+    <Column gap="8">
+      <Text variant="display-strong-s">Display</Text>
+      <Text variant="heading-strong-m">Heading</Text>
+      <Text variant="body-default-m">Body text</Text>
+      <Text variant="label-default-s">Label</Text>
+      <Text variant="code-default-s">npm install</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Variants.tsx"
+  }
+]} />
+
+When `variant` is not set, `family`, `size` and `weight` build one. They default to `body`, `m` and `default`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Text } from "@once-ui-system/native";
+
+export function Parts() {
+  return (
+    <Text family="label" size="s" weight="strong">
+      Strong small label
+    </Text>
+  );
+}`,
+    language: "tsx",
+    label: "Parts.tsx"
+  }
+]} />
+
+## Colors
+
+`onBackground` takes a scheme and a weight, such as `"neutral-weak"` or `"brand-medium"`. Use `onSolid` for text on a solid background.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Text } from "@once-ui-system/native";
+
+export function Colors() {
+  return (
+    <Column gap="8">
+      <Text onBackground="neutral-weak">Secondary text</Text>
+      <Text onBackground="brand-medium">Brand text</Text>
+      <Column padding="12" background="brand-strong" radius="m">
+        <Text onSolid="brand-strong">Text on a solid surface</Text>
+      </Column>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Colors.tsx"
+  }
+]} />
+
+## Alignment, truncation and spacing
+
+`align` sets the text alignment. `truncate` keeps the text on one line and ends it with an ellipsis. React Native's `numberOfLines` works too. `Text` takes the spacing props, such as `marginTop` and `paddingX`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Text } from "@once-ui-system/native";
+
+export function Caption() {
+  return (
+    <>
+      <Text align="center" marginBottom="8">
+        Centered
+      </Text>
+      <Text truncate>A long product name that does not fit on one line of a phone screen</Text>
+      <Text numberOfLines={2}>A description that may run to two lines, then stops.</Text>
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "Caption.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **No `as`.** React Native has no HTML elements. Use [Heading](/native/components/heading) for a title, which screen readers announce as a header.
+- **No `wrap` or `opacity`.** Use `numberOfLines` to limit the lines, or pass a `style`.
+- **Nesting.** A `Text` inside another `Text` runs inline with it, as in React Native.
+
+## Props
+
+`Text` also takes the spacing props (`padding`, `margin`, their sides, `gap`) and every React Native `Text` prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `TextVariant` | | A type style such as `"body-default-m"`. Wins over `family`, `size` and `weight`. |
+| `family` | `"body" \| "heading" \| "display" \| "label" \| "code"` | `"body"` | Used when `variant` is not set. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | Used when `variant` is not set. |
+| `weight` | `"default" \| "normal" \| "medium" \| "strong"` | `"default"` | Used when `variant` is not set. |
+| `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | Text colour on a background. |
+| `onSolid` | `"<scheme>-<weight>"` | | Text colour on a solid surface. Wins over `onBackground`. |
+| `align` | `"left" \| "center" \| "right" \| "justify"` | | Text alignment. |
+| `truncate` | `boolean` | | One line, ending in an ellipsis. |
+| `style` | `TextStyle \| TextStyle[]` | | Applied after the props. |

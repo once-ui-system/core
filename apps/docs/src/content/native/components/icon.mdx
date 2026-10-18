@@ -1,0 +1,131 @@
+---
+title: "Icon"
+summary: "Once UI's built-in icons drawn with react-native-svg, plus IconProvider for adding icons of your own by name."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/icon.mdx"
+github: "packages/native/src/components/Icon.tsx"
+navLabel: "Icon"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Icon` draws one icon by name. The native package ships the same icon data as the web package and draws it with `react-native-svg`, so the names match and no icon font or extra icon library is needed. `react-native-svg` 15 is a peer dependency, and Expo includes it. See the [web Icon page](/components/icon).
+
+## Sizes and colours
+
+`size` takes `xs` to `xl`: 16, 20, 24, 32 or 40 points. `m` is the default. The colour is `neutral-strong` unless you set `onBackground` or `onSolid`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Icon, Row } from "@once-ui-system/native";
+
+export function Icons() {
+  return (
+    <Row gap="16" vertical="center">
+      <Icon name="heart" size="xs" />
+      <Icon name="heart" size="m" onBackground="danger-medium" />
+      <Icon name="heart" size="xl" onBackground="brand-strong" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Icons.tsx"
+  }
+]} />
+
+## Built-in names
+
+`name` is typed as `IconName`, so a misspelled name is a type error. The built-in names include `arrowLeft`, `arrowRight`, `bell`, `calendar`, `check`, `chevronDown`, `chevronLeft`, `chevronRight`, `chevronUp`, `close`, `copy`, `danger`, `edit`, `eye`, `eyeOff`, `heart`, `home`, `info`, `link`, `lock`, `mail`, `minus`, `person`, `plus`, `refresh`, `search`, `settings`, `star`, `trash` and `warning`. Your editor's autocomplete on `name` lists all of them.
+
+Components that take `prefixIcon` or `suffixIcon`, such as [Button](/native/components/button), take the same names.
+
+## Accessibility
+
+Icons are decorative by default and hidden from screen readers. When an icon carries meaning on its own, pass `decorative={false}` and an `ariaLabel`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Icon, Row, Text } from "@once-ui-system/native";
+
+export function Status() {
+  return (
+    <Row gap="8" vertical="center">
+      <Icon name="check" size="s" onBackground="success-medium" decorative={false} ariaLabel="Paid" />
+      <Text>Invoice 1042</Text>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Status.tsx"
+  }
+]} />
+
+## Adding icons with IconProvider
+
+`IconProvider` adds icons by name, or replaces built-in ones. An icon is either core's SVG data (`{ tag, attr, child }`) or a component that takes `size` in points and `color`. That makes a set like `@expo/vector-icons` easy to plug in. Declare the new names on `IconLibraryOverrides` so `name` accepts them.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import Ionicons from "@expo/vector-icons/Ionicons";
+import { Button, Column, Icon, IconProvider } from "@once-ui-system/native";
+
+declare module "@once-ui-system/native" {
+  interface IconLibraryOverrides {
+    rocket: true;
+  }
+}
+
+const icons = {
+  rocket: ({ size, color }: { size: number; color: string }) => (
+    <Ionicons name="rocket-outline" size={size} color={color} />
+  ),
+};
+
+export default function App() {
+  return (
+    <IconProvider icons={icons}>
+      <Column gap="12">
+        <Icon name="rocket" />
+        <Button prefixIcon="rocket" label="Launch" onPress={() => {}} />
+      </Column>
+    </IconProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+`useIcons()` returns the merged set of icons in scope, for your own components.
+
+## Differences from the web
+
+- **No tooltip.** There is no hover on a touch screen, so `tooltip` and `tooltipPosition` are not supported. Use `ariaLabel` for the name.
+- **`color`.** Native `Icon` also takes a plain colour string in `color`, which wins over `onBackground`. Components use it to colour icons inside their labels.
+- **Custom icons.** The web's `IconProvider` takes React components. The native one also takes core's SVG data, and its components receive `size` and `color` instead of styling through CSS.
+
+## Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `IconName` | | A built-in name, or one added with `IconProvider`. Required. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | 16, 20, 24, 32 or 40 points. |
+| `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | Icon colour on a background. |
+| `onSolid` | `"<scheme>-<weight>"` | | Icon colour on a solid surface. Wins over `onBackground`. |
+| `color` | `string` | | A plain colour. Wins over `onBackground` and `onSolid`. |
+| `decorative` | `boolean` | `true` | Hidden from screen readers unless `false`. |
+| `ariaLabel` | `string` | the `name` | The accessible name when `decorative` is `false`. |
+| `style` | `ViewStyle` | | Applied to the view around the icon. |
+
+### IconProvider
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `icons` | `Record<string, NativeIcon>` | | Icons to add or replace, by name. A `NativeIcon` is core's SVG data or a component taking `size` and `color`. |
+| `children` | `ReactNode` | | The part of the app that uses these icons. |

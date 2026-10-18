@@ -1,0 +1,116 @@
+---
+title: "IconButton"
+summary: "A square React Native button that holds one icon, with the same variants and sizes as Button."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/iconButton.mdx"
+github: "packages/native/src/components/IconButton.tsx"
+navLabel: "IconButton"
+navIcon: "components"
+status: "unreleased"
+---
+
+`IconButton` is a square `Pressable` that shows one icon. It takes the same `variant` values as [Button](/native/components/button) and handles taps with `onPress`. See the [web IconButton page](/components/iconButton) for more on when to use it.
+
+## Accessible name
+
+An icon alone tells a screen reader nothing, so give every `IconButton` an `ariaLabel`. Without one, and without children, it logs a warning.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { IconButton, Row } from "@once-ui-system/native";
+
+export function Toolbar() {
+  return (
+    <Row gap="8">
+      <IconButton icon="search" variant="secondary" ariaLabel="Search" onPress={() => {}} />
+      <IconButton icon="settings" variant="tertiary" ariaLabel="Settings" onPress={() => {}} />
+      <IconButton icon="trash" variant="danger" ariaLabel="Delete" onPress={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Toolbar.tsx"
+  }
+]} />
+
+## Sizes and shape
+
+`size` takes `xs` to `xl`, from 20 to 48 points square. `m` (32 points) is the default. Every size takes taps from a 44 point area. `rounded` makes it a circle.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { IconButton, Row } from "@once-ui-system/native";
+
+export function Sizes() {
+  return (
+    <Row gap="8" vertical="center">
+      <IconButton size="s" icon="plus" ariaLabel="Add" onPress={() => {}} />
+      <IconButton size="m" icon="plus" ariaLabel="Add" onPress={() => {}} />
+      <IconButton size="l" icon="plus" rounded ariaLabel="Add" onPress={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes.tsx"
+  }
+]} />
+
+## Colour and custom content
+
+`color` sets the icon colour, such as `"brand-medium"`. By default it follows the variant. Children replace the icon, for an element of your own.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { IconButton, Row, Text } from "@once-ui-system/native";
+
+export function Custom() {
+  return (
+    <Row gap="8">
+      <IconButton
+        icon="heart"
+        variant="ghost"
+        color="danger-medium"
+        ariaLabel="Like"
+        onPress={() => {}}
+      />
+      <IconButton variant="secondary" ariaLabel="Three items" onPress={() => {}}>
+        <Text variant="label-strong-s">3</Text>
+      </IconButton>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Custom.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **No tooltip.** There is no hover on a touch screen. `tooltip` is still accepted and becomes the accessible name when `ariaLabel` is not set.
+- **`onPress`.** Taps go to `onPress`, as on any `Pressable`. There is no `onClick` or `href`.
+- **Pressed, not hover.** The variant's pressed colours show while the finger is down.
+
+## Props
+
+`IconButton` also takes every React Native `Pressable` prop except `children` and `style`, which it replaces.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `icon` | `IconName` | `"refresh"` | The icon to show. |
+| `ariaLabel` | `string` | | The accessible name. |
+| `tooltip` | `string` | | Used as the accessible name when `ariaLabel` is not set. |
+| `variant` | `ButtonVariant` | `"primary"` | Visual style, as on `Button`. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | 20, 24, 32, 40 or 48 points square. |
+| `rounded` | `boolean` | `false` | Makes the button a circle. |
+| `color` | `"<scheme>-<weight>"` | | Icon colour. Defaults to the variant's label colour. |
+| `loading` | `boolean` | `false` | Shows a spinner and blocks presses. |
+| `disabled` | `boolean` | `false` | Greys the button out and blocks presses. |
+| `children` | `ReactNode` | | Replaces the icon. |
+| `onPress` | `(event) => void` | | Called on tap. |
+| `style` | `ViewStyle` | | Applied after the button's own style. |
