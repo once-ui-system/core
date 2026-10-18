@@ -49,11 +49,14 @@
     "format": "biome format --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "demo": "node scripts/demo.mjs"
+    "demo": "node scripts/demo.mjs",
+    "sync:icons": "node scripts/sync-icons.mjs",
+    "check:icons": "node scripts/sync-icons.mjs --check"
   },
   "peerDependencies": {
     "react": ">=19",
-    "react-native": ">=0.79"
+    "react-native": ">=0.79",
+    "react-native-svg": ">=15"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.6",
@@ -66,6 +69,7 @@
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-native": "0.87.1",
+    "react-native-svg": "15.16.0",
     "react-native-web": "^0.21.4",
     "rimraf": "^6.1.3",
     "typescript": "6.0.3",

@@ -19,7 +19,7 @@ const shared = {
   entryPoints: [join(ROOT, "src/index.ts")],
   bundle: true,
   // Metro resolves these from the app; bundling them would ship a second React.
-  external: ["react", "react/jsx-runtime", "react-native"],
+  external: ["react", "react/jsx-runtime", "react-native", "react-native-svg"],
   jsx: "automatic",
   target: "es2022",
   platform: "neutral",

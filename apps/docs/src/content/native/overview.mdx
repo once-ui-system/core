@@ -26,7 +26,7 @@ It is a preview. Most apps should keep shipping Once UI on phones as the web bui
 
 ## Install
 
-Needs React 19 and React Native 0.79 or later (Expo SDK 53 and up). Preview versions are published to the `next` tag.
+Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -73,13 +73,15 @@ export default function App() {
 | `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
 | `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
 | `Switch`, `Checkbox` | Controlled or not, with a label and description. |
+| `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+
+`IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
 
 `useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
 
 ## Differences from the web
 
-- **Icons.** `prefixIcon`, `suffixIcon` and `icon` take an element instead of an icon name, since the preview has no icon set yet.
 - **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
