@@ -205,6 +205,34 @@ describe("content", () => {
     expect(controlled.getAttribute("aria-expanded")).toBe("true");
   });
 
+  it("Accordion takes core 3.0's defaultOpen and onOpenChange", () => {
+    const onOpenChange = vi.fn();
+    wrap(
+      <Accordion title="Next" defaultOpen onOpenChange={onOpenChange}>
+        <Text>Three</Text>
+      </Accordion>,
+    );
+    const header = screen.getByRole("button", { name: /Next/ });
+    expect(header.getAttribute("aria-expanded")).toBe("true");
+    fireEvent.click(header);
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+    expect(header.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("Tabs report through core 3.0's onValueChange too", () => {
+    const onValueChange = vi.fn();
+    wrap(
+      <Tabs onValueChange={onValueChange}>
+        <TabList>
+          <Tab value="a" label="A" />
+          <Tab value="b" label="B" />
+        </TabList>
+      </Tabs>,
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "B" }));
+    expect(onValueChange).toHaveBeenCalledWith("b");
+  });
+
   it("AvatarGroup shows up to limit and counts the rest", () => {
     wrap(<AvatarGroup limit={2} avatars={[{ value: "AB" }, { value: "CD" }, { value: "EF" }]} />);
     expect(screen.getByLabelText("Avatar AB")).toBeTruthy();
@@ -218,8 +246,10 @@ describe("content", () => {
       <>
         <StatusIndicator color="green" />
         <StatusIndicator color="red" ariaLabel="Closed" size="l" />
+        <StatusIndicator scheme="yellow" />
       </>,
     );
+    expect(screen.getByRole("img", { name: "yellow status indicator" })).toBeTruthy();
     expect(screen.getByRole("img", { name: "green status indicator" })).toBeTruthy();
     expect(screen.getByRole("img", { name: "Closed" })).toBeTruthy();
   });
