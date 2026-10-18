@@ -19,9 +19,12 @@ import {
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { layout } from "@/resources";
+import { isPlatformRoot, platformOfPath } from "@/resources/platforms";
 import { AVAILABILITY, type Availability } from "./availability";
+import { DocsContextSwitcher, flattenSlugs } from "./DocsContextSwitcher";
 
 import styles from "./Sidebar.module.scss";
+import { basePath } from "@/resources/versions";
 
 // Global navigation cache to prevent refetching
 let globalNavigationCache: any = null;
@@ -356,6 +359,14 @@ const SidebarContent: React.FC<{
       );
     };
 
+    /* Each platform is its own site context: web shows everything but the
+       other platforms' folders, a platform with its own folder shows only
+       that folder's pages, lifted to the top level. */
+    const platform = platformOfPath(pathname);
+    const visible = platform.root
+      ? (navigation.find((item) => item.slug === platform.root)?.children ?? [])
+      : navigation.filter((item) => !isPlatformRoot(item.slug));
+
     // Release history lives on GitHub, generated from CHANGELOG.md.
     const resourcesSection = (
       <Column gap="4" marginTop="32" paddingLeft="4">
@@ -364,13 +375,15 @@ const SidebarContent: React.FC<{
         </Row>
         {/* The blocks surface has its own catalogue and hides this sidebar,
             so this is the way into it from the reference. Free with 2.0. */}
-        <ResourceLink
-          href="/blocks/quickStart"
-          icon="apps"
-          label="Blocks"
-          tag="New"
-          pathname={pathname}
-        />
+        {platform.id === "web" && (
+          <ResourceLink
+            href="/blocks/quickStart"
+            icon="apps"
+            label="Blocks"
+            tag="New"
+            pathname={pathname}
+          />
+        )}
         <ResourceLink
           href="https://github.com/once-ui-system/core/releases"
           icon="github"
@@ -382,7 +395,7 @@ const SidebarContent: React.FC<{
 
     return (
       <>
-        {renderNavigation(navigation, 0)}
+        {renderNavigation(visible, 0)}
         {resourcesSection}
       </>
     );
@@ -435,7 +448,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
 
     // Fetch only if not loaded and no global cache
     if (!hasLoaded) {
-      fetch("/api/navigation")
+      fetch(`${basePath}/api/navigation`)
         .then((res) => res.json())
         .then((data) => {
           setNavigation(data);
@@ -468,6 +481,9 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
+        <Row fillWidth paddingBottom="12">
+          <DocsContextSwitcher slugs={flattenSlugs(navigation)} />
+        </Row>
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
         ) : (

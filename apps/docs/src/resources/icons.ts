@@ -111,6 +111,7 @@ export const iconLibrary = {
   chevronsLeftRight: LuChevronsLeftRight,
   email: HiOutlineEnvelope,
   computer: HiOutlineComputerDesktop,
+  mobile: HiOutlineDevicePhoneMobile,
   help: HiOutlineQuestionMarkCircle,
   info: HiOutlineInformationCircle,
   warning: HiOutlineExclamationTriangle,

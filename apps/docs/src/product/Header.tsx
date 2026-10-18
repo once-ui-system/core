@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import {
   Button,
@@ -16,12 +16,22 @@ import {
   Line,
 } from "@once-ui-system/core";
 import { layout } from "@/resources/once-ui.config";
+import {
+  PLATFORMS,
+  counterpartSlug,
+  isPlatformRoot,
+  platformOfPath,
+} from "@/resources/platforms";
 import { Sidebar, NavigationItem } from "./Sidebar";
+import { flattenSlugs } from "./DocsContextSwitcher";
+import { basePath } from "@/resources/versions";
 
 export function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
   const [isMac, setIsMac] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const platform = platformOfPath(pathname);
 
   useEffect(() => {
     setSidebarVisible(false);
@@ -38,7 +48,7 @@ export function Header() {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/navigation")
+    fetch(`${basePath}/api/navigation`)
       .then((res) => res.json())
       .then((data) => {
         setNavigationItems(data);
@@ -82,7 +92,21 @@ export function Header() {
     return kbarItems;
   };
 
-  const docsItems = convertToKbarItems(navigationItems);
+  // Search stays inside the platform being read, like the sidebar.
+  const platformItems = platform.root
+    ? (navigationItems.find((item) => item.slug === platform.root)?.children ?? [])
+    : navigationItems.filter((item) => !isPlatformRoot(item.slug));
+  const docsItems = convertToKbarItems(platformItems);
+  const allSlugs = flattenSlugs(navigationItems);
+  const platformKbarItems = PLATFORMS.filter((p) => p.id !== platform.id).map((p) => ({
+    id: `platform-${p.id}`,
+    name: `Switch to ${p.label} docs`,
+    section: "Platform",
+    shortcut: [],
+    keywords: `${p.label.toLowerCase()}, platform, switch, ${p.id}`,
+    perform: () => router.push(`/${counterpartSlug(pathname ?? "/", p, allSlugs)}`),
+    icon: p.icon,
+  }));
   const { theme, setTheme } = useTheme();
 
   const navigationKbarItems = [
@@ -110,6 +134,7 @@ export function Header() {
   const kbar = [
     ...navigationKbarItems,
     ...docsItems,
+    ...platformKbarItems,
     {
       id: "theme-toggle",
       name: theme === "dark" ? "Light mode" : "Dark mode",
