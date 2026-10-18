@@ -51,6 +51,8 @@ follows the device.
 | `Dialog` | A bottom sheet with core's props (`open`, `onClose`, `title`, `description`, `footer`); the back button and a tap on the backdrop close it. |
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ variant, message })` as in core; toasts stack at the bottom and hide after 6 s. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `multiple`, `searchable`. |
+| `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
+| `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As in core. |
 
 `useTheme()` gives the resolved theme to your own components:

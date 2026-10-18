@@ -16,3 +16,20 @@ export function useControllable(
     },
   ];
 }
+
+/** The same for a value: `value` when the caller controls it, otherwise local state. */
+export function useControlledValue<T>(
+  value: T | undefined,
+  defaultValue: T,
+  onChange?: (value: T) => void,
+): [T, (next: T) => void] {
+  const [local, setLocal] = useState(defaultValue);
+  const current = value ?? local;
+  return [
+    current,
+    (next) => {
+      if (value === undefined) setLocal(next);
+      onChange?.(next);
+    },
+  ];
+}

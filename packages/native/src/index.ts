@@ -1,7 +1,9 @@
 export { Avatar, type AvatarProps } from "./components/Avatar";
+export { Badge, type BadgeProps } from "./components/Badge";
 export { Button, type ButtonProps, type ButtonVariant } from "./components/Button";
 export { Card, type CardProps } from "./components/Card";
 export { Checkbox, type CheckboxProps } from "./components/Checkbox";
+export { Chip, type ChipProps } from "./components/Chip";
 export { Dialog, type DialogProps } from "./components/Dialog";
 export { Feedback, type FeedbackProps } from "./components/Feedback";
 export {
@@ -27,6 +29,19 @@ export {
 export { IconButton, type IconButtonProps } from "./components/IconButton";
 export { Input, type InputProps, Textarea, type TextareaProps } from "./components/Input";
 export { Line, type LineProps } from "./components/Line";
+export { ProgressBar, type ProgressBarProps } from "./components/ProgressBar";
+export {
+  RadioButton,
+  type RadioButtonProps,
+  RadioGroup,
+  type RadioGroupOption,
+  type RadioGroupProps,
+} from "./components/RadioGroup";
+export {
+  SegmentedControl,
+  type SegmentedControlButton,
+  type SegmentedControlProps,
+} from "./components/SegmentedControl";
 export { Option, type OptionProps, Select, type SelectProps } from "./components/Select";
 export { Skeleton, type SkeletonProps } from "./components/Skeleton";
 export { Spinner, type SpinnerProps } from "./components/Spinner";
