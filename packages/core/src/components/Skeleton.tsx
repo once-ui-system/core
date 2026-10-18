@@ -30,6 +30,9 @@ const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
   ({ shape = "line", size = "m", delay, style, className, ...props }, ref) => {
     return (
       <Flex
+        // A label on a plain div is not announced (axe: aria-prohibited-attr);
+        // a labelled skeleton says what is loading, as a status.
+        role={props["aria-label"] || props["aria-labelledby"] ? "status" : undefined}
         {...props}
         ref={ref}
         style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}

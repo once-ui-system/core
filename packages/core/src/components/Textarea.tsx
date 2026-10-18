@@ -7,6 +7,7 @@ import React, {
   TextareaHTMLAttributes,
   useCallback,
   useEffect,
+  useId,
   useState,
 } from "react";
 import { useDebounce } from "../hooks/useDebounce";
@@ -62,7 +63,7 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   (
     {
-      id,
+      id: idProp,
       label,
       placeholder,
       lines = "auto",
@@ -92,6 +93,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     },
     ref,
   ) => {
+    // \`id\` ties the label, error and description to the field. A field
+    // rendered without one (MDX does not typecheck) still gets them.
+    const generatedId = useId();
+    const id = idProp || `textarea-${generatedId}`;
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);

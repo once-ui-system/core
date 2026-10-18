@@ -59,6 +59,7 @@ const navigation = [
 const Footer = () => {
   return (
     <Column
+      as="footer"
       fillWidth
       horizontal="center"
       paddingTop="80"

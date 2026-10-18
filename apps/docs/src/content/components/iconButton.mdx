@@ -160,15 +160,15 @@ IconButtons can function as links when provided with an `href` property.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <IconButton icon="arrowUpRight" href="#" variant="secondary" />
-      <IconButton icon="chevronRight" href="#" variant="tertiary" />
+      <IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+      <IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />
     </Row>
   }
   codes={[
     {
       code:
-`<IconButton icon="arrowUpRight" href="#" variant="secondary" />
-<IconButton icon="chevronRight" href="#" variant="tertiary" />`,
+`<IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+<IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />`,
       language: "tsx",
       label: "Links"
     }
