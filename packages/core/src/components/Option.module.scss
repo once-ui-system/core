@@ -18,10 +18,12 @@
 .option {
     border-color: var(--static-transparent);
   
-    // Keyboard navigation highlight (lowest priority)
+    // Keyboard navigation highlight (lowest priority). It is the only cue
+    // when focus stays in a combobox field, so it takes the hover fill: a
+    // faint border alone read at about 1.3:1.
     &.highlighted:not(:hover):not(:focus) {
-        background: var(--static-transparent);
-        border-color: var(--neutral-alpha-medium);
+        background: var(--neutral-alpha-weak);
+        border-color: var(--neutral-alpha-strong);
     }
     
     // Selected state (medium priority)
@@ -58,6 +60,14 @@
     }
 }
   
+// Focus lands on the option element (a button or link) around this row, not
+// on the row, so `.option:focus` never matched a keyboard focus.
+:focus-visible > .option {
+    @include active;
+    outline: var(--static-space-2) solid var(--brand-solid-strong);
+    outline-offset: calc(-1 * var(--static-space-2));
+}
+
 .focused {
     background: var(--neutral-background-strong);
 }
