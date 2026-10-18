@@ -26,7 +26,7 @@ export default function App() {
 }
 ```
 
-Needs React 19 and React Native 0.79 or later (Expo SDK 53+).
+Needs React 19, React Native 0.79 or later (Expo SDK 53+) and `react-native-svg` 15 (included in Expo).
 
 Docs: the "React Native" section of the Once UI docs
 (`apps/docs/src/content/native/`). This README stays the quick start.
@@ -47,6 +47,7 @@ follows the device.
 | `Card` | Pressable when given `onPress` (or core's `onClick`), `selected`. |
 | `Input`, `Textarea` | Floating label, `error` + `errorMessage`, `description`, `prefix`/`suffix`, `characterCount`. |
 | `Switch`, `Checkbox` | Controlled (`checked`) or not (`defaultChecked`), `onToggle`, label and description. |
+| `Icon`, `IconButton`, `IconProvider` | Core's built-in icons, drawn with `react-native-svg`. `prefixIcon`/`suffixIcon` on `Button` and `Tag` take a name as in core, or any element. `IconProvider` adds icons: core's SVG data or a component taking `size` and `color` (for example from `@expo/vector-icons`). |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As in core. |
 
 `useTheme()` gives the resolved theme to your own components:
@@ -55,8 +56,6 @@ follows the device.
 
 ## Differences from core
 
-- **Icons:** core's `prefixIcon`/`suffixIcon`/`icon` take an icon name; here
-  they take an element, since the preview has no icon set yet.
 - **Units:** numbers on spacing and size props are rem, as on the web, and rem
   follows the device size Once UI uses (15pt on phones, 16pt on tablets).
 - **Touch:** small controls (`Button`, `Switch`, `Checkbox`) take taps from

@@ -12,6 +12,18 @@ export {
   type SpacingProps,
   spacingStyle,
 } from "./components/Flex";
+export {
+  type BuiltInIconName,
+  Icon,
+  type IconLibraryOverrides,
+  type IconName,
+  type IconProps,
+  IconProvider,
+  type IconSlot,
+  type NativeIcon,
+  useIcons,
+} from "./components/Icon";
+export { IconButton, type IconButtonProps } from "./components/IconButton";
 export { Input, type InputProps, Textarea, type TextareaProps } from "./components/Input";
 export { Line, type LineProps } from "./components/Line";
 export { Skeleton, type SkeletonProps } from "./components/Skeleton";
@@ -20,6 +32,7 @@ export { Switch, type SwitchProps } from "./components/Switch";
 export { Tag, type TagProps } from "./components/Tag";
 export { Heading, type HeadingProps, Text, type TextProps } from "./components/Text";
 export { touchSlop } from "./components/touch";
+export type { IconNode } from "./icons/types";
 export {
   defaultSettings,
   resolveTokens,

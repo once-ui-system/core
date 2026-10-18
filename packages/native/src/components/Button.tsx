@@ -3,6 +3,7 @@ import { Pressable, type PressableProps, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
 import type { TShirtSizes } from "../types";
+import { type IconSlot, renderIcon } from "./Icon";
 import type { RefComponent, ViewRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
@@ -27,9 +28,9 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   children?: ReactNode;
   weight?: "default" | "strong";
   rounded?: boolean;
-  /** An element before the label. Core takes an icon name; the preview has no icon set yet. */
-  prefixIcon?: ReactNode;
-  suffixIcon?: ReactNode;
+  /** An icon name as in core (`"arrowRight"`), or any element. */
+  prefixIcon?: IconSlot;
+  suffixIcon?: IconSlot;
   loading?: boolean;
   disabled?: boolean;
   fillWidth?: boolean;
@@ -137,6 +138,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
     const textSize = size === "xs" ? "s" : size === "xl" ? "l" : size;
     const inactive = disabled || loading;
+    const iconSize = size === "xs" || size === "s" ? "xs" : "s";
 
     return (
       <Pressable
@@ -181,7 +183,11 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
             : buttonColors(theme, variant, pressed).label;
           return (
             <>
-              {loading ? <Spinner size={size === "xl" ? "l" : size} color={color} /> : prefixIcon}
+              {loading ? (
+                <Spinner size={size === "xl" ? "l" : size} color={color} />
+              ) : (
+                renderIcon(prefixIcon, iconSize, color)
+              )}
               {(label || children) && (
                 <Text
                   paddingX="4"
@@ -195,7 +201,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
                   {label || children}
                 </Text>
               )}
-              {suffixIcon}
+              {renderIcon(suffixIcon, iconSize, color)}
             </>
           );
         }}

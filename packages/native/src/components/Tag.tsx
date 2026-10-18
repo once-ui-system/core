@@ -1,16 +1,18 @@
 import type { ReactNode } from "react";
 import type { ViewStyle } from "react-native";
+import { useTheme } from "../theme/ThemeProvider";
 import type { ColorScheme, CondensedTShirtSizes } from "../types";
 import { Row } from "./Flex";
+import { type IconSlot, renderIcon } from "./Icon";
 import { Text } from "./Text";
 
 export interface TagProps {
   scheme?: Exclude<ColorScheme, "accent"> | "accent";
   size?: CondensedTShirtSizes;
   label?: string;
-  /** Elements around the label. Core takes icon names; the preview has no icon set yet. */
-  prefixIcon?: ReactNode;
-  suffixIcon?: ReactNode;
+  /** Icon names as in core, or any elements. */
+  prefixIcon?: IconSlot;
+  suffixIcon?: IconSlot;
   children?: ReactNode;
   style?: ViewStyle;
 }
@@ -31,6 +33,7 @@ export function Tag({
   children,
   style,
 }: TagProps) {
+  const color = useTheme().onBackground(`${scheme}-medium`);
   return (
     <Row
       gap="4"
@@ -42,11 +45,11 @@ export function Tag({
       paddingY={PADDING[size].y}
       style={[{ alignSelf: "flex-start" }, style ?? {}]}
     >
-      {prefixIcon}
+      {renderIcon(prefixIcon, "xs", color)}
       <Text variant="label-default-s" onBackground={`${scheme}-medium`} numberOfLines={1}>
         {label || children}
       </Text>
-      {suffixIcon}
+      {renderIcon(suffixIcon, "xs", color)}
     </Row>
   );
 }
