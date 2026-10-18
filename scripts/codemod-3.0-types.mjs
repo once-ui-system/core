@@ -15,10 +15,13 @@
  *   G1  `as` on a component that no longer takes it (everything but the
  *       layout primitives, Text, Heading, VisuallyHidden, List and Form):
  *       reported, since 2.x's `as` there was untyped and the fix is a wrapper.
- *   G4  `<Column as="ul" style={{ listStyle: "none", margin: 0, padding: 0 }}>`:
- *       the declarations the list reset now makes are removed (margin and
- *       padding only when no spacing prop sits beside them, since inline
- *       zero beat the prop).
+ *   G4  `<Column as="ul">` / `as="ol"`: 3.0 resets the list (markers, indent,
+ *       margins), where 2.x showed the browser's defaults; what the element
+ *       did not set itself is written back exactly (`className="list-disc"
+ *       paddingLeft="40px" marginY="1em"`). An inline reset of its own
+ *       (`style={{ listStyle: "none", margin: 0 }}`) is kept: it says what the
+ *       list is, which a bare `as="ul"` no longer does, so a second run
+ *       leaves the list alone.
  *
  * Scoped like the other passes: only elements that are Once UI's, found
  * through the file's imports, or by name where nothing is imported (MDX).
@@ -32,6 +35,7 @@ import {
 	openingTagEnd,
 	withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { located } from "./codemod-3.0-format.mjs";
 import { elementsOf } from "./codemod-3.0-leaf.mjs";
 
 /**
@@ -307,50 +311,55 @@ function familyFree(parent) {
 	return `its parent ${parent.tag} sets no font family, so 2.x's font class did nothing there`;
 }
 
-/** G4: inline list resets that `as="ul"` now makes. */
-function rewriteListStyle(src, attrs, tag, push) {
+/**
+ * G4: `as="ul"` / `as="ol"` on a layout primitive resets the list in 3.0
+ * (`:where(.reset-list) { list-style: none; margin: 0; padding: 0 }`). In 2.x
+ * the browser's defaults applied: markers, `padding-inline-start: 40px`,
+ * `margin-block: 1em`. What the element did not set itself is written back
+ * exactly: `className="list-disc"` (or `list-decimal`), `paddingLeft="40px"`,
+ * `marginY="1em"`, each only where no prop or inline style of its own
+ * replaced it in 2.x. A className, a spread, a style that is not a literal
+ * object, or a list inside another list is reported.
+ */
+const LIST_RESTORE_NOTE =
+	'3.0 resets a list\'s markers, indent and margins (2.x showed the browser\'s); to keep them, add className="list-disc" paddingLeft="40px" marginY="1em" (list-decimal for an ol)';
+
+function restoreList(src, attrs, tag, push, warn, spread, ancestors) {
 	const as = attrs.find((a) => a.name === "as");
 	const element = as && as.value !== null ? literal(as.value) : null;
 	if (element !== "ul" && element !== "ol") return;
+	const marker = element === "ul" ? "list-disc" : "list-decimal";
+	const cls = attrs.find((a) => a.name === "className");
+	const clsText = cls?.value ? /^\{?\s*(["'])([^"']*)\1\s*\}?$/.exec(String(cls.value).trim())?.[2] : null;
+	// Written by this pass on an earlier run, or by hand: nothing to add.
+	if (clsText !== null && clsText !== undefined && /\blist-(disc|decimal|none)\b/.test(clsText) && clsText.split(/\s+/).every((c) => /^list-(disc|decimal|none)$/.test(c))) return;
+	const report = (why) => warn(`<${tag} as="${element}">: ${LIST_RESTORE_NOTE} (${why})`);
+	if (spread) return report("a spread may set them");
+	if (cls) return report("its className may set them");
+	if (ancestors().some((a) => a === "li" || a === "ul" || a === "ol")) return report("a nested list's browser margins were 0");
 	const style = attrs.find((a) => a.name === "style");
-	if (!style?.value) return;
-	const raw = String(style.value);
-	const m = /^\{\s*\{([\s\S]*)\}\s*\}$/.exec(raw);
-	if (!m) return;
-	const body = m[1];
-	if (/[{(`]|\.\.\./.test(body)) return; // nested values or spreads: leave it
-	const entries = body
-		.split(",")
-		.map((e) => e.trim())
-		.filter(Boolean);
-	const hasPadding = attrs.some((a) => /^padding/.test(a.name));
-	const hasMargin = attrs.some((a) => /^margin/.test(a.name));
-	const reset = (entry) => {
-		const [k, v] = entry
-			.split(":")
-			.map((x) => x?.trim().replace(/^["']|["']$/g, ""));
-		if (k === "listStyle" || k === "listStyleType") return v === "none";
-		if (k === "margin" && !hasMargin) return v === "0" || v === "0px";
-		if (k === "padding" && !hasPadding) return v === "0" || v === "0px";
-		if (k === "paddingLeft" || k === "paddingInlineStart")
-			return !hasPadding && (v === "0" || v === "0px");
-		return false;
-	};
-	const kept = entries.filter((e) => !reset(e));
-	if (kept.length === entries.length) return;
-	if (!kept.length) {
-		push({
-			...remove(src, style),
-			hit: `<${tag} as="${element}"> inline list reset removed (as="${element}" resets itself)`,
-		});
-		return;
+	let styleKeys = [];
+	if (style) {
+		const m = style.value ? /^\{\s*\{([\s\S]*)\}\s*\}$/.exec(String(style.value)) : null;
+		if (!m || /\.\.\./.test(m[1])) return report("its style may set them");
+		styleKeys = [...m[1].matchAll(/(?:^|,)\s*["']?([A-Za-z]+)["']?\s*:/g)].map((x) => x[1]);
 	}
-	const valueAt = src.indexOf(raw, style.at);
+	const has = (...names) => attrs.some((a) => names.includes(a.name)) || styleKeys.some((k) => names.includes(k));
+	const add = [];
+	if (!styleKeys.some((k) => /^listStyle/.test(k))) add.push(`className="${marker}"`);
+	if (!has("padding", "paddingX", "paddingLeft", "paddingInline", "paddingInlineStart")) add.push('paddingLeft="40px"');
+	const top = has("margin", "marginY", "marginTop", "marginBlock", "marginBlockStart");
+	const bottom = has("margin", "marginY", "marginBottom", "marginBlock", "marginBlockEnd");
+	if (!top && !bottom) add.push('marginY="1em"');
+	else if (!top) add.push('marginTop="1em"');
+	else if (!bottom) add.push('marginBottom="1em"');
+	if (!add.length) return;
+	const last = attrs[attrs.length - 1];
 	push({
-		at: valueAt,
-		end: valueAt + raw.length,
-		text: `{{ ${kept.join(", ")} }}`,
-		hit: `<${tag} as="${element}"> inline list reset removed (as="${element}" resets itself)`,
+		at: last.end,
+		end: last.end,
+		text: ` ${add.join(" ")}`,
+		hit: `<${tag} as="${element}"> ${add.join(" ")} (the browser's list styles, which 3.0 resets)`,
 	});
 }
 
@@ -399,6 +408,17 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 			spread: /\{\s*\.\.\./.test(src.slice(parent.nameEnd, parent.openEnd)),
 		};
 	};
+	// The elements around a list, to tell a nested one (whose 2.x browser
+	// margins were 0) from a top-level one.
+	const ancestorsOf = (at) => {
+		elements ??= elementsOf(src);
+		const out = [];
+		for (let el = elements.find((e) => e.at === at)?.parent; el; el = el.parent) {
+			const as = attributesOf(src, el.nameEnd, el.openEnd - 1).find((a) => a.name === "as");
+			out.push((as && as.value !== null ? literal(as.value) : null) ?? el.name);
+		}
+		return out;
+	};
 	for (const tag of tags) {
 		for (const name of namesFor(tag, bindings, isCore)) {
 			const open = new RegExp(`<${name.replace(".", "\\.")}(?=[\\s/>])`, "g");
@@ -414,13 +434,15 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 						hit: e.hit.startsWith("<") ? e.hit : `<${tag}> ${e.hit}`,
 					});
 				const warn = (w) =>
-					warnings.push(w.startsWith("<") ? w : `<${tag}> ${w}`);
+					warnings.push(located(w.startsWith("<") ? w : `<${tag}> ${w}`, src, m.index));
 				if (showIn.has(tag)) rewriteShowIn(src, attrs, push, warn);
 				if (tag !== "Text" && tag !== "Heading" && showIn.has(tag))
 					rewriteTextPieces(src, attrs, push, warn, tag);
 				if (tag === "Text" || tag === "Heading")
 					rewriteTextSizeWeight(src, attrs, tag, push, warn, tag === "Heading" ? parentOf(m.index) : null);
-				if (LAYOUT.has(tag)) rewriteListStyle(src, attrs, tag, push);
+				if (LAYOUT.has(tag)) {
+					restoreList(src, attrs, tag, push, warn, /\{\s*\.\.\./.test(src.slice(from, end)), () => ancestorsOf(m.index));
+				}
 				if (
 					LOST_AS.has(tag) &&
 					!TAKES_AS.has(tag) &&

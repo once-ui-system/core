@@ -56,7 +56,7 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { addToCoreImport, braceList, codeOnly, removeFromCoreImport } from "./codemod-3.0-format.mjs";
+import { addToCoreImport, braceList, codeOnly, located, removeFromCoreImport } from "./codemod-3.0-format.mjs";
 
 // ─── A small JSX-aware scanner ──────────────────────────────────────────────
 
@@ -420,6 +420,11 @@ function objectLiteral(text) {
     if (a === b) return;
     const seg = t.slice(a, b);
     const m = /^([A-Za-z_$][\w$]*|"[^"]*"|'[^']*')\s*:\s*/.exec(seg);
+    // `{ rows }`: shorthand, the entry is the name's value.
+    if (!m && /^[A-Za-z_$][\w$]*$/.test(seg)) {
+      entries.push({ key: seg, at: a, keyEnd: b, valueAt: a, end: b, value: seg, shorthand: true });
+      return;
+    }
     if (!m) {
       opaque = true;
       entries.push({ key: null, at: a, end: b, keyEnd: a, valueAt: a, value: seg });
@@ -486,7 +491,7 @@ function headersAsColumns(headers) {
     const content = obj.entries.find((e) => e.key === "content");
     if (content) {
       const at = content.at - base;
-      text = `${text.slice(0, at)}header${text.slice(content.keyEnd - base)}`;
+      text = `${text.slice(0, at)}${content.shorthand ? "header: content" : "header"}${text.slice(content.keyEnd - base)}`;
     }
     out.push(text);
   }
@@ -504,7 +509,7 @@ function actionsRowFirst(actions) {
     let text = entry;
     for (const e of [...obj.entries].reverse()) {
       if (e.key !== "onClick" && e.key !== "disabled") continue;
-      text = `${text.slice(0, e.valueAt)}${rowFirst(e.value)}${text.slice(e.end)}`;
+      text = `${text.slice(0, e.valueAt)}${e.shorthand ? `${e.key}: ` : ""}${rowFirst(e.value)}${text.slice(e.end)}`;
     }
     out.push(text.trim());
   }
@@ -1102,9 +1107,11 @@ export function transformMerges(src, { remProps, breakpointProps } = {}) {
       }
       const done = rewriteElement(out, m.index, "Table", local, "Table");
       if (!done) continue;
-      out = applyRewrite(out, m.index, done);
-      hits.push("<Table data> → <Table columns rows>");
-      for (const w of done.warnings) warnings.push(`<Table> ${w}`);
+      for (const w of done.warnings) warnings.push(located(`<Table> ${w}`, out, m.index));
+      const next = applyRewrite(out, m.index, done);
+      // Counted only when written: a data it could not read changes nothing.
+      if (next !== out) hits.push("<Table data> → <Table columns rows>");
+      out = next;
     }
   }
 
@@ -1121,9 +1128,10 @@ export function transformMerges(src, { remProps, breakpointProps } = {}) {
           from = m.index + 1;
           continue;
         }
-        out = applyRewrite(out, m.index, done);
-        hits.push(`<${tag}> → <${to}>`);
-        for (const w of done.warnings) warnings.push(`<${tag}> ${w}`);
+        for (const w of done.warnings) warnings.push(located(`<${tag}> ${w}`, out, m.index));
+        const next = applyRewrite(out, m.index, done);
+        if (next !== out) hits.push(`<${tag}> → <${to}>`);
+        out = next;
         from = m.index + 1;
       }
     }

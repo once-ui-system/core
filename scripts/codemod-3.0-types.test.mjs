@@ -165,22 +165,37 @@ describe("G1: as on a component that no longer takes it", () => {
 	});
 });
 
-describe("G4: inline list resets", () => {
-	it("removes a style that only reset the list", () => {
-		const { out } = run(
-			'<Column as="ul" gap="8" style={{ listStyle: "none", margin: 0, padding: 0 }}>a</Column>\n',
+describe("G4: a list's browser styles, which 3.0 resets", () => {
+	it("writes back the markers, indent and margins a bare list had", () => {
+		assert.equal(
+			body(run('<Column as="ul" gap="16">\n  <Text as="li">a</Text>\n</Column>\n').out),
+			'<Column as="ul" gap="16" className="list-disc" paddingLeft="40px" marginY="1em">\n  <Text as="li">a</Text>\n</Column>\n',
 		);
-		assert.equal(body(out), '<Column as="ul" gap="8">a</Column>\n');
+		assert.match(body(run('<Row as="ol">a</Row>\n').out), /className="list-decimal"/);
 	});
 
-	it("keeps the rest of the style, and a zero that beat a spacing prop", () => {
-		const { out } = run(
-			'<Row as="ol" padding="16" style={{ listStyle: "none", padding: 0, color: "red" }}>a</Row>\n',
-		);
+	it("keeps what the element set itself, and an inline reset of its own", () => {
 		assert.equal(
-			body(out),
-			'<Row as="ol" padding="16" style={{ padding: 0, color: "red" }}>a</Row>\n',
+			body(run('<Column as="ul" gap="8" paddingLeft="20" marginTop="8">a</Column>\n').out),
+			'<Column as="ul" gap="8" paddingLeft="20" marginTop="8" className="list-disc" marginBottom="1em">a</Column>\n',
 		);
+		const reset = '<Column as="ul" gap="8" style={{ listStyle: "none", margin: 0, padding: 0 }}>a</Column>\n';
+		assert.equal(body(run(reset).out), reset);
+		assert.equal(
+			body(run('<Row as="ol" padding="16" style={{ listStyle: "none", padding: 0, color: "red" }}>a</Row>\n').out),
+			'<Row as="ol" padding="16" style={{ listStyle: "none", padding: 0, color: "red" }} marginY="1em">a</Row>\n',
+		);
+	});
+
+	it("reports a className, a spread, or a list inside a list", () => {
+		for (const src of [
+			'<Column as="ul" className={styles.list}>a</Column>\n',
+			'<Column as="ul" {...props}>a</Column>\n',
+			'<Column as="ul">\n  <Text as="li">\n    <Column as="ul">b</Column>\n  </Text>\n</Column>\n',
+		]) {
+			const { warnings } = run(src);
+			assert.ok(warnings.some((w) => /3\.0 resets a list's markers/.test(w)), src);
+		}
 	});
 
 	it("leaves a div's style alone", () => {

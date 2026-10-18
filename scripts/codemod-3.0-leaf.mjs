@@ -57,7 +57,7 @@ import {
 	openingTagEnd,
 	withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { addToCoreImport } from "./codemod-3.0-format.mjs";
+import { addToCoreImport, lineMap, located, splitLine } from "./codemod-3.0-format.mjs";
 
 /** The leaves, and the layout-named props each keeps as its own. */
 const TEXT_OWN = [
@@ -107,6 +107,8 @@ export const LEAVES = {
 	TypeFx: TEXT_OWN,
 };
 
+/** The leaves that hand an unknown prop to a native <input> or <textarea>. */
+const NATIVE_FIELDS = new Set(["Input", "NumberInput", "ColorInput", "Textarea"]);
 /** The leaves that render a Text or Heading: padding becomes inline style where no wrapper can take it. */
 const TEXT_LEAVES = new Set(["Text", "Heading", "ListItem", "CountFx", "ShineFx", "TypeFx"]);
 /** Those a Column may wrap: ListItem is an <li>, and the effects are best left in their own element. */
@@ -156,6 +158,8 @@ export const LEAF_PROPS = new Set([
 const BREAKPOINTS = ["xl", "l", "m", "s", "xs"];
 const MARGINS = [...LEAF_PROPS].filter((p) => p.startsWith("margin"));
 const OFFSETS = ["position", "top", "right", "bottom", "left"];
+/** What places an absolutely positioned leaf, besides OFFSETS: a wrapper in its place takes them. */
+const PLACEMENT = new Set(["translateX", "translateY"]);
 
 /** Every layout prop 2.x put on a Flex: FlexLayoutProps, plus the breakpoints. */
 export const LAYOUT_PROPS = new Set(
@@ -228,6 +232,15 @@ const BLOCK_ELEMENTS = new Set([
 	"fieldset",
 	"figure",
 	"label",
+	// Flow content too: a <div> is valid in a list item, a cell, a quote.
+	"li",
+	"td",
+	"th",
+	"dd",
+	"dt",
+	"blockquote",
+	"details",
+	"dialog",
 ]);
 /** `as` values on Text or Heading that a wrapping <div> may hold. */
 const TEXT_ELEMENTS = new Set([
@@ -336,19 +349,78 @@ export function transformLeaf(src, { isCore = isCoreSource } = {}) {
 	// Notes on what a round did (not left to do), kept from every round.
 	const notes = [];
 	let out = src;
+	// A report's line, read in a later round's text, as the line in `src`.
+	const back = (text, list) => {
+		if (text === src) return list;
+		const map = lineMap(text, src);
+		return list.map((w) => {
+			const { text: msg, line } = splitLine(w);
+			return line === null ? w : `${msg} (line ${map(line)})`;
+		});
+	};
 	for (let round = 0; round < 4; round++) {
 		const r = leafRound(out, isCore);
 		hits.push(...r.hits);
-		notes.push(...r.notes);
+		notes.push(...back(out, r.notes));
 		// What the last round still reports is what is left to do by hand.
 		warnings.length = 0;
-		warnings.push(...r.warnings);
+		warnings.push(...back(out, r.warnings));
 		if (r.out === out) break;
 		out = r.out;
 	}
 	if (hits.length) out = withWrapperImports(out, hits, warnings, isCore);
+	out = leafPropTypes(out, isCore, hits, warnings);
 	warnings.unshift(...notes);
 	return { out, hits, warnings };
+}
+
+/**
+ * The props a leaf no longer takes, named through its type:
+ * `Pick<ComponentProps<typeof Icon>, "onBackground" | "background">` →
+ * `Pick<ComponentProps<typeof Icon>, "onBackground"> & Pick<ComponentProps<typeof Row>, "background">`
+ * (the Row that now carries them takes the type 2.x's Flex gave them), and
+ * `ComponentProps<typeof Icon>["background"]` → `…<typeof Row>["background"]`.
+ */
+function leafPropTypes(src, isCore, hits, warnings) {
+	const bindings = importBindings(src);
+	const row = [...bindings].find(([local, b]) => b.canonical === "Row" && isCore(b.source) && !local.startsWith("type "))?.[0] ?? null;
+	let out = src;
+	for (const tag of Object.keys(LEAVES)) {
+		const own = new Set(LEAVES[tag]);
+		const moves = (k) => LAYOUT_PROPS.has(k) && !LEAF_PROPS.has(k) && !own.has(k);
+		for (const [local, b] of bindings) {
+			if (b.canonical !== tag || !isCore(b.source) || local.startsWith("type ")) continue;
+			const props = `((?:React\\s*\\.\\s*)?ComponentProps(?:WithoutRef|WithRef)?\\s*<\\s*typeof\\s+)${local}(\\s*>)`;
+			const pick = new RegExp(`(?<![\\w$.])Pick\\s*<\\s*${props}\\s*,\\s*((?:["'][\\w]+["']\\s*\\|?\\s*)+)>`, "g");
+			out = out.replace(pick, (whole, head, close, list, at) => {
+				const keys = [...list.matchAll(/(["'])(\w+)\1/g)].map((m) => ({ q: m[1], k: m[2] }));
+				const moved = keys.filter((x) => moves(x.k));
+				if (!moved.length) return whole;
+				if (!row) {
+					warnings.push(located(`Pick<ComponentProps<typeof ${tag}>, …>: ${tag} does not take ${moved.map((x) => x.k).join(", ")} in 3.0; pick them from Row's props, the Row that carries them`, out, at));
+					return whole;
+				}
+				const kept = keys.filter((x) => !moves(x.k));
+				const names = (xs) => xs.map((x) => `${x.q}${x.k}${x.q}`).join(" | ");
+				const rowPick = `Pick<${head}${row}${close}, ${names(moved)}>`;
+				const text = kept.length ? `Pick<${head}${local}${close}, ${names(kept)}> & ${rowPick}` : rowPick;
+				hits.push(`Pick<ComponentProps<typeof ${tag}>, …> ${moved.map((x) => x.k).join(", ")} → Row's props`);
+				// `Pick<…>[]`: the intersection is one type.
+				return kept.length && /^\s*\[/.test(out.slice(at + whole.length)) ? `(${text})` : text;
+			});
+			const index = new RegExp(`(?<![\\w$.])${props}(\\s*\\[\\s*)(["'])(\\w+)\\4(\\s*\\])`, "g");
+			out = out.replace(index, (whole, head, close, open, q, k, end, at) => {
+				if (!moves(k)) return whole;
+				if (!row) {
+					warnings.push(located(`ComponentProps<typeof ${tag}>["${k}"]: ${tag} does not take ${k} in 3.0; use Row's`, out, at));
+					return whole;
+				}
+				hits.push(`ComponentProps<typeof ${tag}>["${k}"] → Row's`);
+				return `${head}${row}${close}${open}${q}${k}${q}${end}`;
+			});
+		}
+	}
+	return out;
 }
 
 function leafRound(src, isCore) {
@@ -364,7 +436,8 @@ function leafRound(src, isCore) {
 	for (const tag of LAYOUT_PARENTS)
 		for (const name of namesFor(tag, bindings, isCore)) layoutOf.set(name, tag);
 
-	for (const el of elementsOf(src)) {
+	const elements = elementsOf(src);
+	for (const el of elements) {
 		const tag = leafOf.get(el.name);
 		if (!tag) continue;
 		const attrs = attributesOf(src, el.nameEnd, el.openEnd - 1);
@@ -449,7 +522,7 @@ function leafRound(src, isCore) {
 		}
 
 		const finish = (extraWarning) => {
-			if (extraWarning) warnings.push(extraWarning);
+			if (extraWarning) warnings.push(located(extraWarning, src, el.at));
 			if (!ops.length) return;
 			let element = src.slice(el.at, el.openEnd);
 			for (const o of [...ops].sort((x, y) => y.at - x.at)) element = element.slice(0, o.at - el.at) + o.text + element.slice(o.end - el.at);
@@ -474,7 +547,11 @@ function leafRound(src, isCore) {
 				for (const a of inert) ops.push({ ...remove(src, a), text: "" });
 				done.push(`<${tag}> ${inert.map((a) => a.name).join(", ")} dropped`);
 				notes.push(
-					`<${tag}> ${inert.map((a) => a.name).join(", ")}: had no effect on ${tag} in 2.x and was dropped; to hide it, wrap it in a Column with hide`,
+					located(
+						`<${tag}> ${inert.map((a) => a.name).join(", ")}: had no effect on ${tag} in 2.x and was dropped; to hide it, wrap it in a Column with hide`,
+						src,
+						el.at,
+					),
 				);
 				dropped = dropped.filter((a) => !inert.includes(a));
 				if (!dropped.length) {
@@ -483,8 +560,32 @@ function leafRound(src, isCore) {
 				}
 			}
 		}
+		// 2.x Input, NumberInput, ColorInput and Textarea spread what they did
+		// not take onto the native <input> or <textarea>, where `height` is an
+		// attribute only an image input reads (2.0 renamed the old `height` to
+		// `size`): it did nothing, and dropping it keeps the page as it was.
+		if (NATIVE_FIELDS.has(tag)) {
+			const type = attrs.find((a) => a.name === "type");
+			const image = type && (type.value === null || unquote(type.value) === null || unquote(type.value) === "image");
+			const inert = image ? [] : dropped.filter((a) => a.name === "height");
+			if (inert.length) {
+				for (const a of inert) ops.push({ ...remove(src, a), text: "" });
+				done.push(`<${tag}> height dropped (2.x passed it to the native <${tag === "Textarea" ? "textarea" : "input"}>, where it did nothing; the size prop is \`size\`)`);
+				dropped = dropped.filter((a) => !inert.includes(a));
+				if (!dropped.length) {
+					finish();
+					continue;
+				}
+			}
+		}
 		const spinner = tag === "Spinner";
+		// An absolutely placed leaf (`position="absolute" left top translateX="-50%"`):
+		// a Row in its place takes the placement, shrink-wrapped to the leaf, so
+		// the translate's percentages are of the same box.
+		const position = unquote(attrs.find((a) => a.name === "position")?.value);
+		const placed = !textLike && !spinner && (position === "absolute" || position === "fixed") && !attrs.some((a) => a.name === "fillWidth" || a.name === "flex");
 		const movable = (a) => {
+			if (placed && PLACEMENT.has(a.name)) return true;
 			if (a.name === "hide") return a.value === null || /^\{\s*(true|false)\s*\}$/.test(a.value);
 			if (BREAKPOINTS.includes(a.name)) return hideOnly(a.value) !== null;
 			if (textLike) return PADDING.has(a.name);
@@ -502,7 +603,21 @@ function leafRound(src, isCore) {
 		}
 		const styling = dropped.some((a) => a.name !== "hide" && !BREAKPOINTS.includes(a.name));
 		const onlyPadding = dropped.every((a) => PADDING.has(a.name));
-		let why = blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread });
+		// Only `hide` and `{ hide }` breakpoints, on a leaf that is a JSX prop's
+		// value (`trigger={<NavIcon hide m={{ hide: false }} />}`, the stock
+		// Once UI header): the slot holds whatever it is given, so a Row shown
+		// and hidden with them is exact there, whatever the parent.
+		const visibility =
+			!styling &&
+			!spread &&
+			!el.parent &&
+			elements.some((e) => e !== el && e.nameEnd <= el.at && el.at < e.openEnd);
+		const translated = placed && dropped.some((a) => PLACEMENT.has(a.name));
+		let why = visibility
+			? el.end < 0
+				? "its closing tag was not found"
+				: null
+			: blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread, placed: translated });
 		if (!why && textLike && !COLUMN_WRAPPED.has(tag)) why = `a Column would change what ${tag} renders`;
 
 		// Padding on text that no wrapper can take is the class's own declaration, inline.
@@ -526,7 +641,10 @@ function leafRound(src, isCore) {
 			(a) =>
 				dropped.includes(a) ||
 				MARGINS.includes(a.name) ||
+				// The outermost element of a list item carries its key.
+				a.name === "key" ||
 				(textLike && a.name === "flex") ||
+				(translated && OFFSETS.includes(a.name)) ||
 				(spinner && ["flex", "fillWidth", ...OFFSETS].includes(a.name)),
 		);
 		const fillWidth = spinner ? null : attrs.find((a) => a.name === "fillWidth");
@@ -558,6 +676,25 @@ function leafRound(src, isCore) {
 			text,
 			hits: [...done, `<${tag}> ${dropped.map((a) => a.name).join(", ")} → <${wrapperName}> around it`],
 		});
+	}
+	// A leaf the element scanner did not reach (something before it it could
+	// not read): never silent, since its props may need moving.
+	const seen = new Set(elements.map((e) => e.at));
+	for (const [name, tag] of leafOf) {
+		for (const m of src.matchAll(new RegExp(`<${name.replace(".", "\\.")}(?=[\\s/>])`, "g"))) {
+			if (seen.has(m.index) || /[\w$)\].]/.test(src[m.index - 1] ?? "")) continue;
+			const end = openingTagEnd(src, m.index + name.length + 1);
+			const own = new Set(LEAVES[tag]);
+			const props = end < 0 ? [] : attributesOf(src, m.index + name.length + 1, end).filter((a) => LAYOUT_PROPS.has(a.name) && !LEAF_PROPS.has(a.name) && !own.has(a.name));
+			if (end >= 0 && !props.length) continue;
+			warnings.push(
+				located(
+					`<${tag}>${props.length ? ` ${props.map((a) => a.name).join(", ")}` : ""}: this element could not be read in place (check the code before it); ${props.length ? "these are not taken by a leaf in 3.0, move them to a Row or Column around it" : "check its layout props by hand"}`,
+					src,
+					m.index,
+				),
+			);
+		}
 	}
 	return { out: applyEdits(src, edits, hits), hits, warnings, notes };
 }
@@ -722,7 +859,7 @@ function adviceFor(tag, stuck, suggestion) {
 }
 
 /** Why wrapping this element would not render exactly the same, or null. */
-function blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread }) {
+function blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread, placed = false }) {
 	if (el.end < 0) return "its closing tag was not found";
 	if (spread) return "a spread may carry more props";
 	const spinner = tag === "Spinner";
@@ -741,7 +878,7 @@ function blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread }) {
 		if (parentAs && !BLOCK_ELEMENTS.has(unquote(parentAs.value)))
 			return `its parent renders as ${parentAs.value}`;
 	}
-	if (attrs.some((a) => OFFSETS.includes(a.name))) return "it is positioned";
+	if (!placed && attrs.some((a) => OFFSETS.includes(a.name))) return "it is positioned";
 	if (!textLike && attrs.some((a) => a.name === "flex")) return "its flex would not reach it";
 	if (iconBox && attrs.some((a) => a.name === "fillWidth" || a.name === "tooltip"))
 		return "fillWidth or a tooltip on the Icon";

@@ -35,7 +35,7 @@ describe("F6: Table data={{ headers, rows }} → Table columns rows", () => {
   it("maps headers it cannot see into with .map, and a plain name's headers and rows", () => {
     assert.equal(
       run("Table", "<Table data={{ headers: cols, rows }} />\n").body,
-      "<Table data={{ headers: cols, rows }} />\n",
+      "<Table columns={cols.map(({ content, ...column }) => ({ ...column, header: content }))} rows={rows} />\n",
     );
     assert.equal(
       run("Table", "<Table data={{ headers: cols, rows: list }} />\n").body,
@@ -47,11 +47,18 @@ describe("F6: Table data={{ headers, rows }} → Table columns rows", () => {
     );
   });
 
-  it("reports data it cannot read: a shorthand entry or a call", () => {
-    const r = run("Table", "<Table data={{ headers: cols, rows }} />\n");
-    assert.ok(r.warnings.some((w) => w.startsWith("<Table> data: not an inline")));
-    const call = run("Table", "<Table data={build()} />\n");
+  it("reads shorthand entries: { headers: [...], rows } and a shorthand header content", () => {
+    const r = run("Table", '<Table\n  data={{\n    headers: [{ content: "", key: "row" }, { content, key: "us" }],\n    rows,\n  }}\n/>\n');
+    assert.match(r.body, /columns=\{\[\{ header: "", key: "row" \}, \{ header: content, key: "us" \}\]\}/);
+    assert.match(r.body, /rows=\{rows\}/);
+    assert.deepEqual(r.warnings, []);
+  });
+
+  it("reports data it cannot read (a call), and counts no change for it", () => {
+    const call = transform(`${core("Table")}<Table data={build()} />\n`);
     assert.ok(call.warnings.some((w) => w.startsWith("<Table> data: not an inline")));
+    assert.match(call.warnings.join("\n"), /\(line 2\)/);
+    assert.ok(!call.hits.some((h) => h.includes("<Table data>")));
   });
 
   it("renames the page-size props and keeps 2.x's page-size select and first/last buttons", () => {

@@ -106,12 +106,21 @@ describe("E1: tone where 2.x said variant, scheme, state or hue", () => {
 			'const steps = [{ label: "a", state: current }];\n<Timeline items={steps} />\n',
 			'const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps} />\nlog(steps[0].state);\n',
 			'const steps = [{ label: "a", state: "active" }, ...more];\n<Timeline items={steps} />\n',
-			'const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps.map((s) => ({ ...s, state: s.done ? "success" : "active" }))} />\n',
 		]) {
 			const { out, warnings } = run(src);
 			assert.equal(body(out), src);
 			assert.ok(warnings.some((w) => /<Timeline> items=\{steps/.test(w)), src);
 		}
+	});
+
+	it("maps a ternary of states in a .map over a const it follows", () => {
+		const src = 'const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps.map((s) => ({ ...s, state: s.done ? "success" : "active" }))} />\n';
+		const { out, warnings } = run(src);
+		assert.equal(
+			body(out),
+			'const steps = [{ label: "a", tone: "brand" }];\n<Timeline items={steps.map((s) => ({ ...s, tone: s.done ? "success" : "brand" }))} />\n',
+		);
+		assert.deepEqual(warnings, []);
 	});
 
 	it("renames a Scrubber's tracks built in a useMemo, and the scheme type index", () => {

@@ -30,12 +30,15 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { braceList, codeOnly } from "./codemod-3.0-format.mjs";
+import { braceList, codeOnly, lineMap, lineOf, located, splitLine } from "./codemod-3.0-format.mjs";
+import { contextFor, evaluate, numberKind, statementEnd, valueSpans } from "./codemod-3.0-values.mjs";
+import { boundElsewhere, closing, objectEntries, partsBetween, skipLexeme, topLevel, trimmed } from "./codemod-3.0-scan.mjs";
 import { packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
 import { LEAVES, transformLeaf } from "./codemod-3.0-leaf.mjs";
-import { forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
+import { consumesProp, forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
+import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -582,50 +585,8 @@ function convertNumber(kind, text) {
   return null;
 }
 
-/** Skip a string or comment starting at `i`; the index after it, or `i` when there is none. */
-function skipLexeme(text, i) {
-  const c = text[i];
-  if (c === '"' || c === "'" || c === "`") {
-    let j = i + 1;
-    while (j < text.length && !(text[j] === c && text[j - 1] !== "\\")) j++;
-    return j + 1;
-  }
-  if (c === "/" && text[i + 1] === "/") {
-    const nl = text.indexOf("\n", i);
-    return nl < 0 ? text.length : nl;
-  }
-  if (c === "/" && text[i + 1] === "*") {
-    const close = text.indexOf("*/", i + 2);
-    return close < 0 ? text.length : close + 2;
-  }
-  return i;
-}
 
-/** `text` with its offsets, trimmed of whitespace and of parentheses around all of it. */
-function trimmed(expr, at, end) {
-  for (;;) {
-    while (at < end && /\s/.test(expr[at])) at++;
-    while (end > at && /\s/.test(expr[end - 1])) end--;
-    if (expr[at] !== "(" || expr[end - 1] !== ")" || closing(expr, at) !== end - 1) return { at, end };
-    at++;
-    end--;
-  }
-}
 
-/** The index of the bracket that closes the one at `i`. */
-function closing(expr, i) {
-  let depth = 0;
-  for (let j = i; j < expr.length; j++) {
-    const past = skipLexeme(expr, j);
-    if (past !== j) {
-      j = past - 1;
-      continue;
-    }
-    if ("([{".includes(expr[j])) depth++;
-    else if (")]}".includes(expr[j]) && --depth === 0) return j;
-  }
-  return -1;
-}
 
 /**
  * Where an expression's value can come from, as spans: both branches of a
@@ -693,72 +654,6 @@ function literalNumbers(expr) {
   return found ? { spans: found.filter((l) => l.number) } : { opaque: true };
 }
 
-/**
- * The entries of an object literal `{ … }` that starts at `text[0]`: each
- * key with the offsets of its value. A spread, a computed key or a method is
- * reported as `opaque` beside the entries that could be read.
- */
-export function objectEntries(text) {
-  const entries = [];
-  let opaque = false;
-  let i = 1;
-  const end = text.length - 1;
-  while (i < end) {
-    const past = skipLexeme(text, i);
-    if (past !== i && !/["'`]/.test(text[i])) {
-      i = past;
-      continue;
-    }
-    if (/[\s,]/.test(text[i])) {
-      i++;
-      continue;
-    }
-    let key;
-    if (/["']/.test(text[i])) {
-      const close = skipLexeme(text, i);
-      key = text.slice(i + 1, close - 1);
-      i = close;
-    } else if (/[A-Za-z_$]/.test(text[i])) {
-      let j = i;
-      while (j < end && /[\w$]/.test(text[j])) j++;
-      key = text.slice(i, j);
-      i = j;
-    } else {
-      opaque = true; // `...spread` or `[computed]`
-      key = null;
-    }
-    while (i < end && /\s/.test(text[i])) i++;
-    let valueAt = i;
-    if (key !== null && text[i] === ":") valueAt = i + 1;
-    else if (key !== null && (text[i] === "," || i >= end)) {
-      entries.push({ key, value: key, at: valueAt - key.length, end: valueAt, shorthand: true });
-      continue;
-    } else if (key !== null) opaque = true; // a method or a getter
-    let j = valueAt;
-    let depth = 0;
-    while (j < end) {
-      const skip = skipLexeme(text, j);
-      if (skip !== j) {
-        j = skip;
-        continue;
-      }
-      const c = text[j];
-      if ("([{".includes(c)) depth++;
-      else if (")]}".includes(c)) depth--;
-      else if (c === "," && depth === 0) break;
-      j++;
-    }
-    if (key !== null && text[valueAt - 1] === ":") {
-      let a = valueAt;
-      let b = j;
-      while (a < b && /\s/.test(text[a])) a++;
-      while (b > a && /\s/.test(text[b - 1])) b--;
-      entries.push({ key, value: text.slice(a, b), at: a, end: b });
-    }
-    i = j + 1;
-  }
-  return { entries, opaque };
-}
 
 /** The element names in this file that mean Once UI's `tag` (see localNamesFor). */
 function namesFor(tag, bindings, isCore) {
@@ -776,7 +671,31 @@ function rewriteValue(kind, expr, base, label, push, warn) {
   const found = literalNumbers(expr);
   if (found.opaque) {
     if (kind === "px" || kind === "px!") return;
-    const known = constValue(expr.trim());
+    const lead = expr.length - expr.trimStart().length;
+    const name = expr.trim();
+    // What the value is where it comes from (./codemod-3.0-values.mjs): a
+    // config, a const, a mapped data entry, a typed prop, arithmetic.
+    const length = kind === "rem" || kind === "%" || kind === "vh";
+    const res = length && unitCtx ? numberKind(unitCtx, base + lead, base + lead + name.length) : null;
+    if (res?.kind === "num") {
+      // Always a number: the use becomes the string 2.x read it as.
+      const at = base + lead;
+      push({ at, end: at + name.length, text: `\`\${${name}}${kind}\``, kind, label, hit: `${label}={${name}}: a number → \`\${…}${kind}\`` });
+      return;
+    }
+    // Never a number: a token, a CSS length, or nothing.
+    if (res?.kind === "str") return;
+    if (res?.kind === "mixed") {
+      const fixable = sourceCandidate(res, name, kind);
+      if (fixable) {
+        fixable.uses.push({ kind, warn, label, name });
+        return;
+      }
+      warn(mixedReport(label, name, kind, res));
+      return;
+    }
+    const why = res?.why ? ` (${res.why})` : "";
+    const known = constValue(name);
     // A same-file const that holds a string is a token or a CSS length: unchanged.
     if (known && known.string) return;
     // A `const W = 14` nothing shadows (or a member of an `as const`
@@ -791,14 +710,14 @@ function rewriteValue(kind, expr, base, label, push, warn) {
     if (known && kind !== "s") {
       warn(
         `${label}={${expr.trim()}}: ${expr.trim()} is ${known.number}, a const in this file, so this was ${known.number}${kind} in 2.x and is ${known.number}px now; ` +
-          `write {\`\${${expr.trim()}}${kind}\`}, or make the const "${known.number}${kind}"`,
+          `write {\`\${${expr.trim()}}${kind}\`}, or make the const "${known.number}${kind}"${why}`,
       );
       return;
     }
     const unit = kind === "s" ? "seconds (now milliseconds)" : `${kind} (now px)`;
     const fix =
       kind === "s" ? "multiply it by 1000" : `write {\`\${${expr.trim()}}${kind}\`} or convert it to px`;
-    warn(`${label}={${expr.trim()}}: a number here was ${unit}; if this value is a number, ${fix}`);
+    warn(`${label}={${expr.trim()}}: a number here was ${unit}; if this value is a number, ${fix}${why}`);
     return;
   }
   for (const s of found.spans) {
@@ -809,6 +728,52 @@ function rewriteValue(kind, expr, base, label, push, warn) {
   }
 }
 
+/** Where a value's numbers are defined, as `file:line` (the file name only when it is another file). */
+function whereDefined(atoms) {
+  const seen = [];
+  for (const a of atoms) {
+    if (a.t !== "num" || !a.ctx) continue;
+    const here = unitCtx && a.ctx.file === unitCtx.file && a.ctx.original === unitCtx.src;
+    const place = `${here ? "line " : `${path.basename(a.ctx.file ?? "")}:`}${lineOf(a.ctx.src, a.at)}`;
+    if (!seen.includes(place)) seen.push(place);
+  }
+  return seen.slice(0, 4).join(", ") + (seen.length > 4 ? ", …" : "");
+}
+
+/** The report for a value that is a number only some of the time. */
+function mixedReport(label, name, kind, res) {
+  const others = [...new Set(res.atoms.filter((a) => a.t !== "num").map((a) => (a.t === "nil" ? "undefined" : a.t === "str" ? "a string" : `a ${a.t}`)))].join(" or ");
+  return (
+    `${label}={${name}}: ${name} is a number (${whereDefined(res.atoms)}) or ${others}; a number was ${kind} in 2.x and is px now, ` +
+    `so write those numbers as "N${kind}" where they are defined (and widen their type to \`\${number}${kind}\`)`
+  );
+}
+
+/**
+ * A same-file const that is a number or undefined (`const w = wide ? undefined : 32`):
+ * its literal numbers can become the rem strings they were, at the source,
+ * when every use of it is a size prop of the same unit. Collected per file;
+ * transformUnits decides once it has seen every use.
+ */
+let sourceCandidates = new Map();
+function sourceCandidate(res, name, kind) {
+  if (!/^[A-Za-z_$][\w$]*$/.test(name) || !unitCtx) return null;
+  if (!res.atoms.every((a) => a.t === "num" || a.t === "nil")) return null;
+  const decl = res.atoms.find((a) => a.decl)?.decl;
+  if (!decl || decl.name !== name || decl.annotated || decl.ctx.original !== unitCtx.src) return null;
+  if (!res.atoms.every((a) => a.decl === decl || (a.decl && a.decl.at === decl.at))) return null;
+  if (new RegExp(`\\bexport\\s+const\\s+${name}\\b|\\bexport\\s*\\{[^}]*\\b${name}\\b`).test(unitCtx.src)) return null;
+  const init = unitCtx.src.slice(decl.initAt, decl.initEnd).replace(/\s+as\s+const\s*$/, "");
+  const spans = leaves(init);
+  if (!spans) return null;
+  let entry = sourceCandidates.get(name);
+  if (!entry) {
+    entry = { decl, spans, uses: [] };
+    sourceCandidates.set(name, entry);
+  }
+  return entry;
+}
+
 /**
  * The file's consts of a plain literal, `const GAP = 12` or
  * `const WIDTH = { plain: 14, wide: "20rem" } as const`: name (or
@@ -817,6 +782,8 @@ function rewriteValue(kind, expr, base, label, push, warn) {
  * known here. Set per file by transformUnits.
  */
 let fileConsts = new Map();
+/** The file the units pass is reading, `{ file, src }`, for ./codemod-3.0-values.mjs. */
+let unitCtx = null;
 function sameFileConsts(src) {
   const found = new Map();
   const seen = new Map();
@@ -858,62 +825,6 @@ function sameFileConsts(src) {
   return found;
 }
 
-/**
- * Whether `name` may be bound again somewhere in `code` (comments and strings
- * blanked) besides the declaration at `declAt`: as a parameter, in a
- * destructuring pattern, a catch clause. Read conservatively: a name passed
- * as an argument or listed in an array or object counts too.
- */
-function boundElsewhere(code, name, declAt) {
-  for (const m of code.matchAll(new RegExp(`(?<![\\w$.])${name.replace(/\$/g, "\\$")}(?![\\w$])`, "g"))) {
-    if (m.index >= declAt && m.index < declAt + 6 + name.length + 1) continue; // `const NAME`
-    let i = m.index - 1;
-    while (i >= 0 && /\s/.test(code[i])) i--;
-    let j = m.index + name.length;
-    while (j < code.length && /\s/.test(code[j])) j++;
-    const prev = code[i] ?? "";
-    const next = code[j] ?? "";
-    if (code.startsWith("=>", j)) return true;
-    // `={NAME}` and `={NAME …}`: a JSX attribute reads it.
-    if (prev === "{" && code[i - 1] === "=") continue;
-    if (!((/[([{,]/.test(prev) || code.slice(i - 2, i + 1) === "...") && /[,)}\]=:]/.test(next) && !code.startsWith("==", j))) continue;
-    // In a list: a pattern when its brackets are followed by what follows a
-    // parameter list or a destructuring (`) =>`, `) {`, `} =`, `] =`).
-    let depth = 0;
-    let open = -1;
-    for (let k = m.index - 1; k >= 0; k--) {
-      if (")]}".includes(code[k])) depth++;
-      else if ("([{".includes(code[k])) {
-        if (depth === 0) {
-          open = k;
-          break;
-        }
-        depth--;
-      }
-    }
-    if (open < 0) return true;
-    const close = closing(code, open);
-    if (close < 0) return true;
-    const after = code.slice(close + 1, close + 40);
-    if (code[open] === "(" && /^\s*(=>|\{|:)/.test(after)) return true;
-    if (code[open] !== "(" && /^\s*(=(?![=>])|\)|:)/.test(after)) return true;
-    if (code[open] !== "(" && /(\(|,)\s*$/.test(code.slice(0, open))) {
-      // A pattern inside a parameter list: `({ W }) =>`, `(a, [W]) =>`.
-      let d = 0;
-      for (let k = open - 1; k >= 0; k--) {
-        if (")]}".includes(code[k])) d++;
-        else if ("([{".includes(code[k])) {
-          if (d === 0) {
-            if (code[k] === "(" && /^\s*(=>|\{|:)/.test(code.slice(closing(code, k) + 1, closing(code, k) + 40))) return true;
-            break;
-          }
-          d--;
-        }
-      }
-    }
-  }
-  return false;
-}
 const constValue = (expr) => fileConsts.get(expr.replace(/\?\./g, ".")) ?? null;
 
 /** Walk `paths` (`{ "bulge.duration": "s" }`) into an inline object literal. */
@@ -996,19 +907,48 @@ export function warnLocalSizes(src, { isCore = isCoreSource, file = null } = {})
           prop: a.name,
           isRem,
         });
+      // The wrapper turns it into rem itself (or uses it in an inline style): the number stays.
+      if (!byDefault && consumesProp({ file: defined || null, text: bound ? (defined ? readSource(defined) : null) : src, name: bound ? bound.canonical : name, prop: a.name, isRem }))
+        continue;
       if (target) {
         edits.push({ at: src.indexOf(a.value, a.at), end: a.end, text: `"${Number(n)}rem"` });
         hits.push(`<${name}> ${a.name}: number → "rem" string (${name} passes it on to a ${target})`);
         continue;
       }
       warnings.push(
-        `<${name}> ${a.name}={${n}}: if ${name} passes ${a.name} on to a Once UI component, this was ${n}rem in 2.x and is ${n}px in 3.0; write "${n}rem" to keep the size`,
+        located(
+          `<${name}> ${a.name}={${n}}: if ${name} passes ${a.name} on to a Once UI component, this was ${n}rem in 2.x and is ${n}px in 3.0; write "${n}rem" to keep the size`,
+          src,
+          a.at,
+        ),
       );
     }
   }
   let out = src;
   for (const e of edits.sort((x, y) => y.at - x.at)) out = out.slice(0, e.at) + e.text + out.slice(e.end);
   return { out, hits, warnings };
+}
+
+/**
+ * `<DataThemeProvider height={dataStyle.height}>`, where `dataStyle` is the
+ * config's `const dataStyle = { height: 24 }`: transformDataStyle writes that
+ * config value as "24rem" (in this run, or the run before), so the use site
+ * must not add a unit. In a .js config the value is typed `string`, which
+ * DataThemeProvider's `height` does not take, so a TypeScript use site casts
+ * it to the rem string it now is. True when this is that case (handled).
+ */
+function dataStyleHeight(src, inner, base, file, push) {
+  const e = inner.trim();
+  if (/\bas\s+`\$\{number\}rem`\s*$/.test(e)) return true;
+  const m = /^([\s\S]*?)\s*(?:\?\.|\.)\s*height$/.exec(e);
+  if (!m || !unitCtx) return false;
+  const at = base + inner.indexOf(e);
+  const atoms = evaluate(contextFor(file, src), at, at + m[1].length);
+  const config = atoms.length && atoms.every((x) => x.t === "obj" && x.decl?.name === "dataStyle" && !x.decl.annotated);
+  if (!config) return false;
+  if (!/\.(tsx|ts|mts|cts)$/.test(file ?? ".tsx")) return true;
+  push({ at: at + e.length, end: at + e.length, text: " as `${number}rem`", kind: "rem", label: "height", hit: 'height={dataStyle.height}: the config\'s height is "Nrem" now → as `${number}rem`' });
+  return true;
 }
 
 /**
@@ -1024,6 +964,10 @@ export function transformDataStyle(src) {
   const key = /\bdataStyle\s*:\s*\{|\b(?:const|let|var)\s+dataStyle\s*(?::[^=]+)?=\s*\{/g;
   let m;
   while ((m = key.exec(src))) {
+    // `const dataStyle: DataStyleConfig = …`: the app's own type says height is
+    // a number, so it stays one, and the use site writes the unit
+    // (`${dataStyle.height}rem`, see transformUnits).
+    if (/^(?:const|let|var)\s+dataStyle\s*:/.test(m[0])) continue;
     const at = m.index + m[0].length - 1;
     const end = closing(src, at);
     if (end < 0) continue;
@@ -1032,7 +976,7 @@ export function transformDataStyle(src) {
       if (e.key !== "height" || e.shorthand) continue;
       const found = literalNumbers(e.value);
       if (found.opaque) {
-        warnings.push(`dataStyle.height: ${e.value}: a number here was rem (now px); if it is a number, write it as "Nrem"`);
+        warnings.push(located(`dataStyle.height: ${e.value}: a number here was rem (now px); if it is a number, write it as "Nrem"`, src, at + e.at));
         continue;
       }
       for (const span of found.spans) {
@@ -1053,12 +997,14 @@ export function transformDataStyle(src) {
  * and `speed` renames. `isCore(source)` decides which imports are Once UI
  * (core's own sources pass a predicate that accepts their relative imports).
  */
-export function transformUnits(src, { isCore = isCoreSource } = {}) {
+export function transformUnits(src, { isCore = isCoreSource, file = null } = {}) {
   const hits = [];
   const warnings = [];
   const edits = [];
   const bindings = importBindings(src);
   fileConsts = sameFileConsts(src);
+  unitCtx = { file, src };
+  sourceCandidates = new Map();
   const tags = new Set([...LAYOUT_COMPONENTS, ...Object.keys(UNIT_TABLE), ...Object.keys(SPEED_RENAMES)]);
   for (const tag of tags) {
     const own = UNIT_TABLE[tag] ?? {};
@@ -1076,8 +1022,10 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
             ...e,
             hit: `<${tag}> ${e.hit ?? `${e.label}: ${e.kind === "s" ? "seconds → ms" : `number → "${e.kind.replace("!", "")}" string`}`}`,
           });
-        const warn = (w) => warnings.push(`<${tag}> ${w}`);
+        const warnAt = (at) => (w) => warnings.push(located(`<${tag}> ${w}`, src, at));
+        let warn = warnAt(m.index);
         for (const a of attrs) {
+          warn = warnAt(a.at);
           if (tag === "Mask" && a.name === "radius" && a.value !== null && NUMERIC_STRING.test(String(a.value))) {
             const n = NUMERIC_STRING.exec(String(a.value))[2];
             if (Number(n) !== 0) push({ at: a.at + a.name.length + 1, end: a.end, text: `"${n}vh"`, kind: "vh", label: "radius" });
@@ -1112,12 +1060,14 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
           }
           const kind = own[a.name] ?? (layout && REM_PROPS.has(a.name) ? "rem" : null);
           if (!kind) continue;
+          if (tag === "DataThemeProvider" && a.name === "height" && dataStyleHeight(src, inner, valueAt + 1, file, push)) continue;
           rewriteValue(kind, inner, valueAt + 1, a.name, push, warn);
         }
 
         // D5: `speed` that was a length of time.
         const rename = SPEED_RENAMES[tag];
         const speed = attrs.find((a) => a.name === "speed");
+        warn = warnAt(speed ? speed.at : m.index);
         if (rename && speed) {
           const twin = attrs.find((a) => a.name === rename.to);
           if (twin) {
@@ -1147,6 +1097,28 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
       }
     }
   }
+  // Consts that are a number or undefined: rewritten where they are declared
+  // when every use of them is one of the size props seen above, in one unit.
+  if (sourceCandidates.size) {
+    const code = codeOnly(src, { jsxText: true });
+    for (const [name, { decl, spans, uses }] of sourceCandidates) {
+      const all = [...code.matchAll(new RegExp(`(?<![\\w$.])${name.replace(/\$/g, "\\$")}(?![\\w$])`, "g"))].length - 1;
+      const kinds = new Set(uses.map((u) => u.kind));
+      if (all === uses.length && kinds.size === 1) {
+        const [kind] = kinds;
+        for (const sp of spans) {
+          if (!sp.number || Number(sp.text) === 0) continue;
+          edits.push({ at: decl.initAt + sp.at, end: decl.initAt + sp.end, text: `"${Number(sp.text)}${kind}"`, hit: `const ${name}: number → "${kind}" string (every use of it is a size)` });
+        }
+        continue;
+      }
+      for (const u of uses)
+        u.warn(
+          `${u.label}={${name}}: ${name} is a number or undefined (line ${lineOf(src, decl.at)}); it was ${u.kind} in 2.x and is px now: write its numbers as "N${u.kind}" where it is declared, if nothing else reads it as a number`,
+        );
+    }
+  }
+  unitCtx = null;
   // Right to left, so earlier offsets stay valid; an overlapping edit is dropped.
   edits.sort((x, y) => y.at - x.at || y.end - x.end);
   let out = src;
@@ -1270,6 +1242,8 @@ function rewriteButton(src, attrs, tag, push, warn) {
     } else if (v === "quaternary") {
       const span = valueSpan(src, variant);
       push({ at: span.at, end: span.end, text: String(variant.value).replace("quaternary", "ghost"), hit: 'variant="quaternary" → "ghost"' });
+    } else if (!v && !tone && splitButtonVariant(src, variant, push)) {
+      writesTone = true;
     } else if (!v) {
       const expr = expressionOf(variant.value);
       const span = valueSpan(src, variant);
@@ -1297,6 +1271,48 @@ function rewriteButton(src, attrs, tag, push, warn) {
       );
     }
   }
+}
+
+/**
+ * E2: `variant={c ? "danger" : "secondary"}`, every value a literal: the
+ * variant each branch had in 3.0's terms, and the tone beside it, chosen
+ * by the same condition (`danger` was primary in red):
+ * `variant={c ? "primary" : "secondary"} tone={c ? "danger" : undefined}`,
+ * and `variant="primary"` when every branch is the same variant.
+ */
+function splitButtonVariant(src, variant, push) {
+  const value = String(variant.value);
+  if (!value.startsWith("{")) return false;
+  const span = valueSpan(src, variant);
+  const innerAt = span.at + 1;
+  const innerEnd = span.end - 1;
+  const leaves = valueSpans(src, innerAt, innerEnd);
+  const read = leaves.map((l) => {
+    const t = src.slice(l.at, l.end);
+    if (t === "undefined") return { l, variant: null, tone: null };
+    const m = /^(["'])([a-z]+)\1$/.exec(t);
+    if (!m) return null;
+    if (BUTTON_TONES.has(m[2])) return { l, q: m[1], variant: "primary", tone: m[2] };
+    return { l, q: m[1], variant: m[2] === "quaternary" ? "ghost" : m[2], tone: null };
+  });
+  if (!read.length || read.some((r) => r === null) || !read.some((r) => r.tone)) return false;
+  const q = read.find((r) => r.q)?.q ?? '"';
+  const rebuild = (pick) => {
+    let text = src.slice(innerAt, innerEnd);
+    for (const r of [...read].sort((a, b) => b.l.at - a.l.at)) {
+      const v = pick(r);
+      text = text.slice(0, r.l.at - innerAt) + (v === null ? "undefined" : `${q}${v}${q}`) + text.slice(r.l.end - innerAt);
+    }
+    return text.trim();
+  };
+  const variants = new Set(read.map((r) => r.variant));
+  const variantText = variants.size === 1 && !variants.has(null) ? `variant=${q}${[...variants][0]}${q}` : `variant={${rebuild((r) => r.variant)}}`;
+  const toneText = `tone={${rebuild((r) => r.tone)}}`;
+  const lineStart = src.lastIndexOf("\n", variant.at - 1) + 1;
+  const indent = src.slice(lineStart, variant.at);
+  const sep = /^[ \t]*$/.test(indent) ? `\n${indent}` : " ";
+  push({ at: variant.at, end: variant.end, text: `${variantText}${sep}${toneText}`, hit: 'variant={… "danger" …} → variant and tone={…}' });
+  return true;
 }
 
 /** E1 on Tag: `scheme` → `tone`, `scheme="gradient"` → `variant="gradient"`. */
@@ -1361,7 +1377,33 @@ const TIMELINE_STATE = (value) => {
   if (v === "default") return { text: "", remove: true, hit: 'state: "default" removed (no tone)' };
   if (v === "active") return { text: `tone: ${quote(value)}brand${quote(value)}`, hit: 'state: "active" → tone: "brand"' };
   if (v === "success" || v === "danger") return { text: `tone: ${value}`, hit: `state: "${v}" → tone` };
-  return undefined;
+  // `approved ? "success" : "active"`, `i <= step ? ("active" as const) : ("default" as const)`:
+  // each literal branch mapped, "default" being no tone at all.
+  const leaves = valueSpans(value, 0, value.length);
+  const read = leaves.map((l) => {
+    const t = value.slice(l.at, l.end);
+    if (t === "undefined") return { l, to: null };
+    const m = /^(["'])(active|default|success|danger)\1$/.exec(t);
+    if (!m) return null;
+    return { l, to: m[2] === "active" ? `${m[1]}brand${m[1]}` : m[2] === "default" ? null : t };
+  });
+  if (leaves.length < 2 || read.some((r) => r === null)) return undefined;
+  if (read.every((r) => r.to === null)) return { text: "", remove: true, hit: 'state: "default" removed (no tone)' };
+  let text = value;
+  for (const r of [...read].sort((a, b) => b.l.at - a.l.at)) {
+    if (r.to !== null) {
+      text = text.slice(0, r.l.at) + r.to + text.slice(r.l.end);
+      continue;
+    }
+    // `("default" as const)` → `undefined`, parentheses and all.
+    let { outerAt: a, outerEnd: b } = r.l;
+    while (/\(\s*$/.test(text.slice(0, a)) && /^\s*\)/.test(text.slice(b))) {
+      a = text.slice(0, a).replace(/\(\s*$/, "").length;
+      b = text.length - text.slice(b).replace(/^\s*\)/, "").length;
+    }
+    text = text.slice(0, a) + "undefined" + text.slice(b);
+  }
+  return { text: `tone: ${text}`, hit: 'state: … → tone: … ("active" is "brand", "default" no tone)' };
 };
 
 const TABLE_ACTION_VARIANT = (value) => {
@@ -1377,45 +1419,7 @@ const RENAME_KEY = (to, hit) => (value) => ({ text: `${to}: ${value}`, hit });
 
 // ─── Data built outside the element: Timeline items, Scrubber tracks ───────
 
-/** The comma-separated parts between the brackets at `open` and `close`, as offsets. */
-function partsBetween(src, open, close) {
-  const parts = [];
-  let start = open + 1;
-  let depth = 0;
-  for (let i = open + 1; i < close; i++) {
-    const past = skipLexeme(src, i);
-    if (past !== i) {
-      i = past - 1;
-      continue;
-    }
-    const c = src[i];
-    if ("([{".includes(c)) depth++;
-    else if (")]}".includes(c)) depth--;
-    else if (c === "," && depth === 0) {
-      parts.push({ at: start, end: i });
-      start = i + 1;
-    }
-  }
-  parts.push({ at: start, end: close });
-  return parts.map((p) => trimmed(src, p.at, p.end)).filter((p) => p.end > p.at);
-}
 
-/** The index of the first top-level `ch` in `src` between `at` and `end`, or -1. */
-function topLevel(src, at, end, test) {
-  let depth = 0;
-  for (let i = at; i < end; i++) {
-    const past = skipLexeme(src, i);
-    if (past !== i) {
-      i = past - 1;
-      continue;
-    }
-    const c = src[i];
-    if ("([{".includes(c)) depth++;
-    else if (")]}".includes(c)) depth--;
-    else if (depth === 0 && test(i)) return i;
-  }
-  return -1;
-}
 
 /**
  * The object literals a Timeline's `items` or a Scrubber's `tracks` are built
@@ -1491,16 +1495,18 @@ function walkData(src, at, end, ctx, found, param = null) {
     if (open < 0 || closing(src, open) !== end - 1) return false;
     const callee = src.slice(at, open).replace(/\s+$/, "");
     const args = partsBetween(src, open, end - 1);
-    const fn = args[0] && /^(?:async\s+)?(?:\(\s*([A-Za-z_$][\w$]*)?\s*(?::[^,)]*)?(?:,[^)]*)?\)|([A-Za-z_$][\w$]*))\s*(?::[^=]*)?=>\s*/.exec(src.slice(args[0].at, args[0].end));
+    const fn = args[0] && /^(?:async\s+)?(?:\(\s*(?:([A-Za-z_$][\w$]*)|(\{[^{}]*\}|\[[^[\]]*\]))?\s*(?::[^,)]*)?(?:,[^)]*)?\)|([A-Za-z_$][\w$]*))\s*(?::[^=]*)?=>\s*/.exec(src.slice(args[0].at, args[0].end));
     if (!fn) return false;
     const bodyAt = args[0].at + fn[0].length;
     if (src[bodyAt] === "{") return false; // a block body: its return cannot be followed
-    const p = fn[1] ?? fn[2] ?? null;
+    const p = fn[1] ?? fn[3] ?? null;
+    // `({ label }, i) =>`: what it takes out of the item is the app's own data, so the array mapped is not renamed.
+    const destructured = Boolean(fn[2]);
     if (/^(?:React\.)?useMemo\s*(?:<[\s\S]*>)?$/.test(callee)) return walkData(src, bodyAt, args[0].end, ctx, found, null);
     const map = /^([\s\S]*?)\s*\??\.\s*map$/.exec(callee);
     if (!map) return false;
     // Items read through `p.key` come from the array mapped: a const whose keys are renamed too.
-    const source = /^[A-Za-z_$][\w$]*$/.test(map[1].trim()) ? map[1].trim() : null;
+    const source = !destructured && /^[A-Za-z_$][\w$]*$/.test(map[1].trim()) ? map[1].trim() : null;
     const before = found.entries.length;
     const followed = source ? walkData(src, at, at + map[1].length, ctx, found, null) : false;
     if (source && !followed) found.entries.length = before;
@@ -1717,6 +1723,11 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
     }
   }
 
+  // E1: Timeline items built outside the element, in a `TimelineItem[]` (or
+  // a `TimelineItem`) the file declares, and pushed onto one: their `state`
+  // keys are typed as Timeline's, so they are `tone` now.
+  out = applyEdits(out, timelineItemEdits(out, isCore, warnings), hits);
+
   // E1/E2: renames and value rewrites, element by element.
   const bindings = importBindings(out);
   const edits = [];
@@ -1756,7 +1767,7 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
           }
           edits.push({ ...e, hit: `<${tag}> ${e.hit}` });
         };
-        const warn = (w) => warnings.push(`<${tag}> ${w}`);
+        const warn = (w) => warnings.push(located(`<${tag}> ${w}`, out, m.index));
         for (const [old, to] of Object.entries(TONE_RENAMES[tag] ?? {})) {
           const a = attrs.find((x) => x.name === old);
           if (!a) continue;
@@ -1800,6 +1811,21 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
         if (out !== before) hits.push(`${type}["${from}"] → ${type}["${to}"]`);
       }
     }
+    // `ComponentProps<typeof Text>["variant"]`, `TextProps["variant"]`: the prop's type under its new name.
+    for (const [bound, b] of typeBindings) {
+      const local = bound.replace(/^type\s+/, "");
+      const canonical = b.canonical.replace(/^type\s+/, "");
+      if (!isCore(b.source)) continue;
+      const component = TONE_RENAMES[canonical] ? canonical : /Props$/.test(canonical) && TONE_RENAMES[canonical.slice(0, -5)] ? canonical.slice(0, -5) : null;
+      if (!component) continue;
+      const head = canonical === component ? `(?:React\\s*\\.\\s*)?ComponentProps(?:WithRef|WithoutRef)?\\s*<\\s*typeof\\s+${local}\\s*>` : local;
+      for (const [from, to] of Object.entries(TONE_RENAMES[component])) {
+        const re = new RegExp(`(?<![\\w$.])(${head}\\s*\\[\\s*)(["'])${from}\\2(\\s*\\])`, "g");
+        const before = out;
+        out = out.replace(re, `$1$2${to}$2$3`);
+        if (out !== before) hits.push(`${canonical === component ? `ComponentProps<typeof ${component}>` : canonical}["${from}"] → ["${to}"]`);
+      }
+    }
   }
 
   // E1: `addToast({ variant })` → `addToast({ tone })`, in files that show toasts.
@@ -1809,25 +1835,78 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
     let m;
     while ((m = call.exec(out))) {
       const argAt = m.index + m[0].length;
-      if (out[argAt] !== "{") {
-        if (out[argAt] !== ")") warnings.push("addToast(…): its `variant` is `tone` in 3.0; rename the key where the object is built");
+      if (out[argAt] === ")") continue;
+      const paren = m.index + m[0].lastIndexOf("(");
+      const callEnd = closing(out, paren);
+      const args = callEnd < 0 ? [] : partsBetween(out, paren, callEnd);
+      // The object, or each object a ternary (or `??`) chooses between.
+      const spans = args.length ? valueSpans(out, args[0].at, args[0].end) : [];
+      const objects = spans.filter((sp) => out[sp.at] === "{" && closing(out, sp.at) === sp.end - 1);
+      if (!spans.length || objects.length !== spans.length) {
+        warnings.push(located("addToast(…): its `variant` is `tone` in 3.0; rename the key where the object is built", out, m.index));
         continue;
       }
-      const close = closing(out, argAt);
-      if (close < 0) continue;
-      const body = out.slice(argAt, close + 1);
-      const { entries } = objectEntries(body);
-      for (const e of entries) {
-        if (e.key !== "variant" || e.shorthand) continue;
-        const keyAt = body.lastIndexOf("variant", e.at);
-        toastEdits.push({ at: argAt + keyAt, end: argAt + keyAt + "variant".length, text: "tone", hit: "addToast variant → tone" });
+      for (const sp of objects) {
+        const body = out.slice(sp.at, sp.end);
+        const { entries } = objectEntries(body);
+        for (const e of entries) {
+          if (e.key !== "variant") continue;
+          if (e.shorthand) {
+            toastEdits.push({ at: sp.at + e.at, end: sp.at + e.end, text: "tone: variant", hit: "addToast { variant } → { tone: variant }" });
+            continue;
+          }
+          const keyAt = body.lastIndexOf("variant", e.at);
+          toastEdits.push({ at: sp.at + keyAt, end: sp.at + keyAt + "variant".length, text: "tone", hit: "addToast variant → tone" });
+        }
       }
-      if (entries.some((e) => e.key === "variant" && e.shorthand))
-        warnings.push("addToast({ variant }): rename it `tone: variant`, the key is tone in 3.0");
     }
     out = applyEdits(out, toastEdits, hits);
   }
   return { out, hits, warnings };
+}
+
+/** Edits for the `state` keys of object literals typed as TimelineItem (see transformTone). */
+function timelineItemEdits(src, isCore, warnings) {
+  const edits = [];
+  const names = [...importBindings(src)]
+    .filter(([, b]) => b.canonical.replace(/^type\s+/, "") === "TimelineItem" && isCore(b.source))
+    .map(([local]) => local.replace(/^type\s+/, ""));
+  if (!names.length) return edits;
+  const push = (e) => {
+    if (e.remove) {
+      let { at, end: to } = e;
+      const after = /^\s*,\s*/.exec(src.slice(to));
+      if (after) to += after[0].length;
+      else {
+        const before = /,\s*$/.exec(src.slice(0, at));
+        if (before) at -= before[0].length;
+      }
+      edits.push({ at, end: to, text: "", hit: `<Timeline> ${e.hit} (a TimelineItem)` });
+      return;
+    }
+    edits.push({ ...e, hit: `<Timeline> ${e.hit} (a TimelineItem)` });
+  };
+  const warn = (at) => (w) => warnings.push(located(`<Timeline> ${w}`, src, at));
+  const typed = [];
+  for (const name of names) {
+    const decl = new RegExp(`\\b(?:const|let|var)\\s+([A-Za-z_$][\\w$]*)\\s*:\\s*(?:${name}\\s*\\[\\s*\\]|(?:Readonly)?Array\\s*<\\s*${name}\\s*>|${name})\\s*=\\s*`, "g");
+    for (const m of src.matchAll(decl)) {
+      const at = m.index + m[0].length;
+      const end = statementEnd(src, at);
+      rewriteKeys(src.slice(at, end), at, "state", TIMELINE_STATE, push, warn(m.index), "items");
+      typed.push(m[1]);
+    }
+  }
+  // `events.push({ …, state: "danger" })` onto one of them.
+  for (const name of typed) {
+    for (const m of src.matchAll(new RegExp(`(?<![\\w$.])${name}\\s*\\.\\s*(?:push|unshift)\\s*\\(`, "g"))) {
+      const open = m.index + m[0].length - 1;
+      const close = closing(src, open);
+      if (close < 0) continue;
+      rewriteKeys(src.slice(open + 1, close), open + 1, "state", TIMELINE_STATE, push, warn(m.index), "items");
+    }
+  }
+  return edits;
 }
 
 /** Apply edits right to left so earlier offsets stay valid; an overlapping edit is dropped. */
@@ -1918,12 +1997,50 @@ export function transform(src, { file = null } = {}) {
 }
 
 function transformFile(src, { file = null } = {}) {
+  const hits = [];
+  // Reports as { text, line }: a line is in the text the pass read, and is
+  // carried on through each later pass's rewrite to the file written.
+  const reports = [];
+  let out = src;
+  const run = (result, before) => {
+    hits.push(...result.hits);
+    for (const w of result.warnings) reports.push(splitLine(w));
+    if (result.out !== before) {
+      const map = lineMap(before, result.out);
+      for (const r of reports) if (r.line !== null) r.line = map(r.line);
+    }
+    out = result.out;
+  };
   // E/F3 first: Badge and Chip become Tag before the passes below read Tag.
-  const tone = transformTone(src);
-  const exp = rewriteExports(tone.out);
-  const hits = [...tone.hits, ...exp.hits];
-  const warnings = [...tone.warnings, ...exp.warnings];
-  let out = exp.out;
+  run(transformTone(out), out);
+  run(rewriteExports(out), out);
+  run(transformRenames(out), out);
+  // D2–D5, after the renames above (it reads the 3.0 prop names).
+  run(transformUnits(out, { file }), out);
+  run(warnLocalSizes(out, { file }), out);
+  run(transformDataStyle(out), out);
+  // F1, F2, F4, F5: components that merged. Last, so the passes above read the
+  // 2.x names they know; see the section below.
+  run(transformMerges(out, { remProps: REM_PROPS, breakpointProps: BREAKPOINT_PROPS }), out);
+  // G1, G4, G5: types, resets and aliases (./codemod-3.0-types.mjs). After
+  // the merges, so it reads 3.0's component names.
+  run(transformTypes(out), out);
+  // G2: leaf components take LeafProps (./codemod-3.0-leaf.mjs); a dropped
+  // prop moves to a Row or Column around the leaf where that renders the
+  // same, and is reported otherwise. After the renames, on 3.0's names.
+  run(transformLeaf(out), out);
+  // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
+  // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
+  run(transformImports(out), out);
+  const warnings = reports.map((r) => (r.line === null ? r.text : `${r.text} (line ${r.line})`));
+  return { out, hits, warnings };
+}
+
+/** A5, C: the plain prop renames of TRANSFORMS, the REWRITES, and the FLAGGED reports. */
+function transformRenames(src) {
+  const hits = [];
+  const warnings = [];
+  let out = src;
   const bindings = importBindings(out);
   const tags = new Set([...Object.keys(TRANSFORMS), ...Object.keys(REWRITES), ...Object.keys(FLAGGED)]);
   for (const tag of tags) {
@@ -1938,7 +2055,7 @@ function transformFile(src, { file = null } = {}) {
         const attrs = attributesOf(out, m.index + name.length + 1, end);
         for (const a of attrs) {
           const note = FLAGGED[tag]?.[a.name];
-          if (note) warnings.push(`<${tag}> ${a.name}: ${note}`);
+          if (note) warnings.push(located(`<${tag}> ${a.name}: ${note}`, out, a.at));
           const to = map[a.name];
           if (!to) continue;
           if (attrs.some((b) => b.name === to)) {
@@ -1951,7 +2068,7 @@ function transformFile(src, { file = null } = {}) {
         const rewrite = REWRITES[tag]?.(out, attrs, out.slice(m.index, end + 1));
         if (rewrite) {
           for (const e of rewrite.edits) edits.push({ ...e, hit: `<${tag}> ${e.hit}` });
-          for (const w of rewrite.warnings) warnings.push(`<${tag}> ${w}`);
+          for (const w of rewrite.warnings) warnings.push(located(`<${tag}> ${w}`, out, m.index));
         }
       }
     }
@@ -1965,44 +2082,6 @@ function transformFile(src, { file = null } = {}) {
       lastAt = e.at;
     }
   }
-  // D2–D5, after the renames above (it reads the 3.0 prop names).
-  const units = transformUnits(out);
-  out = units.out;
-  hits.push(...units.hits);
-  warnings.push(...units.warnings);
-  const local = warnLocalSizes(out, { file });
-  out = local.out;
-  hits.push(...local.hits);
-  warnings.push(...local.warnings);
-  const config = transformDataStyle(out);
-  out = config.out;
-  hits.push(...config.hits);
-  warnings.push(...config.warnings);
-  // F1, F2, F4, F5: components that merged. Last, so the passes above read the
-  // 2.x names they know; see the section below.
-  const merges = transformMerges(out, { remProps: REM_PROPS, breakpointProps: BREAKPOINT_PROPS });
-  out = merges.out;
-  hits.push(...merges.hits);
-  warnings.push(...merges.warnings);
-  // G1, G4, G5: types, resets and aliases (./codemod-3.0-types.mjs). After
-  // the merges, so it reads 3.0's component names.
-  const types = transformTypes(out);
-  out = types.out;
-  hits.push(...types.hits);
-  warnings.push(...types.warnings);
-  // G2: leaf components take LeafProps (./codemod-3.0-leaf.mjs); a dropped
-  // prop moves to a Row or Column around the leaf where that renders the
-  // same, and is reported otherwise. After the renames, on 3.0's names.
-  const leaf = transformLeaf(out);
-  out = leaf.out;
-  hits.push(...leaf.hits);
-  warnings.push(...leaf.warnings);
-  // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
-  // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
-  const imports = transformImports(out);
-  out = imports.out;
-  hits.push(...imports.hits);
-  warnings.push(...imports.warnings);
   return { out, hits, warnings };
 }
 
@@ -2021,14 +2100,14 @@ export { MERGED_EXPORTS, transformMerges } from "./codemod-3.0-merges.mjs";
 export { MOVED_IMPORTS, transformImports } from "./codemod-3.0-imports.mjs";
 
 // Keep `literal` reachable for passes that read scale values (later rows).
-export { literal };
+export { literal, objectEntries };
 
 const invokedDirectly =
   process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (invokedDirectly) {
   const [dir, ...flags] = process.argv.slice(2);
   if (!dir) {
-    console.error("usage: codemod-3.0.mjs <dir> [--dry]");
+    console.error("usage: codemod-3.0.mjs <dir> [--dry] [--force]");
     process.exit(1);
   }
   const dry = flags.includes("--dry");
@@ -2042,6 +2121,13 @@ if (invokedDirectly) {
     }
   })(dir);
 
+  // On a 1.x tree the 2.x renames would land on the wrong names: stop first.
+  const oneX = flags.includes("--force") ? null : detectOneX(dir, files);
+  if (oneX) {
+    console.error(`${ONE_X_MESSAGE}\n${oneX.map((r) => `   ${r}`).join("\n")}\n(--force runs it anyway)`);
+    process.exit(1);
+  }
+
   let total = 0;
   let touched = 0;
   let flagged = 0;
@@ -2052,9 +2138,13 @@ if (invokedDirectly) {
     for (const name of packagesAdded(src, out)) install.add(name);
     if (!hits.length && !warnings.length) continue;
     console.log(f);
-    for (const w of [...new Set(warnings)]) console.log(`   ! ${w}  (fix by hand)`);
+    // One line per site, each with the line it is on, so none is fixed and its twin missed.
+    for (const w of [...new Set(warnings)]) {
+      const { text, line } = splitLine(w);
+      console.log(`   ! ${line === null ? "" : `${f}:${line}  `}${text}  (fix by hand)`);
+    }
     for (const h of [...new Set(hits)]) console.log(`   ${h}  ×${hits.filter((x) => x === h).length}`);
-    flagged += warnings.length;
+    flagged += new Set(warnings).size;
     if (hits.length) {
       touched++;
       total += hits.length;

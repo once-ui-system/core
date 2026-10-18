@@ -83,3 +83,71 @@ export function removeFromCoreImport(src, local) {
 		return `${indent}import ${typeKw ?? ""}${braceList(keep, clause, indent)} from ${q}${source}${q}${semi}${nl}`;
 	});
 }
+
+/** The 1-based line of offset `at` in `src`. */
+export function lineOf(src, at) {
+	let n = 1;
+	for (let i = 0; i < at && i < src.length; i++) if (src.charCodeAt(i) === 10) n++;
+	return n;
+}
+
+const LINE = /\s\(line (\d+)\)$/;
+
+/**
+ * A report that names where it is: `msg (line N)`, N being the line of
+ * offset `at` in `src` (the text the pass read). `transform` maps N on to
+ * the file it writes, and the CLI prints it as `file:N`.
+ */
+export function located(msg, src, at) {
+	if (at === undefined || at === null || at < 0 || LINE.test(msg)) return msg;
+	return `${msg} (line ${lineOf(src, at)})`;
+}
+
+/** `{ text, line }` of a report written by `located` (line null when it has none). */
+export function splitLine(msg) {
+	const m = LINE.exec(msg);
+	return m ? { text: msg.slice(0, m.index), line: Number(m[1]) } : { text: msg, line: null };
+}
+
+/**
+ * old line → new line, for a pass that turned `before` into `after`: lines
+ * kept are matched (a longest common subsequence of the lines that differ),
+ * and a line that was rewritten maps to where its neighbours went.
+ */
+export function lineMap(before, after) {
+	if (before === after) return (n) => n;
+	const a = before.split("\n");
+	const b = after.split("\n");
+	let pre = 0;
+	while (pre < a.length && pre < b.length && a[pre] === b[pre]) pre++;
+	let suf = 0;
+	while (suf < a.length - pre && suf < b.length - pre && a[a.length - 1 - suf] === b[b.length - 1 - suf]) suf++;
+	const am = a.slice(pre, a.length - suf);
+	const bm = b.slice(pre, b.length - suf);
+	const match = new Map();
+	if (am.length && bm.length && am.length * bm.length <= 4e6) {
+		const w = bm.length + 1;
+		const dp = new Uint16Array((am.length + 1) * w);
+		for (let i = am.length - 1; i >= 0; i--)
+			for (let j = bm.length - 1; j >= 0; j--)
+				dp[i * w + j] = am[i] === bm[j] ? dp[(i + 1) * w + j + 1] + 1 : Math.max(dp[(i + 1) * w + j], dp[i * w + j + 1]);
+		for (let i = 0, j = 0; i < am.length && j < bm.length; ) {
+			if (am[i] === bm[j]) {
+				match.set(i, j);
+				i++;
+				j++;
+			} else if (dp[(i + 1) * w + j] >= dp[i * w + j + 1]) i++;
+			else j++;
+		}
+	}
+	return (n) => {
+		const i = n - 1;
+		if (i < pre) return n;
+		if (i >= a.length - suf) return n + (b.length - a.length);
+		const k = i - pre;
+		if (match.has(k)) return pre + match.get(k) + 1;
+		// A rewritten line: just after the last kept line above it.
+		for (let p = k - 1; p >= 0; p--) if (match.has(p)) return Math.min(pre + match.get(p) + 1 + (k - p), pre + bm.length);
+		return pre + Math.min(k, bm.length - 1) + 1;
+	};
+}

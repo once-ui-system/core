@@ -323,6 +323,43 @@ function skipComment(src, i) {
     const close = src.indexOf("*/", i + 2);
     return close < 0 ? src.length : close + 2;
   }
+  return skipRegex(src, i);
+}
+
+/**
+ * If a regular expression literal starts at `i`, the index just past it
+ * (flags included), else `i`. `/^https?:\/\//` holds a `//` and a quote
+ * may sit in one (`/"/g`): read as a comment or a string, either would
+ * unbalance the scanner for the rest of the file. A `/` opens a regex only
+ * after an operator or an opening bracket (never after a name, a number, a
+ * closing bracket or `<`, where it is a division or a closing tag), and the
+ * literal ends on the same line.
+ */
+export function skipRegex(src, i) {
+  if (src[i] !== "/") return i;
+  let p = i - 1;
+  while (p >= 0 && (src[p] === " " || src[p] === "\t")) p--;
+  const prev = p < 0 ? "" : src[p];
+  const keyword = /\b(return|typeof|case|in|of|void|delete|throw)$/.test(src.slice(Math.max(0, p - 7), p + 1));
+  if (!keyword && !(prev === "" || "(,=:[!&|?{;+-*%~^".includes(prev))) return i;
+  let j = i + 1;
+  let inClass = false;
+  if (src[j] === "/" || src[j] === "*" || src[j] === " " || src[j] === "\n") return i;
+  while (j < src.length && src[j] !== "\n") {
+    const c = src[j];
+    if (c === "\\") {
+      j += 2;
+      continue;
+    }
+    if (c === "[") inClass = true;
+    else if (c === "]") inClass = false;
+    else if (c === "/" && !inClass) {
+      j++;
+      while (/[a-z]/.test(src[j] ?? "")) j++;
+      return j;
+    }
+    j++;
+  }
   return i;
 }
 

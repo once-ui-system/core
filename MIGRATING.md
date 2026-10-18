@@ -17,6 +17,16 @@ codemod does and what it reports for you to finish.
 
 ### 1. Run the codemod
 
+**Be on 2.x first.** The codemod reads 2.x code. Check what is installed
+(`npm ls @once-ui-system/core`), not only the range: a `"latest"` range can
+still be pinned to 1.x by a lockfile, as Once UI's own templates were. On a
+1.x tree the codemod stops before it writes anything, with "this looks like
+1.x: run the 2.0 codemod first", and says why: the installed or locked
+version, a chart, `CodeBlock` or `MediaUpload` export imported from the root
+barrel, or a prop under its 1.x name (`<Dialog isOpen>`, `<Input hasPrefix>`).
+Do the [1.8.x → 2.0](#18x--20) steps, then this one (`--force` runs it
+anyway).
+
 ```sh
 node scripts/codemod-3.0.mjs src --dry   # see what it would change
 node scripts/codemod-3.0.mjs src
@@ -26,7 +36,8 @@ It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
 changes nothing. Run it once, before you write 3.0 code: it reads every bare
 number as 2.x did, so on a size you wrote as 3.0 px (`width={200}`) it would
-write `"200rem"`. Lines marked `!` are for you to fix by hand. Code you have
+write `"200rem"`. Lines marked `!` are for you to fix by hand, one per site,
+each with its file and line. Code you have
 already moved to 3.0 can still take the import step on its own
 (`scripts/codemod-3.0-imports.mjs`, § 12), which changes nothing else.
 
@@ -137,7 +148,7 @@ where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
 | --- | --- | --- |
 | `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
 | Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
-| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object or a `const dataStyle = { … }`, and on DataThemeProvider |
+| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object or a `const dataStyle = { … }`, and on DataThemeProvider; a TypeScript use site of the rewritten config gets ``height={dataStyle.height as `${number}rem`}``. A `const dataStyle: DataStyleConfig = { … }` with a type of yours keeps its number (rewriting it would break that type) and the use site becomes ``{`${dataStyle.height}rem`}`` |
 | Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
 | Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
 | CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
@@ -155,26 +166,42 @@ DateRangeInput `minHeight` (DropdownWrapper's and ContextMenu's are written
 `width`/`height` (the drawing's size: the gauge scales to its box, so set the
 box with `maxWidth`).
 
-What the codemod reports, for you to finish: a variable, arithmetic or a call
-on one of these props (`maxWidth={layout.content.width}`: write
-``{`${layout.content.width}rem`}``, or change the value at its source to a rem
-string or px), a breakpoint object passed by name, and spreads. A const of
-this file that holds a number and is not shadowed (`const COLUMN_WIDTH = 20`
-used as `maxWidth={COLUMN_WIDTH}`) becomes ``{`${COLUMN_WIDTH}rem`}``. A number
+A variable, arithmetic or a call on one of these props is followed as far as
+its value can be read: consts of the file (the one in scope where a name is
+declared twice), objects and arrays, a config imported from your own files
+(relative, `@/`, tsconfig `paths`, re-exports), the items of an array that is
+mapped, a destructured value, a prop typed `number` in the file or in an
+imported type, arithmetic, and what a function returns or declares it
+returns. When every value it can take is a number, the use site becomes a
+template, ``maxWidth={layout.content.width}`` → ``maxWidth={`${layout.content.width}rem`}``,
+and the config keeps its number. When none is (`"m" | "l"`, a `` `${n}%` ``
+string) it is left alone. A const of this file that holds numbers or
+`undefined` and only feeds these props (`const formWidth = wide ? undefined : 32`)
+is rewritten where it is defined. What is left is reported, one line per
+site: a value that is a number only some of the time, with the lines its
+numbers are on (write them as `"Nrem"` there and widen their type to
+`` `${number}rem` ``), a value it cannot read, with why (`it is the result of
+a call`), a breakpoint object passed by name, and spreads. A number
 on one of these props on a component of your own (defined in the file, or
 imported from a relative path, `@/`, `~/`, or an alias in your tsconfig or
 jsconfig `paths`) becomes a rem string when the codemod can read that the
 component hands the prop on to a Once UI layout component (`<Book
 minWidth={14}>`, where Book spreads its props onto a `Row`); otherwise it is
-reported: write `"14rem"` there if it does. Mask `radius="50"` and the numeric strings in
-Background's objects (`x: "50"`) read as the numbers they were. Values in a
-config object other than `dataStyle` (`layout.content.width: 44`) are not Once UI props, so the
-codemod cannot see them: change them to `"44rem"` there.
+reported: write `"14rem"` there if it does. A component that makes the
+number rem itself (`minWidth={minWidth ?? 12}` on a Column inside it, which
+becomes a template), only uses it in an inline style, or never reads it,
+keeps its call sites' numbers. Mask `radius="50"` and the numeric strings in
+Background's objects (`x: "50"`) read as the numbers they were.
 
-A rem string in a config is a `CSSUnit` only when TypeScript sees the literal:
-in a `.ts` config write `height: "24rem" as const` (or `as const` on the
-object); a `.js` config infers `string`, so cast where you pass it
-(``height={dataStyle.height as `${number}rem`}``) or move the config to `.ts`.
+The codemod does not rewrite a config at its source (apart from
+`dataStyle`): its numbers are read where they reach a prop. If you change
+one yourself, mind the file: a rem string in a config is a `CSSUnit` only
+when TypeScript sees the literal. In a `.ts` config write `width: "44rem" as
+const` (or `as const` on the object); a `.js` config infers `string`, which
+the props do not take, so there keep the number and write the template at
+the use site (``maxWidth={`${layout.content.width}rem`}``), or cast it
+(``height={dataStyle.height as `${number}rem`}``). A config comment such as
+"units are set in REM" is no longer true of a bare number.
 
 Behaviour to check: keyword speeds that did not divide evenly moved to the
 shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
@@ -223,17 +250,17 @@ so `variant` never means typography.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
-| Button, IconButton `variant="danger"` / `"success"` / `"warning"` | `tone="danger"` (on the default `primary` variant; any variant takes any tone) | rewrites a literal; reports a variable |
+| Button, IconButton `variant="danger"` / `"success"` / `"warning"` | `tone="danger"` (on the default `primary` variant; any variant takes any tone) | rewrites a literal, and a ternary of literals (`variant={bad ? "danger" : "secondary"}` → `variant={bad ? "primary" : "secondary"} tone={bad ? "danger" : undefined}`); reports a variable |
 | Button, IconButton `variant="quaternary"` | `variant="ghost"` | rewrites, also inside a ternary |
 | Button, IconButton `color="brand-strong"` (it tinted only the icons) | `tone="brand"`, which colours the label and icons together | rewrites and reports, because the label changes colour |
 | Table `actions[].variant: "danger"` | `variant: "primary", tone: "danger"` | rewrites an inline array; reports one built elsewhere in the file |
-| Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames; `addToast({ variant })` shorthand is reported |
+| Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames, also in each object a ternary passes to `addToast`; the `{ variant }` shorthand becomes `tone: variant`; reports an argument it cannot see |
 | Tag, Pulse `scheme`; Tag `scheme="gradient"` | `tone`; `variant="gradient"` | rewrites |
 | Scrubber `tracks[].scheme`, `blocks[].scheme`; the `ScrubberTrack["scheme"]` and `ScrubberBlock["scheme"]` types | `tone` | rewrites an inline array, and one built in the file (a const used once, `.map(… => ({ … }))`, `useMemo`); reports the rest |
-| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`); `TimelineItem["state"]` | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array, and one built in the file as for Scrubber; reports the rest |
+| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`); `TimelineItem["state"]` | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array, one built in the file as for Scrubber (a `.map` over any array, a ternary of states), and a `const items: TimelineItem[]` with its `.push`es; reports the rest. Items built in a `.map` are not checked by TypeScript (an object literal returned from a callback has no excess-property check), so a `state:` left behind compiles and is ignored: look for `state:` near Timeline data, or type the array `TimelineItem[]` |
 | LinearGauge, RadialGauge `hue="success"` / `hue={[a, b]}` | `tone="success"` (also `"warning"`) / `hueRange={[a, b]}` | rewrites a literal or a ternary of tones; reports a variable |
 | StatusIndicator `color`, Avatar `statusIndicator={{ color }}` | `scheme` | renames |
-| Text, Heading, ListItem, CountFx, ShineFx, TypeFx, FadingLettersFx `variant` | `textVariant` | renames |
+| Text, Heading, ListItem, CountFx, ShineFx, TypeFx, FadingLettersFx `variant` | `textVariant` | renames, also in `ComponentProps<typeof Text>["variant"]` and `TextProps["variant"]` |
 | Tag, StatusIndicator, Pulse, Accordion, Pagination `size`: `s` to `l` | `xs` to `xl` | nothing to rewrite |
 
 `subtle` stays a Button and IconButton variant. A free colour prop (Background's
@@ -368,12 +395,28 @@ where it relied on the element being typed as a `div`:
 
 **Lists and buttons reset.** `<Column as="ul">`, `<Row as="ol">` and `<Grid
 as="ul">` render without bullets, indent or margin, and `as="button"` without
-the browser's background, border, padding and font, and with `type="button"`
-unless you pass `type`. The resets have zero specificity, so every prop still
-applies. Remove the `style={{ listStyle: "none", margin: 0, padding: 0 }}` and
-`all: "unset"` workarounds: the codemod removes the list ones (keeping a
-`padding: 0` that beat a `padding` prop beside it). For a list that keeps its
-markers, use `List`, which now sets them explicitly.
+the browser's background, border, padding (its `1px 6px` inset too) and font,
+and with `type="button"` unless you pass `type`. The resets have zero
+specificity, so every prop still applies, and the `style={{ listStyle:
+"none", margin: 0, padding: 0 }}` and `all: "unset"` workarounds are no longer
+needed (the codemod leaves them: they are harmless).
+
+A 2.x list looked the way the browser draws one. To keep that look, the
+codemod writes it back on every `as="ul"` / `as="ol"` layout element:
+
+```tsx
+<Column as="ul" gap="8" className="list-disc" paddingLeft="40px" marginY="1em">
+```
+
+(`list-decimal` on `ol`), leaving out what the element already sets: its own
+`paddingLeft`, `paddingX` or `padding`, a `marginTop` or `marginBottom`, a
+`listStyle` in its style, or an inline reset. This is the browser's style
+exactly: `40px` and `1em` rather than the `"40"` and `"16"` tokens, which
+grow and shrink with the theme's scaling where the browser's indent does
+not, and the margin follows the list's font size. `List` is a different look
+(a 20px indent and no block margins). A list beside a `className`, a spread
+or inside another list is reported instead, since the restore could clash
+with it. Remove the restore from a list you wanted bare.
 
 **New values.** `vertical="baseline"` aligns children on their first line of
 text (a class, also in breakpoint objects). Margins take `"auto"`:
@@ -603,7 +646,16 @@ Padding on a `Text` or `Heading` in running text (or beside a `className`,
 its class (`className="z-index-1"`, `"opacity-60"`), an `InlineCode`
 `textVariant` the font classes, and a `Kbd`'s `fit` (already its look) goes.
 It adds `Row` or `Column` to your Once UI import, and renames
-`Button`/`IconButton` `radius="none"` to `corners="none"`. It reports the rest,
+`Button`/`IconButton` `radius="none"` to `corners="none"`. A type that
+picked moved props from the leaf names the Row's
+(`Pick<ComponentProps<typeof Icon>, "onBackground" | "background">` →
+`Pick<ComponentProps<typeof Icon>, "onBackground"> & Pick<ComponentProps<typeof Row>, "background">`).
+A `height` on `Input`, `NumberInput`, `ColorInput` or `Textarea` (2.0 renamed
+it `size`) went on to the native element, where it did nothing: the codemod
+drops it. A leaf that is a JSX prop's value with only `hide` and `{{ hide }}`
+breakpoints (`trigger={<NavIcon hide m={{ hide: false }} />}`) is wrapped
+whatever its parent, and an absolutely placed leaf with a translate moves
+its placement (and its `key`) to the Row, which shrink-wraps it. It reports the rest,
 with the props to move: a parent it cannot see in the same file (the wrapper
 could change its layout), a spread, offsets, styling on a `Button` (a
 wrapper's padding is not the button's), sizes on a `ProgressBar`, and a look

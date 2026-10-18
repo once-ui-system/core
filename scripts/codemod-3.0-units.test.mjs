@@ -104,11 +104,13 @@ describe("D2: a number that was rem becomes a rem string", () => {
 });
 
 describe("D2: what it cannot rewrite exactly is reported", () => {
-  it("reports a variable, arithmetic or a call", () => {
-    const w = warned(`${core("Flex")}<Flex width={w} height={h * 2} maxWidth={size()} />`);
-    assert.match(w, /width=\{w\}.*rem \(now px\).*\{`\$\{w\}rem`\}/);
-    assert.match(w, /height=\{h \* 2\}/);
-    assert.match(w, /maxWidth=\{size\(\)\}/);
+  it("reports a variable or a call it cannot follow, and says why", () => {
+    const { out, warnings } = transform(`${core("Flex")}<Flex width={w} height={h * 2} maxWidth={size()} />`);
+    const w = warnings.join("\n");
+    assert.match(w, /width=\{w\}.*rem \(now px\).*\{`\$\{w\}rem`\}.*\(w is not defined in this file\)/);
+    assert.match(w, /maxWidth=\{size\(\)\}.*\(it is the result of a call\)/);
+    // `h * 2` is a number whatever h is.
+    assert.match(out, /height=\{`\$\{h \* 2\}rem`\}/);
   });
 
   it("reports a breakpoint object passed by name, and a spread inside one", () => {
@@ -313,22 +315,22 @@ describe("numbers the units pass used to miss", () => {
     assert.equal(transform(out).out, out);
   });
 
-  it("writes a member of an as const object, and names one of a plain object or a shadowed const", () => {
+  it("writes a member of an object nothing writes to, and names a shadowed const or one written to", () => {
     const src =
-      `${core("Column")}const CAP = { plain: 20 } as const;\nconst LOOSE = { plain: 20 };\nconst N = 14;\n` +
-      "<Column maxWidth={CAP.plain} minWidth={LOOSE.plain} />\nconst Card = ({ N }) => <Column width={N} />;\n";
+      `${core("Column")}const CAP = { plain: 20 } as const;\nconst LOOSE = { plain: 20 };\nconst N = 14;\nconst MUT = { w: 2 };\nMUT.w = 3;\n` +
+      "<Column maxWidth={CAP.plain} minWidth={LOOSE.plain} height={MUT.w} />\nconst Card = ({ N }) => <Column width={N} />;\n";
     const { out, warnings } = transform(src);
-    assert.match(out, /maxWidth=\{`\$\{CAP\.plain\}rem`\} minWidth=\{LOOSE\.plain\}/);
+    assert.match(out, /maxWidth=\{`\$\{CAP\.plain\}rem`\} minWidth=\{`\$\{LOOSE\.plain\}rem`\} height=\{MUT\.w\}/);
     assert.match(out, /<Column width=\{N\} \/>/);
     const w = warnings.join("\n");
-    assert.match(w, /LOOSE\.plain is 20, a const in this file/);
+    assert.match(w, /height=\{MUT\.w\}.*MUT is written to in this file/);
     assert.match(w, /N is 14, a const in this file/);
   });
 
-  it("keeps a const passed as an argument a report, not a rewrite of the call", () => {
+  it("writes a numeric call (Math.max) as the rem it was", () => {
     const { out, warnings } = transform(`${core("Column")}const W = 14;\n<Column width={W} gap={Math.max(W, 2)} />\n`);
-    assert.match(out, /width=\{`\$\{W\}rem`\} gap=\{Math\.max\(W, 2\)\}/);
-    assert.match(warnings.join("\n"), /gap=\{Math\.max\(W, 2\)\}/);
+    assert.match(out, /width=\{`\$\{W\}rem`\} gap=\{`\$\{Math\.max\(W, 2\)\}rem`\}/);
+    assert.deepEqual(warnings, []);
   });
 
   it("reads a numeric string radius on Mask, and numeric strings in Background's objects", () => {
@@ -384,15 +386,16 @@ describe("an own component that passes a size on to a layout component", () => {
     assert.equal(transform(r.out).out, r.out);
   });
 
-  it("reports a wrapper that takes the prop out, one it cannot read, and a default import", () => {
+  it("reports a wrapper it cannot read and a default import; one that takes the prop out and never reads it is quiet", () => {
     const r = run(
       `${core("Column")}import { Taker } from "@ui/Panel";\nimport { Other } from "@/components/Other";\nimport Def from "../components/Sidebar";\n<Column><Taker maxWidth={10} /><Other maxHeight={28} /><Def width={3} /></Column>\n`,
     );
     assert.match(r.out, /<Taker maxWidth=\{10\} \/>/);
     assert.match(r.out, /<Other maxHeight=\{28\} \/>/);
     assert.match(r.out, /<Def width=\{3\} \/>/);
-    assert.equal(r.warnings.length, 3);
-    assert.match(r.warnings.join("\n"), /<Taker> maxWidth=\{10\}: if Taker passes maxWidth on/);
+    // Taker drops maxWidth: it did nothing in 2.x and does nothing now.
+    assert.equal(r.warnings.length, 2);
+    assert.doesNotMatch(r.warnings.join("\n"), /<Taker>/);
   });
 
   it("rewrites a same-file wrapper without a file to read", () => {

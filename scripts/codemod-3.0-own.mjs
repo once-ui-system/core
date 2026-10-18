@@ -18,9 +18,10 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { importBindings, isCoreSource } from "./codemod-2.0.mjs";
+import { attributesOf, importBindings, isCoreSource, openingTagEnd } from "./codemod-2.0.mjs";
 import { codeOnly } from "./codemod-3.0-format.mjs";
 import { elementsOf } from "./codemod-3.0-leaf.mjs";
+import { valueSpans } from "./codemod-3.0-values.mjs";
 
 const EXTENSIONS = [".tsx", ".ts", ".jsx", ".js", ".mjs"];
 const configs = new Map();
@@ -97,7 +98,14 @@ export function pathAliases(file) {
 /** The candidate paths an alias maps `source` to, or null when no alias matches it. */
 function aliasTargets(file, source) {
 	const config = file ? pathAliases(file) : null;
-	if (!config) return null;
+	if (!config) {
+		// No tsconfig above the files (a copy of `src` alone): `@/…` is Next's
+		// default alias, `./src/*`, so it names the `src` folder the file is in.
+		if (!file || !source.startsWith("@/")) return null;
+		const parts = path.resolve(file).split(path.sep);
+		const at = parts.lastIndexOf("src");
+		return at > 0 ? [path.join(parts.slice(0, at + 1).join(path.sep) || path.sep, source.slice(2))] : null;
+	}
 	let best = null;
 	for (const [pattern, targets] of Object.entries(config.paths)) {
 		if (!Array.isArray(targets)) continue;
@@ -244,6 +252,114 @@ function layoutPropsOf(text, type, prop, isLayout, depth = 0) {
 		return found;
 	}
 	return null;
+}
+
+/**
+ * Whether component `name` (exported by `file`, whose text is `text`) takes
+ * `prop` out by name and uses it only where a 2.x number keeps its meaning
+ * once this codemod has run: inside a `${…}rem` template, in an inline style
+ * (a number there is px in both versions), or as a leaf of a rem size prop on
+ * a Once UI element, which the units pass rewrites inside the wrapper itself.
+ * Then the wrapper's call sites keep their numbers: `<Slot width={4}>`, with
+ * Slot rendering `<Row width={width}>`, is 4rem before and after.
+ */
+export function consumesProp({ file, text, name, prop, isRem }, depth = 0) {
+	if (depth > 4 || !text) return false;
+	for (const m of text.matchAll(/export\s*\{([^}]*)\}\s*from\s*(["'])([^"']+)\2/g)) {
+		for (const spec of m[1].split(",").map((x) => x.trim()).filter(Boolean)) {
+			const [orig, as] = spec.replace(/^type\s+/, "").split(/\s+as\s+/).map((x) => x.trim());
+			if ((as ?? orig) !== name) continue;
+			const next = file && resolveOwn(file, m[3]);
+			return next ? consumesProp({ file: next, text: read(next), name: orig, prop, isRem }, depth + 1) : false;
+		}
+	}
+	const def = new RegExp(
+		`(?:^|[\\s;])(?:export\\s+)?(?:(?:const|let|var)\\s+${name}\\s*(?::\\s*[^=]+?)?\\s*=|function\\s+${name}\\s*(?:<[^>]*>)?\\s*(?=\\())`,
+	).exec(text);
+	if (!def) {
+		for (const m of text.matchAll(/export\s*\*\s*from\s*(["'])([^"']+)\1/g)) {
+			const next = file && resolveOwn(file, m[2]);
+			if (next && consumesProp({ file: next, text: read(next), name, prop, isRem }, depth + 1)) return true;
+		}
+		return false;
+	}
+	// The parameter list, through a `forwardRef(` or `memo(` around it.
+	const after = def.index + def[0].length;
+	const open = /^[^(]{0,80}?\(\s*(?:\(\s*)?\{/.exec(text.slice(after));
+	if (!open) return false;
+	const patternAt = after + open[0].length - 1;
+	const patternEnd = groupEnd(text, patternAt);
+	if (patternEnd < 0) return false;
+	let local = null;
+	for (const p of parts(text.slice(patternAt + 1, patternEnd - 1))) {
+		const m = new RegExp(`^${prop}\\s*(?::\\s*([A-Za-z_$][\\w$]*))?\\s*(?:=[\\s\\S]*)?$`).exec(p);
+		if (m) local = m[1] ?? prop;
+	}
+	if (!local) return false;
+	const paramsOpen = text.lastIndexOf("(", patternAt);
+	const paramsEnd = groupEnd(text, paramsOpen);
+	if (paramsEnd < 0) return false;
+	const head = /^\s*(?:=>\s*)?([{(])/.exec(text.slice(paramsEnd));
+	let bodyAt;
+	let bodyEnd;
+	if (head) {
+		bodyAt = paramsEnd + head[0].length - 1;
+		bodyEnd = groupEnd(text, bodyAt);
+	} else {
+		// `=> <Column … />`: an expression body, to the end of its statement.
+		const arrow = /^\s*=>\s*/.exec(text.slice(paramsEnd));
+		if (!arrow) return false;
+		bodyAt = paramsEnd + arrow[0].length;
+		bodyEnd = -1;
+		for (let i = bodyAt, depth = 0; i < text.length; i++) {
+			const c = text[i];
+			if ("([{".includes(c)) depth++;
+			else if (")]}".includes(c)) depth--;
+			if (depth < 0 || (depth === 0 && (c === ";" || c === "\n"))) {
+				bodyEnd = i;
+				break;
+			}
+		}
+	}
+	if (bodyEnd < 0) return false;
+	// Where the number is still read as 2.x read it.
+	const fine = [];
+	for (const m of text.slice(bodyAt, bodyEnd).matchAll(/\bstyle=\{/g)) {
+		const at = bodyAt + m.index + m[0].length - 1;
+		fine.push([at, groupEnd(text, at)]);
+	}
+	const core = new Map();
+	for (const [l, b] of importBindings(text)) if (isCoreSource(b.source)) core.set(l, b.canonical);
+	const element = /<([A-Z][\w]*)(?=[\s/>])/g;
+	element.lastIndex = bodyAt;
+	let el;
+	while ((el = element.exec(text)) && el.index < bodyEnd) {
+		const canonical = core.get(el[1]);
+		if (!canonical) continue;
+		const from = el.index + el[1].length + 1;
+		const end = openingTagEnd(text, from);
+		if (end < 0) continue;
+		for (const a of attributesOf(text, from, end)) {
+			if (a.value === null || !a.value.startsWith("{") || !isRem(canonical, a.name)) continue;
+			const valueAt = a.end - a.value.length;
+			for (const leaf of valueSpans(text, valueAt + 1, a.end - 1))
+				if (text.slice(leaf.at, leaf.end) === local) fine.push([leaf.at, leaf.end]);
+		}
+	}
+	const inTemplate = (i) => {
+		const s = text.lastIndexOf("${", i);
+		if (s < 0 || text.slice(s + 2, i).includes("}")) return false;
+		const close = groupEnd(text, s + 1);
+		return close > i && text.startsWith("rem", close);
+	};
+	const uses = [...text.slice(bodyAt, bodyEnd).matchAll(new RegExp(`(?<![\\w$.])${local.replace(/\$/g, "\\$")}(?![\\w$])`, "g"))];
+	return uses.every((u) => {
+		const i = bodyAt + u.index;
+		const rest = text.slice(i + local.length, i + local.length + 3);
+		// An attribute name (`minWidth=`), or a key (`{ minWidth: 1 }`), is not a use.
+		if (/^=(?![=>])/.test(rest) || (/^\??:/.test(rest.trimStart()) && /[{,]\s*$/.test(text.slice(i - 20, i)))) return true;
+		return inTemplate(i) || fine.some(([a, b]) => i >= a && i < b);
+	});
 }
 
 /**
