@@ -183,6 +183,10 @@
     "family": "hi2",
     "symbol": "HiOutlineGlobeAlt"
   },
+  "grip": {
+    "family": "lu",
+    "symbol": "LuGripVertical"
+  },
   "heart": {
     "family": "hi2",
     "symbol": "HiOutlineHeart"

@@ -201,6 +201,7 @@
   "forward",
   "gift",
   "globe",
+  "grip",
   "heart",
   "help",
   "home",
@@ -734,10 +735,10 @@
    "endDate": "!Date | undefined"
   },
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -874,11 +875,11 @@
    "2",
    "3",
    "4",
+   "9",
    "12",
    "5",
    "6",
    "7",
-   "9",
    "11"
   ],
   "FormColumns": [
@@ -992,11 +993,11 @@
    "2",
    "3",
    "4",
+   "9",
    "12",
    "5",
    "6",
    "7",
-   "9",
    "11"
   ],
   "IconButtonProps": "IconButton props",
@@ -1065,6 +1066,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "home",
    "inbox",
@@ -1461,6 +1463,33 @@
    "contrast",
    "inverse"
   ],
+  "SortableAnnouncement": {
+   "item": "!string",
+   "position": "!number",
+   "total": "!number",
+   "list": "string"
+  },
+  "SortableDirection": [
+   "row",
+   "column"
+  ],
+  "SortableLabels": {
+   "instructions": "!string",
+   "handle": "!(item?: string) => string",
+   "lifted": "!(a: SortableAnnouncement) => string",
+   "moved": "!(a: SortableAnnouncement) => string",
+   "dropped": "!(a: SortableAnnouncement) => string",
+   "cancelled": "!(a: SortableAnnouncement) => string"
+  },
+  "SortablePosition": {
+   "list": "!string",
+   "index": "!number"
+  },
+  "SortableReorder": {
+   "id": "!string",
+   "from": "!number",
+   "to": "!number"
+  },
   "SpacingToken": [
    "xl",
    "l",
@@ -1474,8 +1503,8 @@
    "4",
    "64",
    "160",
-   "8",
    "12",
+   "8",
    "16",
    "20",
    "24",
@@ -4258,6 +4287,58 @@
     "className": "string"
    }
   },
+  "Sortable": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!readonly string[]",
+    "onReorder": "(items: string[], move: SortableReorder) => void",
+    "group": "string",
+    "name": "string",
+    "onMove": "(id: string, to: SortablePosition, from: SortablePosition) => void",
+    "direction": "SortableDirection",
+    "handle": "boolean",
+    "disabled": "boolean",
+    "label": "string",
+    "labels": "Partial<SortableLabels>"
+   }
+  },
+  "SortableHandle": {
+   "group": "components",
+   "extends": [
+    "IconButton"
+   ]
+  },
+  "SortableItem": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "id": "!string",
+    "label": "string",
+    "disabled": "boolean = false"
+   }
+  },
   "Spinner": {
    "group": "components",
    "extends": [
@@ -5664,8 +5745,14 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: NavVariant; rail...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
   },
   "useStylePanel": {
    "group": "components",
