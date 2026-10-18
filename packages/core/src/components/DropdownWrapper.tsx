@@ -768,8 +768,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           return;
         }
 
-        // Handle tab key for focus trapping
+        // Handle tab key for focus trapping. The panel's FocusTrap sees Tab
+        // first and has already moved focus; wrapping again from there sent
+        // Tab from the last-but-one control back to the first.
         if (e.key === "Tab" && dropdownRef.current) {
+          if (e.defaultPrevented) return;
           // Find all focusable elements in the dropdown
           const focusableElements = Array.from(
             dropdownRef.current.querySelectorAll(

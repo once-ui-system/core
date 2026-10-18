@@ -78,14 +78,15 @@ describe("InfoTip", () => {
     await waitFor(() => expect(screen.queryByText("Your legal name.")).toBeNull());
   });
 
-  it("does not activate anything on Enter or Space", async () => {
+  it("toggles the tip on Enter and Space, as a button should", async () => {
     const user = userEvent.setup();
     render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
     await user.tab();
     await screen.findByRole("tooltip");
     await user.keyboard("{Enter}");
+    await waitFor(() => expect(screen.queryByRole("tooltip")).toBeNull());
     await user.keyboard(" ");
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(text);
     expect(icon()).toHaveFocus();
-    expect(tip()).toHaveTextContent(text);
   });
 });

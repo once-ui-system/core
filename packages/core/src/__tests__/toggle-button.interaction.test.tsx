@@ -97,12 +97,13 @@ describe("ToggleButton: interaction", () => {
     expect(ref.current).toBe(screen.getByRole("button", { name: "Ref" }));
   });
 
-  // Current behaviour, as the docs' first example renders it: with no
-  // `onClick`, `type` or `href` there is nothing to do, and it is a plain box.
-  it("renders a plain, unfocusable box with nothing to do", () => {
+  // With no `onClick` or `href` it is still a button, so Tab reaches it, and
+  // says whether it is on.
+  it("is a focusable toggle with nothing else to do", () => {
     render(<ToggleButton label="Static" selected />, { wrapper: wrap });
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    expect(screen.getByText("Static")).toBeInTheDocument();
+    const button = screen.getByRole("button", { name: "Static" });
+    expect(button).toHaveAttribute("type", "button");
+    expect(button).toHaveAttribute("aria-pressed", "true");
   });
 
   it("renders a button from `type` alone", () => {

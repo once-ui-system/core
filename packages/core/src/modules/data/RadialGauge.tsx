@@ -60,8 +60,6 @@ export const RadialGauge = ({
   ...flex
 }: RadialGaugeProps) => {
   const pad = 4;
-  // Per instance: a fixed id repeats as soon as two gauges share a page.
-  const gradientId = `${useId()}-line-gradient`;
 
   // Destructure line with individual defaults
   const lineCount = line?.count ?? 48;
