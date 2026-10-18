@@ -6,7 +6,12 @@ import { describe, expect, it } from "vitest";
 import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { STATIC_SPACING_TOKENS, translateTransform, translateValue } from "../utils/layoutClasses";
+import {
+  STATIC_SPACING_TOKENS,
+  tokenLength as t,
+  translateTransform,
+  translateValue,
+} from "../utils/layoutClasses";
 
 /**
  * `translateX` and `translateY` are typed `SpacingToken | number | CSSUnit`,
@@ -50,8 +55,8 @@ describe("translate values", () => {
   });
 
   it("keeps a number as px and a CSS unit as written", () => {
-    expect(translateValue(1.5)).toBe("1.5px");
-    expect(translateValue(-2)).toBe("-2px");
+    expect(translateValue(1.5)).toBe(t(1.5));
+    expect(translateValue(-2)).toBe(t(-2));
     expect(translateValue(0)).toBe("0px");
     expect(translateValue("-50%")).toBe("-50%");
     expect(translateValue("10vw")).toBe("10vw");
@@ -68,7 +73,7 @@ describe("translate values", () => {
   it("writes one translate, the unset axis 0", () => {
     expect(translateTransform("16", undefined)).toBe("translate(var(--static-space-16), 0)");
     expect(translateTransform(undefined, "m")).toBe("translate(0, var(--responsive-space-m))");
-    expect(translateTransform("8", -1)).toBe("translate(var(--static-space-8), -1px)");
+    expect(translateTransform("8", -1)).toBe(`translate(var(--static-space-8), ${t(-1)})`);
     expect(translateTransform(undefined, undefined)).toBeUndefined();
     expect(translateTransform("nope", undefined)).toBeUndefined();
   });
@@ -106,12 +111,12 @@ describe.each(COMPONENTS)("%s translateX / translateY", (_name, Component) => {
           </Component>,
         ),
       ),
-    ).toContain("transform:translate(var(--static-space-72), -1px)");
+    ).toContain(`transform:translate(var(--static-space-72), ${t(-1)})`);
   });
 
   it("still writes a number as px and a CSS unit as written", () => {
     expect(styleOf(renderToStaticMarkup(<Component translateX={1.5}>x</Component>))).toContain(
-      "transform:translate(1.5px, 0)",
+      `transform:translate(${t(1.5)}, 0)`,
     );
     expect(
       styleOf(renderToStaticMarkup(<Component translateY="calc(100% - 1rem)">x</Component>)),

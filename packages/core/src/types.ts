@@ -65,8 +65,10 @@ export type SpacingToken = StaticSpacingToken | ResponsiveSpacingToken;
  * `"320px"`, `"40rem"`, `"1.5em"`, `"50%"`, `"100vh"`, `"100dvh"`, `"50vw"`,
  * or a `calc()`, `min()`, `max()`, `clamp()` or `var()` expression.
  *
- * A bare number on a size, spacing or offset prop is px (`width={320}`), and
- * a digit string is a static spacing token (`"16"` is `--static-space-16`).
+ * A bare number on a size, spacing or offset prop is on the token scale
+ * (`width={320}` is 20rem, scaled by `[data-scaling]`), as a digit string
+ * is a static spacing token (`"16"` is `--static-space-16`): `16` and `"16"`
+ * render the same.
  */
 export type CSSUnit =
   | `${number}px`

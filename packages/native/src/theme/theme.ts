@@ -10,6 +10,7 @@ import type {
   TextVariant,
 } from "../types";
 import {
+  DENSITIES,
   remFor,
   resolveTokens,
   type ShadowLayer,
@@ -60,6 +61,8 @@ export interface OnceTheme {
   breakpoints: Breakpoints;
   /** Safe-area insets passed to `ThemeProvider`; zeros when none were. */
   insets: Insets;
+  /** The size a control takes when given none: the density's (m when normal). */
+  controlSize: "s" | "m" | "l";
   /** px per rem for this screen: 15 on phones, 16 on tablets, as on the web. */
   rem: number;
   /** Every resolved token, by its CSS name without `--`. */
@@ -173,6 +176,7 @@ export function createTheme(
     width,
     breakpoints: { xs, s, m, l, xl: Number.POSITIVE_INFINITY },
     insets,
+    controlSize: DENSITIES[settings.density ?? "normal"]?.size ?? "m",
     rem,
     tokens,
     px: (name) => px(name),

@@ -25,6 +25,7 @@ import { ToggleButton } from "../components/ToggleButton";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider } from "../contexts/ToastProvider";
 import type { LeafProps } from "../interfaces";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * 3.0 (G2): a leaf takes its own props and `LeafProps` — margins, `flex`,
@@ -157,7 +158,7 @@ describe("LeafProps", () => {
 describe("leaf props render on the leaf's own root", () => {
   it("Button: margin, flex and offsets as classes and inline values", () => {
     const { getByRole } = render(
-      <Button onClick={() => {}} marginTop="8" marginLeft={3} flex={1} position="absolute" top="4">
+      <Button onClick={() => {}} marginTop="8" marginLeft={4} flex={1} position="absolute" top="4">
         Go
       </Button>,
       { wrapper: wrap },
@@ -168,7 +169,8 @@ describe("leaf props render on the leaf's own root", () => {
     // Inline, so Button's own `position: relative` cannot win.
     expect(el.style.position).toBe("absolute");
     expect(el.className).toContain("top-4");
-    expect(el.style.marginLeft).toBe("3px");
+    // A step of the scale, which jsdom can compute (see Dialog.test).
+    expect(el.style.marginLeft).toBe(t(4));
     expect(el.getAttribute("margintop")).toBeNull();
     expect(el.getAttribute("flex")).toBeNull();
   });

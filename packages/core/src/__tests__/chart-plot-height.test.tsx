@@ -6,6 +6,7 @@ import BarChart from "../modules/data/BarChart.impl";
 import LineBarChart from "../modules/data/LineBarChart.impl";
 import LineChart from "../modules/data/LineChart.impl";
 import PieChart from "../modules/data/PieChart.impl";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * `height` sizes a chart's card once, and the plot takes what the header
@@ -35,7 +36,7 @@ describe("chart plot height", () => {
       const { container } = render(chart);
       const card = container.firstElementChild as HTMLElement;
       const plot = card.lastElementChild as HTMLElement;
-      expect(card.style.height).toBe("24px");
+      expect(card.style.height).toBe(t(24));
       expect(card.style.minHeight).toBe("");
       expect(plot.style.minHeight).toBe("");
     });

@@ -172,7 +172,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
     {
       variant = "primary",
       tone,
-      size = "m",
+      size: sizeProp,
       corners,
       label,
       children,
@@ -193,6 +193,8 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
     ref,
   ) {
     const theme = useTheme();
+    // Left out, the theme's density picks it.
+    const size = sizeProp ?? theme.controlSize;
     const dims = SIZES[size];
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
     const inactive = disabled || loading;

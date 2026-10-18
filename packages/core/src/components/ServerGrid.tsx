@@ -9,7 +9,6 @@ import {
   isCSSUnit,
   offsetClasses,
   offsetValue,
-  px,
   scrollsOn,
   sizeValue,
   spacingClass,
@@ -17,6 +16,7 @@ import {
   spacingValue,
   themeAttributes,
   translateTransform,
+  withTokenLengths,
 } from "../utils/layoutClasses.js";
 import { numericSpacingStyle } from "../utils/spacingStyle.js";
 
@@ -347,7 +347,7 @@ const ServerGrid = ({
     bottom: offsetValue(bottom),
     left: offsetValue(left),
     transform,
-    // A size is a class; a number is px, and has no class to reach for.
+    // A size is a class; a number is inline, and has no class to reach for.
     filter: spacingValue(blur) ? `blur(${spacingValue(blur)})` : undefined,
     ...(spacingValue(backdropBlur) && {
       WebkitBackdropFilter: `blur(${spacingValue(backdropBlur)})`,
@@ -362,7 +362,7 @@ const ServerGrid = ({
       ref={ref}
       {...(Component === "button" && { type: "button" })}
       className={classes}
-      style={combinedStyle}
+      style={withTokenLengths(combinedStyle)}
       {...rest}
       {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
     >

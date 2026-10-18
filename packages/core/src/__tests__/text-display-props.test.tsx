@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Heading } from "../components/Heading";
 import { Text } from "../components/Text";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * 3.0 (G2): `Text` and `Heading` are leaves. They take their typography and
@@ -78,10 +79,10 @@ describe.each([
         </Component>,
       ),
     );
-    expect(style).toContain("top:2px");
+    expect(style).toContain(`top:${t(2)}`);
     expect(style).toContain("right:50%");
     expect(style).toContain("bottom:calc(100% - 1rem)");
-    expect(style).toContain("margin-left:3px");
+    expect(style).toContain(`margin-left:${t(3)}`);
   });
 
   it("lets style win over a resolved value", () => {
@@ -93,7 +94,7 @@ describe.each([
       ),
     );
     expect(style).toContain("top:3px");
-    expect(style).not.toContain("top:2px");
+    expect(style).not.toContain(`top:${t(2)}`);
   });
 
   it("puts none of them on the DOM as an attribute", () => {
@@ -136,7 +137,7 @@ describe.each([
     );
     const el = container.firstElementChild as HTMLElement;
     expect(el.getAttributeNames().filter((attr) => LEAKED.includes(attr))).toEqual([]);
-    expect(el.style.top).toBe("1px");
+    expect(el.style.top).toBe(t(1));
     const warnings = error.mock.calls.map((call) => String(call[0]));
     expect(warnings.filter((w) => /does not recognize|non-boolean attribute/.test(w))).toEqual([]);
   });

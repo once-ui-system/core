@@ -5,21 +5,22 @@ import React, { CSSProperties, useCallback, useEffect, useRef } from "react";
 import { useInViewport } from "../hooks/useInViewport.js";
 import { useReducedMotion } from "../hooks/useReducedMotion.js";
 import type { CSSUnit } from "../types.js";
+import { cssLength as length } from "../utils/layoutClasses.js";
 import { Flex } from "./Flex.js";
 import styles from "./Mask.module.scss";
 
 export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {
   cursor?: boolean;
   /**
-   * Where the mask's centre sits: a number is px from the left edge, a string
-   * a CSS length (`"50%"` is the middle). Set with `y`. Was a bare percentage
+   * Where the mask's centre sits: a number is a length on the token
+   * scale from the left edge (`16` is 1rem), a string a CSS length (`"50%"` is the middle). Set with `y`. Was a bare percentage
    * until 3.0 (`x={50}` is `x="50%"` now).
    */
   x?: number | CSSUnit;
   /** As `x`, from the top edge. */
   y?: number | CSSUnit;
   /**
-   * The mask's radius: a number is px, a string a CSS length. Default
+   * The mask's radius: a number is on the token scale, a string a CSS length. Default
    * `"50svh"`: `svh`, the viewport with a phone's toolbars shown, holds still
    * as they slide away, where `vh` would make the mask jump; on a desktop the
    * two are the same. Was a bare `vh` count until 3.0: write a 2.x
@@ -31,9 +32,6 @@ export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radi
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }
-
-/** A number as px, a CSS length as written. */
-const length = (value: number | string) => (typeof value === "number" ? `${value}px` : value);
 
 const Mask = ({
   ref: forwardedRef,

@@ -104,7 +104,7 @@ const LOOK = {
 export function Tag({
   tone,
   variant = "default",
-  size = "m",
+  size: sizeProp,
   label,
   prefixIcon,
   suffixIcon,
@@ -121,6 +121,8 @@ export function Tag({
   style,
 }: TagProps) {
   const theme = useTheme();
+  // Left out, the theme's density picks it.
+  const size = sizeProp ?? theme.controlSize;
   const handler = pressHandler(onPress, onClick, href);
   const text = label || children;
 

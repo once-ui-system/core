@@ -68,7 +68,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <div style={{ gap: 8, padding: 24 }}>
 ```
 
-5. `width`/`height`/`maxWidth`/`minHeight` (and every spacing and offset prop) accept a number in **px** (`width={320}`), a spacing token string (`"16"`), or a CSS length string (`"40rem"`, `"50%"`, `"100dvh"`, `calc(…)`). Prefer tokens; write rem as a string when a size should follow the root font size. `maxWidth={40}` is 40 px, not 40rem (2.x).
+5. `width`/`height`/`maxWidth`/`minHeight` (and every spacing and offset prop) accept a number on the **token scale** (`width={320}`: `n` renders as the token `"n"` would, n/16 rem scaled by `data-scaling`, so 320 px at the defaults), a spacing token string (`"16"`), or a CSS length string (`"40rem"`, `"50%"`, `"100dvh"`, `calc(…)`). Prefer tokens; write `"320px"` for a length that must not scale. `maxWidth={40}` is 2.5rem, not 40rem (2.x).
 
 6. Only use `style={{}}` for things no token prop covers (e.g. `isolation`, custom filters). If a prop exists, the prop wins.
 
@@ -237,13 +237,13 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 </Column>
 ```
 
-22. `Background` gradient units: `x`/`y` place the centre as a percentage string of the container (`"50%"`/`"50%"` = center) or px as a number. `width`/`height` are the ellipse's radii, as a percentage string of the container (`"100%"`, the default) or px. A soft corner glow is `width: "100%"`–`"200%"`; `"500%"` overshoots the container. `Mask` is the same: `x`/`y` percentage strings, `radius` a CSS length (`"50vh"`, the default) or px.
+22. `Background` gradient units: `x`/`y` place the centre as a percentage string of the container (`"50%"`/`"50%"` = center) or a number on the token scale. `width`/`height` are the ellipse's radii, as a percentage string of the container (`"100%"`, the default) or a number. A soft corner glow is `width: "100%"`–`"200%"`; `"500%"` overshoots the container. `Mask` is the same: `x`/`y` percentage strings, `radius` a CSS length (`"50vh"`, the default) or a number.
 
 23. Color visibility: `*-background-weak` is nearly the page color — it is invisible as an accent. For tints and glows use alpha tokens (`brand-alpha-medium`, `brand-alpha-strong`) or solid tokens (`brand-solid-strong`) and do not stack a low `opacity` on top of an already-weak color.
 
 ## Effect units
 
-24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `HoverCard placement="cover"` `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx` and `LetterFx`. `translateY` as a number is in **px** — use a token like `"16"` (1rem) or `translateY={16}`.
+24. Time is **milliseconds** everywhere: every `duration`, `delay`, `hold` and interval. Stagger with `delay={index * 100}`, never `index * 0.1` (that was 1.8.x, and 2.0 reads it as a tenth of a millisecond, i.e. no stagger at all). That covers `RevealFx` `duration` and `delay`, `ShineFx` and `CountFx` `duration`, `TypeFx` `charDuration`, `delay` and `hold`, `CelebrationFx` and `WeatherFx` `duration` (`5000`, not `5`), `MatrixFx` `bulge.duration`, `FlipFx` `autoFlipInterval`, `Animation`/`HoverCard` `delay` and `duration`, `HoverCard placement="cover"` `hideDelay`, `Skeleton` `delay`. `speed` is only ever a **multiplier** — `1` is the default, `2` twice as fast, `0.5` half — or `"slow"`/`"medium"`/`"fast"` (0.5/1/2), on `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx` and `LetterFx`. `translateY` as a number is on the token scale (`16` = `"16"` = 1rem) — use a token like `"16"` or `translateY={16}`.
 
 25. `LogoCloud` extends `Grid` — always set `columns` (and responsive overrides), or logos stack in one column: `columns="4" m={{ columns: 3 }} s={{ columns: 2 }}`.
    A logo that changes with the theme is one `Logo` with a source per theme — `<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} />`, and `icon` takes the same pair — not a `<Logo showIn="dark">` beside a `<Logo showIn="light">`. Keep `showIn` for a logo that should only appear in one theme.
@@ -252,7 +252,7 @@ Siblings holding content get `zIndex={1}`. That layer and its content sibling ar
 
 ## Motion
 
-27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem, or 8–16 as px numbers), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
+27. Animations are **eye-leading, not eye-grabbing**: they direct attention to the one thing that should be read next, they don't announce themselves. Small distances (`translateY="8"`–`"16"`, i.e. 0.5–1rem, or 8–16 as numbers), short staggers (`delay={index * 100}` max), and only on elements worth leading the eye to — the hero heading, stat numbers, the highlighted card in a set.
 
 28. Do **not** wrap every section in `RevealFx` — uniform entrance animation on everything reads dated and makes scrolling feel slow. Entry-animation budget per page: the hero, plus at most one or two key moments (stats, a card set). Everything else just renders.
 
@@ -361,6 +361,11 @@ export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme
 <ThemeInit config={style} dataStyle={dataStyle} />
 <ThemeProvider {...style}><DataThemeProvider {...dataStyle}>...</DataThemeProvider></ThemeProvider>
 ```
+
+A denser or roomier app is `style.density` (`"compact"`, `"normal"`, `"spacious"`), not a
+`size` on every control: Button, IconButton, ToggleButton, SegmentedControl, Tag, Switch,
+Checkbox, RadioButton, RadioGroup and Slider with no `size` take s, m or l from it, and
+it picks `scaling` 95/100/105 unless `scaling` is set. A `size` on a control still wins.
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so

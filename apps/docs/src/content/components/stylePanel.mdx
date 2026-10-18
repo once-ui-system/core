@@ -54,6 +54,7 @@ Applies the following `data-*` attributes to the `<html>` element:
 - `data-theme`
 - `data-transition`
 - `data-scaling`
+- `data-density` (the Density row: compact, normal or spacious controls; a new density brings its scaling along until a scaling is chosen)
 - `data-surface`
 - `data-body-size`
 - `data-body-line-height`
@@ -74,7 +75,7 @@ pieces inside `StylePanel.Root`:
 ```
 
 Rows: `Theme`, `Shape`, `Brand`, `Accent`, `Neutral`, `Solid`, `Effect`,
-`Surface`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
+`Surface`, `Density`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
 Groups: `Page`, `Color`, `SolidStyle`, `BodyText`, `Advanced`.
 
 Only `DataStyle` needs a `DataThemeProvider` in the tree, so a panel without
@@ -223,8 +224,8 @@ export function SiteStylePanel({ saved, save }: {
 | Key | Covers |
 | --- | --- |
 | `groups` | Each group's `title` and `description`, keyed like `visibility`: `page`, `color`, `solidStyle`, `bodyText`, `advanced`. |
-| `rows` | Each row's label, keyed by its part name: `theme`, `shape`, `brand`, `accent`, `neutral`, `solid`, `effect`, `surface`, `scaling`, `transition`, `dataStyle`, `bodySize`, `bodyLineHeight`. |
-| `options` | The segmented options, by row and value (`solid.inverse`, `transition.micro`, `dataStyle.sequential`), and a formatter for each numeric row: `scaling`, `bodySize`, `bodyLineHeight`. |
+| `rows` | Each row's label, keyed by its part name: `theme`, `shape`, `brand`, `accent`, `neutral`, `solid`, `effect`, `surface`, `density`, `scaling`, `transition`, `dataStyle`, `bodySize`, `bodyLineHeight`. |
+| `options` | The segmented options, by row and value (`solid.inverse`, `transition.micro`, `dataStyle.sequential`, `density.compact`), and a formatter for each numeric row: `scaling`, `bodySize`, `bodyLineHeight`. |
 | `names` | Display names for `shapes`, `schemes` and `neutrals`. They default to the key (`"blue"`), and the swatches' names are built from them. |
 | `swatches` | The swatches' accessible names, as functions of that display name: `shape`, `scheme` (which also gets the row, `"brand"` or `"accent"`) and `neutral`. The defaults read `Corner style: sharp`, `Brand colour: blue` and `Neutral colour: gray`. |
 | `themeSwitcher` | "System theme", "Dark theme" and "Light theme". [ThemeSwitcher](/components/themeSwitcher) takes the same object as its own `labels`. |

@@ -6,6 +6,7 @@ import {
   type CustomSchemeSeeds,
   customSchemeProperties,
 } from "../utils/colorScheme.js";
+import { DENSITIES, densityScaling } from "../utils/density.js";
 import { safeScriptJson } from "../utils/safe-html.js";
 
 /**
@@ -75,6 +76,17 @@ function themeInitAttributes(
   return attributes;
 }
 
+/**
+ * The scaling each density picks, for the script, when the config sets a
+ * density but no scaling of its own: then the density chosen on the page
+ * (stored) brings its scaling too. `null` when the config sets a scaling,
+ * which always wins, or no density.
+ */
+function derivedScaling(attributes: Record<string, string>): Record<string, string> | null {
+  if (attributes.scaling || !densityScaling(attributes.density)) return null;
+  return Object.fromEntries(Object.entries(DENSITIES).map(([name, d]) => [name, d.scaling]));
+}
+
 export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   const seeds: CustomSchemeSeeds = {};
   for (const [key, scheme] of Object.entries(SEED_KEYS)) {
@@ -84,6 +96,9 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   // Generated here, on the server, so a custom scheme is in the document
   // before anything paints: no flash of a page with no brand colour.
   const schemeProperties = customSchemeProperties(seeds);
+  const attributes = themeInitAttributes(config, dataStyle, schemeProperties);
+  const densityScales = derivedScaling(attributes);
+  if (densityScales) attributes.scaling = densityScales[attributes.density];
   const schemeCss = Object.entries(schemeProperties)
     .map(([property, value]) => `${property}:${value};`)
     .join("");
@@ -97,7 +112,8 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
           (function() {
             try {
               const root = document.documentElement;
-              const config = ${safeScriptJson(themeInitAttributes(config, dataStyle, schemeProperties))};
+              const config = ${safeScriptJson(attributes)};
+              const densityScaling = ${safeScriptJson(densityScales)};
 
               // Apply config defaults FIRST (prevents FOUC)
               Object.entries(config).forEach(([key, value]) => {
@@ -126,6 +142,13 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
                   root.setAttribute('data-' + key, value);
                 }
               });
+
+              // A density with no scaling set brings its own scaling, also
+              // when the density was chosen on the page and stored.
+              if (densityScaling && !localStorage.getItem('data-scaling')) {
+                const density = localStorage.getItem('data-density') || config.density;
+                if (densityScaling[density]) root.setAttribute('data-scaling', densityScaling[density]);
+              }
 
             } catch (e) {
               console.error('Failed to initialize theme:', e);

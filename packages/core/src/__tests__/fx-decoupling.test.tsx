@@ -8,6 +8,7 @@ import { CountUp } from "../internal/CountUp";
 import { Reveal } from "../internal/Reveal";
 import { ShineText } from "../internal/ShineText";
 import { formatCount } from "../internal/useCountUp";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -123,7 +124,7 @@ describe("Reveal", () => {
     );
     const el = container.firstElementChild as HTMLElement;
     expect(el.style.transitionDuration).toBe("250ms");
-    expect(el.style.transform).toBe("translateY(16px)");
+    expect(el.style.transform).toBe(`translateY(${t(16)})`);
   });
 
   it("starts hidden and reveals once mounted", () => {

@@ -34,6 +34,10 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
    * `announce`, the pill with a shine (2.x's Badge).
    */
   variant?: "default" | "gradient" | "announce";
+  /**
+   * Left out, the theme's `density` picks it: s when compact, m when normal
+   * (the default), l when spacious. A size given here always wins.
+   */
   size?: TShirtSizes;
   label?: string;
   prefixIcon?: IconName;
@@ -88,7 +92,7 @@ const Tag = ({
   ref,
   tone,
   variant = "default",
-  size = "m",
+  size: sizeProp,
   label = "",
   prefixIcon,
   suffixIcon,
@@ -106,6 +110,10 @@ const Tag = ({
   ...rest
 }: TagProps) => {
   const arrowId = useId();
+  // Left out, the size is m, restyled by the theme's `density` in CSS.
+  const size = sizeProp ?? "m";
+  const auto = sizeProp === undefined;
+  const iconClass = auto ? styles.icon : undefined;
   const arrow = arrowProp ?? href !== undefined;
 
   if (!href && (selected !== undefined || onRemove)) {
@@ -114,7 +122,7 @@ const Tag = ({
       <InteractiveTag
         ref={ref}
         tone={tone}
-        size={size}
+        size={sizeProp}
         label={label}
         prefixIcon={prefixIcon}
         suffixIcon={suffixIcon}
@@ -173,6 +181,7 @@ const Tag = ({
       data-tag-arrow={arrow ? arrowId : undefined}
       className={classNames(
         styles.tag,
+        auto && styles.auto,
         gradient ? styles.gradient : undefined,
         effect ? styles.shine : undefined,
         announce ? styles.announce : undefined,
@@ -187,11 +196,12 @@ const Tag = ({
           <Icon
             marginRight="8"
             size={ANNOUNCE_ICON[size]}
+            className={iconClass}
             name={prefixIcon}
             onBackground={`${palette}-medium`}
           />
         ) : (
-          <Icon name={prefixIcon} size={ICON[size]} />
+          <Icon name={prefixIcon} size={ICON[size]} className={iconClass} />
         ))}
       {announce ? (
         // As 2.x's Badge: the text sits in the pill itself, so children
@@ -202,7 +212,7 @@ const Tag = ({
           <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
         </Row>
       )}
-      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
+      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} className={iconClass} />}
       {/* The arrow follows hover on this tag only: each one has its own id. */}
       {arrow && <Arrow trigger={`[data-tag-arrow="${arrowId}"]`} />}
     </Row>

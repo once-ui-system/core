@@ -40,7 +40,7 @@ export function Checkbox({
   style,
 }: CheckboxProps) {
   const theme = useTheme();
-  const chrome = controlChrome({ size, error, errorMessage });
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
   const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
   const filled = on || indeterminate;
   const box = theme.space(BOX[chrome.size]);

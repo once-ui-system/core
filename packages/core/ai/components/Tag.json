@@ -12,7 +12,7 @@
  "props": {
   "tone": "Tone",
   "variant": "\"default\" | \"gradient\" | \"announce\" = default",
-  "size": "TShirtSizes = m",
+  "size": "TShirtSizes",
   "label": "string = \"\"",
   "prefixIcon": "IconName",
   "suffixIcon": "IconName",

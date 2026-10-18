@@ -9,7 +9,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: NavVariant; rail...",
+   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: NavVariant; rail: b...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "useFormPending": {
@@ -304,6 +304,11 @@
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "DeviceFontSize": [
    "16",
    "13",
@@ -444,11 +449,6 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
-  "NavDensity": [
-   "normal",
-   "compact",
-   "spacious"
-  ],
   "NavVariant": [
    "solid",
    "subtle",
@@ -554,6 +554,7 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -638,6 +639,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -661,6 +663,7 @@
    "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
@@ -679,6 +682,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",

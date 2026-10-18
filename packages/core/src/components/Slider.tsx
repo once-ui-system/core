@@ -9,7 +9,7 @@ import type { TShirtSizes } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useControlLabel } from "./ControlLabelContext.js";
-import { useFieldSize } from "./FormContext.js";
+import { useFieldSizing } from "./FormContext.js";
 import { Row } from "./Row.js";
 import styles from "./Slider.module.scss";
 import { Text } from "./Text.js";
@@ -29,7 +29,11 @@ interface SliderFieldProps extends LeafProps {
   error?: boolean;
   /** A message below the slider, which describes it; it also sets the error state. */
   errorMessage?: ReactNode;
-  /** Thumb and track size. Defaults to the surrounding `Form`'s size, else `"m"` (the 2.x look). */
+  /**
+   * Thumb and track size. Defaults to the surrounding `Form`'s size; outside
+   * one the theme's `density` picks it (s when compact, m when normal, the
+   * 2.x look, l when spacious).
+   */
   size?: TShirtSizes;
 }
 
@@ -268,7 +272,7 @@ const SliderImpl = ({
 }: SliderProps & { ref?: React.Ref<HTMLElement> }) => {
   const props = { ...others, min, max, step, showValue, disabled, error } as SliderProps;
   const messageId = useId();
-  const size = useFieldSize(props.size);
+  const { size, auto } = useFieldSizing(props.size);
   const invalid = Boolean(props.error || props.errorMessage);
   const footer = props.errorMessage ? (
     <Text
@@ -281,7 +285,8 @@ const SliderImpl = ({
     </Text>
   ) : null;
   const shared = {
-    sizeClassName: size === "m" ? undefined : styles[size],
+    // Left out here and on a Form, the theme's density restyles it in CSS.
+    sizeClassName: auto ? styles.auto : size === "m" ? undefined : styles[size],
     footer,
     describedBy: props.errorMessage ? messageId : undefined,
   };

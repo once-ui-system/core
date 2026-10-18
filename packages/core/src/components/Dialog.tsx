@@ -5,6 +5,7 @@ import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
 import { useOverlay } from "../internal/useOverlay.js";
+import { tokenLength } from "../utils/layoutClasses.js";
 import { Column } from "./Column.js";
 import styles from "./Dialog.module.scss";
 import { Flex } from "./Flex.js";
@@ -42,6 +43,7 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
    *  only an action in the dialog should dismiss it. */
   showClose?: boolean;
   onHeightChange?: (height: number) => void;
+  /** The dialog's minimum height, on the token scale (`320` is 20rem). */
   minHeight?: number;
   closeOnClickaway?: boolean;
 }
@@ -200,7 +202,7 @@ const Dialog = ({
             style={{
               transform: isAnimating ? "translateY(0)" : "translateY(4rem)",
               transition: "transform 600ms ease",
-              minHeight: minHeight ? `${minHeight}px` : undefined,
+              minHeight: minHeight ? tokenLength(minHeight) : undefined,
             }}
             {...rest}
           >
@@ -285,7 +287,7 @@ const Dialog = ({
               [styles.open]: isAnimating,
             })}
             style={{
-              minHeight: minHeight ? `${minHeight}px` : undefined,
+              minHeight: minHeight ? tokenLength(minHeight) : undefined,
             }}
             ref={dialogRef}
             fillWidth

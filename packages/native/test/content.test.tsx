@@ -182,15 +182,15 @@ describe("content", () => {
     expect(header.getAttribute("aria-expanded")).toBe("false");
   });
 
-  it("Accordion opens from its handle, or follows open with onToggle", () => {
+  it("Accordion opens from its handle, or follows open with onOpenChange", () => {
     const ref = createRef<AccordionHandle>();
-    const onToggle = vi.fn();
+    const onOpenChange = vi.fn();
     wrap(
       <>
         <Accordion ref={ref} title="Handle">
           <Text>One</Text>
         </Accordion>
-        <Accordion title="Controlled" open onToggle={onToggle}>
+        <Accordion title="Controlled" open onOpenChange={onOpenChange}>
           <Text>Two</Text>
         </Accordion>
       </>,
@@ -201,7 +201,7 @@ describe("content", () => {
     );
     const controlled = screen.getByRole("button", { name: /Controlled/ });
     fireEvent.click(controlled);
-    expect(onToggle).toHaveBeenCalledOnce();
+    expect(onOpenChange).toHaveBeenCalledWith(false);
     expect(controlled.getAttribute("aria-expanded")).toBe("true");
   });
 
@@ -245,7 +245,7 @@ describe("content", () => {
     wrap(
       <>
         <StatusIndicator color="green" />
-        <StatusIndicator color="red" ariaLabel="Closed" size="l" />
+        <StatusIndicator color="red" aria-label="Closed" size="l" />
         <StatusIndicator scheme="yellow" />
       </>,
     );
@@ -260,7 +260,7 @@ describe("Flex props on Media and StatusIndicator", () => {
     const { container } = render(
       <ThemeProvider theme="dark">
         <Media src="https://example.com/a.jpg" alt="Latte" hide />
-        <StatusIndicator color="green" xl={{ style: { marginTop: 7 } }} ariaLabel="Open" />
+        <StatusIndicator color="green" xl={{ style: { marginTop: 7 } }} aria-label="Open" />
       </ThemeProvider>,
     );
     expect(container.querySelector("img")).toBeNull();

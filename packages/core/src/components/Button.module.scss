@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .button {
@@ -201,11 +202,15 @@ $solid-tokens: brand, danger, neutral;
   gap: var(--static-space-2);
 }
 
-.s {
+@mixin s {
   padding: var(--static-space-4) var(--static-space-8);
   min-height: var(--static-space-32);
   height: var(--static-space-32);
   gap: var(--static-space-4);
+}
+
+.s {
+  @include s;
 }
 
 .m {
@@ -215,11 +220,47 @@ $solid-tokens: brand, danger, neutral;
   gap: var(--static-space-4);
 }
 
-.l {
+@mixin l {
   padding: var(--static-space-12) var(--static-space-20);
   min-height: var(--static-space-48);
   height: var(--static-space-48);
   gap: var(--static-space-8);
+}
+
+.l {
+  @include l;
+}
+
+/* No `size`: m above, or the theme density's s or l (density.scss). Button.tsx
+   puts `.label` and `.icon` on the parts a size also picks presets for. */
+.auto {
+  @include density.size(s) {
+    @include s;
+  }
+
+  @include density.parts(s) {
+    .label {
+      @include density.text(label, s);
+    }
+
+    .icon {
+      @include density.icon(xs);
+    }
+  }
+
+  @include density.size(l) {
+    @include l;
+
+    &:global(.radius-m) {
+      border-radius: var(--radius-l);
+    }
+  }
+
+  @include density.parts(l) {
+    .label {
+      @include density.text(label, l);
+    }
+  }
 }
 
 .xl {

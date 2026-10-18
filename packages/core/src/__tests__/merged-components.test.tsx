@@ -104,7 +104,9 @@ describe("Scroller auto (2.x AutoScroll)", () => {
     );
     expect(screen.getAllByText("Logo")).toHaveLength(2);
     expect(screen.queryByRole("button")).toBeNull();
-    expect(screen.getAllByText("Logo")[0].parentElement).toHaveStyle({ marginRight: "24px" });
+    expect(screen.getAllByText("Logo")[0].parentElement).toHaveStyle({
+      marginRight: "var(--static-space-24)",
+    });
   });
 });
 

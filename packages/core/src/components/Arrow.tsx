@@ -23,7 +23,7 @@ interface ArrowProps extends Omit<React.ComponentProps<typeof Flex>, "children" 
 /**
  * The animated arrow Button `arrowIcon` and Tag `arrow` draw, on its own: put
  * it in a card or a link and point `trigger` at that element. Its layout props
- * are Flex's (a number is px).
+ * are Flex's (a number is on the token scale).
  */
 const Arrow = ({
   ref,

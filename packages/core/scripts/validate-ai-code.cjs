@@ -766,7 +766,8 @@ const REM_HABIT_BELOW = 10;
  * A box sized as if numbers were still rem (2.x): two of `width`, `height`,
  * `minWidth`, `minHeight` set to the same small number (`width={2}
  * height={2}`) on an element that holds only an icon, avatar or a line of
- * text. A number is px in 3.0, so that box is 2 px. Boxes holding layout are
+ * text. A number is on the token scale in 3.0 (`2` is `"2"`, 0.125rem), so
+ * that box is 2 px at the default root size. Boxes holding layout are
  * left alone. Returns the number, or 0.
  */
 function pixelBoxSize(source, tag) {
@@ -1363,7 +1364,7 @@ function validate(source, spec, iconNames, options = {}) {
     const [tag, size] = pixelBox;
     add(
       "size.rem",
-      `${tag.name} sized ${size} around an icon or label is ${size} px — a number is px in 3.0 (it was rem in 2.x). For ${size}rem write width="${size}rem", or the px it was: width={${size * 16}}`,
+      `${tag.name} sized ${size} around an icon or label is ${size} px — a number is on the token scale in 3.0 (${size} is "${size}", ${size / 16}rem; it was rem in 2.x). For ${size}rem write width="${size}rem", or the number it was: width={${size * 16}}`,
     );
   }
 

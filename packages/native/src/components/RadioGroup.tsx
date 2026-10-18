@@ -67,7 +67,7 @@ export function RadioButton({
   const inGroup = group !== null && value !== undefined;
   const disabled = disabledProp || (inGroup && group.disabled);
   const chrome = controlChrome({
-    size: sizeProp ?? (inGroup ? group.size : undefined),
+    size: sizeProp ?? (inGroup ? group.size : theme.controlSize),
     error: error ?? (inGroup ? group.invalid : undefined),
     errorMessage,
   });
@@ -190,7 +190,8 @@ export function RadioGroup({
   children,
   style,
 }: RadioGroupProps) {
-  const chrome = controlChrome({ size, error, errorMessage });
+  const theme = useTheme();
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
   const text = CONTROL_TEXT[chrome.size];
   const [selected, select] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
     if (v !== undefined) onValueChange?.(v);

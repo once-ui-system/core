@@ -3,7 +3,9 @@ import type { StaticSpacingToken } from "@once-ui-system/core";
 /**
  * RevealFx's `translateY` as a CSS length, read exactly as core's layout
  * props read `translateY` (`translateValue` in core's
- * `src/utils/layoutClasses.ts`, which is internal): a number is px, a static
+ * `src/utils/layoutClasses.ts`, which is internal): a number is on the token
+ * scale (`tokenLength`: n/16 rem times `--scaling`, as the token `"n"`,
+ * read through a `--ou-n-*` property core's Flex declares), a static
  * step is its `--static-space-*`, a t-shirt size its `--responsive-space-*`,
  * and a CSS length passes through. `__tests__/internal-parity.test.ts` holds
  * the two to the same answers.
@@ -41,7 +43,18 @@ const CSS_LENGTH =
 const CSS_FUNCTION = /^(calc|min|max|clamp|var)\(/;
 
 export function translateValue(value: unknown): string | undefined {
-  if (typeof value === "number") return `${value}px`;
+  if (typeof value === "number") {
+    if (value === 0) return "0px";
+    if (STATIC_SPACING.has(String(value))) return `var(--static-space-${value})`;
+    // Core's `--ou-n-*` property, named the same way: every effect writes its
+    // style through core's Flex, whose `withTokenLengths` declares it on the
+    // element (the scaled `calc()` stays out of the length itself, which
+    // jsdom cannot compute).
+    const text = String(value);
+    return /^-?\d+(\.\d+)?$/.test(text)
+      ? `var(--ou-n-${text.replace(".", "_")})`
+      : `${value / 16}rem`;
+  }
   if (typeof value !== "string") return undefined;
   if (CSS_LENGTH.test(value) || CSS_FUNCTION.test(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;

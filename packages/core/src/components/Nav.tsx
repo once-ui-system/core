@@ -3,10 +3,12 @@
 import type React from "react";
 import { createContext, type ReactNode, useContext } from "react";
 import type { SpacingToken } from "../types.js";
+import type { Density } from "../utils/density.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
 
-type NavDensity = "compact" | "normal" | "spacious";
+/** The theme-wide density's values; Nav takes its own until it follows the theme's. */
+type NavDensity = Density;
 type NavVariant = "solid" | "subtle" | "minimal";
 
 interface NavStyle {

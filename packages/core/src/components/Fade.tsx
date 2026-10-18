@@ -1,6 +1,7 @@
 import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { ColorScheme, ColorWeight, CSSUnit, SpacingToken } from "../types.js";
+import { cssLength } from "../utils/layoutClasses.js";
 import styles from "./Fade.module.scss";
 import { Flex } from "./Flex.js";
 
@@ -16,7 +17,7 @@ interface FadeProps extends React.ComponentProps<typeof Flex> {
   className?: string;
   to?: "bottom" | "top" | "left" | "right";
   base?: BaseColor;
-  /** Backdrop blur: a number is px, a string a CSS length. Default 0.5rem (a number was rem until 3.0). */
+  /** Backdrop blur: a number is on the token scale (`8` is 0.5rem), a string a CSS length. Default 0.5rem. */
   blur?: number | CSSUnit;
   pattern?: {
     display?: boolean;
@@ -53,7 +54,7 @@ const Fade = ({
       : `var(--${scheme}-background-${weight})`;
   };
 
-  const backdropBlur = `blur(${blur === undefined ? "0.5rem" : typeof blur === "number" ? `${blur}px` : blur})`;
+  const backdropBlur = `blur(${blur === undefined ? "0.5rem" : cssLength(blur)})`;
 
   return (
     <Flex

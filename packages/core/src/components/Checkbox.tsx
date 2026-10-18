@@ -102,6 +102,7 @@ const Checkbox = ({
       vertical="center"
       gap="16"
       className={classNames(styles.container, className, styles[chrome.size], {
+        [styles.auto]: chrome.auto,
         [styles.error]: chrome.invalid,
         [styles.disabled]: disabled,
         [styles.noHover]: !hoverable,
@@ -176,6 +177,7 @@ const Checkbox = ({
           labelId={labelId}
           descriptionId={descriptionId}
           size={chrome.size}
+          auto={chrome.auto}
           errorMessage={chrome.showsError ? errorMessage : undefined}
           errorId={chrome.errorId}
           onClick={disabled ? () => {} : activate}

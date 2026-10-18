@@ -10,9 +10,8 @@ import styles from "./Gauge.module.css";
 
 export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, "direction"> {
   /**
-   * The drawing's width in px. The gauge scales to fit its container, so this
-   * sets its proportions; it is px like every other size, but it is not the
-   * box's `width` (put `maxWidth` on the gauge for that).
+   * The drawing's width, in the SVG's own units (px). The gauge scales to fit
+   * its container, so this sets its proportions only; it is not the box's `width` (put `maxWidth` on the gauge for that).
    */
   width?: number;
   /** The drawing's height in px; see `width`. */

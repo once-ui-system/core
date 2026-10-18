@@ -22,6 +22,10 @@ import { Tooltip } from "./Tooltip.js";
 interface IconButtonCommonProps extends LeafProps {
   icon?: IconName;
   id?: string;
+  /**
+   * Left out, the theme's `density` picks it: s when compact, m when normal
+   * (the default), l when spacious. A size given here always wins.
+   */
   size?: TShirtSizes;
   corners?:
     | "none"
@@ -56,7 +60,7 @@ type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchor
 const IconButton = ({
   ref,
   icon = "refresh",
-  size = "m",
+  size: sizeProp,
   id,
   corners,
   rounded = false,
@@ -76,6 +80,8 @@ const IconButton = ({
 }: (IconButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
   const layout = leafLayout(leaf);
+  // Left out, the size is m, restyled by the theme's `density` in CSS.
+  const size = sizeProp ?? "m";
   const radiusSize = size === "s" || size === "m" ? "m" : "l";
   const trigger = useDropdownTrigger();
 
@@ -114,6 +120,7 @@ const IconButton = ({
         buttonStyles[variant],
         buttonStyles[`tone-${tone ?? defaultButtonTone(variant)}`],
         iconStyles[size],
+        sizeProp === undefined && iconStyles.auto,
         corners === "none"
           ? "radius-none"
           : corners

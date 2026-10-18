@@ -27,6 +27,10 @@ interface ButtonCommonProps extends LeafProps {
    * `neutral` on the rest. 2.x's `variant="danger"` is `tone="danger"`.
    */
   tone?: Tone;
+  /**
+   * Left out, the theme's `density` picks it: s when compact, m when normal
+   * (the default), l when spacious. A size given here always wins.
+   */
   size?: TShirtSizes;
   corners?:
     | "none"
@@ -59,7 +63,7 @@ const Button = ({
   ref,
   variant = "primary",
   tone,
-  size = "m",
+  size: sizeProp,
   corners,
   rounded,
   label,
@@ -80,6 +84,10 @@ const Button = ({
 }: (ButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
   const layout = leafLayout(leaf);
+  // Left out, the size is m, restyled by the theme's `density` in CSS
+  // (`styles.auto`); a `size` given here always wins.
+  const size = sizeProp ?? "m";
+  const auto = sizeProp === undefined;
   const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
   const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
   const trigger = useDropdownTrigger();
@@ -101,6 +109,7 @@ const Button = ({
         styles[variant],
         styles[`tone-${tone ?? defaultButtonTone(variant)}`],
         styles[size],
+        auto && styles.auto,
         corners === "none"
           ? "radius-none"
           : corners
@@ -120,10 +129,17 @@ const Button = ({
       style={{ ...layout.style, ...style }}
       {...props}
     >
-      {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
+      {prefixIcon && !loading && (
+        <Icon name={prefixIcon} size={iconSize} className={auto ? styles.icon : undefined} />
+      )}
       {loading && <Spinner size={size} />}
       {(label || children) && (
-        <Flex paddingX="4" paddingY="0" textVariant={`label-${weight}-${size}`}>
+        <Flex
+          paddingX="4"
+          paddingY="0"
+          textVariant={`label-${weight}-${size}`}
+          className={auto ? styles.label : undefined}
+        >
           {label || children}
         </Flex>
       )}
@@ -137,7 +153,9 @@ const Button = ({
           color={variant === "primary" ? "onSolid" : "onBackground"}
         />
       )}
-      {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
+      {suffixIcon && (
+        <Icon name={suffixIcon} size={iconSize} className={auto ? styles.icon : undefined} />
+      )}
     </ElementType>
   );
 };

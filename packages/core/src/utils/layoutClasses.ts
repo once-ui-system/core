@@ -53,7 +53,8 @@ const RESPONSIVE_SIZES = new Set<unknown>(["xs", "s", "m", "l", "xl"]);
  * cannot hold it, so it is passed through inline as written.
  *
  * A bare digit string is not a CSS length: `"16"` is the static spacing token
- * `--static-space-16`, and `16` (the number) is 16px.
+ * `--static-space-16`. The number `16` is read on the same scale (see
+ * {@link tokenLength}), so it renders as that token does.
  */
 const CSS_LENGTH =
   /^-?(\d+\.?\d*|\.\d+)(px|rem|em|ch|%|vh|vw|dvh|dvw|svh|svw|lvh|lvw|vmin|vmax|cqw|cqh)$/;
@@ -64,22 +65,102 @@ export function isCSSUnit(value: unknown): value is string {
 }
 
 /**
- * A number as a CSS length. Every size, spacing, offset and blur prop reads a
- * number as px, the convention of React's own `style={{ width: 320 }}`; write
- * `"40rem"` for a length that follows the root font size.
+ * A number as a CSS length on the token scale. Every size, spacing, offset and
+ * blur prop reads a number `n` as the static token `"n"` would be: n/16 rem,
+ * multiplied by `--scaling` (1, or what `[data-scaling]` sets), so
+ * `width={40}` is `"40"` (2.5rem) and both follow the root font size and the
+ * theme's scaling together. At the default root size and scaling, `n` is n
+ * device pixels, as before. Write `"40px"` for a length that must not scale.
+ *
+ * The exceptions are lengths that are device pixels by nature: border widths,
+ * hairlines, measured positions and sizes, and the `sizes` hint of an image.
+ *
+ * A step of the scale is that token itself (`var(--static-space-16)`). Any
+ * other number is a custom property named after it (`var(--ou-n-300)`), which
+ * {@link withTokenLengths} declares on the same element as
+ * `calc(18.75rem * var(--scaling, 1))`. The multiplication lives in a custom
+ * property, never in the length itself, because jsdom (30) throws from
+ * `getComputedStyle` on a length property whose value is math holding a
+ * `var()`, and testing-library's role queries call it on every element:
+ * `max-width: calc(… var() …)` would break every jsdom test of an app that
+ * passes such a number. A custom property's value is never resolved there, and
+ * a bare `var()` passes through. So every inline style that can hold a token
+ * length goes through `withTokenLengths`.
  */
-export function px(value: number): string {
-  return `${value}px`;
+export function tokenLength(value: number): string {
+  // Zero is zero on any scale; a length unit keeps it valid inside `calc()`.
+  if (value === 0) return "0px";
+  const step = String(value);
+  if (STATIC_SPACING.has(step)) return `var(--static-space-${step})`;
+  const name = tokenLengthName(value);
+  // A number with no plain decimal form (1e-7, Infinity) has no name; it
+  // keeps its rem length and simply does not scale.
+  return name ? `var(${name})` : `${value / 16}rem`;
+}
+
+const TOKEN_LENGTH_PREFIX = "--ou-n-";
+const TOKEN_LENGTH_REF = /var\(--ou-n-(-?\d+(?:_\d+)?)\)/g;
+
+/** `--ou-n-300`, `--ou-n-12_5`, `--ou-n--8`: the custom property a number reads. */
+function tokenLengthName(value: number): string | undefined {
+  const text = String(value);
+  return /^-?\d+(\.\d+)?$/.test(text) ? TOKEN_LENGTH_PREFIX + text.replace(".", "_") : undefined;
+}
+
+/**
+ * An inline style with every `var(--ou-n-*)` a {@link tokenLength} put in its
+ * values declared beside it, so the element computes its own scaled length:
+ * `{ maxWidth: "var(--ou-n-300)", "--ou-n-300": "calc(18.75rem * var(--scaling, 1))" }`.
+ * The same object back when there is nothing to declare.
+ */
+export function withTokenLengths<T extends object | undefined>(style: T): T {
+  if (!style) return style;
+  const declarations = tokenLengthDeclarations(Object.values(style));
+  return declarations ? { ...style, ...declarations } : style;
+}
+
+/**
+ * {@link withTokenLengths} for a style written straight to the DOM (a
+ * positioning middleware's `element.style`): declares the `--ou-n-*` each of
+ * `values` reads on `style`.
+ */
+export function declareTokenLengths(style: CSSStyleDeclaration, ...values: unknown[]): void {
+  const declarations = tokenLengthDeclarations(values);
+  if (!declarations) return;
+  for (const [name, value] of Object.entries(declarations)) style.setProperty(name, value);
+}
+
+/** Every `--ou-n-*` the values read, with its declaration; none, `undefined`. */
+function tokenLengthDeclarations(values: unknown[]): Record<string, string> | undefined {
+  let declarations: Record<string, string> | undefined;
+  for (const value of values) {
+    if (typeof value !== "string" || !value.includes(TOKEN_LENGTH_PREFIX)) continue;
+    for (const [, key] of value.matchAll(TOKEN_LENGTH_REF)) {
+      declarations ??= {};
+      declarations[TOKEN_LENGTH_PREFIX + key] = tokenLengthDeclaration(key);
+    }
+  }
+  return declarations;
+}
+
+/** The value of a `--ou-n-*` property, from the key in its name. */
+function tokenLengthDeclaration(key: string): string {
+  return `calc(${Number(key.replace("_", ".")) / 16}rem * var(--scaling, 1))`;
+}
+
+/** A number on the token scale ({@link tokenLength}), a string as written. */
+export function cssLength<T extends string | undefined>(value: number | T): string | T {
+  return typeof value === "number" ? tokenLength(value) : value;
 }
 
 /**
  * A size prop (`width`, `minHeight`, `minColumnWidth`…) as a CSS value: a
- * number is px, a static token is its `--static-space-*` step, a t-shirt
+ * number is on the token scale, a static token is its `--static-space-*` step, a t-shirt
  * size is the responsive width or height, and a CSS length passes through.
  * Anything else is no value at all, as before.
  */
 export function sizeValue(value: unknown, type: "width" | "height"): string | undefined {
-  if (typeof value === "number") return px(value);
+  if (typeof value === "number") return tokenLength(value);
   if (typeof value !== "string") return undefined;
   if (isCSSUnit(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
@@ -89,11 +170,11 @@ export function sizeValue(value: unknown, type: "width" | "height"): string | un
 
 /**
  * A spacing value (`padding`, `margin`, `gap`) that a class cannot hold, as
- * its inline value: a number is px and a CSS length passes through. A token
+ * its inline value: a number is on the token scale and a CSS length passes through. A token
  * is a class (`.p-16`) and is not written inline.
  */
 export function spacingValue(value: unknown): string | undefined {
-  if (typeof value === "number") return px(value);
+  if (typeof value === "number") return tokenLength(value);
   if (isCSSUnit(value)) return value;
   return undefined;
 }
@@ -155,7 +236,7 @@ const SPACING_PREFIX = {
  * `typeof value === "number"`, so the string fell through both. Numbers worked,
  * tokens did not, and neither said so.
  *
- * Numbers (px) and CSS lengths still go to the inline path, since `gap: 4` or
+ * Numbers and CSS lengths still go to the inline path, since `gap: 4` or
  * `gap: "0.25rem"` has no class behind it; `Flex` and `Grid` keep those on the
  * client component.
  */
@@ -174,7 +255,7 @@ const OFFSET_SIDES = ["top", "right", "bottom", "left"] as const;
 /**
  * An offset with a class behind it. Foundations generates `top`, `right`,
  * `bottom` and `left` for the static steps only, at the base and at every
- * breakpoint (`.m-top-16`); a t-shirt size, a px number and a CSS length have
+ * breakpoint (`.m-top-16`); a t-shirt size, a number and a CSS length have
  * none.
  */
 export function isOffsetToken(value: unknown): value is StaticSpacingToken {
@@ -182,12 +263,12 @@ export function isOffsetToken(value: unknown): value is StaticSpacingToken {
 }
 
 /**
- * An offset a class cannot hold, as its inline value: a number is px (`top: 2`
- * is 2px, while `top: "2"` is the 0.125rem `.top-2`), and a CSS length passes
+ * An offset a class cannot hold, as its inline value: a number is on the token
+ * scale (`top: 2` renders as `top: "2"`, the 0.125rem `.top-2`, does), and a CSS length passes
  * through.
  */
 export function offsetValue(value: unknown): string | undefined {
-  if (typeof value === "number") return px(value);
+  if (typeof value === "number") return tokenLength(value);
   if (isCSSUnit(value)) return value;
   return undefined;
 }
@@ -195,13 +276,13 @@ export function offsetValue(value: unknown): string | undefined {
 /**
  * A `translateX`/`translateY` value as a CSS length. A static step is its
  * `--static-space-*` and a t-shirt size its `--responsive-space-*`, the values
- * the spacing classes read; a number is px, and a CSS length passes through.
+ * the spacing classes read; a number is on the token scale, and a CSS length passes through.
  *
  * Only the number and the CSS unit used to resolve, so `translateY="16"`, the
  * form the props' type and the harness teach, wrote no transform at all.
  */
 export function translateValue(value: unknown): string | undefined {
-  if (typeof value === "number") return px(value);
+  if (typeof value === "number") return tokenLength(value);
   if (typeof value !== "string") return undefined;
   if (isCSSUnit(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
@@ -280,15 +361,22 @@ const BREAKPOINT_SIZES = [
  * and the properties each sets: the shorthand, then each side, then each axis
  * over its two sides, the order `ClientFlex` has always applied them in.
  */
+// `padding` and `margin` are written as their four sides, not the shorthand:
+// a number is a `var()` or a `calc()` holding one, and a shorthand holding a
+// `var()` reads back as "" on every side, so neither a later read nor a
+// breakpoint that leaves could see the value.
+const PADDING_SIDES = ["paddingTop", "paddingRight", "paddingBottom", "paddingLeft"];
+const MARGIN_SIDES = ["marginTop", "marginRight", "marginBottom", "marginLeft"];
+
 const BREAKPOINT_SPACING: [prop: string, properties: string[]][] = [
-  ["padding", ["padding"]],
+  ["padding", PADDING_SIDES],
   ["paddingLeft", ["paddingLeft"]],
   ["paddingRight", ["paddingRight"]],
   ["paddingTop", ["paddingTop"]],
   ["paddingBottom", ["paddingBottom"]],
   ["paddingX", ["paddingLeft", "paddingRight"]],
   ["paddingY", ["paddingTop", "paddingBottom"]],
-  ["margin", ["margin"]],
+  ["margin", MARGIN_SIDES],
   ["marginLeft", ["marginLeft"]],
   ["marginRight", ["marginRight"]],
   ["marginTop", ["marginTop"]],
@@ -372,8 +460,8 @@ function breakpointBorderStyle(props: Record<string, unknown>): [string, string]
  * current breakpoint: the values `isClassExpressible` sends to the client.
  *
  * The `style` escape hatch goes first, so a resolved value wins over it; then
- * `aspectRatio`, the sizes (a number is px, a token its step, `below-header`
- * written out), px or CSS-length spacing and px or CSS-length offsets. A token spacing
+ * `aspectRatio`, the sizes (a number on the token scale, a token its step, `below-header`
+ * written out), numeric or CSS-length spacing and offsets. A token spacing
  * or offset is a class, written by the server component, and is not here.
  *
  * `ClientGrid` applied only `style`, `aspectRatio` and the offsets, so a
@@ -401,6 +489,11 @@ export function breakpointStyle(props: Record<string, unknown>): [string, unknow
     if (value !== undefined) for (const property of properties) add(property, value);
   }
   for (const [side, value] of Object.entries(offsetStyle(props))) add(side, value);
+  // The `--ou-n-*` each number written above reads (see `withTokenLengths`).
+  const values = Object.fromEntries(entries);
+  for (const [property, value] of Object.entries(withTokenLengths(values))) {
+    if (!(property in values)) add(property, value);
+  }
   return entries;
 }
 
@@ -427,7 +520,7 @@ function inlineDeclarations(style: CSSStyleDeclaration): Map<string, [string, st
  *
  * The client components used to clear each property they had written and
  * then re-apply only `style`, so leaving a breakpoint emptied a base value it
- * had overridden: `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40px
+ * had overridden: `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40
  * maximum on the way back up. Now each pass records the inline declarations
  * it wrote over and puts them back, longhand by longhand so a shorthand
  * (`padding`) restores the sides beneath it. A declaration React has rewritten
@@ -450,7 +543,9 @@ export function applyBreakpointStyle(
   if (entries.length === 0) return null;
   const before = inlineDeclarations(style);
   for (const [property, value] of entries) {
-    (style as unknown as Record<string, unknown>)[property] = value;
+    // A custom property (`--ou-n-300`) has no camelCase accessor.
+    if (property.startsWith("--")) style.setProperty(property, String(value));
+    else (style as unknown as Record<string, unknown>)[property] = value;
   }
   const after = new Map<string, string>();
   for (const name of new Set([...before.keys(), ...inlineDeclarations(style).keys()])) {
@@ -463,7 +558,7 @@ export function applyBreakpointStyle(
 /**
  * Props whose breakpoint value cannot become a utility class.
  *
- * `width`, `height` and their min/max siblings accept arbitrary px numbers and
+ * `width`, `height` and their min/max siblings accept arbitrary numbers and
  * CSS lengths, `aspectRatio` is a free-form ratio, and `style` is the escape hatch.
  * A class matrix cannot enumerate any of them.
  */
@@ -489,7 +584,7 @@ const OFFSET_PROPS = new Set<string>(OFFSET_SIDES);
  * True when every value in a breakpoint object maps to a generated class, so
  * the component can stay on the server.
  *
- * Numbers are the subtle case: `padding: 16` means 16px and has no class,
+ * Numbers are the subtle case: `padding: 16` is written inline and has no class,
  * while `padding: "16"` is the token and does. The two look alike in JSX and
  * behave differently, so this reads the value's type rather than trusting the
  * prop name. `Flex` and `Grid` share it, so a breakpoint object that keeps one
@@ -499,7 +594,7 @@ export function isClassExpressible(breakpointProps: Record<string, unknown>): bo
   return Object.entries(breakpointProps).every(([prop, value]) => {
     if (value === undefined) return true;
     if (INLINE_ONLY.has(prop)) return false;
-    // `top: "16"` is `.m-top-16`; `top: 2` (2px) and `top: "50%"` are inline.
+    // `top: "16"` is `.m-top-16`; `top: 2` and `top: "50%"` are inline.
     if (OFFSET_PROPS.has(prop)) return offsetValue(value) === undefined;
     if (isCSSUnit(value)) return false;
     return typeof value !== "number" || NUMERIC_CLASS_PROPS.has(prop);
@@ -595,11 +690,11 @@ export function textLayout({
       gap === "-1" ? "g-horizontal--1" : spacingClass("g", gap),
       ...OFFSET_SIDES.map((side) => isOffsetToken(offsets[side]) && `${side}-${offsets[side]}`),
     ],
-    style: {
+    style: withTokenLengths({
       gap: spacingValue(gap),
       ...offsetStyle(offsets),
       transform: translateTransform(translateX, translateY),
-    },
+    }),
   };
 }
 

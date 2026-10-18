@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
-import { spacingValue } from "./layoutClasses.js";
+import { spacingValue, withTokenLengths } from "./layoutClasses.js";
 
-/** The spacing props that take a number (px) or a CSS length as well as a token. */
+/** The spacing props that take a number (on the token scale) or a CSS length as well as a token. */
 export interface NumericSpacingProps {
   padding?: unknown;
   paddingX?: unknown;
@@ -20,7 +20,7 @@ export interface NumericSpacingProps {
 }
 
 /**
- * The first value that is written inline: a number as px, or a CSS length as
+ * The first value that is written inline: a number on the token scale, or a CSS length as
  * written. Tokens are classes and are not written inline.
  */
 function inline(...values: unknown[]): string | undefined {
@@ -45,7 +45,7 @@ function inline(...values: unknown[]): string | undefined {
  * later key to clear.
  */
 export function numericSpacingStyle(p: NumericSpacingProps): CSSProperties {
-  return {
+  return withTokenLengths({
     paddingTop: inline(p.paddingTop, p.paddingY, p.padding),
     paddingRight: inline(p.paddingRight, p.paddingX, p.padding),
     paddingBottom: inline(p.paddingBottom, p.paddingY, p.padding),
@@ -54,5 +54,5 @@ export function numericSpacingStyle(p: NumericSpacingProps): CSSProperties {
     marginRight: inline(p.marginRight, p.marginX, p.margin),
     marginBottom: inline(p.marginBottom, p.marginY, p.margin),
     marginLeft: inline(p.marginLeft, p.marginX, p.margin),
-  };
+  });
 }

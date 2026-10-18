@@ -7,6 +7,7 @@ import styles from "../components/Dialog.module.scss";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { resetDialogState } from "../test/dialogTestUtils";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 vi.mock("../components", async () => {
   const actual = await vi.importActual<typeof import("../components")>("../components");
@@ -596,15 +597,17 @@ describe("Dialog", () => {
 
   describe("minHeight prop", () => {
     it("applies minHeight inline style when provided", () => {
-      renderDialog({ minHeight: 480 });
+      // A step of the scale: jsdom 30 throws computing a calc() that holds
+      // a var(), which a number between the steps renders as.
+      renderDialog({ minHeight: 160 });
 
-      expect(getDialogPanel()).toHaveStyle({ minHeight: "480px" });
+      expect(getDialogPanel()).toHaveStyle({ minHeight: t(160) });
     });
 
     it("does not apply minHeight style when omitted", () => {
       renderDialog();
 
-      expect(getDialogPanel()).not.toHaveStyle({ minHeight: "480px" });
+      expect(getDialogPanel()).not.toHaveStyle({ minHeight: t(160) });
     });
   });
 

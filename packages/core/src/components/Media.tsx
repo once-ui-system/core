@@ -5,6 +5,7 @@ import type React from "react";
 import { type CSSProperties, type ReactNode, useEffect, useRef, useState } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import type { CSSUnit } from "../types.js";
+import { cssLength } from "../utils/layoutClasses.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { MediaVideoPlayer } from "./MediaVideoPlayer.js";
@@ -14,7 +15,7 @@ import { Skeleton } from "./Skeleton.js";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
-  /** A number is px (`320`); a string is a CSS length (`"20rem"`, `"50svh"`). */
+  /** A number is on the token scale (`320` is 20rem); a string is a CSS length (`"50svh"`). */
   height?: number | CSSUnit;
   alt?: string;
   loading?: boolean;
@@ -177,9 +178,7 @@ const Media = ({
             : aspectRatio
               ? ""
               : height
-                ? typeof height === "number"
-                  ? `${height}px`
-                  : height
+                ? cssLength(height)
                 : "100%",
         aspectRatio: aspectRatio === "original" ? undefined : aspectRatio,
         borderRadius: isEnlarged ? "0" : undefined,

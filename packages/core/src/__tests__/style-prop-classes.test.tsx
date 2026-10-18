@@ -8,6 +8,7 @@ import { Heading } from "../components/Heading";
 import { ServerFlex } from "../components/ServerFlex";
 import { Text } from "../components/Text";
 import type { BlendMode, BlurSize, UserSelect } from "../types";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * `user-select`, `mix-blend-mode` and blur had no prop, so the apps wrote them
@@ -112,9 +113,9 @@ describe("enumerable style props as classes", () => {
         x
       </Flex>,
     );
-    expect(html).toContain("filter:blur(0.125px)");
-    expect(html).toContain("backdrop-filter:blur(0.75px)");
-    expect(html).toContain("-webkit-backdrop-filter:blur(0.75px)");
+    expect(html).toContain(`filter:blur(${t(0.125)})`);
+    expect(html).toContain(`backdrop-filter:blur(${t(0.75)})`);
+    expect(html).toContain(`-webkit-backdrop-filter:blur(${t(0.75)})`);
     expect(classesOf(html).some((cls) => cls.startsWith("blur-"))).toBe(false);
   });
 

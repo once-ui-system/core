@@ -41,9 +41,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   own with core as a peer: the sixteen effects, and Banner, Book, LogoCloud,
   ScrollToTop, StylePanel and StyleOverlay. See Changed.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
+- **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
+  written as `data-density` on `<html>`: `"compact"`, `"normal"` (the default) or
+  `"spacious"`. Every Button, IconButton, ToggleButton, SegmentedControl, Tag,
+  Switch, Checkbox, RadioButton, RadioGroup and Slider given no `size` (and, for a
+  field, no `Form` size) takes s, m or l through CSS, so it works in server
+  components and before any JS runs; a `size` always wins. Unless `scaling` is set,
+  the density also picks it: 95, 100 or 105. StylePanel has a Density row beside
+  Scaling, and the React Native preview takes `density` too. Input and the fields
+  built on it join once their s size lands.
+- **`--scaling`**, the theme's scaling as a factor (1, or 0.9 to 1.1 under
+  `[data-scaling]`), which a number on a size, spacing or offset prop multiplies.
 - **`Arrow` stays public**, with a docs page and an AI spec entry: the arrow that
   slides in while its `trigger` element is hovered, for a whole-card link or a hover
-  card. It takes Flex's layout props (a number is px), `scale` and
+  card. It takes Flex's layout props (a number is on the token scale), `scale` and
   `color="onBackground" | "onSolid"`, and is hidden from assistive technology.
 - **`TextProps` and `HeadingProps` carry `children` and the element's HTML attributes**,
   so a wrapper typed with them compiles (`(props: TextProps) => <Text {...props} />`,
@@ -243,12 +254,21 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **ProgressBar, RadialGauge, DataTooltip, Carousel, DatePicker and Table no longer use
   `CountFx`, `RevealFx` or `ShineFx`** (F8 prerequisite): internal count-up, reveal and
   shine parts look and time the same, so the effects can move to `@once-ui-system/fx`.
-- **A number is px on every size, spacing and offset prop** (D2): `width`, `height`
-  and their min/max, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/
-  `bottom`/`left`, `translateX`/`Y`, `blur` and `backdropBlur` on Flex, Grid, Text,
-  Heading and everything built on them, in breakpoint objects too. They were rem, so
-  `maxWidth={40}` was 640px and is 40px now; the codemod writes `maxWidth="40rem"`,
-  which renders exactly as before. Tokens stay strings (`"16"` is the spacing step).
+- **A number is on the token scale on every size, spacing and offset prop** (D2):
+  `width`, `height` and their min/max, `minColumnWidth`, `padding*`, `margin*`, `gap`,
+  `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur` and `backdropBlur` on Flex,
+  Grid, Text, Heading and everything built on them, in breakpoint objects too. `n`
+  renders as the token `"n"` does: 16 = `"16"` = 1rem, scaled by `data-scaling`
+  (a step of the scale is written as its `var(--static-space-n)`; any other number
+  as `var(--ou-n-<n>)`, which the same element declares as
+  `calc(n/16 rem * var(--scaling, 1))`, so the length itself is never math holding a
+  `var()`: jsdom's `getComputedStyle` throws on that, and with it every role query in
+  an app's jsdom tests). At the default root size and scaling a
+  number is that many px. They were 16× that in 2.x, so `maxWidth={40}` was 640px
+  and is 2.5rem now; the codemod writes `maxWidth="40rem"`, which renders exactly as
+  before. Tokens stay strings (`"16"` is the spacing step); write `"40px"` for a
+  length that must not scale. A breakpoint's `padding`/`margin` is written as the
+  four sides. Border widths stay px.
 - **Any CSS length string works**: `CSSUnit` and the size parsers accept px, rem, em,
   ch, %, vh/vw/dvh/svh/lvh and their widths, vmin/vmax, cqw/cqh, and `calc()`, `min()`,
   `max()`, `clamp()` and `var()`. `width="320px"` and `maxWidth="40rem"` were type
@@ -256,12 +276,16 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **One unit per kind on the outliers** (D3): Avatar `size`, Media `height`, Carousel
   `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and
   ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`,
-  CodeBlock `codeHeight` and Fade `blur` read a number as px (was rem) and also take a
-  CSS length. Mask `x`/`y` (was a percentage) and `radius` (was vh) and Background
+  CodeBlock `codeHeight` and Fade `blur` read a number on the token scale (was rem)
+  and also take a CSS length; so do Dialog `minHeight`, Animation `blur`, AutoScroll
+  `scrollGap`, StatusIndicator `pulseSize`, DataThemeProvider `height` and RevealFx
+  `translateY`. Mask `x`/`y` (was a percentage) and `radius` (was vh) and Background
   `gradient.x`/`y` (a percentage) and `gradient.width`/`height` (a quarter-percent of
-  the gradient layer) read a number as px; percentages are strings, of the element
-  (`x="50%"`, `width: "100%"`, the default). LinearGauge and RadialGauge
-  `width`/`height` stay the drawing's px size.
+  the gradient layer) read a number on the token scale; percentages are strings, of
+  the element (`x="50%"`, `width: "100%"`, the default). Device pixels stay px:
+  `borderWidth`, Background `lines.thickness`, Media and Carousel `sizes`,
+  InfiniteScroll `threshold`, MatrixFx `size`/`spacing`, and LinearGauge and
+  RadialGauge `width`/`height` (the drawing's own units).
 - **Durations, delays and intervals are milliseconds everywhere** (D4): CelebrationFx
   and WeatherFx `duration`, MatrixFx `bulge.duration` and FlipFx `autoFlipInterval`
   were seconds. The codemod multiplies literals by 1000.

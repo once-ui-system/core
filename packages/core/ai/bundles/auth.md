@@ -17,11 +17,12 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `width={32} height={32}` (a number is px), `maxWidth="40rem"` | `maxWidth={40}` for 40rem (that was 2.x: a number is px now, so it is 40 px) |
+| `width={32} height={32}` (a number is the token: `32` = `"32"` = 2rem), `maxWidth="40rem"` | `maxWidth={40}` for 40rem (that was 2.x: `40` is now `"40"`, 2.5rem) |
 | `border` | `border="neutral-alpha-weak"` |
 | `<Logo wordmark={{ light, dark }} />` | a `<Logo showIn="dark">` and a `<Logo showIn="light">` |
 
-- Units: a number is **px** on every size, spacing and offset prop (`width={320}`, `padding={24}`, `top={8}`), in breakpoint objects too; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"40rem"`, `"50%"`, `"100dvh"`). Numbers are px — `Mask`/`Background` percentages are strings (`x="50%"`)
+- Units: a number is on the **token scale** on every size, spacing and offset prop: `16` = `"16"` = 1rem, scaled by `data-scaling` (`width={320}`, `padding={24}`, `top={8}`), in breakpoint objects too; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"320px"` never scales, `"50%"`, `"100dvh"`). `Mask`/`Background` percentages are strings (`x="50%"`)
+- Control size for a whole app: `density: "compact" | "normal" | "spacious"` in the config `style` (`data-density`), not `size="s"` on every Button; it also picks scaling 95/100/105 unless `scaling` is set. Give `size` only where one control differs
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
@@ -63,7 +64,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 - Every `duration`, `delay` and interval is **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x; `CelebrationFx`/`WeatherFx` `duration={5000}`, not `{5}`. `RevealFx`/`ShineFx`/`CountFx` take `duration`, `TypeFx` `charDuration` (`speed` there was 2.x)
 - `speed` is only a multiplier, `1` the default, or `"slow"`/`"medium"`/`"fast"` (0.5/1/2): `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx`, `LetterFx`
-- `RevealFx translateY`: number = px; prefer `"8"`–`"16"` tokens
+- `RevealFx translateY`: a number is the token scale (`16` = 1rem); prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
 
@@ -160,7 +161,7 @@ Mixins: CommonProps, LeafProps, TextProps.
 Mixins: LeafProps.
 - variant?: ButtonVariant = primary
 - tone?: Tone
-- size?: TShirtSizes = m
+- size?: TShirtSizes
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 - label?: string
 - weight?: "default" | "strong" = strong
@@ -271,7 +272,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Mixins: LeafProps.
 - icon?: IconName = refresh
 - id?: string
-- size?: TShirtSizes = m
+- size?: TShirtSizes
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 - rounded?: boolean = false
 - tooltip?: ReactNode
@@ -321,7 +322,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Avoid: Passing the same text as label and children — the children are dropped
 - tone?: Tone
 - variant?: "default" | "gradient" | "announce" = default
-- size?: TShirtSizes = m
+- size?: TShirtSizes
 - label?: string = ""
 - prefixIcon?: IconName
 - suffixIcon?: IconName
@@ -542,7 +543,7 @@ type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"stro
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id">) => string; removeToast: (id: string) => void }
 type Tone = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
-type UserSelect = "text" | "none" | "auto" | "all"
+type UserSelect = "text" | "auto" | "none" | "all"
 ```
 
 ## Gotchas
@@ -551,7 +552,7 @@ type UserSelect = "text" | "none" | "auto" | "all"
 - Use fill not fillWidth fillHeight; center not horizontal="center" vertical="center"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.
 - Colors are semantic tokens ({tone}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.
 - Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).
-- A number on any size, spacing or offset prop is px in 3.0 (it was rem in 2.x): width={32} is 32 px, maxWidth={40} is 40 px. For rem write the string, maxWidth="40rem"; a digit string is the spacing token, width="32" (2rem). An icon or avatar box is usually "24" to "48", or 24 to 48 as px.
+- A number on any size, spacing or offset prop is on the token scale in 3.0 (it was rem in 2.x): width={32} renders as width="32" (2rem, 32 px at the defaults, scaled by data-scaling), maxWidth={40} is 2.5rem. For 40rem write the string, maxWidth="40rem". An icon or avatar box is usually "24" to "48", or 24 to 48 as numbers.
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span prop: a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.
 - Checkbox, Switch and RadioButton take checked (or defaultChecked) and onCheckedChange(checked: boolean); onChange is the native event of their input. onToggle was 2.x; isChecked and isIndeterminate were 1.x.

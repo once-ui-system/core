@@ -185,7 +185,7 @@ describe("safe areas", () => {
     function Saver() {
       const { addToast } = useToast();
       return (
-        <Button label="Save" onPress={() => addToast({ variant: "info", message: "Saved" })} />
+        <Button label="Save" onPress={() => addToast({ tone: "info", message: "Saved" })} />
       );
     }
     render(

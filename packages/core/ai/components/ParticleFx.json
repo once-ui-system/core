@@ -257,8 +257,8 @@
   ],
   "UserSelect": [
    "text",
-   "none",
    "auto",
+   "none",
    "all"
   ]
  }

@@ -5,6 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Grid } from "../components/Grid";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * "As many columns as fit, each at least N wide" had no prop, so the apps
@@ -38,7 +39,7 @@ describe("Grid minColumnWidth", () => {
       </Grid>,
     );
     expect(classesOf(html)).toContain("columns-auto-fit");
-    expect(html).toContain("--grid-min-column-width:13px");
+    expect(html).toContain(`--grid-min-column-width:${t(13)}`);
   });
 
   it("reads a value the way minWidth does", () => {
@@ -46,8 +47,8 @@ describe("Grid minColumnWidth", () => {
       renderToStaticMarkup(<Grid minColumnWidth={value} />).match(
         /--grid-min-column-width:([^;"]+)/,
       )?.[1];
-    expect(width(16)).toBe("16px");
-    expect(width(12.5)).toBe("12.5px");
+    expect(width(16)).toBe(t(16));
+    expect(width(12.5)).toBe(t(12.5));
     expect(width("160")).toBe("var(--static-space-160)");
     expect(width("30%")).toBe("30%");
     expect(width("calc(10rem + 2vw)")).toBe("calc(10rem + 2vw)");
@@ -85,6 +86,6 @@ describe("Grid minColumnWidth", () => {
     );
     const el = container.firstElementChild as HTMLElement | null;
     expect(el?.className).toContain("columns-auto-fit");
-    expect(el?.style.getPropertyValue("--grid-min-column-width")).toBe("10px");
+    expect(el?.style.getPropertyValue("--grid-min-column-width")).toBe(t(10));
   });
 });

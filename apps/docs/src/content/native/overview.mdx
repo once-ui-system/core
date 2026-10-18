@@ -13,7 +13,7 @@ status: "unreleased"
 
 It is a preview. Most apps should keep shipping Once UI on phones as the web build wrapped in a native shell (the Stack mobile target); use this package when the app itself has to be native.
 
-**Props follow core 3.0.** The components take the 3.0 props of `@once-ui-system/core`, not the 2.x ones: state is `checked` / `defaultChecked` / `onCheckedChange`, `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`; accessible names are `aria-label`; colour is `tone` and look is `variant`; Text and Heading take `textVariant`; Badge and Chip are `Tag`; and a number on a spacing or size prop is px. The renames are listed under "Coming from the 2.x props" below.
+**Props follow core 3.0.** The components take the 3.0 props of `@once-ui-system/core`, not the 2.x ones: state is `checked` / `defaultChecked` / `onCheckedChange`, `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`; accessible names are `aria-label`; colour is `tone` and look is `variant`; Text and Heading take `textVariant`; Badge and Chip are `Tag`; and a number on a spacing or size prop is points (the web reads it on the token scale, which is the same at the default root size). The renames are listed under "Coming from the 2.x props" below.
 
 <Row fillWidth horizontal="center" marginY="24">
   <Media
@@ -87,7 +87,7 @@ Each component has its own page with examples, a props table and what differs fr
 
 ## Differences from the web
 
-- **Units.** A number on a spacing or size prop is px, as on the web in 3.0, and px here are density-independent points. Tokens work as on the web, and so do `"24px"` and `"1.5rem"` strings; rem follows the screen size, 15pt on phones and 16pt on tablets.
+- **Units.** A number on a spacing or size prop is density-independent points. On the web 3.0 reads it on the token scale (16 = 1rem, following `data-scaling`), which is the same number of px at the default root size; here it does not follow the screen's rem or `scaling`. Tokens work as on the web, and so do `"24px"` and `"1.5rem"` strings; rem follows the screen size, 15pt on phones and 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
 - **Dialog** opens as a bottom sheet unless `variant="center"`; the web's default is the centred card.

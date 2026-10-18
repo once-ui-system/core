@@ -127,7 +127,7 @@ export const ToggleButton: RefComponent<ToggleButtonProps, ViewRef> = forwardRef
       {renderIcon(prefixIcon, iconSize, color)}
       {(label || children) && (
         <Text
-          variant={`label-${weight}-${textSize}`}
+          textVariant={`label-${weight}-${textSize}`}
           paddingX={labelX}
           // One line, as core's `white-space: nowrap`; `truncate` only adds the ellipsis there.
           numberOfLines={1}

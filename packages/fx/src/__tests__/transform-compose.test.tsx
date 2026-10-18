@@ -11,7 +11,7 @@ import { TypeFx } from "../TypeFx.js";
  * effect's own `transform` replaced the translate its `translateX` /
  * `translateY` props resolve to, TiltFx took any touch-capable laptop for a
  * phone (#187), and FadingLettersFx (3.0's `TypeFx mode="fade"`) typed `ref`
- * without forwarding it. A bare number is px in 3.0.
+ * without forwarding it. A bare number is on the token scale in 3.0.
  */
 
 /** A style prop moves Flex to ClientFlex, which reads the layout context. */
@@ -36,7 +36,9 @@ const hoverNone = () =>
 describe("FlipFx transform", () => {
   it("composes the flip with translateX/translateY", () => {
     const { getByRole } = render(<FlipFx translateY={16} flipped front="front" back="back" />);
-    expect(getByRole("button").style.transform).toBe("translate(0, 16px) rotateY(180deg)");
+    expect(getByRole("button").style.transform).toBe(
+      "translate(0, var(--static-space-16)) rotateY(180deg)",
+    );
   });
 
   it("keeps the translate when not flipped", () => {
@@ -71,7 +73,9 @@ describe("TiltFx", () => {
     );
     const tilt = getByText("tilt") as HTMLElement;
     fireEvent.mouseMove(tilt, { clientX: 0, clientY: 0 });
-    expect(tilt.style.transform).toMatch(/^translate\(0, 32px\) perspective\(1000px\)/);
+    expect(tilt.style.transform).toMatch(
+      /^translate\(0, var\(--static-space-32\)\) perspective\(1000px\)/,
+    );
   });
 
   it("tilts under a mouse even where touch events exist", () => {

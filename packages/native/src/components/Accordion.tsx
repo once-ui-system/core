@@ -28,11 +28,10 @@ export interface AccordionProps extends Omit<FlexProps, "radius"> {
   iconRotation?: number;
   size?: CondensedTShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
-  /** With `onToggle` or `onOpenChange` the caller owns the state; without them, only the first state. */
+  /** With `onOpenChange` the caller owns the state; without it, only the first state. */
   open?: boolean;
   /** Core 3.0's name for the first state when the accordion owns it. */
   defaultOpen?: boolean;
-  onToggle?: () => void;
   /** Core 3.0's change handler: called with the next state. */
   onOpenChange?: (open: boolean) => void;
   headerProps?: FlexProps;
@@ -51,7 +50,6 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
     children,
     open,
     defaultOpen = false,
-    onToggle,
     onOpenChange,
     iconRotation = 180,
     radius = "m",
@@ -70,7 +68,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
   useEffect(() => {
     if (open !== undefined) setLocal(open);
   }, [open]);
-  const controlled = open !== undefined && (onToggle !== undefined || onOpenChange !== undefined);
+  const controlled = open !== undefined && onOpenChange !== undefined;
   const isOpen = controlled ? open : local;
 
   // LayoutAnimation eases the content's height on the next layout pass.
@@ -78,7 +76,6 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
   const set = (next: boolean) => {
     if (next === isOpen) return;
     animate();
-    onToggle?.();
     onOpenChange?.(next);
     if (!controlled) setLocal(next);
   };
@@ -126,7 +123,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
         >
           <Row flex={1}>
             {typeof title === "string" || typeof title === "number" ? (
-              <Text variant="heading-strong-s">{title}</Text>
+              <Text textVariant="heading-strong-s">{title}</Text>
             ) : (
               title
             )}

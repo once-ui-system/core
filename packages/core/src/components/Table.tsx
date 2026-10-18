@@ -7,6 +7,7 @@ import { pageCount, withDefaultLabels } from "../internal/pagination.js";
 import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
 import type { Tone } from "../types.js";
 import { dev } from "../utils/devLogger.js";
+import { tokenLength, withTokenLengths } from "../utils/layoutClasses.js";
 import { Checkbox } from "./Checkbox.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
@@ -579,10 +580,12 @@ function Table<T>({
         {hasActions && (
           <td
             className={classNames(tableStyles.td, tableStyles.tdActions)}
-            style={{
-              width: `${(actions?.length ?? 0) * 32}px`,
-              minWidth: `${(actions?.length ?? 0) * 32}px`,
-            }}
+            // 32 per action on the token scale, so the column scales with
+            // the buttons in it.
+            style={withTokenLengths({
+              width: tokenLength((actions?.length ?? 0) * 32),
+              minWidth: tokenLength((actions?.length ?? 0) * 32),
+            })}
           >
             {/* biome-ignore lint/a11y/noStaticElementInteractions: stops a row click, it handles none itself */}
             {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above */}

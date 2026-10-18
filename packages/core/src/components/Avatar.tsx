@@ -2,7 +2,7 @@ import React from "react";
 import { IconName } from "../icons.js";
 import type { LeafPropsOf } from "../interfaces.js";
 import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types.js";
-import { isCSSUnit } from "../utils/layoutClasses.js";
+import { isCSSUnit, tokenLength, withTokenLengths } from "../utils/layoutClasses.js";
 import styles from "./Avatar.module.scss";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
@@ -13,7 +13,7 @@ import { Text } from "./Text.js";
 
 interface AvatarProps extends LeafPropsOf<"div"> {
   /**
-   * A t-shirt size, a number in px (`40`), or a CSS length (`"2.5rem"`).
+   * A t-shirt size, a number on the token scale (`40` is 2.5rem), or a CSS length.
    */
   size?: TShirtSizes | number | CSSUnit;
   value?: string;
@@ -44,7 +44,7 @@ const statusIndicatorSizeMapping: Record<TShirtSizes, CondensedTShirtSizes> = {
   xl: "l",
 };
 
-/** A custom size in px, as far as it can be read (`"10rem"` reads as 160). */
+/** A custom size in px at the default root size, as far as it can be read (`"10rem"` reads as 160). */
 function approxPx(size: unknown): number {
   if (typeof size === "number") return size;
   const match = typeof size === "string" ? /^(\d*\.?\d+)(px|rem|em)$/.exec(size) : null;
@@ -66,9 +66,10 @@ const Avatar = ({
   style = {},
   ...rest
 }: AvatarProps) => {
-  // A t-shirt size is a class; a number is px and a CSS length is as written.
+  // A t-shirt size is a class; a number is on the token scale and a CSS
+  // length is as written.
   const customSize =
-    typeof size === "number" ? `${size}px` : isCSSUnit(size) ? (size as string) : undefined;
+    typeof size === "number" ? tokenLength(size) : isCSSUnit(size) ? (size as string) : undefined;
   const sizeStyle = customSize
     ? {
         width: customSize,
@@ -108,7 +109,16 @@ const Avatar = ({
           onBackground="neutral-medium"
           name={icon || "person"}
           size="m"
-          style={customSize ? { fontSize: `calc(${customSize} / 3)` } : undefined}
+          style={
+            customSize
+              ? // The third is taken in a custom property: jsdom throws on a
+                // `font-size` that is a `calc()` holding a `var()`.
+                withTokenLengths({
+                  "--avatar-icon-size": `calc(${customSize} / 3)`,
+                  fontSize: "var(--avatar-icon-size)",
+                } as React.CSSProperties)
+              : undefined
+          }
           className={styles.icon}
         />
       );
@@ -122,7 +132,10 @@ const Avatar = ({
           stretch
           alt="Avatar"
           aspectRatio="1"
-          sizes={scale ? `${sizeMapping[scale]}px` : customSize}
+          // An image hint, in device pixels: a `var()` is no `sizes` value.
+          sizes={
+            scale ? `${sizeMapping[scale]}px` : typeof size === "number" ? `${size}px` : customSize
+          }
           unoptimized={unoptimized}
           className={styles.image}
         />

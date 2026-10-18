@@ -7,7 +7,7 @@
  "props": {
   "icon": "IconName = refresh",
   "id": "string",
-  "size": "TShirtSizes = m",
+  "size": "TShirtSizes",
   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "rounded": "boolean = false",
   "tooltip": "ReactNode",

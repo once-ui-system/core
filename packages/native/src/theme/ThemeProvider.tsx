@@ -4,6 +4,7 @@ import type {
   BodyLineHeight,
   BodySize,
   BorderStyle,
+  Density,
   DeviceFontSize,
   NeutralColor,
   ScalingSize,
@@ -13,7 +14,7 @@ import type {
   SurfaceStyle,
   Theme,
 } from "../types";
-import { defaultSettings } from "./resolve";
+import { DENSITIES, defaultSettings } from "./resolve";
 import { createTheme, type FontFamilies, type Insets, NO_INSETS, type OnceTheme } from "./theme";
 
 export interface ThemeProviderProps {
@@ -26,7 +27,14 @@ export interface ThemeProviderProps {
   solidStyle?: SolidStyle;
   border?: BorderStyle;
   surface?: SurfaceStyle;
+  /** Left out, `density` picks it: compact 95, normal 100, spacious 105. */
   scaling?: ScalingSize;
+  /**
+   * The size Button, IconButton, Tag, Checkbox, Switch and RadioGroup take
+   * when given none: s when `"compact"`, m when `"normal"` (the default), l
+   * when `"spacious"`. A `size` on the control always wins.
+   */
+  density?: Density;
   bodySize?: BodySize;
   bodyLineHeight?: BodyLineHeight;
   desktopSize?: DeviceFontSize;
@@ -64,11 +72,17 @@ export function ThemeProvider({
   // Insets by value too: `useSafeAreaInsets()` returns a new object on every render.
   const key = JSON.stringify([resolvedTheme, options, fonts, insets]);
   // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries options, fonts and insets by value.
-  const value = useMemo(
-    () =>
-      createTheme({ ...defaultSettings, ...options, theme: resolvedTheme }, width, fonts, insets),
-    [key, width],
-  );
+  const value = useMemo(() => {
+    const density = options.density ?? defaultSettings.density;
+    // A scaling of its own wins; without one the density picks it.
+    const scaling = options.scaling ?? DENSITIES[density].scaling;
+    return createTheme(
+      { ...defaultSettings, ...options, density, scaling, theme: resolvedTheme },
+      width,
+      fonts,
+      insets,
+    );
+  }, [key, width]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 

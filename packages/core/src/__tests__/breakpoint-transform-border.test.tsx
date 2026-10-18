@@ -6,13 +6,13 @@ import { Fade } from "../components/Fade";
 import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { breakpointStyle, isClassExpressible } from "../utils/layoutClasses";
+import { breakpointStyle, isClassExpressible, tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * Two ROADMAP 2.2 lines: leaving a breakpoint cleared the base inline value
  * it had overridden; a component's own `transform` replaced its translate
  * props; a breakpoint border type-checked and drew nothing; `Fade` ignored
- * `blur` outside its pattern mode. A bare number is px in 3.0.
+ * `blur` outside its pattern mode. A bare number is on the token scale in 3.0.
  *
  * The 2.2 file also covered FlipFx, TiltFx, CursorCard and FadingLettersFx.
  * In 3.0 the effects live in `@once-ui-system/fx` (tested there), CursorCard
@@ -52,20 +52,20 @@ describe("leaving a breakpoint", () => {
     );
     const flex = container.querySelector(".display-flex") as HTMLElement;
     const grid = container.querySelector(".display-grid") as HTMLElement;
-    expect(flex.style.maxWidth).toBe("20px");
-    expect(flex.style.paddingTop).toBe("2px");
-    expect(grid.style.width).toBe("10px");
+    expect(flex.style.maxWidth).toBe(t(20));
+    expect(flex.style.paddingTop).toBe(t(2));
+    expect(grid.style.width).toBe(t(10));
 
     await resizeTo(1300);
-    expect(flex.style.maxWidth).toBe("40px");
+    expect(flex.style.maxWidth).toBe(t(40));
     // The breakpoint wrote the `padding` shorthand; each side comes back.
-    expect(flex.style.paddingTop).toBe("1px");
-    expect(flex.style.paddingLeft).toBe("1px");
-    expect(grid.style.width).toBe("30px");
+    expect(flex.style.paddingTop).toBe(t(1));
+    expect(flex.style.paddingLeft).toBe(t(1));
+    expect(grid.style.width).toBe(t(30));
 
     await resizeTo(JSDOM_WIDTH);
-    expect(flex.style.maxWidth).toBe("20px");
-    expect(grid.style.width).toBe("10px");
+    expect(flex.style.maxWidth).toBe(t(20));
+    expect(grid.style.width).toBe(t(10));
   });
 
   it("still clears a value the base never set", async () => {
@@ -75,7 +75,7 @@ describe("leaving a breakpoint", () => {
       </LayoutProvider>,
     );
     const flex = container.querySelector(".display-flex") as HTMLElement;
-    expect(flex.style.width).toBe("20px");
+    expect(flex.style.width).toBe(t(20));
     await resizeTo(1300);
     expect(flex.style.width).toBe("");
   });
@@ -130,18 +130,18 @@ describe("a component's own transform", () => {
   it("composes with translateX/translateY on Arrow", () => {
     const { container } = inLayout(<Arrow trigger="#none" translateX={2} />);
     const arrow = container.firstElementChild as HTMLElement;
-    expect(arrow.style.transform).toBe("translate(2px, 0) scale(0.8)");
+    expect(arrow.style.transform).toBe(`translate(${t(2)}, 0) scale(0.8)`);
   });
 });
 
 describe("Fade", () => {
   it("blurs by its blur prop outside pattern mode", () => {
     const { container } = inLayout(<Fade blur={2} />);
-    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe("blur(2px)");
+    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe(`blur(${t(2)})`);
   });
 
   it("blurs by its blur prop in pattern mode", () => {
     const { container } = inLayout(<Fade blur={1} pattern={{ display: true, size: "2" }} />);
-    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe("blur(1px)");
+    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe(`blur(${t(1)})`);
   });
 });

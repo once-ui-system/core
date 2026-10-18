@@ -56,7 +56,7 @@ export interface GridProps {
   /**
    * As many columns as fit, each at least this wide: the grid reflows on its
    * own, with no breakpoint objects. Takes the same values as `minWidth` — a
-   * number is px, a string is a spacing token or a CSS length
+   * number is on the token scale, a string is a spacing token or a CSS length
    * (`"16rem"`, `"40%"`, `calc(…)`).
    *
    * Renders on the server: a `.columns-auto-fit` class plus the
@@ -161,9 +161,11 @@ export type TextElement =
 
 export interface SizeProps {
   /**
-   * A number is px (`320`); a string is a spacing token (`"16"` is
-   * `--static-space-16`), a t-shirt size, or a CSS length (`"40rem"`,
-   * `"50%"`, `"100dvh"`, `calc(…)`). Write rem to follow the root font size.
+   * A number is on the token scale: `n` is what the token `"n"` is, n/16 rem
+   * times `[data-scaling]` (`320` is 20rem, 320px at the default root size).
+   * A string is a spacing token (`"16"` is `--static-space-16`), a t-shirt
+   * size, or a CSS length (`"320px"`, `"50%"`, `"100dvh"`, `calc(…)`). Write
+   * px for a length that must not scale.
    */
   width?: number | SpacingToken | CSSUnit;
   /**
@@ -264,14 +266,14 @@ export interface StyleProps {
   blendMode?: BlendMode;
   /**
    * `filter: blur()`. A size (`xs` 0.25rem to `xl` 3rem) is a class; a number
-   * is px and a CSS length (`"1rem"`) is as written, inline by the server. It
+   * is on the token scale and a CSS length (`"1rem"`) is as written, inline by the server. It
    * sets the whole `filter`, so combine it with other filter functions in
    * `style` instead.
    */
   blur?: BlurSize | number | CSSUnit;
   /**
    * `backdrop-filter: blur()` — frosts what shows through a translucent
-   * background. Same scale as `blur`; a number is px. Wins over the backdrop
+   * background. Same scale as `blur`; a number is on the token scale. Wins over the backdrop
    * blur `background="surface"` brings with a translucent theme.
    */
   backdropBlur?: BlurSize | number | CSSUnit;
@@ -401,7 +403,7 @@ export interface FlexLayoutProps
  */
 export interface LeafProps {
   /**
-   * A spacing token (`"16"`) is a class, a number is px, a CSS length is
+   * A spacing token (`"16"`) is a class, a number is the same length inline, a CSS length is
    * inline; `"auto"` pushes the element along its row.
    */
   margin?: SpacingToken | number | CSSUnit | "auto";

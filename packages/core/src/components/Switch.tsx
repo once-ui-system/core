@@ -115,6 +115,7 @@ const Switch = ({
       horizontal={reverse ? "between" : undefined}
       fillWidth={fillWidth ?? reverse}
       className={classNames(styles.container, className, styles[chrome.size], {
+        [styles.auto]: chrome.auto,
         [styles.error]: chrome.invalid,
         [styles.reverse]: reverse,
         [styles.disabled]: disabled,
@@ -182,6 +183,7 @@ const Switch = ({
           labelId={labelId}
           descriptionId={descriptionId}
           size={chrome.size}
+          auto={chrome.auto}
           errorMessage={chrome.showsError ? errorMessage : undefined}
           errorId={chrome.errorId}
           onClick={() => {}}
