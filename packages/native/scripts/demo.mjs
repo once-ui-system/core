@@ -27,7 +27,8 @@ await build({
     "@react-native/assets-registry/registry": join(ROOT, "scripts/web/assets-registry.js"),
   },
   resolveExtensions: [".web.js", ".web.tsx", ".web.ts", ".tsx", ".ts", ".jsx", ".js", ".json"],
-  define: { "process.env.NODE_ENV": '"production"' },
+  // react-native-web's animations read Node's `global`.
+  define: { "process.env.NODE_ENV": '"production"', global: "globalThis" },
   logLevel: "warning",
 });
 

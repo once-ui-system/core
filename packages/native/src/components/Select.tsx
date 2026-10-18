@@ -148,6 +148,8 @@ export function Select({
       <Pressable
         accessibilityRole="combobox"
         accessibilityLabel={label}
+        // The field below is hidden from screen readers, so the choice is read from here.
+        accessibilityValue={{ text: shown || placeholder }}
         aria-expanded={open}
         aria-disabled={disabled}
         disabled={disabled}
