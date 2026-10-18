@@ -157,6 +157,26 @@ describe("Table: 2.x data={{ headers, rows }} as columns and array rows", () => 
   });
 });
 
+describe("Table cells a server component sent", () => {
+  // Past a few KB of rows, React sends the remaining elements as lazy
+  // references, which isValidElement does not recognise: they printed as
+  // "[object Object]" (/basics/spacing, every Markdown table).
+  it("renders a lazy element in a cell instead of printing it as text", async () => {
+    const { lazy, Suspense } = await import("react");
+    // React.lazy types its value as a component; resolved to an element, it is a lazy node.
+    const load = async () => ({ default: <code>space-16</code> }) as never;
+    const cell = lazy(load) as unknown as React.ReactNode;
+    render(
+      <Suspense fallback={null}>
+        <Table columns={[{ key: "token", header: "Token" }]} rows={[{ token: cell }]} />
+      </Suspense>,
+      { wrapper: wrap },
+    );
+    expect(await screen.findByText("space-16")).toBeInTheDocument();
+    expect(screen.queryByText("[object Object]")).toBeNull();
+  });
+});
+
 describe("DatePicker range and DateInput range (2.x DateRangePicker, DateRangeInput)", () => {
   it("picks a range over two months with months={2}", async () => {
     const user = userEvent.setup();

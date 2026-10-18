@@ -19,8 +19,9 @@ import { Text } from "./Text";
  * - a static label, the 2.x Tag;
  * - `variant="announce"`, with `href`, `arrow` and `effect`: the pill that
  *   announces something, usually as a link (2.x's Badge);
- * - `selected`, `onClick` or `onRemove`: a toggle with `aria-pressed` and an
- *   optional remove button (2.x's Chip). `selected` defaults to false.
+ * - `selected` or `onRemove`: a toggle with `aria-pressed` and an optional
+ *   remove button (2.x's Chip). An `onClick` without `selected` keeps the
+ *   static look, as on 2.x's Tag.
  */
 export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onClick"> {
   /**
@@ -45,7 +46,7 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
   effect?: boolean;
   /** Makes the tag a toggle, pressed when true. Defaults to false. */
   selected?: boolean;
-  /** Makes the tag a toggle (a button), called on a click, Enter and Space. */
+  /** Called on a click; with `selected`, also on Enter and Space, as a toggle. */
   onClick?: MouseEventHandler<HTMLDivElement>;
   /** Adds a remove button. Removing is never a click on the tag. */
   onRemove?: () => void;
@@ -110,7 +111,7 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
     const arrowId = useId();
     const arrow = arrowProp ?? href !== undefined;
 
-    if (!href && (selected !== undefined || onClick || onRemove)) {
+    if (!href && (selected !== undefined || onRemove)) {
       const toggle = { selected, onClick, onRemove, removeButtonProps };
       return (
         <InteractiveTag
@@ -140,6 +141,23 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
       ? { onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement> }
       : {};
 
+    // A static tag with onClick is a button in the tag's own look (2.x's
+    // clickable Tag): focusable, pressed by Enter and Space, not a toggle.
+    const button =
+      onClick && !href
+        ? {
+            onClick,
+            role: "button",
+            tabIndex: 0,
+            cursor: "interactive" as const,
+            onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
+              if (e.key !== "Enter" && e.key !== " ") return;
+              e.preventDefault();
+              onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+            },
+          }
+        : {};
+
     const box = (
       <Row
         fitWidth
@@ -164,9 +182,11 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
           styles.tag,
           gradient ? styles.gradient : undefined,
           effect ? styles.shine : undefined,
+          announce ? styles.announce : undefined,
           className,
         )}
         style={style}
+        {...button}
         {...rest}
       >
         {prefixIcon &&

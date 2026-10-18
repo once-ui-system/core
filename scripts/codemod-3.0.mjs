@@ -6,7 +6,9 @@
  * only renamed inside an element that is Once UI's component, found through
  * the file's imports, or by name in MDX where components have no import), and
  * anything a rewrite cannot do exactly is reported for a human instead of
- * guessed. Every pass is idempotent, so running it twice changes nothing.
+ * guessed. Every pass is idempotent, so running it twice changes nothing,
+ * but it reads code as 2.x: a bare number written for 3.0 (px) on a size
+ * prop is rewritten as if it were 2.x rem. Run it once, over 2.x code.
  *
  * The break list it follows is MIGRATING.md § "2.x → 3.0"; each pass below
  * names the row it implements.

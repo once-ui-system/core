@@ -138,4 +138,6 @@
 /* `error` / `errorMessage`: the danger border Input draws. */
 .error .switch:not(.checked) {
     border-color: var(--danger-border-medium);
+    // Themes whose solid border width is 0 draw no border: a ring shows it there too.
+    box-shadow: 0 0 0 1px var(--danger-border-medium);
 }

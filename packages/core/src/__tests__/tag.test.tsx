@@ -10,9 +10,10 @@ import { expectNoAxeViolations } from "../test/axe";
 /**
  * 3.0 folds Badge and Chip into Tag (F3). A Tag is a static label; with
  * `variant="announce"`, `href`, `arrow` and `effect` it is 2.x's Badge; with
- * `selected`, `onClick` or `onRemove` it is 2.x's Chip: a `role="button"`
- * with `aria-pressed`, pressed by a click, Enter or Space, whose remove button
- * sits beside it and never counts as a click on the tag.
+ * `selected` or `onRemove` it is 2.x's Chip: a `role="button"` with
+ * `aria-pressed`, pressed by a click, Enter or Space, whose remove button
+ * sits beside it and never counts as a click on the tag. An `onClick` alone
+ * keeps the static look (2.x's clickable Tag), as a button that is no toggle.
  */
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -119,10 +120,27 @@ describe("Tag, as a toggle (2.x Chip)", () => {
   // Chip's `selected` defaulted to true, so `<Tag selected label="Unselected" />`, as
   // the docs wrote it, was announced and drawn as pressed (core#198).
   it("is a focusable toggle button named by its label, unselected by default", () => {
-    render(<Tag label="Design" onClick={vi.fn()} />, { wrapper });
+    render(<Tag label="Design" selected={false} onClick={vi.fn()} />, { wrapper });
     const tag = screen.getByRole("button", { name: "Design" });
     expect(tag).toHaveAttribute("tabindex", "0");
     expect(tag).toHaveAttribute("aria-pressed", "false");
+  });
+
+  // Testimonial9 switched companies with `<Tag tone={…} onClick>`: in 2.x the
+  // tag kept its tone and size, and must not turn into a Chip.
+  it("keeps the static look with onClick alone, as a focusable button with no aria-pressed", async () => {
+    const user = userEvent.setup();
+    const onClick = vi.fn();
+    const { container } = render(<Tag label="Acme" tone="brand" onClick={onClick} />, { wrapper });
+    const tag = screen.getByRole("button", { name: "Acme" });
+    expect(tag).not.toHaveAttribute("aria-pressed");
+    expect(tag).toHaveAttribute("tabindex", "0");
+    expect(container.querySelector('[class*="_toggle_"]')).toBeNull();
+    expect(tag.className).toMatch(/brand-background-weak/);
+    tag.focus();
+    await user.keyboard("{Enter}");
+    expect(onClick).toHaveBeenCalledTimes(1);
+    await expectNoAxeViolations(container);
   });
 
   it("reflects `selected` in aria-pressed", () => {
@@ -166,10 +184,12 @@ describe("Tag, as a toggle (2.x Chip)", () => {
     const user = userEvent.setup();
     const onClick = vi.fn();
     const onRemove = vi.fn();
-    const { rerender } = render(<Tag label="Design" onClick={onClick} />, { wrapper });
+    const { rerender } = render(<Tag label="Design" selected={false} onClick={onClick} />, {
+      wrapper,
+    });
     expect(screen.getAllByRole("button")).toHaveLength(1);
 
-    rerender(<Tag label="Design" onClick={onClick} onRemove={onRemove} />);
+    rerender(<Tag label="Design" selected={false} onClick={onClick} onRemove={onRemove} />);
     await user.click(screen.getByRole("button", { name: "Remove" }));
     expect(onRemove).toHaveBeenCalledTimes(1);
     expect(onClick).not.toHaveBeenCalled();

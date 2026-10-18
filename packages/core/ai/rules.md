@@ -114,7 +114,7 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
     - Image/video → `Media`, not `img`
     - Links → `SmartLink` / `Button href`, not `a`
     - Status dot → `StatusIndicator`; progress → `ProgressBar`; loading → `Spinner` / `Skeleton`
-    - Labels/metadata → `Tag` (`variant="announce"` + `href` for the "New" pill above a hero; `selected`/`onClick`/`onRemove` for a filter toggle), `Kbd`, `InlineCode`. Badge and Chip are Tag in 3.0
+    - Labels/metadata → `Tag` (`variant="announce"` + `href` for the "New" pill above a hero; `selected` (+ `onClick`) or `onRemove` for a filter toggle), `Kbd`, `InlineCode`. Badge and Chip are Tag in 3.0
     - Tabs → `Tabs` > `TabList` > `Tab` with a `TabPanel` per value (`orientation="vertical"` for a settings nav). `SegmentedControl` picks a value; it is not a tab set
     - Mobile nav, filters, a side sheet → `Drawer` (`side`, `size`); it brings the focus trap, scroll lock and Escape a hand-made overlay misses
     - Where-am-I trail → `Breadcrumbs items={[{ label, href }, ...]}`; the last item is the current page

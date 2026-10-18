@@ -207,6 +207,8 @@ function textOf(node: unknown): string {
   if (node instanceof Date) return Number.isNaN(node.getTime()) ? "" : node.toISOString();
   if (Array.isArray(node)) return node.map(textOf).join(" ");
   if (isValidElement<{ children?: ReactNode }>(node)) return textOf(node.props.children);
+  // A lazy reference from a server component has no text to read here: give
+  // such a column its own `sort`, or pass its rows from a client component.
   return "";
 }
 
@@ -223,7 +225,7 @@ const isEmpty = (value: unknown) =>
   (value instanceof Date && Number.isNaN(value.getTime()));
 
 function compareValues(a: unknown, b: unknown): number {
-  if (isValidElement(a) || isValidElement(b) || Array.isArray(a) || Array.isArray(b))
+  if (isNode(a) || isNode(b) || Array.isArray(a) || Array.isArray(b))
     return textOf(a).localeCompare(textOf(b), undefined, { numeric: true, sensitivity: "base" });
   if (typeof a === "number" && typeof b === "number") return a - b;
   if (typeof a === "bigint" && typeof b === "bigint") return a < b ? -1 : a > b ? 1 : 0;
@@ -235,16 +237,19 @@ function compareValues(a: unknown, b: unknown): number {
 /** A field as cell content. Dates print as YYYY-MM-DD, the same on the server and in every locale. */
 function renderField(value: unknown): ReactNode {
   if (value === null || value === undefined) return null;
-  if (isValidElement(value)) return value;
   if (value instanceof Date) {
     return Number.isNaN(value.getTime()) ? null : value.toISOString().slice(0, 10);
   }
   if (Array.isArray(value))
-    return value.some((item) => isValidElement(item))
-      ? (value as ReactNode[])
-      : value.map(String).join(", ");
-  return String(value);
+    return value.some(isNode) ? (value as ReactNode[]) : value.map(String).join(", ");
+  // Any other object is React's to render: an element, or one a server
+  // component sent as a lazy reference, which isValidElement does not know.
+  return isNode(value) ? (value as ReactNode) : String(value);
 }
+
+/** An element, or another object React renders (a lazy reference from the server). */
+const isNode = (value: unknown) =>
+  isValidElement(value) || (typeof value === "object" && value !== null && "$$typeof" in value);
 
 const ALIGN = {
   left: { th: tableStyles.thAlignLeft, td: tableStyles.tdAlignLeft, row: "start" },

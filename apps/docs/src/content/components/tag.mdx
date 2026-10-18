@@ -12,13 +12,13 @@ navIcon: "components"
 
 - a **static label** for a status, a category or a piece of metadata;
 - an **announcement** (`variant="announce"`), the pill above a hero that links to what is new;
-- a **toggle** (`selected`, `onClick` or `onRemove`), a choice in a filter row or a value in `TagInput`.
+- a **toggle** (`selected` or `onRemove`), a choice in a filter row or a value in `TagInput`.
 
 <Feedback
   marginTop="16"
   marginBottom="24"
   title="Badge and Chip are Tag in 3.0"
-  description={<>2.x had three components for this. <InlineCode>Badge</InlineCode> is <InlineCode>{'<Tag variant="announce">'}</InlineCode> (<InlineCode>title</InlineCode> is <InlineCode>label</InlineCode>, <InlineCode>icon</InlineCode> is <InlineCode>prefixIcon</InlineCode>), and <InlineCode>Chip</InlineCode> is a Tag with <InlineCode>selected</InlineCode>, <InlineCode>onClick</InlineCode> or <InlineCode>onRemove</InlineCode>. <InlineCode>selected</InlineCode> now defaults to false. Tag's <InlineCode>scheme</InlineCode> is <InlineCode>tone</InlineCode>. The 3.0 codemod rewrites all of it.</>}
+  description={<>2.x had three components for this. <InlineCode>Badge</InlineCode> is <InlineCode>{'<Tag variant="announce">'}</InlineCode> (<InlineCode>title</InlineCode> is <InlineCode>label</InlineCode>, <InlineCode>icon</InlineCode> is <InlineCode>prefixIcon</InlineCode>), and <InlineCode>Chip</InlineCode> is a Tag with <InlineCode>selected</InlineCode> or <InlineCode>onRemove</InlineCode>. <InlineCode>selected</InlineCode> now defaults to false. Tag's <InlineCode>scheme</InlineCode> is <InlineCode>tone</InlineCode>. The 3.0 codemod rewrites all of it.</>}
 />
 
 <CodeBlock
@@ -191,7 +191,7 @@ An announcement lays its children out in the pill itself, so they take its `gap`
 
 ## Toggle
 
-With `selected`, `onClick` or `onRemove` a Tag is a toggle: a `role="button"` with `aria-pressed`, pressed by a click, Enter or Space. Selected, it draws in its tone (`brand` unless given one); unselected, in neutral. `selected` defaults to false. This was `Chip` in 2.x, where it defaulted to true.
+With `selected` or `onRemove` a Tag is a toggle: a `role="button"` with `aria-pressed`, pressed by a click, Enter or Space. An `onClick` alone keeps the static look, in its tone and size, as a plain button. Selected, it draws in its tone (`brand` unless given one); unselected, in neutral. `selected` defaults to false. This was `Chip` in 2.x, where it defaulted to true.
 
 <CodeBlock
   marginTop="16"
@@ -300,7 +300,7 @@ const [tags, setTags] = useState([
     arrow: "An arrow that slides in on hover. On by default with href.",
     effect: "A shine that sweeps across now and then. On by default with variant=\"announce\".",
     selected: "Makes it a toggle, pressed when true. Defaults to false.",
-    onClick: "Makes it a toggle, called on a click, Enter or Space.",
+    onClick: "Called on a click, Enter or Space. With selected it is a toggle; alone, the tag keeps its static look as a button.",
     onRemove: "Adds a remove button, called when it is used.",
     removeButtonProps: "Passed to the remove button.",
   }}

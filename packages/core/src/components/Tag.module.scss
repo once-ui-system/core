@@ -7,6 +7,11 @@
         color: var(--brand-on-background-medium);
         background-clip: padding-box;
     }
+
+    // As 2.x's Badge: a long announcement wraps inside its pill.
+    &.announce {
+        white-space: normal;
+    }
 }
 
 // `effect`: a shine that sweeps across the tag now and then, faster on hover.

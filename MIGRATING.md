@@ -24,7 +24,9 @@ node scripts/codemod-3.0.mjs src
 
 It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
-changes nothing. Lines marked `!` are for you to fix by hand.
+changes nothing. Run it once, before you write 3.0 code: it reads every bare
+number as 2.x did, so on a size you wrote as 3.0 px (`width={200}`) it would
+write `"200rem"`. Lines marked `!` are for you to fix by hand.
 
 ### 2. React 19
 
@@ -229,6 +231,8 @@ draw their icons in `neutral-on-background-strong` rather than `weak`.
   selected in its tone (`brand` by default). **`selected` defaults to false**;
   Chip's defaulted to true, so a 2.x `<Chip label="x" />` was drawn and
   announced as selected.
+- A Tag with only `onClick` keeps 2.x Tag's look, in its tone and size, and
+  is now a focusable button that Enter and Space press.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
