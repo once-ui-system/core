@@ -13,6 +13,7 @@ import { Scroller } from "../../components/Scroller";
 import { StyleOverlay } from "../../components/StyleOverlay";
 import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
+import { VisuallyHidden } from "../../components/VisuallyHidden";
 import type { IconName } from "../../icons";
 import { useScrollableTabStop } from "../../internal/scrollableTabStop";
 import { SpacingToken } from "../../types";
@@ -798,7 +799,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
-                      aria-label="Explain this code"
+                      // It opens the style panel; it used to be named
+                      // "Explain this code".
+                      aria-label="Code block style"
                       color="neutral-weak"
                     />
                   </Flex>
@@ -1003,6 +1006,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   return (
     <>
+      {/* The copy button only swaps its icon, which says nothing to a screen
+          reader; this says it. On the page from the start, so it is read. */}
+      <VisuallyHidden role="status">{copyIcon === "check" ? "Copied" : ""}</VisuallyHidden>
       {renderCodeBlock(false)}
       {isFullscreen &&
         ReactDOM.createPortal(

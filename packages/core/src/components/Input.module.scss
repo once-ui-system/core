@@ -54,6 +54,21 @@
   outline-offset: 2px;
 }
 
+/* Without the ring a focused field still has to look different from the
+   others, not only show a caret (WCAG 2.4.7): its border darkens, and a ghost
+   field gains one. Quiet enough to keep the native look; an error keeps its
+   colour, one step stronger. */
+.base:has(.input:focus-visible),
+.focused .base {
+  border-color: var(--neutral-border-strong);
+}
+
+.error .base:has(.input:focus-visible),
+.error.focused .base,
+.focused .error .base {
+  border-color: var(--danger-border-strong);
+}
+
 .base {
   --fld-border: 1px;
   --fld-well: var(--static-space-4); /* Column padding="4" in the TSX */

@@ -22,6 +22,12 @@ interface ToastProps {
    * keeps it up until it is closed.
    */
   duration?: number;
+  /**
+   * Make the toast its own live region. Toaster turns this off and announces
+   * through regions that are already on the page, since a region inserted
+   * together with its text is often not read at all.
+   */
+  announce?: boolean;
 }
 
 const iconMap: { [key in ToastProps["variant"]]: IconName } = {
@@ -34,7 +40,16 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
   (
     // The default is a literal so the generated props spec (ai/) states it.
-    { variant, className, showIcon = true, onClose, action, children, duration = 6000 },
+    {
+      variant,
+      className,
+      showIcon = true,
+      onClose,
+      action,
+      children,
+      duration = 6000,
+      announce = true,
+    },
     ref,
   ) => {
     const [visible, setVisible] = useState(true);
@@ -80,8 +95,8 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         // Only a danger toast interrupts. Everything else waits for the screen
         // reader to finish what it is saying: a "saved" confirmation announced
         // assertively cuts off whatever the user was listening to.
-        role={variant === "danger" ? "alert" : "status"}
-        aria-live={variant === "danger" ? "assertive" : "polite"}
+        role={announce ? (variant === "danger" ? "alert" : "status") : undefined}
+        aria-live={announce ? (variant === "danger" ? "assertive" : "polite") : undefined}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onFocus={() => setFocused(true)}

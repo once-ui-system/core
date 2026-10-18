@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useId, useMemo, useState } from "react";
 import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -319,13 +319,16 @@ function Table({
     </tr>
   );
 
+  // Two tables on a page used to share the ids "table-search" and "page-size".
+  const controlsId = useId();
+
   return (
     <Column fillWidth gap="m" {...flex}>
       {/* Search Bar */}
       {searchable && (
         <Row horizontal="between" vertical="center" gap="m" maxWidth={12}>
           <Input
-            id="table-search"
+            id={`${controlsId}-search`}
             placeholder={searchPlaceholder}
             value={searchQuery}
             size="xs"
@@ -383,7 +386,7 @@ function Table({
           <Row gap="8" vertical="center">
             <Row maxWidth={5}>
               <Select
-                id="page-size"
+                id={`${controlsId}-page-size`}
                 placeholder="Select page size"
                 value={String(pageSize)}
                 size="xs"
