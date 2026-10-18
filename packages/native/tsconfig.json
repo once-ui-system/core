@@ -13,5 +13,5 @@
     "noEmit": true,
     "types": []
   },
-  "include": ["src", "test", "demo-src"]
+  "include": ["src", "test", "test-native", "demo-src"]
 }

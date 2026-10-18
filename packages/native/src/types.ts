@@ -32,6 +32,8 @@ export type ResponsiveSpacingToken = TShirtSizes;
 export type ShadowSize = TShirtSizes;
 export type SpacingToken = StaticSpacingToken | ResponsiveSpacingToken;
 
+export type Opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
+
 export type ColorScheme =
   | "neutral"
   | "brand"

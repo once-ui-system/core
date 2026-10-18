@@ -131,6 +131,10 @@ jobs:
       - name: Foundations tests
         run: pnpm --filter @once-ui-system/foundations test
 
+      # src/icons/data.ts is a copy of core's built-in icons.
+      - name: Icon copy up to date
+        run: pnpm --filter @once-ui-system/native check:icons
+
       - name: Lint
         run: pnpm --filter @once-ui-system/native lint
 
@@ -139,6 +143,16 @@ jobs:
 
       - name: Test
         run: pnpm --filter @once-ui-system/native test
+
+      # The same components against the real react-native package (Jest with
+      # React Native's preset), not the react-native-web stand-in.
+      - name: Test on React Native
+        run: pnpm --filter @once-ui-system/native test:native
+
+      # Metro bundles the demo for Android and iOS and Hermes compiles it,
+      # as a release build of an app would.
+      - name: Bundle for Android and iOS
+        run: pnpm --filter @once-ui-system/native bundle:native
 
       - name: Build
         run: pnpm --filter @once-ui-system/native build

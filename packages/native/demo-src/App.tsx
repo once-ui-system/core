@@ -8,6 +8,7 @@ import {
   Column,
   Feedback,
   Heading,
+  IconButton,
   Input,
   Line,
   Row,
@@ -17,14 +18,19 @@ import {
   Tag,
   Text,
   ThemeProvider,
+  ToastProvider,
   useTheme,
+  useToast,
 } from "../src";
+import { Menu } from "./Menu";
+import { Order } from "./Order";
 
 /** A loyalty-card screen built only from the preview components. */
 function Screen() {
   const theme = useTheme();
   const [stamps, setStamps] = useState(7);
   const [push, setPush] = useState(true);
+  const { addToast } = useToast();
   return (
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20">
@@ -36,7 +42,8 @@ function Screen() {
               Kazinczy utca 14
             </Text>
           </Column>
-          <Tag scheme="success" label="Open" style={{ alignSelf: "center" }} />
+          <Tag scheme="success" label="Open" prefixIcon="time" style={{ alignSelf: "center" }} />
+          <IconButton icon="heart" variant="tertiary" ariaLabel="Save to favourites" />
         </Row>
 
         <Card padding="20" gap="16" shadow="m">
@@ -70,8 +77,15 @@ function Screen() {
             Three more coffees and the next one is on us.
           </Text>
           <Row gap="8">
-            <Button label="Add stamp" onPress={() => setStamps((s) => Math.min(10, s + 1))} />
-            <Button variant="secondary" label="History" />
+            <Button
+              label="Add stamp"
+              prefixIcon="plus"
+              onPress={() => {
+                setStamps((s) => Math.min(10, s + 1));
+                addToast({ variant: "success", message: "Stamp added" });
+              }}
+            />
+            <Button variant="secondary" label="History" suffixIcon="chevronRight" />
           </Row>
         </Card>
 
@@ -113,10 +127,24 @@ function Screen() {
   );
 }
 
-export function App({ theme }: { theme: "light" | "dark" }) {
+export function App({
+  theme,
+  screen = "card",
+}: {
+  theme: "light" | "dark";
+  screen?: "card" | "order" | "sheet" | "menu";
+}) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
-      <Screen />
+      <ToastProvider>
+        {screen === "card" ? (
+          <Screen />
+        ) : screen === "menu" ? (
+          <Menu />
+        ) : (
+          <Order sheet={screen === "sheet"} />
+        )}
+      </ToastProvider>
     </ThemeProvider>
   );
 }

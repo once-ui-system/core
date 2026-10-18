@@ -9,8 +9,8 @@ import type {
   TextVariant,
   TextWeight,
 } from "../types";
-import { type SpacingProps, spacingStyle, splitSpacing } from "./Flex";
 import type { RefComponent, TextRef } from "./refs";
+import { type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
 
 export interface TextProps extends SpacingProps, Omit<RNTextProps, "style"> {
   /** `"body-default-m"`, `"heading-strong-l"`, … as in core. */

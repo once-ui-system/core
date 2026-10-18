@@ -1,7 +1,7 @@
 import { forwardRef, type ReactNode } from "react";
 import { Pressable, View } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import { type FlexProps, flexStyle } from "./Flex";
+import { type FlexProps, flexStyle, wrapText } from "./Flex";
 import type { RefComponent, ViewRef } from "./refs";
 
 export interface CardProps extends FlexProps {
@@ -19,18 +19,19 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
   ref,
 ) {
   const theme = useTheme();
-  const { style, rest } = flexStyle(theme, {
+  const { style, rest, userStyle, hidden } = flexStyle(theme, {
     direction: "column",
     radius: "l",
     background: selected ? "brand-alpha-weak" : "surface",
     border: selected ? "brand-medium" : "neutral-medium",
     ...props,
   });
+  if (hidden) return null;
   const handler = onPress ?? onClick;
   if (!handler) {
     return (
-      <View ref={ref} {...rest} style={[style, props.style]}>
-        {children}
+      <View ref={ref} {...rest} style={[style, userStyle]}>
+        {wrapText(children)}
       </View>
     );
   }
@@ -41,9 +42,9 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
       aria-selected={selected}
       onPress={handler}
       {...rest}
-      style={({ pressed }) => [style, pressed && { opacity: 0.8 }, props.style]}
+      style={({ pressed }) => [style, pressed && { opacity: 0.8 }, userStyle]}
     >
-      {children}
+      {wrapText(children)}
     </Pressable>
   );
 });

@@ -5,12 +5,14 @@
  * app runs; only View/Text/Pressable come from react-native-web.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { build } from "esbuild";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 mkdirSync(join(ROOT, "demo"), { recursive: true });
+const svgRoot = join(createRequire(import.meta.url).resolve("react-native-svg/package.json"), "..");
 
 await build({
   entryPoints: [join(ROOT, "demo-src/index.tsx")],
@@ -18,8 +20,15 @@ await build({
   bundle: true,
   jsx: "automatic",
   format: "iife",
-  alias: { "react-native": "react-native-web" },
-  define: { "process.env.NODE_ENV": '"production"' },
+  // react-native-svg's web build draws plain <svg>; it has no image assets to look up here.
+  alias: {
+    "react-native": join(ROOT, "scripts/web/react-native.js"),
+    "react-native-svg": join(svgRoot, "lib/module/ReactNativeSVG.web.js"),
+    "@react-native/assets-registry/registry": join(ROOT, "scripts/web/assets-registry.js"),
+  },
+  resolveExtensions: [".web.js", ".web.tsx", ".web.ts", ".tsx", ".ts", ".jsx", ".js", ".json"],
+  // react-native-web's animations read Node's `global`.
+  define: { "process.env.NODE_ENV": '"production"', global: "globalThis" },
   logLevel: "warning",
 });
 
