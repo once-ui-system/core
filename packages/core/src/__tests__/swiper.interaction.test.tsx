@@ -160,3 +160,34 @@ describe("Swiper: navigation", () => {
     expect(el.style.scrollSnapType).toBe("x mandatory");
   });
 });
+
+describe("Swiper: visibility", () => {
+  it("ignores a neighbour that only touches the edge of the view", () => {
+    let callback: IntersectionObserverCallback = () => {};
+    const Real = globalThis.IntersectionObserver;
+    globalThis.IntersectionObserver = class {
+      constructor(cb: IntersectionObserverCallback) {
+        callback = cb;
+      }
+      observe() {}
+      unobserve() {}
+      disconnect() {}
+      takeRecords() {
+        return [];
+      }
+    } as unknown as typeof IntersectionObserver;
+    try {
+      render(<Swiper items={items} />, { wrapper });
+      const slides = [...scroller().children];
+      const entry = (target: Element, ratio: number) =>
+        ({ target, isIntersecting: true, intersectionRatio: ratio }) as IntersectionObserverEntry;
+      // What the browser reports first: the slide in view, and the next one touching its edge.
+      act(() => {
+        callback([entry(slides[0], 1), entry(slides[1], 0)], {} as IntersectionObserver);
+      });
+      expect(dot(1)).toHaveAttribute("aria-current", "true");
+    } finally {
+      globalThis.IntersectionObserver = Real;
+    }
+  });
+});
