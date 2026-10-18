@@ -8,6 +8,7 @@ import {
   Checkbox,
   Column,
   createTheme,
+  Dialog,
   defaultSettings,
   Feedback,
   flexStyle,
@@ -15,6 +16,7 @@ import {
   Input,
   Line,
   Row,
+  Select,
   Skeleton,
   Spinner,
   Switch,
@@ -22,6 +24,8 @@ import {
   Text,
   Textarea,
   ThemeProvider,
+  ToastProvider,
+  useToast,
 } from "../src";
 
 afterEach(cleanup);
@@ -190,5 +194,81 @@ describe("polish", () => {
     fireEvent.blur(field);
     // A resting label hides the control behind it; a floating one leaves it visible.
     expect(getComputedStyle(field).opacity).not.toBe("0");
+  });
+});
+
+describe("overlays", () => {
+  it("shows a Dialog as a sheet and closes it from the close button", () => {
+    const onClose = vi.fn();
+    render(
+      <ThemeProvider theme="light">
+        <Dialog
+          open
+          onClose={onClose}
+          title="Redeem reward"
+          description="Show this at the counter."
+        >
+          <Text>Free pastry</Text>
+        </Dialog>
+      </ThemeProvider>,
+    );
+    expect(screen.getByText("Redeem reward")).toBeTruthy();
+    expect(screen.getByText("Free pastry")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Close" }));
+    expect(onClose).toHaveBeenCalled();
+  });
+
+  it("renders nothing while a Dialog is closed", () => {
+    render(
+      <ThemeProvider theme="light">
+        <Dialog open={false} onClose={() => {}} title="Hidden" />
+      </ThemeProvider>,
+    );
+    expect(screen.queryByText("Hidden")).toBeNull();
+  });
+
+  it("adds a toast with useToast and hides it after its duration", () => {
+    vi.useFakeTimers();
+    function Saver() {
+      const { addToast } = useToast();
+      return (
+        <Button
+          label="Save"
+          onPress={() => addToast({ variant: "success", message: "Saved", duration: 1000 })}
+        />
+      );
+    }
+    render(
+      <ThemeProvider theme="light">
+        <ToastProvider>
+          <Saver />
+        </ToastProvider>
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Save" }));
+    expect(screen.getByText("Saved")).toBeTruthy();
+    act(() => vi.advanceTimersByTime(1100));
+    expect(screen.queryByText("Saved")).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it("opens Select's options in a sheet and picks one", () => {
+    const onSelect = vi.fn();
+    render(
+      <ThemeProvider theme="light">
+        <Select
+          label="Venue"
+          value="kazinczy"
+          onSelect={onSelect}
+          options={[
+            { value: "kazinczy", label: "Kazinczy utca" },
+            { value: "andrassy", label: "Andrássy út" },
+          ]}
+        />
+      </ThemeProvider>,
+    );
+    fireEvent.click(screen.getByRole("combobox", { name: "Venue" }));
+    fireEvent.click(screen.getByText("Andrássy út"));
+    expect(onSelect).toHaveBeenCalledWith("andrassy");
   });
 });
