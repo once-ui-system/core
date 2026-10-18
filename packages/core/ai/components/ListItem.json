@@ -83,7 +83,12 @@
    "weight": "TextWeight",
    "family": "TextType",
    "truncate": "boolean",
-   "flex": "FlexValue | number"
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  }
 }

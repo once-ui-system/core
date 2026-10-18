@@ -152,12 +152,12 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 
 ### Heading
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 - wrap?: CSSProperties["textWrap"] = balance
 
 ### Text
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 
 ### Button
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
@@ -448,6 +448,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - family?: TextType
 - truncate?: boolean
 - flex?: FlexValue | number
+- xl?: TextBreakpointHide
+- l?: TextBreakpointHide
+- m?: TextBreakpointHide
+- s?: TextBreakpointHide
+- xs?: TextBreakpointHide
 
 ## Types
 
@@ -472,6 +477,7 @@ type SolidType = "color" | "contrast" | "inverse"
 type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "1" | "2" | "4" | "8" | "12" | "32" | "64" | "160" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
+type TextBreakpointHide = { hide?: boolean }
 type TextSize = "xl" | "l" | "m" | "s" | "xs"
 type TextType = "label" | "body" | "code" | "heading" | "display"
 type TextVariant = `${"label" | "body" | "code" | "heading" | "display"}-${"default" | "medium" | "strong" | "normal"}-${"xl" | "xs" | "l" | "m" | "s"}`
@@ -499,7 +505,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.
 - Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding and flex but no radius or border; put those on the wrapper.
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.
 - vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: "baseline" }}.
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.

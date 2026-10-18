@@ -144,6 +144,9 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   },
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextProps": {
    "as": "T",
    "variant": "TextVariant",
@@ -152,7 +155,12 @@
    "weight": "TextWeight",
    "family": "TextType",
    "truncate": "boolean",
-   "flex": "FlexValue | number"
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  },
  "iconNames": [
@@ -1717,6 +1725,9 @@
    "align": "\"left\" | \"center\" | \"right\""
   },
   "TagProps": "Tag props",
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextSize": [
    "xl",
    "l",

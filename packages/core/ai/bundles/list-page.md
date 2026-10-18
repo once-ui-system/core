@@ -142,12 +142,12 @@ Use instead of Flex with direction="row".
 
 ### Heading
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 - wrap?: CSSProperties["textWrap"] = balance
 
 ### Text
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 
 ### Button
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
@@ -543,6 +543,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - family?: TextType
 - truncate?: boolean
 - flex?: FlexValue | number
+- xl?: TextBreakpointHide
+- l?: TextBreakpointHide
+- m?: TextBreakpointHide
+- s?: TextBreakpointHide
+- xs?: TextBreakpointHide
 
 ### GridProps
 - columns?: GridSize
@@ -582,6 +587,7 @@ type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "danger"; onClick: (rowIndex: number) => void; disabled?: (rowIndex: number) => boolean }
 type TableHeader = { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right" }
+type TextBreakpointHide = { hide?: boolean }
 type TextSize = "xl" | "l" | "m" | "s" | "xs"
 type TextType = "label" | "body" | "code" | "heading" | "display"
 type TextVariant = `${"label" | "body" | "code" | "heading" | "display"}-${"default" | "medium" | "strong" | "normal"}-${"xl" | "xs" | "l" | "m" | "s"}`
@@ -598,7 +604,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
 - Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.
 - Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding and flex but no radius or border; put those on the wrapper.
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.
 - A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width="32" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale ("160" is the largest), so height="320" is a type error: write height={20}. An icon or avatar box is usually "24" to "48".
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.

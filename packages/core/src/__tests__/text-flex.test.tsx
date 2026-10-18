@@ -15,3 +15,13 @@ describe("Text and Heading flex", () => {
     expect(renderToStaticMarkup(<Text flex={1}>a</Text>)).not.toContain(' flex="');
   });
 });
+
+describe("Text and Heading breakpoint hide", () => {
+  it("hides from the breakpoint down, without leaking to the DOM", () => {
+    const html = renderToStaticMarkup(<Text s={{ hide: true }}>a</Text>);
+    expect(html).toContain("s-flex-hide");
+    expect(html).not.toContain(' s="');
+    expect(renderToStaticMarkup(<Heading m={{ hide: true }}>a</Heading>)).toContain("m-flex-hide");
+    expect(renderToStaticMarkup(<Text s={{ hide: false }}>a</Text>)).not.toContain("flex-");
+  });
+});

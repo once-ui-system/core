@@ -96,6 +96,16 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
   truncate?: boolean;
   /** Flex grow inside a Row or Column, e.g. a label that takes the free space: `<Text flex={1}>`. */
   flex?: FlexValue | number;
+  /** Hide from this breakpoint down: `s={{ hide: true }}`. Text takes only `hide` here; anything else that changes at a breakpoint goes on a Row or Column wrapper. */
+  xl?: TextBreakpointHide;
+  l?: TextBreakpointHide;
+  m?: TextBreakpointHide;
+  s?: TextBreakpointHide;
+  xs?: TextBreakpointHide;
+}
+
+export interface TextBreakpointHide {
+  hide?: boolean;
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {

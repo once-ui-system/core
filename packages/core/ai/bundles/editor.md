@@ -208,7 +208,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Text
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 
 ### Media
 Extends Flex.
@@ -254,7 +254,7 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 
 ### Heading
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
-Avoid: Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 - wrap?: CSSProperties["textWrap"] = balance
 
 ### Button
@@ -523,6 +523,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - family?: TextType
 - truncate?: boolean
 - flex?: FlexValue | number
+- xl?: TextBreakpointHide
+- l?: TextBreakpointHide
+- m?: TextBreakpointHide
+- s?: TextBreakpointHide
+- xs?: TextBreakpointHide
 
 ### GridProps
 - columns?: GridSize
@@ -555,6 +560,7 @@ type SolidType = "color" | "contrast" | "inverse"
 type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "1" | "2" | "4" | "8" | "12" | "32" | "64" | "160" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
+type TextBreakpointHide = { hide?: boolean }
 type TextSize = "xl" | "l" | "m" | "s" | "xs"
 type TextType = "label" | "body" | "code" | "heading" | "display"
 type TextVariant = `${"label" | "body" | "code" | "heading" | "display"}-${"default" | "medium" | "strong" | "normal"}-${"xl" | "xs" | "l" | "m" | "s"}`
@@ -569,7 +575,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Use fill not fillWidth fillHeight; center not horizontal="center" vertical="center"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.
 - zIndex is for an isolated stacking group: an absolute decorative layer and its content sibling (zIndex={1}), or a sticky header over its pane. Never on a lone element, never a page-wide ladder of 3 / 5 / 9 — restructure the tree instead.
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding and flex but no radius or border; put those on the wrapper.
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.
 - A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width="32" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale ("160" is the largest), so height="320" is a type error: write height={20}. An icon or avatar box is usually "24" to "48".
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.

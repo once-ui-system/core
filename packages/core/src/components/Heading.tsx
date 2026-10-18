@@ -64,6 +64,11 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     style,
     truncate,
     flex,
+    xl,
+    l,
+    m,
+    s,
+    xs,
     opacity,
     className,
     userSelect,
@@ -173,6 +178,12 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
     ...layout.classes,
+    // Below xl each query is max-width, so a hide at s also covers xs.
+    xl?.hide && "xl-flex-hide",
+    l?.hide && "l-flex-hide",
+    m?.hide && "m-flex-hide",
+    s?.hide && "s-flex-hide",
+    xs?.hide && "xs-flex-hide",
   );
 
   const combinedStyle = {
