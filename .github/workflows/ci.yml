@@ -1,6 +1,6 @@
 # Quality gates for @once-ui-system/core: every pull request and every push to
 # main must build, typecheck, pass its tests, add no lint errors and keep the
-# docs app building.
+# docs app building and in step with the code.
 name: CI
 
 on:
@@ -100,6 +100,12 @@ jobs:
       # would on the docs deployment (apps/docs/vercel.json runs the same build).
       - name: Build core
         run: pnpm --filter @once-ui-system/core build
+
+      # Every example on the site and in the agent harness is typechecked
+      # against the built package, and every props table against the spec,
+      # so a renamed prop or a wrong default fails here instead of on a page.
+      - name: Docs match the code
+        run: pnpm --filter @once-ui-system/docs check:docs
 
       - name: Build docs
         run: pnpm --filter @once-ui-system/docs build

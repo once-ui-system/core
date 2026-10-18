@@ -144,43 +144,22 @@ two rows that read as unrelated settings.
     controlWidth: "Width reserved for the control, in rem, so a column of settings lines up.",
     children: "The control itself.",
   }}
-  content={[
-    ["children", "ReactNode"]
-  ]}
 />
 
 ### SettingGroup
 
 <PropsTable
-  content={[
-    ["label", "ReactNode"],
-    ["description", "ReactNode"],
-    ["info", "ReactNode"],
-    ["control", "ReactNode"],
-    ["open", "boolean"],
-    ["children", "ReactNode"],
-    ["...flex"]
-  ]}
+  component="SettingGroup"
 />
 
 ### SettingAxes
 
 <PropsTable
-  content={[
-    ["label", "ReactNode"],
-    ["info", "ReactNode"],
-    ["axes", "{ label: ReactNode; control: ReactNode }[]"],
-    ["axisWidth", "number", "13"],
-    ["...flex"]
-  ]}
+  component="SettingAxes"
 />
 
 ### InfoTip
 
 <PropsTable
-  content={[
-    ["children", "ReactNode"],
-    ["size", ["xs", "s", "m", "l", "xl"], "xs"],
-    ["...flex"]
-  ]}
+  component="InfoTip"
 />

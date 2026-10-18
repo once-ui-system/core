@@ -12,7 +12,7 @@ The `useOgData` hook fetches Open Graph metadata from URLs, including title, des
 
 **Used in components:** [OgCard](/components/ogCard)
 
-<Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. The OGCard component already uses it internally to fetch and display Open Graph previews. Use this hook when you need custom rendering or additional control over the fetching logic."/>
+<Feedback marginTop="16" marginBottom="24" description="Most of the time you don't need to use this hook directly. The OgCard component already uses it internally to fetch and display Open Graph previews. Use this hook when you need custom rendering or additional control over the fetching logic."/>
 
 ## Features
 
@@ -115,7 +115,7 @@ For cases where you only need the image:
 function LinkThumbnail({ url }: { url: string }) {
   const { ogImage, loading } = useOgImage(url);
 
-  if (loading) return <Skeleton width={200} size={200} />;
+  if (loading) return <Skeleton shape="block" width={12} height={12} />;
   if (!ogImage) return <DefaultThumbnail />;
 
   return (
@@ -133,9 +133,9 @@ function LinkThumbnail({ url }: { url: string }) {
   ]}
 />
 
-## With OGCard component
+## With OgCard component
 
-Combine with the OGCard component for rich previews:
+Combine with the OgCard component for rich previews:
 
 <CodeBlock
   marginTop="16"
@@ -145,11 +145,11 @@ Combine with the OGCard component for rich previews:
   codes={[
     {
       code:
-`import { OGCard } from '@once-ui-system/core';
+`import { OgCard } from '@once-ui-system/core';
 
 function RichLinkPreview({ url }: { url: string }) {
   return (
-    <OGCard
+    <OgCard
       url={url}
       aspectRatio="16 / 9"
       radius="l"
@@ -193,10 +193,10 @@ function RichLinkPreview({ url }: { url: string }) {
   faviconUrl?: string;
 }
 
-{
+type UseOgDataResult = {
   ogData: Partial<OgData> | null;
   loading: boolean;
-}`,
+};`,
       language: "tsx",
       label: "Return type"
     }
@@ -223,10 +223,10 @@ function RichLinkPreview({ url }: { url: string }) {
   codes={[
     {
       code:
-`{
+`type UseOgImageResult = {
   ogImage: string | null;
   loading: boolean;
-}`,
+};`,
       language: "tsx",
       label: "Return type"
     }
@@ -316,7 +316,7 @@ The hook handles errors gracefully:
     );
   }
 
-  return <OGCard url={url} />;
+  return <OgCard url={url} />;
 }`,
       language: "tsx",
       label: "SafeLinkPreview.tsx"
@@ -356,7 +356,7 @@ function OptimizedPreview({ rawUrl }: { rawUrl: string | undefined }) {
   if (!url) return <div>Invalid URL</div>;
   if (loading) return <Skeleton />;
   
-  return <OGCard url={url} />;
+  return <OgCard url={url} />;
 }`,
       language: "tsx",
       label: "OptimizedPreview.tsx"

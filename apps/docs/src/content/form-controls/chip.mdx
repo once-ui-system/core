@@ -99,7 +99,7 @@ Chips can include a remove button to allow users to dismiss or remove the chip. 
     {
       code:
 `const { addToast } = useToast();
-const [chips, setChips] = useState([
+const [chips, setChips] = useState<{ id: string; label: string; icon?: IconName }[]>([
     { id: "1", label: "React", icon: "code" },
     { id: "2", label: "TypeScript", icon: "code" },
     { id: "3", label: "Next.js" }

@@ -28,8 +28,8 @@ export interface KbarItem {
   id: string;
   name: string;
   section: string;
-  shortcut: string[];
-  keywords: string;
+  shortcut?: string[];
+  keywords?: string;
   href?: string;
   perform?: () => void;
   icon?: IconName;
@@ -184,12 +184,12 @@ export const KbarContent: React.FC<KbarContentProps> = ({
             suffix:
               item.shortcut && item.shortcut.length > 0 ? (
                 <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
-                  {item.shortcut.map((key, i) => (
+                  {item.shortcut.map((key, i, keys) => (
                     <Row gap="2" key={i}>
                       <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
                         {key}
                       </Kbd>
-                      {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
+                      {i < keys.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                     </Row>
                   ))}
                 </Row>

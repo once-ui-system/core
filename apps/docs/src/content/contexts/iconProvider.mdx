@@ -255,3 +255,12 @@ const known = Object.keys(icons);
 Unlike the other context hooks, `useIcons()` does not throw outside a provider —
 it returns the default library, so a component that only needs built-in icons
 works with no provider in the tree.
+
+## API reference
+
+<PropsTable
+  component="IconProvider"
+  describe={{
+    icons: "Icons to add or replace, keyed by name. Merged over the built-in library.",
+  }}
+/>
