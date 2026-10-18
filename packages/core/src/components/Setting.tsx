@@ -18,12 +18,25 @@ import { Text } from "./Text";
  * not exist yet.
  */
 
-/** Renders a label that may be a plain string or arbitrary nodes. */
-function renderLabel(label: React.ReactNode) {
-  return typeof label === "string" || typeof label === "number" ? (
-    <Text wrap="nowrap" variant="label-default-s">
+/**
+ * Renders a label that may be a plain string or arbitrary nodes. With an `id`
+ * (the target of the control's `aria-labelledby`), a string label carries it
+ * on its own Text, so the label adds no box of its own; a node label is
+ * wrapped in a `display: contents` span, which names it without taking part
+ * in the row's layout.
+ */
+function renderLabel(label: React.ReactNode, id?: string) {
+  if (typeof label === "string" || typeof label === "number") {
+    return (
+      <Text id={id} wrap="nowrap" variant="label-default-s">
+        {label}
+      </Text>
+    );
+  }
+  return id ? (
+    <span id={id} style={{ display: "contents" }}>
       {label}
-    </Text>
+    </span>
   ) : (
     label
   );
@@ -65,7 +78,7 @@ const Setting: React.FC<SettingProps> = ({
       {hasLabel && (
         <Column gap="4" paddingLeft="8" paddingRight="4" paddingY="4">
           <Row vertical="center" gap="8">
-            {label && <span id={labelId}>{renderLabel(label)}</span>}
+            {label && renderLabel(label, labelId)}
             {info && <InfoTip>{info}</InfoTip>}
           </Row>
           {description && (
@@ -185,7 +198,7 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   return (
     <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
       <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
-        {label && <span id={labelId}>{renderLabel(label)}</span>}
+        {label && renderLabel(label, labelId)}
         {info && <InfoTip>{info}</InfoTip>}
       </Row>
       <Row fillWidth gap="12" wrap>
