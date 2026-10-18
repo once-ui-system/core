@@ -38,6 +38,7 @@ export function ProgressBar({
   const horizontal = labelPosition === "left" || labelPosition === "right";
   const bar = (
     <View
+      accessible
       accessibilityRole="progressbar"
       aria-valuemin={min}
       aria-valuemax={max}
