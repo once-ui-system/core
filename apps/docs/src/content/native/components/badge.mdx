@@ -1,0 +1,83 @@
+---
+title: "Badge"
+summary: "A pill that announces something, and can lead to it when pressed."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/badge.mdx"
+github: "packages/native/src/components/Badge.tsx"
+navLabel: "Badge"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Badge` is a pill with a title, an optional icon and an optional arrow. Use it to point at something new, like a release or a feature. For a static label, use [Tag](/native/components/tag). See the [web Badge page](/components/badge) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Badge } from "@once-ui-system/native";
+
+export function Announcement() {
+  return <Badge title="New: loyalty cards" icon="sparkle" />;
+}`,
+    language: "tsx",
+    label: "Badge"
+  }
+]} />
+
+## Pressable with an arrow
+
+Pass `onPress` to make the badge pressable. Screen readers announce it as a link. Add `arrow` to show a chevron after the title.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Badge } from "@once-ui-system/native";
+
+export function WhatsNew({ onOpen }: { onOpen: () => void }) {
+  return <Badge title="See what's new" icon="bell" arrow onPress={onOpen} />;
+}`,
+    language: "tsx",
+    label: "Pressable"
+  }
+]} />
+
+## Custom content
+
+Children render after the title, so you can add your own elements.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Badge, Text } from "@once-ui-system/native";
+
+export function Version() {
+  return (
+    <Badge title="Version">
+      <Text variant="code-default-s" onBackground="brand-medium">2.0</Text>
+    </Badge>
+  );
+}`,
+    language: "tsx",
+    label: "Custom content"
+  }
+]} />
+
+## Differences from the web
+
+- `onPress` replaces `href`. There is no `effect` animation and no `textVariant`.
+- `arrow` is off by default. On the web it turns on when the badge has an `href`.
+- Badge does not take Flex props, so its padding, background and border are fixed. Use `style` for the outer view.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `title` | `string` | | The badge text. |
+| `icon` | `IconName` | | An icon before the title. |
+| `arrow` | `boolean` | `false` | A chevron after the title. |
+| `onPress` | `() => void` | | Makes the badge pressable, announced as a link. |
+| `children` | `ReactNode` | | Content after the title. |
+| `style` | `ViewStyle` | | Style for the outer view. |

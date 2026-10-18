@@ -1,0 +1,88 @@
+---
+title: "Tag"
+summary: "A small label on a weak tint of its color scheme."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/tag.mdx"
+github: "packages/native/src/components/Tag.tsx"
+navLabel: "Tag"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Tag` is a static label for a status, a category or a piece of metadata. It stays on one line. For something that announces or links, use [Badge](/native/components/badge). See the [web Tag page](/components/tag) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Tag } from "@once-ui-system/native";
+
+export function Status() {
+  return <Tag label="In stock" scheme="success" />;
+}`,
+    language: "tsx",
+    label: "Tag"
+  }
+]} />
+
+## Schemes and sizes
+
+`scheme` picks the color, from `neutral` (the default) to `brand`, `accent`, `info`, `danger`, `warning` and `success`. `size` is `s`, `m` or `l`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, Tag } from "@once-ui-system/native";
+
+export function Labels() {
+  return (
+    <Row gap="8" wrap vertical="center">
+      <Tag size="s" label="Draft" />
+      <Tag size="m" label="Brand" scheme="brand" />
+      <Tag size="l" label="Overdue" scheme="danger" />
+      <Tag label="Pending" scheme="warning" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Schemes and sizes"
+  }
+]} />
+
+## Icons
+
+`prefixIcon` and `suffixIcon` take an icon name, as on the web, or any element.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, Tag } from "@once-ui-system/native";
+
+export function Meta() {
+  return (
+    <Row gap="8">
+      <Tag label="Today" prefixIcon="calendar" scheme="info" />
+      <Tag label="Favourite" suffixIcon="star" scheme="brand" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Icons"
+  }
+]} />
+
+## API reference
+
+Tag does not take Flex props. Use `style` for the outer view.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | | The tag text. `children` is used when it is not set. |
+| `scheme` | `"neutral" \| "brand" \| "accent" \| "info" \| "danger" \| "warning" \| "success"` | `"neutral"` | The color scheme. |
+| `size` | `"s" \| "m" \| "l"` | `"m"` | The tag size. |
+| `prefixIcon` | `IconName \| ReactNode` | | An icon before the text. |
+| `suffixIcon` | `IconName \| ReactNode` | | An icon after the text. |
+| `children` | `ReactNode` | | The text, when there is no `label`. |
+| `style` | `ViewStyle` | | Style for the tag. |

@@ -1,0 +1,14 @@
+{
+  "title": "Form controls",
+  "order": 5,
+  "pages": {
+    "input": 1,
+    "textarea": 2,
+    "select": 3,
+    "checkbox": 4,
+    "switch": 5,
+    "radioButton": 6,
+    "radioGroup": 7,
+    "chip": 8
+  }
+}
