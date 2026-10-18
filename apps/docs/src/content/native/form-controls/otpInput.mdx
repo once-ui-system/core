@@ -1,0 +1,66 @@
+---
+title: "OTPInput"
+summary: "One field per digit of a one-time code, with SMS autofill, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/otpInput.mdx"
+github: "packages/native/src/components/OTPInput.tsx"
+navLabel: "OTPInput"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`OTPInput` draws one field per digit of a one-time code. Each digit moves focus to the next field, and backspace in an empty field goes back to the one before. A code pasted into a field, or filled in from a text message, spreads across the fields from that one. `onComplete` gets the code once every field has a digit. See the [web OTPInput](/form-controls/otpInput) for the browser version.
+
+## Basic usage
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { OTPInput } from "@once-ui-system/native";
+
+export function Verify({ onCode }: { onCode: (code: string) => void }) {
+  return <OTPInput length={6} autoFocus onComplete={onCode} />;
+}`,
+    language: "tsx",
+    label: "Verify.tsx"
+  }
+]} />
+
+## Errors
+
+`error` draws every field in the danger colour. `errorMessage` shows under the fields and is announced when it appears.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { OTPInput } from "@once-ui-system/native";
+
+export function WrongCode() {
+  return <OTPInput length={6} error errorMessage="That code has expired. We sent a new one." />;
+}`,
+    language: "tsx",
+    label: "Error"
+  }
+]} />
+
+## Differences from the web
+
+- The first field sets `textContentType="oneTimeCode"` and `autoComplete="sms-otp"`, so iOS and Android offer the code from a text message above the keyboard.
+- A pasted or autofilled code fills the following fields. On the web each field takes one character.
+- Each field is 56 points wide, not 48, to leave room for the field's side padding around a large digit.
+- The keyboard is a number pad. There are no arrow keys, so moving between fields is by tapping one.
+- `OTPInput` does not take the web's div props. Use `style` for the outer view.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `length` | `number` | `4` | How many digits. |
+| `onComplete` | `(code: string) => void` | | Called with the code once every field has a digit. |
+| `error` | `boolean` | `false` | Draws the fields in the danger colour. |
+| `errorMessage` | `ReactNode` | | Shown under the fields while `error` is true. |
+| `disabled` | `boolean` | `false` | Dims the fields. They take no input. |
+| `autoFocus` | `boolean` | `false` | Focuses the first field on mount. |
+| `style` | `ViewStyle` | | Style for the outer view. |

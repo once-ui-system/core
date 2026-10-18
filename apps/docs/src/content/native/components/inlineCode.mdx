@@ -1,0 +1,64 @@
+---
+title: "InlineCode"
+summary: "Code inside a sentence, in the code font on a weak tint, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/inlineCode.mdx"
+github: "packages/native/src/components/InlineCode.tsx"
+navLabel: "InlineCode"
+navIcon: "components"
+status: "unreleased"
+---
+
+`InlineCode` sets a short piece of code, such as a command or a prop name, in the code font on a weak neutral tint with a thin border. It is a `Text`, so it can sit inside a paragraph. For longer code, use [CodeBlock](/native/components/codeBlock). See the [web InlineCode page](/components/inlineCode) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { InlineCode, Text } from "@once-ui-system/native";
+
+export function Hint() {
+  return (
+    <Text>
+      Run <InlineCode>npx expo start</InlineCode> to open the app.
+    </Text>
+  );
+}`,
+    language: "tsx",
+    label: "InlineCode"
+  }
+]} />
+
+## On its own
+
+Outside a `Text`, InlineCode shows its rounded border and padding.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { InlineCode } from "@once-ui-system/native";
+
+export function PropName() {
+  return <InlineCode onBackground="brand-strong">fillWidth</InlineCode>;
+}`,
+    language: "tsx",
+    label: "Standalone"
+  }
+]} />
+
+## Differences from the web
+
+- InlineCode is a `Text`, not a Flex, so it takes Text props instead of Flex props.
+- The web sets 80% of the surrounding text size. A nested `Text` cannot read its parent's size, so InlineCode uses the label-s size, which is what the web's `code-s` size uses.
+- Inside another `Text`, React Native ignores the border, radius and padding. Only the tint shows. Used on its own, all of them show.
+- The font is `fonts.code` from `ThemeProvider`, or the platform monospace font (Menlo on iOS, monospace on Android) when none is set.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | The code. Required. |
+| `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | The text colour. |
+| `style` | `TextStyle \| TextStyle[]` | | Style on top of the code style. |
+| `...text` | `TextProps` | | Other Text props, except `variant`, `family`, `size` and `weight`. |
