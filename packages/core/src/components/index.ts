@@ -110,6 +110,7 @@ export * from "./ShineFx";
 export * from "./Skeleton";
 export * from "./Slider";
 export * from "./SmartLink";
+export * from "./Sortable";
 export * from "./Spinner";
 export * from "./SplitView";
 export * from "./StatusIndicator";

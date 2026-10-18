@@ -9,8 +9,14 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: NavVariant; rail...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
   },
   "useStylePanel": {
    "group": "components",
@@ -291,10 +297,10 @@
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -369,6 +375,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "home",
    "inbox",
@@ -434,11 +441,6 @@
    "normal",
    "compact",
    "spacious"
-  ],
-  "NavVariant": [
-   "solid",
-   "subtle",
-   "minimal"
   ],
   "NavigationLayout": [
    "grid",
