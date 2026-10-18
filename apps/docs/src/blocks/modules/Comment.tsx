@@ -4,7 +4,6 @@ import {
   Avatar,
   Button,
   Column,
-  CountFx,
   Dialog,
   Dropdown,
   Icon,
@@ -17,6 +16,7 @@ import {
   Textarea,
   useToast,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
 import type React from "react";
 import { useState } from "react";

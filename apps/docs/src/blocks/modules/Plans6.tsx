@@ -1,4 +1,5 @@
-import { BlobFx, Button, Column, Grid, Heading, Icon, Row, Tag, Text } from "@once-ui-system/core";
+import { Button, Column, Grid, Heading, Icon, Row, Tag, Text } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 interface Tier {
   name: string;
@@ -115,9 +116,11 @@ function TierCard({ tier }: { tier: Tier }) {
             {tier.price}
           </Heading>
           {tier.period && (
-            <Text textVariant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
-              {tier.period}
-            </Text>
+            <Column paddingBottom="4">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
+                {tier.period}
+              </Text>
+            </Column>
           )}
         </Row>
         <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">

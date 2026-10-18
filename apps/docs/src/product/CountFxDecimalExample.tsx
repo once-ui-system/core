@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Row, CountFx } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 
 export const CountFxDecimalExample = () => {
   const [value1, setValue1] = useState<number>(0);

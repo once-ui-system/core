@@ -3,39 +3,45 @@
 import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
+import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
+import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { ElementType } from "./ElementType.js";
 import { Icon } from "./Icon.js";
 
-interface SmartLinkCommonProps {
+interface SmartLinkCommonProps extends LeafProps {
   prefixIcon?: IconName;
   suffixIcon?: IconName;
-  fillWidth?: boolean;
   iconSize?: TShirtSizes;
   selected?: boolean;
   unstyled?: boolean;
   children: ReactNode;
   href?: string;
-  style?: React.CSSProperties;
-  className?: string;
 }
 
-export type SmartLinkProps = SmartLinkCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
+export type SmartLinkProps = SmartLinkCommonProps &
+  Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LeafProps>;
 
 const SmartLink = ({
   ref,
   href,
   prefixIcon,
   suffixIcon,
-  fillWidth = false,
+  fillWidth,
   iconSize = "xs",
   style,
   className,
   selected,
   unstyled = false,
   children,
-  ...props
+  ...rest
 }: SmartLinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  const layout = leafLayout(leaf);
+  // A margin of the caller's own replaces the link's 2px side margin.
+  const ownMarginX = [leaf.margin, leaf.marginX, leaf.marginLeft, leaf.marginRight].every(
+    (value) => value === undefined,
+  );
   const content = (
     <>
       {prefixIcon && <Icon name={prefixIcon} size={iconSize} />}
@@ -53,11 +59,14 @@ const SmartLink = ({
         "fill-width": fillWidth,
         "fit-width": !fillWidth,
         "min-width-0": fillWidth,
-        "px-2 mx-2": !unstyled,
+        "px-2": !unstyled,
+        "mx-2": !unstyled && ownMarginX,
       },
+      ...layout.classes,
     ),
     style: !unstyled
       ? {
+          ...layout.style,
           ...(selected && {
             textDecoration: "underline",
             textUnderlineOffset: "0.3em",
@@ -68,6 +77,7 @@ const SmartLink = ({
         }
       : {
           textDecoration: "none",
+          ...layout.style,
           ...style,
         },
     ...props,

@@ -195,7 +195,8 @@ describe("Particle → ParticleFx still renames components", () => {
 		);
 		assert.equal(
 			out,
-			'import { ParticleFx } from "@once-ui-system/core";\n<ParticleFx density={1} />;\n',
+			// F8: the import pass then moves it to @once-ui-system/fx.
+			'import { ParticleFx } from "@once-ui-system/fx";\n<ParticleFx density={1} />;\n',
 		);
 	});
 });

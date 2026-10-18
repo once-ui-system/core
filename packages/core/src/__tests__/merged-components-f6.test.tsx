@@ -13,7 +13,6 @@ import { Setting } from "../components/Setting";
 import { Slider } from "../components/Slider";
 import { StatusIndicator } from "../components/StatusIndicator";
 import { Table } from "../components/Table";
-import { TypeFx } from "../components/TypeFx";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import * as modules from "../modules";
 import { MegaMenu } from "../modules/navigation/MegaMenu";
@@ -61,11 +60,12 @@ describe("the F6 exports are gone", () => {
       "Kbd",
       "Grid",
       "StatusIndicator",
-      "TypeFx",
       "Setting",
     ]) {
       expect(name in components, name).toBe(true);
     }
+    // TypeFx, FadingLettersFx's survivor, is in @once-ui-system/fx (F8).
+    expect("TypeFx" in components).toBe(false);
   });
 });
 
@@ -349,30 +349,6 @@ describe("StatusIndicator pulse (2.x Pulse)", () => {
   it("keeps the plain dot without pulse", () => {
     render(<StatusIndicator scheme="green" />, { wrapper: wrap });
     expect(screen.getByRole("img", { name: "green status indicator" })).toBeInTheDocument();
-  });
-});
-
-describe('TypeFx mode="fade" (2.x FadingLettersFx)', () => {
-  it("fades each letter in, words 200ms and letters 40ms apart, from delay", () => {
-    const { container } = render(<TypeFx mode="fade" words="Hi yo" delay={2500} />, {
-      wrapper: wrap,
-    });
-    const letters = [...container.querySelectorAll<HTMLElement>("[data-letter]")];
-    expect(letters.map((l) => l.dataset.letter)).toEqual(["H", "i", "y", "o"]);
-    expect(letters.map((l) => l.style.getPropertyValue("--entry-delay"))).toEqual([
-      "2500ms",
-      "2540ms",
-      "2700ms",
-      "2740ms",
-    ]);
-    expect(letters[0].className).toMatch(/entering/);
-  });
-
-  it("fades out with state exiting", () => {
-    const { container } = render(<TypeFx mode="fade" words="Hi" state="exiting" />, {
-      wrapper: wrap,
-    });
-    expect(container.querySelector("[data-letter]")?.className).toMatch(/exiting/);
   });
 });
 

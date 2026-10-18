@@ -47,8 +47,10 @@ and `ComponentRef`/`ElementRef<typeof X>` give the same element types as in
 | `Particle` | `ParticleFx` | renames the import and every element |
 | Dialog `hideClose` | `showClose={false}` (an expression is negated) | rewrites |
 | CodeBlock `highlight` on the root | `highlight` on each entry of `codes` | rewrites an inline `codes` array, reports any other |
+| CodeBlock `styleButton` | `actions={<StyleOverlay>…</StyleOverlay>}`, StyleOverlay from `@once-ui-system/blocks` (§ 12) | reports |
 | `ariaLabel` on IconButton, Spinner, Switch, Scrubber, StatusIndicator | `aria-label` | renames |
-| `BaseBreakpointProps` | `FlexBreakpointProps`, `GridBreakpointProps` or `TextBreakpointProps` | reports |
+| `BaseBreakpointProps` | `FlexBreakpointProps` or `GridBreakpointProps` | reports |
+| `TextBreakpointProps`, `ButtonBreakpointProps`, `InputBreakpointProps` | none: leaves take `LeafProps` and no breakpoints (§ 13) | not rewritten; `tsc` names them |
 | `resetScrollLockState`, `resetAdapterWarning`, `warnIfFrameworkUnadapted` | none: they were test-only or internal | reports |
 
 ### 4. One value contract: fields
@@ -382,21 +384,24 @@ props in one and are the most-written props in Once UI code. `Grid` now applies
 imports. The subset subpaths (`/components`, `/contexts`, `/hooks`, `/icons`,
 `/types`, `/interfaces`, `/utils`) and `/modules` only re-exported parts of
 the root, and `/components/*` made every file in `dist/components` public,
-internals included. Import from the root instead. Four components left it:
+internals included. Import from the root instead. Four components left it
+for a subpath, and twenty-two for a package of their own (below the table):
 
 | 2.x | 3.0 |
 | --- | --- |
 | `@once-ui-system/core/components`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils`, `/modules`, `/components/<Name>` | `@once-ui-system/core` |
 | `EmojiPicker` (root) | `@once-ui-system/core/emoji`, so its emoji data (about 270 KB) is in no bundle that does not render it |
 | `Scrubber`, `CompareImage` (root); `MediaAudioPlayer`, `MediaVideoPlayer` (`/components/<Name>`) | `@once-ui-system/core/media`, beside `MediaUpload` |
+| The sixteen effects: `BlobFx`, `CelebrationFx`, `CountdownFx`, `CountFx`, `Effect`, `FlipFx`, `GlitchFx`, `HoloFx`, `LetterFx`, `MatrixFx`, `ParticleFx`, `RevealFx`, `ShineFx`, `TiltFx`, `TypeFx`, `WeatherFx`, with their props types | `@once-ui-system/fx` |
+| `Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel` (with `useStylePanel` and the `StylePanel*` types), `StyleOverlay` | `@once-ui-system/blocks` |
 
 The entry points are `.`, `/config`, `/server`, `/next`, `/data`, `/code`,
 `/media`, `/emoji`, `/mdx`, the `css/*` and `ai/*` files, `AGENTS.md` and
 `package.json`. The codemod's import pass moves every import, re-export and
 `import()` (splitting a statement that mixes names, joining an import of the
 subpath you already have), and reports what it cannot move: `Once.EmojiPicker`
-through a namespace import, `export * from "@once-ui-system/core"` (it no
-longer carries the four), an internal module `/components/*` exposed
+or `Once.RevealFx` through a namespace import, `export * from "@once-ui-system/core"` (it no
+longer carries the moved names), an internal module `/components/*` exposed
 (`FormContext`, `StylePanelSections`…), and any other specifier 3.0 does not
 have, such as a `vi.mock()` path. The pass only rewrites import sources, so it
 is also safe on code already written for 3.0:
@@ -409,6 +414,34 @@ A bundler resolves every specifier under `/media` it reaches, so an app that
 imports the players, `Scrubber` or `CompareImage` from there needs
 `compressorjs` resolvable for `MediaUpload`'s lazy chunk, as `/media` users
 already did. If your bundler fails on a missing `compressorjs`, install it.
+
+**Install the effects and the blocks.** `@once-ui-system/fx` and
+`@once-ui-system/blocks` are packages of their own, versioned with core. Each
+takes `@once-ui-system/core` (and React 19) as a peer and depends on nothing
+core does not already bring (`clsx`), and core no longer carries their code, so
+an app that renders no effect ships none of it. Add the ones your app imports
+from:
+
+```sh
+npm install @once-ui-system/fx @once-ui-system/blocks
+```
+
+```diff
+- import { Column, RevealFx, StylePanel } from "@once-ui-system/core";
++ import { Column } from "@once-ui-system/core";
++ import { RevealFx } from "@once-ui-system/fx";
++ import { StylePanel } from "@once-ui-system/blocks";
+```
+
+The import pass moves these imports like the others and, at the end of its
+run, names the packages the code now imports from so you know what to add.
+Nothing else changes: the components, their props and their CSS are the same,
+and core keeps no alias or re-export of them. In Next.js, list the packages in
+`transpilePackages` beside `@once-ui-system/core` if you list core there.
+CodeBlock's `styleButton` rendered a `StyleOverlay`, which core can no longer
+import: CodeBlock takes an `actions` slot instead, so pass
+`actions={<StyleOverlay><IconButton icon="sparkle" aria-label="Style" /></StyleOverlay>}`
+(the codemod reports each `styleButton`).
 
 **Real ESM.** The package is `"type": "module"`, and its JS names every file
 it imports (`./Button.js`), so Node and every bundler resolve it the same way.
@@ -442,6 +475,69 @@ under `dist/` breaks; take the breakpoints from
 source maps that pointed at the unshipped `src/`, or the harness's generator
 input (`ai/catalog.seed.json`, `ai/eval-tasks.md`). Nothing that was reachable
 through `exports` or `bin` moved.
+
+### 13. Leaf components take a small prop set
+
+Only the layout components (`Flex`, `Row`, `Column`, `Grid` and the components
+built on them, such as `Card`) take the layout props. A **leaf** takes its own
+props, the element's attributes, and `LeafProps`:
+
+| `LeafProps` | |
+| --- | --- |
+| `margin`, `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `marginX`, `marginY` | spacing token or px number, as on `Flex` |
+| `flex`, `fillWidth` | how it sits in its row or column |
+| `position`, `top`, `right`, `bottom`, `left` | to pin it (an `Avatar` on a corner, a `Button` on a card) |
+| `className`, `style` | |
+
+The leaves are `Button`, `IconButton`, `ToggleButton`, `Input`, `Textarea`,
+`NumberInput`, `ColorInput`, `DateInput`, `TagInput`, `OTPInput`, `Select`,
+`Slider`, `Switch`, `Checkbox`, `RadioButton`, `Text`, `Heading`, `Icon`,
+`Avatar`, `Spinner`, `StatusIndicator`, `Kbd`, `InlineCode`, `ProgressBar`,
+`Logo`, `SmartLink` and `NavIcon`. Anything else on one is a type error. Put
+it on a `Row` around the leaf (a `Column` around `Text` or `Heading`, so the
+text keeps its own line):
+
+```tsx
+// 2.x
+<Button s={{ hide: true }}>Sign up</Button>
+<Text paddingX="8" hide>Beta</Text>
+<Icon name="check" padding="4" radius="full" background="brand-weak" />
+
+// 3.0
+<Row s={{ hide: true }}><Button>Sign up</Button></Row>
+<Column paddingX="8" hide><Text>Beta</Text></Column>
+<Row fit padding="4" radius="full" background="brand-weak"><Icon name="check" /></Row>
+```
+
+What each leaf lost:
+
+| Leaf | Lost | Instead |
+| --- | --- | --- |
+| `Icon`, `Avatar`, `Spinner`, `StatusIndicator`, `Kbd`, `InlineCode`, `ProgressBar`, `NavIcon` (were `Flex`) | every other layout prop: padding, `gap`, sizes (`width`, `minHeight`, `fit`, `fill`…), `background`, `solid`, `border*`, `radius*`, `shadow`, the theme props, alignment (`center`, `horizontal`, `vertical`, `direction`, `wrap`), `overflow`, `zIndex`, `opacity`, `cursor`, `hide`, `showIn`, `translateX`/`Y`, `textVariant`, `onBackground`, `onSolid`, and the `xl`…`xs` objects | a `Row` around it; for a look of its own (a `Kbd`'s colours), `style` with the token variables |
+| `Slider` (its root was a `Flex`) | the same | a `Row` or `Column` around it |
+| `Text`, `Heading` | padding, `gap`, `translateX`/`Y`, `overflow*`, `scrollbar`, `zIndex`, `pointerEvents`, `userSelect`, `transition`, `inline`, `hide`, `showIn` | a `Column` around it; they keep their typography props and `opacity` |
+| `Button`, `IconButton`, `ToggleButton`, the fields, `Switch`, `Checkbox`, `RadioButton`, `Logo`, `SmartLink` | nothing: they took no layout props, and gain `LeafProps` | |
+
+`TextBreakpointProps`, `ButtonBreakpointProps` and `InputBreakpointProps` are
+gone: no component used them. `LeafProps` and `LeafPropsOf<"div">` are
+exported for your own leaf components.
+
+`position` on a leaf is written inline, so it beats a component's own
+stylesheet (`Button` is `position: relative`). `SmartLink`'s own side margin
+applies only when you set no horizontal margin.
+
+**Codemod.** It wraps the leaf where the wrapper renders exactly the same: a
+`hide` or a `{{ hide }}` breakpoint on any leaf, padding on `Text` and
+`Heading` (the wrapper takes the leaf's margins and `flex`, and keeps its
+`fillWidth`), and an `Icon`'s box (`padding`, `background`, `border*`,
+`radius*`) on a `<Row fit>`. It adds `Row` or `Column` to your Once UI import,
+and renames `Button`/`IconButton` `radius="none"` to `corners="none"`. It
+reports the rest, with the props to move: a parent that is not a `Flex`,
+`Row`, `Column` or `Grid` in the same file (the wrapper could change its
+layout), a spread, offsets, styling on a `Button` (a wrapper's padding is not
+the button's), and sizes. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
+step on its own. The AI validator reports the same props (`layout.leafProps`)
+and names the wrapper.
 
 ---
 

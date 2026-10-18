@@ -37,6 +37,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   and `axes`, MegaMenu `collapseBelow` (with `onClose`).
 - **`FlexLayoutProps`, `GridLayoutProps`, `FlexElementProps`, `FlexPropsOf<E>`,
   `PolymorphicProps<T, Own>`** for components built on the layout primitives.
+- **`@once-ui-system/fx` and `@once-ui-system/blocks`** (F8, F10), packages of their
+  own with core as a peer: the sixteen effects, and Banner, Book, LogoCloud,
+  ScrollToTop, StylePanel and StyleOverlay. See Changed.
+- **CodeBlock `actions`**: controls of your own in the header, before copy.
 
 ### Removed
 
@@ -55,6 +59,9 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   package; the codemod reports each import with what to use instead.
 - **`DialogProvider`.** Stacked dialogs never read its state; a `stack` Dialog makes
   the one beneath it inert by itself. The codemod unwraps it.
+- **CodeBlock `styleButton`** (F10): it rendered `StyleOverlay`, now in
+  `@once-ui-system/blocks`, which core cannot import. Pass
+  `actions={<StyleOverlay>…</StyleOverlay>}`; the codemod reports each one.
 - **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
   `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
   `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
@@ -114,6 +121,19 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   through `require()` on Node 22.12+.
   The CLIs are `scripts/init-agent.cjs` and `scripts/validate-ai-code.cjs` (the bin
   names are unchanged), and the build scripts are `.cjs` too.
+- **The effects are `@once-ui-system/fx`** (F8): `BlobFx`, `CelebrationFx`,
+  `CountdownFx`, `CountFx`, `Effect`, `FlipFx`, `GlitchFx`, `HoloFx`, `LetterFx`,
+  `MatrixFx`, `ParticleFx`, `RevealFx`, `ShineFx`, `TiltFx`, `TypeFx` and `WeatherFx`,
+  with their props types. **`Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel`
+  (with `useStylePanel` and its types) and `StyleOverlay` are `@once-ui-system/blocks`**
+  (F10). Core's root no longer exports them, with no alias; install the packages and
+  import from them (the codemod's import pass moves the imports and names the packages
+  to add). Core imports none of them: ProgressBar, RadialGauge, DataTooltip, Carousel,
+  DatePicker and Table use internal parts, and CodeBlock's `styleButton` is gone (see
+  Removed). The harness documents both packages, each component with its package as
+  `importFrom` and a manifest `imports` row that says `install`. Book links through
+  `SmartLink` (`unstyled`), so a linked cover gets SmartLink's focus ring. The docs
+  blocks (`apps/docs/src/blocks`) stay in the docs app for now.
 - **`EmojiPicker` is on `@once-ui-system/core/emoji`** (F9), so its emoji data (272 KB
   of JSON) is out of the root graph. **`MediaAudioPlayer`, `MediaVideoPlayer`,
   `Scrubber` and `CompareImage` are on `@once-ui-system/core/media`**, beside
@@ -137,6 +157,14 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **Prop aliases collapsed** (G5): `dark`/`light` are `showIn`; `textSize`,
   `textWeight` and `textType` are `textVariant`; Text/Heading `size` is `textVariant`,
   and `weight` now swaps a `textVariant`'s weight instead of being ignored beside it.
+- **Leaf components take a small prop set** (G2): Button, IconButton, ToggleButton, the
+  fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner,
+  StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink and NavIcon take
+  `LeafProps` (margins, `flex`, `fillWidth`, `position` and offsets, `className`,
+  `style`) and their own props. Padding, background, border, radius, sizes, `hide` and
+  breakpoints are type errors on them; put them on a Row or Column around the leaf. The
+  codemod wraps where that renders the same and reports the rest. `TextBreakpointProps`,
+  `ButtonBreakpointProps` and `InputBreakpointProps` are removed.
 
 - **`tone` is the semantic palette and `variant` is appearance only** (E1, E2):
   `brand | accent | neutral | info | success | warning | danger`. It replaces Button and

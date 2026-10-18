@@ -1,4 +1,5 @@
-import { BlobFx, Column, CountFx, HoloFx, Media, Row, Text, TiltFx } from "@once-ui-system/core";
+import { Column, Media, Row, Text } from "@once-ui-system/core";
+import { BlobFx, CountFx, HoloFx, TiltFx } from "@once-ui-system/fx";
 
 export const Features15 = (flex: React.ComponentProps<typeof Column>) => {
   return (

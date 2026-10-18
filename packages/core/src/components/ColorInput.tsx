@@ -7,6 +7,7 @@ import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
 import { Input, InputProps } from "./Input.js";
+import { Row } from "./Row.js";
 import { Slider } from "./Slider.js";
 
 /** The field's own controls. Omitted fields keep the English default. */
@@ -153,13 +154,9 @@ const ColorInput = ({
             style={{ transform: hexValue ? "scale(0)" : "scale(1)" }}
           >
             {" "}
-            <Icon
-              marginLeft="4"
-              padding="2"
-              size="xs"
-              name="eyeDropper"
-              onBackground="neutral-medium"
-            />{" "}
+            <Row marginLeft="4" padding="2">
+              <Icon size="xs" name="eyeDropper" onBackground="neutral-medium" />
+            </Row>{" "}
           </Flex>{" "}
           <Flex
             border="neutral-strong"

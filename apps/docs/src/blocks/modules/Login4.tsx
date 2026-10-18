@@ -11,11 +11,11 @@ import {
   Line,
   Logo,
   Media,
-  RevealFx,
   Row,
   SmartLink,
   Text,
 } from "@once-ui-system/core";
+import { RevealFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 export const Login4 = () => {

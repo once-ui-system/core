@@ -4,15 +4,14 @@ import {
   Background,
   Button,
   Column,
-  CountFx,
   Icon,
   Mask,
-  MatrixFx,
   Row,
   Switch,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { CountFx, MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { schema } from "@/resources";
 

@@ -3,12 +3,10 @@
 import {
   Button,
   Column,
-  CountFx,
   Grid,
   Heading,
   Icon,
   Line,
-  RevealFx,
   Row,
   SegmentedControl,
   StatusIndicator,
@@ -17,6 +15,7 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+import { CountFx, RevealFx } from "@once-ui-system/fx";
 /**
  * Gold example: dashboard
  * Target: KPI stat row, chart placeholders, recent activity table

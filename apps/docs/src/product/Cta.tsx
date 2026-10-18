@@ -1,4 +1,5 @@
-import { Row, Button, Mask, ParticleFx, Column, TypeFx, Background } from "@once-ui-system/core";
+import { Row, Button, Mask, Column, Background } from "@once-ui-system/core";
+import { ParticleFx, TypeFx } from "@once-ui-system/fx";
 
 export const Cta = () => {
   return (

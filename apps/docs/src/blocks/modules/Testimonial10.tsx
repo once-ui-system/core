@@ -9,10 +9,10 @@ import {
   Heading,
   IconButton,
   Mask,
-  MatrixFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Testimonial2 } from "./Testimonial2";
 import styles from "./Testimonial10.module.scss";
@@ -253,9 +253,11 @@ export const Testimonial10 = (flex: React.ComponentProps<typeof Flex>) => {
   return (
     <Column fillWidth horizontal="center" padding="l" {...flex}>
       <Column maxWidth="l" gap="24">
-        <Heading paddingLeft="24" as="h2" textVariant="display-default-s">
-          Solo founders and small teams scale faster when their design system does not fight back.
-        </Heading>
+        <Column paddingLeft="24">
+          <Heading as="h2" textVariant="display-default-s">
+            Solo founders and small teams scale faster when their design system does not fight back.
+          </Heading>
+        </Column>
         <CaseStudySlideShow aspectRatio="8/3" minHeight="36rem" activeIndex={0} />
       </Column>
     </Column>

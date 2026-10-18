@@ -1,4 +1,4 @@
-import { act, render } from "@testing-library/react";
+import { render } from "@testing-library/react";
 import type React from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -7,13 +7,10 @@ import { Background } from "../components/Background";
 import { Column } from "../components/Column";
 import { Dropdown } from "../components/Dropdown";
 import { Flex } from "../components/Flex";
-import { GlitchFx } from "../components/GlitchFx";
 import { Grid } from "../components/Grid";
 import { Mask } from "../components/Mask";
 import { Media } from "../components/Media";
-import { RevealFx } from "../components/RevealFx";
 import { Scroller } from "../components/Scroller";
-import { ShineFx } from "../components/ShineFx";
 import { Text } from "../components/Text";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { isCSSUnit, sizeValue, spacingValue } from "../utils/layoutClasses";
@@ -76,7 +73,7 @@ describe("a number is px", () => {
     const grid = styleOf(ssr(<Grid minColumnWidth={240} padding={16} />));
     expect(grid).toContain("--grid-min-column-width:240px");
     expect(grid).toContain("padding-top:16px");
-    expect(styleOf(ssr(<Text paddingX={10}>t</Text>))).toContain("padding-left:10px");
+    expect(styleOf(ssr(<Text marginX={10}>t</Text>))).toContain("margin-left:10px");
     const { getByTestId } = r(<Column data-testid="c" m={{ maxWidth: 360, gap: 8 }} />);
     expect(getByTestId("c").style.maxWidth).toBe("360px");
     expect(getByTestId("c").style.gap).toBe("8px");
@@ -182,19 +179,6 @@ describe("time is milliseconds, speed a multiplier", () => {
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
-  it("RevealFx and ShineFx take duration in ms", () => {
-    const reveal = r(
-      <RevealFx data-testid="r" duration={750}>
-        x
-      </RevealFx>,
-    ).getByTestId("r");
-    expect(reveal.style.transitionDuration).toBe("750ms");
-    act(() => void vi.advanceTimersByTime(0));
-    const shine = r(<ShineFx duration={1200}>s</ShineFx>).container
-      .firstElementChild as HTMLElement;
-    expect(shine.style.animationDuration).toBe("1200ms");
-  });
-
   it("speed keywords are 0.5, 1 and 2, numbers are themselves", () => {
     expect(speedFactor("slow")).toBe(0.5);
     expect(speedFactor("medium")).toBe(1);
@@ -202,15 +186,6 @@ describe("time is milliseconds, speed a multiplier", () => {
     expect(speedFactor(3)).toBe(3);
     expect(speedFactor(undefined)).toBe(1);
     expect(speedFactor(0)).toBe(1);
-  });
-
-  it("GlitchFx speed sets the glitch cycle", () => {
-    const el = r(
-      <GlitchFx data-testid="g" speed={2}>
-        g
-      </GlitchFx>,
-    ).getByTestId("g");
-    expect(el.style.getPropertyValue("--glitch-duration")).toBe("1250ms");
   });
 
   it("Scroller auto (2.x AutoScroll) accepts a multiplier as well as a keyword", () => {

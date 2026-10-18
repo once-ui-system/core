@@ -104,24 +104,33 @@ You can use either the `children` prop or the `label` prop to set the content of
 
 ## Customization
 
-The Kbd component inherits all Flex props, allowing for customization of its appearance.
+Kbd keeps its keycap look and takes the leaf props: margins, `flex`,
+`fillWidth`, `position` and the offsets. For a one-off colour or size, set
+`style` (or `className`), which wins over the keycap's own classes.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="16" vertical="center">
-      <Kbd background="brand-medium" border="brand-medium" onBackground="brand-weak">Cmd</Kbd>
-      <Kbd background="accent-medium" border="accent-medium" onBackground="accent-weak">Alt</Kbd>
-      <Kbd paddingX="8" paddingY="4">Space</Kbd>
+      <Kbd style={{ background: "var(--brand-background-medium)", borderColor: "var(--brand-border-medium)", color: "var(--brand-on-background-weak)" }}>Cmd</Kbd>
+      <Kbd style={{ background: "var(--accent-background-medium)", borderColor: "var(--accent-border-medium)", color: "var(--accent-on-background-weak)" }}>Alt</Kbd>
+      <Kbd style={{ padding: "var(--static-space-4) var(--static-space-8)" }}>Space</Kbd>
     </Row>
   }
   codes={[
     {
       code:
-`<Kbd background="brand-medium" border="brand-medium" onBackground="brand-weak">Cmd</Kbd>
-<Kbd background="accent-medium" border="accent-medium" onBackground="accent-weak">Alt</Kbd>
-<Kbd paddingX="8" paddingY="4">Space</Kbd>`,
+`<Kbd
+  style={{
+    background: "var(--brand-background-medium)",
+    borderColor: "var(--brand-border-medium)",
+    color: "var(--brand-on-background-weak)",
+  }}
+>
+  Cmd
+</Kbd>
+<Kbd style={{ padding: "var(--static-space-4) var(--static-space-8)" }}>Space</Kbd>`,
       language: "tsx",
       label: "Custom styling"
     }

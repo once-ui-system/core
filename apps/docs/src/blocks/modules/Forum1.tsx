@@ -5,7 +5,6 @@ import {
   AvatarGroup,
   Card,
   Column,
-  CountFx,
   Icon,
   InfiniteScroll,
   Line,
@@ -16,6 +15,7 @@ import {
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useCallback, useState } from "react";
 import { Footer1 } from "./Footer1";
 import { posts } from "./forum1content";

@@ -1,5 +1,6 @@
 import React from "react";
 import { IconName } from "../icons.js";
+import type { LeafPropsOf } from "../interfaces.js";
 import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types.js";
 import { isCSSUnit } from "../utils/layoutClasses.js";
 import styles from "./Avatar.module.scss";
@@ -10,7 +11,7 @@ import { Skeleton } from "./Skeleton.js";
 import { StatusIndicator } from "./StatusIndicator.js";
 import { Text } from "./Text.js";
 
-interface AvatarProps extends React.ComponentProps<typeof Flex> {
+interface AvatarProps extends LeafPropsOf<"div"> {
   /**
    * A t-shirt size, a number in px (`40`), or a CSS length (`"2.5rem"`).
    */
@@ -25,8 +26,6 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   statusIndicator?: {
     scheme: "green" | "yellow" | "red" | "gray";
   };
-  style?: React.CSSProperties;
-  className?: string;
 }
 
 const sizeMapping: Record<TShirtSizes, number> = {

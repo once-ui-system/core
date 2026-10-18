@@ -70,7 +70,11 @@ describe("CodeBlock root highlight", () => {
 describe("renamed and removed exports", () => {
   it("renames Particle to ParticleFx, import and elements", () => {
     const { out } = run(`${core("Particle, Row")}<Particle density={20}><Row /></Particle>`);
-    assert.equal(out, `${core("ParticleFx, Row")}<ParticleFx density={20}><Row /></ParticleFx>`);
+    // F8: the import pass then moves ParticleFx to @once-ui-system/fx.
+    assert.equal(
+      out,
+      `${core("Row")}import { ParticleFx } from "@once-ui-system/fx";\n<ParticleFx density={20}><Row /></ParticleFx>`,
+    );
   });
 
   it("keeps an alias when the old name is used as a value", () => {

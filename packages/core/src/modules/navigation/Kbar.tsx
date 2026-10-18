@@ -14,13 +14,13 @@ import { Column } from "../../components/Column.js";
 import { Flex } from "../../components/Flex.js";
 import { Icon } from "../../components/Icon.js";
 import { Input } from "../../components/Input.js";
-import { Kbd } from "../../components/Kbd.js";
 import { Option } from "../../components/Option.js";
 import { Row } from "../../components/Row.js";
 import { ScrollLock } from "../../components/ScrollLock.js";
 import { Text } from "../../components/Text.js";
 import { useAdapters } from "../../contexts/AdapterProvider.js";
 import type { IconName } from "../../icons.js";
+import { KbdCap } from "../../internal/KbdCap.js";
 import { useControllableState } from "../../internal/useControllableState.js";
 import type { TShirtSizes } from "../../types.js";
 import styles from "./Kbar.module.scss";
@@ -188,9 +188,9 @@ export const KbarContent = ({
                 <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
                   {item.shortcut.map((key, i) => (
                     <Row gap="2" key={i}>
-                      <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
+                      <KbdCap minWidth="24" style={{ transform: "scale(0.8)" }}>
                         {key}
-                      </Kbd>
+                      </KbdCap>
                       {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                     </Row>
                   ))}
@@ -457,24 +457,24 @@ export const KbarContent = ({
               textVariant="label-default-m"
               vertical="center"
             >
-              <Kbd minWidth="20">
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="chevronUp" size="xs" />
                 </Row>
-              </Kbd>
-              <Kbd minWidth="20">
+              </KbdCap>
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="chevronDown" size="xs" />
                 </Row>
-              </Kbd>
+              </KbdCap>
               <Text marginLeft="8" marginRight="24">
                 Navigate
               </Text>
-              <Kbd minWidth="20">
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="enter" size="xs" />
                 </Row>
-              </Kbd>
+              </KbdCap>
               <Text marginLeft="8">Go to</Text>
             </Row>
           </Row>

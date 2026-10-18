@@ -5,11 +5,11 @@ import {
   Heading,
   IconButton,
   Input,
-  RevealFx,
   Row,
   Scroller,
   Text,
 } from "@once-ui-system/core";
+import { RevealFx } from "@once-ui-system/fx";
 import { Book } from "./Book";
 
 export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {

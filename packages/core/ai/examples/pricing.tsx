@@ -2,15 +2,11 @@
 
 import {
   Background,
-  BlobFx,
   Button,
   Column,
-  CountFx,
   Grid,
   Heading,
   Icon,
-  MatrixFx,
-  RevealFx,
   Row,
   SegmentedControl,
   Table,
@@ -18,6 +14,7 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+import { BlobFx, CountFx, MatrixFx, RevealFx } from "@once-ui-system/fx";
 /**
  * Gold example: pricing
  * Target: three tiers, highlighted middle, comparison table, split FAQ, ambient CTA
@@ -178,14 +175,11 @@ export function PricingExample() {
                           effect="wheel"
                           duration={400}
                         />
-                        <Text
-                          textVariant="label-default-s"
-                          onBackground="neutral-weak"
-                          paddingBottom="4"
-                          paddingLeft="4"
-                        >
-                          / mo
-                        </Text>
+                        <Column paddingBottom="4" paddingLeft="4">
+                          <Text textVariant="label-default-s" onBackground="neutral-weak">
+                            / mo
+                          </Text>
+                        </Column>
                       </Row>
                     ) : (
                       <Text textVariant="display-strong-s">Custom</Text>

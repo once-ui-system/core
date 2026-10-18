@@ -1,5 +1,4 @@
 import {
-  BlobFx,
   Button,
   Column,
   Grid,
@@ -10,6 +9,7 @@ import {
   Text,
   Textarea,
 } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 const roleDetails = {
   title: "Senior Product Designer",

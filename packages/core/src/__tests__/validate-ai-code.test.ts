@@ -772,6 +772,38 @@ describe("LayoutProvider.next", () => {
   });
 });
 
+describe("layout.leafProps: G2 leaves take a small prop set", () => {
+  const leaf = (source: string) =>
+    issues(source)
+      .filter((issue) => issue.rule === "layout.leafProps")
+      .map((issue) => issue.message);
+
+  it("names a dropped prop and the wrapper to put it on", () => {
+    expect(leaf('<Button padding="8" s={{ fillWidth: true }}>Go</Button>')).toEqual([
+      expect.stringMatching(
+        /^Button is a leaf in 3\.0 and does not take padding, s: put them on a <Row> around it/,
+      ),
+    ]);
+    expect(leaf('<Text paddingX="8">a</Text>')).toEqual([
+      expect.stringMatching(/does not take paddingX: put it on a <Column> around it/),
+    ]);
+    expect(leaf('<Icon name="close" radius="full" />')).toEqual([
+      expect.stringMatching(/<Row fit>/),
+    ]);
+    expect(leaf('<Kbd onBackground="neutral-weak">K</Kbd>')).toEqual([
+      expect.stringMatching(/does not take onBackground/),
+    ]);
+  });
+
+  it("leaves the kept props, a leaf's own props, values and layout components alone", () => {
+    expect(
+      leaf(
+        '<Row padding="8" hide s={{ hide: false }}><Button fillWidth marginTop="8" aria-label="padding" style={{ padding: 2 }}>a</Button><Text opacity={60} onBackground="neutral-weak" flex={1}>a</Text><Kbd keys="mod+k" marginLeft="4" /></Row>',
+      ),
+    ).toEqual([]);
+  });
+});
+
 describe("api.renamed: 1.x prop names", () => {
   it("names the 2.x prop for a 1.x one, which TypeScript does not", () => {
     const found = issues(

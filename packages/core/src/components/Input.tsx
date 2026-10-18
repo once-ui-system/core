@@ -3,7 +3,9 @@
 import classNames from "clsx";
 import React, { InputHTMLAttributes, ReactNode, useCallback, useEffect, useState } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
+import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldSize } from "./FormContext.js";
 import { IconButton } from "./IconButton.js";
@@ -12,7 +14,9 @@ import { Row } from "./Row.js";
 import { Spinner } from "./Spinner.js";
 import { Text } from "./Text.js";
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
+interface InputProps
+  extends LeafProps,
+    Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix" | keyof LeafProps> {
   id: string;
   label?: string;
   placeholder?: string;
@@ -30,8 +34,6 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
     | "top-right"
     | "bottom-right"
     | "bottom-left";
-  className?: string;
-  style?: React.CSSProperties;
   prefix?: ReactNode;
   suffix?: ReactNode;
   variant?: "default" | "ghost";
@@ -90,8 +92,10 @@ const Input = ({
   onAnimationStart,
   validate,
   cursor,
-  ...props
+  fillWidth = true,
+  ...rest
 }: InputProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);
@@ -213,9 +217,10 @@ const Input = ({
 
   return (
     <Column
+      {...leaf}
       gap="8"
       style={style}
-      fillWidth
+      fillWidth={fillWidth}
       fitHeight
       className={classNames(className, {
         [styles.error]: (error || (displayError && styledValue !== "")) && props.value !== "",

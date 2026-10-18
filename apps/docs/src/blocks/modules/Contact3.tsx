@@ -5,7 +5,6 @@ import {
   AvatarGroup,
   Button,
   Column,
-  CountFx,
   Heading,
   Icon,
   Input,
@@ -16,6 +15,7 @@ import {
   Text,
   Textarea,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 const topics = [

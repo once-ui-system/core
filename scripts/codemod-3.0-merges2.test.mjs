@@ -210,7 +210,8 @@ describe('F6: FadingLettersFx → TypeFx mode="fade"', () => {
       "FadingLettersFx",
       '<FadingLettersFx text="Hello" animationState={state} messageIdx={2} variant="body-default-l" />\n',
     );
-    assert.equal(r.importLine, core("TypeFx").trim());
+    // F8: TypeFx is in @once-ui-system/fx, so the import pass moves it there.
+    assert.equal(r.importLine, 'import { TypeFx } from "@once-ui-system/fx";');
     assert.equal(
       r.body,
       '<TypeFx mode="fade" words="Hello" state={state} textVariant="body-default-l" delay={5000} />\n',

@@ -3,9 +3,11 @@
 import classNames from "clsx";
 import React, { ReactNode, useEffect } from "react";
 import { IconName } from "../icons.js";
+import type { LeafProps } from "../interfaces.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
 import { Tone, TShirtSizes } from "../types.js";
 import { dev } from "../utils/devLogger.js";
+import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import type { ButtonVariant } from "./Button.js";
 import buttonStyles from "./Button.module.scss";
 import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
@@ -17,7 +19,7 @@ import iconStyles from "./IconButton.module.scss";
 import { Spinner } from "./Spinner.js";
 import { Tooltip } from "./Tooltip.js";
 
-interface IconButtonCommonProps {
+interface IconButtonCommonProps extends LeafProps {
   icon?: IconName;
   id?: string;
   size?: TShirtSizes;
@@ -44,8 +46,6 @@ interface IconButtonCommonProps {
   tone?: Tone;
   loading?: boolean;
   disabled?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
   href?: string;
   children?: ReactNode;
 }
@@ -71,8 +71,11 @@ const IconButton = ({
   className,
   style,
   "aria-label": ariaLabel,
-  ...props
+  fillWidth,
+  ...rest
 }: (IconButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  const layout = leafLayout(leaf);
   const radiusSize = size === "s" || size === "m" ? "m" : "l";
   const trigger = useDropdownTrigger();
 
@@ -116,9 +119,11 @@ const IconButton = ({
         "text-decoration-none",
         "button",
         disabled ? "cursor-not-allowed" : "cursor-interactive",
+        fillWidth && "fill-width",
+        ...layout.classes,
         className,
       )}
-      style={style}
+      style={{ ...layout.style, ...style }}
       aria-label={accessibleName}
       aria-disabled={disabled}
       {...props}

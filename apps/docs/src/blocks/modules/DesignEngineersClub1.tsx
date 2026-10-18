@@ -4,13 +4,12 @@ import {
   Flex,
   Heading,
   Icon,
-  LetterFx,
   Media,
   SmartLink,
   Text,
-  TiltFx,
   Row,
 } from "@once-ui-system/core";
+import { LetterFx, TiltFx } from "@once-ui-system/fx";
 import { clsx } from "clsx";
 import Image from "next/image";
 import type { ReactNode } from "react";

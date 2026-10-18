@@ -5,10 +5,10 @@ import {
   Input,
   Logo,
   Mask,
-  MatrixFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 export const Newsletter4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (

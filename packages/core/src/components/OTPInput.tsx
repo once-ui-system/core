@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useId, useRef, useState } from "react";
+import type { LeafProps } from "../interfaces.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { Input } from "./Input.js";
@@ -8,7 +9,8 @@ import styles from "./OTPInput.module.scss";
 import { Text } from "./Text.js";
 
 interface OTPInputProps
-  extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
+  extends LeafProps,
+    Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue" | keyof LeafProps> {
   length?: number;
   /** The code typed so far, controlled. Leave it out to let the field keep
    *  its own, starting from `defaultValue`. */

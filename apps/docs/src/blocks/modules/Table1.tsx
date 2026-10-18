@@ -5,7 +5,6 @@ import {
   Card,
   Checkbox,
   Column,
-  CountFx,
   Dropdown,
   Icon,
   IconButton,
@@ -14,6 +13,7 @@ import {
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useEffect, useMemo, useState } from "react";
 
 type Align = "start" | "center" | "end";
@@ -126,20 +126,22 @@ export function Table1<T = Record<string, unknown>>({
       >
         <Row fillWidth gap="12" vertical="center" horizontal="between">
           {selectable && someCurrentSelected ? (
-            <CountFx
-              textVariant="label-default-m"
-              paddingY="12"
-              paddingLeft="8"
-              value={selectedItems.size}
-              effect="smooth"
-              duration={250}
-            >
-              <Text marginLeft="8">selected</Text>
-            </CountFx>
+            <Column paddingY="12" paddingLeft="8">
+              <CountFx
+                textVariant="label-default-m"
+                value={selectedItems.size}
+                effect="smooth"
+                duration={250}
+              >
+                <Text marginLeft="8">selected</Text>
+              </CountFx>
+            </Column>
           ) : typeof heading === "string" ? (
-            <Text textVariant="label-default-m" paddingY="12" paddingLeft="8">
-              {heading}
-            </Text>
+            <Column paddingY="12" paddingLeft="8">
+              <Text textVariant="label-default-m">
+                {heading}
+              </Text>
+            </Column>
           ) : (
             <Row paddingY="12" paddingLeft="8">
               {heading}

@@ -15,7 +15,7 @@ export const Footer1: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
       <Row maxWidth="m" paddingY="8" paddingX="16" gap="16" horizontal="between" vertical="center">
         <Text textVariant="body-default-s" onBackground="neutral-strong">
           <Text onBackground="neutral-weak">© {currentYear} /</Text>
-          <Text paddingX="4">Once UI</Text>
+          <Text marginX="4">Once UI</Text>
           <Text onBackground="neutral-weak">/ All rights reserved</Text>
         </Text>
         <Row gap="16">

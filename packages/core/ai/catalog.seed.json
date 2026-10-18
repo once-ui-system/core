@@ -617,9 +617,9 @@
     "pairsWith": ["Row", "Text", "Avatar"]
   },
   "StyleOverlay": {
-    "purpose": "Icon button that opens a floating side panel, usually holding StylePanel",
+    "purpose": "Wraps a trigger (an IconButton) that opens StylePanel in a floating side panel; fits CodeBlock's actions",
     "tags": ["overlay", "settings", "theme"],
-    "pairsWith": ["StylePanel"]
+    "pairsWith": ["StylePanel", "IconButton", "CodeBlock"]
   },
   "StylePanel": {
     "purpose": "Live theming controls for theme, brand and accent colours, shape and density",

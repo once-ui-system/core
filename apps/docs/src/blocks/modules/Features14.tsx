@@ -62,16 +62,16 @@ export const Features14 = (flex: React.ComponentProps<typeof Row>) => {
         <Grid fillWidth columns={3} m={{ columns: 2 }} xs={{ columns: 1 }} borderTop borderLeft>
           {features.map((feature, index) => (
             <Column key={index} fillWidth padding="l" borderBottom borderRight gap="8">
-              <Icon
-                name={feature.icon}
-                size="s"
+              <Row
+                fit
                 border="brand-alpha-weak"
                 background="brand-alpha-weak"
-                onBackground="brand-weak"
                 radius="m"
                 padding="8"
                 marginBottom="12"
-              />
+              >
+                <Icon name={feature.icon} size="s" onBackground="brand-weak" />
+              </Row>
               <Heading as="h3" textVariant="heading-strong-m">
                 {feature.title}{" "}
                 <Text marginLeft="8" onBackground="brand-weak" weight="default">

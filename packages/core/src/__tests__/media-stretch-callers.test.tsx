@@ -1,7 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Avatar } from "../components/Avatar";
-import { Book } from "../components/Book";
 import { CompareImage } from "../components/CompareImage";
 import { Media } from "../components/Media";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -38,11 +37,6 @@ describe("Media stretch — core's own callers", () => {
 
   it("Avatar renders a stretched cover image", () => {
     const { container } = render(<Avatar src="/a.jpg" />, { wrapper: wrap });
-    isStretched(container.querySelector("img"));
-  });
-
-  it("Book renders a stretched cover image", () => {
-    const { container } = render(<Book src="/cover.jpg" alt="Cover" />, { wrapper: wrap });
     isStretched(container.querySelector("img"));
   });
 

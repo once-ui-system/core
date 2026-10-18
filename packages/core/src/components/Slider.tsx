@@ -2,9 +2,11 @@
 
 import classNames from "clsx";
 import React, { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import type { FlexLayoutProps, LeafProps } from "../interfaces.js";
 import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { TShirtSizes } from "../types.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldSize } from "./FormContext.js";
 import { Row } from "./Row.js";
@@ -12,7 +14,7 @@ import styles from "./Slider.module.scss";
 import { Text } from "./Text.js";
 
 /** What both modes take. */
-interface SliderFieldProps {
+interface SliderFieldProps extends LeafProps {
   min?: number;
   max?: number;
   /** Every value lands on a multiple of `step` from `min`. */
@@ -28,8 +30,6 @@ interface SliderFieldProps {
   errorMessage?: ReactNode;
   /** Thumb and track size. Defaults to the surrounding `Form`'s size, else `"m"` (the 2.x look). */
   size?: TShirtSizes;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 /** One thumb on a native range input: the default. */
@@ -61,6 +61,7 @@ interface RangeModeSliderProps
   extends SliderFieldProps,
     Omit<
       RangeSliderProps,
+      | keyof FlexLayoutProps
       | "invalid"
       | "describedBy"
       | "sizeClassName"
@@ -134,10 +135,12 @@ const SingleSlider = ({
   describedBy,
   className,
   style,
-  ...props
+  fillWidth = true,
+  ...rest
 }: (SingleSliderProps & { sizeClassName?: string; footer?: ReactNode; describedBy?: string }) & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const [leaf, props] = takeLeafProps(rest);
   const sliderRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const labelId = useId();
@@ -179,7 +182,8 @@ const SingleSlider = ({
 
   return (
     <Column
-      fillWidth
+      {...leaf}
+      fillWidth={fillWidth}
       gap="8"
       className={classNames(styles.container, sizeClassName, { [styles.error]: error }, className)}
       style={style}

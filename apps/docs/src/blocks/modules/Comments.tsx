@@ -216,11 +216,15 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
       {/* Comments list */}
       <Column gap="16" marginTop="8" fillWidth>
         {isLoading ? (
-          <Spinner minHeight="12rem" center align="center" fillWidth size="s" />
+          <Row minHeight="12rem" center fillWidth>
+            <Spinner size="s" />
+          </Row>
         ) : error ? (
-          <Text textVariant="body-default-s" onBackground="danger-weak" align="center" paddingY="l">
-            {error}
-          </Text>
+          <Column paddingY="l">
+            <Text textVariant="body-default-s" onBackground="danger-weak" align="center">
+              {error}
+            </Text>
+          </Column>
         ) : comments.length > 0 ? (
           (() => {
             // Total available across comments + replies
@@ -262,9 +266,11 @@ export function Comments({ limit, showTitle = true, ...flex }: CommentsProps) {
             return nodes;
           })()
         ) : (
-          <Text textVariant="body-default-s" onBackground="neutral-weak" align="center" paddingY="l">
-            No comments yet. Be the first to share your thoughts!
-          </Text>
+          <Column paddingY="l">
+            <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
+              No comments yet. Be the first to share your thoughts!
+            </Text>
+          </Column>
         )}
       </Column>
       {(() => {

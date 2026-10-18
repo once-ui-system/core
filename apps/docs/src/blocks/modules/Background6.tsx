@@ -1,4 +1,5 @@
-import { Background, Mask, ParticleFx, Row } from "@once-ui-system/core";
+import { Background, Mask, Row } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 
 export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (

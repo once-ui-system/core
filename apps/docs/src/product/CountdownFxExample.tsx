@@ -1,6 +1,7 @@
 "use client";
 
-import { Column, Row, Text, CountdownFx, Heading } from "@once-ui-system/core";
+import { Column, Row, Text, Heading } from "@once-ui-system/core";
+import { CountdownFx } from "@once-ui-system/fx";
 
 export const CountdownFxBasic = () => {
   return (

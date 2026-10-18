@@ -80,9 +80,11 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                         src={member.avatar}
                         size="6rem"
                         statusIndicator={{ scheme: member.statusColor as "green" | "gray" }}
-                        style={{ transform: "translateY(50%)" }}
-                        borderWidth={4}
-                        border="surface"
+                        style={{
+                          transform: "translateY(50%)",
+                          borderWidth: 4,
+                          borderColor: "var(--surface-border)",
+                        }}
                       />
                     </Row>
                     <Column fillWidth padding="20" marginTop="40" gap="12">

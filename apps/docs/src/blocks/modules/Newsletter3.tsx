@@ -2,12 +2,11 @@ import {
   Background,
   Button,
   Column,
-  HoloFx,
   Input,
-  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Newsletter3: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (

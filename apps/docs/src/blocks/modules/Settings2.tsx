@@ -8,11 +8,11 @@ import {
   Heading,
   Line,
   Row,
-  StylePanel,
   Switch,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 import { useState } from "react";
 
 export const Settings2 = (flex: React.ComponentProps<typeof Row>) => {

@@ -9,6 +9,7 @@ import { describe, it } from "node:test";
 import { transform, transformUnits } from "./codemod-3.0.mjs";
 
 const core = (names) => `import { ${names} } from "@once-ui-system/core";\n`;
+const fx = (names) => `import { ${names} } from "@once-ui-system/fx";\n`;
 const body = (src) => transform(src).out.split("\n").slice(1).join("\n");
 const warned = (src) => transform(src).warnings.join("\n");
 
@@ -163,7 +164,8 @@ describe("D4: seconds become milliseconds", () => {
 
   it("leaves a value that is already milliseconds, and asks about one it cannot tell", () => {
     const src = `${core("CelebrationFx")}<CelebrationFx duration={4000} />`;
-    assert.equal(transform(src).out, src);
+    // Only the import moves (F8: the effects are @once-ui-system/fx).
+    assert.equal(transform(src).out, src.replace("@once-ui-system/core", "@once-ui-system/fx"));
     assert.match(warned(`${core("CelebrationFx")}<CelebrationFx duration={200} />`), /200 is read as milliseconds/);
     assert.match(warned(`${core("WeatherFx")}<WeatherFx duration={secs} />`), /seconds \(now milliseconds\)/);
   });
@@ -200,11 +202,12 @@ describe("D5: speed is a multiplier; lengths of time are duration", () => {
 
   it("leaves speed alone where it is already a multiplier or a keyword", () => {
     const src = `${core("MatrixFx, AutoScroll, LetterFx")}<MatrixFx speed={2} /><AutoScroll speed="slow" /><LetterFx speed="fast" />`;
-    // F2 then folds AutoScroll into Scroller `auto`, its speed keyword unchanged.
+    // F2 then folds AutoScroll into Scroller `auto`, its speed keyword unchanged,
+    // and the import pass moves the effects to @once-ui-system/fx (F8).
     assert.equal(
       transform(src).out,
       src
-        .replace("AutoScroll,", "Scroller,")
+        .replace(core("MatrixFx, AutoScroll, LetterFx"), `${core("Scroller")}${fx("MatrixFx, LetterFx")}`)
         .replace('<AutoScroll speed="slow" />', '<Scroller auto={{ speed: "slow" }} />'),
     );
   });

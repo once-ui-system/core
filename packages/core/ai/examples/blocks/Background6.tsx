@@ -1,4 +1,5 @@
-import { Background, Mask, ParticleFx, Row } from "@once-ui-system/core";
+import { Background, Mask, Row } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 
 /** Ambient hero layer: a brand floor glow and interactive particles (Waitlist1's background). */
 export const Background6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {

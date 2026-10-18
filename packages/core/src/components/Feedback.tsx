@@ -7,6 +7,7 @@ import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
 import { Text } from "./Text.js";
 
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
@@ -62,13 +63,13 @@ const Feedback = ({
     >
       {showIcon && (
         <Flex paddingY="16" paddingLeft="16">
-          <Icon
-            padding="2"
-            radius="m"
-            onBackground={`${tone}-medium`}
-            name={icon ?? toneIconMap[tone] ?? "info"}
-            aria-hidden="true"
-          />
+          <Row padding="2">
+            <Icon
+              onBackground={`${tone}-medium`}
+              name={icon ?? toneIconMap[tone] ?? "info"}
+              aria-hidden="true"
+            />
+          </Row>
         </Flex>
       )}
       <Column fillWidth padding="16" gap="24" vertical="center">

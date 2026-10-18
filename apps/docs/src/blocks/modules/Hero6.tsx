@@ -1,4 +1,5 @@
-import { Background, Tag, Button, Column, Heading, Mask, MatrixFx, Media, RevealFx, Row } from "@once-ui-system/core";
+import { Background, Tag, Button, Column, Heading, Mask, Media, Row } from "@once-ui-system/core";
+import { MatrixFx, RevealFx } from "@once-ui-system/fx";
 
 export const Hero6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (

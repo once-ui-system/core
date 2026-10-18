@@ -8,10 +8,10 @@ import {
   Fade,
   Heading,
   Icon,
-  MatrixFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 interface Testimonial6 {
   content: string;

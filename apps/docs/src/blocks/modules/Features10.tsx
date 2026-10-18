@@ -33,9 +33,11 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
       />
       <Row fillWidth vertical="center" gap="l" m={{ direction: "column" }}>
         <Column fillWidth paddingLeft="xl">
-          <Heading as="h2" textVariant="display-strong-s" marginBottom="48" paddingLeft="20">
-            Ready-to-use ecommerce solution
-          </Heading>
+          <Column marginBottom="48" paddingLeft="20">
+            <Heading as="h2" textVariant="display-strong-s">
+              Ready-to-use ecommerce solution
+            </Heading>
+          </Column>
           <Grid fillWidth columns={2} m={{ columns: 2 }} gap="32">
             {features.map((feature, index) => (
               <Column fillWidth gap="12" padding="20" key={index}>

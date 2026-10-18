@@ -13,9 +13,15 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const run = (script) =>
-  spawnSync(process.execPath, [path.join(ROOT, "scripts", script)], {
+const SCRIPTS = path.dirname(fileURLToPath(import.meta.url));
+// `--root <dir>`: watch another workspace package instead (`@once-ui-system/fx`
+// and `@once-ui-system/blocks` run `pnpm dev` through this script). They have
+// no assets besides their Sass modules, so only core runs the asset copy.
+const rootFlag = process.argv.indexOf("--root");
+const ROOT = rootFlag > 0 ? path.resolve(process.argv[rootFlag + 1]) : path.resolve(SCRIPTS, "..");
+const isCore = ROOT === path.resolve(SCRIPTS, "..");
+const run = (script, ...args) =>
+  spawnSync(process.execPath, [path.join(SCRIPTS, script), ...args], {
     cwd: ROOT,
     stdio: "inherit",
   });
@@ -24,8 +30,8 @@ let timer;
 const restyle = () => {
   clearTimeout(timer);
   timer = setTimeout(() => {
-    run("copy-files.cjs");
-    run("compile-css-modules.cjs");
+    if (isCore) run("copy-files.cjs");
+    run("compile-css-modules.cjs", "--root", ROOT);
   }, 100);
 };
 

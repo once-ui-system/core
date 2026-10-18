@@ -12,10 +12,10 @@ import {
   Heading,
   Icon,
   Line,
-  RevealFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { RevealFx } from "@once-ui-system/fx";
 
 const features = [
   {

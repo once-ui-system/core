@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { useId } from "react";
+import type { LeafProps } from "../interfaces.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -9,13 +10,15 @@ import {
 } from "../internal/controlChrome.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Flex } from "./Flex.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import { useRadioGroupItem } from "./RadioGroupContext.js";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
-  extends Omit<
+  extends LeafProps,
+    Omit<
       InteractiveDetailsProps,
       "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
     >,
@@ -24,10 +27,8 @@ interface RadioButtonProps
     // which an input never fires.
     Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
-      "checked" | "defaultChecked" | "onToggle" | "size"
+      "checked" | "defaultChecked" | "onToggle" | "size" | keyof LeafProps
     > {
-  style?: React.CSSProperties;
-  className?: string;
   /** Chosen or not, controlled. Leave it out to let the radio keep its own
    *  state, starting from `defaultChecked`. */
   checked?: boolean;
@@ -66,8 +67,10 @@ const RadioButton = ({
   size: sizeProp,
   error,
   errorMessage,
-  ...rest
+  fillWidth,
+  ...others
 }: RadioButtonProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const [leaf, rest] = takeLeafProps(others);
   // A RadioGroup around this button owns these; outside one, the props do.
   const {
     checked: groupChecked,
@@ -113,6 +116,8 @@ const RadioButton = ({
 
   return (
     <Flex
+      {...leaf}
+      fillWidth={fillWidth}
       vertical="center"
       gap="16"
       zIndex={1}

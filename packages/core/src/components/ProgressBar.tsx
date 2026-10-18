@@ -1,5 +1,6 @@
 import classNames from "clsx";
 import React from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { StyleProps } from "../interfaces.js";
 import { CountUp } from "../internal/CountUp.js";
 import { Column } from "./Column.js";
@@ -7,15 +8,13 @@ import { Flex } from "./Flex.js";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
 
-interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
+interface ProgressBarProps extends LeafPropsOf<"div"> {
   value: number;
   min?: number;
   max?: number;
   showLabel?: boolean;
   labelPosition?: "top" | "bottom" | "left" | "right";
   barBackground?: StyleProps["solid"];
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 const ProgressBar = ({

@@ -23,8 +23,10 @@
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
     "@next/mdx": "^16.2.12",
+    "@once-ui-system/blocks": "workspace:*",
     "@once-ui-system/core": "workspace:*",
     "@once-ui-system/foundations": "workspace:*",
+    "@once-ui-system/fx": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",

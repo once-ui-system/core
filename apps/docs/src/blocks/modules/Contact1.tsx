@@ -70,14 +70,13 @@ export const Contact1 = () => {
                 colorEnd: "static-transparent",
               }}
             />
-            <Icon
-              name={contact.icon}
-              size="s"
-              padding="12"
-              radius="full"
-              background="brand-alpha-weak"
-              onBackground="brand-weak"
-            />
+            <Row fit padding="12" radius="full" background="brand-alpha-weak">
+              <Icon
+                name={contact.icon}
+                size="s"
+                onBackground="brand-weak"
+              />
+            </Row>
             <Heading marginTop="16" marginLeft="12" as="h3" textVariant="heading-strong-l">
               {contact.title}
             </Heading>

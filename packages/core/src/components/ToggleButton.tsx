@@ -3,13 +3,15 @@
 import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
+import type { LeafProps } from "../interfaces.js";
 import { RadiusSize, TShirtSizes } from "../types.js";
+import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { ElementType } from "./ElementType.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import styles from "./ToggleButton.module.scss";
 
-interface ToggleButtonCommonProps {
+interface ToggleButtonCommonProps extends LeafProps {
   label?: ReactNode;
   selected?: boolean;
   variant?: "ghost" | "outline" | "subtle";
@@ -33,14 +35,11 @@ interface ToggleButtonCommonProps {
     | "bottom-left";
   rounded?: boolean;
   horizontal?: "start" | "center" | "end" | "between";
-  fillWidth?: boolean;
   weight?: "default" | "strong";
   truncate?: boolean;
   disabled?: boolean;
   prefixIcon?: IconName;
   suffixIcon?: IconName;
-  className?: string;
-  style?: React.CSSProperties;
   children?: ReactNode;
   href?: string;
 }
@@ -58,7 +57,7 @@ const ToggleButton = ({
   corners,
   rounded = false,
   horizontal = "center",
-  fillWidth = false,
+  fillWidth,
   weight = "default",
   truncate = false,
   disabled = false,
@@ -68,8 +67,10 @@ const ToggleButton = ({
   style,
   children,
   href,
-  ...props
+  ...rest
 }: ToggleButtonProps & { ref?: React.Ref<HTMLElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  const layout = leafLayout(leaf);
   return (
     <ElementType
       ref={ref}
@@ -95,9 +96,10 @@ const ToggleButton = ({
           ["fit-width"]: !fillWidth,
           ["justify-" + horizontal]: horizontal,
         },
+        ...layout.classes,
         className,
       )}
-      style={style}
+      style={{ ...layout.style, ...style }}
       {...props}
     >
       {prefixIcon && (

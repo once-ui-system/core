@@ -10,12 +10,12 @@ import {
   Icon,
   IconButton,
   type IconName,
-  MatrixFx,
   Media,
   Row,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 const social = [
   { icon: "github" as const, href: "#" },
@@ -111,7 +111,9 @@ function ResourceCard({
         }}
       >
         <Column paddingY="20" paddingX="24" gap="8" align="center" horizontal="center">
-          <Icon name={icon} size="s" padding="8" radius="m" border marginBottom="12" />
+          <Row fit padding="8" radius="m" border marginBottom="12">
+            <Icon name={icon} size="s" />
+          </Row>
           <Heading as="h2" textVariant="heading-strong-xl">
             {title}
           </Heading>
@@ -187,9 +189,9 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
         </Row>
 
         <Column fillWidth gap="24">
-          <Heading as="h2" paddingX="8">
-            Recent posts
-          </Heading>
+          <Column paddingX="8">
+            <Heading as="h2">Recent posts</Heading>
+          </Column>
           <Grid fillWidth columns={2} gap="56" s={{ columns: 1 }}>
             {posts.map((post) => (
               <Card

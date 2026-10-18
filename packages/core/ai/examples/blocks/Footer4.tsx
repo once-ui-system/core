@@ -7,13 +7,12 @@ import {
   IconButton,
   Logo,
   Mask,
-  ParticleFx,
   Row,
   SmartLink,
   Tag,
   Text,
-  TypeFx,
 } from "@once-ui-system/core";
+import { ParticleFx, TypeFx } from "@once-ui-system/fx";
 
 const social: { icon: IconName; label: string; href: string }[] = [
   {

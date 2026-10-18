@@ -6,8 +6,8 @@ import {
   Row,
   SmartLink,
   Text,
-  TiltFx,
 } from "@once-ui-system/core";
+import { TiltFx } from "@once-ui-system/fx";
 
 const plans = {
   free: {

@@ -55,9 +55,6 @@ interface SelectProps
   emptyState?: ReactNode;
   placement?: Placement;
   searchable?: boolean;
-  className?: string;
-  style?: React.CSSProperties;
-  fillWidth?: boolean;
   multiple?: boolean;
   /** The search field's name and its clear button's, for a translated interface. */
   labels?: SelectLabels;

@@ -1,6 +1,7 @@
 "use client";
 
-import { Column, Row } from "@once-ui-system/core";
+import { StyleOverlay } from "@once-ui-system/blocks";
+import { Column, IconButton, Row } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { blocks } from "@/resources";
@@ -214,7 +215,18 @@ function BlockExample({
       </Row>
       <CodeBlock
         lineNumbers
-        styleButton
+        actions={
+          <StyleOverlay>
+            <IconButton
+              size="m"
+              variant="tertiary"
+              icon="sparkle"
+              tooltip="Style"
+              tooltipPosition="bottom"
+              aria-label="Open the style panel"
+            />
+          </StyleOverlay>
+        }
         reloadButton={reloadButton}
         fullscreenButton
         copyButton

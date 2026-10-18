@@ -3,8 +3,10 @@
 import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
+import type { LeafProps } from "../interfaces.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
 import { Tone, TShirtSizes } from "../types.js";
+import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { Arrow } from "./Arrow.js";
 import styles from "./Button.module.scss";
 import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
@@ -16,7 +18,7 @@ import { Spinner } from "./Spinner.js";
 /** A button's appearance. 2.x's `quaternary` is `ghost`. */
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost" | "link" | "subtle";
 
-interface ButtonCommonProps {
+interface ButtonCommonProps extends LeafProps {
   /** How the button looks. The palette it draws in is `tone`. */
   variant?: ButtonVariant;
   /**
@@ -43,12 +45,9 @@ interface ButtonCommonProps {
   suffixIcon?: IconName;
   loading?: boolean;
   disabled?: boolean;
-  fillWidth?: boolean;
   horizontal?: "start" | "center" | "end" | "between";
   children?: ReactNode;
   href?: string;
-  className?: string;
-  style?: React.CSSProperties;
   id?: string;
   arrowIcon?: boolean;
 }
@@ -70,15 +69,17 @@ const Button = ({
   suffixIcon,
   loading = false,
   disabled = false,
-  fillWidth = false,
+  fillWidth,
   horizontal = "center",
   href,
   id,
   arrowIcon = false,
   className,
   style,
-  ...props
+  ...rest
 }: (ButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  const layout = leafLayout(leaf);
   const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
   const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
   const trigger = useDropdownTrigger();
@@ -110,9 +111,10 @@ const Button = ({
           ["fit-width"]: !fillWidth,
           ["justify-" + horizontal]: horizontal,
         },
+        ...layout.classes,
         className,
       )}
-      style={style}
+      style={{ ...layout.style, ...style }}
       {...props}
     >
       {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}

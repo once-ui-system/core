@@ -7,12 +7,12 @@ import {
   Card,
   Column,
   Icon,
-  MatrixFx,
   Row,
   Tag,
   Text,
   ToggleButton,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { usePathname } from "next/navigation";
 
 const navigation = [

@@ -33,6 +33,7 @@ const SPREADS: Record<string, { type: string; href?: string }> = {
   flex: { type: "FlexProps", href: "/components/flex" },
   grid: { type: "GridProps", href: "/components/grid" },
   text: { type: "TextProps", href: "/components/text" },
+  leaf: { type: "LeafProps", href: "/basics/responsive#leaf-components" },
   card: { type: "CardProps", href: "/components/card" },
   scroller: { type: "ScrollerProps", href: "/components/scroller" },
   animation: { type: "AnimationProps", href: "/components/animation" },

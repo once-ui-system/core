@@ -249,7 +249,7 @@ Sets the `border-color` property.
 
 <Table
   marginTop="16"
-  marginBottom="24" columns={[{ header: "Class", key: "class-3", sortable: false }, { header: "Value", key: "value", sortable: false }, { header: <Row gap="8" key="header-icons"><Icon padding="2" name="dark" size="xs"/><Icon padding="2" name="light" size="xs"/></Row>, key: "preview", sortable: false }]} rows={[
+  marginBottom="24" columns={[{ header: "Class", key: "class-3", sortable: false }, { header: "Value", key: "value", sortable: false }, { header: <Row gap="8" key="header-icons"><Row fit padding="2"><Icon name="dark" size="xs"/></Row><Row fit padding="2"><Icon name="light" size="xs"/></Row></Row>, key: "preview", sortable: false }]} rows={[
       // Generate rows for each color scheme and variant combination
       ...[
         "neutral",

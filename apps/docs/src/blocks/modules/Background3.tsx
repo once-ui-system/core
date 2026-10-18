@@ -1,4 +1,5 @@
-import { Background, HoloFx, ParticleFx, Row } from "@once-ui-system/core";
+import { Background, Row } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Background3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (

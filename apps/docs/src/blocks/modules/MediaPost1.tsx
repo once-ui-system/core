@@ -4,7 +4,6 @@ import {
   Avatar,
   Button,
   Column,
-  CountFx,
   Icon,
   IconButton,
   Media,
@@ -12,6 +11,7 @@ import {
   Scroller,
   Text,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Comments } from ".";
 

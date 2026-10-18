@@ -65,8 +65,7 @@ const ContentTooltip = ({
         tabIndex={0}
         aria-label={ariaLabel}
         aria-describedby={tipId}
-        radius="full"
-        className="focus-ring"
+        className="radius-full focus-ring"
       />
     ) : React.isValidElement<{ "aria-describedby"?: string }>(children) ? (
       React.cloneElement(children, {

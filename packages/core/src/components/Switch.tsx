@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { useId } from "react";
+import type { LeafProps } from "../interfaces.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -9,7 +10,7 @@ import {
 } from "../internal/controlChrome.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
-
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Flex } from "./Flex.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import commonStyles from "./SharedInteractiveStyles.module.scss";
@@ -17,7 +18,8 @@ import { Spinner } from "./Spinner.js";
 import styles from "./Switch.module.scss";
 
 interface SwitchProps
-  extends Omit<
+  extends LeafProps,
+    Omit<
       InteractiveDetailsProps,
       "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
     >,
@@ -26,10 +28,8 @@ interface SwitchProps
     // which an input never fires.
     Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
-      "checked" | "defaultChecked" | "onToggle" | "size"
+      "checked" | "defaultChecked" | "onToggle" | "size" | keyof LeafProps
     > {
-  style?: React.CSSProperties;
-  className?: string;
   /** On or off, controlled. Leave it out to let the switch keep its own
    *  state, starting from `defaultChecked`. */
   checked?: boolean;
@@ -64,8 +64,10 @@ const Switch = ({
   size: sizeProp,
   error,
   errorMessage,
-  ...rest
+  fillWidth,
+  ...others
 }: SwitchProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const [leaf, rest] = takeLeafProps(others);
   const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
   const labelId = useId();
   const descriptionId = useId();
@@ -102,10 +104,11 @@ const Switch = ({
 
   return (
     <Flex
+      {...leaf}
       gap="16"
       vertical="center"
       horizontal={reverse ? "between" : undefined}
-      fillWidth={reverse}
+      fillWidth={fillWidth ?? reverse}
       className={classNames(styles.container, className, styles[chrome.size], {
         [styles.error]: chrome.invalid,
         [styles.reverse]: reverse,

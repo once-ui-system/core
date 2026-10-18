@@ -10,6 +10,7 @@ This repo uses a monorepo layout with pnpm workspaces and Turborepo:
 |------|-------------|
 | `packages/core` | The Once UI package [@once-ui-system/core](https://www.npmjs.com/package/@once-ui-system/core) — all components, tokens, and utilities |
 | `packages/foundations` | Tokens, styles, and token-value types. Core consumes it at build time and inlines its SCSS/CSS into `dist`; it is not published to npm |
+| `packages/fx`, `packages/blocks` | 3.0: `@once-ui-system/fx` (the effects) and `@once-ui-system/blocks` (Banner, Book, LogoCloud, ScrollToTop, StylePanel, StyleOverlay), built on core; not on npm yet |
 | `apps/dev` | Local sandbox app for testing components (Next.js 16, port 3001) |
 | `apps/docs` | Documentation site at [docs.once-ui.com](https://docs.once-ui.com) (Next.js 16, port 3000) |
 

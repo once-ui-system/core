@@ -1,11 +1,12 @@
 import classNames from "clsx";
 import React from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { PulseRing } from "../internal/PulseRing.js";
 import { Schemes, Tone, TShirtSizes } from "../types.js";
 import { Flex } from "./Flex.js";
 import styles from "./StatusIndicator.module.scss";
 
-interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
+interface StatusIndicatorProps extends LeafPropsOf<"div"> {
   size?: TShirtSizes;
   /** The dot's palette hue. 2.x called this `color`. */
   scheme?: Schemes | "gray";
@@ -18,8 +19,6 @@ interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   tone?: Tone;
   /** The pulsing ring's size, overriding the one `size` sets. Only with `pulse`. */
   pulseSize?: string | number;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 const StatusIndicator = ({

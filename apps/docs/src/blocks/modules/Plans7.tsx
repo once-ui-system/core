@@ -2,19 +2,17 @@
 
 import {
   Background,
-  BlobFx,
   Button,
   Column,
-  CountFx,
   Heading,
   Icon,
   Mask,
-  MatrixFx,
   Row,
   SegmentedControl,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { BlobFx, CountFx, MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 type BillingPeriod = "monthly" | "annual";
@@ -143,9 +141,11 @@ function TierCard({ tier, billing }: { tier: Tier; billing: BillingPeriod }) {
           <Heading as="h3" textVariant="display-strong-xs">
             $<CountFx value={price} />
           </Heading>
-          <Text textVariant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
-            {period}
-          </Text>
+          <Column paddingBottom="4">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
+              {period}
+            </Text>
+          </Column>
         </Row>
         <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
           {tier.description}

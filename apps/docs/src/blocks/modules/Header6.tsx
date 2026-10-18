@@ -40,7 +40,9 @@ export const Header6: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
 
       <Row fillWidth paddingX="16" minHeight="56" vertical="center" horizontal="between" gap="16">
         <Row gap="12" vertical="center">
-          <NavIcon hide s={{ hide: false }} />
+          <Row hide s={{ hide: false }}>
+            <NavIcon />
+          </Row>
           <Row hide s={{ hide: false }} gap="4" vertical="center">
             <Logo
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}

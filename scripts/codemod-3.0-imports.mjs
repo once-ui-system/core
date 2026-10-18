@@ -11,6 +11,10 @@
  *       `@once-ui-system/core/emoji`; `MediaAudioPlayer`, `MediaVideoPlayer`,
  *       `Scrubber` and `CompareImage` are on `@once-ui-system/core/media`,
  *       beside `MediaUpload`.
+ *   F8  The sixteen effects (`RevealFx`, `CountFx`, `Effect`…) are their own
+ *       package, `@once-ui-system/fx`.
+ *   F10 Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay are
+ *       their own package, `@once-ui-system/blocks`.
  *
  * Rewrites `import`/`export … from` statements (named, type-only, default and
  * namespace) and `import("…")`. A statement that mixes names is split, and a
@@ -32,7 +36,10 @@ import { specifiersOf } from "./codemod-2.0.mjs";
 
 const ROOT = "@once-ui-system/core";
 
-/** Exports that left the root barrel for a subpath in 3.0 (F9). */
+/**
+ * Exports that left the root barrel in 3.0: for a subpath (F9), or for a
+ * package of their own (F8, F10), which the app installs beside core.
+ */
 export const MOVED_IMPORTS = {
 	[`${ROOT}/emoji`]: ["EmojiPicker", "EmojiPickerProps"],
 	[`${ROOT}/media`]: [
@@ -45,7 +52,72 @@ export const MOVED_IMPORTS = {
 		"ScrubberTrack",
 		"CompareImage",
 	],
+	"@once-ui-system/fx": [
+		"BlobFx",
+		"BlobFxProps",
+		"CelebrationFx",
+		"CountdownFx",
+		"CountdownFxProps",
+		"CountFx",
+		"CountFxProps",
+		"Effect",
+		"EffectProps",
+		"EffectType",
+		"FlipFx",
+		"FlipFxProps",
+		"GlitchFx",
+		"HoloFx",
+		"LetterFx",
+		"MatrixFx",
+		"BulgeConfig",
+		"ParticleFx",
+		"RevealFx",
+		"ShineFx",
+		"ShineFxProps",
+		"TiltFx",
+		"TypeFx",
+		"TypeFxProps",
+		"WeatherFx",
+	],
+	"@once-ui-system/blocks": [
+		"Banner",
+		"Book",
+		"BookProps",
+		"LogoCloud",
+		"ScrollToTop",
+		"StyleOverlay",
+		"StylePanel",
+		"StylePanelProps",
+		"useStylePanel",
+		"StyleGroupProps",
+		"StylePanelCustomLabels",
+		"StylePanelGroupLabels",
+		"StylePanelHeading",
+		"StylePanelLabels",
+		"StylePanelNameLabels",
+		"StylePanelOptionLabels",
+		"StylePanelRootProps",
+		"StylePanelRowLabels",
+		"StylePanelSchemeRow",
+		"StylePanelSwatchLabels",
+		"StylePanelValue",
+		"StylePanelVisibility",
+		"StyleRowProps",
+		"StyleSchemeRowProps",
+	],
 };
+
+/** The packages 3.0 split off core (F8, F10): an app adds them to its dependencies. */
+export const NEW_PACKAGES = ["@once-ui-system/fx", "@once-ui-system/blocks"];
+
+/** The new packages `out` imports from and `src` did not: what the app now has to install. */
+export function packagesAdded(src, out) {
+	const sources = (text) =>
+		new Set([...text.matchAll(/(["'])(@once-ui-system\/(?:fx|blocks))\1/g)].map((m) => m[2]));
+	const before = sources(src);
+	return [...sources(out)].filter((name) => !before.has(name));
+}
+
 const MOVED_TO = new Map(
 	Object.entries(MOVED_IMPORTS).flatMap(([target, names]) => names.map((name) => [name, target])),
 );
@@ -173,7 +245,7 @@ export function transformImports(src) {
 			if (parts.ns) namespaces.push(parts.ns);
 			if (parts.star && keyword === "export")
 				warnings.push(
-					`export * from "${source}": in 3.0 it does not re-export EmojiPicker (now on "${ROOT}/emoji") or MediaAudioPlayer, MediaVideoPlayer, Scrubber and CompareImage (now on "${ROOT}/media")`,
+					`export * from "${source}": in 3.0 it does not re-export EmojiPicker (now on "${ROOT}/emoji"), MediaAudioPlayer, MediaVideoPlayer, Scrubber and CompareImage (now on "${ROOT}/media"), the effects (now in "@once-ui-system/fx") or Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay (now in "@once-ui-system/blocks")`,
 				);
 			if (!removed) return whole;
 			hits.push(`${source} → ${deepTarget}`);
@@ -283,9 +355,11 @@ if (invokedDirectly) {
 	})(dir);
 	let total = 0;
 	let touched = 0;
+	const install = new Set();
 	for (const f of files) {
 		const src = fs.readFileSync(f, "utf8");
 		const { out, hits, warnings } = transformImports(src);
+		for (const name of packagesAdded(src, out)) install.add(name);
 		if (!hits.length && !warnings.length) continue;
 		console.log(f);
 		for (const w of warnings) console.log(`   ! ${w}  (fix by hand)`);
@@ -299,4 +373,5 @@ if (invokedDirectly) {
 	console.log(
 		`\n${total} change${total === 1 ? "" : "s"} across ${touched} file${touched === 1 ? "" : "s"}${dry ? " (dry run)" : ""}`,
 	);
+	if (install.size) console.log(`Now imported, so add to your dependencies: ${[...install].join(", ")}`);
 }

@@ -41,14 +41,9 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         }}
       />
       <Row gap="12" vertical="center">
-        <Icon
-          name="security"
-          size="s"
-          padding="12"
-          radius="full"
-          background="brand-alpha-weak"
-          onBackground="brand-weak"
-        />
+        <Row fit padding="12" radius="full" background="brand-alpha-weak">
+          <Icon name="security" size="s" onBackground="brand-weak" />
+        </Row>
         <Column gap="4" fillWidth>
           <Text textVariant="heading-strong-s">We value your privacy</Text>
           <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">

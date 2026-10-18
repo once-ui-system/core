@@ -4,13 +4,14 @@ import classNames from "clsx";
 import React, { ReactNode } from "react";
 import { useIcons } from "../contexts/IconProvider.js";
 import { type IconComponent, IconName } from "../icons.js";
+import type { LeafPropsOf } from "../interfaces.js";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types.js";
 import { Flex } from "./Flex.js";
 import { HoverCard } from "./HoverCard.js";
 import styles from "./Icon.module.scss";
 import { Tooltip } from "./Tooltip.js";
 
-interface IconProps extends React.ComponentProps<typeof Flex> {
+interface IconProps extends LeafPropsOf<"div"> {
   name: IconName;
   onBackground?: `${ColorScheme}-${ColorWeight}`;
   onSolid?: `${ColorScheme}-${ColorWeight}`;
@@ -18,8 +19,6 @@ interface IconProps extends React.ComponentProps<typeof Flex> {
   decorative?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 const Icon = ({

@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, CountFx, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { Button, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { LinearGauge } from "@once-ui-system/core/data";
 
 export const StatusBar = (flex: React.ComponentProps<typeof Row>) => {

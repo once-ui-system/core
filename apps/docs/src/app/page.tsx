@@ -1,5 +1,6 @@
 import React from "react";
-import { Column, Row, Heading, Text, Button, Grid, Media, StatusIndicator, Tag, Meta, Schema, MatrixFx, Background, Card, BlobFx } from "@once-ui-system/core";
+import { Column, Row, Heading, Text, Button, Grid, Media, StatusIndicator, Tag, Meta, Schema, Background, Card } from "@once-ui-system/core";
+import { MatrixFx, BlobFx } from "@once-ui-system/fx";
 import corePackage from "@once-ui-system/core/package.json";
 import { PromptLibrary } from "@/product/PromptLibrary";
 import { baseURL, meta, schema, layout } from "@/resources";

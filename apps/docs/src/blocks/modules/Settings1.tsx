@@ -8,9 +8,9 @@ import {
   Input,
   Row,
   SegmentedControl,
-  StylePanel,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 import { MediaUpload } from "@once-ui-system/core/media";
 import { useState } from "react";
 

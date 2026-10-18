@@ -1,6 +1,5 @@
 import {
   Avatar,
-  BlobFx,
   Button,
   Column,
   Grid,
@@ -10,6 +9,7 @@ import {
   Row,
   Text,
 } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 export const About1 = () => {
   const team = [

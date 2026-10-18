@@ -99,7 +99,11 @@ const MediaList = ({
       ref={referenceRef}
     >
       <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-      {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
+      {progress > 0 && (
+        <Column fillWidth paddingX="l">
+          <ProgressBar showLabel={false} value={progress} />
+        </Column>
+      )}
 
       {portalContainer &&
         (isHovered || isVisible) &&
@@ -129,7 +133,11 @@ const MediaList = ({
             }}
           >
             <Media aspectRatio="16/9" src={image} alt={title} sizes="400px" radius="l" />
-            {progress > 0 && <ProgressBar showLabel={false} value={progress} paddingX="l" />}
+            {progress > 0 && (
+              <Column fillWidth paddingX="l">
+                <ProgressBar showLabel={false} value={progress} />
+              </Column>
+            )}
             <Column fillWidth paddingX="16" paddingBottom="20" paddingTop="8" gap="8">
               <Row fillWidth horizontal="between" paddingBottom="12">
                 <Row gap="8" themeBorder="rounded">

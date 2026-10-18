@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { TypeFx, Button, Column } from "@once-ui-system/core";
+import { Button, Column } from "@once-ui-system/core";
+import { TypeFx } from "@once-ui-system/fx";
 
 export const TypeFxCustomExample = () => {
   const triggerFnRef = useRef<(() => void) | null>(null);

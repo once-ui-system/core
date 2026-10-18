@@ -25,6 +25,10 @@ const nextConfig = {
       "../../packages/core/.next/**/*",
       "../../packages/core/scripts/**/*",
       "../../packages/core/tsconfig*.json",
+      "../../packages/fx/src/**/*",
+      "../../packages/fx/node_modules/**/*",
+      "../../packages/blocks/src/**/*",
+      "../../packages/blocks/node_modules/**/*",
       "../../packages/**/*.md",
     ],
   },
@@ -33,7 +37,12 @@ const nextConfig = {
     silenceDeprecations: ["legacy-js-api"],
   },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
-  transpilePackages: ["next-mdx-remote", "@once-ui-system/core"],
+  transpilePackages: [
+    "next-mdx-remote",
+    "@once-ui-system/core",
+    "@once-ui-system/fx",
+    "@once-ui-system/blocks",
+  ],
   experimental: {
     serverMinification: true,
     serverActions: {

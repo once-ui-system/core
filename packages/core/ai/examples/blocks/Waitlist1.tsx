@@ -3,17 +3,16 @@
 import {
   AvatarGroup,
   Column,
-  CountFx,
   Heading,
   IconButton,
   Input,
   Line,
   Logo,
-  RevealFx,
   Row,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { CountFx, RevealFx } from "@once-ui-system/fx";
 import { useEffect, useState } from "react";
 import { Background6 } from "./Background6";
 
@@ -95,7 +94,7 @@ export const Waitlist1 = () => {
               }}
             />
             <Line vert marginX="16" height="20" background="brand-alpha-medium" />
-            <Text paddingX="4">Arriving soon</Text>
+            <Text marginX="4">Arriving soon</Text>
           </Tag>
         </RevealFx>
         <Column horizontal="center" align="center" gap="24">

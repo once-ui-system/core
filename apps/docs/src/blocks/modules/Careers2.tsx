@@ -118,7 +118,9 @@ export const Careers2 = () => {
               <Row />
               <Column fillWidth radius="l" padding="l" gap="16" center>
                 <Column gap="16" horizontal="center">
-                  <Icon radius="full" border padding="16" name="search" marginBottom="16" />
+                  <Row fit radius="full" border padding="16" marginBottom="16">
+                    <Icon name="search" />
+                  </Row>
                   <Heading textVariant="heading-strong-l">No positions found</Heading>
                   <Text
                     wrap="balance"

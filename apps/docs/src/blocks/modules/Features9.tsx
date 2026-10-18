@@ -1,4 +1,5 @@
-import { Background, BlobFx, Button, Column, Heading, Text, TiltFx } from "@once-ui-system/core";
+import { Background, Button, Column, Heading, Text } from "@once-ui-system/core";
+import { BlobFx, TiltFx } from "@once-ui-system/fx";
 
 export const Features9: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (

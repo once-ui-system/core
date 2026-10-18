@@ -5,7 +5,6 @@ import {
   Background,
   Card,
   Column,
-  CountFx,
   Grid,
   Heading,
   HoverCard,
@@ -13,6 +12,7 @@ import {
   Row,
   Text,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 
 const stats = [
   { label: "GitHub stars", value: 4200, suffix: "+" },

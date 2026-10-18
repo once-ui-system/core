@@ -9,12 +9,11 @@ import {
   HoverCard,
   Icon,
   Mask,
-  MatrixFx,
   Row,
-  ShineFx,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx, ShineFx } from "@once-ui-system/fx";
 import { LineChart } from "@once-ui-system/core/data";
 import type { ReactNode } from "react";
 

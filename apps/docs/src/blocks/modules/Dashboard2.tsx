@@ -6,7 +6,6 @@ import {
   Button,
   Card,
   Column,
-  CountFx,
   Grid,
   Heading,
   Icon,
@@ -16,6 +15,7 @@ import {
   StatusIndicator,
   Text,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Header1, Sidebar1 } from ".";
 

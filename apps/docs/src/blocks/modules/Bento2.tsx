@@ -88,14 +88,13 @@ const tiles = {
             onBackground="neutral-strong"
             horizontal="center"
           >
-            <Icon
-              padding="24"
-              radius="full"
-              border="neutral-strong"
-              onBackground="neutral-strong"
-              name="discord"
-              size="xl"
-            />
+            <Row fit padding="24" radius="full" border="neutral-strong">
+              <Icon
+                onBackground="neutral-strong"
+                name="discord"
+                size="xl"
+              />
+            </Row>
           </Row>
         </Row>
       ),

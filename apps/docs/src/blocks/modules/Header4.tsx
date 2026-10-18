@@ -35,14 +35,14 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
       {...flex}
     >
       <Row gap="24" vertical="center">
-        <NavIcon
-          active={isActive}
-          onClick={() => setIsActive(!isActive)}
-          aria-label="Toggle navigation menu"
-          aria-expanded={isActive}
-          hide
-          s={{ hide: false }}
-        />
+        <Row hide s={{ hide: false }}>
+          <NavIcon
+            active={isActive}
+            onClick={() => setIsActive(!isActive)}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isActive}
+          />
+        </Row>
         <Logo
           href="#"
           icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}

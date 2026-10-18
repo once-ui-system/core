@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Row } from "@once-ui-system/core";
-import { WeatherFx } from "@once-ui-system/core";
+import { WeatherFx } from "@once-ui-system/fx";
 import React from "react";
 
 export function WeatherFxExample() {

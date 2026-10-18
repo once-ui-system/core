@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Dialog, Button, Column, Text, Input, BlobFx } from "@once-ui-system/core";
+import { Dialog, Button, Column, Text, Input } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 export function ModalExample() {
   const [isOpen, setIsOpen] = useState(false);

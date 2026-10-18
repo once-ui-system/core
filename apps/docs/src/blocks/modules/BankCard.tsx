@@ -2,14 +2,13 @@ import {
   Background,
   Column,
   Heading,
-  HoloFx,
   Icon,
   IconButton,
   Input,
   Row,
   Text,
-  TiltFx,
 } from "@once-ui-system/core";
+import { HoloFx, TiltFx } from "@once-ui-system/fx";
 
 export const BankCard: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (

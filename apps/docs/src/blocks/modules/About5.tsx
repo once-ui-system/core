@@ -6,17 +6,16 @@ import {
   Button,
   Card,
   Column,
-  CountFx,
   Grid,
   Heading,
   HoverCard,
-  LetterFx,
   Line,
   Logo,
   Media,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { CountFx, LetterFx } from "@once-ui-system/fx";
 import { useEffect, useRef, useState } from "react";
 
 const stats = [
@@ -191,9 +190,11 @@ export const About5 = () => {
           <Row fillWidth borderBottom>
             <Row flex={1} borderRight m={{ hide: true }} />
             <Column flex={3} background="page">
-              <Heading as="h2" textVariant="heading-strong-l" padding="24">
-                Swag designed for makers.
-              </Heading>
+              <Column padding="24">
+                <Heading as="h2" textVariant="heading-strong-l">
+                  Swag designed for makers.
+                </Heading>
+              </Column>
             </Column>
           </Row>
 

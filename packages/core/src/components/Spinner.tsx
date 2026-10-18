@@ -1,13 +1,12 @@
 import classNames from "clsx";
 import React from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
 import { Flex } from "./Flex.js";
 import styles from "./Spinner.module.scss";
 
-interface SpinnerProps extends React.ComponentProps<typeof Flex> {
+interface SpinnerProps extends LeafPropsOf<"div"> {
   size?: TShirtSizes;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 const Spinner = ({

@@ -11,9 +11,9 @@ import {
   Row,
   Scroller,
   StatusIndicator,
-  StylePanel,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 import { LineChart, RadialGauge } from "@once-ui-system/core/data";
 
 const stats = [

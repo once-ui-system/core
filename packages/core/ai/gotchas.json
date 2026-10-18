@@ -160,6 +160,10 @@
     "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).",
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
+  "layout.leafProps": {
+    "rule": "Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).",
+    "components": ["Button", "Text", "Heading", "Icon", "Input", "Row", "Column"]
+  },
   "spacing.tokens": {
     "rule": "gap, padding and margin take spacing tokens (\"0\", \"1\", \"2\", \"4\", \"8\", \"12\", \"16\", \"20\", \"24\", \"32\", \"40\", \"48\", \"56\", \"64\", \"72\", \"80\", \"104\", \"128\", \"160\", or xs–xl). \"6\" and \"10\" are not tokens and are type errors.",
     "components": ["Flex", "Row", "Column", "Grid"]

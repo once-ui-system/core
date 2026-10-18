@@ -3,14 +3,18 @@
 import classNames from "clsx";
 import React, { ReactNode, TextareaHTMLAttributes, useCallback, useEffect, useState } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
+import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldSize } from "./FormContext.js";
 import styles from "./Input.module.scss";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
 
-interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
+interface TextareaProps
+  extends LeafProps,
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix" | keyof LeafProps> {
   id: string;
   label?: string;
   placeholder?: string;
@@ -33,7 +37,6 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
     | "top-right"
     | "bottom-right"
     | "bottom-left";
-  className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
   variant?: "default" | "ghost";
@@ -85,8 +88,10 @@ const Textarea = ({
   onValueChange,
   onAnimationStart,
   style,
-  ...props
+  fillWidth = true,
+  ...rest
 }: TextareaProps & { ref?: React.Ref<HTMLTextAreaElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);
@@ -204,8 +209,9 @@ const Textarea = ({
 
   return (
     <Column
+      {...leaf}
       gap="8"
-      fillWidth
+      fillWidth={fillWidth}
       fitHeight
       className={classNames(className, {
         [styles.error]: displayError && styledValue !== "",

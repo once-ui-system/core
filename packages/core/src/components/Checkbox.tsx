@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { useId } from "react";
+import type { LeafProps } from "../interfaces.js";
 import {
   type ControlChromeProps,
   describedBy,
@@ -9,13 +10,15 @@ import {
 } from "../internal/controlChrome.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps
-  extends Omit<
+  extends LeafProps,
+    Omit<
       InteractiveDetailsProps,
       "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
     >,
@@ -24,7 +27,7 @@ interface CheckboxProps
     // which an input never fires.
     Omit<
       React.InputHTMLAttributes<HTMLInputElement>,
-      "checked" | "defaultChecked" | "onToggle" | "size"
+      "checked" | "defaultChecked" | "onToggle" | "size" | keyof LeafProps
     > {
   /** Ticked or not, controlled. Leave it out to let the checkbox keep its
    *  own state, starting from `defaultChecked`. */
@@ -58,8 +61,10 @@ const Checkbox = ({
   size: sizeProp,
   error,
   errorMessage,
-  ...rest
+  fillWidth,
+  ...others
 }: CheckboxProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const [leaf, rest] = takeLeafProps(others);
   const [isChecked, setIsChecked] = useControllableState({
     value: checkedProp,
     defaultValue: defaultChecked,
@@ -90,6 +95,8 @@ const Checkbox = ({
 
   return (
     <Flex
+      {...leaf}
+      fillWidth={fillWidth}
       vertical="center"
       gap="16"
       className={classNames(styles.container, className, styles[chrome.size], {

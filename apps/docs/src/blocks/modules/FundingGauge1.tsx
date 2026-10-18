@@ -1,6 +1,7 @@
 "use client";
 
-import { Background, Column, CountFx, Icon, Row, Text } from "@once-ui-system/core";
+import { Background, Column, Icon, Row, Text } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { LinearGauge } from "@once-ui-system/core/data";
 
 const MAX_FUNDING = 15000;

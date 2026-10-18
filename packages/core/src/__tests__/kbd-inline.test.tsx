@@ -27,8 +27,10 @@ describe("Kbd", () => {
     expect(el.className).toMatch(/\bfit\b/);
   });
 
-  it("can still be overridden", () => {
-    const { container } = render(<Kbd inline={false}>Esc</Kbd>, { wrapper: wrap });
-    expect((container.querySelector("kbd") as HTMLElement).className).toContain("display-flex");
+  it("takes the leaf props, not the layout ones (3.0)", () => {
+    const { container } = render(<Kbd marginLeft="8">Esc</Kbd>, { wrapper: wrap });
+    expect((container.querySelector("kbd") as HTMLElement).className).toContain("ml-8");
+    // @ts-expect-error — `inline` is a layout prop; a Kbd is always inline.
+    expect(<Kbd inline={false}>Esc</Kbd>).toBeDefined();
   });
 });

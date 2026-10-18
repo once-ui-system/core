@@ -1,6 +1,7 @@
 "use client";
 
-import { AvatarGroup, Tag, Column, CountFx, Heading, IconButton, Input, Line, Logo, RevealFx, Row, Text } from "@once-ui-system/core";
+import { AvatarGroup, Tag, Column, Heading, IconButton, Input, Line, Logo, Row, Text } from "@once-ui-system/core";
+import { CountFx, RevealFx } from "@once-ui-system/fx";
 import { useEffect, useState } from "react";
 import { Background6 } from ".";
 
@@ -81,7 +82,7 @@ export const Waitlist1 = () => {
               }}
             />
             <Line vert marginX="16" height="20" background="brand-alpha-medium" />
-            <Text paddingX="4">Arriving soon</Text>
+            <Text marginX="4">Arriving soon</Text>
           </Tag>
         </RevealFx>
         <Column horizontal="center" align="center" gap="24">

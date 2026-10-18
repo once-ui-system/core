@@ -82,15 +82,14 @@ export const Sidebar2: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
       <ToggleButton prefixIcon="check" label="My tasks" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="bookmark" label="Saved" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="eye" label="Watching" horizontal="start" fillWidth />
-      <Text
-        textVariant="label-default-s"
-        onBackground="neutral-weak"
-        paddingTop="m"
-        paddingBottom="12"
-        paddingLeft="xs"
-      >
-        My workspace
-      </Text>
+      <Column paddingTop="m" paddingBottom="12" paddingLeft="xs">
+        <Text
+          textVariant="label-default-s"
+          onBackground="neutral-weak"
+        >
+          My workspace
+        </Text>
+      </Column>
       <ToggleButton prefixIcon="squareStack" label="Views" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="calendar" label="Calendar" horizontal="start" fillWidth />
       <ToggleButton prefixIcon="people" label="Members" horizontal="start" fillWidth />

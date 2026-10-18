@@ -1,6 +1,7 @@
 "use client";
 
-import { AvatarGroup, Background, BlobFx, Button, Column, CountFx, Grid, Heading, Icon, Line, StatusIndicator, Row, Scroller, Tag, Text } from "@once-ui-system/core";
+import { AvatarGroup, Background, Button, Column, Grid, Heading, Icon, Line, StatusIndicator, Row, Scroller, Tag, Text } from "@once-ui-system/core";
+import { BlobFx, CountFx } from "@once-ui-system/fx";
 import { useMemo, useState } from "react";
 
 const perks = [

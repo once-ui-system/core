@@ -54,9 +54,11 @@ export const Pricing2 = (flex: React.ComponentProps<typeof Column>) => {
             </Text>
             <Row gap="4" vertical="end">
               <Text textVariant="heading-strong-m">$29</Text>
-              <Text textVariant="body-default-s" onBackground="neutral-weak" paddingBottom="4">
-                /mo
-              </Text>
+              <Column paddingBottom="4">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
+                  /mo
+                </Text>
+              </Column>
             </Row>
           </Column>
         </Row>

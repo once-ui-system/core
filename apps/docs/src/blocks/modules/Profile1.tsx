@@ -34,11 +34,11 @@ export const Profile1 = () => {
               left: "50%",
               transform: "translate(-50%, 50%)",
               borderColor: "var(--page-background)",
+              borderWidth: 8,
             }}
             bottom="0"
             position="absolute"
             src="/images/creators/lorant.jpg"
-            borderWidth={8}
             size="xl"
             statusIndicator={{ scheme: "green" }}
           />

@@ -5,7 +5,9 @@ import type React from "react";
 import { useEffect } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import { useToast } from "../contexts/ToastProvider.js";
+import type { LeafProps } from "../interfaces.js";
 import type { SpacingToken, TShirtSizes } from "../types.js";
+import { leafLayout, takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
 import { Flex } from "./Flex.js";
@@ -31,10 +33,10 @@ const sizeMap: Record<string, SpacingToken> = {
  */
 type LogoSource = string | { light: string; dark: string };
 
-interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
-  className?: string;
+interface LogoProps
+  extends LeafProps,
+    Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, keyof LeafProps> {
   size?: TShirtSizes;
-  style?: React.CSSProperties;
   icon?: LogoSource;
   wordmark?: LogoSource;
   href?: string;
@@ -56,8 +58,11 @@ const Logo = ({
   style,
   showIn,
   brand,
-  ...props
+  fillWidth,
+  ...rest
 }: LogoProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  const layout = leafLayout(leaf);
   useEffect(() => {
     if (!icon && !wordmark) {
       console.warn(
@@ -211,9 +216,11 @@ const Logo = ({
             "fit-height",
             showIn === "dark" && "dark-flex",
             showIn === "light" && "light-flex",
+            fillWidth && "fill-width",
+            ...layout.classes,
             className,
           )}
-          style={style}
+          style={{ ...layout.style, ...style }}
           href={href}
           aria-label="Trademark"
           {...props}
@@ -224,11 +231,12 @@ const Logo = ({
     } else {
       return (
         <Flex
-          className={classNames(className)}
+          className={classNames(...layout.classes, className)}
           showIn={showIn}
           radius="l"
           fitHeight
-          style={style}
+          fillWidth={fillWidth}
+          style={{ ...layout.style, ...style }}
           aria-label="Trademark"
         >
           {content}

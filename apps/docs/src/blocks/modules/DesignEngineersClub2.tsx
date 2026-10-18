@@ -4,15 +4,13 @@ import {
   type Flex,
   Heading,
   Icon,
-  LetterFx,
   Mask,
   Media,
-  ParticleFx,
   Row,
   SmartLink,
   Text,
-  TiltFx,
 } from "@once-ui-system/core";
+import { LetterFx, ParticleFx, TiltFx } from "@once-ui-system/fx";
 
 import type { ReactNode } from "react";
 

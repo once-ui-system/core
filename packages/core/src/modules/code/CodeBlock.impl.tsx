@@ -10,7 +10,6 @@ import { Flex } from "../../components/Flex.js";
 import { IconButton } from "../../components/IconButton.js";
 import { Row } from "../../components/Row.js";
 import { Scroller } from "../../components/Scroller.js";
-import { StyleOverlay } from "../../components/StyleOverlay.js";
 import { Text } from "../../components/Text.js";
 import { ToggleButton } from "../../components/ToggleButton.js";
 import type { IconName } from "../../icons.js";
@@ -459,7 +458,12 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   codes?: CodeInstance[];
   preview?: ReactNode;
   copyButton?: boolean;
-  styleButton?: boolean;
+  /**
+   * Extra controls in the header's button row, after reload and fullscreen
+   * and before copy. 2.x's `styleButton` was one built in; in 3.0 pass
+   * `<StyleOverlay>` from `@once-ui-system/blocks` around an `IconButton`.
+   */
+  actions?: ReactNode;
   reloadButton?: boolean;
   fullscreenButton?: boolean;
   compact?: boolean;
@@ -480,7 +484,7 @@ const CodeBlock = ({
   codes = [],
   preview,
   copyButton = true,
-  styleButton = false,
+  actions,
   reloadButton = false,
   fullscreenButton = false,
   lineNumbers = false,
@@ -774,18 +778,7 @@ const CodeBlock = ({
                   />
                 </Flex>
               )}
-              {styleButton && (
-                <StyleOverlay>
-                  <Flex
-                    fit
-                    radius="s"
-                    background={background}
-                    style={{ backgroundColor: styleBackgroundColor }}
-                  >
-                    <IconButton variant="tertiary" icon="sparkle" aria-label="Explain this code" />
-                  </Flex>
-                </StyleOverlay>
-              )}
+              {actions}
               {copyButton && (
                 <Flex
                   fit

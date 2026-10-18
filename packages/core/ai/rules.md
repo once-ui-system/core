@@ -107,6 +107,8 @@ If you can't ask (or the user says "you decide"), default to: restrained, center
 <Grid columns="3" s={{ columns: 1 }}>
 ```
 
+Breakpoints, padding, background, border, radius, sizes and `hide` exist only on `Flex`, `Row`, `Column` and `Grid`. Leaf components (`Button`, the fields and controls, `Text`, `Heading`, `Icon`, `Avatar`, `Kbd`…) take `LeafProps` — margins, `flex`, `fillWidth`, `position` and offsets, `className`, `style` — so wrap one to change the rest: `<Row s={{ hide: true }}><Button …/></Row>`, `<Column padding="8"><Text …/></Column>`.
+
 ## Components over primitives
 
 12. Reach for the purpose-built component before composing primitives:
@@ -278,7 +280,8 @@ Without this, mount-timed animations play while still off-screen and the user sc
 
 30. Most things come from the package root, but these modules do not, because
 their dependencies are optional peers (or, for `EmojiPicker`, a large dataset)
-and a root re-export would drag them into every consumer's module graph:
+and a root re-export would drag them into every consumer's module graph, or
+because they are packages of their own (the effects and the blocks):
 
 | Import | From | Peer the app installs |
 |--------|------|-----------------------|
@@ -288,9 +291,14 @@ and a root re-export would drag them into every consumer's module graph:
 | `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` | none |
 | `EmojiPicker` | `@once-ui-system/core/emoji` | none |
 | `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
+| the effects: `RevealFx`, `CountFx`, `TypeFx`, `MatrixFx`, `Effect` and every other `*Fx` | `@once-ui-system/fx` | `@once-ui-system/fx` itself |
+| `Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel`, `StyleOverlay` | `@once-ui-system/blocks` | `@once-ui-system/blocks` itself |
 
 Naming one of these from the root does not resolve, and there are no deep
-imports (`@once-ui-system/core/components/…` is not an entry point).
+imports (`@once-ui-system/core/components/…` is not an entry point). The
+effects and the blocks are packages of their own, built on core: add
+`@once-ui-system/fx` or `@once-ui-system/blocks` to the app's dependencies
+before importing from them (the manifest's `imports` row says `install`).
 Each component slice in `ai/components/`, each catalog entry, and each hook or
 function in `spec.json`'s `functions` carries the specifier to import it from
 when it is not the root; `ai/manifest.json`'s `imports` lists every entry

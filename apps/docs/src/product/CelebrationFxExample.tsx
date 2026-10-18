@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { CelebrationFx, Button, Column } from "@once-ui-system/core";
+import { Button, Column } from "@once-ui-system/core";
+import { CelebrationFx } from "@once-ui-system/fx";
 
 export function CelebrationFxExample() {
   const [active, setActive] = useState(false);

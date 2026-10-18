@@ -370,6 +370,58 @@ export interface FlexLayoutProps
     CommonProps,
     DisplayProps {}
 
+/**
+ * The props every leaf component takes besides its own: Button, IconButton,
+ * ToggleButton, the fields (Input, Textarea, Select, NumberInput, ColorInput,
+ * DateInput, TagInput, OTPInput, Slider), Switch, Checkbox, RadioButton,
+ * Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode,
+ * ProgressBar, Logo, SmartLink and NavIcon.
+ *
+ * They place the element among its siblings and nothing more. Padding,
+ * background, border, radius, sizes and the `xl`…`xs` breakpoint objects
+ * belong to the layout components (Flex, Row, Column, Grid, Card…): to change
+ * one of those on a leaf, or anything at a breakpoint, wrap it,
+ * `<Row s={{ hide: true }}><Button … /></Row>`.
+ *
+ * `id`, `data-*` and `aria-*` are the element's own attributes, as are its
+ * events.
+ */
+export interface LeafProps {
+  /**
+   * A spacing token (`"16"`) is a class, a number is px, a CSS length is
+   * inline; `"auto"` pushes the element along its row.
+   */
+  margin?: SpacingToken | number | CSSUnit | "auto";
+  marginTop?: SpacingToken | number | CSSUnit | "auto";
+  marginRight?: SpacingToken | number | CSSUnit | "auto";
+  marginBottom?: SpacingToken | number | CSSUnit | "auto";
+  marginLeft?: SpacingToken | number | CSSUnit | "auto";
+  marginX?: SpacingToken | number | CSSUnit | "auto";
+  marginY?: SpacingToken | number | CSSUnit | "auto";
+  /** `flex` on the element, as a flex item: `flex={1}` takes the room left. */
+  flex?: FlexValue;
+  /** Stretch to the width of the parent. */
+  fillWidth?: boolean;
+  /** With `top`/`right`/`bottom`/`left`: a badge pinned to a corner. */
+  position?: CSSProperties["position"];
+  top?: SpacingToken | number | CSSUnit;
+  right?: SpacingToken | number | CSSUnit;
+  bottom?: SpacingToken | number | CSSUnit;
+  left?: SpacingToken | number | CSSUnit;
+  className?: string;
+  style?: CSSProperties;
+}
+
+/** The names of `LeafProps`, for components that take them apart. */
+export type LeafPropName = keyof LeafProps;
+
+/**
+ * A leaf's props on the element it renders: `LeafProps` and that element's
+ * attributes (with `ref`), the layout props left out.
+ */
+export type LeafPropsOf<E extends ElementType> = LeafProps &
+  Omit<ComponentPropsWithRef<E>, keyof LeafProps>;
+
 /** Everything `Grid` reads, apart from the attributes of the element it renders. */
 export interface GridLayoutProps
   extends GridProps,
@@ -430,7 +482,6 @@ export interface PolymorphicComponent<Own, Default extends ElementType> {
 // Usage:
 //   type FlexBreakpointProps = BreakpointProps<AllFlexProps, 'direction' | 'padding' | ...>;
 //   type GridBreakpointProps = BreakpointProps<AllGridProps, 'columns' | 'padding' | ...>;
-//   type TextBreakpointProps = BreakpointProps<AllTextProps, 'textVariant' | 'align' | ...>;
 // ============================================================================
 
 // Union of all prop interfaces available to Flex-derived components
@@ -438,9 +489,6 @@ type AllFlexProps = FlexProps & StyleProps & SpacingProps & SizeProps & CommonPr
 
 // Union of all prop interfaces available to Grid-derived components
 type AllGridProps = GridProps & StyleProps & SpacingProps & SizeProps & CommonProps & DisplayProps;
-
-// Union of all prop interfaces available to Text-derived components
-type AllTextProps = TextProps & CommonProps & SpacingProps & DisplayProps;
 
 // Generic breakpoint type: picks Keys from Source and makes them optional
 export type BreakpointProps<Source, Keys extends keyof Source> = {
@@ -606,160 +654,6 @@ export type GridBreakpointProps = BreakpointProps<
   | "overflow"
   | "overflowX"
   | "overflowY"
-  // Escape hatch
-  | "style"
->;
-
-// ============================================================================
-// Text Breakpoint Props
-// Supports: typography, spacing, display effects, position
-// Does NOT support: layout (direction, horizontal, etc.), sizing, colors, border
-// ============================================================================
-export type TextBreakpointProps = BreakpointProps<
-  AllTextProps,
-  // Typography
-  | "textVariant"
-  | "weight"
-  | "family"
-  | "align"
-  | "wrap"
-  // Spacing
-  | "padding"
-  | "paddingLeft"
-  | "paddingRight"
-  | "paddingTop"
-  | "paddingBottom"
-  | "paddingX"
-  | "paddingY"
-  | "margin"
-  | "marginLeft"
-  | "marginRight"
-  | "marginTop"
-  | "marginBottom"
-  | "marginX"
-  | "marginY"
-  | "gap"
-  // Position offsets
-  | "top"
-  | "right"
-  | "bottom"
-  | "left"
-  // Effects / state
-  | "opacity"
-  | "zIndex"
-  | "pointerEvents"
-  | "transition"
-  | "scrollbar"
-  // Display / position
-  | "position"
-  | "hide"
-  | "overflow"
-  | "overflowX"
-  | "overflowY"
-  // Escape hatch
-  | "style"
->;
-
-// ============================================================================
-// Button Breakpoint Props
-// Supports: spacing, colors, typography, border/radius, effects
-// Does NOT support: layout, sizing, overflow
-// ============================================================================
-export type ButtonBreakpointProps = BreakpointProps<
-  SpacingProps & StyleProps & CommonProps & DisplayProps,
-  // Spacing
-  | "padding"
-  | "paddingLeft"
-  | "paddingRight"
-  | "paddingTop"
-  | "paddingBottom"
-  | "paddingX"
-  | "paddingY"
-  | "margin"
-  | "marginLeft"
-  | "marginRight"
-  | "marginTop"
-  | "marginBottom"
-  | "marginX"
-  | "marginY"
-  | "gap"
-  // Colors
-  | "background"
-  | "solid"
-  | "border"
-  | "borderTop"
-  | "borderRight"
-  | "borderBottom"
-  | "borderLeft"
-  | "borderX"
-  | "borderY"
-  | "borderStyle"
-  | "borderWidth"
-  | "radius"
-  | "shadow"
-  | "onBackground"
-  | "onSolid"
-  // Typography
-  | "align"
-  | "textVariant"
-  // Effects / state
-  | "opacity"
-  | "zIndex"
-  | "pointerEvents"
-  | "transition"
-  | "scrollbar"
-  // Escape hatch
-  | "style"
->;
-
-// ============================================================================
-// Input Breakpoint Props
-// Supports: spacing, colors, border, typography, effects
-// Does NOT support: layout, sizing, overflow
-// ============================================================================
-export type InputBreakpointProps = BreakpointProps<
-  SpacingProps & StyleProps & CommonProps & DisplayProps,
-  // Spacing
-  | "padding"
-  | "paddingLeft"
-  | "paddingRight"
-  | "paddingTop"
-  | "paddingBottom"
-  | "paddingX"
-  | "paddingY"
-  | "margin"
-  | "marginLeft"
-  | "marginRight"
-  | "marginTop"
-  | "marginBottom"
-  | "marginX"
-  | "marginY"
-  | "gap"
-  // Colors
-  | "background"
-  | "solid"
-  | "border"
-  | "borderTop"
-  | "borderRight"
-  | "borderBottom"
-  | "borderLeft"
-  | "borderX"
-  | "borderY"
-  | "borderStyle"
-  | "borderWidth"
-  | "radius"
-  | "shadow"
-  | "onBackground"
-  | "onSolid"
-  // Typography
-  | "align"
-  | "textVariant"
-  // Effects / state
-  | "opacity"
-  | "zIndex"
-  | "pointerEvents"
-  | "transition"
-  | "scrollbar"
   // Escape hatch
   | "style"
 >;

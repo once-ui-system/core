@@ -36,8 +36,6 @@ interface SingleDateInputProps
   /** Receives every open and close the field makes. */
   onOpenChange?: (open: boolean) => void;
   minHeight?: number;
-  className?: string;
-  style?: React.CSSProperties;
   timePicker?: boolean;
   minDate?: Date;
   maxDate?: Date;
@@ -271,8 +269,6 @@ interface RangeDateInputProps
   /** Receives every open and close the fields make. */
   onOpenChange?: (open: boolean) => void;
   minHeight?: number;
-  className?: string;
-  style?: React.CSSProperties;
   /**
    * The locale the fields' dates and the calendar's month and weekday names
    * are in, as a BCP 47 tag such as "de" or "pt-BR". Without it (or with a

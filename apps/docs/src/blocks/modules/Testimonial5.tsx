@@ -4,12 +4,12 @@ import {
   Column,
   Fade,
   type Flex,
-  ParticleFx,
   SmartLink,
   Text,
   User,
   Row,
 } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 import type { ReactNode } from "react";
 
 interface Testimonial {

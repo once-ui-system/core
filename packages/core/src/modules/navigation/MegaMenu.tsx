@@ -623,7 +623,9 @@ const MegaMenuBar = ({
                             >
                               <Row gap="12">
                                 {link.icon && (
-                                  <Icon name={link.icon} size="s" padding="8" radius="s" border />
+                                  <Row fit padding="8" radius="s" border>
+                                    <Icon name={link.icon} size="s" />
+                                  </Row>
                                 )}
                                 <Column gap="4">
                                   {link.label && (

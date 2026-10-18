@@ -1,13 +1,12 @@
 import classNames from "clsx";
 import React, { ReactNode } from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { Flex } from "./Flex.js";
 import styles from "./InlineCode.module.scss";
 
-interface InlineCodeProps extends Omit<React.ComponentProps<typeof Flex>, "ref"> {
+interface InlineCodeProps extends Omit<LeafPropsOf<"span">, "ref"> {
   ref?: React.Ref<HTMLSpanElement>;
   children: ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 const InlineCode = ({ ref, children, className, style, ...flex }: InlineCodeProps) => {

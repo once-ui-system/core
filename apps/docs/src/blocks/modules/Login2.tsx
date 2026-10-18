@@ -3,14 +3,13 @@ import {
   Button,
   Column,
   Heading,
-  HoloFx,
   Input,
   Line,
   Logo,
-  ParticleFx,
   Row,
   SmartLink,
 } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Login2 = () => {
   return (

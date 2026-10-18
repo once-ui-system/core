@@ -8,6 +8,8 @@ The 2.0 package split (`rfcs/2026-08-once-ui-2-architecture.md`) shipped in 2.0.
 core/
 ├── packages/
 │   ├── core/                  # @once-ui-system/core — the design system library (published)
+│   ├── fx/                    # @once-ui-system/fx — the effects, on top of core (3.0)
+│   ├── blocks/                # @once-ui-system/blocks — Banner, Book, LogoCloud, StylePanel… (3.0)
 │   └── foundations/           # @once-ui-system/foundations — design tokens + utility styles (private, no React)
 ├── apps/
 │   ├── dev/                   # Next.js 16 sandbox for component development

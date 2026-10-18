@@ -15,6 +15,7 @@
  *
  * Usage:  node scripts/codemod-3.0.mjs <dir> [--dry]
  *         node scripts/codemod-3.0-imports.mjs <dir> [--dry]   (import sources only)
+ *         node scripts/codemod-3.0-leaf.mjs <dir> [--dry]      (G2 leaf props only)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -29,7 +30,8 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { transformImports } from "./codemod-3.0-imports.mjs";
+import { packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
+import { transformLeaf } from "./codemod-3.0-leaf.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
 
@@ -123,6 +125,12 @@ const FLAGGED = {
   NavGroup: {
     onToggle:
       "renamed to onOpenChange, which receives the next open state (a zero-argument toggle still works)",
+  },
+  // F10: StyleOverlay is in @once-ui-system/blocks, which core cannot import.
+  CodeBlock: {
+    styleButton:
+      "removed: pass actions={<StyleOverlay><IconButton … /></StyleOverlay>}, with StyleOverlay " +
+      "from @once-ui-system/blocks",
   },
 };
 
@@ -229,7 +237,7 @@ const RENAMED_EXPORTS = { Particle: "ParticleFx", generateMetadata: "createMetad
 
 /** Exports 3.0 removed with no drop-in replacement: name → what to do. A3, A6. */
 const REMOVED_EXPORTS = {
-  BaseBreakpointProps: "removed; use FlexBreakpointProps, GridBreakpointProps or TextBreakpointProps",
+  BaseBreakpointProps: "removed; use FlexBreakpointProps or GridBreakpointProps (leaves take LeafProps)",
   resetScrollLockState: "removed from the public API (it was test-only)",
   resetAdapterWarning: "removed from the public API (it was test-only)",
   warnIfFrameworkUnadapted: "removed from the public API (LayoutProvider calls it)",
@@ -1422,6 +1430,13 @@ export function transform(src) {
   out = types.out;
   hits.push(...types.hits);
   warnings.push(...types.warnings);
+  // G2: leaf components take LeafProps (./codemod-3.0-leaf.mjs); a dropped
+  // prop moves to a Row or Column around the leaf where that renders the
+  // same, and is reported otherwise. After the renames, on 3.0's names.
+  const leaf = transformLeaf(out);
+  out = leaf.out;
+  hits.push(...leaf.hits);
+  warnings.push(...leaf.warnings);
   // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
   // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
   const imports = transformImports(out);
@@ -1470,9 +1485,11 @@ if (invokedDirectly) {
   let total = 0;
   let touched = 0;
   let flagged = 0;
+  const install = new Set();
   for (const f of files) {
     const src = fs.readFileSync(f, "utf8");
     const { out, hits, warnings } = transform(src);
+    for (const name of packagesAdded(src, out)) install.add(name);
     if (!hits.length && !warnings.length) continue;
     console.log(f);
     for (const w of [...new Set(warnings)]) console.log(`   ! ${w}  (fix by hand)`);
@@ -1489,4 +1506,6 @@ if (invokedDirectly) {
       (flagged ? `, ${flagged} to fix by hand` : "") +
       (dry ? " (dry run)" : ""),
   );
+  // F8, F10: the effects and the blocks are packages of their own now.
+  if (install.size) console.log(`Now imported, so add to your dependencies: ${[...install].join(", ")}`);
 }

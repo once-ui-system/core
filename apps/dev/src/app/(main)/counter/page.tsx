@@ -1,6 +1,7 @@
 "use client";
 
-import { CountFx, Row } from "@once-ui-system/core";
+import { Row } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 export default function Counter() {

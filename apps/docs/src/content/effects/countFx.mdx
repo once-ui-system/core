@@ -121,7 +121,8 @@ Use the [useInViewport](/hooks/useInViewport) hook to trigger the count animatio
     {
       code:
 `import { useRef, useState, useEffect } from "react";
-import { CountFx, useInViewport } from "@once-ui-system/core";
+import { useInViewport } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 
 function ScrollCountExample() {
     const ref = useRef<HTMLDivElement>(null);

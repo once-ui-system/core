@@ -1,16 +1,15 @@
 "use client";
 
 import {
-  BlobFx,
   Button,
   Column,
-  CountFx,
   Heading,
   Line,
   StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { BlobFx, CountFx } from "@once-ui-system/fx";
 
 export const Hero12 = (flex: React.ComponentProps<typeof Column>) => {
   return (

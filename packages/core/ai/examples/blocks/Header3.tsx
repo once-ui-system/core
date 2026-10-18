@@ -47,27 +47,27 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         <Row fillWidth vertical="center" horizontal="end">
           <Row s={{ hide: true }} fillWidth gap="24" paddingX="64" vertical="center">
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" textVariant="label-strong-s">
+              <Text margin="8" onBackground="neutral-strong" textVariant="label-strong-s">
                 Home
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
+              <Text margin="8" onBackground="neutral-strong" textVariant="label-default-s">
                 TV Shows
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
+              <Text margin="8" onBackground="neutral-strong" textVariant="label-default-s">
                 Movies
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
+              <Text margin="8" onBackground="neutral-strong" textVariant="label-default-s">
                 Popular
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
+              <Text margin="8" onBackground="neutral-strong" textVariant="label-default-s">
                 My List
               </Text>
             </SmartLink>
@@ -113,53 +113,27 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                       label="Account"
                       value="account"
                       prefix={
-                        <Icon
-                          padding="4"
-                          margin="2"
-                          size="s"
-                          name="person"
-                          onBackground="neutral-weak"
-                        />
+                        <Icon margin={6} size="s" name="person" onBackground="neutral-weak" />
                       }
                     />
                     <Option
                       label="Settings"
                       value="settings"
                       prefix={
-                        <Icon
-                          padding="4"
-                          margin="2"
-                          size="s"
-                          name="settings"
-                          onBackground="neutral-weak"
-                        />
+                        <Icon margin={6} size="s" name="settings" onBackground="neutral-weak" />
                       }
                     />
                     <Option
                       label="Subscription"
                       value="subscription"
                       prefix={
-                        <Icon
-                          padding="4"
-                          margin="2"
-                          size="s"
-                          name="payment"
-                          onBackground="neutral-weak"
-                        />
+                        <Icon margin={6} size="s" name="payment" onBackground="neutral-weak" />
                       }
                     />
                     <Option
                       label="Help"
                       value="help"
-                      prefix={
-                        <Icon
-                          padding="4"
-                          margin="2"
-                          size="s"
-                          name="help"
-                          onBackground="neutral-weak"
-                        />
-                      }
+                      prefix={<Icon margin={6} size="s" name="help" onBackground="neutral-weak" />}
                     />
                   </Column>
                   <Line />
@@ -169,13 +143,7 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                       label="Log out"
                       value="logout"
                       prefix={
-                        <Icon
-                          padding="4"
-                          margin="2"
-                          size="s"
-                          name="logout"
-                          onBackground="neutral-weak"
-                        />
+                        <Icon margin={6} size="s" name="logout" onBackground="neutral-weak" />
                       }
                     />
                   </Column>

@@ -8,11 +8,11 @@ import {
   Icon,
   Logo,
   Mask,
-  MatrixFx,
   Media,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 export interface TestimonialProps {
   logo: {
@@ -83,13 +83,9 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
         radius="xl"
         overflow="hidden"
         cursor={
-          <Icon
-            solid="brand-strong"
-            onSolid="brand-strong"
-            name="arrowUpRight"
-            padding="12"
-            radius="full"
-          />
+          <Row fit solid="brand-strong" padding="12" radius="full">
+            <Icon onSolid="brand-strong" name="arrowUpRight" />
+          </Row>
         }
       >
         <Background

@@ -1,6 +1,7 @@
 "use client";
 
-import { Row, MatrixFx, Button } from "@once-ui-system/core";
+import { Row, Button } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import React from "react";
 
 export function MatrixFxExample() {

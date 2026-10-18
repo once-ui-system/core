@@ -438,14 +438,18 @@ export function subtract(a: number, b: number): number {
 
 ## Extras
 
-The `CodeBlock` component supports additional features like fullscreen mode and style customization.
+The `CodeBlock` component supports additional features like fullscreen mode, and `actions` takes controls of your own for its header, such as a `StyleOverlay` from `@once-ui-system/blocks` (3.0 replaces the built-in `styleButton` with it).
 
 <CodeBlock
   marginTop="16"
   isCollapsible={false}
   marginBottom="24"
   fullscreenButton
-  styleButton
+  actions={
+    <StyleOverlay>
+      <IconButton variant="tertiary" icon="sparkle" aria-label="Open the style panel" />
+    </StyleOverlay>
+  }
   codes={[
     {
       language: "tsx",
@@ -453,7 +457,11 @@ The `CodeBlock` component supports additional features like fullscreen mode and 
       code:
 `<CodeBlock
 		fullscreenButton
-		styleButton
+		actions={
+			<StyleOverlay>
+				<IconButton variant="tertiary" icon="sparkle" aria-label="Open the style panel" />
+			</StyleOverlay>
+		}
 		reloadButton
 		codes={[
 			{
@@ -618,7 +626,7 @@ Pass any color via `style.backgroundColor` &mdash; the button wrappers automatic
     ["codes", "CodeInstance[]", "[]"],
     ["preview", "ReactNode"],
     ["copyButton", "boolean", "true"],
-    ["styleButton", "boolean", "false"],
+    ["actions", "ReactNode"],
     ["reloadButton", "boolean", "false"],
     ["fullscreenButton", "boolean", "false"],
     ["compact", "boolean", "false"],

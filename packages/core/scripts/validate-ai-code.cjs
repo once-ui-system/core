@@ -805,6 +805,26 @@ function rootLayoutProviderImport(source) {
 }
 
 /**
+ * Names imported from the package root that live in a package of their own
+ * (3.0, F8 and F10): `RevealFx` from "@once-ui-system/core" does not resolve,
+ * it is on "@once-ui-system/fx". The spec's `importFrom` says where each lives.
+ */
+function packageImportsFromRoot(source, spec) {
+  const found = new Map();
+  for (const m of source.matchAll(CORE_ROOT_SPECIFIERS)) {
+    for (const part of m[3].split(",")) {
+      const name = part
+        .trim()
+        .replace(/^type\s+/, "")
+        .split(/\s+as\s+/)[0];
+      const from = spec?.components?.[name]?.importFrom ?? spec?.functions?.[name]?.importFrom;
+      if (from && !from.startsWith("@once-ui-system/core")) found.set(name, from);
+    }
+  }
+  return found;
+}
+
+/**
  * 1.x prop names that 2.x no longer accepts at all, from the 2.0 codemod
  * (`scripts/codemod-2.0.mjs` at the repo root). Names that 2.x reuses with a
  * new meaning are left out, because they are valid now: `fill` on Media,
@@ -923,6 +943,109 @@ const PRE_3_COMPONENTS = {
 };
 
 /**
+ * G2: the leaf components, which take `LeafProps` (margins, `flex`,
+ * `fillWidth`, `position` and the offsets, `className`, `style`) and their
+ * own props, not the layout set. A layout prop on one is a type error in 3.0;
+ * it goes on the wrapper named here. Text and Heading take a Column, so the
+ * block keeps its line; the rest a Row (an Icon's box: `<Row fit …>`).
+ */
+const LEAF_COMPONENTS = [
+  "Button",
+  "IconButton",
+  "ToggleButton",
+  "Input",
+  "Textarea",
+  "NumberInput",
+  "ColorInput",
+  "DateInput",
+  "TagInput",
+  "OTPInput",
+  "Select",
+  "Slider",
+  "Switch",
+  "Checkbox",
+  "RadioButton",
+  "Text",
+  "Heading",
+  "Icon",
+  "Avatar",
+  "Spinner",
+  "StatusIndicator",
+  "Kbd",
+  "InlineCode",
+  "ProgressBar",
+  "Logo",
+  "SmartLink",
+  "NavIcon",
+];
+const LEAF_PROPS = new Set([
+  "margin",
+  "marginTop",
+  "marginRight",
+  "marginBottom",
+  "marginLeft",
+  "marginX",
+  "marginY",
+  "flex",
+  "fillWidth",
+  "position",
+  "top",
+  "right",
+  "bottom",
+  "left",
+  "className",
+  "style",
+]);
+const LAYOUT_MIXINS = [
+  "FlexProps",
+  "GridProps",
+  "SpacingProps",
+  "SizeProps",
+  "StyleProps",
+  "DisplayProps",
+];
+
+/**
+ * The layout props on a leaf that it does not take, each with the wrapper
+ * to put it on. Read from the spec: a prop a leaf declares itself (Text's
+ * `opacity`, Kbd's `onBackground`) is its own and not reported.
+ */
+function droppedLeafProps(spec, tag) {
+  if (!LEAF_COMPONENTS.includes(tag.name) || !spec.components?.[tag.name]) return [];
+  const accepted = acceptedProps(spec, tag.name);
+  const layout = new Set([...BREAKPOINTS, "onBackground", "onSolid", "align"]);
+  for (const mixin of LAYOUT_MIXINS)
+    for (const p of Object.keys(spec.mixins?.[mixin] ?? {})) layout.add(p);
+  // Attribute names only: values (strings, `{ … }` blocks) blanked out.
+  let names = "";
+  let depth = 0;
+  let quote = null;
+  for (const ch of tag.attrs) {
+    if (quote) {
+      if (ch === quote && depth === 0) quote = null;
+      names += " ";
+      continue;
+    }
+    if (depth === 0 && (ch === '"' || ch === "'")) quote = ch;
+    else if (ch === "{") depth++;
+    else if (ch === "}") depth--;
+    else if (depth === 0) {
+      names += ch;
+      continue;
+    }
+    names += " ";
+  }
+  const found = [];
+  for (const m of names.matchAll(/(?:^|\s)([A-Za-z]\w*)(?=\s*=|\s|\/?$)/g)) {
+    const name = m[1];
+    if (LEAF_PROPS.has(name) || !layout.has(name)) continue;
+    if (name in accepted && !BREAKPOINTS.includes(name)) continue;
+    if (!found.includes(name)) found.push(name);
+  }
+  return found;
+}
+
+/**
  * E2: Button and IconButton `variant` values that are a tone (or a twin) in
  * 3.0, with what to write instead.
  */
@@ -981,6 +1104,20 @@ function validate(source, spec, iconNames, options = {}) {
         );
       }
     }
+  }
+
+  const leafSeen = new Set();
+  for (const t of tags) {
+    const dropped = droppedLeafProps(spec, t).filter((p) => !leafSeen.has(`${t.name}.${p}`));
+    if (!dropped.length) continue;
+    for (const p of dropped) leafSeen.add(`${t.name}.${p}`);
+    const text = t.name === "Text" || t.name === "Heading";
+    const wrapper = text ? "Column" : t.name === "Icon" ? "Row fit" : "Row";
+    const list = dropped.join(", ");
+    add(
+      "layout.leafProps",
+      `${t.name} is a leaf in 3.0 and does not take ${list}: put ${dropped.length > 1 ? "them" : "it"} on a <${wrapper}> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)`,
+    );
   }
 
   if (tags.some((t) => hasProp(t.attrs, "fillWidth") && hasProp(t.attrs, "fillHeight"))) {
@@ -1244,6 +1381,13 @@ function validate(source, spec, iconNames, options = {}) {
       "LayoutProvider.next",
       'In a Next.js app, import LayoutProvider from "@once-ui-system/core/next" — the root export renders links and images as plain <a> and <img>',
       "next-layout-provider",
+    );
+  }
+
+  for (const [name, from] of packageImportsFromRoot(source, spec)) {
+    add(
+      "imports.package",
+      `${name} is in ${from} since 3.0, a package of its own: import it from "${from}" (and add ${from} to the app's dependencies)`,
     );
   }
 

@@ -256,14 +256,14 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
       {...flex}
     >
       <Row gap="4" vertical="center" maxWidth="10rem">
-        <NavIcon
-          active={isActive}
-          onClick={handleClick}
-          aria-label="Toggle navigation menu"
-          aria-expanded={isActive}
-          hide
-          s={{ hide: false }}
-        />
+        <Row hide s={{ hide: false }}>
+          <NavIcon
+            active={isActive}
+            onClick={handleClick}
+            aria-label="Toggle navigation menu"
+            aria-expanded={isActive}
+          />
+        </Row>
         <Logo
           wordmark={{
             light: "/trademarks/wordmark-light.svg",

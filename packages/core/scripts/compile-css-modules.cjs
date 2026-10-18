@@ -24,7 +24,11 @@ const path = require("node:path");
 // The build fails if a module does not compile, if an import would point at
 // CSS that was not written, or if any emitted file still imports Sass.
 
-const ROOT = path.resolve(__dirname, "..");
+// `--root <dir>` compiles another workspace package the same way:
+// `@once-ui-system/fx` and `@once-ui-system/blocks` build with this script.
+const rootFlag = process.argv.indexOf("--root");
+const ROOT =
+  rootFlag > 0 ? path.resolve(process.argv[rootFlag + 1]) : path.resolve(__dirname, "..");
 const SRC = path.join(ROOT, "src");
 const DIST = path.join(ROOT, "dist");
 

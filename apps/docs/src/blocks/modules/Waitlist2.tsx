@@ -1,6 +1,7 @@
 "use client";
 
-import { Avatar, Tag, BlobFx, Button, Column, CountFx, Fade, Icon, IconButton, Input, Line, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { Avatar, Tag, Button, Column, Fade, Icon, IconButton, Input, Line, StatusIndicator, Row, Text } from "@once-ui-system/core";
+import { BlobFx, CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 const recentJoins = [

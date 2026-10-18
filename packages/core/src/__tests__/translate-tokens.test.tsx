@@ -5,17 +5,15 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
-import { Heading } from "../components/Heading";
-import { Text } from "../components/Text";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { STATIC_SPACING_TOKENS, translateTransform, translateValue } from "../utils/layoutClasses";
 
 /**
  * `translateX` and `translateY` are typed `SpacingToken | number | CSSUnit`,
  * and the harness teaches the token (`translateY="16"`), but only a number and
- * a CSS unit resolved: a token wrote no transform at all, on Flex, Grid, Text
- * and Heading alike. A token is its spacing variable now, the one the spacing
- * classes read.
+ * a CSS unit resolved: a token wrote no transform at all, on Flex and Grid
+ * alike. A token is its spacing variable now, the one the spacing classes
+ * read. Text and Heading are leaves in 3.0 (G2) and take no translate.
  */
 const TOKENS = readFileSync(
   join(__dirname, "../../../foundations/test/__snapshots__/tokens-custom-properties.txt"),
@@ -36,8 +34,6 @@ const attributesOf = (html: string) =>
 const COMPONENTS: [string, React.ElementType][] = [
   ["Flex", Flex],
   ["Grid", Grid],
-  ["Text", Text],
-  ["Heading", Heading],
 ];
 
 describe("translate values", () => {

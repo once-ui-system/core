@@ -2,12 +2,11 @@
 
 import classNames from "clsx";
 import React from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { Flex } from "./Flex.js";
 import styles from "./NavIcon.module.scss";
 
-interface NavIconProps extends React.ComponentProps<typeof Flex> {
-  className?: string;
-  style?: React.CSSProperties;
+interface NavIconProps extends LeafPropsOf<"div"> {
   onClick?: () => void;
   /** Whether the menu it toggles is open: the lines turn into a cross, and
    *  `aria-expanded` follows. Without it the button reports no state. */

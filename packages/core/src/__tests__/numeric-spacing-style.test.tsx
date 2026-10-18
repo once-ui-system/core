@@ -51,12 +51,12 @@ describe("numeric spacing", () => {
     const { getByTestId } = render(
       <>
         <Grid data-testid="g" padding={1} />
-        <Text data-testid="t" padding={1} />
+        <Text data-testid="t" margin={1} />
         <Heading data-testid="h" margin={1} />
       </>,
     );
     expect(sides(getByTestId("g"), "padding")).toEqual(["1px", "1px", "1px", "1px"]);
-    expect(sides(getByTestId("t"), "padding")).toEqual(["1px", "1px", "1px", "1px"]);
+    expect(sides(getByTestId("t"), "margin")).toEqual(["1px", "1px", "1px", "1px"]);
     expect(sides(getByTestId("h"), "margin")).toEqual(["1px", "1px", "1px", "1px"]);
   });
 });

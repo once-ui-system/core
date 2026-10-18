@@ -9,12 +9,11 @@ import {
   Icon,
   Logo,
   Mask,
-  MatrixFx,
   Media,
   Row,
-  ShineFx,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx, ShineFx } from "@once-ui-system/fx";
 
 export const About4 = () => {
   const benefits = [
@@ -91,9 +90,9 @@ export const About4 = () => {
           />
           <Row fillWidth>
             <Column fillWidth paddingY="48" gap="20" background="page">
-              <Heading textVariant="display-strong-m" paddingX="32">
-                A vision to build the impossible.
-              </Heading>
+              <Column paddingX="32">
+                <Heading textVariant="display-strong-m">A vision to build the impossible.</Heading>
+              </Column>
             </Column>
             <Row fillWidth borderLeft s={{ hide: true }} />
           </Row>
@@ -138,20 +137,18 @@ export const About4 = () => {
                   border
                 >
                   <Column fillWidth paddingX="l" gap="12">
-                    <Heading as="h2" textVariant="heading-strong-l" paddingX="4">
-                      Curiosity in code<ShineFx baseOpacity={0.4}>_</ShineFx>
-                    </Heading>
-                    <Text
-                      wrap="balance"
-                      textVariant="body-default-m"
-                      onBackground="neutral-weak"
-                      marginBottom="16"
-                      paddingX="4"
-                    >
-                      How far can curiosity take design and code when they work as one? Once UI is
-                      not a company — it’s a flow of ideas, a way of building a future that feels
-                      human.
-                    </Text>
+                    <Column paddingX="4">
+                      <Heading as="h2" textVariant="heading-strong-l">
+                        Curiosity in code<ShineFx baseOpacity={0.4}>_</ShineFx>
+                      </Heading>
+                    </Column>
+                    <Column marginBottom="16" paddingX="4">
+                      <Text wrap="balance" textVariant="body-default-m" onBackground="neutral-weak">
+                        How far can curiosity take design and code when they work as one? Once UI is
+                        not a company — it’s a flow of ideas, a way of building a future that feels
+                        human.
+                      </Text>
+                    </Column>
                   </Column>
                   <Row fillWidth borderY paddingRight="l">
                     <Background

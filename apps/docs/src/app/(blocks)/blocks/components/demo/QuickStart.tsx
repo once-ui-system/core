@@ -1,6 +1,7 @@
 "use client";
 
-import { Scroller, Tag, BlobFx, Button, Column, Dialog, Heading, Icon, Row, ShineFx, Text } from "@once-ui-system/core";
+import { Scroller, Tag, Button, Column, Dialog, Heading, Icon, Row, Text } from "@once-ui-system/core";
+import { BlobFx, ShineFx } from "@once-ui-system/fx";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { BlockCategories } from "../BlockCategories";
@@ -57,14 +58,9 @@ const Docs: React.FC = () => {
                 }
               }}
             >
-              <Icon
-                padding="4"
-                border="brand-alpha-medium"
-                background="brand-alpha-weak"
-                radius="full"
-                name="sparkle"
-                size="xs"
-              />
+              <Row fit padding="4" border="brand-alpha-medium" background="brand-alpha-weak" radius="full">
+                <Icon name="sparkle" size="xs" />
+              </Row>
               <ShineFx duration={3000} inverse baseOpacity={0.6}>
                 What's new?
               </ShineFx>

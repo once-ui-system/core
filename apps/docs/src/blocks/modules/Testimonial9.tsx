@@ -7,12 +7,12 @@ import {
   Column,
   Heading,
   Mask,
-  MatrixFx,
   Media,
   Row,
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 interface CaseStudy {

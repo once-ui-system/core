@@ -17,6 +17,13 @@ const path = require("path");
 
 const ROOT = path.join(__dirname, "..");
 const SRC = path.join(ROOT, "src");
+// 3.0 (F8, F10): the effects and the blocks are packages of their own, built
+// on core. An agent still has to find them, so the spec documents them beside
+// core's components, each with the package as its `importFrom`. In the
+// workspace their sources sit next to core's.
+const FX_SRC = path.join(ROOT, "..", "fx", "src");
+const BLOCKS_SRC = path.join(ROOT, "..", "blocks", "src");
+const SOURCE_ROOTS = [SRC, FX_SRC, BLOCKS_SRC];
 const OUT_DIR = path.join(ROOT, "ai");
 const OUT_FILE = path.join(OUT_DIR, "spec.json");
 
@@ -78,13 +85,20 @@ const BARRELS = [
     group: "config",
     importFrom: "@once-ui-system/core/config",
   },
+  { file: path.join(FX_SRC, "index.ts"), group: "fx", importFrom: "@once-ui-system/fx" },
+  {
+    file: path.join(BLOCKS_SRC, "index.ts"),
+    group: "blocks",
+    importFrom: "@once-ui-system/blocks",
+  },
 ];
 
 /**
  * Every entry point an app imports from, for the manifest's `imports`. The
  * exports of each subpath are filled in from the spec, so the table cannot
  * name something the entry does not have. `peer` is the optional peer the
- * app installs for it.
+ * app installs for it; `install` is the package itself, for an entry that is
+ * not part of core.
  */
 const ENTRY_POINTS = [
   {
@@ -119,6 +133,16 @@ const ENTRY_POINTS = [
   {
     specifier: "@once-ui-system/core/config",
     use: "defineConfig and the OnceUIConfig types with no component code behind them, for once-ui.config (the root exports them too)",
+  },
+  {
+    specifier: "@once-ui-system/fx",
+    use: "The effects (RevealFx, CountFx, TypeFx, MatrixFx, Effect and the other *Fx): a package of its own, built on core",
+    install: "@once-ui-system/fx",
+  },
+  {
+    specifier: "@once-ui-system/blocks",
+    use: "Compositions: Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay: a package of its own, built on core",
+    install: "@once-ui-system/blocks",
   },
 ];
 
@@ -173,7 +197,12 @@ function loadTsConfig(ts) {
   const configPath = path.join(ROOT, "tsconfig.json");
   const configFile = ts.readConfigFile(configPath, ts.sys.readFile);
   const parsed = ts.parseJsonConfigFileContent(configFile.config, ts.sys, ROOT);
-  return parsed.options;
+  // fx and blocks import `@once-ui-system/core`, which resolves to core's
+  // `dist` through the workspace link, and the build runs this script after
+  // `dist` is cleaned. Read core's sources instead, so a prop the effects
+  // inherit (`extends Flex`) is the same declaration core's components share.
+  const paths = { ...parsed.options.paths, "@once-ui-system/core": [path.join(SRC, "index.ts")] };
+  return { ...parsed.options, paths };
 }
 
 function isInNodeModules(decl) {
@@ -199,6 +228,9 @@ function isOwnSource(fileName, src = SRC, platform = process.platform) {
     ? file.toLowerCase().startsWith(root.toLowerCase())
     : file.startsWith(root);
 }
+
+/** One of the documented packages' sources: core's, fx's or blocks'. */
+const isDocumentedSource = (fileName) => SOURCE_ROOTS.some((src) => isOwnSource(fileName, src));
 
 /** Strip quotes from string literal default values */
 function cleanDefault(text) {
@@ -262,7 +294,7 @@ function collectTypeAliases(ts, program, checker, seedBlob, components) {
   /** Every type alias and interface declared in src, by name. */
   const declared = new Map();
   for (const file of program.getSourceFiles()) {
-    const own = !file.isDeclarationFile && isOwnSource(file.fileName);
+    const own = !file.isDeclarationFile && isDocumentedSource(file.fileName);
     // A vendored type is indexed too, but only a string union of it is ever
     // emitted — `Placement` comes from floating-ui and its twelve values are
     // exactly what a caller needs; React's object types are not.
@@ -983,7 +1015,7 @@ async function main() {
     version: pkg.version,
     generated: new Date().toISOString().split("T")[0],
     format:
-      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
+      "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
     tokens,
     mixins,
     iconNames,
@@ -1190,9 +1222,10 @@ function emitArtifacts(spec, version, entryTypes) {
   // export reaches an agent's first read without anyone editing the rules.
   const imports = {};
   for (const entry of ENTRY_POINTS) {
-    const { specifier, use, peer } = entry;
+    const { specifier, use, peer, install } = entry;
     const row = { use };
     if (peer) row.peer = peer;
+    if (install) row.install = install;
     if (specifier !== "@once-ui-system/core") {
       const from = (item) => item.importFrom === specifier;
       const names = [

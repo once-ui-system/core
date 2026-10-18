@@ -3,7 +3,6 @@
 import {
   Button,
   Column,
-  CountFx,
   Fade,
   Heading,
   IconButton,
@@ -16,6 +15,7 @@ import {
   Tag,
   Text,
 } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Footer2, Header3 } from ".";
 

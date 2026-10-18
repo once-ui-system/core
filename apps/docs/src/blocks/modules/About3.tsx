@@ -9,10 +9,10 @@ import {
   Line,
   Mask,
   Media,
-  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 
 export const About3 = () => {
   const team = [

@@ -9,18 +9,18 @@ import {
 import {
   CommonProps,
   DisplayProps,
-  SpacingProps,
+  type LeafProps,
   type TextElement,
   TextProps,
 } from "../interfaces.js";
 import { ColorScheme, ColorWeight, TextVariant } from "../types.js";
-import { spacingClass, textLayout, withWeight } from "../utils/layoutClasses.js";
-import { numericSpacingStyle } from "../utils/spacingStyle.js";
+import { withWeight } from "../utils/layoutClasses.js";
+import { leafLayout } from "../utils/leafLayout.js";
 
 type TypeProps<T extends ElementType> = TextProps<T> &
   CommonProps &
-  SpacingProps &
-  DisplayProps &
+  LeafProps &
+  Pick<DisplayProps, "opacity"> &
   ComponentPropsWithoutRef<T>;
 
 /**
@@ -54,13 +54,6 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
   onSolid,
   align,
   wrap,
-  padding,
-  paddingLeft,
-  paddingRight,
-  paddingTop,
-  paddingBottom,
-  paddingX,
-  paddingY,
   margin,
   marginLeft,
   marginRight,
@@ -68,33 +61,18 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
   marginBottom,
   marginX,
   marginY,
+  flex,
+  fillWidth,
+  position,
+  top,
+  right,
+  bottom,
+  left,
   children,
   style,
   className,
   truncate,
   opacity,
-  userSelect,
-  gap,
-  top,
-  right,
-  bottom,
-  left,
-  translateX,
-  translateY,
-  position,
-  overflow,
-  overflowX,
-  overflowY,
-  scrollbar,
-  pointerEvents,
-  transition,
-  zIndex,
-  // Typed through `DisplayProps`, with no class that fits text: `inline`,
-  // `hide` and `showIn` are display modes of Flex and Grid. Taken out
-  // so they stop reaching the DOM as attributes.
-  inline: _inline,
-  hide: _hide,
-  showIn: _showIn,
   ...props
 }: TypeProps<T> & { ref?: TextRef<T> }) {
   const Component = as || "span";
@@ -127,70 +105,36 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, value: unknown) => spacingClass(prefix, value);
-
-  const layout = textLayout({
-    gap,
+  const layout = leafLayout({
+    margin,
+    marginLeft,
+    marginRight,
+    marginTop,
+    marginBottom,
+    marginX,
+    marginY,
+    flex,
+    position,
     top,
     right,
     bottom,
     left,
-    translateX,
-    translateY,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-    scrollbar,
-    pointerEvents,
-    transition,
-    zIndex,
   });
 
   const combinedClasses = classNames(
     ...classes,
     colorClass,
     className,
-    generateClassName("p", padding),
-    generateClassName("pl", paddingLeft),
-    generateClassName("pr", paddingRight),
-    generateClassName("pt", paddingTop),
-    generateClassName("pb", paddingBottom),
-    generateClassName("px", paddingX),
-    generateClassName("py", paddingY),
-    generateClassName("m", margin),
-    generateClassName("ml", marginLeft),
-    generateClassName("mr", marginRight),
-    generateClassName("mt", marginTop),
-    generateClassName("mb", marginBottom),
-    generateClassName("mx", marginX),
-    generateClassName("my", marginY),
     opacity !== undefined && `opacity-${opacity}`,
     truncate && "truncate",
-    userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
+    fillWidth && "fill-width",
     ...layout.classes,
   );
 
   const combinedStyle = {
     textAlign: align,
     textWrap: wrap,
-    ...numericSpacingStyle({
-      padding,
-      paddingX,
-      paddingY,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      paddingLeft,
-      margin,
-      marginX,
-      marginY,
-      marginTop,
-      marginRight,
-      marginBottom,
-      marginLeft,
-    }),
     ...layout.style,
     ...style,
   };

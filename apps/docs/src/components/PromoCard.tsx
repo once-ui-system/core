@@ -7,11 +7,10 @@ import {
   Card,
   Animation,
   HoverCard,
-  LetterFx,
   Media,
   Text,
-  BlobFx,
 } from "@once-ui-system/core";
+import { LetterFx, BlobFx } from "@once-ui-system/fx";
 
 export interface PromoCardProps {
   href: string;

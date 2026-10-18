@@ -279,7 +279,7 @@ Control how text wraps with the `wrap` prop. By default, the `wrap` prop is set 
 
 ## Spacing
 
-Headings support various spacing props for margin and padding.
+Headings take margins. Padding, like every other layout prop, goes on a `Column` around the heading.
 
 <CodeBlock
   marginTop="16"
@@ -289,9 +289,11 @@ Headings support various spacing props for margin and padding.
       <Heading marginLeft="40">
           With left margin
       </Heading>
-      <Heading padding="8">
-          With padding
-      </Heading>
+      <Column padding="8">
+        <Heading>
+            With padding
+        </Heading>
+      </Column>
       <Heading marginTop="16" marginBottom="16">
           With top and bottom margin
       </Heading>
@@ -303,9 +305,11 @@ Headings support various spacing props for margin and padding.
 `<Heading marginLeft="40">
     With left margin
 </Heading>
-<Heading padding="8">
-    With padding
-</Heading>
+<Column padding="8">
+    <Heading>
+        With padding
+    </Heading>
+</Column>
 <Heading marginTop="16" marginBottom="16">
     With top and bottom margin
 </Heading>`,

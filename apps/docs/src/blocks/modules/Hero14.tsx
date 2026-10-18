@@ -1,6 +1,7 @@
 "use client";
 
-import { Avatar, Background, Button, Card, Column, Heading, InlineCode, Media, Row, Tag, Text, TiltFx } from "@once-ui-system/core";
+import { Avatar, Background, Button, Card, Column, Heading, InlineCode, Media, Row, Tag, Text } from "@once-ui-system/core";
+import { TiltFx } from "@once-ui-system/fx";
 import { CompareImage } from "@once-ui-system/core/media";
 import { CodeBlock } from "@once-ui-system/core/code";
 

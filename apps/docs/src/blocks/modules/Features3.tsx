@@ -1,4 +1,5 @@
-import { Column, Heading, Icon, MatrixFx, Media, Row, Text } from "@once-ui-system/core";
+import { Column, Heading, Icon, Media, Row, Text } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 const features = [
   {

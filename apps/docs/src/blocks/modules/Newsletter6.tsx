@@ -3,10 +3,8 @@
 import {
   AvatarGroup,
   Background,
-  BlobFx,
   Button,
   Column,
-  CountFx,
   Heading,
   Icon,
   Input,
@@ -14,6 +12,7 @@ import {
   Row,
   Text,
 } from "@once-ui-system/core";
+import { BlobFx, CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {

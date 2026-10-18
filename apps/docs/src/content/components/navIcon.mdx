@@ -111,7 +111,7 @@ NavIcon has two states: `active` and `inactive`, controlled by the `active` prop
 
 ## Customization
 
-The NavIcon component accepts all the props of the `Flex` component, allowing for customization of size, spacing, and other properties.
+NavIcon keeps its 40px button look and takes the leaf props: margins, `flex`, `position` and the offsets. For another size or fill, set `style` (or `className`), which wins over its own classes.
 
 <CodeBlock
   marginTop="16"
@@ -122,15 +122,17 @@ The NavIcon component accepts all the props of the `Flex` component, allowing fo
   codes={[
     {
       code:
-`<NavIcon 
-    active={isActive} 
+`<NavIcon
+    active={isActive}
     onClick={handleClick}
-    width="48"
-    height="48"
-    border="neutral-alpha-medium"
-    background="neutral-strong"
-    padding="8"
-    radius="full"
+    style={{
+        width: 48,
+        height: 48,
+        padding: "var(--static-space-8)",
+        borderRadius: "var(--radius-full)",
+        background: "var(--neutral-background-strong)",
+        border: "1px solid var(--neutral-alpha-medium)",
+    }}
 />`,
       language: "tsx",
       label: "Customization"

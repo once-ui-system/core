@@ -5,9 +5,9 @@ import {
   Heading,
   Line,
   Row,
-  StylePanel,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 
 export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
   return (

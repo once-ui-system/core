@@ -1,22 +1,19 @@
 import type React from "react";
 import { type ReactNode } from "react";
+import type { LeafPropsOf } from "../interfaces.js";
 import { KbdCap } from "../internal/KbdCap.js";
 import { KeyCombo } from "../internal/KeyCombo.js";
-import type { Flex } from "./Flex.js";
-import type { Row } from "./Row.js";
 
 /** One keycap, its text as `children` (or `label`). */
-interface KbdCapModeProps extends React.ComponentProps<typeof Flex> {
+interface KbdCapModeProps extends LeafPropsOf<"div"> {
   keys?: undefined;
   /** The cap's text, in place of `children`. */
   label?: string;
   children?: ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
 /** A shortcut (2.x's KeyTip): platform-aware caps for `keys`, after the action `label`. */
-interface KbdKeysModeProps extends Omit<React.ComponentProps<typeof Row>, "children"> {
+interface KbdKeysModeProps extends Omit<LeafPropsOf<"div">, "children"> {
   /**
    * The shortcut, in the syntax `useHotkeys` takes: `"mod+k"`, `"shift+?"`,
    * `"g i"` for a sequence. An array lists alternatives. `mod` shows as ⌘ on

@@ -1,6 +1,7 @@
 "use client";
 
-import { Avatar, Tag, Button, Column, CountFx, Grid, Icon, Input, Line, Row, Text } from "@once-ui-system/core";
+import { Avatar, Tag, Button, Column, Grid, Icon, Input, Line, Row, Text } from "@once-ui-system/core";
+import { CountFx } from "@once-ui-system/fx";
 import { useState } from "react";
 
 const leaderboard = [

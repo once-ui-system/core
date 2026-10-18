@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Card } from "../components/Card";
-import { Effect } from "../components/Effect";
 import { Media } from "../components/Media";
 import { Setting } from "../components/Setting";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -88,32 +87,6 @@ describe("Card interactivity", () => {
   it("still shows the pointer on one that does", () => {
     render(<Card onClick={() => {}}>Panel</Card>, { wrapper: wrap });
     expect(screen.getByText("Panel").className).toContain("cursor-interactive");
-  });
-});
-
-describe("Effect", () => {
-  it("renders its content with no layer when switched off", () => {
-    const { container } = render(<Effect type="none">Hero</Effect>, { wrapper: wrap });
-    expect(screen.getByText("Hero")).toBeInTheDocument();
-    expect(container.querySelector("canvas")).toBeNull();
-  });
-
-  it("paints a canvas layer for a canvas-backed effect", () => {
-    const { container } = render(<Effect type="matrix">Hero</Effect>, { wrapper: wrap });
-    expect(container.querySelector("canvas")).not.toBeNull();
-    expect(screen.getByText("Hero")).toBeInTheDocument();
-  });
-
-  it("keeps the content in place across a swap — that is the point", () => {
-    const { container, rerender } = render(<Effect type="matrix">Hero</Effect>, { wrapper: wrap });
-    const before = container.firstElementChild?.className;
-    rerender(
-      <LayoutProvider>
-        <Effect type="blob">Hero</Effect>
-      </LayoutProvider>,
-    );
-    expect(container.firstElementChild?.className).toBe(before);
-    expect(screen.getByText("Hero")).toBeInTheDocument();
   });
 });
 

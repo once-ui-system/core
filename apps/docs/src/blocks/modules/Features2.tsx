@@ -1,14 +1,5 @@
-import {
-  Background,
-  Column,
-  Grid,
-  Heading,
-  Icon,
-  Mask,
-  MatrixFx,
-  Row,
-  Text,
-} from "@once-ui-system/core";
+import { Background, Column, Grid, Heading, Icon, Mask, Row, Text } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 
 const features = [
   {
@@ -94,15 +85,15 @@ export const Features2: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               <MatrixFx size={1.5} colors={["brand-background-strong"]} flicker />
             </Mask>
             <Row vertical="center" gap="16">
-              <Icon
+              <Row
+                fit
                 padding="8"
-                name={feature.icon}
-                onBackground="brand-weak"
-                size="xs"
                 radius="m"
                 border="brand-alpha-medium"
                 background="brand-alpha-weak"
-              />
+              >
+                <Icon name={feature.icon} onBackground="brand-weak" size="xs" />
+              </Row>
               <Heading as="h3" textVariant="label-default-m" onBackground="brand-weak">
                 {feature.title}
               </Heading>

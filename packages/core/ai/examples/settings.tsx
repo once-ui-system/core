@@ -117,7 +117,7 @@ export function SettingsExample() {
           </TabPanel>
 
           <TabPanel value="notifications" gap="8">
-            <Heading as="h2" textVariant="heading-strong-m" paddingBottom="8">
+            <Heading as="h2" textVariant="heading-strong-m" marginBottom="8">
               Notifications
             </Heading>
             <Setting label="Product updates" description="Release notes and changelog">

@@ -7,19 +7,23 @@ import { Heading } from "../components/Heading";
 import { Text } from "../components/Text";
 
 /**
- * `Text` and `Heading` take `DisplayProps` and `SpacingProps` in their types,
- * and read only the padding, margin, `opacity` and `userSelect` among them.
- * Everything else — `pointerEvents`, `overflow`, `position`, `zIndex`, `gap`,
- * the offsets — was spread onto the element, so it reached the DOM as an
- * attribute that did nothing (and React warned about the camel-cased ones).
- * They resolve as `Flex` resolves them now: a class where foundations
- * generates one, inline where a class cannot hold the value. `inline`, `hide`,
- * `showIn` are Flex and Grid display modes with no class that fits
- * text; they are taken out of the props and do nothing, as before.
+ * 3.0 (G2): `Text` and `Heading` are leaves. They take their typography and
+ * colour props and `LeafProps` (margins, `flex`, `fillWidth`, `position` and
+ * the offsets), which resolve as `Flex` resolves them: a class where
+ * foundations generates one, inline where a class cannot hold the value. The
+ * layout props 2.x typed on them (padding, `gap`, `overflow`, `zIndex`,
+ * `pointerEvents`, `translateX`, `inline`, `hide`, `showIn`…) are type errors;
+ * a Row or Column around the text carries them.
  */
 const STYLES = join(__dirname, "../../../foundations/scss/styles");
-const GENERATED = ["display", "position", "spacing"]
-  .map((name) => readFileSync(join(STYLES, `${name}.generated.scss`), "utf8"))
+const GENERATED = ["display", "position", "spacing", "flex"]
+  .map((name) => {
+    try {
+      return readFileSync(join(STYLES, `${name}.generated.scss`), "utf8");
+    } catch {
+      return "";
+    }
+  })
   .join("\n");
 
 const classesOf = (html: string) => {
@@ -38,26 +42,7 @@ const attributesOf = (html: string) =>
     m[1].toLowerCase(),
   );
 
-const LEAKED = [
-  "pointerevents",
-  "overflow",
-  "overflowx",
-  "overflowy",
-  "scrollbar",
-  "position",
-  "transition",
-  "zindex",
-  "gap",
-  "top",
-  "right",
-  "bottom",
-  "left",
-  "translatex",
-  "translatey",
-  "inline",
-  "hide",
-  "showin",
-];
+const LEAKED = ["position", "top", "right", "bottom", "left", "flex", "fillwidth", "margin"];
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -66,61 +51,37 @@ afterEach(() => {
 describe.each([
   ["Text", Text],
   ["Heading", Heading],
-] as const)("%s display props", (_name, Component) => {
+] as const)("%s leaf props", (_name, Component) => {
   it("maps the ones with a class to that class, on the server", () => {
     const html = renderToStaticMarkup(
-      <Component
-        pointerEvents="none"
-        position="absolute"
-        overflow="hidden"
-        overflowX="auto"
-        transition="micro-medium"
-        zIndex={0}
-        opacity={0}
-        gap="8"
-        top="16"
-        left="0"
-      >
+      <Component position="absolute" top="16" left="0" marginTop="8" flex={1} fillWidth opacity={0}>
         x
       </Component>,
     );
     const classes = classesOf(html);
-    const expected = [
-      "pointer-events-none",
-      "position-absolute",
-      "overflow-hidden",
-      "overflow-x-auto",
-      // `overflowX="auto"` scrolls, so it takes the scrollbar styling, as on Flex.
-      "scrollbar-minimal",
-      "transition-micro-medium",
-      "z-index-0",
-      "opacity-0",
-      "g-8",
-      "top-16",
-      "left-0",
-    ];
+    // `position` is inline, as on every leaf whose root is not a Flex.
+    expect(styleOf(html)).toContain("position:absolute");
+    const expected = ["top-16", "left-0", "mt-8", "opacity-0"];
     for (const cls of expected) expect(classes).toContain(cls);
+    expect(classes).toContain("flex-1");
+    expect(classes).toContain("fill-width");
     // Every one of them has a rule behind it.
-    const dead = expected.filter(
-      (cls) => cls !== "scrollbar-minimal" && !GENERATED.includes(`.${cls} {`),
-    );
+    const dead = expected.filter((cls) => !GENERATED.includes(`.${cls} {`));
     expect(dead).toEqual([]);
-    expect(GENERATED).toContain(".scrollbar-minimal::-webkit-scrollbar {");
   });
 
   it("writes a value a class cannot hold inline", () => {
     const style = styleOf(
       renderToStaticMarkup(
-        <Component gap={0.5} top={2} right="50%" bottom="calc(100% - 1rem)" translateX={1}>
+        <Component top={2} right="50%" bottom="calc(100% - 1rem)" marginLeft={3}>
           x
         </Component>,
       ),
     );
-    expect(style).toContain("gap:0.5px");
     expect(style).toContain("top:2px");
     expect(style).toContain("right:50%");
     expect(style).toContain("bottom:calc(100% - 1rem)");
-    expect(style).toContain("transform:translate(1px, 0)");
+    expect(style).toContain("margin-left:3px");
   });
 
   it("lets style win over a resolved value", () => {
@@ -137,63 +98,45 @@ describe.each([
 
   it("puts none of them on the DOM as an attribute", () => {
     const html = renderToStaticMarkup(
-      <Component
-        pointerEvents="auto"
-        overflow="auto"
-        overflowX="clip"
-        overflowY="visible"
-        scrollbar="default"
-        position="sticky"
-        transition="macro-long"
-        zIndex={2}
-        gap="-1"
-        top="0"
-        right={1}
-        bottom="10vh"
-        left="m"
-        translateX="50%"
-        translateY={-1}
-        inline
-        hide
-        showIn="dark"
-      >
+      <Component position="sticky" top="0" right={1} bottom="10vh" left="m" flex={2} fillWidth>
         x
       </Component>,
     );
-    const leaked = attributesOf(html).filter((attr) => LEAKED.includes(attr));
-    expect(leaked).toEqual([]);
-    expect(classesOf(html)).toContain("scrollbar-default");
-    expect(classesOf(html)).toContain("g-horizontal--1");
+    expect(attributesOf(html).filter((attr) => LEAKED.includes(attr))).toEqual([]);
   });
 
-  it("gives inline, hide and showIn no class", () => {
-    const classes = classesOf(
-      renderToStaticMarkup(
-        <Component inline hide showIn="light">
-          x
-        </Component>,
-      ),
+  it("types the layout props out", () => {
+    const elements = (
+      <>
+        {/* @ts-expect-error — padding is a layout prop: wrap the text in a Column */}
+        <Component padding="8">x</Component>
+        {/* @ts-expect-error — breakpoint objects belong to Flex, Row, Column and Grid */}
+        <Component s={{ hide: true }}>x</Component>
+        {/* @ts-expect-error */}
+        <Component hide>x</Component>
+        {/* @ts-expect-error */}
+        <Component gap="8">x</Component>
+        {/* @ts-expect-error */}
+        <Component zIndex={1}>x</Component>
+        {/* @ts-expect-error */}
+        <Component translateX={1}>x</Component>
+        {/* @ts-expect-error */}
+        <Component maxWidth={320}>x</Component>
+      </>
     );
-    expect(classes.filter((cls) => /flex|grid|hide|show|dark|light|inline/.test(cls))).toEqual([]);
+    expect(elements).toBeTruthy();
   });
 
   it("raises no unknown-prop warning when it mounts", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const { container } = render(
-      <Component
-        pointerEvents="none"
-        overflowX="hidden"
-        zIndex={1}
-        translateY={1}
-        hide
-        showIn="dark"
-      >
+      <Component position="relative" top={1} flex={1} marginX="auto">
         x
       </Component>,
     );
     const el = container.firstElementChild as HTMLElement;
     expect(el.getAttributeNames().filter((attr) => LEAKED.includes(attr))).toEqual([]);
-    expect(el.style.transform).toBe("translate(0, 1px)");
+    expect(el.style.top).toBe("1px");
     const warnings = error.mock.calls.map((call) => String(call[0]));
     expect(warnings.filter((w) => /does not recognize|non-boolean attribute/.test(w))).toEqual([]);
   });

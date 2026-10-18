@@ -296,30 +296,34 @@ Control how the text wraps using the `wrap` prop.
 
 ## Spacing
 
-Use margin and padding props to control layout spacing.
+Text takes margins. Padding, like every other layout prop, goes on a `Column` around the text.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column gap="12">
-      <Text padding="8">With padding</Text>
+      <Column padding="8">
+        <Text>With padding</Text>
+      </Column>
       <Text marginBottom="16">With bottom margin</Text>
-      <Text paddingX="12" paddingY="8">With horizontal and vertical padding</Text>
+      <Column paddingX="12" paddingY="8">
+        <Text>With horizontal and vertical padding</Text>
+      </Column>
     </Column>
   }
   codes={[
     {
       code:
-`<Text padding="8">
-    With padding
-</Text>
+`<Column padding="8">
+    <Text>With padding</Text>
+</Column>
 <Text marginBottom="16">
     With bottom margin
 </Text>
-<Text paddingX="12" paddingY="8">
-    With horizontal and vertical padding
-</Text>`,
+<Column paddingX="12" paddingY="8">
+    <Text>With horizontal and vertical padding</Text>
+</Column>`,
       language: "tsx",
       label: "Spacing"
     }

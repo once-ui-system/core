@@ -4,10 +4,10 @@ import {
   Heading,
   Mask,
   Media,
-  ParticleFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { ParticleFx } from "@once-ui-system/fx";
 
 const section = {
   title: "The best of Once UI",

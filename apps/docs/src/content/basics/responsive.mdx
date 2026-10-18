@@ -180,6 +180,28 @@ These extend `Flex` and inherit all Flex breakpoint props.
   ]}
 />
 
+### Leaf components
+
+Button, IconButton, ToggleButton, the form fields, Switch, Checkbox, Text,
+Heading, Icon, Avatar, Spinner, Kbd and the other leaf components take no
+breakpoint objects. They take the small `LeafProps` set (margins, `flex`,
+`fillWidth`, `position` and the offsets); to change one at a breakpoint, wrap
+it in a `Row` or `Column` and put the breakpoint object there.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code: `<Row s={{ hide: true }}>
+  <Button>Desktop only</Button>
+</Row>`,
+      language: "tsx",
+      label: "A leaf at a breakpoint"
+    }
+  ]}
+/>
+
 ## How it works
 
 ### Type system
@@ -300,9 +322,6 @@ import {
   BreakpointProps,
   FlexBreakpointProps,
   GridBreakpointProps,
-  TextBreakpointProps,
-  ButtonBreakpointProps,
-  InputBreakpointProps,
 } from "@once-ui-system/core";
 
 // Create custom breakpoint type for your component
@@ -319,9 +338,6 @@ type MyComponentBreakpointProps = BreakpointProps<
   marginBottom="24" columns={[{ header: "Type", key: "type" }, { header: "Use Case", key: "usecase" }]} rows={[
       [<InlineCode>BreakpointProps&lt;Source, Keys&gt;</InlineCode>, "Generic: pick any keys from any source"],
       [<InlineCode>FlexBreakpointProps</InlineCode>, "Flex, Row, Column, Card, Dialog, Mask, etc."],
-      [<InlineCode>GridBreakpointProps</InlineCode>, "Grid, LogoCloud"],
-      [<InlineCode>TextBreakpointProps</InlineCode>, "Text (if breakpoints added)"],
-      [<InlineCode>ButtonBreakpointProps</InlineCode>, "Button (if breakpoints added)"],
-      [<InlineCode>InputBreakpointProps</InlineCode>, "Input (if breakpoints added)"],
+      [<InlineCode>GridBreakpointProps</InlineCode>, "Grid"],
     ]}
 />

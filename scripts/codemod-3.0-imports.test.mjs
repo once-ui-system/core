@@ -1,12 +1,12 @@
 /**
  * Regression tests for the 2.x → 3.0 codemod: import sources
- * (MIGRATING.md § "2.x → 3.0", 12; breaks B2 and F9).
+ * (MIGRATING.md § "2.x → 3.0", 12; breaks B2, F8, F9 and F10).
  *
  * Run: node --test scripts/
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { transformImports } from "./codemod-3.0-imports.mjs";
+import { MOVED_IMPORTS, packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
 import { transform } from "./codemod-3.0.mjs";
 
 const run = (src) => transformImports(src);
@@ -238,6 +238,88 @@ describe("F9: EmojiPicker and the media components leave the root", () => {
 	});
 });
 
+describe("F8, F10: the effects and the blocks are packages of their own", () => {
+	it("moves the effects to @once-ui-system/fx and the blocks to @once-ui-system/blocks", () => {
+		const src =
+			'import { Button, RevealFx, type CountFxProps, StylePanel, LogoCloud, MatrixFx } from "@once-ui-system/core";\n';
+		assert.equal(
+			idempotent(src),
+			'import { Button } from "@once-ui-system/core";\n' +
+				'import { RevealFx, type CountFxProps, MatrixFx } from "@once-ui-system/fx";\n' +
+				'import { StylePanel, LogoCloud } from "@once-ui-system/blocks";\n',
+		);
+	});
+
+	it("moves every one of the sixteen effects and the six blocks", () => {
+		const effects = MOVED_IMPORTS["@once-ui-system/fx"].filter((n) => !/Props$|Type$|Config$/.test(n));
+		const blocks = MOVED_IMPORTS["@once-ui-system/blocks"].filter((n) => /^[A-Z]/.test(n) && !/Props$|Labels$|Heading$|Value$|Visibility$|Row$/.test(n));
+		assert.equal(effects.length, 16);
+		assert.deepEqual(blocks.sort(), ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"]);
+		const { out } = run(`import { ${[...effects, ...blocks].join(", ")} } from "@once-ui-system/core";\n`);
+		assert.doesNotMatch(out, /from "@once-ui-system\/core"/);
+		assert.match(out, new RegExp(`import \\{ ${effects.join(", ")} \\} from "@once-ui-system/fx";`));
+	});
+
+	it("moves a type-only import, StylePanel's types and its hook", () => {
+		const src =
+			'import type { StylePanelValue, StylePanelLabels, SpacingToken } from "@once-ui-system/core";\n' +
+			'import { useStylePanel } from "@once-ui-system/core";\n';
+		assert.equal(
+			idempotent(src),
+			'import type { SpacingToken } from "@once-ui-system/core";\n' +
+				'import type { StylePanelValue, StylePanelLabels } from "@once-ui-system/blocks";\n' +
+				'import { useStylePanel } from "@once-ui-system/blocks";\n',
+		);
+	});
+
+	it("joins an existing import of the package", () => {
+		const src =
+			'import { Row, ShineFx } from "@once-ui-system/core";\n' +
+			'import { RevealFx } from "@once-ui-system/fx";\n';
+		assert.equal(
+			idempotent(src),
+			'import { Row } from "@once-ui-system/core";\nimport { RevealFx, ShineFx } from "@once-ui-system/fx";\n',
+		);
+	});
+
+	it("moves a deep 2.x import of an effect or a block", () => {
+		const src =
+			'import { TiltFx } from "@once-ui-system/core/components/TiltFx";\n' +
+			'import { Book } from "@once-ui-system/core/components";\n';
+		assert.equal(
+			idempotent(src),
+			'import { TiltFx } from "@once-ui-system/fx";\nimport { Book } from "@once-ui-system/blocks";\n',
+		);
+	});
+
+	it("moves the import in a code sample", () => {
+		const src = "const code = `import { Column, TypeFx } from \"@once-ui-system/core\";\n\n<TypeFx words=\"Hi\" />`;\n";
+		assert.equal(
+			idempotent(src),
+			'const code = `import { Column } from "@once-ui-system/core";\nimport { TypeFx } from "@once-ui-system/fx";\n\n<TypeFx words="Hi" />`;\n',
+		);
+	});
+
+	it("reports a namespace import that reaches an effect", () => {
+		const { warnings } = run('import * as Once from "@once-ui-system/core";\n<Once.RevealFx />;\n');
+		assert.match(warnings.join("\n"), /Once\.RevealFx: RevealFx is on "@once-ui-system\/fx"/);
+	});
+
+	it("leaves an import from the new packages alone", () => {
+		const src = 'import { RevealFx } from "@once-ui-system/fx";\nimport { Banner } from "@once-ui-system/blocks";\n';
+		const { out, hits, warnings } = run(src);
+		assert.equal(out, src);
+		assert.deepEqual(hits, []);
+		assert.deepEqual(warnings, []);
+	});
+
+	it("names the packages a file now needs installed", () => {
+		const src = 'import { Row, RevealFx } from "@once-ui-system/core";\n';
+		assert.deepEqual(packagesAdded(src, run(src).out), ["@once-ui-system/fx"]);
+		assert.deepEqual(packagesAdded(run(src).out, run(src).out), []);
+	});
+});
+
 describe("the full codemod runs the import pass", () => {
 	it("moves EmojiPickerDropdown, merged into EmojiPicker, onto ./emoji", () => {
 		const src = 'import { EmojiPickerDropdown } from "@once-ui-system/core";\n<EmojiPickerDropdown trigger={<b />} />;\n';
@@ -249,5 +331,20 @@ describe("the full codemod runs the import pass", () => {
 	it("moves a deep import", () => {
 		const { out } = transform('import { Button } from "@once-ui-system/core/components/Button";\n<Button />;\n');
 		assert.match(out, /import \{ Button \} from "@once-ui-system\/core";/);
+	});
+
+	it("renames Particle and FadingLettersFx before moving them to @once-ui-system/fx", () => {
+		const { out } = transform(
+			'import { Particle, FadingLettersFx } from "@once-ui-system/core";\n<Particle />;\n<FadingLettersFx text="Hi" />;\n',
+		);
+		assert.doesNotMatch(out, /@once-ui-system\/core"/);
+		assert.match(out, /from "@once-ui-system\/fx";/);
+		assert.match(out, /<ParticleFx \/>/);
+		assert.match(out, /<TypeFx /);
+	});
+
+	it("reports CodeBlock styleButton, whose StyleOverlay is in @once-ui-system/blocks", () => {
+		const { warnings } = transform('import { CodeBlock } from "@once-ui-system/core/code";\n<CodeBlock styleButton codes={[]} />;\n');
+		assert.match(warnings.join("\n"), /<CodeBlock> styleButton: removed: pass actions=/);
 	});
 });
