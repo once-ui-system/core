@@ -38,6 +38,13 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A docs page of CodeBlocks could fail hydration at random (React #418).** Prism
+  highlights every `code[class*="language-"]` in the document a frame after it loads
+  unless `Prism.manual` is set first. That pass reached server-rendered CodeBlocks React
+  had not hydrated yet and rewrote their text into token spans, so whichever page lost
+  the race threw a text mismatch. CodeBlock now sets `Prism.manual` before importing
+  Prism and highlights only its own element, as it already did.
+
 - **Types that refused what the components already do.** `SegmentedControl`'s
   `onChange` is optional, so an uncontrolled control with only `defaultValue` compiles.
   `StatusIndicator`'s `color` (defaults to `blue`), `Skeleton`'s `shape` (defaults to
