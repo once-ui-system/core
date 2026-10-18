@@ -9,6 +9,16 @@ import { SmartLink } from "../../components/SmartLink.js";
 import { Text } from "../../components/Text.js";
 import { useHeadingLinks } from "../../hooks/useHeadingLinks.js";
 
+/**
+ * The indicator's offset: `calc(n * var(--static-space-32))` in a custom
+ * property that `top` reads. jsdom (30) throws from `getComputedStyle` on a
+ * length whose inline value is math holding a `var()`, which every role
+ * query of an app's tests would hit; a custom property is never resolved
+ * there (see `withTokenLengths`).
+ */
+const INDICATOR_TOP = "--ou-heading-nav-top";
+const indicatorTop = (index: number) => `calc(${index} * var(--static-space-32))`;
+
 export interface HeadingNavProps extends React.ComponentProps<typeof Flex> {
   header?: boolean;
 }
@@ -32,7 +42,7 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
         setActiveIndex(index);
 
         if (indicatorRef.current) {
-          indicatorRef.current.style.top = `calc(${index} * var(--static-space-32))`;
+          indicatorRef.current.style.setProperty(INDICATOR_TOP, indicatorTop(index));
         }
 
         lastUpdateTimeRef.current = Date.now();
@@ -176,7 +186,7 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
     setActiveIndex(index);
 
     if (indicatorRef.current) {
-      indicatorRef.current.style.top = `calc(${index} * var(--static-space-32))`;
+      indicatorRef.current.style.setProperty(INDICATOR_TOP, indicatorTop(index));
     }
 
     lastUpdateTimeRef.current = Date.now();
@@ -214,10 +224,13 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
                 paddingY="4"
                 fillWidth
                 position="absolute"
-                style={{
-                  top: `calc(${activeIndex} * var(--static-space-32))`,
-                  transition: "top 0.3s ease",
-                }}
+                style={
+                  {
+                    [INDICATOR_TOP]: indicatorTop(activeIndex),
+                    top: `var(${INDICATOR_TOP})`,
+                    transition: "top 0.3s ease",
+                  } as React.CSSProperties
+                }
               >
                 <Row fillWidth solid="brand-strong" radius="full" />
               </Row>
@@ -249,7 +262,10 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
                         }
                       }}
                       style={{
-                        paddingLeft: `calc(${indent} * var(--static-space-8))`,
+                        // Math with a var() in a length breaks jsdom's
+                        // getComputedStyle; it lives in a custom property.
+                        ["--ou-heading-nav-indent" as string]: `calc(${indent} * var(--static-space-8))`,
+                        paddingLeft: "var(--ou-heading-nav-indent)",
                         color: isActive
                           ? "var(--neutral-on-background-strong)"
                           : "var(--neutral-on-background-weak)",

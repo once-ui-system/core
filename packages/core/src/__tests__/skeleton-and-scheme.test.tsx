@@ -27,6 +27,26 @@ describe("Skeleton", () => {
     expect(cls).toMatch(/size-s/);
   });
 
+  // 1.x's `width="m"` compiled through Flex's t-shirt widths and rendered a
+  // page-wide box. Skeleton's lengths are numbers, static tokens or CSS.
+  it("takes no t-shirt width or height", () => {
+    // @ts-expect-error — "m" is not a Skeleton length
+    const wide = <Skeleton width="m" />;
+    // @ts-expect-error — "l" is not a Skeleton length
+    const tall = <Skeleton height="l" />;
+    const fine = <Skeleton width={240} height="2.5rem" maxWidth="16" />;
+    expect([wide, tall, fine]).toHaveLength(3);
+  });
+
+  it("reads a number on the token scale, as everywhere", () => {
+    const { container } = render(<Skeleton shape="line" width={12} />, { wrapper: wrap });
+    const { container: token } = render(<Skeleton shape="line" width="12" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    expect(el.getAttribute("style")).toBe(
+      (token.firstElementChild as HTMLElement).getAttribute("style"),
+    );
+  });
+
   it("takes delay in milliseconds", () => {
     const { container } = render(<Skeleton shape="line" delay={300} />, { wrapper: wrap });
     expect(container.firstElementChild).toHaveStyle({ animationDelay: "300ms" });

@@ -2,12 +2,13 @@
 
 import type React from "react";
 import { createContext, type ReactNode, useContext } from "react";
+import { useStyle } from "../contexts/ThemeProvider.js";
 import type { SpacingToken } from "../types.js";
 import type { Density } from "../utils/density.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
 
-/** The theme-wide density's values; Nav takes its own until it follows the theme's. */
+/** The theme-wide density (`style.density`), which a Nav follows unless it sets its own. */
 type NavDensity = Density;
 type NavVariant = "solid" | "subtle" | "minimal";
 
@@ -83,7 +84,9 @@ const useNavStyle = () => {
 interface NavProps extends React.ComponentProps<typeof Column> {
   /**
    * How tight the rows sit: 32, 40 or 48px tall. Compact is the dashboard
-   * size; it also drops the text to the small label.
+   * size; it also drops the text to the small label. Left out, the theme's
+   * `density` (ThemeProvider, `style.density` in the config); set, it wins
+   * for this Nav.
    */
   density?: NavDensity;
   /**
@@ -103,26 +106,31 @@ interface NavProps extends React.ComponentProps<typeof Column> {
  */
 const Nav = ({
   ref,
-  density = "normal",
+  density: own,
   variant = "solid",
   rail = true,
   children,
   ...column
-}: NavProps) => (
-  <NavContext.Provider value={{ density, variant, rail }}>
-    <Column
-      ref={ref}
-      as="nav"
-      fillWidth
-      gap={DENSITY[density].gap}
-      data-density={density}
-      data-variant={variant}
-      {...column}
-    >
-      {children}
-    </Column>
-  </NavContext.Provider>
-);
+}: NavProps) => {
+  const theme = useStyle().density;
+  // One scale for the theme and the Nav: an unknown value falls back to normal.
+  const density: NavDensity = own ?? (theme in DENSITY ? theme : "normal");
+  return (
+    <NavContext.Provider value={{ density, variant, rail }}>
+      <Column
+        ref={ref}
+        as="nav"
+        fillWidth
+        gap={DENSITY[density].gap}
+        data-density={density}
+        data-variant={variant}
+        {...column}
+      >
+        {children}
+      </Column>
+    </NavContext.Provider>
+  );
+};
 
 Nav.displayName = "Nav";
 

@@ -13,6 +13,7 @@ import { resetScrollLockState } from "../components/ScrollLock";
 import { Table } from "../components/Table";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { CodeBlock } from "../modules/code/CodeBlock";
+import { HeadingNav } from "../modules/navigation/HeadingNav";
 import { resetDialogState } from "../test/dialogTestUtils";
 
 /**
@@ -183,15 +184,41 @@ describe("numbers between the steps keep jsdom's getComputedStyle working", () =
     );
     // Found by its element: the highlighter loads asynchronously.
     await waitFor(() => expect(document.querySelector("pre")).not.toBeNull());
-    // Only the code box and what is inside it: the block's border overlay
-    // writes `width: calc(100% + 2px)`, which jsdom cannot compute either
-    // (a percentage in math), and which is not a token length.
     const pre = document.querySelector("pre") as HTMLElement;
     expect(pre.style.maxHeight).toBe("var(--ou-n-300)");
-    for (const element of [pre, ...pre.querySelectorAll("*")]) {
-      const computed = getComputedStyle(element);
-      for (const property of computed) computed.getPropertyValue(property);
-    }
-    expect(expectTokenLengthsDeclared()).toBeGreaterThan(0);
+    // The whole block: the border overlay's `calc(100% + 2px)` (a percentage
+    // in math, which jsdom cannot compute either) is a custom property now.
+    expectSafe();
+  });
+
+  it("CodeBlock collapsed, with its fade", async () => {
+    render(
+      <CodeBlock
+        isCollapsible
+        maxLines={2}
+        codeHeight={300}
+        codes={[{ code: "a\nb\nc\nd\ne", language: "ts", label: "a.ts" }]}
+      />,
+      { wrapper },
+    );
+    await screen.findByText("View code", {}, { timeout: 5000 });
+    expectSafe();
+  });
+});
+
+describe("other inline math keeps jsdom's getComputedStyle working", () => {
+  it("HeadingNav: the indicator's offset and each link's indent", async () => {
+    render(
+      <>
+        <h2 id="one">One</h2>
+        <h3 id="two">Two</h3>
+        <HeadingNav />
+      </>,
+      { wrapper },
+    );
+    await waitFor(() => expect(screen.getAllByRole("link")).toHaveLength(2));
+    expect(() => computeEverything()).not.toThrow();
+    await userEvent.click(screen.getByRole("link", { name: "Two" }));
+    expect(() => computeEverything()).not.toThrow();
   });
 });

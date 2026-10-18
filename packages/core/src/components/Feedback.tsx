@@ -1,6 +1,7 @@
 "use client";
 
 import React, { ReactNode } from "react";
+import { useIcons } from "../contexts/IconProvider.js";
 import type { IconName } from "../icons.js";
 import type { Tone } from "../types.js";
 import { Column } from "./Column.js";
@@ -47,6 +48,11 @@ const Feedback = ({
   children,
   ...rest
 }: FeedbackProps) => {
+  const { icons } = useIcons();
+  const iconName = icon ?? toneIconMap[tone] ?? "info";
+  // The icon's padded box only when there is an icon to put in it: a name
+  // the library does not have (or 2.x MDX's bare `icon`) left an empty gap.
+  const hasIcon = showIcon && typeof iconName === "string" && Boolean(icons[iconName]);
   return (
     <Flex
       fillWidth
@@ -64,14 +70,10 @@ const Feedback = ({
       style={style}
       {...rest}
     >
-      {showIcon && (
+      {hasIcon && (
         <Flex paddingY="16" paddingLeft="16">
           <Row padding="2">
-            <Icon
-              onBackground={`${tone}-medium`}
-              name={icon ?? toneIconMap[tone] ?? "info"}
-              aria-hidden="true"
-            />
+            <Icon onBackground={`${tone}-medium`} name={iconName} aria-hidden="true" />
           </Row>
         </Flex>
       )}

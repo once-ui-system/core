@@ -846,11 +846,17 @@ const CodeBlock = ({
           paddingRight="2"
           paddingBottom="2"
           flex="1"
-          style={{
-            left: "-1px",
-            bottom: "-1px",
-            width: "calc(100% + 2px)",
-          }}
+          // Math in a length (a percentage, or a var()) breaks jsdom's
+          // getComputedStyle in an app's tests: it lives in a custom
+          // property the length reads (see `withTokenLengths`).
+          style={
+            {
+              left: "-1px",
+              bottom: "-1px",
+              "--ou-code-frame-width": "calc(100% + 2px)",
+              width: "var(--ou-code-frame-width)",
+            } as React.CSSProperties
+          }
         >
           {((lines) => {
             const isCollapsed = isCollapsible && maxLines > 0 && lines > maxLines && !isExpanded;
@@ -861,7 +867,13 @@ const CodeBlock = ({
                 fillWidth
                 position="relative"
                 style={
-                  isCollapsed ? { maxHeight: collapsedMaxHeight, overflow: "hidden" } : undefined
+                  isCollapsed
+                    ? ({
+                        "--ou-code-collapsed-height": collapsedMaxHeight,
+                        maxHeight: "var(--ou-code-collapsed-height)",
+                        overflow: "hidden",
+                      } as React.CSSProperties)
+                    : undefined
                 }
               >
                 <Row
@@ -937,7 +949,6 @@ const CodeBlock = ({
                       }
                       to="top"
                       height={"100%"}
-                      blur="100rem"
                     />
                     <Flex
                       position="absolute"

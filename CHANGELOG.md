@@ -319,6 +319,32 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   and JSX text as uses of an old name; and keeps multi-line imports and a closing tag
   on its own line as written.
 
+- **Codemod, round 5**, from the satellite upgrades: 2.x JSX inside JSON strings
+  (generator anchors, templates) is rewritten when it is a byte-exact copy of source
+  the run migrated, and reported otherwise; `ElementType` becomes a `<button
+  type="button">`, an `<a target="_blank">` or a `Flex` where its props say which,
+  and is reported with the snippet otherwise; a project's own `dev` logger takes
+  over core's removed `dev` import; a hide-only leaf in a fragment is wrapped in
+  `<Row hide>`; an fx/blocks/media/emoji spread of a core namespace gets its four
+  namespaces; ParticleFx `speed={expr}` is divided by 0.3; table columns and
+  CodeBlock highlights keep one entry per line. It now reports Text `size` passed
+  through an app's own wrapper, a bare Feedback `icon`, Accordion `open={expr}`,
+  `{ startDate: Date; endDate: Date }` handler annotations, generated prop strings,
+  and Kbd padding strings 2.x dropped as a dead class; it names each file that
+  imports a package it asks you to add, and ends with a formatter note. Names an
+  app declares itself (an own `Badge`) and literal-typed values that need nothing
+  are no longer reported.
+- **Skeleton's lengths are lengths**: `width`, `height` and their min/max take a
+  number, a static spacing token or a CSS length; `width="m"` is a type error (in
+  2.x it was a percentage step). `<Skeleton width={12} height={2.5}>` reads as
+  `"12"` and `"2.5"` on the token scale; the codemod writes the 2.x numbers as rem.
+- **Nav follows the theme's `density`** when given none; its own `density` wins.
+- **The light theme's weak text reaches 4.5:1 on sand and slate**: step 500 of each
+  is a hair darker (sand `#78766f`, slate `#747582`).
+- **AI harness**: `ai/components` holds a slice for each spec component and no
+  other (29 slices for removed 2.x components are gone, and the generator prunes
+  them); bundles list neighbouring props of one type on one line.
+
 ### Fixed
 
 - **Several announcement tags on one page** no longer share `id="badge"`; each arrow
@@ -327,6 +353,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   and draws the danger look, as a RadioButton's own `error` does.
 - **CodeBlock's header icons are grey again** (`neutral-weak`), as in 2.x; the tone
   split had dropped IconButton `color`, which drew them white.
+- **CodeBlock's collapsed fade blurs 0.5rem again**, not `100rem`.
+- **Feedback draws no empty icon box** when its icon does not resolve.
+- **CodeBlock and HeadingNav render under jsdom**: their `calc()` lengths moved
+  into custom properties, so `getComputedStyle` no longer throws in tests.
 
 ## [Unreleased]
 
