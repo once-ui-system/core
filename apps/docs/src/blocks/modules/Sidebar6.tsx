@@ -1,5 +1,6 @@
 "use client";
 
+import type { IconName } from "@once-ui-system/core";
 import {
   Accordion,
   Avatar,
@@ -15,7 +16,6 @@ import {
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import type { IconName } from "@/resources/icons";
 
 export type LinkItem = { type: "link"; key: string; label: string; href: string; icon?: IconName };
 export type AccordionItem = {

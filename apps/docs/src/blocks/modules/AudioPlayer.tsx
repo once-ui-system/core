@@ -1,8 +1,7 @@
 "use client";
 
-import { Button, Column, Icon, IconButton, Line, Row, Text } from "@once-ui-system/core";
+import { Button, Column, dev, Icon, IconButton, Line, Row, Text } from "@once-ui-system/core";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { dev } from "@/utils/dev-logger";
 import styles from "./AudioPlayer.module.css";
 
 interface Chapter {

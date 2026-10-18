@@ -14,7 +14,6 @@ import {
   Text,
 } from "@once-ui-system/core";
 import { useState } from "react";
-import { schema } from "@/resources";
 
 export interface PricingExtra {
   id: string;
@@ -34,6 +33,8 @@ export interface PricingBundle {
 
 export interface PricingProps {
   bundles: PricingBundle[];
+  /** Where "Contact us" sends a bundle enquiry. */
+  email?: string;
 }
 
 export const plans: PricingBundle[] = [
@@ -80,7 +81,11 @@ export const plans: PricingBundle[] = [
   },
 ];
 
-export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps<typeof Row>) => {
+export const Plans5 = ({
+  bundles,
+  email = "support@once-ui.com",
+  ...flex
+}: PricingProps & React.ComponentProps<typeof Row>) => {
   const [selectedExtras, setSelectedExtras] = useState<Record<string, Record<string, boolean>>>({});
 
   const toggleExtra = (bundleIndex: number, extraId: string) => {
@@ -249,7 +254,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                 variant={bundle.featured ? "primary" : "secondary"}
                 fillWidth
                 target="_blank"
-                href={`mailto:${schema.email}?subject=${encodeURIComponent(getEmailSubject(bundleIndex, bundle))}`}
+                href={`mailto:${email}?subject=${encodeURIComponent(getEmailSubject(bundleIndex, bundle))}`}
               >
                 Get in touch
               </Button>
