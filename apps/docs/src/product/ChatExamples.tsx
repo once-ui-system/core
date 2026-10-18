@@ -12,7 +12,13 @@ import { useEffect, useRef, useState } from "react";
 
 type Message = { id: number; from: "self" | "other"; text: string; time: Date };
 
-const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60_000);
+// Counted back from 9:00 today rather than from now, so the demo shows the same
+// times all day and two screenshots taken minutes apart still match.
+const minutesAgo = (minutes: number) => {
+  const anchor = new Date();
+  anchor.setHours(9, 0, 0, 0);
+  return new Date(anchor.getTime() - minutes * 60_000);
+};
 
 // A conversation that answers back: send a message and a reply follows.
 export function ChatConversationExample() {
