@@ -135,10 +135,11 @@ describe("Toaster", () => {
       wrapper: wrap,
     });
     expect(container).toBeEmptyDOMElement();
-    const texts = [...document.body.querySelectorAll('[role="status"], [role="alert"]')].map(
-      (el) => el.textContent,
-    );
-    expect(texts).toEqual(["One", "Two"]);
+    // The stack is one polite live region; only a danger toast is its own alert.
+    const region = screen.getByRole("region", { name: "Notifications" });
+    expect(region).toHaveAttribute("aria-live", "polite");
+    expect(region.textContent).toMatch(/One.*Two/);
+    expect(screen.getByRole("alert")).toHaveTextContent("Two");
   });
 
   it("sits at the bottom by default", () => {
@@ -204,7 +205,7 @@ describe("useToast", () => {
     );
 
     await user.click(screen.getByRole("button", { name: "Copy" }));
-    const toast = screen.getByText("Copied").closest('[role="status"]') as HTMLElement;
+    const toast = screen.getByText("Copied").closest('[class*="toast"]') as HTMLElement;
     expect(toast).toBeInTheDocument();
     expect(screen.getByTestId("count")).toHaveTextContent("1");
 

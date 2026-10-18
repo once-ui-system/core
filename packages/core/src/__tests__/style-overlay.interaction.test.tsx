@@ -18,7 +18,8 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
   </LayoutProvider>
 );
 
-const panel = (container: HTMLElement) => container.querySelector("aside") as HTMLElement;
+const panel = (container: HTMLElement) =>
+  container.querySelector('[aria-label="Style panel"]') as HTMLElement;
 
 /**
  * jsdom 30 throws computing any style of an element whose max-height is
@@ -83,7 +84,8 @@ describe("StyleOverlay", () => {
     );
   });
 
-  it("passes iconButtonProps to the close button, and other props to the panel", () => {
+  it("passes iconButtonProps to the close button, and other props to the panel", async () => {
+    const user = userEvent.setup();
     const { container } = render(
       <StyleOverlay
         iconButtonProps={{ "aria-label": "Done" }}
@@ -94,6 +96,8 @@ describe("StyleOverlay", () => {
       </StyleOverlay>,
       { wrapper },
     );
+    // The closed panel is aria-hidden; open it to reach its close button.
+    await user.click(screen.getByRole("button", { name: "Customize" }));
     expect(screen.getByRole("button", { name: "Done" })).toBeInTheDocument();
     expect(panel(container)).toHaveAttribute("data-testid", "overlay-panel");
     // A caller style joins the panel's own instead of replacing it.

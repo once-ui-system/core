@@ -5,6 +5,9 @@ import { LetterFx } from "../components/LetterFx";
 import { expectNoAxeViolations } from "../test/axe";
 import { mockReducedMotion } from "../test/fxTestUtils";
 
+/** What is on screen: while a run is in flight the real text sits in a visually hidden copy for screen readers. */
+const shown = (el: Element) => (el.querySelector('[aria-hidden="true"]') ?? el).textContent ?? "";
+
 const settle = async (ms = 2000) => {
   await act(async () => {
     await vi.advanceTimersByTimeAsync(ms);
@@ -37,9 +40,9 @@ describe("LetterFx", () => {
     const el = screen.getByText("Hi there");
     fireEvent.mouseOver(el);
     // Spaces survive the scramble.
-    expect(el.textContent).toBe("## #####");
+    expect(shown(el)).toBe("## #####");
     await settle();
-    expect(el.textContent).toBe("Hi there");
+    expect(shown(el)).toBe("Hi there");
   });
 
   it("ignores hovers while a run is in flight", async () => {
@@ -59,7 +62,7 @@ describe("LetterFx", () => {
     // One extra scramble frame (5 letters) at most, not two more runs.
     expect(random.mock.calls.length - callsMidRun).toBeLessThanOrEqual(5);
     await settle(3000);
-    expect(el.textContent).toBe("Hello");
+    expect(shown(el)).toBe("Hello");
   });
 
   it("does not react to hover with another trigger", () => {
@@ -79,11 +82,11 @@ describe("LetterFx", () => {
       </LetterFx>,
     );
     const el = container.firstElementChild as HTMLElement;
-    expect(el.textContent).toBe("#####");
+    expect(shown(el)).toBe("#####");
     await settle();
-    expect(el.textContent).toBe("Hello");
+    expect(shown(el)).toBe("Hello");
     await settle();
-    expect(el.textContent).toBe("Hello");
+    expect(shown(el)).toBe("Hello");
   });
 
   it("hands a start function to onTrigger with trigger custom", async () => {
@@ -102,9 +105,9 @@ describe("LetterFx", () => {
     expect(start).toBeTypeOf("function");
     act(() => start?.());
     const el = container.firstElementChild as HTMLElement;
-    expect(el.textContent).toBe("#####");
+    expect(shown(el)).toBe("#####");
     await settle();
-    expect(el.textContent).toBe("Hello");
+    expect(shown(el)).toBe("Hello");
   });
 
   it("resolves faster at speed fast than slow", async () => {

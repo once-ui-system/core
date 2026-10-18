@@ -21,7 +21,8 @@ const advance = async (ms: number) => {
 
 /** What is typed so far, without the blinking cursor. */
 const typed = (container: HTMLElement) => {
-  const el = container.firstElementChild as HTMLElement;
+  // The typing is drawn in an aria-hidden span; screen readers get the words whole.
+  const el = container.querySelector('[aria-hidden="true"]') as HTMLElement;
   const cursor = el.querySelector("span[style*='opacity']");
   return (el.textContent ?? "").slice(0, cursor ? -1 : undefined);
 };
@@ -102,8 +103,8 @@ describe("TypeFx", () => {
     );
     await advance(0);
     const [once, looping] = Array.from(container.children) as HTMLElement[];
-    expect(once.textContent).toBe("cd");
-    expect(looping.textContent).toBe("ef");
+    expect(once.querySelector('[aria-hidden="true"]')?.textContent).toBe("cd");
+    expect(looping.querySelector('[aria-hidden="true"]')?.textContent).toBe("ef");
     expect(hasCursor(container)).toBe(false);
     expect(vi.getTimerCount()).toBe(0);
   });
