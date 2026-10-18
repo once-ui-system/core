@@ -40,6 +40,8 @@ export interface TabsProps extends FlexProps {
   defaultValue?: string;
   /** Called with the newly selected tab's `value`. Not called for the tab already selected. */
   onChange?: (value: string) => void;
+  /** Core 3.0's name for `onChange`. */
+  onValueChange?: (value: string) => void;
   /** `vertical` lays the list out beside the panels, as a settings screen does. */
   orientation?: "horizontal" | "vertical";
   /** Accepted for core's API; it is about arrow keys, which a touch screen does not have. */
@@ -56,6 +58,7 @@ export const Tabs: RefComponent<TabsProps, ViewRef> = forwardRef<ViewRef, TabsPr
     value,
     defaultValue,
     onChange,
+    onValueChange,
     orientation = "horizontal",
     activation: _activation,
     children,
@@ -65,7 +68,9 @@ export const Tabs: RefComponent<TabsProps, ViewRef> = forwardRef<ViewRef, TabsPr
 ) {
   const baseId = useId();
   const [chosen, setChosen] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
-    if (v !== undefined) onChange?.(v);
+    if (v === undefined) return;
+    onChange?.(v);
+    onValueChange?.(v);
   });
   const [first, setFirst] = useState<string>();
   const current = chosen ?? (value === undefined ? first : undefined);
