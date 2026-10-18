@@ -12,7 +12,7 @@ import React, {
   useState,
 } from "react";
 import ReactDOM from "react-dom";
-import { getFocusableElements } from "../internal/focusable";
+import { getFocusableElements, nextInTrap } from "../internal/focusable";
 import { Column } from "./Column";
 import styles from "./Dialog.module.scss";
 import { Flex } from "./Flex";
@@ -95,6 +95,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
     const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
     const dialogId = useId();
     const dialogTitleId = `${dialogId}-title`;
+    const dialogDescriptionId = `${dialogId}-description`;
     const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
     const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
@@ -157,20 +158,15 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
         if (event.key === "Escape" && !base && !event.defaultPrevented) {
           onClose();
         }
-        if (event.key === "Tab" && dialogRef.current) {
-          const focusableElements = getFocusableElements(dialogRef.current);
-
-          if (focusableElements.length > 0) {
-            const firstElement = focusableElements[0] as HTMLElement;
-            const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
-
-            if (event.shiftKey && document.activeElement === firstElement) {
-              event.preventDefault();
-              lastElement.focus();
-            } else if (!event.shiftKey && document.activeElement === lastElement) {
-              event.preventDefault();
-              firstElement.focus();
-            }
+        // `defaultPrevented`: a FocusTrap inside (a dropdown's panel) has
+        // already moved focus for this Tab.
+        if (event.key === "Tab" && dialogRef.current && !event.defaultPrevented) {
+          // A base dialog under a stacked one leaves Tab to the one on top.
+          if (base && !dialogRef.current.contains(document.activeElement)) return;
+          const next = nextInTrap(dialogRef.current, document.activeElement, event.shiftKey);
+          if (next) {
+            event.preventDefault();
+            next.focus();
           }
         }
       },
@@ -258,17 +254,16 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       }
     }, [open, stack]);
 
+    // Focus moves in once the panel exists: on the first `open` render it is
+    // not mounted yet (`isVisible` lags a render), which left focus on the
+    // page behind. A dialog with nothing focusable takes focus itself.
     useEffect(() => {
-      if (open && dialogRef.current) {
-        const focusableElements = dialogRef.current.querySelectorAll<HTMLElement>(
-          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-        );
-        const firstElement = focusableElements[0];
-        if (firstElement) {
-          firstElement.focus();
-        }
+      if (open && isVisible && dialogRef.current) {
+        if (dialogRef.current.contains(document.activeElement)) return;
+        const [firstElement] = getFocusableElements(dialogRef.current);
+        (firstElement ?? dialogRef.current).focus();
       }
-    }, [open]);
+    }, [open, isVisible]);
 
     useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -329,7 +324,9 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
           padding="l"
           role="dialog"
           aria-modal="true"
-          aria-labelledby={dialogTitleId}
+          aria-labelledby={title && !flush ? dialogTitleId : undefined}
+          // Read after the title when the dialog opens.
+          aria-describedby={description && !flush ? dialogDescriptionId : undefined}
         >
           <Flex
             fill
@@ -356,30 +353,6 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
               border="neutral-medium"
               background="neutral-weak"
               tabIndex={-1}
-              onKeyDown={(e) => {
-                if (e.key === "Tab") {
-                  const focusableElements = Array.from(
-                    dialogRef.current?.querySelectorAll(
-                      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-                    ) || [],
-                  );
-
-                  if (focusableElements.length === 0) return;
-
-                  const firstElement = focusableElements[0] as HTMLElement;
-                  const lastElement = focusableElements[
-                    focusableElements.length - 1
-                  ] as HTMLElement;
-
-                  if (e.shiftKey && document.activeElement === firstElement) {
-                    e.preventDefault();
-                    lastElement.focus();
-                  } else if (!e.shiftKey && document.activeElement === lastElement) {
-                    e.preventDefault();
-                    firstElement.focus();
-                  }
-                }
-              }}
               {...rest}
             >
               {!flush && (
@@ -403,7 +376,11 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                     )}
                   </Flex>
                   {description && (
-                    <Text variant="body-default-s" onBackground="neutral-weak">
+                    <Text
+                      id={dialogDescriptionId}
+                      variant="body-default-s"
+                      onBackground="neutral-weak"
+                    >
                       {description}
                     </Text>
                   )}

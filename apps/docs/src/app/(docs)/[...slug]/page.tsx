@@ -76,7 +76,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" id="main-content" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}

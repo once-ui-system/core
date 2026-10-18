@@ -101,6 +101,9 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         min={min}
         max={max}
         step={step}
+        // The field itself steps with the arrow keys, so the stepper buttons
+        // are for the pointer only and stay out of the Tab order: two extra
+        // stops per field made a form of numbers three times as long to tab.
         suffix={
           <>
             <Flex position="static" minWidth={1.25}></Flex>
@@ -127,6 +130,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                   size="s"
                   onClick={increment}
                   aria-label="Increment value"
+                  tabIndex={-1}
                 />
               </Flex>
               <Flex
@@ -143,6 +147,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
                   size="s"
                   onClick={decrement}
                   aria-label="Decrement value"
+                  tabIndex={-1}
                 />
               </Flex>
             </Column>

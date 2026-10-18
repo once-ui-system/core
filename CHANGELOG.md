@@ -50,6 +50,15 @@ item (see `ROADMAP.md`, Week 4).
   against Recharts' API, and imports from the pre-package `@/modules` path. Twenty-one
   hand-written props tables now read their rows from the spec, and `HeadingNav`,
   `IconProvider`, `Meta`, `Schema` and `OgRoutesProvider` have API tables.
+- **Every docs page is opened in a browser.** `check:render` opens each page of the
+  built site, presses its previews' controls with the clock a day past the build, and
+  fails on anything that throws or logs an error. CI runs it after the docs build. It
+  found the `EmojiPicker` preview throwing on every click (it had no `onSelect`), the
+  date pickers' examples showing the time the docs were built, and the footer's
+  Changelog link logging a CORS error on every page.
+- **The agent spec gives `Flex` and `Grid` their defaults.** `position` defaults to
+  `relative` and `scrollbar` to `minimal`; the spec read the defaults from the wrong
+  file and listed none.
 
 ## [2.2.0] — 2026-10-17
 

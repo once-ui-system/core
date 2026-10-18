@@ -9,7 +9,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { getFocusableElements } from "../internal/focusable";
+import { getFocusableElements, nextInTrap } from "../internal/focusable";
 
 interface FocusTrapProps {
   children: ReactNode;
@@ -104,30 +104,13 @@ const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
         return;
       }
 
-      // Handle tab key for focus trapping
-      if (e.key === "Tab" && containerRef.current) {
-        const focusableElements = getFocusableElements(containerRef.current);
-
-        if (focusableElements.length === 0) return;
-
-        // Get the first and last focusable elements
-        const firstElement = focusableElements[0];
-        const lastElement = focusableElements[focusableElements.length - 1];
-
-        // Handle tab and shift+tab to cycle through focusable elements
-        if (e.shiftKey) {
-          // Shift+Tab
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement.focus({ preventScroll: true });
-          }
-        } else {
-          // Tab
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement.focus({ preventScroll: true });
-          }
-        }
+      // Handle tab key for focus trapping: the trap decides every Tab, so it
+      // also wraps out of a roving grid whose focused cell Tab would skip.
+      if (e.key === "Tab" && containerRef.current && !e.defaultPrevented) {
+        const next = nextInTrap(containerRef.current, document.activeElement, e.shiftKey);
+        if (!next) return;
+        e.preventDefault();
+        next.focus({ preventScroll: true });
       }
     };
 

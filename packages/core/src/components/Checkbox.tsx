@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled";
 import { assignRefs, retarget } from "../internal/toggleInput";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -34,7 +35,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
       defaultChecked = false,
       indeterminate = false,
       onToggle,
-      disabled,
+      disabled: disabledProp,
       hoverable = true,
       name,
       value,
@@ -50,6 +51,7 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
     },
     ref,
   ) => {
+    const disabled = useFieldsetDisabled(disabledProp);
     const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
     const labelId = useId();
     const descriptionId = useId();
