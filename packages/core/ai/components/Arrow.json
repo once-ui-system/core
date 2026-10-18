@@ -68,7 +68,7 @@
    "flex": "FlexValue"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
+   "width": "number | SpacingToken | CSSUnit | \"auto\"",
    "height": "number | SpacingToken | CSSUnit | \"below-header\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",

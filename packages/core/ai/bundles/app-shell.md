@@ -80,7 +80,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
-| Screen-reader text, skip link | `VisuallyHidden` (no `href`: wrap the link, `<VisuallyHidden focusable><a href="#main">Skip to content</a></VisuallyHidden>`) |
+| Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
@@ -273,8 +273,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Kbar
 - items: KbarItem[]
-- children: React.ReactNode
+- children?: React.ReactNode
 - inputSize?: TShirtSizes
+- open?: boolean
+- onOpenChange?: (open: boolean) => void
 
 ### Line
 Extends Flex.
@@ -518,7 +520,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - flex?: FlexValue
 
 ### SizeProps
-- width?: number | SpacingToken | CSSUnit
+- width?: number | SpacingToken | CSSUnit | "auto"
 - height?: number | SpacingToken | CSSUnit | "below-header"
 - maxWidth?: number | SpacingToken | CSSUnit
 - minWidth?: number | SpacingToken | CSSUnit
@@ -650,7 +652,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Use fill not fillWidth fillHeight; center not horizontal="center" vertical="center"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.
 - Never write props equal to defaults or implied by another prop on the element: position="relative", direction on Row/Column, variant="primary" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Width props take a number, a spacing token or a CSS unit, never "auto": to undo a width at a breakpoint write s={{ fillWidth: true }} or s={{ width: "100%" }}. Text and Heading take padding but no radius, border or flex; put those on the wrapper.
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding but no radius, border or flex; put those on the wrapper.
 - A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width="32" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale ("160" is the largest), so height="320" is a type error: write height={20}. An icon or avatar box is usually "24" to "48".
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.
@@ -678,6 +680,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - A collapsed sidebar keeps every item reachable: icons with a tooltip or aria-label, the group label as the icon's name
 - At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it
 - Breadcrumbs from the route, and the account or workspace switcher as a DropdownWrapper or UserMenu with Option rows
+- A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it
 
 ## Layout shell
 

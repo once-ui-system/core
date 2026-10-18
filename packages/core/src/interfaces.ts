@@ -1,6 +1,6 @@
-import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
+import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider";
-import {
+import type {
   BlendMode,
   BlurSize,
   Colors,
@@ -97,7 +97,8 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
-  width?: number | SpacingToken | CSSUnit;
+  /** A number is rem; a string is a spacing token or a CSS unit. `"auto"` undoes a width, e.g. `width={20} s={{ width: "auto" }}`. */
+  width?: number | SpacingToken | CSSUnit | "auto";
   /**
    * A number is rem; a string is a spacing token or a CSS unit.
    * `"below-header"` is the viewport below the app header,

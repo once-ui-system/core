@@ -43,6 +43,7 @@
     "current": "`selectNavHref` picks the highlighted item and opens the group that holds it",
     "collapse": "A collapsed sidebar keeps every item reachable: icons with a tooltip or aria-label, the group label as the icon's name",
     "phone": "At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it",
-    "header": "Breadcrumbs from the route, and the account or workspace switcher as a DropdownWrapper or UserMenu with Option rows"
+    "header": "Breadcrumbs from the route, and the account or workspace switcher as a DropdownWrapper or UserMenu with Option rows",
+    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it"
   }
 }

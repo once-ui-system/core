@@ -80,7 +80,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
-| Screen-reader text, skip link | `VisuallyHidden` (no `href`: wrap the link, `<VisuallyHidden focusable><a href="#main">Skip to content</a></VisuallyHidden>`) |
+| Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
@@ -360,7 +360,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - flex?: FlexValue
 
 ### SizeProps
-- width?: number | SpacingToken | CSSUnit
+- width?: number | SpacingToken | CSSUnit | "auto"
 - height?: number | SpacingToken | CSSUnit | "below-header"
 - maxWidth?: number | SpacingToken | CSSUnit
 - minWidth?: number | SpacingToken | CSSUnit
@@ -496,7 +496,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.
 - Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Width props take a number, a spacing token or a CSS unit, never "auto": to undo a width at a breakpoint write s={{ fillWidth: true }} or s={{ width: "100%" }}. Text and Heading take padding but no radius, border or flex; put those on the wrapper.
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding but no radius, border or flex; put those on the wrapper.
 - vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: "baseline" }}.
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.

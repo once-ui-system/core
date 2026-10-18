@@ -3,8 +3,10 @@
  "group": "modules",
  "props": {
   "items": "!KbarItem[]",
-  "children": "!React.ReactNode",
-  "inputSize": "TShirtSizes"
+  "children": "React.ReactNode",
+  "inputSize": "TShirtSizes",
+  "open": "boolean",
+  "onOpenChange": "(open: boolean) => void"
  },
  "tags": [
   "navigation",

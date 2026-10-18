@@ -78,7 +78,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
 | Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
-| Screen-reader text, skip link | `VisuallyHidden` (no `href`: wrap the link, `<VisuallyHidden focusable><a href="#main">Skip to content</a></VisuallyHidden>`) |
+| Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
