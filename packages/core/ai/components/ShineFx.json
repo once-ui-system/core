@@ -86,7 +86,8 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number"
   }
  }
 }

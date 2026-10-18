@@ -8,8 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
-import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import { textLayout } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
@@ -64,6 +64,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     style,
     className,
     truncate,
+    flex,
     opacity,
     userSelect,
     gap,
@@ -177,6 +178,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
   const combinedStyle = {
     textAlign: align,
     textWrap: wrap,
+    flex: flex === undefined ? undefined : Number(flex),
     ...numericSpacingStyle({
       padding,
       paddingX,

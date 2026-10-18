@@ -19,7 +19,7 @@
   "Column",
   "RevealFx"
  ],
- "avoid": "Layout props: it takes padding and margin but no s/m/l breakpoints, flex, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
+ "avoid": "Layout props: it takes padding, margin and flex but no s/m/l breakpoints, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -80,7 +80,8 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number"
   }
  }
 }

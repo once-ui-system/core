@@ -154,7 +154,7 @@
     "components": ["Column", "Background"]
   },
   "layout.responsiveProps": {
-    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding but no radius, border or flex; put those on the wrapper.",
+    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Text and Heading take padding and flex but no radius or border; put those on the wrapper.",
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
   "layout.noBaseline": {

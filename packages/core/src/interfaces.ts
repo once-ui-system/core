@@ -94,6 +94,8 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
   weight?: TextWeight;
   family?: TextType;
   truncate?: boolean;
+  /** Flex grow inside a Row or Column, e.g. a label that takes the free space: `<Text flex={1}>`. */
+  flex?: FlexValue | number;
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {

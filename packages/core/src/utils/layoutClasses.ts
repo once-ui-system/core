@@ -575,3 +575,22 @@ export function textLayout({
     },
   };
 }
+
+/**
+ * Whether the element is hidden at a wider breakpoint than each of xl, l, m,
+ * s and xs (the base `hide` counts as wider than all of them). A `-show`
+ * class is display: none outside its media query, so it is only emitted where
+ * this is true.
+ */
+export function hiddenAboveBreakpoints(
+  hide: boolean | undefined,
+  wider: ({ hide?: boolean } | undefined)[],
+): Record<"xl" | "l" | "m" | "s" | "xs", boolean> {
+  const result = { xl: false, l: false, m: false, s: false, xs: false };
+  let hidden = hide === true;
+  (["xl", "l", "m", "s", "xs"] as const).forEach((bp, i) => {
+    result[bp] = hidden;
+    if (wider[i]?.hide === true) hidden = true;
+  });
+  return result;
+}

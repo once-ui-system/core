@@ -8,8 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
-import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import { textLayout } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
@@ -63,6 +63,7 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     children,
     style,
     truncate,
+    flex,
     opacity,
     className,
     userSelect,
@@ -177,6 +178,7 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
   const combinedStyle = {
     textAlign: align,
     textWrap: wrap,
+    flex: flex === undefined ? undefined : Number(flex),
     ...numericSpacingStyle({
       padding,
       paddingX,
