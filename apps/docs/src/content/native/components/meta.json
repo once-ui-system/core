@@ -41,6 +41,7 @@
     "blockquote": 37,
     "breadcrumbs": 38,
     "pagination": 39,
-    "timeline": 40
+    "timeline": 40,
+    "scroller": 41
   }
 }

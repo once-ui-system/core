@@ -38,7 +38,7 @@ export function Variants() {
 
 ## Sizes and width
 
-`size` takes `xs`, `s`, `m`, `l` and `xl`, from 24 to 56 points tall. `m` is the default. A button is as wide as its label; `fillWidth` stretches it to its parent, and `horizontal` aligns the content inside it.
+`size` takes `xs`, `s`, `m`, `l` and `xl`, from 24 to 56 points tall. `m` is the default. A button is as wide as its label; `fillWidth` stretches it to its parent, or to an equal share of a row, as core's `width: 100%`, and `horizontal` aligns the content inside it.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -142,7 +142,7 @@ export function Save() {
 | `suffixIcon` | `IconName \| ReactNode` | | Icon after the label. |
 | `loading` | `boolean` | `false` | Shows a spinner and blocks presses. |
 | `disabled` | `boolean` | `false` | Greys the button out and blocks presses. |
-| `fillWidth` | `boolean` | `false` | Stretches to the parent's width. |
+| `fillWidth` | `boolean` | `false` | Stretches to the parent's width. Several in a row share it equally. |
 | `horizontal` | `"start" \| "center" \| "end" \| "between"` | `"center"` | Content alignment inside the button. |
 | `onPress` | `(event) => void` | | Called on tap. |
 | `style` | `ViewStyle` | | Applied after the button's own style. |
