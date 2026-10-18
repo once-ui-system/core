@@ -2279,14 +2279,19 @@
   },
   "Checkbox": {
    "group": "components",
-   "extends": [
-    "InteractiveDetails",
-    "controlChrome"
-   ],
    "mixins": [
     "LeafProps"
    ],
    "props": {
+    "size": "TShirtSizes",
+    "error": "boolean",
+    "errorMessage": "ReactNode",
+    "label": "React.ReactNode",
+    "id": "string",
+    "description": "React.ReactNode",
+    "disabled": "boolean",
+    "iconButtonProps": "IconButtonProps",
+    "auto": "boolean",
     "checked": "boolean",
     "defaultChecked": "boolean = false",
     "indeterminate": "boolean = false",
@@ -2545,9 +2550,6 @@
   },
   "Flex": {
    "group": "components",
-   "extends": [
-    "ServerFlex"
-   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -2557,6 +2559,7 @@
     "StyleProps"
    ],
    "props": {
+    "as": "ElementType",
     "position": "CSSProperties[\"position\"] = relative",
     "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
@@ -2612,9 +2615,6 @@
   },
   "Grid": {
    "group": "components",
-   "extends": [
-    "ServerGrid"
-   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -2624,6 +2624,7 @@
     "StyleProps"
    ],
    "props": {
+    "as": "ElementType",
     "position": "CSSProperties[\"position\"] = relative",
     "scrollbar": "\"default\" | \"minimal\" = minimal",
     "masonry": "boolean"
@@ -3093,14 +3094,18 @@
   },
   "RadioButton": {
    "group": "components",
-   "extends": [
-    "InteractiveDetails",
-    "controlChrome"
-   ],
    "mixins": [
     "LeafProps"
    ],
    "props": {
+    "size": "TShirtSizes",
+    "error": "boolean",
+    "errorMessage": "ReactNode",
+    "label": "React.ReactNode",
+    "id": "string",
+    "description": "React.ReactNode",
+    "iconButtonProps": "IconButtonProps",
+    "auto": "boolean",
     "checked": "boolean",
     "defaultChecked": "boolean = false",
     "name": "string",
@@ -3112,9 +3117,6 @@
   },
   "RadioGroup": {
    "group": "components",
-   "extends": [
-    "controlChrome"
-   ],
    "mixins": [
     "CommonProps",
     "DisplayProps",
@@ -3124,6 +3126,9 @@
     "StyleProps"
    ],
    "props": {
+    "size": "TShirtSizes",
+    "error": "boolean",
+    "errorMessage": "ReactNode",
     "options": "RadioGroupOption[]",
     "value": "string",
     "defaultValue": "string",
@@ -3368,14 +3373,18 @@
   },
   "Switch": {
    "group": "components",
-   "extends": [
-    "InteractiveDetails",
-    "controlChrome"
-   ],
    "mixins": [
     "LeafProps"
    ],
    "props": {
+    "size": "TShirtSizes",
+    "error": "boolean",
+    "errorMessage": "ReactNode",
+    "label": "React.ReactNode",
+    "id": "string",
+    "description": "React.ReactNode",
+    "iconButtonProps": "IconButtonProps",
+    "auto": "boolean",
     "checked": "boolean",
     "defaultChecked": "boolean = false",
     "loading": "boolean = false",
@@ -4555,9 +4564,11 @@
   "MdxHeadingAnchor": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
-   "extends": [
-    "HeadingAnchor"
-   ]
+   "props": {
+    "id": "!string",
+    "label": "!string",
+    "className": "string"
+   }
   },
   "NextAdapterProvider": {
    "group": "next",

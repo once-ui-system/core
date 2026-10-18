@@ -116,7 +116,6 @@ With `range`, the field becomes two, a start and an end, over one calendar that 
     value: "The date, controlled. Leave it out and the field keeps its own.",
     defaultValue: "The starting date when `value` is left out.",
     onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x.",
-    onChange: "The native change event of the field, as on Input.",
     range: "Two fields, start and end, over one calendar. value, defaultValue and onValueChange then take a DateRange.",
     startLabel: "With range, the label on the start field.",
     endLabel: "With range, the label on the end field.",
@@ -131,6 +130,7 @@ With `range`, the field becomes two, a start and an end, over one calendar that 
   }}
   content={[
     ["className"],
-    ["style"]
+    ["style"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the field, as on Input."]
   ]}
 />

@@ -55,12 +55,14 @@ partial entry such as `-` or `1.` stays as typed until it reads as a number.
     value: "The current number, controlled. Leave it out and the field keeps its own.",
     defaultValue: "The starting number when `value` is left out.",
     onValueChange: "Receives the number itself. Was onChange in 2.x.",
-    onChange: "The native change event of the input, as on Input, so a form library's register() works.",
     min: "Lower bound. The decrement control stops here.",
     max: "Upper bound. The increment control stops here.",
     step: "How much each press moves the value.",
     padStart: "Pad to this many digits with leading zeros — 7 shown as 007.",
   }}
+  content={[
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the input, as on Input, so a form library's register() works."]
+  ]}
 />
 
 Everything on [Input](/form-controls/input) — `label`, `description`, `error`,

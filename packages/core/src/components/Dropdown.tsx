@@ -37,8 +37,8 @@ import {
 } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { FocusTrap } from "./FocusTrap.js";
-import { Option } from "./Option.js";
 import { IconButton } from "./IconButton.js";
+import { Option } from "./Option.js";
 import { Row } from "./Row.js";
 import { ScrollLock } from "./ScrollLock.js";
 

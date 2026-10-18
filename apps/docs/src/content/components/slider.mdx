@@ -368,7 +368,6 @@ along, since only one of them can go each way.
     minDistance: "With range, the smallest gap the thumbs keep between them.",
     formatValue: "With range, how a value reads, in the readout and to a screen reader.",
     thumbLabels: "With range, the thumbs' accessible names, start first.",
-    name: "The form field name. With range, one name for both values or one for each.",
     range: "Two thumbs selecting a [start, end] pair. value, defaultValue and onValueChange then take the pair.",
     error: "Paint the slider in its error state and mark it invalid.",
     errorMessage: "Shown under the track and read with the thumb, when error is set.",
@@ -377,12 +376,13 @@ along, since only one of them can go each way.
     defaultValue: "Where the slider starts when it keeps its own state. Defaults to min.",
     onValueChange: "Called with the new value, as a number, on every step of a drag.",
     onValueCommit: "Called with the value once a change is done: on pointer release, and after each key that moves the thumb.",
-    onChange: "The native change event of the range input.",
     label: "Visible label that names the slider.",
   }}
   content={[
     ["className"],
     ["style"],
-    ["...InputHTMLAttributes", "input attributes"]
+    ["...InputHTMLAttributes", "input attributes"],
+    ["name", "string", "-", "The form field name. With range, one name for both values or one for each."],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the range input."]
   ]}
 />

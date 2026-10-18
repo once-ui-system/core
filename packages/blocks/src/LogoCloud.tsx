@@ -5,8 +5,8 @@ import classNames from "clsx";
 import type React from "react";
 import type { ComponentProps } from "react";
 import { useEffect, useState } from "react";
-import styles from "./LogoCloud.module.scss";
 import { prefersReducedMotionNow } from "./internal/reducedMotion.js";
+import styles from "./LogoCloud.module.scss";
 
 type LogoProps = ComponentProps<typeof Logo>;
 

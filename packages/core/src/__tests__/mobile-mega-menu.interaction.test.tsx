@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { type MenuGroup, MegaMenu } from "../modules/navigation/MegaMenu";
+import { MegaMenu, type MenuGroup } from "../modules/navigation/MegaMenu";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

@@ -1,14 +1,18 @@
 {
  "name": "Switch",
  "group": "components",
- "extends": [
-  "InteractiveDetails",
-  "controlChrome"
- ],
  "mixins": [
   "LeafProps"
  ],
  "props": {
+  "size": "TShirtSizes",
+  "error": "boolean",
+  "errorMessage": "ReactNode",
+  "label": "React.ReactNode",
+  "id": "string",
+  "description": "React.ReactNode",
+  "iconButtonProps": "IconButtonProps",
+  "auto": "boolean",
   "checked": "boolean",
   "defaultChecked": "boolean = false",
   "loading": "boolean = false",
@@ -50,5 +54,15 @@
    "className": "string",
    "style": "CSSProperties"
   }
+ },
+ "types": {
+  "IconButtonProps": "IconButton props",
+  "TShirtSizes": [
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs"
+  ]
  }
 }

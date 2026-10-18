@@ -1,9 +1,9 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { act, render } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CountdownFx } from "../CountdownFx.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

@@ -179,7 +179,6 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     checked: "Whether this one is chosen, controlled. Leave it out and the radio keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     onCheckedChange: "Called with the new state when it is picked: true when it becomes the chosen one.",
-    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     name: "Group name. Radios sharing one are mutually exclusive.",
     value: "Form field value.",
     disabled: "Block interaction.",
@@ -191,6 +190,7 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     ["className"],
     ["style"],
     ["iconButtonProps", "IconButtonProps", "-", "Props forwarded to the icon button beside the label."],
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works."]
   ]}
 />

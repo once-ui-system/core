@@ -210,8 +210,8 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - rotationInterval?: number = ANIMATION_DURATION
 
 ### Grid
-Extends ServerGrid.
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- as?: ElementType
 - position?: CSSProperties["position"] = relative
 - scrollbar?: "default" | "minimal" = minimal
 - masonry?: boolean

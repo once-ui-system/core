@@ -270,7 +270,7 @@ useEffect(() => {
 
 <Column ref={ref} gap="16">
   <RevealFx revealed={seen} translateY="8">...</RevealFx>
-  <CountFx value={seen ? 2400 : 0} duration={1500} separator="," variant="display-strong-m" />
+  <CountFx value={seen ? 2400 : 0} duration={1500} separator="," textVariant="display-strong-m" />
 </Column>
 ```
 

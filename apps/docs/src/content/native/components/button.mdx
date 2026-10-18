@@ -13,7 +13,7 @@ status: "unreleased"
 
 ## Variants
 
-`primary` is the default. `danger`, `success` and `warning` are solid like `primary`. `secondary`, `tertiary`, `quaternary`, `subtle`, `ghost` and `link` are quieter.
+`primary` is the default. `secondary`, `tertiary`, `subtle`, `ghost` and `link` are quieter. `tone` sets the colour, as in core 3.0: `tone="danger"`, `"success"` or `"warning"` on a `primary` button is solid in that colour.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -27,7 +27,7 @@ export function Variants() {
       <Button label="Primary" onPress={() => {}} />
       <Button variant="secondary" label="Secondary" onPress={() => {}} />
       <Button variant="tertiary" label="Tertiary" onPress={() => {}} />
-      <Button variant="danger" label="Delete account" onPress={() => {}} />
+      <Button tone="danger" label="Delete account" onPress={() => {}} />
       <Button variant="link" label="Learn more" onPress={() => {}} />
     </Column>
   );
@@ -135,7 +135,8 @@ export function Save() {
 | --- | --- | --- | --- |
 | `label` | `string` | | The button's text. |
 | `children` | `ReactNode` | | Used as the label when `label` is not set. |
-| `variant` | `"primary" \| "secondary" \| "tertiary" \| "quaternary" \| "subtle" \| "danger" \| "success" \| "warning" \| "ghost" \| "link"` | `"primary"` | Visual style. |
+| `variant` | `"primary" \| "secondary" \| "tertiary" \| "subtle" \| "ghost" \| "link"` | `"primary"` | Visual style. |
+| `tone` | `"brand" \| "accent" \| "neutral" \| "danger" \| "warning" \| "success" \| "info"` | from the variant | The colour, as in core 3.0 (2.x's `variant="danger"` is `tone="danger"`). |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | Height and padding. |
 | `weight` | `"default" \| "strong"` | `"strong"` | Label weight. |
 | `rounded` | `boolean` | | Fully rounded corners. |

@@ -128,7 +128,7 @@ With `masonry`, Grid packs children into columns, each item keeping its own heig
                     border="neutral-alpha-medium"
                     fill
                     center
-                    height={height + "rem"}
+                    height={height * 16}
                 >{index}
                 </Flex>
             ))}
@@ -153,7 +153,7 @@ With `masonry`, Grid packs children into columns, each item keeping its own heig
             border="neutral-alpha-medium"
             fill
             center
-            height={height + "rem"}
+            height={height * 16}
         >{index}
         </Flex>
     ))}
@@ -189,7 +189,7 @@ Control the number of columns in the grid using the `columns` prop. You can also
                     border="neutral-alpha-medium"
                     fill
                     center
-                    height={height + "rem"}
+                    height={height * 16}
                 >{index}
                 </Flex>
             ))}
@@ -214,7 +214,7 @@ Control the number of columns in the grid using the `columns` prop. You can also
             border="neutral-alpha-medium"
             fill
             center
-            height={height + "rem"}
+            height={height * 16}
         >{index}
         </Flex>
     ))}
@@ -249,7 +249,7 @@ Adjust the spacing between items using the `gap` prop.
                     border="neutral-alpha-medium"
                     fill
                     center
-                    height={height + "rem"}
+                    height={height * 16}
                 >{index}
                 </Flex>
             ))}
@@ -273,7 +273,7 @@ Adjust the spacing between items using the `gap` prop.
             border="neutral-alpha-medium"
             fill
             center
-            height={height + "rem"}
+            height={height * 16}
         >{index}
         </Flex>
     ))}
@@ -290,12 +290,14 @@ Adjust the spacing between items using the `gap` prop.
   component="Grid"
   describe={{
     masonry: "Pack children into columns (default 3), each keeping its own height. gap defaults to \"8\"; rows, minColumnWidth and xl do not apply.",
-    xl: "Overrides applied at the xl breakpoint and below.",
-    l: "Overrides applied at the l breakpoint and below.",
-    m: "Overrides applied at the m breakpoint and below.",
-    s: "Overrides applied at the s breakpoint and below.",
-    xs: "Overrides applied at the xs breakpoint.",
   }}
+  content={[
+    ["xl", "GridBreakpointProps", "-", "Overrides applied at the xl breakpoint and below."],
+    ["l", "GridBreakpointProps", "-", "Overrides applied at the l breakpoint and below."],
+    ["m", "GridBreakpointProps", "-", "Overrides applied at the m breakpoint and below."],
+    ["s", "GridBreakpointProps", "-", "Overrides applied at the s breakpoint and below."],
+    ["xs", "GridBreakpointProps", "-", "Overrides applied at the xs breakpoint."]
+  ]}
 />
 
 ## Everything else

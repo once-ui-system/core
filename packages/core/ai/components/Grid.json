@@ -1,9 +1,6 @@
 {
  "name": "Grid",
  "group": "components",
- "extends": [
-  "ServerGrid"
- ],
  "mixins": [
   "CommonProps",
   "DisplayProps",
@@ -13,6 +10,7 @@
   "StyleProps"
  ],
  "props": {
+  "as": "ElementType",
   "position": "CSSProperties[\"position\"] = relative",
   "scrollbar": "\"default\" | \"minimal\" = minimal",
   "masonry": "boolean"

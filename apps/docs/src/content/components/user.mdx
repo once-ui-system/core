@@ -17,7 +17,7 @@ navIcon: "components"
     <User
       name="Lorant One"
       subline="Design Engineer"
-      tagProps={{ label: "Admin", scheme: "accent" }}
+      tagProps={{ label: "Admin", tone: "accent" }}
       avatarProps={{ src: "/images/avatar.jpg" }}
     />
   }
@@ -27,7 +27,7 @@ navIcon: "components"
 `<User
     name="Lorant One"
     subline="Design Engineer"
-    tagProps={{ label: "Admin", scheme: "accent" }}
+    tagProps={{ label: "Admin", tone: "accent" }}
     avatarProps={{ src: "/images/avatar.jpg" }}
 />`,
       language: "tsx",
@@ -109,8 +109,8 @@ With `dropdown`, the User is the trigger of an account menu; `selected`, `placem
       avatarProps={{ src: "/images/avatar.jpg" }}
       dropdown={
         <Column gap="4" padding="4" minWidth="10rem">
-          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
-          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
+          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" value="settings" />
+          <ClientOption fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" value="logout" />
         </Column>
       }
     />
@@ -125,8 +125,8 @@ With `dropdown`, the User is the trigger of an account menu; `selected`, `placem
     avatarProps={{ src: "/images/avatar.jpg" }}
     dropdown={
       <Column gap="4" padding="4" minWidth="10rem">
-        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" />
-        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" />
+        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="settings" />} label="Settings" value="settings" />
+        <Option fillWidth prefix={<Icon size="xs" onBackground="neutral-weak" name="logout" />} label="Log out" value="logout" />
       </Column>
     }
 />`,

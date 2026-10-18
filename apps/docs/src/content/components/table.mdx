@@ -249,7 +249,7 @@ arguments.
   aria-label="Tasks"
   columns={columns}
   rows={tasks}
-  onRowClick={(task) => open(task.id)}
+  onRowClick={(task: Task) => open(task.id)}
   actions={[
     { icon: "edit", label: "Edit", onClick: (task) => edit(task) },
     { icon: "trash", label: "Delete", variant: "primary", tone: "danger", onClick: (task) => remove(task) },

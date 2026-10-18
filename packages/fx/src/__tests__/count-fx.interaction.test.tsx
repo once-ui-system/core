@@ -1,8 +1,8 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { render, screen } from "@testing-library/react";
 import type React from "react";
 import { describe, expect, it } from "vitest";
 import { CountFx } from "../CountFx.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 import { controlAnimationFrames, mockReducedMotion } from "../test/fxTestUtils.js";
 

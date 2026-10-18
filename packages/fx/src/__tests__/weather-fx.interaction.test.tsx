@@ -1,15 +1,15 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { WeatherFx } from "../WeatherFx.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 import {
   controlAnimationFrames,
   fakeCanvasContext,
   mockReducedMotion,
 } from "../test/fxTestUtils.js";
+import { WeatherFx } from "../WeatherFx.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>

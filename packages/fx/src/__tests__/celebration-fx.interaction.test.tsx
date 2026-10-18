@@ -1,9 +1,9 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { CelebrationFx } from "../CelebrationFx.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 import {
   controlAnimationFrames,

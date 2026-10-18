@@ -105,7 +105,7 @@ codes={[
 
 export function OfflineNotice() {
   return (
-    <Toast variant="warning" duration={Infinity} showIcon>
+    <Toast tone="warning" duration={Infinity} showIcon>
       You are offline. Changes will sync later.
     </Toast>
   );
@@ -135,7 +135,7 @@ export function OfflineNotice() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
+| `tone` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
 | `message` | `ReactNode` | | The text. Required. |
 | `action` | `ReactNode` | | An element before the close button. |
 | `duration` | `number` | `6000` | Milliseconds before the toast hides itself. `Infinity` keeps it. |
@@ -144,7 +144,7 @@ export function OfflineNotice() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
+| `tone` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
 | `children` | `ReactNode` | | The text. Required. |
 | `showIcon` | `boolean` | `true` | Shows the variant's icon. |
 | `onClose` | `() => void` | | Shows a close button. Also called when the toast hides itself. |

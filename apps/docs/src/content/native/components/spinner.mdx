@@ -58,7 +58,7 @@ export function Sizes() {
 
 ## Color and label
 
-`color` takes any color string. `ariaLabel` is what screen readers say, "Loading" by default. Use `useTheme` to pick a token color.
+`color` takes any color string. `aria-label` is what screen readers say, "Loading" by default. Use `useTheme` to pick a token color.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -68,7 +68,7 @@ codes={[
 
 export function Uploading() {
   const theme = useTheme();
-  return <Spinner color={theme.color("brand-solid-strong")} ariaLabel="Uploading photo" />;
+  return <Spinner color={theme.color("brand-solid-strong")} aria-label="Uploading photo" />;
 }`,
     language: "tsx",
     label: "Color and label"
@@ -87,5 +87,5 @@ export function Uploading() {
 | --- | --- | --- | --- |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The spinner size. |
 | `color` | `string` | `neutral-on-background-medium` | The spinner color. |
-| `ariaLabel` | `string` | `"Loading"` | Read out by screen readers. |
+| `aria-label` | `string` | `"Loading"` | Read out by screen readers. |
 | `style` | `ViewStyle` | | Style for the spinner. |

@@ -2,9 +2,11 @@
  "name": "MdxHeadingAnchor",
  "group": "mdx",
  "importFrom": "@once-ui-system/core/mdx",
- "extends": [
-  "HeadingAnchor"
- ],
+ "props": {
+  "id": "!string",
+  "label": "!string",
+  "className": "string"
+ },
  "tags": [
   "mdx",
   "docs"

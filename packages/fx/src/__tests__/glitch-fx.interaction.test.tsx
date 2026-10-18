@@ -1,9 +1,9 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GlitchFx } from "../GlitchFx.js";
 import styles from "../GlitchFx.module.scss";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

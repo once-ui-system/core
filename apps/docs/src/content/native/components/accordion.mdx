@@ -35,7 +35,7 @@ export function Faq() {
 
 ## Controlled
 
-Pass `open` with `onOpenChange` (or `onToggle`) when the screen owns the state. `onOpenChange` is called with the next state.
+Pass `open` with `onOpenChange` when the screen owns the state. `onOpenChange` is called with the next state.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -87,7 +87,7 @@ export function Help() {
 ## Differences from the web
 
 - `Accordion` also takes core 3.0's `defaultOpen` and `onOpenChange`.
-- With `open` and no `onToggle` or `onOpenChange`, `open` only sets the first state, and later changes to it are followed.
+- With `open` and no `onOpenChange`, `open` only sets the first state, and later changes to it are followed.
 - Flex props other than those listed go to the content area, as on the web.
 
 ## API reference
@@ -96,9 +96,8 @@ export function Help() {
 | --- | --- | --- | --- |
 | `title` | `ReactNode` | | The header. A string is drawn as `heading-strong-s`. Required. |
 | `children` | `ReactNode` | | The content that opens and closes. Required. |
-| `open` | `boolean` | | The state. With `onToggle` or `onOpenChange` the caller owns it; without them, only the first state. |
+| `open` | `boolean` | | The state. With `onOpenChange` the caller owns it; without it, only the first state. |
 | `defaultOpen` | `boolean` | `false` | Core 3.0's name for the first state when the accordion owns it. |
-| `onToggle` | `() => void` | | Called when the header is pressed or a method changes the state. |
 | `onOpenChange` | `(open: boolean) => void` | | Core 3.0's change handler, called with the next state. |
 | `icon` | `IconName` | `"chevronDown"` | The icon at the end of the header. |
 | `iconRotation` | `number` | `180` | Degrees the icon turns while open. |

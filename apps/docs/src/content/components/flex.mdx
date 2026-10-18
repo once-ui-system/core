@@ -329,13 +329,13 @@ says otherwise. This is how layout adapts; media queries are never needed.
 
 <PropsTable
   component="Flex"
-  describe={{
-    xl: "Overrides applied at the xl breakpoint and below.",
-    l: "Overrides applied at the l breakpoint and below.",
-    m: "Overrides applied at the m breakpoint and below.",
-    s: "Overrides applied at the s breakpoint and below.",
-    xs: "Overrides applied at the xs breakpoint.",
-  }}
+  content={[
+    ["xl", "FlexBreakpointProps", "-", "Overrides applied at the xl breakpoint and below."],
+    ["l", "FlexBreakpointProps", "-", "Overrides applied at the l breakpoint and below."],
+    ["m", "FlexBreakpointProps", "-", "Overrides applied at the m breakpoint and below."],
+    ["s", "FlexBreakpointProps", "-", "Overrides applied at the s breakpoint and below."],
+    ["xs", "FlexBreakpointProps", "-", "Overrides applied at the xs breakpoint."]
+  ]}
 />
 
 ## Related

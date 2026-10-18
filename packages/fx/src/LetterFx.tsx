@@ -4,8 +4,8 @@ import { type Speed, useReducedMotion, VisuallyHidden } from "@once-ui-system/co
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { speedFactor } from "./internal/speed.js";
 import { prefersReducedMotionNow } from "./internal/reducedMotion.js";
+import { speedFactor } from "./internal/speed.js";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 

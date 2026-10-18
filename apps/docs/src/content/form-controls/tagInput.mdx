@@ -63,8 +63,10 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
     value: "The tags, as an array of strings, controlled. Leave it out and the input keeps its own list.",
     defaultValue: "The starting tags when `value` is left out.",
     onValueChange: "Receives the whole new array, after an add or a remove. Was onChange in 2.x.",
-    onChange: "The native change event of the text field, as on Input.",
   }}
+  content={[
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the text field, as on Input."]
+  ]}
 />
 
 Everything on [Input](/form-controls/input) — `label`, `description`, `error`,

@@ -211,13 +211,11 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     checked: "Whether it is on, controlled. Leave it out and the switch keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
     onCheckedChange: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
-    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     loading: "Show a spinner in the track while something resolves.",
     disabled: "Block interaction.",
     reverse: "Put the label before the switch instead of after it.",
     name: "Form field name.",
     value: "Form field value.",
-    "aria-label": "Label for a switch with no visible one.",
   }}
   content={[
     ["label", "ReactNode"],
@@ -225,6 +223,8 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     ["className"],
     ["style"],
     ["iconButtonProps", "IconButtonProps", "-", "Props forwarded to the icon button beside the label."],
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works."],
+    ["aria-label", "string", "-", "Label for a switch with no visible one."]
   ]}
 />

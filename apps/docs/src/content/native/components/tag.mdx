@@ -18,7 +18,7 @@ codes={[
 `import { Tag } from "@once-ui-system/native";
 
 export function Status() {
-  return <Tag label="In stock" scheme="success" />;
+  return <Tag label="In stock" tone="success" />;
 }`,
     language: "tsx",
     label: "Tag"
@@ -39,9 +39,9 @@ export function Labels() {
   return (
     <Row gap="8" wrap vertical="center">
       <Tag size="s" label="Draft" />
-      <Tag size="m" label="Brand" scheme="brand" />
-      <Tag size="l" label="Overdue" scheme="danger" />
-      <Tag label="Pending" scheme="warning" />
+      <Tag size="m" label="Brand" tone="brand" />
+      <Tag size="l" label="Overdue" tone="danger" />
+      <Tag label="Pending" tone="warning" />
     </Row>
   );
 }`,
@@ -63,8 +63,8 @@ codes={[
 export function Meta() {
   return (
     <Row gap="8">
-      <Tag label="Today" prefixIcon="calendar" scheme="info" />
-      <Tag label="Favourite" suffixIcon="star" scheme="brand" />
+      <Tag label="Today" prefixIcon="calendar" tone="info" />
+      <Tag label="Favourite" suffixIcon="star" tone="brand" />
     </Row>
   );
 }`,
@@ -80,7 +80,7 @@ Tag does not take Flex props. Use `style` for the outer view.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | | The tag text. `children` is used when it is not set. |
-| `scheme` | `"neutral" \| "brand" \| "accent" \| "info" \| "danger" \| "warning" \| "success"` | `"neutral"` | The color scheme. |
+| `tone` | `"neutral" \| "brand" \| "accent" \| "info" \| "danger" \| "warning" \| "success"` | `"neutral"` | The color scheme. |
 | `size` | `"s" \| "m" \| "l"` | `"m"` | The tag size. |
 | `prefixIcon` | `IconName \| ReactNode` | | An icon before the text. |
 | `suffixIcon` | `IconName \| ReactNode` | | An icon after the text. |

@@ -20,7 +20,7 @@ codes={[
 export function Online() {
   return (
     <Row gap="8" vertical="center">
-      <StatusIndicator color="green" ariaLabel="Online" />
+      <StatusIndicator color="green" aria-label="Online" />
       <Text>Online</Text>
     </Row>
   );
@@ -83,7 +83,7 @@ export function Colors() {
 ## Differences from the web
 
 - Takes `scheme` as well as `color`, ahead of core 3.0.
-- Screen readers read it as an image labelled `ariaLabel`, or "green status indicator" and so on by default. Give it a label that says what the status means.
+- Screen readers read it as an image labelled `aria-label`, or "green status indicator" and so on by default. Give it a label that says what the status means.
 
 ## API reference
 
@@ -94,4 +94,4 @@ StatusIndicator extends Flex props, so margin, position and the rest apply.
 | `size` | `"s" \| "m" \| "l"` | `"m"` | The dot size. |
 | `color` | `Schemes \| "gray"` | `"blue"` | The color scheme. |
 | `scheme` | `Schemes \| "gray"` | | Core 3.0's name for `color`. Wins when both are set. |
-| `ariaLabel` | `string` | `"<color> status indicator"` | Read out by screen readers. |
+| `aria-label` | `string` | `"<color> status indicator"` | Read out by screen readers. |

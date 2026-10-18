@@ -209,7 +209,6 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     defaultChecked: "The starting state when `checked` is left out.",
     indeterminate: "The third state, for a parent whose children are partly ticked.",
     onCheckedChange: "Called with the new state when it is flipped: true when it becomes ticked.",
-    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     hoverable: "Highlight the row on hover.",
   }}
   content={[
@@ -219,6 +218,7 @@ it takes the enclosing `Form`'s `size`, as `Input` does.
     ["className"],
     ["style"],
     ["iconButtonProps", "IconButtonProps", "-", "Props forwarded to the icon button beside the label."],
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works."]
   ]}
 />

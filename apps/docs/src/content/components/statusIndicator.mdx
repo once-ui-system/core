@@ -206,10 +206,10 @@ Customize the pulse ring dimensions with the `pulseSize` prop, accepting a numbe
     pulseSize: "How far the ring travels, overriding the size's default. Only with pulse.",
     scheme: "The palette hue of the dot (2.x called it color).",
     size: "Dot size.",
-    "aria-label": "What assistive tech announces. Set it to the meaning, not the colour.",
   }}
   content={[
     ["className"],
-    ["style"]
+    ["style"],
+    ["aria-label", "string", "-", "What assistive tech announces. Set it to the meaning, not the colour."]
   ]}
 />

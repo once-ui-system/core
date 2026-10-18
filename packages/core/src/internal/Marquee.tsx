@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { useReducedMotion } from "../hooks/useReducedMotion.js";
-import { prefersReducedMotionNow } from "./reducedMotion.js";
 import { Row } from "../components/Row.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
 import type { Speed } from "../types.js";
 import { cssLength } from "../utils/layoutClasses.js";
 import { speedFactor } from "../utils/speed.js";
 import styles from "./Marquee.module.scss";
+import { prefersReducedMotionNow } from "./reducedMotion.js";
 
 interface MarqueeProps extends React.ComponentProps<typeof Row> {
   children: React.ReactNode;

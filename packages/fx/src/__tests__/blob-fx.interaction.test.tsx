@@ -1,9 +1,9 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { render } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 import { BlobFx } from "../BlobFx.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

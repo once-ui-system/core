@@ -1,3 +1,4 @@
+import { DataThemeProvider, LayoutProvider, ThemeProvider } from "@once-ui-system/core";
 import { render, screen, within } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import type React from "react";
@@ -5,9 +6,6 @@ import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { StylePanel } from "../StylePanel.js";
 import { type StylePanelValue } from "../StylePanelSections.js";
-import { DataThemeProvider } from "@once-ui-system/core";
-import { LayoutProvider } from "@once-ui-system/core";
-import { ThemeProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

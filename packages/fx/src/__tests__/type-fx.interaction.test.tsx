@@ -1,10 +1,10 @@
+import { LayoutProvider } from "@once-ui-system/core";
 import { act, render } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { TypeFx } from "../TypeFx.js";
 import styles from "../internal/FadingLetters.module.scss";
-import { LayoutProvider } from "@once-ui-system/core";
+import { TypeFx } from "../TypeFx.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 import { mockReducedMotion } from "../test/fxTestUtils.js";
 

@@ -13,7 +13,7 @@ status: "unreleased"
 
 ## Uncontrolled
 
-Without `value`, the control keeps its own state. It starts on `defaultValue`, or on the first button. `onChange` is required.
+Without `value`, the control keeps its own state. It starts on `defaultValue`, or on the first button. `onValueChange` is required.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -25,7 +25,7 @@ export function ViewSwitch() {
   return (
     <SegmentedControl
       defaultValue="list"
-      onChange={(value) => console.log(value)}
+      onValueChange={(value) => console.log(value)}
       buttons={[
         { value: "list", label: "List" },
         { value: "grid", label: "Grid" },
@@ -41,7 +41,7 @@ export function ViewSwitch() {
 
 ## Controlled
 
-Pass `value` with `onChange` when the screen owns the selection.
+Pass `value` with `onValueChange` when the screen owns the selection.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -56,7 +56,7 @@ export function Period() {
     <>
       <SegmentedControl
         value={period}
-        onChange={setPeriod}
+        onValueChange={setPeriod}
         buttons={[
           { value: "day", label: "Day" },
           { value: "week", label: "Week" },
@@ -87,7 +87,7 @@ export function Align() {
     <SegmentedControl
       compact
       fillWidth={false}
-      onChange={() => {}}
+      onValueChange={() => {}}
       buttons={[
         { value: "left", prefixIcon: "arrowLeft" },
         { value: "right", prefixIcon: "arrowRight" },
@@ -110,7 +110,7 @@ export function Align() {
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `buttons` | `SegmentedControlButton[]` | | The buttons. Required. |
-| `onChange` | `(value: string) => void` | | Called with the pressed button's `value`. Required. |
+| `onValueChange` | `(value: string) => void` | | Called with the pressed button's `value`. Required. |
 | `value` | `string` | | The selected value, when the screen owns the state. |
 | `defaultValue` | `string` | first button | The value selected first when the control keeps its own state. |
 | `fillWidth` | `boolean` | `true` | Stretches the control and its buttons to the available width. |
@@ -121,7 +121,7 @@ export function Align() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `string` | | What `onChange` reports. Required. |
+| `value` | `string` | | What `onValueChange` reports. Required. |
 | `label` | `ReactNode` | | The button's text. |
 | `prefixIcon` | `IconSlot` | | An icon name, or any element, before the label. |
 | `suffixIcon` | `IconSlot` | | An icon name, or any element, after the label. |

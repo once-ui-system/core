@@ -13,7 +13,7 @@ status: "unreleased"
 
 ## Controlled
 
-Pass `checked` and update it in `onToggle`, which gets the next state.
+Pass `checked` and update it in `onCheckedChange`, which gets the next state.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -29,7 +29,7 @@ export function Notifications() {
       label="Notifications"
       description="Order updates and offers"
       checked={on}
-      onToggle={setOn}
+      onCheckedChange={setOn}
     />
   );
 }`,
@@ -74,7 +74,7 @@ export function Sync() {
       reverse
       checked={on}
       loading={saving}
-      onToggle={(next) => {
+      onCheckedChange={(next) => {
         setSaving(true);
         setTimeout(() => {
           setOn(next);
@@ -91,9 +91,9 @@ export function Sync() {
 
 ## Differences from the web
 
-- The handler is `onToggle(checked)`. There is no `name`, `value` or form submission.
+- The handler is `onCheckedChange(checked)`. There is no `name`, `value` or form submission.
 - The knob widens while pressed, in place of the hover state.
-- A switch without a label takes taps from 44pt around it. Give it `ariaLabel` so screen readers can name it.
+- A switch without a label takes taps from 44pt around it. Give it `aria-label` so screen readers can name it.
 
 ## API reference
 
@@ -101,11 +101,11 @@ export function Sync() {
 | --- | --- | --- | --- |
 | `checked` | `boolean` | | The state, when the screen owns it. |
 | `defaultChecked` | `boolean` | `false` | The first state when the switch keeps its own. |
-| `onToggle` | `(checked: boolean) => void` | | Called with the next state. |
+| `onCheckedChange` | `(checked: boolean) => void` | | Called with the next state. |
 | `label` | `ReactNode` | | Text beside the switch. A string is also the accessibility label. |
 | `description` | `ReactNode` | | A line under the label. |
 | `loading` | `boolean` | `false` | Shows a spinner in the knob and ignores taps. |
 | `disabled` | `boolean` | `false` | Dims the switch and ignores taps. |
 | `reverse` | `boolean` | `false` | Puts the switch after the label. |
-| `ariaLabel` | `string` | `"Toggle switch"` | The accessibility label when `label` is not a string. |
+| `aria-label` | `string` | `"Toggle switch"` | The accessibility label when `label` is not a string. |
 | `style` | `ViewStyle` | | Style for the row. |

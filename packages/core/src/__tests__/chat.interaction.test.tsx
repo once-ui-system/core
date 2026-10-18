@@ -8,8 +8,8 @@ import { ChatComposer } from "../modules/chat/ChatComposer";
 import { ChatMessage } from "../modules/chat/ChatMessage";
 import { ChatMessageList } from "../modules/chat/ChatMessageList";
 import { ConversationItem } from "../modules/chat/ConversationItem";
-import { TypingIndicator } from "../modules/chat/TypingIndicator";
 import { formatChatTime, renderChatTime } from "../modules/chat/chatTime";
+import { TypingIndicator } from "../modules/chat/TypingIndicator";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: ReactNode }) => (

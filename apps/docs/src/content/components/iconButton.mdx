@@ -220,13 +220,13 @@ Use the children prop to add custom content to the IconButton.
   describe={{
     loading: "Swap the icon for a spinner and block interaction.",
     rounded: "Fully rounded corners.",
-    "aria-label": "The accessible name.",
     tooltip: "Hover and focus hint. A plain-text tooltip also names the button when it has no aria-label.",
   }}
   content={[
     ["children"],
     ["className"],
     ["style"],
-    ["...ButtonHTMLAttributes"]
+    ["...ButtonHTMLAttributes"],
+    ["aria-label", "string", "-", "The accessible name."]
   ]}
 />

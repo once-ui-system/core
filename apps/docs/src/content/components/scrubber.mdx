@@ -119,8 +119,10 @@ what belongs in it is entirely your application's business.
     showTime: "Show the current time next to the playhead.",
     formatTime: "Turn seconds into the label shown. Defaults to m:ss.",
     step: "Snap the playhead to this interval, in seconds.",
-    "aria-label": "Label for the playhead handle.",
   }}
+  content={[
+    ["aria-label", "string", "-", "Label for the playhead handle."]
+  ]}
 />
 
 ### ScrubberTrack

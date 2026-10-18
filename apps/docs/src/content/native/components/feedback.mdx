@@ -9,7 +9,7 @@ navIcon: "components"
 status: "unreleased"
 ---
 
-`Feedback` shows a message inside the layout: an error under a form, a warning above a list, a note after a save. It fills the width and takes the color of its `variant`. Screen readers announce it as an alert when it appears. See the [web Feedback page](/components/feedback) for the web version.
+`Feedback` shows a message inside the layout: an error under a form, a warning above a list, a note after a save. It fills the width and takes the color of its `tone`. Screen readers announce it as an alert when it appears. See the [web Feedback page](/components/feedback) for the web version.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -20,7 +20,7 @@ codes={[
 export function Saved() {
   return (
     <Feedback
-      variant="success"
+      tone="success"
       title="Card saved"
       description="Your stamps are synced to this device."
     />
@@ -44,7 +44,7 @@ codes={[
 export function Offline() {
   return (
     <Feedback
-      variant="warning"
+      tone="warning"
       icon={<Icon name="warning" onBackground="warning-medium" />}
       title="You are offline"
       description="Changes will sync when you reconnect."
@@ -72,7 +72,7 @@ export function Notice() {
   if (!open) return null;
   return (
     <Feedback
-      variant="info"
+      tone="info"
       title="New rewards"
       description="Every tenth coffee is now free."
       showCloseButton
@@ -97,7 +97,7 @@ codes={[
 
 export function PaymentFailed({ onRetry }: { onRetry: () => void }) {
   return (
-    <Feedback variant="danger" title="Payment failed" description="Your card was declined.">
+    <Feedback tone="danger" title="Payment failed" description="Your card was declined.">
       <Button variant="secondary" size="s" label="Try again" onPress={onRetry} />
     </Feedback>
   );
@@ -117,7 +117,7 @@ export function PaymentFailed({ onRetry }: { onRetry: () => void }) {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"info" \| "danger" \| "warning" \| "success"` | `"info"` | The color and meaning. |
+| `tone` | `"info" \| "danger" \| "warning" \| "success"` | `"info"` | The color and meaning. |
 | `title` | `string` | | A short heading. |
 | `description` | `string` | | The message under the title. |
 | `icon` | `ReactNode` | | An element before the text. |

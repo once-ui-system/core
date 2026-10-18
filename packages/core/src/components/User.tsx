@@ -1,10 +1,10 @@
 import classNames from "clsx";
 import type React from "react";
+import { UserTrigger } from "../internal/UserTrigger.js";
 import type { Placement } from "../types.js";
 import { Avatar, type AvatarProps } from "./Avatar.js";
 import { Column } from "./Column.js";
 import { Dropdown, type DropdownProps } from "./Dropdown.js";
-import { useDropdownTrigger } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { Skeleton } from "./Skeleton.js";
 import { Tag, type TagProps } from "./Tag.js";
@@ -100,27 +100,6 @@ const UserCard = ({
 };
 
 UserCard.displayName = "UserCard";
-
-/**
- * The focusable pill. It is the element Tab lands on, so it is the button:
- * it carries the role and the open state itself, and registers as the
- * dropdown's trigger so the wrappers around it stop claiming `role="button"`.
- * Before, focus landed on a plain div and the expanded state sat on an
- * unfocusable ancestor, so nothing said it opened a menu.
- */
-const UserTrigger = (props: React.ComponentProps<typeof Column> & { loading?: boolean }) => {
-  const { loading, ...rest } = props;
-  const trigger = useDropdownTrigger();
-  return (
-    <Column
-      role="button"
-      aria-haspopup={trigger?.haspopup}
-      aria-expanded={trigger?.expanded}
-      aria-disabled={loading || undefined}
-      {...rest}
-    />
-  );
-};
 
 /**
  * An avatar with a name, a subline and an optional tag. With `dropdown` it is

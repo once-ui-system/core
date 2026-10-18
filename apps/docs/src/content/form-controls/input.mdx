@@ -446,10 +446,10 @@ thing each, so they live on pages of their own:
     validate: "Run on a debounce, controlled or not; return a message to show, or null to clear.",
     loading: "Show a spinner in the suffix while something resolves.",
     reveal: "With type=\"password\", show the button that unmasks the value. Default true.",
-    className: "",
-    style: "",
   }}
   content={[
-    ["...InputHTMLAttributes"]
+    ["...InputHTMLAttributes"],
+    ["className", "string", "-", ""],
+    ["style", "CSSProperties", "-", ""]
   ]}
 />

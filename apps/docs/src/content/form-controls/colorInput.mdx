@@ -107,8 +107,10 @@ The `ColorInput` component extends the standard `Input` component props with the
     value: "The current colour, as hex or rgba, controlled. Leave it out and the field keeps its own.",
     defaultValue: "The starting colour when `value` is left out.",
     onValueChange: "Receives the colour string after a pick, an opacity change or a clear (\"\"). Was onChange in 2.x.",
-    onChange: "The native change event of the colour input, as on Input.",
     supportAlpha: "Adds an opacity slider and switches the value to rgba().",
     labels: "The clear and opacity controls' text, to translate them.",
   }}
+  content={[
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the colour input, as on Input."]
+  ]}
 />

@@ -131,7 +131,7 @@ export default function App() {
       <Column fill padding="20" background="page">
         <SegmentedControl
           value={mode}
-          onChange={(value) => setMode(value as Mode)}
+          onValueChange={(value) => setMode(value as Mode)}
           buttons={[
             { value: "system", label: "System" },
             { value: "light", label: "Light" },

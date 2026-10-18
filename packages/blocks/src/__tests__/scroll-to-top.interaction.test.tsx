@@ -1,10 +1,9 @@
+import { Button, LayoutProvider } from "@once-ui-system/core";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import type React from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { Button } from "@once-ui-system/core";
 import { ScrollToTop } from "../ScrollToTop.js";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

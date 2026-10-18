@@ -272,8 +272,15 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - style?: React.CSSProperties
 
 ### Switch
-Extends InteractiveDetails, controlChrome.
 Mixins: LeafProps.
+- size?: TShirtSizes
+- error?: boolean
+- errorMessage?: ReactNode
+- label?: React.ReactNode
+- id?: string
+- description?: React.ReactNode
+- iconButtonProps?: IconButtonProps
+- auto?: boolean
 - checked?: boolean
 - defaultChecked?: boolean = false
 - loading?: boolean = false
@@ -315,8 +322,16 @@ Mixins: LeafProps.
 - padStart?: number
 
 ### Checkbox
-Extends InteractiveDetails, controlChrome.
 Mixins: LeafProps.
+- size?: TShirtSizes
+- error?: boolean
+- errorMessage?: ReactNode
+- label?: React.ReactNode
+- id?: string
+- description?: React.ReactNode
+- disabled?: boolean
+- iconButtonProps?: IconButtonProps
+- auto?: boolean
 - checked?: boolean
 - defaultChecked?: boolean = false
 - indeterminate?: boolean = false
@@ -356,8 +371,8 @@ Mixins: LeafProps.
 - style?: CSSProperties = {}
 
 ### Grid
-Extends ServerGrid.
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- as?: ElementType
 - position?: CSSProperties["position"] = relative
 - scrollbar?: "default" | "minimal" = minimal
 - masonry?: boolean

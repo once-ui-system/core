@@ -1,3 +1,4 @@
+import { DataThemeProvider, LayoutProvider, ThemeProvider } from "@once-ui-system/core";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import type React from "react";
@@ -5,9 +6,6 @@ import { createRef } from "react";
 import { describe, expect, it } from "vitest";
 import { StyleOverlay } from "../StyleOverlay.js";
 import styles from "../StyleOverlay.module.scss";
-import { DataThemeProvider } from "@once-ui-system/core";
-import { LayoutProvider } from "@once-ui-system/core";
-import { ThemeProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (

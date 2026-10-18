@@ -492,6 +492,11 @@ async function main() {
 
   const mixinsUsed = new Map(); // mixinName -> Map<propName, propString>
   const components = {};
+  // componentName -> Map<base, { propName: propString }>: the props a
+  // component takes from another file's declarations, kept so a base that is
+  // no public component (internal/controlChrome.ts, the internal
+  // InteractiveDetails, ServerFlex) can be listed inline instead of named.
+  const inherited = new Map();
   const functions = {};
   const entryTypes = new Map(); // importFrom -> Set<type name>
   const warnings = [];
@@ -922,6 +927,10 @@ async function main() {
         // extends LayoutProvider" names nothing the spec documents.
         if (base !== name) {
           extendsComponents.add(base);
+          if (!inherited.has(name)) inherited.set(name, new Map());
+          const byBase = inherited.get(name);
+          if (!byBase.has(base)) byBase.set(base, {});
+          byBase.get(base)[propName] = propString(propSym, pDecl, defaults);
           continue;
         }
       }
@@ -984,6 +993,26 @@ async function main() {
     for (const exp of checker.getExportsOfModule(moduleSymbol)) {
       processExport(exp.getName(), exp, barrel.group, barrel.importFrom);
     }
+  }
+
+  // "extends" promises "all props of that component", so it can only name a
+  // component the spec lists. A base that is not one (an internal file since
+  // 3.0) is listed inline: Checkbox's `size`, `error` and `errorMessage` come
+  // from internal/controlChrome.ts and used to vanish behind
+  // `extends: ["controlChrome"]`.
+  for (const [name, byBase] of inherited) {
+    const entry = components[name];
+    if (!entry || !entry.extends) continue;
+    const kept = [];
+    for (const base of entry.extends) {
+      if (components[base]) {
+        kept.push(base);
+        continue;
+      }
+      entry.props = { ...byBase.get(base), ...entry.props };
+    }
+    if (kept.length) entry.extends = kept;
+    else delete entry.extends;
   }
 
   // Emit interfaces.ts types referenced by name in prop strings (e.g. FlexBreakpointProps)

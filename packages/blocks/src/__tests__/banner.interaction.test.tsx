@@ -1,11 +1,10 @@
+import { Icon, LayoutProvider } from "@once-ui-system/core";
 import { render, screen } from "@testing-library/react";
 import { userEvent } from "@testing-library/user-event";
 import type React from "react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { Banner } from "../Banner.js";
-import { Icon } from "@once-ui-system/core";
-import { LayoutProvider } from "@once-ui-system/core";
 import { expectNoAxeViolations } from "../test/axe.js";
 import { failOnConsoleError } from "../test/failOnConsoleError.js";
 

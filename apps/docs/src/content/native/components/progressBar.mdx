@@ -62,7 +62,7 @@ codes={[
 export function Stamps({ stamps }: { stamps: number }) {
   return (
     <Column gap="8">
-      <Text variant="label-default-s">{stamps} of 10 stamps</Text>
+      <Text textVariant="label-default-s">{stamps} of 10 stamps</Text>
       <ProgressBar value={stamps} max={10} showLabel={false} barBackground="success-medium" />
     </Column>
   );
