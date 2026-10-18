@@ -9,7 +9,8 @@ export type FadeState = "entering" | "visible" | "exiting";
  * from `delay`; `state="exiting"` fades them out in a scatter.
  */
 export function fadingLetters(text: string, state: FadeState, delay: number, charDuration: number) {
-  return text.split(" ").map((word, wordIdx) => {
+  const words = text.split(" ");
+  return words.map((word, wordIdx) => {
     const letters = word.split("").map((letter, letterIdx) => {
       const entryDelay = delay + wordIdx * 200 + letterIdx * charDuration;
       const exitDelay = Math.random() * 400;
@@ -35,6 +36,10 @@ export function fadingLetters(text: string, state: FadeState, delay: number, cha
     return (
       <span key={wordIdx} className={styles.word}>
         {letters}
+        {/* Keeps the words apart in the text (copy, search, screen readers).
+            Trailing white space in an inline-flex box is not rendered, so the
+            gap stays the word's margin. */}
+        {wordIdx < words.length - 1 ? " " : null}
       </span>
     );
   });

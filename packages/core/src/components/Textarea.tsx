@@ -281,7 +281,12 @@ const Textarea = ({
             // The caller's own description comes first; it used to be
             // overwritten, the same bug Input had.
             aria-describedby={
-              [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+              [
+                props["aria-describedby"],
+                showsErrorMessage ? `${id}-error` : undefined,
+                // Rendered below with this id, which nothing pointed at.
+                description ? `${id}-description` : undefined,
+              ]
                 .filter(Boolean)
                 .join(" ") || undefined
             }

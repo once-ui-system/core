@@ -265,8 +265,17 @@ const Calendar = ({
   // Track if calendar is synced to selected value
   const [isCalendarSynced, setIsCalendarSynced] = useState(false);
 
+  /**
+   * Whether focus was in the picker when a change of `value` unmounted the
+   * grid to re-sync it. A pick from the keyboard in a controlled picker
+   * (and a range's start pick) changes `value`, and the remounted grid
+   * found focus on the page and left it there.
+   */
+  const refocusAfterSync = useRef(false);
+
   // Sync currentMonth/currentYear to value on mount and when value changes
   useEffect(() => {
+    if (rootRef.current?.contains(document.activeElement)) refocusAfterSync.current = true;
     // Reset calendar sync to ensure proper re-sync
     setIsCalendarSynced(false);
 
@@ -284,6 +293,11 @@ const Calendar = ({
       setIsCalendarSynced(true);
     }
   }, [value, monthIsControlled]);
+
+  // The grid has remounted and taken focus back (see `initialFocusedIndex`).
+  useEffect(() => {
+    if (isCalendarSynced) refocusAfterSync.current = false;
+  }, [isCalendarSynced]);
 
   // Additional sync effect that runs when the component becomes ready
   useEffect(() => {
@@ -1117,7 +1131,9 @@ const Calendar = ({
               // value set from outside, it took focus from the page. Where
               // the keys start is the day that has focus (FollowFocusedDay).
               initialFocusedIndex={
-                focusIsInside() && startDay !== undefined ? pickableDays.indexOf(startDay) : -1
+                (focusIsInside() || refocusAfterSync.current) && startDay !== undefined
+                  ? pickableDays.indexOf(startDay)
+                  : -1
               }
               wrap
               itemSelector={DAY_SELECTOR}

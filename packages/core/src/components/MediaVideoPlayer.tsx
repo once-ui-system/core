@@ -190,6 +190,10 @@ const MediaVideoPlayer = ({
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    // Space on a focused control button belongs to that button.
+    if (event.key === " " && event.target !== event.currentTarget) {
+      return;
+    }
     switch (event.key) {
       case " ":
       case "k":

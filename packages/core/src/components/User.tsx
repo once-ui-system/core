@@ -4,6 +4,7 @@ import type { Placement } from "../types.js";
 import { Avatar, type AvatarProps } from "./Avatar.js";
 import { Column } from "./Column.js";
 import { Dropdown, type DropdownProps } from "./Dropdown.js";
+import { useDropdownTrigger } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { Skeleton } from "./Skeleton.js";
 import { Tag, type TagProps } from "./Tag.js";
@@ -43,6 +44,7 @@ const UserCard = ({
   name,
   children,
   subline,
+  tag,
   tagProps = {},
   loading = false,
   avatarProps = {},
@@ -50,6 +52,8 @@ const UserCard = ({
 }: UserProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const { src, value, empty, ...restAvatarProps } = avatarProps;
   const isEmpty = empty || (!src && !value);
+  // `tag` is the documented shorthand; it was declared and never read.
+  const tagLabel = tagProps.label ?? tag;
 
   return (
     <Flex ref={ref} vertical="center" gap="8" className={classNames(className)}>
@@ -73,9 +77,9 @@ const UserCard = ({
               <Text textVariant="label-default-m" onBackground="neutral-strong">
                 {name}
               </Text>
-              {tagProps.label && (
+              {tagLabel && (
                 <Tag size="s" {...tagProps}>
-                  {tagProps.label}
+                  {tagLabel}
                 </Tag>
               )}
             </Flex>
@@ -96,6 +100,27 @@ const UserCard = ({
 };
 
 UserCard.displayName = "UserCard";
+
+/**
+ * The focusable pill. It is the element Tab lands on, so it is the button:
+ * it carries the role and the open state itself, and registers as the
+ * dropdown's trigger so the wrappers around it stop claiming `role="button"`.
+ * Before, focus landed on a plain div and the expanded state sat on an
+ * unfocusable ancestor, so nothing said it opened a menu.
+ */
+const UserTrigger = (props: React.ComponentProps<typeof Column> & { loading?: boolean }) => {
+  const { loading, ...rest } = props;
+  const trigger = useDropdownTrigger();
+  return (
+    <Column
+      role="button"
+      aria-haspopup={trigger?.haspopup}
+      aria-expanded={trigger?.expanded}
+      aria-disabled={loading || undefined}
+      {...rest}
+    />
+  );
+};
 
 /**
  * An avatar with a name, a subline and an optional tag. With `dropdown` it is
@@ -129,7 +154,8 @@ const User = ({
         borderRadius: "var(--radius-full)",
       }}
       trigger={
-        <Column
+        <UserTrigger
+          loading={loading}
           tabIndex={loading ? -1 : 0}
           padding="4"
           radius="full"
@@ -141,7 +167,7 @@ const User = ({
           style={style}
         >
           <UserCard loading={loading} {...userProps} />
-        </Column>
+        </UserTrigger>
       }
     >
       {dropdown}

@@ -218,12 +218,14 @@ const FadeCarousel = ({
 
   return (
     <Column
+      ref={ref}
       fillWidth
       fillHeight={stretch}
       gap="8"
       {...flex}
       aspectRatio={undefined}
-      style={{ isolation: "isolate" }}
+      // The ref was never attached, and this replaced the caller's `style`.
+      style={{ isolation: "isolate", ...flex.style }}
     >
       {items.length > 1 && play.controls && play.auto && (
         <Flex position="absolute" top="16" right="16" zIndex={1}>
@@ -406,6 +408,18 @@ const FadeCarousel = ({
                 <Flex
                   className={styles.indicator}
                   onClick={() => handleControlClick(index)}
+                  // Click-only divs: a keyboard could not reach or press them,
+                  // and nothing said which slide was showing.
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={activeIndex === index ? "true" : undefined}
+                  onKeyDown={(e: React.KeyboardEvent) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleControlClick(index);
+                    }
+                  }}
                   cursor={activeIndex === index ? undefined : "interactive"}
                   key={index}
                   fillWidth
@@ -427,6 +441,12 @@ const FadeCarousel = ({
               {items.map((item, index) => (
                 <Flex
                   key={index}
+                  // Scroller supplies the click and Enter/Space handling;
+                  // the thumbnail has to be focusable and named for them.
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Go to slide ${index + 1}`}
+                  aria-current={activeIndex === index ? "true" : undefined}
                   style={{
                     border:
                       activeIndex === index

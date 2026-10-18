@@ -218,9 +218,12 @@ const Scrubber = ({
         aria-valuenow={value}
         aria-valuetext={formatTime(value)}
         onKeyDown={(event: React.KeyboardEvent) => {
-          if (event.key === "ArrowLeft") onValueChange(clamp(value - keyStep));
-          else if (event.key === "ArrowRight") onValueChange(clamp(value + keyStep));
-          else if (event.key === "Home") onValueChange(0);
+          // Up and Down step too, as on any slider; they used to scroll the page.
+          if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+            onValueChange(clamp(value - keyStep));
+          } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+            onValueChange(clamp(value + keyStep));
+          } else if (event.key === "Home") onValueChange(0);
           else if (event.key === "End") onValueChange(duration);
           else return;
           event.preventDefault();

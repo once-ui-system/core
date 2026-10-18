@@ -156,7 +156,8 @@ const SingleSlider = ({
     onChange: onValueChange,
   });
 
-  const percentage = ((current - min) / (max - min)) * 100;
+  // With min === max there is no range to fill: 0 / 0 made the width NaN%.
+  const percentage = max > min ? ((current - min) / (max - min)) * 100 : 0;
 
   // The native `onChange` hears the range input's own event, as with any
   // `<input type="range">`; `onValueChange` hears the number.

@@ -211,8 +211,13 @@ const Input = ({
   // anything to point `aria-describedby` at.
   const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
   // The caller's own description comes first; it used to be overwritten.
+  // `description` is read last: it rendered with an id nothing pointed at.
   const describedBy =
-    [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+    [
+      props["aria-describedby"],
+      showsErrorMessage ? `${id}-error` : undefined,
+      description ? `${id}-description` : undefined,
+    ]
       .filter(Boolean)
       .join(" ") || undefined;
 

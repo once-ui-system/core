@@ -56,7 +56,6 @@ const AvatarGroup = ({
           className={styles.avatar}
           size={size}
           style={{
-            ...style,
             zIndex: reverse ? -1 : displayedAvatars.length + 1,
           }}
         />

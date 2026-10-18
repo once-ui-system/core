@@ -16,6 +16,7 @@ const StyleOverlay = ({
   iconButtonProps,
   children,
   zIndex = 2,
+  style,
   ...rest
 }: StyleOverlayProps) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,10 +75,11 @@ const StyleOverlay = ({
         aria-label="Style panel"
         aria-hidden={!isOpen || undefined}
         zIndex={3}
-        className={`${styles.panel} ${isOpen && styles.open}`}
+        className={`${styles.panel}${isOpen ? ` ${styles.open}` : ""}`}
         maxWidth="28rem"
         style={{
           maxHeight: "calc(100% - var(--static-space-4))",
+          ...style,
         }}
         fillHeight
         position="absolute"

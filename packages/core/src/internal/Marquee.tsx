@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import { prefersReducedMotionNow } from "./reducedMotion.js";
 import { Row } from "../components/Row.js";
 import type { Speed } from "../types.js";
 import { cssLength } from "../utils/layoutClasses.js";
@@ -50,6 +52,7 @@ const Marquee = ({
   });
   const [contentWidth, setContentWidth] = useState(0);
   const previousReverseRef = useRef(reverse);
+  const { prefersReducedMotion } = useReducedMotion();
 
   // Stable reference to children to prevent unnecessary re-renders
   const childrenStable = useMemo(() => children, []);
@@ -119,6 +122,9 @@ const Marquee = ({
       animationRef.current = null;
     }
 
+    // Under reduced motion the content stays where it is.
+    if (prefersReducedMotion || prefersReducedMotionNow()) return;
+
     // Always animate, even if content is not wider than container
     // If content is not wider than container, we'll use the content width as the animation distance
     // This ensures there's always some movement
@@ -165,7 +171,7 @@ const Marquee = ({
         animationRef.current = null;
       }
     };
-  }, [speed, reverse, contentWidth]);
+  }, [speed, reverse, contentWidth, prefersReducedMotion]);
 
   // Handle hover effects
   useEffect(() => {
@@ -181,7 +187,9 @@ const Marquee = ({
       }
     } else {
       animation.updatePlaybackRate(1);
-      if (animation.playState === "paused" && hover !== "pause") {
+      // The pause came from hovering, so leaving is what resumes it. The old
+      // `hover !== "pause"` check meant hover="pause" never played again.
+      if (animation.playState === "paused") {
         animation.play();
       }
     }
@@ -246,11 +254,15 @@ const Marquee = ({
         >
           {children || childrenStable}
         </Row>
+        {/* The copy that makes the loop seamless: drawn, but not read out
+              or tabbed into a second time. */}
         <Row
           fitWidth
           horizontal="around"
           className={styles.marqueeContent}
           style={{ marginRight: gapStyle }}
+          aria-hidden="true"
+          inert
         >
           {children || childrenStable}
         </Row>

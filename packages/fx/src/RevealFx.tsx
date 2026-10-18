@@ -43,7 +43,12 @@ const RevealFx = ({
   const [maskRemoved, setMaskRemoved] = useState(false);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  const controlled = revealed !== undefined;
+
   useEffect(() => {
+    // Controlled: `revealed` alone decides, so the delay timer must not
+    // reveal content the caller is still holding back.
+    if (controlled) return;
     const timer = setTimeout(() => {
       setIsRevealed(true);
 
@@ -59,7 +64,7 @@ const RevealFx = ({
         clearTimeout(transitionTimeoutRef.current);
       }
     };
-  }, [delay]);
+  }, [delay, controlled]);
 
   useEffect(() => {
     if (revealed !== undefined) {

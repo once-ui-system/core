@@ -69,6 +69,19 @@ const SegmentedControl = ({
     pick(clickedButton.value, event);
   };
 
+  /**
+   * The next enabled segment from `from` in `direction`, wrapping. A disabled
+   * button cannot take focus, so stepping onto one used to leave focus where
+   * it was and every segment past it out of reach.
+   */
+  const enabledFrom = (from: number, direction: 1 | -1) => {
+    for (let offset = 1; offset <= buttons.length; offset++) {
+      const index = (from + direction * offset + buttons.length * offset) % buttons.length;
+      if (!buttons[index]?.disabled) return index;
+    }
+    return -1;
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
     const focusedIndex = buttonRefs.current.findIndex((ref) => ref === document.activeElement);
 
@@ -76,24 +89,16 @@ const SegmentedControl = ({
       case "ArrowLeft":
       case "ArrowUp":
         event.preventDefault();
-        const prevIndex =
-          focusedIndex === -1
-            ? buttons.length - 1 // If nothing is focused, focus the last item
-            : focusedIndex > 0
-              ? focusedIndex - 1
-              : buttons.length - 1;
-        buttonRefs.current[prevIndex]?.focus();
+        // If nothing is focused, focus the last item
+        buttonRefs.current[enabledFrom(focusedIndex === -1 ? 0 : focusedIndex, -1)]?.focus();
         break;
       case "ArrowRight":
       case "ArrowDown":
         event.preventDefault();
-        const nextIndex =
-          focusedIndex === -1
-            ? 0 // If nothing is focused, focus the first item
-            : focusedIndex < buttons.length - 1
-              ? focusedIndex + 1
-              : 0;
-        buttonRefs.current[nextIndex]?.focus();
+        // If nothing is focused, focus the first item
+        buttonRefs.current[
+          enabledFrom(focusedIndex === -1 ? buttons.length - 1 : focusedIndex, 1)
+        ]?.focus();
         break;
       case "Enter":
       case " ": // Space key
@@ -151,7 +156,7 @@ const SegmentedControl = ({
         radius="l"
         border={compact ? undefined : "neutral-alpha-weak"}
       >
-        {buttons.map((button, index) => {
+        {buttons.map(({ onClick, ...button }, index) => {
           return (
             <ToggleButton
               ref={(el) => {
@@ -169,7 +174,12 @@ const SegmentedControl = ({
               }
               key={button.value}
               selected={index === selectedIndex}
-              onClick={(event) => handleButtonClick(button, event)}
+              // The option's own `onClick` runs as well; spread below, it
+              // used to replace this one and the segment stopped selecting.
+              onClick={(event) => {
+                onClick?.(event);
+                handleButtonClick({ ...button, onClick }, event);
+              }}
               role="tab"
               className={className}
               style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}

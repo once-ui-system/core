@@ -134,6 +134,9 @@ const ColorInput = ({
     setHexValue("");
     setAlpha(100);
     onValueChange?.("");
+    // The clear button unmounts with the colour; without this, focus
+    // dropped to the page and a keyboard user lost their place.
+    colorInputRef.current?.focus();
   };
   return (
     <Input

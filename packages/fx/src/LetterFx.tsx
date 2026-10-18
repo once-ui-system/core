@@ -1,10 +1,11 @@
 "use client";
 
-import { type Speed, VisuallyHidden } from "@once-ui-system/core";
+import { type Speed, useReducedMotion, VisuallyHidden } from "@once-ui-system/core";
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { speedFactor } from "./internal/speed.js";
+import { prefersReducedMotionNow } from "./internal/reducedMotion.js";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
@@ -89,8 +90,15 @@ const LetterFx = ({
   const [inProgress, setInProgress] = useState<boolean>(false);
   const [hasAnimated, setHasAnimated] = useState<boolean>(false);
   const originalText = useRef<string>(typeof children === "string" ? children : "");
+  const { prefersReducedMotion } = useReducedMotion();
 
   const eventHandler = useCallback(() => {
+    // Under reduced motion there is no scramble: the text stays as it is.
+    if (prefersReducedMotion || prefersReducedMotionNow()) {
+      if (!inProgress) setText(originalText.current);
+      if (trigger === "instant") setHasAnimated(true);
+      return;
+    }
     createEventHandler(
       originalText.current,
       setText,
@@ -100,16 +108,21 @@ const LetterFx = ({
       charset,
       trigger === "instant" ? setHasAnimated : undefined,
     )();
-  }, [inProgress, speed, charset, trigger, setHasAnimated]);
+  }, [inProgress, speed, charset, trigger, setHasAnimated, prefersReducedMotion]);
 
+  // Only new text resets the display. This used to share an effect with the
+  // instant trigger, so every new `eventHandler` (each render, with an inline
+  // `charset` array) put the original text back over the scramble.
   useEffect(() => {
     if (typeof children === "string") {
       setText(children);
       originalText.current = children;
+    }
+  }, [children]);
 
-      if (trigger === "instant" && !hasAnimated) {
-        eventHandler();
-      }
+  useEffect(() => {
+    if (typeof children === "string" && trigger === "instant" && !hasAnimated) {
+      eventHandler();
     }
   }, [children, trigger, eventHandler, hasAnimated]);
 
@@ -128,7 +141,9 @@ const LetterFx = ({
     >
       {/* While it scrambles, a screen reader gets the real words once
           instead of every random frame. At rest the text is just text. */}
-      {inProgress ? (
+      {typeof children !== "string" ? (
+        children
+      ) : inProgress ? (
         <>
           <VisuallyHidden>{originalText.current}</VisuallyHidden>
           <span aria-hidden="true">{text}</span>

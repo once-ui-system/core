@@ -326,6 +326,9 @@ const RangeDateInput = ({
   maxDate,
   onClick,
   onKeyDown,
+  // Names the dialog. Spread onto both fields, it replaced their own
+  // names and the start and end fields were announced alike.
+  "aria-label": ariaLabel,
   ...rest
 }: RangeDateInputProps) => {
   const [isOpen, setIsOpen] = useControllableState({
@@ -440,7 +443,7 @@ const RangeDateInput = ({
       id={dialogId}
       role="dialog"
       aria-modal="true"
-      aria-label={rest["aria-label"] || `${startLabel} – ${endLabel}`}
+      aria-label={ariaLabel || `${startLabel} – ${endLabel}`}
       onKeyDown={handleDialogKeyDown}
     >
       <DatePicker

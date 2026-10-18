@@ -95,7 +95,7 @@ const Avatar = ({
         {...(customSize
           ? { width: customSize as CSSUnit, height: customSize as CSSUnit }
           : { size: scale })}
-        className={`${styles.avatar} ${className}`}
+        className={`${styles.avatar} ${className || ""}`}
         aria-busy="true"
         aria-label="Loading avatar"
       />

@@ -74,6 +74,7 @@ export const InteractiveTag = ({
   removeButtonProps = {},
   className,
   textVariant,
+  onKeyDown,
   ...rest
 }: InteractiveTagProps) => {
   // Left out, the size is m, restyled by the theme's `density` in CSS.
@@ -105,6 +106,10 @@ export const InteractiveTag = ({
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    // The caller's handler runs first and can cancel the activation; it
+    // used to be spread over this one, and Enter and Space did nothing.
+    onKeyDown?.(e);
+    if (e.defaultPrevented) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
@@ -113,7 +118,7 @@ export const InteractiveTag = ({
 
   const control = toggles
     ? { role: "button", tabIndex: 0, onKeyDown: handleKeyDown, "aria-pressed": selected }
-    : {};
+    : { onKeyDown };
 
   const tagClassName = classNames(
     styles.tag,

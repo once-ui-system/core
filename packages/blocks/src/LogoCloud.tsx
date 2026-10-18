@@ -1,11 +1,12 @@
 "use client";
 
-import { Flex, Grid, Logo } from "@once-ui-system/core";
+import { Flex, Grid, Logo, useReducedMotion } from "@once-ui-system/core";
 import classNames from "clsx";
 import type React from "react";
 import type { ComponentProps } from "react";
 import { useEffect, useState } from "react";
 import styles from "./LogoCloud.module.scss";
+import { prefersReducedMotionNow } from "./internal/reducedMotion.js";
 
 type LogoProps = ComponentProps<typeof Logo>;
 
@@ -31,11 +32,17 @@ const LogoCloud = ({
 }: LogoCloudProps) => {
   const [visibleLogos, setVisibleLogos] = useState<LogoProps[]>(() => logos.slice(0, limit));
   const [key, setKey] = useState(0);
-  const shouldRotate = logos.length > limit;
+  const { prefersReducedMotion } = useReducedMotion();
+  // Under reduced motion the first `limit` logos stay put: no rotation.
+  const shouldRotate = logos.length > limit && !prefersReducedMotion;
 
   useEffect(() => {
-    if (!shouldRotate) {
+    if (logos.length <= limit) {
       setVisibleLogos(logos);
+      return;
+    }
+    if (!shouldRotate || prefersReducedMotionNow()) {
+      setVisibleLogos(logos.slice(0, limit));
       return;
     }
 
@@ -71,12 +78,12 @@ const LogoCloud = ({
           radius="l"
         >
           <Logo
-            className={shouldRotate ? styles.logo : styles.staticLogo}
+            {...logo}
+            className={classNames(shouldRotate ? styles.logo : styles.staticLogo, logo.className)}
             style={{
               ...logo.style,
               animationDelay: `${index * STAGGER_DELAY}ms`,
             }}
-            {...logo}
           />
         </Flex>
       ))}

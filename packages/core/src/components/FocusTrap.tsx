@@ -1,7 +1,14 @@
 "use client";
 
 import type React from "react";
-import { type KeyboardEvent, type ReactNode, type RefObject, useEffect, useRef } from "react";
+import {
+  type KeyboardEvent,
+  type ReactNode,
+  type RefObject,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+} from "react";
 import { getFocusableElements, nextInTrap } from "../internal/focusable.js";
 
 interface FocusTrapProps {
@@ -32,6 +39,8 @@ const FocusTrap = ({
 }: FocusTrapProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const internalRef = useRef<HTMLDivElement>(null);
   const containerRef = externalRef || internalRef;
+  // The ref was accepted and never attached.
+  useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
   const previouslyFocusedElement = useRef<Element | null>(null);
 
   // Store the previously focused element when the trap becomes active

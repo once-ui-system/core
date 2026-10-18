@@ -63,7 +63,8 @@ const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: Timel
   return (
     // A list of steps: a screen reader says how many there are and which
     // one the reader is on. The `brand` step is the current one.
-    <Column role="list" {...flex}>
+    // (The ref was taken but never attached.)
+    <Column ref={ref} role="list" {...flex}>
       {items.map((item, index) => {
         const tone = item.tone;
         const nextTone = index < items.length - 1 ? items[index + 1].tone : tone;

@@ -91,7 +91,9 @@ const FormErrorSummary = ({
         {items.map((item, index) => (
           <Text
             as="li"
-            key={item.id ?? index}
+            // The index too: a field with two errors appears twice.
+            // biome-ignore lint/suspicious/noArrayIndexKey: ids may repeat; the list is static per render
+            key={`${item.id ?? ""}#${index}`}
             textVariant="body-default-s"
             onBackground="danger-medium"
           >

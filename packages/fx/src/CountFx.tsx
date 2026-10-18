@@ -1,8 +1,9 @@
 "use client";
 
-import { Row, Text } from "@once-ui-system/core";
+import { Row, Text, useReducedMotion, VisuallyHidden } from "@once-ui-system/core";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import { prefersReducedMotionNow } from "./internal/reducedMotion.js";
 
 export interface CountFxProps extends Omit<React.ComponentProps<typeof Text>, "ref"> {
   value: number;
@@ -41,6 +42,7 @@ const CountFx = ({
   // Where the run in flight started. `smooth` renders its digit wheels from
   // this origin, so it has to track the current run, not the last finished one.
   const previousValueRef = useRef<number>(value);
+  const { prefersReducedMotion } = useReducedMotion();
 
   // Default format function with separator and decimals support
   const defaultFormat = (val: number) => {
@@ -250,6 +252,16 @@ const CountFx = ({
       setDisplayValue(next);
     };
 
+    // Under reduced motion the number changes without counting through.
+    if (prefersReducedMotion || prefersReducedMotionNow()) {
+      if (animationRef.current) cancelAnimationFrame(animationRef.current);
+      animationRef.current = undefined;
+      previousValueRef.current = endValue;
+      commit(endValue);
+      setAnimationProgress(1);
+      return;
+    }
+
     const animate = (timestamp: number) => {
       if (!startTime) startTime = timestamp;
 
@@ -301,7 +313,7 @@ const CountFx = ({
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [value, duration, easing, effect]);
+  }, [value, duration, easing, effect, prefersReducedMotion]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -319,7 +331,11 @@ const CountFx = ({
           {...text}
           style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
         >
-          {renderWheelDigits(displayValue, value)}
+          {/* The strips print 0-9 per digit; read the number instead. */}
+          <span aria-hidden="true" style={{ display: "contents" }}>
+            {renderWheelDigits(displayValue, value)}
+          </span>
+          <VisuallyHidden>{formatValue(value)}</VisuallyHidden>
           {children}
         </Text>
       </span>
@@ -333,7 +349,11 @@ const CountFx = ({
           {...text}
           style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
         >
-          {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
+          {/* The strips print 0-9 per digit; read the number instead. */}
+          <span aria-hidden="true" style={{ display: "contents" }}>
+            {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
+          </span>
+          <VisuallyHidden>{formatValue(value)}</VisuallyHidden>
           {children}
         </Text>
       </span>

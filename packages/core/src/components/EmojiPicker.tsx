@@ -397,7 +397,9 @@ const EmojiPicker = ({
           onSelect(emoji);
           if (closeAfterClick) setOpen(false);
         }}
-        onClose={closeAfterClick ? () => setOpen(false) : undefined}
+        // No `onClose`: the grid calls it right after `onSelect`, which
+        // already closes, so every pick reported the close to onOpenChange
+        // twice.
       />
     </Dropdown>
   );
