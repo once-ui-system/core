@@ -13,6 +13,21 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`size="xxs"` on every text field: 32px, the height of a small `Button`.** Field
+  heights run a step above the button scale (`xs` 40px, `s` 48px, `m` 56px), so a
+  dashboard toolbar could not be all small controls: the shortest field was as tall
+  as an `m` Button. `Input`, `Textarea`, `Select`, `NumberInput`, `DateInput`,
+  `DateRangeInput`, `PasswordInput`, `ColorInput`, `TagInput` and `Form` take `xxs`
+  (the type is `FieldSize`, `TShirtSizes | "xxs"`). It is rounded at `radius-m` and
+  insets its prefix and suffix 8px, as a small Button does. A 32px field has no room
+  for a floating label, so at `xxs` the `label` shows as the placeholder (unless one
+  is set) and stays the accessible name through a visually hidden `<label>`. A
+  searchable `xxs` Select opens an `xxs` search field, and `NumberInput` puts its
+  steppers side by side. No touch height floor at this size. Existing sizes and the
+  `m` default are unchanged.
+
 ### Fixed
 
 - **Types that refused what the components already do.** `SegmentedControl`'s

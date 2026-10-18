@@ -4,10 +4,12 @@ import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input, InputProps } from "./Input";
 import { Slider } from "./Slider";
+import { Text } from "./Text";
 
 /** The field's own controls. Omitted fields keep the English default. */
 interface ColorInputLabels {
@@ -62,6 +64,12 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
     const [isAlphaDropdownOpen, setIsAlphaDropdownOpen] = useState(false);
     const [hexValue, setHexValue] = useState(() => parseValue(value).hex);
     const [alpha, setAlpha] = useState(() => parseValue(value).alpha);
+    // At xxs Input hides the label and shows it as the placeholder, but a
+    // colour input draws no placeholder, so an empty xxs field would show
+    // nothing but the eyedropper. The text overlay shows it instead. Hidden
+    // from assistive technology: the hidden <label> already names the field.
+    const compact = useFieldSize(props.size) === "xxs";
+    const emptyText = compact && !hexValue ? (props.placeholder ?? label) : undefined;
 
     /**
      * Follow `value` after mount. It used to seed the state once and never
@@ -159,7 +167,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
         }
         suffix={
           <Flex
-            className={`suffix ${hexValue ? "" : "hidden"}`}
+            className={`suffix ${hexValue || emptyText ? "" : "hidden"}`}
             position="absolute"
             cursor="interactive"
             left="48"
@@ -169,15 +177,23 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
             <Flex
               onClick={handleHexClick}
               fillWidth
-              opacity={hexValue ? 100 : 0}
+              opacity={hexValue || emptyText ? 100 : 0}
               transition="micro-medium"
             >
               {" "}
-              {hexValue
-                ? supportAlpha && alpha < 100
-                  ? `${hexValue} ${alpha}%`
-                  : hexValue
-                : ""}{" "}
+              {hexValue ? (
+                supportAlpha && alpha < 100 ? (
+                  `${hexValue} ${alpha}%`
+                ) : (
+                  hexValue
+                )
+              ) : emptyText ? (
+                <Text aria-hidden="true" onBackground="neutral-weak">
+                  {emptyText}
+                </Text>
+              ) : (
+                ""
+              )}{" "}
             </Flex>{" "}
             {hexValue && (
               <Flex
@@ -198,6 +214,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                         tooltip={text.adjustOpacity}
                         tooltipPosition="left"
                         icon="opacity"
+                        size={compact ? "s" : "m"}
                       />
                     }
                     dropdown={
@@ -222,6 +239,7 @@ const ColorInput = forwardRef<HTMLInputElement, ColorInputProps>(
                   tooltip={text.remove}
                   tooltipPosition={supportAlpha ? "bottom" : "left"}
                   icon="close"
+                  size={compact ? "s" : "m"}
                 />{" "}
               </Flex>
             )}{" "}

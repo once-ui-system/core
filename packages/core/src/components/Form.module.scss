@@ -35,6 +35,12 @@
   --form-radius: var(--radius-l);
 }
 
+/* An `xxs` field is rounded at `radius-m`, as a small Button is, so the
+   corners a stacked group keeps match the fields inside it. */
+.form.xxs {
+  --form-radius: var(--radius-m);
+}
+
 .cell {
   position: relative;
   /* A grid item's default `min-width: auto` refuses to shrink below its

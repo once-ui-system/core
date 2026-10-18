@@ -4,9 +4,11 @@ import classNames from "clsx";
 import React, { forwardRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { IconButton } from "./IconButton";
 import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
+import { Row } from "./Row";
 
 interface NumberInputProps
   extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "defaultValue" | "onChange"> {
@@ -75,6 +77,10 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       onChange?.(newValue);
     };
 
+    // A 32px field has no room for two steppers stacked: each would get 15px.
+    // At xxs they sit side by side instead, down then up.
+    const compact = useFieldSize(props.size) === "xxs";
+
     const increment = () => {
       const currentValue = parseFloat(localValue) || 0;
       const newValue = currentValue + step;
@@ -105,53 +111,106 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         // are for the pointer only and stay out of the Tab order: two extra
         // stops per field made a form of numbers three times as long to tab.
         suffix={
-          <>
-            <Flex position="static" minWidth={1.25}></Flex>
-            <Column
-              position="absolute"
-              right="0"
-              top="0"
-              borderLeft="neutral-medium"
-              fillHeight
-              background="neutral-alpha-weak"
-            >
-              <Flex
+          compact ? (
+            <>
+              {/* Room for the steppers (two 28px cells and their borders),
+                  less the suffix's own 8px. */}
+              <Flex position="static" minWidth={3.25}></Flex>
+              <Row
+                className={styles.steppersRow}
+                position="absolute"
+                right="0"
+                top="0"
+                borderLeft="neutral-medium"
                 fillHeight
-                position="static"
-                borderBottom="neutral-medium"
-                transition="micro-medium"
-                vertical="center"
-                paddingX="4"
-                className={classNames(styles.stepper)}
+                background="neutral-alpha-weak"
               >
-                <IconButton
-                  icon="chevronUp"
-                  variant="ghost"
-                  size="s"
-                  onClick={increment}
-                  aria-label="Increment value"
-                  tabIndex={-1}
-                />
-              </Flex>
-              <Flex
+                <Flex
+                  fillHeight
+                  position="static"
+                  borderRight="neutral-medium"
+                  transition="micro-medium"
+                  vertical="center"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronDown"
+                    variant="ghost"
+                    size="xs"
+                    onClick={decrement}
+                    aria-label="Decrement value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+                <Flex
+                  fillHeight
+                  position="static"
+                  vertical="center"
+                  transition="micro-medium"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronUp"
+                    variant="ghost"
+                    size="xs"
+                    onClick={increment}
+                    aria-label="Increment value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+              </Row>
+            </>
+          ) : (
+            <>
+              <Flex position="static" minWidth={1.25}></Flex>
+              <Column
+                position="absolute"
+                right="0"
+                top="0"
+                borderLeft="neutral-medium"
                 fillHeight
-                position="static"
-                vertical="center"
-                transition="micro-medium"
-                paddingX="4"
-                className={classNames(styles.stepper)}
+                background="neutral-alpha-weak"
               >
-                <IconButton
-                  icon="chevronDown"
-                  variant="ghost"
-                  size="s"
-                  onClick={decrement}
-                  aria-label="Decrement value"
-                  tabIndex={-1}
-                />
-              </Flex>
-            </Column>
-          </>
+                <Flex
+                  fillHeight
+                  position="static"
+                  borderBottom="neutral-medium"
+                  transition="micro-medium"
+                  vertical="center"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronUp"
+                    variant="ghost"
+                    size="s"
+                    onClick={increment}
+                    aria-label="Increment value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+                <Flex
+                  fillHeight
+                  position="static"
+                  vertical="center"
+                  transition="micro-medium"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronDown"
+                    variant="ghost"
+                    size="s"
+                    onClick={decrement}
+                    aria-label="Decrement value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+              </Column>
+            </>
+          )
         }
         className={styles.numberInput}
       />
