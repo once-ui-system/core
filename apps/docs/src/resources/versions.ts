@@ -4,6 +4,7 @@
  * pages use.
  */
 import {
+  basePath as currentBasePath,
   currentVersion as current,
   CURRENT_VERSION as currentId,
   SITE_URL,
@@ -54,8 +55,11 @@ export const currentVersion: DocsVersion = current as DocsVersion;
 export const stableVersion: DocsVersion =
   VERSIONS.find((v) => v.status === "stable") ?? currentVersion;
 
-/** This build's `basePath`, for the few URLs Next does not prefix itself. */
-export const basePath = currentVersion.path;
+/**
+ * This build's `basePath`, for the few URLs Next does not prefix itself: the
+ * version's `path` once it is mounted there, "" before.
+ */
+export const basePath: string = currentBasePath;
 
 /** The address of `path` in another version. */
 export function versionHref(version: DocsVersion, path: string): string {

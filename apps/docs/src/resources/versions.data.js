@@ -5,9 +5,11 @@
  * package, so its live examples render with the components that version
  * ships. The stable build is the site itself; every other version is
  * deployed separately and mounted under its `path` (docs.once-ui.com/beta,
- * docs.once-ui.com/v1) by a rewrite to its `origin`. That build runs with
- * `basePath` set to the same path, so its links, assets and API calls stay
- * inside it.
+ * docs.once-ui.com/v1) by a rewrite to its `origin`. A mounted build runs
+ * with `basePath` set to the same path, so its links, assets and API calls
+ * stay inside it. A version that is not mounted yet is served at the root of
+ * its own `origin` (the 3.0 beta at next.docs.once-ui.com), so its build has
+ * no `basePath`: see `basePath` below.
  *
  * This file is plain JavaScript because next.config.mjs reads it to set
  * `basePath` and the rewrites. `versions.ts` adds the types.
@@ -29,7 +31,7 @@ export const VERSIONS = [
     path: "/beta",
     origin: "https://next.docs.once-ui.com",
     branch: "feat/3-0-breaking-cleanup",
-    published: false,
+    published: true,
     mounted: false,
     samePaths: true,
   },
@@ -58,9 +60,15 @@ export const VERSIONS = [
   },
 ];
 
-export const CURRENT_VERSION = process.env.NEXT_PUBLIC_DOCS_VERSION || "2";
+export const CURRENT_VERSION = process.env.NEXT_PUBLIC_DOCS_VERSION || "3";
 
 export const currentVersion = VERSIONS.find((v) => v.id === CURRENT_VERSION) ?? VERSIONS[0];
+
+/**
+ * This build's `basePath`: the version's `path` once the stable site mounts
+ * it there, "" while it is served at the root of its own `origin`.
+ */
+export const basePath = currentVersion.mounted ? currentVersion.path : "";
 
 /**
  * Where a version's build answers. A test or preview run can point one at
