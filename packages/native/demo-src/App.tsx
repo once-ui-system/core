@@ -8,6 +8,7 @@ import {
   Column,
   Feedback,
   Heading,
+  IconButton,
   Input,
   Line,
   Row,
@@ -36,7 +37,8 @@ function Screen() {
               Kazinczy utca 14
             </Text>
           </Column>
-          <Tag scheme="success" label="Open" style={{ alignSelf: "center" }} />
+          <Tag scheme="success" label="Open" prefixIcon="time" style={{ alignSelf: "center" }} />
+          <IconButton icon="heart" variant="tertiary" ariaLabel="Save to favourites" />
         </Row>
 
         <Card padding="20" gap="16" shadow="m">
@@ -70,8 +72,12 @@ function Screen() {
             Three more coffees and the next one is on us.
           </Text>
           <Row gap="8">
-            <Button label="Add stamp" onPress={() => setStamps((s) => Math.min(10, s + 1))} />
-            <Button variant="secondary" label="History" />
+            <Button
+              label="Add stamp"
+              prefixIcon="plus"
+              onPress={() => setStamps((s) => Math.min(10, s + 1))}
+            />
+            <Button variant="secondary" label="History" suffixIcon="chevronRight" />
           </Row>
         </Card>
 

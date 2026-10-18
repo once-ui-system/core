@@ -131,6 +131,10 @@ jobs:
       - name: Foundations tests
         run: pnpm --filter @once-ui-system/foundations test
 
+      # src/icons/data.ts is a copy of core's built-in icons.
+      - name: Icon copy up to date
+        run: pnpm --filter @once-ui-system/native check:icons
+
       - name: Lint
         run: pnpm --filter @once-ui-system/native lint
 
