@@ -118,9 +118,6 @@ const FLAGGED = {
   Accordion: {
     onToggle:
       "renamed to onOpenChange, which receives the next open state (a zero-argument toggle still works)",
-    open:
-      "now controls the accordion whenever it is set; if it only gave the starting state " +
-      "(no onToggle/onOpenChange beside it), use defaultOpen",
   },
   NavGroup: {
     onToggle:
@@ -226,7 +223,32 @@ function rewriteCodeBlock(src, attrs) {
   return { edits, warnings: [] };
 }
 
-const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock };
+/**
+ * C4: Accordion `open` with no handler beside it was the starting state in
+ * 2.x (the accordion still toggled); 3.0's `open` controls it, so that is
+ * `defaultOpen`. With `onToggle`/`onOpenChange` it is controlled already and
+ * stays; a spread may carry the handler, so it is reported.
+ */
+function rewriteAccordion(src, attrs, tagText) {
+  const open = attrs.find((a) => a.name === "open");
+  if (!open) return { edits: [], warnings: [] };
+  if (attrs.some((a) => a.name === "onToggle" || a.name === "onOpenChange")) return { edits: [], warnings: [] };
+  if (attrs.some((a) => a.name === "defaultOpen"))
+    return { edits: [], warnings: ["open beside defaultOpen: open now controls the accordion; keep one"] };
+  if (/\{\s*\.\.\./.test(tagText))
+    return {
+      edits: [],
+      warnings: [
+        "open: now controls the accordion whenever it is set; if the spread carries no onOpenChange, use defaultOpen",
+      ],
+    };
+  return {
+    edits: [{ at: open.at, end: open.at + "open".length, text: "defaultOpen", hit: "open → defaultOpen (no handler: it was the starting state)" }],
+    warnings: [],
+  };
+}
+
+const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion: rewriteAccordion };
 
 /**
  * Exports 3.0 renamed: old → new. A1, G6. A lower-case name is a function:
@@ -253,7 +275,6 @@ const REMOVED_EXPORTS = {
     "internal in 3.0; use the `label` and `description` props of Checkbox, RadioButton or Switch",
   InteractiveDetailsProps: "internal in 3.0; use React.ComponentProps<typeof Checkbox>",
   Toaster: "internal in 3.0; ToastProvider renders it, show toasts with useToast()",
-  Arrow: "internal in 3.0; use Button's `arrowIcon` or Tag's `arrow`",
   ArrowNavigation:
     "internal in 3.0; use the useArrowNavigation hook on your own container (pass containerRef, call handleKeyDown from onKeyDown)",
   ArrowNavigationProps: "internal in 3.0; use ArrowNavigationOptions with the useArrowNavigation hook",
@@ -272,6 +293,13 @@ const REMOVED_EXPORTS = {
 
 /** Exports 3.0 removed whose element is a pure wrapper: its tags become a fragment. F7. */
 const UNWRAPPED_EXPORTS = new Set(["DialogProvider"]);
+
+/** `{ a, b }`, or one specifier per line when the import was written that way. */
+function braceList(texts, clause) {
+  if (!clause.includes("\n")) return `{ ${texts.join(", ")} }`;
+  const inner = clause.match(/\n([ \t]*)\S/)?.[1] ?? "  ";
+  return `{\n${texts.map((t) => `${inner}${t},`).join("\n")}\n}`;
+}
 
 /**
  * Rename and report exports in `import { … } from "@once-ui-system/core…"`.
@@ -318,7 +346,7 @@ export function rewriteExports(src) {
     });
     if (!changed) return whole;
     if (!text.length) return "";
-    return `${keyword} ${typeOnly ? "type " : ""}{ ${text.join(", ")} } from ${q}${source}${q}${end}`;
+    return `${keyword} ${typeOnly ? "type " : ""}${braceList(text, clause)} from ${q}${source}${q}${end}`;
   });
   for (const name of unwrap) {
     const before = out;
@@ -484,11 +512,52 @@ const SPEED_RENAMES = {
 const PARTICLE_SPEED =
   "speed is a multiplier on the designed drift now, 1 being 2.x's default 0.3: divide a 2.x value by 0.3 (0.6 → 2), or remove it if it was 0.3";
 
+/** A 2.x ParticleFx speed as 3.0's multiplier: divided by 2.x's default, to two decimals. */
+const particleSpeed = (n) => Math.round((n / 0.3) * 100) / 100;
+
+/**
+ * D5: ParticleFx `speed={n}` → `{n / 0.3}`, rounded to two decimals, and
+ * dropped when that is 1 (2.x's default 0.3 is 3.0's 1). Only where the
+ * element is imported from core: that import is what tells 2.x code from 3.0
+ * code (the import pass moves it to @once-ui-system/fx), so a second run
+ * leaves the number alone. By name (MDX) or on an expression it is reported.
+ */
+function rewriteParticleSpeed(src, speed, imported, edits, warn) {
+  const raw = speed.value === null ? "" : String(speed.value);
+  const expr = raw.startsWith("{") ? raw.slice(1, -1).trim() : raw;
+  const found = raw.startsWith("{") ? literalNumbers(expr) : { opaque: true };
+  if (found.opaque || !found.spans.length) {
+    warn(`${PARTICLE_SPEED}; write speed={${/^[\w.]+$/.test(expr) ? expr : `(${expr})`} / 0.3}`);
+    return;
+  }
+  if (!imported) {
+    warn(`${PARTICLE_SPEED}: ${found.spans.map((x) => `${x.text} → ${particleSpeed(Number(x.text))}`).join(", ")}`);
+    return;
+  }
+  const valueAt = src.indexOf(raw, speed.at) + 1;
+  if (found.spans.length === 1 && trimmed(expr, 0, expr.length).end - trimmed(expr, 0, expr.length).at === found.spans[0].text.length) {
+    const next = particleSpeed(Number(found.spans[0].text));
+    if (next === 1) {
+      edits.push({ at: withLeadingSpace(src, speed.at), end: speed.end, text: "", hit: "<ParticleFx> speed: 2.x default removed (1 in 3.0)" });
+      return;
+    }
+  }
+  for (const x of found.spans)
+    edits.push({
+      at: valueAt + x.at,
+      end: valueAt + x.end,
+      text: String(particleSpeed(Number(x.text))),
+      hit: "<ParticleFx> speed: ÷ 0.3 (a multiplier of 3.0's default)",
+    });
+}
+
 /** A one-second ceiling: a duration literal under 50 was written as seconds, one over 1000 as ms. */
 const SECONDS_BELOW = 50;
 const MS_FROM = 1000;
 
 const NUMBER = /^-?(\d+\.?\d*|\.\d+)$/;
+/** `"50"`: a number written as a string, which 2.x read as the number on the props whose string now means a CSS length. */
+const NUMERIC_STRING = /^(["'])(\d+(?:\.\d+)?)\1$/;
 const STRING = /^(["'])(?:\\.|(?!\1).)*\1$|^`[^`]*`$/;
 const CONSTANT = /^(undefined|null|true|false)$/;
 
@@ -704,6 +773,16 @@ function rewriteValue(kind, expr, base, label, push, warn) {
   const found = literalNumbers(expr);
   if (found.opaque) {
     if (kind === "px" || kind === "px!") return;
+    const known = constValue(expr.trim());
+    // A same-file const that holds a string is a token or a CSS length: unchanged.
+    if (known && known.string) return;
+    if (known && kind !== "s") {
+      warn(
+        `${label}={${expr.trim()}}: ${expr.trim()} is ${known.number}, a const in this file, so this was ${known.number}${kind} in 2.x and is ${known.number}px now; ` +
+          `write {\`\${${expr.trim()}}${kind}\`}, or make the const "${known.number}${kind}"`,
+      );
+      return;
+    }
     const unit = kind === "s" ? "seconds (now milliseconds)" : `${kind} (now px)`;
     const fix =
       kind === "s" ? "multiply it by 1000" : `write {\`\${${expr.trim()}}${kind}\`} or convert it to px`;
@@ -718,6 +797,49 @@ function rewriteValue(kind, expr, base, label, push, warn) {
   }
 }
 
+/**
+ * The file's consts of a plain literal, `const GAP = 12` or
+ * `const WIDTH = { plain: 14, wide: "20rem" } as const`: name (or
+ * `name.key`) → `{ number }` or `{ string: true }`. A name declared twice
+ * (shadowed in a function) is left out, since which one a use reads is not
+ * known here. Set per file by transformUnits.
+ */
+let fileConsts = new Map();
+function sameFileConsts(src) {
+  const found = new Map();
+  const seen = new Map();
+  const literalOf = (v) => {
+    const t = v.trim().replace(/\s+as\s+const$/, "");
+    if (NUMBER.test(t)) return { number: Number(t) };
+    if (/^(["'])[^"'`]*\1$/.test(t)) return { string: true };
+    return null;
+  };
+  for (const m of src.matchAll(/\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\b/g)) seen.set(m[1], (seen.get(m[1]) ?? 0) + 1);
+  for (const m of src.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*(?::[^=;]+)?=\s*/g)) {
+    const name = m[1];
+    if (seen.get(name) !== 1) continue;
+    const at = m.index + m[0].length;
+    if (src[at] === "{") {
+      const end = closing(src, at);
+      if (end < 0) continue;
+      const tail = src.slice(end + 1, end + 20);
+      if (!/^\s*(as\s+const\s*)?[;\n]/.test(tail)) continue;
+      const { entries } = objectEntries(src.slice(at, end + 1));
+      for (const e of entries) {
+        if (e.shorthand) continue;
+        const lit = literalOf(e.value);
+        if (lit) found.set(`${name}.${e.key}`, lit);
+      }
+      continue;
+    }
+    const lineEnd = src.slice(at).search(/[;\n]/);
+    const lit = literalOf(src.slice(at, lineEnd < 0 ? undefined : at + lineEnd));
+    if (lit) found.set(name, lit);
+  }
+  return found;
+}
+const constValue = (expr) => fileConsts.get(expr.replace(/\?\./g, ".")) ?? null;
+
 /** Walk `paths` (`{ "bulge.duration": "s" }`) into an inline object literal. */
 function rewriteObject(paths, raw, base, label, push, warn) {
   const { entries, opaque } = objectEntries(raw);
@@ -727,6 +849,13 @@ function rewriteObject(paths, raw, base, label, push, warn) {
     if (!heads.has(e.key)) continue;
     const leaf = paths[e.key];
     if (leaf) {
+      const digits = !e.shorthand && (leaf === "%" || leaf === "vh") && NUMERIC_STRING.exec(e.value);
+      if (digits) {
+        // Untyped 2.x code (a template, a .js file) wrote these as numeric strings.
+        if (Number(digits[2]) !== 0)
+          push({ at: base + e.at, end: base + e.at + e.value.length, text: `"${digits[2]}${leaf}"`, quoted: true, kind: leaf, label: `${label}.${e.key}` });
+        continue;
+      }
       if (e.shorthand) warn(`${label}.${e.key}: a number here was ${leaf === "s" ? "seconds" : leaf}; check ${e.key}`);
       else rewriteValue(leaf, e.value, base + e.at, `${label}.${e.key}`, push, warn);
       continue;
@@ -740,8 +869,15 @@ function rewriteObject(paths, raw, base, label, push, warn) {
 }
 
 /**
+ * An import of the app's own code: a relative path, or a path alias such as
+ * tsconfig's `@/…` or `~/…` (and `#…` subpath imports), which no package name
+ * starts with.
+ */
+const isOwnSource = (source) => /^(\.|@\/|~\/|#)/.test(source);
+
+/**
  * D2 on the file's own components: a wrapper defined here or imported from a
- * relative path often hands its size props on to a Once UI Flex (`{...flex}`),
+ * relative path or a path alias (`@/components/…`) often hands its size props on to a Once UI Flex (`{...flex}`),
  * where a 2.x number was rem. Whether it does cannot be seen from the call,
  * so a literal number is reported, not rewritten. Only in files that import
  * Once UI, so MDX (whose elements are Once UI's) and unrelated files stay quiet.
@@ -755,7 +891,7 @@ export function warnLocalSizes(src, { isCore = isCoreSource } = {}) {
   while ((m = element.exec(src))) {
     const name = m[1];
     const bound = bindings.get(name);
-    if (bound ? !bound.source.startsWith(".") || isCore(bound.source) : LAYOUT_COMPONENTS.has(name)) continue;
+    if (bound ? !isOwnSource(bound.source) || isCore(bound.source) : LAYOUT_COMPONENTS.has(name)) continue;
     const from = m.index + name.length + 1;
     const end = openingTagEnd(src, from);
     if (end < 0) continue;
@@ -772,14 +908,16 @@ export function warnLocalSizes(src, { isCore = isCoreSource } = {}) {
 }
 
 /**
- * D2 in config: the chart height in a `dataStyle: { height: 24 }` object
- * (once-ui.config's chart defaults, handed to DataThemeProvider) was rem.
+ * D2 in config: the chart height in a `dataStyle: { height: 24 }` object, or
+ * a `const dataStyle = { height: 24 }` (once-ui.config's chart defaults,
+ * handed to DataThemeProvider), was rem.
  */
 export function transformDataStyle(src) {
   const hits = [];
   const warnings = [];
   const edits = [];
-  const key = /\bdataStyle\s*:\s*\{/g;
+  // `dataStyle: { … }` inside the config, or `const dataStyle = { … }` beside it.
+  const key = /\bdataStyle\s*:\s*\{|\b(?:const|let|var)\s+dataStyle\s*(?::[^=]+)?=\s*\{/g;
   let m;
   while ((m = key.exec(src))) {
     const at = m.index + m[0].length - 1;
@@ -816,6 +954,7 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
   const warnings = [];
   const edits = [];
   const bindings = importBindings(src);
+  fileConsts = sameFileConsts(src);
   const tags = new Set([...LAYOUT_COMPONENTS, ...Object.keys(UNIT_TABLE), ...Object.keys(SPEED_RENAMES)]);
   for (const tag of tags) {
     const own = UNIT_TABLE[tag] ?? {};
@@ -835,6 +974,11 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
           });
         const warn = (w) => warnings.push(`<${tag}> ${w}`);
         for (const a of attrs) {
+          if (tag === "Mask" && a.name === "radius" && a.value !== null && NUMERIC_STRING.test(String(a.value))) {
+            const n = NUMERIC_STRING.exec(String(a.value))[2];
+            if (Number(n) !== 0) push({ at: a.at + a.name.length + 1, end: a.end, text: `"${n}vh"`, kind: "vh", label: "radius" });
+            continue;
+          }
           if (a.value === null || !String(a.value).startsWith("{")) continue;
           const valueAt = src.indexOf(a.value, a.at);
           const inner = a.value.slice(1, -1);
@@ -887,7 +1031,8 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
               warn(`${rename.to}={${expr}}: milliseconds now; a 2.x keyword was "fast" 1000, "medium" 2000, "slow" 3000`);
           }
         }
-        if (tag === "ParticleFx" && speed && !(speed.value && literal(speed.value))) warn(PARTICLE_SPEED);
+        if (tag === "ParticleFx" && speed && !(speed.value && literal(speed.value)))
+          rewriteParticleSpeed(src, speed, Boolean(bindings.get(name)), edits, warn);
         if (tag === "Effect") {
           const type = attrs.find((a) => a.name === "type");
           const t = type?.value ? literal(type.value) : null;
@@ -1177,7 +1322,7 @@ function foldImports(src, isCore, hits) {
     }
     if (keyword === "import" && out.some((t) => t.replace(/^type\s+/, "") === "Tag")) first = false;
     if (!out.length) return "";
-    return `${keyword} ${typeOnly ?? ""}{ ${out.join(", ")} } ${tail}`;
+    return `${keyword} ${typeOnly ?? ""}${braceList(out, clause)} ${tail}`;
   });
 }
 
@@ -1360,7 +1505,80 @@ function applyEdits(src, edits, hits) {
   return out;
 }
 
+/**
+ * `<core.X>` where `core` is `import * as core from "@once-ui-system/core"`
+ * gets every rule `<X>` gets. Each such element is renamed `<core__X>`, a
+ * synthetic `import { X as core__X }` is added, the passes run, and the
+ * imports they leave say where each name went: a name still on core's root
+ * is `<core.Survivor>` again (DropdownWrapper → `<core.Dropdown>`), and one
+ * that moved to a package (RevealFx → fx, StylePanel → blocks) is imported
+ * from it by name, since the namespace no longer holds it.
+ */
 export function transform(src) {
+  const namespaces = [
+    ...src.matchAll(/(?<![\w$.])import\s+\*\s+as\s+([\w$]+)\s+from\s*(["'])@once-ui-system\/core\2/g),
+  ].map((m) => m[1]);
+  const used = new Map();
+  let text = src;
+  for (const ns of namespaces) {
+    const jsx = new RegExp(`(<\\/?)${ns}\\.([A-Z][\\w$]*)(?=[\\s/>])`, "g");
+    text = text.replace(jsx, (_, open, name) => {
+      used.set(`${ns}__${name}`, { ns, name });
+      return `${open}${ns}__${name}`;
+    });
+  }
+  if (!used.size) return transformFile(src);
+  // After the last import, so a pass that adds a name to "the" core import finds the file's own first.
+  const imports = [...text.matchAll(/^import[^;]*?from\s*["'][^"']+["'];?[ \t]*$/gm)];
+  const last = imports.at(-1);
+  const at = last ? last.index + last[0].length : 0;
+  const synthetic = `\nimport { ${[...used].map(([local, { name }]) => `${name} as ${local}`).join(", ")} } from "@once-ui-system/core";`;
+  text = text.slice(0, at) + synthetic + text.slice(at);
+  const result = transformFile(text);
+  let out = result.out;
+  const bound = new Set([...importBindings(out).keys()]);
+  const extra = [];
+  out = out.replace(
+    /(import\s+(?:type\s+)?\{)([^}]*)(\}\s*from\s*(["'])([^"']+)\4;?)/g,
+    (whole, open, clause, close, _q, source) => {
+      const specs = specifiersOf(clause);
+      if (!specs.some((spec) => used.has(spec.text.split(/\s+as\s+/)[1]?.trim()))) return whole;
+      const keep = [];
+      for (const spec of specs) {
+        const local = spec.text.split(/\s+as\s+/)[1]?.trim();
+        const ns = local && used.get(local);
+        if (!ns) {
+          keep.push(spec.text);
+          continue;
+        }
+        const element = (name) =>
+          (out = out.replace(new RegExp(`(?<![\\w$.])${local}(?![\\w$])`, "g"), name));
+        if (source === "@once-ui-system/core") {
+          extra.push(() => element(`${ns.ns}.${spec.name}`));
+        } else if (!bound.has(spec.name) || importBindings(src).get(spec.name)?.source === source) {
+          keep.push(spec.name);
+          extra.push(() => element(spec.name));
+          result.hits.push(`<${ns.ns}.${ns.name}>: ${spec.name} imported from ${source}`);
+        } else {
+          keep.push(`${spec.name} as ${ns.ns}${spec.name}`);
+          extra.push(() => element(`${ns.ns}${spec.name}`));
+        }
+      }
+      const unique = [...new Set(keep)];
+      if (!unique.length) return "\u0000";
+      return `${open} ${unique.join(", ")} ${close}`;
+    },
+  );
+  for (const run of extra) run();
+  // The synthetic import, and any statement left empty, go with their line.
+  out = out.replace(/\n?\u0000/g, "");
+  // Names imported twice now (a moved name the file also imported by name) are merged by the pass's own join.
+  const warnings = result.warnings.map((w) => w.replace(/\b([\w$]+)__([A-Z][\w$]*)\b/g, "$1.$2"));
+  const hits = result.hits.map((h) => h.replace(/\b([\w$]+)__([A-Z][\w$]*)\b/g, "$1.$2"));
+  return { out, hits, warnings };
+}
+
+function transformFile(src) {
   // E/F3 first: Badge and Chip become Tag before the passes below read Tag.
   const tone = transformTone(src);
   const exp = rewriteExports(tone.out);
@@ -1391,7 +1609,7 @@ export function transform(src) {
             edits.push({ at: a.at, end: a.at + a.name.length, text: to, hit: `<${tag}> ${a.name} → ${to}` });
           }
         }
-        const rewrite = REWRITES[tag]?.(out, attrs);
+        const rewrite = REWRITES[tag]?.(out, attrs, out.slice(m.index, end + 1));
         if (rewrite) {
           for (const e of rewrite.edits) edits.push({ ...e, hit: `<${tag}> ${e.hit}` });
           for (const w of rewrite.warnings) warnings.push(`<${tag}> ${w}`);
@@ -1420,7 +1638,7 @@ export function transform(src) {
   warnings.push(...config.warnings);
   // F1, F2, F4, F5: components that merged. Last, so the passes above read the
   // 2.x names they know; see the section below.
-  const merges = transformMerges(out);
+  const merges = transformMerges(out, { remProps: REM_PROPS, breakpointProps: BREAKPOINT_PROPS });
   out = merges.out;
   hits.push(...merges.hits);
   warnings.push(...merges.warnings);

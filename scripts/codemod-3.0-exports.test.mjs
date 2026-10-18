@@ -20,7 +20,6 @@ describe("exports that became internal", () => {
 		"ElementType",
 		"InteractiveDetails",
 		"Toaster",
-		"Arrow",
 		"ArrowNavigation",
 		"useArrowNavigationContext",
 		"withArrowNavigation",
@@ -55,8 +54,19 @@ describe("exports that became internal", () => {
 	});
 
 	it("reports a re-export of an internal name too", () => {
-		const { warnings } = run('export { Arrow } from "@once-ui-system/core";\n');
-		assert.ok(warnings.some((w) => w.startsWith("Arrow:")));
+		const { warnings } = run('export { Toaster } from "@once-ui-system/core";\n');
+		assert.ok(warnings.some((w) => w.startsWith("Toaster:")));
+	});
+
+	it("keeps Arrow: it is public again in 3.0, and its numbers are rem like Flex's", () => {
+		const { out, warnings } = run(
+			'import { Arrow } from "@once-ui-system/core";\n<Arrow trigger="#card" top={1.5} />;\n',
+		);
+		assert.deepEqual(
+			warnings.filter((w) => w.startsWith("Arrow")),
+			[],
+		);
+		assert.match(out, /<Arrow trigger="#card" top="1.5rem" \/>/);
 	});
 
 	it("ignores the same names from another package", () => {

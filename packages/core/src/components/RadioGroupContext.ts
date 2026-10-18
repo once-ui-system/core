@@ -14,6 +14,8 @@ interface RadioGroupContextValue {
   /** The value of the one radio in the page's Tab order. */
   tabbable: string | undefined;
   select: (value: string) => void;
+  /** The group's `error` or `errorMessage`: every radio in it is drawn and announced invalid. */
+  invalid: boolean;
 }
 
 export const RadioGroupContext = createContext<RadioGroupContextValue | null>(null);
@@ -38,7 +40,8 @@ interface RadioGroupItemProps<Args extends unknown[]> {
 export function useRadioGroupItem<Args extends unknown[]>(props: RadioGroupItemProps<Args>) {
   const group = useContext(RadioGroupContext);
   const { value } = props;
-  if (!group || value === undefined) return { ...props, focusProps: undefined };
+  if (!group || value === undefined)
+    return { ...props, invalid: Boolean(group?.invalid), focusProps: undefined };
 
   const disabled = group.disabled || Boolean(props.disabled);
   return {
@@ -46,6 +49,7 @@ export function useRadioGroupItem<Args extends unknown[]>(props: RadioGroupItemP
     checked: group.value === value,
     name: group.name ?? props.name,
     disabled,
+    invalid: group.invalid,
     onCheckedChange: (...args: Args) => {
       group.select(value);
       props.onCheckedChange?.(...args);

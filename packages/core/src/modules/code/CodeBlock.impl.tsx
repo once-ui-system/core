@@ -7,6 +7,7 @@ import { Button } from "../../components/Button.js";
 import { Column } from "../../components/Column.js";
 import { Fade } from "../../components/Fade.js";
 import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
 import { IconButton } from "../../components/IconButton.js";
 import { Row } from "../../components/Row.js";
 import { Scroller } from "../../components/Scroller.js";
@@ -757,8 +758,9 @@ const CodeBlock = ({
                     tooltipPosition="bottom"
                     variant="tertiary"
                     onClick={handleRefresh}
-                    icon="refresh"
-                  />
+                  >
+                    <Icon name="refresh" size="s" onBackground="neutral-weak" />
+                  </IconButton>
                 </Flex>
               )}
               {fullscreenButton && (
@@ -773,9 +775,14 @@ const CodeBlock = ({
                     tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                     tooltipPosition="bottom"
                     variant="tertiary"
-                    icon={isFullscreen ? "minimize" : "maximize"}
                     onClick={toggleFullscreen}
-                  />
+                  >
+                    <Icon
+                      name={isFullscreen ? "minimize" : "maximize"}
+                      size="s"
+                      onBackground="neutral-weak"
+                    />
+                  </IconButton>
                 </Flex>
               )}
               {actions}
@@ -792,8 +799,9 @@ const CodeBlock = ({
                     tooltipPosition="bottom"
                     variant="tertiary"
                     onClick={handleCopy}
-                    icon={copyIcon}
-                  />
+                  >
+                    <Icon name={copyIcon} size="s" onBackground="neutral-weak" />
+                  </IconButton>
                 </Flex>
               )}
             </Row>
@@ -956,10 +964,11 @@ const CodeBlock = ({
                 tooltipPosition="left"
                 aria-label="Copy code"
                 onClick={handleCopy}
-                icon={copyIcon}
                 size="m"
                 variant="tertiary"
-              />
+              >
+                <Icon name={copyIcon} size="s" onBackground="neutral-weak" />
+              </IconButton>
             </Flex>
           )}
         </Row>

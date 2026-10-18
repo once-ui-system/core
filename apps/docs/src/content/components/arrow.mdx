@@ -1,25 +1,92 @@
 ---
 title: "Arrow"
-summary: "Internal since 3.0: the animated arrow Button and Tag draw."
-updatedAt: "2026-10-17"
+summary: "An animated arrow that slides in while the element its trigger names is hovered."
+updatedAt: "2026-10-18"
 docs: "once-ui/components/arrow.mdx"
 github: "components/Arrow.tsx"
 navLabel: "Arrow"
 navIcon: "components"
 ---
 
-`Arrow` is internal in Once UI 3.0. It is the animated arrow that `Button` and `Tag` draw, and it is no longer exported from `@once-ui-system/core`.
-
-Use the prop that draws it instead:
-
-- `Button`: `arrowIcon` adds an arrow that moves when the button is hovered.
-- `Tag`: `arrow` (on by default when the tag has an `href`).
+A decorative arrow that animates in while a trigger element is hovered: the cue on a card or link that the whole surface goes somewhere. `Button` (`arrowIcon`) and `Tag` (`arrow`) draw the same arrow themselves; use `Arrow` on its own for anything else, such as a whole-card link or a hover card.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={<Button arrowIcon href="#">Read more</Button>}
-  codes={[{ code: `<Button arrowIcon href="/blog">Read more</Button>`, language: "tsx", label: "Button arrow" }]}
+  preview={
+    <Column gap="16" horizontal="center">
+      <Row id="arrow-trigger-1" padding="16" fitWidth radius="m" vertical="center" gap="8">
+        Simple usage
+        <Arrow trigger="#arrow-trigger-1" scale={1} />
+      </Row>
+      <Row id="arrow-trigger-2" padding="16" fitWidth radius="m" vertical="center" gap="8" solid="brand-medium" onSolid="brand-strong">
+        Customized usage
+        <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row id="arrow-trigger-1" vertical="center" gap="8">
+  Simple usage
+  <Arrow trigger="#arrow-trigger-1" scale={1} />
+</Row>
+<Row id="arrow-trigger-2" vertical="center" gap="8" solid="brand-medium" onSolid="brand-strong">
+  Customized usage
+  <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
+</Row>`,
+      language: "tsx",
+      label: "Arrow"
+    }
+  ]}
 />
 
-See [Migrating from 2.x](https://github.com/once-ui-system/core/blob/main/MIGRATING.md) for the full list of exports that became internal.
+## On a card
+
+Give the card an `id` and point `trigger` at it. The arrow takes Flex's layout props, so `position`, `top` and `right` pin it to a corner (a number is px, a token is a spacing step).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Card id="arrow-card" href="#" position="relative" padding="24" radius="l" maxWidth="xs" direction="column" gap="4">
+      <Text textVariant="heading-strong-s">Read the case study</Text>
+      <Text onBackground="neutral-weak">How a team of two shipped in a week.</Text>
+      <Arrow trigger="#arrow-card" position="absolute" top="24" right="24" />
+    </Card>
+  }
+  codes={[
+    {
+      code:
+`<Card id="case-study" href="/stories/case-study" position="relative" padding="24" radius="l" direction="column" gap="4">
+  <Text textVariant="heading-strong-s">Read the case study</Text>
+  <Text onBackground="neutral-weak">How a team of two shipped in a week.</Text>
+  <Arrow trigger="#case-study" position="absolute" top="24" right="24" />
+</Card>`,
+      language: "tsx",
+      label: "Card"
+    }
+  ]}
+/>
+
+## API reference
+
+<PropsTable
+  component="Arrow"
+  describe={{
+    trigger: "CSS selector for the element whose hover draws the arrow.",
+    scale: "Arrow size, as a multiplier of its 16px box.",
+    color: "Whether it draws for a background or on a solid surface.",
+  }}
+  content={[
+    ["style"],
+    ["className"]
+  ]}
+/>
+
+## Usage notes
+
+- `trigger` must be a valid CSS selector (`#element-id`, `[data-card="pro"]`), and the element must be on the page when the arrow mounts.
+- The arrow is decorative and hidden from assistive technology; the trigger element carries the link or action.
+- For a button or a tag, use `Button arrowIcon` or `Tag arrow`, which wire the hover for you.

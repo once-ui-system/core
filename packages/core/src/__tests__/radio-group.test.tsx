@@ -84,6 +84,31 @@ describe("RadioGroup: structure", () => {
   });
 });
 
+describe("RadioGroup: error", () => {
+  it("marks every radio invalid with the group's errorMessage or error, as well as the group", () => {
+    const { rerender } = render(
+      <RadioGroup label="Plan" options={plans} errorMessage="Pick a plan" />,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("radiogroup")).toHaveAttribute("aria-invalid", "true");
+    expect(screen.getByRole("radiogroup")).toHaveAccessibleDescription("Pick a plan");
+    for (const r of screen.getAllByRole("radio")) {
+      expect(r).toHaveAttribute("aria-invalid", "true");
+      // The danger look sits on the radio's container, as for a radio's own error.
+      expect(r.closest("[class*='error']")).not.toBeNull();
+    }
+
+    rerender(<RadioGroup label="Plan" options={plans} error />);
+    for (const r of screen.getAllByRole("radio")) expect(r).toHaveAttribute("aria-invalid", "true");
+
+    rerender(<RadioGroup label="Plan" options={plans} />);
+    for (const r of screen.getAllByRole("radio")) {
+      expect(r).not.toHaveAttribute("aria-invalid");
+      expect(r.closest("[class*='error']")).toBeNull();
+    }
+  });
+});
+
 describe("RadioGroup: selection", () => {
   it("starts on defaultValue and selects on click, reporting each change once", async () => {
     const user = userEvent.setup();

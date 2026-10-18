@@ -77,6 +77,7 @@ const RadioButton = ({
     name,
     onCheckedChange,
     disabled,
+    invalid: groupInvalid,
     focusProps,
   } = useRadioGroupItem({
     value,
@@ -94,6 +95,8 @@ const RadioButton = ({
   const { setRef, activate, relay } = useHiddenInput(ref);
   const { aria, native } = splitAria(rest);
   const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
+  // The group's error marks its radios; the group's message stays the group's.
+  const invalid = chrome.invalid || groupInvalid;
   const labelId = useId();
   const descriptionId = useId();
   const hasLabel = Boolean(label);
@@ -122,7 +125,7 @@ const RadioButton = ({
       gap="16"
       zIndex={1}
       className={classNames(styles.container, className, styles[chrome.size], {
-        [styles.error]: chrome.invalid,
+        [styles.error]: invalid,
         [styles.disabled]: disabled,
         [styles.noHover]: !hoverable,
       })}
@@ -158,7 +161,7 @@ const RadioButton = ({
             : (aria["aria-describedby"] as string | undefined),
           chrome.showsError && chrome.errorId,
         )}
-        aria-invalid={chrome.invalid || undefined}
+        aria-invalid={invalid || undefined}
         aria-disabled={disabled}
         horizontal="center"
         vertical="center"

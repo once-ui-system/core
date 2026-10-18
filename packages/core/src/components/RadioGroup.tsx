@@ -146,8 +146,15 @@ const RadioGroup = ({
   );
 
   const context = useMemo(
-    () => ({ value: current, name, disabled, tabbable: fallback ?? current, select }),
-    [current, name, disabled, fallback, select],
+    () => ({
+      value: current,
+      name,
+      disabled,
+      tabbable: fallback ?? current,
+      select,
+      invalid: chrome.invalid,
+    }),
+    [current, name, disabled, fallback, select, chrome.invalid],
   );
 
   const setRefs = useCallback(

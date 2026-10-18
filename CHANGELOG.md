@@ -41,6 +41,14 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   own with core as a peer: the sixteen effects, and Banner, Book, LogoCloud,
   ScrollToTop, StylePanel and StyleOverlay. See Changed.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
+- **`Arrow` stays public**, with a docs page and an AI spec entry: the arrow that
+  slides in while its `trigger` element is hovered, for a whole-card link or a hover
+  card. It takes Flex's layout props (a number is px), `scale` and
+  `color="onBackground" | "onSolid"`, and is hidden from assistive technology.
+- **`TextProps` and `HeadingProps` carry `children` and the element's HTML attributes**,
+  so a wrapper typed with them compiles (`(props: TextProps) => <Text {...props} />`,
+  the Next MDX-components pattern). They keep 3.0's leaf set (no padding) and Text's
+  `as`, typed by the element. `HeadingProps` is exported.
 
 ### Removed
 
@@ -54,7 +62,7 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
 - **Exports that were parts of other components** (F7): `ServerFlex`, `ClientFlex`,
   `ServerGrid`, `ClientGrid`, `Cursor`, `ElementType`, `InteractiveDetails`, `Toaster`,
-  `Arrow`, `ArrowNavigation` (use the `useArrowNavigation` hook), with
+  `ArrowNavigation` (use the `useArrowNavigation` hook), with
   `useArrowNavigationContext` and `withArrowNavigation`. The modules stay inside the
   package; the codemod reports each import with what to use instead.
 - **`DialogProvider`.** Stacked dialogs never read its state; a `stack` Dialog makes
@@ -268,10 +276,33 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   animated layers), and the shared scale moves GlitchFx `"slow"` to a 5s cycle (was
   3.5s) and `"fast"` to 1.25s (was 1.5s), and LetterFx `"fast"` to 15ms steps (was 10ms).
 
+- **`@once-ui-system/fx` and `@once-ui-system/blocks` peer on core `^3.0.0-0`**
+  (was `workspace:*`, which npm cannot read from a packed tarball), so a 3.0
+  prerelease of core satisfies them and a 2.x core does not.
+- **Codemod**, from a trial migration of two 2.x apps: Spinner's layout props move to
+  the `<Row center>` its root was; an Icon's `solid` joins its box, and a box outside
+  a layout parent is `<Row as="span" inline fit>`; Card, Mask and Fade count as layout
+  parents; padding on Text and Heading in running text, and on ListItem, CountFx,
+  ShineFx and TypeFx, becomes the token's inline style; leaf `zIndex`/`opacity`
+  literals and InlineCode `textVariant` become classes, and Kbd `fit` goes; ParticleFx
+  `speed` literals are divided by 0.3; Accordion `open` without a handler becomes
+  `defaultOpen`; `<core.X>` through a namespace gets the same renames, merges and
+  package moves as `<X>`; ScrollContainer's `{...TILE}` const spread becomes `tile`;
+  `const dataStyle` and Mask `radius="50"` are converted; Text `size` becomes the
+  class 2.x wrote. It now reports numbers on components imported through `@/` or `~/`,
+  same-file number consts used as sizes, a core namespace used as a component
+  registry, and merged names left as component-map keys; no longer reports comments
+  and JSX text as uses of an old name; and keeps multi-line imports and a closing tag
+  on its own line as written.
+
 ### Fixed
 
 - **Several announcement tags on one page** no longer share `id="badge"`; each arrow
   follows hover on its own tag (2.x Badge).
+- **RadioGroup `error` and `errorMessage` reach its radios**: each is `aria-invalid`
+  and draws the danger look, as a RadioButton's own `error` does.
+- **CodeBlock's header icons are grey again** (`neutral-weak`), as in 2.x; the tone
+  split had dropped IconButton `color`, which drew them white.
 
 ## [Unreleased]
 

@@ -91,21 +91,33 @@ describe("G5: Text and Heading size", () => {
 		assert.equal(body(out), '<Text textVariant="body-default-s">a</Text>\n');
 	});
 
-	it("reports size otherwise, with the preset to write, and keeps a lone weight", () => {
+	it("writes Text size as the class 2.x wrote, keeps a lone weight, and reports Heading size", () => {
 		const { out, warnings } = run(
-			'<Heading size="l">a</Heading>\n<Text size="s" weight="strong">b</Text>\n<Text weight="strong">c</Text>\n',
+			'<Heading size="l">a</Heading>\n<Text size="s" weight="strong">b</Text>\n<Text weight="strong">c</Text>\n<Text size="xs" className="price">d</Text>\n',
 		);
 		assert.equal(
 			body(out),
-			'<Heading size="l">a</Heading>\n<Text size="s" weight="strong">b</Text>\n<Text weight="strong">c</Text>\n',
+			'<Heading size="l">a</Heading>\n<Text className="font-s" weight="strong">b</Text>\n<Text weight="strong">c</Text>\n<Text className="price font-xs">d</Text>\n',
 		);
-		assert.ok(warnings.some((w) => /textVariant="heading-strong-l"/.test(w)));
-		assert.ok(
-			warnings.some((w) =>
-				/textVariant="body-strong-s" in place of size and weight/.test(w),
-			),
-		);
-		assert.equal(warnings.length, 2);
+		// Heading always writes font-m in 3.0: drop it, or a preset under a family.
+		assert.equal(warnings.length, 1);
+		assert.match(warnings[0], /<Heading> size: .*drop it .*textVariant="heading-strong-l"/);
+		assert.doesNotMatch(warnings.join("\n"), /body-strong-s/);
+	});
+
+	it("reports Text size beside a className it cannot extend, with the class, not a preset", () => {
+		const { out, warnings } = run('<Text size="s" className={cls}>a</Text>\n');
+		assert.equal(body(out), '<Text size="s" className={cls}>a</Text>\n');
+		assert.match(warnings[0], /className="font-s"/);
+		assert.match(warnings[0], /would change size/);
+	});
+
+	it("drops textWeight on an Icon, and reports its textSize without a textVariant", () => {
+		const { out, warnings } = run('<Icon name="at" textWeight="default" size="xs" />\n<Icon name="x" textSize="s" />\n');
+		assert.equal(body(out), '<Icon name="at" size="xs" />\n<Icon name="x" textSize="s" />\n');
+		assert.equal(warnings.length, 1);
+		assert.match(warnings[0], /<Icon> textSize: .*Drop it/);
+		assert.doesNotMatch(warnings[0], /textVariant/);
 	});
 
 	it("runs after the textVariant rename, so a 2.x variant counts", () => {

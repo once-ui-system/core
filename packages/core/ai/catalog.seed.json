@@ -19,6 +19,11 @@
     "tags": ["effect", "motion", "overlay"],
     "pairsWith": ["HoverCard", "Column"]
   },
+  "Arrow": {
+    "purpose": "Small animated arrow that slides in while the element its trigger selector names is hovered — the arrow on a card or link",
+    "tags": ["decoration", "action"],
+    "pairsWith": ["Card", "SmartLink"]
+  },
   "Avatar": {
     "purpose": "Round profile picture with initials or icon fallback and an optional status dot",
     "tags": ["media", "profile"],

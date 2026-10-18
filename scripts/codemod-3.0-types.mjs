@@ -7,8 +7,10 @@
  *       `textVariant` when all three are literals; dropped beside a
  *       `textVariant` (it overrode the size and weight); reported otherwise.
  *   G5  `size` on Text and Heading: dropped beside `textVariant` (2.x ignored
- *       it there, with a console warning); reported otherwise, with the
- *       `textVariant` to write. `weight` stays, and is dropped only beside a
+ *       it there, with a console warning). Otherwise, on Text, the
+ *       `className="font-…"` 2.x wrote; on Heading, reported (3.0 Heading
+ *       always writes `font-m`).
+ *   G5  `textWeight` on Icon: dropped (a weight on an svg's box never showed). `weight` stays, and is dropped only beside a
  *       `textVariant`, where 2.x ignored it and 3.0 would apply it.
  *   G1  `as` on a component that no longer takes it (everything but the
  *       layout primitives, Text, Heading, VisuallyHidden, List and Form):
@@ -147,9 +149,23 @@ function rewriteShowIn(src, attrs, push, warn) {
 }
 
 /** G5: `textSize` / `textWeight` / `textType` → `textVariant`. */
-function rewriteTextPieces(src, attrs, push, warn) {
+function rewriteTextPieces(src, attrs, push, warn, tag) {
 	const pieces = TEXT_PIECES.map((name) => attrs.find((a) => a.name === name));
 	if (!pieces.some(Boolean)) return;
+	// An Icon draws an svg: a font weight on its box never showed. Its size is
+	// a font size, which a text size would compete with.
+	if (tag === "Icon") {
+		for (const a of pieces) {
+			if (!a) continue;
+			if (a.name === "textWeight")
+				push({ ...remove(src, a), hit: "textWeight removed (it has no effect on an icon)" });
+			else
+				warn(
+					`${a.name}: removed in 3.0; on an Icon it set the font size its own size uses. Drop it, or set the Icon's size`,
+				);
+		}
+		return;
+	}
 	if (attrs.some((a) => a.name === "textVariant")) {
 		for (const a of pieces) {
 			if (!a) continue;
@@ -193,9 +209,13 @@ function rewriteTextPieces(src, attrs, push, warn) {
 }
 
 /**
- * G5: Text / Heading `size` → `textVariant`. `weight` stays (alone it sets
- * the weight, beside a preset it now swaps the preset's), but 2.x ignored it
- * beside `textVariant`, so there it is removed to render as before.
+ * G5: Text / Heading `size`. 2.x wrote it as a bare `font-${size}` class,
+ * which sets a size only under a parent that sets the family. On Text that
+ * class is exactly `className="font-…"` in 3.0; Heading always writes
+ * `font-m` in 3.0, so its `size` is reported (drop it, or write a preset).
+ * `weight` stays (alone it sets the weight, beside a preset it now swaps the
+ * preset's), but 2.x ignored it beside `textVariant`, so there it is removed
+ * to render as before.
  */
 function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
 	const size = attrs.find((a) => a.name === "size");
@@ -210,6 +230,7 @@ function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
 		return;
 	}
 	if (!size) return;
+	const s = literal(size.value);
 	const family = attrs.find((a) => a.name === "family");
 	const f =
 		(family && literal(family.value)) ||
@@ -217,10 +238,34 @@ function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
 	const w =
 		(weight && literal(weight.value)) ||
 		(tag === "Heading" ? "strong" : "default");
-	const s = (size && literal(size.value)) || "m";
+	if (tag === "Text" && s && /^(xs|s|m|l|xl)$/.test(s)) {
+		const cls = attrs.find((a) => a.name === "className");
+		const lit = cls?.value ? /^\{?\s*(["'])([^"']*)\1\s*\}?$/.exec(String(cls.value).trim()) : null;
+		if (!cls) {
+			push({ at: size.at, end: size.end, text: `className="font-${s}"`, hit: `size="${s}" → className="font-${s}"` });
+			return;
+		}
+		if (lit) {
+			push({ ...remove(src, size), hit: `size="${s}" → className="font-${s}"` });
+			push({
+				at: cls.at,
+				end: cls.end,
+				text: `className="${`${lit[2]} font-${s}`.trim()}"`,
+				hit: `size="${s}" → className="font-${s}"`,
+			});
+			return;
+		}
+	}
+	if (tag === "Heading") {
+		warn(
+			`<Heading> size: removed in 3.0. 2.x's font-${s ?? "…"} class set a size only under a parent that set the font family; ` +
+				`outside one, drop it (it did nothing). Under one, write textVariant="${f}-${w}-${s ?? "m"}", which also sets the family`,
+		);
+		return;
+	}
 	warn(
-		`<${tag}> size: removed in 3.0; write textVariant="${f}-${w}-${s}"${weight ? " in place of size and weight" : ""} ` +
-			"(a preset sets all three; 2.x's size alone only took effect under a parent that set the family)",
+		`<${tag}> size: removed in 3.0; write className="font-${s ?? "…"}", the class 2.x wrote (it set a size only under a parent that set the family). ` +
+			`textVariant="${f}-${w}-${s ?? "m"}" would also set the family, so the text would change size where no parent set one`,
 	);
 }
 
@@ -320,7 +365,7 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 					warnings.push(w.startsWith("<") ? w : `<${tag}> ${w}`);
 				if (showIn.has(tag)) rewriteShowIn(src, attrs, push, warn);
 				if (tag !== "Text" && tag !== "Heading" && showIn.has(tag))
-					rewriteTextPieces(src, attrs, push, warn);
+					rewriteTextPieces(src, attrs, push, warn, tag);
 				if (tag === "Text" || tag === "Heading")
 					rewriteTextSizeWeight(src, attrs, tag, push, warn);
 				if (LAYOUT.has(tag)) rewriteListStyle(src, attrs, tag, push);

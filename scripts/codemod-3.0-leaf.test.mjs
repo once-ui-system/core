@@ -91,8 +91,17 @@ describe("G2: dropped props move to a wrapper where that renders the same", () =
 	});
 
 	it("keeps an element inline when it does not start its line", () => {
-		const { out } = run('<Row><Text hide>a</Text></Row>\n');
-		assert.ok(out.endsWith("\n<Row><Column hide><Text>a</Text></Column></Row>\n"), out);
+		const { out } = run('<Row><Button hide>a</Button></Row>\n');
+		assert.ok(out.endsWith("\n<Row><Row hide><Button>a</Button></Row></Row>\n"), out);
+	});
+
+	// 2.x Text and Heading took `hide` out and ignored it, so a wrapper that
+	// honours it would hide text that showed.
+	it("drops hide on Text and Heading, where 2.x ignored it, and says so", () => {
+		const { out, warnings } = run('<Row>\n\t<Text hide s={{ hide: true }}>a</Text>\n\t<Heading hide>b</Heading>\n</Row>\n');
+		assert.equal(body(out), "<Row>\n\t<Text>a</Text>\n\t<Heading>b</Heading>\n</Row>\n");
+		assert.equal(warnings.length, 2);
+		assert.match(warnings[0], /no effect on Text in 2\.x/);
 	});
 
 	it("renames Button radius=\"none\" to corners", () => {
@@ -128,11 +137,11 @@ describe("G2: what it cannot do exactly is reported", () => {
 	});
 
 	it("a parent that is not a layout component in this file", () => {
-		assert.match(reported("<div>\n\t<Text hide>a</Text>\n</div>\n"), /<Text> hide: .*Column.*parent/);
+		assert.match(reported("<div>\n\t<Button hide>a</Button>\n</div>\n"), /<Button> hide: .*Row.*parent/);
 	});
 
 	it("a spread", () => {
-		assert.match(reported("<Row>\n\t<Text {...p} hide>a</Text>\n</Row>\n"), /spread/);
+		assert.match(reported("<Row>\n\t<Button {...p} hide>a</Button>\n</Row>\n"), /spread/);
 	});
 
 	it("an offset or flex beside a moved prop on a non-text leaf", () => {
@@ -149,5 +158,81 @@ describe("G2: wired into the full codemod", () => {
 		const { out, hits } = transform(`${IMPORT}<Row>\n\t<Button hide>Go</Button>\n</Row>\n`);
 		assert.ok(out.includes("<Row hide>"), out);
 		assert.ok(hits.some((h) => h.includes("→ <Row> around it")));
+	});
+});
+
+describe("G2: the trial-migration cases", () => {
+	const IMP =
+		'import { Avatar, Card, Column, Icon, InlineCode, Kbd, ListItem, Row, Spinner, StatusIndicator, Text } from "@once-ui-system/core";\n';
+	const out = (src) => {
+		const r = transform(IMP + src);
+		assert.equal(transform(r.out).out, r.out, "a second run changes nothing");
+		return { body: r.out.slice(IMP.length), warnings: r.warnings };
+	};
+
+	it("moves solid into the Icon box, and counts a Card as a layout parent", () => {
+		assert.equal(
+			out('<Row><Icon name="x" solid="brand-medium" padding="4" /></Row>\n').body,
+			'<Row><Row fit solid="brand-medium" padding="4"><Icon name="x" /></Row></Row>\n',
+		);
+		assert.equal(
+			out('<Card><Icon name="x" padding="4" /></Card>\n').body,
+			'<Card><Row fit padding="4"><Icon name="x" /></Row></Card>\n',
+		);
+	});
+
+	it("boxes an Icon in running text with an inline span, as 2.x's root was", () => {
+		assert.equal(
+			out('<p><Icon name="x" padding="4" /></p>\n').body,
+			'<p><Row as="span" inline fit padding="4"><Icon name="x" /></Row></p>\n',
+		);
+	});
+
+	it("wraps a Spinner in the centred Row its 2.x root was, wherever it is", () => {
+		assert.equal(
+			out('<Row><Spinner size="s" padding="8" fillWidth marginTop="4" /></Row>\n').body,
+			'<Row><Row center padding="8" fillWidth marginTop="4"><Spinner size="s" /></Row></Row>\n',
+		);
+		assert.equal(out('<p><Spinner padding="8" /></p>\n').body, '<p><Row center padding="8"><Spinner /></Row></p>\n');
+		const w = out('<Row><Spinner padding="8" {...rest} /></Row>\n').warnings.join("\n");
+		assert.doesNotMatch(w, /would not render the same/);
+	});
+
+	it("gives Text in running text its padding as an inline style of the token", () => {
+		assert.equal(
+			out('<p>Hi <Text paddingX="4" paddingLeft="8">x</Text></p>\n').body,
+			'<p>Hi <Text style={{ paddingRight: "var(--static-space-4)", paddingLeft: "var(--static-space-8)" }}>x</Text></p>\n',
+		);
+		assert.equal(
+			out('<p><Text padding="4" style={{ color: "red" }}>x</Text></p>\n').body,
+			'<p><Text style={{ padding: "var(--static-space-4)", color: "red" }}>x</Text></p>\n',
+		);
+		assert.equal(
+			out('<p><Text padding="4" className="a">x</Text></p>\n').body,
+			'<p><Text style={{ padding: "var(--static-space-4)" }} className="a">x</Text></p>\n',
+		);
+	});
+
+	it("covers ListItem and the text effects", () => {
+		assert.equal(
+			out('<Column><ListItem padding="8">x</ListItem></Column>\n').body,
+			'<Column><ListItem style={{ padding: "var(--static-space-8)" }}>x</ListItem></Column>\n',
+		);
+	});
+
+	it("turns zIndex, opacity and textVariant literals into classes, and drops Kbd fit", () => {
+		assert.equal(
+			out('<Row><Avatar zIndex={2} opacity={50} src="a" /></Row>\n').body,
+			'<Row><Avatar className="z-index-2 opacity-50" src="a" /></Row>\n',
+		);
+		assert.equal(
+			out('<Row><StatusIndicator opacity={50} className="dot" /></Row>\n').body,
+			'<Row><StatusIndicator className="dot opacity-50" /></Row>\n',
+		);
+		assert.equal(
+			out('<Row><InlineCode textVariant="code-default-s">x</InlineCode></Row>\n').body,
+			'<Row><InlineCode className="font-code font-default font-s">x</InlineCode></Row>\n',
+		);
+		assert.equal(out("<Row><Kbd fit>K</Kbd></Row>\n").body, "<Row><Kbd>K</Kbd></Row>\n");
 	});
 });

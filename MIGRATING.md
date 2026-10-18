@@ -30,6 +30,13 @@ write `"200rem"`. Lines marked `!` are for you to fix by hand. Code you have
 already moved to 3.0 can still take the import step on its own
 (`scripts/codemod-3.0-imports.mjs`, § 12), which changes nothing else.
 
+It keeps the layout of what it edits (an import written one name per line
+stays that way, a closing tag on its own line stays there), but it writes
+the attributes it adds on one line: run your formatter afterwards (`biome
+check --write`, `prettier --write`). Code that generates Once UI source (a
+template string of JSX, a Figma or CMS mapper that emits props) is not
+migrated: update what it emits by hand.
+
 ### 2. React 19
 
 `react` and `react-dom` 19 are the floor. Upgrade them before anything else.
@@ -96,7 +103,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
 | Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
 | Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
-| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | reports every `open` |
+| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | renames `open` to `defaultOpen` where no `onToggle`/`onOpenChange` is set; reports it beside a spread or a `defaultOpen` |
 | RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
 | Kbar, KbarContent `inputSize` | `size` | renames |
 
@@ -128,14 +135,14 @@ where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
 | --- | --- | --- |
 | `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
 | Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
-| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object, and on DataThemeProvider |
+| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object or a `const dataStyle = { … }`, and on DataThemeProvider |
 | Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
 | Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
 | CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
 | RevealFx `speed` (`"fast"`/`"medium"`/`"slow"` or ms) | `duration` in ms (1000/2000/3000) | rewrites |
 | ShineFx, CountFx `speed` (ms) | `duration` | renames |
 | TypeFx `speed` (ms per character) | `charDuration` | renames |
-| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | reports |
+| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | divides a literal by 0.3 to two decimals (`{0.6}` → `{2}`) and removes it when that is 1; reports an expression (`speed={config.speed / 0.3}`) and a literal in MDX |
 | AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
 
 Left as they were, because they were already px: Dialog, DateInput and
@@ -149,12 +156,21 @@ box with `maxWidth`).
 What the codemod reports, for you to finish: a variable, arithmetic or a call
 on one of these props (`maxWidth={layout.content.width}`: write
 ``{`${layout.content.width}rem`}``, or change the value at its source to a rem
-string or px), a breakpoint object passed by name, and spreads; and a number on one of these props on a component of your own
-(defined in the file or imported from a relative path), which was rem if the
+string or px), a breakpoint object passed by name, and spreads; a const of
+this file that holds a number (`const COLUMN_WIDTH = 20` used as
+`maxWidth={COLUMN_WIDTH}`), named with its value; and a number on one of these
+props on a component of your own (defined in the file, or imported from a
+relative path or a path alias such as `@/` or `~/`), which was rem if the
 component hands it on to a Once UI one (`<Book minWidth={14} {...flex}>`):
-write `"14rem"` there. Values in a
+write `"14rem"` there. Mask `radius="50"` and the numeric strings in
+Background's objects (`x: "50"`) read as the numbers they were. Values in a
 config object other than `dataStyle` (`layout.content.width: 44`) are not Once UI props, so the
 codemod cannot see them: change them to `"44rem"` there.
+
+A rem string in a config is a `CSSUnit` only when TypeScript sees the literal:
+in a `.ts` config write `height: "24rem" as const` (or `as const` on the
+object); a `.js` config infers `string`, so cast where you pass it
+(``height={dataStyle.height as `${number}rem`}``) or move the config to `.ts`.
 
 Behaviour to check: keyword speeds that did not divide evenly moved to the
 shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
@@ -164,7 +180,8 @@ shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
 ### 7. Exports that became internal
 
 The root barrel drops the parts other components are built from, so what is
-left is what an app composes. The modules still exist inside the package; only
+left is what an app composes. (`Arrow`, the hover arrow of a card or link,
+stays public: a number on its offsets is px, as everywhere.) The modules still exist inside the package; only
 the exports are gone. The codemod reports every import of one, with what to use
 instead, and changes the code only where the replacement is exact
 (`DialogProvider`, `generateMetadata`).
@@ -174,10 +191,9 @@ instead, and changes the code only where the replacement is exact
 | `ServerFlex`, `ClientFlex` | `Flex`, which already picks its server or client half | reports |
 | `ServerGrid`, `ClientGrid` | `Grid`, likewise | reports |
 | `Cursor` | Flex's or Grid's `cursor` prop, given an element | reports |
-| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action | reports |
+| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action, a plain `<button type="button">` for a bare one. A whole card that links is `Card href` (or, for a shape of your own, a small component that renders an `<a>` when there is an `href` and a `Row` when there is not, as `Book`'s `BookLink` does in `@once-ui-system/blocks`) | reports |
 | `InteractiveDetails`, `InteractiveDetailsProps` | `label` and `description` on Checkbox, RadioButton and Switch | reports |
 | `Toaster` | nothing: `ToastProvider` renders it; show toasts with `useToast()` | reports |
-| `Arrow` | Button `arrowIcon`, Tag `arrow` | reports |
 | `ArrowNavigation`, `ArrowNavigationProps`, `useArrowNavigationContext`, `withArrowNavigation` | the `useArrowNavigation` hook on your own container: pass `containerRef`, call `handleKeyDown` from `onKeyDown` | reports |
 | `DialogProvider` | nothing: a `stack` Dialog makes the one beneath it inert by itself (the provider's state was never read) | drops the import, `<DialogProvider>` becomes `<>` |
 | `generateMetadata` | `createMetadata` (or `Meta.generate`, unchanged). The old name is Next's route-segment convention, so a page that re-exported it had it called by Next | renames the import and every call; keeps a re-export's public name and reports it |
@@ -224,8 +240,9 @@ custom property, and `brand-weak` is `--brand-on-background-weak`. 2.x wrapped
 every value in `var(--…)`, so `#fff` painted nothing; nothing to migrate.
 
 Looks that change: a toned non-primary Button colours its label as well as its
-icons; `quaternary` lost its hover fill as `ghost`; CodeBlock's toolbar buttons
-draw their icons in `neutral-on-background-strong` rather than `weak`.
+icons; `quaternary` lost its hover fill as `ghost`. A 2.x `color` on an
+IconButton is an `<Icon onBackground="…">` passed as its children in 3.0, which
+is how CodeBlock's header keeps its grey icons.
 
 ### 9. Badge and Chip are Tag
 
@@ -264,13 +281,20 @@ the import (keeping an alias, adding the survivor once), renames the prop types
 (`ModalProps` → `DialogProps`, `DropdownWrapperProps` → `DropdownProps`,
 `HoverProps` / `CursorCardProps` → `HoverCardProps`, `DataTableColumn` →
 `TableColumn`, `RangeSliderProps` → `SliderProps`, and so on), and reports any
-other use of an old name, such as passing it as a value.
+other use of an old name, such as passing it as a value (a mention in a
+comment, a string or JSX text is not one). It does the same for
+`<core.Modal>` through `import * as core`, importing a survivor that left the
+root from its package (`<core.RevealFx>` becomes `<RevealFx>` from
+`@once-ui-system/fx`). An old name left as a shorthand key of a component map
+(`const components = { ScrollContainer, Text }`, an MDX components object) is
+reported with the key to write: `ScrollContainer: Scroller` keeps an MDX
+`<ScrollContainer>` tag working, with Scroller's props.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
 | `Modal` | `Dialog variant="sheet"`; `backdrop` is a slot of both variants | renames; every prop carries over |
 | `Swiper` | `Carousel mode="snap"` | renames; `indicator` (a boolean) becomes Carousel's: `true` is the default, `false` stays, an expression becomes `x ? "line" : false` |
-| `ScrollContainer` | `Scroller` in track mode: `draggable`, `infinite`, `markers`, `proximity`, `active` / `onActiveChange`, `step`, `clip`; per-tile props in `tile` | `items` become the children (an inline array is split); tile props move into `tile={{…}}`; adds `draggable` when no track option is set; reports a spread, whose props went to every tile in 2.x |
+| `ScrollContainer` | `Scroller` in track mode: `draggable`, `infinite`, `markers`, `proximity`, `active` / `onActiveChange`, `step`, `clip`; per-tile props in `tile` | `items` become the children (an inline array is split); tile props move into `tile={{…}}`; adds `draggable` when no track option is set. A spread of a `const` of the file used only there (`{...TILE}`) becomes `tile={TILE}` (or `tile={{ ...TILE, … }}` beside other tile props), its track options (`proximity`) move onto the Scroller, and its rem numbers become rem strings; any other spread is reported, since its props went to every tile in 2.x |
 | `AutoScroll` | `Scroller auto={{ speed, hover, reverse, gap }}` (`auto` alone for the defaults) | collects `speed`, `hover`, `reverse` and `scrollGap` into `auto` |
 | `InfoTip` | `Tooltip content={…}`: a Tooltip with `content` and no children renders the info icon; with children it describes them | moves the children into `content` and closes the tag |
 | `Hover` | `HoverCard placement="cover"`, with `delay`, `hideDelay` | moves `overlay` into the children; reports when the element had children of its own, which 2.x ignored |
@@ -349,8 +373,20 @@ markers, use `List`, which now sets them explicitly.
 
 **New values.** `vertical="baseline"` aligns children on their first line of
 text (a class, also in breakpoint objects). Margins take `"auto"`:
-`marginLeft="auto"`, `marginX="auto"`. `DateRange`'s `startDate` and `endDate`
-are optional, so a `{ startDate?: Date }` of your own is a `DateRange`.
+`marginLeft="auto"`, `marginX="auto"`.
+
+**`DateRange`'s `startDate` and `endDate` are optional**, both ways: a `{
+startDate?: Date }` of your own is a `DateRange`, and a range handler typed
+with required fields (`(r: { startDate: Date; endDate: Date }) => …`) no
+longer fits `onValueChange`. Type it `(r: DateRange)` and check each field
+before you use it (a range mid-pick has a start and no end).
+
+**`TextProps` and `HeadingProps` are what a wrapper types its props with.**
+They carry `children`, `className`, `style` and the element's HTML attributes
+beside the typography and leaf props, so the MDX-components pattern compiles:
+`(props: TextProps) => <Text {...props} />`, `({ children, ...rest }:
+HeadingProps<"h2">) => …`. They have no padding (§ 13): a wrapper that set
+padding puts a `Column` around the text.
 
 **Charts take your row type.** `BarChart`, `LineChart`, `LineBarChart` and
 `PieChart` are generic over `data`: `data={rows}` with `rows: RevenueRow[]` needs
@@ -369,8 +405,17 @@ changes until you set one; the default is the 2.x look.
 | --- | --- | --- |
 | `dark` / `light` (Flex, Row, Column, Grid, Logo and the components built on them) | `showIn="dark"` / `showIn="light"` | rewrites; `dark={cond}` becomes `showIn={cond ? "dark" : undefined}`; reports both at once |
 | `textSize`, `textWeight`, `textType` on layout components | `textVariant="type-weight-size"` | folds three literals; removes size and weight beside a `textVariant`, which overrode them; reports the rest |
-| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it; reports the rest with the preset to write |
+| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it. A Text `size` literal becomes the class 2.x wrote (`size="s"` → `className="font-s"`, merged into a literal className); a Heading `size` is reported: drop it where no parent sets the family (it did nothing), or write the preset under one (3.0's Heading always sets its own size) |
 | Text / Heading `weight` beside `textVariant` | kept; it now swaps the preset's weight (2.x ignored it there) | removes it beside `textVariant`, so the page renders as before |
+
+Check a Text that had `size` beside `weight` before you turn it into a
+preset. 2.x wrote `font-s` and the weight class, and `font-s` set no size
+without a family above it, so the text kept the size it inherited. The
+codemod writes that same class, so the page renders as before. A preset sets
+the family, so the size it names applies: `<Text size="s" weight="strong">`
+written as `textVariant="body-strong-s"` really renders at 14px, where 2.x
+showed the inherited 16px. Pick the preset by the size the page showed, or
+keep the smaller one if "small" was what was meant.
 
 `weight` and `family` stay on Text and Heading as overrides of the preset, and
 the layout shorthands stay (`fill`, `fit`, `center`, `paddingX`/`Y`,
@@ -420,11 +465,17 @@ already did. If your bundler fails on a missing `compressorjs`, install it.
 takes `@once-ui-system/core` (and React 19) as a peer and depends on nothing
 core does not already bring (`clsx`), and core no longer carries their code, so
 an app that renders no effect ships none of it. Add the ones your app imports
-from:
+from, at core's version (3.0 ships on the `next` tag first):
 
 ```sh
-npm install @once-ui-system/fx @once-ui-system/blocks
+npm install @once-ui-system/core@next @once-ui-system/fx@next @once-ui-system/blocks@next
+# or
+pnpm add @once-ui-system/core@next @once-ui-system/fx@next @once-ui-system/blocks@next
 ```
+
+fx and blocks take `@once-ui-system/core` `^3.0.0-0` as a peer, which a 3.0
+prerelease satisfies and a 2.x core does not: install core 3.0 with them, or
+npm stops with a peer conflict (`ERESOLVE`).
 
 ```diff
 - import { Column, RevealFx, StylePanel } from "@once-ui-system/core";
@@ -436,7 +487,13 @@ npm install @once-ui-system/fx @once-ui-system/blocks
 The import pass moves these imports like the others and, at the end of its
 run, names the packages the code now imports from so you know what to add.
 Nothing else changes: the components, their props and their CSS are the same,
-and core keeps no alias or re-export of them. In Next.js, list the packages in
+and core keeps no alias or re-export of them. A namespace import used as the
+list of every component (an MDX scope, a playground:
+`Object.entries(core)`, `{ ...core }`) no longer holds the effects or the
+blocks; spread all three, `{ ...core, ...fx, ...blocks }` with `import * as fx
+from "@once-ui-system/fx"` and `import * as blocks from
+"@once-ui-system/blocks"`. The codemod reports such a namespace, since
+nothing fails until a tag is missing at run time. In Next.js, list the packages in
 `transpilePackages` beside `@once-ui-system/core` if you list core there.
 CodeBlock's `styleButton` rendered a `StyleOverlay`, which core can no longer
 import: CodeBlock takes an `actions` slot instead, so pass
@@ -529,13 +586,25 @@ applies only when you set no horizontal margin.
 **Codemod.** It wraps the leaf where the wrapper renders exactly the same: a
 `hide` or a `{{ hide }}` breakpoint on any leaf, padding on `Text` and
 `Heading` (the wrapper takes the leaf's margins and `flex`, and keeps its
-`fillWidth`), and an `Icon`'s box (`padding`, `background`, `border*`,
-`radius*`) on a `<Row fit>`. It adds `Row` or `Column` to your Once UI import,
-and renames `Button`/`IconButton` `radius="none"` to `corners="none"`. It
-reports the rest, with the props to move: a parent that is not a `Flex`,
-`Row`, `Column` or `Grid` in the same file (the wrapper could change its
-layout), a spread, offsets, styling on a `Button` (a wrapper's padding is not
-the button's), and sizes. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
+`fillWidth`), an `Icon`'s box (`padding`, `background`, `solid`, `border*`,
+`radius*`) on a `<Row fit>` (`<Row as="span" inline fit>` outside a layout
+parent, which is what 2.x's Icon root was), and a `Spinner`'s layout props on
+the `<Row center>` its 2.x root was, wherever it sits. A layout parent is a
+`Flex`, `Row`, `Column`, `Grid`, `Card`, `Mask` or `Fade` in the same file.
+Padding on a `Text` or `Heading` in running text (or beside a `className`,
+`style` or handler that a wrapper would separate from it), and on `ListItem`,
+`CountFx`, `ShineFx` and `TypeFx`, becomes the inline style 2.x's class was:
+`paddingX="4"` → `style={{ paddingLeft: "var(--static-space-4)", paddingRight:
+"var(--static-space-4)" }}`. A literal `zIndex` or `opacity` on a leaf becomes
+its class (`className="z-index-1"`, `"opacity-60"`), an `InlineCode`
+`textVariant` the font classes, and a `Kbd`'s `fit` (already its look) goes.
+It adds `Row` or `Column` to your Once UI import, and renames
+`Button`/`IconButton` `radius="none"` to `corners="none"`. It reports the rest,
+with the props to move: a parent it cannot see in the same file (the wrapper
+could change its layout), a spread, offsets, styling on a `Button` (a
+wrapper's padding is not the button's), sizes on a `ProgressBar`, and a look
+of its own on a `Kbd` or `Avatar` (`border`, `paddingX`), which goes in
+`style`. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
 step on its own. The AI validator reports the same props (`layout.leafProps`)
 and names the wrapper.
 

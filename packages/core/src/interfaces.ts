@@ -99,7 +99,20 @@ export interface FlexProps {
   xs?: FlexBreakpointProps;
 }
 
-export interface TextProps<T extends ElementType = "span"> {
+/**
+ * What Text and Heading take, and what a component that hands its props on
+ * to one types them with (`(props: TextProps) => <Text {...props} />`, the
+ * MDX components pattern): the typography props below, `children`,
+ * `className`, `style`, the colour and alignment props, `LeafProps`,
+ * `opacity` and the element's HTML attributes. Text and Heading themselves
+ * type the attributes by `as` (`<Text as="a" href>`); padding, gap and the
+ * rest of the layout props stay on a Column around the text.
+ */
+export interface TextProps<T extends ElementType = "span">
+  extends CommonProps,
+    LeafProps,
+    Pick<DisplayProps, "opacity">,
+    Omit<HTMLAttributes<HTMLElement>, keyof CommonProps | keyof LeafProps | "color"> {
   as?: T;
   /**
    * The typography preset, `${family}-${weight}-${size}` (`"body-default-m"`):

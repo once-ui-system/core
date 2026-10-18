@@ -112,6 +112,30 @@ describe("F2: ScrollContainer → Scroller track mode", () => {
     );
   });
 
+  it("moves a same-file const spread into tile, its track options onto Scroller, its numbers to rem", () => {
+    const src =
+      'const TILE = {\n  radius: "none",\n  proximity: 0.3,\n  minWidth: 20,\n  l: { maxWidth: 30, width: "100%" },\n} as const;\n' +
+      "<ScrollContainer\n  infinite\n  {...TILE}\n  maxWidth={w}\n  items={list.map((x) => <A key={x} />)}\n/>\n";
+    const r = run("ScrollContainer", src);
+    assert.equal(
+      r.body,
+      'const TILE = {\n  radius: "none",\n  minWidth: "20rem",\n  l: { maxWidth: "30rem", width: "100%" },\n} as const;\n' +
+        "<Scroller\n  infinite\n  proximity={0.3}\n  tile={{ ...TILE, maxWidth: w }}\n>\n  {list.map((x) => <A key={x} />)}\n</Scroller>\n",
+    );
+    assert.ok(!r.warnings.some((w) => /\{\.\.\.TILE\}/.test(w)));
+  });
+
+  it("keeps a lone const as the tile, and reports a const used elsewhere too", () => {
+    const one = run("ScrollContainer", 'const T = { radius: "none" };\n<ScrollContainer {...T} items={a} />\n');
+    assert.equal(one.body, 'const T = { radius: "none" };\n<Scroller tile={T}>{a}</Scroller>\n');
+    const two = run(
+      "ScrollContainer",
+      'const T = { radius: "none" };\n<ScrollContainer {...T} items={a} />\n<Row {...T} />\n',
+    );
+    assert.match(two.body, /<Scroller \{\.\.\.T\} draggable>/);
+    assert.ok(two.warnings.some((w) => /\{\.\.\.T\}: ScrollContainer gave its rest props/.test(w)));
+  });
+
   it("reports a spread, whose props went to every tile", () => {
     const r = run("ScrollContainer", "<ScrollContainer {...rest} items={a} />\n");
     assert.ok(r.warnings.some((w) => /tile=\{\{/.test(w)));
@@ -211,7 +235,7 @@ describe("F5: Dropdown, ContextMenu, EmojiPickerDropdown, UserMenu", () => {
     );
     assert.equal(
       r.body,
-      '<Dropdown openOn="contextmenu" trigger={<Card>Right-click</Card>} placement="bottom-start">{menu}</Dropdown>\n',
+      '<Dropdown openOn="contextmenu" trigger={<Card>Right-click</Card>} placement="bottom-start">\n  {menu}\n</Dropdown>\n',
     );
   });
 

@@ -118,6 +118,21 @@ function skipGroup(src, i) {
 }
 
 /**
+ * `src` with comments and string contents blanked (lengths kept), and with
+ * JSX text too when `jsxText` is set: what is left are the names code uses.
+ */
+function codeOnly(src, { jsxText = false } = {}) {
+  const blank = (m) => m.replace(/[^\n]/g, " ");
+  let out = src.replace(/\/\*[\s\S]*?\*\//g, blank).replace(/(^|[^:\w"'`\\])(\/\/.*)$/gm, (m, a, c) => a + blank(c));
+  if (jsxText)
+    out = out.replace(
+      /((?<!=)>|\})((?:[^<>{}();=&]|&#?\w+;)*[A-Za-z](?:[^<>{}();=&]|&#?\w+;)*)(?=<\/?[A-Za-z])/g,
+      (m, open, text) => `${open}${blank(text)}`,
+    );
+  return out.replace(/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/g, (m) => m[0] + blank(m.slice(1, -1)) + m[0]);
+}
+
+/**
  * The opening tag at `lt`: its name, attributes (with raw values and
  * offsets), spreads, where it ends and whether it closes itself.
  */
@@ -343,6 +358,49 @@ const TRACK_OPTIONS = new Set([
   "onActiveChange",
 ]);
 
+/** The 3.0 units pass's rem props, handed in by transformMerges' caller. */
+let UNITS = { rem: new Set(), breakpoints: new Set() };
+
+/**
+ * `const NAME = { … }` declared once in `src`, a plain object literal, and
+ * named nowhere else but in one spread: `{ at, entries }` (offsets of the
+ * entries are from `at`), else null.
+ */
+function tileConst(src, name) {
+  const decl = new RegExp(`(^|[\\s;])const\\s+${name}\\s*(?::[^=]+)?=\\s*(?=\\{)`, "g");
+  const found = [...src.matchAll(decl)];
+  if (found.length !== 1) return null;
+  if (/\bexport\s+$/.test(src.slice(Math.max(0, found[0].index - 20), found[0].index + found[0][1].length)))
+    return null;
+  const at = found[0].index + found[0][0].length;
+  const close = skipGroup(src, at);
+  const lit = objectLiteral(src.slice(at, close));
+  if (!lit || lit.opaque || lit.entries.some((e) => !e.key)) return null;
+  const uses = codeOnly(src, { jsxText: true }).match(new RegExp(`(?<![\\w$])(?<![^.]\\.)${name}(?![\\w$])`, "g"))?.length ?? 0;
+  if (uses !== 2) return null;
+  return { at, entries: lit.entries };
+}
+
+/**
+ * Edits that turn the 2.x rem numbers of an object entry into rem strings,
+ * as the units pass does on attributes: `minWidth: 20` → `minWidth: "20rem"`,
+ * and inside a breakpoint object.
+ */
+function remEdits(entry, base, key) {
+  const v = entry.value.trim();
+  const valueAt = base + entry.valueAt;
+  if (UNITS.rem.has(key) && /^-?\d+(\.\d+)?$/.test(v)) {
+    const lead = entry.value.length - entry.value.trimStart().length;
+    return [{ at: valueAt + lead, end: valueAt + lead + v.length, text: `"${v}rem"` }];
+  }
+  if (UNITS.breakpoints.has(key)) {
+    const lit = objectLiteral(entry.value);
+    if (!lit) return [];
+    return lit.entries.filter((e) => e.key).flatMap((e) => remEdits(e, valueAt, e.key).filter((x) => UNITS.rem.has(e.key)));
+  }
+  return [];
+}
+
 /** EmojiPicker's own props in trigger mode; the rest of EmojiPickerDropdown's went to its DropdownWrapper. */
 const EMOJI_OWN = new Set([
   "trigger",
@@ -502,23 +560,55 @@ const REWRITE = {
         a.name && a.name !== "items" && !TRACK_OPTIONS.has(a.name) && !ELEMENT_ONLY.has(a.name),
     );
     const spreads = tag.attrs.filter((a) => a.spread);
-    const warnings = spreads.length
-      ? [
-          `${spreads.map((s) => s.value).join(" ")}: ScrollContainer gave its rest props to every tile, Scroller gives them to itself; move tile props into tile={{…}}`,
-        ]
-      : [];
-    const result = { drop: [...tile], append: [], warnings };
+    const result = { drop: [...tile], append: [], warnings: [], outside: [] };
+    // A same-file `const TILE = { … }` spread only here: its tile props go
+    // into `tile`, its track options onto the Scroller.
+    let tileBase = null;
+    const options = [];
+    const unknown = [];
+    for (const s of spreads) {
+      const name = /^\{\s*\.\.\.\s*([A-Za-z_$][\w$]*)\s*\}$/.exec(String(s.value))?.[1];
+      const found = name && !tileBase ? tileConst(src, name) : null;
+      if (!found) {
+        unknown.push(s);
+        continue;
+      }
+      tileBase = name;
+      result.drop.push(s);
+      for (const e of found.entries) {
+        if (TRACK_OPTIONS.has(e.key)) {
+          const v = e.value.trim();
+          options.push(/^"[^"]*"$|^'[^']*'$/.test(v) ? `${e.key}=${v}` : `${e.key}={${v}}`);
+          let from = found.at + e.at;
+          while (from > 0 && /[ \t]/.test(src[from - 1])) from--;
+          if (src[from - 1] === "\n") from--;
+          let to = found.at + e.end;
+          if (src[to] === ",") to++;
+          result.outside.push({ at: from, end: to, text: "" });
+        } else {
+          for (const edit of remEdits(e, found.at, e.key)) result.outside.push(edit);
+        }
+      }
+    }
+    if (unknown.length)
+      result.warnings.push(
+        `${unknown.map((s) => s.value).join(" ")}: ScrollContainer gave its rest props to every tile, Scroller gives them to itself; move tile props into tile={{…}}`,
+      );
     if (items) result.drop.push(items);
-    if (tile.length) result.append.push(`tile={${objectOf(tile.map((a) => [a.name, a]))}}`);
+    result.append.push(...options);
+    if (tileBase && tile.length)
+      result.append.push(`tile={{ ...${tileBase}, ${objectOf(tile.map((a) => [a.name, a])).slice(2)}}`);
+    else if (tileBase) result.append.push(`tile={${tileBase}}`);
+    else if (tile.length) result.append.push(`tile={${objectOf(tile.map((a) => [a.name, a]))}}`);
     // Track mode needs a track prop; `draggable` was ScrollContainer's default anyway.
-    const hasOption = tag.attrs.some((a) => TRACK_OPTIONS.has(a.name));
-    if (!hasOption && !tile.length) result.append.push("draggable");
+    const hasOption = tag.attrs.some((a) => TRACK_OPTIONS.has(a.name)) || options.length > 0;
+    if (!hasOption && !tile.length && !tileBase) result.append.push("draggable");
     if (items) {
       const expr = expressionOf(items);
       const entries = arrayEntries(expr);
       // Each entry one child, a fragment included: it was one item, one tile.
       result.children = entries
-        ? entries.map((e) => (isOneElement(e) ? e : `{${e}}`)).join("")
+        ? entries.map((e) => (isOneElement(e) ? e : `{${e}}`))
         : `{${expr}}`;
     } else {
       result.warnings.push("items: not set; Scroller takes the items as its children");
@@ -769,19 +859,58 @@ function rewriteElement(src, lt, tag, local, to) {
     edits.push({ at: withLeadingSpace(src, a.at), end: a.end, text: "" });
   for (const [a, newName] of plan.attrRename ?? [])
     edits.push({ at: a.at, end: a.at + a.name.length, text: newName });
-  const append = (plan.append ?? []).map((a) => ` ${a}`).join("");
   const tagClose = open.selfClosing ? open.slash : open.gt;
   // Before any whitespace that precedes `/>` or `>`, so the attributes stay together.
   let insertAt = tagClose;
   while (insertAt > open.nameEnd && /\s/.test(src[insertAt - 1])) insertAt--;
+  // A tag written over several lines keeps its `>` and its closing tag on
+  // lines of their own, and an attribute it gains goes on a line of its own.
+  const ws = src.slice(insertAt, tagClose);
+  const broken = ws.includes("\n");
+  const sep = broken && src.slice(open.nameEnd, insertAt).includes("\n") ? `${ws}  ` : " ";
+  const append = (plan.append ?? []).map((a) => `${sep}${a}`).join("");
   if (plan.selfClose && !open.selfClosing) {
     // Children became an attribute: the element closes itself.
-    edits.push({ at: insertAt, end: end, text: `${append} />` });
+    edits.push({ at: insertAt, end: end, text: `${append}${broken ? ws : " "}/>` });
   } else if (plan.children !== undefined) {
+    // A child that was an attribute's value moves up a level: its lines
+    // shift so that its last line lines up with its first.
+    const childIndent = `${ws.slice(ws.lastIndexOf("\n") + 1)}  `;
+    const reindent = (text) => {
+      const lines = text.split("\n");
+      if (!broken || lines.length < 2 || /^\s/.test(text) || !lines[lines.length - 1].trim()) return text;
+      const last = lines[lines.length - 1].match(/^[ \t]*/)[0].length;
+      const shift = childIndent.length - last;
+      return lines
+        .map((l, i) => {
+          if (i === 0 || !l.trim()) return l;
+          const have = l.match(/^[ \t]*/)[0].length;
+          return " ".repeat(Math.max(0, have + shift)) + l.slice(have);
+        })
+        .join("\n");
+    };
+    const kids = Array.isArray(plan.children)
+      ? plan.children.map(reindent).join(broken ? `${ws}  ` : "")
+      : reindent(plan.children);
     if (open.selfClosing) {
-      edits.push({ at: insertAt, end: end, text: `${append}>${plan.children}</${name}>` });
+      edits.push({
+        at: insertAt,
+        end: end,
+        text: !broken
+          ? `${append}>${kids}</${name}>`
+          : kids
+            ? `${append}${ws}>${ws}  ${kids}${ws}</${name}>`
+            : `${append}${ws}></${name}>`,
+      });
     } else {
-      edits.push({ at: insertAt, end: closeAt, text: `${append}>${plan.children}` });
+      const lead = children.match(/^\s*/)[0];
+      const trail = children.match(/\s*$/)[0];
+      const keep = lead.includes("\n") && !/^\s/.test(kids);
+      edits.push({
+        at: insertAt,
+        end: closeAt,
+        text: `${append}${ws}>${keep ? lead : ""}${kids}${keep ? trail : ""}`,
+      });
       edits.push({ at: closeAt, end, text: `</${name}>` });
     }
   } else {
@@ -791,7 +920,16 @@ function rewriteElement(src, lt, tag, local, to) {
   edits.sort((x, y) => y.at - x.at || y.end - x.end);
   let out = src.slice(lt, end);
   for (const e of edits) out = out.slice(0, e.at - lt) + e.text + out.slice(e.end - lt);
-  return { text: out, end, warnings: plan.warnings ?? [] };
+  return { text: out, end, warnings: plan.warnings ?? [], outside: plan.outside ?? [] };
+}
+
+/** Apply an element's rewrite and its edits elsewhere in the file (a const it spread). */
+function applyRewrite(src, lt, done) {
+  const edits = [{ at: lt, end: done.end, text: done.text }, ...done.outside];
+  edits.sort((x, y) => y.at - x.at);
+  let out = src;
+  for (const e of edits) out = out.slice(0, e.at) + e.text + out.slice(e.end);
+  return out;
 }
 
 /** Rename the merged names in `import`/`export { … } from "@once-ui-system/core…"`. */
@@ -836,7 +974,8 @@ function rewriteMergedImports(src, warnings, hits, typeRenames = new Map()) {
  * The merges pass. Runs on a file's source after the other 3.0 passes and
  * returns `{ out, hits, warnings }` like they do.
  */
-export function transformMerges(src) {
+export function transformMerges(src, { remProps, breakpointProps } = {}) {
+  UNITS = { rem: remProps ?? new Set(), breakpoints: breakpointProps ?? new Set() };
   const hits = [];
   const warnings = [];
   const bindings = importBindings(src);
@@ -880,7 +1019,7 @@ export function transformMerges(src) {
       }
       const done = rewriteElement(out, m.index, "Table", local, "Table");
       if (!done) continue;
-      out = out.slice(0, m.index) + done.text + out.slice(done.end);
+      out = applyRewrite(out, m.index, done);
       hits.push("<Table data> → <Table columns rows>");
       for (const w of done.warnings) warnings.push(`<Table> ${w}`);
     }
@@ -899,7 +1038,7 @@ export function transformMerges(src) {
           from = m.index + 1;
           continue;
         }
-        out = out.slice(0, m.index) + done.text + out.slice(done.end);
+        out = applyRewrite(out, m.index, done);
         hits.push(`<${tag}> → <${to}>`);
         for (const w of done.warnings) warnings.push(`<${tag}> ${w}`);
         from = m.index + 1;
@@ -930,12 +1069,24 @@ export function transformMerges(src) {
   }
 
   // An old name still used some other way: as a value, in `typeof`, in a type.
-  const code = out.replace(/(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, "");
+  const code = codeOnly(out, { jsxText: true }).replace(
+    /(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g,
+    "",
+  );
   const after = importBindings(out);
   for (const name of [...Object.keys(MERGED_EXPORTS), ...Object.keys(MERGED_TYPES)]) {
     const imported = bindings.get(name);
     if (!imported || !isCoreSource(imported.source)) continue;
     if (after.has(name)) continue;
+    const survivor = MERGED_EXPORTS[name] ?? MERGED_TYPES[name];
+    // `{ ScrollContainer, Dialog }`: a component map (MDX components, a registry).
+    if (MERGED_EXPORTS[name] && new RegExp(`[{,]\\s*${name}\\s*(?=[,}])`).test(code)) {
+      warnings.push(
+        `${name}: a shorthand key of an object (a component map?) after the merge into ${survivor}; ` +
+          `write ${name}: ${survivor} to keep the old tag name working with the 3.0 props, or rename the key to ${survivor}`,
+      );
+      continue;
+    }
     if (new RegExp(`(?<![\\w$.])${name}(?![\\w$])`).test(code))
       warnings.push(
         `${name}: still referenced after the merge into ${MERGED_EXPORTS[name] ?? MERGED_TYPES[name]}; rename it by hand`,

@@ -1,6 +1,6 @@
 // Core components, modules and charts as explicit named imports: Turbopack's
 // frozen module proxy rejects a namespace import here.
-import { Accordion, AccordionGroup, Animation, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, Checkbox, ColorInput, Column, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Flex, FocusTrap, Form, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, User, VisuallyHidden } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Animation, Arrow, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, Checkbox, ColorInput, Column, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Flex, FocusTrap, Form, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, User, VisuallyHidden } from "@once-ui-system/core";
 import { Banner, Book, LogoCloud, ScrollToTop, StyleOverlay, StylePanel } from "@once-ui-system/blocks";
 import { BlobFx, CelebrationFx, CountdownFx, CountFx, Effect, FlipFx, GlitchFx, HoloFx, LetterFx, MatrixFx, ParticleFx, RevealFx, ShineFx, TiltFx, TypeFx, WeatherFx } from "@once-ui-system/fx";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
@@ -244,6 +244,7 @@ const mdxComponents = createMdxComponents({
 
   // ─── Core effects ───
   Animation,
+  Arrow,
   Fade,
   RevealFx,
   FlipFx,

@@ -348,3 +348,35 @@ describe("the full codemod runs the import pass", () => {
 		assert.match(warnings.join("\n"), /<CodeBlock> styleButton: removed: pass actions=/);
 	});
 });
+
+describe("a namespace import", () => {
+	it("reports the namespace used as a component registry", () => {
+		const src =
+			'import * as core from "@once-ui-system/core";\nconst scope = { ...core };\nfor (const [k] of Object.entries(core)) {}\n';
+		const { warnings } = run(src);
+		assert.equal(warnings.length, 1);
+		assert.match(warnings[0], /\{ \.\.\.core, \.\.\.fx, \.\.\.blocks \}/);
+	});
+
+	it("stays quiet when the file already takes the effects or the blocks, or only reads members", () => {
+		assert.deepEqual(
+			run('import * as core from "@once-ui-system/core";\nimport * as fx from "@once-ui-system/fx";\nconst s = { ...core, ...fx };\n').warnings,
+			[],
+		);
+		assert.deepEqual(
+			run('import * as core from "@once-ui-system/core";\nconst a = { ...core.props };\n<core.Button />;\n').warnings,
+			[],
+		);
+	});
+
+	it("gives <core.X> the renames and merges of <X>", () => {
+		const src =
+			'import * as core from "@once-ui-system/core";\n<core.RevealFx speed="fast">a</core.RevealFx>\n<core.Button size="s" />\n';
+		const { out } = transform(src);
+		assert.match(out, /import \{ RevealFx \} from "@once-ui-system\/fx";/);
+		assert.match(out, /<RevealFx duration=\{1000\}>a<\/RevealFx>/);
+		assert.match(out, /<core\.Button size="s" \/>/);
+		assert.doesNotMatch(out, /core__/);
+		assert.equal(transform(out).out, out);
+	});
+});

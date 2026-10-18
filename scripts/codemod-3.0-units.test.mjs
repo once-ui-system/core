@@ -195,7 +195,7 @@ describe("D5: speed is a multiplier; lengths of time are duration", () => {
 
   it("reports a RevealFx speed it cannot read, and ParticleFx's new scale", () => {
     assert.match(warned(`${core("RevealFx")}<RevealFx speed={pace} />`), /"fast" 1000, "medium" 2000, "slow" 3000/);
-    assert.match(warned(`${core("ParticleFx")}<ParticleFx speed={0.6} />`), /divide a 2\.x value by 0\.3/);
+    assert.match(warned(`${core("ParticleFx")}<ParticleFx speed={pace} />`), /speed=\{pace \/ 0\.3\}/);
     assert.match(warned(`${core("Effect")}<Effect type="particle" speed={1} />`), /divide a 2\.x value by 0\.3/);
     assert.equal(warned(`${core("Effect")}<Effect type="matrix" speed={2} />`), "");
   });
@@ -260,5 +260,58 @@ describe("the file's own components", () => {
     assert.equal(warned(`${core("Row")}import Image from "next/image";\n<Image width={200} />`), "");
     assert.equal(warned(`${core("Row")}const Book = () => null;\n<Book minWidth="14rem" />`), "");
     assert.equal(warned(`import { Book } from "./Book";\n<Book minWidth={14} />`), "");
+  });
+});
+
+describe("ParticleFx speed literals", () => {
+  it("divides by 0.3 to two decimals, and drops the 2.x default", () => {
+    const src = `${core("ParticleFx")}<ParticleFx speed={0.6} />\n<ParticleFx speed={0.3} />\n<ParticleFx speed={1} />\n`;
+    const { out } = transform(src);
+    assert.equal(
+      out,
+      'import { ParticleFx } from "@once-ui-system/fx";\n<ParticleFx speed={2} />\n<ParticleFx />\n<ParticleFx speed={3.33} />\n',
+    );
+    // Now imported from fx: a second run leaves the 3.0 values alone.
+    assert.equal(transform(out).out, out);
+  });
+
+  it("reports the value where the element is not imported (MDX)", () => {
+    const { out, warnings } = transform("<ParticleFx speed={0.6} />\n");
+    assert.equal(out, "<ParticleFx speed={0.6} />\n");
+    assert.match(warnings.join("\n"), /0\.6 → 2/);
+  });
+});
+
+describe("numbers the units pass used to miss", () => {
+  it("reports a size number on a component imported through a path alias", () => {
+    const w = warned(
+      core("Row") +
+        'import { A } from "@/components/a";\nimport { B } from "~/ui";\n<A maxHeight={28} />\n<B width={3} />\n',
+    );
+    assert.match(w, /<A> maxHeight=\{28\}: .*28rem in 2\.x and is 28px/);
+    assert.match(w, /<B> width=\{3\}/);
+  });
+
+  it("converts a const dataStyle as well as a dataStyle property", () => {
+    assert.equal(
+      transform('export const dataStyle = {\n  height: 24,\n  variant: "flat",\n};\n').out,
+      'export const dataStyle = {\n  height: "24rem",\n  variant: "flat",\n};\n',
+    );
+  });
+
+  it("names a same-file number const used as a size, and stays quiet about a string const", () => {
+    const w = warned(
+      `${core("Column")}const MAX = 20;\nconst W = "20rem";\n<Column maxWidth={MAX} />\n<Column maxWidth={W} />\n`,
+    );
+    assert.match(w, /MAX is 20, a const in this file/);
+    assert.doesNotMatch(w, /\bW\b/);
+  });
+
+  it("reads a numeric string radius on Mask, and numeric strings in Background's objects", () => {
+    assert.equal(body(`${core("Mask")}<Mask radius="50" />`), '<Mask radius="50vh" />');
+    assert.equal(
+      body(`${core("Background")}<Background mask={{ radius: "50" }} gradient={{ x: "50", y: 20 }} />`),
+      '<Background mask={{ radius: "50vh" }} gradient={{ x: "50%", y: "20%" }} />',
+    );
   });
 });

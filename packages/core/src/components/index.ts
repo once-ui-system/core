@@ -1,6 +1,7 @@
 export * from "./Accordion.js";
 export * from "./AccordionGroup.js";
 export * from "./Animation.js";
+export * from "./Arrow.js";
 export * from "./Avatar.js";
 export * from "./AvatarGroup.js";
 export * from "./Background.js";

@@ -294,7 +294,12 @@ export function transformImports(src) {
 		if (found) {
 			const have = specifiersOf(found[2]);
 			const add = unique.filter((text) => !have.some((s) => s.name === names([text])[0]));
-			out = out.replace(existing, (_, open, _list, close) => `${open} ${[...have.map((s) => s.text), ...add].join(", ")} ${close}`);
+			out = out.replace(existing, (_, open, list, close) => {
+				const all = [...have.map((s) => s.text), ...add];
+				if (!list.includes("\n")) return `${open} ${all.join(", ")} ${close}`;
+				const inner = list.match(/\n([ \t]*)\S/)?.[1] ?? "  ";
+				return `${open}\n${all.map((t) => `${inner}${t},`).join("\n")}\n${close}`;
+			});
 		} else {
 			replacement = `${kw} { ${unique.join(", ")} } from ${q}${target}${q}${semi}`;
 		}
@@ -324,6 +329,21 @@ export function transformImports(src) {
 			if (new RegExp(`(?<![\\w$.])${escape(local)}\\.${name}\\b`).test(out))
 				warnings.push(`${local}.${name}: ${name} is on "${target}" in 3.0; import it from there`);
 		}
+	}
+
+	// A namespace used as the list of every component (an MDX scope, a
+	// playground): in 3.0 it holds neither the effects nor the blocks.
+	const takesSplit = /(["'])@once-ui-system\/(?:fx|blocks)\1/.test(out);
+	for (const local of namespaces) {
+		if (takesSplit) break;
+		const registry = new RegExp(
+			`Object\\.(?:entries|keys|values|assign)\\(\\s*(?:\\{\\s*)?(?:\\.\\.\\.)?${escape(local)}\\b(?!\\.)|\\.\\.\\.${escape(local)}\\b(?!\\.)`,
+		);
+		if (registry.test(out))
+			warnings.push(
+				`${local}: the "${ROOT}" namespace is used as a list of components (Object.entries(${local}), {...${local}}); in 3.0 it no longer holds the effects or the blocks. ` +
+					`Add them: { ...${local}, ...fx, ...blocks }, with import * as fx from "@once-ui-system/fx" and import * as blocks from "@once-ui-system/blocks"`,
+			);
 	}
 
 	// Anything else that names a core subpath 3.0 does not have.

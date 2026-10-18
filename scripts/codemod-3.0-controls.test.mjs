@@ -114,12 +114,24 @@ describe("Accordion and NavGroup onToggle → onOpenChange", () => {
     }
   });
 
-  it("flags an Accordion open that may have been only the starting state", () => {
-    const { out, warnings } = transform(`${core("Accordion")}<Accordion title="T" open />`);
-    assert.match(out, /<Accordion title="T" open \/>/);
-    assert.equal(warnings.length, 1);
-    assert.match(warnings[0], /^<Accordion> open: .*defaultOpen/);
+  it("turns an Accordion open with no handler into defaultOpen, the 2.x starting state", () => {
+    const { out, warnings } = transform(`${core("Accordion")}<Accordion title="T" open />\n<Accordion title="U" open={isOpen}>x</Accordion>`);
+    assert.match(out, /<Accordion title="T" defaultOpen \/>/);
+    assert.match(out, /<Accordion title="U" defaultOpen=\{isOpen\}>x<\/Accordion>/);
+    assert.deepEqual(warnings, []);
+    assert.equal(transform(out).out, out);
   });
+
+  it("leaves a controlled Accordion alone, quietly, and reports one with a spread", () => {
+    const src = `${core("Accordion")}<Accordion title="T" open={o} onToggle={() => setO(!o)} />`;
+    const { out, warnings } = transform(src);
+    assert.match(out, /open=\{o\} onOpenChange=/);
+    assert.ok(!warnings.some((w) => /<Accordion> open/.test(w)));
+    const spread = transform(`${core("Accordion")}<Accordion {...p} title="T" open />`);
+    assert.match(spread.out, / open \/>/);
+    assert.match(spread.warnings.join("\n"), /<Accordion> open: .*defaultOpen/);
+  });
+
 
   it("is idempotent", () => {
     const once = transform(`${core("NavGroup")}<NavGroup label="L" onToggle={t} />`).out;

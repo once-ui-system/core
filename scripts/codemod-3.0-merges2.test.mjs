@@ -282,3 +282,21 @@ describe("F6: an old name used as a value", () => {
     assert.ok(r.warnings.some((w) => w.startsWith("KeyTip: still referenced")));
   });
 });
+
+describe("F6: an old name in a component map, a comment or text", () => {
+  it("reports a shorthand key with the survivor's name", () => {
+    const r = run("ScrollContainer, DropdownWrapper", "export const components = { ScrollContainer, DropdownWrapper, Text };\n");
+    const w = r.warnings.join("\n");
+    assert.match(w, /ScrollContainer: a shorthand key .*ScrollContainer: Scroller/);
+    assert.match(w, /DropdownWrapper: a shorthand key .*DropdownWrapper: Dropdown/);
+    assert.doesNotMatch(w, /still referenced/);
+  });
+
+  it("stays quiet about a comment, a string or JSX text", () => {
+    const r = run(
+      "ScrollContainer",
+      '// was a ScrollContainer\n/* ScrollContainer */\nconst a = "ScrollContainer";\nconst b = <p>Like a ScrollContainer, it\'s a rail</p>;\nconst c = <code>&lt;ScrollContainer /&gt;</code>;\n<ScrollContainer items={x} />;\n',
+    );
+    assert.deepEqual(r.warnings.filter((w) => /ScrollContainer:/.test(w)), []);
+  });
+});

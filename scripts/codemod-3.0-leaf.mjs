@@ -12,16 +12,27 @@
  *
  * The wrapper is written only where it renders exactly what the leaf did:
  *
- *   - the leaf's parent in the same file is a Flex, Row, Column or Grid
- *     rendering a block element (so the wrapper is a flex or grid item in its
- *     place, and a <div> is valid there), and the leaf has no spread;
+ *   - the leaf's parent in the same file is a Flex, Row, Column, Grid, Card,
+ *     Mask or Fade rendering a block element (so the wrapper is a flex or
+ *     grid item in its place, and a <div> is valid there), and the leaf has
+ *     no spread;
  *   - what moves is `hide` and breakpoint objects of `{ hide: … }` only (any
  *     leaf); padding on Text or Heading, which draw no box of their own
  *     (wrapped in a Column, which passes the width through); or padding,
- *     background, border and radius on Icon, whose root is a bare fit-content
- *     box (wrapped in `<Row fit>`, the same box);
+ *     background, solid, border and radius on Icon, whose root is a bare
+ *     fit-content box (wrapped in `<Row fit>`, the same box);
  *   - the leaf's margins move with it, onto the wrapper; its `fillWidth` is
  *     kept and copied; a `flex` moves only off Text and Heading.
+ *
+ * Two wrappers are exact anywhere: an Icon's box outside a layout parent is
+ * `<Row as="span" inline fit>` (2.x's Icon root), and a Spinner's layout
+ * props go on `<Row center>` (2.x's Spinner root), its flex, fillWidth and
+ * offsets with them. Where Text-like padding cannot be wrapped (running
+ * text, a className, style or handler beside it, ListItem and the text
+ * effects), it becomes the inline style 2.x's class was, with the token's
+ * variable (`var(--static-space-4)`). Literal `zIndex` / `opacity` on a leaf
+ * and InlineCode `textVariant` become their classes; Kbd `fit` is dropped
+ * (2.x Kbd was already fit).
  *
  * `radius="none"` on Button and IconButton is their `corners="none"`.
  * Everything else is reported with the props to move: a parent that is not
@@ -88,7 +99,38 @@ export const LEAVES = {
 	Logo: ["showIn"],
 	SmartLink: [],
 	NavIcon: [],
+	// Built on Text, so they take its props: a leaf's set, and Text's own.
+	ListItem: TEXT_OWN,
+	CountFx: TEXT_OWN,
+	ShineFx: TEXT_OWN,
+	TypeFx: TEXT_OWN,
 };
+
+/** The leaves that render a Text or Heading: padding becomes inline style where no wrapper can take it. */
+const TEXT_LEAVES = new Set(["Text", "Heading", "ListItem", "CountFx", "ShineFx", "TypeFx"]);
+/** Those a Column may wrap: ListItem is an <li>, and the effects are best left in their own element. */
+const COLUMN_WRAPPED = new Set(["Text", "Heading"]);
+
+/**
+ * The leaves whose 2.x root was a Flex: a literal `zIndex`, `opacity` or
+ * `textVariant` there was a class on that root, which 3.0 still has, so the
+ * class on the leaf's `className` renders the same. Text and Heading put
+ * `zIndex` on their element as the same class.
+ */
+const FLEX_ROOTED = new Set([
+	"Icon",
+	"Avatar",
+	"Spinner",
+	"StatusIndicator",
+	"Kbd",
+	"InlineCode",
+	"NavIcon",
+]);
+const Z_INDEX = new Set(["-1", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
+const OPACITY = new Set(["0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"]);
+
+/** Props equal to what the leaf already did in 2.x: dropping them renders the same. */
+const NO_OPS = { Kbd: ["fit", "inline"] };
 
 /** `LeafProps`: what every leaf takes. */
 export const LEAF_PROPS = new Set([
@@ -143,6 +185,7 @@ const PADDING = new Set([
 const ICON_BOX = new Set([
 	...PADDING,
 	"background",
+	"solid",
 	"border",
 	"borderTop",
 	"borderRight",
@@ -163,8 +206,13 @@ const ICON_BOX = new Set([
 	"bottomRightRadius",
 ]);
 
-/** Layout components whose children are flex or grid items. */
-const LAYOUT_PARENTS = ["Flex", "Row", "Column", "Grid"];
+/**
+ * Layout components whose children are flex or grid items of their root
+ * element: the primitives, and the Flex-based components that render their
+ * children straight into it (a Card's are the items of its Flex).
+ */
+const LAYOUT_PARENTS = ["Flex", "Row", "Column", "Grid", "Card", "Mask", "Fade"];
+const PRIMITIVES = new Set(["Flex", "Row", "Column", "Grid"]);
 /** `as` values on a parent that still take a <div> child. */
 const BLOCK_ELEMENTS = new Set([
 	"div",
@@ -284,10 +332,13 @@ function hideOnly(raw) {
 export function transformLeaf(src, { isCore = isCoreSource } = {}) {
 	const hits = [];
 	const warnings = [];
+	// Notes on what a round did (not left to do), kept from every round.
+	const notes = [];
 	let out = src;
 	for (let round = 0; round < 4; round++) {
 		const r = leafRound(out, isCore);
 		hits.push(...r.hits);
+		notes.push(...r.notes);
 		// What the last round still reports is what is left to do by hand.
 		warnings.length = 0;
 		warnings.push(...r.warnings);
@@ -295,12 +346,14 @@ export function transformLeaf(src, { isCore = isCoreSource } = {}) {
 		out = r.out;
 	}
 	if (hits.length) out = withWrapperImports(out, hits, warnings, isCore);
+	warnings.unshift(...notes);
 	return { out, hits, warnings };
 }
 
 function leafRound(src, isCore) {
 	const hits = [];
 	const warnings = [];
+	const notes = [];
 	const edits = [];
 	const bindings = importBindings(src);
 	const leafOf = new Map();
@@ -315,67 +368,148 @@ function leafRound(src, isCore) {
 		if (!tag) continue;
 		const attrs = attributesOf(src, el.nameEnd, el.openEnd - 1);
 		const own = new Set(LEAVES[tag]);
-		const dropped = attrs.filter(
+		let dropped = attrs.filter(
 			(a) => LAYOUT_PROPS.has(a.name) && !LEAF_PROPS.has(a.name) && !own.has(a.name),
 		);
-		if (!dropped.length) continue;
-		const warn = (why) =>
-			warnings.push(
-				`<${tag}> ${dropped.map((a) => a.name).join(", ")}: ${why}`,
-			);
+		// Edits inside the opening tag, applied to the element before any wrapping.
+		const ops = [];
+		const done = [];
+		const spread = /\{\s*\.\.\./.test(src.slice(el.nameEnd, el.openEnd));
 
 		// Button and IconButton name their own `radius="none"`.
 		if (tag === "Button" || tag === "IconButton") {
 			const radius = dropped.find((a) => a.name === "radius");
 			if (radius && unquote(radius.value) === "none" && !attrs.some((a) => a.name === "corners")) {
-				edits.push({
-					at: radius.at,
-					end: radius.end,
-					text: 'corners="none"',
-					hit: `<${tag}> radius="none" → corners="none"`,
-				});
-				dropped.splice(dropped.indexOf(radius), 1);
-				if (!dropped.length) continue;
+				ops.push({ at: radius.at, end: radius.end, text: 'corners="none"' });
+				done.push(`<${tag}> radius="none" → corners="none"`);
+				dropped = dropped.filter((a) => a !== radius);
 			}
 		}
 
-		const textLike = tag === "Text" || tag === "Heading";
+		// What 2.x already did by itself: drop it.
+		for (const name of NO_OPS[tag] ?? []) {
+			const a = dropped.find((x) => x.name === name);
+			if (!a || !(a.value === null || /^\{\s*true\s*\}$/.test(a.value))) continue;
+			ops.push({ ...remove(src, a), text: "" });
+			done.push(`<${tag}> ${name} removed (2.x ${tag} was already ${name})`);
+			dropped = dropped.filter((x) => x !== a);
+		}
+
+		// A literal zIndex, opacity or textVariant whose 2.x class 3.0 still has.
+		const classes = [];
+		const classed = [];
+		for (const a of dropped) {
+			const cls = classFor(tag, a);
+			if (cls) {
+				classes.push(cls);
+				classed.push(a);
+			}
+		}
+		if (classes.length) {
+			const merged = withClassName(src, attrs, classes, classed[0]);
+			if (merged) {
+				ops.push(...merged.ops);
+				for (const a of classed) if (!merged.ops.some((o) => o.at === a.at)) ops.push({ ...remove(src, a), text: "" });
+				done.push(`<${tag}> ${classed.map((a) => a.name).join(", ")} → className="${classes.join(" ")}"`);
+				dropped = dropped.filter((a) => !classed.includes(a));
+			}
+		}
+
+		const finish = (extraWarning) => {
+			if (extraWarning) warnings.push(extraWarning);
+			if (!ops.length) return;
+			let element = src.slice(el.at, el.openEnd);
+			for (const o of [...ops].sort((x, y) => y.at - x.at)) element = element.slice(0, o.at - el.at) + o.text + element.slice(o.end - el.at);
+			edits.push({ at: el.at, end: el.openEnd, text: element, hits: done });
+		};
+
+		if (!dropped.length) {
+			finish();
+			continue;
+		}
+		const warn = (why) => `<${tag}> ${dropped.map((a) => a.name).join(", ")}: ${why}`;
+
+		const textLike = TEXT_LEAVES.has(tag);
+		// 2.x Text and Heading took `hide` (and `s={{ hide }}`) out and ignored
+		// it: dropping it keeps the page as it rendered. A wrapper would make it
+		// take effect, which the author may have wanted, so it is reported.
+		if (textLike) {
+			const inert = dropped.filter(
+				(a) => a.name === "hide" || (BREAKPOINTS.includes(a.name) && hideOnly(a.value) !== null),
+			);
+			if (inert.length) {
+				for (const a of inert) ops.push({ ...remove(src, a), text: "" });
+				done.push(`<${tag}> ${inert.map((a) => a.name).join(", ")} dropped`);
+				notes.push(
+					`<${tag}> ${inert.map((a) => a.name).join(", ")}: had no effect on ${tag} in 2.x and was dropped; to hide it, wrap it in a Column with hide`,
+				);
+				dropped = dropped.filter((a) => !inert.includes(a));
+				if (!dropped.length) {
+					finish();
+					continue;
+				}
+			}
+		}
+		const spinner = tag === "Spinner";
 		const movable = (a) => {
 			if (a.name === "hide") return a.value === null || /^\{\s*(true|false)\s*\}$/.test(a.value);
 			if (BREAKPOINTS.includes(a.name)) return hideOnly(a.value) !== null;
 			if (textLike) return PADDING.has(a.name);
 			if (tag === "Icon") return ICON_BOX.has(a.name);
+			// Spinner's root is a centred Flex in 2.x and 3.0: a Row around it is the same box.
+			if (spinner) return !BREAKPOINTS.includes(a.name);
 			return false;
 		};
 		const stuck = dropped.filter((a) => !movable(a));
-		const suggestion = `wrap it in a ${textLike ? "Column" : "Row"} that carries them`;
+		const wrapperKind = textLike ? "Column" : "Row";
+		const suggestion = `wrap it in a ${wrapperKind} that carries them`;
 		if (stuck.length) {
-			warn(`not taken by a leaf in 3.0; ${suggestion}, or drop them (${describeStuck(tag, stuck)})`);
+			finish(warn(`not taken by a leaf in 3.0; ${adviceFor(tag, stuck, suggestion)}`));
 			continue;
 		}
 		const styling = dropped.some((a) => a.name !== "hide" && !BREAKPOINTS.includes(a.name));
-		const why = blocker({ src, el, attrs, tag, textLike, styling, layoutOf });
+		const onlyPadding = dropped.every((a) => PADDING.has(a.name));
+		let why = blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread });
+		if (!why && textLike && !COLUMN_WRAPPED.has(tag)) why = `a Column would change what ${tag} renders`;
+
+		// Padding on text that no wrapper can take is the class's own declaration, inline.
+		if (why && textLike && onlyPadding && !spread) {
+			const style = paddingStyle(src, attrs, dropped);
+			if (style) {
+				ops.push(...style.ops);
+				done.push(`<${tag}> ${dropped.map((a) => a.name).join(", ")} → style`);
+				finish();
+				continue;
+			}
+			why = "a padding value is not a token or a CSS length";
+		}
 		if (why) {
-			warn(`not taken by a leaf in 3.0; ${suggestion} (${why})`);
+			finish(warn(`not taken by a leaf in 3.0; ${suggestion} (${why})`));
 			continue;
 		}
 
 		// The wrapper: what moves, the margins, and the sizing that keeps the box.
 		const moved = attrs.filter(
-			(a) => dropped.includes(a) || MARGINS.includes(a.name) || (textLike && a.name === "flex"),
+			(a) =>
+				dropped.includes(a) ||
+				MARGINS.includes(a.name) ||
+				(textLike && a.name === "flex") ||
+				(spinner && ["flex", "fillWidth", ...OFFSETS].includes(a.name)),
 		);
-		const fillWidth = attrs.find((a) => a.name === "fillWidth");
-		const wrapperName = (textLike ? names(layoutOf, "Column") : names(layoutOf, "Row"))[0] ?? (textLike ? "Column" : "Row");
+		const fillWidth = spinner ? null : attrs.find((a) => a.name === "fillWidth");
+		const inLayout = el.parent && layoutOf.has(el.parent.name);
+		const wrapperName = names(layoutOf, wrapperKind)[0] ?? wrapperKind;
+		// Outside a flex or grid parent, an Icon's box is its 2.x root: an inline-flex span.
+		const iconBox = tag === "Icon" && styling ? (inLayout ? ["fit"] : ['as="span"', "inline", "fit"]) : [];
 		const wrapperAttrs = [
-			...(tag === "Icon" && styling ? ["fit"] : []),
+			...iconBox,
+			...(spinner ? ["center"] : []),
 			...(fillWidth ? [src.slice(fillWidth.at, fillWidth.end)] : []),
-			...moved.map((a) => src.slice(a.at, a.end)),
+			...moved.filter((a) => !(spinner && a.name === "center")).map((a) => src.slice(a.at, a.end)),
 		];
+		for (const a of moved) ops.push({ ...remove(src, a), text: "" });
 		let element = src.slice(el.at, el.end);
-		for (const a of [...moved].sort((x, y) => y.at - x.at)) {
-			const r = remove(src, a);
-			element = element.slice(0, r.at - el.at) + element.slice(r.end - el.at);
-		}
+		for (const o of [...ops].sort((x, y) => y.at - x.at)) element = element.slice(0, o.at - el.at) + o.text + element.slice(o.end - el.at);
 		const lineStart = src.lastIndexOf("\n", el.at - 1) + 1;
 		const indent = src.slice(lineStart, el.at);
 		const unit = indent.includes("\t") ? "\t" : "  ";
@@ -389,29 +523,156 @@ function leafRound(src, isCore) {
 			at: el.at,
 			end: el.end,
 			text,
-			hit: `<${tag}> ${dropped.map((a) => a.name).join(", ")} → <${wrapperName}> around it`,
+			hits: [...done, `<${tag}> ${dropped.map((a) => a.name).join(", ")} → <${wrapperName}> around it`],
 		});
 	}
-	return { out: applyEdits(src, edits, hits), hits, warnings };
+	return { out: applyEdits(src, edits, hits), hits, warnings, notes };
 }
 
 const names = (layoutOf, tag) => [...layoutOf].filter(([, t]) => t === tag).map(([n]) => n);
 
+/** The 2.x class a literal `zIndex`, `opacity` or `textVariant` was on this leaf, or null. */
+function classFor(tag, a) {
+	const v = a.value === null ? null : literalValue(a.value);
+	if (v === null) return null;
+	if (a.name === "zIndex" && Z_INDEX.has(v) && (FLEX_ROOTED.has(tag) || TEXT_LEAVES.has(tag))) return `z-index-${v}`;
+	if (a.name === "opacity" && OPACITY.has(v) && FLEX_ROOTED.has(tag)) return `opacity-${v}`;
+	if (a.name === "textVariant" && FLEX_ROOTED.has(tag) && tag !== "Icon") {
+		const parts = v.split("-");
+		if (parts.length < 3 || parts.some((p) => !/^[a-z]+$/.test(p))) return null;
+		const size = parts.pop();
+		const weight = parts.pop();
+		return `font-${parts.join("-")} font-${weight} font-${size}`;
+	}
+	return null;
+}
+
+/** `"1"`, `{1}`, `{"1"}`, `{-1}` → the text of the literal; anything else → null. */
+function literalValue(raw) {
+	const v = String(raw).trim();
+	const inner = v.startsWith("{") ? v.slice(1, -1).trim() : v;
+	const str = /^(["'])([^"']*)\1$/.exec(inner);
+	if (str) return str[2];
+	return /^-?\d+$/.test(inner) ? inner : null;
+}
+
+/**
+ * Ops that add `classes` to the element's className: a literal one gains
+ * them, a member chain (`styles.card`) becomes a template literal, and a
+ * missing one is written where `at` was. Null when the className is another
+ * expression, which could be undefined.
+ */
+function withClassName(src, attrs, classes, at) {
+	const cls = attrs.find((a) => a.name === "className");
+	const list = classes.join(" ");
+	if (!cls) return { ops: [{ at: at.at, end: at.end, text: `className="${list}"` }] };
+	if (cls.value === null) return null;
+	const literal = /^\{?\s*(["'])([^"']*)\1\s*\}?$/.exec(String(cls.value).trim());
+	if (literal) return { ops: [{ at: cls.at, end: cls.end, text: `className="${`${literal[2]} ${list}`.trim()}"` }] };
+	const expr = String(cls.value).trim().slice(1, -1).trim();
+	if (/^[A-Za-z_$][\w$]*(\.[A-Za-z_$][\w$]*|\[["'][^"']+["']\])+$/.test(expr))
+		return { ops: [{ at: cls.at, end: cls.end, text: `className={\`\${${expr}} ${list}\`}` }] };
+	return null;
+}
+
+/** The CSS custom property behind a 2.x spacing token, or a CSS length as it is; null otherwise. */
+function spaceValue(raw) {
+	const v = literalValue(raw) ?? (/^\{?\s*["']([^"']+)["']\s*\}?$/.exec(String(raw).trim())?.[1] ?? null);
+	if (v === null) return null;
+	if (SPACE_TOKENS.has(v)) return `var(--static-space-${v})`;
+	if (/^(xs|s|m|l|xl)$/.test(v)) return `var(--responsive-space-${v})`;
+	if (/^-?\d*\.?\d+(rem|px|em|%|vh|vw)$/.test(v)) return v;
+	return null;
+}
+const SPACE_TOKENS = new Set(
+	"0 1 2 4 8 12 16 20 24 32 40 48 56 64 72 80 104 128 160".split(" "),
+);
+
+/**
+ * The padding props as the inline style the 2.x classes declared. A side
+ * beats its axis, and an axis beats `padding`, as the classes' order did.
+ */
+function paddingStyle(src, attrs, padding) {
+	const value = {};
+	for (const a of padding) {
+		const v = spaceValue(a.value);
+		if (v === null) return null;
+		value[a.name] = v;
+	}
+	const side = (s, axis) => value[`padding${s}`] ?? value[axis] ?? value.padding;
+	const t = side("Top", "paddingY");
+	const r = side("Right", "paddingX");
+	const b = side("Bottom", "paddingY");
+	const l = side("Left", "paddingX");
+	let entries;
+	if (t && r && b && l) {
+		const short = t === b && r === l ? (t === r ? [t] : [t, r]) : [t, r, b, l];
+		entries = [`padding: "${short.join(" ")}"`];
+	} else {
+		entries = [
+			["paddingTop", t],
+			["paddingRight", r],
+			["paddingBottom", b],
+			["paddingLeft", l],
+		]
+			.filter(([, v]) => v)
+			.map(([k, v]) => `${k}: "${v}"`);
+	}
+	const ops = padding.map((a) => ({ ...remove(src, a), text: "" }));
+	const style = attrs.find((a) => a.name === "style");
+	if (!style) {
+		// In the first padding prop's place.
+		const first = padding.reduce((x, y) => (y.at < x.at ? y : x));
+		ops.splice(ops.findIndex((o) => o.end === first.end), 1, {
+			at: first.at,
+			end: first.end,
+			text: `style={{ ${entries.join(", ")} }}`,
+		});
+		return { ops };
+	}
+	const raw = String(style.value ?? "").trim();
+	const inline = /^\{\s*\{([\s\S]*)\}\s*\}$/.exec(raw);
+	// The 2.x class lost to the element's own style, so the style's entries come last.
+	const rest = inline ? inline[1].trim().replace(/,\s*$/, "") : `...${raw.slice(1, -1).trim()}`;
+	if (!raw.startsWith("{")) return null;
+	ops.push({ at: style.at, end: style.end, text: `style={{ ${[...entries, ...(rest ? [rest] : [])].join(", ")} }}` });
+	return { ops };
+}
+
+/** What to say about props no wrapper here can take. */
+function adviceFor(tag, stuck, suggestion) {
+	const bp = stuck.filter((a) => BREAKPOINTS.includes(a.name));
+	if (bp.length) return `${suggestion} (breakpoint objects belong to Flex, Row, Column and Grid)`;
+	if (tag === "Kbd" || tag === "InlineCode" || tag === "Avatar" || tag === "NavIcon")
+		return `${suggestion}, or drop them (they override the ${tag}'s own look)`;
+	if (stuck.every((a) => a.name === "zIndex" || a.name === "opacity"))
+		return `${suggestion}, or write the class it was (className="z-index-1", "opacity-60") for a literal`;
+	return `${suggestion}, or drop them`;
+}
+
 /** Why wrapping this element would not render exactly the same, or null. */
-function blocker({ src, el, attrs, tag, textLike, styling, layoutOf }) {
+function blocker({ src, el, attrs, tag, textLike, styling, layoutOf, spread }) {
 	if (el.end < 0) return "its closing tag was not found";
+	if (spread) return "a spread may carry more props";
+	const spinner = tag === "Spinner";
+	if (spinner) {
+		if (attrs.some((a) => a.name === "className" || a.name === "style"))
+			return "its className or style would land inside the Row";
+		return null;
+	}
+	const iconBox = tag === "Icon" && styling;
 	const parent = el.parent;
-	if (!parent || !layoutOf.has(parent.name))
-		return "its parent is not a Flex, Row, Column or Grid in this file";
-	const parentAttrs = attributesOf(src, parent.nameEnd, parent.openEnd - 1);
-	const parentAs = parentAttrs.find((a) => a.name === "as");
-	if (parentAs && !BLOCK_ELEMENTS.has(unquote(parentAs.value)))
-		return `its parent renders as ${parentAs.value}`;
-	if (/\{\s*\.\.\./.test(src.slice(el.nameEnd, el.openEnd)))
-		return "a spread may carry more props";
+	const inLayout = parent && layoutOf.has(parent.name);
+	if (!inLayout && !iconBox) return "its parent is not a Flex, Row, Column, Grid or Card in this file";
+	if (inLayout && PRIMITIVES.has(layoutOf.get(parent.name))) {
+		const parentAttrs = attributesOf(src, parent.nameEnd, parent.openEnd - 1);
+		const parentAs = parentAttrs.find((a) => a.name === "as");
+		if (parentAs && !BLOCK_ELEMENTS.has(unquote(parentAs.value)))
+			return `its parent renders as ${parentAs.value}`;
+	}
 	if (attrs.some((a) => OFFSETS.includes(a.name))) return "it is positioned";
 	if (!textLike && attrs.some((a) => a.name === "flex")) return "its flex would not reach it";
-	if (tag === "Icon" && styling && attrs.some((a) => a.name === "fillWidth" || a.name === "tooltip"))
+	if (iconBox && attrs.some((a) => a.name === "fillWidth" || a.name === "tooltip"))
 		return "fillWidth or a tooltip on the Icon";
 	if (textLike) {
 		const as = attrs.find((a) => a.name === "as");
@@ -425,14 +686,6 @@ function blocker({ src, el, attrs, tag, textLike, styling, layoutOf }) {
 			return "its own className, style, handler or truncation would see the padding move";
 	}
 	return null;
-}
-
-function describeStuck(tag, stuck) {
-	const bp = stuck.filter((a) => BREAKPOINTS.includes(a.name));
-	if (bp.length) return "breakpoint objects belong to Flex, Row, Column and Grid";
-	if (tag === "Kbd" || tag === "InlineCode" || tag === "Avatar" || tag === "NavIcon")
-		return `they override the ${tag}'s own look`;
-	return "a wrapper would not render the same";
 }
 
 /** Add the wrappers the pass wrote to the file's Once UI import. */
@@ -480,7 +733,7 @@ function applyEdits(src, edits, hits) {
 	for (const e of edits) {
 		if (e.end > lastAt) continue;
 		out = out.slice(0, e.at) + e.text + out.slice(e.end);
-		hits.push(e.hit);
+		hits.push(...(e.hits ?? [e.hit]));
 		lastAt = e.at;
 	}
 	return out;

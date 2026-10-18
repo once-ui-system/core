@@ -17,7 +17,7 @@ import { ColorScheme, ColorWeight, TextVariant } from "../types.js";
 import { withWeight } from "../utils/layoutClasses.js";
 import { leafLayout } from "../utils/leafLayout.js";
 
-type HeadingProps<T extends ElementType> = TextProps<T> &
+type HeadingProps<T extends ElementType = "h1"> = TextProps<T> &
   CommonProps &
   LeafProps &
   Pick<DisplayProps, "opacity"> &
@@ -149,4 +149,5 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
 
 Heading.displayName = "Heading";
 
+export type { HeadingProps };
 export { Heading };
