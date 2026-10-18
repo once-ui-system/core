@@ -1,7 +1,6 @@
 {
   "name": "@once-ui-system/blocks",
-  "version": "2.1.0",
-  "private": true,
+  "version": "3.0.0-beta.0",
   "description": "Once UI blocks: Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay, compositions on top of @once-ui-system/core.",
   "keywords": [
     "once-ui",

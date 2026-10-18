@@ -3,6 +3,8 @@
 #
 #   v2.2.0, v2.2.0-rc.0   ->  @once-ui-system/core  (packages/core)
 #   cli-v0.2.0            ->  @once-ui-system/cli   (packages/cli)
+#   fx-v3.0.0             ->  @once-ui-system/fx     (packages/fx)
+#   blocks-v3.0.0         ->  @once-ui-system/blocks (packages/blocks)
 #
 # A prerelease version (anything with a "-") goes to the `next` dist-tag and
 # publishes straight away. A stable version goes to `latest` and waits in the
@@ -16,6 +18,8 @@ on:
     tags:
       - "v*"
       - "cli-v*"
+      - "fx-v*"
+      - "blocks-v*"
 
 permissions:
   contents: read
@@ -45,6 +49,8 @@ jobs:
         run: |
           case "$TAG" in
             cli-v*) dir=packages/cli;  version="${TAG#cli-v}" ;;
+            fx-v*)  dir=packages/fx;   version="${TAG#fx-v}" ;;
+            blocks-v*) dir=packages/blocks; version="${TAG#blocks-v}" ;;
             v*)     dir=packages/core; version="${TAG#v}" ;;
             *) echo "::error::Unrecognised release tag $TAG"; exit 1 ;;
           esac
@@ -96,6 +102,11 @@ jobs:
 
       - name: Install
         run: pnpm install --frozen-lockfile
+
+      # fx and blocks build against core's dist.
+      - name: Build core
+        if: needs.resolve.outputs.dir == 'packages/fx' || needs.resolve.outputs.dir == 'packages/blocks'
+        run: pnpm --filter @once-ui-system/core build
 
       - name: Build, typecheck and test
         working-directory: ${{ needs.resolve.outputs.dir }}
