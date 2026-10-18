@@ -6,6 +6,9 @@ import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { CopyPage } from "@/product/CopyPage";
 import { AvailabilityNotice } from "@/product/AvailabilityNotice";
+import { VersionNotice } from "@/product/VersionNotice";
+import { platformOfSlug } from "@/resources/platforms";
+import { currentVersion } from "@/resources/versions";
 import { Metadata } from "next";
 
 export async function generateStaticParams() {
@@ -54,13 +57,21 @@ export default async function Docs({
   
   const { prevPage, nextPage } = getAdjacentPages(slugPath, 'section');
   
-  // Determine section title - use "Docs" for top-level elements
-  const sectionTitle = slug.length === 1 && !slug[0].includes('/') 
-    ? "Docs"
-    : slug[0]
-      ?.split('-')
+  const titleCase = (segment: string) =>
+    segment
+      .split('-')
       .map(word => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+
+  // Determine section title - use "Docs" for top-level elements. A platform's
+  // folder is that platform's root, so its pages are titled by the platform
+  // (or by their section inside it), not by the folder name.
+  const platform = platformOfSlug(slugPath);
+  const sectionTitle = platform.root
+    ? slug.length > 2 ? titleCase(slug[1]) : platform.label
+    : slug.length === 1 && !slug[0].includes('/')
+      ? "Docs"
+      : titleCase(slug[0]);
   
   return (
     <>
@@ -87,12 +98,13 @@ export default async function Docs({
             </Text>
             <Row marginTop="20" gap="8" vertical="center" wrap>
               {doc.metadata.github && (
-                <Button href={"https://github.com/once-ui-system/core/blob/main/packages/core/src/" + doc.metadata.github} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
+                <Button href={`https://github.com/once-ui-system/core/blob/${currentVersion.branch}/` + (doc.metadata.github.startsWith("packages/") ? doc.metadata.github : `packages/core/src/${doc.metadata.github}`)} size="s" variant="secondary" prefixIcon="github" weight="default" data-border="rounded">
                   View on GitHub
                 </Button>
               )}
               <CopyPage path={`/${doc.slug}`} />
             </Row>
+            <VersionNotice path={`/${doc.slug}`} />
             {doc.metadata.status && (
               <AvailabilityNotice status={doc.metadata.status} />
             )}
@@ -162,7 +174,7 @@ export default async function Docs({
             <Column maxWidth={layout.content.width} gap="24" marginTop="40">
               <Line width="40"/>
               <Row fillWidth vertical="center" gap="8" onBackground="neutral-weak" textVariant="label-default-s">
-                Edit this page on <SmartLink prefixIcon="github" href={"https://github.com/once-ui-system/core/tree/main/apps/docs/src/content/" + doc.metadata.docs}>GitHub</SmartLink>
+                Edit this page on <SmartLink prefixIcon="github" href={`https://github.com/once-ui-system/core/tree/${currentVersion.branch}/apps/docs/src/content/` + doc.metadata.docs}>GitHub</SmartLink>
               </Row>
             </Column>
           )}
