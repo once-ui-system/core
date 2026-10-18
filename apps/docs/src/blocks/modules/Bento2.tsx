@@ -1,5 +1,5 @@
 import {
-  AutoScroll,
+  Scroller,
   Background,
   Button,
   Column,
@@ -24,14 +24,14 @@ const tiles = {
       title: "Templates",
       description: "Quick start with pre-built templates",
       media: (
-        <AutoScroll>
+        <Scroller auto>
           <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
           <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
           <Logo wordmark={"/trademarks/wordmark-light.svg"} />
           <Line vert />
-        </AutoScroll>
+        </Scroller>
       ),
     },
     {
@@ -67,7 +67,7 @@ const tiles = {
       media: (
         <Row fill paddingLeft="48">
           <Sidebar1
-            minWidth={16}
+            minWidth="16rem"
             marginTop="48"
             border="neutral-strong"
             tabIndex={-1}
@@ -105,8 +105,8 @@ const tiles = {
       description: "Once UI's mission is to make design accessible to everyone",
       media: (
         <Column align="center" gap="12">
-          <Heading variant="display-strong-m">5,540+</Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Heading textVariant="display-strong-m">5,540+</Heading>
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Commits this year
           </Text>
         </Column>
@@ -119,10 +119,10 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
   return (
     <Column fillWidth horizontal="center" gap="40" {...flex}>
       <Column fillWidth paddingX="l" gap="8">
-        <Heading as="h2" variant="display-strong-m">
+        <Heading as="h2" textVariant="display-strong-m">
           {section.title}
         </Heading>
-        <Text onBackground="neutral-weak" variant="body-default-l">
+        <Text onBackground="neutral-weak" textVariant="body-default-l">
           {section.description}
         </Text>
       </Column>
@@ -134,8 +134,8 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
           mask={{ cursor: true }}
           gradient={{
             display: true,
-            x: 25,
-            y: 25,
+            x: "25%",
+            y: "25%",
             colorStart: "brand-solid-medium",
             colorEnd: "accent-solid-medium",
           }}
@@ -159,14 +159,14 @@ export const Bento2: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex 
                 radius="xl"
               >
                 <Column fillWidth gap="8" padding="l">
-                  <Heading as="h3" variant="heading-strong-l">
+                  <Heading as="h3" textVariant="heading-strong-l">
                     {tile.title}
                   </Heading>
                   <Text onBackground="neutral-weak" wrap="balance">
                     {tile.description}
                   </Text>
                 </Column>
-                <Row fillWidth height={20} paddingLeft="m">
+                <Row fillWidth height="20rem" paddingLeft="m">
                   <Row
                     theme="light"
                     themeSolid="contrast"

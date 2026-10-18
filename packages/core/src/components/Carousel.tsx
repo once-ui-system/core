@@ -1,13 +1,14 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { SpacingToken } from "../types";
+import { Reveal } from "../internal/Reveal";
+import { SnapCarousel } from "../internal/SnapCarousel";
+import { CSSUnit, SpacingToken } from "../types";
 import styles from "./Carousel.module.scss";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
 import { Media } from "./Media";
-import { RevealFx } from "./RevealFx";
 import { Row } from "./Row";
 import { Scroller } from "./Scroller";
 
@@ -18,14 +19,23 @@ interface CarouselItem {
 
 interface ThumbnailItem {
   scaling?: number;
-  height?: SpacingToken | number;
+  height?: SpacingToken | number | CSSUnit;
   /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
   sizes?: string | number;
 }
 
 interface CarouselProps extends React.ComponentProps<typeof Flex> {
   items: CarouselItem[];
-  controls?: boolean;
+  /**
+   * How slides change. `"fade"` (the default) cross-fades one slide into the
+   * next, with line or thumbnail indicators and autoplay. `"snap"` is a
+   * touch-first track the slides scroll along with native snapping, drag and
+   * dots (2.x `Swiper`); its `aspectRatio` defaults to `"16 / 9"`, and
+   * `translateY`, `defaultRevealed`, `thumbnail` and `play` do not apply.
+   */
+  mode?: "fade" | "snap";
+  /** Show the previous/next arrows. `"contained"` (snap mode) draws the dots over the slides. */
+  controls?: boolean | "contained";
   priority?: boolean;
   /**
    * Drop the intrinsic aspect ratio and let the slides stretch to whatever box
@@ -35,12 +45,12 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
    */
   stretch?: boolean;
   indicator?: "line" | "thumbnail" | false;
-  translateY?: SpacingToken | number;
+  translateY?: SpacingToken | number | CSSUnit;
   aspectRatio?: string;
   /** Passed to `Media`: a `sizes` string, or a number as shorthand for a max width in px. */
   sizes?: string | number;
   unoptimized?: boolean;
-  revealedByDefault?: boolean;
+  defaultRevealed?: boolean;
   thumbnail?: ThumbnailItem;
   play?: {
     auto?: boolean;
@@ -50,7 +60,7 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   };
 }
 
-const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
+const FadeCarousel = forwardRef<HTMLDivElement, CarouselProps>(
   (
     {
       items = [],
@@ -62,7 +72,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
       aspectRatio = "original",
       sizes,
       unoptimized = false,
-      revealedByDefault = false,
+      defaultRevealed = false,
       thumbnail = { scaling: 1, height: "80", sizes: "120px" },
       play = { auto: false, interval: 3000, controls: true },
       ...flex
@@ -71,8 +81,8 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
   ) => {
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [hoverIndex, setHoverIndex] = useState<number | undefined>(0);
-    const [isTransitioning, setIsTransitioning] = useState(revealedByDefault);
-    const [initialTransition, setInitialTransition] = useState(revealedByDefault);
+    const [isTransitioning, setIsTransitioning] = useState(defaultRevealed);
+    const [initialTransition, setInitialTransition] = useState(defaultRevealed);
     const [isPlaying, setIsPlaying] = useState<boolean>(play.auto || false);
     const [progressPercent, setProgressPercent] = useState<number>(0);
 
@@ -189,7 +199,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
 
     // Handle initial transition
     useEffect(() => {
-      if (!revealedByDefault && !initialTransition) {
+      if (!defaultRevealed && !initialTransition) {
         setIsTransitioning(true);
         setInitialTransition(true);
       }
@@ -198,7 +208,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
           clearTimeout(transitionTimeoutRef.current);
         }
       };
-    }, [revealedByDefault, initialTransition]);
+    }, [defaultRevealed, initialTransition]);
 
     // Toggle play/pause function
     const togglePlayPause = () => {
@@ -233,14 +243,14 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
             </Flex>
           </Flex>
         )}
-        <RevealFx
+        <Reveal
           fillWidth
           fillHeight={stretch}
           radius={flex.radius || "l"}
           revealed={isTransitioning}
           translateY={translateY}
           aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
-          speed={300}
+          duration={300}
           onTouchStart={(e: React.TouchEvent) => {
             touchStartXRef.current = e.touches[0].clientX;
           }}
@@ -303,7 +313,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
               <Row
                 className={styles.left}
                 cursor="interactive"
-                maxWidth={12}
+                maxWidth="12rem"
                 fill
                 vertical="center"
                 onClick={handlePrevClick}
@@ -330,13 +340,13 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                 )}
               </Row>
             ) : (
-              <Flex maxWidth={12} />
+              <Flex maxWidth="12rem" />
             )}
             {activeIndex < items.length - 1 ? (
               <Row
                 className={styles.right}
                 cursor="interactive"
-                maxWidth={12}
+                maxWidth="12rem"
                 fill
                 vertical="center"
                 horizontal="end"
@@ -364,7 +374,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
                 )}
               </Row>
             ) : (
-              <Flex maxWidth={12} />
+              <Flex maxWidth="12rem" />
             )}
           </Row>
           {play.progress && (
@@ -390,7 +400,7 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
               </Row>
             </Row>
           )}
-        </RevealFx>
+        </Reveal>
         {items.length > 1 && indicator !== false && (
           <>
             {indicator === "line" ? (
@@ -469,6 +479,26 @@ const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
   },
 );
 
+FadeCarousel.displayName = "FadeCarousel";
+
+/**
+ * One slide at a time, from an `items` list of image URLs or nodes.
+ * `mode="snap"` swaps the cross-fade for a swipeable, snapping track.
+ */
+const Carousel = forwardRef<HTMLDivElement, CarouselProps>(({ mode = "fade", ...props }, ref) => {
+  if (mode !== "snap") return <FadeCarousel ref={ref} {...props} />;
+  const {
+    indicator,
+    translateY: _translateY,
+    defaultRevealed: _defaultRevealed,
+    thumbnail: _thumbnail,
+    play: _play,
+    ...snap
+  } = props;
+  return <SnapCarousel ref={ref} indicator={indicator !== false} {...snap} />;
+});
+
 Carousel.displayName = "Carousel";
 
+export type { CarouselItem, CarouselProps };
 export { Carousel };

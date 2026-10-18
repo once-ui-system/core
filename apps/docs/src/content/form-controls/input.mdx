@@ -167,6 +167,32 @@ const handleClear = () => {
   ]}
 />
 
+## Password
+
+With `type="password"`, Input adds a button in the suffix that switches the field between masked and visible, so a password can be checked without being retyped (2.x's `PasswordInput`). The button is named "Show password" or "Hide password" as it toggles, and a `suffix` of your own sits before it. Pass `reveal={false}` for a plain masked field.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PasswordInputExample />}
+  codes={[
+    {
+      code:
+`const [password, setPassword] = useState<string>("");
+
+<Input
+    id="password"
+    label="Password"
+    type="password"
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+/>`,
+      language: "tsx",
+      label: "Password"
+    }
+  ]}
+/>
+
 ## Placeholder
 
 Use the `placeholder` prop to use placeholder instead of label. The placeholder disappears when the input has value.
@@ -390,13 +416,12 @@ takes keyboard input, however that field was focused.
 
 ## Built on Input
 
-Four components build on `Input`. They keep everything on this page and add one
+Three components build on `Input`. They keep everything on this page and add one
 thing each, so they live on pages of their own:
 
-- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onChange`
+- [NumberInput](/form-controls/numberInput) — steppers, `min`/`max`/`step`, and a numeric `onValueChange`
 - [OTPInput](/form-controls/otpInput) — one box per digit, with paste and an `onComplete`
-- [PasswordInput](/form-controls/passwordInput) — a reveal toggle
-- [TagInput](/form-controls/tagInput) — an array of removable chips instead of a string
+- [TagInput](/form-controls/tagInput) — an array of removable tags instead of a string
 
 ## API reference
 
@@ -417,8 +442,10 @@ thing each, so they live on pages of their own:
     variant: "\"ghost\" drops the border and background, for a field inside a surface that already has them.",
     characterCount: "Show how much has been typed, against maxLength.",
     cursor: "Set \"interactive\" for a read-only field that opens something on click.",
-    validate: "Run on a debounce; return a message to show, or null to clear.",
+    onValueChange: "Called with the field's text after every change, after the native onChange. Controlled only when value is set.",
+    validate: "Run on a debounce, controlled or not; return a message to show, or null to clear.",
     loading: "Show a spinner in the suffix while something resolves.",
+    reveal: "With type=\"password\", show the button that unmasks the value. Default true.",
     className: "",
     style: "",
   }}

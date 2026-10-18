@@ -14,7 +14,7 @@ import { StyleOverlay } from "../../components/StyleOverlay";
 import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import type { IconName } from "../../icons";
-import { SpacingToken } from "../../types";
+import { CSSUnit, SpacingToken } from "../../types";
 import { escapeHtml } from "../../utils/safe-html";
 import styles from "./CodeBlock.module.scss";
 
@@ -411,7 +411,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "deleted" || line.type === "context") &&
                 line.oldLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.oldLineNumber}
                   </Text>
                 )}
@@ -419,7 +419,7 @@ const renderDiff = (
             <div className="diff-line-number">
               {(line.type === "added" || line.type === "context") &&
                 line.newLineNumber !== undefined && (
-                  <Text variant="code-default-s" style={{ transform: "scale(0.9)" }}>
+                  <Text textVariant="code-default-s" style={{ transform: "scale(0.9)" }}>
                     {line.newLineNumber}
                   </Text>
                 )}
@@ -449,7 +449,11 @@ type CodeInstance = {
 };
 
 export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
-  codeHeight?: number;
+  /**
+   * Cap on the code area's height before it scrolls: a number is px, a string
+   * a CSS length (`"20rem"`). Was rem until 3.0.
+   */
+  codeHeight?: number | CSSUnit;
   fillHeight?: boolean;
   previewPadding?: SpacingToken;
   codes?: CodeInstance[];
@@ -464,18 +468,12 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   background?: React.ComponentProps<typeof Flex>["background"];
   onInstanceChange?: (index: number) => void;
   lineNumbers?: boolean;
-  /**
-   * @deprecated Set `highlight` on each entry of `codes` instead, so every tab
-   * marks its own lines. This one still applies to an entry that sets none.
-   */
-  highlight?: string;
   maxLines?: number;
   isCollapsible?: boolean;
   hideCode?: boolean;
 }
 
 const CodeBlock: React.FC<CodeBlockProps> = ({
-  highlight: deprecatedHighlight,
   codeHeight,
   fillHeight,
   previewPadding = "l",
@@ -510,10 +508,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
     code: "",
     language: "",
   };
-  const { code, language, startLineNumber } = codeInstance;
-
-  const highlight =
-    codeInstance.highlight !== undefined ? codeInstance.highlight : deprecatedHighlight;
+  const { code, language, startLineNumber, highlight } = codeInstance;
 
   useEffect(() => {
     const loadDependencies = async () => {
@@ -677,7 +672,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
       vertical="center"
       fillWidth
       radius="m"
-      minHeight={2.5}
+      minHeight="2.5rem"
       className={classNames(className, {
         [styles.fullscreen]: inPortal && isFullscreen,
       })}
@@ -756,7 +751,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Reload"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleRefresh}
                     icon="refresh"
@@ -772,7 +766,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                 >
                   <IconButton
                     size="m"
-                    color="neutral-weak"
                     tooltip={isFullscreen ? "Exit fullscreen" : "Fullscreen"}
                     tooltipPosition="bottom"
                     variant="tertiary"
@@ -789,12 +782,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     background={background}
                     style={{ backgroundColor: styleBackgroundColor }}
                   >
-                    <IconButton
-                      variant="tertiary"
-                      icon="sparkle"
-                      aria-label="Explain this code"
-                      color="neutral-weak"
-                    />
+                    <IconButton variant="tertiary" icon="sparkle" aria-label="Explain this code" />
                   </Flex>
                 </StyleOverlay>
               )}
@@ -809,7 +797,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     size="m"
                     tooltip="Copy"
                     tooltipPosition="bottom"
-                    color="neutral-weak"
                     variant="tertiary"
                     onClick={handleCopy}
                     icon={copyIcon}
@@ -869,7 +856,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <div
                       className={classNames(styles.pre, `language-diff`)}
                       style={{
-                        maxHeight: `${codeHeight}rem`,
+                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
                         overflow: "auto",
                         width: "100%",
                       }}
@@ -885,11 +872,13 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     </div>
                   ) : (
                     <pre
-                      key={`${selectedInstance}-${highlight || deprecatedHighlight || "no-highlight"}`}
+                      key={`${selectedInstance}-${highlight || "no-highlight"}`}
                       suppressHydrationWarning
                       tabIndex={-1}
-                      style={{ maxHeight: `${codeHeight}rem` }}
-                      data-line={highlight || deprecatedHighlight}
+                      style={{
+                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
+                      }}
+                      data-line={highlight}
                       ref={preRef}
                       className={classNames(
                         lineNumbers ? styles.lineNumberPadding : styles.padding,
@@ -928,7 +917,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                       }
                       to="top"
                       height={"100%"}
-                      blur={100}
+                      blur="100rem"
                     />
                     <Flex
                       position="absolute"
@@ -972,7 +961,6 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
               <IconButton
                 tooltip="Copy"
                 tooltipPosition="left"
-                color="neutral-weak"
                 aria-label="Copy code"
                 onClick={handleCopy}
                 icon={copyIcon}

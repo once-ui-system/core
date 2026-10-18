@@ -122,7 +122,9 @@ describe("ThemeSwitcher", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     localStorage.setItem("data-theme", "light");
-    const { rerender } = render(<ThemeSwitcher value="dark" onChange={onChange} />, { wrapper });
+    const { rerender } = render(<ThemeSwitcher value="dark" onValueChange={onChange} />, {
+      wrapper,
+    });
     expect(pressed()).toEqual(["Dark theme"]);
 
     await user.click(option("Light theme"));
@@ -132,14 +134,14 @@ describe("ThemeSwitcher", () => {
     expect(localStorage.getItem("data-theme")).toBe("light");
     expect(document.documentElement.getAttribute("data-theme")).toBe("light");
 
-    rerender(<ThemeSwitcher value="system" onChange={onChange} />);
+    rerender(<ThemeSwitcher value="system" onValueChange={onChange} />);
     expect(pressed()).toEqual(["System theme"]);
   });
 
   it("uncontrolled, sets the theme and then reports it", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<ThemeSwitcher onChange={onChange} />, { wrapper });
+    render(<ThemeSwitcher onValueChange={onChange} />, { wrapper });
     await user.click(option("Dark theme"));
     expect(onChange).toHaveBeenCalledWith("dark");
     expect(document.documentElement.getAttribute("data-theme")).toBe("dark");

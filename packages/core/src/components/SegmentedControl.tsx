@@ -1,7 +1,8 @@
 "use client";
 
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef } from "react";
 import { revealInStrip } from "../internal/reveal";
+import { useControllableState } from "../internal/useControllableState";
 import { Flex } from "./Flex";
 import { Scroller } from "./Scroller";
 import { ToggleButton, ToggleButtonProps } from "./ToggleButton";
@@ -13,10 +14,17 @@ interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
 interface SegmentedControlProps
   extends Omit<React.ComponentProps<typeof Scroller>, "onChange" | "defaultValue"> {
   buttons: ButtonOption[];
-  onChange: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
-  defaultValue?: string;
-  fillWidth?: boolean;
+  /** The selected button's `value`, controlled. Leave it out to let the
+   *  control keep its own state, starting from `defaultValue`. */
   value?: string;
+  /** The button selected first when uncontrolled. Without it, the first one. */
+  defaultValue?: string;
+  /** Called with the picked button's `value` (and the click, when it was one)
+   *  on every pick. */
+  onValueChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Disables every button. */
+  disabled?: boolean;
+  fillWidth?: boolean;
   compact?: boolean;
   className?: string;
   style?: React.CSSProperties;
@@ -26,8 +34,9 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
   (
     {
       buttons,
-      onChange,
+      onValueChange,
       defaultValue,
+      disabled = false,
       fillWidth = true,
       value,
       compact = false,
@@ -41,28 +50,26 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
     },
     ref,
   ) => {
-    const [internalSelected, setInternalSelected] = useState<string>(() => {
-      if (value !== undefined) return value;
-      if (defaultValue !== undefined) return defaultValue;
-      return buttons[0]?.value || "";
+    const [internalSelected, setInternalSelected] = useControllableState<string>({
+      value,
+      defaultValue: defaultValue ?? buttons[0]?.value ?? "",
     });
 
     const buttonRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
-    useEffect(() => {
-      if (value !== undefined) {
-        setInternalSelected(value);
-      }
-    }, [value]);
+    const pick = (next: string, event?: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) return;
+      setInternalSelected(next);
+      if (event) onValueChange?.(next, event);
+      else onValueChange?.(next);
+    };
 
     const handleButtonClick = (
       clickedButton: ButtonOption,
       event: React.MouseEvent<HTMLButtonElement>,
     ) => {
       event.stopPropagation();
-      const newSelected = clickedButton.value;
-      setInternalSelected(newSelected);
-      onChange(newSelected, event);
+      pick(clickedButton.value, event);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -96,8 +103,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
           event.preventDefault();
           if (focusedIndex >= 0 && focusedIndex < buttons.length) {
             const focusedButton = buttons[focusedIndex];
-            setInternalSelected(focusedButton.value);
-            onChange(focusedButton.value);
+            if (!focusedButton.disabled) pick(focusedButton.value);
           }
           break;
         default:
@@ -177,6 +183,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
                 tabIndex={index === selectedIndex ? 0 : -1}
                 fillWidth={fillWidth}
                 {...button}
+                disabled={disabled || button.disabled}
               />
             );
           })}

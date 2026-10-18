@@ -54,13 +54,13 @@ const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
           radius="full"
           position="absolute"
           className={classNames(styles.arrowHead, styles[color])}
-          height={0.0875}
+          height="0.0875rem"
         />
         <Flex
           radius="full"
           position="absolute"
           className={classNames(styles.arrowHead, styles[color])}
-          height={0.0875}
+          height="0.0875rem"
         />
       </Flex>
     );

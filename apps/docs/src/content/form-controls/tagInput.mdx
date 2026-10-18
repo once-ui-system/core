@@ -1,6 +1,6 @@
 ---
 title: "TagInput"
-summary: "Collect a list of values as removable chips inside a single field."
+summary: "Collect a list of values as removable tags inside a single field."
 updatedAt: "2026-10-11"
 docs: "once-ui/form-controls/tagInput.mdx"
 github: "components/TagInput.tsx"
@@ -8,7 +8,7 @@ navLabel: "TagInput"
 navIcon: "switch"
 ---
 
-`TagInput` holds an array rather than a string. Each entry renders as a chip
+`TagInput` holds an array rather than a string. Each entry renders as a [Tag](/components/tag)
 that can be removed on its own, and typing a new one appends to the array.
 
 <CodeBlock
@@ -23,7 +23,7 @@ that can be removed on its own, and typing a new one appends to the array.
 <TagInput
     id="interests"
     value={tags}
-    onChange={setTags}
+    onValueChange={setTags}
     placeholder="Add interest"
     suffix={<Kbd position="absolute" top="12" right="12">Enter</Kbd>}
 />`,
@@ -35,7 +35,7 @@ that can be removed on its own, and typing a new one appends to the array.
 
 ## Uncontrolled
 
-Leave out `value` and the input keeps its own list, starting from `defaultValue`. `onChange` still receives every new array.
+Leave out `value` and the input keeps its own list, starting from `defaultValue`. `onValueChange` still receives every new array.
 
 <CodeBlock
   marginTop="16"
@@ -62,7 +62,8 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
   describe={{
     value: "The tags, as an array of strings, controlled. Leave it out and the input keeps its own list.",
     defaultValue: "The starting tags when `value` is left out.",
-    onChange: "Receives the whole new array, after an add or a remove.",
+    onValueChange: "Receives the whole new array, after an add or a remove. Was onChange in 2.x.",
+    onChange: "The native change event of the text field, as on Input.",
   }}
 />
 

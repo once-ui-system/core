@@ -55,6 +55,13 @@ export const SPACING_FAMILIES = [
  * instead of two. It takes a child selector, so it stays a hand-written pair
  * rather than being bent into the loop above.
  */
+/**
+ * The margin families that also take `auto` (`.ml-auto`, `.s-mx-auto`):
+ * pushing an item to the end of a row, centring a block. Padding and gap have
+ * no `auto`.
+ */
+export const MARGIN_AUTO_PREFIXES = SPACING_FAMILIES.filter(({ prefix }) => prefix.startsWith("m"));
+
 export const SPACING_EXTRAS = [
   { selector: ".g-horizontal--1 > *:not(:first-child)", decls: ["margin-left: -1px;"] },
   { selector: ".g-vertical--1 > *:not(:first-child)", decls: ["margin-top: -1px;"] },
@@ -152,9 +159,11 @@ export const JUSTIFY_ALIGNMENTS = [
  * column it is `align-items` — so the same value is meaningful on one axis and
  * meaningless on the other.
  */
-export const ALIGN_ALIGNMENTS = JUSTIFY_ALIGNMENTS.filter(
-  ({ suffix }) => !["between", "around", "even"].includes(suffix),
-);
+export const ALIGN_ALIGNMENTS = [
+  ...JUSTIFY_ALIGNMENTS.filter(({ suffix }) => !["between", "around", "even"].includes(suffix)),
+  // `vertical="baseline"`: children line up on their first line of text.
+  { suffix: "baseline", value: "baseline" },
+];
 
 /* -------------------------------------------------------------- border --- */
 
@@ -487,4 +496,34 @@ export const FONT_SCALING = [
   { key: "m", value: "var(--font-scaling-tablet)" },
   { key: "s", value: "var(--font-scaling-mobile)" },
   { key: "xs", value: "var(--font-scaling-mobile)" },
+];
+
+/* ------------------------------------------------------------- resets --- */
+
+/**
+ * Element resets a layout primitive adds for the element `as` names: a list's
+ * bullets and indent, a button's chrome. In `:where()`, at zero specificity,
+ * so any utility class on the same element (padding, background, border,
+ * font) wins over them, and so does a component's own stylesheet.
+ */
+export const ELEMENT_RESETS = [
+  { selector: ":where(.reset-list)", decls: ["list-style: none;", "margin: 0;", "padding: 0;"] },
+  {
+    selector: ":where(.reset-button)",
+    decls: [
+      "appearance: none;",
+      "background: none;",
+      "border: 0;",
+      "margin: 0;",
+      "padding: 0;",
+      "font: inherit;",
+      "color: inherit;",
+      "text-align: inherit;",
+      "cursor: pointer;",
+    ],
+  },
+  { selector: ":where(.reset-button:disabled)", decls: ["cursor: default;"] },
+  // A list that wants its markers back over the reset (`List`).
+  { selector: ".list-disc", decls: ["list-style-type: disc;"] },
+  { selector: ".list-decimal", decls: ["list-style-type: decimal;"] },
 ];

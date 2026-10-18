@@ -1,5 +1,5 @@
 import {
-  AutoScroll,
+  Scroller,
   Background,
   Column,
   Fade,
@@ -32,7 +32,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
         top="0"
         position="absolute"
         maxWidth="xl"
-        maxHeight={56}
+        maxHeight="56rem"
         border="neutral-medium"
         fill
         radius="xl"
@@ -45,7 +45,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
           left="0"
           fill
           interactive
-          speed={4}
+          speed={13.33}
           intensity={40}
           pointerEvents="none"
         />
@@ -56,7 +56,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
           gradient={{
             display: true,
             x: 0,
-            y: 125,
+            y: "125%",
             colorStart: "accent-solid-strong",
             colorEnd: "static-transparent",
           }}
@@ -64,16 +64,16 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
         <Background
           gradient={{
             display: true,
-            x: 125,
-            y: 100,
-            width: 150,
-            height: 150,
+            x: "125%",
+            y: "100%",
+            width: "150%",
+            height: "150%",
             colorStart: "brand-background-strong",
             colorEnd: "static-transparent",
           }}
         />
       </Column>
-      <AutoScroll fillWidth speed="slow">
+      <Scroller auto={{ speed: "slow" }} fillWidth>
         {testimonials.slice(0, Math.ceil(testimonials.length / 2)).map((testimonial, index) => (
           <Column
             key={index}
@@ -82,11 +82,11 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             border
             vertical="between"
             marginRight="12"
-            minWidth={20}
+            minWidth="20rem"
             fillWidth
           >
             <Row padding="32" fillWidth>
-              <Text wrap="balance" variant="heading-default-xs">
+              <Text wrap="balance" textVariant="heading-default-xs">
                 {testimonial.content}
               </Text>
             </Row>
@@ -110,8 +110,8 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             </Row>
           </Column>
         ))}
-      </AutoScroll>
-      <AutoScroll fillWidth reverse speed="slow">
+      </Scroller>
+      <Scroller auto={{ reverse: true, speed: "slow" }} fillWidth>
         {testimonials.slice(Math.ceil(testimonials.length / 2)).map((testimonial, index) => (
           <Column
             key={index}
@@ -120,11 +120,11 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             border
             vertical="between"
             marginRight="12"
-            minWidth={20}
+            minWidth="20rem"
             fillWidth
           >
             <Row padding="32" fillWidth>
-              <Text wrap="balance" variant="heading-default-xs">
+              <Text wrap="balance" textVariant="heading-default-xs">
                 {testimonial.content}
               </Text>
             </Row>
@@ -148,11 +148,11 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
             </Row>
           </Column>
         ))}
-      </AutoScroll>
+      </Scroller>
       <Fade
         pointerEvents="none"
         fillHeight
-        width={24}
+        width="24rem"
         s={{ hide: true }}
         top="0"
         to="right"
@@ -163,7 +163,7 @@ export const Testimonial5: React.FC<Props> = ({ testimonials, ...flex }) => (
       <Fade
         pointerEvents="none"
         fillHeight
-        width={24}
+        width="24rem"
         s={{ hide: true }}
         top="0"
         to="left"

@@ -34,7 +34,7 @@ const settle = () => new Promise((resolve) => setTimeout(resolve, 400));
 
 describe("DatePicker focus", () => {
   it("takes no focus as it mounts", async () => {
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await settle();
     expect(document.body).toHaveFocus();
@@ -44,7 +44,7 @@ describe("DatePicker focus", () => {
     render(
       <>
         <input aria-label="Name" />
-        <DatePicker value={jan(5)} onChange={vi.fn()} />
+        <DatePicker value={jan(5)} onValueChange={vi.fn()} />
       </>,
       { wrapper },
     );
@@ -55,11 +55,11 @@ describe("DatePicker focus", () => {
   });
 
   it("takes no focus when its value is changed from outside", async () => {
-    const { rerender } = render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    const { rerender } = render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await settle();
 
-    rerender(<DatePicker value={new Date(2026, 2, 10)} onChange={vi.fn()} />);
+    rerender(<DatePicker value={new Date(2026, 2, 10)} onValueChange={vi.fn()} />);
     await day(new Date(2026, 2, 10));
     await settle();
     expect(document.body).toHaveFocus();
@@ -67,7 +67,7 @@ describe("DatePicker focus", () => {
 
   it("keeps focus on the month buttons as they change the month", async () => {
     const user = userEvent.setup();
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
 
     await user.click(screen.getByRole("button", { name: "Next month" }));
@@ -85,7 +85,7 @@ describe("DatePicker focus", () => {
 
   it("keeps focus on the year selector once a year is picked from its list", async () => {
     const user = userEvent.setup();
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await settle();
 
@@ -106,7 +106,7 @@ describe("DatePicker focus", () => {
   it("starts the keys from the day focus is on, and keeps focus on a day picked with them", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<DatePicker value={jan(5)} onChange={onChange} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={onChange} />, { wrapper });
     const fifth = await day(jan(5));
     act(() => fifth.focus());
 
@@ -138,7 +138,7 @@ describe("DatePicker focus", () => {
       early.disconnect();
     });
     early.observe(document.body, { childList: true, subtree: true });
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await waitFor(async () => expect(await day(jan(5))).toHaveFocus());
     await settle();
 
@@ -147,7 +147,7 @@ describe("DatePicker focus", () => {
   });
 
   it("with autoFocus, focuses the selected day as it appears", async () => {
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} autoFocus />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} autoFocus />, { wrapper });
     const fifth = await day(jan(5));
     await waitFor(() => expect(fifth).toHaveFocus());
   });
@@ -155,7 +155,7 @@ describe("DatePicker focus", () => {
   it("with autoFocus, focuses the first day that can be picked when none is selected", async () => {
     render(
       <DatePicker
-        onChange={vi.fn()}
+        onValueChange={vi.fn()}
         autoFocus
         currentMonth={0}
         currentYear={2026}

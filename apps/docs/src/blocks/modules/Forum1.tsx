@@ -47,9 +47,9 @@ export const Forum1 = () => {
         <Header1 borderBottom="transparent" maxWidth="l" />
       </Row>
       <Row maxWidth="l" style={{ minHeight: "100%" }}>
-        <Column maxWidth={16} style={{ minHeight: "100%" }} borderRight>
+        <Column maxWidth="16rem" style={{ minHeight: "100%" }} borderRight>
           <Column fillWidth padding="16" gap="12">
-            <Text onBackground="neutral-weak" marginLeft="12" variant="label-default-s">
+            <Text onBackground="neutral-weak" marginLeft="12" textVariant="label-default-s">
               Home
             </Text>
             <Column fillWidth gap="4">
@@ -74,7 +74,7 @@ export const Forum1 = () => {
             </Column>
           </Column>
           <Column fillWidth padding="16" gap="12">
-            <Text onBackground="neutral-weak" marginLeft="12" variant="label-default-s">
+            <Text onBackground="neutral-weak" marginLeft="12" textVariant="label-default-s">
               Community
             </Text>
             <Column fillWidth gap="4">
@@ -131,14 +131,14 @@ export const Forum1 = () => {
         </Column>
         <Column fillWidth paddingX="l" paddingY="24" gap="8">
           <Row fillWidth horizontal="between" vertical="center" paddingBottom="8">
-            <Text variant="label-default-s">Once UI Forum</Text>
+            <Text textVariant="label-default-s">Once UI Forum</Text>
             <SegmentedControl
               fitWidth
               buttons={[
                 { label: "Hot", value: "hot" },
                 { label: "New", value: "new" },
               ]}
-              onChange={() => {}}
+              onValueChange={() => {}}
             />
           </Row>
           <InfiniteScroll
@@ -161,34 +161,34 @@ export const Forum1 = () => {
                   <Avatar src={post.author.avatar} />
                   <Column fillWidth gap="2">
                     <Row vertical="center" gap="8">
-                      <Text variant="body-default-s">{post.title}</Text>
+                      <Text textVariant="body-default-s">{post.title}</Text>
                       <Tag size="s" data-scaling="90">
                         {post.tag}
                       </Tag>
                     </Row>
                     <SmartLink href="#">
-                      <Text variant="label-strong-s">@{post.author.name}</Text>
+                      <Text textVariant="label-strong-s">@{post.author.name}</Text>
                     </SmartLink>
                   </Column>
                 </Row>
                 {post.participants.length > 1 && (
                   <AvatarGroup s={{ hide: true }} reverse size="s" avatars={post.participants} />
                 )}
-                <Column gap="4" horizontal="end" minWidth={8}>
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                <Column gap="4" horizontal="end" minWidth="8rem">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {post.date}
                   </Text>
                   <Row gap="16" data-scaling="90">
                     <Row vertical="center" gap="4">
                       <Icon size="xs" name="chat" onBackground="neutral-weak" />
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         {post.comments}
                       </Text>
                     </Row>
                     <Row vertical="center" gap="4">
                       <Icon size="xs" name="eye" onBackground="neutral-weak" />
                       <CountFx
-                        variant="body-default-xs"
+                        textVariant="body-default-xs"
                         onBackground="neutral-weak"
                         separator=","
                         value={post.views}

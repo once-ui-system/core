@@ -43,7 +43,7 @@ export const Features1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
   return (
     <Column fillWidth gap="40" {...flex}>
       <Column maxWidth="s" paddingX="40" gap="12">
-        <Heading as="h2" variant="display-default-s">
+        <Heading as="h2" textVariant="display-default-s">
           Empowering developers with <Text onBackground="brand-weak">cutting-edge tools</Text> and
           capabilities
         </Heading>
@@ -62,10 +62,10 @@ export const Features1: React.FC<React.ComponentProps<typeof Column>> = ({ ...fl
                 border="brand-alpha-medium"
                 background="brand-alpha-weak"
               />
-              <Heading marginTop="12" as="h3" variant="body-default-m">
+              <Heading marginTop="12" as="h3" textVariant="body-default-m">
                 {feature.title}
               </Heading>
-              <Text wrap="balance" onBackground="neutral-weak" variant="body-default-s">
+              <Text wrap="balance" onBackground="neutral-weak" textVariant="body-default-s">
                 {feature.description}
               </Text>
             </Column>

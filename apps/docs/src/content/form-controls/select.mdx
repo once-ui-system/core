@@ -41,7 +41,7 @@ The `Select` component offers a dropdown menu for selecting from a list of optio
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onValueChange={country => setSelectedCountry(country)}
 />`,
             language: "tsx",
             label: "Select"
@@ -94,7 +94,7 @@ Enable search functionality to filter options in large lists.
       { label: "Japan", value: "jp" },
       { label: "Brazil", value: "br" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onValueChange={country => setSelectedCountry(country)}
 />`,
             language: "tsx",
             label: "Searchable"
@@ -149,7 +149,7 @@ Customize the message shown when no options match the search query.
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onValueChange={country => setSelectedCountry(country)}
 />`,
             language: "tsx",
             label: "Empty State"
@@ -159,7 +159,7 @@ Customize the message shown when no options match the search query.
 
 ## Multiple selection
 
-Set `multiple` to allow selecting more than one option. The `value` and `onSelect` callbacks receive arrays when multiple mode is enabled.
+Set `multiple` to allow selecting more than one option. `value`, `defaultValue` and `onValueChange` take arrays when multiple mode is enabled.
 
 <CodeBlock
   marginTop="16"
@@ -179,7 +179,7 @@ Set `multiple` to allow selecting more than one option. The `value` and `onSelec
     { label: "Engineering", value: "engineering" },
     { label: "Product", value: "product" },
   ]}
-  onSelect={(value) => setTags(value as string[])}
+  onValueChange={(value) => setTags(value as string[])}
 />`,
       language: "tsx",
       label: "Multiple selection"
@@ -193,8 +193,12 @@ Set `multiple` to allow selecting more than one option. The `value` and `onSelec
   component="Select"
   describe={{
     options: "The choices, as value and label pairs.",
-    value: "The selection. An array when multiple is set.",
-    onSelect: "Called with the new selection.",
+    value: "The selection, controlled. An array when multiple is set. Leave it out and the Select keeps its own.",
+    defaultValue: "The starting selection when `value` is left out.",
+    onValueChange: "Called with the new selection (the whole array when multiple is set). Was onSelect in 2.x.",
+    open: "Whether the list is open, controlled.",
+    defaultOpen: "Whether the list starts open, when `open` is left out.",
+    onOpenChange: "Called with every open and close.",
     multiple: "Allow more than one choice.",
     searchable: "Add a filter field above the options.",
     emptyState: "Shown when a search matches nothing.",

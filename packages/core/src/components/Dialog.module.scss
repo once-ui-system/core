@@ -31,3 +31,13 @@
         max-width: calc(100% - var(--static-space-16)) !important;
     }
 }
+/* FocusTrap's box inside the panel: the column the header, the scrolling
+   section and the footer stack in, as the panel itself did before. */
+.trap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    outline: none;
+}

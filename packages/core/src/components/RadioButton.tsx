@@ -1,17 +1,27 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useId, useState } from "react";
+import React, { forwardRef, useId } from "react";
+import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
+import { splitAria, useHiddenInput } from "../internal/hiddenInput";
+import { useControllableState } from "../internal/useControllableState";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import { useRadioGroupItem } from "./RadioGroupContext";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps
-  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    // `onToggle` is this component's own; the DOM's is the `toggle` event of
-    // popovers and `<details>`, which an input never fires.
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
+  extends Omit<
+      InteractiveDetailsProps,
+      "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
+    >,
+    ControlChromeProps,
+    // `onToggle` is the DOM's `toggle` event of popovers and `<details>`,
+    // which an input never fires.
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "checked" | "defaultChecked" | "onToggle" | "size"
+    > {
   style?: React.CSSProperties;
   className?: string;
   /** Chosen or not, controlled. Leave it out to let the radio keep its own
@@ -23,10 +33,13 @@ interface RadioButtonProps
   value?: string;
   disabled?: boolean;
   /** Called with the state the radio moves to: `true` when it becomes the
-   *  chosen one. A callback that takes no argument still works. */
-  onToggle?: (checked: boolean) => void;
+   *  chosen one. As with a native radio, picking it again does nothing. */
+  onCheckedChange?: (checked: boolean) => void;
   hoverable?: boolean;
 }
+
+/** The chosen dot, per size: m is 2.x's 12. */
+const DOT = { s: "8", m: "12", l: "16" } as const;
 
 const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
   (
@@ -37,19 +50,28 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       defaultChecked = false,
       name: nameProp,
       value,
-      onToggle: onToggleProp,
+      onCheckedChange: onCheckedChangeProp,
+      onChange,
+      onFocus,
+      onBlur,
       disabled: disabledProp,
       hoverable = true,
-      "aria-label": ariaLabel,
-      ...props
+      label,
+      description,
+      iconButtonProps,
+      id,
+      size: sizeProp,
+      error,
+      errorMessage,
+      ...rest
     },
     ref,
   ) => {
     // A RadioGroup around this button owns these; outside one, the props do.
     const {
-      checked: controlledIsChecked,
+      checked: groupChecked,
       name,
-      onToggle,
+      onCheckedChange,
       disabled,
       focusProps,
     } = useRadioGroupItem({
@@ -57,34 +79,34 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       checked: checkedProp,
       name: nameProp,
       disabled: disabledProp,
-      onToggle: onToggleProp,
+      onCheckedChange: onCheckedChangeProp,
     });
 
-    const [isChecked, setIsChecked] = useState(controlledIsChecked ?? defaultChecked);
+    const [isChecked, setIsChecked] = useControllableState({
+      value: groupChecked,
+      defaultValue: defaultChecked,
+      onChange: onCheckedChange,
+    });
+    const { setRef, activate, relay } = useHiddenInput(ref);
+    const { aria, native } = splitAria(rest);
+    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
     const labelId = useId();
     const descriptionId = useId();
-    const hasLabel = Boolean(props.label);
+    const hasLabel = Boolean(label);
 
-    useEffect(() => {
-      if (controlledIsChecked !== undefined) {
-        setIsChecked(controlledIsChecked);
-      }
-    }, [controlledIsChecked]);
-
-    const toggleItem = () => {
+    // Every change goes through the native input, so its `onChange` hears
+    // the same event a plain radio would send.
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (disabled) return;
-      const next = !(controlledIsChecked !== undefined ? controlledIsChecked : isChecked);
-      // Uncontrolled, the radio keeps its own state whether or not anyone
-      // listens; controlled, the caller's `checked` is the only truth.
-      if (controlledIsChecked === undefined) setIsChecked(next);
-      onToggle?.(next);
+      setIsChecked(event.target.checked);
+      onChange?.(event);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent) => {
       if (disabled) return;
       if (event.key === "Enter" || event.key === " ") {
         event.preventDefault();
-        toggleItem();
+        activate();
       }
     };
 
@@ -93,7 +115,8 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
         vertical="center"
         gap="16"
         zIndex={1}
-        className={classNames(styles.container, className, {
+        className={classNames(styles.container, className, styles[chrome.size], {
+          [styles.error]: chrome.invalid,
           [styles.disabled]: disabled,
           [styles.noHover]: !hoverable,
         })}
@@ -103,12 +126,13 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
             the control people reach, so this stays out of the accessibility
             tree rather than standing beside it as a second, unlabelled radio. */}
         <input
+          {...native}
           type="radio"
-          ref={ref}
+          ref={setRef}
           name={name}
           value={value}
-          checked={controlledIsChecked !== undefined ? controlledIsChecked : isChecked}
-          onChange={toggleItem}
+          checked={isChecked}
+          onChange={handleChange}
           disabled={disabled}
           className={styles.hidden}
           tabIndex={-1}
@@ -116,46 +140,61 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
         />
         <Flex
           role="radio"
-          aria-checked={controlledIsChecked !== undefined ? controlledIsChecked : isChecked}
+          {...aria}
+          aria-checked={isChecked}
           // Named by the label text alone (not the description or help
           // button beside it); `aria-label` only when there is no label.
           aria-labelledby={hasLabel ? labelId : undefined}
-          aria-label={hasLabel ? undefined : ariaLabel}
-          aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+          aria-label={hasLabel ? undefined : (aria["aria-label"] as string | undefined)}
+          aria-describedby={describedBy(
+            hasLabel && description
+              ? descriptionId
+              : (aria["aria-describedby"] as string | undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
           aria-disabled={disabled}
           horizontal="center"
           vertical="center"
           radius="full"
-          onClick={toggleItem}
+          onClick={disabled ? undefined : activate}
           onKeyDown={handleKeyDown}
+          onFocus={relay(onFocus)}
+          onBlur={relay(onBlur)}
           tabIndex={disabled ? -1 : 0}
           {...focusProps}
           cursor={disabled ? "not-allowed" : undefined}
           style={style}
           className={classNames(styles.element, {
-            [styles.checked]: controlledIsChecked !== undefined ? controlledIsChecked : isChecked,
+            [styles.checked]: isChecked,
             [styles.disabled]: disabled,
           })}
         >
-          {(controlledIsChecked !== undefined ? controlledIsChecked : isChecked) && (
+          {isChecked && (
             <Flex
               style={{
                 backgroundColor: "var(--neutral-on-solid-strong)",
               }}
               radius="full"
-              width="12"
-              height="12"
+              width={DOT[chrome.size]}
+              height={DOT[chrome.size]}
               className={styles.icon}
             />
           )}
         </Flex>
-        {props.label && (
+        {(label || chrome.showsError) && (
           <InteractiveDetails
             disabled={disabled}
-            {...props}
+            label={label}
+            description={description}
+            iconButtonProps={iconButtonProps}
+            id={id}
             labelId={labelId}
             descriptionId={descriptionId}
-            onClick={toggleItem}
+            size={chrome.size}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            errorId={chrome.errorId}
+            onClick={disabled ? () => {} : activate}
           />
         )}
       </Flex>

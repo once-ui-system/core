@@ -124,16 +124,16 @@ Inside a [StylePanel](/components/stylePanel#localisation), its
 
 By default the switcher sets the theme through `ThemeProvider`, which applies it
 to the page and stores it. Pass `value` to own it instead: the switcher shows
-your theme as active, reports a choice through `onChange`, and changes nothing
+your theme as active, reports a choice through `onValueChange`, and changes nothing
 itself. That is what an editor previewing someone else's theme needs. Without
-`value`, `onChange` is still called, after the theme has been set.
+`value`, `onValueChange` is still called, after the theme has been set.
 
 ```tsx
-<ThemeSwitcher value={draft.theme} onChange={(theme) => setDraft({ ...draft, theme })} />
+<ThemeSwitcher value={draft.theme} onValueChange={(theme) => setDraft({ ...draft, theme })} />
 ```
 
 A [StylePanel](/components/stylePanel#owning-the-state) with `value` and
-`onChange` does this for its Theme row.
+`onValueChange` does this for its Theme row.
 
 ## API reference
 
@@ -143,7 +143,7 @@ A [StylePanel](/components/stylePanel#owning-the-state) with `value` and
     ["direction", "row | column"],
     ["labels", "{ system?: string; dark?: string; light?: string }", "-", "The options' accessible names, to translate them."],
     ["value", "system | dark | light", "-", "The active theme, when you own the state. The switcher then sets nothing."],
-    ["onChange", "(theme) => void", "-", "Called with the chosen theme."],
+    ["onValueChange", "(theme) => void", "-", "Called with the chosen theme."],
     ["ref", "HTMLDivElement"],
     ["className"],
     ["style"],

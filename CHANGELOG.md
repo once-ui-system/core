@@ -11,6 +11,204 @@ Entries before 1.7.13 are reconstructed from GitHub releases and git history and
 incomplete; reconciling them against actual npm release history is a scheduled roadmap
 item (see `ROADMAP.md`, Week 4).
 
+## [3.0.0] - Unreleased
+
+Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
+lists what to do and `scripts/codemod-3.0.mjs` does most of it.
+
+### Added
+
+- **`vertical="baseline"`** on Flex, Row and Column, and **`"auto"` margins**
+  (`marginLeft="auto"`, `marginX="auto"`, also in breakpoint objects), as classes.
+- **`error`, `errorMessage` and `size`** on Checkbox, Switch, RadioButton and
+  RadioGroup, as on Input: `aria-invalid`, a linked message, and a `Form size` that
+  reaches them (C6).
+- **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
+  thumb turn danger, the thumb is `aria-invalid` and described by the message, and
+  `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
+  suffix, as PasswordInput did.
+- **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
+  `actions`, `onRowClick`, `rowClassName`, `cellClassName`, a custom `loadingState`,
+  `showFirstLast`, and rows given as arrays, read by column position.
+- **Mode props on survivors** (F6): DatePicker and DateInput `range` (DatePicker
+  `months`), Slider `range`, Kbd `keys`, Grid `masonry`, StatusIndicator `pulse` (with
+  `tone`, `pulseSize`), TypeFx `mode="fade"` (with `state`), Setting `control`/`open`
+  and `axes`, MegaMenu `collapseBelow` (with `onClose`).
+- **`FlexLayoutProps`, `GridLayoutProps`, `FlexElementProps`, `FlexPropsOf<E>`,
+  `PolymorphicProps<T, Own>`** for components built on the layout primitives.
+
+### Removed
+
+- **`Particle`**, the 2.0 alias of `ParticleFx`.
+- **Dialog `hideClose`.** Use `showClose={false}`, the name `Drawer` uses.
+- **CodeBlock's root `highlight`.** Set it on each entry of `codes`.
+- **`ariaLabel`** on `IconButton`, `Spinner`, `Switch`, `Scrubber` and `StatusIndicator`.
+  The native `aria-label` names the same element, with the same defaults.
+- **`BaseBreakpointProps`**, unused since 2.0.
+- **Internal exports** that reached the root barrel: `resetScrollLockState`,
+  `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
+- **Exports that were parts of other components** (F7): `ServerFlex`, `ClientFlex`,
+  `ServerGrid`, `ClientGrid`, `Cursor`, `ElementType`, `InteractiveDetails`, `Toaster`,
+  `Arrow`, `ArrowNavigation` (use the `useArrowNavigation` hook), with
+  `useArrowNavigationContext` and `withArrowNavigation`. The modules stay inside the
+  package; the codemod reports each import with what to use instead.
+- **`DialogProvider`.** Stacked dialogs never read its state; a `stack` Dialog makes
+  the one beneath it inert by itself. The codemod unwraps it.
+- **Internal helpers from the root barrel**: `dev`, `getLastOpenedDropdown`,
+  `setLastOpenedDropdown`, `clearLastOpenedDropdown`, `MissingDependency`,
+  `escapeHtml`, `safeScriptJson`, `sanitizeHref`.
+- **Components that merged** (F1, F2, F4, F5, F6). The codemod rewrites each one; see
+  [MIGRATING.md § 10](MIGRATING.md#10-components-that-merged).
+  - `Modal` → `Dialog variant="sheet"`, with a `backdrop` slot on both variants.
+  - `Swiper` → `Carousel mode="snap"`.
+  - `ScrollContainer` → `Scroller` track mode (`draggable`, `infinite`, `markers`,
+    `proximity`, `active`, `tile`); `AutoScroll` → `Scroller auto={{ speed, hover, reverse }}`.
+  - `InfoTip` → `Tooltip content`; a Tooltip with no children renders the info icon.
+  - `Hover` → `HoverCard placement="cover"`; `CursorCard` → `HoverCard placement="cursor"`
+    (`cursorPlacement`, `delay`, `hideDelay`).
+  - `DropdownWrapper` → `Dropdown`, whose menu is now the children; the 2.x bare
+    `Dropdown` panel is internal. `ContextMenu` → `Dropdown openOn="contextmenu"`.
+  - `EmojiPickerDropdown` → `EmojiPicker trigger`; `UserMenu` → `User dropdown`.
+  - `DataTable` → `Table`, and 2.x `Table data={{ headers, rows }}` → `Table columns rows`
+    (F6). Sorting cycles on the header and the "Sorted by" line is gone; paging is
+    Pagination's with its per-page select; default loading is skeleton rows.
+  - `DateRangePicker` → `DatePicker range` (`dual` → `months={2}`); `DateRangeInput`
+    → `DateInput range`; `RangeSlider` → `Slider range`.
+  - `PasswordInput` → `Input type="password"`, toggle kept. Every password Input now
+    has the toggle; `reveal={false}` restores the plain field.
+  - `KeyTip` → `Kbd keys label`; `MasonryGrid` → `Grid masonry`; `Pulse` →
+    `StatusIndicator pulse`; `FadingLettersFx` → `TypeFx mode="fade"` (`text` →
+    `words`, `animationState` → `state`, `messageIdx` → `delay`).
+  - `SettingGroup` → `Setting control open`; `SettingAxes` → `Setting axes`.
+  - `MobileMegaMenu` → `MegaMenu collapseBelow="always"`; `collapseBelow="m"` renders
+    the bar and the accordion and switches with CSS.
+- **`Badge` and `Chip`** (F3): both are `Tag` now. Badge is `<Tag variant="announce">`
+  (`title` → `label`, `icon` → `prefixIcon`), Chip is a Tag with `selected`, `onClick` or
+  `onRemove` (`iconButtonProps` → `removeButtonProps`). The codemod rewrites both; see
+  [MIGRATING.md § 9](MIGRATING.md#9-badge-and-chip-are-tag).
+- **Button and IconButton `variant="quaternary"`, `"danger"`, `"success"` and `"warning"`**
+  and their icon-only `color`. `quaternary` is `ghost`; the rest are a `tone`.
+
+### Changed
+
+- **`as` is typed by the element** on Flex, Row, Column, Grid and VisuallyHidden (G1):
+  `<Row as="a" href>`, `<Column as="form" onSubmit>` and `<Column as="ul" ref>` type
+  their attributes and ref. Other components no longer accept an untyped `as`
+  inherited from `DisplayProps`; wrap them. `React.ComponentProps<typeof Text>` (and
+  Heading) is no longer `any`.
+- **Lists and buttons reset** (G4): `as="ul"`/`"ol"` renders without bullets or
+  indent, `as="button"` without browser chrome and with `type="button"` by default.
+  `List` keeps its markers.
+- **Charts are generic over the row type** (G3): `data: T[]`, `series.key: keyof T`.
+  `DateRange`'s fields are optional.
+- **Prop aliases collapsed** (G5): `dark`/`light` are `showIn`; `textSize`,
+  `textWeight` and `textType` are `textVariant`; Text/Heading `size` is `textVariant`,
+  and `weight` now swaps a `textVariant`'s weight instead of being ignored beside it.
+
+- **`tone` is the semantic palette and `variant` is appearance only** (E1, E2):
+  `brand | accent | neutral | info | success | warning | danger`. It replaces Button and
+  IconButton's tone variants, Feedback and Toast `variant` (and `addToast({ variant })`),
+  Tag and Pulse `scheme`, Timeline items' `state`, Scrubber tracks' `scheme`, Table
+  actions' `variant="danger"`, and the gauges' named `hue` (a hue pair is `hueRange`).
+  StatusIndicator and Avatar `statusIndicator` take the palette hue as `scheme` (was
+  `color`). See [MIGRATING.md § 8](MIGRATING.md#8-tone-and-variant).
+- **Text, Heading and everything built on them take `textVariant`** (E2) for the type
+  style: Text, Heading, ListItem, CountFx, ShineFx, TypeFx and FadingLettersFx `variant`.
+- **One colour resolver** (E3): Background, ParticleFx, the charts and the gauges read a
+  colour the same way: a token (`brand-weak`), a data hue, a `--custom-property` or any
+  raw CSS colour. `#fff` and `brand-weak` used to be dropped in some of them.
+- **Sizes run `xs` to `xl`** (E4) on Tag, StatusIndicator, Pulse, Accordion and Pagination.
+- **Tag `selected` defaults to false** (core#198). 2.x's Chip defaulted to true, so a
+  Chip with no `selected` was drawn and announced as pressed.
+- **Dialog and Drawer share one overlay core.** Escape closes only the innermost open
+  overlay, focus returns as an overlay starts closing (Dialog waited for its 300ms
+  exit), the panel's Tab containment is FocusTrap's, and the dialog is described by
+  its `description` (`aria-describedby`). The sheet variant takes `description` and
+  `footer` like the centred one.
+- **An uncontrolled `EmojiPicker trigger` closes on a pick**; 2.x's
+  `EmojiPickerDropdown` closed only when controlled.
+- **React 19 is the floor** for `react` and `react-dom`.
+- **Fields and pickers report their value through `onValueChange`.** NumberInput,
+  ColorInput, TagInput, DateInput, DateRangeInput, DatePicker and DateRangePicker
+  `onChange(value)` and Select `onSelect(value)` become `onValueChange(value)`, same
+  signature (the codemod renames them). `onChange` is now the native event, forwarded
+  to the real input on NumberInput, ColorInput, TagInput's text field and DateInput.
+- **Input, Textarea and PasswordInput take `onValueChange(value: string)`**, and
+  `validate` and the character count work on an uncontrolled field.
+- **`defaultValue` on every field and picker**: NumberInput, ColorInput, DateInput,
+  DateRangeInput, Select, DatePicker, DateRangePicker and OTPInput. DatePicker's
+  `defaultDate`, which was never read, is renamed `defaultValue` and works.
+- **`open` / `defaultOpen` / `onOpenChange`** on Select, DateInput and DateRangeInput.
+- **OTPInput takes `value` / `defaultValue` / `onValueChange(code)`**, and its div
+  props and `className` go on the root instead of every digit field.
+- **A cleared `value` clears DateInput**; it used to keep showing the last date.
+- **Checkbox, RadioButton and Switch report through `onCheckedChange(checked)`**
+  (was `onToggle`, same signature), and their native input props (`onChange`,
+  `onBlur`, `name`, `required`, …) now land on the real `<input>`, which every
+  change goes through, so form libraries' `register()` works. They used to be
+  spread onto the label and dropped.
+- **Controls report their value through `onValueChange`.** RadioGroup,
+  SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher and StylePanel
+  `onChange`, and Scrubber `onChange`, become `onValueChange`; Scrubber `onSelect`
+  becomes `onSelectedChange`; Pagination `onChange` becomes `onPageChange`. Same
+  signatures (the codemod renames them). Slider's `onChange` is now the range
+  input's native event, and it adds `onValueCommit`. StylePanel is controlled by
+  `value` alone.
+- **Accordion and NavGroup take `open` / `defaultOpen` / `onOpenChange(open)`**
+  (was `onToggle()`, no argument). An Accordion is controlled whenever `open` is
+  set, which fixes AccordionGroup `autoCollapse={false}` items that could never
+  open; AccordionGroup items take `defaultOpen`. The codemod renames and reports
+  each use.
+- **Kbar takes `open` / `defaultOpen` / `onOpenChange`**, and `inputSize` is `size`
+  on Kbar and KbarContent.
+- **RevealFx and Carousel `revealedByDefault` is `defaultRevealed`.**
+- **SegmentedControl** takes a group `disabled`, its handler is optional, and a
+  controlled one stays on `value` until the parent changes it.
+- **`generateMetadata` is `createMetadata`** (G6): the old name is Next's route-segment
+  convention, so re-exporting it from a page made Next call it. `Meta.generate` is
+  unchanged; the codemod renames the import and every call.
+- **ProgressBar, RadialGauge, DataTooltip, Carousel, DatePicker and Table no longer use
+  `CountFx`, `RevealFx` or `ShineFx`** (F8 prerequisite): internal count-up, reveal and
+  shine parts look and time the same, so the effects can move to `@once-ui-system/fx`.
+- **A number is px on every size, spacing and offset prop** (D2): `width`, `height`
+  and their min/max, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/
+  `bottom`/`left`, `translateX`/`Y`, `blur` and `backdropBlur` on Flex, Grid, Text,
+  Heading and everything built on them, in breakpoint objects too. They were rem, so
+  `maxWidth={40}` was 640px and is 40px now; the codemod writes `maxWidth="40rem"`,
+  which renders exactly as before. Tokens stay strings (`"16"` is the spacing step).
+- **Any CSS length string works**: `CSSUnit` and the size parsers accept px, rem, em,
+  ch, %, vh/vw/dvh/svh/lvh and their widths, vmin/vmax, cqw/cqh, and `calc()`, `min()`,
+  `max()`, `clamp()` and `var()`. `width="320px"` and `maxWidth="40rem"` were type
+  errors that rendered no width at all; spacing (`padding="1.5rem"`) takes them too.
+- **One unit per kind on the outliers** (D3): Avatar `size`, Media `height`, Carousel
+  `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and
+  ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`,
+  CodeBlock `codeHeight` and Fade `blur` read a number as px (was rem) and also take a
+  CSS length. Mask `x`/`y` (was a percentage) and `radius` (was vh) and Background
+  `gradient.x`/`y` (a percentage) and `gradient.width`/`height` (a quarter-percent of
+  the gradient layer) read a number as px; percentages are strings, of the element
+  (`x="50%"`, `width: "100%"`, the default). LinearGauge and RadialGauge
+  `width`/`height` stay the drawing's px size.
+- **Durations, delays and intervals are milliseconds everywhere** (D4): CelebrationFx
+  and WeatherFx `duration`, MatrixFx `bulge.duration` and FlipFx `autoFlipInterval`
+  were seconds. The codemod multiplies literals by 1000.
+- **`speed` is only a multiplier** (D5), `1` being the designed pace, with
+  `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 on every effect that takes it (MatrixFx,
+  WeatherFx, CelebrationFx, ParticleFx, Effect, AutoScroll, GlitchFx, LetterFx). Where
+  it was a length of time it is renamed: RevealFx `speed` (ms, or `"fast"` 1000,
+  `"medium"` 2000, `"slow"` 3000), ShineFx and CountFx `speed` become `duration` (ms),
+  and TypeFx `speed` (ms per character) becomes `charDuration`. ParticleFx's default
+  is now `1` for the same drift as 2.x's `0.3`. AutoScroll, GlitchFx and LetterFx take
+  a number too; GlitchFx `speed` now takes effect (its classes never reached the
+  animated layers), and the shared scale moves GlitchFx `"slow"` to a 5s cycle (was
+  3.5s) and `"fast"` to 1.25s (was 1.5s), and LetterFx `"fast"` to 15ms steps (was 10ms).
+
+### Fixed
+
+- **Several announcement tags on one page** no longer share `id="badge"`; each arrow
+  follows hover on its own tag (2.x Badge).
+
 ## [Unreleased]
 
 ### Added

@@ -14,7 +14,7 @@ import { Text } from "../components/Text";
  * attribute that did nothing (and React warned about the camel-cased ones).
  * They resolve as `Flex` resolves them now: a class where foundations
  * generates one, inline where a class cannot hold the value. `inline`, `hide`,
- * `dark` and `light` are Flex and Grid display modes with no class that fits
+ * `showIn` are Flex and Grid display modes with no class that fits
  * text; they are taken out of the props and do nothing, as before.
  */
 const STYLES = join(__dirname, "../../../foundations/scss/styles");
@@ -56,8 +56,7 @@ const LEAKED = [
   "translatey",
   "inline",
   "hide",
-  "dark",
-  "light",
+  "showin",
 ];
 
 afterEach(() => {
@@ -117,11 +116,11 @@ describe.each([
         </Component>,
       ),
     );
-    expect(style).toContain("gap:0.5rem");
-    expect(style).toContain("top:2rem");
+    expect(style).toContain("gap:0.5px");
+    expect(style).toContain("top:2px");
     expect(style).toContain("right:50%");
     expect(style).toContain("bottom:calc(100% - 1rem)");
-    expect(style).toContain("transform:translate(1rem, 0)");
+    expect(style).toContain("transform:translate(1px, 0)");
   });
 
   it("lets style win over a resolved value", () => {
@@ -133,7 +132,7 @@ describe.each([
       ),
     );
     expect(style).toContain("top:3px");
-    expect(style).not.toContain("top:2rem");
+    expect(style).not.toContain("top:2px");
   });
 
   it("puts none of them on the DOM as an attribute", () => {
@@ -156,8 +155,7 @@ describe.each([
         translateY={-1}
         inline
         hide
-        dark
-        light
+        showIn="dark"
       >
         x
       </Component>,
@@ -168,10 +166,10 @@ describe.each([
     expect(classesOf(html)).toContain("g-horizontal--1");
   });
 
-  it("gives inline, hide, dark and light no class", () => {
+  it("gives inline, hide and showIn no class", () => {
     const classes = classesOf(
       renderToStaticMarkup(
-        <Component inline hide dark light>
+        <Component inline hide showIn="light">
           x
         </Component>,
       ),
@@ -182,13 +180,20 @@ describe.each([
   it("raises no unknown-prop warning when it mounts", () => {
     const error = vi.spyOn(console, "error").mockImplementation(() => {});
     const { container } = render(
-      <Component pointerEvents="none" overflowX="hidden" zIndex={1} translateY={1} hide dark>
+      <Component
+        pointerEvents="none"
+        overflowX="hidden"
+        zIndex={1}
+        translateY={1}
+        hide
+        showIn="dark"
+      >
         x
       </Component>,
     );
     const el = container.firstElementChild as HTMLElement;
     expect(el.getAttributeNames().filter((attr) => LEAKED.includes(attr))).toEqual([]);
-    expect(el.style.transform).toBe("translate(0, 1rem)");
+    expect(el.style.transform).toBe("translate(0, 1px)");
     const warnings = error.mock.calls.map((call) => String(call[0]));
     expect(warnings.filter((w) => /does not recognize|non-boolean attribute/.test(w))).toEqual([]);
   });

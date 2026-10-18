@@ -32,7 +32,9 @@ const formValues = (container: HTMLElement, name: string) =>
 
 const Controlled = (props: Partial<React.ComponentProps<typeof RadioGroup>>) => {
   const [value, setValue] = useState("annual");
-  return <RadioGroup label="Plan" options={plans} value={value} onChange={setValue} {...props} />;
+  return (
+    <RadioGroup label="Plan" options={plans} value={value} onValueChange={setValue} {...props} />
+  );
 };
 
 describe("RadioGroup: structure", () => {
@@ -86,9 +88,12 @@ describe("RadioGroup: selection", () => {
   it("starts on defaultValue and selects on click, reporting each change once", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<RadioGroup label="Plan" options={plans} defaultValue="annual" onChange={onChange} />, {
-      wrapper: wrap,
-    });
+    render(
+      <RadioGroup label="Plan" options={plans} defaultValue="annual" onValueChange={onChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(checkedRadio()).toBe(radio("Annual"));
 
     await user.click(radio("Lifetime"));
@@ -110,7 +115,7 @@ describe("RadioGroup: selection", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const { rerender } = render(
-      <RadioGroup label="Plan" options={plans} value="monthly" onChange={onChange} />,
+      <RadioGroup label="Plan" options={plans} value="monthly" onValueChange={onChange} />,
       { wrapper: wrap },
     );
 
@@ -118,7 +123,7 @@ describe("RadioGroup: selection", () => {
     expect(onChange).toHaveBeenCalledWith("annual");
     expect(checkedRadio()).toBe(radio("Monthly"));
 
-    rerender(<RadioGroup label="Plan" options={plans} value="annual" onChange={onChange} />);
+    rerender(<RadioGroup label="Plan" options={plans} value="annual" onValueChange={onChange} />);
     expect(checkedRadio()).toBe(radio("Annual"));
   });
 
@@ -137,7 +142,7 @@ describe("RadioGroup: selection", () => {
         label="Plan"
         options={plans.map((plan) => ({ ...plan, disabled: plan.value === "lifetime" }))}
         defaultValue="monthly"
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -156,7 +161,7 @@ describe("RadioGroup: selection", () => {
         options={plans}
         defaultValue="monthly"
         disabled
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -214,7 +219,7 @@ describe("RadioGroup: keyboard", () => {
   it("moves focus and the selection with the arrow keys, wrapping at the ends", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Page defaultValue="monthly" onChange={onChange} />, { wrapper: wrap });
+    render(<Page defaultValue="monthly" onValueChange={onChange} />, { wrapper: wrap });
     await user.tab();
     await user.tab();
 
@@ -331,7 +336,7 @@ describe("RadioGroup: RadioButton children", () => {
       <RadioGroup label="Size" name="size" {...props}>
         <Grid columns="2" gap="8">
           <RadioButton value="s" label="Small" />
-          <RadioButton value="m" label="Medium" onToggle={onPick} />
+          <RadioButton value="m" label="Medium" onCheckedChange={onPick} />
           <RadioButton value="l" label="Large" disabled />
           <RadioButton value="xl" label="Extra large" />
         </Grid>
@@ -343,7 +348,9 @@ describe("RadioGroup: RadioButton children", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const onPick = vi.fn();
-    const { container } = render(<Cards onChange={onChange} onPick={onPick} />, { wrapper: wrap });
+    const { container } = render(<Cards onValueChange={onChange} onPick={onPick} />, {
+      wrapper: wrap,
+    });
 
     expect(checkedRadio()).toBeNull();
     expect(radio("Small")).toHaveAttribute("tabindex", "0");

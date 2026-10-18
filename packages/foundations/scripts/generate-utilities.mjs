@@ -21,9 +21,11 @@ import {
   BORDER_STYLES,
   BORDER_WIDTHS,
   CURSORS,
+  ELEMENT_RESETS,
   GRID_AUTO_FIT,
   GRID_COLUMNS,
   GRID_ROWS,
+  MARGIN_AUTO_PREFIXES,
   MAX_WIDTH_SIZES,
   ON_RAMPS,
   OPACITY_STEPS,
@@ -78,6 +80,9 @@ function spacing() {
     for (const token of SPACING_TOKENS) {
       out.push(rule(`.${prefix}-${token}`, props.map((p) => `${p}: ${spacingVar(token)};`)));
     }
+    if (MARGIN_AUTO_PREFIXES.some((m) => m.prefix === prefix)) {
+      out.push(rule(`.${prefix}-auto`, props.map((p) => `${p}: auto;`)));
+    }
     out.push("");
   }
   for (const { selector, decls } of SPACING_EXTRAS) {
@@ -90,11 +95,14 @@ function spacing() {
   // guards on `typeof value === "number"`, so the string fell through both.
   // Numbers worked, tokens did not, and neither said so.
   for (const { key, query } of BREAKPOINTS_CASCADE) {
-    const body = SPACING_FAMILIES.flatMap(({ prefix, props }) =>
-      SPACING_TOKENS.map((token) =>
+    const body = SPACING_FAMILIES.flatMap(({ prefix, props }) => [
+      ...SPACING_TOKENS.map((token) =>
         rule(`.${key}-${prefix}-${token}`, props.map((p) => `${p}: ${spacingVar(token)};`)),
       ),
-    )
+      ...(MARGIN_AUTO_PREFIXES.some((m) => m.prefix === prefix)
+        ? [rule(`.${key}-${prefix}-auto`, props.map((p) => `${p}: auto;`))]
+        : []),
+    ])
       .join("\n")
       .replace(/^/gm, "  ")
       .replace(/^\s+$/gm, "");
@@ -361,6 +369,7 @@ function display() {
     out.push(rule(`.transition-${t}`, [`transition: var(--transition-${t});`]));
   }
   for (const pe of POINTER_EVENTS) out.push(rule(`.pointer-events-${pe}`, [`pointer-events: ${pe};`]));
+  for (const { selector, decls } of ELEMENT_RESETS) out.push(rule(selector, decls));
   for (const c of CURSORS) out.push(rule(`.cursor-${c}`, [`cursor: ${cursorValue(c)};`]));
 
   // Last in the file, after `.surface-background` (which sets its own

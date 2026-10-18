@@ -53,7 +53,7 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
               vertical="center"
               aria-label={`${badge} unread`}
             >
-              <Text variant="label-default-xs" onSolid="brand-strong">
+              <Text textVariant="label-default-xs" onSolid="brand-strong">
                 {badge > 9 ? "9+" : badge}
               </Text>
             </Row>

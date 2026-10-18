@@ -11,7 +11,7 @@ import {
   Row,
   SmartLink,
   Text,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 
 export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
@@ -22,7 +22,7 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         position="absolute"
         pointerEvents="none"
         top="0"
-        height={5}
+        height="5rem"
         pattern={{ display: true, size: "2" }}
       />
       <Row as="header" fillWidth paddingX="l" height="64" vertical="center">
@@ -47,39 +47,39 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
         <Row fillWidth vertical="center" horizontal="end">
           <Row s={{ hide: true }} fillWidth gap="24" paddingX="64" vertical="center">
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" variant="label-strong-s">
+              <Text padding="8" onBackground="neutral-strong" textVariant="label-strong-s">
                 Home
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" variant="label-default-s">
+              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
                 TV Shows
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" variant="label-default-s">
+              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
                 Movies
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" variant="label-default-s">
+              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
                 Popular
               </Text>
             </SmartLink>
             <SmartLink href="#">
-              <Text padding="8" onBackground="neutral-strong" variant="label-default-s">
+              <Text padding="8" onBackground="neutral-strong" textVariant="label-default-s">
                 My List
               </Text>
             </SmartLink>
           </Row>
           <Row fitWidth vertical="center" gap="8">
-            <UserMenu
+            <User
               placement="bottom-end"
               avatarProps={{
                 src: "/images/creators/lorant.jpg",
               }}
               dropdown={
-                <Column minWidth={14} background="page">
+                <Column minWidth="14rem" background="page">
                   <Background
                     position="absolute"
                     fill
@@ -87,9 +87,9 @@ export const Header3: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex })
                     left="0"
                     gradient={{
                       display: true,
-                      width: 200,
-                      height: 100,
-                      x: 50,
+                      width: "200%",
+                      height: "100%",
+                      x: "50%",
                       y: 0,
                       colorStart: "brand-background-medium",
                       colorEnd: "static-transparent",

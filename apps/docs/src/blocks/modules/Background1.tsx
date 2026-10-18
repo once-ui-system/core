@@ -10,17 +10,17 @@ export const Background1: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         fill
         interactive
-        speed={1}
+        speed={3.33}
         intensity={10}
         pointerEvents="none"
       />
       <Background
         gradient={{
           display: true,
-          x: 100,
+          x: "100%",
           y: 0,
-          width: 150,
-          height: 100,
+          width: "150%",
+          height: "100%",
           colorStart: "accent-solid-strong",
           colorEnd: "static-transparent",
         }}
@@ -31,8 +31,8 @@ export const Background1: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
         left="0"
         gradient={{
           display: true,
-          x: 50,
-          y: -25,
+          x: "50%",
+          y: "-25%",
           colorStart: "brand-background-strong",
           colorEnd: "static-transparent",
         }}

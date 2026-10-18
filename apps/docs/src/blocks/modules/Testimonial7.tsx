@@ -65,12 +65,12 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
           flicker
           bulge={{
             type: "ripple",
-            duration: 4,
+            duration: 4000,
             intensity: 15,
             repeat: true,
           }}
         />
-        <Mask fill center x={70} y={20} padding="24">
+        <Mask fill center x="70%" y="20%" padding="24">
           <Media aspectRatio="1" src={testimonial.logo.icon} />
         </Mask>
         <Row position="absolute" left="24" bottom="24">
@@ -98,14 +98,14 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
           fill
           gradient={{
             display: true,
-            width: 75,
-            height: 50,
-            y: 100,
+            width: "75%",
+            height: "50%",
+            y: "100%",
             colorStart: "brand-solid-medium",
           }}
         />
         <Column fill vertical="center" paddingX="xl" paddingY="80">
-          <Heading variant="display-default-xs">{testimonial.heading}</Heading>
+          <Heading textVariant="display-default-xs">{testimonial.heading}</Heading>
           <BlockQuote
             align="left"
             separator="none"
@@ -113,7 +113,7 @@ export const Testimonial7 = (flex: React.ComponentProps<typeof Column>) => {
             author={testimonial.quote.author}
             link={testimonial.quote.link}
           >
-            <Text variant="heading-default-l" onBackground="neutral-weak">
+            <Text textVariant="heading-default-l" onBackground="neutral-weak">
               {testimonial.quote.text}
             </Text>
           </BlockQuote>

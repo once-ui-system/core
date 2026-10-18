@@ -31,7 +31,7 @@ const images = {
 export const Features5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
     <Row fillWidth horizontal="center" aspectRatio="16/9" {...flex}>
-      <Mask position="absolute" fill top="0" x={50} y={0} radius={100}>
+      <Mask position="absolute" fill top="0" x="50%" y={0} radius="100vh">
         <Media alt="Background image" sizes={1024} radius="xl" src={images.background} />
       </Mask>
 
@@ -39,7 +39,7 @@ export const Features5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
         <Grid fillWidth gap="8" columns="4" m={{ columns: 2 }} s={{ columns: 1 }}>
           {features.map((item, index) => (
             <Column
-              backdropBlur={1}
+              backdropBlur="1rem"
               key={index}
               background="overlay"
               radius="l"
@@ -50,10 +50,10 @@ export const Features5: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
               gap="8"
             >
               <Icon name={item.icon} marginBottom="12" size="s" onBackground="brand-weak" />
-              <Heading as="h3" variant="label-default-l">
+              <Heading as="h3" textVariant="label-default-l">
                 {item.title}
               </Heading>
-              <Text wrap="balance" variant="body-default-s" onBackground="neutral-weak">
+              <Text wrap="balance" textVariant="body-default-s" onBackground="neutral-weak">
                 {item.description}
               </Text>
             </Column>

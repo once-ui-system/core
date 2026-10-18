@@ -2,11 +2,13 @@
 
 import { createContext, ReactNode, useContext, useEffect, useState } from "react";
 import { ChartMode, ChartVariant } from "../modules/data/interfaces";
+import type { CSSUnit } from "../types";
 
 export interface ChartOptions {
   variant: ChartVariant;
   mode: ChartMode;
-  height: number;
+  /** The chart's height: a number is px, or any CSS length (`"24rem"`). */
+  height: number | CSSUnit;
   axis: {
     stroke: string;
   };
@@ -35,7 +37,7 @@ export interface DataThemeProviderProps extends OnceUIDataStyleConfig {
 const defaultChartOptions: ChartOptions = {
   variant: "gradient",
   mode: "categorical",
-  height: 24,
+  height: "24rem",
   axis: {
     stroke: "var(--neutral-alpha-weak)",
   },

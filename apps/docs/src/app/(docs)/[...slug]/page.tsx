@@ -65,7 +65,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" maxWidth="60rem" horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -80,9 +80,9 @@ export default async function Docs({
             }}
           />
           <Column maxWidth={layout.content.width} gap="8" vertical="center">
-            <Text variant="label-default-l" onBackground="neutral-medium">{sectionTitle}</Text>
-            <Heading variant="display-strong-s">{doc.metadata.title}</Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-l" onBackground="neutral-medium">{sectionTitle}</Text>
+            <Heading textVariant="display-strong-s">{doc.metadata.title}</Heading>
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Updated: {formatDate(doc.metadata.updatedAt)}
             </Text>
             <Row marginTop="20" gap="8" vertical="center" wrap>
@@ -107,7 +107,7 @@ export default async function Docs({
           <Row gap="16" maxWidth={layout.content.width} horizontal="between" s={{direction: "column"}}>              
             {prevPage ? (
               <Row fillWidth>
-              <Row maxWidth={20}>
+              <Row maxWidth="20rem">
               <Card
                 fillWidth
                 border="neutral-alpha-medium"
@@ -118,12 +118,12 @@ export default async function Docs({
               >
                 <Icon name="chevronLeft" size="s" onBackground="neutral-weak" />
                 <Column gap="4" vertical="center" paddingX="16" paddingY="12">
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {prevPage.slug.includes('/') ? 
                       `${prevPage.slug.split('/')[0].split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}` : 
                       'page'}
                   </Text>
-                  <Text onBackground="neutral-strong" variant="heading-strong-m" wrap="balance">
+                  <Text onBackground="neutral-strong" textVariant="heading-strong-m" wrap="balance">
                     {prevPage.metadata.title}
                   </Text>
                 </Column>
@@ -133,7 +133,7 @@ export default async function Docs({
             ) : <Row/>}
             {nextPage ? (
               <Row fillWidth horizontal="end">
-                <Row maxWidth={20}>
+                <Row maxWidth="20rem">
                   <Card
                     fillWidth
                     border="neutral-alpha-medium"
@@ -143,12 +143,12 @@ export default async function Docs({
                     paddingX="16"
                   >
                     <Column horizontal="end" gap="4" vertical="center" paddingX="16" paddingY="12">
-                      <Text variant="label-default-s" onBackground="neutral-weak">
+                      <Text textVariant="label-default-s" onBackground="neutral-weak">
                         {nextPage.slug.includes('/') ? 
                           `${nextPage.slug.split('/')[0].split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}` : 
                           'page'}
                       </Text>
-                      <Text onBackground="neutral-strong" variant="heading-strong-m" wrap="balance">
+                      <Text onBackground="neutral-strong" textVariant="heading-strong-m" wrap="balance">
                         {nextPage.metadata.title}
                       </Text>
                     </Column>

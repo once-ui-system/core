@@ -1,102 +1,243 @@
 ---
 title: "Table"
-summary: "The Table component displays structured tabular data with optional sorting and click interactions. It supports custom cell rendering and dynamic row behavior."
-updatedAt: "2025-05-09"
+summary: "A table of typed rows from column definitions, with sorting, search, row selection, pagination, row actions, and empty and loading states."
+updatedAt: "2026-10-17"
 docs: "once-ui/components/table.mdx"
 github: "components/Table.tsx"
 navLabel: "Table"
 navIcon: "components"
 ---
-
-`Table` is used to organize and render lists of information in a column/row format. It supports sorting, optional click handlers, and flexible cell content using `ReactNode`.
+`Table` renders an array of your own rows through a list of column definitions.
+It keeps the rows as data, so it can sort by the values rather than by the text
+on screen, select rows by id, search, and page through them. In 3.0 it is 2.x's
+`DataTable` under the short name, and it absorbs 2.x `Table`'s search, row
+actions and row clicks.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={
-    <Table
-      data={{
-        headers: [
-          { content: "Name", key: "name", sortable: true },
-          { content: "Role", key: "role", sortable: true },
-        ],
-        rows: [
-          ["Alice", "Engineer"],
-          ["Bob", "Designer"],
-          ["Carol", "Product"],
-        ],
-      }}
-    />
-  }
+  preview={<DataTableExample />}
   codes={[
     {
       code:
-`<Table
-    data={{
-      headers: [
-        { content: "Name", key: "name" },
-        { content: "Role", key: "role" },
-      ],
-      rows: [
-        ["Alice", "Engineer"],
-        ["Bob", "Designer"],
-        ["Carol", "Product"],
-      ],
-    }}
-/>`,
+`type Invoice = { id: string; customer: string; status: Status; amount: number; issued: string };
+
+const columns: TableColumn<Invoice>[] = [
+  { key: "id", header: "Invoice", sortable: true },
+  { key: "customer", header: "Customer", sortable: true },
+  {
+    key: "status",
+    header: "Status",
+    cell: (invoice) => <Tag size="s" tone={scheme[invoice.status]}>{invoice.status}</Tag>,
+  },
+  { key: "issued", header: "Issued", sortable: true },
+  {
+    key: "amount",
+    header: "Amount",
+    align: "right",
+    sortable: true,
+    cell: (invoice) => money(invoice.amount),
+  },
+];
+
+<Table aria-label="Invoices" columns={columns} rows={invoices} />`,
       language: "tsx",
       label: "Table"
     }
   ]}
 />
 
+`Table` is generic over the row type, so `cell` and `sort` receive your rows
+typed. A column without `cell` shows `row[key]`. Name the table with `aria-label`,
+or point `aria-labelledby` at a heading above it.
+
 ## Sorting
 
-Enable sorting per column by setting `sortable: true` on the corresponding header. Click toggles between ascending and descending.
+A `sortable` column's header is a button. Each press cycles ascending, descending
+and back to the rows' own order, and the sorted header carries `aria-sort`. Without
+a `sort` function the column compares `row[key]`: numbers as numbers, dates by
+time, text in natural order ("Item 2" before "Item 10"), with empty values last
+in both directions. Give the column a `sort` comparator, written ascending, when
+the key is not a field of the row or its values need their own order:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const priority = { high: 0, medium: 1, low: 2 };
+
+{ key: "priority", header: "Priority", sortable: true,
+  sort: (a, b) => priority[a.priority] - priority[b.priority] }`,
+      language: "tsx",
+      label: "Comparator"
+    }
+  ]}
+/>
+
+Table keeps the sort itself, starting from `defaultSort`, or follows `sort` and
+`onSortChange` when the host owns it. `null` is unsorted. A new sort returns to the
+first page.
+
+## Selection and pagination
+
+`selectable` adds a checkbox column. The header checkbox selects or clears the rows
+on screen, and shows a mixed state when only some of them are selected; selection
+is kept across pages. `getRowId` gives each row the id that selection reports;
+without it a row's `id` field is used, or its index. `getRowLabel` names each
+row's checkbox for screen readers.
+
+`paginated` shows the rows a page at a time with [`Pagination`](/components/pagination)
+below; `perPageOptions` adds a page-size select.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableSelectionExample />}
+  codes={[
+    {
+      code:
+`const [selected, setSelected] = useState<string[]>([]);
+
+<Table
+  aria-label="Invoices"
+  columns={columns}
+  rows={invoices}
+  getRowId={(invoice) => invoice.id}
+  getRowLabel={(invoice) => \`Select \${invoice.id}\`}
+  selectable
+  selected={selected}
+  onSelectionChange={setSelected}
+  paginated
+  defaultPerPage={5}
+  perPageOptions={[5, 10, 25]}
+/>`,
+      language: "tsx",
+      label: "Selection"
+    }
+  ]}
+/>
+
+## Server-side data
+
+When the server sorts and pages, pass the current page's rows with `count`, the
+number of rows on the server (or `total`, the number of pages). Table then
+neither sorts nor slices the rows: it reports `onPageChange`, `onPerPageChange`
+and `onSortChange`, and shows `loading` while you fetch. Give rows a `getRowId`
+here, since an index repeats from page to page.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableServerExample />}
+  codes={[
+    {
+      code:
+`const [page, setPage] = useState(1);
+const [sort, setSort] = useState<TableSort | null>(null);
+const { rows, count, loading } = useInvoices({ page, perPage: 5, sort });
+
+<Table
+  aria-label="Invoices"
+  columns={columns}
+  rows={rows}
+  count={count}
+  perPage={5}
+  page={page}
+  onPageChange={setPage}
+  sort={sort}
+  onSortChange={setSort}
+  loading={loading}
+/>`,
+      language: "tsx",
+      label: "Server-side"
+    }
+  ]}
+/>
+
+## Rows as arrays
+
+A row can be an array of cells instead of an object: column n then shows the
+cell at position n, with no `cell` needed, and sorts by it (an element by its
+text). This is how 2.x `Table` took its data, `data={{ headers, rows }}`; in
+3.0 each header is a column, its `content` the column's `header`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Table
-      data={{
-        headers: [
-          { content: "Name", key: "name", sortable: true },
-          { content: "Role", key: "role", sortable: true },
-        ],
-        rows: [
-          ["Alice", "Engineer"],
-          ["Bob", "Designer"],
-          ["Carol", "Product"],
-        ],
-      }}
+      aria-label="Team"
+      columns={[{ header: "Name", key: "name", sortable: true }, { header: "Role", key: "role", sortable: true }]}
+      rows={[
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+      ]}
     />
   }
   codes={[
     {
       code:
 `<Table
-    data={{
-      headers: [
-        { content: "Name", key: "name", sortable: true },
-        { content: "Role", key: "role", sortable: true },
-      ],
-      rows: [
-        ["Alice", "Engineer"],
-        ["Bob", "Designer"],
-        ["Carol", "Product"],
-      ],
-    }}
+  aria-label="Team"
+  columns={[
+    { header: "Name", key: "name", sortable: true },
+    { header: "Role", key: "role", sortable: true },
+  ]}
+  rows={[
+    ["Alice", "Engineer"],
+    ["Bob", "Designer"],
+    ["Carol", "Product"],
+  ]}
 />`,
       language: "tsx",
-      label: "Sorting"
+      label: "Array rows"
     }
   ]}
 />
 
-## Row actions
+## Search
 
-Add `onRowClick` to make rows interactive. A hover state is applied automatically.
+`searchable` adds a field above the table that keeps the rows any of whose cells
+reads as holding the query, with a count of what is left. `searchPlaceholder`
+sets its placeholder, which also names it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Table
+      aria-label="Team"
+      searchable
+      searchPlaceholder="Filter by name..."
+      columns={[{ header: "Name", key: "name", sortable: true }, { header: "Role", key: "role" }]}
+      rows={[
+        ["Alice", "Engineer"],
+        ["Bob", "Designer"],
+        ["Carol", "Product"],
+        ["Dan", "Marketing"],
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Table searchable searchPlaceholder="Filter by name..." columns={columns} rows={rows} />`,
+      language: "tsx",
+      label: "Search"
+    }
+  ]}
+/>
+
+## Row clicks and actions
+
+`onRowClick` makes the rows clickable and receives the row and its index in
+`rows`. `actions` adds a column of icon buttons; each action's `onClick` and
+`disabled` receive the row and its index too (2.x passed the index alone).
+`rowClassName` and `cellClassName` style a row or a cell from the same
+arguments.
 
 <CodeBlock
   marginTop="16"
@@ -105,17 +246,14 @@ Add `onRowClick` to make rows interactive. A hover state is applied automaticall
     {
       code:
 `<Table
-    onRowClick={(index) => alert(\`Clicked row \${index}\`)}
-    data={{
-      headers: [
-        { content: "Task", key: "task" },
-        { content: "Status", key: "status" },
-      ],
-      rows: [
-        ["Launch", "In progress"],
-        ["Prototype", "Done"],
-      ],
-    }}
+  aria-label="Tasks"
+  columns={columns}
+  rows={tasks}
+  onRowClick={(task) => open(task.id)}
+  actions={[
+    { icon: "edit", label: "Edit", onClick: (task) => edit(task) },
+    { icon: "trash", label: "Delete", variant: "primary", tone: "danger", onClick: (task) => remove(task) },
+  ]}
 />`,
       language: "tsx",
       label: "Row actions"
@@ -123,170 +261,144 @@ Add `onRowClick` to make rows interactive. A hover state is applied automaticall
   ]}
 />
 
-## Search
+## Empty and loading
 
-Enable `searchable` to filter rows by cell content. Use `searchPlaceholder` to customize the input label.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <Table
-      searchable
-      searchPlaceholder="Filter by name..."
-      data={{
-        headers: [
-          { content: "Name", key: "name", sortable: true },
-          { content: "Role", key: "role" },
-        ],
-        rows: [
-          ["Alice", "Engineer"],
-          ["Bob", "Designer"],
-          ["Carol", "Product"],
-          ["Dan", "Marketing"],
-        ],
-      }}
-    />
-  }
-  codes={[
-    {
-      code:
-`<Table
-    searchable
-    searchPlaceholder="Filter by name..."
-    data={{
-      headers: [
-        { content: "Name", key: "name", sortable: true },
-        { content: "Role", key: "role" },
-      ],
-      rows: [
-        ["Alice", "Engineer"],
-        ["Bob", "Designer"],
-        ["Carol", "Product"],
-      ],
-    }}
-/>`,
-      language: "tsx",
-      label: "Search"
-    }
-  ]}
-/>
-
-## Pagination
-
-Set `paginated` to split large datasets into pages. Control the default page size with `defaultPageSize` and `pageSizeOptions`.
+With no rows Table shows an empty state; pass your own as `emptyState`. While
+`loading`, skeleton rows stand in for the page (as many as `perPage`), the table is
+marked `aria-busy`, and sorting, selection and pagination are disabled.
+`loadingState` shows your own placeholder instead of the skeleton rows.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <Table
-      paginated
-      defaultPageSize={3}
-      data={{
-        headers: [
-          { content: "Name", key: "name" },
-          { content: "Role", key: "role" },
-        ],
-        rows: [
-          ["Alice", "Engineer"],
-          ["Bob", "Designer"],
-          ["Carol", "Product"],
-          ["Dan", "Marketing"],
-          ["Eve", "Support"],
-          ["Frank", "Sales"],
-        ],
-      }}
-    />
+    <Column fillWidth gap="16">
+      <Table
+        aria-label="Members"
+        columns={[
+          { key: "name", header: "Name" },
+          { key: "email", header: "Email" },
+          { key: "role", header: "Role" },
+        ]}
+        rows={[]}
+        emptyState={<Text>No members yet.</Text>}
+      />
+      <Table
+        aria-label="Members loading"
+        loading
+        paginated
+        defaultPerPage={3}
+        columns={[
+          { key: "name", header: "Name" },
+          { key: "email", header: "Email" },
+          { key: "role", header: "Role" },
+        ]}
+        rows={[]}
+      />
+    </Column>
   }
   codes={[
     {
       code:
-`<Table
-  paginated
-  defaultPageSize={5}
-  pageSizeOptions={[5, 10, 20, 50]}
-  data={{ headers, rows }}
-/>`,
+`<Table columns={columns} rows={[]} emptyState={<Text>No members yet.</Text>} />
+<Table columns={columns} rows={rows} loading paginated defaultPerPage={3} />`,
       language: "tsx",
-      label: "Pagination"
+      label: "Empty and loading"
     }
   ]}
 />
 
-## Loading and empty states
-
-Use `loading` to show a spinner while data is fetched. Provide `emptyState` or `loadingState` for custom placeholders.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={
-    <Table
-      loading
-      data={{
-        headers: [
-          { content: "Name", key: "name" },
-          { content: "Role", key: "role" },
-        ],
-        rows: [],
-      }}
-    />
-  }
-  codes={[
-    {
-      code:
-`<Table
-  loading
-  loadingState={<Text>Fetching records...</Text>}
-  emptyState={<Text>No results found.</Text>}
-  data={{ headers, rows }}
-/>`,
-      language: "tsx",
-      label: "Loading"
-    }
-  ]}
-/>
+`stickyHeader` keeps the header row in view while the rows scroll; pair it with
+`maxHeight`, which caps the scroll area. `striped`, `hoverable` and `compact` change
+the look.
 
 ## API reference
 
 <PropsTable
   component="Table"
   describe={{
-    data: "Headers and rows. Cells are ReactNodes, so anything can go in one.",
-    onRowClick: "Called with the row index. Rows become focusable when set.",
-    searchable: "Add a search field that filters rows.",
-    searchPlaceholder: "Placeholder for that field.",
+    columns: "The columns, in order. See TableColumn below.",
+    rows: "Your rows: every row, or with count or total only the current page. An array row is read by position.",
+    onRowClick: "Called with the clicked row and its index.",
+    searchable: "Add a search field that filters the rows by their cells' text.",
+    searchPlaceholder: "The search field's placeholder and name.",
+    actions: "Icon buttons in a last column, for each row. See TableAction below.",
+    rowClassName: "A class for a row, from the row and its index.",
+    cellClassName: "A class for a cell, from the row, its index and the column's index.",
+    loadingState: "What shows in place of the skeleton rows while loading.",
+    showFirstLast: "First- and last-page buttons beside the pages.",
+    getRowId: "A stable id per row, which selection reports. Defaults to row.id, then the index.",
+    sort: "The sorted column and direction when the host owns it; null for unsorted.",
+    defaultSort: "The sort to start with.",
+    onSortChange: "Called with the new sort, or null.",
+    selectable: "Add a checkbox column with select-all.",
+    selected: "The selected rows' ids when the host owns them.",
+    defaultSelected: "The ids selected to start with.",
+    onSelectionChange: "Called with every selected id after each change.",
+    getRowLabel: "The accessible name of a row's checkbox.",
+    paginated: "Show the rows a page at a time.",
+    page: "The current page, from 1, when the host owns it.",
+    defaultPage: "The page to start on.",
+    onPageChange: "Called with the new page.",
+    perPage: "Rows per page when the host owns it.",
+    defaultPerPage: "Rows per page to start with.",
+    perPageOptions: "Page sizes to offer in a select.",
+    onPerPageChange: "Called with the new page size.",
+    count: "Rows on the server. The rows are then one page, sorted and sliced by the host.",
+    total: "Pages on the server, as count.",
+    loading: "Show skeleton rows and disable the controls.",
+    emptyState: "What to show when there are no rows.",
+    stickyHeader: "Keep the header row in view while the rows scroll.",
     striped: "Alternate row backgrounds.",
     hoverable: "Highlight the row under the pointer.",
-    compact: "Tighter row height, for dense data.",
-    loading: "Swap the rows for the loading state.",
-    loadingState: "What to render while loading.",
-    emptyState: "What to render when there are no rows.",
-    actions: "Row actions, rendered in a trailing column.",
-    stickyHeader: "Keep the header visible while the body scrolls.",
-    rowClassName: "Per-row class, by index.",
-    cellClassName: "Per-cell class, by row and column index.",
-    paginated: "Page the rows instead of rendering all of them.",
-    defaultPageSize: "Rows per page before the reader changes it.",
-    pageSizeOptions: "The sizes offered in the page-size control.",
+    compact: "Tighter rows.",
+    labels: "The checkbox, pagination and per-page names, to translate them.",
+    "aria-label": "The table's accessible name.",
+    "aria-labelledby": "The id of the element that names the table.",
   }}
+/>
+
+### TableColumn
+
+<PropsTable
+  label="Field"
   content={[
-    ["maxHeight", "string"],
-    ["className"],
-    ["style"]
+    ["key", "string", "-", "The column's id, the key a sort reports, and the field shown when there is no cell.", true],
+    ["header", "React.ReactNode", "-", "The header cell's content.", true],
+    ["cell", "(row: T, index: number) => React.ReactNode", "-", "Renders the cell. Without it the cell shows row[key]."],
+    ["sortable", "boolean", "false", "Let the reader sort by this column."],
+    ["sort", "(a: T, b: T) => number", "-", "Ascending comparator. Without it rows compare by row[key]."],
+    ["align", ["left", "center", "right"], "left", "Aligns the header and the cells."],
+    ["width", "string", "-", "A CSS width for the column."],
+  ]}
+/>
+
+### TableLabels
+
+<PropsTable
+  label="Field"
+  content={[
+    ["selectAll", "string", "\"Select all rows\"", "The select-all checkbox's name; \"Select all rows on this page\" when paginated."],
+    ["selectRow", "string", "\"Select row\"", "Each row checkbox's name, unless getRowLabel names it."],
+    ["pagination", "string", "\"Pagination\"", "The pagination landmark's name."],
+    ["perPage", "string", "\"Rows per page\"", "The per-page select's label."],
+    ["search", "string", "\"Search\"", "The search field's name when it has no placeholder."],
+    ["actions", "string", "\"Actions\"", "The actions column's header."],
+    ["previous, next, first, last", "string", "-", "As on Pagination."],
   ]}
 />
 
 ### TableAction
 
 <PropsTable
+  label="Field"
   content={[
-    ["icon", "string"],
-    ["label", "string"],
-    ["tooltip", "string"],
-    ["variant", ["primary", "secondary", "tertiary", "danger"], "secondary"],
-    ["onClick", "(rowIndex: number) => void"],
-    ["disabled", "(rowIndex: number) => boolean"]
+    ["icon", "string", "-", "The button's icon.", true],
+    ["label", "string", "-", "The button's name, and its tooltip when there is no tooltip."],
+    ["tooltip", "string", "-", "The tooltip."],
+    ["variant", ["primary", "secondary", "tertiary", "ghost"], "tertiary", "The button's look."],
+    ["tone", "Tone", "-", "The button's palette, such as danger."],
+    ["onClick", "(row: T, index: number) => void", "-", "Called with the row and its index.", true],
+    ["disabled", "(row: T, index: number) => boolean", "-", "Disables the button for a row."],
   ]}
 />

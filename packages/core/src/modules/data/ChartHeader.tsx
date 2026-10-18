@@ -14,8 +14,8 @@ import {
 } from "date-fns";
 import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { DateRange, DateRangePicker } from "../../components/DateRangePicker";
-import { DropdownWrapper } from "../../components/DropdownWrapper";
+import { DatePicker, type DateRange } from "../../components/DatePicker";
+import { Dropdown } from "../../components/Dropdown";
 import { IconButton } from "../../components/IconButton";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
@@ -163,15 +163,15 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
     <Column fillWidth paddingX="20" paddingY="12" gap="4" {...flex}>
       <Row fillWidth vertical="center">
         <Column fillWidth gap="4">
-          {title && <Text variant="heading-strong-xs">{title}</Text>}
+          {title && <Text textVariant="heading-strong-xs">{title}</Text>}
           {description && (
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {description}
             </Text>
           )}
         </Column>
         {dateRange && date?.selector && (
-          <DropdownWrapper
+          <Dropdown
             open={dateRangeOpen}
             onOpenChange={(isOpen) => setDateRangeOpen(isOpen)}
             placement="bottom-end"
@@ -184,56 +184,56 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
                 size="m"
               />
             }
-            dropdown={
-              <Row padding="4" s={{ direction: "column" }}>
-                {presets.display && (
-                  <Column
-                    s={{ direction: "row" }}
-                    padding="4"
-                    gap="2"
-                    minWidth={8}
-                    border
-                    radius="m"
-                    overflowX="scroll"
-                  >
-                    {(Object.keys(dateRangePresets) as PresetName[])
-                      .filter((presetName) => {
-                        if (presets.granularity === "year") {
-                          return presetName.includes("year");
-                        } else if (presets.granularity === "month") {
-                          return presetName.includes("year") || presetName.includes("month");
-                        } else {
-                          return true;
-                        }
-                      })
-                      .map((presetName) => (
-                        <ToggleButton
-                          key={presetName}
-                          style={{ paddingLeft: "0.25rem" }}
-                          fillWidth
-                          horizontal="start"
-                          selected={selectedPreset === presetName}
-                          onClick={() => handlePresetClick(presetName)}
-                        >
-                          {presetName}
-                        </ToggleButton>
-                      ))}
-                  </Column>
-                )}
-                <DateRangePicker
-                  size="s"
-                  padding="16"
-                  gap="24"
-                  id="chart-date-range"
-                  maxDate={date?.max}
-                  minDate={date?.min}
-                  dual={date?.dual}
-                  value={dateRange}
-                  onChange={handleDateRangeChange}
-                />
-              </Row>
-            }
-          />
+          >
+            <Row padding="4" s={{ direction: "column" }}>
+              {presets.display && (
+                <Column
+                  s={{ direction: "row" }}
+                  padding="4"
+                  gap="2"
+                  minWidth="8rem"
+                  border
+                  radius="m"
+                  overflowX="scroll"
+                >
+                  {(Object.keys(dateRangePresets) as PresetName[])
+                    .filter((presetName) => {
+                      if (presets.granularity === "year") {
+                        return presetName.includes("year");
+                      } else if (presets.granularity === "month") {
+                        return presetName.includes("year") || presetName.includes("month");
+                      } else {
+                        return true;
+                      }
+                    })
+                    .map((presetName) => (
+                      <ToggleButton
+                        key={presetName}
+                        style={{ paddingLeft: "0.25rem" }}
+                        fillWidth
+                        horizontal="start"
+                        selected={selectedPreset === presetName}
+                        onClick={() => handlePresetClick(presetName)}
+                      >
+                        {presetName}
+                      </ToggleButton>
+                    ))}
+                </Column>
+              )}
+              <DatePicker
+                range
+                size="s"
+                padding="16"
+                gap="24"
+                id="chart-date-range"
+                maxDate={date?.max}
+                minDate={date?.min}
+                months={date?.dual ? 2 : 1}
+                value={dateRange}
+                onValueChange={handleDateRangeChange}
+              />
+            </Row>
+          </Dropdown>
         )}
       </Row>
     </Column>

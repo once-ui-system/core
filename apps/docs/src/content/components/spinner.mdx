@@ -64,12 +64,12 @@ Customize the ARIA label for screen readers.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Spinner ariaLabel="Processing payment..." />
+    <Spinner aria-label="Processing payment..." />
   }
   codes={[
     {
       code:
-`<Spinner ariaLabel="Processing payment..." />`,
+`<Spinner aria-label="Processing payment..." />`,
       language: "tsx",
       label: "ARIA label"
     }
@@ -82,7 +82,7 @@ Customize the ARIA label for screen readers.
   component="Spinner"
   describe={{
     size: "Spinner size.",
-    ariaLabel: "What assistive tech announces while it turns.",
+    "aria-label": "What assistive tech announces while it turns.",
   }}
   content={[
     ["className"],

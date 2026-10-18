@@ -4,7 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLayout } from "../contexts/LayoutProvider";
-import { ToastPosition } from "../types";
+import { ToastPosition, Tone } from "../types";
 import { Column } from "./Column";
 import { Row } from "./Row";
 import { Toast } from "./Toast";
@@ -13,7 +13,7 @@ import styles from "./Toaster.module.scss";
 interface ToasterProps {
   toasts: {
     id: string;
-    variant: "success" | "danger" | "warning" | "info";
+    tone: Tone;
     message: React.ReactNode;
     action?: React.ReactNode;
     duration?: number;
@@ -64,7 +64,7 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
       <Column
         zIndex={10}
         fillWidth
-        maxWidth={32}
+        maxWidth="32rem"
         position="fixed"
         className={classNames(styles.toastContainer, styles[actualPosition])}
       >
@@ -87,7 +87,7 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
             >
               <Toast
                 className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
-                variant={toast.variant}
+                tone={toast.tone}
                 onClose={() => removeToast(toast.id)}
                 action={toast.action}
                 duration={toast.duration}

@@ -71,7 +71,7 @@ export function PricingExample() {
           size={1.5}
           spacing={8}
           colors={["brand-solid-strong"]}
-          bulge={{ type: "wave", duration: 3, intensity: 20, repeat: true }}
+          bulge={{ type: "wave", duration: 3000, intensity: 20, repeat: true }}
         />
         <Background
           position="absolute"
@@ -83,19 +83,19 @@ export function PricingExample() {
             display: true,
             colorStart: "page-background",
             x: 0,
-            y: 50,
-            width: 150,
-            height: 300,
+            y: "50%",
+            width: "150%",
+            height: "300%",
           }}
         />
-        <Column zIndex={1} center gap="24" padding="48" maxWidth={48}>
-          <Text variant="label-default-s" onBackground="brand-medium">
+        <Column zIndex={1} center gap="24" padding="48" maxWidth="48rem">
+          <Text textVariant="label-default-s" onBackground="brand-medium">
             Pricing
           </Text>
-          <Heading as="h1" variant="display-strong-xl" align="center">
+          <Heading as="h1" textVariant="display-strong-xl" align="center">
             Pay for momentum, not seats
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+          <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
             Start free, scale when you're ready.
           </Text>
         </Column>
@@ -110,12 +110,12 @@ export function PricingExample() {
             gap="24"
             s={{ direction: "column", horizontal: "start" }}
           >
-            <Heading as="h2" variant="display-strong-xs">
+            <Heading as="h2" textVariant="display-strong-xs">
               Three plans, one decision
             </Heading>
             <SegmentedControl
               value={billing}
-              onChange={(value) => setBilling(value as Billing)}
+              onValueChange={(value) => setBilling(value as Billing)}
               buttons={[
                 { value: "monthly", label: "Monthly" },
                 { value: "yearly", label: "Yearly −20%" },
@@ -151,35 +151,35 @@ export function PricingExample() {
                         display: true,
                         colorStart: "brand-alpha-medium",
                         colorEnd: "static-transparent",
-                        x: 50,
+                        x: "50%",
                         y: 0,
-                        width: 200,
-                        height: 60,
+                        width: "200%",
+                        height: "60%",
                         opacity: 50,
                       }}
                     />
                   )}
                   <Column zIndex={1} fill gap="24">
                     <Row fillWidth horizontal="between" vertical="center">
-                      <Heading as="h3" variant="heading-strong-m">
+                      <Heading as="h3" textVariant="heading-strong-m">
                         {tier.name}
                       </Heading>
-                      {tier.highlighted && <Tag scheme="brand" size="s" label="Most popular" />}
+                      {tier.highlighted && <Tag tone="brand" size="s" label="Most popular" />}
                     </Row>
-                    <Text variant="body-default-s" onBackground="neutral-weak">
+                    <Text textVariant="body-default-s" onBackground="neutral-weak">
                       {tier.description}
                     </Text>
                     {tier.price ? (
                       <Row vertical="end" gap="2">
-                        <Text variant="display-strong-s">$</Text>
+                        <Text textVariant="display-strong-s">$</Text>
                         <CountFx
-                          variant="display-strong-s"
+                          textVariant="display-strong-s"
                           value={tier.price[billing]}
                           effect="wheel"
-                          speed={400}
+                          duration={400}
                         />
                         <Text
-                          variant="label-default-s"
+                          textVariant="label-default-s"
                           onBackground="neutral-weak"
                           paddingBottom="4"
                           paddingLeft="4"
@@ -188,13 +188,13 @@ export function PricingExample() {
                         </Text>
                       </Row>
                     ) : (
-                      <Text variant="display-strong-s">Custom</Text>
+                      <Text textVariant="display-strong-s">Custom</Text>
                     )}
                     <Column flex={1} gap="12">
                       {tier.features.map((feature) => (
                         <Row key={feature} gap="12" vertical="center">
                           <Icon name="checkbox" size="xs" onBackground="brand-medium" />
-                          <Text variant="body-default-s">{feature}</Text>
+                          <Text textVariant="body-default-s">{feature}</Text>
                         </Row>
                       ))}
                     </Column>
@@ -221,22 +221,20 @@ export function PricingExample() {
         paddingX="24"
       >
         <Column maxWidth="l" gap="40">
-          <Heading as="h2" variant="display-strong-xs">
+          <Heading as="h2" textVariant="display-strong-xs">
             Every feature, side by side
           </Heading>
           <Table
             fillWidth
-            data={{
-              headers: [
-                { content: "Feature", key: "feature" },
-                { content: "Starter", key: "starter" },
-                { content: "Pro", key: "pro" },
-              ],
-              rows: [
-                ["Projects", "3", "Unlimited"],
-                ["API access", "—", "✓"],
-              ],
-            }}
+            columns={[
+              { header: "Feature", key: "feature" },
+              { header: "Starter", key: "starter" },
+              { header: "Pro", key: "pro" },
+            ]}
+            rows={[
+              ["Projects", "3", "Unlimited"],
+              ["API access", "—", "✓"],
+            ]}
           />
         </Column>
       </Column>
@@ -244,8 +242,8 @@ export function PricingExample() {
       <Column fillWidth horizontal="center">
         <Column maxWidth="l" radius="xl" border overflow="hidden" padding="64" center>
           <BlobFx position="absolute" top="0" left="0" fill opacity={60} seed={2} />
-          <Column zIndex={1} center gap="24" maxWidth={40}>
-            <Heading as="h2" variant="display-strong-s" align="center">
+          <Column zIndex={1} center gap="24" maxWidth="40rem">
+            <Heading as="h2" textVariant="display-strong-s" align="center">
               Ship your next launch on Pro
             </Heading>
             <Button arrowIcon>Start free trial</Button>

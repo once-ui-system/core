@@ -71,10 +71,10 @@ export const About3 = () => {
     <Column fillWidth horizontal="center">
       <Column maxWidth="m" horizontal="center" gap="24">
         <Column maxWidth="xs" horizontal="center" gap="20">
-          <Text variant="body-default-s" align="center" onBackground="brand-weak">
+          <Text textVariant="body-default-s" align="center" onBackground="brand-weak">
             Our Story
           </Text>
-          <Heading variant="display-strong-m" align="center">
+          <Heading textVariant="display-strong-m" align="center">
             Redefining Creativity for the Future
           </Heading>
         </Column>
@@ -86,7 +86,7 @@ export const About3 = () => {
             left="0"
             fill
             interactive
-            speed={4}
+            speed={13.33}
             intensity={40}
             pointerEvents="none"
           />
@@ -97,7 +97,7 @@ export const About3 = () => {
             gradient={{
               display: true,
               x: 0,
-              y: 125,
+              y: "125%",
               colorStart: "accent-solid-strong",
               colorEnd: "static-transparent",
             }}
@@ -108,16 +108,16 @@ export const About3 = () => {
             left="0"
             gradient={{
               display: true,
-              x: 125,
-              y: 100,
-              width: 150,
-              height: 150,
+              x: "125%",
+              y: "100%",
+              width: "150%",
+              height: "150%",
               colorStart: "brand-background-strong",
               colorEnd: "static-transparent",
             }}
           />
           <Row fillWidth s={{ direction: "column" }} gap="16" vertical="center">
-            <Mask x={60} y={60} radius={40} style={{ mixBlendMode: "luminosity" }}>
+            <Mask x="60%" y="60%" radius="40vh" style={{ mixBlendMode: "luminosity" }}>
               <Media
                 priority
                 sizes="(max-width: 768px) 100vw, 560px"
@@ -129,15 +129,15 @@ export const About3 = () => {
             </Mask>
             <Column fillWidth textVariant="body-default-m">
               <Column fillWidth padding="48" gap="32">
-                <Text variant="body-default-xl" wrap="balance">
+                <Text textVariant="body-default-xl" wrap="balance">
                   We are dedicated to providing world-class tools that help creators bring their
                   boldest ideas to life.
                 </Text>
-                <Text variant="body-default-xl" wrap="balance">
+                <Text textVariant="body-default-xl" wrap="balance">
                   Our tools are designed to help you create anything you can imagine: from simple
                   prototypes to complex applications.
                 </Text>
-                <Text variant="body-default-xl" wrap="balance">
+                <Text textVariant="body-default-xl" wrap="balance">
                   Join our community and be part of the next generation of creators.
                 </Text>
               </Column>
@@ -156,14 +156,14 @@ export const About3 = () => {
               border="neutral-alpha-medium"
             >
               <Icon name={feature.icon} onBackground="brand-weak" size="s" />
-              <Text variant="body-default-m" wrap="balance">
+              <Text textVariant="body-default-m" wrap="balance">
                 {feature.title} <Text onBackground="neutral-weak">{feature.description}</Text>
               </Text>
             </Column>
           ))}
         </Grid>
         <Line width="24" background="neutral-alpha-strong" marginTop="64" marginBottom="24" />
-        <Heading variant="display-strong-xs" align="center" marginBottom="24">
+        <Heading textVariant="display-strong-xs" align="center" marginBottom="24">
           Meet the Team
         </Heading>
         <Grid fillWidth columns="3" m={{ columns: 2 }} s={{ columns: 1 }} gap="8">
@@ -181,11 +181,11 @@ export const About3 = () => {
               border="neutral-alpha-medium"
             >
               <Avatar size="l" src={profile.avatar} />
-              <Text variant="label-default-m" align="center" marginTop="16">
+              <Text textVariant="label-default-m" align="center" marginTop="16">
                 {profile.name}
               </Text>
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 align="center"
                 marginBottom="16"
                 onBackground="neutral-weak"
@@ -215,8 +215,8 @@ export const About3 = () => {
           background="overlay"
           border="neutral-alpha-medium"
         >
-          <Row maxWidth={40}>
-            <Text variant="display-default-xs" wrap="balance">
+          <Row maxWidth="40rem">
+            <Text textVariant="display-default-xs" wrap="balance">
               Join the next generation of creators
             </Text>
           </Row>

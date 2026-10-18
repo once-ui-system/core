@@ -21,7 +21,7 @@ The DatePicker component provides an interactive calendar interface for selectin
       code:
 `<DatePicker 
     value={selectedDate}
-    onChange={handleDateChange}
+    onValueChange={handleDateChange}
 />`,
       language: "tsx",
       label: "DatePicker"
@@ -42,7 +42,7 @@ The DatePicker component provides an interactive calendar interface for selectin
       code:
 `<DatePicker 
     value={dateTime}
-    onChange={handleDateTimeChange}
+    onValueChange={handleDateTimeChange}
     timePicker
 />`,
       language: "tsx",
@@ -68,7 +68,7 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
       code:
 `<DatePicker
     value={selectedDate}
-    onChange={setSelectedDate}
+    onValueChange={setSelectedDate}
     timePicker
     locale="de"
     labels={{
@@ -87,11 +87,42 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
   ]}
 />
 
+## Range
+
+With `range`, the picker selects a start and an end date, highlighting the days between (2.x's `DateRangePicker`). `value`, `defaultValue` and `onValueChange` then take a `DateRange`, `{ startDate, endDate }`: the first pick sets the start alone, the second the end. `months={2}` shows two months side by side (2.x's `dual`), and `minDate` and `maxDate` bound the days that can be picked.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DateRangePickerExample />}
+  codes={[
+    {
+      code:
+`const [range, setRange] = useState<DateRange>({
+    startDate: new Date(),
+    endDate: undefined,
+});
+
+<DatePicker range value={range} onValueChange={setRange} />
+<DatePicker range months={2} value={range} onValueChange={setRange} />`,
+      language: "tsx",
+      label: "Range"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="DatePicker"
   describe={{
+    value: "The date, controlled. Leave it out and the picker keeps its own.",
+    defaultValue: "The starting date when `value` is left out. Replaces defaultDate, which 2.x never read.",
+    onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x. With range, called with the range after each pick: the start alone, then both ends.",
+    range: "Select a start and end date. value, defaultValue and onValueChange then take a DateRange.",
+    months: "With range, how many months show side by side: 1 or 2. 2.x's dual was months={2}.",
+    autoFocus: "Move focus onto the selected day as the picker appears, for a picker that has just been opened.",
+    open: "With autoFocus, focus moves in again each time this turns true. It does not show or hide the picker.",
     currentMonth: "Current month",
     currentYear: "Current year",
     locale: "Locale for month and weekday names and the time picker's time, such as \"de\". English when left out.",

@@ -182,7 +182,7 @@ function BlockExample({
         horizontal="center"
         vertical="start"
         center={false}
-        minHeight={24}
+        minHeight="24rem"
         padding="l"
       >
         {rendered}
@@ -194,7 +194,7 @@ function BlockExample({
     selectedTab !== 0 ? undefined : inView ? (
       renderPreview()
     ) : (
-      <Row fillWidth minHeight={24} />
+      <Row fillWidth minHeight="24rem" />
     );
 
   // Content-sized on the preview tab (capped at 80vh); the code view and

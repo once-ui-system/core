@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { type CSSProperties, forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
 import { useAdapters } from "../contexts/AdapterProvider";
+import type { CSSUnit } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { MediaVideoPlayer } from "./MediaVideoPlayer";
@@ -13,7 +14,8 @@ import { Skeleton } from "./Skeleton";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;
-  height?: number;
+  /** A number is px (`320`); a string is a CSS length (`"20rem"`, `"50vh"`). */
+  height?: number | CSSUnit;
   alt?: string;
   loading?: boolean;
   objectFit?: CSSProperties["objectFit"];
@@ -178,7 +180,9 @@ const Media = forwardRef<HTMLDivElement, MediaProps>(
               : aspectRatio
                 ? ""
                 : height
-                  ? `${height}rem`
+                  ? typeof height === "number"
+                    ? `${height}px`
+                    : height
                   : "100%",
           aspectRatio: aspectRatio === "original" ? undefined : aspectRatio,
           borderRadius: isEnlarged ? "0" : undefined,

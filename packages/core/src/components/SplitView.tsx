@@ -135,7 +135,7 @@ function SplitView({
             { value: "right", label: rightLabel },
           ]}
           value={activePanel}
-          onChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
+          onValueChange={(value) => setActivePanel(value === "right" ? "right" : "left")}
         />
         <Column fill overflowY="auto" minHeight={0}>
           {activePanel === "left" ? leftPanel : rightPanel}
@@ -198,7 +198,7 @@ function SplitView({
         {/* A pill 4px thick. It used to fill the gutter's width, which the
             gutter's own padding leaves at zero, so only the card's border
             showed and the fill never did — not even while dragging. */}
-        <Row width={isHorizontal ? "4" : 8} height={isHorizontal ? 8 : "4"}>
+        <Row width={isHorizontal ? "4" : "8rem"} height={isHorizontal ? "8rem" : "4"}>
           <Card
             fill
             background={isDragging ? "neutral-strong" : "neutral-weak"}

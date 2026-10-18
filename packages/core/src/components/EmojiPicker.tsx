@@ -11,7 +11,9 @@ import {
   useState,
 } from "react";
 import { useDebounce } from "../hooks/useDebounce";
+import { useControllableState } from "../internal/useControllableState";
 import { Column } from "./Column";
+import { Dropdown, type DropdownProps } from "./Dropdown";
 import styles from "./EmojiPicker.module.scss";
 import type { Flex } from "./Flex";
 import { Grid } from "./Grid";
@@ -89,7 +91,7 @@ const fallbackEmojiData: EmojiData = {
 import generatedEmojiData from "../data/emoji-data.json";
 import type { IconName } from "../icons";
 import type { StyleProps } from "../interfaces";
-import type { GridSize } from "../types";
+import type { GridSize, Placement } from "../types";
 
 const emojiData: EmojiData =
   Object.keys(generatedEmojiData).length > 0
@@ -98,6 +100,26 @@ const emojiData: EmojiData =
 
 export interface EmojiPickerProps extends Omit<React.ComponentProps<typeof Flex>, "onSelect"> {
   onSelect: (emoji: string) => void;
+  /**
+   * Open the picker from a trigger, in a Dropdown (2.x
+   * `EmojiPickerDropdown`). Without one the picker renders inline.
+   */
+  trigger?: React.ReactNode;
+  /** With `trigger`: whether the picker is open. Leave unset and it opens and closes itself. */
+  open?: boolean;
+  /** With `trigger`: open on first render, uncontrolled. */
+  defaultOpen?: boolean;
+  /** With `trigger`: called with the next open state. */
+  onOpenChange?: (open: boolean) => void;
+  /** With `trigger`: where the picker opens. */
+  placement?: Placement;
+  /** With `trigger`: close once an emoji is picked. On by default. */
+  closeAfterClick?: boolean;
+  /** With `trigger`: further Dropdown props (`minWidth`, `fillWidth`, `nested`…). */
+  dropdownProps?: Omit<
+    DropdownProps,
+    "trigger" | "children" | "dropdown" | "open" | "onOpenChange"
+  >;
   onClose?: () => void;
   className?: string;
   background?: StyleProps["background"];
@@ -129,14 +151,14 @@ const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiB
       role="gridcell"
       ref={isFocused ? (el) => el?.focus() : undefined}
     >
-      <Text variant="heading-default-xl">{emoji.char}</Text>
+      <Text textVariant="heading-default-xl">{emoji.char}</Text>
     </IconButton>
   );
 });
 
 EmojiButton.displayName = "EmojiButton";
 
-const EmojiPicker = ({
+const EmojiGrid = ({
   onSelect,
   onClose,
   className,
@@ -277,7 +299,7 @@ const EmojiPicker = ({
       className={className}
       style={style}
       data-testid="emoji-picker"
-      height={24}
+      height="24rem"
       {...flex}
     >
       <Input
@@ -323,12 +345,59 @@ const EmojiPicker = ({
       {!searchQuery && (
         <SegmentedControl
           buttons={categoryButtons}
-          onChange={handleCategoryChange}
+          onValueChange={handleCategoryChange}
           defaultValue={activeCategory}
           fillWidth
         />
       )}
     </Column>
+  );
+};
+
+EmojiGrid.displayName = "EmojiGrid";
+
+/**
+ * Search and pick an emoji. Inline by default; with a `trigger` it opens in a
+ * Dropdown from that trigger, and closes itself after a pick.
+ */
+const EmojiPicker = ({
+  trigger,
+  open,
+  defaultOpen = false,
+  onOpenChange,
+  placement,
+  closeAfterClick = true,
+  dropdownProps,
+  ...picker
+}: EmojiPickerProps) => {
+  const [isOpen, setOpen] = useControllableState({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+  if (trigger === undefined) return <EmojiGrid {...picker} />;
+  const { onSelect, background = "surface", padding = "8", ...grid } = picker;
+  return (
+    <Dropdown
+      {...dropdownProps}
+      trigger={trigger}
+      placement={placement}
+      closeAfterClick={closeAfterClick}
+      handleArrowNavigation={false}
+      open={isOpen}
+      onOpenChange={setOpen}
+    >
+      <EmojiGrid
+        padding={padding}
+        background={background}
+        {...grid}
+        onSelect={(emoji) => {
+          onSelect(emoji);
+          if (closeAfterClick) setOpen(false);
+        }}
+        onClose={closeAfterClick ? () => setOpen(false) : undefined}
+      />
+    </Dropdown>
   );
 };
 

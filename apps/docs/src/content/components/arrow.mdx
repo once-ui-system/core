@@ -1,64 +1,25 @@
 ---
 title: "Arrow"
-summary: "The Arrow component provides an animated arrow that responds to hover events on specified trigger elements."
-updatedAt: "2025-05-04"
+summary: "Internal since 3.0: the animated arrow Button and Tag draw."
+updatedAt: "2026-10-17"
 docs: "once-ui/components/arrow.mdx"
 github: "components/Arrow.tsx"
 navLabel: "Arrow"
 navIcon: "components"
 ---
 
-A decorative arrow component that animates when a specified trigger element is hovered. It's useful for creating visual cues and enhancing interactive elements with subtle animations.
+`Arrow` is internal in Once UI 3.0. It is the animated arrow that `Button` and `Tag` draw, and it is no longer exported from `@once-ui-system/core`.
+
+Use the prop that draws it instead:
+
+- `Button`: `arrowIcon` adds an arrow that moves when the button is hovered.
+- `Tag`: `arrow` (on by default when the tag has an `href`).
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={
-    <Column gap="16" horizontal="center">
-      <Row id="arrow-trigger-1" padding="16" fitWidth radius="m" vertical="center">
-        Simple usage
-        <Arrow trigger="#arrow-trigger-1" scale={1} />
-      </Row>
-      <Row id="arrow-trigger-2" padding="16" fitWidth radius="m" vertical="center" solid="brand-medium" onSolid="brand-strong">
-        Customized usage
-        <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
-      </Row>
-    </Column>  }
-  codes={[
-    {
-      code:
-`<Row id="arrow-trigger-1">
-    Simple usage
-    <Arrow trigger="#arrow-trigger-1" scale={1} />
-  </Row>
-  <Row id="arrow-trigger-2">
-    Customized usage
-    <Arrow trigger="#arrow-trigger-2" color="onSolid" scale={1.2} />
-</Row>`,
-      language: "tsx",
-      label: "Arrow"
-    }
-  ]}
+  preview={<Button arrowIcon href="#">Read more</Button>}
+  codes={[{ code: `<Button arrowIcon href="/blog">Read more</Button>`, language: "tsx", label: "Button arrow" }]}
 />
 
-## API reference
-
-<PropsTable
-  component="Arrow"
-  describe={{
-    trigger: "CSS selector for the element it points from. It follows that element's hover.",
-    scale: "Arrow size, as a multiplier.",
-    color: "Whether it draws for a background or a solid surface.",
-  }}
-  content={[
-    ["style"],
-    ["className"]
-  ]}
-/>
-
-## Usage Notes
-
-- The `trigger` prop must be a valid CSS selector (e.g., `#element-id`, `.element-class`)
-- The arrow will animate when the user hovers over the element specified by the trigger selector
-- Use the `scale` prop to adjust the size of the arrow to fit your design
-- The `color` prop allows you to choose between styles optimized for light or dark backgrounds
+See [Migrating from 2.x](https://github.com/once-ui-system/core/blob/main/MIGRATING.md) for the full list of exports that became internal.

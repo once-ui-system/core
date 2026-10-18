@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
 import { StyleProps } from "../interfaces";
+import { CountUp } from "../internal/CountUp";
 import { Column } from "./Column";
-import { CountFx } from "./CountFx";
 import { Flex } from "./Flex";
 import { Row } from "./Row";
 import { Text } from "./Text";
@@ -60,7 +60,7 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 
     const labelEl = showLabel ? (
       <Text align={isHorizontal ? undefined : "center"}>
-        <CountFx value={value} speed={1000} duration={1000} easing="ease-in-out" />%
+        <CountUp value={value} duration={1000} easing="ease-in-out" />%
       </Text>
     ) : null;
 

@@ -59,16 +59,16 @@ it, so it is written once rather than on each child.
   preview={
     <Column fillWidth gap="12">
       <Row fillWidth padding="16" radius="m" background="brand-medium" onBackground="brand-medium" horizontal="center">
-        <Text variant="label-default-s">background + onBackground</Text>
+        <Text textVariant="label-default-s">background + onBackground</Text>
       </Row>
       <Row fillWidth padding="16" radius="m" solid="brand-strong" onSolid="brand-strong" horizontal="center">
-        <Text variant="label-default-s">solid + onSolid</Text>
+        <Text textVariant="label-default-s">solid + onSolid</Text>
       </Row>
       <Row fillWidth padding="16" radius="m" background="brand-alpha-weak" onBackground="brand-strong" horizontal="center">
-        <Text variant="label-default-s">alpha over whatever is behind</Text>
+        <Text textVariant="label-default-s">alpha over whatever is behind</Text>
       </Row>
       <Row fillWidth padding="16" radius="m" background="surface" border="neutral-alpha-medium" onBackground="neutral-strong" horizontal="center">
-        <Text variant="label-default-s">surface</Text>
+        <Text textVariant="label-default-s">surface</Text>
       </Row>
     </Column>
   }
@@ -116,11 +116,11 @@ them.
     <Row fillWidth gap="12" data-solid="contrast">
       <Column flex={1} gap="8" horizontal="center">
         <Row fillWidth height="64" radius="m" style={{ background: "var(--brand-solid-strong)" }} />
-        <Text variant="label-default-s" onBackground="neutral-weak">brand-solid-strong</Text>
+        <Text textVariant="label-default-s" onBackground="neutral-weak">brand-solid-strong</Text>
       </Column>
       <Column flex={1} gap="8" horizontal="center">
         <Row fillWidth height="64" radius="m" style={{ background: "var(--brand-color-strong)" }} />
-        <Text variant="label-default-s" onBackground="neutral-weak">brand-color-strong</Text>
+        <Text textVariant="label-default-s" onBackground="neutral-weak">brand-color-strong</Text>
       </Column>
     </Row>
   }

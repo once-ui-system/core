@@ -4,13 +4,13 @@
 
 .blueShift {
     filter: hue-rotate(260deg);
-    animation: glitch-blue 2.5s infinite;
+    animation: glitch-blue var(--glitch-duration, 2.5s) infinite;
     z-index: 1;
 }
 
 .redShift {
     filter: hue-rotate(120deg);
-    animation: glitch-red 2.5s infinite;
+    animation: glitch-red var(--glitch-duration, 2.5s) infinite;
     z-index: 1;
 }
 
@@ -68,18 +68,6 @@
         opacity: 0.3;
         clip-path: inset(0 0 20% 50%);
     }
-}
-
-.slow {
-    animation-duration: 3.5s;
-}
-
-.medium {
-    animation-duration: 2.5s;
-}
-
-.fast {
-    animation-duration: 1.5s;
 }
 
 .active .blueShift, .active .redShift {

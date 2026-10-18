@@ -35,14 +35,14 @@ const lineOf = (label: string) => screen.getByText(label).parentElement as HTMLE
 
 describe("StylePanel stacked", () => {
   it("puts each row's label above its control", () => {
-    render(<StylePanel stacked value={{}} onChange={vi.fn()} customColors />, { wrapper });
+    render(<StylePanel stacked value={{}} onValueChange={vi.fn()} customColors />, { wrapper });
     for (const label of ["Theme", "Shape", "Brand", "Accent", "Neutral", "Style", "Scaling"]) {
       expect(lineOf(label)).toHaveClass("flex-column");
     }
   });
 
   it("leaves the default panel's rows inline", () => {
-    render(<StylePanel value={{}} onChange={vi.fn()} customColors />, { wrapper });
+    render(<StylePanel value={{}} onValueChange={vi.fn()} customColors />, { wrapper });
     for (const label of ["Theme", "Brand", "Accent", "Neutral", "Style"]) {
       expect(lineOf(label)).not.toHaveClass("flex-column");
     }
@@ -72,18 +72,18 @@ describe("StylePanel's option rows", () => {
     tab.closest('[role="tablist"]')?.parentElement?.parentElement;
 
   it("keep their size inline, and stop at 22rem beside the label", () => {
-    render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
+    render(<StylePanel value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect(scalingTab()).toHaveClass("radius-l");
     expect((optionsOf(scalingTab()) as HTMLElement).style.maxWidth).toBe("22rem");
   });
 
   it("take the whole row when stacked", () => {
-    render(<StylePanel stacked value={{}} onChange={vi.fn()} />, { wrapper });
+    render(<StylePanel stacked value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect((optionsOf(scalingTab()) as HTMLElement).style.maxWidth).toBe("");
   });
 
   it("drop a size when stacked, so a sidebar fits more of them", () => {
-    render(<StylePanel stacked value={{}} onChange={vi.fn()} />, { wrapper });
+    render(<StylePanel stacked value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect(scalingTab()).toHaveClass("radius-m");
     expect(screen.getByRole("tab", { name: "Contrast" })).toHaveClass("radius-m");
   });
@@ -92,7 +92,7 @@ describe("StylePanel's option rows", () => {
 describe("a custom-colour row", () => {
   it("lays out its label and swatches by the props every row takes", () => {
     const { container } = render(
-      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onChange={vi.fn()}>
+      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
         <StylePanel.Group title="Color">
           <StylePanel.Brand custom direction="column" gap="12" paddingX="16" />
         </StylePanel.Group>
@@ -161,7 +161,7 @@ describe("the chosen swatch", () => {
 
   it("is scrolled into view, clear of the Next button, when the panel mounts", () => {
     render(
-      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onChange={vi.fn()}>
+      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
         <StylePanel.Brand custom />
       </StylePanel.Root>,
       { wrapper },
@@ -173,7 +173,7 @@ describe("the chosen swatch", () => {
 
   it("stays put when it is already in view", () => {
     render(
-      <StylePanel.Root value={{ brand: near }} onChange={vi.fn()}>
+      <StylePanel.Root value={{ brand: near }} onValueChange={vi.fn()}>
         <StylePanel.Brand />
       </StylePanel.Root>,
       { wrapper },
@@ -194,7 +194,7 @@ describe("the chosen swatch", () => {
           <button type="button" onClick={() => setValue({ brand: far })}>
             Pick from outside
           </button>
-          <StylePanel.Root value={value} onChange={setValue}>
+          <StylePanel.Root value={value} onValueChange={setValue}>
             <StylePanel.Brand />
           </StylePanel.Root>
         </>

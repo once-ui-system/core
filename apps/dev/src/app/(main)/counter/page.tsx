@@ -8,7 +8,7 @@ export default function Counter() {
 
   return (
     <Row fill center>
-      <CountFx variant="display-default-xl" value={count} speed={10000} separator=","/>
+      <CountFx textVariant="display-default-xl" value={count} duration={10000} separator=","/>
     </Row>
   );
 }

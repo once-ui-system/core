@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
 import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination";
+import type { TShirtSizes } from "../types";
 import { Button } from "./Button";
 import { IconButton } from "./IconButton";
 import styles from "./Pagination.module.scss";
@@ -34,17 +35,18 @@ const DEFAULT_LABELS: PaginationLabels = {
 
 // Buttons and icon buttons share a height one size apart: an `s` page button
 // is 32px, as an `m` icon button is. The field is the closest height above.
-const ICON_BUTTON_SIZE = { s: "m", m: "l", l: "xl" } as const;
-const SELECT_SIZE = { s: "xs", m: "xs", l: "s" } as const;
+// xs and xl have no icon button a size apart, so they share s's and l's.
+const ICON_BUTTON_SIZE = { xs: "s", s: "m", m: "l", l: "xl", xl: "xl" } as const;
+const SELECT_SIZE = { xs: "xs", s: "xs", m: "xs", l: "s", xl: "m" } as const;
 
 interface PaginationProps
   extends Omit<React.ComponentProps<typeof Row>, "onChange" | "children" | "defaultValue"> {
-  /** The current page, from 1, when the host owns the state. Pair with `onChange`. */
+  /** The current page, from 1, when the host owns the state. Pair with `onPageChange`. */
   page?: number;
   /** The page shown first when Pagination manages its own state. */
   defaultPage?: number;
   /** Called with the new page. Not called for the page already shown. */
-  onChange?: (page: number) => void;
+  onPageChange?: (page: number) => void;
   /** How many pages there are. Or pass `count` and `perPage` and let Pagination work it out. */
   total?: number;
   /** How many items there are across all pages. With `perPage`, gives the page count. */
@@ -57,7 +59,7 @@ interface PaginationProps
   perPageOptions?: number[];
   /**
    * Called with the new page size. The page then moves so the first item on
-   * screen stays on screen, and `onChange` reports that move.
+   * screen stays on screen, and `onPageChange` reports that move.
    */
   onPerPageChange?: (perPage: number) => void;
   /** Pages drawn on each side of the current page. */
@@ -67,7 +69,7 @@ interface PaginationProps
   /** Add buttons that jump to the first and the last page. */
   showFirstLast?: boolean;
   /** The buttons' size. */
-  size?: "s" | "m" | "l";
+  size?: TShirtSizes;
   /** Disable every control, such as while the next page loads. */
   disabled?: boolean;
   /** The buttons' names and the per-page label, to translate them. */
@@ -85,14 +87,14 @@ interface PaginationProps
  * With `perPageOptions` it also offers a page-size select.
  *
  * Works on its own state (`defaultPage`) or the host's (`page` and
- * `onChange`), which is what server-side paging wants.
+ * `onPageChange`), which is what server-side paging wants.
  */
 const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
   (
     {
       page,
       defaultPage = 1,
-      onChange,
+      onPageChange,
       total,
       count,
       perPage,
@@ -148,7 +150,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       // left on it, where the browser drops it to the page.
       if (fromArrow && (next === 1 || next === pages)) refocusCurrent.current = true;
       if (!controlled) setUncontrolledPage(next);
-      onChange?.(next);
+      onPageChange?.(next);
     };
 
     // Runs once the new page is drawn, controlled or not: `current` is the
@@ -176,7 +178,7 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       const clamped = Math.min(nextPages, Math.max(1, target));
       if (clamped !== current) {
         if (!controlled) setUncontrolledPage(clamped);
-        onChange?.(clamped);
+        onPageChange?.(clamped);
       }
     };
 
@@ -208,17 +210,21 @@ const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
       <Row ref={setRefs} as="nav" aria-label={ariaLabel} gap="16" vertical="center" wrap {...flex}>
         {perPageOptions && perPageOptions.length > 0 && (
           <Row gap="8" vertical="center">
-            <Text id={`${perPageId}-label`} variant="label-default-s" onBackground="neutral-medium">
+            <Text
+              id={`${perPageId}-label`}
+              textVariant="label-default-s"
+              onBackground="neutral-medium"
+            >
               {text.perPage}
             </Text>
-            <Row width={5}>
+            <Row width="5rem">
               <Select
                 id={`${perPageId}-select`}
                 aria-labelledby={`${perPageId}-label`}
                 size={SELECT_SIZE[size]}
                 value={String(currentPerPage)}
                 disabled={disabled}
-                onSelect={changePerPage}
+                onValueChange={changePerPage}
                 options={perPageOptions.map((option) => ({
                   label: String(option),
                   value: String(option),

@@ -95,7 +95,7 @@ export function MdxHeading(props: MdxHeadingProps) {
       <Heading
         as={as}
         id={slug || undefined}
-        variant={headingVariant[as]}
+        textVariant={headingVariant[as]}
         className={className}
         style={style}
       >
@@ -159,7 +159,7 @@ export function MdxParagraph(props: MdxParagraphProps) {
       as={blocks.length > 0 ? "div" : "p"}
       id={id}
       className={className}
-      variant="body-default-m"
+      textVariant="body-default-m"
       onBackground="neutral-medium"
       style={{ ...BODY_LINE_HEIGHT, ...style }}
       {...spacing}
@@ -205,7 +205,7 @@ export function MdxBlockQuote(props: MdxBlockQuoteProps) {
     isValidElement<MdxParagraphProps>(child) && child.type === MdxParagraph ? (
       <Text
         as="p"
-        variant="body-default-m"
+        textVariant="body-default-m"
         onBackground="neutral-medium"
         marginTop="8"
         marginBottom="12"
@@ -351,16 +351,17 @@ export type MdxTableProps = MdxElementProps<"table"> & MdxSpacingProps;
 
 /**
  * A GFM table (with `remark-gfm`) through `Table`. MDX hands over the
- * `thead`/`tbody`/`tr`/`th`/`td` elements; their cells become `Table` data, and
- * a column's `:---:` alignment carries over.
+ * `thead`/`tbody`/`tr`/`th`/`td` elements; the header cells become `columns`
+ * and each body row an array of cells, read by position, and a column's
+ * `:---:` alignment carries over.
  */
 export function MdxTable(props: MdxTableProps) {
   const { spacing, rest } = splitSpacing(props, { marginTop: "16", marginBottom: "16" });
   const sections = Children.toArray(rest.children).filter(isValidElement<SectionProps>);
   const head = sections.find((section) => section.type === "thead");
   const headerCells = elementsIn(elementsIn(head)[0]);
-  const headers = headerCells.map((cell, index) => ({
-    content: cell.props.children,
+  const columns = headerCells.map((cell, index) => ({
+    header: cell.props.children,
     key: `column-${index}`,
     align: alignmentOf(cell),
   }));
@@ -370,6 +371,12 @@ export function MdxTable(props: MdxTableProps) {
     .map((row) => elementsIn(row).map((cell) => cell.props.children));
 
   return (
-    <Table className={rest.className} style={rest.style} data={{ headers, rows }} {...spacing} />
+    <Table
+      className={rest.className}
+      style={rest.style}
+      columns={columns}
+      rows={rows}
+      {...spacing}
+    />
   );
 }

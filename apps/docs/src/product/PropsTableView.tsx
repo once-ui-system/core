@@ -1,7 +1,7 @@
 "use client";
 
-import React, { ReactNode } from "react";
 import { Column, InlineCode, Row, SmartLink, Table, Text } from "@once-ui-system/core";
+import React, { ReactNode } from "react";
 
 type PropType = string | string[] | ReactNode;
 
@@ -38,10 +38,7 @@ const SPREADS: Record<string, { type: string; href?: string }> = {
   animation: { type: "AnimationProps", href: "/components/animation" },
   user: { type: "UserProps", href: "/components/user" },
   chart: { type: "ChartProps", href: "/data/setup" },
-  dropdownWrapper: {
-    type: "DropdownWrapperProps",
-    href: "/components/dropdownWrapper",
-  },
+  dropdown: { type: "DropdownProps", href: "/components/dropdown" },
   input: { type: "InputProps", href: "/form-controls/input" },
   HTMLAttributes: {
     type: "React.HTMLAttributes",
@@ -109,7 +106,7 @@ function PropsTableView({ content, label = "Prop" }: PropsTableViewProps) {
         // An inherited-props row is not a prop, so it does not get a name cell
         // pretending to be one — it reads as the sentence it actually is.
         return [
-          <Text key="prop" onBackground="neutral-weak" variant="body-default-s">
+          <Text key="prop" onBackground="neutral-weak" textVariant="body-default-s">
             …and every{" "}
             {spread.href ? (
               <SmartLink href={spread.href}>{spread.type}</SmartLink>
@@ -132,13 +129,13 @@ function PropsTableView({ content, label = "Prop" }: PropsTableViewProps) {
           <Row gap="8" vertical="center" wrap>
             <InlineCode>{name}</InlineCode>
             {required && (
-              <Text variant="body-default-xs" onBackground="danger-weak">
+              <Text textVariant="body-default-xs" onBackground="danger-weak">
                 required
               </Text>
             )}
           </Row>
           {description && (
-            <Text variant="body-default-xs" onBackground="neutral-weak" wrap="pretty">
+            <Text textVariant="body-default-xs" onBackground="neutral-weak" wrap="pretty">
               {description}
             </Text>
           )}
@@ -157,8 +154,15 @@ function PropsTableView({ content, label = "Prop" }: PropsTableViewProps) {
     }),
   };
 
-  return <Table marginTop="16" marginBottom="24" data={data} />;
+  return (
+    <Table
+      marginTop="16"
+      marginBottom="24"
+      columns={data.headers.map(({ content, ...column }) => ({ ...column, header: content }))}
+      rows={data.rows}
+    />
+  );
 }
 
-export { PropsTableView };
 export type { PropData, PropType };
+export { PropsTableView };

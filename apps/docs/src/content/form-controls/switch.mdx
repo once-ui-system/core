@@ -1,7 +1,7 @@
 ---
 title: "Switch"
 summary: "Switch provides a toggle control for binary states with a sliding animation and optional loading state."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/switch.mdx"
 github: "components/Switch.tsx"
 navLabel: "Switch"
@@ -21,7 +21,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
     label="Enable notifications"
     description="Receive updates about new features and improvements"
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Switch"
@@ -31,7 +31,7 @@ The `Switch` component provides a toggle control for binary states, featuring a 
 
 ## State
 
-Control the switch state with the `checked` prop. `onToggle` receives the state the switch moves to, so the setter can be passed straight in.
+Control the switch state with the `checked` prop. `onCheckedChange` receives the state the switch moves to, so the setter can be passed straight in.
 
 <CodeBlock
   marginTop="16"
@@ -45,7 +45,7 @@ Control the switch state with the `checked` prop. `onToggle` receives the state 
 <Switch
     label={isChecked ? "Feature is now enabled" : "Feature is currently disabled"}
     checked={isChecked}
-    onToggle={setIsChecked}
+    onCheckedChange={setIsChecked}
 />`,
       language: "tsx",
       label: "State"
@@ -55,7 +55,7 @@ Control the switch state with the `checked` prop. `onToggle` receives the state 
 
 ## Uncontrolled
 
-Leave out `checked` and the switch keeps its own state, starting from `defaultChecked`. `onToggle` still reports every change, and with a `name` the switch submits its value with a form.
+Leave out `checked` and the switch keeps its own state, starting from `defaultChecked`. `onCheckedChange` still reports every change, and with a `name` the switch submits its value with a form.
 
 <CodeBlock
   marginTop="16"
@@ -111,7 +111,7 @@ const handleToggle = () => {
     label="Processing"
     checked={isChecked}
     loading={isLoading}
-    onToggle={handleToggle}
+    onCheckedChange={handleToggle}
 />`,
       language: "tsx",
       label: "Loading"
@@ -139,7 +139,7 @@ Disable the switch to prevent user interaction.
     label="Disabled switch"
     disabled
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Disabled"
@@ -165,10 +165,37 @@ Place the switch on the right side of the label.
     description="This places the switch after the label text"
     reverse
     checked={isChecked}
-    onToggle={() => setIsChecked(!isChecked)}
+    onCheckedChange={() => setIsChecked(!isChecked)}
 />`,
       language: "tsx",
       label: "Reversed"
+    }
+  ]}
+/>
+
+## Validation and size
+
+`error` marks the Switch invalid (a danger border and `aria-invalid`);
+`errorMessage` shows under it, linked with `aria-describedby`, and marks it
+invalid too. `size` (`s`, `m`, `l`) scales the control and its text; left out,
+it takes the enclosing `Form`'s `size`, as `Input` does.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Switch label="Two-factor authentication" error errorMessage="Required for admins" />
+  }
+  codes={[
+    {
+      code:
+`<Switch
+    label="Two-factor authentication"
+    error
+    errorMessage="Required for admins"
+/>`,
+      language: "tsx",
+      label: "Validation"
     }
   ]}
 />
@@ -178,15 +205,19 @@ Place the switch on the right side of the label.
 <PropsTable
   component="Switch"
   describe={{
+    size: "s, m or l. Left out, the enclosing Form's size, else m.",
+    error: "Mark it invalid: a danger border and aria-invalid.",
+    errorMessage: "Shown under it, linked with aria-describedby; marks it invalid too.",
     checked: "Whether it is on, controlled. Leave it out and the switch keeps its own state.",
     defaultChecked: "The starting state when `checked` is left out.",
-    onToggle: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
+    onCheckedChange: "Called with the new state when it is flipped, by pointer or keyboard: true when it turns on.",
+    onChange: "The native change event of the hidden input, with the rest of the input attributes (name, required, onBlur), so a form library's register() works.",
     loading: "Show a spinner in the track while something resolves.",
     disabled: "Block interaction.",
     reverse: "Put the label before the switch instead of after it.",
     name: "Form field name.",
     value: "Form field value.",
-    ariaLabel: "Label for a switch with no visible one.",
+    "aria-label": "Label for a switch with no visible one.",
   }}
   content={[
     ["label", "ReactNode"],

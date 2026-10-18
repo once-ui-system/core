@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { TShirtSizes } from "../types";
+import { Tone, TShirtSizes } from "../types";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Line } from "./Line";
@@ -8,7 +8,12 @@ import { Text } from "./Text";
 export interface TimelineItem {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  state?: "default" | "active" | "success" | "danger";
+  /**
+   * The step's palette: its dot, the line into it and, for `danger`, its
+   * text. Leave it out for a step not reached yet. 2.x's `state: "active"`
+   * is `tone: "brand"`.
+   */
+  tone?: Tone;
   marker?: React.ReactNode;
   children?: React.ReactNode;
 }
@@ -21,47 +26,21 @@ interface TimelineProps extends Omit<React.ComponentProps<typeof Flex>, "childre
 
 const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
   ({ items, alignment = "left", size = "m", ...flex }, ref) => {
-    // Helper to get color variable for state
-    const getStateColor = (state: string) => {
-      switch (state) {
-        case "active":
-          return "var(--brand-solid-strong)";
-        case "success":
-          return "var(--success-solid-strong)";
-        case "danger":
-          return "var(--danger-solid-strong)";
-        default:
-          return "var(--neutral-solid-strong)";
-      }
-    };
+    // The line between two steps fades from one's colour to the next.
+    const toneColor = (tone?: Tone) =>
+      tone ? `var(--${tone}-solid-strong)` : "var(--neutral-solid-strong)";
 
     const dotSize =
       size === "xs" ? "8" : size === "s" ? "24" : size === "m" ? "32" : size === "l" ? "40" : "48";
     const isHorizontal = flex.direction === "row";
 
-    const renderDot = (item: TimelineItem, state: string) => (
+    const renderDot = (item: TimelineItem, tone?: Tone) => (
       <Flex
         center
         radius="full"
-        solid={
-          state === "active"
-            ? "brand-strong"
-            : state === "success"
-              ? "success-strong"
-              : state === "danger"
-                ? "danger-strong"
-                : undefined
-        }
-        background={state === "default" ? "neutral-weak" : undefined}
-        border={
-          state === "success"
-            ? "success-strong"
-            : state === "danger"
-              ? "danger-strong"
-              : state === "active"
-                ? "brand-strong"
-                : "neutral-strong"
-        }
+        solid={tone ? `${tone}-strong` : undefined}
+        background={tone ? undefined : "neutral-weak"}
+        border={tone ? `${tone}-strong` : "neutral-strong"}
         minHeight={dotSize}
         maxHeight={dotSize}
         minWidth={dotSize}
@@ -70,16 +49,8 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
         {item.marker && (
           <Flex
             center
-            onSolid={
-              state === "active"
-                ? "brand-strong"
-                : state === "success"
-                  ? "success-strong"
-                  : state === "danger"
-                    ? "danger-strong"
-                    : undefined
-            }
-            onBackground={state === "default" ? "neutral-weak" : undefined}
+            onSolid={tone ? `${tone}-strong` : undefined}
+            onBackground={tone ? undefined : "neutral-weak"}
             textVariant="label-default-m"
           >
             {item.marker}
@@ -93,11 +64,11 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
     return (
       <Column {...flex}>
         {items.map((item, index) => {
-          const state = item.state || "default";
-          const nextState = index < items.length - 1 ? items[index + 1].state || "default" : state;
+          const tone = item.tone;
+          const nextTone = index < items.length - 1 ? items[index + 1].tone : tone;
 
-          const currentColor = getStateColor(state);
-          const nextColor = getStateColor(nextState);
+          const currentColor = toneColor(tone);
+          const nextColor = toneColor(nextTone);
 
           const gradientToNext = isHorizontal
             ? `linear-gradient(to right, ${currentColor}, ${nextColor})`
@@ -110,18 +81,10 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
                   {index !== 0 && (
                     <Line
                       background={undefined}
-                      solid={
-                        state === "active"
-                          ? "brand-strong"
-                          : state === "success"
-                            ? "success-strong"
-                            : state === "danger"
-                              ? "danger-strong"
-                              : "neutral-strong"
-                      }
+                      solid={tone ? `${tone}-strong` : "neutral-strong"}
                     />
                   )}
-                  {renderDot(item, state)}
+                  {renderDot(item, tone)}
                   {index !== items.length - 1 && (
                     <Line background={undefined} style={{ background: gradientToNext }} />
                   )}
@@ -137,16 +100,16 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
                 >
                   {item.label && (
                     <Text
-                      variant="label-default-m"
-                      onBackground={state === "danger" ? "danger-weak" : undefined}
+                      textVariant="label-default-m"
+                      onBackground={tone === "danger" ? "danger-weak" : undefined}
                     >
                       {item.label}
                     </Text>
                   )}
                   {item.description && (
                     <Text
-                      variant="body-default-s"
-                      onBackground={state === "danger" ? "danger-weak" : "neutral-weak"}
+                      textVariant="body-default-s"
+                      onBackground={tone === "danger" ? "danger-weak" : "neutral-weak"}
                     >
                       {item.description}
                     </Text>
@@ -168,19 +131,11 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
                     vert
                     fillHeight
                     background={undefined}
-                    solid={
-                      state === "active"
-                        ? "brand-strong"
-                        : state === "success"
-                          ? "success-strong"
-                          : state === "danger"
-                            ? "danger-strong"
-                            : "neutral-strong"
-                    }
+                    solid={tone ? `${tone}-strong` : "neutral-strong"}
                     minHeight="8"
                   />
                 )}
-                {renderDot(item, state)}
+                {renderDot(item, tone)}
                 {index !== items.length - 1 && (
                   <Line
                     vert
@@ -201,16 +156,16 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
               >
                 {item.label && (
                   <Text
-                    variant="label-default-m"
-                    onBackground={state === "danger" ? "danger-weak" : undefined}
+                    textVariant="label-default-m"
+                    onBackground={tone === "danger" ? "danger-weak" : undefined}
                   >
                     {item.label}
                   </Text>
                 )}
                 {item.description && (
                   <Text
-                    variant="body-default-s"
-                    onBackground={state === "danger" ? "danger-weak" : "neutral-weak"}
+                    textVariant="body-default-s"
+                    onBackground={tone === "danger" ? "danger-weak" : "neutral-weak"}
                   >
                     {item.description}
                   </Text>

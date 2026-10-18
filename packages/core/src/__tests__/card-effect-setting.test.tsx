@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { Card } from "../components/Card";
 import { Effect } from "../components/Effect";
 import { Media } from "../components/Media";
-import { Setting, SettingAxes, SettingGroup } from "../components/Setting";
+import { Setting } from "../components/Setting";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -132,17 +132,17 @@ describe("Setting", () => {
 
   it("hides a group's body until it is open", () => {
     const { rerender } = render(
-      <SettingGroup label="Watermark" control={<span>toggle</span>}>
+      <Setting label="Watermark" control={<span>toggle</span>}>
         <Setting label="Opacity" />
-      </SettingGroup>,
+      </Setting>,
       { wrapper: wrap },
     );
     expect(screen.queryByText("Opacity")).toBeNull();
     rerender(
       <LayoutProvider>
-        <SettingGroup label="Watermark" control={<span>toggle</span>} open>
+        <Setting label="Watermark" control={<span>toggle</span>} open>
           <Setting label="Opacity" />
-        </SettingGroup>
+        </Setting>
       </LayoutProvider>,
     );
     expect(screen.getByText("Opacity")).toBeInTheDocument();
@@ -150,9 +150,9 @@ describe("Setting", () => {
 
   it("is one surface: the header and the revealed body share the group's background", () => {
     render(
-      <SettingGroup label="Watermark" control={<span>toggle</span>} open>
+      <Setting label="Watermark" control={<span>toggle</span>} open>
         <Setting label="Opacity" />
-      </SettingGroup>,
+      </Setting>,
       { wrapper: wrap },
     );
     const group = screen.getByText("Watermark").closest(".surface-background");
@@ -171,7 +171,7 @@ describe("Setting", () => {
 
   it("renders one row per axis", () => {
     render(
-      <SettingAxes
+      <Setting
         label="Tilt"
         axes={[
           { label: "X", control: <span>x-control</span> },

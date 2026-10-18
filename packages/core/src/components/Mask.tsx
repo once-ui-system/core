@@ -4,19 +4,33 @@ import classNames from "clsx";
 import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
+import type { CSSUnit } from "../types";
 import { Flex } from "./Flex";
 import styles from "./Mask.module.scss";
 
 export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {
   cursor?: boolean;
-  x?: number;
-  y?: number;
-  radius?: number;
+  /**
+   * Where the mask's centre sits: a number is px from the left edge, a string
+   * a CSS length (`"50%"` is the middle). Set with `y`. Was a bare percentage
+   * until 3.0 (`x={50}` is `x="50%"` now).
+   */
+  x?: number | CSSUnit;
+  /** As `x`, from the top edge. */
+  y?: number | CSSUnit;
+  /**
+   * The mask's radius: a number is px, a string a CSS length. Default
+   * `"50vh"`. Was a bare `vh` count until 3.0 (`radius={50}` is `radius="50vh"`).
+   */
+  radius?: number | CSSUnit;
   reducedMotion?: boolean | "auto";
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }
+
+/** A number as px, a CSS length as written. */
+const length = (value: number | string) => (typeof value === "number" ? `${value}px` : value);
 
 const Mask = forwardRef<HTMLDivElement, MaskProps>(
   (
@@ -24,7 +38,7 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
       cursor = false,
       x,
       y,
-      radius = 50,
+      radius = "50vh",
       reducedMotion = "auto",
       children,
       className,
@@ -123,15 +137,15 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
         return {
           "--mask-position-x": `${smoothPosRef.current.x}px`,
           "--mask-position-y": `${smoothPosRef.current.y}px`,
-          "--mask-radius": `${radius}vh`,
+          "--mask-radius": length(radius),
         } as CSSProperties;
       }
 
       if (x != null && y != null) {
         return {
-          "--mask-position-x": `${x}%`,
-          "--mask-position-y": `${y}%`,
-          "--mask-radius": `${radius}vh`,
+          "--mask-position-x": length(x),
+          "--mask-position-y": length(y),
+          "--mask-radius": length(radius),
         } as CSSProperties;
       }
 

@@ -19,9 +19,9 @@ export const Hero9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         left="0"
         gradient={{
           display: true,
-          x: 50,
-          y: 100,
-          width: 50,
+          x: "50%",
+          y: "100%",
+          width: "50%",
           colorStart: "brand-background-strong",
         }}
       />
@@ -36,12 +36,12 @@ export const Hero9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       />
       <Column fillWidth horizontal="center" paddingX="l" paddingBottom="104">
         <Column maxWidth="m" horizontal="center" paddingX="l">
-          <Heading variant="display-strong-l" align="center" marginBottom="32">
+          <Heading textVariant="display-strong-l" align="center" marginBottom="32">
             Launch apps without writing a single line of code
           </Heading>
           <Text
             wrap="balance"
-            variant="heading-default-xl"
+            textVariant="heading-default-xl"
             align="center"
             onBackground="neutral-medium"
             marginBottom="40"
@@ -52,7 +52,7 @@ export const Hero9: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
         </Column>
       </Column>
       <Row position="absolute" bottom="0" left="0" fillWidth height="1">
-        <Mask x={50} y={50} radius={75}>
+        <Mask x="50%" y="50%" radius="75vh">
           <Line background="brand-alpha-medium" />
         </Mask>
       </Row>

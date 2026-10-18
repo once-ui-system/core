@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, EmojiPickerDropdown, IconButton, Row, Textarea } from "@once-ui-system/core";
+import { Column, EmojiPicker, IconButton, Row, Textarea } from "@once-ui-system/core";
 import { useState } from "react";
 import { MediaPost1, Sidebar3 } from ".";
 
@@ -43,7 +43,7 @@ export const Feed1 = () => {
                 transition="micro-medium"
               >
                 <Row fillWidth horizontal="between" paddingX="8" paddingBottom="8">
-                  <EmojiPickerDropdown
+                  <EmojiPicker
                     onSelect={(emoji) => setPost(post + emoji)}
                     trigger={
                       <Row fillWidth themeBorder="rounded" gap="4">

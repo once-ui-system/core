@@ -112,10 +112,10 @@ function ResourceCard({
       >
         <Column paddingY="20" paddingX="24" gap="8" align="center" horizontal="center">
           <Icon name={icon} size="s" padding="8" radius="m" border marginBottom="12" />
-          <Heading as="h2" variant="heading-strong-xl">
+          <Heading as="h2" textVariant="heading-strong-xl">
             {title}
           </Heading>
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             {description}
           </Text>
         </Column>
@@ -129,7 +129,7 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
     <Column fillWidth horizontal="center" paddingY="24" gap="56" {...flex}>
       <Column maxWidth="l" gap="40" paddingX="16">
         <Row fillWidth horizontal="between" vertical="center" paddingX="8">
-          <Heading variant="heading-strong-xl">Blog</Heading>
+          <Heading textVariant="heading-strong-xl">Blog</Heading>
           <Row gap="8">
             {social.map((item) => (
               <IconButton
@@ -160,19 +160,19 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
               gap="12"
               background="overlay"
             >
-              <Tag scheme="brand" size="s">
+              <Tag tone="brand" size="s">
                 {featured.tag}
               </Tag>
-              <Heading as="h2" variant="display-strong-xs">
+              <Heading as="h2" textVariant="display-strong-xs">
                 {featured.title}
               </Heading>
-              <Text variant="body-default-m" onBackground="neutral-weak" wrap="balance">
+              <Text textVariant="body-default-m" onBackground="neutral-weak" wrap="balance">
                 {featured.excerpt}
               </Text>
               <Row gap="12" vertical="center">
                 <Avatar src={featured.author.avatar} size="s" />
-                <Text variant="label-default-s">{featured.author.name}</Text>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s">{featured.author.name}</Text>
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {featured.publishedAt}
                 </Text>
               </Row>
@@ -212,19 +212,19 @@ export const Blog4 = (flex: React.ComponentProps<typeof Column>) => {
                 <Column gap="8" paddingX="8">
                   <Row gap="8" vertical="center">
                     <Tag size="s">{post.tag}</Tag>
-                    <Text variant="label-default-s" onBackground="neutral-weak">
+                    <Text textVariant="label-default-s" onBackground="neutral-weak">
                       {post.publishedAt}
                     </Text>
                   </Row>
-                  <Heading as="h3" variant="heading-strong-m">
+                  <Heading as="h3" textVariant="heading-strong-m">
                     {post.title}
                   </Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                     {post.excerpt}
                   </Text>
                   <Row gap="8" vertical="center">
                     <Avatar src={post.author.avatar} size="xs" />
-                    <Text variant="label-default-s">{post.author.name}</Text>
+                    <Text textVariant="label-default-s">{post.author.name}</Text>
                   </Row>
                 </Column>
               </Card>

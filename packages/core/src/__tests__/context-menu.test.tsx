@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { Column } from "../components/Column";
-import { ContextMenu } from "../components/ContextMenu";
+import { Dropdown } from "../components/Dropdown";
 import { Option } from "../components/Option";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -21,10 +21,11 @@ const items = (
   </Column>
 );
 
-const Target = (props: Partial<React.ComponentProps<typeof ContextMenu>>) => (
-  <ContextMenu dropdown={items} {...props}>
-    <button type="button">Clip</button>
-  </ContextMenu>
+/** 2.x `ContextMenu`, now `Dropdown openOn="contextmenu"` (F5): the region is the trigger. */
+const Target = (props: Partial<React.ComponentProps<typeof Dropdown>>) => (
+  <Dropdown openOn="contextmenu" trigger={<button type="button">Clip</button>} {...props}>
+    {items}
+  </Dropdown>
 );
 
 const menu = () => screen.findByRole("menu");
@@ -42,7 +43,7 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("ContextMenu position", () => {
+describe("Dropdown openOn=contextmenu (2.x ContextMenu): position", () => {
   it("opens at the pointer", async () => {
     render(<Target />, { wrapper: wrap });
     fireEvent.contextMenu(screen.getByRole("button", { name: "Clip" }), {
@@ -129,7 +130,7 @@ describe("ContextMenu position", () => {
   });
 });
 
-describe("ContextMenu semantics and keyboard", () => {
+describe("Dropdown openOn=contextmenu (2.x ContextMenu): semantics and keyboard", () => {
   it("is a menu of menu items, with no listbox or option roles inside", async () => {
     render(<Target />, { wrapper: wrap });
     fireEvent.contextMenu(screen.getByRole("button", { name: "Clip" }));
@@ -207,7 +208,7 @@ describe("ContextMenu semantics and keyboard", () => {
  * timeline's context menu because an absolutely positioned block inside that
  * wrapper positioned against the wrapper instead of its lane.
  */
-describe("ContextMenu wrapper", () => {
+describe("Dropdown openOn=contextmenu (2.x ContextMenu): wrapper", () => {
   it("keeps today's Flex wrapper by default", () => {
     const { container } = render(<Target />, { wrapper: wrap });
     const wrapper = container.firstElementChild as HTMLElement;
@@ -225,11 +226,17 @@ describe("ContextMenu wrapper", () => {
 
   it("adds no box with `contents`, and still opens", async () => {
     const { container } = render(
-      <ContextMenu dropdown={items} contents>
-        <div data-testid="block" style={{ position: "absolute", left: 40 }}>
-          Block
-        </div>
-      </ContextMenu>,
+      <Dropdown
+        openOn="contextmenu"
+        contents
+        trigger={
+          <div data-testid="block" style={{ position: "absolute", left: 40 }}>
+            Block
+          </div>
+        }
+      >
+        {items}
+      </Dropdown>,
       { wrapper: wrap },
     );
 

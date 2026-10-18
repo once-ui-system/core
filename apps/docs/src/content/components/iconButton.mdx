@@ -21,14 +21,14 @@ The IconButton component provides a compact, icon-based interactive element for 
         <IconButton icon="check" variant="primary" />
         <IconButton icon="plus" variant="secondary" />
         <IconButton icon="chevronDown" variant="tertiary" />
-        <IconButton icon="danger" variant="danger" />
+        <IconButton icon="danger" tone="danger" />
         <IconButton icon="info" variant="ghost" />
       </Row>
       <Row gap="16" horizontal="center" wrap>
-        <IconButton icon="sparkle" variant="quaternary" />
+        <IconButton icon="sparkle" variant="ghost" />
         <IconButton icon="settings" variant="subtle" />
-        <IconButton icon="check" variant="success" />
-        <IconButton icon="warning" variant="warning" />
+        <IconButton icon="check" tone="success" />
+        <IconButton icon="warning" tone="warning" />
         <IconButton icon="link" variant="link" />
       </Row>
     </Column>
@@ -39,12 +39,12 @@ The IconButton component provides a compact, icon-based interactive element for 
 `<IconButton icon="check" variant="primary" />
 <IconButton icon="plus" variant="secondary" />
 <IconButton icon="chevronDown" variant="tertiary" />
-<IconButton icon="danger" variant="danger" />
+<IconButton icon="danger" tone="danger" />
 <IconButton icon="info" variant="ghost" />
-<IconButton icon="sparkle" variant="quaternary" />
+<IconButton icon="sparkle" variant="ghost" />
 <IconButton icon="settings" variant="subtle" />
-<IconButton icon="check" variant="success" />
-<IconButton icon="warning" variant="warning" />
+<IconButton icon="check" tone="success" />
+<IconButton icon="warning" tone="warning" />
 <IconButton icon="link" variant="link" />`,
       language: "tsx",
       label: "IconButton"
@@ -108,7 +108,7 @@ Add tooltips to provide context for icon buttons.
 
 ## Accessible name
 
-An icon button has no text, so it needs a name for screen readers. It takes the first of `aria-label`, `ariaLabel` and a `tooltip` that is plain text, so the tooltips above already name their buttons. It is never named after its icon key. Without any of them it warns in development.
+An icon button has no text, so it needs a name for screen readers. It takes `aria-label`, or else a `tooltip` that is plain text, so the tooltips above already name their buttons. It is never named after its icon key. Without any of them it warns in development.
 
 <CodeBlock
   marginTop="16"
@@ -117,7 +117,7 @@ An icon button has no text, so it needs a name for screen readers. It takes the 
     {
       code:
 `<IconButton icon="close" aria-label="Close dialog" />
-<IconButton icon="search" ariaLabel="Search" />
+<IconButton icon="search" aria-label="Search" />
 <IconButton icon="copy" tooltip="Copy link" />`,
       language: "tsx",
       label: "Accessible name"
@@ -185,13 +185,13 @@ Use the children prop to add custom content to the IconButton.
   preview={
     <Row gap="16" horizontal="center">
       <IconButton>
-        <Text variant="body-strong-s">A</Text>
+        <Text textVariant="body-strong-s">A</Text>
       </IconButton>
       <IconButton variant="secondary">
-        <Text variant="body-strong-s">B</Text>
+        <Text textVariant="body-strong-s">B</Text>
       </IconButton>
       <IconButton variant="tertiary">
-        <Text variant="body-strong-s">C</Text>
+        <Text textVariant="body-strong-s">C</Text>
       </IconButton>
     </Row>
   }
@@ -199,13 +199,13 @@ Use the children prop to add custom content to the IconButton.
     {
       code:
 `<IconButton>
-    <Text variant="body-strong-s">A</Text>
+    <Text textVariant="body-strong-s">A</Text>
 </IconButton>
 <IconButton variant="secondary">
-    <Text variant="body-strong-s">B</Text>
+    <Text textVariant="body-strong-s">B</Text>
 </IconButton>
 <IconButton variant="tertiary">
-    <Text variant="body-strong-s">C</Text>
+    <Text textVariant="body-strong-s">C</Text>
 </IconButton>`,
       language: "tsx",
       label: "Custom content"
@@ -220,7 +220,7 @@ Use the children prop to add custom content to the IconButton.
   describe={{
     loading: "Swap the icon for a spinner and block interaction.",
     rounded: "Fully rounded corners.",
-    ariaLabel: "The accessible name, as on the other components. A native aria-label wins over it.",
+    "aria-label": "The accessible name.",
     tooltip: "Hover and focus hint. A plain-text tooltip also names the button when it has no aria-label.",
   }}
   content={[

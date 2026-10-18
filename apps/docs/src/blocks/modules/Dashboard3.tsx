@@ -40,7 +40,7 @@ function DashboardPreviewPanel() {
   return (
     <Column fillWidth gap="16" padding="m">
       <Row vertical="center" fillWidth horizontal="between" gap="8" wrap>
-        <Heading variant="display-strong-xs">Dashboard</Heading>
+        <Heading textVariant="display-strong-xs">Dashboard</Heading>
         <Button prefixIcon="plus" size="s" data-border="rounded">
           New
         </Button>
@@ -51,7 +51,7 @@ function DashboardPreviewPanel() {
           {stats.map((stat, index) => (
             <Card
               key={stat.title}
-              minWidth={12}
+              minWidth="12rem"
               padding="16"
               gap="8"
               radius="l"
@@ -67,17 +67,17 @@ function DashboardPreviewPanel() {
                 left="0"
                 gradient={{
                   display: true,
-                  x: 100,
+                  x: "100%",
                   y: 0,
-                  width: 50,
-                  height: 75,
+                  width: "50%",
+                  height: "75%",
                   colorStart: stat.positive
                     ? "success-background-strong"
                     : "danger-background-strong",
                 }}
               />
               <Row vertical="center" gap="8">
-                <Text variant="label-default-s" onBackground="neutral-medium">
+                <Text textVariant="label-default-s" onBackground="neutral-medium">
                   {stat.title}
                 </Text>
                 <Row
@@ -86,10 +86,10 @@ function DashboardPreviewPanel() {
                   onBackground={stat.positive ? "success-weak" : "danger-weak"}
                 >
                   <Icon size="xs" name={stat.positive ? "trendUp" : "trendDown"} />
-                  <Text variant="body-default-xs">{stat.change}</Text>
+                  <Text textVariant="body-default-xs">{stat.change}</Text>
                 </Row>
               </Row>
-              <Heading variant="display-strong-xs">{stat.value}</Heading>
+              <Heading textVariant="display-strong-xs">{stat.value}</Heading>
             </Card>
           ))}
         </Row>
@@ -100,7 +100,7 @@ function DashboardPreviewPanel() {
           <LineChart
             style={{ height: "auto" }}
             height={undefined}
-            minHeight={16}
+            minHeight="16rem"
             border="neutral-medium"
             radius="l"
             axis="x"
@@ -128,7 +128,7 @@ function DashboardPreviewPanel() {
             ]}
           />
         </Row>
-        <Column flex={1} radius="l" border="neutral-medium" overflow="hidden" minWidth={16}>
+        <Column flex={1} radius="l" border="neutral-medium" overflow="hidden" minWidth="16rem">
           <Background
             position="absolute"
             themeSolid="color"
@@ -136,30 +136,30 @@ function DashboardPreviewPanel() {
             left="0"
             gradient={{
               display: true,
-              x: 50,
-              y: -50,
-              width: 75,
-              height: 100,
+              x: "50%",
+              y: "-50%",
+              width: "75%",
+              height: "100%",
               colorStart: "brand-solid-medium",
             }}
-            mask={{ x: 50, y: 0, radius: 30 }}
+            mask={{ x: "50%", y: 0, radius: "30vh" }}
           />
           <Column fill center gap="8" padding="24">
-            <Text variant="label-default-xs" onBackground="brand-medium" align="center">
+            <Text textVariant="label-default-xs" onBackground="brand-medium" align="center">
               16d left
             </Text>
             <RadialGauge
               width={180}
               height={180}
               value={42}
-              hue="success"
+              tone="success"
               unit="%"
               line={{ count: 48, width: 2, length: 24 }}
             />
-            <Text variant="label-default-s" onBackground="neutral-weak" align="center">
+            <Text textVariant="label-default-s" onBackground="neutral-weak" align="center">
               Monthly target
             </Text>
-            <Text variant="heading-strong-m" align="center">
+            <Text textVariant="heading-strong-m" align="center">
               $27,000
             </Text>
           </Column>
@@ -175,7 +175,7 @@ function DashboardPreviewPanel() {
           paddingRight="12"
           paddingY="12"
         >
-          <Heading variant="heading-strong-s">Project status</Heading>
+          <Heading textVariant="heading-strong-s">Project status</Heading>
         </Row>
         <Column fillWidth borderTop="neutral-medium">
           {projects.map((project) => (
@@ -189,13 +189,13 @@ function DashboardPreviewPanel() {
             >
               <Row vertical="center" gap="12">
                 <Icon name={project.icon} size="xs" onBackground="neutral-weak" />
-                <Text variant="body-default-s">{project.name}</Text>
+                <Text textVariant="body-default-s">{project.name}</Text>
               </Row>
               <Row vertical="center" gap="8">
-                <Text variant="body-default-xs" onBackground="neutral-weak">
+                <Text textVariant="body-default-xs" onBackground="neutral-weak">
                   {project.status}
                 </Text>
-                <StatusIndicator color={statusColor(project.status)} />
+                <StatusIndicator scheme={statusColor(project.status)} />
               </Row>
             </Row>
           ))}
@@ -208,22 +208,22 @@ function DashboardPreviewPanel() {
 export const Dashboard3 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" borderY paddingX="l" {...flex}>
-      <Column maxWidth={120}>
+      <Column maxWidth="120rem">
         <Background
           position="absolute"
           top="0"
           left="0"
           dots={{ display: true, size: "4", color: "brand-background-strong" }}
-          mask={{ x: 60, y: 30, radius: 50 }}
+          mask={{ x: "60%", y: "30%", radius: "50vh" }}
         />
         <Row fill vertical="end" l={{ direction: "column" }}>
           <Row flex={1} l={{ hide: true }} />
           <Column fillWidth flex={5} l={{ style: { flex: 0 } }}>
-            <Column maxWidth={64} gap="16" paddingX="24" paddingY="48">
-              <Text variant="heading-default-xl" onBackground="brand-weak">
+            <Column maxWidth="64rem" gap="16" paddingX="24" paddingY="48">
+              <Text textVariant="heading-default-xl" onBackground="brand-weak">
                 Design tokens, without the chaos
               </Text>
-              <Heading as="h2" variant="display-default-s" marginBottom="8">
+              <Heading as="h2" textVariant="display-default-s" marginBottom="8">
                 Live theming beside a masked dashboard preview
               </Heading>
               <Button data-border="rounded" suffixIcon="chevronRight">
@@ -269,9 +269,9 @@ export const Dashboard3 = (flex: React.ComponentProps<typeof Column>) => {
         <Row maxWidth="xl" vertical="center" gap="8">
           <Background
             lines={{ display: true, size: "2", color: "neutral-alpha-weak" }}
-            height={1}
-            minWidth={2}
-            maxWidth={8}
+            height="1rem"
+            minWidth="2rem"
+            maxWidth="8rem"
             border
             radius="xs"
             fillHeight
@@ -281,9 +281,9 @@ export const Dashboard3 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
           <Background
             lines={{ display: true, size: "2", color: "neutral-alpha-weak" }}
-            height={1}
-            minWidth={2}
-            maxWidth={24}
+            height="1rem"
+            minWidth="2rem"
+            maxWidth="24rem"
             fillHeight
           />
           <Row opacity={50}>

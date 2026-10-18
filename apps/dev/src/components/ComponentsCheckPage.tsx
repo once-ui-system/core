@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Flex, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, ParticleFx, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, TagInput, Avatar, Background, Flex, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, useToast } from "@once-ui-system/core";
 import { BarChart, LineChart } from "@once-ui-system/core/data";
 import { CodeBlock } from "@once-ui-system/core/code";
 
@@ -36,7 +36,7 @@ export default function ComponentsCheck() {
   const handleAddToast = (
     variant: "success" | "danger" | "warning" | "info",
   ) => {
-    addToast({ variant, message: `This is a ${variant} toast!` });
+    addToast({ tone: variant, message: `This is a ${variant} toast!` });
   };
 
   const selectVar = (compKey: string, value: string) => {
@@ -188,7 +188,7 @@ export default function ComponentsCheck() {
                       radius="full"
                     >
                       <Text
-                        variant="label-default-s"
+                        textVariant="label-default-s"
                         onBackground="brand-strong"
                       >
                         Item {i + 1}
@@ -249,27 +249,27 @@ export default function ComponentsCheck() {
             {
               value: "display",
               label: "Display",
-              element: <Heading variant="display-default-l">Display</Heading>,
+              element: <Heading textVariant="display-default-l">Display</Heading>,
             },
             {
               value: "heading",
               label: "Heading",
               element: (
-                <Heading variant="heading-strong-l">Heading Strong L</Heading>
+                <Heading textVariant="heading-strong-l">Heading Strong L</Heading>
               ),
             },
             {
               value: "subheading",
               label: "Subheading",
               element: (
-                <Heading variant="heading-strong-m">Heading Strong M</Heading>
+                <Heading textVariant="heading-strong-m">Heading Strong M</Heading>
               ),
             },
             {
               value: "small",
               label: "Small",
               element: (
-                <Heading variant="heading-strong-s">Heading Strong S</Heading>
+                <Heading textVariant="heading-strong-s">Heading Strong S</Heading>
               ),
             },
           ],
@@ -280,18 +280,18 @@ export default function ComponentsCheck() {
             {
               value: "body-l",
               label: "Body L",
-              element: <Text variant="body-default-l">Body large text</Text>,
+              element: <Text textVariant="body-default-l">Body large text</Text>,
             },
             {
               value: "body-m",
               label: "Body M",
-              element: <Text variant="body-default-m">Body medium text</Text>,
+              element: <Text textVariant="body-default-m">Body medium text</Text>,
             },
             {
               value: "body-s",
               label: "Body S",
               element: (
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   Body small muted
                 </Text>
               ),
@@ -299,13 +299,13 @@ export default function ComponentsCheck() {
             {
               value: "label",
               label: "Label",
-              element: <Text variant="label-default-s">Label text</Text>,
+              element: <Text textVariant="label-default-s">Label text</Text>,
             },
             {
               value: "code",
               label: "Code",
               element: (
-                <Text variant="code-default-m">console.log("hello")</Text>
+                <Text textVariant="code-default-m">console.log("hello")</Text>
               ),
             },
             {
@@ -357,7 +357,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default (300)",
               element: (
-                <Text weight="default" size="l">
+                <Text textVariant="body-default-l">
                   Light weight text — default
                 </Text>
               ),
@@ -366,7 +366,7 @@ export default function ComponentsCheck() {
               value: "bold",
               label: "Bold (400)",
               element: (
-                <Text weight="normal" size="l">
+                <Text textVariant="body-normal-l">
                   Normal weight text — bold
                 </Text>
               ),
@@ -375,7 +375,7 @@ export default function ComponentsCheck() {
               value: "bolder",
               label: "Bolder (500)",
               element: (
-                <Text weight="medium" size="l">
+                <Text textVariant="body-medium-l">
                   Medium weight text — bolder
                 </Text>
               ),
@@ -384,7 +384,7 @@ export default function ComponentsCheck() {
               value: "strong",
               label: "Strong (600)",
               element: (
-                <Text weight="strong" size="l">
+                <Text textVariant="body-strong-l">
                   Semi-bold weight text — strong
                 </Text>
               ),
@@ -411,11 +411,11 @@ export default function ComponentsCheck() {
                   <Button variant="tertiary">Tertiary</Button>
                   <Button variant="subtle">Subtle</Button>
                   <Button variant="ghost">Ghost</Button>
-                  <Button variant="quaternary">Quaternary</Button>
+                  <Button variant="ghost">Quaternary</Button>
                   <Button variant="link">Link</Button>
-                  <Button variant="success">Success</Button>
-                  <Button variant="warning">Warning</Button>
-                  <Button variant="danger">Danger</Button>
+                  <Button tone="success">Success</Button>
+                  <Button tone="warning">Warning</Button>
+                  <Button tone="danger">Danger</Button>
                 </Row>
               ),
             },
@@ -486,9 +486,9 @@ export default function ComponentsCheck() {
                   <IconButton icon="refresh" variant="secondary" />
                   <IconButton icon="plus" variant="tertiary" />
                   <IconButton icon="check" variant="subtle" />
-                  <IconButton icon="check" variant="success" />
-                  <IconButton icon="warning" variant="warning" />
-                  <IconButton icon="close" variant="danger" />
+                  <IconButton icon="check" tone="success" />
+                  <IconButton icon="warning" tone="warning" />
+                  <IconButton icon="close" tone="danger" />
                 </Row>
               ),
             },
@@ -511,7 +511,7 @@ export default function ComponentsCheck() {
                   />
                   <IconButton
                     icon="close"
-                    variant="danger"
+                    tone="danger"
                     tooltip="Delete"
                     tooltipPosition="bottom"
                   />
@@ -603,10 +603,10 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <PasswordInput
+                <Input
                   id="pwd"
                   label="Password"
-                  placeholder="Enter password"
+                  placeholder="Enter password" type="password"
                 />
               ),
             },
@@ -642,7 +642,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-lg"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -655,7 +655,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-md"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -668,7 +668,7 @@ export default function ComponentsCheck() {
                   <ColorInput
                     id="color-sm"
                     value="#3b82f6"
-                    onChange={() => {}}
+                    onValueChange={() => {}}
                   />
                 </Flex>
               ),
@@ -726,7 +726,7 @@ export default function ComponentsCheck() {
               element: (
                 <Switch
                   checked={false}
-                  onToggle={() => {}}
+                  onCheckedChange={() => {}}
                   label="Notifications"
                 />
               ),
@@ -735,7 +735,7 @@ export default function ComponentsCheck() {
               value: "on",
               label: "On",
               element: (
-                <Switch checked onToggle={() => {}} label="Dark mode" />
+                <Switch checked onCheckedChange={() => {}} label="Dark mode" />
               ),
             },
             {
@@ -744,7 +744,7 @@ export default function ComponentsCheck() {
               element: (
                 <Switch
                   checked={switchOn}
-                  onToggle={() => setSwitchOn(!switchOn)}
+                  onCheckedChange={() => setSwitchOn(!switchOn)}
                   label="Toggle me"
                 />
               ),
@@ -843,7 +843,7 @@ export default function ComponentsCheck() {
                 <TagInput
                   id="tags"
                   value={["react", "typescript"]}
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               ),
             },
@@ -855,7 +855,7 @@ export default function ComponentsCheck() {
                   id="tags-disabled"
                   value={["react"]}
                   disabled
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                 />
               ),
             },
@@ -870,7 +870,7 @@ export default function ComponentsCheck() {
               element: (
                 <SegmentedControl
                   value="one"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                   buttons={[
                     { value: "one", label: "One" },
                     { value: "two", label: "Two" },
@@ -886,7 +886,7 @@ export default function ComponentsCheck() {
                 <SegmentedControl
                   compact
                   value="a"
-                  onChange={() => {}}
+                  onValueChange={() => {}}
                   buttons={[
                     { value: "a", label: "A" },
                     { value: "b", label: "B" },
@@ -906,27 +906,27 @@ export default function ComponentsCheck() {
               label: "IconButton color",
               element: (
                 <Row gap="8" wrap vertical="center">
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     secondary
                   </Text>
                   <IconButton
                     variant="secondary"
-                    color="brand-strong"
+                    tone="brand"
                     icon="sparkle"
                   />
                   <IconButton
                     variant="secondary"
-                    color="danger-strong"
+                    tone="danger"
                     icon="close"
                   />
                   <IconButton
                     variant="secondary"
-                    color="warning-strong"
+                    tone="warning"
                     icon="warning"
                   />
                   <IconButton
                     variant="secondary"
-                    color="success-strong"
+                    tone="success"
                     icon="check"
                   />
                 </Row>
@@ -937,23 +937,23 @@ export default function ComponentsCheck() {
               label: "Ghost color",
               element: (
                 <Row gap="8" wrap vertical="center">
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     ghost
                   </Text>
                   <IconButton
                     variant="ghost"
-                    color="brand-strong"
+                    tone="brand"
                     icon="sparkle"
                   />
                   <IconButton
                     variant="ghost"
-                    color="danger-strong"
+                    tone="danger"
                     icon="close"
                   />
-                  <IconButton variant="ghost" color="info-strong" icon="info" />
+                  <IconButton variant="ghost" tone="info" icon="info" />
                   <IconButton
                     variant="ghost"
-                    color="success-strong"
+                    tone="success"
                     icon="check"
                   />
                 </Row>
@@ -967,18 +967,18 @@ export default function ComponentsCheck() {
                   <Button
                     variant="secondary"
                     prefixIcon="sparkle"
-                    color="brand-strong"
+                    tone="brand"
                   >
                     Settings
                   </Button>
                   <Button
                     variant="secondary"
                     suffixIcon="chevronRight"
-                    color="danger-strong"
+                    tone="danger"
                   >
                     Delete
                   </Button>
-                  <Button variant="ghost" prefixIcon="info" color="info-strong">
+                  <Button variant="ghost" prefixIcon="info" tone="info">
                     Info
                   </Button>
                 </Row>
@@ -1000,19 +1000,11 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Table
-                  data={{
-                    headers: [
-                      { content: "Name", key: "name" },
-                      { content: "Role", key: "role" },
-                      { content: "Status", key: "status" },
-                    ],
-                    rows: [
+                <Table columns={[{ header: "Name", key: "name" }, { header: "Role", key: "role" }, { header: "Status", key: "status" }]} rows={[
                       ["Alice", "Engineer", "Active"],
                       ["Bob", "Designer", "Away"],
                       ["Carol", "Manager", "Active"],
-                    ],
-                  }}
+                    ]}
                 />
               ),
             },
@@ -1020,19 +1012,11 @@ export default function ComponentsCheck() {
               value: "sortable",
               label: "Sortable",
               element: (
-                <Table
-                  data={{
-                    headers: [
-                      { content: "Name", key: "name", sortable: true },
-                      { content: "Score", key: "score", sortable: true },
-                      { content: "Status", key: "status", sortable: true },
-                    ],
-                    rows: [
+                <Table columns={[{ header: "Name", key: "name", sortable: true }, { header: "Score", key: "score", sortable: true }, { header: "Status", key: "status", sortable: true }]} rows={[
                       ["Alice", "95", "Active"],
                       ["Bob", "82", "Away"],
                       ["Carol", "91", "Active"],
-                    ],
-                  }}
+                    ]}
                 />
               ),
             },
@@ -1086,9 +1070,9 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <Row gap="s" wrap vertical="center">
-                  <Badge>Badge</Badge>
+                  <Tag variant="announce">Badge</Tag>
                   <Tag label="Tag">Tag</Tag>
-                  <Chip label="Chip">Chip</Chip>
+                  <Tag selected label="Chip">Chip</Tag>
                 </Row>
               ),
             },
@@ -1409,16 +1393,16 @@ export default function ComponentsCheck() {
               element: (
                 <Row gap="m" vertical="center">
                   <Row gap="xs" vertical="center">
-                    <StatusIndicator color="green" />
-                    <Text variant="label-default-s">Online</Text>
+                    <StatusIndicator scheme="green" />
+                    <Text textVariant="label-default-s">Online</Text>
                   </Row>
                   <Row gap="xs" vertical="center">
-                    <StatusIndicator color="yellow" />
-                    <Text variant="label-default-s">Away</Text>
+                    <StatusIndicator scheme="yellow" />
+                    <Text textVariant="label-default-s">Away</Text>
                   </Row>
                   <Row gap="xs" vertical="center">
-                    <StatusIndicator color="red" />
-                    <Text variant="label-default-s">Offline</Text>
+                    <StatusIndicator scheme="red" />
+                    <Text textVariant="label-default-s">Offline</Text>
                   </Row>
                 </Row>
               ),
@@ -1428,9 +1412,9 @@ export default function ComponentsCheck() {
               label: "Sizes",
               element: (
                 <Row gap="m" vertical="center">
-                  <StatusIndicator color="green" size="s" />
-                  <StatusIndicator color="green" size="m" />
-                  <StatusIndicator color="green" size="l" />
+                  <StatusIndicator scheme="green" size="s" />
+                  <StatusIndicator scheme="green" size="m" />
+                  <StatusIndicator scheme="green" size="l" />
                 </Row>
               ),
             },
@@ -1460,8 +1444,8 @@ export default function ComponentsCheck() {
               label: "Default",
               element: (
                 <Card padding="16" radius="m" border="neutral-alpha-medium">
-                  <Heading variant="heading-strong-s">Card title</Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak">
+                  <Heading textVariant="heading-strong-s">Card title</Heading>
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
                     A basic interactive card component.
                   </Text>
                 </Card>
@@ -1477,7 +1461,7 @@ export default function ComponentsCheck() {
                   radius="m"
                   border="neutral-alpha-medium"
                 >
-                  <Text variant="label-default-s">Linked card</Text>
+                  <Text textVariant="label-default-s">Linked card</Text>
                 </Card>
               ),
             },
@@ -1539,7 +1523,7 @@ export default function ComponentsCheck() {
                     onClose={() => setMediaDialogOpen(false)}
                     title="Featured article"
                     description="A preview of the latest design thinking."
-                    maxWidth={48}
+                    maxWidth="48rem"
                     flush
                     footer={
                       <>
@@ -1564,7 +1548,7 @@ export default function ComponentsCheck() {
                         fillWidth
                       />
                       <Column fillWidth gap="8" paddingX="24">
-                        <Text variant="heading-strong-s">
+                        <Text textVariant="heading-strong-s">
                           Building design systems that scale
                         </Text>
                         <Text onBackground="neutral-weak">
@@ -1628,20 +1612,16 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <DropdownWrapper
+                <Dropdown
                   trigger={
                     <Button variant="secondary" suffixIcon="chevronDown">
                       Options
                     </Button>
-                  }
-                  dropdown={
-                    <Column padding="xs">
+                  }><Column padding="xs">
                       <Option value="edit">Edit</Option>
                       <Option value="duplicate">Duplicate</Option>
                       <Option value="delete">Delete</Option>
-                    </Column>
-                  }
-                />
+                    </Column></Dropdown>
               ),
             },
           ],
@@ -1725,16 +1705,10 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <ContextMenu
-                  dropdown={
-                    <Column padding="xs">
+                <Dropdown openOn="contextmenu" trigger={<Button variant="secondary">Right-click me</Button>}><Column padding="xs">
                       <Option value="copy">Copy</Option>
                       <Option value="paste">Paste</Option>
-                    </Column>
-                  }
-                >
-                  <Button variant="secondary">Right-click me</Button>
-                </ContextMenu>
+                    </Column></Dropdown>
               ),
             },
           ],
@@ -1742,7 +1716,7 @@ export default function ComponentsCheck() {
         {
           name: "UserMenu",
           variations: [
-            { value: "default", label: "Default", element: <UserMenu /> },
+            { value: "default", label: "Default", element: <User dropdown={null} /> },
           ],
         },
         {
@@ -1800,7 +1774,7 @@ export default function ComponentsCheck() {
               value: "open",
               label: "Open by default",
               element: (
-                <Accordion open title="Installation">
+                <Accordion defaultOpen title="Installation">
                   <Text>
                     Run pnpm install @once-ui-system/core to get started.
                   </Text>
@@ -1919,27 +1893,6 @@ export default function ComponentsCheck() {
             },
           ],
         },
-        {
-          name: "InteractiveDetails",
-          variations: [
-            {
-              value: "default",
-              label: "Default",
-              element: <InteractiveDetails onClick={() => {}} />,
-            },
-            {
-              value: "with-text",
-              label: "With label",
-              element: (
-                <InteractiveDetails
-                  onClick={() => {}}
-                  label="Details"
-                  description="Click for more info"
-                />
-              ),
-            },
-          ],
-        },
       ],
     },
     {
@@ -2036,27 +1989,27 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Pulse>
+                <StatusIndicator pulse>
                   <Text>Pulse Effect</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
             {
               value: "large",
               label: "Large pulse",
               element: (
-                <Pulse pulseSize={80}>
+                <StatusIndicator pulse pulseSize={80}>
                   <Text>Large pulse</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
             {
               value: "small",
               label: "Small pulse",
               element: (
-                <Pulse pulseSize={40}>
+                <StatusIndicator pulse pulseSize={40}>
                   <Text>Small pulse</Text>
-                </Pulse>
+                </StatusIndicator>
               ),
             },
           ],
@@ -2068,13 +2021,9 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Hover
+                <HoverCard placement="cover"
                   trigger={<Text>Test</Text>}
-                  overlay={<Column background="overlay" />}
-                  onClick={() => {}}
-                >
-                  <Text>Hover Effect</Text>
-                </Hover>
+                  onClick={() => {}}><Column background="overlay" /></HoverCard>
               ),
             },
           ],
@@ -2188,10 +2137,10 @@ export default function ComponentsCheck() {
               value: "entering",
               label: "Entering",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="entering"
-                  variant="heading-strong-m"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="entering"
+                  textVariant="heading-strong-m"
                 />
               ),
             },
@@ -2199,10 +2148,10 @@ export default function ComponentsCheck() {
               value: "visible",
               label: "Visible",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="visible"
-                  variant="heading-strong-m"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="visible"
+                  textVariant="heading-strong-m"
                 />
               ),
             },
@@ -2210,10 +2159,10 @@ export default function ComponentsCheck() {
               value: "exiting",
               label: "Exiting",
               element: (
-                <FadingLettersFx
-                  text="Fading Letters"
-                  animationState="exiting"
-                  variant="heading-strong-m"
+                <TypeFx mode="fade"
+                  words="Fading Letters"
+                  state="exiting"
+                  textVariant="heading-strong-m"
                 />
               ),
             },
@@ -2284,7 +2233,7 @@ export default function ComponentsCheck() {
               label: "Large (100%)",
               element: (
                 <Flex fillWidth>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-lg"
                     startLabel="Start"
                     endLabel="End"
@@ -2298,7 +2247,7 @@ export default function ComponentsCheck() {
               label: "Medium (50%)",
               element: (
                 <Flex style={{ width: "50%" }}>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-md"
                     startLabel="Start"
                     endLabel="End"
@@ -2312,7 +2261,7 @@ export default function ComponentsCheck() {
               label: "Small (25%)",
               element: (
                 <Flex style={{ width: "25%" }}>
-                  <DateRangeInput
+                  <DateInput range
                     id="dri-sm"
                     startLabel="Start"
                     endLabel="End"
@@ -2368,16 +2317,6 @@ export default function ComponentsCheck() {
           ],
         },
         {
-          name: "Arrow",
-          variations: [
-            {
-              value: "default",
-              label: "Default",
-              element: <Arrow trigger="hover here" />,
-            },
-          ],
-        },
-        {
           name: "Kbd",
           variations: [
             {
@@ -2386,7 +2325,7 @@ export default function ComponentsCheck() {
               element: (
                 <Row gap="xs" vertical="center">
                   <Kbd>Ctrl</Kbd>
-                  <Text variant="label-default-s">+</Text>
+                  <Text textVariant="label-default-s">+</Text>
                   <Kbd>K</Kbd>
                 </Row>
               ),
@@ -2446,7 +2385,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <CursorCard
+                <HoverCard placement="cursor"
                   trigger={
                     <Flex
                       padding="l"
@@ -2457,18 +2396,14 @@ export default function ComponentsCheck() {
                     >
                       <Text>Move cursor over me</Text>
                     </Flex>
-                  }
-                  overlay={
-                    <Flex
+                  }><Flex
                       padding="l"
                       radius="l"
                       background="surface"
                       border="neutral-medium"
                     >
                       <Text>I follow your cursor!</Text>
-                    </Flex>
-                  }
-                />
+                    </Flex></HoverCard>
               ),
             },
           ],
@@ -2536,7 +2471,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <EmojiPickerDropdown
+                <EmojiPicker
                   trigger={<Button variant="secondary">Pick Emoji</Button>}
                   onSelect={() => {}}
                 />
@@ -2552,7 +2487,7 @@ export default function ComponentsCheck() {
               label: "XS input",
               element: (
                 <Kbar
-                  inputSize="xs"
+                  size="xs"
                   items={[
                     {
                       id: "home",
@@ -2581,7 +2516,7 @@ export default function ComponentsCheck() {
               label: "M input",
               element: (
                 <Kbar
-                  inputSize="m"
+                  size="m"
                   items={[
                     {
                       id: "home",
@@ -2610,7 +2545,7 @@ export default function ComponentsCheck() {
               label: "L input",
               element: (
                 <Kbar
-                  inputSize="l"
+                  size="l"
                   items={[
                     {
                       id: "home",
@@ -2653,7 +2588,7 @@ export default function ComponentsCheck() {
                         background="neutral-medium"
                         radius="m"
                       >
-                        <Text variant="label-default-s">Item {n}</Text>
+                        <Text textVariant="label-default-s">Item {n}</Text>
                       </Flex>
                     ))}
                   </Row>
@@ -2669,7 +2604,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <AutoScroll>
+                <Scroller auto>
                   <Row gap="s">
                     {["Once", "UI", "Design", "System", "Components"].map(
                       (word) => (
@@ -2681,7 +2616,7 @@ export default function ComponentsCheck() {
                           radius="full"
                         >
                           <Text
-                            variant="label-default-s"
+                            textVariant="label-default-s"
                             onBackground="brand-strong"
                           >
                             {word}
@@ -2690,7 +2625,7 @@ export default function ComponentsCheck() {
                       ),
                     )}
                   </Row>
-                </AutoScroll>
+                </Scroller>
               ),
             },
           ],
@@ -2702,7 +2637,7 @@ export default function ComponentsCheck() {
               value: "default",
               label: "Default",
               element: (
-                <Swiper
+                <Carousel mode="snap"
                   aspectRatio="16/9"
                   items={[
                     {
@@ -2733,7 +2668,7 @@ export default function ComponentsCheck() {
               value: "3col",
               label: "3 columns",
               element: (
-                <MasonryGrid columns={3}>
+                <Grid masonry columns={3}>
                   {[4, 8, 6, 5, 7, 4].map((h, i) => (
                     <Flex
                       key={i}
@@ -2743,17 +2678,17 @@ export default function ComponentsCheck() {
                       style={{ height: `${h}rem` }}
                       center
                     >
-                      <Text variant="label-default-s">{i + 1}</Text>
+                      <Text textVariant="label-default-s">{i + 1}</Text>
                     </Flex>
                   ))}
-                </MasonryGrid>
+                </Grid>
               ),
             },
             {
               value: "2col",
               label: "2 columns",
               element: (
-                <MasonryGrid columns={2}>
+                <Grid masonry columns={2}>
                   {[6, 8, 5, 7].map((h, i) => (
                     <Flex
                       key={i}
@@ -2763,10 +2698,10 @@ export default function ComponentsCheck() {
                       style={{ height: `${h}rem` }}
                       center
                     >
-                      <Text variant="label-default-s">{i + 1}</Text>
+                      <Text textVariant="label-default-s">{i + 1}</Text>
                     </Flex>
                   ))}
-                </MasonryGrid>
+                </Grid>
               ),
             },
           ],
@@ -2842,9 +2777,9 @@ export default function ComponentsCheck() {
                   fullscreenButton
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
-                      <Heading variant="heading-strong-m">Hello World</Heading>
+                      <Heading textVariant="heading-strong-m">Hello World</Heading>
                       <Text
-                        variant="body-default-m"
+                        textVariant="body-default-m"
                         onBackground="neutral-medium"
                       >
                         This is a preview of the code below.
@@ -2872,9 +2807,9 @@ export default function ComponentsCheck() {
                   hideCode
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
-                      <Heading variant="heading-strong-m">Hidden Code</Heading>
+                      <Heading textVariant="heading-strong-m">Hidden Code</Heading>
                       <Text
-                        variant="body-default-m"
+                        textVariant="body-default-m"
                         onBackground="neutral-medium"
                       >
                         The code is hidden, only preview is shown.
@@ -2904,9 +2839,9 @@ export default function ComponentsCheck() {
                   copyButton
                   preview={
                     <Column gap="m" fillWidth horizontal="center" padding="l">
-                      <Heading variant="heading-strong-m">Full Code</Heading>
+                      <Heading textVariant="heading-strong-m">Full Code</Heading>
                       <Text
-                        variant="body-default-m"
+                        textVariant="body-default-m"
                         onBackground="neutral-medium"
                       >
                         Code is collapsible but shows all lines when expanded.
@@ -3064,7 +2999,7 @@ export default function ComponentsCheck() {
         }}
       >
         <Text
-          variant="label-default-s"
+          textVariant="label-default-s"
           onBackground="neutral-weak"
           marginBottom="s"
         >
@@ -3079,7 +3014,7 @@ export default function ComponentsCheck() {
           onClick={() => setActiveCategory(null)}
         >
           <Text
-            variant="label-default-s"
+            textVariant="label-default-s"
             onBackground={
               activeCategory === null ? "neutral-strong" : "neutral-weak"
             }
@@ -3103,7 +3038,7 @@ export default function ComponentsCheck() {
             }}
           >
             <Text
-              variant="label-default-s"
+              textVariant="label-default-s"
               onBackground={
                 activeCategory === cat.id ? "neutral-strong" : "neutral-weak"
               }
@@ -3118,8 +3053,8 @@ export default function ComponentsCheck() {
         {filteredCategories.map((category) => (
           <Column key={category.id} id={category.id} gap="m" fillWidth>
             <Column gap="xs">
-              <Heading variant="heading-strong-l">{category.name}</Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Heading textVariant="heading-strong-l">{category.name}</Heading>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {category.description}
               </Text>
             </Column>
@@ -3140,7 +3075,7 @@ export default function ComponentsCheck() {
                       <Flex gap="s" fillWidth>
                         <SegmentedControl
                           value={currentVar}
-                          onChange={(value: string) =>
+                          onValueChange={(value: string) =>
                             selectVar(comp.name, value)
                           }
                           buttons={comp.variations.map((v) => ({

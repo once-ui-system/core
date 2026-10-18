@@ -16,6 +16,7 @@ export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
   flipped?: boolean;
   onFlip?: (flipped: boolean) => void;
   disableClickFlip?: boolean;
+  /** Milliseconds between automatic flips (seconds until 3.0). Unset never flips on its own. */
   autoFlipInterval?: number;
   front: React.ReactNode;
   back: React.ReactNode;
@@ -68,7 +69,7 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
       const interval = setInterval(() => {
         setInternalFlipped((prev) => !prev);
         onFlip?.(!flippedState);
-      }, autoFlipInterval * 1000);
+      }, autoFlipInterval);
 
       return () => clearInterval(interval);
     }

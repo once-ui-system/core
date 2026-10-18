@@ -87,7 +87,8 @@ describe("enumerable style props as classes", () => {
   });
 
   it("maps each prop to its class on Flex and Grid, on the server", () => {
-    for (const Component of [Flex, Grid]) {
+    // Flex and Grid are each overloaded, so their union is not callable as JSX.
+    for (const Component of [Flex, Grid] as React.ElementType[]) {
       // No LayoutProvider: the client path would throw.
       const html = renderToStaticMarkup(
         <Component userSelect="none" blendMode="color-dodge" blur="xl" backdropBlur="s">
@@ -105,15 +106,15 @@ describe("enumerable style props as classes", () => {
     }
   });
 
-  it("writes a number as rem, inline, still on the server", () => {
+  it("writes a number as px, inline, still on the server", () => {
     const html = renderToStaticMarkup(
       <Flex blur={0.125} backdropBlur={0.75}>
         x
       </Flex>,
     );
-    expect(html).toContain("filter:blur(0.125rem)");
-    expect(html).toContain("backdrop-filter:blur(0.75rem)");
-    expect(html).toContain("-webkit-backdrop-filter:blur(0.75rem)");
+    expect(html).toContain("filter:blur(0.125px)");
+    expect(html).toContain("backdrop-filter:blur(0.75px)");
+    expect(html).toContain("-webkit-backdrop-filter:blur(0.75px)");
     expect(classesOf(html).some((cls) => cls.startsWith("blur-"))).toBe(false);
   });
 
@@ -126,7 +127,7 @@ describe("enumerable style props as classes", () => {
       </ServerFlex>,
     );
     expect(html).toContain("filter:grayscale(1)");
-    expect(html).not.toContain("blur(1rem)");
+    expect(html).not.toContain("blur(1px)");
   });
 
   it("gives Text and Heading userSelect, which share the display props", () => {

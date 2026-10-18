@@ -1,49 +1,40 @@
 import classNames from "clsx";
-import { CSSProperties, forwardRef } from "react";
+import { type CSSProperties, type ElementType, forwardRef, type HTMLAttributes } from "react";
 
-import {
-  CommonProps,
-  DisplayProps,
-  FlexBreakpointProps,
-  FlexProps,
-  SizeProps,
-  SpacingProps,
-  StyleProps,
-} from "../interfaces";
+import type { FlexLayoutProps } from "../interfaces";
 import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import {
   BELOW_HEADER,
+  crossAxisClass,
+  elementReset,
+  isCSSUnit,
   offsetClasses,
+  offsetValue,
+  px,
   scrollsOn,
   sizeValue,
+  spacingClass,
   spacingClasses,
+  spacingValue,
   themeAttributes,
   translateTransform,
 } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
-interface ServerFlexProps
-  extends FlexProps,
-    SpacingProps,
-    SizeProps,
-    StyleProps,
-    CommonProps,
-    DisplayProps {
-  xl?: FlexBreakpointProps;
-  l?: FlexBreakpointProps;
-  m?: FlexBreakpointProps;
-  s?: FlexBreakpointProps;
-  xs?: FlexBreakpointProps;
-}
+/**
+ * What the two halves of Flex take: the layout props, plus the attributes of
+ * whatever element `as` names, typed loosely here. `Flex` is the typed face.
+ */
+export type ServerFlexProps = FlexLayoutProps &
+  Omit<HTMLAttributes<HTMLElement>, keyof FlexLayoutProps> & { as?: ElementType };
 
-const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
+const ServerFlex = forwardRef<HTMLElement, ServerFlexProps>(
   (
     {
       as: Component = "div",
       inline,
       hide,
-      dark,
-      light,
+      showIn,
       direction,
       xl,
       l,
@@ -55,9 +46,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       vertical,
       flex,
       textVariant,
-      textSize,
-      textWeight,
-      textType,
       onBackground,
       onSolid,
       align,
@@ -173,10 +161,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
     };
 
-    const sizeClass = textSize ? `font-${textSize}` : "";
-    const weightClass = textWeight ? `font-${textWeight}` : "";
-
-    const variantClasses = textVariant ? getVariantClasses(textVariant) : [sizeClass, weightClass];
+    const variantClasses = textVariant ? getVariantClasses(textVariant) : [];
 
     let colorClass = "";
     if (onBackground) {
@@ -213,62 +198,36 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
 
     let classes = classNames(
       inline ? "display-inline-flex" : "display-flex",
+      elementReset(Component),
       position && `position-${position}`,
       hide && "flex-hide",
-      typeof padding !== "number" && padding && `p-${padding}`,
-      typeof paddingLeft !== "number" && paddingLeft && `pl-${paddingLeft}`,
-      typeof paddingRight !== "number" && paddingRight && `pr-${paddingRight}`,
-      typeof paddingTop !== "number" && paddingTop && `pt-${paddingTop}`,
-      typeof paddingBottom !== "number" && paddingBottom && `pb-${paddingBottom}`,
-      typeof paddingX !== "number" && paddingX && `px-${paddingX}`,
-      typeof paddingY !== "number" && paddingY && `py-${paddingY}`,
-      typeof margin !== "number" && margin && `m-${margin}`,
-      typeof marginLeft !== "number" && marginLeft && `ml-${marginLeft}`,
-      typeof marginRight !== "number" && marginRight && `mr-${marginRight}`,
-      typeof marginTop !== "number" && marginTop && `mt-${marginTop}`,
-      typeof marginBottom !== "number" && marginBottom && `mb-${marginBottom}`,
-      typeof marginX !== "number" && marginX && `mx-${marginX}`,
-      typeof marginY !== "number" && marginY && `my-${marginY}`,
+      spacingClass("p", padding),
+      spacingClass("pl", paddingLeft),
+      spacingClass("pr", paddingRight),
+      spacingClass("pt", paddingTop),
+      spacingClass("pb", paddingBottom),
+      spacingClass("px", paddingX),
+      spacingClass("py", paddingY),
+      spacingClass("m", margin),
+      spacingClass("ml", marginLeft),
+      spacingClass("mr", marginRight),
+      spacingClass("mt", marginTop),
+      spacingClass("mb", marginBottom),
+      spacingClass("mx", marginX),
+      spacingClass("my", marginY),
       gap === "-1"
         ? direction === "column" || direction === "column-reverse"
           ? "g-vertical--1"
           : "g-horizontal--1"
-        : typeof gap !== "number" && gap && `g-${gap}`,
-      typeof top === "string" &&
-        !top.endsWith("%") &&
-        !top.endsWith("vh") &&
-        !top.endsWith("dvh") &&
-        !top.endsWith("vw") &&
-        !top.startsWith("calc(") &&
-        top
+        : spacingClass("g", gap),
+      typeof top === "string" && !isCSSUnit(top) && top
         ? `top-${top}`
         : position === "sticky" && top === undefined
           ? "top-0"
           : undefined,
-      typeof right === "string" &&
-        !right.endsWith("%") &&
-        !right.endsWith("vh") &&
-        !right.endsWith("dvh") &&
-        !right.endsWith("vw") &&
-        !right.startsWith("calc(") &&
-        right &&
-        `right-${right}`,
-      typeof bottom === "string" &&
-        !bottom.endsWith("%") &&
-        !bottom.endsWith("vh") &&
-        !bottom.endsWith("dvh") &&
-        !bottom.endsWith("vw") &&
-        !bottom.startsWith("calc(") &&
-        bottom &&
-        `bottom-${bottom}`,
-      typeof left === "string" &&
-        !left.endsWith("%") &&
-        !left.endsWith("vh") &&
-        !left.endsWith("dvh") &&
-        !left.endsWith("vw") &&
-        !left.startsWith("calc(") &&
-        left &&
-        `left-${left}`,
+      typeof right === "string" && !isCSSUnit(right) && right && `right-${right}`,
+      typeof bottom === "string" && !isCSSUnit(bottom) && bottom && `bottom-${bottom}`,
+      typeof left === "string" && !isCSSUnit(left) && left && `left-${left}`,
       generateDynamicClass("background", background),
       generateDynamicClass("solid", solid),
       // Handle border color: boolean uses default-border, string uses dynamic class
@@ -325,10 +284,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         (direction === "row" || direction === "row-reverse" || direction === undefined
           ? `justify-${horizontal}`
           : `align-${horizontal}`),
-      vertical &&
-        (direction === "row" || direction === "row-reverse" || direction === undefined
-          ? `align-${vertical}`
-          : `justify-${vertical}`),
+      vertical && crossAxisClass("", vertical, direction),
       center && "center",
       fit && "fit",
       fitWidth && "fit-width",
@@ -348,14 +304,15 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       maxHeight === BELOW_HEADER && "max-height-below-header",
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
-      textType && `font-${textType}`,
       typeof cursor === "string" && `cursor-${cursor}`,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
-      typeof blur === "string" && `blur-${blur}`,
-      typeof backdropBlur === "string" && `backdrop-blur-${backdropBlur}`,
-      dark && "dark-flex",
-      light && "light-flex",
+      typeof blur === "string" && !isCSSUnit(blur) && `blur-${blur}`,
+      typeof backdropBlur === "string" &&
+        !isCSSUnit(backdropBlur) &&
+        `backdrop-blur-${backdropBlur}`,
+      showIn === "dark" && "dark-flex",
+      showIn === "light" && "light-flex",
       colorClass,
       className,
       ...variantClasses,
@@ -370,7 +327,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ...spacingClasses("s", cascadedS),
         ...spacingClasses("xs", cascadedXs),
         // Offsets cascade with the rest. Only a static step is a class
-        // (`.m-top-16`); a rem number or a CSS unit is inline, on ClientFlex.
+        // (`.m-top-16`); a px number or a CSS length is inline, on ClientFlex.
         ...offsetClasses("xl", cascadedXl),
         ...offsetClasses("l", cascadedL),
         ...offsetClasses("m", cascadedM),
@@ -402,48 +359,28 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
           cascadedL?.direction === undefined
             ? `l-justify-${cascadedL.horizontal}`
             : `l-align-${cascadedL.horizontal}`),
-        cascadedL?.vertical &&
-          (cascadedL?.direction === "row" ||
-          cascadedL?.direction === "row-reverse" ||
-          cascadedL?.direction === undefined
-            ? `l-align-${cascadedL.vertical}`
-            : `l-justify-${cascadedL.vertical}`),
+        cascadedL?.vertical && crossAxisClass("l-", cascadedL.vertical, cascadedL.direction),
         cascadedM?.horizontal &&
           (cascadedM?.direction === "row" ||
           cascadedM?.direction === "row-reverse" ||
           cascadedM?.direction === undefined
             ? `m-justify-${cascadedM.horizontal}`
             : `m-align-${cascadedM.horizontal}`),
-        cascadedM?.vertical &&
-          (cascadedM?.direction === "row" ||
-          cascadedM?.direction === "row-reverse" ||
-          cascadedM?.direction === undefined
-            ? `m-align-${cascadedM.vertical}`
-            : `m-justify-${cascadedM.vertical}`),
+        cascadedM?.vertical && crossAxisClass("m-", cascadedM.vertical, cascadedM.direction),
         cascadedS?.horizontal &&
           (cascadedS?.direction === "row" ||
           cascadedS?.direction === "row-reverse" ||
           cascadedS?.direction === undefined
             ? `s-justify-${cascadedS.horizontal}`
             : `s-align-${cascadedS.horizontal}`),
-        cascadedS?.vertical &&
-          (cascadedS?.direction === "row" ||
-          cascadedS?.direction === "row-reverse" ||
-          cascadedS?.direction === undefined
-            ? `s-align-${cascadedS.vertical}`
-            : `s-justify-${cascadedS.vertical}`),
+        cascadedS?.vertical && crossAxisClass("s-", cascadedS.vertical, cascadedS.direction),
         cascadedXs?.horizontal &&
           (cascadedXs?.direction === "row" ||
           cascadedXs?.direction === "row-reverse" ||
           cascadedXs?.direction === undefined
             ? `xs-justify-${cascadedXs.horizontal}`
             : `xs-align-${cascadedXs.horizontal}`),
-        cascadedXs?.vertical &&
-          (cascadedXs?.direction === "row" ||
-          cascadedXs?.direction === "row-reverse" ||
-          cascadedXs?.direction === undefined
-            ? `xs-align-${cascadedXs.vertical}`
-            : `xs-justify-${cascadedXs.vertical}`),
+        cascadedXs?.vertical && crossAxisClass("xs-", cascadedXs.vertical, cascadedXs.direction),
         // Additional class-based properties. `xl` leads, as it does for spacing:
         // without it an `xl={{ overflow }}` reached every narrower step and
         // missed its own.
@@ -496,26 +433,6 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedXs?.transition && `xs-transition-${cascadedXs.transition}`,
       );
 
-    const parsePosition = (
-      value: number | SpacingToken | string | undefined,
-    ): string | undefined => {
-      if (value === undefined) return undefined;
-      if (typeof value === "number") return `${value}rem`;
-      if (typeof value === "string") {
-        // Check for CSS unit values - pass through directly
-        if (
-          value.endsWith("%") ||
-          value.endsWith("vh") ||
-          value.endsWith("dvh") ||
-          value.endsWith("vw") ||
-          value.startsWith("calc(")
-        ) {
-          return value;
-        }
-      }
-      return undefined;
-    };
-
     // A spacing token as well as a number or a CSS unit: `translateY="16"`
     // used to write no transform at all.
     const transform = translateTransform(translateX, translateY);
@@ -548,17 +465,17 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         marginBottom,
         marginLeft,
       }),
-      gap: typeof gap === "number" ? `${gap}rem` : undefined,
-      top: parsePosition(top),
-      right: parsePosition(right),
-      bottom: parsePosition(bottom),
-      left: parsePosition(left),
+      gap: spacingValue(gap),
+      top: offsetValue(top),
+      right: offsetValue(right),
+      bottom: offsetValue(bottom),
+      left: offsetValue(left),
       transform,
-      // A size is a class; a number is rem, and has no class to reach for.
-      filter: typeof blur === "number" ? `blur(${blur}rem)` : undefined,
-      ...(typeof backdropBlur === "number" && {
-        WebkitBackdropFilter: `blur(${backdropBlur}rem)`,
-        backdropFilter: `blur(${backdropBlur}rem)`,
+      // A size is a class; a number is px, and has no class to reach for.
+      filter: spacingValue(blur) ? `blur(${spacingValue(blur)})` : undefined,
+      ...(spacingValue(backdropBlur) && {
+        WebkitBackdropFilter: `blur(${spacingValue(backdropBlur)})`,
+        backdropFilter: `blur(${spacingValue(backdropBlur)})`,
       }),
       ...style,
     };
@@ -566,6 +483,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     return (
       <Component
         ref={ref}
+        // A button that is a layout box is an action, not a form submit.
+        {...(Component === "button" && { type: "button" })}
         className={classes}
         style={combinedStyle}
         {...rest}

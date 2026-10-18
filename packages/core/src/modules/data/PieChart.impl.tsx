@@ -2,22 +2,24 @@
 
 import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
+import type { DateRange } from "../../components/DatePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import type { SizeProps } from "../../interfaces";
+import { cssColor } from "../../internal/cssColor";
 import { RadiusSize, schemes } from "../../types";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { RadialGradient } from "./Gradient";
-import { ChartProps, ChartVariant } from "./interfaces";
+import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 
 import { getDistributedColor } from "./utils/colorDistribution";
 
-export interface PieChartProps extends ChartProps {
+export interface PieChartProps<T extends object = DataPoint> extends ChartProps<T> {
   /**
    * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
    * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
@@ -25,8 +27,10 @@ export interface PieChartProps extends ChartProps {
    */
   "data-viz-style"?: DataStyle | (string & {});
   ring?: { inner: number; outer: number };
-  dataKey?: string;
-  nameKey?: string;
+  /** The row key that sizes each slice. */
+  dataKey?: SeriesKey<T>;
+  /** The row key that names each slice. */
+  nameKey?: SeriesKey<T>;
   origo?: { x: number; y: number };
 }
 
@@ -90,11 +94,11 @@ const PieChart: React.FC<PieChartProps> = ({
   };
 
   const colorPalette = React.useMemo(() => {
-    if (!data || data.length === 0) return schemes.map((c) => `var(--data-${c})`);
+    if (!data || data.length === 0) return schemes.map((c) => cssColor(c, "data-"));
 
     return Array.from({ length: data.length }, (_, index) => {
       const colorKey = getDistributedColor(index, data.length);
-      return `var(--data-${colorKey})`;
+      return cssColor(String(colorKey), "data-");
     });
   }, [data]);
 
@@ -125,7 +129,8 @@ const PieChart: React.FC<PieChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       data-viz-style={dataViz || mode}
       border={border}
       radius="l"
@@ -206,7 +211,7 @@ const PieChart: React.FC<PieChartProps> = ({
                         }),
                       ),
                     ).map((colorKey) => {
-                      const baseColor = `var(--data-${colorKey})`;
+                      const baseColor = cssColor(String(colorKey), "data-");
                       const patternId = getGradientId(colorKey as string);
                       return (
                         <pattern
@@ -278,7 +283,7 @@ const PieChart: React.FC<PieChartProps> = ({
                     {filteredData.map((entry, index) => {
                       const colorKey =
                         entry.color || getDistributedColor(index, filteredData.length);
-                      const baseColor = `var(--data-${colorKey})`;
+                      const baseColor = cssColor(String(colorKey), "data-");
                       const gradientId = getGradientId(String(colorKey));
                       return (
                         <Cell
@@ -302,7 +307,7 @@ const PieChart: React.FC<PieChartProps> = ({
                           const colorKey =
                             filteredData[index]?.color ||
                             getDistributedColor(index, filteredData.length);
-                          props.payload[0].color = `var(--data-${colorKey})`;
+                          props.payload[0].color = cssColor(String(colorKey), "data-");
                         }
                         return (
                           <DataTooltip

@@ -2,12 +2,19 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useState } from "react";
+import type { Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
 import styles from "./GlitchFx.module.scss";
 
 interface GlitchFxProps extends React.ComponentProps<typeof Flex> {
   children: React.ReactNode;
-  speed?: "slow" | "medium" | "fast";
+  /**
+   * A multiplier on the 2.5s glitch cycle (`2` is twice as fast), or
+   * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2).
+   */
+  speed?: Speed;
+  /** Milliseconds between glitches when `trigger="custom"`. */
   interval?: number;
   trigger?: "instant" | "hover" | "custom";
   continuous?: boolean;
@@ -21,6 +28,7 @@ const GlitchFx = forwardRef<HTMLDivElement, GlitchFxProps>(
       interval = 2500,
       trigger = "instant",
       continuous = true,
+      style,
       ...rest
     },
     ref,
@@ -59,16 +67,17 @@ const GlitchFx = forwardRef<HTMLDivElement, GlitchFxProps>(
       }
     }, [trigger, interval, triggerGlitch]);
 
-    const speedClass = styles[speed];
+    const cycle = `${2500 / speedFactor(speed)}ms`;
 
     return (
       <Flex
         ref={ref}
         inline
         zIndex={0}
-        className={classNames(speedClass, isGlitching && styles.active)}
+        className={classNames(isGlitching && styles.active)}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{ ["--glitch-duration" as string]: cycle, ...style }}
         {...rest}
       >
         <Flex fillWidth inline zIndex={1}>

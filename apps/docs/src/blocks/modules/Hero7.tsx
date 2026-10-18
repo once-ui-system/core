@@ -18,22 +18,22 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
       <Column paddingX="l" fillWidth horizontal="center" gap="m">
         <Column maxWidth="s" horizontal="center" align="center">
           <RevealFx paddingTop="24" translateY="4" fillWidth horizontal="center" paddingBottom="16">
-            <Heading variant="display-strong-l">Design an independent future</Heading>
+            <Heading textVariant="display-strong-l">Design an independent future</Heading>
           </RevealFx>
           <RevealFx translateY="8" delay={200} fillWidth horizontal="center" paddingBottom="40">
-            <Text wrap="balance" onBackground="neutral-weak" variant="heading-default-xl">
+            <Text wrap="balance" onBackground="neutral-weak" textVariant="heading-default-xl">
               Build your solo business and live on your own terms
             </Text>
           </RevealFx>
           <RevealFx direction="column" gap="16" translateY="12" delay={400} horizontal="center">
-            <Text wrap="balance" onBackground="neutral-weak" variant="label-default-s">
+            <Text wrap="balance" onBackground="neutral-weak" textVariant="label-default-s">
               By the creator of Once UI
             </Text>
             <Column
               radius="l"
               horizontal="center"
               align="center"
-              maxWidth={20}
+              maxWidth="20rem"
               themeBorder="rounded"
             >
               <Input
@@ -64,7 +64,7 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
                   { src: "/images/creators/div.jpg" },
                 ]}
               />
-              <Text variant="code-default-s">Join 3.5k+ readers</Text>
+              <Text textVariant="code-default-s">Join 3.5k+ readers</Text>
             </Row>
           </RevealFx>
         </Column>
@@ -78,9 +78,9 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
           gradient={{
             display: true,
             colorStart: "brand-solid-strong",
-            y: 100,
-            width: 100,
-            height: 90,
+            y: "100%",
+            width: "100%",
+            height: "90%",
           }}
           pointerEvents="none"
         />
@@ -89,22 +89,22 @@ export const Hero7: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) =
             <Row paddingX="56" gap="40" paddingY="48">
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/01.jpg"
               />
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/02.jpg"
               />
               <Book
                 href="#"
-                minWidth={14}
-                maxWidth={16}
+                minWidth="14rem"
+                maxWidth="16rem"
                 aspectRatio="3/4"
                 src="/images/customize/philosophy/03.jpg"
               />

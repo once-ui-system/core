@@ -99,28 +99,28 @@ function TierCard({ tier }: { tier: Tier }) {
       <Column gap="8">
         <Row fillWidth vertical="center" gap="8">
           <Text
-            variant="label-default-s"
+            textVariant="label-default-s"
             onBackground={tier.featured ? "brand-weak" : "neutral-weak"}
           >
             {tier.name}
           </Text>
           {tier.featured && (
-            <Tag size="s" scheme="brand" themeBorder="rounded">
+            <Tag size="s" tone="brand" themeBorder="rounded">
               Most popular
             </Tag>
           )}
         </Row>
         <Row vertical="end" gap="4">
-          <Heading as="h3" variant="display-strong-xs">
+          <Heading as="h3" textVariant="display-strong-xs">
             {tier.price}
           </Heading>
           {tier.period && (
-            <Text variant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
+            <Text textVariant="label-default-s" onBackground="neutral-weak" paddingBottom="4">
               {tier.period}
             </Text>
           )}
         </Row>
-        <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
           {tier.description}
         </Text>
       </Column>
@@ -128,7 +128,7 @@ function TierCard({ tier }: { tier: Tier }) {
         {tier.benefits.map((benefit) => (
           <Row key={benefit} vertical="center" gap="8">
             <Icon name="check" size="xs" onBackground="brand-weak" />
-            <Text variant="label-default-s">{benefit}</Text>
+            <Text textVariant="label-default-s">{benefit}</Text>
           </Row>
         ))}
       </Column>
@@ -150,14 +150,14 @@ function CustomTierCard({ tier }: { tier: CustomTier }) {
     <Column fillWidth padding="l" gap="20" radius="l" border vertical="between">
       <Column gap="8">
         <Row fillWidth horizontal="between" vertical="center">
-          <Heading as="h3" variant="heading-strong-m">
+          <Heading as="h3" textVariant="heading-strong-m">
             {tier.name}
           </Heading>
-          <Text variant="label-default-s" onBackground="brand-weak">
+          <Text textVariant="label-default-s" onBackground="brand-weak">
             {tier.price}
           </Text>
         </Row>
-        <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
           {tier.description}
         </Text>
       </Column>
@@ -171,11 +171,11 @@ function CustomTierCard({ tier }: { tier: CustomTier }) {
 export const Plans6 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="64" {...flex}>
-      <Column gap="16" maxWidth={48}>
-        <Heading as="h2" variant="display-strong-m">
+      <Column gap="16" maxWidth="48rem">
+        <Heading as="h2" textVariant="display-strong-m">
           Simple pricing for every stage
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
           Start for free, upgrade when you need more, or talk to us for a custom plan.
         </Text>
       </Column>
@@ -187,7 +187,7 @@ export const Plans6 = (flex: React.ComponentProps<typeof Column>) => {
       </Row>
 
       <Column fillWidth gap="24">
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           NEED MORE?
         </Text>
         <Grid fillWidth columns="3" m={{ columns: 1 }} gap="16">

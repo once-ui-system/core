@@ -3,10 +3,10 @@
 import {
   Button,
   Column,
-  DataTable,
-  type DataTableColumn,
-  type DataTableSort,
   Row,
+  Table,
+  type TableColumn,
+  type TableSort,
   Tag,
   Text,
 } from "@once-ui-system/core";
@@ -35,14 +35,14 @@ const INVOICES: Invoice[] = Array.from({ length: 48 }, (_, index) => ({
 
 const money = (amount: number) => `$${amount.toLocaleString("en-US")}`;
 
-const columns: DataTableColumn<Invoice>[] = [
+const columns: TableColumn<Invoice>[] = [
   { key: "id", header: "Invoice", sortable: true },
   { key: "customer", header: "Customer", sortable: true },
   {
     key: "status",
     header: "Status",
     cell: (invoice) => (
-      <Tag size="s" scheme={STATUS_SCHEME[invoice.status]}>
+      <Tag size="s" tone={STATUS_SCHEME[invoice.status]}>
         {invoice.status}
       </Tag>
     ),
@@ -58,7 +58,7 @@ const columns: DataTableColumn<Invoice>[] = [
 ];
 
 export function DataTableExample() {
-  return <DataTable aria-label="Invoices" columns={columns} rows={INVOICES.slice(0, 6)} />;
+  return <Table aria-label="Invoices" columns={columns} rows={INVOICES.slice(0, 6)} />;
 }
 
 export function DataTableSelectionExample() {
@@ -67,7 +67,7 @@ export function DataTableSelectionExample() {
   return (
     <Column fillWidth gap="12">
       <Row fillWidth horizontal="between" vertical="center" paddingX="4">
-        <Text variant="label-default-m">
+        <Text textVariant="label-default-m">
           {selected.length > 0 ? `${selected.length} selected` : "Invoices"}
         </Text>
         <Button
@@ -79,7 +79,7 @@ export function DataTableSelectionExample() {
           Clear selection
         </Button>
       </Row>
-      <DataTable
+      <Table
         aria-label="Invoices"
         columns={columns}
         rows={INVOICES}
@@ -97,7 +97,7 @@ export function DataTableSelectionExample() {
 }
 
 /** Stands in for an API: sorts and slices on the "server", after a delay. */
-function fetchInvoices(page: number, perPage: number, sort: DataTableSort | null) {
+function fetchInvoices(page: number, perPage: number, sort: TableSort | null) {
   const sorted = [...INVOICES];
   if (sort) {
     const key = sort.key as keyof Invoice;
@@ -117,7 +117,7 @@ function fetchInvoices(page: number, perPage: number, sort: DataTableSort | null
 
 export function DataTableServerExample() {
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<DataTableSort | null>(null);
+  const [sort, setSort] = useState<TableSort | null>(null);
   const [data, setData] = useState<{ rows: Invoice[]; count: number }>({ rows: [], count: 0 });
   const [loading, setLoading] = useState(true);
   const perPage = 5;
@@ -136,7 +136,7 @@ export function DataTableServerExample() {
   }, [page, sort]);
 
   return (
-    <DataTable
+    <Table
       aria-label="Invoices"
       columns={columns}
       rows={data.rows}

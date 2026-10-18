@@ -34,12 +34,12 @@ const DEFAULT_LABELS: Required<ThemeSwitcherLabels> = {
 interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onChange"> {
   /**
    * The theme to show as active, when the host owns the state. Pair with
-   * `onChange`. The switcher then never sets the theme or stores it, which is
+   * `onValueChange`. The switcher then never sets the theme or stores it, which is
    * what an editor previewing someone else's theme needs.
    */
   value?: Theme;
   /** Called with the chosen theme. Without `value`, after it has been set. */
-  onChange?: (theme: Theme) => void;
+  onValueChange?: (theme: Theme) => void;
   /**
    * Show only the active theme, and reveal the rest on hover or focus.
    *
@@ -74,7 +74,7 @@ interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onC
 }
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  ({ collapsed, direction = "row", labels, value, onChange, className, ...flex }, ref) => {
+  ({ collapsed, direction = "row", labels, value, onValueChange, className, ...flex }, ref) => {
     const { theme: providerTheme, setTheme } = useTheme();
     const controlled = value !== undefined;
     const theme = controlled ? value : providerTheme;
@@ -130,7 +130,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
 
     const choose = (next: Theme) => {
       if (!controlled) setTheme(next);
-      onChange?.(next);
+      onValueChange?.(next);
     };
 
     const options = ordered.map(({ value: option, icon }, index) => {

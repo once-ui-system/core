@@ -15,7 +15,7 @@ const examples: BlockExampleDef[] = [
           <Header1 />
           <Row fillWidth paddingX="12">
             <Background
-              height={32}
+              height="32rem"
               flex="3"
               background="neutral-alpha-weak"
               border="neutral-alpha-medium"
@@ -28,7 +28,7 @@ const examples: BlockExampleDef[] = [
           <Header1 authenticated avatar="/images/creators/lorant.jpg" />
           <Row fillWidth paddingX="12">
             <Background
-              height={32}
+              height="32rem"
               flex="3"
               background="neutral-alpha-weak"
               border="neutral-alpha-medium"
@@ -49,7 +49,7 @@ const examples: BlockExampleDef[] = [
           <Header2 />
           <Row fillWidth paddingX="12">
             <Background
-              height={32}
+              height="32rem"
               flex="3"
               background="neutral-alpha-weak"
               border="neutral-alpha-medium"
@@ -62,7 +62,7 @@ const examples: BlockExampleDef[] = [
           <Header2 authenticated={true} />
           <Row fillWidth paddingX="12">
             <Background
-              height={32}
+              height="32rem"
               flex="3"
               background="neutral-alpha-weak"
               border="neutral-alpha-medium"

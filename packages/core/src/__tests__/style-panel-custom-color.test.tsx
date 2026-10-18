@@ -42,7 +42,7 @@ function Host({
       customColors
       labels={labels}
       value={value}
-      onChange={(next, changed) => {
+      onValueChange={(next, changed) => {
         setValue(next);
         onChange?.(next, changed);
       }}
@@ -57,7 +57,7 @@ const face = (swatch: HTMLElement) => swatch.querySelector('[class*="swatch"]') 
 
 describe("StylePanel custom colour", () => {
   it("is not offered unless the host opts in", () => {
-    render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
+    render(<StylePanel value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect(screen.queryByRole("button", { name: "Brand colour: custom" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Accent colour: custom" })).toBeNull();
   });
@@ -229,7 +229,7 @@ describe("StylePanel custom colour", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <StylePanel.Root value={{}} onChange={onChange}>
+      <StylePanel.Root value={{}} onValueChange={onChange}>
         <StylePanel.Group>
           <StylePanel.Brand />
           <StylePanel.Accent custom label="Highlight" />
@@ -299,7 +299,7 @@ describe("StylePanel controlled Theme row", () => {
   });
 
   it("treats an unset theme as the system one", () => {
-    render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
+    render(<StylePanel value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect(screen.getByRole("button", { name: "System theme" })).toHaveAttribute(
       "aria-pressed",
       "true",

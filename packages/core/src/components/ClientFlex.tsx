@@ -2,32 +2,11 @@
 
 import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
-import { DisplayProps, FlexBreakpointProps, FlexProps, StyleProps } from "../interfaces";
-import {
-  Colors,
-  FlexValue,
-  Opacity,
-  RadiusNest,
-  RadiusSize,
-  ShadowSize,
-  TextSize,
-  TextType,
-  TextVariant,
-  TextWeight,
-} from "../types";
 import { breakpointStyle } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
-import { ServerFlex } from "./ServerFlex";
+import { ServerFlex, type ServerFlexProps } from "./ServerFlex";
 
-interface ClientFlexProps extends FlexProps, StyleProps, DisplayProps {
-  cursor?: StyleProps["cursor"];
-  xl?: FlexBreakpointProps;
-  l?: FlexBreakpointProps;
-  m?: FlexBreakpointProps;
-  s?: FlexBreakpointProps;
-  xs?: FlexBreakpointProps;
-  hide?: boolean;
-}
+type ClientFlexProps = ServerFlexProps;
 
 const generateBackgroundClass = (
   type: "background" | "solid",
@@ -75,14 +54,14 @@ const CLASS_BASED_PROPS = new Set([
   "left",
 ]);
 
-const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
+const ClientFlex = forwardRef<HTMLElement, ClientFlexProps>(
   ({ cursor, hide, xl, l, m, s, xs, ...props }, ref) => {
-    const elementRef = useRef<HTMLDivElement>(null);
+    const elementRef = useRef<HTMLElement>(null);
     const [isTouchDevice, setIsTouchDevice] = useState(false);
     const { currentBreakpoint } = useLayout();
 
     // Combine refs
-    const combinedRef = (node: HTMLDivElement) => {
+    const combinedRef = (node: HTMLElement) => {
       elementRef.current = node;
       if (typeof ref === "function") {
         ref(node);

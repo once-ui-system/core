@@ -26,10 +26,10 @@ exist yet.
     {
       code:
 `<Setting label="Autoplay" description="Start playing on load">
-    <Switch checked={autoplay} onToggle={toggleAutoplay} />
+    <Switch checked={autoplay} onCheckedChange={toggleAutoplay} />
 </Setting>
 <Setting label="Loop" info="Restarts from the beginning when it reaches the end.">
-    <Switch checked={loop} onToggle={toggleLoop} />
+    <Switch checked={loop} onCheckedChange={toggleLoop} />
 </Setting>`,
       language: "tsx",
       label: "Setting"
@@ -50,16 +50,14 @@ own for use anywhere else.
   previewPadding="24"
   preview={
     <Row gap="8" vertical="center">
-      <Text variant="label-default-s">Bitrate</Text>
-      <InfoTip>Higher bitrates keep more detail in fast motion, at a larger file size.</InfoTip>
+      <Text textVariant="label-default-s">Bitrate</Text>
+      <Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />
     </Row>
   }
   codes={[
     {
       code:
-`<InfoTip>
-    Higher bitrates keep more detail in fast motion, at a larger file size.
-</InfoTip>`,
+`<Tooltip content="Higher bitrates keep more detail in fast motion, at a larger file size." />`,
       language: "tsx",
       label: "InfoTip"
     }
@@ -68,9 +66,9 @@ own for use anywhere else.
 
 ## Groups
 
-`SettingGroup` nests sub-settings **inside** its own box rather than beside it,
+With `control` or `open`, a Setting becomes a group (2.x's `SettingGroup`): it nests sub-settings **inside** its own box rather than beside it,
 so the relationship survives a panel with ten groups in it. The header control
-is what usually gates the body.
+is what usually gates the body; `open` shows or hides it.
 
 The group is a single surface — the header and the body it reveals share one
 background, separated by a hairline — so opening one grows the panel instead of
@@ -85,27 +83,27 @@ whatever the group is nested in.
   codes={[
     {
       code:
-`<SettingGroup
+`<Setting
   label="Watermark"
-  control={<Switch checked={enabled} onToggle={toggleEnabled} />}
+  control={<Switch checked={enabled} onCheckedChange={toggleEnabled} />}
   open={enabled}
 >
     <Setting label="Opacity">
-      <Slider value={opacity} onChange={setOpacity} />
+      <Slider value={opacity} onValueChange={setOpacity} />
     </Setting>
     <Setting label="Position">
-      <SegmentedControl value={position} onChange={setPosition} buttons={positions} />
+      <SegmentedControl value={position} onValueChange={setPosition} buttons={positions} />
     </Setting>
-</SettingGroup>`,
+</Setting>`,
       language: "tsx",
-      label: "SettingGroup"
+      label: "Group"
     }
   ]}
 />
 
 ## Axes
 
-A property with more than one axis belongs in one row. `SettingAxes` puts them
+A property with more than one axis belongs in one row. `axes` (2.x's `SettingAxes`) puts them
 side by side, and wraps when the panel is too narrow, instead of splitting into
 two rows that read as unrelated settings.
 
@@ -117,16 +115,16 @@ two rows that read as unrelated settings.
   codes={[
     {
       code:
-`<SettingAxes
+`<Setting
   label="Tilt"
   info="Rotates the frame in 3D. Both axes are degrees."
   axes={[
-    { label: "X", control: <Slider value={x} min={-45} max={45} onChange={setX} /> },
-    { label: "Y", control: <Slider value={y} min={-45} max={45} onChange={setY} /> },
+    { label: "X", control: <Slider value={x} min={-45} max={45} onValueChange={setX} /> },
+    { label: "Y", control: <Slider value={y} min={-45} max={45} onValueChange={setY} /> },
   ]}
 />`,
       language: "tsx",
-      label: "SettingAxes"
+      label: "Axes"
     }
   ]}
 />
@@ -141,37 +139,15 @@ two rows that read as unrelated settings.
     label: "Name of the setting.",
     description: "What it does, under the label.",
     info: "Extra detail behind an InfoTip.",
-    controlWidth: "Width reserved for the control, in rem, so a column of settings lines up.",
-    children: "The control itself.",
+    controlWidth: "Width reserved for the control, so a column of settings lines up: a number is px, a string a CSS length. Default \"14rem\".",
+    children: "The control itself; in a group, the sub-settings it reveals.",
+    control: "Makes a group: the control in its header, usually a Switch gating the body.",
+    open: "Makes a group: its body shows only while open is true.",
+    axes: "Puts one control per axis side by side in one row: { label, control }[]. Takes no children.",
+    axisWidth: "With axes, the least width of each axis before the row wraps: a number is px, a string a CSS length. Default \"13rem\".",
   }}
   content={[
     ["children", "ReactNode"]
-  ]}
-/>
-
-### SettingGroup
-
-<PropsTable
-  content={[
-    ["label", "ReactNode"],
-    ["description", "ReactNode"],
-    ["info", "ReactNode"],
-    ["control", "ReactNode"],
-    ["open", "boolean"],
-    ["children", "ReactNode"],
-    ["...flex"]
-  ]}
-/>
-
-### SettingAxes
-
-<PropsTable
-  content={[
-    ["label", "ReactNode"],
-    ["info", "ReactNode"],
-    ["axes", "{ label: ReactNode; control: ReactNode }[]"],
-    ["axisWidth", "number", "13"],
-    ["...flex"]
   ]}
 />
 

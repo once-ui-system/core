@@ -7,7 +7,7 @@ import { useAdapters } from "../contexts/AdapterProvider";
 import { useToast } from "../contexts/ToastProvider";
 import type { SpacingToken, TShirtSizes } from "../types";
 import { Column } from "./Column";
-import { ContextMenu } from "./ContextMenu";
+import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { Line } from "./Line";
@@ -38,13 +38,16 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   icon?: LogoSource;
   wordmark?: LogoSource;
   href?: string;
-  dark?: boolean;
-  light?: boolean;
+  /**
+   * Show this logo only in one theme. For a logo that changes with the
+   * theme, pass `{ light, dark }` sources instead. 2.x: `dark` / `light`.
+   */
+  showIn?: "dark" | "light";
   brand?: { copy?: boolean; url?: string };
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ size = "m", href, icon, wordmark, className, style, dark, light, brand, ...props }, ref) => {
+  ({ size = "m", href, icon, wordmark, className, style, showIn, brand, ...props }, ref) => {
     useEffect(() => {
       if (!icon && !wordmark) {
         console.warn(
@@ -55,7 +58,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
 
     /**
      * One <img> for a plain source; for a per-theme source, both, each gated by
-     * the same light-flex / dark-flex classes the `light` and `dark` props use.
+     * the same light-flex / dark-flex classes `showIn` uses.
      * Rendering both rather than reading the theme at runtime keeps the
      * component server-renderable and avoids a flash on first paint.
      */
@@ -97,7 +100,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const copyIconToClipboard = async () => {
       if (!icon) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "No icon available to copy",
         });
         return;
@@ -109,12 +112,12 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         await navigator.clipboard.writeText(svgText);
 
         addToast({
-          variant: "success",
+          tone: "success",
           message: "Icon copied to clipboard as SVG",
         });
       } catch (error) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "Failed to copy icon to clipboard",
         });
         console.error("Error copying icon:", error);
@@ -124,7 +127,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const copyWordmarkToClipboard = async () => {
       if (!wordmark) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "No wordmark available to copy",
         });
         return;
@@ -136,12 +139,12 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         await navigator.clipboard.writeText(svgText);
 
         addToast({
-          variant: "success",
+          tone: "success",
           message: "Wordmark copied to clipboard as SVG",
         });
       } catch (error) {
         addToast({
-          variant: "danger",
+          tone: "danger",
           message: "Failed to copy wordmark to clipboard",
         });
         console.error("Error copying wordmark:", error);
@@ -196,8 +199,8 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
               "radius-l",
               "display-flex",
               "fit-height",
-              dark ? "dark-flex" : "",
-              light ? "light-flex" : "",
+              showIn === "dark" && "dark-flex",
+              showIn === "light" && "light-flex",
               className,
             )}
             style={style}
@@ -212,8 +215,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         return (
           <Flex
             className={classNames(className)}
-            dark={dark}
-            light={light}
+            showIn={showIn}
             radius="l"
             fitHeight
             style={style}
@@ -226,9 +228,9 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     };
 
     return enableContext ? (
-      <ContextMenu dropdown={renderDropdownContent()} placement="bottom-start">
-        {renderLogo()}
-      </ContextMenu>
+      <Dropdown openOn="contextmenu" trigger={renderLogo()} placement="bottom-start">
+        {renderDropdownContent()}
+      </Dropdown>
     ) : (
       renderLogo()
     );

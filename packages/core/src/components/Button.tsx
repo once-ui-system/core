@@ -3,7 +3,8 @@
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
 import { IconName } from "../icons";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { defaultButtonTone } from "../internal/buttonTone";
+import { Tone, TShirtSizes } from "../types";
 import { Arrow } from "./Arrow";
 import styles from "./Button.module.scss";
 import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
@@ -12,18 +13,18 @@ import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { Spinner } from "./Spinner";
 
+/** A button's appearance. 2.x's `quaternary` is `ghost`. */
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost" | "link" | "subtle";
+
 interface ButtonCommonProps {
-  variant?:
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "quaternary"
-    | "subtle"
-    | "danger"
-    | "success"
-    | "warning"
-    | "ghost"
-    | "link";
+  /** How the button looks. The palette it draws in is `tone`. */
+  variant?: ButtonVariant;
+  /**
+   * Which palette the button draws in: the solid fill of a `primary` button,
+   * the label and icons of the others. Defaults to `brand` on `primary` and
+   * `neutral` on the rest. 2.x's `variant="danger"` is `tone="danger"`.
+   */
+  tone?: Tone;
   size?: TShirtSizes;
   corners?:
     | "none"
@@ -50,7 +51,6 @@ interface ButtonCommonProps {
   style?: React.CSSProperties;
   id?: string;
   arrowIcon?: boolean;
-  color?: `${ColorScheme}-${ColorWeight}`;
 }
 
 export type ButtonProps = ButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -60,6 +60,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
   (
     {
       variant = "primary",
+      tone,
       size = "m",
       corners,
       rounded,
@@ -75,7 +76,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
       href,
       id,
       arrowIcon = false,
-      color,
       className,
       style,
       ...props
@@ -98,6 +98,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         className={classNames(
           styles.button,
           styles[variant],
+          styles[`tone-${tone ?? defaultButtonTone(variant)}`],
           styles[size],
           corners === "none"
             ? "radius-none"
@@ -117,16 +118,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         style={style}
         {...props}
       >
-        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} onBackground={color} />}
+        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
         {loading && <Spinner size={size} />}
         {(label || children) && (
-          <Flex
-            paddingX="4"
-            paddingY="0"
-            textWeight={weight}
-            textSize={size}
-            className="font-label"
-          >
+          <Flex paddingX="4" paddingY="0" textVariant={`label-${weight}-${size}`}>
             {label || children}
           </Flex>
         )}
@@ -137,17 +132,10 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
             }}
             trigger={"#" + id}
             scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
-            color={
-              variant === "primary" ||
-              variant === "danger" ||
-              variant === "success" ||
-              variant === "warning"
-                ? "onSolid"
-                : "onBackground"
-            }
+            color={variant === "primary" ? "onSolid" : "onBackground"}
           />
         )}
-        {suffixIcon && <Icon name={suffixIcon} size={iconSize} onBackground={color} />}
+        {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
       </ElementType>
     );
   },

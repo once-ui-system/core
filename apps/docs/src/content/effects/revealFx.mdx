@@ -8,7 +8,7 @@ navLabel: "RevealFx"
 navIcon: "sparkle"
 ---
 
-RevealFx animates content into view using a vertical translateY motion. You can control the speed, delay, and triggering behavior.
+RevealFx animates content into view using a vertical translateY motion. You can control the duration, delay, and triggering behavior.
 
 <CodeBlock
   marginTop="16"
@@ -16,12 +16,12 @@ RevealFx animates content into view using a vertical translateY motion. You can 
   preview={
     <Column fillWidth>
       <RevealFx padding="8">
-        <Text variant="heading-strong-l">The revolution begins</Text>
+        <Text textVariant="heading-strong-l">The revolution begins</Text>
       </RevealFx>
-      <RevealFx padding="8" marginBottom="16" delay={200} translateY={0.5} onBackground="neutral-weak">
+      <RevealFx padding="8" marginBottom="16" delay={200} translateY="0.5rem" onBackground="neutral-weak">
         Get ready for the next phase
       </RevealFx>
-      <RevealFx padding="8" delay={400} translateY={1}>
+      <RevealFx padding="8" delay={400} translateY="1rem">
         <Button href="https://designengineers.club" size="s" data-border="rounded">Join now</Button>
       </RevealFx>
     </Column>
@@ -32,10 +32,10 @@ RevealFx animates content into view using a vertical translateY motion. You can 
 `<RevealFx>
     The revolution begins
 </RevealFx>
-<RevealFx delay={200} translateY={0.5}>
+<RevealFx delay={200} translateY="0.5rem">
     Get ready for the next phase.
 </RevealFx>
-<RevealFx delay={400} translateY={1}>
+<RevealFx delay={400} translateY="1rem">
     <Button>
       Join now
     </Button>
@@ -53,10 +53,10 @@ RevealFx animates content into view using a vertical translateY motion. You can 
   describe={{
     children: "What is revealed.",
     revealed: "Whether it has played. Latch this off useInViewport for a below-the-fold reveal.",
-    revealedByDefault: "Start revealed, for content that is already on screen.",
-    speed: "Named duration, or a number of milliseconds.",
+    defaultRevealed: "Start revealed, for content that is already on screen.",
+    duration: "Milliseconds the reveal takes. Default 2000. Was speed (\"fast\" 1000, \"medium\" 2000, \"slow\" 3000) until 3.0.",
     delay: "Milliseconds before it starts. Stagger a set with index * 100.",
-    translateY: "How far it travels. A number is rem, a token is a spacing step.",
+    translateY: "How far it travels. A number is px, a token is a spacing step, a string a CSS length.",
   }}
   content={[
     ["children"],

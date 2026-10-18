@@ -1,6 +1,7 @@
 import React, { forwardRef } from "react";
 import { IconName } from "../icons";
-import { CondensedTShirtSizes, TShirtSizes } from "../types";
+import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types";
+import { isCSSUnit } from "../utils/layoutClasses";
 import styles from "./Avatar.module.scss";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -10,15 +11,19 @@ import { StatusIndicator } from "./StatusIndicator";
 import { Text } from "./Text";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
-  size?: TShirtSizes | number;
+  /**
+   * A t-shirt size, a number in px (`40`), or a CSS length (`"2.5rem"`).
+   */
+  size?: TShirtSizes | number | CSSUnit;
   value?: string;
   src?: string;
   unoptimized?: boolean;
   loading?: boolean;
   empty?: boolean;
   icon?: IconName;
+  /** A status dot; `scheme` is its palette hue (2.x called it `color`). */
   statusIndicator?: {
-    color: "green" | "yellow" | "red" | "gray";
+    scheme: "green" | "yellow" | "red" | "gray";
   };
   style?: React.CSSProperties;
   className?: string;
@@ -40,6 +45,14 @@ const statusIndicatorSizeMapping: Record<TShirtSizes, CondensedTShirtSizes> = {
   xl: "l",
 };
 
+/** A custom size in px, as far as it can be read (`"10rem"` reads as 160). */
+function approxPx(size: unknown): number {
+  if (typeof size === "number") return size;
+  const match = typeof size === "string" ? /^(\d*\.?\d+)(px|rem|em)$/.exec(size) : null;
+  if (!match) return 0;
+  return Number(match[1]) * (match[2] === "px" ? 1 : 16);
+}
+
 const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   (
     {
@@ -57,16 +70,19 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
     },
     ref,
   ) => {
-    const sizeInRem = typeof size === "number" ? `${size}rem` : undefined;
-    const sizeStyle = sizeInRem
+    // A t-shirt size is a class; a number is px and a CSS length is as written.
+    const customSize =
+      typeof size === "number" ? `${size}px` : isCSSUnit(size) ? (size as string) : undefined;
+    const sizeStyle = customSize
       ? {
-          width: sizeInRem,
-          height: sizeInRem,
-          minWidth: sizeInRem,
-          minHeight: sizeInRem,
+          width: customSize,
+          height: customSize,
+          minWidth: customSize,
+          minHeight: customSize,
           ...style,
         }
       : style;
+    const scale = customSize ? undefined : (size as TShirtSizes);
     const isEmpty = empty || (!src && !value);
 
     if (value && src) {
@@ -79,7 +95,9 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           {...rest}
           border="neutral-medium"
           shape="circle"
-          {...(typeof size === "number" ? { width: size, height: size } : { size })}
+          {...(customSize
+            ? { width: customSize as CSSUnit, height: customSize as CSSUnit }
+            : { size: scale })}
           className={`${styles.avatar} ${className}`}
           aria-busy="true"
           aria-label="Loading avatar"
@@ -94,7 +112,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             onBackground="neutral-medium"
             name={icon || "person"}
             size="m"
-            style={typeof size === "number" ? { fontSize: `${size / 3}rem` } : undefined}
+            style={customSize ? { fontSize: `calc(${customSize} / 3)` } : undefined}
             className={styles.icon}
             aria-label="Empty avatar"
           />
@@ -109,7 +127,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             stretch
             alt="Avatar"
             aspectRatio="1"
-            sizes={typeof size === "string" ? `${sizeMapping[size]}px` : `${size * 16}px`}
+            sizes={scale ? `${sizeMapping[scale]}px` : customSize}
             unoptimized={unoptimized}
             className={styles.image}
           />
@@ -121,7 +139,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           <Text
             as="span"
             onBackground="neutral-weak"
-            variant={`body-default-${typeof size === "string" ? size : "m"}`}
+            textVariant={`body-default-${scale ?? "m"}`}
             className={styles.value}
             aria-label={`Avatar with initials ${value}`}
           >
@@ -143,17 +161,17 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
         border="neutral-strong"
         background="surface"
         style={sizeStyle}
-        className={`${styles.avatar} ${typeof size === "string" ? styles[size] : ""} ${className || ""}`}
+        className={`${styles.avatar} ${scale ? styles[scale] : ""} ${className || ""}`}
         {...rest}
       >
         {renderContent()}
         {statusIndicator && (
           <StatusIndicator
             position="absolute"
-            size={typeof size === "string" ? statusIndicatorSizeMapping[size] : "l"}
-            color={statusIndicator.color}
-            className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || (typeof size === "number" && size >= 10) ? styles.position : ""}`}
-            aria-label={`Status: ${statusIndicator.color}`}
+            size={scale ? statusIndicatorSizeMapping[scale] : "l"}
+            scheme={statusIndicator.scheme}
+            className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
+            aria-label={`Status: ${statusIndicator.scheme}`}
           />
         )}
       </Flex>

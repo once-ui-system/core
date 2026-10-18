@@ -29,7 +29,7 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
           as="aside"
           zIndex={3}
           className={`${styles.panel} ${isOpen && styles.open}`}
-          maxWidth={28}
+          maxWidth="28rem"
           style={{
             maxHeight: "calc(100% - var(--static-space-4))",
           }}
@@ -52,9 +52,9 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
               top="0"
               right="8"
               left={undefined}
-              width={8}
-              height={4}
-              mask={{ x: 100, y: 0, radius: 7 }}
+              width="8rem"
+              height="4rem"
+              mask={{ x: "100%", y: 0, radius: "7vh" }}
               dots={{ display: true, size: "2", color: "page-background" }}
             />
             <IconButton

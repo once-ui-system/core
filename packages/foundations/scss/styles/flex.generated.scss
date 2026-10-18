@@ -90,6 +90,10 @@
   align-items: stretch;
 }
 
+.align-baseline {
+  align-items: baseline;
+}
+
 .center {
   align-items: center;
   justify-content: center;
@@ -236,6 +240,10 @@
     align-items: stretch;
   }
 
+  .xl-align-baseline {
+    align-items: baseline;
+  }
+
   .xl-center {
     align-items: center;
     justify-content: center;
@@ -373,6 +381,10 @@
 
   .l-align-stretch {
     align-items: stretch;
+  }
+
+  .l-align-baseline {
+    align-items: baseline;
   }
 
   .l-center {
@@ -514,6 +526,10 @@
     align-items: stretch;
   }
 
+  .m-align-baseline {
+    align-items: baseline;
+  }
+
   .m-center {
     align-items: center;
     justify-content: center;
@@ -653,6 +669,10 @@
     align-items: stretch;
   }
 
+  .s-align-baseline {
+    align-items: baseline;
+  }
+
   .s-center {
     align-items: center;
     justify-content: center;
@@ -790,6 +810,10 @@
 
   .xs-align-stretch {
     align-items: stretch;
+  }
+
+  .xs-align-baseline {
+    align-items: baseline;
   }
 
   .xs-center {

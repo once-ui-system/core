@@ -8,7 +8,7 @@ import {
   CountFx,
   Grid,
   Heading,
-  Hover,
+  HoverCard,
   Icon,
   Row,
   Text,
@@ -60,11 +60,11 @@ export const About6 = () => {
                 background="page"
                 borderRight={index < stats.length - 1 ? "neutral-alpha-weak" : undefined}
               >
-                <Heading variant="display-strong-xs">
-                  <CountFx value={stat.value} speed={800} separator="," />
+                <Heading textVariant="display-strong-xs">
+                  <CountFx value={stat.value} duration={800} separator="," />
                   {stat.suffix}
                 </Heading>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   {stat.label}
                 </Text>
               </Column>
@@ -83,14 +83,14 @@ export const About6 = () => {
                 top="56"
                 gap="8"
               >
-                <Heading as="h2" variant="heading-strong-l">
+                <Heading as="h2" textVariant="heading-strong-l">
                   Hall of fame
                 </Heading>
                 <Row vertical="center" gap="8" onBackground="neutral-weak">
                   <Icon name="github" size="xs" />
-                  <Text variant="label-default-s">Open-source contributors</Text>
+                  <Text textVariant="label-default-s">Open-source contributors</Text>
                 </Row>
-                <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                   Builders who shape Once UI in public — every commit, review, and idea compounds
                   into shared infrastructure.
                 </Text>
@@ -101,7 +101,7 @@ export const About6 = () => {
               <Row fillWidth marginTop="48" borderTop>
                 <Grid columns="3" m={{ columns: 3 }} s={{ columns: 2 }} fillWidth background="page">
                   {contributors.map((contributor) => (
-                    <Hover
+                    <HoverCard placement="cover"
                       key={contributor.login}
                       trigger={
                         <Card
@@ -117,9 +117,7 @@ export const About6 = () => {
                         >
                           <Avatar src={contributor.avatar} style={{ filter: "grayscale(100%)" }} />
                         </Card>
-                      }
-                      overlay={
-                        <Row
+                      }><Row
                           fill
                           center
                           background="surface"
@@ -128,9 +126,7 @@ export const About6 = () => {
                           textVariant="label-default-s"
                         >
                           {contributor.login}
-                        </Row>
-                      }
-                    />
+                        </Row></HoverCard>
                   ))}
                 </Grid>
               </Row>

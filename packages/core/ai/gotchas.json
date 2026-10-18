@@ -20,28 +20,31 @@
     "components": ["Fade"]
   },
   "RevealFx.delay": {
-    "rule": "Timing props on RevealFx (delay, speed), ShineFx (speed), CountFx (speed), TypeFx (speed, delay), Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay) are milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger). speed on MatrixFx, WeatherFx, ParticleFx, CelebrationFx and Effect is a multiplier, where 0.5 is half speed.",
+    "rule": "Time is milliseconds everywhere in 3.0: RevealFx (duration, delay), ShineFx and CountFx (duration), TypeFx (charDuration, delay, hold), CelebrationFx and WeatherFx (duration — 5000, not 5), MatrixFx bulge.duration, FlipFx autoFlipInterval, Animation and HoverCard (delay, duration; HoverCard placement=\"cover\" also hideDelay) and Skeleton (delay). Stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 0.1 is a tenth of a millisecond, i.e. no stagger). speed is only a multiplier (1 the default, 0.5 half) or \"slow\"/\"medium\"/\"fast\" (0.5/1/2), on MatrixFx, WeatherFx, ParticleFx, CelebrationFx, Effect, Scroller auto, GlitchFx and LetterFx; RevealFx/ShineFx/CountFx speed is duration and TypeFx speed is charDuration since 3.0.",
     "components": [
       "RevealFx",
       "ShineFx",
       "CountFx",
       "TypeFx",
+      "CelebrationFx",
+      "WeatherFx",
+      "MatrixFx",
+      "FlipFx",
       "Animation",
       "HoverCard",
-      "Hover",
       "Skeleton"
     ]
   },
   "RevealFx.translateY": {
-    "rule": "translateY as a number is in rem. Use translateY={1} or token \"16\" (1rem); 16 means 16rem.",
+    "rule": "translateY as a number is px. Use a token such as \"16\" (1rem) or translateY={16}; translateY=\"1rem\" also works.",
     "components": ["RevealFx"]
   },
   "LogoCloud.columns": {
     "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
     "components": ["LogoCloud"]
   },
-  "StatusIndicator.color": {
-    "rule": "StatusIndicator uses color=\"green\" | \"red\" | \"orange\" | \"gray\" etc. — not variant or semantic scheme names.",
+  "StatusIndicator.scheme": {
+    "rule": "StatusIndicator takes scheme=\"green\" | \"red\" | \"orange\" | \"gray\" etc., a palette hue — not a tone (brand, danger…) and not color, its 2.x name. Avatar's statusIndicator is { scheme }.",
     "components": ["StatusIndicator"]
   },
   "Icon.names": {
@@ -58,34 +61,34 @@
   },
   "Toast.stable": {
     "rule": "Fixed in 2.1: useToast()'s addToast and removeToast keep one identity for the provider's lifetime, so list addToast in an effect's dependencies like any stable callback. Do not hold it in a ref, or leave it out of the deps, to stop the effect re-running when a toast appears. addToast returns the toast's id for removeToast(id); duration is in milliseconds (default 6000, Infinity until closed).",
-    "components": ["Toast", "Toaster"]
+    "components": ["Toast", "ToastProvider"]
   },
   "NumberInput.value": {
-    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.",
+    "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onValueChange; do not remount it with a key to push a new value in.",
     "components": ["NumberInput"]
   },
   "Select.closed": {
-    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.",
+    "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.",
     "components": ["Select"]
   },
   "Button.trigger": {
-    "rule": "Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
-    "components": ["Button", "IconButton", "DropdownWrapper"]
+    "rule": "Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type=\"button\"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type=\"button\" or a no-op onClick, or wrap it in a focusable Row, to make it one.",
+    "components": ["Button", "IconButton", "Dropdown"]
   },
-  "ContextMenu.contents": {
-    "rule": "Fixed in 2.1: ContextMenu is a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. Its wrapper is a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use ContextMenu with contents instead of a hand-made right-click menu.",
-    "components": ["ContextMenu"]
+  "Dropdown.contents": {
+    "rule": "Fixed in 2.1: a context menu is <Dropdown openOn=\"contextmenu\" trigger={region}>{options}</Dropdown> (2.x ContextMenu): a real menu (menu and menuitem roles, arrow keys, Home/End, Escape returns focus) that opens at the pointer and stays on screen. The trigger region gets a box; set contents to render none (display: contents), so an absolutely positioned or grid/flex child keeps its own layout. Use it instead of a hand-made right-click menu.",
+    "components": ["Dropdown"]
   },
-  "Badge.duplicate": {
-    "rule": "Do not pass the same text as both title prop and children — it renders twice.",
-    "components": ["Badge"]
+  "Tag.duplicate": {
+    "rule": "Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.",
+    "components": ["Tag"]
   },
   "Timeline.notScrubber": {
     "rule": "Timeline lays a sequence of steps down the page. For a video or audio editor's timeline — a playhead over stacked tracks of movable, trimmable blocks — use Scrubber. Do not build one out of Flex and absolute positioning.",
     "components": ["Timeline", "Scrubber"]
   },
   "color.tokens": {
-    "rule": "Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
+    "rule": "Colors are semantic tokens ({tone}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
     "components": ["Column", "Row", "Text", "Button"]
   },
   "color.svgPaint": {
@@ -97,7 +100,7 @@
     "components": ["Background"]
   },
   "api.renamed": {
-    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
+    "rule": "Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone=\"danger\" (not variant=\"danger\"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.",
     "components": [
       "SegmentedControl",
       "Dialog",
@@ -114,7 +117,7 @@
     "components": ["Row", "Column", "Flex", "Grid"]
   },
   "theme.typedProps": {
-    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, Badge, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
+    "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
     "components": ["Row", "Column", "Flex", "Grid", "Background"]
   },
   "layout.defaults": {
@@ -122,7 +125,7 @@
     "components": ["Row", "Column", "Grid", "Button"]
   },
   "Logo.themes": {
-    "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with dark and light: twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep dark or light for a logo that should only appear in one theme.",
+    "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with showIn=\"dark\" and showIn=\"light\": twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep showIn for a logo that should only appear in one theme.",
     "components": ["Logo"]
   },
   "border.default": {
@@ -157,32 +160,24 @@
     "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).",
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
-  "layout.noBaseline": {
-    "rule": "vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: \"baseline\" }}.",
-    "components": ["Flex", "Row", "Column"]
-  },
   "spacing.tokens": {
     "rule": "gap, padding and margin take spacing tokens (\"0\", \"1\", \"2\", \"4\", \"8\", \"12\", \"16\", \"20\", \"24\", \"32\", \"40\", \"48\", \"56\", \"64\", \"72\", \"80\", \"104\", \"128\", \"160\", or xs–xl). \"6\" and \"10\" are not tokens and are type errors.",
     "components": ["Flex", "Row", "Column", "Grid"]
   },
   "layout.noSpanOrType": {
-    "rule": "Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: \"span 2\" }}.",
+    "rule": "Row, Column and Grid have no span prop: a Grid child spanning columns uses style={{ gridColumn: \"span 2\" }}.",
     "components": ["Row", "Column", "Grid"]
   },
-  "Column.form": {
-    "rule": "Wrap a Column in a native <form onSubmit={handleSubmit}>. Column as=\"form\" keeps the div event types, so a FormEvent<HTMLFormElement> handler (and noValidate) is a type error.",
-    "components": ["Column", "Input", "Button"]
-  },
   "Checkbox.checked": {
-    "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onToggle(checked: boolean). isChecked and isIndeterminate were 1.x; the 2.x props are checked and indeterminate.",
+    "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onCheckedChange(checked: boolean); onChange is the native event of their input. onToggle was 2.x; isChecked and isIndeterminate were 1.x.",
     "components": ["Checkbox", "Switch", "RadioButton"]
   },
   "RevealFx.primaryContent": {
-    "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with speed=\"fast\".",
+    "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with duration={1000}.",
     "components": ["RevealFx"]
   },
   "size.rem": {
-    "rule": "A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width=\"32\" (32 px), or the rem value, width={2}. An icon or avatar box is usually \"24\" to \"48\".",
+    "rule": "A number on any size, spacing or offset prop is px in 3.0 (it was rem in 2.x): width={32} is 32 px, maxWidth={40} is 40 px. For rem write the string, maxWidth=\"40rem\"; a digit string is the spacing token, width=\"32\" (2rem). An icon or avatar box is usually \"24\" to \"48\", or 24 to 48 as px.",
     "components": ["Flex", "Row", "Column", "Grid"]
   }
 }

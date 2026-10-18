@@ -65,7 +65,7 @@ const CountdownFx = forwardRef<HTMLDivElement, CountdownFxProps>(
               key={`${key}-${index}`}
               value={parseInt(digit)}
               effect={effect}
-              speed={400}
+              duration={400}
               {...countFxProps}
             />
           ))}
@@ -84,7 +84,7 @@ const CountdownFx = forwardRef<HTMLDivElement, CountdownFxProps>(
         <Row
           gap="0"
           align="center"
-          textVariant={countFxProps.variant}
+          textVariant={countFxProps.textVariant}
           style={{ fontVariantNumeric: "tabular-nums" }}
         >
           {format === "DD:HH:MM:SS" && (

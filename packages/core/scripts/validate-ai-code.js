@@ -707,19 +707,22 @@ function rawThemeAttributes(spec, tags) {
 }
 
 /**
- * Timing props measured in milliseconds, per component. Everything else named
- * `speed` is a multiplier (`MatrixFx`, `WeatherFx`, `ParticleFx`,
- * `CelebrationFx`, `Effect`), where `0.5` is exactly right, or a named pace
- * (`LetterFx`, `GlitchFx`, `AutoScroll`). A component that extends one of
- * these in the spec (`HoverCard` extends `Animation`) inherits its props.
+ * Timing props measured in milliseconds, per component: in 3.0 every
+ * duration, delay and interval is. `speed` is always a multiplier (`1` the
+ * default, `0.5` half) or `"slow"`/`"medium"`/`"fast"`, so it is never here.
+ * A component that extends one of these in the spec (`HoverCard` extends
+ * `Animation`) inherits its props.
  */
 const MILLISECOND_PROPS = {
-  RevealFx: ["delay", "speed"],
-  ShineFx: ["speed"],
-  CountFx: ["speed"],
-  TypeFx: ["delay", "speed"],
+  RevealFx: ["delay", "duration"],
+  ShineFx: ["duration"],
+  CountFx: ["duration"],
+  TypeFx: ["delay", "charDuration", "hold"],
+  CelebrationFx: ["duration"],
+  WeatherFx: ["duration"],
+  FlipFx: ["timing", "autoFlipInterval"],
   Animation: ["delay", "duration"],
-  Hover: ["delay", "hideDelay"],
+  HoverCard: ["hideDelay"],
   Skeleton: ["delay"],
 };
 
@@ -731,40 +734,51 @@ function millisecondProps(spec, name) {
   return props;
 }
 
+/** Lengths of time where a small whole number can only be seconds. */
+const WHOLE_SECONDS_PROPS = new Set(["duration", "timing", "autoFlipInterval"]);
+
 /**
  * A timing value written in seconds: a fraction on its own (`{0.3}`), or a
  * fraction it is multiplied by (`{index * 0.1}`) with nothing in the
  * expression big enough to be milliseconds already (`{index * 0.1 * 1000}`).
  */
-function looksLikeSeconds(value) {
+function looksLikeSeconds(value, prop) {
   if (!value?.startsWith("{")) return false;
   const expr = value.slice(1, -1).trim();
+  // `duration={5}`: a whole number of seconds, as CelebrationFx and WeatherFx took in 2.x.
+  if (
+    WHOLE_SECONDS_PROPS.has(prop) &&
+    /^\d+$/.test(expr) &&
+    Number(expr) >= 1 &&
+    Number(expr) <= 20
+  )
+    return true;
   const numbers = (expr.match(/\d*\.?\d+/g) || []).map(Number);
   if (numbers.some((n) => n >= 10)) return false;
   return /^\d*\.\d+$/.test(expr) || /\*\s*\d*\.\d+|\d*\.\d+\s*\*/.test(expr);
 }
 
-const BOX_SIZE = /\b(width|height|minWidth|minHeight)=\{\s*(\d+)\s*\}/g;
-/** Spacing tokens, in px, that read as a box size when written as a number. */
-const PIXEL_TOKENS = new Set([16, 20, 24, 32, 40, 48, 56, 64, 72, 80, 104, 128, 160]);
+const BOX_SIZE = /\b(width|height|minWidth|minHeight)=\{\s*(\d*\.?\d+)\s*\}/g;
+/** Below this many px, a box around an icon or a label cannot hold it. */
+const REM_HABIT_BELOW = 10;
 
 /**
- * A box sized as if numbers were pixels: two of `width`, `height`, `minWidth`,
- * `minHeight` set to the same spacing-token number (`width={32} height={32}`)
- * on an element that holds only an icon, avatar or a line of text. A number
- * is rem, so that box is 512 px. Large rem boxes holding layout (a hero, a
- * decorative blob, a 14rem timer dial) are left alone. Returns the number, or 0.
+ * A box sized as if numbers were still rem (2.x): two of `width`, `height`,
+ * `minWidth`, `minHeight` set to the same small number (`width={2}
+ * height={2}`) on an element that holds only an icon, avatar or a line of
+ * text. A number is px in 3.0, so that box is 2 px. Boxes holding layout are
+ * left alone. Returns the number, or 0.
  */
 function pixelBoxSize(source, tag) {
   if (!RELATIVE_BY_DEFAULT.has(tag.name) || tag.attrs.trimEnd().endsWith("/")) return 0;
   const values = [...tag.attrs.matchAll(BOX_SIZE)].map((m) => Number(m[2]));
-  const size = values.find((v, i) => PIXEL_TOKENS.has(v) && values.indexOf(v) !== i);
+  const size = values.find((v, i) => v > 0 && v < REM_HABIT_BELOW && values.indexOf(v) !== i);
   if (!size) return 0;
   const close = source.indexOf(`</${tag.name}>`, tag.end);
   if (close < 0) return 0;
   const body = source.slice(tag.end + 1, close);
   if (body.length > 400 || /<(Row|Column|Flex|Grid|Media|Background)\b/.test(body)) return 0;
-  return /<(Icon|Avatar|Text|Heading|Badge|Tag)\b|\{[^}]*\}/.test(body) ? size : 0;
+  return /<(Icon|Avatar|Text|Heading|Tag)\b|\{[^}]*\}/.test(body) ? size : 0;
 }
 
 const POSITIONED = /(?:^|\s)position=\{?\s*["'](?:absolute|fixed|sticky)["']\s*\}?/;
@@ -806,16 +820,19 @@ const PRE_2_PROPS = {
   Toast: { icon: "showIcon" },
   DataTooltip: { colors: "showSwatches" },
   RevealFx: { trigger: "revealed" },
-  SegmentedControl: { selected: "value", onToggle: "onChange", defaultSelected: "defaultValue" },
+  SegmentedControl: {
+    selected: "value",
+    onToggle: "onValueChange",
+    defaultSelected: "defaultValue",
+  },
   NavIcon: { isActive: "active" },
   Checkbox: { isChecked: "checked", isIndeterminate: "indeterminate" },
   RadioButton: { isChecked: "checked" },
   Switch: { isChecked: "checked" },
   Dialog: { isOpen: "open" },
-  Modal: { isOpen: "open" },
   DatePicker: { isOpen: "open", isNested: "nested" },
-  DropdownWrapper: { isOpen: "open", isNested: "nested" },
-  EmojiPickerDropdown: { isOpen: "open", isNested: "nested" },
+  Dropdown: { isOpen: "open", isNested: "nested" },
+  EmojiPicker: { isOpen: "open" },
   Input: FIELD,
   Textarea: FIELD,
   Option: { hasPrefix: "prefix", hasSuffix: "suffix" },
@@ -824,12 +841,96 @@ const PRE_2_PROPS = {
   TagInput: FIELD,
   ColorInput: FIELD,
   DateInput: FIELD,
-  DateRangeInput: FIELD,
-  PasswordInput: FIELD,
-  Pulse: { variant: "scheme" },
-  Tag: { variant: "scheme" },
   Button: { radius: "corners" },
   IconButton: { radius: "corners" },
+};
+
+/**
+ * 2.x names 3.0 renamed (MIGRATING.md § 2.x → 3.0), listed only where the old
+ * name is no longer accepted at all: `onChange` stays valid as the native
+ * event on NumberInput, ColorInput, TagInput, DateInput and Slider, so it is
+ * not flagged there.
+ */
+const PRE_3_PROPS = {
+  Dialog: { hideClose: "showClose" },
+  IconButton: { ariaLabel: "aria-label" },
+  Spinner: { ariaLabel: "aria-label" },
+  StatusIndicator: { ariaLabel: "aria-label", color: "scheme" },
+  Switch: { ariaLabel: "aria-label", onToggle: "onCheckedChange" },
+  Checkbox: { onToggle: "onCheckedChange" },
+  RadioButton: { onToggle: "onCheckedChange" },
+  DatePicker: { onChange: "onValueChange", defaultDate: "defaultValue" },
+  RadioGroup: { onChange: "onValueChange" },
+  SegmentedControl: { onChange: "onValueChange" },
+  Tabs: { onChange: "onValueChange" },
+  ThemeSwitcher: { onChange: "onValueChange" },
+  Pagination: { onChange: "onPageChange" },
+  Scrubber: { ariaLabel: "aria-label", onChange: "onValueChange", onSelect: "onSelectedChange" },
+  Accordion: { onToggle: "onOpenChange" },
+  NavGroup: { onToggle: "onOpenChange" },
+  RevealFx: { revealedByDefault: "defaultRevealed", speed: "duration" },
+  Carousel: { revealedByDefault: "defaultRevealed" },
+  Kbar: { inputSize: "size" },
+  // D5: a `speed` that was a length of time.
+  ShineFx: { speed: "duration", variant: "textVariant" },
+  CountFx: { speed: "duration", variant: "textVariant" },
+  TypeFx: { speed: "charDuration" },
+  // E1/E2: `tone` is the palette, `variant` the look, `scheme` a palette hue;
+  // Text and Heading take `textVariant`, as Flex does.
+  Text: { variant: "textVariant" },
+  Heading: { variant: "textVariant" },
+  ListItem: { variant: "textVariant" },
+  Feedback: { variant: "tone" },
+  Toast: { variant: "tone" },
+  Tag: { scheme: "tone" },
+  LinearGauge: { hue: "tone" },
+  RadialGauge: { hue: "tone" },
+};
+
+// G5: one name per prop. `dark`/`light` are `showIn`; the pieces of a text
+// preset are `textVariant` (Text and Heading keep `weight` and `family`).
+for (const name of ["Flex", "Row", "Column", "Grid", "Logo"]) {
+  PRE_3_PROPS[name] = { ...PRE_3_PROPS[name], dark: "showIn", light: "showIn" };
+}
+for (const name of ["Flex", "Row", "Column", "Grid"]) {
+  Object.assign(PRE_3_PROPS[name], {
+    textSize: "textVariant",
+    textWeight: "textVariant",
+    textType: "textVariant",
+  });
+}
+for (const name of ["Text", "Heading"])
+  PRE_3_PROPS[name] = { ...PRE_3_PROPS[name], size: "textVariant" };
+
+/**
+ * 2.x components that folded into another in 3.0 (F6), with what to write.
+ * The earlier merges (Modal, Swiper, DropdownWrapper…) are not in the spec
+ * either; these are the ones an agent trained on 2.x docs reaches for most.
+ */
+const PRE_3_COMPONENTS = {
+  DataTable: "Table (DataTable's API under the short name)",
+  DateRangePicker: "DatePicker range (dual is months={2})",
+  DateRangeInput: "DateInput range",
+  RangeSlider: "Slider range",
+  PasswordInput: 'Input type="password" (it has the show/hide toggle)',
+  KeyTip: 'Kbd keys="mod+k" label="…"',
+  MasonryGrid: "Grid masonry",
+  Pulse: "StatusIndicator pulse tone=…",
+  FadingLettersFx: 'TypeFx mode="fade"',
+  SettingAxes: "Setting axes={…}",
+  SettingGroup: "Setting control={…} open={…}",
+  MobileMegaMenu: 'MegaMenu collapseBelow="always" (or a breakpoint)',
+};
+
+/**
+ * E2: Button and IconButton `variant` values that are a tone (or a twin) in
+ * 3.0, with what to write instead.
+ */
+const PRE_3_BUTTON_VARIANTS = {
+  danger: 'tone="danger"',
+  success: 'tone="success"',
+  warning: 'tone="warning"',
+  quaternary: 'variant="ghost"',
 };
 
 function validate(source, spec, iconNames, options = {}) {
@@ -844,10 +945,41 @@ function validate(source, spec, iconNames, options = {}) {
 
   const renamed = new Set();
   for (const t of tags) {
+    if (PRE_3_COMPONENTS[t.name] && !renamed.has(t.name)) {
+      renamed.add(t.name);
+      add("api.renamed", `${t.name} is ${PRE_3_COMPONENTS[t.name]} in 3.0`);
+    }
+    if (t.name === "Table" && hasProp(t.attrs, "data") && !renamed.has("Table.data")) {
+      renamed.add("Table.data");
+      add(
+        "api.renamed",
+        "Table takes columns and rows in 3.0; data={{ headers, rows }} is the 2.x shape (a header's content is a column's header, array rows read by position)",
+      );
+    }
     for (const [old, now] of Object.entries(PRE_2_PROPS[t.name] ?? {})) {
       if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
       renamed.add(`${t.name}.${old}`);
-      add("api.renamed", `${t.name} takes ${now} in 2.x; ${old} is the 1.x name`);
+      add("api.renamed", `${t.name} takes ${now}; ${old} is the 1.x name`);
+    }
+    for (const [old, now] of Object.entries(PRE_3_PROPS[t.name] ?? {})) {
+      if (!hasProp(t.attrs, old) || renamed.has(`${t.name}.${old}`)) continue;
+      renamed.add(`${t.name}.${old}`);
+      add("api.renamed", `${t.name} takes ${now} in 3.0; ${old} is the 2.x name`);
+    }
+    if (t.name === "Button" || t.name === "IconButton") {
+      const v = stringValue(propValue(t.attrs, "variant"));
+      const now = v && PRE_3_BUTTON_VARIANTS[v];
+      if (now && !renamed.has(`${t.name}.variant.${v}`)) {
+        renamed.add(`${t.name}.variant.${v}`);
+        add("api.renamed", `${t.name} takes ${now} in 3.0; variant="${v}" is the 2.x spelling`);
+      }
+      if (hasProp(t.attrs, "color") && !renamed.has(`${t.name}.color`)) {
+        renamed.add(`${t.name}.color`);
+        add(
+          "api.renamed",
+          `${t.name} takes tone in 3.0 (it colours the label and icons); color is the 2.x name`,
+        );
+      }
     }
   }
 
@@ -940,12 +1072,17 @@ function validate(source, spec, iconNames, options = {}) {
   // Two Logos, one `dark` and one `light`, double the elements, leave two
   // places to keep in sync, and put a hidden link in every focus order.
   const logos = tags.filter((t) => t.name === "Logo");
-  const logoIn = (prop) =>
-    logos.some((t) => hasProp(t.attrs, prop) && /(?:^|\s)(icon|wordmark)=/.test(ownProps(t.attrs)));
+  // `showIn="dark"` in 3.0; the 2.x `dark`/`light` booleans count too.
+  const logoIn = (theme) =>
+    logos.some(
+      (t) =>
+        (hasProp(t.attrs, theme) || stringValue(propValue(t.attrs, "showIn")) === theme) &&
+        /(?:^|\s)(icon|wordmark)=/.test(ownProps(t.attrs)),
+    );
   if (logoIn("dark") && logoIn("light")) {
     add(
       "Logo.themes",
-      'a Logo drawn twice, once with `dark` and once with `light` — draw it once with a source per theme: <Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} /> (icon takes the same pair)',
+      'a Logo drawn twice, once with showIn="dark" and once with showIn="light" — draw it once with a source per theme: <Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} /> (icon takes the same pair)',
     );
   }
 
@@ -1017,7 +1154,7 @@ function validate(source, spec, iconNames, options = {}) {
     // Spread props may well carry the handler; there is no telling from here.
     if (hasSpread(tag.attrs)) continue;
     // A card handed to a `trigger` prop is operated by whatever owns it
-    // (DropdownWrapper, Dialog), so it carries no handler of its own and is
+    // (Dropdown, Dialog), so it carries no handler of its own and is
     // not the static-panel misuse this rule is looking for.
     if (insidePropValue(source, tag.start, "trigger")) continue;
     add(
@@ -1076,7 +1213,7 @@ function validate(source, spec, iconNames, options = {}) {
 
   const seconds = tags
     .flatMap((t) => [...millisecondProps(spec, t.name)].map((prop) => [t.name, prop, t.attrs]))
-    .find(([, prop, attrs]) => looksLikeSeconds(propValue(attrs, prop)));
+    .find(([, prop, attrs]) => looksLikeSeconds(propValue(attrs, prop), prop));
   if (seconds) {
     add(
       "RevealFx.delay",
@@ -1089,7 +1226,7 @@ function validate(source, spec, iconNames, options = {}) {
     const [tag, size] = pixelBox;
     add(
       "size.rem",
-      `${tag.name} sized ${size} around an icon or label is ${size}rem (${size * 16} px) — a number is rem. For ${size} px write the token string, width="${size}"`,
+      `${tag.name} sized ${size} around an icon or label is ${size} px — a number is px in 3.0 (it was rem in 2.x). For ${size}rem write width="${size}rem", or the px it was: width={${size * 16}}`,
     );
   }
 
@@ -1381,6 +1518,7 @@ module.exports = {
   validate,
   applyFixes,
   PRE_2_PROPS,
+  PRE_3_PROPS,
   loadSpec,
   parseIconNames,
   iconPropsByComponent,

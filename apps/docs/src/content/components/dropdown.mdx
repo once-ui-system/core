@@ -1,256 +1,374 @@
 ---
 title: "Dropdown"
-summary: "The Dropdown component provides a container for displaying selectable options in a dropdown menu."
-updatedAt: "2025-05-09"
+summary: "A trigger and the floating panel it opens: menus of options, pickers and selectors, and right-click context menus."
+updatedAt: "2026-10-11"
 docs: "once-ui/components/dropdown.mdx"
 github: "components/Dropdown.tsx"
 navLabel: "Dropdown"
 navIcon: "components"
+navTag: "Update"
+navTagVariant: "success"
 ---
 
-The Dropdown component is a container for displaying selectable options in a dropdown menu. It provides a way to present a list of selectable options with various styling and interaction capabilities.
+Dropdown is a trigger and the panel it opens, with the positioning and state management of a dropdown menu. In 3.0 it took the API of 2.x `DropdownWrapper`: the content goes in `children` (2.x `dropdown`, still accepted for one minor), and the 2.x `Dropdown` panel is internal. It provides a flexible way to create custom dropdown interfaces with various trigger elements and dropdown contents. It supports keyboard navigation when used with `Option` components.
 
 ## Basic usage
 
-A simple dropdown container with options.
+A simple dropdown with a button trigger and custom content.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <BasicRawDropdown />
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
+      <BasicDropdown />
+    </Row>
   }
   codes={[
     {
       code:
-`const [selected, setSelected] = useState("");
+`const [isOpen, setIsOpen] = useState(false);
+const [selected, setSelected] = useState("");
+
+const options = [
+    { label: "Option 1", value: "option1" },
+    { label: "Option 2", value: "option2" },
+    { label: "Option 3", value: "option3" }
+];
 
 const handleSelect = (value: string) => {
     setSelected(value);
+    setIsOpen(false);
 };
 
 return (
     <Dropdown
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="4"
-      radius="m-4"
-    >
-      <Option
-        label="Option 1"
-        value="option1"
-        selected={selected === "option1"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Option 2"
-        value="option2"
-        selected={selected === "option2"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Option 3"
-        value="option3"
-        selected={selected === "option3"}
-        onClick={handleSelect}
-      />
-    </Dropdown>
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      trigger={
+        <Button 
+          variant="secondary" 
+          suffixIcon="chevronDown"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {selected ? options.find(opt => opt.value === selected)?.label : "Select an option"}
+        </Button>
+      }><Column minWidth="10rem" padding="4" gap="2">
+          {options.map((option) => (
+            <Option
+              key={option.value}
+              label={option.label}
+              value={option.value}
+              selected={option.value === selected}
+              onClick={handleSelect}
+            />
+          ))}
+        </Column></Dropdown>
 );`,
       language: "tsx",
-      label: "Basic Usage"
+      label: "Dropdown"
     }
   ]}
 />
 
-## With icons
+## Placement
 
-Enhance dropdown options with icons for better visual communication.
+Control the placement of the dropdown relative to its trigger element.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <IconsRawDropdown />
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
+      <CustomPositionDropdown />
+    </Row>
   }
   codes={[
     {
       code:
-`const [selected, setSelected] = useState("");
-
-const handleSelect = (value: string) => {
-    setSelected(value);
-};
+`const [isOpen, setIsOpen] = useState(false);
 
 return (
+  <Row horizontal="center">
     <Dropdown
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="8"
-      radius="m-8"
-    >
-      <Option
-        label="Edit"
-        value="edit"
-        prefix={<Icon name="edit" size="xs" />}
-        selected={selected === "edit"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Duplicate"
-        value="duplicate"
-        prefix={<Icon name="copy" size="xs" />}
-        selected={selected === "duplicate"}
-        onClick={handleSelect}
-      />
-      <Line marginY="8" />
-      <Option
-        label="Delete"
-        value="delete"
-        prefix={<Icon name="delete" size="xs" />}
-        danger
-        selected={selected === "delete"}
-        onClick={handleSelect}
-      />
-    </Dropdown>
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      placement="top"
+      trigger={
+        <Button onClick={() => setIsOpen(!isOpen)}>
+          Open Upward
+        </Button>
+      }><Column fillWidth padding="4" gap="2">
+          <Option
+            label="Top option"
+            value="top"
+            onClick={() => setIsOpen(false)}
+          />
+          <Option
+            label="Middle option"
+            value="middle"
+            onClick={() => setIsOpen(false)}
+          />
+          <Option
+            label="Bottom option"
+            value="bottom"
+            onClick={() => setIsOpen(false)}
+          />
+        </Column></Dropdown>
+  </Row>
 );`,
       language: "tsx",
-      label: "With Icons"
+      label: "Placement"
     }
   ]}
 />
 
-## With descriptions
+## Custom
 
-Add descriptive text to dropdown options for additional context.
+Control the dimensions of the dropdown menu.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <DescriptionRawDropdown />
+    <Row fillWidth height="10rem" horizontal="center" vertical="start">
+      <SearchableDropdown />
+    </Row>
   }
   codes={[
     {
       code:
-`const [selected, setSelected] = useState("");
+`const [isOpen, setIsOpen] = useState(false);
+const [selected, setSelected] = useState("");
+const [searchQuery, setSearchQuery] = useState("");
+
+const options = [
+    { label: "Apple", value: "apple", description: "Fruit" },
+    { label: "Banana", value: "banana", description: "Fruit" },
+    { label: "Carrot", value: "carrot", description: "Vegetable" },
+    { label: "Broccoli", value: "broccoli", description: "Vegetable" },
+    { label: "Orange", value: "orange", description: "Fruit" }
+];
 
 const handleSelect = (value: string) => {
     setSelected(value);
+    setIsOpen(false);
 };
+
+const filteredOptions = options.filter(option => 
+    option.label.toLowerCase().includes(searchQuery.toLowerCase())
+);
 
 return (
     <Dropdown
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="8"
-      radius="m-8"
-    >
-      <Option
-        label="Apple"
-        value="apple"
-        description="A fruit that grows on trees"
-        selected={selected === "apple"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Banana"
-        value="banana"
-        description="A curved yellow fruit"
-        selected={selected === "banana"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Carrot"
-        value="carrot"
-        description="An orange root vegetable"
-        selected={selected === "carrot"}
-        onClick={handleSelect}
-      />
-    </Dropdown>
+      open={isOpen}
+      onOpenChange={setIsOpen}
+      minHeight="200px"
+      trigger={
+        <Button 
+          variant="secondary" 
+          suffixIcon="chevronDown"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {selected ? options.find(opt => opt.value === selected)?.label : "Search items"}
+        </Button>
+      }><Column fillWidth minWidth="12rem">
+          <Column padding="4" fillWidth position="sticky" top="0" background="surface" zIndex={1}>
+            <Input
+              size="s"
+              id="search-dropdown"
+              placeholder="Search"
+              prefix={<Icon name="search" size="xs" />}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </Column>
+          <Column fillWidth gap="2" padding="4">
+            {filteredOptions.length > 0 ? (
+              filteredOptions.map((option) => (
+                <Option
+                  key={option.value}
+                  label={option.label}
+                  value={option.value}
+                  description={option.description}
+                  selected={option.value === selected}
+                  onClick={handleSelect}
+                />
+              ))
+            ) : (
+              <Flex fillWidth center paddingX="16" paddingY="32">
+                <Text>No results found</Text>
+              </Flex>
+            )}
+          </Column>
+        </Column></Dropdown>
 );`,
       language: "tsx",
-      label: "Description"
+      label: "Custom"
     }
   ]}
 />
 
-## Custom styling
+## Where it opens
 
-Customize the appearance of the dropdown with Flex props.
+A panel opens on the option marked `aria-selected="true"`, scrolled into view
+inside the panel, the way a native select opens on the value it is already
+showing. `Option` sets that attribute from its `selected` prop, so a list built
+from `Option` needs nothing further. With no selection the panel opens on its
+first enabled option; a selected option that is disabled is skipped.
+
+A panel that leads with something other than its list — a searchable `Select`
+and its query field — opens on that instead.
+
+## Button triggers
+
+A `Button` or `IconButton` passed as the `trigger` renders a real
+`<button type="button">` with `aria-haspopup` and `aria-expanded`, so the
+dropdown opens from the keyboard as well as the mouse. There is no need to add
+`type="button"` or an empty `onClick` to make it one. A disabled trigger does not
+open the dropdown.
+
+## Context menu
+
+`openOn="contextmenu"` opens the Dropdown at the pointer on right-click (or the context menu key) over its `trigger`, as a `menu` of `menuitem`s that stays on screen. `contents` renders no box around the trigger. It was `ContextMenu` in 2.x, which took the region as children and the menu as `dropdown`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
-    <CustomStyledRawDropdown />
+    <Column gap="16" fillWidth>
+      <Dropdown openOn="contextmenu" trigger={<Row fillWidth align="center" horizontal="center" padding="40" radius="l" background="surface" border="neutral-alpha-medium" textVariant="label-default-m">Right click me</Row>}
+        placement="bottom-start"><Column gap="2" padding="4" minWidth="10rem">
+            <Row paddingBottom="8" paddingTop="12" paddingX="16" onBackground="neutral-weak">
+              <Text textVariant="label-default-s">Context Menu</Text>
+            </Row>
+            <Option
+              prefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />}
+              label="Edit"
+              value="edit"
+            />
+            <Option
+              prefix={<Icon size="xs" name="document" onBackground="neutral-weak" />}
+              label="Duplicate"
+              value="duplicate"
+            />
+            <Option
+              prefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+              label="Copy"
+              value="copy"
+            />
+            <Option
+              prefix={<Icon size="xs" name="eyeOff" onBackground="neutral-weak" />}
+              label="Hide"
+              value="hide"
+            />
+            <Line marginY="2" />
+            <Option
+              prefix={<Icon size="xs" name="delete" onBackground="danger-medium" />}
+              danger
+              label="Delete"
+              value="delete"
+            />
+          </Column></Dropdown>
+    </Column>
   }
   codes={[
     {
       code:
-`const [selected, setSelected] = useState("");
-
-const handleSelect = (value: string) => {
-    setSelected(value);
-};
-
-return (
-    <Dropdown
-      selectedOption={selected}
-      onSelect={handleSelect}
-      radius="m-8"
-      border="brand-alpha-medium"
-      background="brand-alpha-weak"
-      shadow="xl"
-      padding="8"
-    >
-      <Option
-        label="Small"
-        value="small"
-        selected={selected === "small"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Medium"
-        value="medium"
-        selected={selected === "medium"}
-        onClick={handleSelect}
-      />
-      <Option
-        label="Large"
-        value="large"
-        selected={selected === "large"}
-        onClick={handleSelect}
-      />
-    </Dropdown>
-);`,
+`<Dropdown openOn="contextmenu" trigger={<Row fillWidth align="center" horizontal="center" padding="40" radius="l" background="surface" border="neutral-alpha-medium" textVariant="label-default-m">Right click me</Row>}
+    placement="bottom-start"><Column gap="2" padding="4" minWidth="10rem">
+        <Option
+          prefix={<Icon size="xs" name="edit" onBackground="neutral-weak" />}
+          label="Edit"
+          value="edit"
+        />
+        <Option
+          prefix={<Icon size="xs" name="document" onBackground="neutral-weak" />}
+          label="Duplicate"
+          value="duplicate"
+        />
+        <Option
+          prefix={<Icon size="xs" name="copy" onBackground="neutral-weak" />}
+          label="Copy"
+          value="copy"
+        />
+        <Option
+          prefix={<Icon size="xs" name="eyeOff" onBackground="neutral-weak" />}
+          label="Hide"
+          value="hide"
+        />
+        <Line marginY="2" />
+        <Option
+          prefix={<Icon size="xs" name="delete" onBackground="danger-medium" />}
+          danger
+          label="Delete"
+          value="delete"
+        />
+      </Column></Dropdown>`,
       language: "tsx",
-      label: "Custom styling"
+      label: "ContextMenu"
     }
   ]}
 />
 
-## Accessibility
+### Keyboard and screen readers
 
-The Dropdown component follows accessibility best practices:
+The menu opens at the pointer, or at the element when it is opened from the keyboard (Shift+F10 or the Menu key). Near the right or bottom edge of the screen it opens to the left of or above the pointer, so it stays on screen. It is a `menu` and its Options are `menuitem`s: the arrow keys move between them, skipping disabled ones and wrapping at the ends, Home and End jump to the first and last, and Escape closes it and returns focus to where it was.
 
-- Uses `role="listbox"` for the dropdown container
-- Provides `aria-selected` state for selected options
-- Supports keyboard navigation
-- Properly manages focus when opening and closing
+### Without a wrapper box
+
+`Dropdown openOn="contextmenu"` wraps its children in a box. Set `contents` to render the wrapper with `display: contents` instead, so it adds nothing to the layout: an absolutely positioned child still positions against its own ancestors, and a grid or flex item stays one. A timeline clip or a table row can take a context menu this way without a hand-made one. With `contents` there is no box for `className`, `style` or the disabled dimming to style.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Grid columns="3" gap="8">
+  {files.map((file) => (
+    <Dropdown openOn="contextmenu" trigger={<FileTile file={file} />} key={file.id} contents><FileMenu file={file} /></Dropdown>
+  ))}
+</Grid>`,
+      language: "tsx",
+      label: "contents",
+    },
+  ]}
+/>
+
 
 ## API reference
 
 <PropsTable
   component="Dropdown"
   describe={{
-    disabled: "Prevent interaction with the dropdown.",
+    trigger: "The element that opens the dropdown.",
+    children: "What opens. Usually a Column of Options.",
+    dropdown: "2.x name for children, kept for one minor.",
+    openOn: "What opens it: a click on the trigger, or a right-click (\"contextmenu\") at the pointer.",
+    disabled: "With openOn=\"contextmenu\": the region does not open the menu, and is dimmed.",
+    contents: "With openOn=\"contextmenu\": no box around the trigger (display: contents).",
+    placement: "Which side of the trigger it opens on, and how it aligns.",
+    open: "Controlled open state. Leave it out to let the component manage its own.",
+    onOpenChange: "Called whenever it opens or closes, controlled or not.",
+    onSelect: "Called with the value of the Option that was picked.",
+    selectedOption: "Value of the Option to mark as current.",
+    closeAfterClick: "Close on selection. Turn it off for a multi-select.",
+    handleArrowNavigation: "Move through options with the arrow keys.",
+    navigationLayout: "Whether arrow keys walk a row, a column or a grid.",
+    columns: "Grid width, for a grid navigation layout.",
+    optionsCount: "How many options there are, when the component cannot count them itself.",
+    nested: "Marks a dropdown opened from inside another one.",
+    disableTriggerClick: "Stop the trigger opening it, when something else does.",
+    dropdownId: "Id for the dropdown element, to reference from a label.",
+    fillWidth: "Match the trigger's width.",
+    minWidth: "Lower bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
+    maxWidth: "Upper bound on the dropdown's width: a number is px, a string a CSS length (\"12rem\").",
+    minHeight: "Lower bound on the dropdown's height: a number is px, a string a CSS length.",
   }}
   content={[
-    ["children", "ReactNode"]
+    ["style", "React.CSSProperties"],
+    ["className", "string"]
   ]}
 />
-
-## Related components
-
-- [DropdownWrapper](/components/dropdownWrapper) - A container for creating dropdown menus with positioning and state management
-- [Option](/components/option) - Individual selectable items used within dropdowns

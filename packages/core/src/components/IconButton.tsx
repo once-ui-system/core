@@ -3,8 +3,10 @@
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useEffect } from "react";
 import { IconName } from "../icons";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
+import { defaultButtonTone } from "../internal/buttonTone";
+import { Tone, TShirtSizes } from "../types";
 import { dev } from "../utils/devLogger";
+import type { ButtonVariant } from "./Button";
 import buttonStyles from "./Button.module.scss";
 import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
 import { ElementType } from "./ElementType";
@@ -32,27 +34,20 @@ interface IconButtonCommonProps {
   rounded?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  variant?:
-    | "primary"
-    | "secondary"
-    | "tertiary"
-    | "quaternary"
-    | "subtle"
-    | "danger"
-    | "success"
-    | "warning"
-    | "ghost"
-    | "link";
+  /** How the button looks. The palette it draws in is `tone`. */
+  variant?: ButtonVariant;
+  /**
+   * Which palette the button draws in: the solid fill of a `primary` button,
+   * the icon of the others. Defaults to `brand` on `primary` and `neutral` on
+   * the rest. 2.x's `variant="danger"` is `tone="danger"`.
+   */
+  tone?: Tone;
   loading?: boolean;
   disabled?: boolean;
   className?: string;
   style?: React.CSSProperties;
   href?: string;
   children?: ReactNode;
-  color?: `${ColorScheme}-${ColorWeight}`;
-  /** The button's accessible name, like the `ariaLabel` the other components
-   *  take. Native `aria-label` wins when both are given. */
-  ariaLabel?: string;
 }
 
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
@@ -69,15 +64,14 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
       tooltip,
       tooltipPosition = "top",
       variant = "primary",
+      tone,
       loading = false,
       disabled = false,
       href,
       children,
-      color,
       className,
       style,
-      ariaLabel,
-      "aria-label": nativeAriaLabel,
+      "aria-label": ariaLabel,
       ...props
     },
     ref,
@@ -85,11 +79,10 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
     const radiusSize = size === "s" || size === "m" ? "m" : "l";
     const trigger = useDropdownTrigger();
 
-    // The name is what the caller wrote for people: aria-label, ariaLabel, or
+    // The name is what the caller wrote for people: aria-label, or
     // a tooltip that is plain text. Never the icon key ("chevronRight" is not
     // a name), and never a tooltip node cast to a string ("[object Object]").
-    const accessibleName =
-      nativeAriaLabel ?? ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
+    const accessibleName = ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
     const namedOtherwise =
       Boolean(children) ||
       Boolean(props["aria-labelledby"]) ||
@@ -116,6 +109,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
         className={classNames(
           buttonStyles.button,
           buttonStyles[variant],
+          buttonStyles[`tone-${tone ?? defaultButtonTone(variant)}`],
           iconStyles[size],
           corners === "none"
             ? "radius-none"
@@ -138,7 +132,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
           ) : children ? (
             children
           ) : (
-            <Icon name={icon} size="s" onBackground={color} />
+            <Icon name={icon} size="s" />
           )}
         </Flex>
       </ElementType>

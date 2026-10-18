@@ -18,18 +18,18 @@ The `CelebrationFx` component creates animated celebration effects using the nat
   fullscreenButton
   preview={
     <CelebrationFx
-      height={20}
+      height="20rem"
       type="confetti"
-      duration={4}
+      duration={4000}
     />
   }
   codes={[
     {
       code:
 `<CelebrationFx
-  height={20}
+  height="20rem"
   type="confetti"
-  duration={4}
+  duration={4000}
 />`,
       language: "tsx",
       label: "Usage"
@@ -48,14 +48,14 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
   reloadButton
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
       />
       <CelebrationFx
         type="fireworks"
-        duration={5}
+        duration={5000}
       />
     </Grid>
   }
@@ -64,11 +64,11 @@ Choose between `confetti` (falling particles) or `fireworks` (explosive bursts).
       code:
 `<CelebrationFx
     type="confetti"
-    duration={5}
+    duration={5000}
 />
 <CelebrationFx
     type="fireworks"
-    duration={5}
+    duration={5000}
 />`,
       language: "tsx",
       label: "Types"
@@ -88,12 +88,12 @@ Control when the celebration starts with `mount` (automatic), `hover` (on mouse 
   fullscreenButton
   preview={
     <CelebrationFx
-      height={16}
+      height="16rem"
       type="confetti"
       trigger="hover"
       center
     >
-      <Text variant="heading-strong-l">
+      <Text textVariant="heading-strong-l">
         Hover me!
       </Text>
     </CelebrationFx>
@@ -102,12 +102,12 @@ Control when the celebration starts with `mount` (automatic), `hover` (on mouse 
     {
       code:
 `<CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
     trigger="hover"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Hover me!
     </Text>
 </CelebrationFx>`,
@@ -125,13 +125,13 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
   previewPadding="none"
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="fireworks"
         trigger="click"
         center
       >
-        <Text variant="heading-strong-l">
+        <Text textVariant="heading-strong-l">
           Click for fireworks!
         </Text>
       </CelebrationFx>
@@ -140,7 +140,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
         trigger="click"
         center
       >
-        <Text variant="heading-strong-l">
+        <Text textVariant="heading-strong-l">
           Click for confetti!
         </Text>
       </CelebrationFx>
@@ -154,7 +154,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
     trigger="click"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Click for fireworks!
     </Text>
 </CelebrationFx>
@@ -163,7 +163,7 @@ Use `trigger="click"` to fire celebrations from exactly where users click. Perfe
     trigger="click"
     center
 >
-    <Text variant="heading-strong-l">
+    <Text textVariant="heading-strong-l">
       Click for confetti!
     </Text>
 </CelebrationFx>`,
@@ -185,9 +185,9 @@ Customize celebration colors using design tokens or any valid CSS color.
   fullscreenButton
   preview={
     <CelebrationFx
-      height={16}
+      height="16rem"
       type="fireworks"
-      duration={5}
+      duration={5000}
       colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
     />
   }
@@ -195,9 +195,9 @@ Customize celebration colors using design tokens or any valid CSS color.
     {
       code:
 `<CelebrationFx
-  height={16}
+  height="16rem"
   type="fireworks"
-  duration={5}
+  duration={5000}
   colors={["accent-background-strong", "danger-background-strong", "warning-background-strong"]}
 />`,
       language: "tsx",
@@ -217,16 +217,16 @@ Control particle density with `intensity` and animation speed with `speed`.
   reloadButton
   fullscreenButton
   preview={
-    <Grid fillWidth height={16} columns={2} gap="16" s={{ columns: 1 }}>
+    <Grid fillWidth height="16rem" columns={2} gap="16" s={{ columns: 1 }}>
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
         intensity={100}
         speed={2}
       />
       <CelebrationFx
         type="confetti"
-        duration={5}
+        duration={5000}
         intensity={20}
         speed={0.5}
       />
@@ -236,16 +236,16 @@ Control particle density with `intensity` and animation speed with `speed`.
     {
       code:
 `<CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
-    duration={5}
+    duration={5000}
     intensity={100}
     speed={2}
 />
 <CelebrationFx
-    height={16}
+    height="16rem"
     type="confetti"
-    duration={5}
+    duration={5000}
     intensity={20}
     speed={0.5}
 />`,
@@ -281,7 +281,7 @@ export function demo() {
     return (
       <Column gap="16" fillWidth>
         <CelebrationFx
-          height={16}
+          height="16rem"
           type="fireworks"
           trigger="manual"
           active={active}
@@ -315,9 +315,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
   fullscreenButton
   preview={
     <CelebrationFx
-      height={20}
+      height="20rem"
       type="confetti"
-      duration={6}
+      duration={6000}
       center
     >
       <Column
@@ -328,8 +328,8 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
         radius="l"
       >
         <Icon name="trophy" size="xl" onBackground="accent-strong" />
-        <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="heading-strong-xl">Achievement Unlocked!</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           You've completed all challenges
         </Text>
       </Column>
@@ -339,9 +339,9 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
     {
       code:
 `<CelebrationFx
-    height={20}
+    height="20rem"
     type="confetti"
-    duration={6}
+    duration={6000}
     center
 >
     <Column
@@ -352,8 +352,8 @@ Use `CelebrationFx` as a wrapper to overlay celebrations behind any content.
       radius="l"
     >
       <Icon name="trophy" size="xl" onBackground="accent-strong" />
-      <Text variant="heading-strong-xl">Achievement Unlocked!</Text>
-      <Text variant="body-default-s" onBackground="neutral-weak">
+      <Text textVariant="heading-strong-xl">Achievement Unlocked!</Text>
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
         You've completed all challenges
       </Text>
     </Column>
@@ -378,10 +378,10 @@ The `CelebrationFx` component extends all layout props from `Flex` plus the foll
   component="CelebrationFx"
   describe={{
     type: "Which celebration to render.",
-    speed: "Motion multiplier. Not a duration.",
+    speed: "Motion multiplier: 1 is the default. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
     colors: "Palette for the pieces.",
     intensity: "How much of it there is.",
-    duration: "Stop after this long, in milliseconds. Runs indefinitely if unset.",
+    duration: "Stop after this long, in milliseconds (seconds until 3.0). Runs indefinitely if unset.",
     trigger: "What starts it. \"manual\" hands control to active.",
     active: "Run it, when trigger is \"manual\".",
     reducedMotion: "\"auto\" follows the reader's system setting, which is the right default for anything ambient.",

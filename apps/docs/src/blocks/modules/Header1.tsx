@@ -8,14 +8,13 @@ import {
   Line,
   Logo,
   MegaMenu,
-  MobileMegaMenu,
   NavIcon,
   Option,
   Row,
   SmartLink,
   Text,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import type React from "react";
@@ -256,7 +255,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
       zIndex={2}
       {...flex}
     >
-      <Row gap="4" vertical="center" maxWidth={10}>
+      <Row gap="4" vertical="center" maxWidth="10rem">
         <NavIcon
           active={isActive}
           onClick={handleClick}
@@ -307,18 +306,18 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
               </Button>
             </Kbar>
           </Row>
-          <Row vertical="center" gap="16" horizontal="end" maxWidth={10}>
+          <Row vertical="center" gap="16" horizontal="end" maxWidth="10rem">
             <SmartLink prefixIcon="book" href="#">
-              <Text variant="label-default-s">Docs</Text>
+              <Text textVariant="label-default-s">Docs</Text>
             </SmartLink>
-            <UserMenu
+            <User
               placement="bottom-end"
               avatarProps={{
                 empty: !avatar,
                 src: avatar,
               }}
               dropdown={
-                <Column padding="4" gap="2" minWidth={10}>
+                <Column padding="4" gap="2" minWidth="10rem">
                   <Option
                     prefix={<Icon onBackground="neutral-weak" size="s" name="person" />}
                     label="Profile"
@@ -393,7 +392,7 @@ export const Header1: React.FC<HeaderProps> = ({ authenticated, avatar, ...flex 
               />
             </Column>
           ) : (
-            <MobileMegaMenu
+            <MegaMenu collapseBelow="always"
               padding="8"
               background="surface"
               border="surface"

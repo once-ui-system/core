@@ -1,15 +1,15 @@
 "use client";
 
-import { Chip, type IconName, Row, useToast } from "@once-ui-system/core";
+import { Tag, type IconName, Row, useToast } from "@once-ui-system/core";
 import React, { useState } from "react";
 
 export function BasicChipExample() {
   return (
     <Row gap="16" center>
-      <Chip label="Default" selected />
-      <Chip label="With icon" prefixIcon="calendar" />
-      <Chip label="Removable" onRemove={() => {}} />
-      <Chip label="Unselected" />
+      <Tag label="Default" selected />
+      <Tag selected label="With icon" prefixIcon="calendar" />
+      <Tag selected label="Removable" onRemove={() => {}} />
+      <Tag selected={false} label="Unselected" />
     </Row>
   );
 }
@@ -17,16 +17,16 @@ export function BasicChipExample() {
 export function InteractiveChipExample() {
   const [selected, setSelected] = useState<boolean>(true);
 
-  return <Chip label="Clickable" selected={selected} onClick={() => setSelected(!selected)} />;
+  return <Tag label="Clickable" selected={selected} onClick={() => setSelected(!selected)} />;
 }
 
 export function ChipWithIconsExample() {
   return (
     <Row gap="16" center>
-      <Chip label="Date" prefixIcon="calendar" />
-      <Chip label="Discord" prefixIcon="discord" />
-      <Chip label="Style" prefixIcon="style" />
-      <Chip label="Favorite" prefixIcon="like" />
+      <Tag selected label="Date" prefixIcon="calendar" />
+      <Tag selected label="Discord" prefixIcon="discord" />
+      <Tag selected label="Style" prefixIcon="style" />
+      <Tag selected label="Favorite" prefixIcon="like" />
     </Row>
   );
 }
@@ -45,7 +45,7 @@ export function RemovableChipsExample() {
 
     if (chipToRemove) {
       addToast({
-        variant: "danger",
+        tone: "danger",
         message: `Removed ${chipToRemove.label} chip`,
       });
     }
@@ -54,7 +54,7 @@ export function RemovableChipsExample() {
   return (
     <Row gap="8" wrap>
       {chips.map((chip) => (
-        <Chip
+        <Tag selected
           key={chip.id}
           label={chip.label}
           prefixIcon={chip.icon}
@@ -70,19 +70,19 @@ export function CustomRemovableChipExample() {
 
   const handleRemove = (label: string) => {
     addToast({
-      variant: "danger",
+      tone: "danger",
       message: `Removed ${label} chip`,
     });
   };
 
   return (
     <Row gap="16" horizontal="center">
-      <Chip label="Removable" onRemove={() => handleRemove("Removable")} />
-      <Chip label="With Icon" prefixIcon="tag" onRemove={() => handleRemove("With Icon")} />
-      <Chip
+      <Tag selected label="Removable" onRemove={() => handleRemove("Removable")} />
+      <Tag selected label="With Icon" prefixIcon="tag" onRemove={() => handleRemove("With Icon")} />
+      <Tag selected
         label="Custom Remove"
         onRemove={() => handleRemove("Custom Remove")}
-        iconButtonProps={{
+        removeButtonProps={{
           icon: "trash",
           tooltip: "Delete",
         }}

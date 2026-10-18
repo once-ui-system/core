@@ -91,7 +91,7 @@ const examples: BlockExampleDef[] = [
       <Column fill center>
         <Testimonial1
           marginRight="12"
-          minWidth={20}
+          minWidth="20rem"
           testimonials={TESTIMONIALS.slice(0, 4).map((testimonial) => ({
             ...testimonial,
             link: " ",

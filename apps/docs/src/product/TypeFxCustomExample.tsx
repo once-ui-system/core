@@ -10,7 +10,7 @@ export const TypeFxCustomExample = () => {
     <Column fillWidth horizontal="center" gap="16">
       <TypeFx
         words={["Click the button", "to start typing", "this animation"]}
-        speed={60}
+        charDuration={60}
         hold={1500}
         trigger="custom"
         onTrigger={(fn) => {

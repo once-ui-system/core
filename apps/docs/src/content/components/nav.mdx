@@ -21,7 +21,7 @@ differ per product and stay yours to compose.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column maxWidth={20} gap="4" padding="8" radius="l" border>
+    <Column maxWidth="20rem" gap="4" padding="8" radius="l" border>
       <NavItem href="#" icon="home" label="Projects" selected />
       <NavItem href="#" icon="sparkle" label="Presets" />
       <NavItem href="#" icon="inbox" label="Inbox" badge={42} />
@@ -60,7 +60,7 @@ with no number worth showing.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column maxWidth={20} gap="4" padding="8" radius="l" border>
+    <Column maxWidth="20rem" gap="4" padding="8" radius="l" border>
       <NavItem href="#" icon="home" label="Projects" />
       <NavGroup label="Settings" icon="settings" defaultOpen>
         <NavItem href="#" label="Profile" selected />
@@ -85,7 +85,7 @@ with no number worth showing.
 
 The rail is a vertical `Line`, not padding — indentation alone stops reading as
 hierarchy the moment a label wraps. A group manages its own open state unless
-you pass `open` and `onToggle`, which is what you do to open the group holding
+you pass `open` and `onOpenChange`, which is what you do to open the group holding
 the current route.
 
 <PropsTable
@@ -95,7 +95,7 @@ the current route.
     icon: "Leading icon, matching the NavItems beside it.",
     children: "The rows inside.",
     open: "Open state, when the host owns it — to keep one group open at a time, say.",
-    onToggle: "Called on the header. Only needed alongside open.",
+    onOpenChange: "Called with the state the group moves to: true when it opens.",
     defaultOpen: "Starting state when the group manages its own.",
     selected: "Mark the header itself as current, for a group that is also a link.",
   }}

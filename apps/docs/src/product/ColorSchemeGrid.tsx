@@ -18,7 +18,7 @@ function ColorSchemeGrid() {
   return (
     <>
       <Row fillWidth marginBottom="16" overflowX="auto">
-        <Column fillWidth gap="1" minWidth={40} paddingY="8">
+        <Column fillWidth gap="1" minWidth="40rem" paddingY="8">
           <Row gap="1" position="sticky" background="page" zIndex={1}>
             <Flex
               paddingX="8"

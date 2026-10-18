@@ -21,6 +21,7 @@ import { ScrollLock } from "../../components/ScrollLock";
 import { Text } from "../../components/Text";
 import { useAdapters } from "../../contexts/AdapterProvider";
 import type { IconName } from "../../icons";
+import { useControllableState } from "../../internal/useControllableState";
 import type { TShirtSizes } from "../../types";
 import styles from "./Kbar.module.scss";
 
@@ -71,7 +72,7 @@ const KbarSearchInput: React.FC<{
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
-  inputSize?: TShirtSizes;
+  size?: TShirtSizes;
   /** Set while there are results to show; the popup is collapsed otherwise. */
   listboxId?: string;
   activeOptionId?: string;
@@ -81,7 +82,7 @@ const KbarSearchInput: React.FC<{
   onSearchChange,
   onKeyDown,
   inputRef,
-  inputSize = "m",
+  size = "m",
   listboxId,
   activeOptionId,
 }) => (
@@ -98,7 +99,7 @@ const KbarSearchInput: React.FC<{
     onChange={onSearchChange}
     onKeyDown={onKeyDown}
     ref={inputRef}
-    height={inputSize}
+    height={size}
     prefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
     autoComplete="off"
   />
@@ -121,7 +122,8 @@ export interface KbarContentProps {
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
-  inputSize?: TShirtSizes;
+  /** The search field's height. */
+  size?: TShirtSizes;
 }
 
 export const KbarContent: React.FC<KbarContentProps> = ({
@@ -129,7 +131,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   onClose,
   items,
   placeholder = "Search",
-  inputSize = "m",
+  size = "m",
 }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
@@ -376,13 +378,13 @@ export const KbarContent: React.FC<KbarContentProps> = ({
               onSearchChange={handleSearchChange}
               onKeyDown={handleInputKeyDown}
               inputRef={inputRef}
-              inputSize={inputSize}
+              size={size}
               listboxId={hasResults ? listboxId : undefined}
               activeOptionId={hasResults ? optionId(active) : undefined}
             />
           </Row>
           <Column
-            maxHeight={32}
+            maxHeight="32rem"
             fillWidth
             padding="4"
             gap="2"
@@ -485,12 +487,33 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 export interface KbarProps {
   items: KbarItem[];
   children: React.ReactNode;
-  inputSize?: TShirtSizes;
+  /** The search field's height. */
+  size?: TShirtSizes;
+  /** Open or not, controlled. Leave it out to let Kbar keep its own state,
+   *  starting from `defaultOpen`. */
+  open?: boolean;
+  /** The starting state of an uncontrolled Kbar (no `open`). */
+  defaultOpen?: boolean;
+  /** Called with the state Kbar moves to: on the trigger, ⌘K/Ctrl+K, a
+   *  dismissal, and a route change. */
+  onOpenChange?: (open: boolean) => void;
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest }) => {
-  const [open, setOpen] = useState(false);
+export const Kbar: React.FC<KbarProps> = ({
+  items,
+  children,
+  size,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
+  ...rest
+}) => {
+  const [open, setOpen] = useControllableState({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
   const { usePathname } = useAdapters();
   const pathname = usePathname();
 
@@ -502,8 +525,11 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
     setOpen(false);
   };
 
-  // Close Kbar when pathname changes
+  // Close Kbar when pathname changes (not on mount, so defaultOpen holds).
+  const lastPathname = useRef(pathname);
   useEffect(() => {
+    if (lastPathname.current === pathname) return;
+    lastPathname.current = pathname;
     if (open) {
       handleClose();
     }
@@ -545,7 +571,7 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
       </KbarTrigger>
       {open &&
         createPortal(
-          <KbarContent open={open} onClose={handleClose} items={items} inputSize={inputSize} />,
+          <KbarContent open={open} onClose={handleClose} items={items} size={size} />,
           document.body,
         )}
     </>

@@ -58,7 +58,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
       <Heading
         className={classNames(styles.text, "cursor-interactive")}
         id={id}
-        variant={variantMap[as]}
+        textVariant={variantMap[as]}
         as={as}
         onClick={copy}
       >

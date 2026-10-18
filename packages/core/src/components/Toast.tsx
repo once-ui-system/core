@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { IconName } from "../icons";
+import type { Tone } from "../types";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
@@ -11,7 +12,8 @@ import styles from "./Toast.module.scss";
 
 interface ToastProps {
   className?: string;
-  variant: "success" | "danger" | "warning" | "info";
+  /** The palette and its icon. */
+  tone: Tone;
   showIcon?: boolean;
   onClose?: () => void;
   action?: React.ReactNode;
@@ -24,7 +26,7 @@ interface ToastProps {
   duration?: number;
 }
 
-const iconMap: { [key in ToastProps["variant"]]: IconName } = {
+const iconMap: Partial<Record<Tone, IconName>> = {
   success: "check",
   danger: "danger",
   warning: "warning",
@@ -34,7 +36,7 @@ const iconMap: { [key in ToastProps["variant"]]: IconName } = {
 const Toast = forwardRef<HTMLDivElement, ToastProps>(
   (
     // The default is a literal so the generated props spec (ai/) states it.
-    { variant, className, showIcon = true, onClose, action, children, duration = 6000 },
+    { tone, className, showIcon = true, onClose, action, children, duration = 6000 },
     ref,
   ) => {
     const [visible, setVisible] = useState(true);
@@ -80,8 +82,8 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
         // Only a danger toast interrupts. Everything else waits for the screen
         // reader to finish what it is saying: a "saved" confirmation announced
         // assertively cuts off whatever the user was listening to.
-        role={variant === "danger" ? "alert" : "status"}
-        aria-live={variant === "danger" ? "assertive" : "polite"}
+        role={tone === "danger" ? "alert" : "status"}
+        aria-live={tone === "danger" ? "assertive" : "polite"}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
         onFocus={() => setFocused(true)}
@@ -91,13 +93,15 @@ const Toast = forwardRef<HTMLDivElement, ToastProps>(
             setFocused(false);
           }
         }}
-        className={classNames(className, styles.toast, styles[variant], {
+        className={classNames(className, styles.toast, {
           [styles.visible]: visible,
           [styles.hidden]: !visible,
         })}
       >
         <Flex fillWidth vertical="center" gap="8">
-          {showIcon && <Icon size="s" onBackground={`${variant}-medium`} name={iconMap[variant]} />}
+          {showIcon && (
+            <Icon size="s" onBackground={`${tone}-medium`} name={iconMap[tone] ?? "info"} />
+          )}
           <Row fillWidth textVariant="body-default-s">
             {children}
           </Row>

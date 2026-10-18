@@ -181,8 +181,8 @@ const OgCard = ({
     >
       {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
-          minWidth={isRow ? 16 : undefined}
-          maxWidth={isRow ? 24 : undefined}
+          minWidth={isRow ? "16rem" : undefined}
+          maxWidth={isRow ? "24rem" : undefined}
           loading={loading}
           radius="l"
           sizes={sizes}
@@ -217,7 +217,7 @@ const OgCard = ({
               (loading ? (
                 <Skeleton shape="line" width="25%" size="xs" />
               ) : (
-                <Text variant="label-default-s" onBackground="neutral-weak" truncate>
+                <Text textVariant="label-default-s" onBackground="neutral-weak" truncate>
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
               ))}
@@ -230,7 +230,7 @@ const OgCard = ({
             ) : (
               resolvedTitle && (
                 <Text
-                  variant={
+                  textVariant={
                     size === "s"
                       ? "label-default-s"
                       : size === "m"
@@ -250,7 +250,7 @@ const OgCard = ({
               </Column>
             ) : resolvedDescription ? (
               <Text
-                variant={
+                textVariant={
                   size === "s"
                     ? "label-default-s"
                     : size === "m"

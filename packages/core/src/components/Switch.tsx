@@ -1,7 +1,10 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useId, useState } from "react";
+import React, { forwardRef, useId } from "react";
+import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
+import { splitAria, useHiddenInput } from "../internal/hiddenInput";
+import { useControllableState } from "../internal/useControllableState";
 
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -10,10 +13,17 @@ import { Spinner } from "./Spinner";
 import styles from "./Switch.module.scss";
 
 interface SwitchProps
-  extends Omit<InteractiveDetailsProps, "onClick" | "labelId" | "descriptionId">,
-    // `onToggle` is this component's own; the DOM's is the `toggle` event of
-    // popovers and `<details>`, which an input never fires.
-    Omit<React.InputHTMLAttributes<HTMLInputElement>, "checked" | "onToggle"> {
+  extends Omit<
+      InteractiveDetailsProps,
+      "onClick" | "labelId" | "descriptionId" | "size" | "errorMessage" | "errorId"
+    >,
+    ControlChromeProps,
+    // `onToggle` is the DOM's `toggle` event of popovers and `<details>`,
+    // which an input never fires.
+    Omit<
+      React.InputHTMLAttributes<HTMLInputElement>,
+      "checked" | "defaultChecked" | "onToggle" | "size"
+    > {
   style?: React.CSSProperties;
   className?: string;
   /** On or off, controlled. Leave it out to let the switch keep its own
@@ -26,48 +36,66 @@ interface SwitchProps
   value?: string;
   disabled?: boolean;
   reverse?: boolean;
-  ariaLabel?: string;
-  /** Called with the state the switch moves to: `true` when it turns on.
-   *  A callback that takes no argument still works. */
-  onToggle?: (checked: boolean) => void;
+  /** Called with the state the switch moves to: `true` when it turns on. */
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 const Switch = forwardRef<HTMLInputElement, SwitchProps>(
   (
     {
       className,
-      checked: controlledChecked,
+      style,
+      checked: checkedProp,
       defaultChecked = false,
       reverse = false,
       loading = false,
-      onToggle,
-      ariaLabel = "Toggle switch",
-      "aria-label": nativeAriaLabel,
+      onCheckedChange,
+      onChange,
+      onFocus,
+      onBlur,
       disabled,
-      name,
-      value,
-      ...props
+      label,
+      description,
+      iconButtonProps,
+      id,
+      size: sizeProp,
+      error,
+      errorMessage,
+      ...rest
     },
     ref,
   ) => {
+    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
     const labelId = useId();
     const descriptionId = useId();
-    const hasLabel = Boolean(props.label);
-    const [uncontrolledChecked, setUncontrolledChecked] = useState(defaultChecked);
-    const isControlled = controlledChecked !== undefined;
-    const checked = isControlled ? controlledChecked : uncontrolledChecked;
+    const hasLabel = Boolean(label);
+    const [checked, setChecked] = useControllableState({
+      value: checkedProp,
+      defaultValue: defaultChecked,
+      onChange: onCheckedChange,
+    });
+    const { inputRef, setRef, activate, relay } = useHiddenInput(ref);
+    const { aria, native } = splitAria(rest);
+    const ariaLabel = (aria["aria-label"] as string | undefined) ?? "Toggle switch";
 
-    const toggle = () => {
+    // Every change goes through the native input, so its `onChange` hears
+    // the same event a plain checkbox would send.
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       if (disabled) return;
-      const next = !checked;
-      if (!isControlled) setUncontrolledChecked(next);
-      onToggle?.(next);
+      setChecked(event.target.checked);
+      onChange?.(event);
+    };
+
+    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+      // The input's own click bubbles here too: it already changed.
+      if (disabled || event.target === inputRef.current) return;
+      activate();
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       if (!disabled && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        toggle();
+        activate();
       }
     };
 
@@ -77,22 +105,24 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
         vertical="center"
         horizontal={reverse ? "between" : undefined}
         fillWidth={reverse}
-        className={classNames(styles.container, className, {
+        className={classNames(styles.container, className, styles[chrome.size], {
+          [styles.error]: chrome.invalid,
           [styles.reverse]: reverse,
           [styles.disabled]: disabled,
         })}
-        onClick={toggle}
+        style={style}
+        onClick={handleClick}
       >
         {/* Carries the value for form submission only. The thumb below is the
             control people reach, so this stays out of the accessibility tree
             rather than standing beside it as a second, unnamed switch. */}
         <input
-          ref={ref}
+          {...native}
+          ref={setRef}
           type="checkbox"
-          name={name}
-          value={value}
           checked={checked}
-          onChange={toggle}
+          disabled={disabled}
+          onChange={handleChange}
           className={commonStyles.hidden}
           tabIndex={-1}
           aria-hidden="true"
@@ -105,16 +135,25 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           })}
         >
           {/* The element that takes focus is the switch. It is named by the
-              visible label when there is one; `aria-label` (or `ariaLabel`)
+              visible label when there is one; `aria-label`
               only stands in when there is nothing on screen to point at. */}
           <div
+            {...aria}
             role="switch"
             aria-checked={checked}
             aria-labelledby={hasLabel ? labelId : undefined}
-            aria-label={hasLabel ? undefined : (nativeAriaLabel ?? ariaLabel)}
-            aria-describedby={hasLabel && props.description ? descriptionId : undefined}
+            aria-label={hasLabel ? undefined : ariaLabel}
+            aria-describedby={describedBy(
+              hasLabel && description
+                ? descriptionId
+                : (aria["aria-describedby"] as string | undefined),
+              chrome.showsError && chrome.errorId,
+            )}
+            aria-invalid={chrome.invalid || undefined}
             aria-disabled={disabled}
             onKeyDown={handleKeyDown}
+            onFocus={relay(onFocus)}
+            onBlur={relay(onBlur)}
             tabIndex={disabled ? -1 : 0}
             className={classNames(styles.element, {
               [styles.checked]: checked,
@@ -124,12 +163,18 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
             {loading && <Spinner size="xs" />}
           </div>
         </Flex>
-        {props.label && (
+        {(label || chrome.showsError) && (
           <InteractiveDetails
             disabled={disabled}
-            {...props}
+            label={label}
+            description={description}
+            iconButtonProps={iconButtonProps}
+            id={id}
             labelId={labelId}
             descriptionId={descriptionId}
+            size={chrome.size}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            errorId={chrome.errorId}
             onClick={() => {}}
           />
         )}

@@ -97,7 +97,7 @@ export interface StyleSchemeRowProps extends StyleRowProps {
    * End the swatches with one for a colour of the host's own, painted with
    * the current seed, and edit the seed in a colour field while it is
    * chosen. Choosing it reports `{ brand: "custom", brandSeed }` (or the
-   * accent pair) through `onChange`.
+   * accent pair) through `onValueChange`.
    *
    * Controlled mode only. Bound to ThemeProvider, whose `setStyle` takes no
    * seed, the panel has nowhere to put one, so the swatch does not render.
@@ -372,7 +372,7 @@ function useStylePanel(): StylePanelContextValue {
   return context;
 }
 
-/** Reads and writes ThemeProvider — the default when no `value`/`onChange` is given. */
+/** Reads and writes ThemeProvider — the default when no `value` is given. */
 function useBoundState(): Omit<StylePanelContextValue, "controlled"> {
   const styleContext = useStyle();
   const [mounted, setMounted] = useState(false);
@@ -411,10 +411,11 @@ function useBoundState(): Omit<StylePanelContextValue, "controlled"> {
 
 export interface StylePanelRootProps
   extends Omit<React.ComponentProps<typeof Column>, "value" | "onChange"> {
-  /** Supply with `onChange` to take ownership of the state. The panel then
-   *  writes nothing to ThemeProvider, DataThemeProvider or storage. */
+  /** Set it to take ownership of the state (pair with `onValueChange`). The
+   *  panel then writes nothing to ThemeProvider, DataThemeProvider or storage. */
   value?: StylePanelValue;
-  onChange?: (next: StylePanelValue, changed: Partial<StylePanelValue>) => void;
+  /** Called with the whole next value and the part that changed. */
+  onValueChange?: (next: StylePanelValue, changed: Partial<StylePanelValue>) => void;
   /** Every string the panel shows or announces, over the English defaults.
    *  Every group and row inside reads them; their own props still win. */
   labels?: StylePanelLabels;
@@ -424,15 +425,16 @@ export interface StylePanelRootProps
 }
 
 const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
-  { value, onChange, labels, stacked = false, children, ...rest },
+  { value, onValueChange, labels, stacked = false, children, ...rest },
   ref,
 ) {
   const bound = useBoundState();
-  const controlled = value !== undefined && onChange !== undefined;
+  // Controlled when `value` is set, whether or not a handler is passed.
+  const controlled = value !== undefined;
 
   const controlledSet = useCallback(
-    (patch: Partial<StylePanelValue>) => onChange?.({ ...value, ...patch }, patch),
-    [value, onChange],
+    (patch: Partial<StylePanelValue>) => onValueChange?.({ ...value, ...patch }, patch),
+    [value, onValueChange],
   );
 
   const context = useMemo<StylePanelContextValue>(
@@ -462,7 +464,7 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
 
 function RowLabel({ children }: { children: ReactNode }) {
   return (
-    <Flex textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
+    <Flex textVariant="label-default-s" minWidth="3rem" onBackground="neutral-strong">
       {children}
     </Flex>
   );
@@ -495,12 +497,12 @@ function Group({ title, description, children, ...rest }: StyleGroupProps) {
       {(title !== false || description !== false) && (
         <Column fillWidth paddingTop="12" paddingLeft="16" gap="4">
           {title !== false && (
-            <Text variant="heading-strong-s" onBackground="neutral-strong">
+            <Text textVariant="heading-strong-s" onBackground="neutral-strong">
               {title}
             </Text>
           )}
           {description !== false && (
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               {description}
             </Text>
           )}
@@ -629,7 +631,10 @@ function ThemeRow({ label, ...rest }: StyleRowProps) {
   const panel = useContext(StylePanelContext);
   // Controlled, an unset theme is the system one, as it is for ThemeProvider.
   const controlled = panel?.controlled
-    ? { value: panel.value.theme ?? "system", onChange: (theme: Theme) => panel.set({ theme }) }
+    ? {
+        value: panel.value.theme ?? "system",
+        onValueChange: (theme: Theme) => panel.set({ theme }),
+      }
     : {};
   return (
     <Row label={prefer(label, labels.rows.theme)} {...rest}>
@@ -755,7 +760,7 @@ function schemeRow(key: StylePanelSchemeRow) {
               id={pickerId}
               label={labels.custom.picker(key)}
               value={fieldColor(seed)}
-              onChange={(next) => {
+              onValueChange={(next) => {
                 // The clear button reports "": keep the seed rather than
                 // leave the scheme pointing at nothing.
                 if (isFieldColor(next)) set({ [key]: "custom", [seedKey]: next });
@@ -805,7 +810,7 @@ function Options({ buttons, ...rest }: Omit<SegmentedControlProps, "labels">) {
   const labels = useStylePanelLabels();
   return (
     <SegmentedControl
-      maxWidth={stacked ? undefined : 22}
+      maxWidth={stacked ? undefined : "22rem"}
       minWidth={0}
       labels={labels.scroller}
       buttons={buttons.map((button) => ({ size: stacked ? "m" : "l", ...button }))}
@@ -842,7 +847,7 @@ function segmentedRow<K extends keyof StylePanelValue>(
     return (
       <Row label={prefer(label, labels.rows[row])} {...rest}>
         <Options
-          onChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
+          onValueChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
           value={mounted ? (value[key] as string | undefined) : undefined}
           defaultValue={defaultValue}
           buttons={buttons(labels)}
@@ -930,7 +935,7 @@ function BoundDataStyleControl() {
   const labels = useStylePanelLabels();
   return (
     <Options
-      onChange={(next) => setChartOptions({ mode: next as ChartMode })}
+      onValueChange={(next) => setChartOptions({ mode: next as ChartMode })}
       value={mode}
       defaultValue="categorical"
       buttons={dataStyleButtons(labels)}
@@ -945,7 +950,7 @@ function DataStyleRow({ label, ...rest }: StyleRowProps) {
     <Row label={prefer(label, labels.rows.dataStyle)} {...rest}>
       {controlled ? (
         <Options
-          onChange={(next) => set({ chartMode: next as ChartMode })}
+          onValueChange={(next) => set({ chartMode: next as ChartMode })}
           value={mounted ? value.chartMode : undefined}
           defaultValue="categorical"
           buttons={dataStyleButtons(labels)}

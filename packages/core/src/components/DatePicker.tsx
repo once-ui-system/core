@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
+import { Reveal } from "../internal/Reveal";
 import { CondensedTShirtSizes } from "../types";
 import { getCalendarNames } from "../utils/calendarLocale";
 import {
@@ -14,13 +15,12 @@ import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationCon
 import { Button } from "./Button";
 import { Column } from "./Column";
 import styles from "./DatePicker.module.scss";
-import { DropdownWrapper } from "./DropdownWrapper";
+import { Dropdown } from "./Dropdown";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { NumberInput } from "./NumberInput";
 import { Option } from "./Option";
-import { RevealFx } from "./RevealFx";
 import { Row } from "./Row";
 import { SegmentedControl } from "./SegmentedControl";
 import { Text } from "./Text";
@@ -70,15 +70,29 @@ const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
   pm: undefined,
 };
 
-export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
+/** A range of dates, as `<DatePicker range>` and `<DateInput range>` take it. */
+export interface DateRange {
+  /** Unset until the first date is picked. */
+  startDate?: Date;
+  /** Unset until the second date is picked. */
+  endDate?: Date;
+}
+
+/** One month's calendar: the single-date DatePicker, and each month of a range. */
+interface CalendarProps
+  extends Omit<React.ComponentProps<typeof Flex>, "onChange" | "defaultValue"> {
+  /** The date, controlled. Leave it out to let the picker keep its own,
+   *  starting from `defaultValue`. */
   value?: Date;
-  onChange?: (date: Date) => void;
+  /** The starting date of an uncontrolled DatePicker (no `value`). */
+  defaultValue?: Date;
+  /** Receives the date picked, and each time edit with `timePicker`. */
+  onValueChange?: (date: Date) => void;
   minDate?: Date;
   maxDate?: Date;
   previousMonth?: boolean;
   nextMonth?: boolean;
   timePicker?: boolean;
-  defaultDate?: Date;
   defaultTime?: {
     hours: number;
     minutes: number;
@@ -90,7 +104,8 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   currentMonth?: number;
   currentYear?: number;
   onMonthChange?: (increment: number) => void;
-  range?: {
+  /** The range to draw on this month: a range picker's selection, or its hover preview. */
+  highlight?: {
     startDate?: Date;
     endDate?: Date;
   };
@@ -144,17 +159,17 @@ const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement
   return null;
 };
 
-const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
+const Calendar = forwardRef<HTMLDivElement, CalendarProps>(
   (
     {
       value,
-      onChange,
+      defaultValue,
+      onValueChange,
       timePicker = false,
       previousMonth = true,
       nextMonth = true,
       minDate,
       maxDate,
-      defaultDate,
       defaultTime,
       size = "m",
       nested = false,
@@ -163,7 +178,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       currentMonth: propCurrentMonth,
       currentYear: propCurrentYear,
       onMonthChange,
-      range,
+      highlight: range,
       onHover,
       autoFocus = false,
       open,
@@ -175,15 +190,28 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
     const today = new Date();
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+    /** Where the picker starts: `value`, else `defaultValue` (2.x's `defaultDate` was never read). */
+    const initialDate = value ?? defaultValue;
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
+    const initialTime =
+      defaultTime ??
+      (initialDate
+        ? { hours: initialDate.getHours(), minutes: initialDate.getMinutes() }
+        : undefined);
     const [selectedTime, setSelectedTime] = useState<
       | {
           hours: number;
           minutes: number;
         }
       | undefined
-    >(defaultTime);
-    const [isPM, setIsPM] = useState(defaultTime?.hours ? defaultTime.hours >= 12 : false);
+    >(initialTime);
+    const [isPM, setIsPM] = useState(initialTime?.hours ? initialTime.hours >= 12 : false);
+    /**
+     * Whether `value` has ever been set. Until it has, the picker is
+     * uncontrolled and keeps its own date; once it has, a `value` cleared
+     * from outside clears the selection, as it always did.
+     */
+    const hadValueRef = useRef(value !== undefined);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
@@ -207,12 +235,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [currentMonth, setCurrentMonth] = useState<number>(() =>
       monthIsControlled && propCurrentMonth !== undefined
         ? propCurrentMonth
-        : (value ?? today).getMonth(),
+        : (initialDate ?? today).getMonth(),
     );
     const [currentYear, setCurrentYear] = useState<number>(() =>
       monthIsControlled && propCurrentYear !== undefined
         ? propCurrentYear
-        : (value ?? today).getFullYear(),
+        : (initialDate ?? today).getFullYear(),
     );
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
@@ -274,6 +302,8 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     }, [isReady, value, isCalendarSynced, monthIsControlled]);
 
     useEffect(() => {
+      if (value === undefined && !hadValueRef.current) return;
+      hadValueRef.current = true;
       setSelectedDate(value);
       if (value) {
         setSelectedTime({
@@ -376,7 +406,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       if (timePicker) {
         handleTimeToggle(true);
       } else {
-        onChange?.(newDate);
+        onValueChange?.(newDate);
       }
     };
 
@@ -478,7 +508,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       const newDate = new Date(selectedDate);
       newDate.setHours(newTime.hours);
       newDate.setMinutes(minutes);
-      onChange?.(newDate);
+      onValueChange?.(newDate);
     };
 
     const isInRange = (date: Date) => {
@@ -679,7 +709,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               onClick={(e: React.MouseEvent) => {
                 if (!isDisabled) {
                   if (timePicker) {
-                    // Stop propagation to prevent DropdownWrapper from closing
+                    // Stop propagation to prevent Dropdown from closing
                     e.stopPropagation();
                   }
                   handleDateSelect(currentDate);
@@ -763,7 +793,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 horizontal="center"
                 marginBottom="16"
               >
-                <Text variant="label-default-m" onBackground="neutral-medium" align="center">
+                <Text textVariant="label-default-m" onBackground="neutral-medium" align="center">
                   {day}
                 </Text>
               </Row>
@@ -799,7 +829,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         <Flex fillWidth center>
           {isTimeSelector ? (
             <Column horizontal="center" fillWidth gap="8">
-              <Text variant={`label-default-${size}`} onBackground="neutral-strong">
+              <Text textVariant={`label-default-${size}`} onBackground="neutral-strong">
                 {gridLabel}
               </Text>
               <Row
@@ -838,7 +868,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               )}
               <Column fillWidth horizontal="center" gap="8">
                 <Row gap="4" horizontal="center">
-                  <DropdownWrapper
+                  <Dropdown
                     nested={nested}
                     placement="bottom-start"
                     open={isMonthOpen}
@@ -877,45 +907,44 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         </Row>
                       </Button>
                     }
-                    dropdown={
-                      <Column
-                        fillWidth
-                        gap="2"
-                        padding="4"
-                        onClick={(event: React.MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                      >
-                        {monthNames.map((month, index) => {
-                          const monthDisabled = isMonthDisabled(index, currentYear);
-                          return (
-                            <Option
-                              key={month}
-                              value={index.toString()}
-                              disabled={monthDisabled}
-                              label={
-                                <Text color={monthDisabled ? "neutral-weak" : undefined}>
-                                  {month}
-                                </Text>
-                              }
-                              selected={index === currentMonth}
-                              onClick={(value) => {
-                                if (!monthDisabled) {
-                                  handleMonthSelect(index);
-                                  setIsMonthOpen(false);
-                                  clearLastOpenedDropdown();
-                                }
-                              }}
-                            />
-                          );
-                        })}
-                      </Column>
-                    }
                     data-dropdown-id="month-dropdown"
-                  />
+                  >
+                    <Column
+                      fillWidth
+                      gap="2"
+                      padding="4"
+                      onClick={(event: React.MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                    >
+                      {monthNames.map((month, index) => {
+                        const monthDisabled = isMonthDisabled(index, currentYear);
+                        return (
+                          <Option
+                            key={month}
+                            value={index.toString()}
+                            disabled={monthDisabled}
+                            label={
+                              <Text color={monthDisabled ? "neutral-weak" : undefined}>
+                                {month}
+                              </Text>
+                            }
+                            selected={index === currentMonth}
+                            onClick={(value) => {
+                              if (!monthDisabled) {
+                                handleMonthSelect(index);
+                                setIsMonthOpen(false);
+                                clearLastOpenedDropdown();
+                              }
+                            }}
+                          />
+                        );
+                      })}
+                    </Column>
+                  </Dropdown>
 
-                  <DropdownWrapper
+                  <Dropdown
                     nested={nested}
                     open={isYearOpen}
                     dropdownId="year-dropdown"
@@ -949,52 +978,51 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                         </Row>
                       </Button>
                     }
-                    dropdown={
-                      <Column
-                        fillWidth
-                        padding="4"
-                        gap="2"
-                        overflowY="auto"
-                        style={{ maxHeight: "16rem" }}
-                        onClick={(event: React.MouseEvent) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                      >
-                        {generateYearOptions().map((year) => {
-                          // Check if all months in this year are disabled
-                          const allMonthsDisabled = Array.from({ length: 12 }, (_, i) => i).every(
-                            (month) => isMonthDisabled(month, year),
-                          );
-
-                          return (
-                            <Option
-                              key={year}
-                              value={year.toString()}
-                              disabled={allMonthsDisabled}
-                              label={
-                                <Text color={allMonthsDisabled ? "neutral-weak" : undefined}>
-                                  {year}
-                                </Text>
-                              }
-                              selected={year === currentYear}
-                              onClick={(value) => {
-                                if (!allMonthsDisabled) {
-                                  handleYearSelect(year);
-                                  setIsYearOpen(false);
-                                  clearLastOpenedDropdown();
-                                }
-                              }}
-                            />
-                          );
-                        })}
-                      </Column>
-                    }
                     data-dropdown-id="year-dropdown"
-                  />
+                  >
+                    <Column
+                      fillWidth
+                      padding="4"
+                      gap="2"
+                      overflowY="auto"
+                      style={{ maxHeight: "16rem" }}
+                      onClick={(event: React.MouseEvent) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                    >
+                      {generateYearOptions().map((year) => {
+                        // Check if all months in this year are disabled
+                        const allMonthsDisabled = Array.from({ length: 12 }, (_, i) => i).every(
+                          (month) => isMonthDisabled(month, year),
+                        );
+
+                        return (
+                          <Option
+                            key={year}
+                            value={year.toString()}
+                            disabled={allMonthsDisabled}
+                            label={
+                              <Text color={allMonthsDisabled ? "neutral-weak" : undefined}>
+                                {year}
+                              </Text>
+                            }
+                            selected={year === currentYear}
+                            onClick={(value) => {
+                              if (!allMonthsDisabled) {
+                                handleYearSelect(year);
+                                setIsYearOpen(false);
+                                clearLastOpenedDropdown();
+                              }
+                            }}
+                          />
+                        );
+                      })}
+                    </Column>
+                  </Dropdown>
                 </Row>
                 {timePicker && selectedTime && (
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {formatTime(selectedTime.hours, selectedTime.minutes, [amLabel, pmLabel])}
                   </Text>
                 )}
@@ -1016,15 +1044,15 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           )}
         </Flex>
 
-        <RevealFx
+        <Reveal
           fillWidth
           center
           key={isTimeSelector ? "time" : "date"}
           revealed={isTransitioning}
-          speed={250}
+          duration={250}
         >
           {isTimeSelector ? (
-            <Column maxWidth={24} center padding="32" gap="32">
+            <Column maxWidth="24rem" center padding="32" gap="32">
               <SegmentedControl
                 buttons={[
                   {
@@ -1037,7 +1065,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   },
                 ]}
                 value={isPM ? "PM" : "AM"}
-                onChange={(value) =>
+                onValueChange={(value) =>
                   handleTimeChange(
                     convert24to12(selectedTime?.hours ?? 0),
                     selectedTime?.minutes ?? 0,
@@ -1052,7 +1080,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   min={1}
                   max={12}
                   value={selectedTime?.hours ? convert24to12(selectedTime.hours) : 12}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     if (value >= 1 && value <= 12) {
                       handleTimeChange(value, selectedTime?.minutes ?? 0);
                     }
@@ -1067,7 +1095,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   max={59}
                   padStart={2}
                   value={selectedTime?.minutes ?? 0}
-                  onChange={(value) => {
+                  onValueChange={(value) => {
                     if (value >= 0 && value <= 59) {
                       handleTimeChange(convert24to12(selectedTime?.hours ?? 0), value);
                     }
@@ -1124,12 +1152,188 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
               </ArrowNavigation>
             )
           )}
-        </RevealFx>
+        </Reveal>
       </Column>
     );
   },
 );
 
+Calendar.displayName = "Calendar";
+
+/** One date, on one month's calendar (with `timePicker`, a date and time). */
+interface SingleDatePickerProps extends Omit<CalendarProps, "highlight"> {
+  /** Pick a `{ startDate, endDate }` range instead of one date. */
+  range?: false;
+}
+
+/**
+ * A range of dates (2.x's DateRangePicker): the first pick is the start, the
+ * second the end, with a hover preview between them.
+ */
+interface RangeDatePickerProps
+  extends Omit<
+    React.ComponentProps<typeof Flex>,
+    "onChange" | "defaultValue" | "value" | "onValueChange"
+  > {
+  range: true;
+  /** The range, controlled. Leave it out to let the picker keep its own,
+   *  starting from `defaultValue`. */
+  value?: DateRange;
+  /** The starting range of an uncontrolled range picker (no `value`). */
+  defaultValue?: DateRange;
+  /** Receives the range after each pick: the start alone, then both ends. */
+  onValueChange?: (range: DateRange) => void;
+  minDate?: Date;
+  maxDate?: Date;
+  /** How many months show side by side: 1 (the default) or 2. 2.x's `dual` was `months={2}`. */
+  months?: 1 | 2;
+  size?: CondensedTShirtSizes;
+  /**
+   * Moves focus onto the first calendar's start day (else its first day that
+   * can be picked) as it appears, as for a picker that has just been opened.
+   */
+  autoFocus?: boolean;
+  /** The locale month and weekday names are shown in: see the single picker. */
+  locale?: string;
+  /** Every calendar's buttons and names, for a translated interface. */
+  labels?: DatePickerLabels;
+}
+
+type DatePickerProps = SingleDatePickerProps | RangeDatePickerProps;
+
+const RangeCalendars = forwardRef<HTMLDivElement, RangeDatePickerProps>(
+  (
+    {
+      range: _range,
+      value,
+      defaultValue,
+      onValueChange,
+      minDate,
+      maxDate,
+      size = "m",
+      months = 1,
+      autoFocus,
+      locale,
+      labels,
+      ...rest
+    },
+    ref,
+  ) => {
+    const dual = months === 2;
+    const initial = value ?? defaultValue;
+    const [internalValue, setInternalValue] = useState<DateRange>({
+      startDate: initial?.startDate || undefined,
+      endDate: initial?.endDate || undefined,
+    });
+
+    const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
+    // The first calendar starts on the range's start month, else this month.
+    const [currentMonth, setCurrentMonth] = useState(
+      initial?.startDate ? initial.startDate.getMonth() : new Date().getMonth(),
+    );
+    const [currentYear, setCurrentYear] = useState(
+      initial?.startDate ? initial.startDate.getFullYear() : new Date().getFullYear(),
+    );
+
+    useEffect(() => {
+      if (value) {
+        setInternalValue({ startDate: value.startDate, endDate: value.endDate });
+        if (value.startDate) {
+          setCurrentMonth(value.startDate.getMonth());
+          setCurrentYear(value.startDate.getFullYear());
+        }
+      }
+    }, [value]);
+
+    const handleDateChange = (date: Date) => {
+      if (!internalValue.startDate || (internalValue.startDate && internalValue.endDate)) {
+        // A new selection starts.
+        const newRange = { startDate: date, endDate: undefined };
+        setInternalValue(newRange);
+        onValueChange?.(newRange);
+      } else {
+        const newRange = { startDate: internalValue.startDate, endDate: date };
+        if (newRange.startDate > date) {
+          newRange.startDate = date;
+          newRange.endDate = internalValue.startDate;
+        }
+        setInternalValue(newRange);
+        onValueChange?.(newRange);
+      }
+    };
+
+    const handleMonthChange = (increment: number) => {
+      const newDate = new Date(currentYear, currentMonth + increment, 1);
+      setCurrentMonth(newDate.getMonth());
+      setCurrentYear(newDate.getFullYear());
+      setInternalValue({ startDate: internalValue.startDate, endDate: internalValue.endDate });
+    };
+
+    const secondMonth = new Date(currentYear, currentMonth + 1, 1);
+
+    const preview =
+      !internalValue.startDate || internalValue.endDate || !hoveredDate
+        ? null
+        : {
+            startDate: internalValue.startDate,
+            endDate: hoveredDate > internalValue.startDate ? hoveredDate : internalValue.startDate,
+          };
+
+    return (
+      <Flex ref={ref} gap="24" {...rest}>
+        <Calendar
+          value={internalValue.startDate}
+          onValueChange={handleDateChange}
+          highlight={preview || internalValue}
+          minDate={minDate}
+          maxDate={maxDate}
+          size={size}
+          nextMonth={!dual}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+          onMonthChange={handleMonthChange}
+          onHover={setHoveredDate}
+          autoFocus={autoFocus}
+          locale={locale}
+          labels={labels}
+        />
+        {dual && (
+          <Calendar
+            value={internalValue.endDate}
+            onValueChange={handleDateChange}
+            highlight={preview || internalValue}
+            minDate={minDate}
+            maxDate={maxDate}
+            previousMonth={false}
+            size={size}
+            currentMonth={secondMonth.getMonth()}
+            currentYear={secondMonth.getFullYear()}
+            onMonthChange={handleMonthChange}
+            onHover={setHoveredDate}
+            locale={locale}
+            labels={labels}
+          />
+        )}
+      </Flex>
+    );
+  },
+);
+
+RangeCalendars.displayName = "RangeCalendars";
+
+/**
+ * A calendar for one date (and time, with `timePicker`), or with `range` a
+ * `{ startDate, endDate }` range over one or two months (`months`).
+ */
+const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>((props, ref) =>
+  props.range ? (
+    <RangeCalendars {...props} ref={ref} />
+  ) : (
+    <Calendar {...(({ range: _range, ...rest }) => rest)(props)} ref={ref} />
+  ),
+);
+
 DatePicker.displayName = "DatePicker";
 
+export type { DatePickerProps };
 export { DatePicker };

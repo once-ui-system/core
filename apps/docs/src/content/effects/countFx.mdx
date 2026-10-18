@@ -28,25 +28,25 @@ useEffect(() => {
 }, []);
 
 <CountFx
-    variant="display-strong-m"
+    textVariant="display-strong-m"
     value={value}
-    speed={5000}
+    duration={5000}
     effect="wheel"
     easing="ease-out"
 />
 
 <CountFx
-    variant="display-strong-m"
+    textVariant="display-strong-m"
     value={value}
-    speed={5000}
+    duration={5000}
     effect="smooth"
     easing="ease-out"
 />
 
 <CountFx
-    variant="display-strong-m"
+    textVariant="display-strong-m"
     value={value}
-    speed={5000}
+    duration={5000}
     separator=","
     effect="simple"
     easing="ease-out"
@@ -83,19 +83,19 @@ useEffect(() => {
 }, []);
 
 <CountFx
-    variant="display-strong-m"
+    textVariant="display-strong-m"
     value={value1}
     decimals={2}
-    speed={2000}
+    duration={2000}
     effect="simple"
     easing="ease-out"
 />
 
 <CountFx
-    variant="display-strong-m"
+    textVariant="display-strong-m"
     value={value2}
     decimals={2}
-    speed={2000}
+    duration={2000}
     separator=","
     effect="simple"
     easing="ease-out"
@@ -141,9 +141,9 @@ function ScrollCountExample() {
     
     return (
       <CountFx
-        variant="display-strong-l"
+        textVariant="display-strong-l"
         value={value}
-        speed={2000}
+        duration={2000}
         effect="wheel"
         easing="ease-out"
       />
@@ -161,7 +161,7 @@ function ScrollCountExample() {
   component="CountFx"
   describe={{
     value: "The number to count to. Change it and the count runs again — there is no trigger prop.",
-    speed: "How long the count takes, in milliseconds.",
+    duration: "How long the count takes, in milliseconds. Was speed until 3.0.",
     easing: "How the count accelerates and settles.",
     effect: "How the digits change: a plain count, a wheel, or a smooth blur.",
     format: "Turn the number into the string shown, for a currency or a unit.",

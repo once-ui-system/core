@@ -40,8 +40,8 @@ export const Checkout2 = () => {
             {steps.map((item, index) => (
               <Row key={item.label} fillWidth gap="8" vertical="center">
                 <Row
-                  minWidth={8}
-                  minHeight={8}
+                  minWidth="8rem"
+                  minHeight="8rem"
                   radius="full"
                   center
                   border={index <= step ? "brand-alpha-strong" : "neutral-alpha-weak"}
@@ -57,7 +57,7 @@ export const Checkout2 = () => {
                 </Row>
                 <Column gap="2" hide={index === steps.length - 1 ? false : undefined}>
                   <Text
-                    variant="label-default-s"
+                    textVariant="label-default-s"
                     onBackground={index <= step ? "neutral-strong" : "neutral-weak"}
                   >
                     {item.label}
@@ -75,7 +75,7 @@ export const Checkout2 = () => {
 
           {step === 0 && (
             <Column fillWidth gap="16">
-              <Text variant="heading-strong-s">Shipping address</Text>
+              <Text textVariant="heading-strong-s">Shipping address</Text>
               <Row fillWidth gap="8" m={{ direction: "column" }}>
                 <Input autoComplete="off" id="first-name" placeholder="First name" />
                 <Input autoComplete="off" id="last-name" placeholder="Last name" />
@@ -95,7 +95,7 @@ export const Checkout2 = () => {
                   { label: "Germany", value: "de" },
                 ]}
                 value="United States"
-                onSelect={() => {}}
+                onValueChange={() => {}}
               />
               <Button fillWidth onClick={() => setStep(1)}>
                 Continue to payment
@@ -105,7 +105,7 @@ export const Checkout2 = () => {
 
           {step === 1 && (
             <Column fillWidth gap="16">
-              <Text variant="heading-strong-s">Payment method</Text>
+              <Text textVariant="heading-strong-s">Payment method</Text>
               <Input autoComplete="off" id="email-checkout" placeholder="Email" />
               <Column fillWidth gap="-1">
                 <Input
@@ -143,7 +143,7 @@ export const Checkout2 = () => {
 
           {step === 2 && (
             <Column fillWidth gap="16">
-              <Text variant="heading-strong-s">Review your order</Text>
+              <Text textVariant="heading-strong-s">Review your order</Text>
               <Column fillWidth gap="12" padding="16" radius="l" border background="surface">
                 {cartItems.map((item) => (
                   <Row key={item.name} fillWidth gap="12" vertical="center">
@@ -151,19 +151,19 @@ export const Checkout2 = () => {
                       src={item.image}
                       alt={item.name}
                       aspectRatio="1/1"
-                      minWidth={5}
-                      maxWidth={5}
+                      minWidth="5rem"
+                      maxWidth="5rem"
                       radius="m"
                       border
                       sizes="80px"
                     />
                     <Column fillWidth gap="2">
-                      <Text variant="label-default-s">{item.name}</Text>
-                      <Text variant="body-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="label-default-s">{item.name}</Text>
+                      <Text textVariant="body-default-xs" onBackground="neutral-weak">
                         {item.variant}
                       </Text>
                     </Column>
-                    <Text variant="body-default-s">${item.price.toFixed(2)}</Text>
+                    <Text textVariant="body-default-s">${item.price.toFixed(2)}</Text>
                   </Row>
                 ))}
               </Column>
@@ -191,11 +191,11 @@ export const Checkout2 = () => {
           top="64"
           fitHeight
         >
-          <Text variant="heading-strong-s">Order summary</Text>
+          <Text textVariant="heading-strong-s">Order summary</Text>
           <Column fillWidth gap="12">
             {cartItems.map((item) => (
               <Row key={item.name} fillWidth gap="12" vertical="center">
-                <Row minWidth={5} minHeight={5}>
+                <Row minWidth="5rem" minHeight="5rem">
                   <Media
                     src={item.image}
                     alt={item.name}
@@ -221,12 +221,12 @@ export const Checkout2 = () => {
                   </Row>
                 </Row>
                 <Column fillWidth gap="2">
-                  <Text variant="label-default-s">{item.name}</Text>
-                  <Text variant="body-default-xs" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s">{item.name}</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
                     {item.variant}
                   </Text>
                 </Column>
-                <Text variant="body-default-s">${(item.price * item.qty).toFixed(2)}</Text>
+                <Text textVariant="body-default-s">${(item.price * item.qty).toFixed(2)}</Text>
               </Row>
             ))}
           </Column>

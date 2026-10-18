@@ -1,5 +1,4 @@
 import {
-  Arrow,
   Background,
   Column,
   Heading,
@@ -64,7 +63,7 @@ interface PlanCardProps {
   plan: (typeof plans)[keyof typeof plans];
 }
 
-const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
+const PlanCard: React.FC<PlanCardProps> = ({ plan }) => {
   const borderColor = `${plan.color}-medium` as const;
   const textColor = `${plan.color}-strong` as const;
   const gradientColor = `${plan.color}-background-strong` as const;
@@ -82,10 +81,10 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
                 mask={{
                   x: 0,
                   y: 0,
-                  radius: 75,
+                  radius: "75vh",
                 }}
                 gradient={{
-                  x: 75,
+                  x: "75%",
                   y: 0,
                   opacity: 100,
                   display: true,
@@ -96,17 +95,17 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
             )}
             <Column fill gap="8">
               <Column fillWidth gap="8" marginBottom="24">
-                <Heading as="h3" align="left" variant="heading-strong-l">
+                <Heading as="h3" align="left" textVariant="heading-strong-l">
                   {plan.name}
                 </Heading>
-                <Text align="left" onBackground={textColor} variant="display-default-xs">
+                <Text align="left" onBackground={textColor} textVariant="display-default-xs">
                   {plan.price.original !== plan.price.discounted && (
                     <Text onBackground="neutral-weak" style={{ textDecoration: "line-through" }}>
                       ${plan.price.original}
                     </Text>
                   )}{" "}
                   ${plan.price.discounted}{" "}
-                  <Text onBackground="neutral-strong" variant="body-default-s">
+                  <Text onBackground="neutral-strong" textVariant="body-default-s">
                     / year
                   </Text>
                 </Text>
@@ -115,7 +114,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
                 {plan.features.map((feature, index) => (
                   <Row key={index} vertical="center" gap="8">
                     <Icon name="check" size="s" onBackground="neutral-medium" />
-                    <Text align="left" onBackground="neutral-medium" variant="body-default-m">
+                    <Text align="left" onBackground="neutral-medium" textVariant="body-default-m">
                       {feature}
                     </Text>
                   </Row>
@@ -135,7 +134,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ id, plan }) => {
           >
             <Row vertical="center">
               Create your account and get started
-              <Arrow trigger={`#${id}`} />
+              <Icon name="chevronRight" size="xs" marginLeft="4" />
             </Row>
           </Row>
         </Column>

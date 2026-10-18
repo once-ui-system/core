@@ -1,12 +1,35 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { type FadeState, fadingLetters } from "../internal/FadingLetters";
 import { Text } from "./Text";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "children"> {
   words: string | string[];
-  speed?: number;
+  /**
+   * `"type"` (the default) types each word out and erases it. `"fade"` (2.x's
+   * FadingLettersFx) fades the letters of `words` in one after another, as
+   * `state` says, and holds them.
+   */
+  mode?: "type" | "fade";
+  /**
+   * Fade mode: `"entering"` (the default) fades the letters in, `"visible"`
+   * shows them still, `"exiting"` fades them out. Was FadingLettersFx's
+   * `animationState`.
+   */
+  state?: FadeState;
+  /**
+   * Milliseconds each character takes to type (higher is slower); erasing
+   * runs at half of it. Was `speed` until 3.0. In fade mode, the gap between
+   * two letters' entries, default 40.
+   */
+  charDuration?: number;
+  /**
+   * Milliseconds before typing starts; in fade mode, before the first letter
+   * enters (FadingLettersFx's `messageIdx` was `delay={messageIdx * 2500}`).
+   */
   delay?: number;
+  /** Milliseconds a finished word stays before it is erased. */
   hold?: number;
   trigger?: "instant" | "custom";
   onTrigger?: (triggerFn: () => void) => void;
@@ -14,11 +37,43 @@ export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "ch
   children?: React.ReactNode;
 }
 
-const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
+const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>((props, ref) =>
+  props.mode === "fade" ? <FadeFx {...props} ref={ref} /> : <TypingFx {...props} ref={ref} />,
+);
+
+const FadeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
   (
     {
       words,
-      speed = 100,
+      mode: _mode,
+      state = "entering",
+      charDuration = 40,
+      delay = 0,
+      hold: _hold,
+      trigger: _trigger,
+      onTrigger: _onTrigger,
+      loop: _loop,
+      children,
+      ...text
+    },
+    ref,
+  ) => (
+    <Text {...text} ref={ref} style={{ display: "contents", ...text.style }}>
+      {children}
+      {fadingLetters(Array.isArray(words) ? words.join(" ") : words, state, delay, charDuration)}
+    </Text>
+  ),
+);
+
+FadeFx.displayName = "FadeFx";
+
+const TypingFx = forwardRef<HTMLSpanElement, TypeFxProps>(
+  (
+    {
+      words,
+      mode: _mode,
+      state: _state,
+      charDuration = 100,
       delay = 0,
       hold = 2000,
       trigger = "instant",
@@ -78,7 +133,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           for (let i = 0; i <= currentWord.length; i++) {
             if (!active) return;
             setDisplayText(currentWord.substring(0, i));
-            await sleep(speed);
+            await sleep(charDuration);
           }
 
           if (isSingleWord) {
@@ -92,7 +147,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           for (let i = currentWord.length; i >= 0; i--) {
             if (!active) return;
             setDisplayText(currentWord.substring(0, i));
-            await sleep(speed / 2);
+            await sleep(charDuration / 2);
           }
 
           currentIndex = (currentIndex + 1) % wordsArray.length;
@@ -100,7 +155,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
           if (!loop && currentIndex === 0) return;
 
           if (!active) return;
-          await sleep(speed);
+          await sleep(charDuration);
         }
       };
 
@@ -113,7 +168,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
         }
         if (pendingResolve) pendingResolve();
       };
-    }, [triggered, wordsHash, speed, delay, hold, loop]);
+    }, [triggered, wordsHash, charDuration, delay, hold, loop]);
 
     return (
       <Text {...text} ref={ref}>
@@ -125,6 +180,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
   },
 );
 
+TypingFx.displayName = "TypingFx";
 TypeFx.displayName = "TypeFx";
 
 export { TypeFx };

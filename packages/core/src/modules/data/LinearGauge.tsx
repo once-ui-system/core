@@ -5,11 +5,18 @@ import { Column } from "../../components/Column";
 import { Flex } from "../../components/Flex";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
+import { cssColor } from "../../internal/cssColor";
 import { ColorValue } from "../../types";
 import styles from "./Gauge.module.css";
 
 export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
+  /**
+   * The drawing's width in px. The gauge scales to fit its container, so this
+   * sets its proportions; it is px like every other size, but it is not the
+   * box's `width` (put `maxWidth` on the gauge for that).
+   */
   width?: number;
+  /** The drawing's height in px; see `width`. */
   height?: number;
   line?: {
     count?: number;
@@ -18,30 +25,40 @@ export interface LinearGaugeProps extends React.ComponentProps<typeof Flex> {
   };
   value?: number;
   labels?: "none" | "percentage" | string[];
-  hue?: "success" | "neutral" | "danger" | [number, number];
+  /**
+   * Colours the active lines on a hue ramp for the tone: `success` blue to
+   * green, `warning` and `neutral` orange to yellow, `danger` red to orange.
+   * 2.x called this `hue`.
+   */
+  tone?: "success" | "neutral" | "warning" | "danger";
+  /** A hue ramp of your own, from start to end (0–360). Wins over `tone`. */
+  hueRange?: [number, number];
   color?: ColorValue;
 }
 
-const resolveHueRange = (hue: LinearGaugeProps["hue"]): [number, number] => {
-  if (hue && typeof hue !== "string") {
-    const [start = 200, end = 120] = hue;
+const resolveHueRange = (
+  tone?: LinearGaugeProps["tone"],
+  hueRange?: [number, number],
+): [number, number] => {
+  if (hueRange) {
+    const [start = 200, end = 120] = hueRange;
     return [start, end];
   }
 
-  if (hue === "danger") return [0, 30];
-  if (hue === "neutral") return [30, 60];
-  if (hue === "success") return [200, 120];
+  if (tone === "danger") return [0, 30];
+  if (tone === "neutral" || tone === "warning") return [30, 60];
+  if (tone === "success") return [200, 120];
 
   return [200, 120];
 };
-
 export const LinearGauge = ({
   width = 400,
   height = 80,
   line,
   value = 50,
   labels = "none",
-  hue,
+  tone,
+  hueRange,
   color = "contrast",
   ...flex
 }: LinearGaugeProps) => {
@@ -76,8 +93,8 @@ export const LinearGauge = ({
     };
   }, [value, lineCount, activeLines]);
 
-  const hasHue = hue !== undefined;
-  const [startHue, endHue] = resolveHueRange(hue);
+  const hasHue = tone !== undefined || hueRange !== undefined;
+  const [startHue, endHue] = resolveHueRange(tone, hueRange);
 
   const renderLines = () => {
     const lines = [];
@@ -106,7 +123,7 @@ export const LinearGauge = ({
               isActive && hasHue
                 ? `hsl(${finalHue}, 100%, 50%)`
                 : isActive && color
-                  ? `var(--data-${color})`
+                  ? cssColor(color, "data-")
                   : "var(--neutral-alpha-medium)",
           }}
         />,

@@ -2,7 +2,7 @@ import {
   Avatar,
   Card,
   Column,
-  DropdownWrapper,
+  Dropdown,
   Heading,
   IconButton,
   Media,
@@ -13,9 +13,9 @@ import { chatMembers } from "./chat1content";
 
 export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {
   return (
-    <Column fillHeight maxWidth={18} background="surface" gap="20" {...flex}>
+    <Column fillHeight maxWidth="18rem" background="surface" gap="20" {...flex}>
       <Row paddingX="24" paddingTop="12">
-        <Heading as="h2" variant="label-strong-m">
+        <Heading as="h2" textVariant="label-strong-m">
           Members
         </Heading>
       </Row>
@@ -35,7 +35,7 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
               <Text>{group.members.length}</Text>
             </Row>
             {group.members.map((member, index) => (
-              <DropdownWrapper
+              <Dropdown
                 fillWidth
                 key={index}
                 placement="left-start"
@@ -53,22 +53,20 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                   >
                     <Avatar
                       src={member.avatar}
-                      statusIndicator={{ color: member.statusColor as "green" | "gray" }}
+                      statusIndicator={{ scheme: member.statusColor as "green" | "gray" }}
                     />
                     <Column fillWidth gap="2">
-                      <Text variant="label-strong-s" truncate>
+                      <Text textVariant="label-strong-s" truncate>
                         {member.name}
                       </Text>
                       {member.status && (
-                        <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+                        <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
                           {member.status}
                         </Text>
                       )}
                     </Column>
                   </Card>
-                }
-                dropdown={
-                  <Column maxWidth={20} fitHeight tabIndex={-1}>
+                }><Column maxWidth="20rem" fitHeight tabIndex={-1}>
                     <Row fillWidth>
                       <Media src="/images/backgrounds/1.jpg" sizes="320px" aspectRatio="2/1" />
                       <Row position="absolute" right="12" top="12" themeBorder="rounded" gap="8">
@@ -80,8 +78,8 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                         left="12"
                         bottom="0"
                         src={member.avatar}
-                        size={6}
-                        statusIndicator={{ color: member.statusColor as "green" | "gray" }}
+                        size="6rem"
+                        statusIndicator={{ scheme: member.statusColor as "green" | "gray" }}
                         style={{ transform: "translateY(50%)" }}
                         borderWidth={4}
                         border="surface"
@@ -89,22 +87,20 @@ export const Sidebar5: React.FC<React.ComponentProps<typeof Column>> = ({ ...fle
                     </Row>
                     <Column fillWidth padding="20" marginTop="40" gap="12">
                       <Column fillWidth gap="2">
-                        <Text variant="heading-strong-s">{member.name}</Text>
-                        <Text variant="body-default-xs" onBackground="neutral-weak">
+                        <Text textVariant="heading-strong-s">{member.name}</Text>
+                        <Text textVariant="body-default-xs" onBackground="neutral-weak">
                           {member.status}
                         </Text>
                       </Column>
                       {member.bio && (
                         <Row fillWidth>
-                          <Text variant="body-default-xs" onBackground="neutral-weak">
+                          <Text textVariant="body-default-xs" onBackground="neutral-weak">
                             {member.bio}
                           </Text>
                         </Row>
                       )}
                     </Column>
-                  </Column>
-                }
-              />
+                  </Column></Dropdown>
             ))}
           </Column>
         ))}

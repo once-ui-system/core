@@ -47,8 +47,8 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
     <Column fillWidth borderTop>
       <Row fillWidth vertical="center" gap="12" paddingY="16" paddingX="24">
         <Avatar src={user.avatar} />
-        <Text variant="label-default-s">{user.name}</Text>
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="label-default-s">{user.name}</Text>
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           12h ago
         </Text>
       </Row>
@@ -67,8 +67,8 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
                   src={item}
                   radius="l"
                   border
-                  minWidth={28}
-                  maxWidth={28}
+                  minWidth="28rem"
+                  maxWidth="28rem"
                   aspectRatio={aspectRatio}
                   sizes="(max-width: 768px) 100vw, 560px"
                 />
@@ -94,7 +94,7 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
               marginRight="8"
               effect="smooth"
               value={reactionCount}
-              variant="body-default-s"
+              textVariant="body-default-s"
               style={{
                 color: hasReacted
                   ? "var(--danger-solid-strong)"
@@ -112,7 +112,7 @@ export const MediaPost1 = ({ user, media, content, aspectRatio = "16/9" }: Media
               marginRight="8"
               effect="smooth"
               value={shareCount}
-              variant="body-default-s"
+              textVariant="body-default-s"
               onBackground={hasShared ? "neutral-strong" : "neutral-weak"}
             />
             <Icon size="s" name="refresh" />

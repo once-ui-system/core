@@ -16,9 +16,7 @@
     "Input",
     "Select",
     "Setting",
-    "SettingGroup",
-    "SettingAxes",
-    "InfoTip",
+    "Tooltip",
     "Switch",
     "Slider",
     "NumberInput",
@@ -43,14 +41,13 @@
     "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
-    "Column.form",
     "Checkbox.checked"
   ],
   "quality": {
     "sectionNav": "Tabs orientation=\"vertical\" with s={{ direction: \"column\" }} (and the TabList s={{ direction: \"row\" }}), one TabPanel per section, keepMounted on a form panel. Sections that are routes use NavItem href instead",
     "settingRow": "One Setting per control — label and description left, control right. A list of Settings needs no surface around it",
-    "grouping": "SettingGroup with a header control and open={enabled}, so sub-settings sit inside its box; SettingAxes for X/Y pairs",
-    "explainers": "info on a Setting (an InfoTip) instead of a description line that is only needed once",
+    "grouping": "Setting with a header control and open={enabled}, so sub-settings sit inside its box; Setting axes={…} for X/Y pairs",
+    "explainers": "info on a Setting (a Tooltip with content and no children: an info icon) instead of a description line that is only needed once",
     "forms": "Profile fields in a Form (columns per breakpoint), not hand-spaced Columns",
     "surfaceRecipe": "background=\"surface\" border radius=\"l\" padding=\"24\"",
     "dangerZone": "border=\"danger-alpha-medium\" on danger actions only"

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, Flex, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Card, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, ParticleFx, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ToggleButton, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, Flex, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, RevealFx, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, TagInput, Avatar, Background, Card, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Scroller, ParticleFx, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ToggleButton, ScrollToTop, CompareImage, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, useToast } from "@once-ui-system/core";
 import { BarChart, LineChart } from "@once-ui-system/core/data";
 
 interface ComponentDemo {
@@ -32,7 +32,7 @@ function DemoCard({
       background="surface"
     >
       <Column gap="s" fillWidth>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           {name}
         </Text>
         <Flex center minHeight="8" fillWidth>
@@ -52,7 +52,7 @@ export default function ComponentsCheckOld() {
 
   const handleAddToast = () => {
     addToast({
-      variant: "success",
+      tone: "success",
       message: "This is a toast!",
     });
   };
@@ -124,9 +124,9 @@ export default function ComponentsCheckOld() {
           name: "Heading",
           element: (
             <Column gap="s" fillWidth>
-              <Heading variant="display-default-l">Display</Heading>
-              <Heading variant="heading-strong-l">Heading</Heading>
-              <Heading variant="heading-strong-m">Subheading</Heading>
+              <Heading textVariant="display-default-l">Display</Heading>
+              <Heading textVariant="heading-strong-l">Heading</Heading>
+              <Heading textVariant="heading-strong-m">Subheading</Heading>
             </Column>
           ),
         },
@@ -134,9 +134,9 @@ export default function ComponentsCheckOld() {
           name: "Text",
           element: (
             <Column gap="s" fillWidth>
-              <Text variant="body-default-l">Body large</Text>
-              <Text variant="body-default-m">Body medium</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant="body-default-l">Body large</Text>
+              <Text textVariant="body-default-m">Body medium</Text>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 Body small muted
               </Text>
             </Column>
@@ -172,7 +172,7 @@ export default function ComponentsCheckOld() {
               <Button variant="primary">Primary</Button>
               <Button variant="secondary">Secondary</Button>
               <Button variant="tertiary">Tertiary</Button>
-              <Button variant="danger">Danger</Button>
+              <Button tone="danger">Danger</Button>
             </Row>
           ),
         },
@@ -217,10 +217,10 @@ export default function ComponentsCheckOld() {
         {
           name: "PasswordInput",
           element: (
-            <PasswordInput
+            <Input
               id="demo-password"
               label="Password"
-              placeholder="Enter password"
+              placeholder="Enter password" type="password"
             />
           ),
         },
@@ -233,7 +233,7 @@ export default function ComponentsCheckOld() {
         {
           name: "ColorInput",
           element: (
-            <ColorInput id="demo-color" value="#3b82f6" onChange={() => {}} />
+            <ColorInput id="demo-color" value="#3b82f6" onValueChange={() => {}} />
           ),
         },
         { name: "OTPInput", element: <OTPInput length={4} /> },
@@ -246,7 +246,7 @@ export default function ComponentsCheckOld() {
           element: (
             <Switch
               checked={switchOn}
-              onToggle={() => setSwitchOn(!switchOn)}
+              onCheckedChange={() => setSwitchOn(!switchOn)}
               label="Dark mode"
             />
           ),
@@ -272,7 +272,7 @@ export default function ComponentsCheckOld() {
             <TagInput
               id="demo-tags"
               value={["react", "typescript"]}
-              onChange={() => {}}
+              onValueChange={() => {}}
             />
           ),
         },
@@ -281,7 +281,7 @@ export default function ComponentsCheckOld() {
           element: (
             <SegmentedControl
               value={segmentValue}
-              onChange={setSegmentValue}
+              onValueChange={setSegmentValue}
               buttons={[
                 { value: "one", label: "One" },
                 { value: "two", label: "Two" },
@@ -301,19 +301,11 @@ export default function ComponentsCheckOld() {
         {
           name: "Table",
           element: (
-            <Table
-              data={{
-                headers: [
-                  { content: "Name", key: "name" },
-                  { content: "Role", key: "role" },
-                  { content: "Status", key: "status" },
-                ],
-                rows: [
+            <Table columns={[{ header: "Name", key: "name" }, { header: "Role", key: "role" }, { header: "Status", key: "status" }]} rows={[
                   ["Alice", "Engineer", "Active"],
                   ["Bob", "Designer", "Away"],
                   ["Carol", "Manager", "Active"],
-                ],
-              }}
+                ]}
             />
           ),
         },
@@ -343,9 +335,9 @@ export default function ComponentsCheckOld() {
           name: "Badge / Tag / Chip",
           element: (
             <Row gap="s" wrap vertical="center">
-              <Badge>Badge</Badge>
+              <Tag variant="announce">Badge</Tag>
               <Tag label="Tag">Tag</Tag>
-              <Chip label="Chip">Chip</Chip>
+              <Tag selected label="Chip">Chip</Tag>
             </Row>
           ),
         },
@@ -483,16 +475,16 @@ export default function ComponentsCheckOld() {
           element: (
             <Row gap="m" vertical="center">
               <Row gap="xs" vertical="center">
-                <StatusIndicator color="green" />
-                <Text variant="label-default-s">Online</Text>
+                <StatusIndicator scheme="green" />
+                <Text textVariant="label-default-s">Online</Text>
               </Row>
               <Row gap="xs" vertical="center">
-                <StatusIndicator color="yellow" />
-                <Text variant="label-default-s">Away</Text>
+                <StatusIndicator scheme="yellow" />
+                <Text textVariant="label-default-s">Away</Text>
               </Row>
               <Row gap="xs" vertical="center">
-                <StatusIndicator color="red" />
-                <Text variant="label-default-s">Offline</Text>
+                <StatusIndicator scheme="red" />
+                <Text textVariant="label-default-s">Offline</Text>
               </Row>
             </Row>
           ),
@@ -564,20 +556,16 @@ export default function ComponentsCheckOld() {
         {
           name: "DropdownWrapper",
           element: (
-            <DropdownWrapper
+            <Dropdown
               trigger={
                 <Button variant="secondary" suffixIcon="chevronDown">
                   Options
                 </Button>
-              }
-              dropdown={
-                <Column padding="xs">
+              }><Column padding="xs">
                   <Option value="edit">Edit</Option>
                   <Option value="duplicate">Duplicate</Option>
                   <Option value="delete">Delete</Option>
-                </Column>
-              }
-            />
+                </Column></Dropdown>
           ),
         },
         {
@@ -595,19 +583,13 @@ export default function ComponentsCheckOld() {
         {
           name: "ContextMenu",
           element: (
-            <ContextMenu
-              dropdown={
-                <Column padding="xs">
+            <Dropdown openOn="contextmenu" trigger={<Button variant="secondary">Right-click me</Button>}><Column padding="xs">
                   <Option value="copy">Copy</Option>
                   <Option value="paste">Paste</Option>
-                </Column>
-              }
-            >
-              <Button variant="secondary">Right-click me</Button>
-            </ContextMenu>
+                </Column></Dropdown>
           ),
         },
-        { name: "UserMenu", element: <UserMenu /> },
+        { name: "UserMenu", element: <User dropdown={null} /> },
         {
           name: "SmartLink",
           element: <SmartLink href="/">Smart Link to home</SmartLink>,
@@ -655,10 +637,6 @@ export default function ComponentsCheckOld() {
             />
           ),
         },
-        {
-          name: "InteractiveDetails",
-          element: <InteractiveDetails onClick={() => {}} />,
-        },
       ],
     },
     {
@@ -695,21 +673,17 @@ export default function ComponentsCheckOld() {
         {
           name: "Pulse",
           element: (
-            <Pulse>
+            <StatusIndicator pulse>
               <Text>Pulse Effect</Text>
-            </Pulse>
+            </StatusIndicator>
           ),
         },
         {
           name: "Hover",
           element: (
-            <Hover
+            <HoverCard placement="cover"
               trigger={<Text>Test</Text>}
-              overlay={<Column background="overlay"></Column>}
-              onClick={() => {}}
-            >
-              <Text>Hover Effect</Text>
-            </Hover>
+              onClick={() => {}}><Column background="overlay"></Column></HoverCard>
           ),
         },
         {
@@ -775,10 +749,10 @@ export default function ComponentsCheckOld() {
         {
           name: "FadingLettersFx",
           element: (
-            <FadingLettersFx
-              text="Fading Letters Effect"
-              animationState="entering"
-              variant="heading-strong-m"
+            <TypeFx mode="fade"
+              words="Fading Letters Effect"
+              state="entering"
+              textVariant="heading-strong-m"
             />
           ),
         },
@@ -803,7 +777,7 @@ export default function ComponentsCheckOld() {
         {
           name: "DateRangeInput",
           element: (
-            <DateRangeInput
+            <DateInput range
               id="demo-date-range"
               startLabel="Start"
               endLabel="End"
@@ -831,13 +805,12 @@ export default function ComponentsCheckOld() {
           ),
         },
         { name: "Line", element: <Line /> },
-        { name: "Arrow", element: <Arrow trigger="hover here" /> },
         {
           name: "Kbd",
           element: (
             <Row gap="xs" vertical="center">
               <Kbd>Ctrl</Kbd>
-              <Text variant="label-default-s">+</Text>
+              <Text textVariant="label-default-s">+</Text>
               <Kbd>K</Kbd>
             </Row>
           ),
@@ -863,17 +836,7 @@ export default function ComponentsCheckOld() {
         {
           name: "CursorCard",
           element: (
-            <CursorCard>
-              <Card
-                padding="l"
-                radius="l"
-                background="neutral-medium"
-                center
-                fillWidth
-              >
-                <Text>Move cursor over me</Text>
-              </Card>
-            </CursorCard>
+            <HoverCard placement="cursor">{null}</HoverCard>
           ),
         },
         {
@@ -912,7 +875,7 @@ export default function ComponentsCheckOld() {
         {
           name: "EmojiPickerDropdown",
           element: (
-            <EmojiPickerDropdown
+            <EmojiPicker
               trigger={<Button variant="secondary">Pick Emoji</Button>}
               onSelect={() => {}}
             />
@@ -958,7 +921,7 @@ export default function ComponentsCheckOld() {
                     background="neutral-medium"
                     radius="m"
                   >
-                    <Text variant="label-default-s">Item {n}</Text>
+                    <Text textVariant="label-default-s">Item {n}</Text>
                   </Flex>
                 ))}
               </Row>
@@ -968,7 +931,7 @@ export default function ComponentsCheckOld() {
         {
           name: "AutoScroll",
           element: (
-            <AutoScroll>
+            <Scroller auto>
               <Row gap="s">
                 {["Once", "UI", "Design", "System", "Components"].map(
                   (word) => (
@@ -980,7 +943,7 @@ export default function ComponentsCheckOld() {
                       radius="full"
                     >
                       <Text
-                        variant="label-default-s"
+                        textVariant="label-default-s"
                         onBackground="brand-strong"
                       >
                         {word}
@@ -989,13 +952,13 @@ export default function ComponentsCheckOld() {
                   ),
                 )}
               </Row>
-            </AutoScroll>
+            </Scroller>
           ),
         },
         {
           name: "Swiper",
           element: (
-            <Swiper
+            <Carousel mode="snap"
               aspectRatio="16/9"
               items={[
                 {
@@ -1020,7 +983,7 @@ export default function ComponentsCheckOld() {
         {
           name: "MasonryGrid",
           element: (
-            <MasonryGrid columns={3}>
+            <Grid masonry columns={3}>
               {[4, 8, 6, 5, 7, 4].map((h, i) => (
                 <Flex
                   key={i}
@@ -1030,10 +993,10 @@ export default function ComponentsCheckOld() {
                   style={{ height: `${h}rem` }}
                   center
                 >
-                  <Text variant="label-default-s">{i + 1}</Text>
+                  <Text textVariant="label-default-s">{i + 1}</Text>
                 </Flex>
               ))}
-            </MasonryGrid>
+            </Grid>
           ),
         },
         {
@@ -1116,7 +1079,7 @@ export default function ComponentsCheckOld() {
         }}
       >
         <Text
-          variant="label-default-s"
+          textVariant="label-default-s"
           onBackground="neutral-weak"
           marginBottom="s"
         >
@@ -1131,7 +1094,7 @@ export default function ComponentsCheckOld() {
           onClick={() => setActiveCategory(null)}
         >
           <Text
-            variant="label-default-s"
+            textVariant="label-default-s"
             onBackground={
               activeCategory === null ? "neutral-strong" : "neutral-weak"
             }
@@ -1155,7 +1118,7 @@ export default function ComponentsCheckOld() {
             }}
           >
             <Text
-              variant="label-default-s"
+              textVariant="label-default-s"
               onBackground={
                 activeCategory === cat.id ? "neutral-strong" : "neutral-weak"
               }
@@ -1170,8 +1133,8 @@ export default function ComponentsCheckOld() {
         {filteredCategories.map((category) => (
           <Column key={category.id} id={category.id} gap="m" fillWidth>
             <Column gap="xs">
-              <Heading variant="heading-strong-l">{category.name}</Heading>
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Heading textVariant="heading-strong-l">{category.name}</Heading>
+              <Text textVariant="body-default-s" onBackground="neutral-weak">
                 {category.description}
               </Text>
             </Column>

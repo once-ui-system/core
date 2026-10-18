@@ -29,16 +29,16 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row fillWidth borderBottom="neutral-medium">
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
+        <Column maxWidth="s" minWidth="24rem" flex={3} horizontal="center">
           {(title || description) && (
             <Column fillWidth padding="32">
               {title && (
-                <Heading as="h2" variant="heading-strong-l" align="center" marginBottom="8">
+                <Heading as="h2" textVariant="heading-strong-l" align="center" marginBottom="8">
                   {title}
                 </Heading>
               )}
               {description && (
-                <Text align="center" onBackground="neutral-medium" variant="body-default-s">
+                <Text align="center" onBackground="neutral-medium" textVariant="body-default-s">
                   {description}
                 </Text>
               )}
@@ -49,11 +49,11 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row horizontal="center" borderBottom="neutral-medium">
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} fitHeight background="surface">
+        <Column maxWidth="s" minWidth="24rem" flex={3} fitHeight background="surface">
           {content.map((item, index) => (
             <React.Fragment key={index}>
-              <Accordion title={<Text variant="body-default-s">{item.title}</Text>}>
-                <Text variant="body-default-s" onBackground="neutral-medium">
+              <Accordion title={<Text textVariant="body-default-s">{item.title}</Text>}>
+                <Text textVariant="body-default-s" onBackground="neutral-medium">
                   {item.content}
                 </Text>
               </Accordion>
@@ -65,12 +65,12 @@ export const Faq2: React.FC<Faq2Props> = ({ title, description, content, ...flex
       </Row>
       <Row fillWidth>
         <Row borderRight="neutral-medium" flex={1} />
-        <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
+        <Column maxWidth="s" minWidth="24rem" flex={3} horizontal="center">
           <Row padding="32" fillWidth horizontal="center">
             <Text
               align="center"
               wrap="balance"
-              variant="body-default-s"
+              textVariant="body-default-s"
               onBackground="neutral-medium"
             >
               Got more questions? Email us at{" "}

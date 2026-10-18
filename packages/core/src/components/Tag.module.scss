@@ -7,4 +7,171 @@
         color: var(--brand-on-background-medium);
         background-clip: padding-box;
     }
+
+    // As 2.x's Badge: a long announcement wraps inside its pill.
+    &.announce {
+        white-space: normal;
+    }
+}
+
+// `effect`: a shine that sweeps across the tag now and then, faster on hover.
+// 2.x drew it on Badge.
+.shine {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        opacity: 0;
+        border-radius: var(--radius-full);
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg,
+            transparent 20%,
+            var(--brand-alpha-medium) 50%,
+            transparent 80%
+        );
+        transform: skewX(-20deg);
+        animation: shineDefault 9s ease-in-out infinite;
+    }
+
+    &:hover {
+        &::before {
+            animation: shineHover 3s ease-in-out infinite;
+        }
+    }
+}
+
+@keyframes shineDefault {
+    0% {
+        left: -100%;
+    }
+    1% {
+        left: -100%;
+        opacity: 1;
+    }
+    15% {
+        left: 100%;
+        opacity: 1;
+    }
+    16% {
+        opacity: 0;
+    }
+    100% {
+        left: -100%;
+    }
+}
+
+@keyframes shineHover {
+    0% {
+        left: -100%;
+    }
+    1% {
+        left: -100%;
+        opacity: 1;
+    }
+    45% {
+        left: 100%;
+        opacity: 1;
+    }
+    46% {
+        opacity: 0;
+    }
+    100% {
+        left: -100%;
+    }
+}
+
+// A Tag with `selected`, `onClick` or `onRemove` is a toggle (2.x's Chip).
+// Selected, it draws in its tone (brand unless one is given); unselected, in
+// neutral.
+@mixin tone($tone) {
+    --tag-selected: var(--#{$tone}-alpha-medium);
+    --tag-selected-active: var(--#{$tone}-alpha-weak);
+    --tag-on-selected: var(--#{$tone}-on-background-medium);
+    --tag-on-selected-active: var(--#{$tone}-on-background-weak);
+}
+
+// Written out, not generated, so every class is a literal in the source.
+.tone-brand {
+    @include tone(brand);
+}
+.tone-accent {
+    @include tone(accent);
+}
+.tone-neutral {
+    @include tone(neutral);
+}
+.tone-info {
+    @include tone(info);
+}
+.tone-success {
+    @include tone(success);
+}
+.tone-warning {
+    @include tone(warning);
+}
+.tone-danger {
+    @include tone(danger);
+}
+
+.toggle {
+    &.selected {
+        background: var(--tag-selected);
+        color: var(--tag-on-selected);
+
+        &:hover,
+        &:focus {
+            background: var(--tag-selected);
+        }
+
+        &:active {
+            background: var(--tag-selected-active);
+            color: var(--tag-on-selected-active);
+        }
+    }
+
+    &.unselected {
+        background: var(--neutral-alpha-weak);
+        color: var(--neutral-on-background-medium);
+
+        &:hover,
+        &:focus {
+            background: var(--neutral-alpha-medium);
+        }
+
+        &:active {
+            background: var(--neutral-alpha-weak);
+            color: var(--neutral-on-background-weak);
+        }
+    }
+
+    &:disabled {
+        background: var(--neutral-solid-weak);
+        cursor: not-allowed;
+    }
+}
+
+// A removable toggle takes focus on its own control, beside the remove
+// button, rather than on the box. The box still looks focused, as it did when
+// it was the control: the same background, and the browser's own focus ring
+// around the whole tag. Rules of their own, so a browser without `:has()`
+// drops only these and keeps the ring on the control itself.
+.toggle.selected:has(> .action:focus) {
+    background: var(--tag-selected);
+}
+
+.toggle.unselected:has(> .action:focus) {
+    background: var(--neutral-alpha-medium);
+}
+
+.toggle:has(> .action:focus-visible) {
+    outline: 1px auto;
+    outline: -webkit-focus-ring-color auto 1px;
+
+    > .action {
+        outline: none;
+    }
 }

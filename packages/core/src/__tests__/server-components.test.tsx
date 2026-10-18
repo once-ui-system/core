@@ -4,7 +4,6 @@ import { dirname, join, relative, resolve } from "node:path";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Avatar } from "../components/Avatar";
-import { Badge } from "../components/Badge";
 import { Banner } from "../components/Banner";
 import { InlineCode } from "../components/InlineCode";
 import { Line } from "../components/Line";
@@ -34,7 +33,6 @@ import { LayoutProvider } from "../contexts/LayoutProvider";
  */
 const SERVER_COMPONENTS = [
   "Avatar",
-  "Badge",
   "Banner",
   "InlineCode",
   "Line",
@@ -119,10 +117,10 @@ describe("components with nothing client-side render as server components", () =
         <InlineCode>code</InlineCode>
         <Skeleton shape="line" />
         <ProgressBar value={40} />
-        <Timeline items={[{ label: "Step one", state: "success" }, { label: "Step two" }]} />
-        <Badge title="New" href="/changelog" />
+        <Timeline items={[{ label: "Step one", tone: "success" }, { label: "Step two" }]} />
+        <Tag variant="announce" label="New" href="/changelog" />
         <Tag label="Live" prefixIcon="check" />
-        <Avatar value="AB" statusIndicator={{ color: "green" }} />
+        <Avatar value="AB" statusIndicator={{ scheme: "green" }} />
         <Avatar loading />
         <User
           name="Ada"

@@ -3,22 +3,24 @@
 import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
+import type { DateRange } from "../../components/DatePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import type { SizeProps } from "../../interfaces";
+import { cssColor } from "../../internal/cssColor";
 import { RadiusSize, schemes } from "../../types";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { LinearGradient } from "./Gradient";
-import { ChartProps, ChartVariant, curveType, SeriesConfig } from "./interfaces";
+import { ChartProps, ChartVariant, curveType, DataPoint, SeriesConfig } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { getDistributedColor } from "./utils/colorDistribution";
 import { formatDate } from "./utils/formatDate";
 
-export interface LineChartProps extends ChartProps {
+export interface LineChartProps<T extends object = DataPoint> extends ChartProps<T> {
   curve?: curveType;
   reverseY?: boolean;
   reverseX?: boolean;
@@ -168,7 +170,7 @@ const LineChart: React.FC<LineChartProps> = ({
     (props: any) => {
       const customPayload = autoSeries.map(({ key, color }, index) => ({
         value: key,
-        color: `var(--data-${color || schemes[index % schemes.length]})`,
+        color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
       }));
 
       return (
@@ -227,7 +229,8 @@ const LineChart: React.FC<LineChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}
@@ -280,7 +283,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   <defs>
                     {autoSeries.map(({ key, color }, index) => {
                       const colorValue = color || schemes[index % schemes.length];
-                      const lineColor = `var(--data-${colorValue})`;
+                      const lineColor = cssColor(colorValue, "data-");
                       return (
                         <LinearGradient
                           key={`gradient-${chartId}-${index}`}
@@ -336,7 +339,7 @@ const LineChart: React.FC<LineChartProps> = ({
                   )}
                   {autoSeries.map(({ key, color }, index) => {
                     const colorValue = color || schemes[index % schemes.length];
-                    const lineColor = `var(--data-${colorValue})`;
+                    const lineColor = cssColor(colorValue, "data-");
                     return (
                       <Area
                         key={key}

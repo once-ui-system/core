@@ -83,14 +83,14 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
             <Column fill gap="40" vertical="center">
               <Row gap="m" vertical="center">
                 <Icon name="discord" />
-                <Text variant="label-default-s">/</Text>
-                <Text variant="label-default-s">Once UI</Text>
+                <Text textVariant="label-default-s">/</Text>
+                <Text textVariant="label-default-s">Once UI</Text>
               </Row>
               <Column gap="8" fillWidth>
-                <Heading as="h2" variant="display-strong-xs">
+                <Heading as="h2" textVariant="display-strong-xs">
                   Design Engineers Club
                 </Heading>
-                <Text onBackground="neutral-medium" variant="heading-default-xs" wrap="balance">
+                <Text onBackground="neutral-medium" textVariant="heading-default-xs" wrap="balance">
                   It's time. The revolution begins.
                 </Text>
               </Column>
@@ -102,7 +102,7 @@ export function DesignEngineersClub1({ children, ...flex }: DesignEngineersClub1
                     pointerEvents: "all",
                   }}
                 >
-                  <Text variant="code-default-s">
+                  <Text textVariant="code-default-s">
                     <LetterFx>Join 1k+ creators</LetterFx>
                   </Text>
                 </Button>

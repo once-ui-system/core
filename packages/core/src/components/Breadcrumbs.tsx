@@ -43,7 +43,7 @@ interface BreadcrumbsProps extends Omit<React.ComponentProps<typeof Row>, "child
  * Separators are drawn but hidden from assistive technology. Links render
  * through SmartLink, so an internal `href` uses the app's Link adapter.
  */
-const Breadcrumbs = forwardRef<HTMLDivElement, BreadcrumbsProps>(
+const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
   (
     {
       items,
@@ -55,7 +55,7 @@ const Breadcrumbs = forwardRef<HTMLDivElement, BreadcrumbsProps>(
     ref,
   ) => {
     const [expanded, setExpanded] = useState(false);
-    const listRef = useRef<HTMLDivElement | null>(null);
+    const listRef = useRef<HTMLOListElement | null>(null);
     const focusAfterExpand = useRef(false);
 
     const limit = maxItems === undefined ? undefined : Math.max(2, Math.floor(maxItems));

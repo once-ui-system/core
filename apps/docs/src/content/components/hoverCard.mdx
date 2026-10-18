@@ -13,8 +13,8 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
 <Feedback
   marginTop="16"
   marginBottom="24"
-  title="Tooltip, InfoTip or HoverCard"
-  description={<><SmartLink href="/components/tooltip">Tooltip</SmartLink> is a short text label on hover or focus, usually set through a component's <InlineCode>tooltip</InlineCode> prop. <SmartLink href="/components/infoTip">InfoTip</SmartLink> is an info icon that explains a label or setting in a sentence or two. <SmartLink href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger. 3.0 plans to consolidate them.</>}
+  title="Tooltip or HoverCard"
+  description={<><SmartLink href="/components/tooltip">Tooltip</SmartLink> is a short text explanation on hover or focus: of its children, or of an info icon when it has none (2.x InfoTip), and the bubble a component's <InlineCode>tooltip</InlineCode> prop shows. <SmartLink href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger, following the pointer (2.x CursorCard) or over the trigger (2.x Hover).</>}
 />
 
 <CodeBlock
@@ -25,17 +25,17 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
       placement="top"
       trigger={<Avatar size="l" src="/images/avatar.jpg" tabIndex={0} />}
     >
-      <Column padding="20" gap="20" radius="l" maxWidth={24} background="page" border href="https://lorant.one">
+      <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border href="https://lorant.one">
         <Row gap="20" fillWidth vertical="center">
-          <Avatar size={3} src="/images/avatar.jpg" />
+          <Avatar size="3rem" src="/images/avatar.jpg" />
           <Column gap="4">
-            <Text variant="heading-strong-m">Lorant One</Text>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="heading-strong-m">Lorant One</Text>
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Design Engineer
             </Text>
           </Column>
         </Row>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           Published 100k+ lines of open-source code. Author of The Dopler Method, The Design Dividend, and Learn anything.
         </Text>
         <Row gap="8" wrap>
@@ -55,17 +55,17 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
     placement="top"
     trigger={<Avatar size="l" src="/images/avatar.jpg" tabIndex={0} />}
 >
-  <Column padding="20" gap="20" radius="l" maxWidth={24} background="page" border href="https://lorant.one">
+  <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border href="https://lorant.one">
     <Row gap="20" fillWidth vertical="center">
-      <Avatar size={3} src="/images/avatar.jpg" />
+      <Avatar size="3rem" src="/images/avatar.jpg" />
       <Column gap="4">
-        <Text variant="heading-strong-m">Lorant One</Text>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="heading-strong-m">Lorant One</Text>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           Design Engineer
         </Text>
       </Column>
     </Row>
-    <Text variant="body-default-s" onBackground="neutral-weak">
+    <Text textVariant="body-default-s" onBackground="neutral-weak">
       Published 100k+ lines of open-source code. Author of The Dopler Method, The Design Dividend, and Learn anything.
     </Text>
     <Row gap="8" wrap>
@@ -80,10 +80,360 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
 />
 
 
+## Cover
+
+`placement="cover"` draws the card over the trigger itself, filling its box, while the pointer or focus is on it: an overlay of actions on a media tile. `delay` and `hideDelay` are milliseconds, `interactive` lets the card take pointer events, `disabled` turns it off, and `touch` decides what touch devices get. It was `Hover` in 2.x, which took the card as `overlay`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+      <HoverCard placement="cover"
+        tabIndex={-1}
+        trigger={
+          <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
+            <Media
+              fillWidth
+              aspectRatio="16 / 9"
+              radius="l"
+              alt="Example"
+              src="/images/docs/once-ui/vibe-coding-light.jpg"
+              sizes="480px"
+            />
+            <Column fillWidth padding="20" gap="8">
+              <Text textVariant="heading-strong-m">Hover over me</Text>
+              <Text onBackground="neutral-weak" textVariant="body-default-s">
+                Move your cursor over this card to see the overlay effect.
+              </Text>
+            </Column>
+          </Card>
+        }><Tag position="absolute" top="24" right="24">
+            New!
+          </Tag></HoverCard>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Hover",
+      code:
+`<HoverCard placement="cover"
+    tabIndex={-1}
+    trigger={
+      <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text textVariant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" textVariant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }><Tag position="absolute" top="24" right="24">
+        New!
+      </Tag></HoverCard>`,
+    }
+  ]}
+/>
+
+### Delay
+
+Add a delay before the overlay appears or disappears with the `delay` and `hideDelay` props.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <HoverCard placement="cover"
+      tabIndex={-1}
+      delay={500}
+      hideDelay={1000}
+      trigger={
+        <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
+          <Media
+            fillWidth
+            aspectRatio="16 / 9"
+            radius="l"
+            alt="Example"
+            src="/images/docs/once-ui/vibe-coding-light.jpg"
+            sizes="480px"
+          />
+          <Column fillWidth padding="20" gap="8">
+            <Text textVariant="heading-strong-m">Hover over me</Text>
+            <Text onBackground="neutral-weak" textVariant="body-default-s">
+              Move your cursor over this card to see the overlay effect.
+            </Text>
+          </Column>
+        </Card>
+      }><Row fill horizontal="center" padding="32">
+          <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: "300%", height: "50%"}} radius="l-8"/>
+          <Row textVariant="heading-strong-m">Read article</Row>
+        </Row></HoverCard>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Delay",
+      code:
+`<HoverCard placement="cover"
+    tabIndex={-1}
+    delay={500}
+    hideDelay={1000}
+    trigger={
+      <Card maxWidth="24rem" padding="8" direction="column" radius="l-8" href="#">
+        <Media
+          fillWidth
+          aspectRatio="16 / 9"
+          radius="l"
+          alt="Example"
+          src="/images/docs/once-ui/vibe-coding-light.jpg"
+          sizes="480px"
+        />
+        <Column fillWidth padding="20" gap="8">
+          <Text textVariant="heading-strong-m">Hover over me</Text>
+          <Text onBackground="neutral-weak" textVariant="body-default-s">
+            Move your cursor over this card to see the overlay effect.
+          </Text>
+        </Column>
+      </Card>
+    }><Row fill horizontal="center" padding="32">
+        <Background top="0" left="0" position="absolute" gradient={{display: true, colorStart: "page-background", y: 0, width: "300%", height: "50%"}} radius="l-8"/>
+        <Row textVariant="heading-strong-m">Read article</Row>
+      </Row></HoverCard>`,
+    }
+  ]}
+/>
+
+### Accessibility
+
+The component supports keyboard navigation. For non-focusable triggers, add `tabIndex={0}` to make the wrapper keyboard-accessible. If your trigger is already focusable (like a Card with `href`), use `tabIndex={-1}` to prevent duplicate focus stops.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <HoverCard placement="cover"
+      trigger={
+        <Card padding="l" direction="column" gap="12" maxWidth="24rem" center align="center" radius="l" tabIndex={0}>
+          <Text textVariant="heading-strong-m">Keyboard accessible</Text>
+          <Text onBackground="neutral-weak" textVariant="body-default-s">
+            Tab to this card to see the overlay
+          </Text>
+        </Card>
+      }><Column fill padding="l" gap="12" background="surface" border="neutral-medium" center align="center" radius="l">
+          <Text textVariant="heading-strong-l">
+            Focused!
+          </Text>
+          <Text onBackground="neutral-weak" textVariant="body-default-s">
+            Showing an overlay
+          </Text>
+        </Column></HoverCard>
+  }
+  codes={[
+    {
+      language: "tsx",
+      label: "Accessibility",
+      code:
+`<HoverCard placement="cover"
+    trigger={
+      <Card padding="l" direction="column" gap="12" maxWidth="24rem" center align="center" radius="l" tabIndex={0}>
+        <Text textVariant="heading-strong-m">Keyboard accessible</Text>
+        <Text onBackground="neutral-weak" textVariant="body-default-s">
+          Tab to this card to see the overlay
+        </Text>
+      </Card>
+    }><Column fill padding="l" gap="12" background="surface" border="neutral-medium" center align="center" radius="l">
+        <Text textVariant="heading-strong-l">
+          Focused!
+        </Text>
+        <Text onBackground="neutral-weak" textVariant="body-default-s">
+          Showing an overlay
+        </Text>
+      </Column></HoverCard>`,
+    }
+  ]}
+/>
+
+By default, the hover effect is disabled on touch devices. You can set `touch="enable"` to allow hover interactions, or `touch="display"` to always show the overlay on touch devices.
+
+### Interactive
+
+By default, the overlay is not interactive and click events are passed through to the trigger. You can set `interactive` to make the overlay interactive.
+
+
+## Cursor
+
+`placement="cursor"` makes the card follow the pointer while it is over the trigger, in a portal; `cursorPlacement` puts it on a side of the pointer (`"bottom-left"` by default). It was `CursorCard` in 2.x, which took the card as `overlay` and its side as `placement`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Flex fillWidth horizontal="center" padding="24" style={{position: "relative", zIndex: 999}}>
+      <HoverCard placement="cursor"
+        cursorPlacement="bottom-right"
+        trigger={
+          <Button weight="default" variant="secondary">
+            See details
+          </Button>
+        }><Card maxWidth="24rem" radius="l-4" direction="column" border="neutral-alpha-medium">
+            <Row fillWidth paddingX="20" paddingY="12" gap="8" vertical="center">
+              <Avatar size="xs" src="/images/avatar.jpg"/>
+              <Text textVariant="label-default-s">Lorant One</Text>
+            </Row>
+            <Media
+              border
+              sizes="400px"
+              fillWidth
+              aspectRatio="4 / 3"
+              radius="l"
+              alt="Proxima b"
+              src="/images/docs/once-ui/vibe-coding-light.jpg"
+            />
+            <Column fillWidth paddingX="20" paddingY="24" gap="8">
+              <Text textVariant="body-default-xl">Proxima b</Text>
+              <Text onBackground="neutral-weak" textVariant="body-default-s">
+                A planet so cruel on the surface, but once you explore what's underneath, you'll question
+                everything you know. Yet, you vibe with it.
+              </Text>
+            </Column>
+            <Line background="neutral-alpha-medium" />
+            <Row
+              paddingX="20"
+              paddingY="12"
+              gap="8"
+              vertical="center"
+              textVariant="label-default-s"
+              onBackground="neutral-medium"
+            >
+              <Icon name="like" size="s" onBackground="neutral-strong" />
+              34
+              <Icon
+                name="chat"
+                size="s"
+                onBackground="neutral-strong"
+                marginLeft="24"
+              />
+              5
+            </Row>
+          </Card></HoverCard>
+    </Flex>
+  }
+  codes={[
+    {
+      code:
+`<HoverCard placement="cursor"
+    cursorPlacement="bottom-right"
+    maxWidth="24rem"
+    trigger={
+      <Button weight="default" variant="secondary">
+        See details
+      </Button>
+    }><Card maxWidth="24rem" radius="l-4" direction="column" border="neutral-alpha-medium">
+        {children}
+      </Card></HoverCard>`,
+      language: "tsx",
+      label: "CursorCard"
+    }
+  ]}
+/>
+
+### Placement
+
+The cursor placement supports different placement options to control how the overlay content is positioned relative to the cursor.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="16" wrap horizontal="center" textVariant="label-default-s">
+      <HoverCard placement="cursor"
+        cursorPlacement="top-left"
+        trigger={
+          <Button variant="secondary">
+            Top left
+          </Button>
+        }><Row padding="16" radius="m" background="page" border="neutral-alpha-medium">
+            Top left
+          </Row></HoverCard>
+      <HoverCard placement="cursor"
+        cursorPlacement="top"
+        trigger={
+          <Button variant="secondary">
+            Top
+          </Button>
+        }><Row padding="16" radius="m" background="surface" border="neutral-alpha-medium">
+            Top
+          </Row></HoverCard>
+      <HoverCard placement="cursor"
+        cursorPlacement="bottom-right"
+        trigger={
+          <Button variant="secondary">
+            Bottom right
+          </Button>
+        }><Row padding="16" radius="m" background="surface" border="neutral-alpha-medium">
+            Bottom right
+          </Row></HoverCard>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<HoverCard placement="cursor"
+    cursorPlacement="top-left"
+    trigger={
+      <Button variant="secondary">
+        Top left
+      </Button>
+    }><Row>
+        Top left
+      </Row></HoverCard>
+
+  <HoverCard placement="cursor"
+    cursorPlacement="top"
+    trigger={
+      <Button variant="secondary">
+        Top
+      </Button>
+    }><Row>
+        Top
+      </Row></HoverCard>
+
+  <HoverCard placement="cursor"
+    cursorPlacement="bottom-right"
+    trigger={
+      <Button variant="secondary">
+        Bottom right
+      </Button>
+    }><Row>
+        Bottom right
+      </Row></HoverCard>`,
+      language: "tsx",
+      label: "Placement"
+    }
+  ]}
+/>
+
+### Accessibility Considerations
+
+The cursor placement is designed for desktop use and automatically disables its functionality on touch devices. For touch devices, consider providing alternative ways to access the same information, such as expandable sections or dialogs.
+
+
 ## API reference
 
 <PropsTable
-  content={[
-    ["...animation"]
-  ]}
+  component="HoverCard"
+  describe={{
+    placement: "A side to float beside the trigger, \"cursor\" to follow the pointer (2.x CursorCard) or \"cover\" to draw over the trigger (2.x Hover).",
+    cursorPlacement: "With placement=\"cursor\": the side of the pointer the card sits on.",
+    hideDelay: "With placement=\"cover\": milliseconds before it hides.",
+    interactive: "With placement=\"cover\": the card takes pointer events.",
+    disabled: "With placement=\"cover\": never show the card.",
+  }}
 />

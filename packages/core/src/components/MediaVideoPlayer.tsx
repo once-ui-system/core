@@ -394,7 +394,7 @@ const MediaVideoPlayer = forwardRef<HTMLDivElement, MediaVideoPlayerProps>(
                   }}
                 />
 
-                <Text variant="label-default-xs" onSolid="neutral-weak" className={styles.time}>
+                <Text textVariant="label-default-xs" onSolid="neutral-weak" className={styles.time}>
                   {formatTime(currentTime)} / {formatTime(duration)}
                 </Text>
               </Row>

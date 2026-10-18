@@ -28,12 +28,12 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
         left="0"
         top="0"
         aspectRatio="16/9"
-        gradient={{ display: true, width: 100, y: 80, colorStart: "brand-solid-strong" }}
-        mask={{ x: 50, y: 60, radius: 40 }}
+        gradient={{ display: true, width: "100%", y: "80%", colorStart: "brand-solid-strong" }}
+        mask={{ x: "50%", y: "60%", radius: "40vh" }}
       />
       <Row fillWidth vertical="center" gap="l" m={{ direction: "column" }}>
         <Column fillWidth paddingLeft="xl">
-          <Heading as="h2" variant="display-strong-s" marginBottom="48" paddingLeft="20">
+          <Heading as="h2" textVariant="display-strong-s" marginBottom="48" paddingLeft="20">
             Ready-to-use ecommerce solution
           </Heading>
           <Grid fillWidth columns={2} m={{ columns: 2 }} gap="32">
@@ -50,15 +50,15 @@ export const Features10: React.FC<React.ComponentProps<typeof Column>> = ({ ...f
                 >
                   0{index + 1}
                 </Row>
-                <Text variant="label-strong-m">{feature.title}</Text>
-                <Text wrap="balance" variant="body-default-s" onBackground="neutral-medium">
+                <Text textVariant="label-strong-m">{feature.title}</Text>
+                <Text wrap="balance" textVariant="body-default-s" onBackground="neutral-medium">
                   {feature.description}
                 </Text>
               </Column>
             ))}
           </Grid>
         </Column>
-        <Mask marginRight="32" maxWidth={32} aspectRatio="1/1" x={30} y={40} radius={60}>
+        <Mask marginRight="32" maxWidth="32rem" aspectRatio="1/1" x="30%" y="40%" radius="60vh">
           <Media
             style={{ filter: "grayscale(40%)" }}
             src="/images/global/swag-promo-01.png"

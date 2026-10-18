@@ -1,141 +1,22 @@
 ---
 title: "InteractiveDetails"
-summary: "A utility component for displaying labels and descriptions for interactive form elements."
-updatedAt: "2026-10-11"
+summary: "Internal since 3.0: the label block of Checkbox, RadioButton and Switch."
+updatedAt: "2026-10-17"
 docs: "once-ui/form-controls/interactiveDetails.mdx"
 github: "components/InteractiveDetails.tsx"
 navLabel: "InteractiveDetails"
 navIcon: "switch"
 ---
 
-The `InteractiveDetails` component is a utility component used to display labels and descriptions for interactive form elements such as checkboxes and radio buttons. It provides consistent styling and behavior for these elements.
+`InteractiveDetails` is internal in Once UI 3.0. It is the label and description block `Checkbox`, `RadioButton` and `Switch` draw, and it is no longer exported from `@once-ui-system/core`.
+
+Pass `label` and `description` to the control instead:
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={<InteractiveDetailsExample />}
-  codes={[
-    {
-      code:
-`<InteractiveDetails 
-    label="Basic label" 
+  preview={<Checkbox label="Email updates" description="One message a month, no more." />}
+  codes={[{ code: `<Checkbox label="Email updates" description="One message a month, no more." />`, language: "tsx", label: "Checkbox" }]}
 />
 
-<InteractiveDetails 
-    label="With description" 
-    description="This is a description for the interactive element"
-/>
-
-<InteractiveDetails 
-    label="With help tooltip" 
-    iconButtonProps={{ tooltip: "This is a help tooltip", tooltipPosition: "right" }}
-/>`,
-      language: "tsx",
-      label: "InteractiveDetails"
-    }
-  ]}
-/>
-
-## Usage
-
-The `InteractiveDetails` component is primarily used as a building block for form controls like `Checkbox`, `RadioButton` and `Switch` to provide consistent labeling and description functionality.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={<FormControlsExample />}
-  codes={[
-    {
-      code:
-`<Checkbox 
-    label="Checkbox with InteractiveDetails"
-    description="This checkbox uses InteractiveDetails for its label and description"
-/>
-
-<RadioButton 
-    label="Radio button with InteractiveDetails"
-    description="This radio button uses InteractiveDetails for its label and description"
-/>`,
-      language: "tsx",
-      label: "Usage"
-    }
-  ]}
-/>
-
-## Tooltip
-
-Add a help tooltip to provide additional information about the form control.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  preview={<TooltipExample />}
-  codes={[
-    {
-      code:
-`<InteractiveDetails 
-    label="With tooltip on top"
-    iconButtonProps={{ 
-      tooltip: "This tooltip appears on top", 
-      tooltipPosition: "top" 
-    }}
-/>
-
-<InteractiveDetails 
-    label="With tooltip on right"
-    iconButtonProps={{ 
-      tooltip: "This tooltip appears on the right", 
-      tooltipPosition: "right" 
-    }}
-/>`,
-      language: "tsx",
-      label: "Tooltip"
-    }
-  ]}
-/>
-
-## Naming the control
-
-A control beside `InteractiveDetails` should be named by its label alone, and described by its description. `Checkbox`, `Switch` and `RadioButton` already do this; for a control of your own, note that `id` covers the whole block, help button included, and point the control at the two texts instead: `labelId` goes on the label text and `descriptionId` on the description.
-
-<CodeBlock
-  marginTop="16"
-  marginBottom="24"
-  codes={[
-    {
-      code:
-`<Row gap="12" vertical="center">
-  <input type="checkbox" id="updates" aria-labelledby="updates-label" aria-describedby="updates-description" />
-  <InteractiveDetails
-    labelId="updates-label"
-    descriptionId="updates-description"
-    label="Product updates"
-    description="Release notes, once a month"
-    onClick={toggle}
-  />
-</Row>`,
-      language: "tsx",
-      label: "labelId and descriptionId"
-    }
-  ]}
-/>
-
-## API reference
-
-<PropsTable
-  component="InteractiveDetails"
-  describe={{
-    label: "The main text.",
-    description: "Supporting text under it.",
-    info: "Extra detail behind an InfoTip.",
-    disabled: "Dim it and block the click.",
-    iconButtonProps: "Passed through to the info control.",
-    onClick: "Called when the text is clicked, so the label activates the control it belongs to.",
-    id: "Element id on the whole block.",
-    labelId: "Id on the label text alone, for the control's aria-labelledby.",
-    descriptionId: "Id on the description text, for the control's aria-describedby.",
-  }}
-  content={[
-    ["className"]
-  ]}
-/>
+See [Migrating from 2.x](https://github.com/once-ui-system/core/blob/main/MIGRATING.md) for the full list of exports that became internal.

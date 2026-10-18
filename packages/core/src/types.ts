@@ -60,12 +60,37 @@ export type ShadowSize = TShirtSizes;
 
 export type SpacingToken = StaticSpacingToken | ResponsiveSpacingToken;
 
+/**
+ * A CSS length written as a string, passed through inline as written:
+ * `"320px"`, `"40rem"`, `"1.5em"`, `"50%"`, `"100vh"`, `"100dvh"`, `"50vw"`,
+ * or a `calc()`, `min()`, `max()`, `clamp()` or `var()` expression.
+ *
+ * A bare number on a size, spacing or offset prop is px (`width={320}`), and
+ * a digit string is a static spacing token (`"16"` is `--static-space-16`).
+ */
 export type CSSUnit =
+  | `${number}px`
+  | `${number}rem`
+  | `${number}em`
+  | `${number}ch`
   | `${number}%`
   | `${number}vh`
-  | `${number}dvh`
   | `${number}vw`
-  | `calc(${string})`;
+  | `${number}dvh`
+  | `${number}dvw`
+  | `${number}svh`
+  | `${number}svw`
+  | `${number}lvh`
+  | `${number}lvw`
+  | `${number}vmin`
+  | `${number}vmax`
+  | `${number}cqw`
+  | `${number}cqh`
+  | `calc(${string})`
+  | `min(${string})`
+  | `max(${string})`
+  | `clamp(${string})`
+  | `var(${string})`;
 
 export type Opacity = 0 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
 
@@ -77,6 +102,13 @@ export type ColorScheme =
   | "danger"
   | "warning"
   | "success";
+
+/**
+ * Which semantic palette a component draws in. It is the only prop that
+ * carries this meaning in 3.0: `variant` says how a component looks
+ * (`primary`, `ghost`…), and `scheme` names a palette hue (`blue`, `green`…).
+ */
+export type Tone = ColorScheme;
 
 export type ColorCategory = "on-solid" | "on-background";
 
@@ -508,3 +540,11 @@ export type ToastPosition = "top" | "bottom";
 export type Side = "top" | "right" | "bottom" | "left";
 export type Alignment = "start" | "end";
 export type Placement = Side | `${Side}-${Alignment}`;
+
+/**
+ * How fast an effect runs, as a multiplier on its designed pace: `1` is the
+ * default, `2` twice as fast, `0.5` half. The keywords are the same numbers:
+ * `"slow"` 0.5, `"medium"` 1, `"fast"` 2. A length of time is never a speed;
+ * effects that run for a set time take a `duration` in milliseconds instead.
+ */
+export type Speed = "slow" | "medium" | "fast" | number;

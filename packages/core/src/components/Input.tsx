@@ -13,6 +13,7 @@ import { useDebounce } from "../hooks/useDebounce";
 import { TShirtSizes } from "../types";
 import { Column } from "./Column";
 import { useFieldSize } from "./FormContext";
+import { IconButton } from "./IconButton";
 import styles from "./Input.module.scss";
 import { Row } from "./Row";
 import { Spinner } from "./Spinner";
@@ -49,8 +50,18 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
   focusRing?: boolean;
   characterCount?: boolean;
   cursor?: undefined | "interactive";
+  /** Receives the field's text on every change, after the native `onChange`.
+   *  The field is controlled only when `value` is set. */
+  onValueChange?: (value: string) => void;
+  /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   loading?: boolean;
+  /**
+   * With `type="password"`, an eye button after the field shows and hides the
+   * text (2.x's PasswordInput). On by default; `reveal={false}` leaves a plain
+   * password field.
+   */
+  reveal?: boolean;
   /** How many columns to occupy inside a `Form` grid. `Form` reads this off
    *  the child and strips it; outside a `Form` it does nothing. */
   span?: number;
@@ -78,9 +89,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       // Consumed by `Form`, never rendered. Destructured so it cannot reach
       // the DOM when an `Input` carrying it is used on its own.
       span,
+      reveal = true,
       children,
       onFocus,
       onBlur,
+      onChange,
+      onValueChange,
       onAnimationStart,
       validate,
       cursor,
@@ -91,13 +105,35 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    const [revealed, setRevealed] = useState(false);
+    const revealable = props.type === "password" && reveal;
     const [isFocused, setIsFocused] = useState(false);
     // Seeded from `defaultValue` too: an uncontrolled field — how a settings
     // form normally renders saved data — has no `value`, so the label never
     // floated and sat on top of the text until the first focus and blur.
     const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
     const [validationError, setValidationError] = useState<ReactNode | null>(null);
-    const debouncedValue = useDebounce(props.value, 1000);
+    /**
+     * The text the field holds. Controlled it is `value`; uncontrolled the
+     * field keeps its own copy from `defaultValue` and each change, so
+     * `validate` and the character count see what was typed. Both used to
+     * read `value` alone, and an uncontrolled field never validated.
+     */
+    const controlled = props.value !== undefined;
+    const [ownText, setOwnText] = useState(() =>
+      props.defaultValue === undefined ? "" : String(props.defaultValue),
+    );
+    const text = controlled ? String(props.value) : ownText;
+    const debouncedValue = useDebounce(text, 1000);
+    // What the error styling compares against, as before: the debounced
+    // `value` when controlled, nothing when not.
+    const styledValue = controlled ? debouncedValue : undefined;
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!controlled) setOwnText(event.target.value);
+      onChange?.(event);
+      onValueChange?.(event.target.value);
+    };
 
     const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
       setIsFocused(true);
@@ -178,10 +214,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       cursor === "interactive" ? "cursor-interactive" : undefined,
       {
         [styles.withPrefix]: prefix,
-        [styles.withSuffix]: suffix,
+        [styles.withSuffix]: suffix || revealable,
         [styles.placeholder]: placeholder,
         [styles.hasChildren]: children,
-        [styles.error]: displayError && debouncedValue !== "",
+        [styles.error]: displayError && styledValue !== "",
       },
     );
 
@@ -192,7 +228,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         fillWidth
         fitHeight
         className={classNames(className, {
-          [styles.error]: (error || (displayError && debouncedValue !== "")) && props.value !== "",
+          [styles.error]: (error || (displayError && styledValue !== "")) && props.value !== "",
         })}
       >
         <Row
@@ -220,11 +256,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           <Column fillWidth padding="4">
             <input
               {...props}
+              type={revealable && revealed ? "text" : props.type}
               ref={ref}
               id={id}
               placeholder={placeholder}
               onFocus={handleFocus}
               onBlur={handleBlur}
+              onChange={handleChange}
               onAnimationStart={handleAnimationStart}
               className={inputClassNames}
               aria-describedby={describedBy}
@@ -236,7 +274,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {label && (
               <Text
                 as="label"
-                variant="label-default-m"
+                textVariant="label-default-m"
                 htmlFor={id}
                 className={classNames(styles.label, styles.inputLabel, {
                   [styles.floating]: isFocused || isFilled || placeholder,
@@ -250,16 +288,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {characterCount && props.maxLength && (
             <Row paddingRight="12" className={styles.suffix} position="static">
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 onBackground={
-                  props.maxLength - String(props.value || "").length <= 5
+                  props.maxLength - text.length <= 5
                     ? "danger-weak"
-                    : props.maxLength - String(props.value || "").length <= 10
+                    : props.maxLength - text.length <= 10
                       ? "warning-weak"
                       : "neutral-weak"
                 }
               >
-                {props.maxLength - String(props.value || "").length}
+                {props.maxLength - text.length}
               </Text>
             </Row>
           )}
@@ -271,6 +309,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           {suffix && !loading && (
             <Row paddingRight="12" className={styles.suffix} position="static">
               {suffix}
+            </Row>
+          )}
+          {revealable && (
+            <Row paddingRight="12" className={styles.suffix} position="static">
+              <IconButton
+                onClick={() => setRevealed((shown) => !shown)}
+                variant="ghost"
+                icon={revealed ? "eyeOff" : "eye"}
+                aria-label={revealed ? "Hide password" : "Show password"}
+                size="s"
+                type="button"
+              />
             </Row>
           )}
         </Row>

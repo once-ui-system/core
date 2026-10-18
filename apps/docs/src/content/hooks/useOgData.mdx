@@ -29,7 +29,7 @@ Fetch and display Open Graph data:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}
+  codeHeight="24rem"
   lineNumbers
   codes={[
     {
@@ -64,7 +64,7 @@ Use custom API routes for fetching and proxying:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={28}
+  codeHeight="28rem"
   lineNumbers
   codes={[
     {
@@ -105,7 +105,7 @@ For cases where you only need the image:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={20}
+  codeHeight="20rem"
   lineNumbers
   codes={[
     {
@@ -115,7 +115,7 @@ For cases where you only need the image:
 function LinkThumbnail({ url }: { url: string }) {
   const { ogImage, loading } = useOgImage(url);
 
-  if (loading) return <Skeleton width={200} size={200} />;
+  if (loading) return <Skeleton width="200px" size={200} />;
   if (!ogImage) return <DefaultThumbnail />;
 
   return (
@@ -140,7 +140,7 @@ Combine with the OGCard component for rich previews:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={16}
+  codeHeight="16rem"
   lineNumbers
   codes={[
     {
@@ -180,7 +180,7 @@ function RichLinkPreview({ url }: { url: string }) {
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}
+  codeHeight="24rem"
   lineNumbers
   codes={[
     {
@@ -218,7 +218,7 @@ function RichLinkPreview({ url }: { url: string }) {
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={12}
+  codeHeight="12rem"
   lineNumbers
   codes={[
     {
@@ -240,7 +240,7 @@ This hook requires two server routes. In a Next.js app, use the ready-made [OG r
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={20}
+  codeHeight="20rem"
   lineNumbers
   codes={[
     {
@@ -297,7 +297,7 @@ The hook handles errors gracefully:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={20}
+  codeHeight="20rem"
   lineNumbers
   codes={[
     {
@@ -333,7 +333,7 @@ The hook handles errors gracefully:
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  codeHeight={24}
+  codeHeight="24rem"
   lineNumbers
   codes={[
     {

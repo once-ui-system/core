@@ -1,7 +1,7 @@
 ---
 title: "Flex"
 summary: "The layout primitive every other component is built on: one element, a direction, and token-driven spacing, size and surface."
-updatedAt: "2026-10-10"
+updatedAt: "2026-10-17"
 docs: "once-ui/components/flex.mdx"
 github: "components/Flex.tsx"
 navLabel: "Flex"
@@ -33,6 +33,37 @@ with `direction` preset, and reading `<Column gap="16">` beats reading
 
 Reach for `Flex` directly when the direction is conditional — a row on desktop
 that stacks on a phone — since that is the one thing a preset cannot express.
+
+## Element
+
+`as` picks the element, and the types follow it: `as="a"` takes `href`,
+`as="form"` types `onSubmit` for a form, and a ref is typed by the element.
+A list loses its bullets and indent and a button its browser chrome, at zero
+specificity, so any spacing, background or border prop still applies; a
+button is `type="button"` unless you set `type`. For a list that keeps its
+markers, use `List`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<Column as="ul" gap="8">              // no bullets, no indent
+    <Row as="li">...</Row>
+</Column>
+<Row as="a" href="/pricing" gap="8">...</Row>
+<Row as="button" padding="12" radius="m" onClick={open}>...</Row>
+<Column as="form" onSubmit={(event) => save(event.currentTarget)}>...</Column>`,
+      language: "tsx",
+      label: "as"
+    }
+  ]}
+/>
+
+Only `Flex`, `Row`, `Column`, `Grid`, `Text`, `Heading` and `VisuallyHidden`
+take `as`. A component built on them (Card, Tag, Avatar…) renders its own
+element; wrap it to place it in a list: `<Column as="li"><Card /></Column>`.
 
 ## Direction and alignment
 
@@ -67,7 +98,7 @@ runs.
   describe={{
     direction: "Which way children run. Row and Column preset this.",
     horizontal: "Alignment along the horizontal axis, whatever the direction.",
-    vertical: "Alignment along the vertical axis, whatever the direction.",
+    vertical: "Alignment along the vertical axis, whatever the direction. \"baseline\" lines children up on their first line of text.",
     center: "Shorthand for horizontal and vertical both centred.",
     wrap: "Let children flow onto another line instead of shrinking.",
     flex: "This element's own grow/shrink value inside its parent.",
@@ -76,14 +107,14 @@ runs.
 
 ## Size
 
-Sizes take a spacing token, a number (read as rem), or any CSS unit. `fill` and
+Sizes take a spacing token, a number (read as px), or a CSS length such as `"40rem"` or `"50%"`. `fill` and
 `fit` are the two you want most: fill the parent, or shrink to the content.
 
 <PropsTable
   mixin="SizeProps"
   describe={{
-    width: "Fixed width. A token, a number in rem, or a CSS unit.",
-    height: "Fixed height. A token, a number in rem, or a CSS unit. \"below-header\" is the viewport below the app header.",
+    width: "Fixed width. A token, a number in px, or a CSS length (\"40rem\", \"50%\").",
+    height: "Fixed height. A token, a number in px, or a CSS length. \"below-header\" is the viewport below the app header.",
     maxWidth: "Upper bound. The usual way to cap a text column.",
     minWidth: "Lower bound.",
     minHeight: "Lower bound.",
@@ -111,7 +142,9 @@ when a child is added, removed or reordered.
     {
       code:
 `<Column gap="16" padding="24">    // space between children, space inside
-<Column marginBottom="16">        // last resort: space against a sibling`,
+<Column marginBottom="16">        // last resort: space against a sibling
+<Row marginLeft="auto">           // push to the end of a row
+<Column maxWidth="40rem" marginX="auto">  // centre a block`,
       language: "tsx",
       label: "Gap over margin"
     }
@@ -124,7 +157,7 @@ when a child is added, removed or reordered.
     padding: "Space inside, all four sides.",
     paddingX: "Space inside, left and right.",
     paddingY: "Space inside, top and bottom.",
-    margin: "Space outside, all four sides.",
+    margin: "Space outside, all four sides. Margins also take \"auto\".",
     marginX: "Space outside, left and right.",
     marginY: "Space outside, top and bottom.",
     gap: "Space between children. \"-1\" collapses the gap to overlap borders.",
@@ -177,7 +210,7 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
     cursor: "Pointer style. \"interactive\" is the one to use for anything clickable.",
     textVariant: "Set the text style for everything inside in one prop.",
     blendMode: "mix-blend-mode, as a class. color-dodge and plus-lighter are the glow modes.",
-    blur: "filter: blur(). xs (0.25rem) to xl (3rem) is a class; a number is rem.",
+    blur: "filter: blur(). xs (0.25rem) to xl (3rem) is a class; a number is px.",
     backdropBlur: "backdrop-filter: blur(), for what shows through a translucent fill. Same scale as blur.",
     theme: "Render this subtree light or dark: data-theme, typed.",
     themeBorder: "The subtree's corner style (ThemeProvider's border): data-border.",
@@ -191,7 +224,7 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
 `blendMode`, `blur`, `backdropBlur` and `userSelect` are classes, so setting
 them keeps `Flex` and `Grid` server components — a `style` object does not.
 The blur scale is the static spacing steps: `xs` 0.25rem, `s` 0.5rem, `m`
-1rem, `l` 2rem, `xl` 3rem; a number is rem, written inline on the server.
+1rem, `l` 2rem, `xl` 3rem; a number is px, written inline on the server.
 `blur` sets the whole `filter`, so a blur combined with another filter
 function still goes in `style`.
 
@@ -219,7 +252,7 @@ frame, so it stays in `style`; for a static shift, `translateX` and
 `theme`, `themeBorder`, `themeSolid` and `themeSurface` restyle everything
 inside, the way `ThemeProvider` restyles the page: they write `data-theme`,
 `data-border`, `data-solid` and `data-surface`, typed with the provider's own
-values. `theme="dark"` renders the subtree dark; the `dark` boolean only shows
+values. `theme="dark"` renders the subtree dark; `showIn="dark"` only shows
 or hides an element depending on the theme around it.
 
 <CodeBlock
@@ -242,7 +275,6 @@ or hides an element depending on the theme around it.
 <PropsTable
   mixin="DisplayProps"
   describe={{
-    as: "Render a different element — section, article, nav, ul.",
     inline: "Lay out inline rather than as a block.",
     hide: "Remove from the layout. Most useful per breakpoint.",
     position: "relative is the default, so it never needs writing.",
@@ -255,8 +287,7 @@ or hides an element depending on the theme around it.
     zIndex: "Stacking order.",
     pointerEvents: "\"none\" lets clicks fall through a decorative layer.",
     userSelect: "\"none\" keeps a handle or a timeline label from being selected mid-drag.",
-    dark: "Show only while the theme around it is dark. To make a subtree dark, use theme=\"dark\".",
-    light: "Show only while the theme around it is light.",
+    showIn: "\"dark\" or \"light\": show only while the theme around it is that one. To make a subtree dark, use theme=\"dark\".",
   }}
 />
 

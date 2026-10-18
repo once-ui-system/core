@@ -1,17 +1,16 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { Particle, ParticleFx } from "../components/ParticleFx";
+import { ParticleFx } from "../components/ParticleFx";
+import * as core from "../index";
 
 /**
- * 2.0 renamed `Particle` to `ParticleFx`, like the other effects, and kept the
- * old name as a deprecated alias so no consumer breaks before 3.0. The alias has
- * to stay the same component, not a copy, and core itself should only use the
- * new name, or the deprecation would be advertised by its own call sites.
+ * 2.0 renamed `Particle` to `ParticleFx`, like the other effects, and 3.0
+ * removed the deprecated alias. Nothing in core may use the old name.
  */
 describe("ParticleFx", () => {
-  it("keeps Particle as an alias of the same component", () => {
-    expect(Particle).toBe(ParticleFx);
+  it("exports only the new name", () => {
+    expect("Particle" in core).toBe(false);
     expect(ParticleFx.displayName).toBe("ParticleFx");
   });
 

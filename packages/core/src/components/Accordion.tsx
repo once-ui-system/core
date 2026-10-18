@@ -1,16 +1,10 @@
 "use client";
 
 import classNames from "clsx";
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useCallback, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons";
-import { CondensedTShirtSizes } from "../types";
+import { useControllableState } from "../internal/useControllableState";
+import { TShirtSizes } from "../types";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -29,10 +23,15 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   children: React.ReactNode;
   icon?: IconName;
   iconRotation?: number;
-  size?: CondensedTShirtSizes;
+  size?: TShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  /** Open or not, controlled. Leave it out to let the accordion keep its own
+   *  state, starting from `defaultOpen`. */
   open?: boolean;
-  onToggle?: () => void;
+  /** The starting state of an uncontrolled accordion (no `open`). */
+  defaultOpen?: boolean;
+  /** Called with the state the accordion moves to: `true` when it opens. */
+  onOpenChange?: (open: boolean) => void;
   className?: string;
   style?: React.CSSProperties;
   headerProps?: React.ComponentProps<typeof Row>;
@@ -40,13 +39,18 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   toggleOnHeaderClick?: boolean;
 }
 
+// Paddings per size; s, m and l are 2.x's.
+const HEADER_PADDING_Y = { xs: "4", s: "8", m: "12", l: "16", xl: "20" } as const;
+const PADDING_X = { xs: "8", s: "12", m: "16", l: "20", xl: "24" } as const;
+
 const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   (
     {
       title,
       children,
-      open = false,
-      onToggle,
+      open,
+      defaultOpen = false,
+      onOpenChange,
       iconRotation = 180,
       radius = "m",
       icon = "chevronDown",
@@ -61,30 +65,24 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     ref,
   ) => {
     const headerRef = useRef<HTMLDivElement>(null);
-    const [isOpen, setIsOpen] = useState(open);
+    const contentId = useId();
+    // Controlled when `open` is set, whether or not a handler is passed.
+    const [isAccordionOpen, setOpen] = useControllableState({
+      value: open,
+      defaultValue: defaultOpen,
+      onChange: onOpenChange,
+    });
 
-    useEffect(() => {
-      setIsOpen(open);
-    }, [open]);
-
-    const isAccordionOpen = onToggle ? open : isOpen;
-
-    const toggleAccordion = useCallback(() => {
-      if (onToggle) {
-        onToggle();
-      } else {
-        setIsOpen((prev) => !prev);
-      }
-    }, [onToggle]);
+    const toggleAccordion = useCallback(() => setOpen((prev) => !prev), [setOpen]);
 
     useImperativeHandle(ref, () => {
       const node = headerRef.current ?? document.createElement("div");
       return Object.assign(node, {
         toggle: toggleAccordion,
-        open: () => setIsOpen(true),
-        close: () => setIsOpen(false),
+        open: () => setOpen(true),
+        close: () => setOpen(false),
       }) as HTMLDivElement & AccordionHandle;
-    }, [toggleAccordion]);
+    }, [toggleAccordion, setOpen]);
 
     const {
       className: headerClassName,
@@ -129,9 +127,9 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       }
     };
 
-    const headerPaddingY = size === "s" ? "8" : size === "m" ? "12" : "16";
-    const headerPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
-    const contentPaddingX = size === "s" ? "12" : size === "m" ? "16" : "20";
+    const headerPaddingY = HEADER_PADDING_Y[size];
+    const headerPaddingX = PADDING_X[size];
+    const contentPaddingX = PADDING_X[size];
 
     return (
       <Column fillWidth>
@@ -149,7 +147,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           onClick={handleHeaderClick}
           onKeyDown={handleHeaderKeyDown}
           aria-expanded={isAccordionOpen}
-          aria-controls="accordion-content"
+          aria-controls={contentId}
           radius={radius}
           role="button"
           {...headerRest}
@@ -159,7 +157,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           </Row>
           <Icon
             name={icon}
-            size={size === "s" ? "xs" : "s"}
+            size={size === "s" || size === "xs" ? "xs" : "s"}
             onBackground={isAccordionOpen ? "neutral-strong" : "neutral-weak"}
             style={{
               display: "flex",
@@ -169,7 +167,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           />
         </Row>
         <Grid
-          id="accordion-content"
+          id={contentId}
           fillWidth
           transition="macro-medium"
           style={{

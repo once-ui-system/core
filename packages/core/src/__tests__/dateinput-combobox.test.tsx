@@ -5,16 +5,15 @@ import { useState } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { DateInput } from "../components/DateInput";
-import { DateRangeInput } from "../components/DateRangeInput";
-import type { DateRange } from "../components/DateRangePicker";
+import { type DateRange } from "../components/DatePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
- * DateInput and DateRangeInput wrapped their read-only field in
+ * DateInput and DateInput range wrapped their read-only field in
  * DropdownWrapper's two `role="button"` elements: an input inside a button
  * (axe "nested-interactive"), announced twice, with no popup state of its own;
- * DateRangeInput's picker also sat in a listbox with no options. Each field is
+ * DateInput range's picker also sat in a listbox with no options. Each field is
  * now a combobox that opens a date picker dialog, as Select's field opens its
  * listbox: `aria-haspopup="dialog"`, `aria-expanded`, and `aria-controls` on
  * the dialog while it is open.
@@ -48,7 +47,7 @@ const Single = ({ onPick }: { onPick?: (date: Date) => void }) => {
         id="due"
         label="Due"
         value={value}
-        onChange={(date) => {
+        onValueChange={(date) => {
           setValue(date);
           onPick?.(date);
         }}
@@ -186,12 +185,13 @@ const Range = ({ onPick }: { onPick?: (range: DateRange) => void }) => {
   return (
     <>
       <button type="button">Before</button>
-      <DateRangeInput
+      <DateInput
+        range
         id="stay"
         startLabel="Check-in"
         endLabel="Check-out"
         value={value}
-        onChange={(range) => {
+        onValueChange={(range) => {
           setValue(range);
           onPick?.(range);
         }}
@@ -203,7 +203,7 @@ const Range = ({ onPick }: { onPick?: (range: DateRange) => void }) => {
 const start = () => screen.getByRole("combobox", { name: "Check-in" }) as HTMLInputElement;
 const end = () => screen.getByRole("combobox", { name: "Check-out" }) as HTMLInputElement;
 
-describe("DateRangeInput as two comboboxes", () => {
+describe("DateInput range as two comboboxes", () => {
   it("is two collapsed comboboxes named by their labels, with no button around them", () => {
     render(<Range />, { wrapper: wrap });
 

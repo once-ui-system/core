@@ -85,7 +85,7 @@ const SideBar = React.memo(() => {
       {Object.entries(blocks).map(([sectionKey, section]) => (
         <Column key={sectionKey} gap="2">
           <Row paddingX="8" paddingY="8" vertical="center">
-            <Text as="span" variant="body-default-xs" onBackground="neutral-weak">
+            <Text as="span" textVariant="body-default-xs" onBackground="neutral-weak">
               {section.title}
             </Text>
           </Row>

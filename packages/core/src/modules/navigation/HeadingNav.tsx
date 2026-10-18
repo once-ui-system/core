@@ -256,7 +256,7 @@ const HeadingNav = forwardRef<HTMLDivElement, HeadingNavProps>(
                         }}
                       >
                         <Text
-                          variant={isActive ? "body-strong-s" : "body-default-s"}
+                          textVariant={isActive ? "body-strong-s" : "body-default-s"}
                           truncate
                           style={{
                             transition: "font-weight 0.2s ease",

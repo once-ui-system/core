@@ -111,14 +111,14 @@ after a few swatches. `stacked` puts every label above its control instead:
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column maxWidth={20} fillWidth>
+    <Column maxWidth="20rem" fillWidth>
       <StylePanel stacked />
     </Column>
   }
   codes={[
     {
       code:
-`<Column maxWidth={20} fillWidth>
+`<Column maxWidth="20rem" fillWidth>
   <StylePanel stacked />
 </Column>`,
       language: "tsx",
@@ -139,14 +139,14 @@ option is scrolled into view.
 ## Owning the state
 
 By default the panel reads and writes `ThemeProvider`, which persists to
-`localStorage`. Pass `value` and `onChange` to take that over — the panel then
+`localStorage`. Pass `value` and `onValueChange` to take that over — the panel then
 writes nothing to the providers or to storage, and you decide what a change
 means:
 
 ```tsx
 <StylePanel
   value={draft}
-  onChange={(next, changed) => {
+  onValueChange={(next, changed) => {
     setDraft(next);
     saveToDatabase(changed);
   }}
@@ -211,7 +211,7 @@ export function SiteStylePanel({ saved, save }: {
     <StylePanel
       labels={labels}
       value={draft}
-      onChange={(next, changed) => {
+      onValueChange={(next, changed) => {
         setDraft(next);
         save(changed);
       }}
@@ -242,7 +242,7 @@ your own, such as a site's brand colour. It is painted with the current seed,
 and shows a plus while there is none. Choosing it reports
 `{ brand: "custom", brandSeed }` — the seed already in `value`, or `#5a93fc`
 if there is none — and while it is chosen a colour field under the swatches
-edits the seed. Every colour picked there comes through `onChange`, in both
+edits the seed. Every colour picked there comes through `onValueChange`, in both
 `next` and `changed`.
 
 ```tsx
@@ -254,7 +254,7 @@ const [draft, setDraft] = useState<StylePanelValue>({
 <StylePanel
   customColors
   value={draft}
-  onChange={(next, changed) => {
+  onValueChange={(next, changed) => {
     setDraft(next); // { ...draft, brand: "custom", brandSeed: "#c2410c" }
     saveSiteStyle(changed);
   }}
@@ -343,7 +343,7 @@ generated from one colour.
   describe={{
     visibility: "Which sections and rows to show.",
     value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
-    onChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
+    onValueChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
     customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",

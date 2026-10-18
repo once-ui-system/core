@@ -12,8 +12,8 @@ export function AgentGeneration({ text, active = false }: AgentGenerationProps) 
 
   return (
     <Column
-      maxWidth={48}
-      maxHeight={12}
+      maxWidth="48rem"
+      maxHeight="12rem"
       overflowY="auto"
       background="neutral-alpha-weak"
       radius="m"
@@ -21,7 +21,7 @@ export function AgentGeneration({ text, active = false }: AgentGenerationProps) 
       paddingY="8"
       border
     >
-      <Text variant="body-default-s" onBackground="neutral-strong">
+      <Text textVariant="body-default-s" onBackground="neutral-strong">
         {text}
         {active ? (
           <Text as="span" onBackground="brand-medium">

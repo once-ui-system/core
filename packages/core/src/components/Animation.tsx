@@ -12,23 +12,35 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import type { Placement, SpacingToken } from "../types";
+import type { CSSUnit, Placement, SpacingToken } from "../types";
 import { Flex } from "./Flex";
 
 type TriggerType = "hover" | "click" | "manual";
 
 type EasingCurve = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out" | "spring" | "bounce";
 
+/** A number as px and a CSS length as written, optionally negated. */
+const cssLength = (value: number | string, sign: 1 | -1 = 1) =>
+  typeof value === "number" ? `${sign * value}px` : sign === 1 ? value : `calc(-1 * ${value})`;
+
 export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
   children: ReactNode;
   fade?: number;
   scale?: number;
+  /** Blur in px to animate from. */
   blur?: number;
-  slideUp?: number;
-  slideDown?: number;
-  slideLeft?: number;
-  slideRight?: number;
+  /**
+   * Distance to slide in from: a number is px, a string a CSS length
+   * (`"1rem"`). Was rem until 3.0.
+   */
+  slideUp?: number | CSSUnit;
+  /** As `slideUp`. */
+  slideDown?: number | CSSUnit;
+  /** As `slideUp`. */
+  slideLeft?: number | CSSUnit;
+  /** As `slideUp`. */
+  slideRight?: number | CSSUnit;
   zoomIn?: number;
   zoomOut?: number;
   triggerType?: TriggerType;
@@ -280,28 +292,32 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       }
 
       if (slideUp !== undefined) {
-        transforms.push(shouldAnimate ? "translateY(0)" : `translateY(${slideUp}rem)`);
+        transforms.push(shouldAnimate ? "translateY(0)" : `translateY(${cssLength(slideUp)})`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
 
       if (slideDown !== undefined) {
-        transforms.push(shouldAnimate ? "translateY(0)" : `translateY(-${slideDown}rem)`);
+        transforms.push(
+          shouldAnimate ? "translateY(0)" : `translateY(${cssLength(slideDown, -1)})`,
+        );
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
 
       if (slideLeft !== undefined) {
-        transforms.push(shouldAnimate ? "translateX(0)" : `translateX(${slideLeft}rem)`);
+        transforms.push(shouldAnimate ? "translateX(0)" : `translateX(${cssLength(slideLeft)})`);
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }
       }
 
       if (slideRight !== undefined) {
-        transforms.push(shouldAnimate ? "translateX(0)" : `translateX(-${slideRight}rem)`);
+        transforms.push(
+          shouldAnimate ? "translateX(0)" : `translateX(${cssLength(slideRight, -1)})`,
+        );
         if (combinedStyle.opacity === undefined) {
           combinedStyle.opacity = shouldAnimate ? 1 : 0;
         }

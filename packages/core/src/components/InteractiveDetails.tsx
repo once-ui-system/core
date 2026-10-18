@@ -1,6 +1,7 @@
 "use client";
 
 import React, { forwardRef } from "react";
+import { CONTROL_TEXT, type ControlSize } from "../internal/controlChrome";
 import { Column } from "./Column";
 import { IconButton, IconButtonProps } from "./IconButton";
 import { Row } from "./Row";
@@ -19,6 +20,12 @@ interface InteractiveDetailsProps {
   labelId?: string;
   /** Goes on the description text, for the control's `aria-describedby`. */
   descriptionId?: string;
+  /** The control's size; sets the text presets. */
+  size?: ControlSize;
+  /** Shown under the description, in the danger colour. */
+  errorMessage?: React.ReactNode;
+  /** Goes on the error message, for the control's `aria-describedby`. */
+  errorId?: string;
 }
 
 const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
@@ -33,6 +40,9 @@ const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
       labelId,
       descriptionId,
       disabled,
+      size = "m",
+      errorMessage,
+      errorId,
     },
     ref,
   ) => {
@@ -48,7 +58,7 @@ const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
           <Text
             as="span"
             id={labelId}
-            variant="label-default-m"
+            textVariant={CONTROL_TEXT[size].label}
             onBackground={disabled ? "neutral-weak" : "neutral-strong"}
           >
             {label}
@@ -66,8 +76,23 @@ const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
           )}
         </Row>
         {description && (
-          <Text as="span" id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
+          <Text
+            as="span"
+            id={descriptionId}
+            textVariant={CONTROL_TEXT[size].body}
+            onBackground="neutral-weak"
+          >
             {description}
+          </Text>
+        )}
+        {errorMessage && (
+          <Text
+            as="span"
+            id={errorId}
+            textVariant={CONTROL_TEXT[size].body}
+            onBackground="danger-weak"
+          >
+            {errorMessage}
           </Text>
         )}
       </Column>

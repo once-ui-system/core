@@ -10,7 +10,7 @@ import {
   Heading,
   Icon,
   Input,
-  Pulse,
+  StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -38,27 +38,27 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
         left="0"
         gradient={{
           display: true,
-          x: 50,
-          y: 100,
-          width: 100,
-          height: 60,
+          x: "50%",
+          y: "100%",
+          width: "100%",
+          height: "60%",
           colorStart: "brand-background-strong",
         }}
       />
 
-      <Column maxWidth={36} gap="24" horizontal="center" zIndex={1}>
+      <Column maxWidth="36rem" gap="24" horizontal="center" zIndex={1}>
         <Row vertical="center" gap="8">
-          <Pulse size="s" />
-          <Text variant="code-default-s" onBackground="brand-medium">
+          <StatusIndicator pulse size="s" />
+          <Text textVariant="code-default-s" onBackground="brand-medium">
             Community updates
           </Text>
         </Row>
 
         <Column gap="12" horizontal="center">
-          <Heading variant="display-strong-s" align="center">
+          <Heading textVariant="display-strong-s" align="center">
             Follow the build in public
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
+          <Text textVariant="body-default-l" onBackground="neutral-weak" align="center" wrap="balance">
             Milestone unlocks, open-source releases, and product drops — one email when it matters,
             never spam.
           </Text>
@@ -76,7 +76,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
               { src: "/images/creators/aryan.jpg" },
             ]}
           />
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Join{" "}
             <Text as="span" onBackground="brand-medium">
               <CountFx value={5200} separator="," />+
@@ -101,7 +101,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
             You're on the list — welcome aboard
           </Row>
         ) : (
-          <Row maxWidth={24}>
+          <Row maxWidth="24rem">
             <Input
               id="community-email"
               placeholder="Email address"
@@ -122,7 +122,7 @@ export const Newsletter6 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
         )}
 
-        <Text variant="body-default-xs" onBackground="neutral-weak" align="center">
+        <Text textVariant="body-default-xs" onBackground="neutral-weak" align="center">
           Unsubscribe anytime. We respect your inbox.
         </Text>
       </Column>

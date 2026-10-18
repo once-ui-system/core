@@ -47,13 +47,13 @@ The `RadialGauge` component renders a tick-based circular or arc-shaped gauge th
 
 ## Hue
 
-Use the `hue` prop to quickly change the color ramp of active ticks to represent different states.
+Use the `tone` prop to colour the active ticks on a ramp for a state (`success`, `neutral`, `warning`, `danger`), or `hueRange` for a ramp of your own. 2.x took both as `hue`.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   previewPadding="none"
-  codeHeight={20}
+  codeHeight="20rem"
   fullscreenButton={true}
   preview={
     <Grid maxWidth="s" columns={2} gap="16" s={{ columns: 1 }}>
@@ -63,7 +63,7 @@ Use the `hue` prop to quickly change the color ramp of active ticks to represent
           height={260}
           value={82}
           unit="%"
-          hue="success"
+          tone="success"
         />
       </Row>
       <Row padding="l">
@@ -72,7 +72,7 @@ Use the `hue` prop to quickly change the color ramp of active ticks to represent
           height={260}
           value={56}
           unit="%"
-          hue="neutral"
+          tone="neutral"
         />
       </Row>
       <Row padding="l">
@@ -81,7 +81,7 @@ Use the `hue` prop to quickly change the color ramp of active ticks to represent
           height={260}
           value={28}
           unit="%"
-          hue="danger"
+          tone="danger"
         />
       </Row>
       <Row padding="l">
@@ -90,7 +90,7 @@ Use the `hue` prop to quickly change the color ramp of active ticks to represent
           height={260}
           value={90}
           unit="%"
-          hue={[0, 200]}
+          hueRange={[0, 200]}
         />
       </Row>
     </Grid>
@@ -103,28 +103,28 @@ Use the `hue` prop to quickly change the color ramp of active ticks to represent
     height={260}
     value={82}
     unit="%"
-    hue="success"
+    tone="success"
 />
 <RadialGauge
     width={260}
     height={260}
     value={56}
     unit="%"
-    hue="neutral"
+    tone="neutral"
 />
 <RadialGauge
     width={260}
     height={260}
     value={28}
     unit="%"
-    hue="danger"
+    tone="danger"
 />
 <RadialGauge
     width={260}
     height={260}
     value={90}
     unit="%"
-    hue={[0, 200]}
+    hueRange={[0, 200]}
 />`,
       language: "tsx",
       label: "Hue"
@@ -148,7 +148,7 @@ You can create semicircular or arc gauges by combining `angle` and `edgePad`. Th
   fullscreenButton={true}
   preview={
     <Row
-      maxWidth={24}
+      maxWidth="24rem"
       padding="24"
       horizontal="center">
       <RadialGauge
@@ -164,7 +164,7 @@ You can create semicircular or arc gauges by combining `angle` and `edgePad`. Th
         }}
       >
         <Row fill vertical="end" horizontal="center" padding="20">
-          <Text variant="heading-strong-xl">68%</Text>
+          <Text textVariant="heading-strong-xl">68%</Text>
         </Row>
       </RadialGauge>
     </Row>
@@ -185,7 +185,7 @@ You can create semicircular or arc gauges by combining `angle` and `edgePad`. Th
     }}
 >
     <Row fill vertical="end" horizontal="center" padding="20">
-      <Text variant="heading-strong-xl">68%</Text>
+      <Text textVariant="heading-strong-xl">68%</Text>
     </Row>
 </RadialGauge>`,
       highlight: "8-11",
@@ -248,7 +248,7 @@ For interactive demos or dashboards, you can animate the `value` over time on th
   marginTop="16"
   marginBottom="24"
   previewPadding="none"
-  codeHeight={24}
+  codeHeight="24rem"
   fullscreenButton={true}
   preview={
     <Row paddingTop="24">
@@ -323,7 +323,7 @@ export function RadialGaugeSpeedDemo() {
         }}
         edgePad={4}
       />
-      <Text variant="label-default-m" onBackground="neutral-medium">
+      <Text textVariant="label-default-m" onBackground="neutral-medium">
         {label}
       </Text>
     </Column>
@@ -351,7 +351,8 @@ The `RadialGauge` component accepts all layout props from `Column` (except `dire
     direction: "Which way the sweep runs from the start angle.",
     edgePad: "Inset between the arc and the edge of the box, in pixels.",
     children: "Rendered in the middle of the gauge, in place of the value.",
-    hue: "Colour the arc by its value \u2014 a named ramp, or a [from, to] pair of hue degrees to interpolate between.",
+    tone: "Colour the arc by its value on the ramp for a tone.",
+    hueRange: "Colour the arc by its value on a [from, to] pair of hue degrees. Wins over tone.",
     color: "A single colour for the arc, when it should not vary with the value. Takes a token or any CSS colour.",
   }}
 />

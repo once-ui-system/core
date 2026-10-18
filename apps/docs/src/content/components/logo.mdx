@@ -48,14 +48,14 @@ The Logo component comes in different sizes to accommodate various use cases.
   marginBottom="24"
   preview={
     <>
-    <Column gap="16" center dark>
+    <Column gap="16" center showIn="dark">
       <Logo wordmark="/trademarks/type-dark.svg" size="xs" />
       <Logo wordmark="/trademarks/type-dark.svg" size="s" />
       <Logo wordmark="/trademarks/type-dark.svg" size="m" />
       <Logo wordmark="/trademarks/type-dark.svg" size="l" />
       <Logo wordmark="/trademarks/type-dark.svg" size="xl" />
     </Column>
-    <Column gap="16" center light>
+    <Column gap="16" center showIn="light">
       <Logo wordmark="/trademarks/type-light.svg" size="xs" />
       <Logo wordmark="/trademarks/type-light.svg" size="s" />
       <Logo wordmark="/trademarks/type-light.svg" size="m" />
@@ -87,11 +87,11 @@ Display only the icon part of the logo.
   marginBottom="24"
   preview={
     <>
-      <Row gap="16" center dark>
+      <Row gap="16" center showIn="dark">
         <Logo icon="/trademarks/icon-dark.svg" size="s" />
         <Logo icon="/trademarks/icon-dark.svg" size="l" />
       </Row>
-      <Row gap="16" center light>
+      <Row gap="16" center showIn="light">
         <Logo icon="/trademarks/icon-light.svg" size="s" />
         <Logo icon="/trademarks/icon-light.svg" size="l" />
       </Row>
@@ -117,11 +117,11 @@ Display only the wordmark part of the logo.
   marginBottom="24"
   preview={
     <>
-      <Row gap="16" center dark>
+      <Row gap="16" center showIn="dark">
         <Logo wordmark="/trademarks/type-dark.svg" size="s" />
         <Logo wordmark="/trademarks/type-dark.svg" size="l" />
       </Row>
-      <Row gap="16" center light>
+      <Row gap="16" center showIn="light">
         <Logo wordmark="/trademarks/type-light.svg" size="s" />
         <Logo wordmark="/trademarks/type-light.svg" size="l" />
       </Row>
@@ -147,11 +147,11 @@ The Logo component can function as a link when provided with an `href` property.
   marginBottom="24"
   preview={
     <>
-      <Row gap="16" center dark>
+      <Row gap="16" center showIn="dark">
         <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" />
         <Logo wordmark="/trademarks/type-dark.svg" href="https://once-ui.com" size="l" />
       </Row>
-      <Row gap="16" center light>
+      <Row gap="16" center showIn="light">
         <Logo wordmark="/trademarks/type-light.svg" href="https://once-ui.com" />
         <Logo wordmark="/trademarks/type-light.svg" href="https://once-ui.com" size="l" />
       </Row>
@@ -177,8 +177,8 @@ The `brand` prop provides a `copy` option for allowing the icon and wordmark to 
   marginBottom="24"
   preview={
     <>
-      <Logo light icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
-      <Logo dark icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
+      <Logo showIn="light" icon="/trademarks/icon-light.svg" wordmark="/trademarks/type-light.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
+      <Logo showIn="dark" icon="/trademarks/icon-dark.svg" wordmark="/trademarks/type-dark.svg" brand={{ copy: true, url: "https://once-ui.com/brand" }} />
     </>
   }
   codes={[

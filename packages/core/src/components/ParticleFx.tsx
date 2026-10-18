@@ -4,14 +4,21 @@ import React, { useEffect, useRef } from "react";
 import { useInViewport } from "../hooks/useInViewport";
 import { useReducedMotion } from "../hooks/useReducedMotion";
 import { DisplayProps } from "../interfaces";
-import { ColorValue, SpacingToken } from "../types";
+import { cssColor } from "../internal/cssColor";
+import { ColorValue, SpacingToken, Speed } from "../types";
+import { speedFactor } from "../utils/speed";
 import { Flex } from "./Flex";
 
 interface ParticleFxProps extends React.ComponentProps<typeof Flex> {
   density?: number;
   color?: ColorValue;
   size?: SpacingToken;
-  speed?: number;
+  /**
+   * A multiplier on the designed drift (`1`), or `"slow"`/`"medium"`/`"fast"`
+   * (0.5, 1, 2). The default was `0.3` until 3.0, on a scale where `1` was
+   * over three times the designed pace; `speed={n}` from 2.x is `n / 0.3` now.
+   */
+  speed?: Speed;
   interactive?: boolean;
   mode?: "repel" | "attract";
   intensity?: number;
@@ -28,7 +35,7 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
       density = 100,
       color = "brand-on-background-weak",
       size = "2",
-      speed = 0.3,
+      speed: speedProp,
       interactive = false,
       mode = "repel",
       intensity = 20,
@@ -41,6 +48,8 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
     },
     forwardedRef,
   ) => {
+    // 0.3 is the drift ParticleFx was designed at; `speed` scales it.
+    const speed = speedFactor(speedProp) * 0.3;
     const containerRef = useRef<HTMLDivElement>(null);
     const isInViewport = useInViewport(containerRef);
     const { shouldAnimate } = useReducedMotion(reducedMotion);
@@ -92,7 +101,7 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
         el.style.cssText = `
           position:absolute;left:0;top:0;
           width:${parsedSize};height:${parsedSize};
-          background:var(--${color});
+          background:${cssColor(color)};
           border-radius:50%;
           pointer-events:none;
           opacity:${parsedOpacity};
@@ -223,10 +232,4 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
 
 ParticleFx.displayName = "ParticleFx";
 
-/**
- * @deprecated Renamed to `ParticleFx`, in line with the other effects. This
- * name keeps working through 2.x and is removed in 3.0.
- */
-const Particle = ParticleFx;
-
-export { Particle, ParticleFx };
+export { ParticleFx };

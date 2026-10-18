@@ -9,7 +9,7 @@ export function CelebrationFxExample() {
   return (
     <Column gap="16" fillWidth horizontal="center" padding="24">
       <CelebrationFx
-        height={16}
+        height="16rem"
         type="fireworks"
         trigger="manual"
         active={active}

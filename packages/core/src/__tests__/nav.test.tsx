@@ -74,14 +74,14 @@ describe("NavGroup", () => {
   });
 
   it("hands the open state over when controlled", async () => {
-    const onToggle = vi.fn();
+    const onOpenChange = vi.fn();
     render(
-      <NavGroup label="Settings" open={false} onToggle={onToggle}>
+      <NavGroup label="Settings" open={false} onOpenChange={onOpenChange}>
         <NavItem href="/settings/billing" label="Billing" />
       </NavGroup>,
       { wrapper: wrap },
     );
     await userEvent.click(screen.getByText("Settings"));
-    expect(onToggle).toHaveBeenCalledOnce();
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
   });
 });

@@ -9,6 +9,367 @@ The changelog is the record of *what* changed and why
 
 ---
 
+## 2.x → 3.0
+
+3.0 is in progress on the `feat/3-0-breaking-cleanup` branch and ships first on
+the `next` tag. This section grows with the branch; each step lists what the
+codemod does and what it reports for you to finish.
+
+### 1. Run the codemod
+
+```sh
+node scripts/codemod-3.0.mjs src --dry   # see what it would change
+node scripts/codemod-3.0.mjs src
+```
+
+It only touches Once UI's own components (found through your imports, or by
+name in MDX), never a same-named component of yours, and running it twice
+changes nothing. Run it once, before you write 3.0 code: it reads every bare
+number as 2.x did, so on a size you wrote as 3.0 px (`width={200}`) it would
+write `"200rem"`. Lines marked `!` are for you to fix by hand.
+
+### 2. React 19
+
+`react` and `react-dom` 19 are the floor. Upgrade them before anything else.
+
+### 3. Removed names
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `Particle` | `ParticleFx` | renames the import and every element |
+| Dialog `hideClose` | `showClose={false}` (an expression is negated) | rewrites |
+| CodeBlock `highlight` on the root | `highlight` on each entry of `codes` | rewrites an inline `codes` array, reports any other |
+| `ariaLabel` on IconButton, Spinner, Switch, Scrubber, StatusIndicator | `aria-label` | renames |
+| `BaseBreakpointProps` | `FlexBreakpointProps`, `GridBreakpointProps` or `TextBreakpointProps` | reports |
+| `resetScrollLockState`, `resetAdapterWarning`, `warnIfFrameworkUnadapted` | none: they were test-only or internal | reports |
+
+### 4. One value contract: fields
+
+Every field and picker follows one rule: state `X` is `X` / `defaultX` /
+`onXChange(next)`, and it is controlled only when `X` is set. `onChange` only
+ever means the native DOM event, forwarded to the real `<input>`, so a form
+library's `{...register("x")}` spread works on every field that has one. Each
+renamed handler keeps its 2.x signature, so the codemod's rename is the whole
+migration; a leftover `onChange={(v: number) => …}` is a TypeScript error, not
+a silent bug.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| NumberInput, ColorInput, TagInput, DateInput `onChange(value)` | `onValueChange(value)`; `onChange` is now the native event of the input | renames |
+| DateRangeInput, DatePicker, DateRangePicker `onChange(value)` | `onValueChange(value)` | renames |
+| Select `onSelect(value)` | `onValueChange(value)`; `onSelect` stays the action on menus (DropdownWrapper, ContextMenu) | renames |
+| DatePicker `defaultDate` (declared, never read) | `defaultValue`, which now works | renames |
+| DatePicker `open` | kept, but it only ever re-focused the grid for `autoFocus`; it never showed or hid the picker | reports every use |
+| OTPInput spread its div props (`onChange`, `onKeyDown`, `id`, …) onto every digit and dropped `className` | they go on the root, `className` included | nothing to rewrite: check any handler you passed |
+
+Added, nothing to migrate: `onValueChange(value: string)` on Input, Textarea
+and PasswordInput, whose `validate` and character count now work uncontrolled;
+`defaultValue` on NumberInput, ColorInput, DateInput, DateRangeInput, Select,
+DatePicker, DateRangePicker and OTPInput; `value`/`defaultValue`/`onValueChange`
+on OTPInput; `open`/`defaultOpen`/`onOpenChange` on Select, DateInput and
+DateRangeInput. ColorInput's `value` and handler are no longer required.
+
+### 5. One value contract: controls
+
+The same rule on toggles, groups and disclosure: `checked` / `defaultChecked` /
+`onCheckedChange`, `value` / `defaultValue` / `onValueChange`, `open` /
+`defaultOpen` / `onOpenChange`, controlled only when the state prop is set.
+Checkbox, RadioButton and Switch now put their native input props (`onChange`,
+`onBlur`, `name`, `required`, `form`, `data-*`, …) on the hidden `<input>`,
+which every change goes through, so `{...register("x")}` works on them too.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| Checkbox, RadioButton, Switch `onToggle(checked)` | `onCheckedChange(checked)`; `onChange` is now the input's native event | renames |
+| RadioGroup, SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher `onChange(value)` | `onValueChange(value)` (SegmentedControl keeps its `(value, event?)`) | renames |
+| StylePanel and `StylePanel.Root` `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
+| Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
+| Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
+| Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
+| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | reports every `open` |
+| RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
+| Kbar, KbarContent `inputSize` | `size` | renames |
+
+Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when
+it is clicked again, as a native radio; SegmentedControl no longer moves its
+selection when controlled and the parent keeps `value`. A wrapper of yours
+that reads `props.onToggle` (as the docs' `ClientSwitch` did) needs that read
+renamed by hand.
+
+Added, nothing to migrate: `defaultOpen` on Accordion and on each
+AccordionGroup item (which also fixes `autoCollapse={false}` items that could
+never open); `open`/`defaultOpen`/`onOpenChange` on Kbar; `onValueCommit` on
+Slider, on pointer release and after each key; a group `disabled` on
+SegmentedControl, whose `onValueChange` is no longer required.
+
+### 6. Numbers mean px
+
+A bare number has one meaning per kind now: a length is **px**, a time is
+**milliseconds**, and `speed` is a **multiplier**. In 2.x a number was rem on
+sizes, spacing and offsets (and vh, a percentage or seconds on a few props),
+so `maxWidth={40}` was 640px; in 3.0 it is 40px. Run the codemod: it writes
+the rem you had as a string, `maxWidth="40rem"`, which renders exactly as
+before and still follows the root font size. Tokens are unchanged
+(`padding="16"` is the spacing step), and any CSS length string now works
+where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
+`"100dvh"`, `calc(…)`), so write whichever you prefer for new code.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
+| Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
+| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object, and on DataThemeProvider |
+| Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
+| Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
+| CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
+| RevealFx `speed` (`"fast"`/`"medium"`/`"slow"` or ms) | `duration` in ms (1000/2000/3000) | rewrites |
+| ShineFx, CountFx `speed` (ms) | `duration` | renames |
+| TypeFx `speed` (ms per character) | `charDuration` | renames |
+| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | reports |
+| AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
+
+Left as they were, because they were already px: Dialog, DateInput and
+DateRangeInput `minHeight` (DropdownWrapper's and ContextMenu's are written
+`"200px"`, since the Dropdown they merge into read numbers as rem in 2.x); Animation `blur`;
+`sizes`; AutoScroll `scrollGap`; Pulse `pulseSize`; `borderWidth`; MatrixFx
+`size`/`spacing`; Background `lines.thickness`; LinearGauge and RadialGauge
+`width`/`height` (the drawing's size: the gauge scales to its box, so set the
+box with `maxWidth`).
+
+What the codemod reports, for you to finish: a variable, arithmetic or a call
+on one of these props (`maxWidth={layout.content.width}`: write
+``{`${layout.content.width}rem`}``, or change the value at its source to a rem
+string or px), a breakpoint object passed by name, and spreads; and a number on one of these props on a component of your own
+(defined in the file or imported from a relative path), which was rem if the
+component hands it on to a Once UI one (`<Book minWidth={14} {...flex}>`):
+write `"14rem"` there. Values in a
+config object other than `dataStyle` (`layout.content.width: 44`) are not Once UI props, so the
+codemod cannot see them: change them to `"44rem"` there.
+
+Behaviour to check: keyword speeds that did not divide evenly moved to the
+shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
+1.25s rather than 1.5s, and its `speed` now takes effect at all; LetterFx
+`"fast"` steps every 15ms rather than 10ms).
+
+### 7. Exports that became internal
+
+The root barrel drops the parts other components are built from, so what is
+left is what an app composes. The modules still exist inside the package; only
+the exports are gone. The codemod reports every import of one, with what to use
+instead, and changes the code only where the replacement is exact
+(`DialogProvider`, `generateMetadata`).
+
+| 2.x export | 3.0 | Codemod |
+| --- | --- | --- |
+| `ServerFlex`, `ClientFlex` | `Flex`, which already picks its server or client half | reports |
+| `ServerGrid`, `ClientGrid` | `Grid`, likewise | reports |
+| `Cursor` | Flex's or Grid's `cursor` prop, given an element | reports |
+| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action | reports |
+| `InteractiveDetails`, `InteractiveDetailsProps` | `label` and `description` on Checkbox, RadioButton and Switch | reports |
+| `Toaster` | nothing: `ToastProvider` renders it; show toasts with `useToast()` | reports |
+| `Arrow` | Button `arrowIcon`, Tag `arrow` | reports |
+| `ArrowNavigation`, `ArrowNavigationProps`, `useArrowNavigationContext`, `withArrowNavigation` | the `useArrowNavigation` hook on your own container: pass `containerRef`, call `handleKeyDown` from `onKeyDown` | reports |
+| `DialogProvider` | nothing: a `stack` Dialog makes the one beneath it inert by itself (the provider's state was never read) | drops the import, `<DialogProvider>` becomes `<>` |
+| `generateMetadata` | `createMetadata` (or `Meta.generate`, unchanged). The old name is Next's route-segment convention, so a page that re-exported it had it called by Next | renames the import and every call; keeps a re-export's public name and reports it |
+| `dev` | a `process.env.NODE_ENV` check of your own | reports |
+| `getLastOpenedDropdown`, `setLastOpenedDropdown`, `clearLastOpenedDropdown` | nothing: dropdowns close each other | reports |
+| `MissingDependency` | nothing: the fallback a chart, CodeBlock or MediaUpload shows when its peer is missing | reports |
+| `escapeHtml`, `safeScriptJson`, `sanitizeHref` | a sanitiser of your own; `Schema`, `ThemeInit` and `SmartLink` keep using them | reports |
+
+The rest of core no longer depends on the effects: ProgressBar, RadialGauge and
+DataTooltip count up, Carousel and DatePicker reveal, and Table's loading text
+shines with internal parts of their own instead of `CountFx`, `RevealFx` and
+`ShineFx`. Nothing changes in how they look or what you pass them; it is what
+lets the effects move to `@once-ui-system/fx` later.
+
+### 8. Tone and variant
+
+Each visual prop has one meaning now. **`tone`** is the semantic palette,
+`brand | accent | neutral | info | success | warning | danger`, on every
+component that had one, whatever 2.x called it. **`variant`** is how a
+component looks, never its colour. **`scheme`** is a palette hue (`blue`,
+`green`…). Text and Heading take **`textVariant`**, the name Flex already used,
+so `variant` never means typography.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| Button, IconButton `variant="danger"` / `"success"` / `"warning"` | `tone="danger"` (on the default `primary` variant; any variant takes any tone) | rewrites a literal; reports a variable |
+| Button, IconButton `variant="quaternary"` | `variant="ghost"` | rewrites, also inside a ternary |
+| Button, IconButton `color="brand-strong"` (it tinted only the icons) | `tone="brand"`, which colours the label and icons together | rewrites and reports, because the label changes colour |
+| Table `actions[].variant: "danger"` | `variant: "primary", tone: "danger"` | rewrites an inline array; reports one built elsewhere in the file |
+| Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames; `addToast({ variant })` shorthand is reported |
+| Tag, Pulse `scheme`; Tag `scheme="gradient"` | `tone`; `variant="gradient"` | rewrites |
+| Scrubber `tracks[].scheme`, `blocks[].scheme` | `tone` | rewrites an inline array; reports a variable |
+| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`) | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array; reports one built elsewhere in the file |
+| LinearGauge, RadialGauge `hue="success"` / `hue={[a, b]}` | `tone="success"` (also `"warning"`) / `hueRange={[a, b]}` | rewrites a literal or a ternary of tones; reports a variable |
+| StatusIndicator `color`, Avatar `statusIndicator={{ color }}` | `scheme` | renames |
+| Text, Heading, ListItem, CountFx, ShineFx, TypeFx, FadingLettersFx `variant` | `textVariant` | renames |
+| Tag, StatusIndicator, Pulse, Accordion, Pagination `size`: `s` to `l` | `xs` to `xl` | nothing to rewrite |
+
+`subtle` stays a Button and IconButton variant. A free colour prop (Background's
+`gradient`, `dots`, `lines` and `grid` colours, ParticleFx `color`, chart series
+and gauge `color`) now goes through one resolver: a raw CSS colour (`#fff`,
+`rgb()`, `hsl()`, `oklch()`, `white`) passes through, a token name becomes its
+custom property, and `brand-weak` is `--brand-on-background-weak`. 2.x wrapped
+every value in `var(--…)`, so `#fff` painted nothing; nothing to migrate.
+
+Looks that change: a toned non-primary Button colours its label as well as its
+icons; `quaternary` lost its hover fill as `ghost`; CodeBlock's toolbar buttons
+draw their icons in `neutral-on-background-strong` rather than `weak`.
+
+### 9. Badge and Chip are Tag
+
+`Badge` and `Chip` are no longer exported. `Tag` takes over both jobs:
+
+- `<Tag variant="announce">` is the announcement pill (2.x Badge), with `href`,
+  `arrow` (on by default with `href`) and `effect` (the shine, on by default on
+  `announce`). Each tag's arrow follows its own hover, so the `id` that 2.x
+  needed on every Badge of a page can go (every Badge defaulted to
+  `id="badge"`).
+- A Tag with `selected`, `onClick` or `onRemove` is the toggle (2.x Chip):
+  `role="button"` with `aria-pressed`, a remove button beside it, drawn
+  selected in its tone (`brand` by default). **`selected` defaults to false**;
+  Chip's defaulted to true, so a 2.x `<Chip label="x" />` was drawn and
+  announced as selected.
+- A Tag with only `onClick` keeps 2.x Tag's look, in its tone and size, and
+  is now a focusable button that Enter and Space press.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `<Badge title="New" icon="rocket" href="/blog" />` | `<Tag variant="announce" label="New" prefixIcon="rocket" href="/blog" />` | rewrites the element, closing tag, import, `BadgeProps` and `typeof Badge` |
+| Badge with both `title` and children | Tag shows its `label`, or its children without one | reports |
+| `<Chip label="A" onRemove={drop} iconButtonProps={…} />` | `<Tag selected label="A" onRemove={drop} removeButtonProps={…} />` | rewrites, and writes `selected` where it was left out so the chip keeps its look |
+| `Chip` / `Badge` passed as a value (a component map) | `Tag` | reports |
+| TagInput's chips | TagInput renders `Tag selected` with a remove button | nothing to do |
+
+A Tag with only `onRemove` is a plain label beside its remove button rather
+than a toggle; add `selected` or `onClick` to make it one.
+
+### 10. Components that merged
+
+Twenty-three components fold into the one that already did most of their job.
+Each 2.x behaviour is a mode or a prop of the survivor and, except where noted
+below the table, looks and behaves the same; the old exports are gone. The codemod rewrites the element, its props and
+the import (keeping an alias, adding the survivor once), renames the prop types
+(`ModalProps` → `DialogProps`, `DropdownWrapperProps` → `DropdownProps`,
+`HoverProps` / `CursorCardProps` → `HoverCardProps`, `DataTableColumn` →
+`TableColumn`, `RangeSliderProps` → `SliderProps`, and so on), and reports any
+other use of an old name, such as passing it as a value.
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `Modal` | `Dialog variant="sheet"`; `backdrop` is a slot of both variants | renames; every prop carries over |
+| `Swiper` | `Carousel mode="snap"` | renames; `indicator` (a boolean) becomes Carousel's: `true` is the default, `false` stays, an expression becomes `x ? "line" : false` |
+| `ScrollContainer` | `Scroller` in track mode: `draggable`, `infinite`, `markers`, `proximity`, `active` / `onActiveChange`, `step`, `clip`; per-tile props in `tile` | `items` become the children (an inline array is split); tile props move into `tile={{…}}`; adds `draggable` when no track option is set; reports a spread, whose props went to every tile in 2.x |
+| `AutoScroll` | `Scroller auto={{ speed, hover, reverse, gap }}` (`auto` alone for the defaults) | collects `speed`, `hover`, `reverse` and `scrollGap` into `auto` |
+| `InfoTip` | `Tooltip content={…}`: a Tooltip with `content` and no children renders the info icon; with children it describes them | moves the children into `content` and closes the tag |
+| `Hover` | `HoverCard placement="cover"`, with `delay`, `hideDelay` | moves `overlay` into the children; reports when the element had children of its own, which 2.x ignored |
+| `CursorCard` | `HoverCard placement="cursor"`, its corner as `cursorPlacement` | moves `overlay` into the children and `placement` to `cursorPlacement` |
+| `DropdownWrapper` | `Dropdown`: the wrapper's API under the short name; the menu is the children (`dropdown` stays as a deprecated alias) | renames; moves `dropdown` into the children, unwrapping a fragment |
+| `Dropdown` (2.x, the bare panel) | internal; use `Dropdown` with a `trigger`, or a `Column` for a static panel | reports each `<Dropdown>` without `trigger`, and `DropdownProps`, whose meaning changed |
+| `ContextMenu` | `Dropdown openOn="contextmenu"`, with `disabled` and `contents` | the children become `trigger`, `dropdown` the children |
+| `EmojiPickerDropdown` | `EmojiPicker trigger={…}`, with `open` / `defaultOpen` / `onOpenChange`, `placement`, `closeAfterClick` and `dropdownProps` | renames; props that were the dropdown's move into `dropdownProps` |
+| `UserMenu` | `User dropdown={…}`, with `selected`, `placement` and the menu's size props | renames; adds `dropdown={null}` when there was none, so the user still renders as a trigger |
+| `DataTable` | `Table`: the DataTable API under the short name (`columns`, `rows`, sorting, selection, `pagination`, `loading`, `emptyState`), plus `searchable`, `actions`, `onRowClick`, `rowClassName`, `cellClassName`, `loadingState` and `showFirstLast` | renames, with the `DataTable*` types |
+| `Table` (2.x, `data={{ headers, rows }}`) | `Table columns={…} rows={…}`: a header's `content` is the column's `header`; rows may still be arrays, read by position | splits an inline `data` or a plain variable (`x.headers.map(…)`, `rows={x.rows}`); `defaultPageSize` → `defaultPerPage`, `pageSizeOptions` → `perPageOptions`; keeps 2.x's page-size select and first/last buttons when paginated; `onRowClick`, `rowClassName`, `cellClassName` and inline `actions` callbacks get the row first; reports any other `data` |
+| `DateRangePicker` | `DatePicker range`; `dual` is `months={2}` | adds `range`; `dual` becomes `months={2}` (an expression `x ? 2 : 1`, `false` dropped) |
+| `DateRangeInput` | `DateInput range` | adds `range`; every prop carries over |
+| `RangeSlider` | `Slider range` | adds `range`; every prop carries over |
+| `PasswordInput` | `Input type="password"`, which keeps the show/hide toggle (`reveal={false}` drops it) | renames and sets `type="password"`; reports a `suffix`, which now sits beside the toggle |
+| `KeyTip` | `Kbd keys="mod+k" label="Search"` | renames; `keys` and `label` carry over |
+| `MasonryGrid` | `Grid masonry` | adds `masonry`; reports `xl`, which MasonryGrid never had |
+| `Pulse` | `StatusIndicator pulse`, with `tone`, `size`, `pulseSize` | adds `pulse` |
+| `FadingLettersFx` | `TypeFx mode="fade"`, with `state` | `text` → `words`, `animationState` → `state`, `messageIdx={n}` → `delay={n * 2500}` |
+| `SettingGroup` | `Setting control={…} open={…}` | renames; adds `open={false}` when neither was set; reports a spread |
+| `SettingAxes` | `Setting axes={…}` | renames; every prop carries over |
+| `MobileMegaMenu` | `MegaMenu collapseBelow="always"`; `collapseBelow="m"` gives one menu that switches at a breakpoint | renames and adds `collapseBelow="always"` |
+
+Two things work better and you may notice them. Dialog and Drawer share one
+overlay core, so Escape closes only the innermost open overlay (a Dialog opened
+from a Drawer closes alone), and focus goes back to the trigger as the overlay
+starts closing rather than after its exit animation. An uncontrolled
+`EmojiPicker trigger` now closes on a pick; 2.x's `EmojiPickerDropdown` closed
+only when controlled.
+
+A few merges look different, by design:
+
+- `Table` (both 2.x Tables) sorts on a click of the header, cycling ascending,
+  descending and unsorted; 2.x's "Sorted by X ✕" line under the table is gone.
+  Its page controls are Pagination's, with the per-page select beside them,
+  instead of the "page / total" text and a separate page-size Select. Loading
+  without `loadingState` shows skeleton rows, not the "Loading data..." text.
+- `Input type="password"` now shows the reveal toggle everywhere, not only in a
+  PasswordInput. The codemod does not add `reveal={false}`: add it where a
+  plain masked field was meant.
+- A `suffix` on a 2.x PasswordInput was dropped; it now shows, before the toggle.
+- `MegaMenu collapseBelow` at a breakpoint renders both the bar and the
+  accordion and hides one with CSS.
+
+### 11. Types, resets and aliases
+
+**`as` is typed by the element.** On `Flex`, `Row`, `Column`, `Grid` and
+`VisuallyHidden`, `as` decides the attributes and the ref: `<Row as="a"
+href="/x">`, `<Column as="form" onSubmit={…}>` with a `FormEvent<HTMLFormElement>`,
+`<Row as="button" type="submit">`, and `<Column as="ul" ref={listRef}>` with a
+`Ref<HTMLUListElement>`. Code that compiled before still compiles, except
+where it relied on the element being typed as a `div`:
+
+- A ref of the wrong element is now an error (`<Column as="ul" ref={divRef}>`).
+  Type the ref by the element.
+- A component of your own that spreads div props onto `<Column as="ul">` may
+  need its props typed for that element: `FlexPropsOf<"ul">`.
+- `React.ComponentProps<typeof Flex>` (and `Row`, `Column`, `Grid`) is the
+  `div` form, without `as`; `PolymorphicProps<"a", FlexLayoutProps>` is the
+  props on another element. `React.ComponentProps<typeof Text>` was `any` and
+  is now Text's real props, so a wrapper built on it may find a prop it never
+  had (CountFx's 2.x `speed` is `duration`).
+- **Components other than those five, Text, Heading, List and Form take no
+  `as`.** 2.x let Card, Tag, Avatar and the other Flex-based components accept
+  an untyped `as` and pass it on. Wrap them instead:
+  `<Column as="li"><Card … /></Column>`. The codemod reports each use.
+
+**Lists and buttons reset.** `<Column as="ul">`, `<Row as="ol">` and `<Grid
+as="ul">` render without bullets, indent or margin, and `as="button"` without
+the browser's background, border, padding and font, and with `type="button"`
+unless you pass `type`. The resets have zero specificity, so every prop still
+applies. Remove the `style={{ listStyle: "none", margin: 0, padding: 0 }}` and
+`all: "unset"` workarounds: the codemod removes the list ones (keeping a
+`padding: 0` that beat a `padding` prop beside it). For a list that keeps its
+markers, use `List`, which now sets them explicitly.
+
+**New values.** `vertical="baseline"` aligns children on their first line of
+text (a class, also in breakpoint objects). Margins take `"auto"`:
+`marginLeft="auto"`, `marginX="auto"`. `DateRange`'s `startDate` and `endDate`
+are optional, so a `{ startDate?: Date }` of your own is a `DateRange`.
+
+**Charts take your row type.** `BarChart`, `LineChart`, `LineBarChart` and
+`PieChart` are generic over `data`: `data={rows}` with `rows: RevenueRow[]` needs
+no cast, and `series={{ key: "revnue" }}` is a type error. `SeriesConfig<T>`,
+`ChartProps<T>` and the chart prop types take the row type; left out, they are
+the 2.x `DataPoint` shapes. PieChart `dataKey`/`nameKey` are row keys.
+
+**Checkbox, Switch, RadioButton and RadioGroup** take `error`, `errorMessage`
+and `size` (`s`/`m`/`l`; `xs` and `xl` draw as `s` and `l`), as Input does: a
+`Form size` reaches them, and a RadioGroup's size reaches its radios. Nothing
+changes until you set one; the default is the 2.x look.
+
+**One name per prop.**
+
+| 2.x | 3.0 | Codemod |
+| --- | --- | --- |
+| `dark` / `light` (Flex, Row, Column, Grid, Logo and the components built on them) | `showIn="dark"` / `showIn="light"` | rewrites; `dark={cond}` becomes `showIn={cond ? "dark" : undefined}`; reports both at once |
+| `textSize`, `textWeight`, `textType` on layout components | `textVariant="type-weight-size"` | folds three literals; removes size and weight beside a `textVariant`, which overrode them; reports the rest |
+| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it; reports the rest with the preset to write |
+| Text / Heading `weight` beside `textVariant` | kept; it now swaps the preset's weight (2.x ignored it there) | removes it beside `textVariant`, so the page renders as before |
+
+`weight` and `family` stay on Text and Heading as overrides of the preset, and
+the layout shorthands stay (`fill`, `fit`, `center`, `paddingX`/`Y`,
+`marginX`/`Y`, `borderX`/`Y`, `topRadius` and its siblings): they set two
+props in one and are the most-written props in Once UI code. `Grid` now applies
+`textVariant`, which 2.x typed and dropped.
+
+---
+
 ## 1.8.x → 2.0
 
 Eight steps. Most apps finish in the first two, and the codemod does the bulk

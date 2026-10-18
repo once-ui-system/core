@@ -15,10 +15,11 @@ Read everything you need in one step, before writing: every file you read is sen
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `width="32" height="32"` (32 px) | `width={32} height={32}` (a number is rem: 512 px) |
+| `width={32} height={32}` (a number is px), `maxWidth="40rem"` | `maxWidth={40}` for 40rem (that was 2.x: a number is px now, so it is 40 px) |
 | `border` | `border="neutral-alpha-weak"` |
-| `<Logo wordmark={{ light, dark }} />` | a `<Logo dark>` and a `<Logo light>` |
+| `<Logo wordmark={{ light, dark }} />` | a `<Logo showIn="dark">` and a `<Logo showIn="light">` |
 
+- Units: a number is **px** on every size, spacing and offset prop (`width={320}`, `padding={24}`, `top={8}`), in breakpoint objects too; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"40rem"`, `"50%"`, `"100dvh"`). Numbers are px — `Mask`/`Background` percentages are strings (`x="50%"`)
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
@@ -35,14 +36,14 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
 
 ## Typography
 
 - Hero: `display-strong-l` or `display-strong-xl`
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
-- Eyebrow: `<Text variant="label-default-s" onBackground="brand-medium">`
+- Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
 
 ## Decoration
@@ -58,8 +59,9 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ## Motion
 
-- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
-- `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
+- Every `duration`, `delay` and interval is **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x; `CelebrationFx`/`WeatherFx` `duration={5000}`, not `{5}`. `RevealFx`/`ShineFx`/`CountFx` take `duration`, `TypeFx` `charDuration` (`speed` there was 2.x)
+- `speed` is only a multiplier, `1` the default, or `"slow"`/`"medium"`/`"fast"` (0.5/1/2): `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx`, `LetterFx`
+- `RevealFx translateY`: number = px; prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
 
@@ -77,7 +79,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
 | Screen-reader text, skip link | `VisuallyHidden` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
@@ -107,12 +109,12 @@ name is a type error, not a blank space — take names from `iconNames` in `cata
 Every type a prop names is defined in the slice's (or bundle's) `types`.
 
 - Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
-- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`.
 - Spacing (`gap`, `padding`, …) takes the tokens in `tokens.json`: `"4"`, `"8"`, `"12"`, `"16"`, `"20"`, `"24"`, `"32"`, `"40"`… — there is no `"6"` or `"10"`.
-- `Row`, `Column` and `Grid` have no `span` or `type`. A clickable row is a `Button` or a native `<button>`; a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
-- A form is a native `<form onSubmit={…}>` around a `Column`. `Column as="form"` types `onSubmit` for a `div`.
-- `Checkbox`, `Switch` and `RadioButton` take `checked` + `onToggle(checked)` — `isChecked` was 1.x.
-- Don't wrap primary content (headlines, prices, KPIs, CTAs) in `RevealFx`: it stays blurred until the reveal ends. Use it on secondary sections, with `speed="fast"`.
+- `as` on `Flex`/`Row`/`Column`/`Grid` types the element's attributes and ref: `<Column as="form" onSubmit={…}>`, `<Row as="button" type="submit">`. `as="ul"`/`"ol"` drops bullets and indent, `as="button"` the button chrome; other components take no `as`.
+- `Row`, `Column` and `Grid` have no `span`: a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
+- `variant` is appearance (Button: `primary | secondary | tertiary | ghost | link`), `tone` the palette (`brand | accent | neutral | info | success | warning | danger`) on Button, IconButton, Tag, Feedback, Toast and `addToast`: `<Button tone="danger">`. Text/Heading take `textVariant`. Badge and Chip are `Tag` (`variant="announce"`; `selected`/`onRemove` make a toggle).
+- `Checkbox`, `Switch` and `RadioButton` take `checked` + `onCheckedChange(checked)` (`onToggle` was 2.x, `isChecked` 1.x); `onChange` is the native event of their input.
+- Don't wrap primary content (headlines, prices, KPIs, CTAs) in `RevealFx`: it stays blurred until the reveal ends. Use it on secondary sections, with `duration={1000}`.
 
 ## Defaults — omit these
 

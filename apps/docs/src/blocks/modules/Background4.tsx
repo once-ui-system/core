@@ -5,36 +5,36 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
     <Row fillWidth center {...flex}>
       <Row
         position="absolute"
-        minWidth={74}
-        minHeight={28}
+        minWidth="74rem"
+        minHeight="28rem"
         radius="full"
         border="brand-alpha-weak"
       />
       <Row
         position="absolute"
-        minWidth={58}
-        minHeight={28}
+        minWidth="58rem"
+        minHeight="28rem"
         radius="full"
         border="brand-alpha-weak"
       />
       <Row
         position="absolute"
-        minWidth={45}
-        minHeight={28}
+        minWidth="45rem"
+        minHeight="28rem"
         radius="full"
         border="brand-alpha-medium"
       />
       <Row
         position="absolute"
-        minWidth={35}
-        minHeight={28}
+        minWidth="35rem"
+        minHeight="28rem"
         radius="full"
         border="brand-alpha-medium"
       />
       <Row
         position="absolute"
-        minWidth={28}
-        minHeight={28}
+        minWidth="28rem"
+        minHeight="28rem"
         radius="full"
         border="brand-alpha-strong"
         overflow="hidden"
@@ -44,18 +44,18 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
           position="absolute"
           gradient={{
             display: true,
-            x: 50,
-            y: 50,
-            width: 100,
-            height: 60,
+            x: "50%",
+            y: "50%",
+            width: "100%",
+            height: "60%",
             opacity: 100,
             colorStart: "brand-alpha-weak",
             colorEnd: "static-transparent",
           }}
           mask={{
-            x: 50,
-            y: 50,
-            radius: 25,
+            x: "50%",
+            y: "50%",
+            radius: "25vh",
           }}
         >
           <ParticleFx
@@ -66,7 +66,7 @@ export const Background4: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             left="0"
             fill
             interactive
-            speed={4}
+            speed={13.33}
             size="1"
             intensity={50}
           />

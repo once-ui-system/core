@@ -71,47 +71,47 @@ Switch between different weather effects: rain, snow, falling leaves, and lightn
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={20}
+        height="20rem"
         type="rain"
         colors={["brand-solid-medium"]}
         intensity={60}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Rain</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Rain</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={20}
+        height="20rem"
         type="snow"
         colors={["neutral-solid-weak"]}
         intensity={60}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Snow</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Snow</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={20}
+        height="20rem"
         type="leaves"
         colors={["warning-solid-strong", "danger-solid-strong"]}
         intensity={40}
         speed={0.7}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Leaves</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Leaves</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={20}
+        height="20rem"
         type="lightning"
         colors={["brand-solid-strong"]}
         intensity={20}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Lightning</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Lightning</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -120,21 +120,21 @@ Switch between different weather effects: rain, snow, falling leaves, and lightn
     {
       code:
 `<WeatherFx
-    height={20}
+    height="20rem"
     type="rain"
     colors={["brand-solid-medium"]}
     intensity={60}
 />
 
 <WeatherFx
-    height={20}
+    height="20rem"
     type="snow"
     colors={["neutral-solid-weak"]}
     intensity={60}
 />
 
 <WeatherFx
-    height={20}
+    height="20rem"
     type="leaves"
     colors={["warning-solid-strong", "danger-solid-strong"]}
     intensity={40}
@@ -142,7 +142,7 @@ Switch between different weather effects: rain, snow, falling leaves, and lightn
 />
 
 <WeatherFx
-    height={20}
+    height="20rem"
     type="lightning"
     colors={["brand-solid-strong"]}
     intensity={20}
@@ -165,35 +165,35 @@ Control the number of particles with the `intensity` prop. Higher values create 
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         intensity={30}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Light</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Light</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         intensity={75}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Medium</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Medium</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         intensity={150}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Heavy</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Heavy</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -202,21 +202,21 @@ Control the number of particles with the `intensity` prop. Higher values create 
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     intensity={30}
     colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     intensity={75}
     colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     intensity={150}
     colors={["brand-solid-medium"]}
@@ -239,24 +239,24 @@ Control the fall speed with the `speed` prop. Higher values make particles fall 
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         speed={0.5}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Slow</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Slow</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         speed={1.5}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Fast</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Fast</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -265,14 +265,14 @@ Control the fall speed with the `speed` prop. Higher values make particles fall 
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     speed={0.5}
     colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     speed={1.5}
     colors={["brand-solid-medium"]}
@@ -295,35 +295,35 @@ Control the direction with the `angle` prop to simulate wind. Positive values an
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         angle={-15}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Left -15°</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Left -15°</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         angle={0}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Straight 0°</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Straight 0°</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         angle={15}
         colors={["brand-solid-medium"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Right 15°</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Right 15°</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -332,21 +332,21 @@ Control the direction with the `angle` prop to simulate wind. Positive values an
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     angle={-15}
     colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     angle={0}
     colors={["brand-solid-medium"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     angle={15}
     colors={["brand-solid-medium"]}
@@ -367,7 +367,7 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
   previewPadding="0"
   preview={
     <WeatherFx
-      height={24}
+      height="24rem"
       type="rain"
       colors={[
         "success-solid-strong",
@@ -380,7 +380,7 @@ Use multiple colors for variety. Supports CSS variables and any valid color form
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="rain"
     colors={[
       "success-solid-strong",
@@ -404,16 +404,16 @@ Overlay content on top of the weather effect.
   previewPadding="0"
   preview={
     <WeatherFx
-      height={24}
+      height="24rem"
       type="rain"
       colors={["neutral-solid-weak"]}
       intensity={100}
     >
       <Column gap="16" fill center>
-        <Heading variant="display-strong-xl" onBackground="neutral-strong" align="center">
+        <Heading textVariant="display-strong-xl" onBackground="neutral-strong" align="center">
           Rainy Day
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
           Animated weather effects with native Canvas 2D
         </Text>
       </Column>
@@ -423,16 +423,16 @@ Overlay content on top of the weather effect.
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="rain"
     colors={["neutral-solid-weak"]}
     intensity={100}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-xl">
+      <Heading textVariant="display-strong-xl">
         Rainy Day
       </Heading>
-      <Text variant="body-default-l">
+      <Text textVariant="body-default-l">
         Animated weather effects
       </Text>
     </Column>
@@ -451,7 +451,7 @@ Use as a full-screen background effect with absolute positioning.
   marginTop="16"
   marginBottom="24"
   previewPadding="16"
-  codeHeight={24}
+  codeHeight="24rem"
   preview={
     <Row
       fill
@@ -460,7 +460,7 @@ Use as a full-screen background effect with absolute positioning.
       border
       radius="l"
       overflow="hidden"
-      height={24}
+      height="24rem"
     >
       <WeatherFx
         position="absolute"
@@ -485,9 +485,9 @@ Use as a full-screen background effect with absolute positioning.
         pointerEvents="none"
       />
       <Column align="center" horizontal="center" pointerEvents="none" gap="8">
-        <Logo dark icon="/trademarks/icon-dark.svg" />
-        <Logo light icon="/trademarks/icon-light.svg" />
-        <Text variant="label-default-s" onBackground="neutral-weak">Weather Effect</Text>
+        <Logo showIn="dark" icon="/trademarks/icon-dark.svg" />
+        <Logo showIn="light" icon="/trademarks/icon-light.svg" />
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Weather Effect</Text>
       </Column>
     </Row>
   }
@@ -525,8 +525,8 @@ Use as a full-screen background effect with absolute positioning.
       pointerEvents="none"
     />
     <Column align="center" horizontal="center" pointerEvents="none">
-      <Logo dark icon="/trademarks/icon-dark.svg" />
-      <Logo light icon="/trademarks/icon-light.svg" />
+      <Logo showIn="dark" icon="/trademarks/icon-dark.svg" />
+      <Logo showIn="light" icon="/trademarks/icon-light.svg" />
     </Column>
 </Row>`,
       language: "tsx",
@@ -545,7 +545,7 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
   previewPadding="0"
   preview={
     <WeatherFx
-      height={24}
+      height="24rem"
       type="snow"
       data-solid="contrast"
       colors={["brand-solid-strong", "neutral-solid-weak"]}
@@ -553,10 +553,10 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
       speed={0.8}
     >
       <Column gap="16" fill center>
-        <Heading variant="display-strong-l" align="center">
+        <Heading textVariant="display-strong-l" align="center">
           Winter Wonderland
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
           Snowflakes with depth and floating motion
         </Text>
       </Column>
@@ -566,7 +566,7 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="snow"
     data-solid="contrast"
     colors={["brand-solid-strong", "neutral-solid-weak"]}
@@ -574,10 +574,10 @@ Snow features realistic physics with depth-based sizing, opacity, and organic fl
     speed={0.8}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-l">
+      <Heading textVariant="display-strong-l">
         Winter Wonderland
       </Heading>
-      <Text variant="body-default-l">
+      <Text textVariant="body-default-l">
         Snowflakes with depth and motion
       </Text>
     </Column>
@@ -597,8 +597,8 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
   marginBottom="24"
   previewPadding="0"
   preview={
-    <Row fillWidth height={18}>
-      <Mask fill position="absolute" x={100} y={0} radius={50}>
+    <Row fillWidth height="18rem">
+      <Mask fill position="absolute" x="100%" y={0} radius="50vh">
         <WeatherFx
           fill
           type="leaves"
@@ -612,7 +612,7 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
         position="absolute"
         bottom="0"
         left="0"
-        height={8}
+        height="8rem"
         border="transparent"
         grid={{
           display: false
@@ -645,13 +645,13 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
         ]}
       />
       <Column gap="16" padding="24" pointerEvents="none">
-        <Heading variant="display-strong-s">
+        <Heading textVariant="display-strong-s">
           9°C
         </Heading>
-        <Text variant="body-default-l">
+        <Text textVariant="body-default-l">
           Saturday, 11:30 AM
         </Text>
-        <Text variant="label-default-s" onBackground="neutral-weak">
+        <Text textVariant="label-default-s" onBackground="neutral-weak">
           Precipitation: 0%<br/>
           Humidity: 72%<br/>
           Wind: 8 km/h
@@ -663,7 +663,7 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="leaves"
     colors={["warning-solid-strong", "danger-solid-strong", "success-solid-medium"]}
     intensity={50}
@@ -671,10 +671,10 @@ Leaves feature gradient colors, rotation animation, and tumbling motion for an a
     angle={5}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-xl">
+      <Heading textVariant="display-strong-xl">
         Autumn Breeze
       </Heading>
-      <Text variant="body-default-l">
+      <Text textVariant="body-default-l">
         Rotating leaves with gradients
       </Text>
     </Column>
@@ -695,17 +695,17 @@ Lightning features highly realistic bolt generation with chaotic, organic branch
   previewPadding="0"
   preview={
     <WeatherFx
-      height={24}
+      height="24rem"
       type="lightning"
       data-solid="contrast"
       colors={["warning-solid-strong"]}
       intensity={15}
     >
       <Column gap="16" fill center>
-        <Heading variant="display-strong-l" align="center">
+        <Heading textVariant="display-strong-l" align="center">
           Thunderstorm
         </Heading>
-        <Text variant="body-default-l" onBackground="neutral-weak" align="center">
+        <Text textVariant="body-default-l" onBackground="neutral-weak" align="center">
           Dynamic lightning with branching bolts
         </Text>
       </Column>
@@ -715,17 +715,17 @@ Lightning features highly realistic bolt generation with chaotic, organic branch
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="lightning"
     data-solid="contrast"
     colors={["warning-solid-strong"]}
     intensity={15}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-l">
+      <Heading textVariant="display-strong-l">
         Thunderstorm
       </Heading>
-      <Text variant="body-default-l">
+      <Text textVariant="body-default-l">
         Dynamic lightning with branching bolts
       </Text>
     </Column>
@@ -748,35 +748,35 @@ For lightning, the `intensity` prop controls strike frequency and bolt patterns.
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="lightning"
         intensity={5}
         colors={["brand-solid-strong"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Rare (5)</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Rare (5)</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="lightning"
         intensity={20}
         colors={["brand-solid-strong"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Frequent (20)</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Frequent (20)</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="lightning"
         intensity={50}
         colors={["brand-solid-strong"]}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Storm (50)</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Storm (50)</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -785,21 +785,21 @@ For lightning, the `intensity` prop controls strike frequency and bolt patterns.
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="lightning"
     intensity={5}
     colors={["brand-solid-strong"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="lightning"
     intensity={20}
     colors={["brand-solid-strong"]}
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="lightning"
     intensity={50}
     colors={["brand-solid-strong"]}
@@ -812,7 +812,7 @@ For lightning, the `intensity` prop controls strike frequency and bolt patterns.
 
 ## Duration
 
-Control how long particles are emitted with the `duration` prop (in seconds). After the duration, existing particles finish their animation but no new ones spawn.
+Control how long particles are emitted with the `duration` prop, in milliseconds (seconds until 3.0). After the duration, existing particles finish their animation but no new ones spawn.
 
 <CodeBlock
   marginTop="16"
@@ -821,17 +821,17 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
   reloadButton
   preview={
     <WeatherFx
-      height={24}
+      height="24rem"
       type="snow"
       colors={["brand-solid-medium"]}
       intensity={80}
-      duration={3}
+      duration={3000}
     >
       <Column gap="16" fill center>
-        <Heading variant="display-strong-l" onBackground="neutral-strong" align="center">
+        <Heading textVariant="display-strong-l" onBackground="neutral-strong" align="center">
           3 Second Burst
         </Heading>
-        <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+        <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
           Snow stops emitting after 3 seconds
         </Text>
       </Column>
@@ -841,14 +841,14 @@ Control how long particles are emitted with the `duration` prop (in seconds). Af
     {
       code:
 `<WeatherFx
-    height={24}
+    height="24rem"
     type="snow"
     colors={["brand-solid-medium"]}
     intensity={80}
-    duration={3}
+    duration={3000}
 >
     <Column gap="16" fill center>
-      <Heading variant="display-strong-l">
+      <Heading textVariant="display-strong-l">
         3 Second Burst
       </Heading>
     </Column>
@@ -871,7 +871,7 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
     <Row gap="16" fillWidth>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="leaves"
         trigger="hover"
         colors={["warning-solid-strong", "danger-solid-strong"]}
@@ -879,19 +879,19 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
         speed={0.8}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Hover for leaves!</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Hover for leaves!</Text>
         </Column>
       </WeatherFx>
       <WeatherFx
         fill
-        height={16}
+        height="16rem"
         type="rain"
         trigger="hover"
         colors={["brand-solid-medium"]}
         intensity={60}
       >
         <Column fill center padding="16">
-          <Text variant="label-default-s" onBackground="neutral-weak">Hover for rain!</Text>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Hover for rain!</Text>
         </Column>
       </WeatherFx>
     </Row>
@@ -900,7 +900,7 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="leaves"
     trigger="hover"
     colors={["warning-solid-strong", "danger-solid-strong"]}
@@ -908,7 +908,7 @@ Use `trigger="hover"` to only emit particles when hovering over the element.
 />
 
 <WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     trigger="hover"
     colors={["brand-solid-medium"]}
@@ -929,14 +929,14 @@ Use `trigger="click"` to toggle emission on click.
   preview={
     <WeatherFx
       fill
-      height={16}
+      height="16rem"
       type="rain"
       trigger="click"
       colors={["brand-solid-medium"]}
       intensity={60}
     >
       <Column fill center padding="16">
-        <Text variant="label-default-s" onBackground="neutral-weak">Click to toggle rain</Text>
+        <Text textVariant="label-default-s" onBackground="neutral-weak">Click to toggle rain</Text>
       </Column>
     </WeatherFx>
   }
@@ -944,7 +944,7 @@ Use `trigger="click"` to toggle emission on click.
     {
       code:
 `<WeatherFx
-    height={16}
+    height="16rem"
     type="rain"
     trigger="click"
     colors={["brand-solid-medium"]}
@@ -981,7 +981,7 @@ export function Demo() {
         <ToggleButton onClick={() => setOn((v) => !v)}>
           {on ? "Stop" : "Start"}
         </ToggleButton>
-        <WeatherFx height={16} type="snow" trigger="manual" active={on} intensity={60} />
+        <WeatherFx height="16rem" type="snow" trigger="manual" active={on} intensity={60} />
       </Row>
     );
 }
@@ -1004,7 +1004,7 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
   component="WeatherFx"
   describe={{
     type: "Which weather to render.",
-    speed: "Fall multiplier. Not a duration.",
+    speed: "Fall multiplier: 1 is the default, 2 twice as fast. \"slow\", \"medium\" and \"fast\" are 0.5, 1 and 2.",
     colors: "Palette for the drops or flakes.",
     intensity: "How much of it there is.",
     angle: "Fall angle, in degrees.",

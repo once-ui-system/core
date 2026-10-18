@@ -9,6 +9,7 @@ const {
   validate,
   applyFixes,
   PRE_2_PROPS,
+  PRE_3_PROPS,
   loadSpec,
   parseIconNames,
   openingTags,
@@ -99,31 +100,44 @@ describe("color.svgPaint", () => {
 describe("RevealFx.delay", () => {
   it("flags seconds, which is what 1.8.x took", () => {
     expect(rules(`<RevealFx delay={index * 0.1} />`)).toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={0.75} />`)).toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={0.75} />`)).toContain("RevealFx.delay");
+  });
+
+  it("flags whole seconds on a duration, which CelebrationFx and WeatherFx took in 2.x", () => {
+    expect(rules(`<CelebrationFx duration={5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<WeatherFx duration={4} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CelebrationFx duration={5000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("leaves milliseconds alone", () => {
     expect(rules(`<RevealFx delay={index * 100} />`)).not.toContain("RevealFx.delay");
-    expect(rules(`<ShineFx speed={750} />`)).not.toContain("RevealFx.delay");
+    expect(rules(`<ShineFx duration={750} />`)).not.toContain("RevealFx.delay");
     expect(rules(`<RevealFx delay={index * 0.1 * 1000} />`)).not.toContain("RevealFx.delay");
   });
 
   it("covers every effect whose timing is in milliseconds, and what extends one", () => {
-    expect(rules(`<CountFx value={9} speed={1.5} />`)).toContain("RevealFx.delay");
+    expect(rules(`<CountFx value={9} duration={1.5} />`)).toContain("RevealFx.delay");
     expect(rules(`<TypeFx words={w} delay={0.4} />`)).toContain("RevealFx.delay");
     // HoverCard extends Animation, whose delay is milliseconds.
     expect(rules(`<HoverCard trigger={t} delay={0.2} />`)).toContain("RevealFx.delay");
   });
 
-  it("does not flag speed on effects where it is a multiplier", () => {
-    for (const fx of ["MatrixFx", "WeatherFx", "ParticleFx", "CelebrationFx", "Effect"]) {
+  it("does not flag speed, which is a multiplier on every effect", () => {
+    for (const fx of [
+      "MatrixFx",
+      "WeatherFx",
+      "ParticleFx",
+      "CelebrationFx",
+      "Effect",
+      "AutoScroll",
+    ]) {
       expect(rules(`<${fx} speed={0.5} />`)).not.toContain("RevealFx.delay");
     }
   });
 
   it("names the component and prop it found", () => {
-    const [issue] = issues(`<ShineFx speed={0.75}>Shine</ShineFx>`);
-    expect(issue.message).toMatch(/^ShineFx speed is in milliseconds/);
+    const [issue] = issues(`<ShineFx duration={0.75}>Shine</ShineFx>`);
+    expect(issue.message).toMatch(/^ShineFx duration is in milliseconds/);
   });
 });
 
@@ -267,7 +281,27 @@ describe("Logo.themes", () => {
     expect(
       rules(`<Logo wordmark={{ light: "/logo-light.svg", dark: "/logo-dark.svg" }} href="/" />`),
     ).not.toContain("Logo.themes");
-    expect(rules(`<Logo dark icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+    expect(rules(`<Logo showIn="dark" icon="/mark-dark.svg" />`)).not.toContain("Logo.themes");
+  });
+
+  it("flags the 3.0 spelling too", () => {
+    expect(
+      rules(`<Row>
+  <Logo showIn="dark" wordmark="/logo-dark.svg" href="/" />
+  <Logo showIn="light" wordmark="/logo-light.svg" href="/" />
+</Row>`),
+    ).toContain("Logo.themes");
+  });
+});
+
+describe("G5 renames", () => {
+  it("names showIn and textVariant for the 2.x aliases", () => {
+    const messages = issues(`<Row dark textSize="m" /><Text size="l" />`)
+      .map((issue) => issue.message)
+      .join("\n");
+    expect(messages).toMatch(/Row takes showIn in 3.0; dark is the 2.x name/);
+    expect(messages).toMatch(/Row takes textVariant in 3.0; textSize is the 2.x name/);
+    expect(messages).toMatch(/Text takes textVariant in 3.0; size is the 2.x name/);
   });
 });
 
@@ -744,16 +778,53 @@ describe("api.renamed: 1.x prop names", () => {
       `<SegmentedControl buttons={b} selected="a" onToggle={(v) => set(v)} />\n<Dialog isOpen={open} title="Hi" onClose={close} />`,
     ).filter((issue) => issue.rule === "api.renamed");
     expect(found.map((issue) => issue.message)).toEqual([
-      "SegmentedControl takes value in 2.x; selected is the 1.x name",
-      "SegmentedControl takes onChange in 2.x; onToggle is the 1.x name",
-      "Dialog takes open in 2.x; isOpen is the 1.x name",
+      "SegmentedControl takes value; selected is the 1.x name",
+      "SegmentedControl takes onValueChange; onToggle is the 1.x name",
+      "Dialog takes open; isOpen is the 1.x name",
+    ]);
+  });
+
+  it("names the 3.0 prop for a 2.x one", () => {
+    const found = issues(
+      `<Switch checked={on} onToggle={set} />\n<Tabs value={tab} onChange={pick} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      "Switch takes onCheckedChange in 3.0; onToggle is the 2.x name",
+      "Tabs takes onValueChange in 3.0; onChange is the 2.x name",
+    ]);
+  });
+
+  it("names tone and textVariant for 2.x's variant, scheme and color", () => {
+    const found = issues(
+      `<Button variant="danger">Delete</Button>\n<IconButton variant="quaternary" icon="close" aria-label="Close" />\n<Tag scheme="brand" label="New" />\n<Text variant="body-default-s">Hi</Text>\n<StatusIndicator color="green" />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'Button takes tone="danger" in 3.0; variant="danger" is the 2.x spelling',
+      'IconButton takes variant="ghost" in 3.0; variant="quaternary" is the 2.x spelling',
+      "Tag takes tone in 3.0; scheme is the 2.x name",
+      "Text takes textVariant in 3.0; variant is the 2.x name",
+      "StatusIndicator takes scheme in 3.0; color is the 2.x name",
+    ]);
+    expect(
+      rules(`<Button tone="danger">Delete</Button>\n<Tag variant="announce" label="New" />`),
+    ).not.toContain("api.renamed");
+  });
+
+  it("names the 3.0 survivor for a 2.x component that merged (F6), and 2.x Table data", () => {
+    const found = issues(
+      `<PasswordInput id="p" label="Password" />\n<KeyTip keys="mod+z" />\n<Table data={{ headers: h, rows: r }} />\n<Table columns={c} rows={r} />`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      'PasswordInput is Input type="password" (it has the show/hide toggle) in 3.0',
+      'KeyTip is Kbd keys="mod+k" label="…" in 3.0',
+      "Table takes columns and rows in 3.0; data={{ headers, rows }} is the 2.x shape (a header's content is a column's header, array rows read by position)",
     ]);
   });
 
   it("leaves the 2.x names, and old names 2.x reuses, alone", () => {
     expect(
       rules(
-        `<SegmentedControl buttons={b} value="a" onChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
+        `<SegmentedControl buttons={b} value="a" onValueChange={set} />\n<Media fill src="/a.jpg" />\n<Feedback icon />`,
       ),
     ).not.toContain("api.renamed");
   });
@@ -763,6 +834,8 @@ describe("api.renamed: 1.x prop names", () => {
     const components = spec.components as Record<string, Entry>;
     const mixins = spec.mixins as Record<string, Record<string, string>>;
     const accepts = (name: string, prop: string, seen = new Set<string>()): boolean => {
+      // Native ARIA attributes reach every component; the spec does not list them.
+      if (prop.startsWith("aria-")) return true;
       const entry = components[name];
       if (!entry || seen.has(name)) return false;
       seen.add(name);
@@ -772,9 +845,10 @@ describe("api.renamed: 1.x prop names", () => {
         (entry.extends ?? []).some((parent) => accepts(parent, prop, seen))
       );
     };
-    for (const [name, renames] of Object.entries(
-      PRE_2_PROPS as Record<string, Record<string, string>>,
-    )) {
+    for (const [name, renames] of [
+      ...Object.entries(PRE_2_PROPS as Record<string, Record<string, string>>),
+      ...Object.entries(PRE_3_PROPS as Record<string, Record<string, string>>),
+    ]) {
       expect(components[name], name).toBeDefined();
       for (const [old, now] of Object.entries(renames)) {
         expect(accepts(name, old), `${name}.${old}`).toBe(false);
@@ -785,38 +859,38 @@ describe("api.renamed: 1.x prop names", () => {
 });
 
 describe("size.rem", () => {
-  it("flags an icon box sized in pixels, which a number turns into rem", () => {
-    expect(rules(`<Row width={32} height={32} center><Icon name="check" /></Row>`)).toContain(
+  it("flags an icon box sized as if numbers were still rem, which 3.0 reads as px", () => {
+    expect(rules(`<Row width={2} height={2} center><Icon name="check" /></Row>`)).toContain(
       "size.rem",
     );
     expect(
-      rules(`<Row minWidth={40} minHeight={40} center><Icon name={item.icon} /></Row>`),
+      rules(`<Row minWidth={2.5} minHeight={2.5} center><Icon name={item.icon} /></Row>`),
     ).toContain("size.rem");
-    expect(rules(`<Column width={32} minWidth={32}><Avatar value="MO" /></Column>`)).toContain(
+    expect(rules(`<Column width={3} minWidth={3}><Avatar value="MO" /></Column>`)).toContain(
       "size.rem",
     );
   });
 
-  it("names the size in rem and pixels and the token to write instead", () => {
-    const issue = issues(`<Row width={40} height={40}><Icon name="check" /></Row>`).find(
+  it("names the size in px and the rem string to write instead", () => {
+    const issue = issues(`<Row width={2} height={2}><Icon name="check" /></Row>`).find(
       (i) => i.rule === "size.rem",
     );
-    expect(issue?.message).toMatch(/40rem \(640 px\).*width="40"/);
+    expect(issue?.message).toMatch(/2 px.*width="2rem".*width=\{32\}/);
   });
 
-  it("leaves rem sizes that hold layout, and tokens, alone", () => {
-    expect(rules(`<Column minWidth={14} gap="8"><Text>Name</Text></Column>`)).not.toContain(
+  it("leaves px sizes, rem strings, tokens and boxes that hold layout alone", () => {
+    expect(rules(`<Row width={32} height={32}><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(rules(`<Row width="32" height="32"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
-    expect(rules(`<Row width={2} height={2}><Icon name="check" /></Row>`)).not.toContain(
+    expect(rules(`<Row width="2rem" height="2rem"><Icon name="check" /></Row>`)).not.toContain(
       "size.rem",
     );
     expect(
-      rules(`<Column width={32} height={32}><Row gap="8"><Text>Hero</Text></Row></Column>`),
+      rules(`<Column width={2} height={2}><Row gap="8"><Text>Hero</Text></Row></Column>`),
     ).not.toContain("size.rem");
-    expect(rules(`<Background width={40} height={40} />`)).not.toContain("size.rem");
+    expect(rules(`<Background width={4} height={4} />`)).not.toContain("size.rem");
   });
 });

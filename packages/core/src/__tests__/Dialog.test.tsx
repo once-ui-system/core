@@ -2,7 +2,7 @@ import { act, createEvent, fireEvent, render, screen } from "@testing-library/re
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Dialog, DialogProvider } from "../components/Dialog";
+import { Dialog } from "../components/Dialog";
 import styles from "../components/Dialog.module.scss";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
@@ -35,8 +35,9 @@ const TestProviders = ({ children }: { children: React.ReactNode }) => (
 const renderDialog = (props: Partial<React.ComponentProps<typeof Dialog>> = {}) =>
   render(<Dialog {...defaultProps} {...props} />, { wrapper: TestProviders });
 
+/** The panel: the box FocusTrap's container (the first `tabindex="-1"`) sits in. */
 const getDialogPanel = (root: ParentNode = document.body) =>
-  root.querySelector('[tabindex="-1"]') as HTMLElement | null;
+  (root.querySelector('[tabindex="-1"]')?.parentElement ?? null) as HTMLElement | null;
 
 const getOverlay = () => screen.getByRole("dialog");
 
@@ -360,8 +361,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       last.focus();
+      expect(panel).toContainElement(last);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab" });
+        fireEvent.keyDown(last, { key: "Tab" });
       });
 
       expect(document.activeElement).toBe(first);
@@ -383,8 +385,9 @@ describe("Dialog", () => {
       const last = buttons[buttons.length - 1];
 
       first.focus();
+      expect(panel).toContainElement(first);
       act(() => {
-        fireEvent.keyDown(panel as HTMLElement, { key: "Tab", shiftKey: true });
+        fireEvent.keyDown(first, { key: "Tab", shiftKey: true });
       });
 
       expect(document.activeElement).toBe(last);
@@ -418,7 +421,7 @@ describe("Dialog", () => {
       }
     });
 
-    it("restores focus to the opener after the close animation completes", () => {
+    it("restores focus to the opener as soon as it closes, while it animates out", () => {
       vi.useFakeTimers();
       const opener = document.createElement("button");
       opener.textContent = "Open dialog";
@@ -431,10 +434,12 @@ describe("Dialog", () => {
 
         rerender(<Dialog {...defaultProps} open={false} />);
 
-        expect(document.activeElement).not.toBe(opener);
+        // The overlay core (shared with Drawer) hands focus back on close, not
+        // after the exit transition: the closing dialog is already inert.
+        expect(document.activeElement).toBe(opener);
+        expect(screen.getByRole("dialog", { hidden: true }).inert).toBe(true);
 
         advanceTimers(299);
-        expect(document.activeElement).not.toBe(opener);
 
         advanceTimers(1);
         expect(document.activeElement).toBe(opener);
@@ -625,15 +630,35 @@ describe("Dialog", () => {
     });
   });
 
-  describe("DialogProvider", () => {
-    it("renders children correctly", () => {
-      render(
-        <DialogProvider>
-          <div>Provider child</div>
-        </DialogProvider>,
+  describe("stacking without a provider", () => {
+    // 3.0 made DialogProvider implicit: a stacked dialog makes the one
+    // beneath it inert on its own, with nothing wrapping the app.
+    it("makes the base dialog inert while a stacked dialog is open", () => {
+      const { rerender } = render(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open={false} />
+        </>,
+        { wrapper: TestProviders },
       );
+      const [baseDialog] = screen.getAllByRole("dialog");
+      expect(baseDialog.inert).toBe(false);
 
-      expect(screen.getByText("Provider child")).toBeInTheDocument();
+      rerender(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open />
+        </>,
+      );
+      expect(screen.getAllByRole("dialog")[0].inert).toBe(true);
+
+      rerender(
+        <>
+          <Dialog {...defaultProps} title="Base dialog" base />
+          <Dialog {...defaultProps} title="Stacked dialog" stack open={false} />
+        </>,
+      );
+      expect(screen.getAllByRole("dialog")[0].inert).toBe(false);
     });
   });
 

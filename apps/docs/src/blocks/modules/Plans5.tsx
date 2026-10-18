@@ -141,7 +141,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             left="0"
             gradient={{
               display: true,
-              x: 100,
+              x: "100%",
               y: 0,
               colorStart: "page-background",
             }}
@@ -153,12 +153,12 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
               left="l"
               translateY="-50%"
               themeBorder="rounded"
-              scheme="brand"
+              tone="brand"
             >
               Best value
             </Tag>
           )}
-          <Mask position="absolute" fill left="0" top="0" x={100} y={0}>
+          <Mask position="absolute" fill left="0" top="0" x="100%" y={0}>
             {bundle.featured && (
               <MatrixFx
                 themeSolid="color"
@@ -171,7 +171,7 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                 flicker
                 bulge={{
                   type: "wave",
-                  duration: 4,
+                  duration: 4000,
                   intensity: 15,
                   repeat: true,
                 }}
@@ -185,30 +185,30 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
             themeSolid="color"
             mask={{
               cursor: true,
-              radius: 60,
+              radius: "60vh",
             }}
             gradient={{
               display: true,
-              height: 50,
-              width: 50,
-              x: 50,
-              y: 100,
+              height: "50%",
+              width: "50%",
+              x: "50%",
+              y: "100%",
               colorStart: "brand-solid-strong",
             }}
           />
           <Column fillWidth>
-            <Text variant="heading-strong-xl">{bundle.title}</Text>
-            <Text variant="label-default-s" onBackground="neutral-medium" marginTop="4">
+            <Text textVariant="heading-strong-xl">{bundle.title}</Text>
+            <Text textVariant="label-default-s" onBackground="neutral-medium" marginTop="4">
               {bundle.subtitle}
             </Text>
-            <Text variant="label-strong-s" onBackground="brand-weak" marginTop="12">
+            <Text textVariant="label-strong-s" onBackground="brand-weak" marginTop="12">
               $<CountFx value={calculatePrice(bundleIndex, bundle)} separator="," />
             </Text>
             <Column fillWidth gap="12" paddingTop="24" paddingBottom="40">
               {bundle.features.map((feature, featureIndex) => (
                 <Row key={featureIndex} vertical="center" gap="8">
                   <Icon name="check" size="xs" onBackground="brand-weak" />
-                  <Text variant="label-default-s">{feature}</Text>
+                  <Text textVariant="label-default-s">{feature}</Text>
                 </Row>
               ))}
             </Column>
@@ -225,20 +225,20 @@ export const Plans5 = ({ bundles, ...flex }: PricingProps & React.ComponentProps
                 gap="12"
                 marginTop="20"
               >
-                <Text variant="label-default-s" onBackground="brand-weak">
+                <Text textVariant="label-default-s" onBackground="brand-weak">
                   Extras
                 </Text>
                 {bundle.extras.map((extra) => (
                   <Row key={extra.id} fillWidth horizontal="between" vertical="center">
                     <Column gap="4">
-                      <Text variant="label-default-s">{extra.label}</Text>
-                      <Text variant="label-default-xs" onBackground="neutral-weak">
+                      <Text textVariant="label-default-s">{extra.label}</Text>
+                      <Text textVariant="label-default-xs" onBackground="neutral-weak">
                         +${extra.price.toLocaleString()}
                       </Text>
                     </Column>
                     <Switch
                       checked={selectedExtras[bundleIndex]?.[extra.id] || false}
-                      onToggle={() => toggleExtra(bundleIndex, extra.id)}
+                      onCheckedChange={() => toggleExtra(bundleIndex, extra.id)}
                     />
                   </Row>
                 ))}

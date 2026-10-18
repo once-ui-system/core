@@ -1,4 +1,4 @@
-import { Column, ElementType, type Flex, Media, Row } from "@once-ui-system/core";
+import { Column, type Flex, Media, Row } from "@once-ui-system/core";
 import styles from "./Book.module.css";
 
 interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
@@ -9,10 +9,22 @@ interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> 
   href?: string;
 }
 
+const coverStyle = { isolation: "isolate", height: "100%", width: "100%" } as const;
+
+/** The whole book is a link when it has an `href`. */
+const BookLink: React.FC<{ href?: string; children: React.ReactNode }> = ({ href, children }) =>
+  href ? (
+    <a href={href} style={coverStyle}>
+      {children}
+    </a>
+  ) : (
+    <Row style={coverStyle}>{children}</Row>
+  );
+
 export const Book: React.FC<BookProps> = ({ children, src, alt, sizes, href, ...flex }) => {
   return (
-    <Row maxWidth={12} aspectRatio="3/4" {...flex}>
-      <ElementType style={{ isolation: "isolate", height: "100%", width: "100%" }} href={href}>
+    <Row maxWidth="12rem" aspectRatio="3/4" {...flex}>
+      <BookLink href={href}>
         <Row fill className={styles.bookWrapper}>
           <Row fill className={styles.book}>
             <Row
@@ -44,7 +56,7 @@ export const Book: React.FC<BookProps> = ({ children, src, alt, sizes, href, ...
                 fillHeight
                 width="8"
                 background="overlay"
-                blur={0.125}
+                blur="0.125rem"
               />
             </Row>
             <Row
@@ -67,7 +79,7 @@ export const Book: React.FC<BookProps> = ({ children, src, alt, sizes, href, ...
             </Row>
           </Row>
         </Row>
-      </ElementType>
+      </BookLink>
     </Row>
   );
 };

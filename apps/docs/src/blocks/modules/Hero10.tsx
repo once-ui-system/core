@@ -1,22 +1,4 @@
-import {
-  Arrow,
-  Avatar,
-  AvatarGroup,
-  Background,
-  Badge,
-  Button,
-  Card,
-  Column,
-  CompareImage,
-  Heading,
-  Icon,
-  Mask,
-  MatrixFx,
-  Media,
-  Pulse,
-  Row,
-  Text,
-} from "@once-ui-system/core";
+import { Avatar, AvatarGroup, Background, Tag, Button, Card, Column, CompareImage, Heading, Icon, Mask, MatrixFx, Media, StatusIndicator, Row, Text } from "@once-ui-system/core";
 
 export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) => {
   return (
@@ -28,14 +10,14 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 80,
-            width: 75,
-            height: 70,
+            x: "50%",
+            y: "80%",
+            width: "75%",
+            height: "70%",
             colorStart: "brand-background-strong",
           }}
         />
-        <Mask fill position="absolute" top="0" left="0" x={50} y={70} radius={100}>
+        <Mask fill position="absolute" top="0" left="0" x="50%" y="70%" radius="100vh">
           <MatrixFx
             fill
             themeSolid="inverse"
@@ -45,7 +27,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
             size={1.5}
             spacing={6}
             bulge={{
-              duration: 3,
+              duration: 3000,
               intensity: 20,
               repeat: false,
             }}
@@ -57,9 +39,9 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 110,
-            height: 65,
+            x: "50%",
+            y: "110%",
+            height: "65%",
             colorStart: "brand-solid-strong",
           }}
         />
@@ -72,9 +54,9 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           left="0"
           gradient={{
             display: true,
-            x: 50,
-            y: 100,
-            height: 50,
+            x: "50%",
+            y: "100%",
+            height: "50%",
             colorStart: "brand-solid-strong",
           }}
         />
@@ -85,7 +67,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
           vertical="end"
           m={{ direction: "column", horizontal: "start" }}
         >
-          <Column zIndex={1} maxWidth={40} gap="24" paddingY="xl" fillHeight vertical="between">
+          <Column zIndex={1} maxWidth="40rem" gap="24" paddingY="xl" fillHeight vertical="between">
             <Card
               fillWidth
               direction="column"
@@ -105,8 +87,8 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
               >
                 <Media
                   xs={{ hide: true }}
-                  minWidth={12}
-                  maxWidth={12}
+                  minWidth="12rem"
+                  maxWidth="12rem"
                   sizes="400px"
                   priority
                   src="/images/blog/iqon-app-02.jpg"
@@ -122,7 +104,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     <Icon name="starFill" size="xs" />
                     <Icon name="starFill" size="xs" />
                   </Row>
-                  <Text variant="heading-default-s" wrap="balance">
+                  <Text textVariant="heading-default-s" wrap="balance">
                     $10k frontend system delivered in 2 months with Once UI Pro
                   </Text>
                   <Row gap="12" vertical="center" textVariant="label-default-s">
@@ -130,17 +112,10 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     Lorant One · Founder @Once UI
                   </Row>
                 </Column>
-                <Arrow
-                  position="absolute"
-                  top="40"
-                  right="40"
-                  trigger="#case-study-arrow-trigger"
-                  scale={1}
-                />
               </Row>
             </Card>
             <Column fillWidth gap="24">
-              <Badge
+              <Tag variant="announce"
                 background="overlay"
                 paddingLeft="8"
                 paddingRight="20"
@@ -149,7 +124,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                 href="#"
               >
                 <Row vertical="center">
-                  <Pulse size="s" />
+                  <StatusIndicator pulse size="s" />
                   <Row
                     marginLeft="12"
                     textVariant="code-default-s"
@@ -160,9 +135,9 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     Sell high-value frontend systems
                   </Row>
                 </Row>
-              </Badge>
-              <Heading variant="display-default-l">Deployment-ready Next.js app templates</Heading>
-              <Text wrap="balance" variant="heading-default-xl" onBackground="neutral-medium">
+              </Tag>
+              <Heading textVariant="display-default-l">Deployment-ready Next.js app templates</Heading>
+              <Text wrap="balance" textVariant="heading-default-xl" onBackground="neutral-medium">
                 Build and deliver complete frontend systems without starting from scratch
               </Text>
               <Row vertical="center" fillWidth gap="20">
@@ -177,7 +152,7 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
                     { src: "/images/creators/osmy.jpg" },
                   ]}
                 />
-                <Text variant="label-default-s" onBackground="brand-medium">
+                <Text textVariant="label-default-s" onBackground="brand-medium">
                   Loved by hundreds of builders
                 </Text>
               </Row>
@@ -224,19 +199,19 @@ export const Hero10: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex }) 
         <Row maxWidth="xl" paddingX="l" gap="-1" align="center" s={{ direction: "column" }}>
           <Row flex="4">
             <Column fillWidth borderX="neutral-medium" horizontal="center" padding="l" gap="8">
-              <Text variant="display-strong-l">100+</Text>
+              <Text textVariant="display-strong-l">100+</Text>
               <Text onBackground="neutral-weak">Copy-paste blocks</Text>
             </Column>
           </Row>
           <Row flex="5">
             <Column fillWidth borderX="neutral-medium" horizontal="center" padding="l" gap="8">
-              <Text variant="display-strong-l">100+</Text>
+              <Text textVariant="display-strong-l">100+</Text>
               <Text onBackground="neutral-weak">Open-source components</Text>
             </Column>
           </Row>
           <Row flex="4">
             <Column fillWidth borderX="neutral-medium" horizontal="center" padding="l" gap="8">
-              <Text variant="display-strong-l">10+</Text>
+              <Text textVariant="display-strong-l">10+</Text>
               <Text onBackground="neutral-weak">Deployment-ready apps</Text>
             </Column>
           </Row>

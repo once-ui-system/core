@@ -12,7 +12,15 @@ import {
   useRef,
   useState,
 } from "react";
+import {
+  CONTROL_TEXT,
+  type ControlChromeProps,
+  describedBy,
+  useControlChrome,
+} from "../internal/controlChrome";
+import { useControllableState } from "../internal/useControllableState";
 import { Column } from "./Column";
+import { FormFieldContext } from "./FormContext";
 import type { IconButtonProps } from "./IconButton";
 import { RadioButton } from "./RadioButton";
 import { RadioGroupContext } from "./RadioGroupContext";
@@ -20,7 +28,7 @@ import { Row } from "./Row";
 import { Text } from "./Text";
 
 interface RadioGroupOption {
-  /** What the group's `value` and `onChange` carry, and what a form submits. */
+  /** What the group's `value` and `onValueChange` carry, and what a form submits. */
   value: string;
   label: ReactNode;
   description?: ReactNode;
@@ -31,15 +39,16 @@ interface RadioGroupOption {
 }
 
 interface RadioGroupProps
-  extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children"> {
+  extends Omit<React.ComponentProps<typeof Column>, "onChange" | "defaultValue" | "children">,
+    ControlChromeProps {
   /** One RadioButton per option, in order. RadioButton `children` render after them. */
   options?: RadioGroupOption[];
-  /** The selected option's `value`, when the host owns the state. Pair with `onChange`. */
+  /** The selected option's `value`, when the host owns the state. Pair with `onValueChange`. */
   value?: string;
   /** The option selected first when the group manages its own state. Without it, none is. */
   defaultValue?: string;
   /** Called with the newly selected `value`. Not called for the option already selected. */
-  onChange?: (value: string) => void;
+  onValueChange?: (value: string) => void;
   /** Submitted with the selected `value` when the group is inside a form. */
   name?: string;
   /** Visible label that names the group. Without one, name it with `aria-label`. */
@@ -87,12 +96,15 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       options,
       value,
       defaultValue,
-      onChange,
+      onValueChange,
       name,
       label,
       description,
       disabled = false,
       orientation = "vertical",
+      size,
+      error,
+      errorMessage,
       children,
       onKeyDown,
       ...flex
@@ -101,10 +113,14 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
   ) => {
     const labelId = useId();
     const descriptionId = useId();
+    const chrome = useControlChrome({ size, error, errorMessage });
+    const fieldDefaults = useMemo(() => ({ size: chrome.size }), [chrome.size]);
     const groupRef = useRef<HTMLDivElement | null>(null);
-    const controlled = value !== undefined;
-    const [uncontrolled, setUncontrolled] = useState<string | undefined>(defaultValue);
-    const current = controlled ? value : uncontrolled;
+    const [current, setCurrent] = useControllableState<string | undefined>({
+      value,
+      defaultValue,
+      onChange: onValueChange as ((next: string | undefined) => void) | undefined,
+    });
 
     // Exactly one radio must be reachable with the Tab key: the selected one,
     // or the first enabled radio while none is selected (or the selected one is
@@ -128,10 +144,9 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     const select = useCallback(
       (next: string) => {
         if (disabled || next === current) return;
-        if (!controlled) setUncontrolled(next);
-        onChange?.(next);
+        setCurrent(next);
       },
-      [disabled, current, controlled, onChange],
+      [disabled, current, setCurrent],
     );
 
     const context = useMemo(
@@ -207,9 +222,11 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           // The visible label names the group, unless the caller named it
           // another way: aria-labelledby would override an aria-label.
           aria-labelledby={flex["aria-labelledby"] ?? (hasLabel && !named ? labelId : undefined)}
-          aria-describedby={
-            flex["aria-describedby"] ?? (hasDescription ? descriptionId : undefined)
-          }
+          aria-describedby={describedBy(
+            flex["aria-describedby"] ?? (hasDescription ? descriptionId : undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
           aria-orientation={orientation}
           aria-disabled={disabled || undefined}
           onKeyDown={handleKeyDown}
@@ -217,23 +234,35 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
           {(hasLabel || hasDescription) && (
             <Column gap="4">
               {hasLabel && (
-                <Text id={labelId} variant="label-strong-s" onBackground="neutral-strong">
+                <Text id={labelId} textVariant="label-strong-s" onBackground="neutral-strong">
                   {label}
                 </Text>
               )}
               {hasDescription && (
-                <Text id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
+                <Text id={descriptionId} textVariant="body-default-s" onBackground="neutral-weak">
                   {description}
                 </Text>
               )}
             </Column>
           )}
-          {orientation === "horizontal" ? (
-            <Row gap="24" wrap>
-              {radios}
-            </Row>
-          ) : (
-            <Column gap="16">{radios}</Column>
+          {/* The group's size reaches each radio the way a Form's does. */}
+          <FormFieldContext.Provider value={fieldDefaults}>
+            {orientation === "horizontal" ? (
+              <Row gap="24" wrap>
+                {radios}
+              </Row>
+            ) : (
+              <Column gap="16">{radios}</Column>
+            )}
+          </FormFieldContext.Provider>
+          {chrome.showsError && (
+            <Text
+              id={chrome.errorId}
+              textVariant={CONTROL_TEXT[chrome.size].body}
+              onBackground="danger-weak"
+            >
+              {errorMessage}
+            </Text>
           )}
         </Column>
       </RadioGroupContext.Provider>

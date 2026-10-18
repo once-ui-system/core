@@ -73,21 +73,21 @@ screens.
   marginBottom="24"
   preview={
     <Tabs defaultValue="general" orientation="vertical" padding="24" gap="24" s={{ direction: "column" }}>
-      <TabList aria-label="Settings" minWidth={12} s={{ direction: "row" }}>
+      <TabList aria-label="Settings" minWidth="12rem" s={{ direction: "row" }}>
         <Tab value="general" size="l" prefixIcon="person">General</Tab>
         <Tab value="style" size="l" prefixIcon="sparkle">Style</Tab>
         <Tab value="security" size="l" prefixIcon="security">Security</Tab>
       </TabList>
       <TabPanel value="general" gap="8">
-        <Heading variant="heading-strong-m">General</Heading>
+        <Heading textVariant="heading-strong-m">General</Heading>
         <Text onBackground="neutral-weak">Your name, email and avatar.</Text>
       </TabPanel>
       <TabPanel value="style" gap="8">
-        <Heading variant="heading-strong-m">Style</Heading>
+        <Heading textVariant="heading-strong-m">Style</Heading>
         <Text onBackground="neutral-weak">Theme, brand colour and density.</Text>
       </TabPanel>
       <TabPanel value="security" gap="8">
-        <Heading variant="heading-strong-m">Security</Heading>
+        <Heading textVariant="heading-strong-m">Security</Heading>
         <Text onBackground="neutral-weak">Password, sessions and two-factor sign-in.</Text>
       </TabPanel>
     </Tabs>
@@ -96,7 +96,7 @@ screens.
     {
       code:
 `<Tabs defaultValue="general" orientation="vertical" gap="24" s={{ direction: "column" }}>
-  <TabList aria-label="Settings" minWidth={12} s={{ direction: "row" }}>
+  <TabList aria-label="Settings" minWidth="12rem" s={{ direction: "row" }}>
     <Tab value="general" size="l" prefixIcon="person">General</Tab>
     <Tab value="style" size="l" prefixIcon="sparkle">Style</Tab>
     <Tab value="security" size="l" prefixIcon="security">Security</Tab>
@@ -113,8 +113,8 @@ screens.
 
 ## Controlled
 
-Pass `value` and `onChange` when something else owns the selection: a URL search
-param, say, so a reload opens the same tab. `onChange` is not called for the tab
+Pass `value` and `onValueChange` when something else owns the selection: a URL search
+param, say, so a reload opens the same tab. `onValueChange` is not called for the tab
 that is already selected. Without `value`, Tabs keeps its own state and starts on
 `defaultValue`, or on the first enabled tab if there is none.
 
@@ -126,7 +126,7 @@ that is already selected. Without `value`, Tabs keeps its own state and starts o
       code:
 `const [tab, setTab] = useState("general");
 
-<Tabs value={tab} onChange={setTab}>
+<Tabs value={tab} onValueChange={setTab}>
   …
 </Tabs>`,
       language: "tsx",
@@ -180,9 +180,9 @@ page names it.
 <PropsTable
   component="Tabs"
   describe={{
-    value: "The selected tab's value, when the host owns the state. Pair with onChange.",
+    value: "The selected tab's value, when the host owns the state. Pair with onValueChange.",
     defaultValue: "The tab selected first when Tabs keeps its own state. Without it, the first enabled tab.",
-    onChange: "Called with the newly selected tab's value.",
+    onValueChange: "Called with the newly selected tab's value.",
     orientation: "Which arrow keys move between tabs, and whether the list sits above or beside the panels.",
     activation: "automatic selects a tab when the arrow keys reach it; manual waits for Enter or Space.",
     children: "A TabList and its TabPanels, in any layout.",
@@ -203,7 +203,7 @@ page names it.
 <PropsTable
   component="Tab"
   describe={{
-    value: "Matches the TabPanel this tab shows, and is what onChange reports.",
+    value: "Matches the TabPanel this tab shows, and is what onValueChange reports.",
     children: "The tab's text.",
     disabled: "Visible, not selectable, skipped by the arrow keys.",
   }}

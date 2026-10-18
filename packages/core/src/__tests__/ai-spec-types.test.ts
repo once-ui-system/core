@@ -82,7 +82,7 @@ describe("spec types", () => {
     "LegendConfig",
     "DateConfig",
     "BarWidth",
-    "TableHeader",
+    "TableColumn",
     "GridSize",
     "Opacity",
     "curveType",
@@ -96,7 +96,10 @@ describe("spec types", () => {
   });
 
   it("gives a chart its row and series shape, not just their names", () => {
-    expect(types.SeriesConfig).toMatchObject({ key: "!string" });
+    // Generic over the row (3.0): read at its default, the key is a DataPoint
+    // key, and SeriesKey says that is any string key of the row.
+    expect(types.SeriesConfig).toMatchObject({ key: "!SeriesKey<DataPoint>" });
+    expect(types.SeriesKey).toBe("Extract<keyof T, string>");
     // DataPoint's whole point is the index signature — series keys live there.
     expect(Object.keys(types.DataPoint as Record<string, string>)).toContain("[key: string]");
   });

@@ -11,7 +11,7 @@ const examples: BlockExampleDef[] = [
     files: ["Footer6.tsx"],
     render: () => (
       <Column fillWidth background="page">
-        <Column fillWidth minHeight={4} background="neutral-medium" borderBottom="surface" />
+        <Column fillWidth minHeight="4rem" background="neutral-medium" borderBottom="surface" />
         <Footer6 />
       </Column>
     ),
@@ -21,7 +21,7 @@ const examples: BlockExampleDef[] = [
     files: ["Footer5.tsx"],
     render: () => (
       <Column fillWidth background="page">
-        <Column fillWidth minHeight={4} background="neutral-medium" borderBottom="surface" />
+        <Column fillWidth minHeight="4rem" background="neutral-medium" borderBottom="surface" />
         <Footer5 />
       </Column>
     ),
@@ -61,7 +61,7 @@ const examples: BlockExampleDef[] = [
     files: ["Footer4.tsx"],
     render: () => (
       <Column fillWidth background="page">
-        <Column fillWidth minHeight={4} background="neutral-medium" borderBottom="surface" />
+        <Column fillWidth minHeight="4rem" background="neutral-medium" borderBottom="surface" />
         <Footer4 />
       </Column>
     ),

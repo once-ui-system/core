@@ -93,7 +93,7 @@ describe("harness entry points", () => {
     "Drawer",
     "VisuallyHidden",
     "Breadcrumbs",
-    "KeyTip",
+    "Kbd",
   ])("has %s on the root", (name) => {
     expect(components[name]).toBeDefined();
     expect(components[name].importFrom).toBeUndefined();
