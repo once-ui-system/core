@@ -57,8 +57,11 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
         border={`${variant}-medium`}
         background={`${variant}-medium`}
         vertical={title || children ? "start" : "center"}
-        role="alert"
-        aria-live="assertive"
+        // Only a problem interrupts: danger and warning are alerts, info and
+        // success a polite status. Every docs callout used to be read out as
+        // an alert. `role` and `aria-live` can still be set through the rest.
+        role={variant === "danger" || variant === "warning" ? "alert" : "status"}
+        aria-live={variant === "danger" || variant === "warning" ? "assertive" : "polite"}
         className={className}
         style={style}
         {...rest}

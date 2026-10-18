@@ -844,9 +844,6 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
           // A combobox handles its own keys, the panel's included.
           onKeyDown={isCombobox ? undefined : handleKeyDown}
           tabIndex={-1}
-          role={wrapperIsTrigger ? "button" : undefined}
-          aria-haspopup={wrapperIsTrigger ? "listbox" : undefined}
-          aria-expanded={wrapperIsTrigger ? isOpen : undefined}
           data-role="dropdown-wrapper"
         >
           <Row
@@ -867,7 +864,11 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                   }
             }
             onKeyDown={isCombobox ? undefined : handleKeyDown}
+            // With a trigger that is not a control of its own (a span, an
+            // Avatar), this row is the button: one, not two nested ones, and
+            // in the tab order, or no keyboard can open the panel.
             role={wrapperIsTrigger ? "button" : undefined}
+            tabIndex={wrapperIsTrigger ? 0 : undefined}
             data-is-dropdown="true"
             aria-haspopup={wrapperIsTrigger ? "true" : undefined}
             aria-expanded={wrapperIsTrigger ? isOpen : undefined}

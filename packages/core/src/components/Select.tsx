@@ -379,15 +379,22 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     };
 
+    // A searchable Select moves focus to its query field. The panel stays
+    // `visibility: hidden` until it is positioned, and a hidden field cannot
+    // take focus, so a single deferred focus() landed nowhere: keep trying
+    // each frame until it sticks (a few frames at most).
     useEffect(() => {
-      if (isDropdownOpen) {
-        // If searchable is true, focus the search input
-        if (searchable) {
-          setTimeout(() => {
-            searchRef.current?.focus();
-          }, 0);
-        }
-      }
+      if (!isDropdownOpen || !searchable) return;
+      let frame = 0;
+      let tries = 0;
+      const attempt = () => {
+        const field = searchRef.current;
+        if (field) field.focus();
+        if (document.activeElement === field || ++tries > 30) return;
+        frame = requestAnimationFrame(attempt);
+      };
+      frame = requestAnimationFrame(attempt);
+      return () => cancelAnimationFrame(frame);
     }, [isDropdownOpen, searchable]);
 
     // Filter options based on search query

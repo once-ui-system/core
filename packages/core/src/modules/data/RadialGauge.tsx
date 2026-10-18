@@ -90,6 +90,8 @@ export const RadialGauge = ({
 
   // Animate active tick count so ticks light up one by one when the value changes
   const [activeLines, setActiveLines] = useState(() => Math.floor((value / 100) * ticks));
+  // Unique per gauge: a fixed id repeated on a page with two gauges.
+  const gradientId = `radial-gauge-gradient-${useId()}`;
 
   useEffect(() => {
     const target = Math.floor((value / 100) * ticks);
@@ -158,9 +160,24 @@ export const RadialGauge = ({
     return lines;
   };
 
+  const { "aria-label": ariaLabel = "Gauge", "aria-labelledby": ariaLabelledBy, ...content } =
+    flex;
+
   return (
-    <Column center radius="full">
+    // A gauge is a meter: without the role its value was only lit ticks.
+    <Column
+      center
+      radius="full"
+      role="meter"
+      aria-label={ariaLabelledBy ? undefined : ariaLabel}
+      aria-labelledby={ariaLabelledBy}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={value}
+      aria-valuetext={typeof unit === "string" ? `${value}${unit}` : undefined}
+    >
       <svg
+        aria-hidden="true"
         width="100%"
         height="100%"
         viewBox={`0 0 ${width} ${height}`}
@@ -176,7 +193,7 @@ export const RadialGauge = ({
         {renderLines()}
       </svg>
 
-      <Column fill position="absolute" horizontal="center" vertical="center" gap="2" {...flex}>
+      <Column fill position="absolute" horizontal="center" vertical="center" gap="2" {...content}>
         {children || (
           <CountFx
             as="div"
