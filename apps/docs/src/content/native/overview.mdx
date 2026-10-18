@@ -149,6 +149,7 @@ With the insets in place, `Dialog` sheets clear the home indicator and toasts ap
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
 - **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
 - **Tabs** have no arrow-key navigation, so `activation` has no effect.
+- **Core 3.0 names.** `Accordion` also takes `defaultOpen` and `onOpenChange`, `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code written for 3.0 works here too.
 - **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them.
 
 ## Design tokens

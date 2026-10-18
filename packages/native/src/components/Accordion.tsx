@@ -28,9 +28,13 @@ export interface AccordionProps extends Omit<FlexProps, "radius"> {
   iconRotation?: number;
   size?: CondensedTShirtSizes;
   radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
-  /** With `onToggle` the caller owns the state; without it, only the first state. */
+  /** With `onToggle` or `onOpenChange` the caller owns the state; without them, only the first state. */
   open?: boolean;
+  /** Core 3.0's name for the first state when the accordion owns it. */
+  defaultOpen?: boolean;
   onToggle?: () => void;
+  /** Core 3.0's change handler: called with the next state. */
+  onOpenChange?: (open: boolean) => void;
   headerProps?: FlexProps;
   contentProps?: FlexProps;
   toggleOnHeaderClick?: boolean;
@@ -45,8 +49,10 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
   {
     title,
     children,
-    open = false,
+    open,
+    defaultOpen = false,
     onToggle,
+    onOpenChange,
     iconRotation = 180,
     radius = "m",
     icon = "chevronDown",
@@ -60,27 +66,27 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
   ref,
 ) {
   const theme = useTheme();
-  const [local, setLocal] = useState(open);
-  useEffect(() => setLocal(open), [open]);
-  const isOpen = onToggle ? open : local;
+  const [local, setLocal] = useState(open ?? defaultOpen);
+  useEffect(() => {
+    if (open !== undefined) setLocal(open);
+  }, [open]);
+  const controlled = open !== undefined && (onToggle !== undefined || onOpenChange !== undefined);
+  const isOpen = controlled ? open : local;
 
   // LayoutAnimation eases the content's height on the next layout pass.
   const animate = () => LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
-  const toggle = () => {
+  const set = (next: boolean) => {
+    if (next === isOpen) return;
     animate();
-    if (onToggle) onToggle();
-    else setLocal((prev) => !prev);
+    onToggle?.();
+    onOpenChange?.(next);
+    if (!controlled) setLocal(next);
   };
+  const toggle = () => set(!isOpen);
   useImperativeHandle(ref, () => ({
     toggle,
-    open: () => {
-      animate();
-      setLocal(true);
-    },
-    close: () => {
-      animate();
-      setLocal(false);
-    },
+    open: () => set(true),
+    close: () => set(false),
   }));
 
   const turn = useRef(new Animated.Value(isOpen ? 1 : 0)).current;
