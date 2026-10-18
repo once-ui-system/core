@@ -44,6 +44,10 @@ jobs:
       - name: Lint gate
         run: pnpm --filter @once-ui-system/core lint:gate
 
+      # fx and blocks left core with their old errors; each holds its own line.
+      - name: Lint gate (fx, blocks)
+        run: pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks lint:gate
+
   test:
     name: Build, typecheck and test
     runs-on: ubuntu-latest

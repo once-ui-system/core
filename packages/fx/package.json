@@ -50,7 +50,8 @@
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
     "check:package": "publint && attw --pack . --profile esm-only",
-    "prepack": "pnpm build"
+    "prepack": "pnpm build",
+    "lint:gate": "node ../core/scripts/lint-gate.mjs --root ."
   },
   "dependencies": {
     "clsx": "^2.1.1"

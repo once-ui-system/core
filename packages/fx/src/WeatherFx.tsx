@@ -273,7 +273,7 @@ const WeatherFx = ({
       const children: LightningBranch[] = [];
 
       // Longer branches that decrease more gradually with depth
-      const lengthMultiplier = Math.pow(0.7, branchLevel);
+      const lengthMultiplier = 0.7 ** branchLevel;
       const branchLength = 3 + Math.floor(Math.random() * 4); // 3-6 segments
 
       let currentX = startX;
@@ -321,7 +321,7 @@ const WeatherFx = ({
                 children.push({
                   startIndex: i,
                   segments: childBranch.segments,
-                  thickness: parentThickness * Math.pow(0.6, branchLevel + 1),
+                  thickness: parentThickness * 0.6 ** (branchLevel + 1),
                   children: childBranch.children,
                 });
               }

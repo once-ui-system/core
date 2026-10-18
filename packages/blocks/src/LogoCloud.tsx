@@ -2,8 +2,8 @@
 
 import { Flex, Grid, Logo } from "@once-ui-system/core";
 import classNames from "clsx";
-import type { ComponentProps } from "react";
 import type React from "react";
+import type { ComponentProps } from "react";
 import { useEffect, useState } from "react";
 import styles from "./LogoCloud.module.scss";
 

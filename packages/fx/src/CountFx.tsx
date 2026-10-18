@@ -63,11 +63,11 @@ const CountFx = ({
       case "linear":
         return progress;
       case "ease-out":
-        return 1 - Math.pow(1 - progress, 3);
+        return 1 - (1 - progress) ** 3;
       case "ease-in-out":
-        return progress < 0.5 ? 2 * progress * progress : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+        return progress < 0.5 ? 2 * progress * progress : 1 - (-2 * progress + 2) ** 2 / 2;
       default:
-        return 1 - Math.pow(1 - progress, 3);
+        return 1 - (1 - progress) ** 3;
     }
   };
 

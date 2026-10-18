@@ -3,7 +3,7 @@
 import type { Speed } from "@once-ui-system/core";
 import classNames from "clsx";
 import type React from "react";
-import { type ReactNode, useCallback, useEffect, useRef, useState } from "react"
+import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { speedFactor } from "./internal/speed.js";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];

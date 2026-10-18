@@ -1,5 +1,5 @@
 import { LayoutProvider } from "@once-ui-system/core";
-import { fireEvent, render as baseRender } from "@testing-library/react";
+import { render as baseRender, fireEvent } from "@testing-library/react";
 import { createRef, type ReactElement } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { FlipFx } from "../FlipFx.js";
@@ -97,9 +97,7 @@ describe("TiltFx", () => {
 describe("TypeFx mode=fade (2.x FadingLettersFx)", () => {
   it("forwards its ref to the Text it renders", () => {
     const ref = createRef<HTMLSpanElement>();
-    const { container } = render(
-      <TypeFx ref={ref} mode="fade" words="hi there" state="visible" />,
-    );
+    const { container } = render(<TypeFx ref={ref} mode="fade" words="hi there" state="visible" />);
     expect(ref.current).toBe(container.firstElementChild);
   });
 });

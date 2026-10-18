@@ -1,0 +1,12 @@
+{
+  "$comment": "Biome error count for packages/fx. CI fails if it rises. After fixing errors, run `pnpm lint:gate --update` to record the lower count.",
+  "errors": 22,
+  "rules": {
+    "lint/a11y/noStaticElementInteractions": 1,
+    "lint/a11y/useKeyWithMouseEvents": 1,
+    "lint/correctness/useExhaustiveDependencies": 13,
+    "lint/security/noDangerouslySetInnerHtml": 1,
+    "lint/suspicious/noArrayIndexKey": 5,
+    "lint/suspicious/useIterableCallbackReturn": 1
+  }
+}

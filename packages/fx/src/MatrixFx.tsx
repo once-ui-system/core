@@ -495,7 +495,7 @@ const MatrixFx = ({
             const now = Date.now();
             const elapsed = (now - revealStartTimeRef.current) / 1000;
             // Cubic easing: starts very slow, then explodes
-            const revealProgress = Math.pow(elapsed, 3) * speed * 3;
+            const revealProgress = elapsed ** 3 * speed * 3;
 
             // Check if animation is complete (max offset is ~1.3)
             if (revealProgress >= 2.0) {
@@ -686,7 +686,7 @@ const MatrixFx = ({
             const now = Date.now();
             const elapsed = (now - revealStartTimeRef.current) / 1000;
             // Cubic easing: starts very slow, then explodes
-            const revealProgress = Math.pow(elapsed, 3) * speed * 3;
+            const revealProgress = elapsed ** 3 * speed * 3;
 
             // Cap progress to prevent infinite growth (max offset is ~1.3)
             const cappedProgress = Math.min(revealProgress, 2.0);
@@ -779,7 +779,7 @@ const MatrixFx = ({
               const elapsed = (Date.now() - hideStartTimeRef.current) / 1000;
               // Use quadratic easing for faster hide (power of 2)
               const hideSpeed = speed * 6; // Faster to handle max progress of 2.0
-              const hideProgress = Math.pow(elapsed, 2) * hideSpeed;
+              const hideProgress = elapsed ** 2 * hideSpeed;
 
               // Reverse from the progress we had when hide started
               const reverseProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
@@ -895,9 +895,9 @@ const MatrixFx = ({
       if (hideStartProgressRef.current > 0) {
         const hideElapsed = (now - hideStartTimeRef.current) / 1000;
         const hideSpeed = speed * 6;
-        const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
+        const hideProgress = hideElapsed ** 2 * hideSpeed;
         const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
-        const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
+        const effectiveElapsed = (currentProgress / (speed * 3)) ** (1 / 3);
         const simulatedStartTime = now - effectiveElapsed * 1000;
         revealStartTimeRef.current = simulatedStartTime;
       } else {
@@ -939,12 +939,12 @@ const MatrixFx = ({
         // Calculate current position during hide
         const hideElapsed = (now - hideStartTimeRef.current) / 1000;
         const hideSpeed = speed * 6;
-        const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
+        const hideProgress = hideElapsed ** 2 * hideSpeed;
         const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
 
         // Reverse the cubic easing formula: progress = elapsed^3 * speed * 3
         // So: elapsed = (progress / (speed * 3)) ^ (1/3)
-        const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
+        const effectiveElapsed = (currentProgress / (speed * 3)) ** (1 / 3);
         const simulatedStartTime = now - effectiveElapsed * 1000;
         revealStartTimeRef.current = simulatedStartTime;
       } else {
@@ -997,9 +997,9 @@ const MatrixFx = ({
       if (hideStartProgressRef.current > 0) {
         const hideElapsed = (now - hideStartTimeRef.current) / 1000;
         const hideSpeed = speed * 6;
-        const hideProgress = Math.pow(hideElapsed, 2) * hideSpeed;
+        const hideProgress = hideElapsed ** 2 * hideSpeed;
         const currentProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
-        const effectiveElapsed = Math.pow(currentProgress / (speed * 3), 1 / 3);
+        const effectiveElapsed = (currentProgress / (speed * 3)) ** (1 / 3);
         const simulatedStartTime = now - effectiveElapsed * 1000;
         revealStartTimeRef.current = simulatedStartTime;
       } else {

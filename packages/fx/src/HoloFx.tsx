@@ -3,7 +3,7 @@
 import { Flex, useInViewport, useReducedMotion } from "@once-ui-system/core";
 import classNames from "clsx";
 import type React from "react";
-import { type CSSProperties, useCallback, useEffect, useRef } from "react"
+import { type CSSProperties, useCallback, useEffect, useRef } from "react";
 import styles from "./HoloFx.module.scss";
 
 interface MaskOptions {

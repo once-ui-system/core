@@ -1,0 +1,8 @@
+{
+  "$comment": "Biome error count for packages/blocks. CI fails if it rises. After fixing errors, run `pnpm lint:gate --update` to record the lower count.",
+  "errors": 2,
+  "rules": {
+    "lint/correctness/useExhaustiveDependencies": 1,
+    "lint/suspicious/noArrayIndexKey": 1
+  }
+}
