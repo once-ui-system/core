@@ -1,10 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, {
+import type React from "react";
+import {
   forwardRef,
-  InputHTMLAttributes,
-  ReactNode,
+  type InputHTMLAttributes,
+  type ReactNode,
   useCallback,
   useEffect,
   useId,
@@ -198,10 +199,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // anything to point `aria-describedby` at.
     const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
     // The caller's own description comes first; it used to be overwritten.
+    // `description` is read last: it rendered with an id nothing pointed at.
     const describedBy =
-      [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+      [
+        props["aria-describedby"],
+        showsErrorMessage ? `${id}-error` : undefined,
+        description ? `${id}-description` : undefined,
+      ]
         .filter(Boolean)
         .join(" ") || undefined;
+    // Characters left, counted from what the field shows: an uncontrolled
+    // field has no `value`, and the count used to stay at `maxLength`.
+    const remaining = props.maxLength ? props.maxLength - String(fieldValue ?? "").length : 0;
 
     const inputClassNames = classNames(
       styles.input,
@@ -294,14 +303,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <Text
                 variant="label-default-s"
                 onBackground={
-                  props.maxLength - String(props.value || "").length <= 5
-                    ? "danger-weak"
-                    : props.maxLength - String(props.value || "").length <= 10
-                      ? "warning-weak"
-                      : "neutral-weak"
+                  remaining <= 5 ? "danger-weak" : remaining <= 10 ? "warning-weak" : "neutral-weak"
                 }
               >
-                {props.maxLength - String(props.value || "").length}
+                {remaining}
               </Text>
             </Row>
           )}

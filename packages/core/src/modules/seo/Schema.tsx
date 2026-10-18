@@ -52,8 +52,11 @@ export function Schema({
   const normalizedBaseURL = baseURL.endsWith("/") ? baseURL.slice(0, -1) : baseURL;
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
 
+  // An absolute image (a CDN) is used as is; only a path is put on baseURL.
   const imageUrl = image
-    ? `${normalizedBaseURL}${image.startsWith("/") ? image : `/${image}`}`
+    ? /^https?:\/\//.test(image)
+      ? image
+      : `${normalizedBaseURL}${image.startsWith("/") ? image : `/${image}`}`
     : `${normalizedBaseURL}/og?title=${encodeURIComponent(title)}`;
 
   const url = `${normalizedBaseURL}${normalizedPath}`;

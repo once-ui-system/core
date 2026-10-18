@@ -53,7 +53,7 @@ export const VERSIONS = [
     origin: "https://v1.docs.once-ui.com",
     branch: "v1",
     published: true,
-    mounted: false,
+    mounted: true,
     samePaths: false,
   },
 ];

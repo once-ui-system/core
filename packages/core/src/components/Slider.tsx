@@ -52,7 +52,8 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     const [uncontrolled, setUncontrolled] = useState(defaultValue ?? min);
     const current = controlled ? value : uncontrolled;
 
-    const percentage = ((current - min) / (max - min)) * 100;
+    // With min === max there is no range to fill: 0 / 0 made the width NaN%.
+    const percentage = max > min ? ((current - min) / (max - min)) * 100 : 0;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = parseFloat(e.target.value);

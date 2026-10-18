@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { useFieldSize } from "./FormContext";
@@ -24,6 +25,17 @@ interface NumberInputProps
 
 const format = (value: number | undefined, padStart?: number) =>
   value === undefined ? "" : padStart ? value.toString().padStart(padStart, "0") : value.toString();
+
+/** Decimal places in a number, so a step can be rounded back onto its grid. */
+const decimals = (n: number) => {
+  const [, exponent] = String(n).split("e-");
+  if (exponent) return Number(exponent);
+  return (String(n).split(".")[1] ?? "").length;
+};
+
+/** `from + by` without floating-point noise: 0.2 + 0.1 is 0.3, not 0.30000000000000004. */
+const add = (from: number, by: number) =>
+  Number((from + by).toFixed(Math.max(decimals(from), decimals(by))));
 
 /** Whether the text in the field already reads as `value`: "1." and "1.50" are 1 and 1.5. */
 const shows = (text: string, value: number | undefined) =>
@@ -81,21 +93,31 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     // At xxs they sit side by side instead, down then up.
     const compact = useFieldSize(props.size) === "xxs";
 
-    const increment = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue + step;
-      if (max === undefined || newValue <= max) {
-        updateValue(newValue);
+    /**
+     * Step by `by`, clamped to `min`/`max`. A step that would pass a bound
+     * used to do nothing, so 8 with step 5 and max 10 could never reach 10;
+     * now it lands on the bound. A step from an empty field starts from 0, or
+     * from `min` when 0 is below it. Nothing is reported when the value would
+     * not change (already at the bound).
+     */
+    const stepBy = (by: number) => {
+      const parsed = parseFloat(localValue);
+      const empty = Number.isNaN(parsed);
+      if (empty && min !== undefined && 0 < min && by > 0) {
+        updateValue(min);
+        return;
       }
+      const currentValue = empty ? 0 : parsed;
+      let newValue = add(currentValue, by);
+      if (max !== undefined && newValue > max) newValue = max;
+      if (min !== undefined && newValue < min) newValue = min;
+      if (!empty && newValue === currentValue) return;
+      updateValue(newValue);
     };
 
-    const decrement = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue - step;
-      if (min === undefined || newValue >= min) {
-        updateValue(newValue);
-      }
-    };
+    const increment = () => stepBy(step);
+
+    const decrement = () => stepBy(-step);
 
     return (
       <Input

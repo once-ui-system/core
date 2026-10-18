@@ -1,0 +1,174 @@
+# Visual check: screenshots every live demo on the docs site (and the block
+# pages, in tiles) for the pull request and for its base branch, and fails when
+# a demo whose code did not change now looks different. Demos whose code
+# changed count as new, so docs edits don't trip it.
+#
+# The head is captured twice; a shot that differs between those two captures
+# is animated or unstable and is reported but never fails the run. Base
+# captures are cached per base commit, so most runs build the docs once.
+#
+# Intended visual change: add the `visual-change` label. The report (before,
+# after and diff images) is the `visual-report` artifact of every run.
+name: Visual check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+    paths:
+      - "packages/core/**"
+      - "packages/foundations/**"
+      - "apps/docs/**"
+      - "scripts/visual/**"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/visual.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: visual-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    name: Capture (${{ matrix.side }})
+    # Labels other than visual-change change nothing here.
+    if: ${{ (github.event.action != 'labeled' && github.event.action != 'unlabeled') || github.event.label.name == 'visual-change' }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      matrix:
+        side: [base, head]
+    steps:
+      # The capture scripts always come from the pull request, so both sides
+      # are shot the same way even when the PR changes the scripts.
+      - name: Check out capture scripts
+        uses: actions/checkout@v4
+        with:
+          path: tools
+          sparse-checkout: scripts/visual
+
+      # For `head`, github.sha is the merge of the PR into its base, so the
+      # comparison shows what merging would change and nothing else.
+      - name: Pick the commit to capture
+        id: target
+        run: |
+          if [ "${{ matrix.side }}" = base ]; then
+            echo "sha=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+          echo "image=${ImageOS}-${ImageVersion}" >> "$GITHUB_OUTPUT"
+
+      - name: Reuse a base capture
+        id: cache
+        if: matrix.side == 'base'
+        uses: actions/cache@v4
+        with:
+          path: shots/base
+          key: visual-base-${{ steps.target.outputs.sha }}-${{ steps.target.outputs.image }}-${{ hashFiles('tools/scripts/visual/*.mjs', 'tools/scripts/visual/package-lock.json') }}
+
+      - name: Check out the site
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ steps.target.outputs.sha }}
+          path: site
+
+      - uses: pnpm/action-setup@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          package_json_file: site/package.json
+
+      - uses: actions/setup-node@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          node-version-file: site/.nvmrc
+          cache: pnpm
+          cache-dependency-path: site/pnpm-lock.yaml
+
+      - name: Build core and docs
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: site
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm --filter @once-ui-system/core build
+          pnpm --filter @once-ui-system/docs build
+
+      - name: Install the capture tool
+        if: steps.cache.outputs.cache-hit != 'true'
+        working-directory: tools/scripts/visual
+        run: |
+          npm ci --no-audit --no-fund
+          npx playwright install --with-deps chromium
+
+      - name: Capture
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          (cd site/apps/docs && npx next start -p 3300 > "$RUNNER_TEMP/next.log" 2>&1 &)
+          for i in $(seq 1 60); do curl -sf http://localhost:3300/sitemap.xml > /dev/null && break; sleep 2; done
+          node tools/scripts/visual/capture.mjs --url http://localhost:3300 --out "shots/${{ matrix.side }}"
+          if [ "${{ matrix.side }}" = head ]; then
+            node tools/scripts/visual/capture.mjs --url http://localhost:3300 --out shots/head-2
+          fi
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-${{ matrix.side }}
+          path: shots/
+          retention-days: 7
+
+  compare:
+    name: Compare
+    needs: capture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: scripts/visual
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install the compare tool
+        working-directory: scripts/visual
+        run: npm ci --no-audit --no-fund --ignore-scripts
+
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: visual-*
+          path: shots
+          merge-multiple: true
+
+      # Exit code 3 means demos changed; anything else non-zero is a broken run.
+      - name: Compare
+        id: compare
+        run: |
+          set +e
+          node scripts/visual/compare.mjs --base shots/base --head shots/head --noise shots/head-2 --report report
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          if [ "$code" != 0 ] && [ "$code" != 3 ]; then exit "$code"; fi
+
+      - name: Summary
+        if: always()
+        run: cat report/summary.md >> "$GITHUB_STEP_SUMMARY" || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: visual-report
+          path: report/
+          retention-days: 14
+
+      - name: Verdict
+        if: steps.compare.outputs.code == '3'
+        run: |
+          if ${{ contains(github.event.pull_request.labels.*.name, 'visual-change') }}; then
+            echo "Visual changes found; the PR is labelled visual-change, so they are accepted."
+          else
+            echo "::error::Demos changed how they look (see the summary and the visual-report artifact). If that is intended, add the visual-change label."
+            exit 1
+          fi

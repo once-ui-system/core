@@ -92,8 +92,9 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
 
     return (
       // A list of steps: a screen reader says how many there are and which
-      // one the reader is on. The active step is the current one.
-      <Column role="list" {...flex}>
+      // one the reader is on. The active step is the current one. (The ref
+      // was taken but never attached.)
+      <Column ref={ref} role="list" {...flex}>
         {items.map((item, index) => {
           const state = item.state || "default";
           const nextState = index < items.length - 1 ? items[index + 1].state || "default" : state;

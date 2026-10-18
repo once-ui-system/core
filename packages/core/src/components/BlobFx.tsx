@@ -25,7 +25,15 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
   const offset3 = 1 + (random3 - 0.5) * 0.6;
 
   return (
-    <Row fill pointerEvents="none" overflow="hidden" style={{ filter: "blur(2rem)" }} {...flex}>
+    <Row
+      ref={ref}
+      fill
+      pointerEvents="none"
+      overflow="hidden"
+      aria-hidden="true"
+      style={{ filter: "blur(2rem)" }}
+      {...flex}
+    >
       {/* Blob 2 - Accent Strong */}
       <Background
         position="absolute"
@@ -81,7 +89,11 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
 
       <style
         dangerouslySetInnerHTML={{
+          // The keyframes exist only when motion is welcome: under
+          // prefers-reduced-motion the animation names resolve to nothing
+          // and the blobs hold still.
           __html: `
+          @media (prefers-reduced-motion: no-preference) {
           @keyframes blob1-${seed} {
             0%, 100% {
               transform: translateX(0);
@@ -116,6 +128,7 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
             66% {
               transform: translateX(${-6 * offset3}rem);
             }
+          }
           }
         `,
         }}

@@ -3,8 +3,8 @@
 import classNames from "clsx";
 import React, {
   forwardRef,
-  ReactNode,
-  TextareaHTMLAttributes,
+  type ReactNode,
+  type TextareaHTMLAttributes,
   useCallback,
   useEffect,
   useId,
@@ -208,6 +208,9 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
     const displayError = validationError || errorMessage;
     const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
+    // Counted from what the field shows: an uncontrolled field has no `value`,
+    // and the count used to stay at `maxLength`.
+    const remaining = props.maxLength ? props.maxLength - String(fieldValue ?? "").length : 0;
 
     const textareaClassNames = classNames(
       styles.input,
@@ -282,7 +285,12 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               // The caller's own description comes first; it used to be
               // overwritten, the same bug Input had.
               aria-describedby={
-                [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+                [
+                  props["aria-describedby"],
+                  showsErrorMessage ? `${id}-error` : undefined,
+                  // Rendered below with this id, which nothing pointed at.
+                  description ? `${id}-description` : undefined,
+                ]
                   .filter(Boolean)
                   .join(" ") || undefined
               }
@@ -319,14 +327,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 <Text
                   variant="label-default-s"
                   onBackground={
-                    props.maxLength - String(props.value || "").length <= 5
+                    remaining <= 5
                       ? "danger-weak"
-                      : props.maxLength - String(props.value || "").length <= 10
+                      : remaining <= 10
                         ? "warning-weak"
                         : "neutral-weak"
                   }
                 >
-                  {props.maxLength - String(props.value || "").length}
+                  {remaining}
                 </Text>
               </Row>
             )}

@@ -647,7 +647,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   const [copyIcon, setCopyIcon] = useState<IconName>("clipboard");
   const handleCopy = () => {
-    if (codes.length > 0 && code) {
+    // No clipboard outside a secure context (plain http): reading
+    // `writeText` off undefined threw from the click handler.
+    if (codes.length > 0 && code && navigator.clipboard) {
       navigator.clipboard
         .writeText(typeof code === "string" ? code : code.content)
         .then(() => {
