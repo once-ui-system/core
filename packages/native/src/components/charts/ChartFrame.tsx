@@ -1,5 +1,5 @@
 import { type ReactNode, useState } from "react";
-import { type LayoutChangeEvent, Pressable, View } from "react-native";
+import { type LayoutChangeEvent, Platform, Pressable, View } from "react-native";
 import { G, Line, Text as SvgText } from "react-native-svg";
 import { useTheme } from "../../theme/ThemeProvider";
 import { type FlexProps, flexStyle } from "../Flex";
@@ -152,7 +152,9 @@ export function Axes({ rect, axis, grid, yTicks, xTicks, xAxisLine = false }: Ax
   const theme = useTheme();
   const stroke = theme.color("neutral-alpha-weak");
   const fill = theme.color("neutral-on-background-weak");
-  const fontFamily = theme.text("label-default-s").fontFamily;
+  // With no theme font, SVG text on the web would fall back to the browser's serif.
+  const fontFamily =
+    theme.text("label-default-s").fontFamily ?? Platform.select({ web: "system-ui, sans-serif" });
   const right = rect.left + rect.width;
   const bottom = rect.top + rect.height;
   const showX = axis === "x" || axis === "both";

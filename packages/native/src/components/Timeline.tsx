@@ -1,5 +1,5 @@
 import { type ReactNode, useId } from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Svg, { Defs, LinearGradient, Rect, Stop } from "react-native-svg";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
@@ -42,7 +42,8 @@ function Connector({ from, to, vertical }: { from: string; to: string; vertical:
   if (from === to) return <View style={[shape, { backgroundColor: from }]} />;
   return (
     <View style={shape}>
-      <Svg width="100%" height="100%">
+      {/* Absolute, so the SVG's own default height can't stretch the step. */}
+      <Svg style={StyleSheet.absoluteFill} width="100%" height="100%">
         <Defs>
           <LinearGradient id={id} x1="0" y1="0" x2={vertical ? "0" : "1"} y2={vertical ? "1" : "0"}>
             <Stop offset="0" stopColor={from} />

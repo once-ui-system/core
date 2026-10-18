@@ -216,7 +216,8 @@ export function Pagination({
           />
         </Row>
       )}
-      <Row gap="4" vertical="center" wrap>
+      {/* Shrinks to the screen so the buttons wrap instead of running off it. */}
+      <Row gap="4" vertical="center" wrap style={{ flexShrink: 1 }}>
         {showFirstLast && arrow("first", "chevronDoubleLeft", text.first, 1, atStart)}
         {arrow("previous", "chevronLeft", text.previous, current - 1, atStart)}
         {paginationItems(current, pages, Math.max(0, siblings), Math.max(0, boundaries)).map(
