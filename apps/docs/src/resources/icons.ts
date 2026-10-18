@@ -28,6 +28,7 @@ import {
   HiOutlineCog6Tooth,
   HiOutlineComputerDesktop,
   HiOutlineCube,
+  HiOutlineDevicePhoneMobile,
   HiOutlineDocumentDuplicate,
   HiOutlineExclamationCircle,
   HiOutlineExclamationTriangle,
