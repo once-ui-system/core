@@ -67,6 +67,14 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
         maxWidth={32}
         position="fixed"
         className={classNames(styles.toastContainer, styles[actualPosition])}
+        // One polite live region that is on the page before the first toast:
+        // a region inserted together with its text is often not read at all.
+        // Toasts are added to it, so each is announced once as it appears; a
+        // danger toast is still its own alert and interrupts.
+        role="region"
+        aria-label="Notifications"
+        aria-live="polite"
+        aria-relevant="additions text"
       >
         {toasts.map((toast, index, array) => {
           const reverseIndex = array.length - 1 - index;
@@ -91,6 +99,7 @@ const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
                 onClose={() => removeToast(toast.id)}
                 action={toast.action}
                 duration={toast.duration}
+                announce={toast.variant === "danger"}
               >
                 {toast.message}
               </Toast>

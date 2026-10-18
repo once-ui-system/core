@@ -95,6 +95,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
     const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
     const dialogId = useId();
     const dialogTitleId = `${dialogId}-title`;
+    const dialogDescriptionId = `${dialogId}-description`;
     const [isVisible, setIsVisible] = useState(open);
     const [isAnimating, setIsAnimating] = useState(false);
     const { stackedDialogOpen, setStackedDialogOpen } = useContext(DialogContext);
@@ -323,7 +324,9 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
           padding="l"
           role="dialog"
           aria-modal="true"
-          aria-labelledby={dialogTitleId}
+          aria-labelledby={title && !flush ? dialogTitleId : undefined}
+          // Read after the title when the dialog opens.
+          aria-describedby={description && !flush ? dialogDescriptionId : undefined}
         >
           <Flex
             fill
@@ -350,30 +353,6 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
               border="neutral-medium"
               background="neutral-weak"
               tabIndex={-1}
-              onKeyDown={(e) => {
-                if (e.key === "Tab") {
-                  const focusableElements = Array.from(
-                    dialogRef.current?.querySelectorAll(
-                      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-                    ) || [],
-                  );
-
-                  if (focusableElements.length === 0) return;
-
-                  const firstElement = focusableElements[0] as HTMLElement;
-                  const lastElement = focusableElements[
-                    focusableElements.length - 1
-                  ] as HTMLElement;
-
-                  if (e.shiftKey && document.activeElement === firstElement) {
-                    e.preventDefault();
-                    lastElement.focus();
-                  } else if (!e.shiftKey && document.activeElement === lastElement) {
-                    e.preventDefault();
-                    firstElement.focus();
-                  }
-                }
-              }}
               {...rest}
             >
               {!flush && (
@@ -397,7 +376,11 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                     )}
                   </Flex>
                   {description && (
-                    <Text variant="body-default-s" onBackground="neutral-weak">
+                    <Text
+                      id={dialogDescriptionId}
+                      variant="body-default-s"
+                      onBackground="neutral-weak"
+                    >
                       {description}
                     </Text>
                   )}
