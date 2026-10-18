@@ -121,4 +121,14 @@ describe("Slider: interaction", () => {
     });
     expect(container.textContent).toBe("");
   });
+
+  // 0 / 0 made the fill and thumb position NaN%, which the browser drops.
+  it("draws an empty fill, not NaN%, when min equals max", () => {
+    const { container } = render(<Slider aria-label="Volume" min={5} max={5} defaultValue={5} />, {
+      wrapper: wrap,
+    });
+    const divs = Array.from(container.querySelectorAll("div"));
+    expect(divs.find((d) => d.style.width !== "")?.style.width).toBe("0%");
+    expect(divs.find((d) => d.style.left !== "")?.style.left).toBe("0%");
+  });
 });

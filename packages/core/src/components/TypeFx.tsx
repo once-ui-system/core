@@ -1,6 +1,8 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { prefersReducedMotionNow } from "../internal/reducedMotion";
 import { Text } from "./Text";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "children"> {
@@ -33,6 +35,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
     const [isComplete, setIsComplete] = useState(false);
     const [triggered, setTriggered] = useState(trigger === "instant");
     const timeoutRef = useRef<number | null>(null);
+    const { prefersReducedMotion } = useReducedMotion();
 
     const wordsHash = JSON.stringify(Array.isArray(words) ? words : [words]);
 
@@ -69,6 +72,14 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
         if (wordsArray.length === 0) return;
         const isSingleWord = wordsArray.length === 1;
 
+        // Under reduced motion nothing is typed out: the word it would settle
+        // on shows at once, the last one without `loop`, else the first.
+        if (prefersReducedMotion || prefersReducedMotionNow()) {
+          setDisplayText(loop ? wordsArray[0] : wordsArray[wordsArray.length - 1]);
+          setIsComplete(true);
+          return;
+        }
+
         if (delay > 0) {
           await sleep(delay);
           if (!active) return;
@@ -85,7 +96,9 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
             await sleep(speed);
           }
 
-          if (isSingleWord) {
+          // Without `loop` the last word stays: it used to be deleted too,
+          // leaving the text empty.
+          if (isSingleWord || (!loop && currentIndex === wordsArray.length - 1)) {
             if (active) setIsComplete(true);
             return;
           }
@@ -117,7 +130,7 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
         }
         if (pendingResolve) pendingResolve();
       };
-    }, [triggered, wordsHash, speed, delay, hold, loop]);
+    }, [triggered, wordsHash, speed, delay, hold, loop, prefersReducedMotion]);
 
     return (
       <Text {...text} ref={ref}>

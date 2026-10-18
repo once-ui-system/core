@@ -686,8 +686,9 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               // Revealing animation with explosive easing
               const now = Date.now();
               const elapsed = (now - revealStartTimeRef.current) / 1000;
-              // Cubic easing: starts very slow, then explodes
-              const revealProgress = Math.pow(elapsed, 3) * speed * 3;
+              // Cubic easing: starts very slow, then explodes. Under reduced
+              // motion the grid shows in full at once.
+              const revealProgress = shouldAnimate ? Math.pow(elapsed, 3) * speed * 3 : 2.0;
 
               // Cap progress to prevent infinite growth (max offset is ~1.3)
               const cappedProgress = Math.min(revealProgress, 2.0);
@@ -782,8 +783,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                 const hideSpeed = speed * 6; // Faster to handle max progress of 2.0
                 const hideProgress = Math.pow(elapsed, 2) * hideSpeed;
 
-                // Reverse from the progress we had when hide started
-                const reverseProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
+                // Reverse from the progress we had when hide started. Under
+                // reduced motion the grid is gone at once.
+                const reverseProgress = shouldAnimate
+                  ? Math.max(0, hideStartProgressRef.current - hideProgress)
+                  : 0;
 
                 if (reverseProgress > 0.01) {
                   // Small threshold to ensure completion
@@ -853,7 +857,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           ctx.globalAlpha = 1;
 
           // Only continue animating if there's active animation or dynamic content
-          const hasActiveAnimation = isHoveredRef.current || hideStartProgressRef.current > 0;
+          // Under reduced motion a revealed grid is drawn in one frame, so
+          // there is nothing more to animate while it stays revealed.
+          const hasActiveAnimation =
+            (isHoveredRef.current && shouldAnimate) || hideStartProgressRef.current > 0;
           const hasDynamicContent = flickering || (bulgeEnabled && showBulge);
           if (hasActiveAnimation || hasDynamicContent) {
             animationRef.current = requestAnimationFrame(animate);

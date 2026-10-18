@@ -5,6 +5,7 @@ import { LogoCloud } from "../components/LogoCloud";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { ToastProvider } from "../contexts/ToastProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>
@@ -61,6 +62,20 @@ describe("LogoCloud", () => {
       "/logo-5.svg",
       "/logo-6.svg",
     ]);
+  });
+
+  // The logos kept swapping on the interval whatever the motion preference.
+  it("keeps the first `limit` logos in place under reduced motion", () => {
+    mockReducedMotion(true);
+    vi.useFakeTimers();
+    const { container } = render(<LogoCloud logos={logos} limit={6} rotationInterval={1000} />, {
+      wrapper,
+    });
+    act(() => {
+      vi.advanceTimersByTime(1150 * 3);
+    });
+    expect(shown(container)).toEqual(logos.slice(0, 6).map((logo) => logo.icon));
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it("wraps around the logo list as it rotates", () => {

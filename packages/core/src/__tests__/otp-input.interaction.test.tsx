@@ -56,6 +56,47 @@ describe("OTPInput: interaction", () => {
     expect(onComplete.mock.calls).toEqual([["1234"], ["1734"]]);
   });
 
+  // Each field holds one character, so a pasted code kept only its first
+  // digit and the rest had to be typed.
+  it("fills every field from a code pasted into any of them, and reports it", async () => {
+    const user = userEvent.setup();
+    const onComplete = vi.fn();
+    render(<OTPInput length={6} onComplete={onComplete} />, { wrapper: wrap });
+    await user.click(digit(3, 6));
+    await user.paste("48 29-13");
+    expect(code(6)).toBe("482913");
+    expect(onComplete.mock.calls).toEqual([["482913"]]);
+    expect(digit(6, 6)).toHaveFocus();
+  });
+
+  it("fills from the current field for a paste shorter than the code", async () => {
+    const user = userEvent.setup();
+    const onComplete = vi.fn();
+    render(<OTPInput onComplete={onComplete} />, { wrapper: wrap });
+    await user.click(digit(1));
+    await user.keyboard("1");
+    expect(digit(2)).toHaveFocus();
+    await user.paste("56");
+    expect(code()).toBe("156");
+    expect(digit(4).value).toBe("");
+    expect(digit(4)).toHaveFocus();
+    expect(onComplete).not.toHaveBeenCalled();
+  });
+
+  // A filled field is at its one-character limit, so a digit typed into it
+  // was dropped and the user had to clear it first.
+  it("replaces a filled digit typed over, and reports the new code", async () => {
+    const user = userEvent.setup();
+    const onComplete = vi.fn();
+    render(<OTPInput onComplete={onComplete} />, { wrapper: wrap });
+    await user.click(digit(1));
+    await user.keyboard("1234");
+    await user.keyboard("{ArrowLeft}{ArrowLeft}9");
+    expect(code()).toBe("1934");
+    expect(digit(3)).toHaveFocus();
+    expect(onComplete.mock.calls).toEqual([["1234"], ["1934"]]);
+  });
+
   it("ignores letters, symbols and spaces between digits", async () => {
     const user = userEvent.setup();
     const onComplete = vi.fn();

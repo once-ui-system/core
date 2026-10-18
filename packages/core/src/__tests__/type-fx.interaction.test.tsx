@@ -7,6 +7,7 @@ import styles from "../components/FadingLettersFx.module.scss";
 import { TypeFx } from "../components/TypeFx";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -81,9 +82,29 @@ describe("TypeFx", () => {
       { wrapper },
     );
     await advance(1000);
-    const settled = typed(container);
+    // It ends on the last word, typed out, not on an empty line.
+    expect(typed(container)).toBe("cd");
+    expect(hasCursor(container)).toBe(false);
     await advance(1000);
-    expect(typed(container)).toBe(settled);
+    expect(typed(container)).toBe("cd");
+    expect(vi.getTimerCount()).toBe(0);
+  });
+
+  // Every word was typed out letter by letter whatever the motion preference.
+  it("shows the word it settles on at once under reduced motion", async () => {
+    mockReducedMotion(true);
+    const { container } = render(
+      <>
+        <TypeFx words={["ab", "cd"]} speed={10} loop={false} />
+        <TypeFx words={["ef", "gh"]} speed={10} />
+      </>,
+      { wrapper },
+    );
+    await advance(0);
+    const [once, looping] = Array.from(container.children) as HTMLElement[];
+    expect(once.textContent).toBe("cd");
+    expect(looping.textContent).toBe("ef");
+    expect(hasCursor(container)).toBe(false);
     expect(vi.getTimerCount()).toBe(0);
   });
 

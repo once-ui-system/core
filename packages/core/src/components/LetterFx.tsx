@@ -2,6 +2,8 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { prefersReducedMotionNow } from "../internal/reducedMotion";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
@@ -98,8 +100,15 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
     const [inProgress, setInProgress] = useState<boolean>(false);
     const [hasAnimated, setHasAnimated] = useState<boolean>(false);
     const originalText = useRef<string>(typeof children === "string" ? children : "");
+    const { prefersReducedMotion } = useReducedMotion();
 
     const eventHandler = useCallback(() => {
+      // Under reduced motion there is no scramble: the text stays as it is.
+      if (prefersReducedMotion || prefersReducedMotionNow()) {
+        if (!inProgress) setText(originalText.current);
+        if (trigger === "instant") setHasAnimated(true);
+        return;
+      }
       createEventHandler(
         originalText.current,
         setText,
@@ -109,7 +118,7 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
         charset,
         trigger === "instant" ? setHasAnimated : undefined,
       )();
-    }, [inProgress, speed, charset, trigger, setHasAnimated]);
+    }, [inProgress, speed, charset, trigger, setHasAnimated, prefersReducedMotion]);
 
     // Only new text resets the display. This used to share an effect with the
     // instant trigger, so every new `eventHandler` (each render, with an inline

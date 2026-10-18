@@ -87,21 +87,31 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       onChange?.(newValue);
     };
 
-    const increment = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = add(currentValue, step);
-      if (max === undefined || newValue <= max) {
-        updateValue(newValue);
+    /**
+     * Step by `by`, clamped to `min`/`max`. A step that would pass a bound
+     * used to do nothing, so 8 with step 5 and max 10 could never reach 10;
+     * now it lands on the bound. A step from an empty field starts from 0, or
+     * from `min` when 0 is below it. Nothing is reported when the value would
+     * not change (already at the bound).
+     */
+    const stepBy = (by: number) => {
+      const parsed = parseFloat(localValue);
+      const empty = Number.isNaN(parsed);
+      if (empty && min !== undefined && 0 < min && by > 0) {
+        updateValue(min);
+        return;
       }
+      const currentValue = empty ? 0 : parsed;
+      let newValue = add(currentValue, by);
+      if (max !== undefined && newValue > max) newValue = max;
+      if (min !== undefined && newValue < min) newValue = min;
+      if (!empty && newValue === currentValue) return;
+      updateValue(newValue);
     };
 
-    const decrement = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = add(currentValue, -step);
-      if (min === undefined || newValue >= min) {
-        updateValue(newValue);
-      }
-    };
+    const increment = () => stepBy(step);
+
+    const decrement = () => stepBy(-step);
 
     return (
       <Input

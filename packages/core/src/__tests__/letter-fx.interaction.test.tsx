@@ -3,6 +3,7 @@ import { createRef } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { LetterFx } from "../components/LetterFx";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const settle = async (ms = 2000) => {
   await act(async () => {
@@ -114,6 +115,36 @@ describe("LetterFx", () => {
     await settle(200);
     expect(fast.textContent).toBe("Hello");
     expect(slow.textContent).not.toBe("Hello");
+  });
+
+  // The scramble ran whatever the visitor's motion preference.
+  it("keeps the text still under reduced motion, on every trigger", async () => {
+    mockReducedMotion(true);
+    let fire: (() => void) | undefined;
+    const { container } = render(
+      <>
+        <LetterFx charset={["#"]}>Hover me</LetterFx>
+        <LetterFx trigger="instant" charset={["#"]}>
+          At mount
+        </LetterFx>
+        <LetterFx
+          trigger="custom"
+          charset={["#"]}
+          onTrigger={(trigger) => {
+            fire = trigger;
+          }}
+        >
+          On demand
+        </LetterFx>
+      </>,
+    );
+    const random = vi.spyOn(Math, "random");
+    fireEvent.mouseOver(screen.getByText("Hover me"));
+    act(() => fire?.());
+    expect(container.textContent).toBe("Hover meAt mountOn demand");
+    await settle(100);
+    expect(container.textContent).toBe("Hover meAt mountOn demand");
+    expect(random).not.toHaveBeenCalled();
   });
 
   it("follows new text", () => {

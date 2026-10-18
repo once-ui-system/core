@@ -119,6 +119,30 @@ describe("MatrixFx", () => {
     expect(frames.pending()).toHaveLength(0);
   });
 
+  // The hover reveal ran its eased grow-in and shrink-out under reduced
+  // motion, and the loop kept running for as long as the pointer stayed.
+  it("reveals and hides at once on hover under reduced motion, and stops the loop", () => {
+    mockReducedMotion(true);
+    const frames = controlAnimationFrames();
+    vi.spyOn(Date, "now").mockReturnValue(1_000_000);
+    const { container } = render(<MatrixFx trigger="hover" />, { wrapper });
+    frames.step(3, 20);
+    expect(canvas.calls.get("fillRect")).toBeUndefined();
+
+    const root = container.firstElementChild as HTMLElement;
+    fireEvent.mouseEnter(root);
+    // No time has passed: an animated reveal would not show a dot yet.
+    frames.step(1, 20);
+    const drawn = canvas.calls.get("fillRect") ?? 0;
+    expect(drawn).toBeGreaterThan(0);
+    expect(frames.pending()).toHaveLength(0);
+
+    fireEvent.mouseLeave(root);
+    frames.step(2, 20);
+    expect(canvas.calls.get("fillRect")).toBe(drawn);
+    expect(frames.pending()).toHaveLength(0);
+  });
+
   it("toggles the reveal on click with the click trigger", () => {
     const frames = controlAnimationFrames();
     vi.spyOn(Date, "now").mockReturnValue(1_000_000);

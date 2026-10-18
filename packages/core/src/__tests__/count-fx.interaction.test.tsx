@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { CountFx } from "../components/CountFx";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
-import { controlAnimationFrames } from "../test/fxTestUtils";
+import { controlAnimationFrames, mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -103,5 +103,15 @@ describe("CountFx", () => {
       .map((el) => el.textContent)
       .join("");
     expect(centred).toBe("25");
+  });
+
+  // The count ran through every number whatever the motion preference.
+  it("jumps to a new value without counting under reduced motion", () => {
+    mockReducedMotion(true);
+    const frames = controlAnimationFrames();
+    const { rerender } = render(<CountFx value={0} speed={160} />, { wrapper });
+    rerender(<CountFx value={100} speed={160} />);
+    expect(screen.getByText("100")).toBeInTheDocument();
+    expect(frames.pending()).toHaveLength(0);
   });
 });

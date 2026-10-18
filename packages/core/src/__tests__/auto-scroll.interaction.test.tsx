@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AutoScroll } from "../components/AutoScroll";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -164,5 +165,14 @@ describe("AutoScroll: animation", () => {
     const animation = start();
     unmount();
     expect(animation.cancel).toHaveBeenCalled();
+  });
+
+  // The marquee ran whatever the motion preference.
+  it("does not move under reduced motion", () => {
+    mockReducedMotion(true);
+    render(<Logos />, { wrapper });
+    start();
+    expect(animations).toHaveLength(0);
+    expect(screen.getAllByRole("link").map((l) => l.textContent)).toEqual(["Acme", "Globex"]);
   });
 });

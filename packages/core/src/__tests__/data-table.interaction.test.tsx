@@ -136,6 +136,38 @@ describe("DataTable interaction", () => {
     expect(container.querySelector("table")).toHaveAttribute("aria-labelledby", "title");
   });
 
+  // A page-size change must not leave the table on a page past the end:
+  // Pagination moves to the page that holds the first row on screen, and
+  // DataTable follows it (page 3 at 5 rows is row 11, page 2 at 10).
+  it("keeps its first row in view, within range, when the page size changes", async () => {
+    const user = userEvent.setup();
+    const many = Array.from({ length: 12 }, (_, i) => ({ id: `r${i}`, name: `Item ${i + 1}` }));
+    const onPageChange = vi.fn();
+    render(
+      <DataTable
+        columns={[{ key: "name", header: "Name" }]}
+        rows={many}
+        paginated
+        defaultPerPage={5}
+        defaultPage={3}
+        perPageOptions={[5, 10]}
+        onPageChange={onPageChange}
+        aria-label="Items"
+      />,
+      { wrapper },
+    );
+    expect(bodyRows()).toHaveLength(2);
+    await user.click(screen.getByRole("combobox", { name: "Rows per page" }));
+    await user.click(await screen.findByRole("option", { name: "10" }));
+    expect(onPageChange.mock.calls).toEqual([[2]]);
+    expect(bodyRows().map((row) => row.textContent)).toEqual(["Item 11", "Item 12"]);
+    // Back at 5 a page, row 11 is on page 3 again, not on a stale page.
+    await user.click(screen.getByRole("combobox", { name: "Rows per page" }));
+    await user.click(await screen.findByRole("option", { name: "5" }));
+    expect(onPageChange.mock.calls).toEqual([[2], [3]]);
+    expect(bodyRows().map((row) => row.textContent)).toEqual(["Item 11", "Item 12"]);
+  });
+
   it("marks the table busy while loading and hides the skeleton rows", async () => {
     const { container } = render(
       <DataTable columns={columns} rows={rows} loading aria-label="Members" />,

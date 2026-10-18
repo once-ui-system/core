@@ -95,6 +95,42 @@ describe("NumberInput: interaction", () => {
     expect(onChange.mock.calls).toEqual([[3], [2], [1]]);
   });
 
+  // A step that would pass a bound used to do nothing: 8 with step 5 and max
+  // 10 could never reach 10 with the buttons.
+  it("clamps a step that would pass max or min to the bound", () => {
+    const onChange = vi.fn();
+    render(
+      <NumberInput
+        id="qty"
+        label="Quantity"
+        defaultValue={8}
+        min={1}
+        max={10}
+        step={5}
+        onChange={onChange}
+      />,
+      { wrapper: wrap },
+    );
+    fireEvent.click(up());
+    expect(field()).toHaveValue(10);
+    fireEvent.click(up());
+    fireEvent.click(down());
+    fireEvent.click(down());
+    expect(field()).toHaveValue(1);
+    fireEvent.click(down());
+    expect(onChange.mock.calls).toEqual([[10], [5], [1]]);
+  });
+
+  it("starts stepping from min when empty and min is above zero", () => {
+    const onChange = vi.fn();
+    render(<NumberInput id="qty" label="Quantity" min={5} max={9} onChange={onChange} />, {
+      wrapper: wrap,
+    });
+    fireEvent.click(up());
+    expect(field()).toHaveValue(5);
+    expect(onChange.mock.calls).toEqual([[5]]);
+  });
+
   // 0.1 + 0.2 is 0.30000000000000004 in floating point, and that is what the
   // field showed and reported after a step.
   it("steps a decimal value without floating-point noise", () => {

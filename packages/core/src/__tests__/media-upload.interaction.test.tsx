@@ -19,6 +19,11 @@ beforeEach(() => {
     writable: true,
     value: vi.fn(() => "blob:preview"),
   });
+  Object.defineProperty(URL, "revokeObjectURL", {
+    configurable: true,
+    writable: true,
+    value: vi.fn(),
+  });
 });
 
 const fileInput = (container: HTMLElement) =>
@@ -64,6 +69,40 @@ describe("MediaUpload: interaction", () => {
     await user.upload(fileInput(container), file);
     expect(onFileUpload).toHaveBeenCalledWith(file);
     expect(await screen.findByAltText("Preview of uploaded image")).toBeInTheDocument();
+  });
+
+  // The input kept its selection, so picking the same file again fired no
+  // change event and nothing happened.
+  it("uploads the same file when it is picked twice", async () => {
+    const user = userEvent.setup();
+    const onFileUpload = vi.fn(() => Promise.resolve());
+    const { container } = render(<MediaUpload compress={false} onFileUpload={onFileUpload} />, {
+      wrapper: wrap,
+    });
+    await zone();
+    const file = png();
+    await user.upload(fileInput(container), file);
+    await user.upload(fileInput(container), file);
+    expect(onFileUpload).toHaveBeenCalledTimes(2);
+  });
+
+  // Every preview made an object URL that was never revoked, holding each
+  // picked file in memory for the life of the page.
+  it("revokes the previous preview URL on replace, and the last one on unmount", async () => {
+    const user = userEvent.setup();
+    let n = 0;
+    vi.mocked(URL.createObjectURL).mockImplementation(() => `blob:preview-${++n}`);
+    const { container, unmount } = render(<MediaUpload compress={false} />, { wrapper: wrap });
+    await zone();
+    await user.upload(fileInput(container), png());
+    expect(URL.revokeObjectURL).not.toHaveBeenCalled();
+    await user.upload(fileInput(container), png());
+    expect(vi.mocked(URL.revokeObjectURL).mock.calls).toEqual([["blob:preview-1"]]);
+    unmount();
+    expect(vi.mocked(URL.revokeObjectURL).mock.calls).toEqual([
+      ["blob:preview-1"],
+      ["blob:preview-2"],
+    ]);
   });
 
   it("uploads a dropped image", async () => {

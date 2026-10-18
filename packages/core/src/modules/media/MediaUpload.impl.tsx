@@ -46,6 +46,14 @@ export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
   accept?: string;
 }
 
+/** Release the object URL held in `ref`, if any. */
+const revokeObjectUrl = (ref: { current: string | null }) => {
+  if (ref.current) {
+    URL.revokeObjectURL(ref.current);
+    ref.current = null;
+  }
+};
+
 const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
   (
     {
@@ -72,12 +80,18 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
     const [previewImage, setPreviewImage] = useState<string | null>(initialPreviewImage); // Use prop as initial state
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    // The object URL this component made for the current preview. Each one
+    // holds its file in memory until revoked, and none ever was.
+    const objectUrlRef = useRef<string | null>(null);
 
     useEffect(() => {
       if (initialPreviewImage) {
+        revokeObjectUrl(objectUrlRef);
         setPreviewImage(initialPreviewImage);
       }
     }, [initialPreviewImage]);
+
+    useEffect(() => () => revokeObjectUrl(objectUrlRef), []);
 
     const handleDragOver = (e: React.DragEvent) => {
       e.preventDefault();
@@ -112,7 +126,10 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
       if (!file) return;
 
       if (file.type.startsWith("image/")) {
-        setPreviewImage(URL.createObjectURL(file));
+        revokeObjectUrl(objectUrlRef);
+        const url = URL.createObjectURL(file);
+        objectUrlRef.current = url;
+        setPreviewImage(url);
 
         if (compress && file.type.startsWith("image/")) {
           compressImage(file);
@@ -241,6 +258,9 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
             if (e.target.files) {
               handleFiles(e.target.files);
             }
+            // Clear the selection, or picking the same file again fires no
+            // change event and nothing happens.
+            e.target.value = "";
           }}
         />
       </Flex>

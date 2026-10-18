@@ -69,10 +69,50 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
       }
     };
 
+    /**
+     * A pasted code fills the fields. Each field holds one character, so a
+     * paste used to keep only its first digit. A code as long as the fields
+     * fills them all, whichever field it is pasted into; a shorter run of
+     * digits fills from the field it is pasted into.
+     */
+    const handlePaste = (index: number, event: React.ClipboardEvent<HTMLInputElement>) => {
+      if (disabled) return;
+      const digits = event.clipboardData.getData("text").replace(/\D/g, "");
+      event.preventDefault();
+      if (!digits) return;
+
+      const start = digits.length >= length ? 0 : index;
+      const newValues = [...values];
+      for (let i = 0; i < digits.length && start + i < length; i++) {
+        newValues[start + i] = digits[i];
+      }
+      setValues(newValues);
+
+      const last = Math.min(start + digits.length, length) - 1;
+      inputsRef.current[last < length - 1 ? last + 1 : last]?.focus();
+
+      if (newValues.every((val) => val !== "") && onComplete) {
+        onComplete(newValues.join(""));
+      }
+    };
+
     const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
       if (disabled) return;
 
-      if (event.key === "Backspace") {
+      const input = event.currentTarget;
+      if (
+        /^[0-9]$/.test(event.key) &&
+        !event.ctrlKey &&
+        !event.metaKey &&
+        !event.altKey &&
+        values[index] !== "" &&
+        input.selectionStart === input.selectionEnd
+      ) {
+        // A filled field is at its one-character limit, so a digit typed into
+        // it was dropped. It replaces the digit instead.
+        event.preventDefault();
+        handleChange(index, event.key);
+      } else if (event.key === "Backspace") {
         event.preventDefault();
         if (values[index]) {
           const newValues = [...values];
@@ -128,6 +168,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               value={values[index]}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
+              onPaste={(e) => handlePaste(index, e)}
               aria-label={`OTP digit ${index + 1} of ${length}`}
               className={styles.inputs}
             />
