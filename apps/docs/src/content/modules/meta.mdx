@@ -23,7 +23,7 @@ function:
       label: "Meta",
       language: "tsx",
       code:
-`import { Meta } from "@/modules";
+`import { Meta } from "@once-ui-system/core";
 
 export async function generateMetadata() {
     return Meta.generate({
@@ -89,7 +89,7 @@ Reference the configuration in your pages:
       label: "app/{page}/page.tsx",
       language: "tsx",
       code:
-`import { Meta } from '@/modules';
+`import { Meta } from '@once-ui-system/core';
 import { meta } from '@/app/resources/seo';
 
 export async function generateMetadata() {
@@ -158,4 +158,13 @@ The `Meta.generate` function will generate all necessary meta tags for SEO and s
 <meta name="twitter:image" content="https://once-ui.com/images/cover.jpg">`
     }
   ]}
+/>
+
+## API reference
+
+`Meta.generate` takes one object:
+
+<PropsTable
+  component="Meta"
+  label="Option"
 />

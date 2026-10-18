@@ -69,6 +69,7 @@ export const iconLibrary = {
   claude: SiClaude,
   chevronsLeftRight: LuChevronsLeftRight,
   computer: HiOutlineComputerDesktop,
+  mobile: HiOutlineDevicePhoneMobile,
   help: HiOutlineQuestionMarkCircle,
   info: HiOutlineInformationCircle,
   warning: HiOutlineExclamationTriangle,

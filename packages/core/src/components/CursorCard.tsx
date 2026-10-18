@@ -11,15 +11,29 @@ import React, {
 } from "react";
 import { createPortal } from "react-dom";
 import { cannotHover } from "../internal/pointer";
-import type { Placement } from "../types";
 import { composeTransform, translateTransform } from "../utils/layoutClasses";
 import styles from "./CursorCard.module.scss";
 import { Flex } from "./Flex";
 
-export interface CursorCardProps extends React.ComponentProps<typeof Flex> {
+export type CursorPlacement =
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
+interface CursorCardProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
   overlay?: ReactNode;
-  placement?: Placement;
+  /**
+   * Which side of the cursor the overlay sits on. The overlay is pinned to the
+   * pointer, so it takes corners rather than the start/end alignments a
+   * floating element anchored to a trigger uses.
+   */
+  placement?: CursorPlacement;
   className?: string;
   style?: React.CSSProperties;
 }

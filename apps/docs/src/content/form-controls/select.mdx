@@ -41,7 +41,7 @@ The `Select` component offers a dropdown menu for selecting from a list of optio
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Select"
@@ -94,7 +94,7 @@ Enable search functionality to filter options in large lists.
       { label: "Japan", value: "jp" },
       { label: "Brazil", value: "br" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Searchable"
@@ -149,7 +149,7 @@ Customize the message shown when no options match the search query.
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Empty State"

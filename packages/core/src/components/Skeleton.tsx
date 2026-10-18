@@ -4,7 +4,8 @@ import { Flex } from "./Flex";
 import styles from "./Skeleton.module.scss";
 
 interface SkeletonProps extends React.ComponentProps<typeof Flex> {
-  shape: "line" | "circle" | "block";
+  /** Defaults to `line`. */
+  shape?: "line" | "circle" | "block";
   /**
    * The scale: height for a `line`, diameter for a `circle`, ignored by a
    * `block` (which fills its container).
