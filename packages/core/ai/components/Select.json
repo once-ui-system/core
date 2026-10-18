@@ -7,7 +7,7 @@
  ],
  "props": {
   "options": "!SelectOptionType[]",
-  "value": "string | string[] = \"\"",
+  "value": "string | string[]",
   "emptyState": "ReactNode = No results",
   "onSelect": "(value: string | string[]) => void",
   "placement": "Placement",
