@@ -15,21 +15,27 @@ A component for creating an ordered or unordered list of items. The `List` compo
   marginBottom="24"
   preview={
     <List as="ol" textVariant="body-default-m" gap="4">
-      <ListItem>Item 1</ListItem>
-      <List as="ul" gap="4" paddingLeft="24">
-        <ListItem>Subitem 1</ListItem>
-      </List>
-      <ListItem>Item 2</ListItem>
-      <List as="ul" gap="4" paddingLeft="24">
-        <ListItem>Subitem 1</ListItem>
-        <ListItem>Subitem 2</ListItem>
-        <List as="ul" gap="4" paddingLeft="24">
-          <ListItem textVariant="body-default-s">Subsubitem 1</ListItem>
-          <ListItem textVariant="body-default-s">Subsubitem 2</ListItem>
-          <ListItem textVariant="body-default-s">Subsubitem 3</ListItem>
+      <ListItem>
+        Item 1
+        <List as="ul" gap="4" paddingLeft="24" marginTop="4">
+          <ListItem>Subitem 1</ListItem>
         </List>
-        <ListItem>Subitem 2</ListItem>
-      </List>
+      </ListItem>
+      <ListItem>
+        Item 2
+        <List as="ul" gap="4" paddingLeft="24" marginTop="4">
+          <ListItem>Subitem 1</ListItem>
+          <ListItem>
+            Subitem 2
+            <List as="ul" gap="4" paddingLeft="24" marginTop="4">
+              <ListItem textVariant="body-default-s">Subsubitem 1</ListItem>
+              <ListItem textVariant="body-default-s">Subsubitem 2</ListItem>
+              <ListItem textVariant="body-default-s">Subsubitem 3</ListItem>
+            </List>
+          </ListItem>
+          <ListItem>Subitem 3</ListItem>
+        </List>
+      </ListItem>
       <ListItem>Item 3</ListItem>
       <ListItem>Item 4</ListItem>
     </List>
@@ -38,23 +44,29 @@ A component for creating an ordered or unordered list of items. The `List` compo
     {
       code:
 `<List as="ol" textVariant="body-default-m" gap="4">
-    <ListItem>Item 1</ListItem>
-    <List as="ul" gap="4" paddingLeft="24">
+  <ListItem>
+    Item 1
+    <List as="ul" gap="4" paddingLeft="24" marginTop="4">
       <ListItem>Subitem 1</ListItem>
     </List>
-    <ListItem>Item 2</ListItem>
-    <List as="ul" gap="4" paddingLeft="24">
+  </ListItem>
+  <ListItem>
+    Item 2
+    <List as="ul" gap="4" paddingLeft="24" marginTop="4">
       <ListItem>Subitem 1</ListItem>
-      <ListItem>Subitem 2</ListItem>
-      <List as="ul" gap="4" paddingLeft="24">
-        <ListItem textVariant="body-default-s">Subsubitem 1</ListItem>
-        <ListItem textVariant="body-default-s">Subsubitem 2</ListItem>
-        <ListItem textVariant="body-default-s">Subsubitem 3</ListItem>
-      </List>
-      <ListItem>Subitem 2</ListItem>
+      <ListItem>
+        Subitem 2
+        <List as="ul" gap="4" paddingLeft="24" marginTop="4">
+          <ListItem textVariant="body-default-s">Subsubitem 1</ListItem>
+          <ListItem textVariant="body-default-s">Subsubitem 2</ListItem>
+          <ListItem textVariant="body-default-s">Subsubitem 3</ListItem>
+        </List>
+      </ListItem>
+      <ListItem>Subitem 3</ListItem>
     </List>
-    <ListItem>Item 3</ListItem>
-    <ListItem>Item 4</ListItem>
+  </ListItem>
+  <ListItem>Item 3</ListItem>
+  <ListItem>Item 4</ListItem>
 </List>`,
       language: "tsx",
       label: "List"
@@ -106,9 +118,8 @@ A numbered list counts from 1. Pass `start` to count from another number, for ex
 ## ListItem API reference
 
 <PropsTable
+  component="ListItem"
   content={[
-    ["className"],
-    ["style"],
     ["...text", "TextProps"]
   ]}
 />

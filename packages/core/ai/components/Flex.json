@@ -12,6 +12,10 @@
   "SpacingProps",
   "StyleProps"
  ],
+ "props": {
+  "position": "CSSProperties[\"position\"] = relative",
+  "scrollbar": "\"default\" | \"minimal\" = minimal"
+ },
  "tags": [
   "layout",
   "basics"

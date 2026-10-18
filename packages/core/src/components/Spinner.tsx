@@ -18,7 +18,7 @@ const Spinner = ({
   ...rest
 }: SpinnerProps) => {
   return (
-    <Flex center style={style} className={className} {...rest}>
+    <Flex center style={style} className={className} data-motion="essential" {...rest}>
       {/* The name belongs on the status element, not the outer wrapper the
             rest of the props land on. */}
       <Flex ref={ref} center className={styles[size]} role="status" aria-label={ariaLabel}>

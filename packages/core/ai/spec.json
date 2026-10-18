@@ -699,10 +699,20 @@
   "CursorFollowerProps": {
    "trigger": "ReactNode",
    "overlay": "ReactNode",
-   "placement": "Placement | \"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"",
+   "placement": "CursorPlacement",
    "className": "string",
    "style": "React.CSSProperties"
   },
+  "CursorPlacement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ],
   "curveType": [
    "step",
    "linear",
@@ -1138,8 +1148,8 @@
    "id": "!string",
    "name": "!string",
    "section": "!string",
-   "shortcut": "!string[]",
-   "keywords": "!string",
+   "shortcut": "string[]",
+   "keywords": "string",
    "href": "string",
    "perform": "() => void",
    "icon": "IconName",
@@ -1212,10 +1222,20 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
+  "NavDensity": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NavigationLayout": [
    "grid",
    "row",
    "column"
+  ],
+  "NavVariant": [
+   "solid",
+   "subtle",
+   "minimal"
   ],
   "NeutralColor": [
    "sand",
@@ -2524,7 +2544,11 @@
     "SizeProps",
     "SpacingProps",
     "StyleProps"
-   ]
+   ],
+   "props": {
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
+   }
   },
   "FocusTrap": {
    "group": "components",
@@ -2589,6 +2613,8 @@
     "StyleProps"
    ],
    "props": {
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal",
     "masonry": "boolean"
    }
   },
@@ -2843,6 +2869,37 @@
     "controls": "boolean = false",
     "style": "CSSProperties",
     "className": "string"
+   }
+  },
+  "Nav": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "density": "NavDensity = normal",
+    "variant": "NavVariant = solid",
+    "rail": "boolean = true"
+   }
+  },
+  "NavSection": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode",
+    "action": "ReactNode"
    }
   },
   "NavGroup": {
@@ -3196,7 +3253,7 @@
     "StyleProps"
    ],
    "props": {
-    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
     "style": "React.CSSProperties",
@@ -3562,7 +3619,8 @@
     "onClose": "() => void",
     "action": "React.ReactNode",
     "children": "!React.ReactNode",
-    "duration": "number = 6000"
+    "duration": "number = 6000",
+    "announce": "boolean = true"
    }
   },
   "ToggleButton": {
@@ -4670,7 +4728,7 @@
     "children": "!ReactNode",
     "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
     "speed": "Speed = medium",
-    "charset": "string[] = defaultCharset",
+    "charset": "string | string[] = defaultCharset",
     "onTrigger": "(triggerFn: () => void) => void",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4949,6 +5007,12 @@
    "kind": "hook",
    "signature": "() => FieldControl | null",
    "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
+  },
+  "useNavStyle": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: NavVariant; rail...",
+   "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "useFormPending": {
    "group": "components",

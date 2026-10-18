@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
@@ -12,11 +12,21 @@ import { Text } from "./Text";
 import { touchSlop } from "./touch";
 import { useControllable, useControlledValue } from "./useControllable";
 
+/** What a RadioGroup tells the RadioButtons inside it, as on the web. */
+const RadioGroupContext = createContext<{
+  value: string | undefined;
+  disabled: boolean;
+  select: (value: string) => void;
+  size: ReturnType<typeof controlChrome>["size"];
+  invalid: boolean;
+} | null>(null);
+
 export interface RadioButtonProps extends ControlChromeProps {
   /** Chosen or not, controlled. Leave it out to let the radio keep its own state. */
   checked?: boolean;
   /** The starting state of an uncontrolled radio (no `checked`). */
   defaultChecked?: boolean;
+  /** Inside a RadioGroup, the group checks the button whose `value` it holds. */
   value?: string;
   /**
    * Called with the state the radio moves to, as core 3.0's (2.x's
@@ -39,10 +49,11 @@ const CIRCLE = { s: "16", m: "20", l: "24" } as const;
 export function RadioButton({
   checked,
   defaultChecked = false,
+  value,
   onCheckedChange,
   label,
   description,
-  disabled = false,
+  disabled: disabledProp = false,
   "aria-label": ariaLabel = "Radio button",
   size: sizeProp,
   error,
@@ -50,8 +61,24 @@ export function RadioButton({
   style,
 }: RadioButtonProps) {
   const theme = useTheme();
-  const chrome = controlChrome({ size: sizeProp, error, errorMessage });
-  const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
+  // A RadioGroup around this button owns its checked state; outside one, or
+  // with no `value` to match, the button's own props stand.
+  const group = useContext(RadioGroupContext);
+  const inGroup = group !== null && value !== undefined;
+  const disabled = disabledProp || (inGroup && group.disabled);
+  const chrome = controlChrome({
+    size: sizeProp ?? (inGroup ? group.size : undefined),
+    error: error ?? (inGroup ? group.invalid : undefined),
+    errorMessage,
+  });
+  const [on, toggle] = useControllable(
+    inGroup ? group.value === value : checked,
+    defaultChecked,
+    (next) => {
+      if (inGroup) group.select(value);
+      onCheckedChange?.(next);
+    },
+  );
   const size = theme.space(CIRCLE[chrome.size]);
   return (
     <Pressable
@@ -138,6 +165,11 @@ export interface RadioGroupProps extends ControlChromeProps {
   description?: ReactNode;
   disabled?: boolean;
   orientation?: "horizontal" | "vertical";
+  /**
+   * RadioButtons with a `value`, in any layout, for radios `options` cannot
+   * describe. They render after the options.
+   */
+  children?: ReactNode;
   style?: ViewStyle;
 }
 
@@ -155,6 +187,7 @@ export function RadioGroup({
   size,
   error,
   errorMessage,
+  children,
   style,
 }: RadioGroupProps) {
   const chrome = controlChrome({ size, error, errorMessage });
@@ -164,6 +197,17 @@ export function RadioGroup({
   });
   const List = orientation === "horizontal" ? Row : Column;
   return (
+    <RadioGroupContext.Provider
+      value={{
+        value: selected,
+        disabled,
+        select: (v) => {
+          if (v !== selected) select(v);
+        },
+        size: chrome.size,
+        invalid: chrome.invalid,
+      }}
+    >
     <Column
       gap="12"
       accessibilityRole="radiogroup"
@@ -187,15 +231,10 @@ export function RadioGroup({
             value={o.value}
             label={o.label}
             description={o.description}
-            disabled={disabled || o.disabled}
-            size={chrome.size}
-            error={chrome.invalid}
-            checked={selected === o.value}
-            onCheckedChange={() => {
-              if (selected !== o.value) select(o.value);
-            }}
+            disabled={o.disabled}
           />
         ))}
+        {children}
       </List>
       {chrome.showsError && (
         <Text textVariant={text.body} onBackground="danger-weak" accessibilityLiveRegion="polite">
@@ -203,5 +242,6 @@ export function RadioGroup({
         </Text>
       )}
     </Column>
+    </RadioGroupContext.Provider>
   );
 }

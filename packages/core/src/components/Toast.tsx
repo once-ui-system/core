@@ -24,6 +24,12 @@ interface ToastProps {
    * keeps it up until it is closed.
    */
   duration?: number;
+  /**
+   * Make the toast its own live region. Toaster turns this off and announces
+   * through regions that are already on the page, since a region inserted
+   * together with its text is often not read at all.
+   */
+  announce?: boolean;
 }
 
 const iconMap: Partial<Record<Tone, IconName>> = {
@@ -43,6 +49,7 @@ const Toast = ({
   action,
   children,
   duration = 6000,
+  announce = true,
 }: ToastProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [visible, setVisible] = useState(true);
   const [hovered, setHovered] = useState(false);
@@ -87,8 +94,8 @@ const Toast = ({
       // Only a danger toast interrupts. Everything else waits for the screen
       // reader to finish what it is saying: a "saved" confirmation announced
       // assertively cuts off whatever the user was listening to.
-      role={tone === "danger" ? "alert" : "status"}
-      aria-live={tone === "danger" ? "assertive" : "polite"}
+      role={announce ? (tone === "danger" ? "alert" : "status") : undefined}
+      aria-live={announce ? (tone === "danger" ? "assertive" : "polite") : undefined}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onFocus={() => setFocused(true)}

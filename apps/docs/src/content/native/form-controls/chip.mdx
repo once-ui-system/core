@@ -1,0 +1,33 @@
+---
+title: "Chip"
+summary: "Chip is Tag in Once UI 3.0, on React Native as on the web: a Tag with selected, onClick or onRemove."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/chip.mdx"
+github: "packages/native/src/components/Tag.tsx"
+navLabel: "Chip"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`Chip` folded into [Tag](/native/components/tag) in Once UI 3.0, as it did on the [web](/form-controls/chip), and `@once-ui-system/native` no longer exports it. A Tag given `selected`, `onClick` (or `onPress`) or `onRemove` is the same toggle, with a remove button when it has `onRemove`. `selected` now defaults to false.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, Tag } from "@once-ui-system/native";
+import { useState } from "react";
+
+export function Filters() {
+  const [on, setOn] = useState(true);
+  return (
+    <Row gap="8">
+      <Tag label="Design" selected={on} onPress={() => setOn(!on)} />
+      <Tag label="Removable" onRemove={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Filters.tsx"
+  }
+]} />

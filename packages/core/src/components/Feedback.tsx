@@ -55,8 +55,11 @@ const Feedback = ({
       border={`${tone}-medium`}
       background={`${tone}-medium`}
       vertical={title || children ? "start" : "center"}
-      role="alert"
-      aria-live="assertive"
+      // Only a problem interrupts: danger and warning are alerts, the other
+      // tones a polite status. Every docs callout used to be read out as an
+      // alert. `role` and `aria-live` can still be set through the rest.
+      role={tone === "danger" || tone === "warning" ? "alert" : "status"}
+      aria-live={tone === "danger" || tone === "warning" ? "assertive" : "polite"}
       className={className}
       style={style}
       {...rest}
@@ -89,6 +92,7 @@ const Feedback = ({
                 </Flex>
                 {showCloseButton && (
                   <IconButton
+                    type="button"
                     onClick={onClose}
                     icon="close"
                     size="m"

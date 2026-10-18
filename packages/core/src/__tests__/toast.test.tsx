@@ -20,7 +20,7 @@ const Capture = () => {
 };
 
 const toastWith = (text: string) =>
-  screen.queryByText(text)?.closest('[role="status"], [role="alert"]');
+  screen.queryByText(text)?.closest('[aria-live], [role="alert"]');
 
 /**
  * A toast must never re-run a consumer's effects. `addToast` and
@@ -126,11 +126,11 @@ describe("toast duration", () => {
     });
 
     act(() => vi.advanceTimersByTime(600));
-    fireEvent.mouseEnter(toastWith("Hover me") as Element);
+    fireEvent.mouseEnter(screen.getByText("Hover me"));
     act(() => vi.advanceTimersByTime(10_000));
     expect(screen.getByText("Hover me")).toBeInTheDocument();
 
-    fireEvent.mouseLeave(toastWith("Hover me") as Element);
+    fireEvent.mouseLeave(screen.getByText("Hover me"));
     act(() => vi.advanceTimersByTime(399));
     expect(screen.getByText("Hover me")).toBeInTheDocument();
     act(() => vi.advanceTimersByTime(1));
@@ -164,8 +164,13 @@ describe("toast duration", () => {
 });
 
 describe("toast announcements", () => {
-  it("is a polite status for everything but danger", () => {
+  it("is announced politely for everything but danger, from a region already on the page", () => {
     render(<Capture />, { wrapper: wrap });
+    // The region is there before the first toast, so the first one is read.
+    expect(screen.getByRole("region", { name: "Notifications" })).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
     act(() => {
       api.addToast({ tone: "success", message: "Saved" });
       api.addToast({ tone: "info", message: "Heads up" });
@@ -173,9 +178,9 @@ describe("toast announcements", () => {
     });
 
     for (const text of ["Saved", "Heads up", "Careful"]) {
-      const toast = toastWith(text);
-      expect(toast).toHaveAttribute("role", "status");
-      expect(toast).toHaveAttribute("aria-live", "polite");
+      const region = toastWith(text);
+      expect(region).toHaveAttribute("role", "region");
+      expect(region).toHaveAttribute("aria-live", "polite");
     }
   });
 

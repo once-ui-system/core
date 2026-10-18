@@ -150,10 +150,20 @@
   "CursorFollowerProps": {
    "trigger": "ReactNode",
    "overlay": "ReactNode",
-   "placement": "Placement | \"top-left\" | \"top-right\" | \"bottom-left\" | \"bottom-right\"",
+   "placement": "CursorPlacement",
    "className": "string",
    "style": "React.CSSProperties"
   },
+  "CursorPlacement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ],
   "Placement": [
    "top",
    "right",

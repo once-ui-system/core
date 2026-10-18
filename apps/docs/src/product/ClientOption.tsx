@@ -12,5 +12,10 @@ export function ClientOption(props: OptionProps) {
     // Option clicked
   };
 
-  return <Option {...props} onClick={props.onClick || handleClick} />;
+  // An option is only valid inside a listbox, which the demo stands in for.
+  return (
+    <div role="listbox" aria-label={typeof props.label === "string" ? props.label : "Options"}>
+      <Option {...props} onClick={props.onClick || handleClick} />
+    </div>
+  );
 }

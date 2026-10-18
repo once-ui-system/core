@@ -58,6 +58,8 @@ export function Avatar({
 
   return (
     <View
+      // One element for screen readers, read out by its label.
+      accessible
       accessibilityRole="image"
       accessibilityLabel={value ? `Avatar ${value}` : "Avatar"}
       style={[{ width: px, height: px }, style]}

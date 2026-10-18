@@ -357,6 +357,8 @@ Mixins: LeafProps.
 ### Grid
 Extends ServerGrid.
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 - masonry?: boolean
 
 ### IconButton
@@ -446,7 +448,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Skeleton
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties

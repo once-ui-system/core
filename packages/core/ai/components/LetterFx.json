@@ -6,7 +6,7 @@
   "children": "!ReactNode",
   "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
   "speed": "Speed = medium",
-  "charset": "string[] = defaultCharset",
+  "charset": "string | string[] = defaultCharset",
   "onTrigger": "(triggerFn: () => void) => void",
   "className": "string",
   "style": "React.CSSProperties"

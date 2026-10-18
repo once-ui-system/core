@@ -8,9 +8,11 @@ import {
   describedBy,
   useControlChrome,
 } from "../internal/controlChrome.js";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
+import { useControlLabel } from "./ControlLabelContext.js";
 import { Flex } from "./Flex.js";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import commonStyles from "./SharedInteractiveStyles.module.scss";
@@ -56,7 +58,7 @@ const Switch = ({
   onChange,
   onFocus,
   onBlur,
-  disabled,
+  disabled: disabledProp,
   label,
   description,
   iconButtonProps,
@@ -68,8 +70,11 @@ const Switch = ({
   ...others
 }: SwitchProps & { ref?: React.Ref<HTMLInputElement> }) => {
   const [leaf, rest] = takeLeafProps(others);
+  const disabled = useFieldsetDisabled(disabledProp);
   const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
   const labelId = useId();
+  // Inside a Setting row, the row's label names a switch that has none.
+  const outerLabelId = useControlLabel();
   const descriptionId = useId();
   const hasLabel = Boolean(label);
   const [checked, setChecked] = useControllableState({
@@ -145,8 +150,8 @@ const Switch = ({
           {...aria}
           role="switch"
           aria-checked={checked}
-          aria-labelledby={hasLabel ? labelId : undefined}
-          aria-label={hasLabel ? undefined : ariaLabel}
+          aria-labelledby={hasLabel ? labelId : aria["aria-label"] ? undefined : outerLabelId}
+          aria-label={hasLabel || (!aria["aria-label"] && outerLabelId) ? undefined : ariaLabel}
           aria-describedby={describedBy(
             hasLabel && description
               ? descriptionId

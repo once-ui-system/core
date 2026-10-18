@@ -1,7 +1,14 @@
 "use client";
 
 import classNames from "clsx";
-import React, { InputHTMLAttributes, ReactNode, useCallback, useEffect, useState } from "react";
+import React, {
+  InputHTMLAttributes,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useId,
+  useState,
+} from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
 import { TShirtSizes } from "../types.js";
@@ -64,7 +71,7 @@ interface InputProps
 
 const Input = ({
   ref,
-  id,
+  id: idProp,
   label,
   placeholder,
   size,
@@ -96,6 +103,10 @@ const Input = ({
   ...rest
 }: InputProps & { ref?: React.Ref<HTMLInputElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
+  // `id` ties the label, error and description to the field. A field
+  // rendered without one (MDX does not typecheck) still gets them.
+  const generatedId = useId();
+  const id = idProp || `input-${generatedId}`;
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);

@@ -7,6 +7,7 @@ import { IconButton } from "../components/IconButton.js";
 import { Media } from "../components/Media.js";
 import { Row } from "../components/Row.js";
 import styles from "./SnapCarousel.module.scss";
+import { useScrollableTabStop } from "./scrollableTabStop.js";
 
 interface SnapCarouselItem {
   slide: string | React.ReactNode;
@@ -51,6 +52,8 @@ const SnapCarousel = ({
   const [activeIndex, setActiveIndex] = useState<number>(0);
   const [isDragging, setIsDragging] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
+  // The track scrolls sideways; a keyboard reaches it to scroll with arrows.
+  const scrollTabStopRef = useScrollableTabStop(scrollContainerRef);
   const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const isScrollingProgrammatically = useRef(false);
   const dragStartX = useRef(0);
@@ -122,14 +125,33 @@ const SnapCarousel = ({
     }, 500);
   }, []);
 
+  // Previous and Next leave at the ends. When the one that has focus goes,
+  // focus moves to the other instead of falling back to the page.
+  const prevButtonRef = useRef<HTMLButtonElement>(null);
+  const nextButtonRef = useRef<HTMLButtonElement>(null);
+  const refocusNav = useRef<"prev" | "next" | null>(null);
+
+  useEffect(() => {
+    const target = refocusNav.current;
+    if (!target) return;
+    const gone = target === "prev" ? activeIndex === 0 : activeIndex === items.length - 1;
+    if (!gone) return;
+    refocusNav.current = null;
+    const active = document.activeElement;
+    if (active && active !== document.body) return;
+    (target === "prev" ? nextButtonRef : prevButtonRef).current?.focus();
+  }, [activeIndex, items.length]);
+
   const handlePrevClick = () => {
     if (activeIndex > 0) {
+      if (activeIndex === 1) refocusNav.current = "prev";
       scrollToIndex(activeIndex - 1);
     }
   };
 
   const handleNextClick = () => {
     if (activeIndex < items.length - 1) {
+      if (activeIndex === items.length - 2) refocusNav.current = "next";
       scrollToIndex(activeIndex + 1);
     }
   };
@@ -225,10 +247,10 @@ const SnapCarousel = ({
         >
           {/* Scroll Container */}
           <Row
-            ref={scrollContainerRef}
+            ref={scrollTabStopRef}
             fillWidth
             fillHeight={stretch}
-            className={styles.scrollContainer}
+            className={`${styles.scrollContainer} focus-ring`}
             onMouseDown={handleMouseDown}
             overflowX="auto"
             style={{
@@ -304,6 +326,7 @@ const SnapCarousel = ({
                   >
                     <Flex radius="m" background="surface">
                       <IconButton
+                        ref={prevButtonRef}
                         onClick={handlePrevClick}
                         variant="secondary"
                         icon="chevronLeft"
@@ -326,6 +349,7 @@ const SnapCarousel = ({
                   >
                     <Flex radius="m" background="surface">
                       <IconButton
+                        ref={nextButtonRef}
                         onClick={handleNextClick}
                         variant="secondary"
                         icon="chevronRight"
@@ -343,34 +367,32 @@ const SnapCarousel = ({
       {/* Dot Indicators */}
       {indicator && items.length > 1 && (
         <Row
-          gap="8"
           fillWidth
           horizontal="center"
           paddingX="16"
-          paddingTop={controls === "contained" ? undefined : "12"}
+          // 8px less than before on each side: the 24px buttons hold the dots
+          // where the 8px dots sat.
+          paddingTop={controls === "contained" ? undefined : "4"}
           position={controls === "contained" ? "absolute" : "relative"}
-          bottom={controls === "contained" ? "16" : undefined}
+          bottom={controls === "contained" ? "8" : undefined}
           style={{
             transform: controls === "contained" ? "translateY(-100%)" : undefined,
           }}
         >
           {items.map((_, index) => (
+            // The dot is 8px; the button around it is 24px, the smallest
+            // target WCAG 2.2 allows (axe: target-size).
             <Flex
               key={index}
+              width="24"
+              height="24"
+              center
               radius="full"
               cursor="interactive"
+              className="focus-ring"
               onClick={() => handleDotClick(index)}
-              width="8"
-              height="8"
-              style={{
-                background:
-                  activeIndex === index
-                    ? "var(--neutral-on-background-strong)"
-                    : "var(--neutral-alpha-medium)",
-                transition: "background 0.3s ease, transform 0.3s ease",
-                transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
-              }}
               aria-label={`Go to slide ${index + 1}`}
+              aria-current={activeIndex === index ? "true" : undefined}
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
@@ -379,7 +401,21 @@ const SnapCarousel = ({
                   handleDotClick(index);
                 }
               }}
-            />
+            >
+              <Flex
+                radius="full"
+                width="8"
+                height="8"
+                style={{
+                  background:
+                    activeIndex === index
+                      ? "var(--neutral-on-background-strong)"
+                      : "var(--neutral-alpha-medium)",
+                  transition: "background 0.3s ease, transform 0.3s ease",
+                  transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
+                }}
+              />
+            </Flex>
           ))}
         </Row>
       )}

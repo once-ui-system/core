@@ -138,12 +138,13 @@ A [StylePanel](/components/stylePanel#owning-the-state) with `value` and
 ## API reference
 
 <PropsTable
+  component="ThemeSwitcher"
+  describe={{
+    labels: "The options' accessible names, to translate them.",
+    value: "The active theme, when you own the state. The switcher then sets nothing.",
+    onValueChange: "Called with the chosen theme.",
+  }}
   content={[
-    ["collapsed", "boolean"],
-    ["direction", "row | column"],
-    ["labels", "{ system?: string; dark?: string; light?: string }", "-", "The options' accessible names, to translate them."],
-    ["value", "system | dark | light", "-", "The active theme, when you own the state. The switcher then sets nothing."],
-    ["onValueChange", "(theme) => void", "-", "Called with the chosen theme."],
     ["ref", "HTMLDivElement"],
     ["className"],
     ["style"],

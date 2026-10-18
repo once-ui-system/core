@@ -16,12 +16,12 @@ root bundle: `import { EmojiPicker } from "@once-ui-system/core/emoji";`
   marginTop="16"
   marginBottom="24"
   preview={
-    <EmojiPicker/>
+    <ClientEmojiPicker />
   }
   codes={[
     {
       code:
-`<EmojiPicker/>`,
+`<EmojiPicker onSelect={(emoji) => console.log(emoji)} />`,
       language: "tsx",
       label: "EmojiPicker"
     }
@@ -36,12 +36,12 @@ You can pass a `columns` prop to the component to override the default columns.
   marginTop="16"
   marginBottom="24"
   preview={
-    <EmojiPicker columns={10}/>
+    <ClientEmojiPicker columns={10} />
   }
   codes={[
     {
       code:
-`<EmojiPicker columns={10}/>`,
+`<EmojiPicker columns={10} onSelect={(emoji) => console.log(emoji)} />`,
       language: "tsx",
       label: "Columns"
     }
@@ -56,7 +56,7 @@ You can pass a `style` prop to the component to override the default styles.
   marginTop="16"
   marginBottom="24"
   preview={
-    <EmojiPicker background="surface" border="neutral-medium" padding="8" radius="l" height="24rem"/>
+    <ClientEmojiPicker background="surface" border="neutral-medium" padding="8" radius="l" height="24rem"/>
   }
   codes={[
     {
@@ -67,6 +67,7 @@ You can pass a `style` prop to the component to override the default styles.
     padding="8"
     radius="l"
     height="24rem"
+    onSelect={(emoji) => console.log(emoji)}
 />`,
       language: "tsx",
       label: "Custom style"

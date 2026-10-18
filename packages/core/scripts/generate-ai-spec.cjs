@@ -842,9 +842,23 @@ async function main() {
     const implSf = program.getSourceFile(implFile);
     const implDecl = implSf ? findComponentDecl(implSf, name) : undefined;
     const implDefaults = implDecl ? getDefaults(getComponentFunction(implDecl)) : {};
+    // `Flex` and `Grid` pick a client or server render and forward everything
+    // to `ServerFlex`/`ServerGrid`, which hold the defaults (`position =
+    // "relative"`, …). Without them the spec had no defaults for either.
+    const serverSf = program.getSourceFile(
+      path.join(path.dirname(ownFile), `Server${name}.tsx`).split(path.sep).join("/"),
+    );
+    const serverDecl = serverSf ? findComponentDecl(serverSf, `Server${name}`) : undefined;
+    // Only the defaults that tell a reader something: `fill = false` and
+    // `as = div` restate what leaving a prop off means, in every slice.
+    const serverDefaults = Object.fromEntries(
+      Object.entries(serverDecl ? getDefaults(getComponentFunction(serverDecl)) : {}).filter(
+        ([, value]) => value !== "false" && value !== "div",
+      ),
+    );
 
     const fn = helper ? helper.fn : getComponentFunction(decl);
-    const defaults = { ...implDefaults, ...getDefaults(fn) };
+    const defaults = { ...serverDefaults, ...implDefaults, ...getDefaults(fn) };
     const mixins = new Set();
     const mixinMembers = new Map(); // mixin -> [propName, propString, declared member count]
     const extendsComponents = new Set();

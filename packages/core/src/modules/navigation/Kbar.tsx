@@ -29,8 +29,8 @@ export interface KbarItem {
   id: string;
   name: string;
   section: string;
-  shortcut: string[];
-  keywords: string;
+  shortcut?: string[];
+  keywords?: string;
   href?: string;
   perform?: () => void;
   icon?: IconName;
@@ -67,6 +67,7 @@ const SectionHeader = ({ id, label }: { id: string; label: string }) => (
  * and choosing never fight over focus.
  */
 const KbarSearchInput = ({
+  id,
   placeholder,
   searchQuery,
   onSearchChange,
@@ -76,6 +77,7 @@ const KbarSearchInput = ({
   listboxId,
   activeOptionId,
 }: {
+  id: string;
   placeholder: string;
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -87,7 +89,7 @@ const KbarSearchInput = ({
   activeOptionId?: string;
 }) => (
   <Input
-    id="kbar-search"
+    id={id}
     placeholder={placeholder}
     aria-label={placeholder}
     role="combobox"
@@ -186,12 +188,12 @@ export const KbarContent = ({
             suffix:
               item.shortcut && item.shortcut.length > 0 ? (
                 <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
-                  {item.shortcut.map((key, i) => (
+                  {item.shortcut.map((key, i, keys) => (
                     <Row gap="2" key={i}>
                       <KbdCap minWidth="24" style={{ transform: "scale(0.8)" }}>
                         {key}
                       </KbdCap>
-                      {i < item.shortcut.length - 1 && <Text onBackground="neutral-weak">+</Text>}
+                      {i < keys.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                     </Row>
                   ))}
                 </Row>
@@ -373,6 +375,7 @@ export const KbarContent = ({
         >
           <Row fillWidth padding="8">
             <KbarSearchInput
+              id={`${baseId}-search`}
               placeholder={placeholder}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}

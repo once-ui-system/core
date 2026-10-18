@@ -5,7 +5,6 @@
     "lint/a11y/noNoninteractiveTabindex": 1,
     "lint/a11y/noStaticElementInteractions": 2,
     "lint/a11y/noSvgWithoutTitle": 2,
-    "lint/a11y/useIframeTitle": 1,
     "lint/a11y/useKeyWithClickEvents": 1,
     "lint/a11y/useSemanticElements": 1,
     "lint/correctness/noChildrenProp": 1,

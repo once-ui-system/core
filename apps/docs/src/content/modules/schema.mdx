@@ -91,7 +91,7 @@ Reference the configuration in your pages:
       label: "app/{page}/page.tsx",
       language: "tsx",
       code:
-`import { Schema } from '@/modules';
+`import { Schema } from '@once-ui-system/core';
 import { schema } from '@/app/resources/seo';
 
 export default function HomePage() {
@@ -116,3 +116,13 @@ export default function HomePage() {
 
 This approach makes it easier to maintain consistent schema data across your site and
 update it from a single location.
+
+## API reference
+
+<PropsTable
+  component="Schema"
+  describe={{
+    as: "The schema.org type to emit.",
+    path: "The page's path, joined to baseURL for its URL.",
+  }}
+/>

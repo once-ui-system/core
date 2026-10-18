@@ -1,7 +1,7 @@
 "use client";
 
 import { Background, type DisplayProps, Flex, IconButton } from "@once-ui-system/core";
-import { useState } from "react";
+import { cloneElement, isValidElement, useEffect, useRef, useState } from "react";
 import styles from "./StyleOverlay.module.scss";
 import { StylePanel } from "./StylePanel.js";
 
@@ -19,16 +19,60 @@ const StyleOverlay = ({
   ...rest
 }: StyleOverlayProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  // Focus follows the panel: into it on open, back to the trigger on close,
+  // but only once someone has opened it, never on mount.
+  const opened = useRef(false);
 
   const togglePanel = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    if (isOpen) {
+      opened.current = true;
+      panelRef.current
+        ?.querySelector<HTMLElement>('button[aria-label="Close style panel"]')
+        ?.focus();
+      const onKeyDown = (event: KeyboardEvent) => {
+        if (event.key !== "Escape" || event.defaultPrevented) return;
+        event.preventDefault();
+        setIsOpen(false);
+      };
+      document.addEventListener("keydown", onKeyDown);
+      return () => document.removeEventListener("keydown", onKeyDown);
+    }
+    if (opened.current) {
+      triggerRef.current?.querySelector<HTMLElement>("button, a[href], [tabindex]")?.focus();
+    }
+  }, [isOpen]);
+
+  // The trigger only shows while the panel is closed. A Button or IconButton
+  // without an onClick renders as a div, which no keyboard can reach, so it
+  // is given the toggle as its own onClick and renders as a real button.
+  const ownsClick =
+    isValidElement<{ onClick?: unknown }>(children) && children.props.onClick === undefined;
+  const trigger = ownsClick
+    ? cloneElement(children as React.ReactElement<Record<string, unknown>>, {
+        onClick: togglePanel,
+        "aria-haspopup": "dialog",
+        "aria-expanded": false,
+      })
+    : children;
+
   return (
     <Flex ref={ref} position="static" zIndex={zIndex}>
-      {!isOpen && <Flex onClick={togglePanel}>{children}</Flex>}
+      {!isOpen && (
+        <Flex ref={triggerRef} onClick={ownsClick ? undefined : togglePanel}>
+          {trigger}
+        </Flex>
+      )}
       <Flex
-        as="aside"
+        ref={panelRef}
+        role="dialog"
+        aria-label="Style panel"
+        aria-hidden={!isOpen || undefined}
         zIndex={3}
         className={`${styles.panel} ${isOpen && styles.open}`}
         maxWidth="28rem"

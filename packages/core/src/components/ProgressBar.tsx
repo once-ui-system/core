@@ -27,6 +27,8 @@ const ProgressBar = ({
   barBackground = "brand-strong",
   className,
   style,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...rest
 }: ProgressBarProps) => {
   const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
@@ -41,6 +43,10 @@ const ProgressBar = ({
       overflow="hidden"
       height="8"
       role="progressbar"
+      // A progressbar needs a name (axe: aria-progressbar-name). The label
+      // props land here rather than on the wrapper that has no role.
+      aria-label={ariaLabelledBy ? undefined : (ariaLabel ?? "Progress")}
+      aria-labelledby={ariaLabelledBy}
       aria-valuenow={value}
       aria-valuemin={min}
       aria-valuemax={max}

@@ -288,6 +288,16 @@ describe("Dropdown (2.x DropdownWrapper's API)", () => {
   });
 });
 
+// The emoji grid is a `role="group"` of buttons (it promised grid cells it
+// never had); each emoji button is titled with its description.
+const emojiButtons = () =>
+  waitFor(() => {
+    const buttons = document.querySelectorAll<HTMLElement>('[role="group"] button[title]');
+    expect(buttons.length).toBeGreaterThan(0);
+    return Array.from(buttons);
+  });
+const emojiGridShown = () => document.querySelector('[role="group"] button[title]') !== null;
+
 describe("EmojiPicker trigger (2.x EmojiPickerDropdown)", () => {
   it("opens from its trigger and closes itself after a pick, uncontrolled", async () => {
     const user = userEvent.setup();
@@ -295,12 +305,11 @@ describe("EmojiPicker trigger (2.x EmojiPickerDropdown)", () => {
     render(<EmojiPicker trigger={<Button>React</Button>} onSelect={onSelect} />, {
       wrapper: wrap,
     });
-    expect(screen.queryByRole("grid")).toBeNull();
+    expect(emojiGridShown()).toBe(false);
     await user.click(screen.getByRole("button", { name: "React" }));
-    const grid = await screen.findByRole("grid");
-    await user.click(within(grid).getAllByRole("gridcell")[0]);
+    await user.click((await emojiButtons())[0]);
     expect(onSelect).toHaveBeenCalledTimes(1);
-    await waitFor(() => expect(screen.queryByRole("grid")).toBeNull());
+    await waitFor(() => expect(emojiGridShown()).toBe(false));
   });
 
   it("follows open and onOpenChange when controlled", async () => {
@@ -320,8 +329,7 @@ describe("EmojiPicker trigger (2.x EmojiPickerDropdown)", () => {
       );
     };
     render(<Controlled />, { wrapper: wrap });
-    const grid = await screen.findByRole("grid");
-    await user.click(within(grid).getAllByRole("gridcell")[0]);
+    await user.click((await emojiButtons())[0]);
     await waitFor(() => expect(screen.getByTestId("state")).toHaveTextContent("false"));
   });
 });

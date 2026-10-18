@@ -14,7 +14,7 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
   marginTop="16"
   marginBottom="24"
   title="Tooltip or HoverCard"
-  description={<><SmartLink href="/components/tooltip">Tooltip</SmartLink> is a short text explanation on hover or focus: of its children, or of an info icon when it has none (2.x InfoTip), and the bubble a component's <InlineCode>tooltip</InlineCode> prop shows. <SmartLink href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger, following the pointer (2.x CursorCard) or over the trigger (2.x Hover).</>}
+  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/tooltip">Tooltip</SmartLink> is a short text explanation on hover or focus: of its children, or of an info icon when it has none (2.x InfoTip), and the bubble a component's <InlineCode>tooltip</InlineCode> prop shows. <SmartLink style={{ textDecoration: "underline" }} href="/components/hoverCard">HoverCard</SmartLink> opens a card of rich content, such as a profile or a link preview, next to its trigger, following the pointer (2.x CursorCard) or over the trigger (2.x Hover).</>}
 />
 
 <CodeBlock
@@ -25,7 +25,7 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
       placement="top"
       trigger={<Avatar size="l" src="/images/avatar.jpg" tabIndex={0} />}
     >
-      <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border href="https://lorant.one">
+      <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border="neutral-alpha-medium">
         <Row gap="20" fillWidth vertical="center">
           <Avatar size="3rem" src="/images/avatar.jpg" />
           <Column gap="4">
@@ -55,7 +55,7 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
     placement="top"
     trigger={<Avatar size="l" src="/images/avatar.jpg" tabIndex={0} />}
 >
-  <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border href="https://lorant.one">
+  <Column padding="20" gap="20" radius="l" maxWidth="24rem" background="page" border="neutral-alpha-medium">
     <Row gap="20" fillWidth vertical="center">
       <Avatar size="3rem" src="/images/avatar.jpg" />
       <Column gap="4">

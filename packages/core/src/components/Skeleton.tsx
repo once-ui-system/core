@@ -4,7 +4,8 @@ import { Flex } from "./Flex.js";
 import styles from "./Skeleton.module.scss";
 
 interface SkeletonProps extends React.ComponentProps<typeof Flex> {
-  shape: "line" | "circle" | "block";
+  /** Defaults to `line`. */
+  shape?: "line" | "circle" | "block";
   /**
    * The scale: height for a `line`, diameter for a `circle`, ignored by a
    * `block` (which fills its container).
@@ -36,6 +37,9 @@ const Skeleton = ({
 }: SkeletonProps) => {
   return (
     <Flex
+      // A label on a plain div is not announced (axe: aria-prohibited-attr);
+      // a labelled skeleton says what is loading, as a status.
+      role={props["aria-label"] || props["aria-labelledby"] ? "status" : undefined}
       {...props}
       ref={ref}
       style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}

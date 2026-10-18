@@ -8,6 +8,7 @@ import { useControllableState } from "../internal/useControllableState.js";
 import type { TShirtSizes } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
+import { useControlLabel } from "./ControlLabelContext.js";
 import { useFieldSize } from "./FormContext.js";
 import { Row } from "./Row.js";
 import styles from "./Slider.module.scss";
@@ -144,6 +145,7 @@ const SingleSlider = ({
   const sliderRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState(false);
   const labelId = useId();
+  const outerLabelId = useControlLabel();
   const [current, setCurrent] = useControllableState({
     value,
     defaultValue: defaultValue ?? min,
@@ -231,7 +233,8 @@ const SingleSlider = ({
           className={styles.input}
           // The visible label names the input, unless the caller named it
           // another way: aria-labelledby would override an aria-label.
-          aria-labelledby={label && !props["aria-label"] ? labelId : undefined}
+          // Inside a Setting row with no label of its own, the row's label.
+          aria-labelledby={props["aria-label"] ? undefined : label ? labelId : outerLabelId}
           aria-invalid={error || undefined}
           aria-describedby={
             [props["aria-describedby"], describedBy].filter(Boolean).join(" ") || undefined

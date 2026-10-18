@@ -1,6 +1,6 @@
 "use client";
 
-import { Text } from "@once-ui-system/core";
+import { Text, VisuallyHidden } from "@once-ui-system/core";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import { type FadeState, fadingLetters } from "./internal/FadingLetters.js";
@@ -167,8 +167,14 @@ const TypingFx = ({
   return (
     <Text {...text} ref={ref}>
       {children}
-      {displayText}
-      {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
+      {/* The words are typed and erased letter by letter, which a screen
+          reader would follow one fragment at a time; it reads them whole,
+          and the cursor not at all. */}
+      <VisuallyHidden>{(Array.isArray(words) ? words : [words]).join(", ")}</VisuallyHidden>
+      <span aria-hidden="true">
+        {displayText}
+        {!isComplete && <span style={{ opacity: 0.5 }}>|</span>}
+      </span>
     </Text>
   );
 };

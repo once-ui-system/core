@@ -1,0 +1,19 @@
+// A minimal nav marks the current row by weight and contrast, not a fill.
+// Hover and focus still tint it, so the row reads as interactive. Doubled
+// to outrank ToggleButton's own `.button.selected`.
+.quiet.quiet {
+    &[aria-current="page"],
+    &[aria-pressed="true"] {
+        &:not(:hover):not(:focus-visible) {
+            background: var(--static-transparent);
+            border-color: var(--static-transparent);
+        }
+    }
+}
+
+// The 48px row. It keeps the `l` padding so its text lines up with a normal
+// nav's; only the height grows.
+.spacious.spacious {
+    height: var(--static-space-48);
+    min-height: var(--static-space-48);
+}

@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { type ReactNode, useId } from "react";
+import { FieldsetDisabledContext, useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import styles from "./Fieldset.module.scss";
 import { Form, type FormProps } from "./Form.js";
 import { Text } from "./Text.js";
@@ -48,6 +49,8 @@ const Fieldset = ({
   ...rest
 }: FieldsetProps) => {
   const descriptionId = `fieldset-${useId().replace(/:/g, "")}-description`;
+  // A Fieldset inside a disabled one is disabled too, as the browser does.
+  const disabledHere = useFieldsetDisabled(disabled);
   const hasDescription = renders(description);
 
   return (
@@ -81,9 +84,11 @@ const Fieldset = ({
           {description}
         </Text>
       )}
-      <Form density={density} columns={columns} size={size}>
-        {children}
-      </Form>
+      <FieldsetDisabledContext.Provider value={disabledHere}>
+        <Form density={density} columns={columns} size={size}>
+          {children}
+        </Form>
+      </FieldsetDisabledContext.Provider>
     </fieldset>
   );
 };

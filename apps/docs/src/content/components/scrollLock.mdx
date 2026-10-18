@@ -67,8 +67,9 @@ to its end hands the gesture back rather than swallowing it.
 ## API reference
 
 <PropsTable
-  content={[
-    ["enabled", "boolean", "-", "Whether the lock is on. Required."],
-    ["allowScrollInElement", "RefObject<HTMLElement | null>", "-", "A region that stays scrollable while locked."],
-  ]}
+  component="ScrollLock"
+  describe={{
+    enabled: "Whether the lock is on. Required.",
+    allowScrollInElement: "A region that stays scrollable while locked.",
+  }}
 />

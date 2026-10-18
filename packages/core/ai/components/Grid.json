@@ -13,6 +13,8 @@
   "StyleProps"
  ],
  "props": {
+  "position": "CSSProperties[\"position\"] = relative",
+  "scrollbar": "\"default\" | \"minimal\" = minimal",
   "masonry": "boolean"
  },
  "tags": [

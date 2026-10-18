@@ -11,16 +11,29 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Flex } from "../components/Flex.js";
-import type { Placement } from "../types.js";
 import { composeTransform, translateTransform } from "../utils/layoutClasses.js";
 import styles from "./CursorFollower.module.scss";
 import { cannotHover } from "./pointer.js";
 
+export type CursorPlacement =
+  | "top"
+  | "bottom"
+  | "left"
+  | "right"
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
 export interface CursorFollowerProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
   overlay?: ReactNode;
-  /** Which side of the pointer the card sits on; `"bottom-left"` by default. */
-  placement?: Placement | "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  /**
+   * Which side of the pointer the card sits on; `"bottom-left"` by default.
+   * The card is pinned to the pointer, so it takes corners rather than the
+   * start/end alignments a floating element anchored to a trigger uses.
+   */
+  placement?: CursorPlacement;
   className?: string;
   style?: React.CSSProperties;
 }

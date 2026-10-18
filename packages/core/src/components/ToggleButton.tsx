@@ -70,11 +70,23 @@ const ToggleButton = ({
   ...rest
 }: ToggleButtonProps & { ref?: React.Ref<HTMLElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
+  // Without an href it is a button even with no handler yet: as a div it
+  // was skipped by Tab. A plain toggle says whether it is on with
+  // aria-pressed; one that carries its own state role (tab, menuitemradio)
+  // or aria-expanded/-selected/-checked keeps that instead.
+  const ownsState =
+    props.role !== undefined ||
+    props["aria-selected"] !== undefined ||
+    props["aria-checked"] !== undefined ||
+    props["aria-expanded"] !== undefined ||
+    props["aria-pressed"] !== undefined;
   const layout = leafLayout(leaf);
   return (
     <ElementType
       ref={ref}
       href={href}
+      type={href ? undefined : (props.type ?? "button")}
+      aria-pressed={href || ownsState ? undefined : selected}
       disabled={disabled}
       data-disabled={disabled ? true : undefined}
       data-border={rounded ? "rounded" : undefined}

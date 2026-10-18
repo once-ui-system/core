@@ -16,6 +16,7 @@ import {
   Column,
   Drawer,
   IconButton,
+  Nav,
   NavGroup,
   NavItem,
   Row,
@@ -55,7 +56,7 @@ export const Shell = ({
       </Row>
       <Row fill paddingX="8">
         <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
-          <Nav nav={nav} pathname={pathname} />
+          <SideNav nav={nav} pathname={pathname} />
         </Column>
         <Row fill horizontal="center" topRadius="l" overflow="hidden">
           <Row
@@ -81,7 +82,7 @@ export const Shell = ({
         flush
       >
         <Column paddingTop="64" paddingBottom="16">
-          <Nav nav={nav} pathname={pathname} />
+          <SideNav nav={nav} pathname={pathname} />
         </Column>
       </Drawer>
     </Column>
@@ -91,13 +92,13 @@ export const Shell = ({
 type Sub = { href: string; label: string; badge?: number };
 type Item = { key: string; label: string; icon?: IconName; href?: string; items?: Sub[] };
 
-export const Nav = ({ nav, pathname }: { nav: Item[]; pathname: string }) => {
+export const SideNav = ({ nav, pathname }: { nav: Item[]; pathname: string }) => {
   const current = selectNavHref(
     pathname,
     nav.flatMap((i) => (i.items ? i.items.map((s) => s.href) : [i.href!])),
   );
   return (
-    <Column fill gap="4" paddingX="8">
+    <Nav fill paddingX="8" aria-label="Main">
       {nav.map((item) =>
         item.items ? (
           <NavGroup
@@ -126,7 +127,7 @@ export const Nav = ({ nav, pathname }: { nav: Item[]; pathname: string }) => {
           />
         ),
       )}
-    </Column>
+    </Nav>
   );
 };
 

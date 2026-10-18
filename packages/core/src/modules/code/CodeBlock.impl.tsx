@@ -13,7 +13,9 @@ import { Row } from "../../components/Row.js";
 import { Scroller } from "../../components/Scroller.js";
 import { Text } from "../../components/Text.js";
 import { ToggleButton } from "../../components/ToggleButton.js";
+import { VisuallyHidden } from "../../components/VisuallyHidden.js";
 import type { IconName } from "../../icons.js";
+import { useScrollableTabStop } from "../../internal/scrollableTabStop.js";
 import { CSSUnit, SpacingToken } from "../../types.js";
 import { escapeHtml } from "../../utils/safe-html.js";
 import styles from "./CodeBlock.module.scss";
@@ -503,6 +505,11 @@ const CodeBlock = ({
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
+  // Code and previews wider or taller than their box scroll; a keyboard has to
+  // be able to reach them to scroll (axe: scrollable-region-focusable).
+  const previewScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const codeScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const diffScrollRef = useScrollableTabStop<HTMLDivElement>();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -816,7 +823,9 @@ const CodeBlock = ({
             radius="l"
             border
             padding={previewPadding}
+            ref={previewScrollRef}
             tabIndex={-1}
+            className="focus-ring"
             horizontal="center"
             overflowY="auto"
           >
@@ -852,10 +861,17 @@ const CodeBlock = ({
                   isCollapsed ? { maxHeight: collapsedMaxHeight, overflow: "hidden" } : undefined
                 }
               >
-                <Row overflowX="auto" fillWidth tabIndex={-1}>
+                <Row
+                  ref={codeScrollRef}
+                  overflowX="auto"
+                  fillWidth
+                  tabIndex={-1}
+                  className="focus-ring"
+                >
                   {language.includes("diff") ? (
                     <div
-                      className={classNames(styles.pre, `language-diff`)}
+                      ref={diffScrollRef}
+                      className={classNames(styles.pre, `language-diff`, "focus-ring")}
                       style={{
                         maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
                         overflow: "auto",
@@ -978,6 +994,9 @@ const CodeBlock = ({
 
   return (
     <>
+      {/* The copy button only swaps its icon, which says nothing to a screen
+          reader; this says it. On the page from the start, so it is read. */}
+      <VisuallyHidden role="status">{copyIcon === "check" ? "Copied" : ""}</VisuallyHidden>
       {renderCodeBlock(false)}
       {isFullscreen &&
         ReactDOM.createPortal(

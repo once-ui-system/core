@@ -187,12 +187,37 @@ const Media = ({
         ...style,
       }}
       onClick={handleImageClick}
+      // An image that enlarges is a button: reachable with Tab, opened with
+      // Enter or Space, and closed the same way or with Escape.
+      role={canEnlarge ? "button" : undefined}
+      tabIndex={canEnlarge ? 0 : undefined}
+      aria-expanded={canEnlarge ? isEnlarged : undefined}
+      aria-label={
+        canEnlarge
+          ? isEnlarged
+            ? "Close enlarged image"
+            : alt
+              ? `Enlarge image: ${alt}`
+              : "Enlarge image"
+          : undefined
+      }
+      onKeyDown={
+        canEnlarge
+          ? (event: React.KeyboardEvent<HTMLDivElement>) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                handleImageClick();
+              }
+            }
+          : undefined
+      }
       className={classNames(
         canEnlarge && !isEnlarged
           ? "cursor-zoom-in"
           : canEnlarge && isEnlarged
             ? "cursor-zoom-out"
             : undefined,
+        canEnlarge && "focus-ring",
         className,
       )}
       {...rest}
@@ -226,6 +251,7 @@ const Media = ({
           width="100%"
           height="100%"
           src={getYouTubeEmbedUrl(src)}
+          title={alt || "YouTube video"}
           frameBorder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

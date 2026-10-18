@@ -305,6 +305,21 @@ const ContextMenuImpl = ({
     }
   }, [isDropdownOpen, enabledItems, focusItem]);
 
+  // Escape closes the menu from the moment it opens. The menu's own handler
+  // only sees keys once focus has moved in, which takes a beat (see above),
+  // and an Escape pressed before that was lost.
+  useEffect(() => {
+    if (!isDropdownOpen) return;
+    const onEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      if (dropdownRef.current?.contains(document.activeElement)) return;
+      event.preventDefault();
+      handleOpenChange(false);
+    };
+    document.addEventListener("keydown", onEscape);
+    return () => document.removeEventListener("keydown", onEscape);
+  }, [isDropdownOpen, handleOpenChange]);
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
@@ -467,7 +482,8 @@ const ContextMenuImpl = ({
             ? { ...style, display: "contents" }
             : { ...style, opacity: disabled ? 0.6 : undefined }
         }
-        aria-disabled={disabled}
+        // Only when it is: "false" on a box with no role claimed nothing.
+        aria-disabled={disabled || undefined}
       >
         {children}
         {menu}

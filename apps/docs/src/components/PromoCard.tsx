@@ -22,6 +22,7 @@ export interface PromoCardProps {
 export function PromoCard({ 
   href, 
   image,
+  buttonText,
 }: PromoCardProps) {
   const triggerLetterFxRef = useRef<(() => void) | null>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -39,14 +40,14 @@ export function PromoCard({
 
   const cardContent = useMemo(
     () => (
-      <Card radius="l" fillWidth href={href} overflow="hidden" background="page">
+      <Card radius="l" fillWidth href={href} overflow="hidden" background="page" aria-label={buttonText ?? "Explore"}>
         <BlobFx data-solid="color" fill position="absolute" translateY="50%" />
         <Animation fillWidth scale={1.05} reverse fade={1} triggerType="hover">
           <Media aspectRatio="3/4" src={image} priority sizes={400} />
         </Animation>
       </Card>
     ),
-    [href, image],
+    [href, image, buttonText],
   );
 
   const overlayContent = useMemo(

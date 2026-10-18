@@ -9,7 +9,7 @@ import { baseURL } from "@/resources";
 
 import { Analytics } from "@vercel/analytics/react"
 
-import { Background, Column, Flex, Meta, Row, ThemeInit } from "@once-ui-system/core";
+import { Background, Column, Flex, Meta, Row, ThemeInit, VisuallyHidden } from "@once-ui-system/core";
 import { dataStyle, layout, schema, style } from "../resources/once-ui.config";
 import { meta } from "@/resources";
 import { currentVersion } from "@/resources/versions";
@@ -107,6 +107,10 @@ export default function RootLayout({
         <Providers>
           <Column background="page" as="body" fillWidth margin="0" padding="0" style={{ minHeight: "100vh" }}
             scrollbar="default">
+            {/* First stop on Tab: past the header and the sidebar's links. */}
+            <VisuallyHidden focusable>
+              <a href="#main-content">Skip to content</a>
+            </VisuallyHidden>
             <Header />
             <Flex
               fillWidth

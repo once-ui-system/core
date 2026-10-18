@@ -36,10 +36,12 @@ Create a streaming chart with auto-adjusting viewport:
     {
       code:
 `import { useStreamingViewport } from '@once-ui-system/core';
-import { LineChart, Line, XAxis } from 'recharts';
+import { LineChart } from '@once-ui-system/core/data';
+
+type Point = { time: number; value: number };
 
 function StreamingViewportChart() {
-  const { data, xDomain, running, setRunning } = useStreamingViewport({
+  const { data, xDomain, running, setRunning } = useStreamingViewport<Point>({
     initialData: generateInitialData(),
     windowSize: 20,
     intervalMs: 1000,
@@ -55,19 +57,13 @@ function StreamingViewportChart() {
       <button onClick={() => setRunning(!running)}>
         {running ? 'Pause' : 'Resume'}
       </button>
-      <LineChart width={600} height={300} data={data}>
-        <XAxis
-          dataKey="time"
-          domain={xDomain}
-          type="number"
-        />
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke="#8884d8"
-          isAnimationActive={false}
-        />
-      </LineChart>
+      <LineChart
+        xAxisType="number"
+        xDomain={xDomain}
+        animation={false}
+        series={[{ key: "value" }]}
+        data={data}
+      />
     </div>
   );
 }`,
@@ -116,17 +112,13 @@ Monitor live system metrics with moving viewport:
         </Button>
         <Button onClick={reset}>Reset</Button>
       </Flex>
-      <LineChart width={800} height={400} data={data}>
-        <XAxis
-          dataKey="timestamp"
-          domain={xDomain}
-          type="number"
-          tickFormatter={(ts) => new Date(ts).toLocaleTimeString()}
-        />
-        <Line dataKey="requests" stroke="#00ff00" isAnimationActive={false} />
-        <Line dataKey="errors" stroke="#ff0000" isAnimationActive={false} />
-        <Line dataKey="latency" stroke="#0000ff" isAnimationActive={false} />
-      </LineChart>
+      <LineChart
+        xAxisType="number"
+        xDomain={xDomain}
+        animation={false}
+        series={[{ key: "requests" }, { key: "errors" }, { key: "latency" }]}
+        data={data}
+      />
     </Flex>
   );
 }`,
@@ -210,17 +202,12 @@ Use `useStreamingViewport` when you need the chart viewport to move with the dat
   });
 
   return (
-    <LineChart width={800} height={400} data={data}>
-      <XAxis
-        dataKey="timestamp"
-        domain={xDomain}
-        type="number"
-        scale="time"
-        tickFormatter={(ts) => new Date(ts).toLocaleTimeString()}
-      />
-      <Line dataKey="temperature" stroke="#ff4444" />
-      <Line dataKey="humidity" stroke="#4444ff" />
-    </LineChart>
+    <LineChart
+      xAxisType="number"
+      xDomain={xDomain}
+      series={[{ key: "temperature" }, { key: "humidity" }]}
+      data={data}
+    />
   );
 }`,
       language: "tsx",

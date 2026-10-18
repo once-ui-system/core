@@ -1,0 +1,81 @@
+---
+title: "Heading"
+summary: "A title for React Native screens and sections, announced to screen readers as a header."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/heading.mdx"
+github: "packages/native/src/components/Text.tsx"
+navLabel: "Heading"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Heading` is [Text](/native/components/text) set to `heading-strong-l`, with `accessibilityRole="header"` so screen readers announce it as a header and let people jump between headings. It takes the same props as `Text`. See the [web Heading page](/components/heading) for the full set of variants.
+
+## Variants
+
+Pick the size with `variant`. Any `heading` or `display` variant works.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Heading } from "@once-ui-system/native";
+
+export function Headings() {
+  return (
+    <Column gap="8">
+      <Heading variant="display-strong-s">Display</Heading>
+      <Heading variant="heading-strong-xl">Extra large</Heading>
+      <Heading>Large, the default</Heading>
+      <Heading variant="heading-strong-m">Medium</Heading>
+      <Heading variant="heading-default-s">Small, default weight</Heading>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Headings.tsx"
+  }
+]} />
+
+## Colors and spacing
+
+`onBackground`, `onSolid`, `align`, `truncate` and the spacing props work as on `Text`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Heading, Text } from "@once-ui-system/native";
+
+export function Section() {
+  return (
+    <Column>
+      <Heading variant="heading-strong-m" onBackground="brand-strong" marginBottom="4">
+        Rewards
+      </Heading>
+      <Text onBackground="neutral-weak">Two stamps until your next free coffee.</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Section.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **No `as`.** There are no `h1` to `h6` elements. Every `Heading` is a header to screen readers, and the variant sets its size.
+- **Use `variant`.** `Heading` always passes a variant, so `family`, `size` and `weight` alone do not change it.
+
+## Props
+
+`Heading` takes every [Text](/native/components/text) prop, the spacing props and every React Native `Text` prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `TextVariant` | `"heading-strong-l"` | The type style. |
+| `onBackground` | `"<scheme>-<weight>"` | `"neutral-strong"` | Text colour on a background. |
+| `onSolid` | `"<scheme>-<weight>"` | | Text colour on a solid surface. Wins over `onBackground`. |
+| `align` | `"left" \| "center" \| "right" \| "justify"` | | Text alignment. |
+| `truncate` | `boolean` | | One line, ending in an ellipsis. |
+| `style` | `TextStyle \| TextStyle[]` | | Applied after the props. |

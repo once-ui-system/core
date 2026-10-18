@@ -622,25 +622,10 @@ Pass any color via `style.backgroundColor` &mdash; the button wrappers automatic
 ## API reference
 
 <PropsTable
-  content={[
-    ["codes", "CodeInstance[]", "[]"],
-    ["preview", "ReactNode"],
-    ["copyButton", "boolean", "true"],
-    ["actions", "ReactNode"],
-    ["reloadButton", "boolean", "false"],
-    ["fullscreenButton", "boolean", "false"],
-    ["compact", "boolean", "false"],
-    ["isCollapsible", "boolean", "false"],
-    ["lineNumbers", "boolean", "false"],
-    ["codeHeight", "number"],
-    ["maxLines", "number"],
-    ["fillHeight", "boolean", "false"],
-    ["previewPadding", "SpacingToken", "'l'"],
-    ["background", "Colors | 'surface' | 'overlay' | 'page' | 'transparent'", "'surface'"],
-    ["onInstanceChange", "(index: number) => void"],
-    ["hideCode", "boolean", "false", "Render only the preview, without the code panel."],
-    ["...flex"]
-  ]}
+  component="CodeBlock"
+  describe={{
+    hideCode: "Render only the preview, without the code panel.",
+  }}
 />
 
 <PropsTable

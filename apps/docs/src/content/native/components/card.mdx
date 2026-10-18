@@ -1,0 +1,109 @@
+---
+title: "Card"
+summary: "A bordered surface for grouping content on React Native screens, pressable when you give it a handler."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/card.mdx"
+github: "packages/native/src/components/Card.tsx"
+navLabel: "Card"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Card` is a [Column](/native/components/flex) with a `surface` background, a `neutral-medium` border and an `l` radius. Give it `onPress` and it becomes a button that dims slightly while pressed. It takes every Flex prop, so padding, gap, size and the defaults themselves can all be changed. See the [web Card page](/components/card).
+
+## Basic card
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, Heading, Text } from "@once-ui-system/native";
+
+export function Summary() {
+  return (
+    <Card padding="20" gap="8" fillWidth>
+      <Heading variant="heading-strong-s">Morning Coffee</Heading>
+      <Text onBackground="neutral-weak">7 of 10 stamps collected.</Text>
+    </Card>
+  );
+}`,
+    language: "tsx",
+    label: "Summary.tsx"
+  }
+]} />
+
+## Pressable
+
+`onPress` makes the card pressable and gives it the button role. `onClick` works too, as on the web.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, Icon, Row, Text } from "@once-ui-system/native";
+
+export function Shortcut() {
+  return (
+    <Card direction="row" vertical="center" gap="12" padding="16" fillWidth onPress={() => {}}>
+      <Icon name="gift" onBackground="brand-medium" />
+      <Text>Redeem a reward</Text>
+      <Row flex={1} />
+      <Icon name="chevronRight" size="s" onBackground="neutral-weak" />
+    </Card>
+  );
+}`,
+    language: "tsx",
+    label: "Shortcut.tsx"
+  }
+]} />
+
+## Selected
+
+`selected` swaps the border to `brand-medium` and the background to `brand-alpha-weak`, for the chosen item in a list. It is reported to screen readers on a pressable card.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Card, Column, Text } from "@once-ui-system/native";
+
+const plans = ["Monthly", "Yearly"];
+
+export function Plans() {
+  const [plan, setPlan] = useState("Monthly");
+  return (
+    <Column gap="8" fillWidth>
+      {plans.map((name) => (
+        <Card key={name} padding="16" selected={plan === name} onPress={() => setPlan(name)}>
+          <Text variant="label-strong-m">{name}</Text>
+        </Card>
+      ))}
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Plans.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **Pressed, not hover.** A pressable card dims to 80% opacity while pressed, in place of the web's hover effect.
+- **`onPress` or `onClick`.** Both work. `onPress` wins when both are set. There is no `href`.
+- **Clipping.** `radius` does not clip children such as an image. Pass `overflow="hidden"` when it should.
+
+## Props
+
+`Card` takes every [Flex](/native/components/flex) prop, including the spacing, size, surface and breakpoint props, and every React Native `View` prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `onPress` | `() => void` | | Makes the card pressable. |
+| `onClick` | `() => void` | | The web's name for `onPress`. |
+| `selected` | `boolean` | | Brand border and tint. |
+| `direction` | `FlexProps["direction"]` | `"column"` | Main axis, as on `Flex`. |
+| `radius` | `RadiusSize` | `"l"` | Corner radius. |
+| `background` | `FlexProps["background"]` | `"surface"` | `"brand-alpha-weak"` while selected. |
+| `border` | `FlexProps["border"]` | `"neutral-medium"` | `"brand-medium"` while selected. |
+| `children` | `ReactNode` | | Content. Bare strings are wrapped in `Text`. |

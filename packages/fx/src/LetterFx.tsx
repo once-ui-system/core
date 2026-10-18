@@ -1,6 +1,6 @@
 "use client";
 
-import type { Speed } from "@once-ui-system/core";
+import { type Speed, VisuallyHidden } from "@once-ui-system/core";
 import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
@@ -8,7 +8,7 @@ import { speedFactor } from "./internal/speed.js";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
-function getRandomCharacter(charset: string[]): string {
+function getRandomCharacter(charset: ArrayLike<string>): string {
   const randomIndex = Math.floor(Math.random() * charset.length);
   return charset[randomIndex];
 }
@@ -19,7 +19,7 @@ function createEventHandler(
   inProgress: boolean,
   setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
   speed: Speed,
-  charset: string[],
+  charset: ArrayLike<string>,
   setHasAnimated?: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   // The designed pace (speed 1): a 30ms step and 300ms of scrambling first.
@@ -68,7 +68,8 @@ type LetterFxProps = {
    * `"slow"`/`"medium"`/`"fast"` (0.5, 1, 2).
    */
   speed?: Speed;
-  charset?: string[];
+  /** The characters to cycle through: an array, or a string read one character at a time. */
+  charset?: string | string[];
   onTrigger?: (triggerFn: () => void) => void;
   className?: string;
   style?: React.CSSProperties;
@@ -125,7 +126,16 @@ const LetterFx = ({
       style={style}
       onMouseOver={trigger === "hover" ? eventHandler : undefined}
     >
-      {text}
+      {/* While it scrambles, a screen reader gets the real words once
+          instead of every random frame. At rest the text is just text. */}
+      {inProgress ? (
+        <>
+          <VisuallyHidden>{originalText.current}</VisuallyHidden>
+          <span aria-hidden="true">{text}</span>
+        </>
+      ) : (
+        text
+      )}
     </span>
   );
 };

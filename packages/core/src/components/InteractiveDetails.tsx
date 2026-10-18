@@ -12,7 +12,7 @@ interface InteractiveDetailsProps {
   description?: React.ReactNode;
   disabled?: boolean;
   iconButtonProps?: IconButtonProps;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   id?: string;
   /** Goes on the label text alone, so the control beside it is named by its

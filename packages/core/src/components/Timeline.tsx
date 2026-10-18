@@ -61,7 +61,9 @@ const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: Timel
   const markerWidth = isHorizontal ? undefined : dotSize;
 
   return (
-    <Column {...flex}>
+    // A list of steps: a screen reader says how many there are and which
+    // one the reader is on. The `brand` step is the current one.
+    <Column role="list" {...flex}>
       {items.map((item, index) => {
         const tone = item.tone;
         const nextTone = index < items.length - 1 ? items[index + 1].tone : tone;
@@ -75,7 +77,13 @@ const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: Timel
 
         if (isHorizontal) {
           return (
-            <Flex key={index} direction="column" fillWidth>
+            <Flex
+              key={index}
+              direction="column"
+              fillWidth
+              role="listitem"
+              aria-current={tone === "brand" ? "step" : undefined}
+            >
               <Column fillWidth horizontal="center" vertical="center" direction="row">
                 {index !== 0 && (
                   <Line background={undefined} solid={tone ? `${tone}-strong` : "neutral-strong"} />
@@ -120,7 +128,13 @@ const Timeline = ({ ref, items, alignment = "left", size = "m", ...flex }: Timel
         const hasContent = item.description || item.children;
 
         return (
-          <Flex key={index} fillWidth direction={rowDirection}>
+          <Flex
+            key={index}
+            fillWidth
+            direction={rowDirection}
+            role="listitem"
+            aria-current={tone === "brand" ? "step" : undefined}
+          >
             <Column horizontal="center" minWidth={markerWidth} maxWidth={markerWidth}>
               {index !== 0 && (
                 <Line

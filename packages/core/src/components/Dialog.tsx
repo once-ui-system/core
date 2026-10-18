@@ -266,8 +266,9 @@ const Dialog = ({
         padding="l"
         role="dialog"
         aria-modal="true"
-        aria-labelledby={dialogTitleId}
-        aria-describedby={description ? descriptionId : undefined}
+        aria-labelledby={title && !flush ? dialogTitleId : undefined}
+        // Read after the title when the dialog opens.
+        aria-describedby={description && !flush ? descriptionId : undefined}
       >
         {backdrop}
         <Flex

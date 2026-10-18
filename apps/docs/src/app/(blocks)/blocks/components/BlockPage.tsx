@@ -9,6 +9,7 @@ import type { BlockItem } from "@/types";
 import { dev } from "@/utils/dev-logger";
 import { BlockTitle } from "./BlockTitle";
 import DocsLayout from "./layout";
+import { basePath } from "@/resources/versions";
 
 type PreviewHeight = "auto" | "fixed";
 
@@ -93,7 +94,7 @@ const fileCache = new Map<string, Promise<string>>();
 function fetchFileContent(file: string): Promise<string> {
   let promise = fileCache.get(file);
   if (!promise) {
-    promise = fetch(`/blocks/${file}`)
+    promise = fetch(`${basePath}/blocks/${file}`)
       .then((response) => (response.ok ? response.text() : ""))
       .catch(() => "");
     fileCache.set(file, promise);

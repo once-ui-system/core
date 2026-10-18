@@ -28,7 +28,7 @@ It is a preview. Most apps should keep shipping Once UI on phones as the web bui
 
 ## Install
 
-Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag.
+Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag. The [quick start](/native/quick-start) covers Expo and bare React Native apps, safe areas and fonts.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -67,34 +67,35 @@ export default function App() {
 
 ## Components
 
-| Component | Notes |
+Each component has its own page with examples, a props table and what differs from the web.
+
+| Group | Components |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow and sizes. `Flex` is a row, as on the web. |
-| `Text`, `Heading` | `textVariant`, with `weight` and `family` as overrides; `onBackground`, `onSolid`, `truncate`. |
-| `Button` | Six variants in any `tone`, five sizes, `corners`, `loading`, `disabled`, `fillWidth`. Takes `onPress` or the web's `onClick`. |
-| `Card` | Pressable with `onPress` (or `onClick`), `href`, `selected`. |
-| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count, `onValueChange`. `type="password"` shows a show/hide button, as on the web. |
-| `Switch`, `Checkbox` | `checked`, `defaultChecked` and `onCheckedChange`, with a label, description, `size` and `errorMessage`. |
-| `Icon`, `IconButton` | The same built-in icons as the web. `IconButton` takes `tone`, `variant` and `aria-label`. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
-| `Dialog` | Opens as a bottom sheet, or a centred card with `variant="center"`; `showClose`, `backdrop`. The back button and a tap outside close it. |
-| `ToastProvider`, `useToast` | `addToast({ tone, message })`, as on the web. Toasts stack at the bottom of the screen. |
-| `Select` | Opens its options in a bottom sheet: `value`, `defaultValue`, `onValueChange`, `open` and `onOpenChange`, `multiple`, `searchable`. |
-| `RadioGroup`, `SegmentedControl` | One choice out of several, with `onValueChange`, as on the web. |
-| `Tag` | A label in its `tone`. `variant="announce"` is the announcement pill, and `selected`, `onClick` and `onRemove` make it a toggle with a remove button, as on the web. |
-| `Avatar`, `Feedback`, `ProgressBar`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+| Layout | [`Flex`](/native/components/flex), [`Card`](/native/components/card), [`Line`](/native/components/line) |
+| Type | [`Text`](/native/components/text), [`Heading`](/native/components/heading) |
+| Actions | [`Button`](/native/components/button), [`IconButton`](/native/components/iconButton), [`ToggleButton`](/native/components/toggleButton), [`SegmentedControl`](/native/components/segmentedControl) |
+| Form controls | [`Input`](/native/form-controls/input), [`Textarea`](/native/form-controls/textarea), [`Select`](/native/form-controls/select), [`Checkbox`](/native/form-controls/checkbox), [`Switch`](/native/form-controls/switch), [`RadioGroup`](/native/form-controls/radioGroup) |
+| Content | [`Icon`](/native/components/icon), [`Media`](/native/components/media), [`Avatar`](/native/components/avatar), [`AvatarGroup`](/native/components/avatarGroup), [`Tag`](/native/components/tag), [`List`](/native/components/List), [`StatusIndicator`](/native/components/statusIndicator) |
+| Feedback | [`Feedback`](/native/components/feedback), [`ProgressBar`](/native/components/progressBar), [`Spinner`](/native/components/spinner), [`Skeleton`](/native/components/skeleton), [`Toast`](/native/components/toast) |
+| Overlays and disclosure | [`Dialog`](/native/components/dialog), [`Tabs`](/native/components/tabs), [`Accordion`](/native/components/accordion) |
 
-`IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
+`Dialog` opens as a bottom sheet, and so do `Select`'s options. `ThemeProvider`, `useTheme()`, `IconProvider` and fonts are on the [config page](/native/config).
 
-`useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
+## Responsive props and safe areas
+
+`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web (`xl`, `l`, `m`, `s`, `xs`), and `safeArea` pads a view clear of the notch and home indicator once the app passes the screen's insets to `ThemeProvider`. See [responsive layouts](/native/basics/responsive) and the [quick start](/native/quick-start).
 
 ## Differences from the web
 
 - **Units.** A number on a spacing or size prop is px, as on the web in 3.0, and px here are density-independent points. Tokens work as on the web, and so do `"24px"` and `"1.5rem"` strings; rem follows the screen size, 15pt on phones and 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
-- **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
 - **Dialog** opens as a bottom sheet unless `variant="center"`; the web's default is the centred card.
 - **Tag** `variant="gradient"` is a flat brand tint, and `effect` draws no shine.
+- **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
+- **Tabs** have no arrow-key navigation, so `activation` has no effect.
+- **Core 3.0 names.** `Accordion` also takes `defaultOpen` and `onOpenChange`, `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code written for 3.0 works here too.
+- **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them (see the [quick start](/native/quick-start)).
 
 ## Coming from the 2.x props
 

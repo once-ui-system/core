@@ -1,6 +1,6 @@
 // Core components, modules and charts as explicit named imports: Turbopack's
 // frozen module proxy rejects a namespace import here.
-import { Accordion, AccordionGroup, Animation, Arrow, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, ChatComposer, ChatMessage, ChatMessageList, Checkbox, ColorInput, Column, ConversationItem, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Field, Fieldset, Flex, FocusTrap, Form, FormErrorSummary, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, SubmitButton, Switch, Tab, Table, TabList, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, TypingIndicator, User, VisuallyHidden } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Animation, Arrow, Avatar, AvatarGroup, Background, BlockQuote, Breadcrumbs, Button, Card, Carousel, ChatComposer, ChatMessage, ChatMessageList, Checkbox, ColorInput, Column, ConversationItem, DateInput, DatePicker, Dialog, Drawer, Dropdown, Fade, Feedback, Field, Fieldset, Flex, FocusTrap, Form, FormErrorSummary, Grid, Heading, HeadingLink, HeadingNav, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, Line, List, ListItem, Logo, Mask, Media, MegaMenu, Nav, NavGroup, NavIcon, NavItem, NavSection, NumberInput, OgCard, Option, OTPInput, Pagination, ProgressBar, RadioButton, RadioGroup, Row, Scroller, ScrollLock, SegmentedControl, Select, Setting, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, SubmitButton, Switch, Tab, Table, TabList, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, Timeline, Toast, ToggleButton, Tooltip, TypingIndicator, User, VisuallyHidden } from "@once-ui-system/core";
 import { Banner, Book, LogoCloud, ScrollToTop, StyleOverlay, StylePanel } from "@once-ui-system/blocks";
 import { BlobFx, CelebrationFx, CountdownFx, CountFx, Effect, FlipFx, GlitchFx, HoloFx, LetterFx, MatrixFx, ParticleFx, RevealFx, ShineFx, TiltFx, TypeFx, WeatherFx } from "@once-ui-system/fx";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
@@ -37,6 +37,7 @@ import {
   ChatComposerExample,
   ChatConversationExample,
   ChipWithIconsExample,
+  ClientEmojiPicker,
   ClientOption,
   ClientSwitch,
   ColorInputAlphaExample,
@@ -226,9 +227,11 @@ const mdxComponents = createMdxComponents({
   TabList,
   Tab,
   TabPanel,
+  Nav,
   NavGroup,
   NavIcon,
   NavItem,
+  NavSection,
   ScrollToTop,
   Scroller,
   InfiniteScroll,
@@ -355,6 +358,7 @@ const mdxComponents = createMdxComponents({
   SwitchWithLoading,
   ReversedSwitch,
   ClientSwitch,
+  ClientEmojiPicker,
   SubscriptionRadioGroup,
   BasicRawDropdown,
   IconsRawDropdown,

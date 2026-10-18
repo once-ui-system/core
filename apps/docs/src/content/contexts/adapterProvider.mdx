@@ -131,11 +131,11 @@ const pathname = usePathname();
 ## API reference
 
 <PropsTable
+  component="AdapterProvider"
   label="AdapterProvider"
-  content={[
-    ["adapters", "Partial<OnceUIAdapters>", "-", "Overrides. Anything omitted keeps the value from the nearest provider, or the DOM default."],
-    ["children", "React.ReactNode"],
-  ]}
+  describe={{
+    adapters: "Overrides. Anything omitted keeps the value from the nearest provider, or the DOM default.",
+  }}
 />
 
 ### OnceUIAdapters

@@ -132,7 +132,7 @@ Navigate horizontally:
   codes={[
     {
       code:
-`function TabNavigation({ tabs }: { tabs: Tab[] }) {
+`function TabNavigation({ tabs }: { tabs: { id: string; label: string }[] }) {
   const containerRef = useRef(null);
   
   const { handleKeyDown, focusedIndex } = useArrowNavigation({

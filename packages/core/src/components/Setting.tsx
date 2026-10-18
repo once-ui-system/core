@@ -1,8 +1,9 @@
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import type { CSSUnit } from "../types.js";
 import { Column } from "./Column.js";
+import { ControlLabelContext } from "./ControlLabelContext.js";
 import { Flex } from "./Flex.js";
 import { Row } from "./Row.js";
 import { Text } from "./Text.js";
@@ -52,6 +53,7 @@ const SettingRow = ({
   ...flex
 }: SettingRowProps) => {
   const hasLabel = Boolean(label || description);
+  const labelId = useId();
   return (
     <Row
       fillWidth
@@ -67,7 +69,7 @@ const SettingRow = ({
       {hasLabel && (
         <Column gap="4" paddingLeft="8" paddingRight="4" paddingY="4">
           <Row vertical="center" gap="8">
-            {renderLabel(label)}
+            {label && <span id={labelId}>{renderLabel(label)}</span>}
             {info && <Tooltip content={info} />}
           </Row>
           {description && (
@@ -86,7 +88,9 @@ const SettingRow = ({
         vertical="center"
         gap="8"
       >
-        {children}
+        <ControlLabelContext.Provider value={label ? labelId : undefined}>
+          {children}
+        </ControlLabelContext.Provider>
       </Row>
     </Row>
   );
@@ -173,24 +177,36 @@ interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
  * `axisWidth` and the row wraps when the panel is narrower, so the controls
  * stay usable instead of collapsing to a few pixels.
  */
-const SettingAxes = ({ label, info, axes, axisWidth = "13rem", ...flex }: SettingAxesProps) => (
-  <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
-    <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
-      {renderLabel(label)}
-      {info && <Tooltip content={info} />}
-    </Row>
-    <Row fillWidth gap="12" wrap>
-      {axes.map((axis, index) => (
-        <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
-          <Text wrap="nowrap" textVariant="label-default-xs" onBackground="neutral-weak">
-            {axis.label}
-          </Text>
-          {axis.control}
-        </Row>
-      ))}
-    </Row>
-  </Column>
-);
+const SettingAxes = ({ label, info, axes, axisWidth = "13rem", ...flex }: SettingAxesProps) => {
+  const labelId = useId();
+  return (
+    <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
+      <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
+        {label && <span id={labelId}>{renderLabel(label)}</span>}
+        {info && <Tooltip content={info} />}
+      </Row>
+      <Row fillWidth gap="12" wrap>
+        {axes.map((axis, index) => (
+          <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
+            <Text
+              id={`${labelId}-${index}`}
+              wrap="nowrap"
+              textVariant="label-default-xs"
+              onBackground="neutral-weak"
+            >
+              {axis.label}
+            </Text>
+            <ControlLabelContext.Provider
+              value={label ? `${labelId} ${labelId}-${index}` : `${labelId}-${index}`}
+            >
+              {axis.control}
+            </ControlLabelContext.Provider>
+          </Row>
+        ))}
+      </Row>
+    </Column>
+  );
+};
 
 /**
  * One settings row, in three shapes:

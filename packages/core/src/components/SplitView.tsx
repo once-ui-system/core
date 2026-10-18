@@ -3,6 +3,7 @@
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider.js";
+import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
 import { Card } from "./Card.js";
 import { Column } from "./Column.js";
 import { Row } from "./Row.js";
@@ -103,6 +104,9 @@ function SplitView({
   ...flex
 }: SplitViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  // A panel whose content overflows scrolls, so it has to take focus.
+  const leftScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const rightScrollRef = useScrollableTabStop<HTMLDivElement>();
   const [direction, setDirection] = useState<"row" | "column">("row");
   const { maxWidth } = useLayout();
   const [activePanel, setActivePanel] = useState<"left" | "right">("left");
@@ -150,7 +154,9 @@ function SplitView({
   return (
     <Row ref={containerRef} fill {...flex}>
       <Column
+        ref={leftScrollRef}
         fill
+        className="focus-ring"
         style={{
           [isHorizontal ? "width" : "height"]: `${splitRatio * 100}%`,
           [isHorizontal ? "minWidth" : "minHeight"]: 0,
@@ -213,7 +219,9 @@ function SplitView({
       </Row>
 
       <Column
+        ref={rightScrollRef}
         fill
+        className="focus-ring"
         style={{
           [isHorizontal ? "width" : "height"]: `${(1 - splitRatio) * 100}%`,
           [isHorizontal ? "minWidth" : "minHeight"]: 0,

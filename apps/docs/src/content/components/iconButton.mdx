@@ -87,19 +87,19 @@ Add tooltips to provide context for icon buttons.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <IconButton variant="secondary" icon="check" tooltip="Confirm" tooltipPosition="left" />
-      <IconButton variant="secondary" icon="danger" tooltip="Delete" tooltipPosition="top" />
-      <IconButton variant="secondary" icon="info" tooltip="Information" tooltipPosition="bottom" />
-      <IconButton variant="secondary" icon="warning" tooltip="Warning" tooltipPosition="right" />
+      <IconButton variant="secondary" icon="check" type="button" tooltip="Confirm" tooltipPosition="left" />
+      <IconButton variant="secondary" icon="danger" type="button" tooltip="Delete" tooltipPosition="top" />
+      <IconButton variant="secondary" icon="info" type="button" tooltip="Information" tooltipPosition="bottom" />
+      <IconButton variant="secondary" icon="warning" type="button" tooltip="Warning" tooltipPosition="right" />
     </Row>
   }
   codes={[
     {
       code:
-`<IconButton variant="secondary" icon="check" tooltip="Confirm" tooltipPosition="left" />
-<IconButton variant="secondary" icon="danger" tooltip="Delete" tooltipPosition="top" />
-<IconButton variant="secondary" icon="info" tooltip="Information" tooltipPosition="bottom" />
-<IconButton variant="secondary" icon="warning" tooltip="Warning" tooltipPosition="right" />`,
+`<IconButton variant="secondary" icon="check" type="button" tooltip="Confirm" tooltipPosition="left" />
+<IconButton variant="secondary" icon="danger" type="button" tooltip="Delete" tooltipPosition="top" />
+<IconButton variant="secondary" icon="info" type="button" tooltip="Information" tooltipPosition="bottom" />
+<IconButton variant="secondary" icon="warning" type="button" tooltip="Warning" tooltipPosition="right" />`,
       language: "tsx",
       label: "Tooltip"
     }
@@ -160,15 +160,15 @@ IconButtons can function as links when provided with an `href` property.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <IconButton icon="arrowUpRight" href="#" variant="secondary" />
-      <IconButton icon="chevronRight" href="#" variant="tertiary" />
+      <IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+      <IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />
     </Row>
   }
   codes={[
     {
       code:
-`<IconButton icon="arrowUpRight" href="#" variant="secondary" />
-<IconButton icon="chevronRight" href="#" variant="tertiary" />`,
+`<IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+<IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />`,
       language: "tsx",
       label: "Links"
     }

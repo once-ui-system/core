@@ -31,7 +31,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Row fill paddingX="8">
     <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
@@ -49,7 +49,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
     <Column paddingTop="64" paddingBottom="16">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
   </Drawer>
 </Column>
@@ -74,7 +74,7 @@ What each part is doing:
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
   separate surface, not this one reflowed: a **`Drawer`** from the left,
-  holding the same `Nav`, opened by a header button that only shows at `s`
+  holding the same `SideNav`, opened by a header button that only shows at `s`
   (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
   Escape and focus return a hand-made overlay misses; `flush` keeps its
   `title` for screen readers only. Tie it to the path it was opened on, as
@@ -85,13 +85,13 @@ What each part is doing:
 ## 2. Data-driven navigation
 
 ```tsx
-import { NavGroup, NavItem, selectNavHref } from "@once-ui-system/core";
+import { Nav, NavGroup, NavItem, selectNavHref } from "@once-ui-system/core";
 
 const current = selectNavHref(pathname, nav.flatMap((i) =>
   i.items ? i.items.map((s) => s.href) : [i.href],
 ));
 
-<Column fill gap="4" paddingX="8">
+<Nav fill paddingX="8" aria-label="Main">
   {nav.map((item) =>
     item.items ? (
       <NavGroup
@@ -119,9 +119,12 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
       />
     ),
   )}
-</Column>
+</Nav>
 ```
 
+- **`Nav` sets the look once.** `density="compact"` for a dashboard's 32px
+  rows, `variant="subtle"` or `"minimal"` for a docs or chat sidebar,
+  `rail={false}` to drop the line down open groups. Every row inside follows.
 - **`selectNavHref` over `===` or `startsWith`.** An equality check leaves a
   nested route (`/settings/billing/invoices/42`) with nothing highlighted; a
   prefix check lights the parent up alongside its child. It returns the longest

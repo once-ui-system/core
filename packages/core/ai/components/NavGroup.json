@@ -23,7 +23,7 @@
  ],
  "pairsWith": [
   "NavItem",
-  "Column"
+  "Nav"
  ],
  "mixinsRef": [
   "CommonProps",

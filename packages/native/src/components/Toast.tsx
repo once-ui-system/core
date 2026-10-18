@@ -136,7 +136,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
           position: "absolute",
           left: theme.space("16"),
           right: theme.space("16"),
-          bottom: theme.space("32"),
+          // Above the home indicator, as core's `calc(space + --safe-area-bottom)`.
+          bottom: theme.space("32") + theme.insets.bottom,
           gap: theme.space("8"),
         }}
       >

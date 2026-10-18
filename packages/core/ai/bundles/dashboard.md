@@ -143,6 +143,8 @@ Use instead of Flex with direction="row".
 ### Grid
 Extends ServerGrid.
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 - masonry?: boolean
 
 ### Heading
@@ -465,7 +467,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Skeleton
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties
@@ -790,7 +792,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Row fill paddingX="8">
     <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
@@ -808,7 +810,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
     <Column paddingTop="64" paddingBottom="16">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
   </Drawer>
 </Column>
@@ -833,7 +835,7 @@ What each part is doing:
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
   separate surface, not this one reflowed: a **`Drawer`** from the left,
-  holding the same `Nav`, opened by a header button that only shows at `s`
+  holding the same `SideNav`, opened by a header button that only shows at `s`
   (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
   Escape and focus return a hand-made overlay misses; `flush` keeps its
   `title` for screen readers only. Tie it to the path it was opened on, as

@@ -118,7 +118,7 @@ describe("EmojiPicker with a trigger, uncontrolled", () => {
     });
 
     await user.click(screen.getByText("Pick an emoji"));
-    const emoji = (await screen.findAllByRole("gridcell"))[0];
+    const emoji = (await screen.findAllByRole("button", { name: "grinning face" }))[0];
     await user.click(emoji);
     expect(onSelect).toHaveBeenCalledTimes(1);
     await waitFor(() => expect(screen.queryAllByRole("gridcell")).toHaveLength(0));

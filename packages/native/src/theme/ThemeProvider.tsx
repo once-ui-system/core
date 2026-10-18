@@ -14,7 +14,7 @@ import type {
   Theme,
 } from "../types";
 import { defaultSettings } from "./resolve";
-import { createTheme, type FontFamilies, type OnceTheme } from "./theme";
+import { createTheme, type FontFamilies, type Insets, NO_INSETS, type OnceTheme } from "./theme";
 
 export interface ThemeProviderProps {
   /** `"system"` follows the device's appearance. */
@@ -34,6 +34,12 @@ export interface ThemeProviderProps {
   mobileSize?: DeviceFontSize;
   /** Font families the app has loaded; the platform font is used for any left out. */
   fonts?: FontFamilies;
+  /**
+   * Safe-area insets in points, for `Dialog`, toasts and `Flex`'s `safeArea`.
+   * React Native has no cross-platform API for them, so pass
+   * `useSafeAreaInsets()` from react-native-safe-area-context.
+   */
+  insets?: Insets;
   children: ReactNode;
 }
 
@@ -48,16 +54,19 @@ const ThemeContext = createContext<OnceTheme | null>(null);
 export function ThemeProvider({
   theme = "system",
   fonts,
+  insets = NO_INSETS,
   children,
   ...options
 }: ThemeProviderProps) {
   const scheme = useColorScheme();
   const { width } = useWindowDimensions();
   const resolvedTheme = theme === "system" ? (scheme === "light" ? "light" : "dark") : theme;
-  const key = JSON.stringify([resolvedTheme, options, fonts]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries options and fonts by value.
+  // Insets by value too: `useSafeAreaInsets()` returns a new object on every render.
+  const key = JSON.stringify([resolvedTheme, options, fonts, insets]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries options, fonts and insets by value.
   const value = useMemo(
-    () => createTheme({ ...defaultSettings, ...options, theme: resolvedTheme }, width, fonts),
+    () =>
+      createTheme({ ...defaultSettings, ...options, theme: resolvedTheme }, width, fonts, insets),
     [key, width],
   );
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

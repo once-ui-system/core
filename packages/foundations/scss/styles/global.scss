@@ -36,3 +36,22 @@ a:not(.button) {
         }
     }
 }
+/* REDUCED MOTION
+   With `prefers-reduced-motion: reduce`, transitions and keyframe animations
+   end at once instead of moving: a dialog appears, an accordion opens, a
+   skeleton stops pulsing. The state change still happens, so nothing that
+   relies on `transitionend` or `animationend` waits forever. A loading
+   spinner is the exception, marked `data-motion="essential"`: stopped, it no
+   longer says that something is happening. */
+@media (prefers-reduced-motion: reduce) {
+    *:not([data-motion="essential"], [data-motion="essential"] *),
+    *:not([data-motion="essential"], [data-motion="essential"] *)::before,
+    *:not([data-motion="essential"], [data-motion="essential"] *)::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        animation-delay: 0s !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+        scroll-behavior: auto !important;
+    }
+}

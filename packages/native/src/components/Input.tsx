@@ -233,8 +233,8 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
 
 export interface TextareaProps extends Omit<InputProps, "type" | "reveal"> {
   /**
-   * How tall the field is: a number of lines, or `"auto"` to start at one
-   * line and grow with the text, as core 3.0's `lines`. Defaults to 3 here.
+   * How tall the field is, as on the web. `"auto"` (the default) grows with
+   * the content; a number fixes that many lines and scrolls past them.
    */
   lines?: number | "auto";
 }
@@ -243,7 +243,7 @@ export interface TextareaProps extends Omit<InputProps, "type" | "reveal"> {
 export const Textarea: RefComponent<TextareaProps, TextInputRef> = forwardRef<
   TextInputRef,
   TextareaProps
->(function Textarea({ lines = 3, inputStyle, ...props }, ref) {
+>(function Textarea({ lines = "auto", inputStyle, ...props }, ref) {
   const theme = useTheme();
   const lineHeight = Number(theme.text("body-default-m").lineHeight);
   return (
@@ -251,8 +251,9 @@ export const Textarea: RefComponent<TextareaProps, TextInputRef> = forwardRef<
       ref={ref}
       multiline
       textAlignVertical="top"
+      scrollEnabled={lines !== "auto"}
       inputStyle={{
-        minHeight: lineHeight * (lines === "auto" ? 1 : lines),
+        ...(lines === "auto" ? { minHeight: lineHeight } : { height: lineHeight * lines }),
         lineHeight,
         ...inputStyle,
       }}

@@ -8,6 +8,7 @@ import {
   describedBy,
   useControlChrome,
 } from "../internal/controlChrome.js";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
@@ -52,7 +53,7 @@ const Checkbox = ({
   onChange,
   onFocus,
   onBlur,
-  disabled,
+  disabled: disabledProp,
   hoverable = true,
   label,
   description,
@@ -65,6 +66,7 @@ const Checkbox = ({
   ...others
 }: CheckboxProps & { ref?: React.Ref<HTMLInputElement> }) => {
   const [leaf, rest] = takeLeafProps(others);
+  const disabled = useFieldsetDisabled(disabledProp);
   const [isChecked, setIsChecked] = useControllableState({
     value: checkedProp,
     defaultValue: defaultChecked,

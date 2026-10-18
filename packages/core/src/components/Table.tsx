@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { isValidElement, type ReactNode, useEffect, useId, useMemo, useState } from "react";
 import { pageCount, withDefaultLabels } from "../internal/pagination.js";
+import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
 import type { Tone } from "../types.js";
 import { dev } from "../utils/devLogger.js";
 import { Checkbox } from "./Checkbox.js";
@@ -329,6 +330,7 @@ function Table<T>({
   );
   const selectionControlled = selected !== undefined;
   const currentSelected = selectionControlled ? selected : uncontrolledSelected;
+  const scrollRef = useScrollableTabStop<HTMLDivElement>();
   const selectedSet = useMemo(() => new Set(currentSelected), [currentSelected]);
 
   const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
@@ -683,6 +685,9 @@ function Table<T>({
         </Row>
       )}
       <Flex
+        // A table wider than its box scrolls, and a keyboard can only scroll
+        // what it can focus: a tab stop while it overflows.
+        ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -690,7 +695,7 @@ function Table<T>({
         overflowX="auto"
         overflowY={maxHeight !== undefined ? "auto" : "visible"}
         maxHeight={maxHeight}
-        className={tableStyles.container}
+        className={classNames(tableStyles.container, "focus-ring")}
       >
         <table
           className={classNames(tableStyles.table, {
@@ -747,7 +752,13 @@ function Table<T>({
           paddingX="s"
           horizontal={perPageOptions?.length ? "between" : "end"}
           size="s"
-          aria-label={text.pagination}
+          // Named after the table it pages, so two tables on one page do not
+          // give two landmarks the same name (axe: landmark-unique).
+          aria-label={
+            ariaLabel && text.pagination
+              ? `${ariaLabel} ${text.pagination.toLowerCase()}`
+              : text.pagination
+          }
           labels={{
             previous: text.previous,
             next: text.next,

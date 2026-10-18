@@ -8,6 +8,7 @@ import {
   describedBy,
   useControlChrome,
 } from "../internal/controlChrome.js";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
@@ -71,6 +72,7 @@ const RadioButton = ({
   ...others
 }: RadioButtonProps & { ref?: React.Ref<HTMLInputElement> }) => {
   const [leaf, rest] = takeLeafProps(others);
+  const inFieldsetDisabled = useFieldsetDisabled(disabledProp);
   // A RadioGroup around this button owns these; outside one, the props do.
   const {
     checked: groupChecked,
@@ -83,7 +85,7 @@ const RadioButton = ({
     value,
     checked: checkedProp,
     name: nameProp,
-    disabled: disabledProp,
+    disabled: inFieldsetDisabled,
     onCheckedChange: onCheckedChangeProp,
   });
 

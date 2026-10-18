@@ -17,6 +17,7 @@ import {
   describedBy,
   useControlChrome,
 } from "../internal/controlChrome.js";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Column } from "./Column.js";
 import { FormFieldContext } from "./FormContext.js";
@@ -98,7 +99,7 @@ const RadioGroup = ({
   name,
   label,
   description,
-  disabled = false,
+  disabled: disabledProp = false,
   orientation = "vertical",
   size,
   error,
@@ -107,6 +108,7 @@ const RadioGroup = ({
   onKeyDown,
   ...flex
 }: RadioGroupProps) => {
+  const disabled = useFieldsetDisabled(disabledProp);
   const labelId = useId();
   const descriptionId = useId();
   const chrome = useControlChrome({ size, error, errorMessage });

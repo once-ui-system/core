@@ -110,7 +110,6 @@ const Avatar = ({
           size="m"
           style={customSize ? { fontSize: `calc(${customSize} / 3)` } : undefined}
           className={styles.icon}
-          aria-label="Empty avatar"
         />
       );
     }
@@ -137,7 +136,6 @@ const Avatar = ({
           onBackground="neutral-weak"
           textVariant={`body-default-${scale ?? "m"}`}
           className={styles.value}
-          aria-label={`Avatar with initials ${value}`}
         >
           {value}
         </Text>
@@ -147,10 +145,16 @@ const Avatar = ({
     return null;
   };
 
+  // role="img" makes everything inside presentational, so the name the
+  // children used to carry lives on the wrapper (axe: role-img-alt).
+  const baseLabel = value ? `Avatar with initials ${value}` : isEmpty ? "Empty avatar" : "Avatar";
+  const label = statusIndicator ? `${baseLabel}, status: ${statusIndicator.scheme}` : baseLabel;
+
   return (
     <Flex
       ref={ref}
       role="img"
+      aria-label={label}
       horizontal="center"
       vertical="center"
       radius="full"

@@ -54,6 +54,21 @@
   outline-offset: 2px;
 }
 
+/* Without the ring a focused field still has to look different from the
+   others, not only show a caret (WCAG 2.4.7): its border darkens, and a ghost
+   field gains one. Quiet enough to keep the native look; an error keeps its
+   colour, one step stronger. */
+.base:has(.input:focus-visible),
+.focused .base {
+  border-color: var(--neutral-border-strong);
+}
+
+.error .base:has(.input:focus-visible),
+.error.focused .base,
+.focused .error .base {
+  border-color: var(--danger-border-strong);
+}
+
 .base {
   --fld-border: 1px;
   --fld-well: var(--static-space-4); /* Column padding="4" in the TSX */
@@ -79,8 +94,12 @@
   --fld-box: calc(var(--fld-h) - 2 * var(--fld-border) - 2 * var(--fld-well));
   --fld-ink-top: calc((var(--fld-box) - var(--fld-ink)) / 2);
 
-  /* Inputs centre their ink in a fixed box; textareas grow, so they anchor to a
-     fixed top inset and share only the gap below the label. */
+  /* Where the ink block starts. `--fld-ink-top` depends only on the size token,
+     never on how tall a textarea has grown, so a textarea uses it too: its
+     floated label and first line land exactly where an input's do, and further
+     lines grow downwards from there. It used to anchor to a flat 8px instead,
+     which matched an input only near size m and pinned the label to the top
+     edge at l and xl. */
   --fld-anchor: var(--fld-ink-top);
 
   /* Distance from a text box's top edge to the cap height of its first line. */
@@ -99,12 +118,13 @@
      the text by half of itself and the ink would sit low. */
   --fld-value-bottom: max(0px, calc(var(--fld-box) - var(--fld-value-top) - var(--fld-lh)));
 
+  /* A textarea's first line, padded to sit where an input's single line falls.
+     On `.base` rather than the textarea so the label, a sibling, can centre on
+     the same line. See `.input.textarea` below. */
+  --fld-textarea-inset: max(var(--static-space-4), calc((var(--fld-box) - var(--fld-lh)) / 2));
+
   backdrop-filter: var(--backdrop-filter);
   min-height: var(--fld-h);
-
-  &:has(.textarea) {
-    --fld-anchor: var(--static-space-8);
-  }
 }
 
 @media (hover: none) and (pointer: coarse) {
@@ -207,8 +227,14 @@
   }
 }
 
+/* Resting, the label centres on the textarea's first line, which is where an
+   input centres its own. It used to sit at a flat 18px from the top whatever
+   the size, so it rode low in an xs or s field and high in an l or xl one.
+   Measured from the Column, like `.inputLabel`: the well, then the textarea's
+   top inset, then half a line. */
 .textareaLabel {
-  top: calc(var(--static-space-16) + var(--static-space-2));
+  top: calc(var(--fld-well) + var(--fld-textarea-inset) + var(--fld-lh) / 2);
+  transform: translateY(-50%);
 
   &.floating {
     top: var(--fld-label-top);
@@ -238,14 +264,11 @@
 
        Padding the block symmetrically puts the first line exactly where an
        input's single line falls, and lets the rest grow downwards from there.
-       Floored so the inset never collapses on a field whose content has
-       already outgrown one line. Note the floating-label rule below overrides
-       `padding-top` when there is a label, because then the value has to clear
-       the label rather than centre. */
-    --fld-textarea-inset: max(
-      var(--static-space-8),
-      calc((var(--fld-box) - var(--fld-lh)) / 2)
-    );
+       `--fld-textarea-inset` is set on `.base`. Its floor is 4px: it used to
+       be 8px, which beat the centring inset at xs and made an xs textarea 4px
+       taller than the input beside it. Note the floating-label rule below
+       overrides both paddings when there is a label, because then the value
+       has to clear the label rather than centre. */
     padding-top: var(--fld-textarea-inset);
     padding-bottom: var(--fld-textarea-inset);
   }
@@ -298,8 +321,10 @@
     color: var(--danger-on-background-medium);
   }
 
+  /* Medium, not weak: the label sits on the tinted error surface, where the
+     weak red read at 4:1 in the light theme. */
   .label {
-    color: var(--danger-on-background-weak);
+    color: var(--danger-on-background-medium);
   }
 
   .resizeHandle {

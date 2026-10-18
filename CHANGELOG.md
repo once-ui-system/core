@@ -306,6 +306,50 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ## [Unreleased]
 
+### Added
+
+- **One look for a whole sidebar: `Nav` and `NavSection`.** Wrap NavItems and NavGroups
+  in `Nav` and set `density` (`compact` 32px rows with the small label, `normal` 40px,
+  `spacious` 48px), `variant` (`solid` fills the current row, `subtle` also dims the
+  rest, `minimal` marks it by weight alone) and `rail` (the line down an open group)
+  once. `NavSection` is the small dim heading over a block of rows, with an optional
+  `action`. Rows outside a `Nav` look as before; an explicit `size` on a NavItem still
+  wins. A selected NavItem with an `href` now carries `aria-current="page"`, and a
+  NavGroup header's icon lines up with the NavItems beside it.
+
+### Fixed
+
+- **Types that refused what the components already do.** `SegmentedControl`'s
+  `onChange` is optional, so an uncontrolled control with only `defaultValue` compiles.
+  `StatusIndicator`'s `color` (defaults to `blue`), `Skeleton`'s `shape` (defaults to
+  `line`) and `InteractiveDetails`' `onClick` are optional. `LetterFx`'s `charset`
+  takes a string as well as an array. A `KbarItem` no longer needs `shortcut` or
+  `keywords`. `CursorCard`'s `placement` takes the corners it positions by
+  (`"bottom-right"`, `"top-left"` and the rest) instead of the start/end alignments it
+  never handled.
+
+### Docs
+
+- **Every example and props table is checked against the code.** `check:docs` in the
+  docs app typechecks the 1,300-odd examples on the docs site, in the agent harness's
+  rules, recipes and gotchas, and in the READMEs against the built package, and checks
+  each props table against `ai/spec.json`. CI runs it before the docs build. It found
+  168 problems, now fixed, among them `Background` opacities written as `0.5` for a
+  0 to 100 scale, `radius="none"` on `Button` where the prop is `corners`, `Timeline`
+  items in a `"completed"` state that does not exist, streaming-chart examples written
+  against Recharts' API, and imports from the pre-package `@/modules` path. Twenty-one
+  hand-written props tables now read their rows from the spec, and `HeadingNav`,
+  `IconProvider`, `Meta`, `Schema` and `OgRoutesProvider` have API tables.
+- **Every docs page is opened in a browser.** `check:render` opens each page of the
+  built site, presses its previews' controls with the clock a day past the build, and
+  fails on anything that throws or logs an error. CI runs it after the docs build. It
+  found the `EmojiPicker` preview throwing on every click (it had no `onSelect`), the
+  date pickers' examples showing the time the docs were built, and the footer's
+  Changelog link logging a CORS error on every page.
+- **The agent spec gives `Flex` and `Grid` their defaults.** `position` defaults to
+  `relative` and `scrollbar` to `minimal`; the spec read the defaults from the wrong
+  file and listed none.
+
 ## [2.2.0] — 2026-10-17
 
 ### Added

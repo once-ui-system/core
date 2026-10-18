@@ -41,6 +41,7 @@ export * from "./ListItem.js";
 export * from "./Logo.js";
 export * from "./Mask.js";
 export * from "./Media.js";
+export * from "./Nav.js";
 export * from "./NavGroup.js";
 export * from "./NavIcon.js";
 export * from "./NavItem.js";

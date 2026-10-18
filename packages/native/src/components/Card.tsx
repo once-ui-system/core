@@ -22,17 +22,18 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
   ref,
 ) {
   const theme = useTheme();
-  const { style, rest } = flexStyle(theme, {
+  const { style, rest, userStyle, hidden } = flexStyle(theme, {
     direction: "column",
     radius: "l",
     background: selected ? "brand-alpha-weak" : "surface",
     border: selected ? "brand-medium" : "neutral-medium",
     ...props,
   });
+  if (hidden) return null;
   const handler = pressHandler(onPress, onClick, href);
   if (!handler) {
     return (
-      <View ref={ref} {...rest} style={[style, props.style]}>
+      <View ref={ref} {...rest} style={[style, userStyle]}>
         {wrapText(children)}
       </View>
     );
@@ -44,7 +45,7 @@ export const Card: RefComponent<CardProps, ViewRef> = forwardRef<ViewRef, CardPr
       aria-selected={selected}
       onPress={handler}
       {...rest}
-      style={({ pressed }) => [style, pressed && { opacity: 0.8 }, props.style]}
+      style={({ pressed }) => [style, pressed && { opacity: 0.8 }, userStyle]}
     >
       {wrapText(children)}
     </Pressable>

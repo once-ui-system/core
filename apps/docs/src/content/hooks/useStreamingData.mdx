@@ -36,10 +36,12 @@ Create a streaming line chart:
     {
       code:
 `import { useStreamingData } from '@once-ui-system/core';
-import { LineChart, Line } from 'recharts';
+import { LineChart } from '@once-ui-system/core/data';
+
+type Point = { time: number; value: number };
 
 function StreamingChart() {
-  const { data, running, setRunning } = useStreamingData({
+  const { data, running, setRunning } = useStreamingData<Point>({
     initialData: generateInitialData(),
     windowSize: 20,
     intervalMs: 1000,
@@ -55,14 +57,12 @@ function StreamingChart() {
       <button onClick={() => setRunning(!running)}>
         {running ? 'Pause' : 'Resume'}
       </button>
-      <LineChart width={600} height={300} data={data}>
-        <Line
-          type="monotone"
-          dataKey="value"
-          stroke="#8884d8"
-          isAnimationActive={false}
-        />
-      </LineChart>
+      <LineChart
+        xAxisType="number"
+        animation={false}
+        series={[{ key: "value" }]}
+        data={data}
+      />
     </div>
   );
 }`,
@@ -108,11 +108,11 @@ Stream multiple data series:
         {running ? 'Pause' : 'Resume'}
       </button>
       <button onClick={reset}>Reset</button>
-      <LineChart width={800} height={400} data={data}>
-        <Line dataKey="cpu" stroke="#ff0000" />
-        <Line dataKey="memory" stroke="#00ff00" />
-        <Line dataKey="disk" stroke="#0000ff" />
-      </LineChart>
+      <LineChart
+        xAxisType="number"
+        series={[{ key: "cpu" }, { key: "memory" }, { key: "disk" }]}
+        data={data}
+      />
     </div>
   );
 }`,
@@ -220,11 +220,12 @@ System monitoring dashboard:
         <Text>CPU: {data[data.length - 1]?.cpu.toFixed(1)}%</Text>
         <Text>Memory: {data[data.length - 1]?.memory.toFixed(1)}%</Text>
       </Flex>
-      <LineChart width={800} height={300} data={data}>
-        <Line dataKey="cpu" stroke="#ff4444" isAnimationActive={false} />
-        <Line dataKey="memory" stroke="#44ff44" isAnimationActive={false} />
-        <Line dataKey="network" stroke="#4444ff" isAnimationActive={false} />
-      </LineChart>
+      <LineChart
+        xAxisType="number"
+        animation={false}
+        series={[{ key: "cpu" }, { key: "memory" }, { key: "network" }]}
+        data={data}
+      />
     </Flex>
   );
 }`,

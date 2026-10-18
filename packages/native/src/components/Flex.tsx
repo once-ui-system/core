@@ -1,8 +1,14 @@
 import { Children, forwardRef, type ReactNode } from "react";
-import { type DimensionValue, View, type ViewProps, type ViewStyle } from "react-native";
+import {
+  type DimensionValue,
+  type StyleProp,
+  View,
+  type ViewProps,
+  type ViewStyle,
+} from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
-import type { Colors, RadiusSize, ShadowSize, SpacingToken } from "../types";
+import type { Colors, Opacity, RadiusSize, ShadowSize, SpacingToken } from "../types";
 import type { RefComponent, ViewRef, Writable } from "./refs";
 import { type Length, type SpacingProps, spacingStyle, splitSpacing } from "./spacing";
 import { Text } from "./Text";
@@ -12,9 +18,19 @@ export { type SpacingProps, spacingStyle, splitSpacing };
 type Alignment = "start" | "center" | "end" | "between" | "around" | "even" | "stretch";
 /** A size: a token, a number of points (px, as in core 3.0), `"320px"`, `"20rem"` or `"50%"`. */
 type Size = number | SpacingToken | Length | `${number}%`;
+type ZIndex = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 
-/** Core's `FlexProps`, `SizeProps` and the `StyleProps` that have a native equivalent. */
-export interface FlexProps extends SpacingProps, Omit<ViewProps, "style"> {
+/** Core's breakpoints, largest first: the order their objects apply in. */
+export const BREAKPOINTS = ["xl", "l", "m", "s", "xs"] as const;
+export type Breakpoint = (typeof BREAKPOINTS)[number];
+
+export type SafeAreaEdge = "top" | "right" | "bottom" | "left";
+
+/**
+ * Core's `FlexProps`, `SizeProps` and the `StyleProps` and `DisplayProps`
+ * that have a native equivalent.
+ */
+export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "pointerEvents"> {
   direction?: "row" | "column" | "row-reverse" | "column-reverse";
   horizontal?: Alignment;
   vertical?: Alignment;
@@ -41,8 +57,90 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style"> {
   fit?: boolean;
   fitWidth?: boolean;
   fitHeight?: boolean;
-  style?: ViewStyle | ViewStyle[];
+  aspectRatio?: number | string;
+  /** React Native has no `fixed` or `sticky`; `relative` is the default, as in core. */
+  position?: "relative" | "absolute" | "static";
+  /** Offsets: a spacing token, or a number of rem, as in core. */
+  top?: SpacingToken | number;
+  right?: SpacingToken | number;
+  bottom?: SpacingToken | number;
+  left?: SpacingToken | number;
+  opacity?: Opacity;
+  zIndex?: ZIndex | `${ZIndex}`;
+  /** Core's values, plus React Native's `box-none` and `box-only`. */
+  pointerEvents?: "none" | "all" | "auto" | "box-none" | "box-only";
+  /** Renders nothing, as core's `display: none`. */
+  hide?: boolean;
+  /** Renders only while the theme is dark (or light); changes no colours. */
+  dark?: boolean;
+  light?: boolean;
+  /**
+   * Adds the safe-area insets from `ThemeProvider`'s `insets` to the padding
+   * on these edges (`true` for all four): the native side of core's
+   * `--safe-area-*` tokens.
+   */
+  safeArea?: boolean | SafeAreaEdge[];
+  /**
+   * Breakpoint overrides, as in core: each applies at and below its
+   * max-width (`xs` 480, `s` 768, `m` 1024, `l` 1440; `xl` everywhere),
+   * larger first so the smaller wins.
+   */
+  xl?: FlexBreakpointProps;
+  l?: FlexBreakpointProps;
+  m?: FlexBreakpointProps;
+  s?: FlexBreakpointProps;
+  xs?: FlexBreakpointProps;
+  style?: StyleProp<ViewStyle>;
 }
+
+/**
+ * The keys of core's `FlexBreakpointProps` that have a native equivalent.
+ * Core's `solid`, `borderTop`…`borderY`, `onBackground`, `onSolid`, `align`,
+ * the `text*` props, `transition`, `scrollbar`, `overflowX` and `overflowY`
+ * are left out, as they are on the base props.
+ */
+export type FlexBreakpointProps = Pick<
+  FlexProps,
+  | "direction"
+  | "horizontal"
+  | "vertical"
+  | "center"
+  | "wrap"
+  | "flex"
+  | keyof SpacingProps
+  | "top"
+  | "right"
+  | "bottom"
+  | "left"
+  | "width"
+  | "height"
+  | "maxWidth"
+  | "minWidth"
+  | "minHeight"
+  | "maxHeight"
+  | "fit"
+  | "fitWidth"
+  | "fitHeight"
+  | "fill"
+  | "fillWidth"
+  | "fillHeight"
+  | "aspectRatio"
+  | "background"
+  | "border"
+  | "borderStyle"
+  | "borderWidth"
+  | "radius"
+  | "shadow"
+  | "opacity"
+  | "zIndex"
+  | "pointerEvents"
+  | "dark"
+  | "light"
+  | "position"
+  | "hide"
+  | "overflow"
+  | "style"
+>;
 
 const JUSTIFY: Record<Alignment, ViewStyle["justifyContent"]> = {
   start: "flex-start",
@@ -70,12 +168,37 @@ function size(theme: OnceTheme, value: Size | undefined): DimensionValue | undef
   return theme.space(value as Exclude<Size, `${number}%`>);
 }
 
-/** Every `FlexProps` style prop as a `ViewStyle`, the rest passed through. */
+/**
+ * The props in force at the theme's width: each breakpoint object the width
+ * falls within, merged over the base props from `xl` down, as the CSS cascade
+ * applies core's media queries. A breakpoint `style` goes after the base one.
+ */
+export function responsiveProps<P extends FlexProps>(
+  theme: OnceTheme,
+  props: P,
+): Omit<P, Breakpoint> {
+  const { xl, l, m, s, xs, ...base } = props;
+  const objects = { xl, l, m, s, xs };
+  let merged: Omit<P, Breakpoint> = base;
+  for (const key of BREAKPOINTS) {
+    const override = objects[key];
+    if (!override || theme.width > theme.breakpoints[key]) continue;
+    const style = override.style ? [merged.style, override.style] : merged.style;
+    merged = { ...merged, ...override, style };
+  }
+  return merged;
+}
+
+/**
+ * Every `FlexProps` style prop as a `ViewStyle`, after the breakpoint objects
+ * for the theme's width. `rest` goes to the view; `userStyle` is the `style`
+ * prop in force, to put after `style`. `hidden` means render nothing.
+ */
 export function flexStyle(
   theme: OnceTheme,
   props: FlexProps,
-): { style: ViewStyle; rest: ViewProps } {
-  const [spacing, others] = splitSpacing(props);
+): { style: ViewStyle; rest: ViewProps; userStyle: StyleProp<ViewStyle>; hidden: boolean } {
+  const [spacing, others] = splitSpacing(responsiveProps(theme, props));
   const {
     direction = "row",
     horizontal,
@@ -102,9 +225,24 @@ export function flexStyle(
     fit,
     fitWidth,
     fitHeight,
-    style: _style,
+    aspectRatio,
+    position,
+    top,
+    right,
+    bottom,
+    left,
+    opacity,
+    zIndex,
+    pointerEvents,
+    hide,
+    dark,
+    light,
+    safeArea,
+    style: userStyle,
     ...rest
   } = others;
+  const scheme = theme.settings.theme;
+  const hidden = !!hide || (!!dark && scheme !== "dark") || (!!light && scheme !== "light");
 
   // As on the web, `horizontal` is the main axis of a row and the cross axis of a column.
   const isRow = direction === "row" || direction === "row-reverse";
@@ -142,7 +280,31 @@ export function flexStyle(
     const v = size(theme, value);
     if (v !== undefined) style[key as keyof typeof sized] = v;
   }
-  return { style, rest };
+  if (aspectRatio !== undefined) style.aspectRatio = aspectRatio;
+  if (position) style.position = position;
+  const offsets = { top, right, bottom, left };
+  for (const [key, value] of Object.entries(offsets)) {
+    if (value !== undefined) style[key as SafeAreaEdge] = theme.space(value);
+  }
+  if (opacity !== undefined) style.opacity = opacity / 100;
+  if (zIndex !== undefined) style.zIndex = Number(zIndex);
+  if (pointerEvents) style.pointerEvents = pointerEvents === "all" ? "auto" : pointerEvents;
+  if (safeArea) {
+    const edges: SafeAreaEdge[] = safeArea === true ? ["top", "right", "bottom", "left"] : safeArea;
+    for (const edge of edges) {
+      // On top of the padding that edge already has, as core's `calc(space + safe-area)`.
+      const axis =
+        edge === "top" || edge === "bottom" ? style.paddingVertical : style.paddingHorizontal;
+      const key = `padding${edge[0].toUpperCase()}${edge.slice(1)}` as
+        | "paddingTop"
+        | "paddingRight"
+        | "paddingBottom"
+        | "paddingLeft";
+      const current = style[key] ?? axis ?? style.padding ?? 0;
+      style[key] = (typeof current === "number" ? current : 0) + theme.insets[edge];
+    }
+  }
+  return { style, rest, userStyle, hidden };
 }
 
 /**
@@ -164,9 +326,10 @@ export function wrapText(children: ReactNode): ReactNode {
 export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexProps>(
   function Flex(props, ref) {
     const theme = useTheme();
-    const { style, rest } = flexStyle(theme, props);
+    const { style, rest, userStyle, hidden } = flexStyle(theme, props);
+    if (hidden) return null;
     return (
-      <View ref={ref} {...rest} style={[style, props.style]}>
+      <View ref={ref} {...rest} style={[style, userStyle]}>
         {wrapText(props.children)}
       </View>
     );

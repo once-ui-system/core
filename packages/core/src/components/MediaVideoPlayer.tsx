@@ -223,6 +223,16 @@ const MediaVideoPlayer = ({
           revealControls();
         }
         break;
+      case "Home":
+      case "End":
+        // Only on the seek bar: elsewhere in the player they are left to
+        // the page.
+        if (event.target !== progressRef.current || !videoRef.current) break;
+        event.preventDefault();
+        videoRef.current.currentTime = event.key === "Home" ? 0 : videoRef.current.duration || 0;
+        syncPlaybackState();
+        revealControls();
+        break;
       default:
         break;
     }
@@ -358,17 +368,21 @@ const MediaVideoPlayer = ({
             ref={progressRef}
             fillWidth
             radius="full"
-            className={styles.progressTrack}
             style={{ background: "var(--neutral-alpha-medium)" }}
             onPointerDown={handleProgressPointerDown}
             onPointerMove={handleProgressPointerMove}
             onPointerUp={handleProgressPointerUp}
             onPointerCancel={handleProgressPointerUp}
+            // A tab stop of its own, so a keyboard user can find the seek
+            // bar; the player's arrow keys (5 s) move it, Home and End jump.
             role="slider"
+            tabIndex={0}
             aria-label="Seek"
             aria-valuemin={0}
             aria-valuemax={100}
             aria-valuenow={Math.round(progress)}
+            aria-valuetext={`${formatTime(currentTime)} of ${formatTime(duration)}`}
+            className={classNames(styles.progressTrack, "focus-ring")}
           >
             <Row
               radius="full"

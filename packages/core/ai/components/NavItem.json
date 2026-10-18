@@ -17,8 +17,8 @@
   "navigation"
  ],
  "pairsWith": [
-  "NavGroup",
-  "Column"
+  "Nav",
+  "NavGroup"
  ],
  "mixinsRef": [
   "LeafProps"

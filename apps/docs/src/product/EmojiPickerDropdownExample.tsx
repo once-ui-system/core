@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import {
   Button,
+  Column,
   IconButton,
   Row,
   Text,
@@ -33,7 +34,7 @@ export function IconButtonEmojiPickerDropdown() {
   return (
     <Row gap="16" vertical="center">
       <EmojiPicker
-        trigger={<IconButton icon="smiley" variant="secondary" />}
+        trigger={<IconButton icon="smiley" variant="secondary" aria-label="Pick an emoji" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
       />
       {selectedEmoji && (
@@ -140,5 +141,20 @@ export function ControlledEmojiPickerDropdown() {
         </Text>
       )}
     </Row>
+  );
+}
+
+// A server-rendered MDX preview can't hand EmojiPicker its onSelect, and a
+// picker without one threw on every click. This one keeps the pick.
+export function ClientEmojiPicker(props: Omit<React.ComponentProps<typeof EmojiPicker>, "onSelect">) {
+  const [selectedEmoji, setSelectedEmoji] = useState("");
+
+  return (
+    <Column gap="12" horizontal="center">
+      <EmojiPicker {...props} onSelect={setSelectedEmoji} />
+      <Text textVariant="body-default-s" onBackground="neutral-weak">
+        {selectedEmoji ? `Selected: ${selectedEmoji}` : "Pick an emoji"}
+      </Text>
+    </Column>
   );
 }

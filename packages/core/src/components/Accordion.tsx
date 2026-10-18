@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useCallback, useId, useImperativeHandle, useRef } from "react";
+import React, { useCallback, useEffect, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { TShirtSizes } from "../types.js";
@@ -62,6 +62,7 @@ const Accordion = ({
   ...rest
 }: AccordionProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   const contentId = useId();
   // Controlled when `open` is set, whether or not a handler is passed.
   const [isAccordionOpen, setOpen] = useControllableState({
@@ -69,6 +70,13 @@ const Accordion = ({
     defaultValue: defaultOpen,
     onChange: onOpenChange,
   });
+
+  // aria-hidden alone leaves the links and buttons of a closed panel in the
+  // tab order (axe: aria-hidden-focus). `inert` takes them out; it is set on
+  // the node because React 18 and 19 disagree on how to pass it as a prop.
+  useEffect(() => {
+    if (contentRef.current) contentRef.current.inert = !isAccordionOpen;
+  }, [isAccordionOpen]);
 
   const toggleAccordion = useCallback(() => setOpen((prev) => !prev), [setOpen]);
 
@@ -164,6 +172,7 @@ const Accordion = ({
         />
       </Row>
       <Grid
+        ref={contentRef}
         id={contentId}
         fillWidth
         transition="macro-medium"

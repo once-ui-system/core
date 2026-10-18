@@ -104,6 +104,8 @@ export function Dialog({
               borderColor: theme.color("neutral-border-medium"),
               borderWidth: 1,
               paddingTop: theme.space("8"),
+              // Clear the home indicator: the sheet sits on the screen's bottom edge.
+              paddingBottom: theme.insets.bottom,
             },
             sheet
               ? {

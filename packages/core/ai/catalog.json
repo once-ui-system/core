@@ -47,6 +47,8 @@
   "Logo": {"purpose":"Brand mark and/or wordmark with light/dark sources and an optional link"},
   "Mask": {"purpose":"Radial mask over its content, fixed or following the cursor"},
   "Media": {"purpose":"Image, YouTube or MP4 by src, with aspect ratio, loading state, caption and enlarge","avoid":"Raw img elements"},
+  "Nav": {"purpose":"Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside"},
+  "NavSection": {"purpose":"Titled block of sidebar rows with an optional heading action, such as Projects with an add button"},
   "NavGroup": {"purpose":"Collapsible group of NavItems in a sidebar, indented behind a rail"},
   "NavIcon": {"purpose":"Hamburger button that toggles to a close icon, for opening mobile navigation"},
   "NavItem": {"purpose":"One sidebar navigation row: label, icon, selected state, count badge or unread dot"},

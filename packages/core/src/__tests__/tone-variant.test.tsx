@@ -86,10 +86,13 @@ describe("Button and IconButton: variant is appearance, tone the palette", () =>
 
 describe("tone on the other components", () => {
   it("Feedback draws in its tone, info by default", () => {
+    // Only danger and warning interrupt; the other tones are a polite status.
     const { rerender } = render(<Feedback description="Saved" />, { wrapper });
-    expect(classOf(screen.getByRole("alert"))).toMatch(/info-background-medium/);
+    expect(classOf(screen.getByRole("status"))).toMatch(/info-background-medium/);
     rerender(<Feedback tone="success" description="Saved" />);
-    expect(classOf(screen.getByRole("alert"))).toMatch(/success-background-medium/);
+    expect(classOf(screen.getByRole("status"))).toMatch(/success-background-medium/);
+    rerender(<Feedback tone="danger" description="Failed" />);
+    expect(classOf(screen.getByRole("alert"))).toMatch(/danger-background-medium/);
   });
 
   it("Toast takes tone, and only a danger toast interrupts", () => {

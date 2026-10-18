@@ -23,8 +23,8 @@ import {
   platformOfPath,
 } from "@/resources/platforms";
 import { Sidebar, NavigationItem } from "./Sidebar";
-import { flattenSlugs } from "./PlatformSwitcher";
-import { VersionPicker } from "./VersionPicker";
+import { flattenSlugs } from "./DocsContextSwitcher";
+import { basePath } from "@/resources/versions";
 
 export function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -48,7 +48,7 @@ export function Header() {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/navigation")
+    fetch(`${basePath}/api/navigation`)
       .then((res) => res.json())
       .then((data) => {
         setNavigationItems(data);
@@ -148,6 +148,18 @@ export function Header() {
     },
   ];
 
+  // Escape closes the phone menu and puts focus back on its button.
+  useEffect(() => {
+    if (!sidebarVisible) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || event.defaultPrevented) return;
+      setSidebarVisible(false);
+      document.querySelector<HTMLElement>('header [aria-label="Menu"]')?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [sidebarVisible]);
+
   useEffect(() => {
     if (sidebarVisible) {
       // Save current scroll position
@@ -227,7 +239,6 @@ export function Header() {
                   fillWidth
                   width={undefined}
                   padding="8"
-                  showVersion
                 />
               </Row>
             </Animation>
@@ -243,10 +254,6 @@ export function Header() {
                   Docs
                 </Text>
               </Row>
-            </Row>
-            {/* On a phone the picker moves into the menu, see `showVersion`. */}
-            <Row s={{ hide: true }}>
-              <VersionPicker />
             </Row>
           </Row>
           <Kbar

@@ -76,7 +76,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth="60rem" horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" id="main-content" maxWidth="60rem" horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -180,7 +180,7 @@ export default async function Docs({
           )}
         </Column>
       </Row>
-      <Row fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+      <Row as="aside" aria-label="On this page" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
         <HeadingNav fillWidth top="80" />
       </Row>
     </>
