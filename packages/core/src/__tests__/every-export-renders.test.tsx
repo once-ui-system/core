@@ -83,6 +83,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
     baseURL: "https://example.com",
     path: "/",
   },
+  Sortable: { items: [] },
+  SortableItem: { id: "a", children: "A" },
   Tab: { value: "a", children: "A" },
   TabList: { children: "list" },
   TabPanel: { value: "a", children: "panel" },
@@ -110,6 +112,8 @@ const inSvg = (child: React.ReactElement) => (
 const parents: Record<string, (child: React.ReactElement) => React.ReactElement> = {
   LinearGradient: inSvg,
   RadialGradient: inSvg,
+  SortableHandle: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
+  SortableItem: (child) => <Core.Sortable items={["a"]}>{child}</Core.Sortable>,
   Tab: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,
   TabList: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,
   TabPanel: (child) => <Core.Tabs defaultValue="a">{child}</Core.Tabs>,
