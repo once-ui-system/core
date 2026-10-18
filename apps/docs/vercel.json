@@ -2,5 +2,6 @@
   "version": 2,
   "installCommand": "npx -y pnpm@10.14.0 install",
   "buildCommand": "cd ../.. && pnpm --filter @once-ui-system/core build && cd apps/docs && pnpm build",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "ignoreCommand": "[ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"preview\" ]"
 }
