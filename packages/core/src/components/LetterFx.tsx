@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { VisuallyHidden } from "./VisuallyHidden";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
@@ -136,7 +137,16 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
         style={style}
         onMouseOver={trigger === "hover" ? eventHandler : undefined}
       >
-        {text}
+        {/* While it scrambles, a screen reader gets the real words once
+            instead of every random frame. At rest the text is just text. */}
+        {inProgress ? (
+          <>
+            <VisuallyHidden>{originalText.current}</VisuallyHidden>
+            <span aria-hidden="true">{text}</span>
+          </>
+        ) : (
+          text
+        )}
       </span>
     );
   },

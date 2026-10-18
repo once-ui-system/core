@@ -123,14 +123,33 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
       }, 500);
     }, []);
 
+    // Previous and Next leave at the ends. When the one that has focus goes,
+    // focus moves to the other instead of falling back to the page.
+    const prevButtonRef = useRef<HTMLButtonElement>(null);
+    const nextButtonRef = useRef<HTMLButtonElement>(null);
+    const refocusNav = useRef<"prev" | "next" | null>(null);
+
+    useEffect(() => {
+      const target = refocusNav.current;
+      if (!target) return;
+      const gone = target === "prev" ? activeIndex === 0 : activeIndex === items.length - 1;
+      if (!gone) return;
+      refocusNav.current = null;
+      const active = document.activeElement;
+      if (active && active !== document.body) return;
+      (target === "prev" ? nextButtonRef : prevButtonRef).current?.focus();
+    }, [activeIndex, items.length]);
+
     const handlePrevClick = () => {
       if (activeIndex > 0) {
+        if (activeIndex === 1) refocusNav.current = "prev";
         scrollToIndex(activeIndex - 1);
       }
     };
 
     const handleNextClick = () => {
       if (activeIndex < items.length - 1) {
+        if (activeIndex === items.length - 2) refocusNav.current = "next";
         scrollToIndex(activeIndex + 1);
       }
     };
@@ -305,6 +324,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     >
                       <Flex radius="m" background="surface">
                         <IconButton
+                          ref={prevButtonRef}
                           onClick={handlePrevClick}
                           variant="secondary"
                           icon="chevronLeft"
@@ -327,6 +347,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     >
                       <Flex radius="m" background="surface">
                         <IconButton
+                          ref={nextButtonRef}
                           onClick={handleNextClick}
                           variant="secondary"
                           icon="chevronRight"
