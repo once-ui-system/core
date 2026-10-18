@@ -1,0 +1,189 @@
+---
+title: "Tabs"
+summary: "A list of tabs and the panel each one shows, horizontal or vertical, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/tabs.mdx"
+github: "packages/native/src/components/Tabs.tsx"
+navLabel: "Tabs"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Tabs` holds one `TabList` of `Tab`s and a `TabPanel` for each tab, matched by `value`. Each `Tab` is a [ToggleButton](/components/toggleButton) with the tab role, so it takes every ToggleButton prop. The first enabled tab is selected unless you pick one. See the [web Tabs](/components/tabs) for the same component in the browser.
+
+## Uncontrolled
+
+Pass `defaultValue` to choose the first tab, or leave it out to start on the first enabled one.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Tab, TabList, TabPanel, Tabs, Text } from "@once-ui-system/native";
+
+export function OrderTabs() {
+  return (
+    <Tabs defaultValue="active">
+      <TabList aria-label="Orders">
+        <Tab value="active" label="Active" />
+        <Tab value="past" label="Past" />
+        <Tab value="drafts" label="Drafts" disabled />
+      </TabList>
+      <TabPanel value="active">
+        <Text>Two orders on the way.</Text>
+      </TabPanel>
+      <TabPanel value="past">
+        <Text>Nothing here yet.</Text>
+      </TabPanel>
+      <TabPanel value="drafts">
+        <Text>No drafts.</Text>
+      </TabPanel>
+    </Tabs>
+  );
+}`,
+    language: "tsx",
+    label: "OrderTabs.tsx"
+  }
+]} />
+
+## Controlled
+
+Pass `value` and `onChange` when the screen owns the selection. `onChange` is not called for the tab that is already selected.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Tab, TabList, TabPanel, Tabs, Text } from "@once-ui-system/native";
+
+export function ProfileTabs() {
+  const [tab, setTab] = useState("posts");
+  return (
+    <Tabs value={tab} onChange={setTab}>
+      <TabList>
+        <Tab value="posts" label="Posts" />
+        <Tab value="likes" label="Likes" />
+      </TabList>
+      <TabPanel value="posts">
+        <Text>Your posts</Text>
+      </TabPanel>
+      <TabPanel value="likes">
+        <Text>Posts you liked</Text>
+      </TabPanel>
+    </Tabs>
+  );
+}`,
+    language: "tsx",
+    label: "ProfileTabs.tsx"
+  }
+]} />
+
+## Vertical
+
+`orientation="vertical"` puts the list beside the panels, as a settings screen does. Tabs then fill the list's width with their label at the start, and the panel takes the rest of the row.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Tab, TabList, TabPanel, Tabs, Text } from "@once-ui-system/native";
+
+export function SettingsTabs() {
+  return (
+    <Tabs orientation="vertical">
+      <TabList width={8}>
+        <Tab value="account" label="Account" prefixIcon="person" />
+        <Tab value="billing" label="Billing" />
+      </TabList>
+      <TabPanel value="account">
+        <Text>Account settings</Text>
+      </TabPanel>
+      <TabPanel value="billing">
+        <Text>Billing settings</Text>
+      </TabPanel>
+    </Tabs>
+  );
+}`,
+    language: "tsx",
+    label: "SettingsTabs.tsx"
+  }
+]} />
+
+## Keep panels mounted
+
+An unselected panel renders nothing by default. Pass `keepMounted` to keep it mounted and hidden, so a form in it keeps what was typed.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Input, Tab, TabList, TabPanel, Tabs } from "@once-ui-system/native";
+
+export function AddressTabs() {
+  return (
+    <Tabs>
+      <TabList>
+        <Tab value="shipping" label="Shipping" />
+        <Tab value="billing" label="Billing" />
+      </TabList>
+      <TabPanel value="shipping" keepMounted>
+        <Input label="Shipping address" />
+      </TabPanel>
+      <TabPanel value="billing" keepMounted>
+        <Input label="Billing address" />
+      </TabPanel>
+    </Tabs>
+  );
+}`,
+    language: "tsx",
+    label: "AddressTabs.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- There is no arrow-key navigation on a touch screen, so `activation` is accepted and has no effect.
+- `Tabs` also takes core 3.0's `onValueChange`, called with the same value as `onChange`.
+- Each panel is labelled by its tab for screen readers.
+
+## API reference
+
+### Tabs
+
+Takes every [Flex](/components/flex) prop. It is a `Column`, or a `Row` when `vertical`, with `fillWidth` and `gap="16"`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | The selected tab's `value`, when the screen owns the state. Pair with `onChange`. |
+| `defaultValue` | `string` | first enabled tab | The tab selected first when Tabs keeps its own state. |
+| `onChange` | `(value: string) => void` | | Called with the newly selected tab's `value`. |
+| `onValueChange` | `(value: string) => void` | | Core 3.0's name for `onChange`. |
+| `orientation` | `"horizontal" \| "vertical"` | `"horizontal"` | `vertical` puts the list beside the panels. |
+| `activation` | `"automatic" \| "manual"` | | Accepted for core's API. Has no effect. |
+| `children` | `ReactNode` | | A `TabList` and the `TabPanel`s. |
+
+### TabList
+
+Takes every Flex prop. A `Row` with `gap="4"`, or a `Column` when `vertical`. Name it with `aria-label` when nothing on screen labels it.
+
+### Tab
+
+Takes every [ToggleButton](/components/toggleButton) prop except `selected`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | Matches the `TabPanel` this tab shows, and is what `onChange` reports. Required. |
+| `disabled` | `boolean` | `false` | The tab stays visible and cannot be picked. |
+| `label` | `ReactNode` | | The tab's text. |
+| `onPress` | `(event) => void` | | Called on press, before the tab is selected. `onClick` also works. |
+
+### TabPanel
+
+Takes every Flex prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | The `value` of the `Tab` that shows this panel. Required. |
+| `keepMounted` | `boolean` | `false` | Keeps the content mounted, hidden, while another tab is selected. |
+| `children` | `ReactNode` | | The panel's content. |

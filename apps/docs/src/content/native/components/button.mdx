@@ -1,0 +1,149 @@
+---
+title: "Button"
+summary: "A pressable button for React Native with the web's ten variants, five sizes, icons and a loading state."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/button.mdx"
+github: "packages/native/src/components/Button.tsx"
+navLabel: "Button"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Button` renders a React Native `Pressable` with a label, optional icons and the same variants and sizes as the web. Handle taps with `onPress`. See the [web Button page](/components/button) for how each variant is meant to be used.
+
+## Variants
+
+`primary` is the default. `danger`, `success` and `warning` are solid like `primary`. `secondary`, `tertiary`, `quaternary`, `subtle`, `ghost` and `link` are quieter.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, Column } from "@once-ui-system/native";
+
+export function Variants() {
+  return (
+    <Column gap="8">
+      <Button label="Primary" onPress={() => {}} />
+      <Button variant="secondary" label="Secondary" onPress={() => {}} />
+      <Button variant="tertiary" label="Tertiary" onPress={() => {}} />
+      <Button variant="danger" label="Delete account" onPress={() => {}} />
+      <Button variant="link" label="Learn more" onPress={() => {}} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Variants.tsx"
+  }
+]} />
+
+## Sizes and width
+
+`size` takes `xs`, `s`, `m`, `l` and `xl`, from 24 to 56 points tall. `m` is the default. A button is as wide as its label; `fillWidth` stretches it to its parent, and `horizontal` aligns the content inside it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, Column } from "@once-ui-system/native";
+
+export function Sizes() {
+  return (
+    <Column gap="8" fillWidth>
+      <Button size="s" label="Small" onPress={() => {}} />
+      <Button size="l" label="Large" onPress={() => {}} />
+      <Button size="l" fillWidth label="Continue" onPress={() => {}} />
+      <Button
+        variant="secondary"
+        fillWidth
+        horizontal="between"
+        label="Payment method"
+        suffixIcon="chevronRight"
+        onPress={() => {}}
+      />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes.tsx"
+  }
+]} />
+
+Small sizes still take taps from a 44 point area around them, without being drawn larger.
+
+## Icons
+
+`prefixIcon` and `suffixIcon` take a built-in icon name, as on the web, or any element. The icon takes the label's colour.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, Row } from "@once-ui-system/native";
+
+export function WithIcons() {
+  return (
+    <Row gap="8">
+      <Button prefixIcon="plus" label="Add stamp" onPress={() => {}} />
+      <Button variant="secondary" suffixIcon="arrowRight" label="Next" onPress={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "WithIcons.tsx"
+  }
+]} />
+
+## States
+
+`loading` swaps the prefix icon for a spinner and blocks presses. `disabled` greys the button out and blocks presses. Both are reported to screen readers.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Button, Row } from "@once-ui-system/native";
+
+export function Save() {
+  const [saving, setSaving] = useState(false);
+  return (
+    <Row gap="8">
+      <Button label="Save" loading={saving} onPress={() => setSaving(true)} />
+      <Button label="Unavailable" disabled />
+      <Button label="Rounded" rounded variant="secondary" onPress={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Save.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **`onPress`.** `Button` takes React Native's `Pressable` props, so taps go to `onPress`. There is no `onClick`.
+- **No `href`.** A button does not render a link. Navigate in `onPress`, for example with your router.
+- **Pressed, not hover.** Each variant shows its pressed colours while the finger is down.
+- **No `arrowIcon`.** Use `suffixIcon="arrowRight"` for an arrow.
+
+## Props
+
+`Button` also takes every React Native `Pressable` prop except `children` and `style`, which it replaces.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | | The button's text. |
+| `children` | `ReactNode` | | Used as the label when `label` is not set. |
+| `variant` | `"primary" \| "secondary" \| "tertiary" \| "quaternary" \| "subtle" \| "danger" \| "success" \| "warning" \| "ghost" \| "link"` | `"primary"` | Visual style. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | Height and padding. |
+| `weight` | `"default" \| "strong"` | `"strong"` | Label weight. |
+| `rounded` | `boolean` | | Fully rounded corners. |
+| `prefixIcon` | `IconName \| ReactNode` | | Icon before the label. |
+| `suffixIcon` | `IconName \| ReactNode` | | Icon after the label. |
+| `loading` | `boolean` | `false` | Shows a spinner and blocks presses. |
+| `disabled` | `boolean` | `false` | Greys the button out and blocks presses. |
+| `fillWidth` | `boolean` | `false` | Stretches to the parent's width. |
+| `horizontal` | `"start" \| "center" \| "end" \| "between"` | `"center"` | Content alignment inside the button. |
+| `onPress` | `(event) => void` | | Called on tap. |
+| `style` | `ViewStyle` | | Applied after the button's own style. |

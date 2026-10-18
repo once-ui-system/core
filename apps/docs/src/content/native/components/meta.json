@@ -1,0 +1,32 @@
+{
+  "title": "Components",
+  "order": 6,
+  "pages": {
+    "flex": 1,
+    "button": 2,
+    "card": 3,
+    "text": 4,
+    "heading": 5,
+    "icon": 6,
+    "media": 7,
+    "dialog": 8,
+    "iconButton": 9,
+    "toggleButton": 10,
+    "line": 11,
+    "avatar": 12,
+    "avatarGroup": 13,
+    "badge": 14,
+    "tag": 15,
+    "feedback": 16,
+    "List": 17,
+    "skeleton": 18,
+    "spinner": 19,
+    "statusIndicator": 20,
+    "progressBar": 21,
+    "tabs": 22,
+    "accordion": 23,
+    "toast": 24,
+    "segmentedControl": 25,
+    "option": 26
+  }
+}

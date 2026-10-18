@@ -1,0 +1,130 @@
+---
+title: "ToggleButton"
+summary: "A quiet React Native button that stays highlighted while it is selected, for filters, toolbars and segmented choices."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/toggleButton.mdx"
+github: "packages/native/src/components/ToggleButton.tsx"
+navLabel: "Toggle"
+navIcon: "components"
+status: "unreleased"
+---
+
+`ToggleButton` is a quiet `Pressable` with a label and optional icons. While `selected` is true it keeps a highlighted background. It does not hold its own state: keep `selected` in your component and flip it in `onPress`. See the [web ToggleButton page](/components/toggleButton) for more examples.
+
+## Selected state
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Row, ToggleButton } from "@once-ui-system/native";
+
+export function Filters() {
+  const [filter, setFilter] = useState("all");
+  return (
+    <Row gap="4">
+      <ToggleButton label="All" selected={filter === "all"} onPress={() => setFilter("all")} />
+      <ToggleButton
+        label="Unread"
+        selected={filter === "unread"}
+        onPress={() => setFilter("unread")}
+      />
+      <ToggleButton
+        label="Starred"
+        prefixIcon="star"
+        selected={filter === "starred"}
+        onPress={() => setFilter("starred")}
+      />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Filters.tsx"
+  }
+]} />
+
+## Variants
+
+`ghost`, the default, shows a border only while selected or pressed. `outline` always shows one. `subtle` never does.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, ToggleButton } from "@once-ui-system/native";
+
+export function Variants() {
+  return (
+    <Row gap="8">
+      <ToggleButton variant="ghost" label="Ghost" selected onPress={() => {}} />
+      <ToggleButton variant="outline" label="Outline" onPress={() => {}} />
+      <ToggleButton variant="subtle" label="Subtle" selected onPress={() => {}} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Variants.tsx"
+  }
+]} />
+
+## Sizes, radius and width
+
+`size` takes `xs` to `xl`, from 20 to 48 points tall. `m` is the default. The corner radius follows the size unless you set `radius`, and `rounded` makes it a pill. `fillWidth` with `horizontal` lays it out as a full-width row.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, ToggleButton } from "@once-ui-system/native";
+
+export function Menu() {
+  return (
+    <Column gap="4" fillWidth>
+      <ToggleButton size="l" rounded label="Rounded" onPress={() => {}} />
+      <ToggleButton
+        size="l"
+        fillWidth
+        horizontal="between"
+        label="Notifications"
+        suffixIcon="chevronRight"
+        onPress={() => {}}
+      />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Menu.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **Pressed, not hover.** The pressed state takes the place of the web's hover state.
+- **`onPress` or `onClick`.** Both work. `onPress` wins when both are set.
+- **One line.** The label always stays on one line and ends in an ellipsis when it does not fit, so `truncate` has no extra effect.
+- **No `href`.** Navigate in `onPress`.
+
+## Props
+
+`ToggleButton` also takes every React Native `Pressable` prop except `children` and `style`, which it replaces.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | | The button's text. |
+| `children` | `ReactNode` | | Used as the label when `label` is not set. |
+| `selected` | `boolean` | `false` | Keeps the highlighted background. Reported to screen readers. |
+| `variant` | `"ghost" \| "outline" \| "subtle"` | `"ghost"` | Border style. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | Height and padding. |
+| `radius` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| "full" \| "none"` | the `size` | Corner radius. |
+| `rounded` | `boolean` | `false` | Fully rounded corners. |
+| `horizontal` | `"start" \| "center" \| "end" \| "between"` | `"center"` | Content alignment inside the button. |
+| `fillWidth` | `boolean` | `false` | Stretches to the parent's width. |
+| `weight` | `"default" \| "strong"` | `"default"` | Label weight. |
+| `truncate` | `boolean` | | Accepted for the web's API. The label is always one line. |
+| `disabled` | `boolean` | `false` | Greys the button out and blocks presses. |
+| `prefixIcon` | `IconName \| ReactNode` | | Icon before the label. |
+| `suffixIcon` | `IconName \| ReactNode` | | Icon after the label. |
+| `onPress` | `(event) => void` | | Called on tap. |
+| `onClick` | `() => void` | | The web's name for `onPress`. |
+| `style` | `ViewStyle` | | Applied after the button's own style. |
