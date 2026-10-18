@@ -99,9 +99,37 @@ export function Rating() {
   }
 ]} />
 
+## Custom layout
+
+For radios `options` cannot describe, put `RadioButton`s with a `value` inside the group, in any layout. The group checks the one whose `value` it holds, as on the web. They render after any `options`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, RadioButton, RadioGroup, Row } from "@once-ui-system/native";
+
+export function Milk() {
+  return (
+    <RadioGroup label="Milk" defaultValue="oat">
+      <Row gap="12">
+        <Card padding="16" radius="l" flex={1}>
+          <RadioButton value="whole" label="Whole" />
+        </Card>
+        <Card padding="16" radius="l" flex={1}>
+          <RadioButton value="oat" label="Oat" description="+200 Ft" />
+        </Card>
+      </Row>
+    </RadioGroup>
+  );
+}`,
+    language: "tsx",
+    label: "Milk.tsx"
+  }
+]} />
+
 ## Differences from the web
 
-- Options come only from `options`. There are no `children` for a custom layout; use `RadioButton`s yourself for that.
 - There is no `name`, form submission or arrow-key navigation.
 
 ## API reference
@@ -116,6 +144,7 @@ export function Rating() {
 | `description` | `ReactNode` | | A line under the group label. |
 | `disabled` | `boolean` | `false` | Turns off every option. |
 | `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | `horizontal` lays the options out in a wrapping row. |
+| `children` | `ReactNode` | | `RadioButton`s with a `value`, in any layout. They render after the options. |
 | `style` | `ViewStyle` | | Style for the group. |
 
 ### RadioGroupOption
