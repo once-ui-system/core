@@ -3,6 +3,7 @@ import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { InteractiveDetails } from "./InteractiveDetails";
 import { Spinner } from "./Spinner";
+import { touchSlop } from "./touch";
 import { useControllable } from "./useControllable";
 
 export interface SwitchProps {
@@ -48,6 +49,7 @@ export function Switch({
       aria-busy={loading}
       disabled={disabled || loading}
       onPress={toggle}
+      hitSlop={touchSlop(theme, height, label || description ? Number.POSITIVE_INFINITY : width)}
       style={[
         {
           flexDirection: reverse ? "row-reverse" : "row",

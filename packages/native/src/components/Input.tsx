@@ -48,13 +48,16 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       onFocus,
       onBlur,
       multiline,
+      onChangeText,
       ...rest
     },
     ref,
   ) {
     const theme = useTheme();
     const [focused, setFocused] = useState(false);
-    const value = rest.value ?? rest.defaultValue ?? "";
+    // Tracked when uncontrolled too, so a typed value keeps the label floating after blur.
+    const [typed, setTyped] = useState(rest.defaultValue ?? "");
+    const value = rest.value ?? typed;
     const floating = focused || value !== "" || !!rest.placeholder;
     const ghost = variant === "ghost";
     const left = rest.maxLength !== undefined ? rest.maxLength - String(value).length : 0;
@@ -104,6 +107,10 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
               onBlur={(e) => {
                 setFocused(false);
                 onBlur?.(e);
+              }}
+              onChangeText={(text) => {
+                setTyped(text);
+                onChangeText?.(text);
               }}
               {...rest}
               style={[
