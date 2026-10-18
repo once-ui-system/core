@@ -6,6 +6,7 @@ import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
 import { Media } from "./Media";
 import { Row } from "./Row";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import styles from "./Swiper.module.scss";
 
 interface SwiperItem {
@@ -49,6 +50,8 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    // The track scrolls sideways; a keyboard reaches it to scroll with arrows.
+    const scrollTabStopRef = useScrollableTabStop(scrollContainerRef);
     const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
     const isScrollingProgrammatically = useRef(false);
     const dragStartX = useRef(0);
@@ -223,10 +226,10 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
           >
             {/* Scroll Container */}
             <Row
-              ref={scrollContainerRef}
+              ref={scrollTabStopRef}
               fillWidth
               fillHeight={stretch}
-              className={styles.scrollContainer}
+              className={`${styles.scrollContainer} focus-ring`}
               onMouseDown={handleMouseDown}
               overflowX="auto"
               style={{
