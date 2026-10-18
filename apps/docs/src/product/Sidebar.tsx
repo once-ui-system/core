@@ -19,7 +19,10 @@ import {
 import { usePathname } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { layout } from "@/resources";
+import { isPlatformRoot, platformOfPath } from "@/resources/platforms";
 import { AVAILABILITY, type Availability } from "./availability";
+import { PlatformSwitcher, flattenSlugs } from "./PlatformSwitcher";
+import { VersionPicker } from "./VersionPicker";
 
 import styles from "./Sidebar.module.scss";
 
@@ -63,6 +66,9 @@ const NAV_RHYTHM = {
 
 interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   initialNavigation?: NavigationItem[];
+  /** Adds the version picker above the platform switcher, for the phone menu,
+      where the header has no room for it. */
+  showVersion?: boolean;
 }
 
 // Memoized navigation item component to prevent re-renders
@@ -356,6 +362,14 @@ const SidebarContent: React.FC<{
       );
     };
 
+    /* Each platform is its own site context: web shows everything but the
+       other platforms' folders, a platform with its own folder shows only
+       that folder's pages, lifted to the top level. */
+    const platform = platformOfPath(pathname);
+    const visible = platform.root
+      ? (navigation.find((item) => item.slug === platform.root)?.children ?? [])
+      : navigation.filter((item) => !isPlatformRoot(item.slug));
+
     // Release history lives on GitHub, generated from CHANGELOG.md.
     const resourcesSection = (
       <Column gap="4" marginTop="32" paddingLeft="4">
@@ -364,13 +378,15 @@ const SidebarContent: React.FC<{
         </Row>
         {/* The blocks surface has its own catalogue and hides this sidebar,
             so this is the way into it from the reference. Free with 2.0. */}
-        <ResourceLink
-          href="/blocks/quickStart"
-          icon="apps"
-          label="Blocks"
-          tag="New"
-          pathname={pathname}
-        />
+        {platform.id === "web" && (
+          <ResourceLink
+            href="/blocks/quickStart"
+            icon="apps"
+            label="Blocks"
+            tag="New"
+            pathname={pathname}
+          />
+        )}
         <ResourceLink
           href="https://github.com/once-ui-system/core/releases"
           icon="github"
@@ -382,7 +398,7 @@ const SidebarContent: React.FC<{
 
     return (
       <>
-        {renderNavigation(navigation, 0)}
+        {renderNavigation(visible, 0)}
         {resourcesSection}
       </>
     );
@@ -400,7 +416,7 @@ const SidebarContent: React.FC<{
 
 SidebarContent.displayName = "SidebarContent";
 
-const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
+const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...rest }) => {
   const [navigation, setNavigation] = useState<NavigationItem[]>(initialNavigation || []);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
@@ -468,6 +484,14 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
+        {showVersion && (
+          <Row fillWidth paddingBottom="8" s={{ hide: false }} hide>
+            <VersionPicker />
+          </Row>
+        )}
+        <Row fillWidth paddingBottom="12">
+          <PlatformSwitcher slugs={flattenSlugs(navigation)} />
+        </Row>
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
         ) : (
