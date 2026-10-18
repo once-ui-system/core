@@ -9,8 +9,14 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: NavVariant; rail: b...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: Nav...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
   },
   "useFormPending": {
    "group": "components",
@@ -310,10 +316,10 @@
    "spacious"
   ],
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -385,6 +391,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "help",
    "home",
@@ -449,11 +456,6 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
-  "NavVariant": [
-   "solid",
-   "subtle",
-   "minimal"
-  ],
   "NavigationLayout": [
    "grid",
    "row",

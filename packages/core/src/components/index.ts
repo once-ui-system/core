@@ -62,6 +62,7 @@ export * from "./Setting.js";
 export * from "./Skeleton.js";
 export * from "./Slider.js";
 export * from "./SmartLink.js";
+export * from "./Sortable.js";
 export * from "./Spinner.js";
 export * from "./SplitView.js";
 export * from "./StatusIndicator.js";

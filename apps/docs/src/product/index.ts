@@ -32,6 +32,7 @@ export * from "./PropsTableView";
 export * from "./RadioButtonExample";
 export * from "./RadioGroupExamples";
 export * from "./ScrubberExamples";
+export * from "./SortableExamples";
 export * from "./SettingExamples";
 export * from "./SwitchExample";
 export * from "./TextareaExamples";

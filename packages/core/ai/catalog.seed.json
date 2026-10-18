@@ -651,6 +651,22 @@
     "avoid": "Raw a elements",
     "pairsWith": ["Text", "Row"]
   },
+  "Sortable": {
+    "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)",
+    "tags": ["data", "navigation", "chat"],
+    "avoid": "Native HTML5 draggable, which does nothing on touch and has no keyboard path",
+    "pairsWith": ["SortableItem", "Nav", "NavItem"]
+  },
+  "SortableHandle": {
+    "purpose": "Grip button a Sortable row drags by when the list has handle; drags at once on touch",
+    "tags": ["action"],
+    "pairsWith": ["Sortable", "SortableItem"]
+  },
+  "SortableItem": {
+    "purpose": "One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged",
+    "tags": ["data"],
+    "pairsWith": ["Sortable", "NavItem", "Card"]
+  },
   "Spinner": {
     "purpose": "Rotating loader for async and streaming states",
     "tags": ["feedback", "chat"],

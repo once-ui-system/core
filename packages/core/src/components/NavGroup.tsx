@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import type { ReactNode } from "react";
+import { type ReactNode, useEffect, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Accordion } from "./Accordion.js";
@@ -40,6 +40,9 @@ interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" |
  *
  * Uncontrolled by default. Pass `open` and `onOpenChange` to drive it — which is
  * what a sidebar does when it opens the group containing the current route.
+ *
+ * A closed group opens when a Sortable row is held over it, so a row can be
+ * dragged into it.
  */
 const NavGroup = ({
   ref,
@@ -60,11 +63,26 @@ const NavGroup = ({
     onChange: onOpenChange,
   });
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => rootRef.current as HTMLDivElement);
+  const latest = useRef({ isOpen, setOpen });
+  latest.current = { isOpen, setOpen };
+  useEffect(() => {
+    const el = rootRef.current;
+    if (!el) return;
+    const openForDrag = () => {
+      if (!latest.current.isOpen) latest.current.setOpen(true);
+    };
+    el.addEventListener("sortableopen", openForDrag);
+    return () => el.removeEventListener("sortableopen", openForDrag);
+  }, []);
+
   return (
     <Row
-      ref={ref}
+      ref={rootRef}
       fillWidth
       radius="m"
+      data-sortable-open=""
       transition="micro-medium"
       background={(isOpen || selected) && variant !== "minimal" ? "neutral-alpha-weak" : undefined}
       {...row}

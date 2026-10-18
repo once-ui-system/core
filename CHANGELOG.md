@@ -340,6 +340,16 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   `action`. Rows outside a `Nav` look as before; an explicit `size` on a NavItem still
   wins. A selected NavItem with an `href` now carries `aria-current="page"`, and a
   NavGroup header's icon lines up with the NavItems beside it.
+- **Reorderable lists: `Sortable`.** Wrap a list in `Sortable` and each row in
+  `Sortable.Item`, and apply the new order in `onReorder`. A mouse or pen drags after a
+  4px move, a finger after a 200ms press (so taps and scrolling still work), and the
+  keyboard picks a row up with Space, moves it with the arrow keys and drops it with
+  Space. Every step is read out to screen readers, the rows slide aside with the macro
+  transition or jump with reduced motion on, and dragging near an edge scrolls. Lists
+  that share a `group` trade rows through `onMove`; inside a `Nav` the rows keep its
+  spacing, and a closed `NavGroup` opens when a row is held over it. With `handle`, rows
+  drag only from a `Sortable.Handle`. No dependency. Also new: the `grip` icon and
+  `arrayMove`.
 
 ### Fixed
 

@@ -67,12 +67,17 @@ const DENSITY = {
   }
 >;
 
-const NavContext = createContext<NavStyle>({ density: "normal", variant: "solid", rail: true });
+const OUTSIDE: NavStyle = { density: "normal", variant: "solid", rail: true };
 
-/** The look the nearest Nav set, or the defaults outside one. */
+const NavContext = createContext<NavStyle>(OUTSIDE);
+
+/**
+ * The look the nearest Nav set, or the defaults outside one. `inNav` says
+ * which, for parts such as Sortable that only adapt inside a Nav.
+ */
 const useNavStyle = () => {
   const style = useContext(NavContext);
-  return { ...style, sizes: DENSITY[style.density] };
+  return { ...style, inNav: style !== OUTSIDE, sizes: DENSITY[style.density] };
 };
 
 interface NavProps extends React.ComponentProps<typeof Column> {
