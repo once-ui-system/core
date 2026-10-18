@@ -4,11 +4,13 @@ import { mergeLabels } from "../internal/labels.js";
 import { Column } from "./Column.js";
 import { Dropdown } from "./Dropdown.js";
 import { Flex } from "./Flex.js";
+import { useFieldSize } from "./FormContext.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
 import { Input, InputProps } from "./Input.js";
 import { Row } from "./Row.js";
 import { Slider } from "./Slider.js";
+import { Text } from "./Text.js";
 
 /** The field's own controls. Omitted fields keep the English default. */
 interface ColorInputLabels {
@@ -83,6 +85,12 @@ const ColorInput = ({
   // Uncontrolled, these are the colour itself, from `defaultValue`.
   const [hexValue, setHexValue] = useState(() => parseValue(value ?? defaultValue).hex);
   const [alpha, setAlpha] = useState(() => parseValue(value ?? defaultValue).alpha);
+  // At xxs Input hides the label and shows it as the placeholder, but a
+  // colour input draws no placeholder, so an empty xxs field would show
+  // nothing but the eyedropper. The text overlay shows it instead. Hidden
+  // from assistive technology: the hidden <label> already names the field.
+  const compact = useFieldSize(props.size) === "xxs";
+  const emptyText = compact && !hexValue ? (props.placeholder ?? label) : undefined;
 
   /**
    * Follow `value` after mount. It used to seed the state once and never
@@ -181,7 +189,7 @@ const ColorInput = ({
       }
       suffix={
         <Flex
-          className={`suffix ${hexValue ? "" : "hidden"}`}
+          className={`suffix ${hexValue || emptyText ? "" : "hidden"}`}
           position="absolute"
           cursor="interactive"
           left="48"
@@ -191,15 +199,23 @@ const ColorInput = ({
           <Flex
             onClick={handleHexClick}
             fillWidth
-            opacity={hexValue ? 100 : 0}
+            opacity={hexValue || emptyText ? 100 : 0}
             transition="micro-medium"
           >
             {" "}
-            {hexValue
-              ? supportAlpha && alpha < 100
-                ? `${hexValue} ${alpha}%`
-                : hexValue
-              : ""}{" "}
+            {hexValue ? (
+              supportAlpha && alpha < 100 ? (
+                `${hexValue} ${alpha}%`
+              ) : (
+                hexValue
+              )
+            ) : emptyText ? (
+              <Text aria-hidden="true" onBackground="neutral-weak">
+                {emptyText}
+              </Text>
+            ) : (
+              ""
+            )}{" "}
           </Flex>{" "}
           {hexValue && (
             <Flex position="absolute" right="12" gap="4" style={{ transform: "translateY(-50%)" }}>
@@ -215,6 +231,8 @@ const ColorInput = ({
                       tooltip={text.adjustOpacity}
                       tooltipPosition="left"
                       icon="opacity"
+                      // Left out above xxs, so the density sets it.
+                      size={compact ? "s" : undefined}
                     />
                   }
                 >
@@ -238,6 +256,7 @@ const ColorInput = ({
                 tooltip={text.remove}
                 tooltipPosition={supportAlpha ? "bottom" : "left"}
                 icon="close"
+                size={compact ? "s" : undefined}
               />{" "}
             </Flex>
           )}{" "}

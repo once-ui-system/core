@@ -108,6 +108,57 @@ With `range`, the field becomes two, a start and an end, over one calendar that 
 - **Formatted Display**: Displays selected date in a readable format
 - **Dropdown Integration**: Uses `DropdownWrapper` for a clean UI experience
 
+## Toolbar size
+
+`size="xxs"` draws a 32px field, the height of a `size="s"` Button, for a date filter in a toolbar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DateInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [date, setDate] = useState<Date>(new Date());
+
+<DateInput
+    id="date"
+    placeholder="Select date"
+    size="xxs"
+    value={date}
+    onValueChange={setDate}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
+With `range`, `size="xxs"` draws both halves at 32px, rounded at `radius-m` on their outer corners.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<BasicDateRangeInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [dateRange, setDateRange] = useState<DateRange>({ startDate: undefined, endDate: undefined });
+
+<DateInput range
+    id="range"
+    startLabel="Start"
+    endLabel="End"
+    size="xxs"
+    value={dateRange}
+    onValueChange={setDateRange}
+/>`,
+      language: "tsx",
+      label: "Toolbar range"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

@@ -280,13 +280,14 @@ const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
 ## Size
 
-The Input component supports five sizes: extra small, small, medium, large, and extra large.
+The Input component supports six sizes, from `xxs` (32px) through `xs` (40px), `s` (48px), `m` (56px, the default) and `l` (64px) to `xl` (72px).
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column fillWidth gap="16">
+      <Input id="size-xxs" label="Extra Extra Small" size="xxs" />
       <Input id="size-xs" label="Extra Small" size="xs" />
       <Input id="size-s" label="Small" size="s" />
       <Input id="size-m" label="Medium" size="m" />
@@ -297,7 +298,8 @@ The Input component supports five sizes: extra small, small, medium, large, and 
   codes={[
     {
       code:
-`<Input id="size-xs" label="Extra Small" size="xs" />
+`<Input id="size-xxs" label="Extra Extra Small" size="xxs" />
+<Input id="size-xs" label="Extra Small" size="xs" />
 <Input id="size-s" label="Small" size="s" />
 <Input id="size-m" label="Medium" size="m" />
 <Input id="size-l" label="Large" size="l" />
@@ -307,6 +309,54 @@ The Input component supports five sizes: extra small, small, medium, large, and 
     }
   ]}
  />
+
+## Toolbar size
+
+Field heights run a step above the button scale: an `xs` field is 40px, as tall as an `m` Button. For a toolbar or a filter row, where every control should be the height of a `size="s"` Button, use `size="xxs"`. It is 32px, rounded at `radius-m` like the button, with its prefix and suffix 8px in from the edge.
+
+A 32px field has no room for a floating label. At `xxs` the `label` shows as the placeholder, unless you pass a `placeholder` of your own, and stays the field's accessible name through a visually hidden `<label>`. Every field built on Input (Select, NumberInput, DateInput and its `range`, ColorInput, TagInput), `type="password"` (its reveal toggle keeps its 24px) and Textarea take `xxs` the same way, and `Form size="xxs"` passes it to every field inside.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Column fillWidth gap="16"><ToolbarFieldsExample /><SearchInput size="xxs" /></Column>}
+  codes={[
+    {
+      code:
+`const [query, setQuery] = useState("");
+const [status, setStatus] = useState("all");
+
+<Row fillWidth gap="8" vertical="center" s={{ direction: "column" }}>
+    <Input
+        id="toolbar-search"
+        size="xxs"
+        label="Search orders"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        prefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
+    />
+    <Select
+        id="toolbar-status"
+        size="xxs"
+        label="Status"
+        value={status}
+        onValueChange={(next) => setStatus(next as string)}
+        options={[
+            { label: "All statuses", value: "all" },
+            { label: "Paid", value: "paid" },
+            { label: "Pending", value: "pending" },
+            { label: "Refunded", value: "refunded" },
+        ]}
+    />
+    <Button size="s" variant="secondary" prefixIcon="download">
+        Export
+    </Button>
+</Row>`,
+      language: "tsx",
+      label: "Toolbar"
+    }
+  ]}
+/>
 
 ## On touch devices
 
@@ -322,6 +372,10 @@ On touch pointers only, the value is therefore clamped:
 | font-size | `max(token, 16px)` |
 | line-height | `max(token, 1.3 × font-size)` |
 | min-height (`xs`, `s`) | `40px` and `48px` |
+
+`xxs` has no height floor: it is small on purpose, and a floor would make it
+the same field as `xs` on a phone. Its 16px value and 20.8px line still fit
+its 22px box.
 
 Line-height is clamped alongside the font because `xs` and `s` resolve
 `--line-height-body-s` to 16.88px on mobile — 16px glyphs would otherwise sit
@@ -429,9 +483,9 @@ thing each, so they live on pages of their own:
   component="Input"
   describe={{
     id: "Ties the label to the field. Required, and must be unique on the page.",
-    label: "Floats above the value once the field is focused or filled.",
+    label: "Floats above the value once the field is focused or filled. At size xxs it shows as the placeholder instead, and stays the accessible name.",
     placeholder: "Shown while the field is empty. Not a substitute for a label.",
-    size: "Field height and type scale.",
+    size: "Field height and type scale: xxs 32px, xs 40px, s 48px, m 56px (default), l 64px, xl 72px. xxs matches a size=\"s\" Button, for toolbars.",
     error: "Put the field in its error state.",
     errorMessage: "Message shown under the field when error is set.",
     description: "Helper text under the field, for the rule the label cannot carry.",

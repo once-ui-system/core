@@ -3,6 +3,7 @@
 import { ChangeEventHandler, KeyboardEventHandler, type Ref, useState } from "react";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
+import { useFieldSize } from "./FormContext.js";
 import { Input, InputProps } from "./Input.js";
 import { Tag } from "./Tag.js";
 
@@ -33,6 +34,9 @@ const TagInput = ({
     defaultValue: [...(defaultValue ?? [])],
     onChange: onValueChange,
   });
+  // The tag row is pulled up 8px into the field; at xxs it keeps 4px clear
+  // of the field's edges rather than 8.
+  const compact = useFieldSize(inputProps.size) === "xxs";
 
   /** The text being typed: `onChange` is the native event of that field. */
   const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -78,7 +82,7 @@ const TagInput = ({
           gap="4"
           vertical="center"
           wrap
-          paddingY="16"
+          paddingY={compact ? "12" : "16"}
         >
           {value.map((tag, index) => (
             <Tag

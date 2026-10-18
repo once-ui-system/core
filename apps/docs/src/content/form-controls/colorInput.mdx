@@ -97,6 +97,32 @@ the opacity button ("Adjust opacity") and `opacity` for its slider
 />
 ```
 
+## Toolbar size
+
+`size="xxs"` draws a 32px field, the height of a `size="s"` Button. The label shows as the placeholder until a colour is picked.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ColorInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [color, setColor] = useState("#4287f5");
+
+<ColorInput
+    id="brand-color"
+    label="Brand Color"
+    size="xxs"
+    value={color}
+    onValueChange={setColor}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
 ## Props
 
 The `ColorInput` component extends the standard `Input` component props with the following modifications:

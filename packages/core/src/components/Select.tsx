@@ -14,6 +14,7 @@ import {
   useDropdownCombobox,
 } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
+import { useFieldSize } from "./FormContext.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
 import { Input, type InputProps } from "./Input.js";
@@ -104,6 +105,7 @@ const SearchInput = ({
   listboxId,
   activeOptionId,
   names,
+  size,
 }: {
   id: string;
   searchQuery: string;
@@ -117,6 +119,8 @@ const SearchInput = ({
   listboxId: string;
   activeOptionId?: string;
   names: Required<SelectLabels>;
+  /** `xxs` when the Select is; `s` otherwise, as it always was. */
+  size: "xxs" | "s";
 } & { ref?: React.Ref<HTMLInputElement> }) => (
   <Input
     ref={ref}
@@ -129,7 +133,7 @@ const SearchInput = ({
     aria-expanded
     aria-controls={listboxId}
     aria-activedescendant={activeOptionId}
-    size="s"
+    size={size}
     suffix={
       searchQuery ? (
         <IconButton
@@ -198,6 +202,9 @@ const Select = ({
   ...rest
 }: SelectProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const names = mergeLabels(DEFAULT_LABELS, labels);
+  // An xxs Select (its own `size` or a Form's) gets an xxs search field in
+  // its panel; every other size keeps the `s` one it always had.
+  const searchSize = useFieldSize(rest.size) === "xxs" ? "xxs" : "s";
   /**
    * Focus for the whole control, not the trigger.
    *
@@ -583,6 +590,7 @@ const Select = ({
               listboxId={listboxId}
               activeOptionId={activeOptionId}
               names={names}
+              size={searchSize}
             />
           )}
 

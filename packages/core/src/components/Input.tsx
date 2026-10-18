@@ -11,7 +11,7 @@ import React, {
 } from "react";
 import { useDebounce } from "../hooks/useDebounce.js";
 import type { LeafProps } from "../interfaces.js";
-import { TShirtSizes } from "../types.js";
+import type { FieldSize } from "../types.js";
 import { takeLeafProps } from "../utils/leafLayout.js";
 import { Column } from "./Column.js";
 import { useFieldInvalid, useFieldSize } from "./FormContext.js";
@@ -27,7 +27,14 @@ interface InputProps
   id: string;
   label?: string;
   placeholder?: string;
-  size?: TShirtSizes;
+  /**
+   * Field height and type scale: `xxs` 32px, `xs` 40px, `s` 48px, `m` 56px
+   * (the default), `l` 64px, `xl` 72px. `xxs` is the height of a small
+   * `Button`, for toolbars. It has no room for a floating label, so there
+   * `label` shows as the placeholder (unless `placeholder` is set) and stays
+   * the field's accessible name through a visually hidden `<label>`.
+   */
+  size?: FieldSize;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
@@ -110,6 +117,12 @@ const Input = ({
   // A `Form` can set the size for every field in it; the field's own
   // prop still wins, and `"m"` is still the default on its own.
   const resolvedSize = useFieldSize(size);
+  // A 32px field has no room for a label above its value. The label stays
+  // the field's accessible name, hidden, and shows as the placeholder
+  // instead, unless the caller gave a placeholder of their own.
+  const compact = resolvedSize === "xxs";
+  const shownPlaceholder = compact ? (placeholder ?? label) : placeholder;
+  const inset = compact ? "8" : "12";
   // A `Field` around this input marks it invalid while its error shows, the
   // same as passing `error`; the message itself renders in the Field.
   const fieldInvalid = useFieldInvalid(id);
@@ -229,7 +242,7 @@ const Input = ({
     {
       [styles.withPrefix]: prefix,
       [styles.withSuffix]: suffix || revealable,
-      [styles.placeholder]: placeholder,
+      [styles.placeholder]: shownPlaceholder,
       [styles.hasChildren]: children,
       [styles.error]: displayError && styledValue !== "",
     },
@@ -260,11 +273,16 @@ const Input = ({
           styles.base,
           focusRing && styles.focusRing,
           styles[resolvedSize],
-          corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
+          // Rounded like a Button of the same height: `radius-m` at xxs.
+          corners === "none"
+            ? "radius-none"
+            : corners
+              ? `radius-${compact ? "m" : "l"}-${corners}`
+              : `radius-${compact ? "m" : "l"}`,
         )}
       >
         {prefix && (
-          <Row paddingLeft="12" className={styles.prefix} position="static">
+          <Row paddingLeft={inset} className={styles.prefix} position="static">
             {prefix}
           </Row>
         )}
@@ -274,7 +292,7 @@ const Input = ({
             type={revealable && revealed ? "text" : props.type}
             ref={ref}
             id={id}
-            placeholder={placeholder}
+            placeholder={shownPlaceholder}
             onFocus={handleFocus}
             onBlur={handleBlur}
             onChange={handleChange}
@@ -291,9 +309,13 @@ const Input = ({
               as="label"
               textVariant="label-default-m"
               htmlFor={id}
-              className={classNames(styles.label, styles.inputLabel, {
-                [styles.floating]: isFocused || isFilled || placeholder,
-              })}
+              className={
+                compact
+                  ? styles.labelHidden
+                  : classNames(styles.label, styles.inputLabel, {
+                      [styles.floating]: isFocused || isFilled || placeholder,
+                    })
+              }
             >
               {label}
             </Text>
@@ -301,7 +323,7 @@ const Input = ({
           {children}
         </Column>
         {characterCount && props.maxLength && (
-          <Row paddingRight="12" className={styles.suffix} position="static">
+          <Row paddingRight={inset} className={styles.suffix} position="static">
             <Text
               textVariant="label-default-s"
               onBackground={
@@ -317,17 +339,17 @@ const Input = ({
           </Row>
         )}
         {loading && (
-          <Row paddingRight="12" className={styles.suffix} position="static">
+          <Row paddingRight={inset} className={styles.suffix} position="static">
             <Spinner size="s" />
           </Row>
         )}
         {suffix && !loading && (
-          <Row paddingRight="12" className={styles.suffix} position="static">
+          <Row paddingRight={inset} className={styles.suffix} position="static">
             {suffix}
           </Row>
         )}
         {revealable && (
-          <Row paddingRight="12" className={styles.suffix} position="static">
+          <Row paddingRight={inset} className={styles.suffix} position="static">
             <IconButton
               onClick={() => setRevealed((shown) => !shown)}
               variant="ghost"
@@ -341,7 +363,7 @@ const Input = ({
       </Row>
       {showsErrorMessage && (
         <Row
-          paddingX="16"
+          paddingX={compact ? "12" : "16"}
           id={`${id}-error`}
           textVariant="body-default-s"
           onBackground="danger-weak"
@@ -351,7 +373,7 @@ const Input = ({
       )}
       {description && (
         <Row
-          paddingX="16"
+          paddingX={compact ? "12" : "16"}
           id={`${id}-description`}
           textVariant="body-default-s"
           onBackground="neutral-weak"
