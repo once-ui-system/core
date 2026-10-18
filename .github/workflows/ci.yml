@@ -146,3 +146,33 @@ jobs:
 
       - name: Build
         run: pnpm --filter @once-ui-system/native build
+
+  cli:
+    name: CLI
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # pnpm's version comes from `packageManager` in the root package.json (10.14.0).
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Lint
+        run: pnpm --filter @once-ui-system/cli lint
+
+      - name: Typecheck
+        run: pnpm --filter @once-ui-system/cli typecheck
+
+      - name: Test
+        run: pnpm --filter @once-ui-system/cli test
+
+      - name: Build
+        run: pnpm --filter @once-ui-system/cli build
