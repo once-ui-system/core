@@ -3,6 +3,7 @@
 import { type ChangeEventHandler, forwardRef, type KeyboardEventHandler, useState } from "react";
 import { Chip } from "./Chip";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { Input, type InputProps } from "./Input";
 
 interface TagInputProps extends Omit<InputProps, "onChange" | "value" | "defaultValue"> {
@@ -33,6 +34,9 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       ...(defaultValue ?? []),
     ]);
     const value = controlledValue ?? uncontrolledValue;
+    // The chip row is pulled up 8px into the field; at xxs it keeps 4px clear
+    // of the field's edges rather than 8.
+    const compact = useFieldSize(inputProps.size) === "xxs";
 
     const commit = (next: string[]) => {
       if (controlledValue === undefined) setUncontrolledValue(next);
@@ -82,7 +86,7 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
             gap="4"
             vertical="center"
             wrap
-            paddingY="16"
+            paddingY={compact ? "12" : "16"}
           >
             {value.map((tag, index) => (
               <Chip

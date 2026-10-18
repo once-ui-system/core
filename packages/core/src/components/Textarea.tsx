@@ -11,7 +11,7 @@ import React, {
   useState,
 } from "react";
 import { useDebounce } from "../hooks/useDebounce";
-import type { TShirtSizes } from "../types";
+import type { FieldSize } from "../types";
 import { Column } from "./Column";
 import { useFieldInvalid, useFieldSize } from "./FormContext";
 import styles from "./Input.module.scss";
@@ -27,7 +27,13 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
    * drops the resize handle; a number fixes that many rows and keeps it.
    */
   lines?: number | "auto";
-  size?: TShirtSizes;
+  /**
+   * Type scale and the height of the first line, the same as `Input`'s: `xxs`
+   * 32px, `xs` 40px, `s` 48px, `m` 56px (the default), `l` 64px, `xl` 72px.
+   * At `xxs` there is no floating label: `label` shows as the placeholder
+   * (unless `placeholder` is set) and stays the accessible name, hidden.
+   */
+  size?: FieldSize;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
@@ -100,6 +106,10 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    // As in Input: an xxs field has no room for a floating label.
+    const compact = resolvedSize === "xxs";
+    const shownPlaceholder = compact ? (placeholder ?? label) : placeholder;
+    const inset = compact ? "8" : "12";
     // `error` used to be accepted and ignored here. It now marks the field
     // invalid the way it does on `Input`, and so does an enclosing `Field`.
     const fieldInvalid = useFieldInvalid(id);
@@ -240,12 +250,16 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             focusRing && styles.focusRing,
             styles[resolvedSize],
             lines !== "auto" && resize !== "none" && styles.resizeHandle,
-            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
+            corners === "none"
+              ? "radius-none"
+              : corners
+                ? `radius-${compact ? "m" : "l"}-${corners}`
+                : `radius-${compact ? "m" : "l"}`,
             lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
           )}
         >
           {prefix && (
-            <Row paddingLeft="12" className={styles.prefix}>
+            <Row paddingLeft={inset} className={styles.prefix}>
               {prefix}
             </Row>
           )}
@@ -262,7 +276,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               }}
               id={id}
               rows={typeof lines === "number" ? lines : 1}
-              placeholder={placeholder}
+              placeholder={shownPlaceholder}
               disabled={disabled}
               onFocus={handleFocus}
               onBlur={handleBlur}
@@ -292,13 +306,17 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
                 as="label"
                 variant="label-default-m"
                 htmlFor={id}
-                className={classNames(styles.label, styles.textareaLabel, {
-                  // `|| placeholder` is the whole point of the pairing: a
-                  // placeholder is visible immediately, so the label has to be
-                  // out of its way from the first paint rather than waiting
-                  // for focus. Identical to `Input`.
-                  [styles.floating]: isFocused || isFilled || placeholder,
-                })}
+                className={
+                  compact
+                    ? styles.labelHidden
+                    : classNames(styles.label, styles.textareaLabel, {
+                        // `|| placeholder` is the whole point of the pairing: a
+                        // placeholder is visible immediately, so the label has
+                        // to be out of its way from the first paint rather
+                        // than waiting for focus. Identical to `Input`.
+                        [styles.floating]: isFocused || isFilled || placeholder,
+                      })
+                }
               >
                 {label}
               </Text>
@@ -322,14 +340,14 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             )}
           </Column>
           {suffix && (
-            <Row paddingRight="12" className={styles.suffix}>
+            <Row paddingRight={inset} className={styles.suffix}>
               {suffix}
             </Row>
           )}
         </Row>
         {showsErrorMessage && (
           <Row
-            paddingX="16"
+            paddingX={compact ? "12" : "16"}
             id={`${id}-error`}
             textVariant="body-default-s"
             onBackground="danger-weak"
@@ -339,7 +357,7 @@ const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         )}
         {description && (
           <Row
-            paddingX="16"
+            paddingX={compact ? "12" : "16"}
             id={`${id}-description`}
             textVariant="body-default-s"
             onBackground="neutral-weak"
