@@ -3,7 +3,9 @@ import { describe, expect, it } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { Avatar } from "../components/Avatar";
 import { CompareImage } from "../components/CompareImage";
+import { Dialog } from "../components/Dialog";
 import { EmojiPicker } from "../components/EmojiPicker";
+import { Feedback } from "../components/Feedback";
 import { Icon } from "../components/Icon";
 import { ProgressBar } from "../components/ProgressBar";
 import { Setting, SettingAxes } from "../components/Setting";
@@ -11,7 +13,10 @@ import { Skeleton } from "../components/Skeleton";
 import { Slider } from "../components/Slider";
 import { Switch } from "../components/Switch";
 import { Textarea } from "../components/Textarea";
+import { ToggleButton } from "../components/ToggleButton";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { LinearGauge } from "../modules/data/LinearGauge";
+import { RadialGauge } from "../modules/data/RadialGauge";
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
@@ -152,5 +157,50 @@ describe("accessibility drill", () => {
     const { container } = render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
     expect(screen.queryAllByRole("gridcell")).toHaveLength(0);
     await expectNoAxeViolations(container);
+  });
+
+  it("interrupts only for problems: danger is an alert, info a polite status", () => {
+    render(
+      <>
+        <Feedback variant="danger" title="Payment failed" />
+        <Feedback variant="info" title="Heads up" />
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent("Payment failed");
+    expect(screen.getByRole("status")).toHaveTextContent("Heads up");
+  });
+
+  it("gives a ToggleButton a pressed state and keeps it out of forms", () => {
+    render(<ToggleButton label="Bold" selected />, { wrapper: wrap });
+    const button = screen.getByRole("button", { name: "Bold" });
+    expect(button).toHaveAttribute("aria-pressed", "true");
+    expect(button).toHaveAttribute("type", "button");
+  });
+
+  it("exposes both gauges as named meters", async () => {
+    const { container } = render(
+      <>
+        <LinearGauge value={40} aria-label="Disk" />
+        <RadialGauge value={70} aria-label="CPU" />
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("meter", { name: "Disk" })).toHaveAttribute("aria-valuenow", "40");
+    expect(screen.getByRole("meter", { name: "CPU" })).toHaveAttribute("aria-valuenow", "70");
+    await expectNoAxeViolations(container);
+  });
+
+  it("moves focus into a Dialog when it opens", async () => {
+    render(
+      <Dialog open onClose={() => {}} title="Rename">
+        <input aria-label="Name" />
+      </Dialog>,
+      { wrapper: wrap },
+    );
+    await screen.findByRole("dialog");
+    await new Promise((resolve) => setTimeout(resolve, 400));
+    const dialog = screen.getByRole("dialog");
+    expect(dialog.contains(document.activeElement)).toBe(true);
   });
 });
