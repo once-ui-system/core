@@ -21,8 +21,7 @@ import React, { useEffect, useState } from "react";
 import { layout } from "@/resources";
 import { isPlatformRoot, platformOfPath } from "@/resources/platforms";
 import { AVAILABILITY, type Availability } from "./availability";
-import { PlatformSwitcher, flattenSlugs } from "./PlatformSwitcher";
-import { VersionPicker } from "./VersionPicker";
+import { DocsContextSwitcher, flattenSlugs } from "./DocsContextSwitcher";
 
 import styles from "./Sidebar.module.scss";
 
@@ -66,9 +65,6 @@ const NAV_RHYTHM = {
 
 interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   initialNavigation?: NavigationItem[];
-  /** Adds the version picker above the platform switcher, for the phone menu,
-      where the header has no room for it. */
-  showVersion?: boolean;
 }
 
 // Memoized navigation item component to prevent re-renders
@@ -416,7 +412,7 @@ const SidebarContent: React.FC<{
 
 SidebarContent.displayName = "SidebarContent";
 
-const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...rest }) => {
+const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
   const [navigation, setNavigation] = useState<NavigationItem[]>(initialNavigation || []);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
@@ -485,13 +481,8 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...re
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
-        {showVersion && (
-          <Row fillWidth paddingBottom="8" s={{ hide: false }} hide>
-            <VersionPicker />
-          </Row>
-        )}
         <Row fillWidth paddingBottom="12">
-          <PlatformSwitcher slugs={flattenSlugs(navigation)} />
+          <DocsContextSwitcher slugs={flattenSlugs(navigation)} />
         </Row>
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />
