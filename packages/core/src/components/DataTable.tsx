@@ -561,7 +561,11 @@ function DataTable<T>({
           size="s"
           // Named after the table it pages, so two tables on one page do not
           // give two landmarks the same name (axe: landmark-unique).
-          aria-label={ariaLabel ? `${ariaLabel} ${text.pagination.toLowerCase()}` : text.pagination}
+          aria-label={
+            ariaLabel && text.pagination
+              ? `${ariaLabel} ${text.pagination.toLowerCase()}`
+              : text.pagination
+          }
           labels={{
             previous: text.previous,
             next: text.next,
