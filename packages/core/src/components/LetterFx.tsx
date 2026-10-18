@@ -7,7 +7,7 @@ import { prefersReducedMotionNow } from "../internal/reducedMotion";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 
-function getRandomCharacter(charset: string[]): string {
+function getRandomCharacter(charset: ArrayLike<string>): string {
   const randomIndex = Math.floor(Math.random() * charset.length);
   return charset[randomIndex];
 }
@@ -18,7 +18,7 @@ function createEventHandler(
   inProgress: boolean,
   setInProgress: React.Dispatch<React.SetStateAction<boolean>>,
   speed: "fast" | "medium" | "slow",
-  charset: string[],
+  charset: ArrayLike<string>,
   setHasAnimated?: React.Dispatch<React.SetStateAction<boolean>>,
 ) {
   const speedSettings = {
@@ -77,7 +77,8 @@ type LetterFxProps = {
   children: ReactNode;
   trigger?: "hover" | "instant" | "custom";
   speed?: "fast" | "medium" | "slow";
-  charset?: string[];
+  /** The characters to cycle through: an array, or a string read one character at a time. */
+  charset?: string | string[];
   onTrigger?: (triggerFn: () => void) => void;
   className?: string;
   style?: React.CSSProperties;

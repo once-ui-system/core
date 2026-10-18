@@ -61,6 +61,10 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
       colorClass = `${scheme}-on-solid-${weight}`;
     }
 
+    // An explicit aria-label means the icon carries meaning. A label is only
+    // exposed on an element with a role, so a labelled icon is an image.
+    const label = rest["aria-label"] ?? (decorative ? undefined : name);
+
     const icon = (
       <Flex
         inline
@@ -68,8 +72,9 @@ const Icon = forwardRef<HTMLDivElement, IconProps>(
         as="span"
         ref={ref}
         className={classNames(colorClass, styles.icon, styles[size], className)}
-        aria-hidden={decorative ? "true" : undefined}
-        aria-label={decorative ? undefined : name}
+        aria-hidden={label ? undefined : "true"}
+        aria-label={label}
+        role={label ? "img" : undefined}
         style={style}
         {...rest}
       >

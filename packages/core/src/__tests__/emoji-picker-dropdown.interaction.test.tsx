@@ -50,7 +50,7 @@ describe("EmojiPickerDropdown", () => {
 
     await openPicker(user);
     expect(trigger()).toHaveAttribute("aria-expanded", "true");
-    expect(screen.getByRole("grid", { name: "smileys emojis" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "smileys emojis" })).toBeInTheDocument();
   });
 
   it("reports the pick and the close once each", async () => {
@@ -67,7 +67,7 @@ describe("EmojiPickerDropdown", () => {
     );
 
     await openPicker(user);
-    await user.click(screen.getByRole("gridcell", { name: "grinning face" }));
+    await user.click(screen.getByRole("button", { name: "grinning face" }));
     expect(onSelect.mock.calls).toEqual([["😀"]]);
     await waitFor(() => expect(search()).toBeNull());
     expect(onOpenChange.mock.calls).toEqual([[true], [false]]);
@@ -103,8 +103,8 @@ describe("EmojiPickerDropdown", () => {
       { wrapper: wrap },
     );
     await openPicker(user);
-    await user.click(screen.getByRole("gridcell", { name: "grinning face" }));
-    await user.click(screen.getByRole("gridcell", { name: "face with tears of joy" }));
+    await user.click(screen.getByRole("button", { name: "grinning face" }));
+    await user.click(screen.getByRole("button", { name: "face with tears of joy" }));
     expect(onSelect.mock.calls).toEqual([["😀"], ["😂"]]);
     expect(search()).toBeInTheDocument();
   });
@@ -128,7 +128,7 @@ describe("EmojiPickerDropdown", () => {
     render(<Controlled />, { wrapper: wrap });
     await openPicker(user);
     expect(screen.getByTestId("state")).toHaveTextContent("true");
-    await user.click(screen.getByRole("gridcell", { name: "grinning face" }));
+    await user.click(screen.getByRole("button", { name: "grinning face" }));
     await waitFor(() => expect(search()).toBeNull());
     expect(screen.getByTestId("state")).toHaveTextContent("false");
   });

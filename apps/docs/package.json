@@ -17,6 +17,9 @@
     "format:check": "biome format .",
     "typecheck": "tsc --noEmit",
     "check:urls": "node scripts/check-urls.mjs",
+    "check:examples": "node scripts/check-examples.mjs",
+    "check:props": "node scripts/check-props.mjs",
+    "check:docs": "node scripts/check-examples.mjs && node scripts/check-props.mjs",
     "clean": "rimraf .next",
     "copy:blocks": "node scripts/copy-blocks.mjs"
   },

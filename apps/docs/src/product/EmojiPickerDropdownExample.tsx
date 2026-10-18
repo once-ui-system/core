@@ -33,7 +33,7 @@ export function IconButtonEmojiPickerDropdown() {
   return (
     <Row gap="16" vertical="center">
       <EmojiPickerDropdown
-        trigger={<IconButton icon="smiley" variant="secondary" />}
+        trigger={<IconButton icon="smiley" variant="secondary" aria-label="Pick an emoji" />}
         onSelect={(emoji) => setSelectedEmoji(emoji)}
       />
       {selectedEmoji && (

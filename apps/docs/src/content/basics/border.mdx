@@ -70,7 +70,12 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
   marginBottom="24"
   codes={[
     {
-      code: `<Flex radius="xs | s | m | l | xl"/>`,
+      code:
+`<Flex radius="xs" />
+<Flex radius="s" />
+<Flex radius="m" />
+<Flex radius="l" />
+<Flex radius="xl" />`,
       language: "tsx",
       label: "Border radius"
     }
@@ -137,12 +142,11 @@ A common challenge in border-radius systems is nesting. For nested elements to m
   codes={[
     {
       code:
-`const radius = { xs | s | m | l | xl }
-
-<Flex radius="{radius}-8">
-    <Flex radius="{radius}-4">
-      <Flex radius="{radius}"/>
-    </Flex>
+`// Any size from xs to xl: the outer box adds -8, the next one -4.
+<Flex padding="8" radius="m-8">
+  <Flex padding="4" radius="m-4">
+    <Flex radius="m" />
+  </Flex>
 </Flex>`,
       language: "tsx",
       label: "Nested radius"

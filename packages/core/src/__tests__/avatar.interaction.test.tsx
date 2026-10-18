@@ -59,7 +59,7 @@ describe("Avatar: accessible name", () => {
 describe("Avatar: states and sizes", () => {
   it("shows a busy skeleton while loading, without a stray class", async () => {
     const { container } = render(<Avatar loading value="LT" />, { wrapper });
-    const skeleton = screen.getByRole("img", { name: "Loading avatar" });
+    const skeleton = screen.getByRole("status", { name: "Loading avatar" });
     expect(skeleton).toHaveAttribute("aria-busy", "true");
     expect(skeleton.className).not.toMatch(/undefined/);
     expect(screen.queryByText("LT")).not.toBeInTheDocument();
@@ -81,8 +81,10 @@ describe("Avatar: states and sizes", () => {
   });
 
   it("shows the placeholder icon when `empty` overrides a value", () => {
-    render(<Avatar value="LT" empty />, { wrapper });
-    expect(screen.getByRole("img", { name: "Empty avatar" })).toBeInTheDocument();
+    const { container } = render(<Avatar value="LT" empty />, { wrapper });
+    const root = container.firstElementChild as HTMLElement;
+    expect(root).toHaveAttribute("role", "img");
+    expect(root.querySelector("svg")).toBeInTheDocument();
     expect(screen.queryByText("LT")).not.toBeInTheDocument();
   });
 

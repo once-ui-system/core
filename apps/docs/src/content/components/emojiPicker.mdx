@@ -19,7 +19,7 @@ The `EmojiPicker` component allows you to select and insert emojis from categori
   codes={[
     {
       code:
-`<EmojiPicker/>`,
+`<EmojiPicker onSelect={(emoji) => console.log(emoji)} />`,
       language: "tsx",
       label: "EmojiPicker"
     }
@@ -39,7 +39,7 @@ You can pass a `columns` prop to the component to override the default columns.
   codes={[
     {
       code:
-`<EmojiPicker columns={10}/>`,
+`<EmojiPicker columns={10} onSelect={(emoji) => console.log(emoji)} />`,
       language: "tsx",
       label: "Columns"
     }
@@ -65,6 +65,7 @@ You can pass a `style` prop to the component to override the default styles.
     padding="8"
     radius="l"
     height={24}
+    onSelect={(emoji) => console.log(emoji)}
 />`,
       language: "tsx",
       label: "Custom style"

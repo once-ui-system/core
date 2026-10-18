@@ -298,8 +298,10 @@
     color: var(--danger-on-background-medium);
   }
 
+  /* Medium, not weak: the label sits on the tinted error surface, where the
+     weak red read at 4:1 in the light theme. */
   .label {
-    color: var(--danger-on-background-weak);
+    color: var(--danger-on-background-medium);
   }
 
   .resizeHandle {
