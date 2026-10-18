@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.1.0",
- "generated": "2026-10-16",
+ "version": "2.2.0",
+ "generated": "2026-10-17",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -9,7 +9,7 @@
   "ResponsiveSpacingToken": "TShirtSizes",
   "ShadowSize": "TShirtSizes",
   "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
-  "CSSUnit": "`${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`",
+  "CSSUnit": "`${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`",
   "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
   "ColorWeight": "\"weak\" | \"medium\" | \"strong\"",
   "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
@@ -297,6 +297,18 @@
    "disableHighlighting": "boolean"
   },
   "AvatarProps": "Avatar props",
+  "AwaitedReactNode": [
+   "undefined",
+   "null",
+   "string",
+   "number",
+   "bigint",
+   "false",
+   "true",
+   "ReactPortal",
+   "ReactElement<unknown, string | JSXElementConstructor<any>>",
+   "Iterable<ReactNode>"
+  ],
   "BarWidth": [
    "number",
    "xl",
@@ -471,6 +483,31 @@
    "outline",
    "gradient"
   ],
+  "ChatComposerMessage": {
+   "text": "!string",
+   "files": "!File[]"
+  },
+  "ChatMessageStatus": [
+   "sending",
+   "sent",
+   "delivered",
+   "read",
+   "failed"
+  ],
+  "ChatTime": [
+   "undefined",
+   "null",
+   "string",
+   "number",
+   "bigint",
+   "false",
+   "true",
+   "ReactElement<unknown, string | JSXElementConstructor<any>>",
+   "Iterable<ReactNode>",
+   "ReactPortal",
+   "Promise<AwaitedReactNode>",
+   "Date"
+  ],
   "CodeInstance": {
    "code": "!string | { content: string; error: string | null }",
    "language": "!string | [\"diff\", string]",
@@ -594,6 +631,9 @@
   ],
   "CountFxProps": "CountFx props",
   "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
    "`${number}%`",
    "`${number}vh`",
    "`${number}dvh`",
@@ -668,6 +708,17 @@
    "selector": "boolean",
    "onChange": "(range: DateRange) => void"
   },
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
+  },
   "DateRange": {
    "startDate": "!Date | undefined",
    "endDate": "!Date | undefined"
@@ -720,6 +771,18 @@
    "particle",
    "celebration"
   ],
+  "FieldControl": {
+   "id": "!string",
+   "invalid": "!boolean",
+   "required": "!boolean",
+   "describedBy": "string"
+  },
+  "FieldControlProps": {
+   "id": "!string",
+   "aria-describedby": "string",
+   "aria-invalid": "true",
+   "aria-required": "true"
+  },
   "FlexBreakpointProps": [
    "style",
    "direction",
@@ -812,6 +875,10 @@
    "number",
    "Partial<Record<Breakpoint, number>>"
   ],
+  "FormErrorItem": {
+   "id": "string",
+   "message": "!ReactNode"
+  },
   "GeneratedMetadata": {
    "metadataBase": "!URL",
    "title": "!string",
@@ -1344,6 +1411,10 @@
    "movable": "boolean",
    "resizable": "boolean",
    "onAdd": "(time: number) => void"
+  },
+  "SelectLabels": {
+   "search": "string",
+   "clear": "string"
   },
   "SelectOptionType": "Omit<OptionProps, \"selected\">",
   "SeriesConfig": {
@@ -2505,6 +2576,7 @@
     "label": "string",
     "placeholder": "string",
     "value": "Date",
+    "defaultValue": "Date",
     "onChange": "(date: Date) => void",
     "minHeight": "number",
     "className": "string",
@@ -2512,7 +2584,8 @@
     "timePicker": "boolean = false",
     "minDate": "Date",
     "maxDate": "Date",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DatePicker": {
@@ -2549,7 +2622,8 @@
     "onHover": "(date: Date | null) => void",
     "autoFocus": "boolean = false",
     "open": "boolean",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DateRangeInput": {
@@ -2566,7 +2640,8 @@
     "minHeight": "number",
     "className": "string",
     "style": "React.CSSProperties",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DateRangePicker": {
@@ -2590,7 +2665,8 @@
     "dual": "boolean",
     "size": "CondensedTShirtSizes = m",
     "autoFocus": "boolean",
-    "locale": "string"
+    "locale": "string",
+    "labels": "DatePickerLabels"
    }
   },
   "DialogProvider": {
@@ -2832,6 +2908,31 @@
     "children": "ReactNode"
    }
   },
+  "Field": {
+   "group": "components",
+   "props": {
+    "label": "ReactNode",
+    "hint": "ReactNode",
+    "error": "ReactNode",
+    "required": "boolean = false",
+    "controlId": "string",
+    "span": "number",
+    "children": "!ReactNode | ((control: FieldControlProps) => ReactNode)",
+    "className": "string",
+    "style": "React.CSSProperties"
+   }
+  },
+  "Fieldset": {
+   "group": "components",
+   "extends": [
+    "Form"
+   ],
+   "props": {
+    "legend": "ReactNode",
+    "description": "ReactNode",
+    "span": "number"
+   }
+  },
   "Flex": {
    "group": "components",
    "mixins": [
@@ -2864,11 +2965,11 @@
     "StyleProps"
    ],
    "props": {
-    "flipDirection": "\"horizontal\" | \"vertical\"",
-    "timing": "number",
+    "flipDirection": "\"horizontal\" | \"vertical\" = horizontal",
+    "timing": "number = 2000",
     "flipped": "boolean",
     "onFlip": "(flipped: boolean) => void",
-    "disableClickFlip": "boolean",
+    "disableClickFlip": "boolean = false",
     "autoFlipInterval": "number",
     "front": "!React.ReactNode",
     "back": "!React.ReactNode",
@@ -2898,10 +2999,32 @@
     "columns": "FormColumns",
     "size": "TShirtSizes",
     "as": "\"div\" | \"form\" = div",
-    "onSubmit": "React.FormEventHandler<HTMLFormElement>",
+    "onSubmit": "(event: React.FormEvent<HTMLFormElement>) => unknown",
+    "pending": "boolean",
     "className": "string",
     "style": "React.CSSProperties",
     "children": "React.ReactNode"
+   }
+  },
+  "FormErrorSummary": {
+   "group": "components",
+   "extends": [
+    "Feedback",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "errors": "!FormErrorItem[] | Record<string, ReactNode>",
+    "title": "string",
+    "autoFocus": "boolean = true",
+    "span": "number"
    }
   },
   "GlitchFx": {
@@ -3483,6 +3606,7 @@
    ],
    "props": {
     "value": "number",
+    "defaultValue": "number | string",
     "onChange": "(value: number) => void",
     "min": "number",
     "max": "number",
@@ -3932,7 +4056,8 @@
     "className": "string",
     "style": "React.CSSProperties",
     "fillWidth": "boolean = true",
-    "multiple": "boolean = false"
+    "multiple": "boolean = false",
+    "labels": "SelectLabels"
    }
   },
   "Setting": {
@@ -4175,6 +4300,16 @@
     "labels": "StylePanelLabels",
     "customColors": "boolean",
     "stacked": "boolean"
+   }
+  },
+  "SubmitButton": {
+   "group": "components",
+   "extends": [
+    "Button"
+   ],
+   "props": {
+    "pendingLabel": "ReactNode",
+    "pending": "boolean"
    }
   },
   "Swiper": {
@@ -4679,6 +4814,136 @@
     "as": "!\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
     "children": "!React.ReactNode",
     "style": "React.CSSProperties"
+   }
+  },
+  "ChatComposer": {
+   "group": "modules",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "onSend": "!(message: ChatComposerMessage) => void | Promise<void>",
+    "value": "string",
+    "defaultValue": "string = \"\"",
+    "onValueChange": "(value: string) => void",
+    "placeholder": "string = Write a message",
+    "attach": "boolean | { accept?: string; multiple?: boolean } = false",
+    "sendOnEnter": "boolean = true",
+    "loading": "boolean = false",
+    "disabled": "boolean = false",
+    "ariaLabel": "string = Message",
+    "sendLabel": "string = Send",
+    "attachLabel": "string = Attach files",
+    "removeLabel": "(fileName: string) => string = (fileName) => `Remove ${fileName}`",
+    "prefix": "ReactNode",
+    "actions": "ReactNode",
+    "maxLength": "number",
+    "id": "string"
+   }
+  },
+  "ChatMessage": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "children": "ReactNode",
+    "from": "\"self\" | \"other\" = other",
+    "name": "ReactNode",
+    "avatarProps": "AvatarProps",
+    "time": "ChatTime",
+    "status": "ChatMessageStatus",
+    "statusLabels": "Partial<Record<ChatMessageStatus, string>>",
+    "onRetry": "() => void",
+    "retryLabel": "string = Retry",
+    "grouped": "boolean = false",
+    "variant": "\"bubble\" | \"plain\" = bubble",
+    "attachments": "ReactNode",
+    "footer": "ReactNode",
+    "actions": "ReactNode"
+   }
+  },
+  "ChatMessageList": {
+   "group": "modules",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "stickToBottom": "boolean = true",
+    "onReachStart": "() => void",
+    "ariaLabel": "string = Messages"
+   }
+  },
+  "ConversationItem": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "name": "!ReactNode",
+    "preview": "ReactNode",
+    "time": "ChatTime",
+    "avatarProps": "AvatarProps",
+    "unread": "number | boolean",
+    "unreadLabel": "(count: number | true) => string = defaultUnreadLabel",
+    "selected": "boolean = false",
+    "typing": "boolean = false",
+    "typingLabel": "ReactNode = typing…",
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
+   }
+  },
+  "TypingIndicator": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode",
+    "ariaLabel": "string = Typing",
+    "bubble": "boolean = true"
    }
   },
   "Meta": {
@@ -5326,10 +5591,22 @@
   }
  },
  "functions": {
+  "useField": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => FieldControl | null",
+   "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
+  },
   "useStylePanel": {
    "group": "components",
    "kind": "hook",
    "signature": "() => StylePanelContextValue"
+  },
+  "useFormPending": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => boolean",
+   "doc": "Whether the enclosing `Form` is submitting."
   },
   "useArrowNavigation": {
    "group": "hooks",

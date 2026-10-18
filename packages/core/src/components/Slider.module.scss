@@ -63,10 +63,16 @@
   box-shadow: var(--shadow-s);
 }
 
-.sliderWrapper:hover .thumb,
 .dragging .thumb {
   transform: translate(-50%, -50%) scale(1.2);
   cursor: grabbing;
+}
+
+@media (hover: hover) {
+  .sliderWrapper:hover .thumb {
+    transform: translate(-50%, -50%) scale(1.2);
+    cursor: grabbing;
+  }
 }
 
 .input:focus-visible ~ .thumb {

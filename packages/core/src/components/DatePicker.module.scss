@@ -38,9 +38,11 @@
   .monthButton {
   
       
-      &:hover {
-          transform: scale(1.10);
-          background: var(--neutral-background-medium);
+      @media (hover: hover) {
+          &:hover {
+              transform: scale(1.10);
+              background: var(--neutral-background-medium);
+          }
       }
       
       
@@ -67,10 +69,12 @@
     color: var(--neutral-on-background-weak);
   
   
-    &:hover {
-      color: var(--neutral-background-weak);
-      transform: scale(1.10);
-      background: var(--neutral-background-strong);
+    @media (hover: hover) {
+      &:hover {
+        color: var(--neutral-background-weak);
+        transform: scale(1.10);
+        background: var(--neutral-background-strong);
+      }
     }
   
     &:active {

@@ -1,6 +1,6 @@
 "use client";
 
-import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider";
 import { DisplayProps, FlexBreakpointProps, FlexProps, StyleProps } from "../interfaces";
 import {
@@ -15,7 +15,7 @@ import {
   TextVariant,
   TextWeight,
 } from "../types";
-import { breakpointStyle } from "../utils/layoutClasses";
+import { applyBreakpointStyle, BreakpointOverride, breakpointStyle } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerFlex } from "./ServerFlex";
 
@@ -42,18 +42,6 @@ const generateBackgroundClass = (
   }
   const [scheme, weight] = value.split("-");
   return `${scheme}-${type}-${weight}`;
-};
-
-const generateBorderClass = (value: string | boolean): string | undefined => {
-  if (value === true) return "default-border";
-  if (value === "transparent") return "transparent-border";
-  const parts = (value as string).split("-");
-  if (parts.includes("alpha")) {
-    const [scheme, , weight] = parts;
-    return `${scheme}-border-alpha-${weight}`;
-  }
-  const [scheme, weight] = (value as string).split("-");
-  return `${scheme}-border-${weight}`;
 };
 
 // Properties the server component already writes as classes.
@@ -90,19 +78,15 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
         ref.current = node;
       }
     };
-    const appliedResponsiveStyles = useRef<Set<string>>(new Set());
-    const baseStyleRef = useRef<CSSProperties>({});
+    const override = useRef<BreakpointOverride | null>(null);
 
-    // Responsive styles logic (client-side only)
-    const applyResponsiveStyles = useCallback(() => {
+    // Responsive styles logic (client-side only). It runs after every render:
+    // a re-render can rewrite a base value the current breakpoint overrides,
+    // and the pass has to land on top of it again.
+    useEffect(() => {
       if (!elementRef.current) return;
 
       const element = elementRef.current;
-
-      // Update base styles when style prop changes
-      if (props.style) {
-        baseStyleRef.current = { ...props.style };
-      }
 
       // Cascade breakpoints: larger breakpoint styles flow down to smaller ones
       // Order: xl > l > m > s > xs
@@ -127,33 +111,16 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
 
       const currentResponsiveProps = getCascadedProps();
 
-      // Clear only responsive styles, not base styles
-      appliedResponsiveStyles.current.forEach((key) => {
-        (element.style as any)[key] = "";
-      });
-      appliedResponsiveStyles.current.clear();
-
-      // Reapply base styles
-      if (baseStyleRef.current) {
-        Object.entries(baseStyleRef.current).forEach(([key, value]) => {
-          (element.style as any)[key] = value;
-        });
-      }
-
-      // Apply new responsive styles if we have them for current breakpoint:
-      // everything a class cannot hold, resolved by the helper ClientGrid
-      // shares. A token spacing or offset is a class, from ServerFlex.
-      if (currentResponsiveProps) {
-        for (const [property, value] of breakpointStyle(currentResponsiveProps)) {
-          (element.style as any)[property] = value;
-          appliedResponsiveStyles.current.add(property);
-        }
-      }
-    }, [xl, l, m, s, xs, props.style, currentBreakpoint]);
-
-    useEffect(() => {
-      applyResponsiveStyles();
-    }, [applyResponsiveStyles]);
+      // Undo the previous pass, restoring whatever base inline value it wrote
+      // over, then apply the current breakpoint: everything a class cannot
+      // hold, resolved by the helper ClientGrid shares. A token spacing or
+      // offset is a class, from ServerFlex.
+      override.current = applyBreakpointStyle(
+        element,
+        currentResponsiveProps ? breakpointStyle(currentResponsiveProps) : [],
+        override.current,
+      );
+    });
 
     // Detect touch device
     useEffect(() => {

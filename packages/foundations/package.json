@@ -24,18 +24,22 @@
   "exports": {
     "./css/tokens.css": "./dist/css/tokens.css",
     "./css/styles.css": "./dist/css/styles.css",
+    "./tokens.json": "./tokens/once-ui.tokens.json",
     "./scss/*": "./scss/*",
     "./package.json": "./package.json"
   },
   "files": [
     "dist",
-    "scss"
+    "scss",
+    "tokens"
   ],
   "scripts": {
     "prebuild": "node ../../scripts/check-node.mjs",
     "generate:utilities": "node scripts/generate-utilities.mjs",
     "check:utilities": "node scripts/generate-utilities.mjs --check",
-    "build": "rimraf dist && pnpm generate:utilities && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
+    "export:tokens": "node scripts/export-tokens.mjs",
+    "check:tokens": "node scripts/export-tokens.mjs --check",
+    "build": "rimraf dist && pnpm generate:utilities && pnpm export:tokens && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",

@@ -8,6 +8,7 @@ import { DateRange } from "../../components/DateRangePicker";
 import { Row } from "../../components/Row";
 import { useDataTheme } from "../../contexts/DataThemeProvider";
 import type { DataStyle } from "../../contexts/ThemeProvider";
+import { cssColor } from "../../internal/cssColor";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
@@ -143,8 +144,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   const lineColor = lineSeries.color || "blue";
   const barColor = barSeries.color || "green";
 
-  const finalLineColor = `var(--data-${lineColor})`;
-  const finalBarColor = `var(--data-${barColor})`;
+  const finalLineColor = cssColor(lineColor, "data-");
+  const finalBarColor = cssColor(barColor, "data-");
 
   const legendContent = useMemo(
     () => (

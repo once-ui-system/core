@@ -175,15 +175,23 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
     const today = new Date();
-    const [selectedDate, setSelectedDate] = useState<Date | undefined>(value);
+    // `defaultDate` is the starting selection when there is no `value`. It
+    // was declared and never read.
+    const initialDate = value ?? defaultDate;
+    const initialTime =
+      defaultTime ??
+      (initialDate
+        ? { hours: initialDate.getHours(), minutes: initialDate.getMinutes() }
+        : undefined);
+    const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
     const [selectedTime, setSelectedTime] = useState<
       | {
           hours: number;
           minutes: number;
         }
       | undefined
-    >(defaultTime);
-    const [isPM, setIsPM] = useState(defaultTime?.hours ? defaultTime.hours >= 12 : false);
+    >(initialTime);
+    const [isPM, setIsPM] = useState(initialTime?.hours ? initialTime.hours >= 12 : false);
     const [isTimeSelector, setIsTimeSelector] = useState(false);
     const [isTransitioning, setIsTransitioning] = useState(true);
     const [isMonthOpen, setIsMonthOpen] = useState(false);
@@ -207,12 +215,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     const [currentMonth, setCurrentMonth] = useState<number>(() =>
       monthIsControlled && propCurrentMonth !== undefined
         ? propCurrentMonth
-        : (value ?? today).getMonth(),
+        : (initialDate ?? today).getMonth(),
     );
     const [currentYear, setCurrentYear] = useState<number>(() =>
       monthIsControlled && propCurrentYear !== undefined
         ? propCurrentYear
-        : (value ?? today).getFullYear(),
+        : (initialDate ?? today).getFullYear(),
     );
 
     /** The day grid, so its keys act on its own day buttons and not another calendar's. */
@@ -273,7 +281,12 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       }
     }, [isReady, value, isCalendarSynced, monthIsControlled]);
 
+    // On mount without a `value`, keep the `defaultDate` selection; after
+    // that, `value` going back to undefined clears it as before.
+    const valueSeen = useRef(false);
     useEffect(() => {
+      if (value === undefined && !valueSeen.current) return;
+      valueSeen.current = true;
       setSelectedDate(value);
       if (value) {
         setSelectedTime({
@@ -349,11 +362,14 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       weekdays: dayNames,
       /** What the column headers are called: "Mo" is what fits, not what to read out. */
       weekdayLabels: dayLabels,
+      firstDayOfWeek,
       monthYear,
       dayPeriods,
       time: formatTime,
     } = getCalendarNames(locale);
     const [amLabel, pmLabel] = [names.am ?? dayPeriods[0], names.pm ?? dayPeriods[1]];
+    /** The weekday indexes (0 is Sunday) in the order the columns show them. */
+    const weekOrder = Array.from({ length: 7 }, (_, column) => (column + firstDayOfWeek) % 7);
     const cellSize = size === "s" ? "32" : size === "m" ? "40" : "48";
     /** The grid's name: the month it shows, which tells two calendars side by side apart. */
     const gridLabel = monthYear(currentMonth, currentYear);
@@ -530,7 +546,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
      * as the CSS grid did, so nothing moves.
      */
     const renderCalendarGrid = () => {
-      const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+      // The days before the 1st in its first week: the week starts on the
+      // locale's first day (Monday in "de"), Sunday without a locale.
+      const firstDay = (new Date(currentYear, currentMonth, 1).getDay() - firstDayOfWeek + 7) % 7;
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       const daysInPrevMonth = new Date(currentYear, currentMonth, 0).getDate();
 
@@ -754,7 +772,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           }}
         >
           <Row role="row">
-            {dayNames.map((day, index) => (
+            {weekOrder.map((index) => (
               <Row
                 key={dayLabels[index]}
                 role="columnheader"
@@ -764,7 +782,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 marginBottom="16"
               >
                 <Text variant="label-default-m" onBackground="neutral-medium" align="center">
-                  {day}
+                  {dayNames[index]}
                 </Text>
               </Row>
             ))}

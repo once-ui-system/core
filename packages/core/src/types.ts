@@ -61,6 +61,9 @@ export type ShadowSize = TShirtSizes;
 export type SpacingToken = StaticSpacingToken | ResponsiveSpacingToken;
 
 export type CSSUnit =
+  | `${number}px`
+  | `${number}rem`
+  | `${number}em`
   | `${number}%`
   | `${number}vh`
   | `${number}dvh`

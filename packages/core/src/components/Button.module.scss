@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .button {
   display: flex;
   align-items: center;
@@ -12,6 +14,8 @@
   &:focus-visible {
     z-index: 1;
   }
+
+  @include touch.target;
 }
 
 .primary {

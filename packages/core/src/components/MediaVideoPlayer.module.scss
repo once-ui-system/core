@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .container {
   position: relative;
   width: 100%;
@@ -75,9 +77,14 @@
   cursor: pointer;
   transition: height var(--transition-micro-short);
 
-  &:hover {
-    height: 0.3125rem;
+  @media (hover: hover) {
+    &:hover {
+      height: 0.3125rem;
+    }
   }
+
+  // A 3px bar is too thin to find with a finger.
+  @include touch.target;
 }
 
 .progressFill {

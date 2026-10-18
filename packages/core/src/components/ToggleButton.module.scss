@@ -1,3 +1,5 @@
+@use "../styles/touch.scss" as touch;
+
 .button {
     display: flex;
     align-items: center;
@@ -32,6 +34,14 @@
         color: var(--neutral-on-background-weak);
         border-color: transparent;
     }
+
+    // The tap area needs a positioned box. Only on touch, so nothing a
+    // desktop layout positions against a toggle button's ancestor moves.
+    @media (pointer: coarse) {
+        position: relative;
+    }
+
+    @include touch.target;
 }
 
 .xs {

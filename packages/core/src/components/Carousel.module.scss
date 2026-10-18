@@ -1,9 +1,17 @@
+@use "../styles/touch.scss" as touch;
+
 .indicator {
-  &:hover, &:focus-within {
-    .inactive {
+  &:focus-within .inactive {
+    background: var(--neutral-alpha-strong);
+  }
+
+  @media (hover: hover) {
+    &:hover .inactive {
       background: var(--neutral-alpha-strong);
     }
   }
+
+  @include touch.target;
 }
 
 .inactive {
@@ -15,11 +23,25 @@
 }
 
 .controls {
-  &:hover, &:focus-within {
-    .button {
+  &:focus-within .button {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  @media (hover: hover) {
+    &:hover .button {
       opacity: 1;
       transform: translateX(0);
     }
+  }
+}
+
+// A tablet has no hover to bring the arrows in, and the buttons would take
+// taps while invisible, so they stay shown. (Phones hide them and swipe.)
+@media (hover: none) {
+  .controls .button {
+    opacity: 1;
+    transform: none;
   }
 }
 

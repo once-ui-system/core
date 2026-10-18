@@ -44,11 +44,18 @@
     margin-right: calc(-1 * var(--static-space-2, 0.125rem));
   }
 
-  &:hover .option.inactive,
   &:focus-within .option.inactive {
     max-width: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
+  }
+
+  @media (hover: hover) {
+    &:hover .option.inactive {
+      max-width: var(--static-space-32, 2rem);
+      opacity: 1;
+      margin: 0;
+    }
   }
 }
 
@@ -101,11 +108,18 @@
     background var(--transition-duration-micro-medium, 0.15s) ease,
     box-shadow var(--transition-duration-micro-medium, 0.15s) ease;
 
-  &:hover,
   &:focus-within {
     border-color: var(--neutral-alpha-weak);
     background: var(--page-background);
     box-shadow: var(--shadow-m);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--neutral-alpha-weak);
+      background: var(--page-background);
+      box-shadow: var(--shadow-m);
+    }
   }
 
   /*
@@ -139,11 +153,18 @@
     margin-bottom: calc(-1 * var(--static-space-2, 0.125rem));
   }
 
-  &:hover .option.inactive,
   &:focus-within .option.inactive {
     max-height: var(--static-space-32, 2rem);
     opacity: 1;
     margin: 0;
+  }
+
+  @media (hover: hover) {
+    &:hover .option.inactive {
+      max-height: var(--static-space-32, 2rem);
+      opacity: 1;
+      margin: 0;
+    }
   }
 }
 

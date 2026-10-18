@@ -68,3 +68,34 @@ describe("ai task bundles in one file", () => {
     },
   );
 });
+
+/**
+ * In the 2.1.0 benchmark an agent made 10 calls a run, and from the JSON
+ * bundle on it re-sent 20k–60k tokens of docs on each call to fetch one or
+ * two more files: the rules, the example, a slice the bundle lacked. The
+ * Markdown bundle is the one file an agent reads before writing.
+ */
+describe("ai task bundles as one Markdown read", () => {
+  it.each(index.tasks.map((t) => [t.id, t.file] as const))(
+    "%s carries the rules, its components, the common ones, its gotchas and its example",
+    (id, file) => {
+      const task = read(file) as { components: string[]; gotchas?: string[]; example?: string };
+      const md = readFileSync(path.join(AI, "bundles", `${id}.md`), "utf8");
+      const gotchas = read("gotchas.json") as Record<string, { rule: string }>;
+      for (const name of [...task.components, "Button", "IconButton", "Input", "Dialog"]) {
+        if (Object.hasOwn(spec.components, name)) expect(md).toContain(`\n### ${name}`);
+      }
+      // The end of each rule: the start may point at a file the bundle replaces.
+      for (const id of task.gotchas ?? []) expect(md).toContain(gotchas[id].rule.slice(-60));
+      expect(md).toContain("## Layout");
+      if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
+      expect(md).not.toMatch(/see spec\.json/);
+      expect(md.length).toBeLessThan(50_000);
+    },
+  );
+
+  it("is what AGENTS.md routes to, task by task", () => {
+    const agents = readFileSync(path.join(AI, "..", "AGENTS.md"), "utf8");
+    for (const { id } of index.tasks) expect(agents).toContain(`\`ai/bundles/${id}.md\``);
+  });
+});

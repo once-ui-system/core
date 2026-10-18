@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.2.0] — 2026-10-17
+
 ### Added
 
 - **`labels` on the date components and `Select`.** `DatePicker`, `DateInput`,
@@ -26,8 +28,71 @@ item (see `ROADMAP.md`, Week 4).
   written in the locale's order and words (`午後01:14` for `"ja"`); `labels.am` and
   `labels.pm` override the words. Without `locale` the time reads as before
   (`01:14 PM`).
+- **Mobile-ready core.** Components work on a phone and in a Capacitor app
+  without changing how they look on a desktop:
+  - **Touch targets.** On a coarse pointer, `Button`, `IconButton`, `ToggleButton`
+    (and `SegmentedControl`, `Pagination`), `Checkbox`, `RadioButton`, `Switch`,
+    `Chip`, `NavIcon`, the `Carousel` indicators and the media players' seek bars
+    take taps from at least 44 px around them. The drawn size and layout stay the
+    same; an invisible area catches the tap.
+  - **Safe areas.** New `--safe-area-top`, `--safe-area-right`, `--safe-area-bottom`
+    and `--safe-area-left` tokens read the device insets (0 unless the page sets
+    `viewport-fit=cover`). `Toaster`, `ScrollToTop`, `Drawer`, `Dialog`, `Modal`,
+    `Kbar` and the full-screen `CodeBlock` keep clear of the notch and the home
+    indicator. New `--touch-target` token (2.75rem).
+  - **No sticky hover.** Hover styles only apply where the pointer can hover, so a
+    tapped button no longer stays highlighted. `Carousel` arrows stay visible on
+    tablets, which have no hover to reveal them.
+  - **Hover detection.** `HoverCard`, `Hover`, `CursorCard` and `TiltFx` decide
+    "touch device" from `(hover: none)` instead of touch support, so laptops with
+    a touchscreen keep their hover cards and effects.
+  - **Viewport units.** The enlarged `Media` overlay is pinned to the viewport's
+    edges instead of `100vw` by `100vh`, which ran under a phone's toolbar, and
+    `Mask` sizes its radius in `svh`.
+  - A test (`mobile-ready.test.ts`) fails on unguarded `:hover`, `vh`/`vw` lengths,
+    fixed UI without safe areas, and the touch targets above going missing.
+- **Form building blocks.** `Field` puts a label, hint and error
+  around any control and wires its `id`, `aria-describedby`, `aria-invalid` and
+  `aria-required`; `Input`, `Textarea` and the fields built on them also draw their
+  error styling from it. `Fieldset` is a real `<fieldset>` with a legend and
+  description that lays its fields out like a `Form`. `SubmitButton` shows a spinner
+  and ignores repeat presses while its form submits. `FormErrorSummary` lists every
+  error after a failed submit, takes focus, and links to each field. `Form`'s
+  `onSubmit` can return a promise, which keeps the form pending (`aria-busy`) until it
+  settles, and `pending` sets that state from outside. `useField()` and
+  `useFormPending()` expose both states to custom controls.
+- **Chat building blocks.** Five components for chat interfaces, from the root
+  package: `ChatMessage` (a bubble with its author, time and delivery state;
+  `from="self"` sits on the right, `grouped` lines up follow-ups, a failed
+  message can offer a retry), `ChatMessageList` (a `log` live region that
+  starts at the newest message and follows new content while the reader is at
+  the bottom, with `onReachStart` for loading history), `ChatComposer` (a
+  growing field where Enter sends and Shift+Enter starts a new line, an
+  optional attach button, pasted images, and a send button that waits for an
+  async `onSend`), `TypingIndicator` (three dots in a `status` region that
+  fade instead of bouncing under reduced motion) and `ConversationItem` (an
+  inbox row with the last message, its time and an unread count, as a link or
+  a button). Every label can be replaced for another language. The AI
+  harness's `chat` task lists them first. Docs: Modules → Chat.
+
+- **Design tokens as JSON.** `@once-ui-system/core/tokens.json` is the token cascade as
+  one JSON file (colours as hex, references kept), for native apps and design tools. The
+  React Native preview, `@once-ui-system/native`, reads it; that package ships on `next`
+  only.
+
+### Changed
+
+- **AI harness: one read per task.** `AGENTS.md` routes a task to
+  `ai/bundles/{id}.md`, one Markdown file with the task, its components, rules and
+  gotchas, instead of a JSON bundle plus spec lookups, so an agent reads far less to
+  build a page. The JSON bundles stay.
 
 ### Fixed
+
+- **DatePicker: the week starts on the locale's first day.** With `locale="de"` the
+  calendar showed German names in a week that started on Sunday. It now starts on the
+  locale's first day (Monday in most of Europe), read from `Intl`. Without `locale`,
+  and in browsers with no week info (Firefox), it still starts on Sunday.
 
 - **`DateRangeInput` gave both its fields the same `id`**, and with it the same error
   and description ids. The fields are now `{id}-start` and `{id}-end`.
@@ -35,6 +100,42 @@ item (see `ROADMAP.md`, Week 4).
   ("March", "2026"), which does not say what they do. They are now named
   "Month: March, change month" and "Year: 2026, change year", which `labels.month`
   and `labels.year` translate.
+- **`AccordionGroup` with `autoCollapse={false}` never opened.** Each item now keeps
+  its own open state, so several can be open at once.
+- **`Checkbox`, `RadioButton` and `Switch` dropped native input props.** `onChange`,
+  `onBlur`, `onFocus`, `required`, `form` and the rest went to the label beside the
+  control (and nowhere without a label). They now reach the hidden input, clicks and
+  keys fire its `change` event, and blur reports the input as its target, so
+  react-hook-form's `register()` works. `onToggle` is unchanged.
+- **`OTPInput` spread its div props onto every digit field**, after the field's own
+  handlers: a caller's `onChange` broke typing, an `id` repeated on each field, and
+  `className` was dropped. They now go on the wrapper; `onChange` and `onKeyDown`
+  still see each digit's event as it bubbles.
+- **Every `Badge` without an `id` got `id="badge"`**, so badges on one page shared
+  it and each arrow followed the first. Each badge now gets its own.
+- **`width="320px"`, `maxWidth="40rem"` and other px, rem and em strings failed the
+  type and rendered no size.** `CSSUnit` now takes them, on sizes, offsets and
+  `translateX`/`translateY`, at every breakpoint. A number is still rem.
+- **Raw CSS colours on `Background`, `ParticleFx`, the charts and the gauges painted
+  nothing.** `ColorValue` takes `#fff`, `rgb(...)` or `var(...)`, but they were
+  wrapped as `var(--#fff)`. They now pass through as written; tokens resolve as before.
+- **`DatePicker` ignored `defaultDate`.** It is now the starting selection and month
+  when there is no `value`.
+- **`NumberInput` and `DateInput` passed the native `defaultValue` to an input that
+  also had a `value`**: React warned and the default never showed. `NumberInput`
+  takes `defaultValue` as a number (a string is parsed), `DateInput` as a `Date`.
+- **`DateInput` could not be cleared from outside.** Setting `value` back to
+  `undefined` now empties the field.
+- **`Input` and `Textarea` ran `validate` only on a controlled `value`.** An
+  uncontrolled field now validates what was typed.
+- **`EmojiPickerDropdown` closed after a pick only when `open` was controlled.**
+- **`Text`, `Heading` and `Flex` logged prop-misuse warnings on every render in
+  production.** They now warn outside production only.
+- **`Textarea` ignored `error` and dropped the caller's `aria-describedby`.** `error`
+  now marks it invalid and draws the error state, as it does on `Input`, and a
+  description passed in is kept ahead of the error message.
+- **A `Form` nested in another `Form` reset the size** the outer one set; it now
+  inherits it unless it sets its own.
 
 - **AI harness: size props are rem.** A number on `width`, `height`, `minWidth` or
   `minHeight` is rem, but models write it as pixels, so `width={32} height={32}` around an
@@ -42,6 +143,21 @@ item (see `ROADMAP.md`, Week 4).
   this. A new `size.rem` gotcha is in every task bundle, `rules.compact.md` shows the
   token string (`width="32"`, 32 px) to write instead, and `validate-ai-code` reports an
   icon, avatar or label box sized with a repeated pixel-like number.
+- **Leaving a breakpoint restores the base value it overrode.** `ClientFlex` and
+  `ClientGrid` cleared each inline value a breakpoint object had written, so
+  `<Flex maxWidth={40} m={{ maxWidth: 20 }}>` lost its 40rem on the way back up; they now
+  put back whatever inline value the breakpoint wrote over.
+- **A translate prop survives a component's own `transform`.** `TiltFx`, `FlipFx`, `Arrow`
+  and `CursorCard` wrote a transform (tilt, flip, scale, cursor position) that replaced the
+  `translate()` from `translateX`/`translateY`; the two are composed now.
+- **`FadingLettersFx` forwards `ref`** to the `Text` it renders. It typed `ref` and
+  dropped it on React 18.
+- **Breakpoint borders apply.** `m={{ borderLeft: "brand-strong" }}` (and `border`, the
+  other sides, `borderStyle`, `borderWidth`) type-checked, stayed on the server and drew
+  nothing, as no border class has a breakpoint variant. They move the component to the
+  client, which writes the colour, style and width inline at that breakpoint.
+- **`Fade` honours `blur` outside pattern mode.** It blurred at a fixed 0.5rem unless
+  `pattern.display` was on.
 
 ## [2.1.0] — 2026-10-15
 

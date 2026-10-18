@@ -10,15 +10,19 @@
     background: var(--neutral-alpha-weak);
   }
 
-  &.hoverable tbody tr:hover {
-    background: var(--neutral-alpha-weak);
+  @media (hover: hover) {
+    &.hoverable tbody tr:hover {
+      background: var(--neutral-alpha-weak);
+    }
   }
 
   &.clickable .row {
     cursor: pointer;
 
-    &:hover {
-      background: var(--neutral-alpha-medium);
+    @media (hover: hover) {
+      &:hover {
+        background: var(--neutral-alpha-medium);
+      }
     }
   }
 
@@ -57,8 +61,10 @@
     background: var(--neutral-alpha-medium);
     border-radius: var(--radius-s);
 
-    &:hover {
-      background: var(--neutral-alpha-strong);
+    @media (hover: hover) {
+      &:hover {
+        background: var(--neutral-alpha-strong);
+      }
     }
   }
 }
@@ -95,8 +101,10 @@
 .thSortable {
   cursor: pointer;
 
-  &:hover {
-    background: var(--neutral-alpha-weak);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--neutral-alpha-weak);
+    }
   }
 }
 

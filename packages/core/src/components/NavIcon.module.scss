@@ -1,3 +1,9 @@
+@use "../styles/touch.scss" as touch;
+
+.navIcon {
+    @include touch.target;
+}
+
 .line {
     background-color: var(--neutral-on-background-strong);
     height: 1px;

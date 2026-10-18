@@ -123,7 +123,10 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
         return {
           "--mask-position-x": `${smoothPosRef.current.x}px`,
           "--mask-position-y": `${smoothPosRef.current.y}px`,
-          "--mask-radius": `${radius}vh`,
+          // `svh`, the viewport with a phone's toolbars shown: it holds still
+          // as they slide away, where `vh` would make the mask jump. On a
+          // desktop the two are the same.
+          "--mask-radius": `${radius}svh`,
         } as CSSProperties;
       }
 
@@ -131,7 +134,7 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
         return {
           "--mask-position-x": `${x}%`,
           "--mask-position-y": `${y}%`,
-          "--mask-radius": `${radius}vh`,
+          "--mask-radius": `${radius}svh`,
         } as CSSProperties;
       }
 

@@ -99,8 +99,10 @@
     background var(--transition-duration-micro-medium) var(--transition-eased),
     width var(--transition-duration-micro-medium) var(--transition-eased);
 
-  &:hover {
-    background: var(--neutral-alpha-strong);
+  @media (hover: hover) {
+    &:hover {
+      background: var(--neutral-alpha-strong);
+    }
   }
 
   &:focus-visible {

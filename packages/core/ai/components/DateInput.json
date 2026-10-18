@@ -9,6 +9,7 @@
   "label": "string",
   "placeholder": "string",
   "value": "Date",
+  "defaultValue": "Date",
   "onChange": "(date: Date) => void",
   "minHeight": "number",
   "className": "string",
@@ -16,7 +17,8 @@
   "timePicker": "boolean = false",
   "minDate": "Date",
   "maxDate": "Date",
-  "locale": "string"
+  "locale": "string",
+  "labels": "DatePickerLabels"
  },
  "tags": [
   "form"
@@ -25,5 +27,18 @@
   "DatePicker",
   "Form"
  ],
- "mixinsRef": []
+ "mixinsRef": [],
+ "types": {
+  "DatePickerLabels": {
+   "previousMonth": "string",
+   "nextMonth": "string",
+   "month": "(month: string) => string",
+   "year": "(year: number) => string",
+   "backToCalendar": "string",
+   "hours": "string",
+   "minutes": "string",
+   "am": "string",
+   "pm": "string"
+  }
+ }
 }

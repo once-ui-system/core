@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef } from "react";
 import { DisplayProps } from "../interfaces";
+import { cssColor } from "../internal/cssColor";
 import { ColorValue, SpacingToken } from "../types";
 import styles from "./Background.module.scss";
 import { Flex } from "./Flex";
@@ -107,10 +108,10 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
                 gradient.height != null ? `${gradient.height / 4}%` : "25%",
               ["--gradient-tilt" as string]: gradient.tilt != null ? `${gradient.tilt}deg` : "0deg",
               ["--gradient-color-start" as string]: gradient.colorStart
-                ? `var(--${gradient.colorStart})`
+                ? cssColor(gradient.colorStart)
                 : "var(--brand-background-strong)",
               ["--gradient-color-end" as string]: gradient.colorEnd
-                ? `var(--${gradient.colorEnd})`
+                ? cssColor(gradient.colorEnd)
                 : "var(--static-transparent)",
             }}
           />
@@ -126,7 +127,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             opacity={dots.opacity}
             style={
               {
-                "--dots-color": `var(--${dotsColor})`,
+                "--dots-color": cssColor(dotsColor),
                 "--dots-size": dotsSize,
               } as React.CSSProperties
             }
@@ -153,7 +154,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
                 style={
                   {
                     "--lines-angle": `${angle}deg`,
-                    "--lines-color": `var(--${lines.color ?? "brand-on-background-weak"})`,
+                    "--lines-color": cssColor(lines.color ?? "brand-on-background-weak"),
                     "--lines-thickness": `${lines.thickness ?? 1}px`,
                     "--lines-spacing": `calc(var(--static-space-${baseSpacing}) * ${adjustmentFactor})`,
                     background: `
@@ -179,7 +180,7 @@ const Background = forwardRef<HTMLDivElement, BackgroundProps>(
             pointerEvents="none"
             opacity={grid.opacity}
             style={{
-              backgroundImage: `linear-gradient(to right, var(--${grid.color ?? "brand-on-background-weak"}) 1px, transparent 1px), linear-gradient(to bottom, var(--${grid.color ?? "brand-on-background-weak"}) 1px, transparent 1px)`,
+              backgroundImage: `linear-gradient(to right, ${cssColor(grid.color ?? "brand-on-background-weak")} 1px, transparent 1px), linear-gradient(to bottom, ${cssColor(grid.color ?? "brand-on-background-weak")} 1px, transparent 1px)`,
               backgroundSize: `${grid.width ?? "80px"} ${grid.height ?? "80px"}`,
             }}
           />

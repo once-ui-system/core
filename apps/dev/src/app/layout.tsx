@@ -59,21 +59,10 @@ export default function RootLayout({
           fonts.code.variable,
         )}
       >
-        <ThemeInit
-          config={{
-            theme: style.theme,
-            brand: style.brand,
-            accent: style.accent,
-            neutral: style.neutral,
-            solid: style.solid,
-            'solid-style': style.solidStyle,
-            border: style.border,
-            surface: style.surface,
-            transition: style.transition,
-            scaling: style.scaling,
-            'viz-style': dataStyle.variant,
-          }}
-        />
+        {/* The current shape: `style` as written, and `dataStyle` for the chart
+            mode. The 2.0 shape passed `dataStyle.variant` as `viz-style`, the
+            wrong setting, so charts fell back to categorical. */}
+        <ThemeInit config={style} dataStyle={dataStyle} />
         <Providers>
           <Column background="page" as="body" fillWidth margin="0" padding="0" minHeight="100vh">
             <Flex

@@ -67,6 +67,22 @@
        `calc(var(--header-height))` offset follows. The utilities read it on
        the element itself, so it can also be set on a subtree. */
     --header-height: var(--static-space-56);
+
+    /* The device's safe areas: the notch, the status bar, the home indicator
+       and rounded corners. They are 0 until the page opts in with
+       `viewport-fit=cover` in its viewport meta, as a Capacitor app or an
+       installed web app does, so a plain website does not move. Fixed
+       components (Toaster, Drawer, Dialog, Modal, ScrollToTop) keep clear
+       of them, and an app shell can read them for its own header and tab bar. */
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+
+    /* The smallest area a tap lands on with a coarse pointer (a finger): 44px,
+       as Apple's guidelines and WCAG 2.5.5 ask. Smaller controls keep their
+       drawn size and take taps from an invisible area this big around them. */
+    --touch-target: 2.75rem;
 }
 
 @include breakpoints.m {
