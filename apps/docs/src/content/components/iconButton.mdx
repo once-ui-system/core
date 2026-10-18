@@ -135,7 +135,7 @@ Customize the border radius of the `IconButton` for different design needs.
   preview={
     <Row gap="1" horizontal="center">
       <IconButton icon="chevronLeft" corners="top-left" />
-      <IconButton icon="chevronDown" radius="none" />
+      <IconButton icon="chevronDown" corners="none" />
       <IconButton icon="chevronRight" corners="bottom-right" />
     </Row>
   }
@@ -143,7 +143,7 @@ Customize the border radius of the `IconButton` for different design needs.
     {
       code:
 `<IconButton icon="chevronLeft" corners="top-left" />
-<IconButton icon="chevronDown" radius="none" />
+<IconButton icon="chevronDown" corners="none" />
 <IconButton icon="chevronRight" corners="bottom-right" />`,
       language: "tsx",
       label: "Radius"
@@ -160,15 +160,15 @@ IconButtons can function as links when provided with an `href` property.
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <IconButton icon="arrowUpRight" href="#" variant="secondary" />
-      <IconButton icon="chevronRight" href="#" variant="tertiary" />
+      <IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+      <IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />
     </Row>
   }
   codes={[
     {
       code:
-`<IconButton icon="arrowUpRight" href="#" variant="secondary" />
-<IconButton icon="chevronRight" href="#" variant="tertiary" />`,
+`<IconButton icon="arrowUpRight" href="#" variant="secondary" aria-label="Open link" />
+<IconButton icon="chevronRight" href="#" variant="tertiary" aria-label="Next" />`,
       language: "tsx",
       label: "Links"
     }

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import { Column } from "./Column";
+import { ControlLabelContext } from "./ControlLabelContext";
 import { Flex } from "./Flex";
 import { InfoTip } from "./InfoTip";
 import { Row } from "./Row";
@@ -48,6 +49,7 @@ const Setting: React.FC<SettingProps> = ({
   ...flex
 }) => {
   const hasLabel = Boolean(label || description);
+  const labelId = useId();
   return (
     <Row
       fillWidth
@@ -63,7 +65,7 @@ const Setting: React.FC<SettingProps> = ({
       {hasLabel && (
         <Column gap="4" paddingLeft="8" paddingRight="4" paddingY="4">
           <Row vertical="center" gap="8">
-            {renderLabel(label)}
+            {label && <span id={labelId}>{renderLabel(label)}</span>}
             {info && <InfoTip>{info}</InfoTip>}
           </Row>
           {description && (
@@ -82,7 +84,9 @@ const Setting: React.FC<SettingProps> = ({
         vertical="center"
         gap="8"
       >
-        {children}
+        <ControlLabelContext.Provider value={label ? labelId : undefined}>
+          {children}
+        </ControlLabelContext.Provider>
       </Row>
     </Row>
   );
@@ -176,24 +180,36 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   axes,
   axisWidth = 13,
   ...flex
-}) => (
-  <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
-    <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
-      {renderLabel(label)}
-      {info && <InfoTip>{info}</InfoTip>}
-    </Row>
-    <Row fillWidth gap="12" wrap>
-      {axes.map((axis, index) => (
-        <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
-          <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
-            {axis.label}
-          </Text>
-          {axis.control}
-        </Row>
-      ))}
-    </Row>
-  </Column>
-);
+}) => {
+  const labelId = useId();
+  return (
+    <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
+      <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
+        {label && <span id={labelId}>{renderLabel(label)}</span>}
+        {info && <InfoTip>{info}</InfoTip>}
+      </Row>
+      <Row fillWidth gap="12" wrap>
+        {axes.map((axis, index) => (
+          <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
+            <Text
+              id={`${labelId}-${index}`}
+              wrap="nowrap"
+              variant="label-default-xs"
+              onBackground="neutral-weak"
+            >
+              {axis.label}
+            </Text>
+            <ControlLabelContext.Provider
+              value={label ? `${labelId} ${labelId}-${index}` : `${labelId}-${index}`}
+            >
+              {axis.control}
+            </ControlLabelContext.Provider>
+          </Row>
+        ))}
+      </Row>
+    </Column>
+  );
+};
 
 SettingAxes.displayName = "SettingAxes";
 

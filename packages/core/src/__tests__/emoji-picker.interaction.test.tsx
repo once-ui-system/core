@@ -17,26 +17,26 @@ vi.mock("../data/emoji-data.json", () => ({ default: {} }));
 
 failOnConsoleError();
 
-const cell = (name: string) => screen.getByRole("gridcell", { name });
+const emojis = (name = "smileys emojis") => screen.getByRole("group", { name });
+const cell = (name: string) => within(emojis()).getByRole("button", { name });
+const cells = () => within(emojis()).getAllByRole("button");
 const search = () => screen.getByRole("textbox", { name: "Search emojis" });
 
 /**
- * EmojiPicker: a search field, a grid of emoji cells the arrow keys move
- * through, and category tabs. The grid failed axe twice over: its cells sat in
- * it without rows, and the category tabs were icons with no names. And the
- * first cell stayed a tab stop next to the focused one, so Shift+Tab out of
- * the grid stopped on it first.
+ * EmojiPicker: a search field, a named group of emoji buttons laid out in
+ * `columns` that the arrow keys move through (roving focus), and category
+ * tabs. The group used to claim role="grid" without the rows and cells a
+ * grid needs (axe: aria-required-children).
  */
 describe("EmojiPicker", () => {
-  it("renders a named grid of rows of named cells, and category tabs with names", async () => {
+  it("renders a named group of named emoji buttons, and category tabs with names", async () => {
     const { container } = render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
 
-    const grid = screen.getByRole("grid", { name: "smileys emojis" });
-    const rows = within(grid).getAllByRole("row");
-    expect(within(rows[0]).getAllByRole("gridcell")).toHaveLength(8);
+    expect(screen.queryByRole("grid")).toBeNull();
+    expect(cells()).toHaveLength(8);
     expect(cell("grinning face")).toHaveTextContent("😀");
 
-    const tabs = screen.getByRole("tablist", { name: "Emoji categories" });
+    const tabs = screen.getByRole("tablist");
     expect(within(tabs).getByRole("tab", { name: "Smileys" })).toHaveAttribute(
       "aria-selected",
       "true",
@@ -46,9 +46,11 @@ describe("EmojiPicker", () => {
   });
 
   it("lays rows out by `columns`", () => {
-    render(<EmojiPicker onSelect={() => {}} columns="4" />, { wrapper: wrap });
-    const [first] = screen.getAllByRole("row");
-    expect(within(first).getAllByRole("gridcell")).toHaveLength(4);
+    const { rerender } = render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
+    expect(emojis()).toHaveClass("columns-8");
+    rerender(<EmojiPicker onSelect={() => {}} columns="4" />);
+    expect(emojis()).toHaveClass("columns-4");
+    expect(emojis()).not.toHaveClass("columns-8");
   });
 
   it("reports a clicked emoji, then closes", async () => {
@@ -63,7 +65,7 @@ describe("EmojiPicker", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("is one tab stop: search, then the grid, then the categories", async () => {
+  it("tabs from the search to the emojis to the categories", async () => {
     const user = userEvent.setup();
     render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
 
@@ -75,34 +77,34 @@ describe("EmojiPicker", () => {
     expect(screen.getByRole("tab", { name: "Smileys" })).toHaveFocus();
   });
 
-  it("moves through the grid with the arrow keys, wrapping round", async () => {
+  it("moves through the emojis with the arrow keys, wrapping round", async () => {
     const user = userEvent.setup();
     render(<EmojiPicker onSelect={() => {}} columns="4" />, { wrapper: wrap });
 
     await user.tab();
     await user.tab();
     const first = document.activeElement as HTMLElement;
-    const cells = screen.getAllByRole("gridcell");
-    expect(first).toBe(cells[0]);
+    const all = cells();
+    expect(first).toBe(all[0]);
 
     await user.keyboard("{ArrowRight}");
-    expect(cells[1]).toHaveFocus();
+    expect(all[1]).toHaveFocus();
     await user.keyboard("{ArrowDown}");
-    expect(cells[5]).toHaveFocus();
+    expect(all[5]).toHaveFocus();
     await user.keyboard("{ArrowUp}");
-    expect(cells[1]).toHaveFocus();
+    expect(all[1]).toHaveFocus();
     await user.keyboard("{ArrowLeft}{ArrowLeft}");
-    expect(cells[cells.length - 1]).toHaveFocus();
+    expect(all[all.length - 1]).toHaveFocus();
     await user.keyboard("{ArrowRight}");
-    expect(cells[0]).toHaveFocus();
+    expect(all[0]).toHaveFocus();
     await user.keyboard("{ArrowUp}");
     // Up from the top row lands in the same column of the last row, or the
     // last cell when that row is short.
-    const lastRowStart = Math.floor((cells.length - 1) / 4) * 4;
-    expect(cells[Math.min(lastRowStart, cells.length - 1)]).toHaveFocus();
+    const lastRowStart = Math.floor((all.length - 1) / 4) * 4;
+    expect(all[Math.min(lastRowStart, all.length - 1)]).toHaveFocus();
   });
 
-  it("leaves the grid with Shift+Tab from any cell, past no other cell", async () => {
+  it("leaves the group with Shift+Tab from its first button", async () => {
     const user = userEvent.setup();
     render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
 
@@ -110,11 +112,17 @@ describe("EmojiPicker", () => {
     await user.tab();
     await user.keyboard("{ArrowRight}{ArrowRight}");
     const focused = document.activeElement as HTMLElement;
+    expect(focused).toBe(cells()[2]);
     expect(focused).toHaveAttribute("tabindex", "0");
-    expect(
-      screen.getAllByRole("gridcell").filter((el) => el.getAttribute("tabindex") === "0"),
-    ).toEqual([focused]);
+    // Only the focused button and the first one (the way back in) are tab
+    // stops; every other button is reached with the arrow keys.
+    expect(cells().filter((el) => el.getAttribute("tabindex") === "0")).toEqual([
+      cells()[0],
+      focused,
+    ]);
 
+    await user.keyboard("{ArrowLeft}{ArrowLeft}");
+    expect(cells()[0]).toHaveFocus();
     await user.tab({ shift: true });
     expect(search()).toHaveFocus();
   });
@@ -136,8 +144,10 @@ describe("EmojiPicker", () => {
     render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
 
     await user.click(screen.getByRole("tab", { name: "Animals" }));
-    expect(screen.getByRole("grid", { name: "animals emojis" })).toBeInTheDocument();
-    expect(screen.queryByRole("gridcell", { name: "grinning face" })).toBeNull();
+    expect(
+      within(emojis("animals emojis")).getByRole("button", { name: "dog face" }),
+    ).toBeVisible();
+    expect(screen.queryByRole("button", { name: "grinning face" })).toBeNull();
     expect(screen.getByRole("tab", { name: "Animals" })).toHaveAttribute("aria-selected", "true");
   });
 
@@ -151,11 +161,15 @@ describe("EmojiPicker", () => {
       fireEvent.change(search(), { target: { value: "Cat Face" } });
       act(() => vi.advanceTimersByTime(299));
       // Debounced: nothing changes until typing has paused for 300ms.
-      expect(screen.getByRole("grid", { name: "smileys emojis" })).toBeInTheDocument();
+      expect(emojis()).toBeInTheDocument();
       act(() => vi.advanceTimersByTime(1));
 
-      const grid = screen.getByRole("grid", { name: "Search results" });
-      expect(within(grid).getByRole("gridcell", { name: "cat face" })).toBeInTheDocument();
+      const results = emojis("Search results");
+      expect(
+        within(results)
+          .getAllByRole("button")
+          .map((b) => b.getAttribute("aria-label")),
+      ).toEqual(["cat face"]);
       expect(screen.queryByRole("tablist")).toBeNull();
       // axe schedules its own timers.
       vi.useRealTimers();
@@ -166,7 +180,7 @@ describe("EmojiPicker", () => {
       render(<EmojiPicker onSelect={() => {}} />, { wrapper: wrap });
       fireEvent.change(search(), { target: { value: "zzzzqqq" } });
       act(() => vi.advanceTimersByTime(300));
-      expect(screen.queryByRole("grid")).toBeNull();
+      expect(screen.queryByRole("group", { name: "Search results" })).toBeNull();
       expect(screen.getByText("No results found")).toBeInTheDocument();
     });
   });

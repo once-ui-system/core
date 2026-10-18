@@ -5,8 +5,8 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
-  useImperativeHandle,
   useId,
+  useImperativeHandle,
   useRef,
   useState,
 } from "react";
@@ -63,7 +63,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
   ) => {
     const headerRef = useRef<HTMLDivElement>(null);
     const contentRef = useRef<HTMLDivElement>(null);
-    const contentId = `accordion-content-${useId().replace(/:/g, "")}`;
+    const contentId = `accordion-content-${useId()}`;
     const [isOpen, setIsOpen] = useState(open);
 
     useEffect(() => {
@@ -72,8 +72,9 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 
     const isAccordionOpen = onToggle ? open : isOpen;
 
-    // A closed panel is aria-hidden; inert keeps its links and fields out of
-    // the Tab order too. Set on the node: React 18 has no `inert` prop.
+    // aria-hidden alone leaves the links and buttons of a closed panel in the
+    // tab order (axe: aria-hidden-focus). `inert` takes them out; it is set on
+    // the node because React 18 and 19 disagree on how to pass it as a prop.
     useEffect(() => {
       if (contentRef.current) contentRef.current.inert = !isAccordionOpen;
     }, [isAccordionOpen]);

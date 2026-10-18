@@ -32,12 +32,12 @@ Use `label` and `description` props for quick setup.
         {
           label: "January 2024",
           description: "Project kickoff",
-          state: "completed"
+          state: "success"
         },
         {
           label: "March 2024",
           description: "Design phase completed",
-          state: "completed"
+          state: "success"
         },
         {
           label: "October 2024",
@@ -60,7 +60,7 @@ Use `label` and `description` props for quick setup.
       {
         label: "January 2024",
         description: "Project kickoff",
-        state: "completed"
+        state: "success"
       },
       {
         label: "October 2024",
@@ -244,13 +244,13 @@ Customize the marker with the `marker` prop.
             marker: 1,
             label: "Create account",
             description: "Sign up with email and password",
-            state: "completed"
+            state: "success"
           },
           {
             marker: 2,
             label: "Verify email",
             description: "Click the link we sent you",
-            state: "completed"
+            state: "success"
           },
           {
             marker: 3,
@@ -271,7 +271,7 @@ Customize the marker with the `marker` prop.
           {
             marker: <Icon name="check" size="s" />,
             label: "Payment received",
-            state: "completed"
+            state: "success"
           },
           {
             marker: <Icon name="truck" size="s" />,
@@ -297,7 +297,7 @@ Customize the marker with the `marker` prop.
         marker: 1,
         label: "Create account",
         description: "Sign up with email and password",
-        state: "completed"
+        state: "success"
       },
       ...
     ]}
@@ -307,7 +307,7 @@ Customize the marker with the `marker` prop.
       {
         marker: <Icon name="check" size="s" />,
         label: "Payment received",
-        state: "completed"
+        state: "success"
       },
       ...
     ]}
@@ -366,7 +366,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
     <Timeline
       items={[
         {
-          state: "completed",
+          state: "success",
           label: <Row vertical="center" gap="8">Dispatched<Tag scheme="success">Done</Tag></Row>,
           description: "Order #123456789",
           children: (
@@ -404,7 +404,7 @@ Extend the label and description with custom React nodes. Use the `children` pro
 `<Timeline
     items={[
       {
-        state: "completed",
+        state: "success",
         label: <Row vertical="center" gap="8">Dispatched<Tag scheme="success">Done</Tag></Row>,
         description: "Order #123456789",
         children: (
@@ -498,7 +498,7 @@ Use the `marker` prop to render custom marker elements.
     size: "Scale of the markers and text.",
   }}
   content={[
-    ["direction", ["column", "row"], "column"]
+    ["direction", ["column", "row", "column-reverse", "row-reverse"], "column"]
   ]}
 />
 

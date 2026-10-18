@@ -69,12 +69,12 @@ describe("User", () => {
     });
     expect(screen.queryByText("Lorant One")).toBeNull();
     expect(screen.queryByText("Design Engineer")).toBeNull();
-    expect(screen.getByRole("img", { name: "Loading avatar" })).toHaveAttribute(
+    expect(screen.getByRole("status", { name: "Loading avatar" })).toHaveAttribute(
       "aria-busy",
       "true",
     );
-    // Named images, as the avatar's skeleton is: a bare aria-label on a
-    // role-less div is prohibited ARIA and is not announced.
+    // The name and subline skeletons are named images (the avatar's is a
+    // named status): a bare aria-label on a role-less div is not announced.
     expect(screen.getByRole("img", { name: "Loading name" })).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "Loading subline" })).toBeInTheDocument();
     await expectNoAxeViolations(container);

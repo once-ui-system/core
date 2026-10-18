@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useId, useRef, useState } from "react";
 import { assignRefs, retarget } from "../internal/toggleInput";
+import { useControlLabel } from "./ControlLabelContext";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
 import commonStyles from "./SharedInteractiveStyles.module.scss";
@@ -58,6 +59,8 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
     ref,
   ) => {
     const labelId = useId();
+    // Inside a Setting row, the row's label names a switch that has none.
+    const outerLabelId = useControlLabel();
     const descriptionId = useId();
     const hasLabel = Boolean(label);
     const inputRef = useRef<HTMLInputElement | null>(null);
@@ -140,8 +143,12 @@ const Switch = forwardRef<HTMLInputElement, SwitchProps>(
           <div
             role="switch"
             aria-checked={checked}
-            aria-labelledby={hasLabel ? labelId : undefined}
-            aria-label={hasLabel ? undefined : (nativeAriaLabel ?? ariaLabel)}
+            aria-labelledby={hasLabel ? labelId : nativeAriaLabel ? undefined : outerLabelId}
+            aria-label={
+              hasLabel || (!nativeAriaLabel && outerLabelId)
+                ? undefined
+                : (nativeAriaLabel ?? ariaLabel)
+            }
             aria-describedby={hasLabel && description ? descriptionId : undefined}
             aria-disabled={disabled}
             onKeyDown={handleKeyDown}

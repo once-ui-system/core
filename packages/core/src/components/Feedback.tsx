@@ -91,6 +91,7 @@ const Feedback = forwardRef<HTMLDivElement, FeedbackProps>(
                   </Flex>
                   {showCloseButton && (
                     <IconButton
+                      type="button"
                       onClick={onClose}
                       icon="close"
                       size="m"

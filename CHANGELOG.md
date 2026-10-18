@@ -13,6 +13,30 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Types that refused what the components already do.** `SegmentedControl`'s
+  `onChange` is optional, so an uncontrolled control with only `defaultValue` compiles.
+  `StatusIndicator`'s `color` (defaults to `blue`), `Skeleton`'s `shape` (defaults to
+  `line`) and `InteractiveDetails`' `onClick` are optional. `LetterFx`'s `charset`
+  takes a string as well as an array. A `KbarItem` no longer needs `shortcut` or
+  `keywords`. `CursorCard`'s `placement` takes the corners it positions by
+  (`"bottom-right"`, `"top-left"` and the rest) instead of the start/end alignments it
+  never handled.
+
+### Docs
+
+- **Every example and props table is checked against the code.** `check:docs` in the
+  docs app typechecks the 1,300-odd examples on the docs site, in the agent harness's
+  rules, recipes and gotchas, and in the READMEs against the built package, and checks
+  each props table against `ai/spec.json`. CI runs it before the docs build. It found
+  168 problems, now fixed, among them `Background` opacities written as `0.5` for a
+  0 to 100 scale, `radius="none"` on `Button` where the prop is `corners`, `Timeline`
+  items in a `"completed"` state that does not exist, streaming-chart examples written
+  against Recharts' API, and imports from the pre-package `@/modules` path. Twenty-one
+  hand-written props tables now read their rows from the spec, and `HeadingNav`,
+  `IconProvider`, `Meta`, `Schema` and `OgRoutesProvider` have API tables.
+
 ## [2.2.0] — 2026-10-17
 
 ### Added

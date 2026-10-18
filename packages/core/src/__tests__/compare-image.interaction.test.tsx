@@ -17,7 +17,10 @@ const Compare = () => (
   />
 );
 
-const handle = () => screen.getByRole("slider", { name: "Drag to compare" });
+const handle = () => screen.getByRole("slider", { name: "Compare images" });
+// The pointer grabs the grip drawn inside the slider (hidden from the
+// accessibility tree and out of the tab order, so it is not a second stop).
+const grip = () => handle().firstElementChild as HTMLElement;
 const clips = () =>
   screen
     .getAllByRole("img")
@@ -26,7 +29,7 @@ const clips = () =>
 /**
  * Two images stacked, with a handle that sets how much of each shows. The
  * handle is a slider: dragged with a mouse or finger, or moved with the
- * arrow keys, Home and End, and it reports where it is.
+ * arrow keys, Page Up/Down, Home and End, and it reports where it is.
  */
 describe("CompareImage: rendering", () => {
   it("shows both images split down the middle and passes axe", async () => {
@@ -53,22 +56,25 @@ describe("CompareImage: keyboard", () => {
     render(<Compare />, { wrapper });
     await user.tab();
     expect(handle()).toHaveFocus();
-    await user.keyboard("{ArrowRight}");
-    expect(handle()).toHaveAttribute("aria-valuenow", "55");
+    await user.keyboard("{ArrowRight}{ArrowUp}");
+    expect(handle()).toHaveAttribute("aria-valuenow", "52");
     await user.keyboard("{ArrowLeft}{ArrowLeft}{ArrowDown}");
-    expect(handle()).toHaveAttribute("aria-valuenow", "40");
-    await user.keyboard("{Shift>}{ArrowDown}{/Shift}");
-    expect(handle()).toHaveAttribute("aria-valuenow", "30");
-    expect(clips()).toEqual(["inset(0 70% 0 0)", "inset(0 0 0 30%)"]);
+    expect(handle()).toHaveAttribute("aria-valuenow", "49");
+    await user.keyboard("{PageDown}");
+    expect(handle()).toHaveAttribute("aria-valuenow", "39");
+    await user.keyboard("{PageUp}{PageUp}");
+    expect(handle()).toHaveAttribute("aria-valuenow", "59");
+    expect(handle()).toHaveAttribute("aria-valuetext", "59% Before");
+    expect(clips()).toEqual(["inset(0 41% 0 0)", "inset(0 0 0 59%)"]);
   });
 
   it("jumps to the ends with Home and End and stays in range", async () => {
     const user = userEvent.setup();
     render(<Compare />, { wrapper });
     handle().focus();
-    await user.keyboard("{End}{ArrowRight}");
+    await user.keyboard("{End}{ArrowRight}{PageUp}");
     expect(handle()).toHaveAttribute("aria-valuenow", "100");
-    await user.keyboard("{Home}{ArrowLeft}");
+    await user.keyboard("{Home}{ArrowLeft}{PageDown}");
     expect(handle()).toHaveAttribute("aria-valuenow", "0");
   });
 });
@@ -88,7 +94,7 @@ describe("CompareImage: pointer", () => {
   it("follows a mouse drag from the handle, clamped to the box", () => {
     const { container } = render(<Compare />, { wrapper });
     box(container);
-    fireEvent.mouseDown(handle());
+    fireEvent.mouseDown(grip());
     fireEvent.mouseMove(document, { clientX: 200 });
     expect(handle()).toHaveAttribute("aria-valuenow", "25");
     fireEvent.mouseMove(document, { clientX: 900 });
@@ -101,7 +107,7 @@ describe("CompareImage: pointer", () => {
   it("follows a touch drag", () => {
     const { container } = render(<Compare />, { wrapper });
     box(container);
-    fireEvent.touchStart(handle());
+    fireEvent.touchStart(grip());
     fireEvent.touchMove(document, { touches: [{ clientX: 400 }] });
     expect(handle()).toHaveAttribute("aria-valuenow", "75");
     fireEvent.touchEnd(document);

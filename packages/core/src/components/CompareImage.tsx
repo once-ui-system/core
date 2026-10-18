@@ -84,17 +84,23 @@ const CompareImage = ({
     setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
   }, []);
 
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    const step = e.shiftKey ? 10 : 5;
-    let next: ((current: number) => number) | null = null;
-    if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = (p) => p - step;
-    else if (e.key === "ArrowRight" || e.key === "ArrowUp") next = (p) => p + step;
-    else if (e.key === "Home") next = () => 0;
-    else if (e.key === "End") next = () => 100;
-    if (!next) return;
+  // The handle is a slider: arrows move it by 1%, Page Up/Down by 10%, Home
+  // and End to the edges. Before, it could only be dragged with a pointer.
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const steps: Record<string, (p: number) => number> = {
+      ArrowLeft: (p) => p - 1,
+      ArrowDown: (p) => p - 1,
+      ArrowRight: (p) => p + 1,
+      ArrowUp: (p) => p + 1,
+      PageDown: (p) => p - 10,
+      PageUp: (p) => p + 10,
+      Home: () => 0,
+      End: () => 100,
+    };
+    const step = steps[e.key];
+    if (!step) return;
     e.preventDefault();
-    const move = next;
-    setPosition((current) => Math.max(0, Math.min(100, move(current))));
+    setPosition((p) => Math.max(0, Math.min(100, step(p))));
   }, []);
 
   useEffect(() => {
@@ -143,27 +149,27 @@ const CompareImage = ({
         radius="l"
         background="surface"
         fitHeight
-        className={styles.dragIcon}
+        className={`${styles.dragIcon} focus-ring`}
         style={{
           left: `${position}%`,
         }}
+        role="slider"
+        tabIndex={0}
+        aria-label="Compare images"
+        aria-orientation="horizontal"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(position)}
+        aria-valuetext={`${Math.round(position)}% ${leftContent.alt || "left image"}`}
+        onKeyDown={handleKeyDown}
       >
-        {/* With no onClick this rendered a div: a keyboard could not reach the
-            handle at all. It is a real button exposed as a slider, moved with
-            the arrow keys, Home and End. */}
         <IconButton
           icon="chevronsLeftRight"
-          type="button"
-          role="slider"
-          aria-label="Drag to compare"
-          aria-orientation="horizontal"
-          aria-valuemin={0}
-          aria-valuemax={100}
-          aria-valuenow={Math.round(position)}
+          aria-hidden="true"
+          tabIndex={-1}
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}
-          onKeyDown={handleKeyDown}
           style={{ cursor: "grab" }}
         />
       </Flex>

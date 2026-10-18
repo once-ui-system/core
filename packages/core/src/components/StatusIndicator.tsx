@@ -6,7 +6,8 @@ import styles from "./StatusIndicator.module.scss";
 
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   size?: CondensedTShirtSizes;
-  color:
+  /** Defaults to `blue`. */
+  color?:
     | "blue"
     | "indigo"
     | "violet"
