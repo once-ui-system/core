@@ -70,16 +70,18 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(
     const shineDefaults = {
       opacity: 30,
       blending: "color-dodge" as CSSProperties["mixBlendMode"],
-      mask: getMaskStyle(shine?.mask),
       ...shine,
+      // After the spread: `shine.mask` is the options object, not the CSS mask.
+      mask: getMaskStyle(shine?.mask),
     };
 
     const burnDefaults = {
       opacity: 30,
       filter: "brightness(0.2) contrast(2)",
       blending: "color-dodge" as CSSProperties["mixBlendMode"],
-      mask: getMaskStyle(burn?.mask),
       ...burn,
+      // After the spread: `burn.mask` is the options object, not the CSS mask.
+      mask: getMaskStyle(burn?.mask),
     };
 
     const textureDefaults = {
@@ -87,8 +89,9 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(
       blending: "color-dodge" as CSSProperties["mixBlendMode"],
       image:
         "repeating-linear-gradient(-45deg, var(--static-white) 0, var(--static-white) 1px, transparent 3px, transparent 2px)",
-      mask: getMaskStyle(texture?.mask),
       ...texture,
+      // After the spread: `texture.mask` is the options object, not the CSS mask.
+      mask: getMaskStyle(texture?.mask),
     };
 
     useEffect(() => {
@@ -134,6 +137,9 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(
           fill
           pointerEvents="none"
           className={classNames(styles.overlay, styles.burn)}
+          // Decorative copies of the content: read and tabbed to once, in the base layer.
+          aria-hidden="true"
+          inert
           style={{
             ["--burn-opacity" as any]: burnDefaults.opacity + "%",
             filter: burnDefaults.filter,
@@ -149,6 +155,9 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(
           fill
           pointerEvents="none"
           className={classNames(styles.overlay, styles.shine)}
+          // Decorative copies of the content: read and tabbed to once, in the base layer.
+          aria-hidden="true"
+          inert
           style={{
             ["--shine-opacity" as any]: shineDefaults.opacity + "%",
             filter: shineDefaults.filter,
@@ -164,6 +173,7 @@ const HoloFx = forwardRef<HTMLDivElement, HoloFxProps>(
           fill
           pointerEvents="none"
           className={classNames(styles.overlay, styles.texture)}
+          aria-hidden="true"
           style={{
             ["--texture-opacity" as any]: textureDefaults.opacity + "%",
             backgroundImage: textureDefaults.image,

@@ -1,9 +1,9 @@
 "use client";
 
-import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
+import { type ChangeEventHandler, forwardRef, type KeyboardEventHandler, useState } from "react";
 import { Chip } from "./Chip";
 import { Flex } from "./Flex";
-import { Input, InputProps } from "./Input";
+import { Input, type InputProps } from "./Input";
 
 interface TagInputProps extends Omit<InputProps, "onChange" | "value" | "defaultValue"> {
   /** The tags, controlled. Leave it out to let TagInput keep its own list,
@@ -16,7 +16,18 @@ interface TagInputProps extends Omit<InputProps, "onChange" | "value" | "default
 }
 
 const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
-  ({ value: controlledValue, defaultValue, onChange, label, placeholder, ...inputProps }, ref) => {
+  (
+    {
+      value: controlledValue,
+      defaultValue,
+      onChange,
+      onKeyDown,
+      label,
+      placeholder,
+      ...inputProps
+    },
+    ref,
+  ) => {
     const [inputValue, setInputValue] = useState("");
     const [uncontrolledValue, setUncontrolledValue] = useState<string[]>(() => [
       ...(defaultValue ?? []),
@@ -32,7 +43,11 @@ const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       setInputValue(e.target.value);
     };
 
+    // The caller's handler runs first and can cancel the commit. It used to
+    // be spread over this one, and Enter or a comma then added nothing.
     const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+      onKeyDown?.(e);
+      if (e.defaultPrevented) return;
       if (e.key === "Enter" || e.key === ",") {
         e.preventDefault();
         if (inputValue.trim()) {

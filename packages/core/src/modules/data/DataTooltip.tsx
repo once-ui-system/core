@@ -35,10 +35,13 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
   }
 
   const dataPoint = payload[0].payload;
-  const displayLabel = label || dataPoint?.[dataKey];
+  // 0 is a label (a numeric x axis starts there): `label && …` rendered a stray
+  // "0" in its place and no header.
+  const hasLabel = label !== undefined && label !== null && label !== "";
+  const displayLabel = hasLabel ? label : dataPoint?.[dataKey];
 
   const formattedLabel =
-    formatDate(displayLabel, date, dataPoint) || displayLabel || dataPoint?.endDate;
+    formatDate(displayLabel, date, dataPoint) ?? displayLabel ?? dataPoint?.endDate;
 
   return (
     <Column
@@ -49,7 +52,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
       radius="m"
       border="neutral-alpha-medium"
     >
-      {label && (
+      {hasLabel && (
         <Row fillWidth paddingX="12">
           <Text variant="label-default-s" onBackground="neutral-strong">
             {formattedLabel}

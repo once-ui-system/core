@@ -80,7 +80,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           border="neutral-medium"
           shape="circle"
           {...(typeof size === "number" ? { width: size, height: size } : { size })}
-          className={`${styles.avatar} ${className}`}
+          className={`${styles.avatar} ${className || ""}`}
           aria-busy="true"
           aria-label="Loading avatar"
         />

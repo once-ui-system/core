@@ -137,7 +137,13 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
           },
           onKeyDown: (e: React.KeyboardEvent) => {
             childOnKeyDown?.(e);
-            if (e.key === "Enter" || e.key === " ") {
+            // A native button (or a link, for Enter) already turns the key into
+            // a click, which runs the onClick above: running it here as well
+            // reported the item twice.
+            const element = e.currentTarget as HTMLElement;
+            const clicksNatively =
+              element.tagName === "BUTTON" || (element.tagName === "A" && e.key === "Enter");
+            if (!clicksNatively && (e.key === "Enter" || e.key === " ")) {
               childOnClick?.(e as any);
               onItemClick?.(index);
             }

@@ -175,8 +175,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       options,
-      // No default: with one, `value` was never undefined, so a Select used
-      // without it ignored its own state and every pick was thrown away.
+      // No default: `undefined` is what makes it uncontrolled. A default of
+      // "" made every Select controlled, so without `value` a pick never
+      // showed and a multiple Select never kept more than one.
       value,
       onSelect,
       searchable = false,
