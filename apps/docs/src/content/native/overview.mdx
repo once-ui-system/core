@@ -117,7 +117,8 @@ Phones keep parts of the screen for the notch, the status bar and the home indic
 codes={[
   {
     code:
-`import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+`import { Column, ThemeProvider } from "@once-ui-system/native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 
 function Themed({ children }) {
   return <ThemeProvider insets={useSafeAreaInsets()}>{children}</ThemeProvider>;
