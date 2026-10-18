@@ -199,7 +199,9 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
     [legend.position, reverseX, axis],
   );
 
-  const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
+  // useId, not Math.random: the server and the client must agree on the
+  // gradient ids or hydration reports an attribute mismatch.
+  const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   return (
     <Column
