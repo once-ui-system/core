@@ -105,10 +105,10 @@ describe("Pagination and Scrubber", () => {
 });
 
 describe("Accordion and NavGroup onToggle → onOpenChange", () => {
-  it("renames it and flags the call site", () => {
+  it("renames it and flags the call site (a handler it cannot see; a zero-argument one is quiet, see round5)", () => {
     for (const tag of ["Accordion", "NavGroup"]) {
-      const { out, warnings } = transform(`${core(tag)}<${tag} title="T" onToggle={() => setOpen(!open)} />`);
-      assert.match(out, new RegExp(`<${tag} title="T" onOpenChange=\\{\\(\\) => setOpen\\(!open\\)\\} />`));
+      const { out, warnings } = transform(`${core(tag)}<${tag} title="T" onToggle={props.onToggle} />`);
+      assert.match(out, new RegExp(`<${tag} title="T" onOpenChange=\\{props\\.onToggle\\} />`));
       assert.equal(warnings.length, 1);
       assert.match(warnings[0], new RegExp(`^<${tag}> onToggle: renamed to onOpenChange`));
     }
@@ -118,7 +118,9 @@ describe("Accordion and NavGroup onToggle → onOpenChange", () => {
     const { out, warnings } = transform(`${core("Accordion")}<Accordion title="T" open />\n<Accordion title="U" open={isOpen}>x</Accordion>`);
     assert.match(out, /<Accordion title="T" defaultOpen \/>/);
     assert.match(out, /<Accordion title="U" defaultOpen=\{isOpen\}>x<\/Accordion>/);
-    assert.deepEqual(warnings, []);
+    // An expression: 2.x also followed it when it changed later, so that is said.
+    assert.equal(warnings.length, 1);
+    assert.match(warnings[0], /^<Accordion> open=\{isOpen\} → defaultOpen: 2\.x also opened or closed/);
     assert.equal(transform(out).out, out);
   });
 

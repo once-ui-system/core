@@ -30,15 +30,16 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { braceList, codeOnly, lineMap, lineOf, located, splitLine } from "./codemod-3.0-format.mjs";
+import { addToCoreImport, attributeGap, braceList, codeOnly, lineMap, lineOf, located, removeFromCoreImport, splitLine } from "./codemod-3.0-format.mjs";
 import { contextFor, evaluate, numberKind, statementEnd, valueSpans } from "./codemod-3.0-values.mjs";
 import { boundElsewhere, closing, objectEntries, partsBetween, skipLexeme, topLevel, trimmed } from "./codemod-3.0-scan.mjs";
 import { packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
-import { LEAVES, transformLeaf } from "./codemod-3.0-leaf.mjs";
+import { LEAVES, elementsOf, transformLeaf } from "./codemod-3.0-leaf.mjs";
 import { consumesProp, forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
+import { transformJsonStrings } from "./codemod-3.0-json.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -136,6 +137,90 @@ const FLAGGED = {
   },
 };
 
+/**
+ * A FLAGGED prop whose use is already what 3.0 means, so its note is noise:
+ * a zero-argument `onToggle` (inline, or a same-file function taking no
+ * parameters) works unchanged as `onOpenChange`; DatePicker `open` beside
+ * `autoFocus` is the one use its note says to keep.
+ */
+function flagNeedless(src, tag, a, attrs) {
+  if (a.name === "onToggle" && (tag === "Accordion" || tag === "NavGroup") && a.value) {
+    const expr = expressionOf(a.value);
+    if (/^(?:async\s*)?\(\s*\)\s*=>/.test(expr) || /^function\s*[\w$]*\s*\(\s*\)/.test(expr)) return true;
+    if (/^[A-Za-z_$][\w$]*$/.test(expr)) {
+      const esc = expr.replace(/\$/g, "\\$");
+      const decls = [...src.matchAll(new RegExp(`(?<![\\w$.])(?:const|let|var|function)\\s+${esc}(?![\\w$])`, "g"))];
+      const zeroArg = new RegExp(
+        `(?<![\\w$.])(?:const\\s+${esc}\\s*=\\s*(?:useCallback\\(\\s*)?(?:async\\s*)?\\(\\s*\\)\\s*=>|function\\s+${esc}\\s*\\(\\s*\\))`,
+      );
+      return decls.length === 1 && zeroArg.test(src);
+    }
+    return false;
+  }
+  if (tag === "DatePicker" && a.name === "open") return attrs.some((b) => b.name === "autoFocus");
+  return false;
+}
+
+/**
+ * The string literals a name is declared to hold in this file
+ * (`variant?: "primary" | "secondary"`, `type V = "a" | "b"` through
+ * `variant: V`), or null when a declaration is not such a union.
+ */
+export function declaredLiterals(src, expr) {
+  const name = /(?:^|\.)\s*([A-Za-z_$][\w$]*)$/.exec(expr.trim())?.[1];
+  if (!name || !/^[A-Za-z_$][\w$.?\s]*$/.test(expr.trim())) return null;
+  const union = (text, depth = 0) => {
+    const parts = text.split("|").map((p) => p.trim()).filter(Boolean);
+    const out = [];
+    for (const p of parts) {
+      const lit = /^(["'])([^"'\\]*)\1$/.exec(p);
+      if (lit) out.push(lit[2]);
+      else if (/^[A-Z][\w$]*$/.test(p) && depth < 3) {
+        const alias = new RegExp(`\\btype\\s+${p}\\s*=\\s*([^;\\n]+(?:\\n\\s*\\|[^;\\n]+)*)`).exec(src);
+        const inner = alias && union(alias[1].trim().replace(/^\|/, ""), depth + 1);
+        if (!inner) return null;
+        out.push(...inner);
+      } else return null;
+    }
+    return out;
+  };
+  const found = [];
+  const re = new RegExp(`(?<![\\w$.])${name.replace(/\$/g, "\\$")}\\??\\s*:\\s*([^;,\\n}=)]+)`, "g");
+  for (const m of codeOnly(src).matchAll(re)) {
+    // A type position (`variant?: T` in a type or a parameter), not an object value (`{ variant: x }`).
+    const text = src.slice(m.index + m[0].length - m[1].length, m.index + m[0].length).trim();
+    if (!/^(["']|[A-Z])/.test(text)) continue;
+    const lits = union(text);
+    if (!lits) return null;
+    found.push(...lits);
+  }
+  return found.length ? found : null;
+}
+
+/** Pickers whose range handler receives a DateRange in 3.0. */
+const DATE_FIELDS = new Set(["DatePicker", "DateRangePicker", "DateInput", "DateRangeInput"]);
+
+/**
+ * The inline type a range handler's parameter is annotated with, when it is
+ * `{ startDate: Date; endDate: Date }` with both required (which a DateRange,
+ * both optional, is not assignable to): on an inline arrow, or on a function
+ * of this file the attribute names. Null otherwise.
+ */
+function rangeAnnotation(src, a) {
+  if (!a.value) return null;
+  const expr = expressionOf(a.value);
+  const REQUIRED = /^\{\s*(?:startDate\s*:\s*Date\s*[;,]\s*endDate\s*:\s*Date|endDate\s*:\s*Date\s*[;,]\s*startDate\s*:\s*Date)\s*[;,]?\s*\}$/;
+  const param = (text) => {
+    const m = /^(?:async\s*)?\(\s*(?:[A-Za-z_$][\w$]*|\{[^}]*\})\s*:\s*(\{[^}]*\})\s*\)/.exec(text.trim());
+    return m && REQUIRED.test(m[1].trim()) ? m[1].replace(/\s+/g, " ").trim() : null;
+  };
+  const inline = param(expr);
+  if (inline) return inline;
+  if (!/^[A-Za-z_$][\w$]*$/.test(expr)) return null;
+  const decl = new RegExp(`(?<![\\w$.])(?:const\\s+${expr}\\s*=\\s*(?:useCallback\\(\\s*)?|function\\s+${expr}\\s*)`).exec(src);
+  return decl ? param(src.slice(decl.index + decl[0].length, decl.index + decl[0].length + 300)) : null;
+}
+
 /** The `{…}` contents of an attribute value, or the quoted string as written. */
 const expressionOf = (raw) => {
   const v = String(raw).trim();
@@ -222,7 +307,10 @@ function rewriteCodeBlock(src, attrs) {
   for (const o of objects) {
     const body = inner.slice(o.at, o.end);
     if (/[{,\s]highlight\s*:/.test(body)) continue; // the entry's own value already won
-    edits.push({ at: innerStart + o.at + 1, end: innerStart + o.at + 1, text: ` highlight: ${expr},`, hit: "highlight moved onto codes" });
+    // An entry written one key per line gets the key on a line of its own.
+    const multi = /^\{[ \t]*\r?\n([ \t]*)/.exec(body);
+    const text = multi ? `\n${multi[1]}highlight: ${expr},` : ` highlight: ${expr},`;
+    edits.push({ at: innerStart + o.at + 1, end: innerStart + o.at + 1, text, hit: "highlight moved onto codes" });
   }
   edits.push({ at: withLeadingSpace(src, root.at), end: root.end, text: "", hit: "root highlight removed" });
   return { edits, warnings: [] };
@@ -247,13 +335,38 @@ function rewriteAccordion(src, attrs, tagText) {
         "open: now controls the accordion whenever it is set; if the spread carries no onOpenChange, use defaultOpen",
       ],
     };
+  // `open={expanded}`: 2.x also followed the value when it changed later;
+  // `defaultOpen` reads it once.
+  const value = open.value === null ? "true" : String(open.value).trim();
+  const followed = !/^\{\s*(true|false)\s*\}$|^true$/.test(value) && !/^["']/.test(value);
   return {
     edits: [{ at: open.at, end: open.at + "open".length, text: "defaultOpen", hit: "open → defaultOpen (no handler: it was the starting state)" }],
-    warnings: [],
+    warnings: followed
+      ? [
+          `open=${value} → defaultOpen: 2.x also opened or closed the accordion when ${expressionOf(value)} changed later, defaultOpen reads it once; ` +
+            `if it changes, control it: open=${value} onOpenChange={(next) => …}`,
+        ]
+      : [],
   };
 }
 
-const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion: rewriteAccordion };
+/**
+ * Feedback `icon` written bare (MDX's `<Feedback icon>`, icon={true}) named
+ * no icon: 2.x drew an empty gap where it would be. 3.0 draws the tone's
+ * icon unless `icon` names another.
+ */
+function rewriteFeedback(src, attrs) {
+  const icon = attrs.find((a) => a.name === "icon");
+  if (!icon || !(icon.value === null || /^\{\s*true\s*\}$/.test(String(icon.value)))) return { edits: [], warnings: [] };
+  return {
+    edits: [],
+    warnings: [
+      "icon: a bare icon named no icon (2.x left an empty gap); remove it to show the tone's icon, or write showIcon={false} for none",
+    ],
+  };
+}
+
+const REWRITES = { Dialog: rewriteDialog, CodeBlock: rewriteCodeBlock, Accordion: rewriteAccordion, Feedback: rewriteFeedback };
 
 /**
  * Exports 3.0 renamed: old → new. A1, G6. A lower-case name is a function:
@@ -275,7 +388,10 @@ const REMOVED_EXPORTS = {
   ClientGrid: "internal in 3.0; use Grid, which picks its server or client half itself",
   Cursor: "internal in 3.0; pass the element to Flex's or Grid's `cursor` prop",
   ElementType:
-    "internal in 3.0; use SmartLink for a link, Button or IconButton for an action, or a plain <a>/<button>",
+    "internal in 3.0. It rendered a router Link for an internal href, <a target=\"_blank\" rel=\"noreferrer\"> for an http(s) one, " +
+    "a <button> for onClick or type, and a Flex otherwise, all unstyled. To keep that, define it locally: " +
+    "const Interactive = ({ href, ...rest }) => href ? <Link href={href} {...rest} /> : <button type=\"button\" {...rest} />; " +
+    "(Link from next/link or your router), and use <Interactive> with the same props. For a styled control use SmartLink, Button or IconButton",
   InteractiveDetails:
     "internal in 3.0; use the `label` and `description` props of Checkbox, RadioButton or Switch",
   InteractiveDetailsProps: "internal in 3.0; use React.ComponentProps<typeof Checkbox>",
@@ -286,7 +402,9 @@ const REMOVED_EXPORTS = {
   useArrowNavigationContext: "internal in 3.0; useArrowNavigation returns focusedIndex and setFocusedIndex",
   withArrowNavigation: "internal in 3.0; use the useArrowNavigation hook",
   DialogProvider: "removed in 3.0; Dialog stacks without it (the codemod unwraps <DialogProvider>)",
-  dev: "internal in 3.0; log behind a process.env.NODE_ENV check of your own",
+  dev:
+    "internal in 3.0; keep a logger of your own: export const dev = Object.fromEntries([\"log\", \"warn\", \"error\", \"info\", \"debug\"].map((k) => " +
+    "[k, (...args) => { if (process.env.NODE_ENV === \"development\") console[k](...args); }])) (2.x's, which logged in development only), and import it from there",
   getLastOpenedDropdown: "internal in 3.0; dropdowns close each other on their own",
   setLastOpenedDropdown: "internal in 3.0; dropdowns close each other on their own",
   clearLastOpenedDropdown: "internal in 3.0; dropdowns close each other on their own",
@@ -295,6 +413,119 @@ const REMOVED_EXPORTS = {
   safeScriptJson: "internal in 3.0; Schema and ThemeInit use it, serialise script JSON yourself",
   sanitizeHref: "internal in 3.0; SmartLink and Button use it, validate hrefs yourself",
 };
+
+/**
+ * F7: `<ElementType>` (internal in 3.0) where what it rendered can be read
+ * from the element: no href and an `onClick` or a literal `type` was a plain
+ * `<button>` (written `type="button"` when it had none, which 2.x left to
+ * the browser's submit), an http(s) literal href was
+ * `<a target="_blank" rel="noreferrer">`, and neither was a Flex. An
+ * internal or computed href went to the app's router Link, which the codemod
+ * cannot name, and a spread may carry either: those are reported with a
+ * local replacement to paste. The import goes once no use is left.
+ */
+export function transformElementType(src) {
+  const hits = [];
+  const warnings = [];
+  const bindings = importBindings(src);
+  const locals = [...bindings].filter(([, b]) => b.canonical === "ElementType" && isCoreSource(b.source)).map(([l]) => l);
+  if (!locals.length) return { out: src, hits, warnings };
+  const edits = [];
+  let flex = false;
+  const elements = elementsOf(src);
+  for (const local of locals) {
+    for (const el of elements.filter((e) => e.name === local)) {
+      const attrs = attributesOf(src, el.nameEnd, el.openEnd - 1);
+      const opening = src.slice(el.at, el.openEnd);
+      const has = (n) => attrs.find((a) => a.name === n);
+      const href = has("href");
+      const type = has("type");
+      const typeValue = type ? literal(type.value) : null;
+      const hrefValue = href ? literal(href.value) : null;
+      const report = (why) =>
+        warnings.push(located(`<${local}>: ${why}, so it is left for you; replace it with the local Interactive of this file's ElementType note`, src, el.at));
+      if (/\{\s*\.\.\./.test(opening)) {
+        report("a spread may carry an href, an onClick or a type");
+        continue;
+      }
+      if (el.end < 0) {
+        report("its closing tag was not found");
+        continue;
+      }
+      let tag;
+      const extra = [];
+      const drop = [];
+      if (!href) {
+        if (has("onClick") || typeValue === "button" || typeValue === "submit" || typeValue === "reset") {
+          tag = "button";
+          if (!type) extra.push('type="button"');
+        } else if (type) {
+          report("its type cannot be read");
+          continue;
+        } else {
+          tag = "Flex";
+          flex = true;
+        }
+        if (has("onLinkClick")) drop.push(has("onLinkClick"));
+      } else if (hrefValue && /^https?:\/\//.test(hrefValue)) {
+        tag = "a";
+        if (!has("target")) extra.push('target="_blank"');
+        if (!has("rel")) extra.push('rel="noreferrer"');
+        if (type) drop.push(type);
+        const linkClick = has("onLinkClick");
+        if (linkClick && has("onClick")) {
+          report("it has both onClick and onLinkClick");
+          continue;
+        }
+        if (linkClick) edits.push({ at: linkClick.at, end: linkClick.at + "onLinkClick".length, text: "onClick" });
+      } else {
+        report(hrefValue ? "an internal href rendered your router's Link" : "its href is computed (a router Link, an <a> or nothing)");
+        continue;
+      }
+      for (const a of drop) edits.push({ at: withLeadingSpace(src, a.at), end: a.end, text: "" });
+      const gap = attributeGap(src, el.nameEnd);
+      edits.push({ at: el.at + 1, end: el.nameEnd, text: extra.length ? `${tag}${gap}${extra.join(gap)}` : tag });
+      if (src[el.end - 2] !== "/") {
+        const close = src.lastIndexOf(`</${local}`, el.end);
+        if (close > el.at) edits.push({ at: close + 2, end: close + 2 + local.length, text: tag });
+      }
+      hits.push(`<${local}> → <${tag}${extra.length ? ` ${extra.join(" ")}` : ""}> (what 2.x's ElementType rendered here)`);
+    }
+  }
+  let out = src;
+  for (const e of edits.sort((a, b) => b.at - a.at)) out = out.slice(0, e.at) + e.text + out.slice(e.end);
+  if (out === src) return { out, hits, warnings };
+  for (const local of locals) {
+    const rest = codeOnly(out, { jsxText: true }).replace(/import\s+(?:type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, "");
+    if (!new RegExp(`(?<![\\w$.])${local}(?![\\w$])`).test(rest)) out = removeFromCoreImport(out, local);
+  }
+  if (flex && !importBindings(out).has("Flex")) out = addToCoreImport(out, ["Flex"]) ?? out;
+  return { out, hits, warnings };
+}
+
+/**
+ * F7: `dev` (2.x's development-only logger) is internal in 3.0. When the app
+ * has a module of its own exporting `dev` (found by the CLI: one file with
+ * `export const dev`), the import is pointed there; otherwise it is reported
+ * with the logger to paste.
+ */
+export function rewriteDevImport(src, file, devLogger) {
+  const none = { out: src, hits: [], warnings: [] };
+  if (!file || !devLogger || path.resolve(file) === path.resolve(devLogger)) return none;
+  const bound = importBindings(src).get("dev");
+  if (!bound || bound.canonical !== "dev" || !isCoreSource(bound.source)) return none;
+  let rel = path.relative(path.dirname(file), devLogger).replace(/\\/g, "/").replace(/\.(tsx?|jsx?|mjs)$/, "").replace(/\/index$/, "");
+  if (!rel.startsWith(".")) rel = `./${rel}`;
+  const removed = removeFromCoreImport(src, "dev");
+  if (removed === src) return none;
+  const q = /from\s*(["'])@once-ui-system\/core/.exec(src)?.[1] ?? '"';
+  const semi = /from\s*["']@once-ui-system\/core[^"']*["'];/.test(src) ? ";" : "";
+  // Where the core import was (or the first import left).
+  const at = src.search(/^import\s[^;]*?from\s*["']@once-ui-system\/core/m);
+  const line = `import { dev } from ${q}${rel}${q}${semi}\n`;
+  const out = removed.slice(0, at) + line + removed.slice(at);
+  return { out, hits: [`dev → the app's own logger (${rel})`], warnings: [] };
+}
 
 /** Exports 3.0 removed whose element is a pure wrapper: its tags become a fragment. F7. */
 const UNWRAPPED_EXPORTS = new Set(["DialogProvider"]);
@@ -526,7 +757,14 @@ function rewriteParticleSpeed(src, speed, imported, edits, warn) {
   const expr = raw.startsWith("{") ? raw.slice(1, -1).trim() : raw;
   const found = raw.startsWith("{") ? literalNumbers(expr) : { opaque: true };
   if (found.opaque || !found.spans.length) {
-    warn(`${PARTICLE_SPEED}; write speed={${/^[\w.]+$/.test(expr) ? expr : `(${expr})`} / 0.3}`);
+    const divided = `${/^[\w.]+$/.test(expr) ? expr : `(${expr})`} / 0.3`;
+    // Always a number where it comes from: dividing it is exact.
+    const valueAt = raw.startsWith("{") ? src.indexOf(raw, speed.at) + 1 + raw.slice(1).indexOf(expr) : -1;
+    if (imported && valueAt > 0 && unitCtx && numberKind(unitCtx, valueAt, valueAt + expr.length).kind === "num") {
+      edits.push({ at: valueAt, end: valueAt + expr.length, text: divided, hit: "<ParticleFx> speed={…}: ÷ 0.3 (a multiplier of 3.0's default)" });
+      return;
+    }
+    warn(`${PARTICLE_SPEED}; write speed={${divided}}`);
     return;
   }
   if (!imported) {
@@ -660,7 +898,7 @@ function namesFor(tag, bindings, isCore) {
   const aliases = [];
   for (const [local, { source, canonical }] of bindings) if (canonical === tag && isCore(source)) aliases.push(local);
   if (aliases.length) return aliases;
-  return bindings.has(tag) ? [] : [tag];
+  return bindings.has(tag) || bindings.declared?.has(tag) ? [] : [tag];
 }
 
 /**
@@ -891,6 +1129,32 @@ export function warnLocalSizes(src, { isCore = isCoreSource, file = null } = {})
     const end = openingTagEnd(src, from);
     if (end < 0) continue;
     for (const a of attributesOf(src, from, end)) {
+      // G5 through a wrapper: Text no longer takes `size`, and a wrapper typed
+      // as Text's props that spreads them onto a Text hands it straight on.
+      const textSize = a.name === "size" && /^(xs|s|m|l|xl)$/.test(literal(a.value) ?? "") && literal(a.value);
+      if (textSize) {
+        const defined = bound ? file && resolveOwn(file, bound.source) : file;
+        const byDefault = new RegExp(`import\\s+${name}\\s*(,|from)`).test(src);
+        const target =
+          !byDefault &&
+          forwardsProp({
+            file: defined || null,
+            text: bound ? (defined ? readSource(defined) : null) : src,
+            name: bound ? bound.canonical : name,
+            prop: "size",
+            isRem: (canonical, prop) => prop === "size" && (canonical === "Text" || canonical === "Heading"),
+          });
+        if (target)
+          warnings.push(
+            located(
+              `<${name}> size="${textSize}": ${name} passes size on to a ${target}, which takes no size in 3.0 (2.x wrote the class font-${textSize}); ` +
+                `write className="font-${textSize}" here${target === "Heading" ? " (on a Heading it set a size only under a parent with a font family)" : ""}, or a textVariant`,
+              src,
+              a.at,
+            ),
+          );
+        continue;
+      }
       if (!REM_PROPS.has(a.name) || a.value === null || !/^\{\s*-?\d/.test(String(a.value))) continue;
       const n = String(a.value).slice(1, -1).trim();
       if (!/^-?\d+(\.\d+)?$/.test(n) || Number(n) === 0) continue;
@@ -1081,7 +1345,10 @@ export function transformUnits(src, { isCore = isCoreSource, file = null } = {})
           } else {
             edits.push({ at: speed.at, end: speed.at + "speed".length, text: rename.to, hit: `<${tag}> speed → ${rename.to}` });
             const expr = raw.startsWith("{") ? raw.slice(1, -1).trim() : raw;
-            if (rename.keywords && !NUMBER.test(expr))
+            // A same-file const holding a number of 50 or more was already milliseconds in 2.x.
+            const known = /^[\w$.]+$/.test(expr) ? constValue(expr) : null;
+            const numeric = known && !known.string && typeof known.number === "number" && known.number >= SECONDS_BELOW;
+            if (rename.keywords && !NUMBER.test(expr) && !numeric)
               warn(`${rename.to}={${expr}}: milliseconds now; a 2.x keyword was "fast" 1000, "medium" 2000, "slow" 3000`);
           }
         }
@@ -1252,7 +1519,10 @@ function rewriteButton(src, attrs, tag, push, warn) {
           push({ at: span.at + s.at, end: span.at + s.end, text: `${s.q}ghost${s.q}`, hit: 'variant "quaternary" → "ghost"' });
       }
       const tones = stringLiterals(expr).filter((s) => BUTTON_TONES.has(s.value));
-      if (tones.length || !stringLiterals(expr).length)
+      // A name declared as a union of literals none of which changed: nothing to check.
+      const declared = !stringLiterals(expr).length ? declaredLiterals(src, expr) : null;
+      const unchanged = declared && declared.every((v) => !BUTTON_TONES.has(v) && v !== "quaternary");
+      if (!unchanged && (tones.length || !stringLiterals(expr).length))
         warn(
           `variant={${expr}}: danger, success and warning are a tone in 3.0 (variant="primary" tone="danger"), and quaternary is ghost; check what it can hold`,
         );
@@ -1498,7 +1768,34 @@ function walkData(src, at, end, ctx, found, param = null) {
     const fn = args[0] && /^(?:async\s+)?(?:\(\s*(?:([A-Za-z_$][\w$]*)|(\{[^{}]*\}|\[[^[\]]*\]))?\s*(?::[^,)]*)?(?:,[^)]*)?\)|([A-Za-z_$][\w$]*))\s*(?::[^=]*)?=>\s*/.exec(src.slice(args[0].at, args[0].end));
     if (!fn) return false;
     const bodyAt = args[0].at + fn[0].length;
-    if (src[bodyAt] === "{") return false; // a block body: its return cannot be followed
+    if (src[bodyAt] === "{") {
+      // `useMemo(() => { …; return [ … ]; })`: the block's own returns, when
+      // no nested block or function returns too (an `if` may return else).
+      if (!/^(?:React\.)?useMemo\s*(?:<[\s\S]*>)?$/.test(callee)) return false;
+      const close = closing(src, bodyAt);
+      if (close < 0) return false;
+      const returns = [];
+      let depth = 0;
+      for (let i = bodyAt; i < close; i++) {
+        const past = skipLexeme(src, i);
+        if (past !== i) {
+          i = past - 1;
+          continue;
+        }
+        const ch = src[i];
+        if ("([{".includes(ch)) depth++;
+        else if (")]}".includes(ch)) depth--;
+        else if (/^return\b/.test(src.slice(i, i + 7)) && !/[\w$.]/.test(src[i - 1])) {
+          if (depth !== 1) return false;
+          returns.push(i + "return".length);
+        }
+      }
+      if (!returns.length) return false;
+      return returns.every((r) => {
+        const stop = topLevel(src, r, close, (i) => src[i] === ";" || (src[i] === "\n" && /^\n\s*(?:const|let|var|if|for|return|\}|$)/.test(src.slice(i))));
+        return walkData(src, r, stop < 0 ? close : stop, ctx, found, null);
+      });
+    }
     const p = fn[1] ?? fn[3] ?? null;
     // `({ label }, i) =>`: what it takes out of the item is the app's own data, so the array mapped is not renamed.
     const destructured = Boolean(fn[2]);
@@ -1676,7 +1973,8 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
           // An alias keeps its local name; the import names Tag.
           if (name === tag) edits.push({ at: m.index + 1, end: from, text: "Tag", hit: `<${tag}> → <Tag>` });
           const added = spec.add(attrs);
-          if (added.length) edits.push({ at: from, end: from, text: ` ${added.join(" ")}`, hit: `<${tag}> + ${added.join(" ")}` });
+          const gap = attributeGap(out, from);
+          if (added.length) edits.push({ at: from, end: from, text: `${gap}${added.join(gap)}`, hit: `<${tag}> + ${added.join(" ")}` });
           for (const a of attrs) {
             const to = spec.props[a.name];
             if (!to) continue;
@@ -1932,7 +2230,7 @@ function applyEdits(src, edits, hits) {
  * that moved to a package (RevealFx → fx, StylePanel → blocks) is imported
  * from it by name, since the namespace no longer holds it.
  */
-export function transform(src, { file = null } = {}) {
+export function transform(src, { file = null, devLogger = null, strings = true } = {}) {
   const namespaces = [
     ...src.matchAll(/(?<![\w$.])import\s+\*\s+as\s+([\w$]+)\s+from\s*(["'])@once-ui-system\/core\2/g),
   ].map((m) => m[1]);
@@ -1945,14 +2243,14 @@ export function transform(src, { file = null } = {}) {
       return `${open}${ns}__${name}`;
     });
   }
-  if (!used.size) return transformFile(src, { file });
+  if (!used.size) return transformFile(src, { file, devLogger, strings });
   // After the last import, so a pass that adds a name to "the" core import finds the file's own first.
   const imports = [...text.matchAll(/^import[^;]*?from\s*["'][^"']+["'];?[ \t]*$/gm)];
   const last = imports.at(-1);
   const at = last ? last.index + last[0].length : 0;
   const synthetic = `\nimport { ${[...used].map(([local, { name }]) => `${name} as ${local}`).join(", ")} } from "@once-ui-system/core";`;
   text = text.slice(0, at) + synthetic + text.slice(at);
-  const result = transformFile(text, { file });
+  const result = transformFile(text, { file, devLogger, strings });
   let out = result.out;
   const bound = new Set([...importBindings(out).keys()]);
   const extra = [];
@@ -1996,7 +2294,7 @@ export function transform(src, { file = null } = {}) {
   return { out, hits, warnings };
 }
 
-function transformFile(src, { file = null } = {}) {
+function transformFile(src, { file = null, devLogger = null, strings = true } = {}) {
   const hits = [];
   // Reports as { text, line }: a line is in the text the pass read, and is
   // carried on through each later pass's rewrite to the file written.
@@ -2013,6 +2311,8 @@ function transformFile(src, { file = null } = {}) {
   };
   // E/F3 first: Badge and Chip become Tag before the passes below read Tag.
   run(transformTone(out), out);
+  run(transformElementType(out), out);
+  run(rewriteDevImport(out, file, devLogger), out);
   run(rewriteExports(out), out);
   run(transformRenames(out), out);
   // D2–D5, after the renames above (it reads the 3.0 prop names).
@@ -2032,9 +2332,68 @@ function transformFile(src, { file = null } = {}) {
   // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
   // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
   run(transformImports(out), out);
+  // Strings that generate Once UI source: reported, never rewritten.
+  if (strings && !/\.mdx$/.test(file ?? "")) run(reportCodeStrings(out), out);
   const warnings = reports.map((r) => (r.line === null ? r.text : `${r.text} (line ${r.line})`));
   return { out, hits, warnings };
 }
+
+/**
+ * Code that writes Once UI source into a string (a generator, a scaffold, a
+ * copy-to-clipboard sample built by concatenation): JSX in a string literal
+ * that the codemod would still change, run on its own, is reported. Template
+ * literals the passes above already migrated read as 3.0 and stay quiet.
+ */
+export function reportCodeStrings(src) {
+  const warnings = [];
+  const LITERAL = /"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'|`(?:[^`\\]|\\.)*`/g;
+  const code = src.replace(/\/\*[\s\S]*?\*\/|(^|[^:\\"'`])\/\/.*$/gm, (m) => m.replace(/[^\n]/g, " "));
+  for (const m of code.matchAll(LITERAL)) {
+    const raw = src.slice(m.index, m.index + m[0].length);
+    if (!/<[A-Z][\w$]*(?:\.[A-Z][\w$]*)?[\s/>]/.test(raw)) continue;
+    // A JSX attribute's own string (`label="<Tag>"`) is text, not source.
+    if (/=\s*$/.test(src.slice(Math.max(0, m.index - 3), m.index)) && raw[0] !== "`") continue;
+    const text = raw[0] === "`" ? raw.slice(1, -1) : raw.slice(1, -1).replace(/\\(["'\\])/g, "$1");
+    let r;
+    try {
+      r = transform(text, { strings: false });
+    } catch {
+      continue;
+    }
+    if (r.out !== text && r.hits.length) {
+      warnings.push(
+        located(
+          `a string holds 2.x Once UI source (${[...new Set(r.hits)].join("; ")}); if code is generated from it, update it to the 3.0 text`,
+          src,
+          m.index,
+        ),
+      );
+      continue;
+    }
+    // An attribute the generator fills in (`variant="${v}"`, `width={${w}}`):
+    // what it writes cannot be read, and these props changed meaning in 3.0.
+    const filled = [...text.matchAll(/<([A-Z][\w$.]*)[^<>]*?\s([a-zA-Z]+)=(?:"\$\{|\{\$\{|\{\s*`?\$\{)/g)]
+      .filter((x) => GENERATED_PROPS.has(x[2]))
+      .map((x) => `<${x[1]}> ${x[2]}`);
+    if (filled.length)
+      warnings.push(
+        located(
+          `a string generates Once UI source with ${[...new Set(filled)].join(", ")} filled in by code; these changed in 3.0 (a variant tone is tone, a number is px not rem, handlers are onXChange): check what the generator writes`,
+          src,
+          m.index,
+        ),
+      );
+  }
+  return { out: src, hits: [], warnings };
+}
+
+/** Props whose 2.x values mean something else in 3.0, for generated source. */
+const GENERATED_PROPS = new Set([
+  "variant", "scheme", "color", "size", "speed", "onChange", "onToggle", "onSelect",
+  "width", "height", "maxWidth", "minWidth", "maxHeight", "minHeight", "gap",
+  "padding", "paddingX", "paddingY", "paddingTop", "paddingRight", "paddingBottom", "paddingLeft",
+  "margin", "marginX", "marginY", "marginTop", "marginRight", "marginBottom", "marginLeft",
+]);
 
 /** A5, C: the plain prop renames of TRANSFORMS, the REWRITES, and the FLAGGED reports. */
 function transformRenames(src) {
@@ -2055,7 +2414,17 @@ function transformRenames(src) {
         const attrs = attributesOf(out, m.index + name.length + 1, end);
         for (const a of attrs) {
           const note = FLAGGED[tag]?.[a.name];
-          if (note) warnings.push(located(`<${tag}> ${a.name}: ${note}`, out, a.at));
+          if (note && !flagNeedless(out, tag, a, attrs)) warnings.push(located(`<${tag}> ${a.name}: ${note}`, out, a.at));
+          const range = DATE_FIELDS.has(tag) && (a.name === "onChange" || a.name === "onValueChange") ? rangeAnnotation(out, a) : null;
+          if (range)
+            warnings.push(
+              located(
+                `<${tag}> ${a.name}: the handler's parameter is typed ${range}; 3.0 passes a DateRange, whose startDate and endDate are unset until picked. ` +
+                  'Type it DateRange (import { type DateRange } from "@once-ui-system/core") and check each date before using it',
+                out,
+                a.at,
+              ),
+            );
           const to = map[a.name];
           if (!to) continue;
           if (attrs.some((b) => b.name === to)) {
@@ -2102,6 +2471,33 @@ export { MOVED_IMPORTS, transformImports } from "./codemod-3.0-imports.mjs";
 // Keep `literal` reachable for passes that read scale values (later rows).
 export { literal, objectEntries };
 
+/**
+ * F8, F10: the packages this run made the app import, each with the files
+ * that import it, so an app that generates other apps (one dependency list
+ * per template or surface) can tell which lists need it.
+ */
+export function dependencyNote(install, dir = ".") {
+  const lines = [...install].map(([name, list]) => {
+    const rel = [...new Set(list)].map((f) => path.relative(dir, f) || f).sort();
+    const shown = rel.length > 12 ? [...rel.slice(0, 12), `… ${rel.length - 12} more`] : rel;
+    return `   ${name}: ${shown.join(", ")}`;
+  });
+  return (
+    "Now imported, so add to your dependencies (imported by):\n" +
+    `${lines.join("\n")}\n` +
+    "   If the app generates other apps, add each package to the dependency list of every template that ships one of those files."
+  );
+}
+
+/** The closing hint: the codemod keeps each rewrite on its line, so long lines are the formatter's to re-wrap. */
+export function formatNote(files, dir = ".") {
+  const n = files.length;
+  return (
+    `Run your formatter on the ${n} changed file${n === 1 ? "" : "s"} (npx biome format --write, or npx prettier --write): ` +
+    "each rewrite stays on the line it was on, so a line that grew past the print width, and an import list a name left or joined, is re-wrapped there."
+  );
+}
+
 const invokedDirectly =
   process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (invokedDirectly) {
@@ -2112,12 +2508,14 @@ if (invokedDirectly) {
   }
   const dry = flags.includes("--dry");
   const files = [];
+  const jsonFiles = [];
   (function walk(d) {
     for (const e of fs.readdirSync(d, { withFileTypes: true })) {
       if (e.name === "node_modules" || e.name === ".next" || e.name === ".git" || e.name === "dist") continue;
       const p = path.join(d, e.name);
       if (e.isDirectory()) walk(p);
       else if (/\.(tsx|jsx|mdx|ts|js|mjs)$/.test(e.name) && !e.name.endsWith(".d.ts")) files.push(p);
+      else if (e.name.endsWith(".json") && !/^(package-lock|tsconfig.*|jsconfig)\.json$/.test(e.name)) jsonFiles.push(p);
     }
   })(dir);
 
@@ -2128,15 +2526,23 @@ if (invokedDirectly) {
     process.exit(1);
   }
 
+  // The app's own development logger, when exactly one module exports `dev`.
+  const loggers = files.filter((f) => {
+    const text = fs.readFileSync(f, "utf8");
+    return !/@once-ui-system\/core/.test(text) && /\bexport\s+const\s+dev\s*[:=]|\bexport\s*\{[^}]*\bdev\b[^}]*\}(?!\s*from)/.test(text);
+  });
+  const devLogger = loggers.length === 1 ? loggers[0] : null;
+
   let total = 0;
   let touched = 0;
   let flagged = 0;
-  const install = new Set();
-  for (const f of files) {
-    const src = fs.readFileSync(f, "utf8");
-    const { out, hits, warnings } = transform(src, { file: f });
-    for (const name of packagesAdded(src, out)) install.add(name);
-    if (!hits.length && !warnings.length) continue;
+  // Package → the files that now import it, so a generator's per-template
+  // dependency lists can be updated from it.
+  const install = new Map();
+  // What this run rewrote, for the JSON strings that copy it.
+  const rewritten = [];
+  const changedFiles = [];
+  const report = (f, out, hits, warnings) => {
     console.log(f);
     // One line per site, each with the line it is on, so none is fixed and its twin missed.
     for (const w of [...new Set(warnings)]) {
@@ -2148,8 +2554,25 @@ if (invokedDirectly) {
     if (hits.length) {
       touched++;
       total += hits.length;
+      changedFiles.push(f);
       if (!dry) fs.writeFileSync(f, out);
     }
+  };
+  for (const f of files) {
+    const src = fs.readFileSync(f, "utf8");
+    const { out, hits, warnings } = transform(src, { file: f, devLogger });
+    for (const name of packagesAdded(src, out)) install.set(name, [...(install.get(name) ?? []), f]);
+    if (out !== src) rewritten.push({ src, out });
+    if (!hits.length && !warnings.length) continue;
+    report(f, out, hits, warnings);
+  }
+  // 2.x JSX copied into JSON strings (a scaffolder's anchors, templates).
+  for (const f of jsonFiles) {
+    if (fs.statSync(f).size > 4e6) continue;
+    const src = fs.readFileSync(f, "utf8");
+    const { out, hits, warnings } = transformJsonStrings(src, { transform: (s) => transform(s), rewritten });
+    if (!hits.length && !warnings.length) continue;
+    report(f, out, hits, warnings);
   }
   console.log(
     `\n${total} change${total === 1 ? "" : "s"} across ${touched} file${touched === 1 ? "" : "s"}` +
@@ -2157,5 +2580,7 @@ if (invokedDirectly) {
       (dry ? " (dry run)" : ""),
   );
   // F8, F10: the effects and the blocks are packages of their own now.
-  if (install.size) console.log(`Now imported, so add to your dependencies: ${[...install].join(", ")}`);
+  if (install.size) console.log(dependencyNote(install, dir));
+  // Each rewrite keeps the line it was on: a formatter re-wraps what grew.
+  if (touched && !dry) console.log(formatNote(changedFiles, dir));
 }

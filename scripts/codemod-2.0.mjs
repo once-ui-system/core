@@ -473,6 +473,13 @@ export function importBindings(src) {
       bindings.set(name, { source, canonical: name });
     }
   }
+  // Components the file declares itself (`const InfoTip = …`, `function
+  // Button()`): not Once UI's, even with no import of that name. Template
+  // literals (code samples) are skipped: a declaration there is sample text.
+  const code = src.replace(/`(?:\\.|[^`\\])*`/g, "``");
+  bindings.declared = new Set(
+    [...code.matchAll(/(?<![\w$.])(?:const|let|var|function|class)\s+([A-Z][\w$]*)(?![\w$])/g)].map((d) => d[1]),
+  );
   return bindings;
 }
 
@@ -492,7 +499,7 @@ export function localNamesFor(tag, bindings) {
   for (const [local, { source, canonical }] of bindings)
     if (canonical === tag && isCoreSource(source)) aliases.push(local);
   if (aliases.length) return aliases;
-  return bindings.has(tag) ? [] : [tag];
+  return bindings.has(tag) || bindings.declared?.has(tag) ? [] : [tag];
 }
 
 /**

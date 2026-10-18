@@ -123,6 +123,14 @@ const MOVED_TO = new Map(
 	Object.entries(MOVED_IMPORTS).flatMap(([target, names]) => names.map((name) => [name, target])),
 );
 
+/** What 2.x's root namespace held that 3.0 split off: local name → package or subpath. */
+const SPLIT_NAMESPACES = [
+	["fx", "@once-ui-system/fx"],
+	["blocks", "@once-ui-system/blocks"],
+	["media", "@once-ui-system/core/media"],
+	["emoji", "@once-ui-system/core/emoji"],
+];
+
 /** Subpaths 3.0 removed (B2). Everything they exported is on the root, or moved above. */
 export const REMOVED_SUBPATHS = [
 	"components",
@@ -341,10 +349,30 @@ export function transformImports(src) {
 		[...out.matchAll(new RegExp(`import\\s+\\*\\s+as\\s+([\\w$]+)\\s+from\\s*(["'])${escape(pkg)}\\2`, "g"))].map((m) => m[1]);
 	const listed = (names) =>
 		names.some((n) => new RegExp(`\\.\\.\\.\\s*${escape(n)}\\b(?!\\.)|Object\\.\\w+\\(\\s*${escape(n)}\\b(?!\\.)`).test(code));
-	const code = codeOnly(out);
+	let code = codeOnly(out);
 	const hasSplit = listed(nsOf("@once-ui-system/fx")) || listed(nsOf("@once-ui-system/blocks"));
 	for (const local of namespaces) {
 		if (hasSplit) break;
+		// Only spread (`{ ...core }`, an MDX scope): the packages 3.0 split off
+		// are spread beside it, which is the list 2.x's namespace was.
+		const spread = new RegExp(`\\.\\.\\.\\s*${escape(local)}\\b(?![.\\w$])`, "g");
+		const other = new RegExp(
+			`Object\\.(?:entries|keys|values|assign|fromEntries)\\(\\s*${escape(local)}\\b(?!\\.)|\\bfor\\s*\\(\\s*(?:const|let|var)\\s+[\\w$]+\\s+in\\s+${escape(local)}\\b(?!\\.)`,
+		);
+		const free = SPLIT_NAMESPACES.every(([n]) => !new RegExp(`(?<![\\w$.])${n}(?![\\w$])`).test(code));
+		const decl = new RegExp(`^([ \\t]*)import\\s+\\*\\s+as\\s+${escape(local)}\\s+from\\s*(["'])${escape(ROOT)}\\2(;?)[ \\t]*$`, "m").exec(out);
+		const spreads = [...code.matchAll(spread)];
+		if (spreads.length && !other.test(code) && free && decl) {
+			const at = [];
+			for (const m of spreads) at.push(m.index + m[0].length);
+			for (const i of at.reverse()) out = `${out.slice(0, i)}${SPLIT_NAMESPACES.map(([n]) => `, ...${n}`).join("")}${out.slice(i)}`;
+			const lines = SPLIT_NAMESPACES.map(([n, from]) => `${decl[1]}import * as ${n} from ${decl[2]}${from}${decl[2]}${decl[3]}`).join("\n");
+			const end = decl.index + decl[0].length;
+			out = `${out.slice(0, end)}\n${lines}${out.slice(end)}`;
+			hits.push(`{ ...${local} } → { ...${local}, ${SPLIT_NAMESPACES.map(([n]) => `...${n}`).join(", ")} } (what 2.x's namespace held)`);
+			code = codeOnly(out);
+			break;
+		}
 		const registry = new RegExp(
 			`Object\\.(?:entries|keys|values|assign|fromEntries)\\(\\s*(?:\\{\\s*)?(?:\\.\\.\\.)?${escape(local)}\\b(?!\\.)|\\.\\.\\.\\s*${escape(local)}\\b(?!\\.)|\\bfor\\s*\\(\\s*(?:const|let|var)\\s+[\\w$]+\\s+in\\s+${escape(local)}\\b(?!\\.)`,
 		);

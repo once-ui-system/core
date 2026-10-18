@@ -35,7 +35,11 @@ describe("exports that became internal", () => {
 
 	it("reports each one, with what to use instead, and leaves the code alone", () => {
 		for (const name of internal) {
-			const src = `import { Row, ${name} } from "@once-ui-system/core";\n<${name} />;\n`;
+			// A bare <ElementType /> rendered a Flex: that one is rewritten (round5 tests).
+			const src =
+				name === "ElementType"
+					? `import { Row, ${name} } from "@once-ui-system/core";\n<${name} {...p} />;\n`
+					: `import { Row, ${name} } from "@once-ui-system/core";\n<${name} />;\n`;
 			const { out, warnings } = run(src);
 			assert.equal(out, src, name);
 			const note = warnings.find((w) => w.startsWith(`${name}:`));

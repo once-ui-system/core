@@ -93,7 +93,8 @@ describe("DatePicker", () => {
   });
 
   it("flags open, which was an autofocus hint and not visibility", () => {
-    const src = `${core("DatePicker")}<DatePicker autoFocus open={isOpen} />`;
+    // Beside autoFocus it is the use the note says to keep, so that is quiet (round5).
+    const src = `${core("DatePicker")}<DatePicker open={isOpen} />`;
     const { out, warnings } = transform(src);
     assert.equal(out, src);
     assert.equal(warnings.length, 1);

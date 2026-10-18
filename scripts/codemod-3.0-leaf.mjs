@@ -134,6 +134,8 @@ const OPACITY = new Set(["0", "10", "20", "30", "40", "50", "60", "70", "80", "9
 
 /** Props equal to what the leaf already did in 2.x: dropping them renders the same. */
 const NO_OPS = { Kbd: ["fit", "inline"] };
+/** Values equal to the leaf's own, in 2.x and 3.0 alike (KbdCap's padding): dropping them renders the same. */
+const SAME_VALUES = { Kbd: { paddingX: "4", paddingY: "2" } };
 
 /** `LeafProps`: what every leaf takes. */
 export const LEAF_PROPS = new Set([
@@ -267,7 +269,7 @@ function namesFor(tag, bindings, isCore) {
 	for (const [local, { source, canonical }] of bindings)
 		if (canonical === tag && isCore(source)) aliases.push(local);
 	if (aliases.length) return aliases;
-	return bindings.has(tag) ? [] : [tag];
+	return bindings.has(tag) || bindings.declared?.has(tag) ? [] : [tag];
 }
 
 const unquote = (raw) => {
@@ -331,6 +333,27 @@ export function elementsOf(src) {
 }
 
 const remove = (src, a) => ({ at: withLeadingSpace(src, a.at), end: a.end });
+
+/** Size props a wrapper takes over from its only child. */
+const SIZES = new Set(["width", "maxWidth", "minWidth", "height", "maxHeight", "minHeight"]);
+
+/** Whether `el`'s parent is a layout component of this file that holds no other element and sets no size itself. */
+function soleChild(el, layoutOf, src) {
+	const parent = el.parent;
+	if (!parent || !layoutOf.has(parent.name) || parent.end < 0) return false;
+	const inner = src.slice(parent.openEnd, src.lastIndexOf("<", parent.end - 1));
+	const before = inner.slice(0, el.at - parent.openEnd).trim();
+	const after = inner.slice(el.end - parent.openEnd).trim();
+	if (before || after) return false;
+	return !attributesOf(src, parent.nameEnd, parent.openEnd - 1).some((a) => SIZES.has(a.name) || a.name.startsWith("fill") || a.name === "fit");
+}
+
+/** The outermost of the fragments `el` sits in (`el` itself when it is in none). */
+function topFragment(el) {
+	let top = el;
+	while (top.parent && (top.parent.name === "" || top.parent.name === "Fragment" || top.parent.name === "React.Fragment")) top = top.parent;
+	return top;
+}
 
 /** `{{ hide: true }}` → true, `{{ hide: false }}` → false, anything else → null. */
 function hideOnly(raw) {
@@ -469,6 +492,14 @@ function leafRound(src, isCore) {
 			dropped = dropped.filter((x) => x !== a);
 		}
 
+		for (const [name, value] of Object.entries(SAME_VALUES[tag] ?? {})) {
+			const a = dropped.find((x) => x.name === name);
+			if (!a || unquote(a.value) !== value) continue;
+			ops.push({ ...remove(src, a), text: "" });
+			done.push(`<${tag}> ${name}="${value}" removed (the ${tag}'s own padding)`);
+			dropped = dropped.filter((x) => x !== a);
+		}
+
 		// A literal zIndex, opacity or textVariant whose 2.x class 3.0 still has.
 		const classes = [];
 		const classed = [];
@@ -598,7 +629,24 @@ function leafRound(src, isCore) {
 		const wrapperKind = textLike ? "Column" : "Row";
 		const suggestion = `wrap it in a ${wrapperKind} that carries them`;
 		if (stuck.length) {
-			finish(warn(`not taken by a leaf in 3.0; ${adviceFor(tag, stuck, suggestion)}`));
+			// A padding string that is no spacing token: 2.x wrote a class of
+			// that name (px-1rem), which does not exist, so the side had none.
+			const dead = stuck.filter((a) => PADDING.has(a.name) && unquote(a.value) !== null && !/^\d+$/.test(unquote(a.value)));
+			// Kbd's root was a 2.x Flex its props were spread onto (after its own padding).
+			if (tag === "Kbd" && dead.length === stuck.length) {
+				const sides = (a) =>
+					({ padding: ["padding"], paddingX: ["paddingLeft", "paddingRight"], paddingY: ["paddingTop", "paddingBottom"] })[a.name] ?? [a.name];
+				const zero = dead.flatMap((a) => sides(a).map((k) => `${k}: 0`)).join(", ");
+				const meant = dead.flatMap((a) => sides(a).map((k) => `${k}: "${unquote(a.value)}"`)).join(", ");
+				finish(
+					warn(
+						`not a spacing token: 2.x wrote the class ${dead.map((a) => `${{ padding: "p", paddingX: "px", paddingY: "py", paddingTop: "pt", paddingRight: "pr", paddingBottom: "pb", paddingLeft: "pl" }[a.name]}-${unquote(a.value)}`).join(", ")}, which does not exist, so that padding was 0` +
+							` (it replaced the Kbd's own). To keep the 2.x look write style={{ ${zero} }}; for the size it names, style={{ ${meant} }}`,
+					),
+				);
+				continue;
+			}
+			finish(warn(`not taken by a leaf in 3.0; ${adviceFor(tag, stuck, suggestion)}${soleChild(el, layoutOf, src) && stuck.some((a) => SIZES.has(a.name)) ? `; its parent ${el.parent.name} holds only it, so moving the sizes onto that ${el.parent.name} is likely what you want` : ""}`));
 			continue;
 		}
 		const styling = dropped.some((a) => a.name !== "hide" && !BREAKPOINTS.includes(a.name));
@@ -607,11 +655,17 @@ function leafRound(src, isCore) {
 		// value (`trigger={<NavIcon hide m={{ hide: false }} />}`, the stock
 		// Once UI header): the slot holds whatever it is given, so a Row shown
 		// and hidden with them is exact there, whatever the parent.
-		const visibility =
-			!styling &&
-			!spread &&
-			!el.parent &&
-			elements.some((e) => e !== el && e.nameEnd <= el.at && el.at < e.openEnd);
+		// The same inside fragments (`<>…<NavIcon hide m={{ hide: false }} />…</>`),
+		// which render no box: what holds the wrapper is the fragment's own
+		// place, a layout component in this file or a JSX prop's slot.
+		let outer = el.parent;
+		while (outer && (outer.name === "" || outer.name === "Fragment" || outer.name === "React.Fragment")) outer = outer.parent;
+		const inSlot = (e) => elements.some((x) => x !== e && x.nameEnd <= e.at && e.at < x.openEnd);
+		const viaFragment =
+			outer !== el.parent &&
+			!attrs.some((a) => a.name === "flex" || OFFSETS.includes(a.name)) &&
+			(outer ? layoutOf.has(outer.name) : inSlot(topFragment(el)));
+		const visibility = !styling && !spread && ((!el.parent && inSlot(el)) || viaFragment);
 		const translated = placed && dropped.some((a) => PLACEMENT.has(a.name));
 		let why = visibility
 			? el.end < 0
@@ -632,7 +686,12 @@ function leafRound(src, isCore) {
 			why = "a padding value is not a token or a CSS length";
 		}
 		if (why) {
-			finish(warn(`not taken by a leaf in 3.0; ${suggestion} (${why})`));
+			// Only `hide` and `{ hide }` breakpoints: the wrapper to paste.
+			const paste =
+				!styling && !spread
+					? `: <Row ${dropped.map((a) => src.slice(a.at, a.end)).join(" ")}><${el.name} …/></Row>`
+					: "";
+			finish(warn(`not taken by a leaf in 3.0; ${suggestion}${paste} (${why})`));
 			continue;
 		}
 

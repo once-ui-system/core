@@ -51,6 +51,13 @@ export function addToCoreImport(src, names) {
 }
 
 /**
+ * What JSX text never holds and code after a closing brace does: a line that
+ * starts a statement (`}\nconst A: React.FC<P>` is not prose before `<P>`).
+ */
+export const STATEMENT =
+	/\n[ \t]*(?:export|const|let|var|function|type|interface|import|class|return|declare|enum|async)\b/;
+
+/**
  * `src` with comments and string contents blanked (lengths kept), and with
  * JSX text too when `jsxText` is set: what is left are the names code uses.
  */
@@ -60,7 +67,7 @@ export function codeOnly(src, { jsxText = false } = {}) {
 	if (jsxText)
 		out = out.replace(
 			/((?<!=)>|\})((?:[^<>{}();=&]|&#?\w+;)*[A-Za-z](?:[^<>{}();=&]|&#?\w+;)*)(?=<\/?[A-Za-z])/g,
-			(m, open, text) => `${open}${blank(text)}`,
+			(m, open, text) => (STATEMENT.test(text) ? m : `${open}${blank(text)}`),
 		);
 	return out.replace(/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/g, (m) => m[0] + blank(m.slice(1, -1)) + m[0]);
 }
@@ -82,6 +89,22 @@ export function removeFromCoreImport(src, local) {
 		if (!keep.length) return "";
 		return `${indent}import ${typeKw ?? ""}${braceList(keep, clause, indent)} from ${q}${source}${q}${semi}${nl}`;
 	});
+}
+
+/**
+ * What goes before an attribute inserted at `at` (just after a tag's name,
+ * or just after an attribute): a space when the attributes share a line, or
+ * a line break and the indentation of the attribute that follows (or that
+ * precedes, after the last one) when they are written one per line.
+ */
+export function attributeGap(src, at) {
+	const next = /^[ \t]*\r?\n([ \t]*)(?=[A-Za-z{])/.exec(src.slice(at));
+	if (next) return `\n${next[1]}`;
+	const lineStart = src.lastIndexOf("\n", at - 1);
+	const before = /\n([ \t]*)[A-Za-z][^\n]*$/.exec(src.slice(lineStart < 0 ? 0 : lineStart, at));
+	const tagLine = /<[A-Za-z]/.test(src.slice(lineStart + 1, at));
+	if (before && !tagLine) return `\n${before[1]}`;
+	return " ";
 }
 
 /** The 1-based line of offset `at` in `src`. */

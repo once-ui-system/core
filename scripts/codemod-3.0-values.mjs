@@ -17,7 +17,7 @@
  * `unknown`, and the caller keeps reporting it instead of rewriting.
  */
 import { importBindings } from "./codemod-2.0.mjs";
-import { codeOnly } from "./codemod-3.0-format.mjs";
+import { STATEMENT, codeOnly } from "./codemod-3.0-format.mjs";
 import { readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { closing, objectEntries, partsBetween, skipLexeme, trimmed } from "./codemod-3.0-scan.mjs";
 
@@ -37,7 +37,7 @@ export function contextFor(file, src) {
 	// kept), so every offset still points into `src`.
 	const text = src.replace(
 		/((?<!=)>|\})((?:[^<>{}();=&]|&#?\w+;)*[A-Za-z](?:[^<>{}();=&]|&#?\w+;)*)(?=<\/?[A-Za-z])/g,
-		(m, open, prose) => `${open}${prose.replace(/[^\n]/g, " ")}`,
+		(m, open, prose) => (STATEMENT.test(prose) ? m : `${open}${prose.replace(/[^\n]/g, " ")}`),
 	);
 	const ctx = { file, src: text, code: codeOnly(text), imports: importBindings(src), memo: new Map(), scopes: null };
 	ctx.original = src;
@@ -501,11 +501,21 @@ function destructured(ctx, name, depth) {
 
 /** The value of `const name = …` declared at `at`, or unknown when the file writes to it. */
 function constValue(ctx, name, at, depth) {
-	const head = new RegExp(`const\\s+${name.replace(/\$/g, "\\$")}\\s*(?::\\s*([^=;]+?))?\\s*=(?![=>])\\s*`, "y");
+	const head = new RegExp(`const\\s+${name.replace(/\$/g, "\\$")}\\s*`, "y");
 	head.lastIndex = at;
-	const h = head.exec(ctx.src);
-	if (!h) return [unknown(`${name} could not be read`)];
-	const initAt = h.index + h[0].length;
+	const found = head.exec(ctx.src);
+	if (!found) return [unknown(`${name} could not be read`)];
+	// The annotation, read to its end (an object type holds `;` and `=>`).
+	let p = found.index + found[0].length;
+	const annotated = ctx.src[p] === ":";
+	if (annotated) {
+		p = typeEnd(ctx.src, p + 1);
+		while (ctx.src.startsWith("=>", p)) p = typeEnd(ctx.src, p + 2);
+	}
+	const eq = /^\s*=(?![=>])\s*/.exec(ctx.src.slice(p));
+	if (!eq) return [unknown(`${name} could not be read`)];
+	const h = [null, annotated];
+	const initAt = p + eq[0].length;
 	const initEnd = statementEnd(ctx.src, initAt);
 	const esc = name.replace(/\$/g, "\\$");
 	// A write to one of its members, or a mutating call, changes what it holds.
@@ -908,6 +918,12 @@ function typeAtoms(ctx, text, depth, at = 0) {
 	if (t === "undefined" || t === "null" || t === "void") return [atom("nil", ctx, at, at)];
 	if (t === "boolean" || t === "true" || t === "false") return [atom("bool", ctx, at, at)];
 	if (t.startsWith("{") && closing(t, 0) === t.length - 1) return [atom("tobj", ctx, at, at, { type: t })];
+	// `typeof RULER_H`: what that const of this file holds (`"24" as const`).
+	const typeOf = /^typeof\s+([A-Za-z_$][\w$]*)$/.exec(t);
+	if (typeOf) {
+		const decl = new RegExp(`(?<![\\w$.])const\\s+${typeOf[1].replace(/\$/g, "\\$")}(?![\\w$])`).exec(ctx.code);
+		if (decl) return constValue(ctx, typeOf[1], decl.index, depth + 1);
+	}
 	if (!IDENT.test(t)) return [unknown(`it is typed ${t.length > 40 ? `${t.slice(0, 40)}…` : t}`)];
 	const iface = new RegExp(`\\binterface\\s+${t}\\b[^{]*\\{`).exec(ctx.code);
 	if (iface) {

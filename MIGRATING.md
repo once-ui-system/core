@@ -42,13 +42,26 @@ already moved to 3.0 can still take the import step on its own
 (`scripts/codemod-3.0-imports.mjs`, § 12), which changes nothing else.
 
 It keeps the layout of what it edits (an import written one name per line
-stays that way, a closing tag on its own line stays there), but it writes
-the attributes it adds on one line: run your formatter afterwards (`biome
-check --write`, `prettier --write`). Code that generates Once UI source (a
-template string of JSX, a Figma or CMS mapper that emits props) is not
-migrated: update what it emits by hand. Neither is content kept outside the
-repo (MDX in a CMS or a database still using 2.x tag names and props): map the
-old tags in your MDX components, or migrate that content where it lives.
+stays that way, a closing tag on its own line stays there, an attribute it
+adds to an element written one attribute per line goes on a line of its own),
+but a rewrite stays on the line it was on, so a line can grow past your print
+width: run your formatter on the files it lists afterwards (`biome check
+--write`, `prettier --write`); the run ends by saying so. When it makes files
+import `@once-ui-system/fx` or `@once-ui-system/blocks`, the closing note
+lists each package with the files that import it: add the package to your
+dependencies, and if your app generates other apps, to the dependency list
+of every template that ships one of those files.
+
+Source kept as text is checked too. JSX in a template literal (a code
+sample) is migrated by name, like MDX. A JSON string that is a byte-exact
+copy of source the run rewrote (a scaffolder's find/replace anchor, a
+template) is rewritten to the migrated text; other JSON strings holding 2.x
+JSX are reported with what would change. A string that generates Once UI
+source with a prop filled in by code (`` `<Button variant="${v}">` ``) is
+reported, since what it writes cannot be read. Content kept outside the repo
+(MDX in a CMS or a database still using 2.x tag names and props) is not
+migrated: map the old tags in your MDX components, or migrate that content
+where it lives.
 
 ### 2. React 19
 
@@ -116,7 +129,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
 | Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
 | Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
-| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | renames `open` to `defaultOpen` where no `onToggle`/`onOpenChange` is set; reports it beside a spread or a `defaultOpen` |
+| Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | renames `open` to `defaultOpen` where no `onToggle`/`onOpenChange` is set; reports it beside a spread or a `defaultOpen`, and an `open={expr}` (2.x also followed the value when it changed later; control it with `onOpenChange` if it does) |
 | RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
 | Kbar, KbarContent `inputSize` | `size` | renames |
 
@@ -164,8 +177,16 @@ itself.
 | RevealFx `speed` (`"fast"`/`"medium"`/`"slow"` or ms) | `duration` in ms (1000/2000/3000) | rewrites |
 | ShineFx, CountFx `speed` (ms) | `duration` | renames |
 | TypeFx `speed` (ms per character) | `charDuration` | renames |
-| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | divides a literal by 0.3 to two decimals (`{0.6}` → `{2}`) and removes it when that is 1; reports an expression (`speed={config.speed / 0.3}`) and a literal in MDX |
+| ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | divides a literal by 0.3 to two decimals (`{0.6}` → `{2}`) and removes it when that is 1; an expression that is always a number becomes `{config.speed / 0.3}`; reports any other expression and a literal in MDX |
 | AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
+
+`Skeleton` takes its own lengths: `width`, `height` and their `min`/`max`
+are a number on the token scale, a static spacing token or a CSS length, and
+a t-shirt step (`width="m"`, which 1.x read as a percentage and Flex would
+read as a page-wide responsive width) is a type error. A 2.x
+`<Skeleton width={12} height={2.5}>` was rem, and the codemod writes it
+`width="12rem" height="2.5rem"`; `size` (the line's height or the circle's
+diameter) keeps its `xs`…`xl` scale.
 
 Not rewritten, because they were already px, which the token scale renders
 the same at the default root size and scaling: Dialog, DateInput and
@@ -236,13 +257,13 @@ instead, and changes the code only where the replacement is exact
 | `ServerFlex`, `ClientFlex` | `Flex`, which already picks its server or client half | reports |
 | `ServerGrid`, `ClientGrid` | `Grid`, likewise | reports |
 | `Cursor` | Flex's or Grid's `cursor` prop, given an element | reports |
-| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action, a plain `<button type="button">` for a bare one. A whole card that links is `Card href` (or, for a shape of your own, a small component that renders an `<a>` when there is an `href` and a `Row` when there is not, as `Book`'s `BookLink` does in `@once-ui-system/blocks`) | reports |
+| `ElementType` | `SmartLink` for a link, `Button` / `IconButton` for an action, a plain `<button type="button">` for a bare one. A whole card that links is `Card href` (or, for a shape of your own, a small component that renders an `<a>` when there is an `href` and a `Row` when there is not, as `Book`'s `BookLink` does in `@once-ui-system/blocks`). To keep 2.x's unstyled element as it was: `const Interactive = ({ href, ...rest }) => href ? <Link href={href} {...rest} /> : <button type="button" {...rest} />` (Link from `next/link` or your router) | rewrites what it rendered where that can be read: no `href` and an `onClick` or a literal `type` → `<button>` (`type="button"` added when none was set), an `http(s)` literal `href` → `<a target="_blank" rel="noreferrer">`, neither → `Flex`; reports an internal or computed `href` and a spread, with the `Interactive` above |
 | `InteractiveDetails`, `InteractiveDetailsProps` | `label` and `description` on Checkbox, RadioButton and Switch | reports |
 | `Toaster` | nothing: `ToastProvider` renders it; show toasts with `useToast()` | reports |
 | `ArrowNavigation`, `ArrowNavigationProps`, `useArrowNavigationContext`, `withArrowNavigation` | the `useArrowNavigation` hook on your own container: pass `containerRef`, call `handleKeyDown` from `onKeyDown` | reports |
 | `DialogProvider` | nothing: a `stack` Dialog makes the one beneath it inert by itself (the provider's state was never read) | drops the import, `<DialogProvider>` becomes `<>` |
 | `generateMetadata` | `createMetadata` (or `Meta.generate`, unchanged). The old name is Next's route-segment convention, so a page that re-exported it had it called by Next | renames the import and every call; keeps a re-export's public name and reports it |
-| `dev` | a `process.env.NODE_ENV` check of your own | reports |
+| `dev` | a logger of your own that logs only in development, as 2.x's did | imports `dev` from your app's own module when exactly one exports it (`export const dev = …`); otherwise reports, with the six lines to paste |
 | `getLastOpenedDropdown`, `setLastOpenedDropdown`, `clearLastOpenedDropdown` | nothing: dropdowns close each other | reports |
 | `MissingDependency` | nothing: the fallback a chart, CodeBlock or MediaUpload shows when its peer is missing | reports |
 | `escapeHtml`, `safeScriptJson`, `sanitizeHref` | a sanitiser of your own; `Schema`, `ThemeInit` and `SmartLink` keep using them | reports |
@@ -269,6 +290,7 @@ so `variant` never means typography.
 | Button, IconButton `color="brand-strong"` (it tinted only the icons) | `tone="brand"`, which colours the label and icons together | rewrites and reports, because the label changes colour |
 | Table `actions[].variant: "danger"` | `variant: "primary", tone: "danger"` | rewrites an inline array; reports one built elsewhere in the file |
 | Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames, also in each object a ternary passes to `addToast`; the `{ variant }` shorthand becomes `tone: variant`; reports an argument it cannot see |
+| Feedback `icon` written bare (MDX's `<Feedback icon>`): named no icon, and 2.x drew an empty gap | the tone's icon unless `icon` names another; a name the library lacks draws no box | reports it: remove it for the tone's icon, or `showIcon={false}` for none |
 | Tag, Pulse `scheme`; Tag `scheme="gradient"` | `tone`; `variant="gradient"` | rewrites |
 | Scrubber `tracks[].scheme`, `blocks[].scheme`; the `ScrubberTrack["scheme"]` and `ScrubberBlock["scheme"]` types | `tone` | rewrites an inline array, and one built in the file (a const used once, `.map(… => ({ … }))`, `useMemo`); reports the rest |
 | Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`); `TimelineItem["state"]` | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array, one built in the file as for Scrubber (a `.map` over any array, a ternary of states), and a `const items: TimelineItem[]` with its `.push`es; reports the rest. Items built in a `.map` are not checked by TypeScript (an object literal returned from a callback has no excess-property check), so a `state:` left behind compiles and is ignored: look for `state:` near Timeline data, or type the array `TimelineItem[]` |
@@ -466,7 +488,7 @@ changes until you set one; the default is the 2.x look.
 | --- | --- | --- |
 | `dark` / `light` (Flex, Row, Column, Grid, Logo and the components built on them) | `showIn="dark"` / `showIn="light"` | rewrites; `dark={cond}` becomes `showIn={cond ? "dark" : undefined}`; reports both at once |
 | `textSize`, `textWeight`, `textType` on layout components | `textVariant="type-weight-size"` | folds three literals; removes size and weight beside a `textVariant`, which overrode them; reports the rest |
-| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it. A Text `size` literal becomes the class 2.x wrote (`size="s"` → `className="font-s"`, merged into a literal className); a Heading `size="m"` goes, `s`/`xs` become `className="font-s"`/`"font-xs"`, and `l`/`xl` go under a parent in the file that sets no family (they did nothing); under one that may, it is reported: write that family's preset (`textVariant="heading-strong-l"`), since 3.0's Heading always sets its own size |
+| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it. A Text `size` literal becomes the class 2.x wrote (`size="s"` → `className="font-s"`, merged into a literal className); on a component of yours that hands `size` on to a Text (its props are Text's and it spreads them), it is reported at the call site with the class to write; a Heading `size="m"` goes, `s`/`xs` become `className="font-s"`/`"font-xs"`, and `l`/`xl` go under a parent in the file that sets no family (they did nothing); under one that may, it is reported: write that family's preset (`textVariant="heading-strong-l"`), since 3.0's Heading always sets its own size |
 | Text / Heading `weight` beside `textVariant` | kept; it now swaps the preset's weight (2.x ignored it there) | removes it beside `textVariant`, so the page renders as before |
 
 Check a Text that had `size` beside `weight` before you turn it into a
@@ -553,8 +575,12 @@ list of every component (an MDX scope, a playground:
 `Object.entries(core)`, `{ ...core }`) no longer holds the effects or the
 blocks; spread all three, `{ ...core, ...fx, ...blocks }` with `import * as fx
 from "@once-ui-system/fx"` and `import * as blocks from
-"@once-ui-system/blocks"`. The codemod reports such a namespace, since
-nothing fails until a tag is missing at run time. In Next.js, list the packages in
+"@once-ui-system/blocks"` (and `...media`, `...emoji` from
+`@once-ui-system/core/media` and `/emoji` for the media players and
+EmojiPicker). Where the namespace is only spread, the codemod writes that
+spread and the four imports; it reports one read any other way
+(`Object.entries(core)`, `for … in`), since nothing fails until a tag is
+missing at run time. In Next.js, list the packages in
 `transpilePackages` beside `@once-ui-system/core` if you list core there.
 CodeBlock's `styleButton` rendered a `StyleOverlay`, which core can no longer
 import: CodeBlock takes an `actions` slot instead, so pass
@@ -667,13 +693,20 @@ picked moved props from the leaf names the Row's
 A `height` on `Input`, `NumberInput`, `ColorInput` or `Textarea` (2.0 renamed
 it `size`) went on to the native element, where it did nothing: the codemod
 drops it. A leaf that is a JSX prop's value with only `hide` and `{{ hide }}`
-breakpoints (`trigger={<NavIcon hide m={{ hide: false }} />}`) is wrapped
-whatever its parent, and an absolutely placed leaf with a translate moves
+breakpoints (`trigger={<NavIcon hide m={{ hide: false }} />}`), or that sits
+in a fragment whose own parent is a layout component or such a slot, is
+wrapped whatever its parent; elsewhere the report carries the wrapper to
+paste (`<Row hide m={{ hide: false }}><NavIcon …/></Row>`).
+A `Kbd`'s `paddingX="4"` / `paddingY="2"` are its own padding and go; and an absolutely placed leaf with a translate moves
 its placement (and its `key`) to the Row, which shrink-wraps it. It reports the rest,
 with the props to move: a parent it cannot see in the same file (the wrapper
 could change its layout), a spread, offsets, styling on a `Button` (a
-wrapper's padding is not the button's), sizes on a `ProgressBar`, and a look
-of its own on a `Kbd` (`paddingX`), which goes in `style`. An `Avatar`'s
+wrapper's padding is not the button's), sizes on a `ProgressBar` (pointing at
+the parent when it holds only the leaf), and a look of its own on a `Kbd`
+(`paddingX`), which goes in `style`. A `Kbd` padding that is no spacing token
+(`paddingX="1rem"`) wrote a class that does not exist in 2.x, so that side
+had no padding at all: the report gives both styles, the 2.x look
+(`paddingLeft: 0`) and the size it names. An `Avatar`'s
 `borderWidth`/`borderStyle` literals become the classes 2.x wrote
 (`className="border-2 border-dashed"`), and `border`/`radius` the `style` they
 resolved to (`borderColor: "var(--brand-alpha-medium)"`, `borderRadius:

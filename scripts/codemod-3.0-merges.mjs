@@ -495,6 +495,13 @@ function headersAsColumns(headers) {
     }
     out.push(text);
   }
+  // Written one header per line: one column per line, as the headers were.
+  const first = /^\[[ \t]*\r?\n([ \t]*)\S/.exec(headers.trim());
+  if (first) {
+    const close = /\n([ \t]*)\]$/.exec(headers.trim());
+    const trailing = /,\s*\]$/.test(headers.trim());
+    return `[\n${out.map((c, i) => `${first[1]}${c}${i < out.length - 1 || trailing ? "," : ""}`).join("\n")}\n${close ? close[1] : ""}]`;
+  }
   return `[${out.join(", ")}]`;
 }
 
@@ -859,7 +866,22 @@ function rewriteElement(src, lt, tag, local, to) {
   const ws = src.slice(insertAt, tagClose);
   const broken = ws.includes("\n");
   const sep = broken && src.slice(open.nameEnd, insertAt).includes("\n") ? `${ws}  ` : " ";
-  const append = (plan.append ?? []).map((a) => `${sep}${a}`).join("");
+  // A value over several lines (a data object's rows, moved up a level)
+  // shifts so its last line lines up with the attribute.
+  const attrIndent = sep.startsWith("\n") ? sep.slice(1) : null;
+  const level = (a) => {
+    const lines = a.split("\n");
+    if (attrIndent === null || lines.length < 2) return a;
+    const shift = attrIndent.length - lines[lines.length - 1].match(/^[ \t]*/)[0].length;
+    return lines
+      .map((l, i) => {
+        if (i === 0 || !l.trim()) return l;
+        const have = l.match(/^[ \t]*/)[0];
+        return (have.includes("\t") ? "\t" : " ").repeat(Math.max(0, have.length + shift)) + l.slice(have.length);
+      })
+      .join("\n");
+  };
+  const append = (plan.append ?? []).map((a) => `${sep}${level(a)}`).join("");
   if (plan.selfClose && !open.selfClosing) {
     // Children became an attribute: the element closes itself.
     edits.push({ at: insertAt, end: end, text: `${append}${broken ? ws : " "}/>` });

@@ -370,10 +370,22 @@ describe("a namespace import", () => {
 		);
 	});
 
-	it("still reports when the file takes only a few effects by name", () => {
-		const { warnings } = run('import * as core from "@once-ui-system/core";\nimport { RevealFx } from "@once-ui-system/fx";\nconst s = { ...core };\n');
+	it("still reports when the file takes only a few effects by name and lists the namespace another way", () => {
+		const { warnings } = run('import * as core from "@once-ui-system/core";\nimport { RevealFx } from "@once-ui-system/fx";\nconst s = Object.keys(core);\n');
 		assert.equal(warnings.length, 1);
 		assert.match(warnings[0], /\.\.\.media, \.\.\.emoji/);
+	});
+
+	it("spreads the split-off packages beside a namespace that is only spread", () => {
+		const { out, warnings, hits } = run('import * as core from "@once-ui-system/core";\nimport { RevealFx } from "@once-ui-system/fx";\nconst s = { ...core, X };\n');
+		assert.deepEqual(warnings, []);
+		assert.equal(
+			out,
+			'import * as core from "@once-ui-system/core";\nimport * as fx from "@once-ui-system/fx";\nimport * as blocks from "@once-ui-system/blocks";\nimport * as media from "@once-ui-system/core/media";\nimport * as emoji from "@once-ui-system/core/emoji";\nimport { RevealFx } from "@once-ui-system/fx";\nconst s = { ...core, ...fx, ...blocks, ...media, ...emoji, X };\n',
+		);
+		assert.equal(hits.length, 1);
+		// A name already taken: reported instead.
+		assert.equal(run('import * as core from "@once-ui-system/core";\nconst media = 1;\nconst s = { ...core };\n').warnings.length, 1);
 	});
 
 	it("reports for…in and Object.fromEntries, not a comment or a string", () => {

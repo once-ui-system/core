@@ -35,7 +35,7 @@ import {
 	openingTagEnd,
 	withLeadingSpace,
 } from "./codemod-2.0.mjs";
-import { located } from "./codemod-3.0-format.mjs";
+import { attributeGap, located } from "./codemod-3.0-format.mjs";
 import { elementsOf } from "./codemod-3.0-leaf.mjs";
 
 /**
@@ -99,7 +99,7 @@ function namesFor(tag, bindings, isCore) {
 	for (const [local, { source, canonical }] of bindings)
 		if (canonical === tag && isCore(source)) aliases.push(local);
 	if (aliases.length) return aliases;
-	return bindings.has(tag) ? [] : [tag];
+	return bindings.has(tag) || bindings.declared?.has(tag) ? [] : [tag];
 }
 
 const expr = (raw) => {
@@ -324,7 +324,7 @@ function familyFree(parent) {
 const LIST_RESTORE_NOTE =
 	'3.0 resets a list\'s markers, indent and margins (2.x showed the browser\'s); to keep them, add className="list-disc" paddingLeft="40px" marginY="1em" (list-decimal for an ol)';
 
-function restoreList(src, attrs, tag, push, warn, spread, ancestors) {
+function restoreList(src, attrs, tag, push, warn, spread, ancestors, children = () => []) {
 	const as = attrs.find((a) => a.name === "as");
 	const element = as && as.value !== null ? literal(as.value) : null;
 	if (element !== "ul" && element !== "ol") return;
@@ -346,7 +346,10 @@ function restoreList(src, attrs, tag, push, warn, spread, ancestors) {
 	}
 	const has = (...names) => attrs.some((a) => names.includes(a.name)) || styleKeys.some((k) => names.includes(k));
 	const add = [];
-	if (!styleKeys.some((k) => /^listStyle/.test(k))) add.push(`className="${marker}"`);
+	// Items that are flex or grid boxes (`<Row as="li">`) draw no marker: 2.x showed none.
+	const items = children();
+	const boxed = items.length > 0 && items.every((c) => c.box);
+	if (!boxed && !styleKeys.some((k) => /^listStyle/.test(k))) add.push(`className="${marker}"`);
 	if (!has("padding", "paddingX", "paddingLeft", "paddingInline", "paddingInlineStart")) add.push('paddingLeft="40px"');
 	const top = has("margin", "marginY", "marginTop", "marginBlock", "marginBlockStart");
 	const bottom = has("margin", "marginY", "marginBottom", "marginBlock", "marginBlockEnd");
@@ -355,10 +358,11 @@ function restoreList(src, attrs, tag, push, warn, spread, ancestors) {
 	else if (!bottom) add.push('marginBottom="1em"');
 	if (!add.length) return;
 	const last = attrs[attrs.length - 1];
+	const gap = attributeGap(src, last.end);
 	push({
 		at: last.end,
 		end: last.end,
-		text: ` ${add.join(" ")}`,
+		text: `${gap}${add.join(gap)}`,
 		hit: `<${tag} as="${element}"> ${add.join(" ")} (the browser's list styles, which 3.0 resets)`,
 	});
 }
@@ -419,6 +423,19 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 		}
 		return out;
 	};
+	// The element children of a list, each with whether it is a flex or grid box.
+	const childrenOf = (at) => {
+		elements ??= elementsOf(src);
+		const el = elements.find((e) => e.at === at);
+		if (!el) return [];
+		return elements
+			.filter((c) => c.parent === el)
+			.map((c) => {
+				const bound = bindings.get(c.name);
+				const canonical = bound ? (isCore(bound.source) ? bound.canonical : null) : c.name;
+				return { box: ["Flex", "Row", "Column", "Grid"].includes(canonical) };
+			});
+	};
 	for (const tag of tags) {
 		for (const name of namesFor(tag, bindings, isCore)) {
 			const open = new RegExp(`<${name.replace(".", "\\.")}(?=[\\s/>])`, "g");
@@ -441,7 +458,7 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 				if (tag === "Text" || tag === "Heading")
 					rewriteTextSizeWeight(src, attrs, tag, push, warn, tag === "Heading" ? parentOf(m.index) : null);
 				if (LAYOUT.has(tag)) {
-					restoreList(src, attrs, tag, push, warn, /\{\s*\.\.\./.test(src.slice(from, end)), () => ancestorsOf(m.index));
+					restoreList(src, attrs, tag, push, warn, /\{\s*\.\.\./.test(src.slice(from, end)), () => ancestorsOf(m.index), () => childrenOf(m.index));
 				}
 				if (
 					LOST_AS.has(tag) &&
