@@ -129,10 +129,17 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       let initialized = false;
       let disposed = false;
 
+      // Returns whether the canvas now has a size. Writing canvas.width or
+      // height clears the bitmap even when the value is the same, so an
+      // unchanged box is left alone: a static grid (reduced motion, or no
+      // flicker) is drawn once and nothing would paint it back.
       const applySize = (): boolean => {
         const rect = container.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) {
           return false;
+        }
+        if (rect.width === canvasWidth && rect.height === canvasHeight) {
+          return true;
         }
         canvasWidth = rect.width;
         canvasHeight = rect.height;
@@ -145,14 +152,26 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         return true;
       };
 
+      // A real resize cleared the canvas and left the grid, its center and the
+      // cached static frame sized for the old box, and a stopped loop would
+      // never redraw it. Rebuild for the new size and restart the loop.
       const handleResize = () => {
+        if (!initialized) {
+          setup();
+          return;
+        }
         const prevW = canvasWidth;
         const prevH = canvasHeight;
         if (!applySize()) return;
-        if (initialized && (prevW !== canvasWidth || prevH !== canvasHeight)) {
-          dotsRef.current = [];
-          isStaticRef.current = false;
+        if (prevW === canvasWidth && prevH === canvasHeight) return;
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
         }
+        dotsRef.current = [];
+        isStaticRef.current = false;
+        initialized = false;
+        setup();
       };
 
       window.addEventListener("resize", handleResize);
@@ -300,7 +319,9 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           // If static and we have cached image, just render that and stop animating
           if (isStaticRef.current && cachedImageData) {
             ctx.putImageData(cachedImageData, 0, 0);
-            // Don't request another frame - animation is complete
+            // Don't request another frame - animation is complete. Clear the
+            // ref so the loop can be restarted.
+            animationRef.current = undefined;
             return;
           }
 
@@ -877,13 +898,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
       setup();
 
-      const resizeObserver = new ResizeObserver(() => {
-        if (!initialized) {
-          setup();
-        } else {
-          handleResize();
-        }
-      });
+      const resizeObserver = new ResizeObserver(handleResize);
       resizeObserver.observe(container);
 
       return () => {
