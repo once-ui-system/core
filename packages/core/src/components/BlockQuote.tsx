@@ -1,11 +1,11 @@
 import { forwardRef } from "react";
-import type { FlexPropsOf } from "../interfaces";
-import { Avatar } from "./Avatar";
-import { Column } from "./Column";
-import { Line } from "./Line";
-import { Row } from "./Row";
-import { SmartLink } from "./SmartLink";
-import { Text } from "./Text";
+import type { FlexPropsOf } from "../interfaces.js";
+import { Avatar } from "./Avatar.js";
+import { Column } from "./Column.js";
+import { Line } from "./Line.js";
+import { Row } from "./Row.js";
+import { SmartLink } from "./SmartLink.js";
+import { Text } from "./Text.js";
 
 interface BlockQuoteProps extends FlexPropsOf<"blockquote"> {
   children: React.ReactNode;

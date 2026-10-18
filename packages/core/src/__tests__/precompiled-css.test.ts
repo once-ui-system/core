@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 /**
  * The build ships every Sass module precompiled to a CSS module and points the
- * JS at it (`scripts/compile-css-modules.js`), so an app needs no Sass to use
+ * JS at it (`scripts/compile-css-modules.cjs`), so an app needs no Sass to use
  * Once UI. These pin that contract on the built `dist/`: no emitted code
  * imports Sass, every style import resolves, and each compiled module keeps
  * the class names, keyframes and custom properties its source declares.
@@ -16,14 +16,12 @@ import { describe, expect, it } from "vitest";
 const PKG_ROOT = join(__dirname, "..", "..");
 const SRC = join(PKG_ROOT, "src");
 const DIST = join(PKG_ROOT, "dist");
-// Copied into dist, but not package code: the CLIs and the agent harness.
-const NOT_CODE = new Set(["ai", "agent", "scripts"].map((dir) => join(DIST, dir)));
 
 const walk = (dir: string, keep: (name: string) => boolean, files: string[] = []): string[] => {
   for (const entry of readdirSync(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (!NOT_CODE.has(full)) walk(full, keep, files);
+      walk(full, keep, files);
     } else if (keep(entry.name)) {
       files.push(full);
     }

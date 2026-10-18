@@ -9,7 +9,7 @@ import {
   useEffect,
   useRef,
 } from "react";
-import { getFocusableElements } from "../internal/focusable";
+import { getFocusableElements } from "../internal/focusable.js";
 
 interface FocusTrapProps {
   children: ReactNode;

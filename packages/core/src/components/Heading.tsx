@@ -14,10 +14,10 @@ import {
   SpacingProps,
   type TextElement,
   TextProps,
-} from "../interfaces";
-import { ColorScheme, ColorWeight, TextVariant } from "../types";
-import { spacingClass, textLayout, withWeight } from "../utils/layoutClasses";
-import { numericSpacingStyle } from "../utils/spacingStyle";
+} from "../interfaces.js";
+import { ColorScheme, ColorWeight, TextVariant } from "../types.js";
+import { spacingClass, textLayout, withWeight } from "../utils/layoutClasses.js";
+import { numericSpacingStyle } from "../utils/spacingStyle.js";
 
 type HeadingProps<T extends ElementType> = TextProps<T> &
   CommonProps &

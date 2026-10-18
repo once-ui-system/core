@@ -8,7 +8,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 
 export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
   flipDirection?: "horizontal" | "vertical";

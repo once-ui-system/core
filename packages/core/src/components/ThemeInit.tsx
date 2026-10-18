@@ -1,12 +1,12 @@
 import type React from "react";
-import type { OnceUIStyleConfig } from "../contexts/ThemeProvider";
-import type { ChartMode } from "../modules/data/interfaces";
+import type { OnceUIStyleConfig } from "../contexts/ThemeProvider.js";
+import type { ChartMode } from "../modules/data/interfaces.js";
 import {
   type CustomScheme,
   type CustomSchemeSeeds,
   customSchemeProperties,
-} from "../utils/colorScheme";
-import { safeScriptJson } from "../utils/safe-html";
+} from "../utils/colorScheme.js";
+import { safeScriptJson } from "../utils/safe-html.js";
 
 /**
  * The shape `ThemeInit` took in 2.0: attribute names rather than the config's

@@ -10,19 +10,19 @@ import {
   useRef,
   useState,
 } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import { useControllableState } from "../internal/useControllableState";
-import { Column } from "./Column";
-import { Dropdown, type DropdownProps } from "./Dropdown";
+import { useDebounce } from "../hooks/useDebounce.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Column } from "./Column.js";
+import { Dropdown, type DropdownProps } from "./Dropdown.js";
 import styles from "./EmojiPicker.module.scss";
-import type { Flex } from "./Flex";
-import { Grid } from "./Grid";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Input } from "./Input";
-import { Row } from "./Row";
-import { type ButtonOption, SegmentedControl } from "./SegmentedControl";
-import { Text } from "./Text";
+import type { Flex } from "./Flex.js";
+import { Grid } from "./Grid.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Input } from "./Input.js";
+import { Row } from "./Row.js";
+import { type ButtonOption, SegmentedControl } from "./SegmentedControl.js";
+import { Text } from "./Text.js";
 
 type EmojiItem = {
   char: string;
@@ -88,10 +88,10 @@ const fallbackEmojiData: EmojiData = {
   ],
 };
 
-import generatedEmojiData from "../data/emoji-data.json";
-import type { IconName } from "../icons";
-import type { StyleProps } from "../interfaces";
-import type { GridSize, Placement } from "../types";
+import generatedEmojiData from "../data/emoji-data.json" with { type: "json" };
+import type { IconName } from "../icons.js";
+import type { StyleProps } from "../interfaces.js";
+import type { GridSize, Placement } from "../types.js";
 
 const emojiData: EmojiData =
   Object.keys(generatedEmojiData).length > 0

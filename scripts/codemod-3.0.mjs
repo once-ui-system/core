@@ -14,6 +14,7 @@
  * names the row it implements.
  *
  * Usage:  node scripts/codemod-3.0.mjs <dir> [--dry]
+ *         node scripts/codemod-3.0-imports.mjs <dir> [--dry]   (import sources only)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -28,6 +29,7 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { transformImports } from "./codemod-3.0-imports.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
 
@@ -1420,6 +1422,12 @@ export function transform(src) {
   out = types.out;
   hits.push(...types.hits);
   warnings.push(...types.warnings);
+  // B2, F9: import sources (./codemod-3.0-imports.mjs). Last, so a name the
+  // merges produced (EmojiPickerDropdown → EmojiPicker) moves to its subpath.
+  const imports = transformImports(out);
+  out = imports.out;
+  hits.push(...imports.hits);
+  warnings.push(...imports.warnings);
   return { out, hits, warnings };
 }
 
@@ -1435,6 +1443,7 @@ export function transform(src) {
 // scanner it needs to move children and attribute values between slots.
 // ─────────────────────────────────────────────────────────────────────────────
 export { MERGED_EXPORTS, transformMerges } from "./codemod-3.0-merges.mjs";
+export { MOVED_IMPORTS, transformImports } from "./codemod-3.0-imports.mjs";
 
 // Keep `literal` reachable for passes that read scale values (later rows).
 export { literal };

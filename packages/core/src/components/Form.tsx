@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import type { GridSize, SpacingToken, TShirtSizes } from "../types";
+import type { GridSize, SpacingToken, TShirtSizes } from "../types.js";
 import styles from "./Form.module.scss";
-import { FormFieldContext } from "./FormContext";
-import { Grid } from "./Grid";
+import { FormFieldContext } from "./FormContext.js";
+import { Grid } from "./Grid.js";
 
 /**
  * Form — spacing density and grouping for a set of fields.

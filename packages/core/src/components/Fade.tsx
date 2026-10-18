@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { ColorScheme, ColorWeight, CSSUnit, SpacingToken } from "../types";
+import { ColorScheme, ColorWeight, CSSUnit, SpacingToken } from "../types.js";
 import styles from "./Fade.module.scss";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 
 export type BaseColor =
   | `${ColorScheme}-${ColorWeight}`

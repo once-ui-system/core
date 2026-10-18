@@ -19,10 +19,10 @@ import {
   NavGroup,
   NavItem,
   Row,
-  Scrubber,
   SplitView,
   selectNavHref,
 } from "@once-ui-system/core";
+import { Scrubber } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 export const Shell = ({

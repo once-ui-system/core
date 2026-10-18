@@ -2,8 +2,8 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import type { Speed } from "../types";
-import { speedFactor } from "../utils/speed";
+import type { Speed } from "../types.js";
+import { speedFactor } from "../utils/speed.js";
 
 const defaultCharset = ["X", "$", "@", "a", "H", "z", "o", "0", "y", "#", "?", "*", "0", "1", "+"];
 

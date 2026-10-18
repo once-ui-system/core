@@ -1,12 +1,12 @@
 "use client";
 
 import React from "react";
-import type { CSSUnit } from "../types";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Row } from "./Row";
-import { Text } from "./Text";
-import { Tooltip } from "./Tooltip";
+import type { CSSUnit } from "../types.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
+import { Tooltip } from "./Tooltip.js";
 
 /**
  * The settings row that Aveiro, Frametic and Scenetic each grew their own copy

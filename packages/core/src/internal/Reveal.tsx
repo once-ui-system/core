@@ -2,9 +2,9 @@
 
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { Flex } from "../components/Flex";
-import type { CSSUnit, SpacingToken } from "../types";
-import { translateValue } from "../utils/layoutClasses";
+import { Flex } from "../components/Flex.js";
+import type { CSSUnit, SpacingToken } from "../types.js";
+import { translateValue } from "../utils/layoutClasses.js";
 import styles from "./Reveal.module.scss";
 
 export interface RevealProps extends React.ComponentProps<typeof Flex> {

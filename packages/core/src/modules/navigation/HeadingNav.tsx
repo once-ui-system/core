@@ -1,13 +1,13 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Row } from "../../components/Row";
-import { SmartLink } from "../../components/SmartLink";
-import { Text } from "../../components/Text";
-import { useHeadingLinks } from "../../hooks/useHeadingLinks";
+import { Column } from "../../components/Column.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Row } from "../../components/Row.js";
+import { SmartLink } from "../../components/SmartLink.js";
+import { Text } from "../../components/Text.js";
+import { useHeadingLinks } from "../../hooks/useHeadingLinks.js";
 
 export interface HeadingNavProps extends React.ComponentProps<typeof Flex> {
   header?: boolean;

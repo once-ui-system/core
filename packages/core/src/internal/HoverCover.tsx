@@ -9,8 +9,8 @@ import React, {
   useRef,
   useState,
 } from "react";
-import { Flex } from "../components/Flex";
-import { Row } from "../components/Row";
+import { Flex } from "../components/Flex.js";
+import { Row } from "../components/Row.js";
 import styles from "./HoverCover.module.scss";
 
 export interface HoverCoverProps extends React.ComponentProps<typeof Flex> {

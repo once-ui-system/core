@@ -1,6 +1,6 @@
-import type { DateRange } from "../../components/DatePicker";
-import type { FlexElementProps } from "../../interfaces";
-import type { ColorValue, TShirtSizes } from "../../types";
+import type { DateRange } from "../../components/DatePicker.js";
+import type { FlexElementProps } from "../../interfaces.js";
+import type { ColorValue, TShirtSizes } from "../../types.js";
 
 /**
  * Recharts' own CurveType, inlined.

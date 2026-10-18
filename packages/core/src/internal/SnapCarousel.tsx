@@ -1,11 +1,11 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { Column } from "../components/Column";
-import { Flex } from "../components/Flex";
-import { IconButton } from "../components/IconButton";
-import { Media } from "../components/Media";
-import { Row } from "../components/Row";
+import { Column } from "../components/Column.js";
+import { Flex } from "../components/Flex.js";
+import { IconButton } from "../components/IconButton.js";
+import { Media } from "../components/Media.js";
+import { Row } from "../components/Row.js";
 import styles from "./SnapCarousel.module.scss";
 
 interface SnapCarouselItem {

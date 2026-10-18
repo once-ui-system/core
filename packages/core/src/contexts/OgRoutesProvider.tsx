@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, useContext, useMemo } from "react";
-import { DEFAULT_OG_ROUTES, type OgRoutes, resolveOgRoutes } from "../utils/ogRoutes";
+import { DEFAULT_OG_ROUTES, type OgRoutes, resolveOgRoutes } from "../utils/ogRoutes.js";
 
 const OgRoutesContext = createContext<Readonly<OgRoutes>>(DEFAULT_OG_ROUTES);
 

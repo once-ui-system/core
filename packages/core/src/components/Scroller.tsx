@@ -2,14 +2,14 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { mergeLabels } from "../internal/labels";
-import { Marquee } from "../internal/Marquee";
-import { ScrollTrack, type ScrollTrackControlPlacement } from "../internal/ScrollTrack";
-import type { RadiusSize, Speed } from "../types";
-import type { Column } from "./Column";
-import { BaseColor, Fade } from "./Fade";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
+import { mergeLabels } from "../internal/labels.js";
+import { Marquee } from "../internal/Marquee.js";
+import { ScrollTrack, type ScrollTrackControlPlacement } from "../internal/ScrollTrack.js";
+import type { RadiusSize, Speed } from "../types.js";
+import type { Column } from "./Column.js";
+import { BaseColor, Fade } from "./Fade.js";
+import { Flex } from "./Flex.js";
+import { IconButton } from "./IconButton.js";
 import styles from "./Scroller.module.scss";
 
 /** The scroll buttons' accessible names. Omitted fields keep the English default. */

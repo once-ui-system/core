@@ -26,7 +26,9 @@ It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
 changes nothing. Run it once, before you write 3.0 code: it reads every bare
 number as 2.x did, so on a size you wrote as 3.0 px (`width={200}`) it would
-write `"200rem"`. Lines marked `!` are for you to fix by hand.
+write `"200rem"`. Lines marked `!` are for you to fix by hand. Code you have
+already moved to 3.0 can still take the import step on its own
+(`scripts/codemod-3.0-imports.mjs`, § 12), which changes nothing else.
 
 ### 2. React 19
 
@@ -367,6 +369,73 @@ the layout shorthands stay (`fill`, `fit`, `center`, `paddingX`/`Y`,
 `marginX`/`Y`, `borderX`/`Y`, `topRadius` and its siblings): they set two
 props in one and are the most-written props in Once UI code. `Grid` now applies
 `textVariant`, which 2.x typed and dropped.
+
+### 12. Packaging and imports
+
+**Import from an entry point.** 3.0 has one entry per feature and no deep
+imports. The subset subpaths (`/components`, `/contexts`, `/hooks`, `/icons`,
+`/types`, `/interfaces`, `/utils`) and `/modules` only re-exported parts of
+the root, and `/components/*` made every file in `dist/components` public,
+internals included. Import from the root instead. Four components left it:
+
+| 2.x | 3.0 |
+| --- | --- |
+| `@once-ui-system/core/components`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils`, `/modules`, `/components/<Name>` | `@once-ui-system/core` |
+| `EmojiPicker` (root) | `@once-ui-system/core/emoji`, so its emoji data (about 270 KB) is in no bundle that does not render it |
+| `Scrubber`, `CompareImage` (root); `MediaAudioPlayer`, `MediaVideoPlayer` (`/components/<Name>`) | `@once-ui-system/core/media`, beside `MediaUpload` |
+
+The entry points are `.`, `/config`, `/server`, `/next`, `/data`, `/code`,
+`/media`, `/emoji`, `/mdx`, the `css/*` and `ai/*` files, `AGENTS.md` and
+`package.json`. The codemod's import pass moves every import, re-export and
+`import()` (splitting a statement that mixes names, joining an import of the
+subpath you already have), and reports what it cannot move: `Once.EmojiPicker`
+through a namespace import, `export * from "@once-ui-system/core"` (it no
+longer carries the four), an internal module `/components/*` exposed
+(`FormContext`, `StylePanelSections`…), and any other specifier 3.0 does not
+have, such as a `vi.mock()` path. The pass only rewrites import sources, so it
+is also safe on code already written for 3.0:
+
+```sh
+node scripts/codemod-3.0-imports.mjs src
+```
+
+A bundler resolves every specifier under `/media` it reaches, so an app that
+imports the players, `Scrubber` or `CompareImage` from there needs
+`compressorjs` resolvable for `MediaUpload`'s lazy chunk, as `/media` users
+already did. If your bundler fails on a missing `compressorjs`, install it.
+
+**Real ESM.** The package is `"type": "module"`, and its JS names every file
+it imports (`./Button.js`), so Node and every bundler resolve it the same way.
+There is no `main` and no `require` condition: those pointed at ESM files and
+`require()` of them threw. Each entry is `{ types, default }`. In practice:
+
+- TypeScript: `moduleResolution` must be `bundler`, `node16` or `nodenext`
+  (`node10`/`node` sees no `exports` and finds nothing). Next.js and Vite
+  templates already use `bundler`.
+- CommonJS: in Node 22.12+ (or 20.19+), `require()` loads the entries that
+  import no CSS (`/config`, `/server`, `/next`); the component entries need a
+  bundler there as they did in 2.x. Jest without ESM support needs the package
+  transformed (`transformIgnorePatterns`).
+- Plain Node, a test runner without a bundler, or SSR code outside one: the
+  JS loads, but the components still `import "./X.module.css"`, which needs a
+  CSS loader (Vitest, Next.js and Vite provide one). `/config`, `/server` and
+  `/next` import no CSS and load in plain Node.
+- The bins are `once-ui-init-agent` and `once-ui-validate-ai-code` as before;
+  the files behind them are `scripts/*.cjs`. Call them by bin name, or update a
+  path that named `scripts/validate-ai-code.js`.
+
+**No Sass.** `sass` is no longer a peer, and the `.module.scss` sources and
+`dist/styles/breakpoints.scss` are no longer in the package: the compiled
+`.module.css` beside each component is what it always imported. Remove `sass`
+from your dependencies unless your own code uses it. An `@use` of a core file
+under `dist/` breaks; take the breakpoints from
+`@once-ui-system/foundations` (`scss/styles/breakpoints.scss`).
+
+**Smaller install.** The tarball no longer carries a second copy of `ai/`,
+`agent/` and the CLI scripts under `dist/`, the test helpers (`dist/test`),
+source maps that pointed at the unshipped `src/`, or the harness's generator
+input (`ai/catalog.seed.json`, `ai/eval-tasks.md`). Nothing that was reachable
+through `exports` or `bin` moved.
 
 ---
 

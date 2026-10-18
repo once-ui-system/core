@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import { type CSSProperties, type ElementType, forwardRef, type HTMLAttributes } from "react";
 
-import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces";
-import { ColorScheme, ColorWeight } from "../types";
+import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces.js";
+import { ColorScheme, ColorWeight } from "../types.js";
 import {
   BELOW_HEADER,
   elementReset,
@@ -17,8 +17,8 @@ import {
   spacingValue,
   themeAttributes,
   translateTransform,
-} from "../utils/layoutClasses";
-import { numericSpacingStyle } from "../utils/spacingStyle";
+} from "../utils/layoutClasses.js";
+import { numericSpacingStyle } from "../utils/spacingStyle.js";
 
 /** What the two halves of Grid take; `Grid` is the typed face. */
 export type ServerGridProps = GridLayoutProps &

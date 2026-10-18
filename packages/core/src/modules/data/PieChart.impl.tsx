@@ -1,23 +1,23 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Column } from "../../components/Column";
-import type { DateRange } from "../../components/DatePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import type { SizeProps } from "../../interfaces";
-import { cssColor } from "../../internal/cssColor";
-import { RadiusSize, schemes } from "../../types";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { RadialGradient } from "./Gradient";
-import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize, schemes } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { RadialGradient } from "./Gradient.js";
+import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
 
-import { getDistributedColor } from "./utils/colorDistribution";
+import { getDistributedColor } from "./utils/colorDistribution.js";
 
 export interface PieChartProps<T extends object = DataPoint> extends ChartProps<T> {
   /**

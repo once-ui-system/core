@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Input } from "./Input";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Input } from "./Input.js";
 import styles from "./OTPInput.module.scss";
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 interface OTPInputProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {

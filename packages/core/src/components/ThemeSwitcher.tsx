@@ -2,11 +2,11 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { type Theme, useTheme } from "../contexts/ThemeProvider";
-import { mergeLabels } from "../internal/labels";
-import { Column } from "./Column";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
+import { type Theme, useTheme } from "../contexts/ThemeProvider.js";
+import { mergeLabels } from "../internal/labels.js";
+import { Column } from "./Column.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
 import styles from "./ThemeSwitcher.module.scss";
 
 const THEMES = [

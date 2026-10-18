@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 
 interface LineProps extends React.ComponentProps<typeof Flex> {
   vert?: boolean;

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { type FadeState, fadingLetters } from "../internal/FadingLetters";
-import { Text } from "./Text";
+import { type FadeState, fadingLetters } from "../internal/FadingLetters.js";
+import { Text } from "./Text.js";
 
 export interface TypeFxProps extends Omit<React.ComponentProps<typeof Text>, "children"> {
   words: string | string[];

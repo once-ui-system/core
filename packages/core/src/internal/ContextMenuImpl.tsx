@@ -12,12 +12,12 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Flex } from "../components/Flex";
-import { OptionRoleContext } from "../components/OptionRoleContext";
-import { ScrollLock } from "../components/ScrollLock";
-import type { CSSUnit, Placement } from "../types";
+import { Flex } from "../components/Flex.js";
+import { OptionRoleContext } from "../components/OptionRoleContext.js";
+import { ScrollLock } from "../components/ScrollLock.js";
+import type { CSSUnit, Placement } from "../types.js";
 import styles from "./ContextMenuImpl.module.scss";
-import { DropdownPanel } from "./DropdownPanel";
+import { DropdownPanel } from "./DropdownPanel.js";
 
 export interface ContextMenuImplProps {
   children: ReactNode;

@@ -14,6 +14,7 @@ import { Scroller } from "../components/Scroller";
 import { Tooltip } from "../components/Tooltip";
 import { User } from "../components/User";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import * as emoji from "../modules/emoji";
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
@@ -51,11 +52,13 @@ describe("the folded exports are gone", () => {
       "Tooltip",
       "HoverCard",
       "Dropdown",
-      "EmojiPicker",
       "User",
     ]) {
       expect(name in components, name).toBe(true);
     }
+    // F9: EmojiPicker survives on its own subpath, off the root barrel.
+    expect("EmojiPicker" in emoji).toBe(true);
+    expect("EmojiPicker" in components).toBe(false);
   });
 });
 

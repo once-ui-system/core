@@ -12,7 +12,7 @@ export {
   NextAdapterProvider,
   type NextAdapterProviderProps,
   nextAdapters,
-} from "./adapters";
+} from "./adapters.js";
 export {
   createOgFetchRoute,
   createOgProxyRoute,
@@ -20,4 +20,4 @@ export {
   type OgFetchRouteOptions,
   type OgProxyRouteOptions,
   type OgRouteHandlers,
-} from "./og";
+} from "./og.js";

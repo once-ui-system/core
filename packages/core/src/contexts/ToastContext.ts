@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, useContext } from "react";
-import type { Tone } from "../types";
+import type { Tone } from "../types.js";
 
 // The context on its own, outside the public barrel, so a component can show a
 // toast when there is a ToastProvider and still work when there is none.

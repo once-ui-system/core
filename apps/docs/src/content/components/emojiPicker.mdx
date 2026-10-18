@@ -9,6 +9,8 @@ navIcon: "components"
 ---
 
 The `EmojiPicker` component allows you to select and insert emojis from categories.
+It carries its emoji dataset, so it has its own entry point and stays out of the
+root bundle: `import { EmojiPicker } from "@once-ui-system/core/emoji";`
 
 <CodeBlock
   marginTop="16"

@@ -1,13 +1,13 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import { IconName } from "../icons";
-import { useControllableState } from "../internal/useControllableState";
-import { Accordion } from "./Accordion";
-import { Column } from "./Column";
-import { Icon } from "./Icon";
-import { Line } from "./Line";
-import { Row } from "./Row";
+import { IconName } from "../icons.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Accordion } from "./Accordion.js";
+import { Column } from "./Column.js";
+import { Icon } from "./Icon.js";
+import { Line } from "./Line.js";
+import { Row } from "./Row.js";
 
 interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" | "onToggle"> {
   /** The group's own text. */

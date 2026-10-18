@@ -20,11 +20,12 @@ const SRC = path.join(ROOT, "src");
 const OUT_DIR = path.join(ROOT, "ai");
 const OUT_FILE = path.join(OUT_DIR, "spec.json");
 
-// The three subpath barrels are listed separately because they are no longer
-// re-exported from the root: their implementations pull in recharts, prismjs
-// and compressorjs, which a bundler resolves whenever it walks the root
-// barrel. Without them here an agent would never learn these components exist,
-// so each carries the specifier to import it from.
+// The subpath barrels are listed separately because they are not re-exported
+// from the root: `data`, `code` and `media` pull in recharts, prismjs and
+// compressorjs, which a bundler resolves whenever it walks the root barrel,
+// and `emoji` its dataset. `media` also holds the players, Scrubber and
+// CompareImage (3.0). Without them here an agent would never learn these
+// components exist, so each carries the specifier to import it from.
 const BARRELS = [
   { file: path.join(SRC, "components", "index.ts"), group: "components" },
   { file: path.join(SRC, "modules", "index.ts"), group: "modules" },
@@ -43,16 +44,13 @@ const BARRELS = [
     group: "media",
     importFrom: "@once-ui-system/core/media",
   },
-  // Public components that live on the `./components/*` subpath only, kept
-  // out of the root barrel so every bundle does not carry them. No barrel
-  // re-exports them, so without an entry of their own the walk above never
-  // reaches them and an agent never learns they exist — although each has a
-  // docs page.
-  ...["MediaAudioPlayer", "MediaVideoPlayer"].map((name) => ({
-    file: path.join(SRC, "components", `${name}.tsx`),
-    group: "components",
-    importFrom: `@once-ui-system/core/components/${name}`,
-  })),
+  // 3.0: EmojiPicker carries ~270 KB of emoji data, so it has a subpath of
+  // its own and is not on the root barrel.
+  {
+    file: path.join(SRC, "modules", "emoji", "index.ts"),
+    group: "emoji",
+    importFrom: "@once-ui-system/core/emoji",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -99,7 +97,15 @@ const ENTRY_POINTS = [
     peer: "recharts",
   },
   { specifier: "@once-ui-system/core/code", use: "CodeBlock", peer: "prismjs" },
-  { specifier: "@once-ui-system/core/media", use: "MediaUpload", peer: "compressorjs" },
+  {
+    specifier: "@once-ui-system/core/media",
+    use: "Media components off the root: MediaAudioPlayer, MediaVideoPlayer, Scrubber, CompareImage, and MediaUpload (which needs compressorjs)",
+    peer: "compressorjs",
+  },
+  {
+    specifier: "@once-ui-system/core/emoji",
+    use: "EmojiPicker, with its emoji dataset off the root",
+  },
   {
     specifier: "@once-ui-system/core/mdx",
     use: "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",
@@ -113,10 +119,6 @@ const ENTRY_POINTS = [
   {
     specifier: "@once-ui-system/core/config",
     use: "defineConfig and the OnceUIConfig types with no component code behind them, for once-ui.config (the root exports them too)",
-  },
-  {
-    specifier: "@once-ui-system/core/components/<Name>",
-    use: "Components kept off the root so every bundle does not carry them",
   },
 ];
 
@@ -1188,15 +1190,13 @@ function emitArtifacts(spec, version, entryTypes) {
     const row = { use };
     if (peer) row.peer = peer;
     if (specifier !== "@once-ui-system/core") {
-      const pattern = specifier.endsWith("/<Name>") ? specifier.replace("<Name>", "") : null;
-      const from = (item) =>
-        pattern ? item.importFrom?.startsWith(pattern) : item.importFrom === specifier;
+      const from = (item) => item.importFrom === specifier;
       const names = [
         ...Object.entries(spec.components).filter(([, c]) => from(c)),
         ...Object.entries(spec.functions ?? {}).filter(([, f]) => from(f)),
       ].map(([name]) => name);
       if (names.length) row.exports = names;
-      const typeNames = pattern ? [] : [...(entryTypes?.get(specifier) ?? [])];
+      const typeNames = [...(entryTypes?.get(specifier) ?? [])];
       if (typeNames.length) row.types = typeNames.sort();
     }
     imports[specifier] = row;

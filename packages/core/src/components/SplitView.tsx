@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
-import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider";
-import { Card } from "./Card";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { SegmentedControl } from "./SegmentedControl";
+import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider.js";
+import { Card } from "./Card.js";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import { SegmentedControl } from "./SegmentedControl.js";
 
 interface SplitViewProps extends React.ComponentProps<typeof Row> {
   leftPanel: ReactNode;

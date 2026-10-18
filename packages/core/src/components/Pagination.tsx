@@ -3,14 +3,14 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
-import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination";
-import type { TShirtSizes } from "../types";
-import { Button } from "./Button";
-import { IconButton } from "./IconButton";
+import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination.js";
+import type { TShirtSizes } from "../types.js";
+import { Button } from "./Button.js";
+import { IconButton } from "./IconButton.js";
 import styles from "./Pagination.module.scss";
-import { Row } from "./Row";
-import { Select } from "./Select";
-import { Text } from "./Text";
+import { Row } from "./Row.js";
+import { Select } from "./Select.js";
+import { Text } from "./Text.js";
 
 interface PaginationLabels {
   /** The previous-page button's accessible name. */

@@ -3,9 +3,9 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
-import { Column } from "../components/Column";
-import { Row } from "../components/Row";
-import { Text } from "../components/Text";
+import { Column } from "../components/Column.js";
+import { Row } from "../components/Row.js";
+import { Text } from "../components/Text.js";
 import styles from "./RangeSlider.module.scss";
 
 interface RangeSliderProps

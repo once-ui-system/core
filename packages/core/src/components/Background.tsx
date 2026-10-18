@@ -2,12 +2,12 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef } from "react";
-import { DisplayProps } from "../interfaces";
-import { cssColor } from "../internal/cssColor";
-import { ColorValue, CSSUnit, SpacingToken } from "../types";
+import { DisplayProps } from "../interfaces.js";
+import { cssColor } from "../internal/cssColor.js";
+import { ColorValue, CSSUnit, SpacingToken } from "../types.js";
 import styles from "./Background.module.scss";
-import { Flex } from "./Flex";
-import { Mask, MaskProps } from "./Mask";
+import { Flex } from "./Flex.js";
+import { Mask, MaskProps } from "./Mask.js";
 
 function setRef<T>(ref: React.Ref<T> | undefined, value: T | null) {
   if (typeof ref === "function") {

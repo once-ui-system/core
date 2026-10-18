@@ -1,7 +1,7 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
 import styles from "./List.module.scss";
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 interface ListItemProps extends React.ComponentProps<typeof Text> {
   children?: React.ReactNode;

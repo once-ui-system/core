@@ -1,4 +1,4 @@
-import type { Speed } from "../types";
+import type { Speed } from "../types.js";
 
 /** The multiplier each speed keyword stands for. */
 export const SPEED_KEYWORDS = { slow: 0.5, medium: 1, fast: 2 } as const;

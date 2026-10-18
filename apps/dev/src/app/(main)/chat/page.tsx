@@ -10,7 +10,6 @@ import {
 import {
   Avatar,
   Column,
-  EmojiPicker,
   Fade,
   Icon,
   IconButton,
@@ -23,6 +22,7 @@ import {
   Text,
   User,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 
 type Conversation = {
   id: string;

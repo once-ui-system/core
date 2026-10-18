@@ -2,9 +2,9 @@
 
 import classNames from "clsx";
 import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { useInViewport } from "../hooks/useInViewport";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { Flex } from "./Flex";
+import { useInViewport } from "../hooks/useInViewport.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import { Flex } from "./Flex.js";
 import styles from "./HoloFx.module.scss";
 
 interface MaskOptions {

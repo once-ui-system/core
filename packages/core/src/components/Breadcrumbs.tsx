@@ -2,12 +2,12 @@
 
 import type React from "react";
 import { forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
-import type { IconName } from "../icons";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
-import { SmartLink } from "./SmartLink";
+import type { IconName } from "../icons.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { SmartLink } from "./SmartLink.js";
 
 interface BreadcrumbItem {
   /** The crumb's text. */

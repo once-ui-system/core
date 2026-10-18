@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
-import type { FlexElementProps, FlexLayoutProps, PolymorphicComponent } from "../interfaces";
-import { Flex } from "./Flex";
+import type { FlexElementProps, FlexLayoutProps, PolymorphicComponent } from "../interfaces.js";
+import { Flex } from "./Flex.js";
 
 /** Column's props on its default `div`; with `as`, see `PolymorphicProps`. */
 export type ColumnProps = FlexElementProps;

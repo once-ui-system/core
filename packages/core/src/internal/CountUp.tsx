@@ -2,8 +2,8 @@
 
 import type React from "react";
 import { forwardRef } from "react";
-import { Text } from "../components/Text";
-import { type CountUpEasing, formatCount, useCountUp } from "./useCountUp";
+import { Text } from "../components/Text.js";
+import { type CountUpEasing, formatCount, useCountUp } from "./useCountUp.js";
 
 export interface CountUpProps extends React.ComponentProps<typeof Text> {
   value: number;

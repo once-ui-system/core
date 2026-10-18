@@ -1,8 +1,8 @@
 "use client";
 
-import NextImage from "next/image";
-import NextLink from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import NextImageModule from "next/image.js";
+import NextLinkModule from "next/link.js";
+import { usePathname, useRouter } from "next/navigation.js";
 import type React from "react";
 import { forwardRef, useCallback } from "react";
 import {
@@ -10,8 +10,8 @@ import {
   type AdapterLinkProps,
   AdapterProvider,
   type OnceUIAdapters,
-} from "../contexts/AdapterProvider";
-import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider";
+} from "../contexts/AdapterProvider.js";
+import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider.js";
 
 /**
  * Next.js adapter bindings — the ONLY runtime `next/*` imports in core
@@ -23,6 +23,18 @@ import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider
  * The `"use client"` directive lives here rather than on the subpath's
  * index, so the same entry can also export server route handlers.
  */
+
+// `next` ships CommonJS with no exports map, so the specifiers name the file
+// (`next/link.js`), and the default import is whatever the loader makes of
+// `exports.default`: a bundler hands back the component, Node's ESM loader
+// the module object. Take `.default` when it is there.
+// Typed for both resolutions: NodeNext (the build) types the import as the
+// module, bundler resolution (tests, apps) as the component.
+type Interop<M> = M extends { default: infer D } ? D : M;
+const interopDefault = <M,>(mod: M): Interop<M> =>
+  ((mod as { default?: unknown }).default ?? mod) as Interop<M>;
+const NextLink = interopDefault(NextLinkModule);
+const NextImage = interopDefault(NextImageModule);
 
 const NextAdapterLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(
   ({ href, children, ...props }, ref) => (

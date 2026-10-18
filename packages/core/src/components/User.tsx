@@ -1,14 +1,14 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
-import type { Placement } from "../types";
-import { Avatar, type AvatarProps } from "./Avatar";
-import { Column } from "./Column";
-import { Dropdown, type DropdownProps } from "./Dropdown";
-import { Flex } from "./Flex";
-import { Skeleton } from "./Skeleton";
-import { Tag, type TagProps } from "./Tag";
-import { Text } from "./Text";
+import type { Placement } from "../types.js";
+import { Avatar, type AvatarProps } from "./Avatar.js";
+import { Column } from "./Column.js";
+import { Dropdown, type DropdownProps } from "./Dropdown.js";
+import { Flex } from "./Flex.js";
+import { Skeleton } from "./Skeleton.js";
+import { Tag, type TagProps } from "./Tag.js";
+import { Text } from "./Text.js";
 import styles from "./User.module.scss";
 
 interface UserProps {

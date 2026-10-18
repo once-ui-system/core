@@ -10,8 +10,8 @@
  * itself goes to an address checked at connect time (see og-transport.ts).
  * They need the Node.js runtime.
  */
-import { OGFetchError, OGUrlValidationError } from "./og-errors";
-import { fetchPublicUrl, type OGUrlValidationOptions } from "./og-url-validation";
+import { OGFetchError, OGUrlValidationError } from "./og-errors.js";
+import { fetchPublicUrl, type OGUrlValidationOptions } from "./og-url-validation.js";
 
 export interface OGData {
   url: string;
@@ -536,5 +536,5 @@ export async function handleOGProxy(
   }
 }
 
-export type { OGUrlValidationOptions } from "./og-url-validation";
-export { OGUrlValidationError, validateOgUrl } from "./og-url-validation";
+export type { OGUrlValidationOptions } from "./og-url-validation.js";
+export { OGUrlValidationError, validateOgUrl } from "./og-url-validation.js";

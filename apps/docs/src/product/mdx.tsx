@@ -1,6 +1,7 @@
 // Core components, modules and charts as explicit named imports: Turbopack's
 // frozen module proxy rejects a namespace import here.
-import { Accordion, AccordionGroup, Animation, Avatar, AvatarGroup, Background, Banner, BlobFx, BlockQuote, Book, Breadcrumbs, Button, Card, Carousel, CelebrationFx, Checkbox, ColorInput, Column, CompareImage, CountdownFx, CountFx, DateInput, DatePicker, Dialog, Drawer, Dropdown, Effect, EmojiPicker, Fade, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HeadingLink, HeadingNav, HoloFx, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MatrixFx, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ParticleFx, ProgressBar, RadioButton, RadioGroup, RevealFx, Row, Scroller, ScrollLock, ScrollToTop, Scrubber, SegmentedControl, Select, Setting, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, ToggleButton, Tooltip, TypeFx, User, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
+import { Accordion, AccordionGroup, Animation, Avatar, AvatarGroup, Background, Banner, BlobFx, BlockQuote, Book, Breadcrumbs, Button, Card, Carousel, CelebrationFx, Checkbox, ColorInput, Column, CountdownFx, CountFx, DateInput, DatePicker, Dialog, Drawer, Dropdown, Effect, Fade, Feedback, Flex, FlipFx, FocusTrap, Form, GlitchFx, Grid, Heading, HeadingLink, HeadingNav, HoloFx, HoverCard, Icon, IconButton, InfiniteScroll, InlineCode, Input, Kbar, Kbd, LetterFx, Line, List, ListItem, Logo, LogoCloud, Mask, MatrixFx, Media, MegaMenu, NavGroup, NavIcon, NavItem, NumberInput, OgCard, Option, OTPInput, Pagination, ParticleFx, ProgressBar, RadioButton, RadioGroup, RevealFx, Row, Scroller, ScrollLock, ScrollToTop, SegmentedControl, Select, Setting, ShineFx, Skeleton, Slider, SmartLink, Spinner, SplitView, StatusIndicator, StyleOverlay, StylePanel, Switch, Tab, TabList, Table, TabPanel, Tabs, Tag, TagInput, Text, Textarea, ThemeInit, ThemeSwitcher, TiltFx, Timeline, Toast, ToggleButton, Tooltip, TypeFx, User, VisuallyHidden, WeatherFx } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { CodeBlock } from "@once-ui-system/core/code";
 import {
   BarChart,
@@ -12,7 +13,7 @@ import {
   RadialGauge,
 } from "@once-ui-system/core/data";
 import { createMdxComponents } from "@once-ui-system/core/mdx";
-import { MediaUpload } from "@once-ui-system/core/media";
+import { MediaUpload, CompareImage, Scrubber } from "@once-ui-system/core/media";
 import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";

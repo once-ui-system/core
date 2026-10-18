@@ -1,9 +1,9 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { Schemes } from "../types";
-import { customSchemeProperties } from "../utils/colorScheme";
-import { dev } from "../utils/devLogger";
+import { Schemes } from "../types.js";
+import { customSchemeProperties } from "../utils/colorScheme.js";
+import { dev } from "../utils/devLogger.js";
 
 export type Theme = "dark" | "light" | "system";
 /** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */

@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { Heading } from "../../components/Heading";
-import { Row } from "../../components/Row";
-import { textOf } from "../mdx/text";
-import { HeadingAnchor, useCopySectionLink } from "./HeadingAnchor";
+import { Heading } from "../../components/Heading.js";
+import { Row } from "../../components/Row.js";
+import { textOf } from "../mdx/text.js";
+import { HeadingAnchor, useCopySectionLink } from "./HeadingAnchor.js";
 import styles from "./HeadingLink.module.scss";
 
 export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {

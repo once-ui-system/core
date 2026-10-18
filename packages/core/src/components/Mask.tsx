@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { useInViewport } from "../hooks/useInViewport";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import type { CSSUnit } from "../types";
-import { Flex } from "./Flex";
+import { useInViewport } from "../hooks/useInViewport.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import type { CSSUnit } from "../types.js";
+import { Flex } from "./Flex.js";
 import styles from "./Mask.module.scss";
 
 export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {

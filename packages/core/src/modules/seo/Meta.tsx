@@ -1,4 +1,4 @@
-import { buildOgRouteUrl, DEFAULT_OG_ROUTES, type OgRoutes } from "../../utils/ogRoutes";
+import { buildOgRouteUrl, DEFAULT_OG_ROUTES, type OgRoutes } from "../../utils/ogRoutes.js";
 
 /**
  * The metadata object `Meta.generate` returns.

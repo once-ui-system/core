@@ -1,13 +1,13 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import type { IconName } from "../icons";
-import type { Tone } from "../types";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Text } from "./Text";
+import type { IconName } from "../icons.js";
+import type { Tone } from "../types.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Text } from "./Text.js";
 
 interface FeedbackProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   /** The palette, and the icon that goes with it. Defaults to `info`. */

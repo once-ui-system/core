@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
-import type { GridBreakpointProps, GridLayoutProps, PolymorphicComponent } from "../interfaces";
-import { Masonry, type MasonryProps } from "../internal/Masonry";
-import { isClassExpressible } from "../utils/layoutClasses";
-import { ClientGrid } from "./ClientGrid";
-import { ServerGrid, type ServerGridProps } from "./ServerGrid";
+import type { GridBreakpointProps, GridLayoutProps, PolymorphicComponent } from "../interfaces.js";
+import { Masonry, type MasonryProps } from "../internal/Masonry.js";
+import { isClassExpressible } from "../utils/layoutClasses.js";
+import { ClientGrid } from "./ClientGrid.js";
+import { ServerGrid, type ServerGridProps } from "./ServerGrid.js";
 
 interface GridMasonryProps {
   /**

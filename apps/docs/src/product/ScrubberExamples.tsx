@@ -1,6 +1,7 @@
 "use client";
 
-import { Column, Row, Scrubber, Text, type ScrubberBlock } from "@once-ui-system/core";
+import { Column, Row, Text } from "@once-ui-system/core";
+import { Scrubber, type ScrubberBlock } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 export function ScrubberSeekExample() {

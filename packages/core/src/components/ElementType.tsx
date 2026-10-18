@@ -2,10 +2,10 @@
 
 import type React from "react";
 import { forwardRef, type ReactNode, useContext } from "react";
-import { useAdapters } from "../contexts/AdapterProvider";
-import { sanitizeHref } from "../utils/safe-html";
-import { DropdownTriggerContext } from "./DropdownTriggerContext";
-import { Flex } from "./Flex";
+import { useAdapters } from "../contexts/AdapterProvider.js";
+import { sanitizeHref } from "../utils/safe-html.js";
+import { DropdownTriggerContext } from "./DropdownTriggerContext.js";
+import { Flex } from "./Flex.js";
 
 type ElementTypeProps = {
   href?: string;

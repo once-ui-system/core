@@ -1,6 +1,7 @@
 "use client";
 
-import { Avatar, Background, Button, Card, Column, CompareImage, Heading, InlineCode, Media, Row, Tag, Text, TiltFx } from "@once-ui-system/core";
+import { Avatar, Background, Button, Card, Column, Heading, InlineCode, Media, Row, Tag, Text, TiltFx } from "@once-ui-system/core";
+import { CompareImage } from "@once-ui-system/core/media";
 import { CodeBlock } from "@once-ui-system/core/code";
 
 export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {

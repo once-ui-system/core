@@ -1,6 +1,7 @@
 "use client";
 
-import { Column, EmojiPicker, IconButton, Row, Textarea } from "@once-ui-system/core";
+import { Column, IconButton, Row, Textarea } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { useState } from "react";
 import { MediaPost1, Sidebar3 } from ".";
 

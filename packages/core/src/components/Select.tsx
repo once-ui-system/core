@@ -3,22 +3,22 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef, useState } from "react";
-import { mergeLabels } from "../internal/labels";
-import { useControllableState } from "../internal/useControllableState";
-import type { Placement } from "../types";
-import { Column } from "./Column";
-import { Dropdown, type DropdownProps } from "./Dropdown";
+import { mergeLabels } from "../internal/labels.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import type { Placement } from "../types.js";
+import { Column } from "./Column.js";
+import { Dropdown, type DropdownProps } from "./Dropdown.js";
 import {
   DropdownComboboxContext,
   DropdownTriggerContext,
   useDropdownCombobox,
-} from "./DropdownTriggerContext";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Input, type InputProps } from "./Input";
+} from "./DropdownTriggerContext.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Input, type InputProps } from "./Input.js";
 import inputStyles from "./Input.module.scss";
-import { Option, type OptionProps } from "./Option";
+import { Option, type OptionProps } from "./Option.js";
 
 type SelectOptionType = Omit<OptionProps, "selected">;
 

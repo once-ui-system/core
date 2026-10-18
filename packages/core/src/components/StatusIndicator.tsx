@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { PulseRing } from "../internal/PulseRing";
-import { Schemes, Tone, TShirtSizes } from "../types";
-import { Flex } from "./Flex";
+import { PulseRing } from "../internal/PulseRing.js";
+import { Schemes, Tone, TShirtSizes } from "../types.js";
+import { Flex } from "./Flex.js";
 import styles from "./StatusIndicator.module.scss";
 
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {

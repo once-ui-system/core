@@ -1,7 +1,7 @@
 import classNames from "clsx";
 import type React from "react";
 import { type ElementType, forwardRef, type ReactNode } from "react";
-import type { PolymorphicComponent, PolymorphicProps } from "../interfaces";
+import type { PolymorphicComponent, PolymorphicProps } from "../interfaces.js";
 import styles from "./VisuallyHidden.module.scss";
 
 /**

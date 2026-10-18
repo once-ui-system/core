@@ -1,12 +1,12 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { MissingDependency } from "../../utils/MissingDependency";
-import type { BarChartProps } from "./BarChart.impl";
-import type { DataPoint } from "./interfaces";
+import { MissingDependency } from "../../utils/MissingDependency.js";
+import type { BarChartProps } from "./BarChart.impl.js";
+import type { DataPoint } from "./interfaces.js";
 
 const BarChartImpl = React.lazy(() =>
-  import("./BarChart.impl").catch(() => {
+  import("./BarChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <BarChart /> requires the "recharts" package. Install it with: npm install recharts',
     );

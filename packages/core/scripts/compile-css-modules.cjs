@@ -16,9 +16,10 @@ const path = require("node:path");
 // sass-loader would compile it in development (expanded, comments kept), so
 // the CSS the bundler receives is the same text it received before.
 //
-// The `.module.scss` sources keep shipping beside the CSS: nothing leaves the
-// tarball, and `pnpm dev` (`tsc --watch`, which re-emits the `.scss` imports)
-// keeps working in the workspace apps, which install `sass` themselves.
+// Only the CSS ships. The `.module.scss` sources and the `breakpoints.scss`
+// they `@use` stay in `src/` (3.0, B5): `pnpm dev` (scripts/dev.mjs) runs this
+// script again after each `tsc --watch` emit and on every `.scss` change, so
+// the workspace apps never see a Sass import either.
 //
 // The build fails if a module does not compile, if an import would point at
 // CSS that was not written, or if any emitted file still imports Sass.
@@ -27,7 +28,7 @@ const ROOT = path.resolve(__dirname, "..");
 const SRC = path.join(ROOT, "src");
 const DIST = path.join(ROOT, "dist");
 
-// `sass` is this package's optional peer, installed here by the workspace; the
+// `sass` is a build-time devDependency (no longer a peer in 3.0); the
 // foundations package compiles the tokens with the same one.
 const foundationsRoot = path.dirname(require.resolve("@once-ui-system/foundations/package.json"));
 const sass = require(require.resolve("sass", { paths: [ROOT, foundationsRoot] }));
@@ -39,14 +40,11 @@ const SCSS_MODULE_IMPORT =
 const ANY_SASS_IMPORT =
   /(\bfrom\s*|\bimport\s*\(\s*|\bimport\s+|\brequire\s*\(\s*)(["'])[^"'\n]+\.s[ac]ss\2/;
 
-// Folders copied into dist that hold no package code: the CLIs and the harness.
-const NOT_CODE = new Set(["ai", "agent", "scripts"].map((dir) => path.join(DIST, dir)));
-
 function walk(dir, keep, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) {
-      if (!NOT_CODE.has(full)) walk(full, keep, files);
+      walk(full, keep, files);
     } else if (keep(entry.name)) {
       files.push(full);
     }

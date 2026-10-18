@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { Column } from "../components/Column";
-import { Icon } from "../components/Icon";
-import { Text } from "../components/Text";
+import { Column } from "../components/Column.js";
+import { Icon } from "../components/Icon.js";
+import { Text } from "../components/Text.js";
 
 export interface MissingDependencyProps {
   component: string;

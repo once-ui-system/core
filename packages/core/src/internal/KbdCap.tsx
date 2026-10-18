@@ -1,7 +1,7 @@
 import type React from "react";
 import { forwardRef, type ReactNode } from "react";
-import { Flex } from "../components/Flex";
-import { Text } from "../components/Text";
+import { Flex } from "../components/Flex.js";
+import { Text } from "../components/Text.js";
 
 export interface KbdCapProps extends React.ComponentProps<typeof Flex> {
   children?: ReactNode;

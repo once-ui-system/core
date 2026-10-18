@@ -1,16 +1,16 @@
 "use client";
 
 import { forwardRef, useEffect, useRef, useState } from "react";
-import { Reveal } from "../internal/Reveal";
-import { SnapCarousel } from "../internal/SnapCarousel";
-import { CSSUnit, SpacingToken } from "../types";
+import { Reveal } from "../internal/Reveal.js";
+import { SnapCarousel } from "../internal/SnapCarousel.js";
+import { CSSUnit, SpacingToken } from "../types.js";
 import styles from "./Carousel.module.scss";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
-import { Media } from "./Media";
-import { Row } from "./Row";
-import { Scroller } from "./Scroller";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { IconButton } from "./IconButton.js";
+import { Media } from "./Media.js";
+import { Row } from "./Row.js";
+import { Scroller } from "./Scroller.js";
 
 interface CarouselItem {
   slide: string | React.ReactNode;

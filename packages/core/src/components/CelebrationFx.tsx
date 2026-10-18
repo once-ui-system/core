@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import type { Speed } from "../types";
-import { speedFactor } from "../utils/speed";
-import { Flex } from "./Flex";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import type { Speed } from "../types.js";
+import { speedFactor } from "../utils/speed.js";
+import { Flex } from "./Flex.js";
 
 type CelebrationType = "confetti" | "fireworks";
 

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { forwardRef, ReactNode, SyntheticEvent } from "react";
-import { Column } from "../components/Column";
-import { Row } from "../components/Row";
+import { Column } from "../components/Column.js";
+import { Row } from "../components/Row.js";
 
 interface DropdownPanelProps extends Omit<React.ComponentProps<typeof Row>, "onSelect"> {
   selectedOption?: string;

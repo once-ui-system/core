@@ -1,17 +1,17 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, type MouseEventHandler, type ReactNode, useId } from "react";
-import type { IconName } from "../icons";
-import { InteractiveTag } from "../internal/InteractiveTag";
-import type { TextVariant, Tone, TShirtSizes } from "../types";
-import { Arrow } from "./Arrow";
-import type { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import type { IconButtonProps } from "./IconButton";
-import { Row } from "./Row";
-import { SmartLink } from "./SmartLink";
+import type { IconName } from "../icons.js";
+import { InteractiveTag } from "../internal/InteractiveTag.js";
+import type { TextVariant, Tone, TShirtSizes } from "../types.js";
+import { Arrow } from "./Arrow.js";
+import type { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import type { IconButtonProps } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { SmartLink } from "./SmartLink.js";
 import styles from "./Tag.module.scss";
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 /**
  * A compact label. 3.0 folds 2.x's Badge and Chip into it:

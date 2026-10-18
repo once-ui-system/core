@@ -1,11 +1,11 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { StyleProps } from "../interfaces";
-import { CountUp } from "../internal/CountUp";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { StyleProps } from "../interfaces.js";
+import { CountUp } from "../internal/CountUp.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 interface ProgressBarProps extends React.ComponentProps<typeof Flex> {
   value: number;

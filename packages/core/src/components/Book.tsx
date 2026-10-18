@@ -3,11 +3,11 @@
 import type React from "react";
 import { forwardRef } from "react";
 import styles from "./Book.module.scss";
-import { Column } from "./Column";
-import { ElementType } from "./ElementType";
-import { Flex } from "./Flex";
-import { Media } from "./Media";
-import { Row } from "./Row";
+import { Column } from "./Column.js";
+import { ElementType } from "./ElementType.js";
+import { Flex } from "./Flex.js";
+import { Media } from "./Media.js";
+import { Row } from "./Row.js";
 
 interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   /** Cover artwork. Omit to render a blank cover you can fill with children. */

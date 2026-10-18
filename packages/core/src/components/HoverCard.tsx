@@ -1,10 +1,10 @@
 "use client";
 
 import { forwardRef } from "react";
-import { CursorFollower, type CursorFollowerProps } from "../internal/CursorFollower";
-import { HoverCover } from "../internal/HoverCover";
-import type { Placement } from "../types";
-import { Animation, type AnimationProps } from "./Animation";
+import { CursorFollower, type CursorFollowerProps } from "../internal/CursorFollower.js";
+import { HoverCover } from "../internal/HoverCover.js";
+import type { Placement } from "../types.js";
+import { Animation, type AnimationProps } from "./Animation.js";
 
 interface HoverCardProps extends Omit<AnimationProps, "triggerType" | "portal" | "placement"> {
   /**

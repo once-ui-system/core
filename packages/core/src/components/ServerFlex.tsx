@@ -1,8 +1,8 @@
 import classNames from "clsx";
 import { type CSSProperties, type ElementType, forwardRef, type HTMLAttributes } from "react";
 
-import type { FlexLayoutProps } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { FlexLayoutProps } from "../interfaces.js";
+import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types.js";
 import {
   BELOW_HEADER,
   crossAxisClass,
@@ -18,8 +18,8 @@ import {
   spacingValue,
   themeAttributes,
   translateTransform,
-} from "../utils/layoutClasses";
-import { numericSpacingStyle } from "../utils/spacingStyle";
+} from "../utils/layoutClasses.js";
+import { numericSpacingStyle } from "../utils/spacingStyle.js";
 
 /**
  * What the two halves of Flex take: the layout props, plus the attributes of

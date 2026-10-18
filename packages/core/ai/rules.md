@@ -276,20 +276,21 @@ Without this, mount-timed animations play while still off-screen and the user sc
 
 ## Imports
 
-30. Most things come from the package root, but three modules do not, because
-their dependencies are optional peers and a root re-export would drag the
-specifier into every consumer's module graph:
+30. Most things come from the package root, but these modules do not, because
+their dependencies are optional peers (or, for `EmojiPicker`, a large dataset)
+and a root re-export would drag them into every consumer's module graph:
 
 | Import | From | Peer the app installs |
 |--------|------|-----------------------|
 | charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+| `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` | none |
+| `EmojiPicker` | `@once-ui-system/core/emoji` | none |
 | `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 
-Naming one of these from the root does not resolve. `MediaAudioPlayer` and
-`MediaVideoPlayer` are not on the root either: they live on the
-`./components/*` subpath (`@once-ui-system/core/components/MediaAudioPlayer`).
+Naming one of these from the root does not resolve, and there are no deep
+imports (`@once-ui-system/core/components/…` is not an entry point).
 Each component slice in `ai/components/`, each catalog entry, and each hook or
 function in `spec.json`'s `functions` carries the specifier to import it from
 when it is not the root; `ai/manifest.json`'s `imports` lists every entry

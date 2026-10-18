@@ -6,7 +6,7 @@ import {
   type StylePanelRootProps,
   type StylePanelVisibility,
   sections,
-} from "./StylePanelSections";
+} from "./StylePanelSections.js";
 
 export type {
   StyleGroupProps,
@@ -24,8 +24,8 @@ export type {
   StylePanelVisibility,
   StyleRowProps,
   StyleSchemeRowProps,
-} from "./StylePanelSections";
-export { useStylePanel } from "./StylePanelSections";
+} from "./StylePanelSections.js";
+export { useStylePanel } from "./StylePanelSections.js";
 
 export interface StylePanelProps extends StylePanelRootProps {
   /** Hide whole sections or individual rows. Omitted keys stay visible. */

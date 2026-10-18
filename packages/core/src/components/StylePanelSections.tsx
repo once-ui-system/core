@@ -14,7 +14,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useDataTheme } from "../contexts/DataThemeProvider";
+import { useDataTheme } from "../contexts/DataThemeProvider.js";
 import {
   type BodyLineHeight,
   type BodySize,
@@ -27,21 +27,21 @@ import {
   type Theme,
   type TransitionStyle,
   useStyle,
-} from "../contexts/ThemeProvider";
-import { mergeLabels } from "../internal/labels";
-import { revealInStrip } from "../internal/reveal";
-import type { ChartMode } from "../modules/data/interfaces";
-import { type Schemes, schemes } from "../types";
-import { ColorInput } from "./ColorInput";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Scroller, type ScrollerLabels } from "./Scroller";
-import { SegmentedControl, type SegmentedControlProps } from "./SegmentedControl";
+} from "../contexts/ThemeProvider.js";
+import { mergeLabels } from "../internal/labels.js";
+import { revealInStrip } from "../internal/reveal.js";
+import type { ChartMode } from "../modules/data/interfaces.js";
+import { type Schemes, schemes } from "../types.js";
+import { ColorInput } from "./ColorInput.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Scroller, type ScrollerLabels } from "./Scroller.js";
+import { SegmentedControl, type SegmentedControlProps } from "./SegmentedControl.js";
 import styles from "./StylePanel.module.scss";
-import { Text } from "./Text";
-import { ThemeSwitcher, type ThemeSwitcherLabels } from "./ThemeSwitcher";
+import { Text } from "./Text.js";
+import { ThemeSwitcher, type ThemeSwitcherLabels } from "./ThemeSwitcher.js";
 
 /** Every style choice the panel can edit, including the chart mode, which is
  *  owned by DataThemeProvider rather than ThemeProvider. */

@@ -1,12 +1,12 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { MissingDependency } from "../../utils/MissingDependency";
-import type { DataPoint } from "./interfaces";
-import type { LineBarChartProps } from "./LineBarChart.impl";
+import { MissingDependency } from "../../utils/MissingDependency.js";
+import type { DataPoint } from "./interfaces.js";
+import type { LineBarChartProps } from "./LineBarChart.impl.js";
 
 const LineBarChartImpl = React.lazy(() =>
-  import("./LineBarChart.impl").catch(() => {
+  import("./LineBarChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <LineBarChart /> requires the "recharts" package. Install it with: npm install recharts',
     );

@@ -2,12 +2,16 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
-import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
-import { splitAria, useHiddenInput } from "../internal/hiddenInput";
-import { useControllableState } from "../internal/useControllableState";
-import { Flex } from "./Flex";
-import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
-import { useRadioGroupItem } from "./RadioGroupContext";
+import {
+  type ControlChromeProps,
+  describedBy,
+  useControlChrome,
+} from "../internal/controlChrome.js";
+import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Flex } from "./Flex.js";
+import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
+import { useRadioGroupItem } from "./RadioGroupContext.js";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface RadioButtonProps

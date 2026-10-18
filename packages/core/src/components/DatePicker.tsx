@@ -2,28 +2,28 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { mergeLabels } from "../internal/labels";
-import { Reveal } from "../internal/Reveal";
-import { CondensedTShirtSizes } from "../types";
-import { getCalendarNames } from "../utils/calendarLocale";
+import { mergeLabels } from "../internal/labels.js";
+import { Reveal } from "../internal/Reveal.js";
+import { CondensedTShirtSizes } from "../types.js";
+import { getCalendarNames } from "../utils/calendarLocale.js";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
   setLastOpenedDropdown,
-} from "../utils/dropdownState";
-import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext";
-import { Button } from "./Button";
-import { Column } from "./Column";
+} from "../utils/dropdownState.js";
+import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationContext.js";
+import { Button } from "./Button.js";
+import { Column } from "./Column.js";
 import styles from "./DatePicker.module.scss";
-import { Dropdown } from "./Dropdown";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { NumberInput } from "./NumberInput";
-import { Option } from "./Option";
-import { Row } from "./Row";
-import { SegmentedControl } from "./SegmentedControl";
-import { Text } from "./Text";
+import { Dropdown } from "./Dropdown.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { NumberInput } from "./NumberInput.js";
+import { Option } from "./Option.js";
+import { Row } from "./Row.js";
+import { SegmentedControl } from "./SegmentedControl.js";
+import { Text } from "./Text.js";
 
 /**
  * The picker's own words, for a translated interface. Omitted fields keep the

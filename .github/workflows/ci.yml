@@ -70,8 +70,8 @@ jobs:
       - name: Test
         run: pnpm --filter @once-ui-system/core test
 
-      # Advisory: publint and arethetypeswrong report known failures (the dist
-      # is bundler-only ESM, see AGENTS.md), so this step reports but never
+      # Advisory: publint and arethetypeswrong (esm-only profile). Both pass
+      # since the 3.0 real-ESM build (see AGENTS.md); the step still never
       # fails the run. Read its log for new failures.
       - name: Package checks (advisory, does not fail CI)
         continue-on-error: true

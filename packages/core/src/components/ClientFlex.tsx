@@ -1,10 +1,10 @@
 "use client";
 
 import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { useLayout } from "../contexts/LayoutProvider";
-import { breakpointStyle } from "../utils/layoutClasses";
-import { Cursor } from "./Cursor";
-import { ServerFlex, type ServerFlexProps } from "./ServerFlex";
+import { useLayout } from "../contexts/LayoutProvider.js";
+import { breakpointStyle } from "../utils/layoutClasses.js";
+import { Cursor } from "./Cursor.js";
+import { ServerFlex, type ServerFlexProps } from "./ServerFlex.js";
 
 type ClientFlexProps = ServerFlexProps;
 

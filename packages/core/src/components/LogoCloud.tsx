@@ -3,9 +3,9 @@
 import classNames from "clsx";
 import type { ComponentProps } from "react";
 import React, { forwardRef, useEffect, useState } from "react";
-import { Flex } from "./Flex";
-import { Grid } from "./Grid";
-import { Logo } from "./Logo";
+import { Flex } from "./Flex.js";
+import { Grid } from "./Grid.js";
+import { Logo } from "./Logo.js";
 import styles from "./LogoCloud.module.scss";
 
 type LogoProps = ComponentProps<typeof Logo>;

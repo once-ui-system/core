@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartVariant } from "./interfaces";
-import { Swatch } from "./Swatch";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { ChartVariant } from "./interfaces.js";
+import { Swatch } from "./Swatch.js";
 
 interface LegendProps {
   payload?: readonly Record<string, any>[];

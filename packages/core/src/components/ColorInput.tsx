@@ -1,13 +1,13 @@
 "use client";
 import React, { forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
-import { mergeLabels } from "../internal/labels";
-import { Column } from "./Column";
-import { Dropdown } from "./Dropdown";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Input, InputProps } from "./Input";
-import { Slider } from "./Slider";
+import { mergeLabels } from "../internal/labels.js";
+import { Column } from "./Column.js";
+import { Dropdown } from "./Dropdown.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Input, InputProps } from "./Input.js";
+import { Slider } from "./Slider.js";
 
 /** The field's own controls. Omitted fields keep the English default. */
 interface ColorInputLabels {

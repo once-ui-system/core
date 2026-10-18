@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import { spacingValue } from "./layoutClasses";
+import { spacingValue } from "./layoutClasses.js";
 
 /** The spacing props that take a number (px) or a CSS length as well as a token. */
 export interface NumericSpacingProps {

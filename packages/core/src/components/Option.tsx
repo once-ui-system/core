@@ -2,12 +2,12 @@
 
 import classNames from "clsx";
 import React, { forwardRef, KeyboardEvent, useContext, useEffect, useRef, useState } from "react";
-import { Column } from "./Column";
-import { ElementType } from "./ElementType";
+import { Column } from "./Column.js";
+import { ElementType } from "./ElementType.js";
 import styles from "./Option.module.scss";
-import { OptionRoleContext } from "./OptionRoleContext";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { OptionRoleContext } from "./OptionRoleContext.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 export interface OptionProps extends Omit<React.ComponentProps<typeof Row>, "onClick" | "prefix"> {
   label?: React.ReactNode;

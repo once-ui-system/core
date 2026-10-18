@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { IconName } from "../icons";
-import { TShirtSizes } from "../types";
-import { ElementType } from "./ElementType";
-import { Icon } from "./Icon";
+import { IconName } from "../icons.js";
+import { TShirtSizes } from "../types.js";
+import { ElementType } from "./ElementType.js";
+import { Icon } from "./Icon.js";
 
 interface SmartLinkCommonProps {
   prefixIcon?: IconName;

@@ -9,15 +9,15 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import { TShirtSizes } from "../types";
-import { Column } from "./Column";
-import { useFieldSize } from "./FormContext";
-import { IconButton } from "./IconButton";
+import { useDebounce } from "../hooks/useDebounce.js";
+import { TShirtSizes } from "../types.js";
+import { Column } from "./Column.js";
+import { useFieldSize } from "./FormContext.js";
+import { IconButton } from "./IconButton.js";
 import styles from "./Input.module.scss";
-import { Row } from "./Row";
-import { Spinner } from "./Spinner";
-import { Text } from "./Text";
+import { Row } from "./Row.js";
+import { Spinner } from "./Spinner.js";
+import { Text } from "./Text.js";
 
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
   id: string;

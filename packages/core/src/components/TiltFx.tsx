@@ -1,8 +1,8 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef } from "react";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { Flex } from "./Flex";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import { Flex } from "./Flex.js";
 import styles from "./TiltFx.module.scss";
 
 interface TiltFxProps extends React.ComponentProps<typeof Flex> {

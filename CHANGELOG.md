@@ -89,9 +89,41 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   [MIGRATING.md § 9](MIGRATING.md#9-badge-and-chip-are-tag).
 - **Button and IconButton `variant="quaternary"`, `"danger"`, `"success"` and `"warning"`**
   and their icon-only `color`. `quaternary` is `ghost`; the rest are a `tone`.
+- **The subset subpaths and deep imports** (B2): `@once-ui-system/core/components`,
+  `/components/*`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils` and
+  `/modules`. They re-exported parts of the root (two module identities for one
+  context in a bundle that used both), and `/components/*` made internals such as
+  `FormContext` and `StylePanelSections` public. Import from the root, `/media` or
+  `/emoji`; the codemod's import pass (`scripts/codemod-3.0-imports.mjs`) moves them.
+  See [MIGRATING.md § 12](MIGRATING.md#12-packaging-and-imports).
+- **`main` and every `require` condition** (B2). They pointed at ESM files, so
+  `require()` of them always threw. Each entry is now `{ types, default }`.
+- **The `sass` peer, and the `.module.scss` sources in the tarball** (B5). The build
+  has shipped compiled `.module.css` since 2.1 and no shipped file imports Sass; the
+  sources and `dist/styles/breakpoints.scss` only served the workspace's watch build,
+  which now runs the CSS compile itself (`pnpm dev`). `sideEffects` is `["*.css"]`.
 
 ### Changed
 
+- **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
+  file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
+  `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
+  package, and publint and arethetypeswrong (`esm-only`) pass; the component entries
+  still import their CSS modules, which takes a bundler or a CSS loader, while
+  `/config`, `/server` and `/next` (with `next` installed) load in plain Node, also
+  through `require()` on Node 22.12+.
+  The CLIs are `scripts/init-agent.cjs` and `scripts/validate-ai-code.cjs` (the bin
+  names are unchanged), and the build scripts are `.cjs` too.
+- **`EmojiPicker` is on `@once-ui-system/core/emoji`** (F9), so its emoji data (272 KB
+  of JSON) is out of the root graph. **`MediaAudioPlayer`, `MediaVideoPlayer`,
+  `Scrubber` and `CompareImage` are on `@once-ui-system/core/media`**, beside
+  `MediaUpload`, instead of the root or `/components/<Name>`. The harness's
+  `importFrom`, manifest `imports` and rules say so.
+- **A smaller tarball** (B6): no second copy of `ai/`, `agent/` and the CLI scripts in
+  `dist/`, no `dist/test` helpers, no source or declaration maps (they pointed at the
+  `src/` the package does not ship), and no `ai/catalog.seed.json` or
+  `ai/eval-tasks.md` (generator input). `npm pack`: 1604 files, 1.05 MB packed and
+  6.46 MB unpacked before; 817 files, 0.71 MB and 3.75 MB after.
 - **`as` is typed by the element** on Flex, Row, Column, Grid and VisuallyHidden (G1):
   `<Row as="a" href>`, `<Column as="form" onSubmit>` and `<Column as="ul" ref>` type
   their attributes and ref. Other components no longer accept an untyped `as`

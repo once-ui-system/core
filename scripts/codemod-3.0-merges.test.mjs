@@ -225,7 +225,8 @@ describe("F5: Dropdown, ContextMenu, EmojiPickerDropdown, UserMenu", () => {
       "EmojiPickerDropdown",
       '<EmojiPickerDropdown trigger={<IconButton icon="smiley" />} onSelect={add} columns="6" minWidth="20rem" />\n',
     );
-    assert.equal(r.importLine, core("EmojiPicker").trim());
+    // F9: the import pass then moves EmojiPicker to its own subpath.
+    assert.equal(r.importLine, 'import { EmojiPicker } from "@once-ui-system/core/emoji";');
     assert.equal(
       r.body,
       '<EmojiPicker trigger={<IconButton icon="smiley" />} onSelect={add} columns="6" dropdownProps={{ minWidth: "20rem" }} />\n',

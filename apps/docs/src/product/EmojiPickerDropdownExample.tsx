@@ -3,11 +3,11 @@
 import React, { useState } from "react";
 import {
   Button,
-  EmojiPicker,
   IconButton,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 
 export function BasicEmojiPickerDropdown() {
   const [selectedEmoji, setSelectedEmoji] = useState("");

@@ -2,12 +2,12 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { IconName } from "../icons";
-import type { Tone } from "../types";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
+import { IconName } from "../icons.js";
+import type { Tone } from "../types.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
 import styles from "./Toast.module.scss";
 
 interface ToastProps {

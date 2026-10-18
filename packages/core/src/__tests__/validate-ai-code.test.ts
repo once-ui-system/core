@@ -17,7 +17,7 @@ const {
   registeredIconNames,
   projectIconNames,
   isNextProject,
-} = require("../../scripts/validate-ai-code.js");
+} = require("../../scripts/validate-ai-code.cjs");
 
 type Issue = { rule: string; message: string; fix?: string };
 type Options = { next?: boolean; icons?: { names: Set<string>; unresolved: boolean } };

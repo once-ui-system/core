@@ -85,19 +85,13 @@ describe("harness entry points", () => {
     expect((components.LayoutProvider as { extends?: string[] }).extends).toBeUndefined();
   });
 
-  it.each([
-    "Tabs",
-    "TabList",
-    "Tab",
-    "TabPanel",
-    "Drawer",
-    "VisuallyHidden",
-    "Breadcrumbs",
-    "Kbd",
-  ])("has %s on the root", (name) => {
-    expect(components[name]).toBeDefined();
-    expect(components[name].importFrom).toBeUndefined();
-  });
+  it.each(["Tabs", "TabList", "Tab", "TabPanel", "Drawer", "VisuallyHidden", "Breadcrumbs", "Kbd"])(
+    "has %s on the root",
+    (name) => {
+      expect(components[name]).toBeDefined();
+      expect(components[name].importFrom).toBeUndefined();
+    },
+  );
 
   it("tells an agent in the manifest which specifier holds what", () => {
     expect(imports[MDX]).toMatchObject({ peer: "prismjs" });
@@ -110,9 +104,23 @@ describe("harness entry points", () => {
     );
     expect(imports[CONFIG].exports).toEqual(["defineConfig"]);
     expect(imports[CONFIG].types).toContain("OnceUIConfig");
-    expect(imports["@once-ui-system/core/components/<Name>"].exports).toEqual([
+    // 3.0 (B2, F9): no `./components/*` subpath; the players live on `./media`
+    // beside Scrubber, CompareImage and MediaUpload, and EmojiPicker on `./emoji`.
+    expect(Object.keys(imports).filter((specifier) => specifier.includes("/components"))).toEqual(
+      [],
+    );
+    expect(imports["@once-ui-system/core/media"]).toMatchObject({ peer: "compressorjs" });
+    expect([...(imports["@once-ui-system/core/media"].exports ?? [])].sort()).toEqual([
+      "CompareImage",
       "MediaAudioPlayer",
+      "MediaUpload",
       "MediaVideoPlayer",
+      "Scrubber",
     ]);
+    expect(imports["@once-ui-system/core/media"].types).toEqual(
+      expect.arrayContaining(["MediaAudioPlayerProps", "ScrubberProps", "MediaUploadProps"]),
+    );
+    expect(imports["@once-ui-system/core/emoji"].exports).toEqual(["EmojiPicker"]);
+    expect(imports["@once-ui-system/core/emoji"].types).toEqual(["EmojiPickerProps"]);
   });
 });

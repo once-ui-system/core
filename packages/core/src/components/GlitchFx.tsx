@@ -2,9 +2,9 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useState } from "react";
-import type { Speed } from "../types";
-import { speedFactor } from "../utils/speed";
-import { Flex } from "./Flex";
+import type { Speed } from "../types.js";
+import { speedFactor } from "../utils/speed.js";
+import { Flex } from "./Flex.js";
 import styles from "./GlitchFx.module.scss";
 
 interface GlitchFxProps extends React.ComponentProps<typeof Flex> {

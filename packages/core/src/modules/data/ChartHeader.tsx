@@ -13,14 +13,14 @@ import {
   subYears,
 } from "date-fns";
 import React, { useEffect, useState } from "react";
-import { Column } from "../../components/Column";
-import { DatePicker, type DateRange } from "../../components/DatePicker";
-import { Dropdown } from "../../components/Dropdown";
-import { IconButton } from "../../components/IconButton";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { ToggleButton } from "../../components/ToggleButton";
-import { DateConfig, PresetsConfig } from "./interfaces";
+import { Column } from "../../components/Column.js";
+import { DatePicker, type DateRange } from "../../components/DatePicker.js";
+import { Dropdown } from "../../components/Dropdown.js";
+import { IconButton } from "../../components/IconButton.js";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { ToggleButton } from "../../components/ToggleButton.js";
+import { DateConfig, PresetsConfig } from "./interfaces.js";
 
 interface ChartHeaderProps
   extends Omit<React.ComponentProps<typeof Column>, "title" | "description"> {

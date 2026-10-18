@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useInViewport } from "../hooks/useInViewport";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { DisplayProps } from "../interfaces";
-import { cssColor } from "../internal/cssColor";
-import { ColorValue, SpacingToken, Speed } from "../types";
-import { speedFactor } from "../utils/speed";
-import { Flex } from "./Flex";
+import { useInViewport } from "../hooks/useInViewport.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import { DisplayProps } from "../interfaces.js";
+import { cssColor } from "../internal/cssColor.js";
+import { ColorValue, SpacingToken, Speed } from "../types.js";
+import { speedFactor } from "../utils/speed.js";
+import { Flex } from "./Flex.js";
 
 interface ParticleFxProps extends React.ComponentProps<typeof Flex> {
   density?: number;

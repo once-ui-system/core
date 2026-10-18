@@ -17,29 +17,29 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { NavigationLayout } from "../hooks/useArrowNavigation";
-import { ContextMenuImpl } from "../internal/ContextMenuImpl";
-import { DropdownPanel } from "../internal/DropdownPanel";
-import type { CSSUnit, Placement } from "../types";
+import { NavigationLayout } from "../hooks/useArrowNavigation.js";
+import { ContextMenuImpl } from "../internal/ContextMenuImpl.js";
+import { DropdownPanel } from "../internal/DropdownPanel.js";
+import type { CSSUnit, Placement } from "../types.js";
 import {
   clearLastOpenedDropdown,
   getLastOpenedDropdown,
   setLastOpenedDropdown,
-} from "../utils/dropdownState";
-import { ArrowNavigation } from "./ArrowNavigationContext";
-import { Button } from "./Button";
-import { Column } from "./Column";
+} from "../utils/dropdownState.js";
+import { ArrowNavigation } from "./ArrowNavigationContext.js";
+import { Button } from "./Button.js";
+import { Column } from "./Column.js";
 import styles from "./Dropdown.module.scss";
 import {
   DropdownComboboxContext,
   DropdownTriggerContext,
   type DropdownTriggerState,
-} from "./DropdownTriggerContext";
-import { Flex } from "./Flex";
-import { FocusTrap } from "./FocusTrap";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
-import { ScrollLock } from "./ScrollLock";
+} from "./DropdownTriggerContext.js";
+import { Flex } from "./Flex.js";
+import { FocusTrap } from "./FocusTrap.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { ScrollLock } from "./ScrollLock.js";
 
 /** A number as px, a CSS length as written. */
 const cssLength = (value: number | string) => (typeof value === "number" ? `${value}px` : value);

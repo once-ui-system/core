@@ -12,8 +12,8 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import type { CSSUnit, Placement, SpacingToken } from "../types";
-import { Flex } from "./Flex";
+import type { CSSUnit, Placement, SpacingToken } from "../types.js";
+import { Flex } from "./Flex.js";
 
 type TriggerType = "hover" | "click" | "manual";
 

@@ -1,15 +1,15 @@
 "use client";
 
 import React from "react";
-import { Accordion } from "../../components/Accordion";
-import { Column } from "../../components/Column";
-import { ElementType } from "../../components/ElementType";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Option } from "../../components/Option";
-import { OptionRoleContext } from "../../components/OptionRoleContext";
-import { Text } from "../../components/Text";
-import type { MenuGroup } from "./MegaMenu";
+import { Accordion } from "../../components/Accordion.js";
+import { Column } from "../../components/Column.js";
+import { ElementType } from "../../components/ElementType.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Option } from "../../components/Option.js";
+import { OptionRoleContext } from "../../components/OptionRoleContext.js";
+import { Text } from "../../components/Text.js";
+import type { MenuGroup } from "./MegaMenu.js";
 
 export interface MegaMenuAccordionProps extends React.ComponentProps<typeof Flex> {
   menuGroups: MenuGroup[];

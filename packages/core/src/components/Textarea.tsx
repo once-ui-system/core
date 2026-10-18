@@ -9,13 +9,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import { TShirtSizes } from "../types";
-import { Column } from "./Column";
-import { useFieldSize } from "./FormContext";
+import { useDebounce } from "../hooks/useDebounce.js";
+import { TShirtSizes } from "../types.js";
+import { Column } from "./Column.js";
+import { useFieldSize } from "./FormContext.js";
 import styles from "./Input.module.scss";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
   id: string;

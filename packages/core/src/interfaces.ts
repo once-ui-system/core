@@ -5,7 +5,7 @@ import type {
   HTMLAttributes,
   ReactNode,
 } from "react";
-import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider";
+import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider.js";
 import {
   BlendMode,
   BlurSize,
@@ -22,7 +22,7 @@ import {
   TextVariant,
   TextWeight,
   UserSelect,
-} from "./types";
+} from "./types.js";
 
 export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
   top?: SpacingToken;

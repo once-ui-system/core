@@ -1,14 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { useOgData } from "../hooks/useFetchOg";
-import { CondensedTShirtSizes } from "../types";
-import { Card } from "./Card";
-import { Column } from "./Column";
-import { Media } from "./Media";
-import { Row } from "./Row";
-import { Skeleton } from "./Skeleton";
-import { Text } from "./Text";
+import { useOgData } from "../hooks/useFetchOg.js";
+import { CondensedTShirtSizes } from "../types.js";
+import { Card } from "./Card.js";
+import { Column } from "./Column.js";
+import { Media } from "./Media.js";
+import { Row } from "./Row.js";
+import { Skeleton } from "./Skeleton.js";
+import { Text } from "./Text.js";
 
 export interface OgServiceConfig {
   proxyImageUrl?: (url: string) => string;

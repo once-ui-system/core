@@ -2,18 +2,18 @@
 
 import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { RadiusSize } from "@/types";
-import { Column } from "../../components/Column";
-import type { DateRange } from "../../components/DatePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import type { SizeProps } from "../../interfaces";
-import { cssColor } from "../../internal/cssColor";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { LinearGradient } from "./Gradient";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { LinearGradient } from "./Gradient.js";
 import {
   BarWidth,
   ChartProps,
@@ -21,10 +21,10 @@ import {
   curveType,
   DataPoint,
   SeriesConfig,
-} from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
-import { formatDate } from "./utils/formatDate";
+} from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
+import { formatDate } from "./utils/formatDate.js";
 
 export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;

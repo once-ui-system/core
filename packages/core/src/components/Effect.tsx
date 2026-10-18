@@ -1,13 +1,13 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import type { Speed } from "../types";
-import { BlobFx } from "./BlobFx";
-import { CelebrationFx } from "./CelebrationFx";
-import { Flex } from "./Flex";
-import { MatrixFx } from "./MatrixFx";
-import { ParticleFx } from "./ParticleFx";
-import { WeatherFx } from "./WeatherFx";
+import type { Speed } from "../types.js";
+import { BlobFx } from "./BlobFx.js";
+import { CelebrationFx } from "./CelebrationFx.js";
+import { Flex } from "./Flex.js";
+import { MatrixFx } from "./MatrixFx.js";
+import { ParticleFx } from "./ParticleFx.js";
+import { WeatherFx } from "./WeatherFx.js";
 
 /**
  * The ambient effects that are interchangeable with one another: each paints a

@@ -1,10 +1,10 @@
 import classNames from "clsx";
 import type { CSSProperties, ReactNode } from "react";
 import React, { forwardRef } from "react";
-import { Column } from "../components/Column";
-import { Flex } from "../components/Flex";
-import { SpacingToken } from "../types";
-import { sizeValue } from "../utils/layoutClasses";
+import { Column } from "../components/Column.js";
+import { Flex } from "../components/Flex.js";
+import { SpacingToken } from "../types.js";
+import { sizeValue } from "../utils/layoutClasses.js";
 import styles from "./Masonry.module.scss";
 
 export interface MasonryBreakpointProps {

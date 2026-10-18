@@ -1,9 +1,9 @@
 "use client";
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
-import { Row } from "../components/Row";
-import type { Speed } from "../types";
-import { speedFactor } from "../utils/speed";
+import { Row } from "../components/Row.js";
+import type { Speed } from "../types.js";
+import { speedFactor } from "../utils/speed.js";
 import styles from "./Marquee.module.scss";
 
 interface MarqueeProps extends React.ComponentProps<typeof Row> {

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useCallback, useState } from "react";
-import { CondensedTShirtSizes } from "../types";
-import { Accordion } from "./Accordion";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Line } from "./Line";
+import { CondensedTShirtSizes } from "../types.js";
+import { Accordion } from "./Accordion.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Line } from "./Line.js";
 
 export type AccordionItem = {
   title: React.ReactNode;

@@ -1,8 +1,8 @@
 "use client";
 
 import { type ReactNode, useId } from "react";
-import { useFieldSize } from "../components/FormContext";
-import type { TShirtSizes } from "../types";
+import { useFieldSize } from "../components/FormContext.js";
+import type { TShirtSizes } from "../types.js";
 
 /** The three sizes a checkbox, radio or switch is drawn at. */
 export type ControlSize = "s" | "m" | "l";

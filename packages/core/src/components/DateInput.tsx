@@ -1,14 +1,14 @@
 "use client";
 
 import React, { forwardRef, useCallback, useId, useRef } from "react";
-import { useControllableState } from "../internal/useControllableState";
-import { fieldLocale } from "../utils/calendarLocale";
-import { DatePicker, type DatePickerLabels, type DateRange } from "./DatePicker";
-import { Dropdown } from "./Dropdown";
-import { DropdownComboboxContext } from "./DropdownTriggerContext";
-import { Flex } from "./Flex";
-import { Input } from "./Input";
-import { Row } from "./Row";
+import { useControllableState } from "../internal/useControllableState.js";
+import { fieldLocale } from "../utils/calendarLocale.js";
+import { DatePicker, type DatePickerLabels, type DateRange } from "./DatePicker.js";
+import { Dropdown } from "./Dropdown.js";
+import { DropdownComboboxContext } from "./DropdownTriggerContext.js";
+import { Flex } from "./Flex.js";
+import { Input } from "./Input.js";
+import { Row } from "./Row.js";
 
 interface SingleDateInputProps
   extends Omit<React.ComponentProps<typeof Input>, "value" | "defaultValue" | "onValueChange"> {

@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Column } from "../../components/Column";
-import { Text } from "../../components/Text";
-import { CountUp } from "../../internal/CountUp";
-import { cssColor } from "../../internal/cssColor";
-import { ColorValue } from "../../types";
+import { Column } from "../../components/Column.js";
+import { Text } from "../../components/Text.js";
+import { CountUp } from "../../internal/CountUp.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { ColorValue } from "../../types.js";
 import styles from "./Gauge.module.css";
 
 export interface RadialGaugeProps extends Omit<React.ComponentProps<typeof Column>, "direction"> {

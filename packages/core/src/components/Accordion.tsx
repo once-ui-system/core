@@ -2,15 +2,15 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useId, useImperativeHandle, useRef } from "react";
-import type { IconName } from "../icons";
-import { useControllableState } from "../internal/useControllableState";
-import { TShirtSizes } from "../types";
+import type { IconName } from "../icons.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { TShirtSizes } from "../types.js";
 import styles from "./Accordion.module.scss";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Grid } from "./Grid";
-import { Icon } from "./Icon";
-import { Row } from "./Row";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Grid } from "./Grid.js";
+import { Icon } from "./Icon.js";
+import { Row } from "./Row.js";
 
 export interface AccordionHandle {
   toggle: () => void;

@@ -2,9 +2,9 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
 import styles from "./ShineFx.module.scss";
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 export interface ShineFxProps extends React.ComponentProps<typeof Text> {
   /** Milliseconds one sweep takes. Was `speed` until 3.0 (and seconds until 2.0). */

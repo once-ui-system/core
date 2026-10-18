@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, Suspense } from "react";
-import { MissingDependency } from "../../utils/MissingDependency";
-import type { MediaUploadProps } from "./MediaUpload.impl";
+import { MissingDependency } from "../../utils/MissingDependency.js";
+import type { MediaUploadProps } from "./MediaUpload.impl.js";
 
 const MediaUploadImpl = React.lazy(() =>
-  import("./MediaUpload.impl").catch(() => {
+  import("./MediaUpload.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <MediaUpload /> requires the "compressorjs" package. Install it with: npm install compressorjs',
     );

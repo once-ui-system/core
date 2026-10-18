@@ -1,7 +1,7 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import type { FlexPropsOf } from "../interfaces";
-import { Column } from "./Column";
+import type { FlexPropsOf } from "../interfaces.js";
+import { Column } from "./Column.js";
 
 interface ListProps extends Omit<FlexPropsOf<"ul">, "ref"> {
   as?: "ul" | "ol";

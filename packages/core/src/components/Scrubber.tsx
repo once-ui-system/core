@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import type { SpacingToken, Tone } from "../types";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import type { SpacingToken, Tone } from "../types.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 /**
  * A block on a track, positioned by time rather than by layout. Times are in

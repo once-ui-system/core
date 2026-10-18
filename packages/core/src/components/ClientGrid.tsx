@@ -1,10 +1,10 @@
 "use client";
 
 import { CSSProperties, forwardRef, useCallback, useEffect, useRef, useState } from "react";
-import { useLayout } from "../contexts/LayoutProvider";
-import { breakpointStyle } from "../utils/layoutClasses";
-import { Cursor } from "./Cursor";
-import { ServerGrid, type ServerGridProps } from "./ServerGrid";
+import { useLayout } from "../contexts/LayoutProvider.js";
+import { breakpointStyle } from "../utils/layoutClasses.js";
+import { Cursor } from "./Cursor.js";
+import { ServerGrid, type ServerGridProps } from "./ServerGrid.js";
 
 type ClientGridProps = ServerGridProps;
 

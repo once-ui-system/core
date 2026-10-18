@@ -3,11 +3,11 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useLayout } from "../contexts/LayoutProvider";
-import { ToastPosition, Tone } from "../types";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { Toast } from "./Toast";
+import { useLayout } from "../contexts/LayoutProvider.js";
+import { ToastPosition, Tone } from "../types.js";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import { Toast } from "./Toast.js";
 import styles from "./Toaster.module.scss";
 
 interface ToasterProps {

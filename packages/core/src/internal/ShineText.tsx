@@ -2,8 +2,8 @@
 
 import classNames from "clsx";
 import React from "react";
-import { Text } from "../components/Text";
-import { useReducedMotion } from "../hooks/useReducedMotion";
+import { Text } from "../components/Text.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
 import styles from "./ShineText.module.scss";
 
 /**

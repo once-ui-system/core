@@ -1,7 +1,7 @@
 import type React from "react";
 import { forwardRef } from "react";
-import { Row } from "../components/Row";
-import type { Tone, TShirtSizes } from "../types";
+import { Row } from "../components/Row.js";
+import type { Tone, TShirtSizes } from "../types.js";
 import styles from "./PulseRing.module.scss";
 
 export interface PulseRingProps extends React.ComponentProps<typeof Row> {

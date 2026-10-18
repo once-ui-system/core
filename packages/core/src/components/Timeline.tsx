@@ -1,9 +1,9 @@
 import React, { forwardRef } from "react";
-import { Tone, TShirtSizes } from "../types";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Line } from "./Line";
-import { Text } from "./Text";
+import { Tone, TShirtSizes } from "../types.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Line } from "./Line.js";
+import { Text } from "./Text.js";
 
 export interface TimelineItem {
   label?: React.ReactNode;

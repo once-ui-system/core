@@ -2,10 +2,10 @@
 
 import type React from "react";
 import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Column } from "../components/Column";
-import { Flex } from "../components/Flex";
-import { IconButton } from "../components/IconButton";
-import { Row } from "../components/Row";
+import { Column } from "../components/Column.js";
+import { Flex } from "../components/Flex.js";
+import { IconButton } from "../components/IconButton.js";
+import { Row } from "../components/Row.js";
 import styles from "./ScrollTrack.module.scss";
 
 export type ScrollTrackControlPlacement =

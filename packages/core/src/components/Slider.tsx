@@ -2,14 +2,14 @@
 
 import classNames from "clsx";
 import React, { forwardRef, type ReactNode, useEffect, useId, useRef, useState } from "react";
-import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider";
-import { useControllableState } from "../internal/useControllableState";
-import type { TShirtSizes } from "../types";
-import { Column } from "./Column";
-import { useFieldSize } from "./FormContext";
-import { Row } from "./Row";
+import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import type { TShirtSizes } from "../types.js";
+import { Column } from "./Column.js";
+import { useFieldSize } from "./FormContext.js";
+import { Row } from "./Row.js";
 import styles from "./Slider.module.scss";
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 /** What both modes take. */
 interface SliderFieldProps {

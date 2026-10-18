@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import { useEffect, useState } from "react";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 import styles from "./ScrollToTop.module.scss";
 
 interface ScrollToTopProps extends React.ComponentProps<typeof Flex> {

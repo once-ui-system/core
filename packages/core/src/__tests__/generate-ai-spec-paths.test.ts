@@ -2,7 +2,7 @@ import { createRequire } from "node:module";
 import { describe, expect, it } from "vitest";
 
 const require = createRequire(import.meta.url);
-const { isOwnSource } = require("../../scripts/generate-ai-spec.js");
+const { isOwnSource } = require("../../scripts/generate-ai-spec.cjs");
 
 /**
  * TypeScript names files with forward slashes everywhere; `path.join` uses

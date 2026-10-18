@@ -176,7 +176,7 @@ To apply a scheme yourself at runtime, `customSchemeProperties` returns the
 properties to write, from the same pure function both of those use:
 
 ```tsx
-import { customSchemeProperties } from "@once-ui-system/core/utils";
+import { customSchemeProperties } from "@once-ui-system/core";
 
 for (const [property, value] of Object.entries(customSchemeProperties({ brand: "#5A93FC" }))) {
   document.documentElement.style.setProperty(property, value);

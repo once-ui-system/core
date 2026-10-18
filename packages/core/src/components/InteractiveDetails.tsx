@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { CONTROL_TEXT, type ControlSize } from "../internal/controlChrome";
-import { Column } from "./Column";
-import { IconButton, IconButtonProps } from "./IconButton";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { CONTROL_TEXT, type ControlSize } from "../internal/controlChrome.js";
+import { Column } from "./Column.js";
+import { IconButton, IconButtonProps } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 interface InteractiveDetailsProps {
   label?: React.ReactNode;

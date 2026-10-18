@@ -7,7 +7,7 @@
  */
 
 import type { CSSProperties } from "react";
-import type { StaticSpacingToken } from "../types";
+import type { StaticSpacingToken } from "../types.js";
 
 /**
  * The static spacing scale, as a value the size parsers can read.

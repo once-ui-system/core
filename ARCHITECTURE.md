@@ -43,7 +43,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 | `src/icons.ts`      | The icon registry and the `IconName` union, built from the inlined SVG data in `src/icons/`.                                                                                                 |
 | `src/index.ts`      | Public API barrel — everything exported from here is available to consumers.                                                                                                                 |
 | `ai/`               | AI codegen harness — manifest, rules, catalog, task bundles, component slices, gotchas, examples. `spec.json`, `catalog.json`, `manifest.json`, `tokens.json`, `functions.json`, `components/` and `bundles/` are generated from the source, `catalog.seed.json`, `tasks/` and `gotchas.json`. |
-| `scripts/`          | Build helpers — emoji data and AI spec generation, file copying — plus the two published CLIs: `validate-ai-code.js` and `init-agent.js`.                                                    |
+| `scripts/`          | Build helpers — emoji data and AI spec generation, file copying — plus the two published CLIs: `validate-ai-code.cjs` and `init-agent.cjs` (CommonJS, hence `.cjs`: the package is `"type": "module"`).                                                    |
 | `dist/`             | Build output (JS, CSS, types). Generated, not committed.                                                                                                                                     |
 
 ### Key conventions
@@ -52,7 +52,7 @@ All source lives under `packages/core/src/`. The build produces `dist/` with JS 
 - **Tokens** follow the pattern `--{category}-{property}-{weight}` (e.g., `--brand-background-strong`).
 - **SCSS modules** use the `.module.scss` convention for scoped styles. Global utilities and design tokens live in `packages/foundations/scss/`; the only foundations file components may reference is `../styles/breakpoints.scss` (a build-time synced copy).
 - **Components** use `forwardRef` and accept a `className`/`style` override. Spread remaining props to the root element.
-- **Exports** go through: `src/components/index.ts` → `src/index.ts`, plus separate re-exports from `contexts/`, `modules/`, `hooks/`, `utils/`, `types.ts`, `interfaces.ts`, `icons.ts`. `modules/data`, `modules/code`, `modules/media` and `next/` are their own subpaths (`/data`, `/code`, `/media`, `/next`) and are never re-exported from the root.
+- **Exports** go through: `src/components/index.ts` → `src/index.ts`, plus separate re-exports from `contexts/`, `modules/`, `hooks/`, `utils/`, `types.ts`, `interfaces.ts`, `icons.ts`. `modules/data`, `modules/code`, `modules/media`, `modules/emoji`, `modules/mdx` and `next/` are their own subpaths (`/data`, `/code`, `/media`, `/emoji`, `/mdx`, `/next`) and are never re-exported from the root; `/media` re-exports the players, `Scrubber` and `CompareImage` from `components/`, and `/emoji` the `EmojiPicker`. Since 3.0 those and `/config`, `/server` and the `css`/`ai` files are the only entry points: there is no `./components/*` and no subset subpath. The package is ESM (`"type": "module"`); relative imports in `src` name the emitted `.js` file, and the build compiles with `module`/`moduleResolution: NodeNext`.
 
 ---
 
@@ -98,7 +98,7 @@ pnpm install          # installs all workspaces + builds foundations and core vi
 pnpm build            # rebuild everything via Turbo
 ```
 
-The core library build: `clean` → `sync-foundations` (copies `breakpoints.scss` from `packages/foundations`; gitignored) → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS) → `copy-files` → `build:css` (copies foundations' compiled CSS into `dist/css` for the deprecated `@once-ui-system/core/css/*` compat entries) → `build:css-modules` (compiles each component's `.module.scss` to `.module.css` and points the emitted JS at it, so consumers need no Sass). Tokens and utility styles compile in `packages/foundations` (`sass`), which builds first via the workspace dependency. Turborepo caches outputs across runs.
+The core library build: `clean` → `sync-foundations` (copies `breakpoints.scss` from `packages/foundations`; gitignored) → `generate-emoji-data` → `generate-ai-spec` → `tsc` (types + JS, NodeNext, no source maps) → `copy-files` (plain `.css` and the emoji JSON only) → `build:css` (copies foundations' compiled CSS into `dist/css` for the deprecated `@once-ui-system/core/css/*` compat entries) → `build:css-modules` (compiles each component's `.module.scss` to `.module.css` and points the emitted JS at it, so consumers need no Sass; the `.scss` sources are not shipped). Tokens and utility styles compile in `packages/foundations` (`sass`), which builds first via the workspace dependency. Turborepo caches outputs across runs.
 
 ---
 

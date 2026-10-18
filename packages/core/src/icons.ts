@@ -1,7 +1,7 @@
-import { iconData } from "./icons/data";
-import { createIcon, type IconComponent } from "./icons/renderIcon";
+import { iconData } from "./icons/data.js";
+import { createIcon, type IconComponent } from "./icons/renderIcon.js";
 
-export type { IconComponent, IconNode } from "./icons/renderIcon";
+export type { IconComponent, IconNode } from "./icons/renderIcon.js";
 
 /**
  * The icons Once UI ships with, built from inlined SVG data.

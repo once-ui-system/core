@@ -1,7 +1,7 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { TShirtSizes } from "../types";
-import { Flex } from "./Flex";
+import { TShirtSizes } from "../types.js";
+import { Flex } from "./Flex.js";
 import styles from "./Spinner.module.scss";
 
 interface SpinnerProps extends React.ComponentProps<typeof Flex> {

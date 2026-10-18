@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useState } from "react";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { IconButton } from "./IconButton";
-import { Input } from "./Input";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { IconButton } from "./IconButton.js";
+import { Input } from "./Input.js";
 import styles from "./NumberInput.module.scss";
 
 interface NumberInputProps

@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { TShirtSizes } from "../types";
+import type { TShirtSizes } from "../types.js";
 
 /**
  * What a `Form` hands down to the fields inside it.

@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartVariant } from "./interfaces";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { ChartVariant } from "./interfaces.js";
 
 interface GradientStop {
   offset: string;

@@ -1,8 +1,8 @@
 "use client";
 
 import React, { forwardRef } from "react";
-import { Background } from "./Background";
-import { Row } from "./Row";
+import { Background } from "./Background.js";
+import { Row } from "./Row.js";
 
 export interface BlobFxProps extends React.ComponentProps<typeof Row> {
   seed?: number;

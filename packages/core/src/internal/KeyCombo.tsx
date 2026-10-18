@@ -2,11 +2,11 @@
 
 import type React from "react";
 import { forwardRef, type ReactNode, useSyncExternalStore } from "react";
-import { Row } from "../components/Row";
-import { Text } from "../components/Text";
-import { VisuallyHidden } from "../components/VisuallyHidden";
-import { isApplePlatform, labelHotkey } from "./hotkeys";
-import { KbdCap } from "./KbdCap";
+import { Row } from "../components/Row.js";
+import { Text } from "../components/Text.js";
+import { VisuallyHidden } from "../components/VisuallyHidden.js";
+import { isApplePlatform, labelHotkey } from "./hotkeys.js";
+import { KbdCap } from "./KbdCap.js";
 
 const subscribe = () => () => {};
 

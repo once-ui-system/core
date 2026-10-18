@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { Column } from "../../components/Column";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { CountUp } from "../../internal/CountUp";
-import { ChartVariant, DateConfig } from "./interfaces";
-import { Swatch } from "./Swatch";
-import { formatDate } from "./utils/formatDate";
+import { Column } from "../../components/Column.js";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { CountUp } from "../../internal/CountUp.js";
+import { ChartVariant, DateConfig } from "./interfaces.js";
+import { Swatch } from "./Swatch.js";
+import { formatDate } from "./utils/formatDate.js";
 
 interface DataTooltipProps {
   active?: boolean;

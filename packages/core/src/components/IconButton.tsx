@@ -2,20 +2,20 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode, useEffect } from "react";
-import { IconName } from "../icons";
-import { defaultButtonTone } from "../internal/buttonTone";
-import { Tone, TShirtSizes } from "../types";
-import { dev } from "../utils/devLogger";
-import type { ButtonVariant } from "./Button";
+import { IconName } from "../icons.js";
+import { defaultButtonTone } from "../internal/buttonTone.js";
+import { Tone, TShirtSizes } from "../types.js";
+import { dev } from "../utils/devLogger.js";
+import type { ButtonVariant } from "./Button.js";
 import buttonStyles from "./Button.module.scss";
-import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
-import { ElementType } from "./ElementType";
-import { Flex } from "./Flex";
-import { HoverCard } from "./HoverCard";
-import { Icon } from "./Icon";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
+import { ElementType } from "./ElementType.js";
+import { Flex } from "./Flex.js";
+import { HoverCard } from "./HoverCard.js";
+import { Icon } from "./Icon.js";
 import iconStyles from "./IconButton.module.scss";
-import { Spinner } from "./Spinner";
-import { Tooltip } from "./Tooltip";
+import { Spinner } from "./Spinner.js";
+import { Tooltip } from "./Tooltip.js";
 
 interface IconButtonCommonProps {
   icon?: IconName;

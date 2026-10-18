@@ -2,13 +2,13 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { useIcons } from "../contexts/IconProvider";
-import { type IconComponent, IconName } from "../icons";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
-import { Flex } from "./Flex";
-import { HoverCard } from "./HoverCard";
+import { useIcons } from "../contexts/IconProvider.js";
+import { type IconComponent, IconName } from "../icons.js";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types.js";
+import { Flex } from "./Flex.js";
+import { HoverCard } from "./HoverCard.js";
 import styles from "./Icon.module.scss";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./Tooltip.js";
 
 interface IconProps extends React.ComponentProps<typeof Flex> {
   name: IconName;

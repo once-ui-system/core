@@ -4,16 +4,16 @@ import classNames from "clsx";
 import type React from "react";
 import { forwardRef, type ReactNode, useCallback, useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
-import { useOverlay } from "../internal/useOverlay";
-import { Column } from "./Column";
+import { useOverlay } from "../internal/useOverlay.js";
+import { Column } from "./Column.js";
 import styles from "./Dialog.module.scss";
-import { Flex } from "./Flex";
-import { FocusTrap } from "./FocusTrap";
-import { Heading } from "./Heading";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
-import { ScrollLock } from "./ScrollLock";
-import { Text } from "./Text";
+import { Flex } from "./Flex.js";
+import { FocusTrap } from "./FocusTrap.js";
+import { Heading } from "./Heading.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { ScrollLock } from "./ScrollLock.js";
+import { Text } from "./Text.js";
 
 interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   open: boolean;

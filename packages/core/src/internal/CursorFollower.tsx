@@ -10,8 +10,8 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Flex } from "../components/Flex";
-import type { Placement } from "../types";
+import { Flex } from "../components/Flex.js";
+import type { Placement } from "../types.js";
 import styles from "./CursorFollower.module.scss";
 
 export interface CursorFollowerProps extends React.ComponentProps<typeof Flex> {

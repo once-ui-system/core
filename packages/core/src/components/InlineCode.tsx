@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 import styles from "./InlineCode.module.scss";
 
 interface InlineCodeProps extends React.ComponentProps<typeof Flex> {

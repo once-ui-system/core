@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, ReactNode } from "react";
-import { IconName } from "../icons";
-import { Icon } from "./Icon";
-import { Row } from "./Row";
-import { Text } from "./Text";
-import { ToggleButton } from "./ToggleButton";
+import { IconName } from "../icons.js";
+import { Icon } from "./Icon.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
+import { ToggleButton } from "./ToggleButton.js";
 
 interface NavItemProps
   extends Omit<React.ComponentProps<typeof ToggleButton>, "label" | "prefixIcon"> {

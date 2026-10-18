@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { IconButton } from "../../components/IconButton";
-import { useOptionalToast } from "../../contexts/ToastContext";
+import { IconButton } from "../../components/IconButton.js";
+import { useOptionalToast } from "../../contexts/ToastContext.js";
 
 /**
  * Copies the URL of the section `id` to the clipboard, and confirms with a

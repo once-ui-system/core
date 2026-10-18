@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 import styles from "./Skeleton.module.scss";
 
 interface SkeletonProps extends React.ComponentProps<typeof Flex> {

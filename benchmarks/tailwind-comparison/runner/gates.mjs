@@ -340,11 +340,15 @@ export async function runGates(letter, code, outDir, task = null) {
 
   if (["A", "B"].includes(letter)) {
     const sources = Object.keys(files).filter((f) => /\.tsx?$/.test(f));
-    const v = run("node", ["node_modules/@once-ui-system/core/scripts/validate-ai-code.js", ...sources], dir, 60_000);
+    // 3.0 renamed the CommonJS bin to .cjs (the package is "type": "module").
+    const validator = ["cjs", "js"]
+      .map((ext) => `node_modules/@once-ui-system/core/scripts/validate-ai-code.${ext}`)
+      .find((file) => fs.existsSync(path.join(dir, file)));
+    const v = run("node", [validator, ...sources], dir, 60_000);
     // The validator changes between releases (rc.0 adds rules), so record which one
     // produced the count; counts are not comparable across validator versions.
     const pkg = JSON.parse(fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/package.json"), "utf8"));
-    const script = fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/scripts/validate-ai-code.js"));
+    const script = fs.readFileSync(path.join(dir, validator));
     res.validate_ai_code = {
       exit: v.code,
       output: v.output.slice(0, 8000),

@@ -14,9 +14,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import { ToggleButton, type ToggleButtonProps } from "./ToggleButton.js";
 
 // Written out on the props rather than as aliases, so the generated spec, the
 // docs' props table and an agent all see the values.

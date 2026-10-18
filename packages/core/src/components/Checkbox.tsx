@@ -2,12 +2,16 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
-import { type ControlChromeProps, describedBy, useControlChrome } from "../internal/controlChrome";
-import { splitAria, useHiddenInput } from "../internal/hiddenInput";
-import { useControllableState } from "../internal/useControllableState";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
+import {
+  type ControlChromeProps,
+  describedBy,
+  useControlChrome,
+} from "../internal/controlChrome.js";
+import { splitAria, useHiddenInput } from "../internal/hiddenInput.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails.js";
 import styles from "./SharedInteractiveStyles.module.scss";
 
 interface CheckboxProps

@@ -3,12 +3,12 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef } from "react";
-import { Flex } from "../components/Flex";
-import { Icon } from "../components/Icon";
-import { IconButton, type IconButtonProps } from "../components/IconButton";
-import type { TagProps } from "../components/Tag";
+import { Flex } from "../components/Flex.js";
+import { Icon } from "../components/Icon.js";
+import { IconButton, type IconButtonProps } from "../components/IconButton.js";
+import type { TagProps } from "../components/Tag.js";
 import styles from "../components/Tag.module.scss";
-import { Text } from "../components/Text";
+import { Text } from "../components/Text.js";
 
 /** Padding, text and icons per size. m is 2.x's Chip. */
 const PADDING_X = { xs: "2", s: "4", m: "8", l: "12", xl: "16" } as const;

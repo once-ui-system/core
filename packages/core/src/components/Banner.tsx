@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-import { Row } from "./Row";
+import { Row } from "./Row.js";
 
 interface BannerProps extends React.ComponentProps<typeof Row> {}
 

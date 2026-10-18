@@ -4,13 +4,13 @@ import {
   Avatar,
   Button,
   Column,
-  EmojiPicker,
   IconButton,
   Row,
   Spinner,
   Text,
   Textarea,
 } from "@once-ui-system/core";
+import { EmojiPicker } from "@once-ui-system/core/emoji";
 import type React from "react";
 import { useEffect, useState } from "react";
 import { Comment } from "./Comment";

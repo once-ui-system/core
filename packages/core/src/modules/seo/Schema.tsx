@@ -1,5 +1,5 @@
 import React from "react";
-import { safeScriptJson } from "../../utils/safe-html";
+import { safeScriptJson } from "../../utils/safe-html.js";
 
 export interface SchemaProps {
   as:

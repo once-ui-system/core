@@ -3,14 +3,14 @@
 import classNames from "clsx";
 import type React from "react";
 import { type CSSProperties, forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
-import { useAdapters } from "../contexts/AdapterProvider";
-import type { CSSUnit } from "../types";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { MediaVideoPlayer } from "./MediaVideoPlayer";
-import { Row } from "./Row";
-import { ScrollLock } from "./ScrollLock";
-import { Skeleton } from "./Skeleton";
+import { useAdapters } from "../contexts/AdapterProvider.js";
+import type { CSSUnit } from "../types.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { MediaVideoPlayer } from "./MediaVideoPlayer.js";
+import { Row } from "./Row.js";
+import { ScrollLock } from "./ScrollLock.js";
+import { Skeleton } from "./Skeleton.js";
 
 export interface MediaProps extends React.ComponentProps<typeof Flex> {
   aspectRatio?: string;

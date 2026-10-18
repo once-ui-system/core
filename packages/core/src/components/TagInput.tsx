@@ -1,10 +1,10 @@
 "use client";
 
 import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
-import { useControllableState } from "../internal/useControllableState";
-import { Flex } from "./Flex";
-import { Input, InputProps } from "./Input";
-import { Tag } from "./Tag";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Flex } from "./Flex.js";
+import { Input, InputProps } from "./Input.js";
+import { Tag } from "./Tag.js";
 
 interface TagInputProps extends Omit<InputProps, "value" | "defaultValue" | "onValueChange"> {
   /** The tags, controlled. Leave it out to let TagInput keep its own list,

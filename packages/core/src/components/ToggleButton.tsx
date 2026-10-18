@@ -2,11 +2,11 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { IconName } from "../icons";
-import { RadiusSize, TShirtSizes } from "../types";
-import { ElementType } from "./ElementType";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
+import { IconName } from "../icons.js";
+import { RadiusSize, TShirtSizes } from "../types.js";
+import { ElementType } from "./ElementType.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
 import styles from "./ToggleButton.module.scss";
 
 interface ToggleButtonCommonProps {

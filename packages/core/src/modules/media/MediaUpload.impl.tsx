@@ -1,11 +1,11 @@
 "use client";
 
 import React, { forwardRef, useEffect, useRef, useState } from "react";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Media } from "../../components/Media";
-import { Spinner } from "../../components/Spinner";
-import { Text } from "../../components/Text";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Media } from "../../components/Media.js";
+import { Spinner } from "../../components/Spinner.js";
+import { Text } from "../../components/Text.js";
 import styles from "./MediaUpload.module.scss";
 
 let Compressor: any;

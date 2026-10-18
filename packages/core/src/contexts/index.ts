@@ -3,11 +3,11 @@ export type {
   AdapterLinkProps,
   AdapterProviderProps,
   OnceUIAdapters,
-} from "./AdapterProvider";
-export { AdapterProvider, defaultAdapters, useAdapters } from "./AdapterProvider";
-export * from "./DataThemeProvider";
-export * from "./IconProvider";
-export * from "./LayoutProvider";
-export * from "./OgRoutesProvider";
-export * from "./ThemeProvider";
-export * from "./ToastProvider";
+} from "./AdapterProvider.js";
+export { AdapterProvider, defaultAdapters, useAdapters } from "./AdapterProvider.js";
+export * from "./DataThemeProvider.js";
+export * from "./IconProvider.js";
+export * from "./LayoutProvider.js";
+export * from "./OgRoutesProvider.js";
+export * from "./ThemeProvider.js";
+export * from "./ToastProvider.js";

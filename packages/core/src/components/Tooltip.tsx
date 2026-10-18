@@ -2,13 +2,13 @@
 
 import classNames from "clsx";
 import React, { forwardRef, type ReactNode, useId } from "react";
-import type { IconName } from "../icons";
-import type { Placement } from "../types";
-import { Column } from "./Column";
-import { HoverCard } from "./HoverCard";
-import { Icon } from "./Icon";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import type { IconName } from "../icons.js";
+import type { Placement } from "../types.js";
+import { Column } from "./Column.js";
+import { HoverCard } from "./HoverCard.js";
+import { Icon } from "./Icon.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 import styles from "./Tooltip.module.scss";
 
 interface TooltipProps extends Omit<React.ComponentProps<typeof Row>, "content"> {

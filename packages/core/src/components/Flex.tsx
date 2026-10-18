@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
-import type { FlexLayoutProps, PolymorphicComponent } from "../interfaces";
-import { isClassExpressible } from "../utils/layoutClasses";
-import { ClientFlex } from "./ClientFlex";
-import { ServerFlex, type ServerFlexProps } from "./ServerFlex";
+import type { FlexLayoutProps, PolymorphicComponent } from "../interfaces.js";
+import { isClassExpressible } from "../utils/layoutClasses.js";
+import { ClientFlex } from "./ClientFlex.js";
+import { ServerFlex, type ServerFlexProps } from "./ServerFlex.js";
 
 const FlexImpl = forwardRef<HTMLElement, ServerFlexProps>(
   ({ cursor, xl, l, m, s, xs, style, hide, ...props }, ref) => {

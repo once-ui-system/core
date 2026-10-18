@@ -17,15 +17,15 @@ import {
   type ControlChromeProps,
   describedBy,
   useControlChrome,
-} from "../internal/controlChrome";
-import { useControllableState } from "../internal/useControllableState";
-import { Column } from "./Column";
-import { FormFieldContext } from "./FormContext";
-import type { IconButtonProps } from "./IconButton";
-import { RadioButton } from "./RadioButton";
-import { RadioGroupContext } from "./RadioGroupContext";
-import { Row } from "./Row";
-import { Text } from "./Text";
+} from "../internal/controlChrome.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Column } from "./Column.js";
+import { FormFieldContext } from "./FormContext.js";
+import type { IconButtonProps } from "./IconButton.js";
+import { RadioButton } from "./RadioButton.js";
+import { RadioGroupContext } from "./RadioGroupContext.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 interface RadioGroupOption {
   /** What the group's `value` and `onValueChange` carry, and what a form submits. */

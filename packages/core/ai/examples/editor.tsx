@@ -9,15 +9,8 @@
  * panels and not the SplitView, labels for the tabs it collapses into, the
  * timeline as a sibling of the split, playback paused while scrubbing.
  */
-import {
-  Column,
-  IconButton,
-  Row,
-  Scrubber,
-  SplitView,
-  Text,
-  ToggleButton,
-} from "@once-ui-system/core";
+import { Column, IconButton, Row, SplitView, Text, ToggleButton } from "@once-ui-system/core";
+import { Scrubber } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];

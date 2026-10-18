@@ -3,15 +3,15 @@
 import classNames from "clsx";
 import type React from "react";
 import { forwardRef, useEffect } from "react";
-import { useAdapters } from "../contexts/AdapterProvider";
-import { useToast } from "../contexts/ToastProvider";
-import type { SpacingToken, TShirtSizes } from "../types";
-import { Column } from "./Column";
-import { Dropdown } from "./Dropdown";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Line } from "./Line";
-import { Option } from "./Option";
+import { useAdapters } from "../contexts/AdapterProvider.js";
+import { useToast } from "../contexts/ToastProvider.js";
+import type { SpacingToken, TShirtSizes } from "../types.js";
+import { Column } from "./Column.js";
+import { Dropdown } from "./Dropdown.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { Line } from "./Line.js";
+import { Option } from "./Option.js";
 
 const sizeMap: Record<string, SpacingToken> = {
   xs: "20",

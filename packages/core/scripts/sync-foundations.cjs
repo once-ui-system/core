@@ -5,8 +5,9 @@ const path = require("path");
 // package (Once UI 2.0 Phase 1 — rfcs/2026-08-once-ui-2-architecture.md §7).
 //
 //   scss: copies breakpoints.scss into src/styles/ (gitignored) so the
-//         shipped component .module.scss files keep resolving their
-//         relative `../styles/breakpoints.scss` import inside dist/.
+//         component .module.scss files resolve their relative
+//         `../styles/breakpoints.scss` import when compile-css-modules.cjs
+//         compiles them (it is not shipped; 3.0 ships the compiled CSS only).
 //   css:  copies foundations' compiled tokens.css/styles.css into dist/css/
 //         so the deprecated `@once-ui-system/core/css/*.css` entries keep
 //         working for one major.
@@ -35,6 +36,6 @@ if (mode === "scss") {
   }
   console.log("Copied foundations CSS into dist/css (deprecated compat entries)");
 } else {
-  console.error("Usage: node scripts/sync-foundations.js <scss|css>");
+  console.error("Usage: node scripts/sync-foundations.cjs <scss|css>");
   process.exit(1);
 }

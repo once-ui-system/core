@@ -3,23 +3,23 @@
 import classNames from "clsx";
 import type React from "react";
 import { isValidElement, type ReactNode, useEffect, useId, useMemo, useState } from "react";
-import { pageCount, withDefaultLabels } from "../internal/pagination";
-import type { Tone } from "../types";
-import { dev } from "../utils/devLogger";
-import { Checkbox } from "./Checkbox";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Input } from "./Input";
-import { Pagination, type PaginationLabels } from "./Pagination";
-import { Row } from "./Row";
-import { Skeleton } from "./Skeleton";
+import { pageCount, withDefaultLabels } from "../internal/pagination.js";
+import type { Tone } from "../types.js";
+import { dev } from "../utils/devLogger.js";
+import { Checkbox } from "./Checkbox.js";
+import { Column } from "./Column.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Input } from "./Input.js";
+import { Pagination, type PaginationLabels } from "./Pagination.js";
+import { Row } from "./Row.js";
+import { Skeleton } from "./Skeleton.js";
 import tableStyles from "./Table.module.scss";
 
 const styles = tableStyles;
 
-import { Text } from "./Text";
+import { Text } from "./Text.js";
 
 interface TableColumn<T> {
   /**

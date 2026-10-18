@@ -2,16 +2,16 @@
 
 import classNames from "clsx";
 import React, { forwardRef, ReactNode } from "react";
-import { IconName } from "../icons";
-import { defaultButtonTone } from "../internal/buttonTone";
-import { Tone, TShirtSizes } from "../types";
-import { Arrow } from "./Arrow";
+import { IconName } from "../icons.js";
+import { defaultButtonTone } from "../internal/buttonTone.js";
+import { Tone, TShirtSizes } from "../types.js";
+import { Arrow } from "./Arrow.js";
 import styles from "./Button.module.scss";
-import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext";
-import { ElementType } from "./ElementType";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Spinner } from "./Spinner";
+import { dropdownTriggerProps, useDropdownTrigger } from "./DropdownTriggerContext.js";
+import { ElementType } from "./ElementType.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { Spinner } from "./Spinner.js";
 
 /** A button's appearance. 2.x's `quaternary` is `ghost`. */
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost" | "link" | "subtle";

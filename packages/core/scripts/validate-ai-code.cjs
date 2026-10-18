@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
  * Mechanical Once UI codegen validator.
- * Usage: node scripts/validate-ai-code.js <file.tsx> [--fix] [--next | --no-next]
- *        node scripts/validate-ai-code.js --stdin [--next] < file.tsx
+ * Usage: node scripts/validate-ai-code.cjs <file.tsx> [--fix] [--next | --no-next]
+ *        node scripts/validate-ai-code.cjs --stdin [--next] < file.tsx
  *
  * `--next` and `--no-next` say whether the file belongs to a Next.js app, for
  * the rules that only apply there. Without either, the file counts as Next
@@ -234,7 +234,7 @@ function readInputs(flags) {
     return [{ source: fs.readFileSync(0, "utf8"), file: "<stdin>" }];
   }
   if (flags.files.length === 0) {
-    console.error("Usage: validate-ai-code.js <file.tsx…> [--fix] [--next | --no-next] | --stdin");
+    console.error("Usage: validate-ai-code.cjs <file.tsx…> [--fix] [--next | --no-next] | --stdin");
     process.exit(2);
   }
   return flags.files.map((file) => ({ source: fs.readFileSync(file, "utf8"), file }));

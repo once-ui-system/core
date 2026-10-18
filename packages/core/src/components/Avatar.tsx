@@ -1,14 +1,14 @@
 import React, { forwardRef } from "react";
-import { IconName } from "../icons";
-import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types";
-import { isCSSUnit } from "../utils/layoutClasses";
+import { IconName } from "../icons.js";
+import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types.js";
+import { isCSSUnit } from "../utils/layoutClasses.js";
 import styles from "./Avatar.module.scss";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { Media } from "./Media";
-import { Skeleton } from "./Skeleton";
-import { StatusIndicator } from "./StatusIndicator";
-import { Text } from "./Text";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { Media } from "./Media.js";
+import { Skeleton } from "./Skeleton.js";
+import { StatusIndicator } from "./StatusIndicator.js";
+import { Text } from "./Text.js";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
   /**

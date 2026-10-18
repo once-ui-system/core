@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { TShirtSizes } from "../types";
-import { Avatar, AvatarProps } from "./Avatar";
+import { TShirtSizes } from "../types.js";
+import { Avatar, AvatarProps } from "./Avatar.js";
 import styles from "./AvatarGroup.module.scss";
-import { Flex } from "./Flex";
+import { Flex } from "./Flex.js";
 
 interface AvatarGroupProps extends React.ComponentProps<typeof Flex> {
   avatars: AvatarProps[];

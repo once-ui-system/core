@@ -10,19 +10,19 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Input } from "../../components/Input";
-import { Kbd } from "../../components/Kbd";
-import { Option } from "../../components/Option";
-import { Row } from "../../components/Row";
-import { ScrollLock } from "../../components/ScrollLock";
-import { Text } from "../../components/Text";
-import { useAdapters } from "../../contexts/AdapterProvider";
-import type { IconName } from "../../icons";
-import { useControllableState } from "../../internal/useControllableState";
-import type { TShirtSizes } from "../../types";
+import { Column } from "../../components/Column.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Input } from "../../components/Input.js";
+import { Kbd } from "../../components/Kbd.js";
+import { Option } from "../../components/Option.js";
+import { Row } from "../../components/Row.js";
+import { ScrollLock } from "../../components/ScrollLock.js";
+import { Text } from "../../components/Text.js";
+import { useAdapters } from "../../contexts/AdapterProvider.js";
+import type { IconName } from "../../icons.js";
+import { useControllableState } from "../../internal/useControllableState.js";
+import type { TShirtSizes } from "../../types.js";
 import styles from "./Kbar.module.scss";
 
 export interface KbarItem {

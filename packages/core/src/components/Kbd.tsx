@@ -1,9 +1,9 @@
 import type React from "react";
 import { forwardRef, type ReactNode } from "react";
-import { KbdCap } from "../internal/KbdCap";
-import { KeyCombo } from "../internal/KeyCombo";
-import type { Flex } from "./Flex";
-import type { Row } from "./Row";
+import { KbdCap } from "../internal/KbdCap.js";
+import { KeyCombo } from "../internal/KeyCombo.js";
+import type { Flex } from "./Flex.js";
+import type { Row } from "./Row.js";
 
 /** One keycap, its text as `children` (or `label`). */
 interface KbdCapModeProps extends React.ComponentProps<typeof Flex> {

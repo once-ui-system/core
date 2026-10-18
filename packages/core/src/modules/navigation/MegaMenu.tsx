@@ -2,16 +2,16 @@
 
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { ToggleButton } from "../../components/ToggleButton";
-import { useAdapters } from "../../contexts/AdapterProvider";
-import type { IconName } from "../../icons";
+import { Column } from "../../components/Column.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { ToggleButton } from "../../components/ToggleButton.js";
+import { useAdapters } from "../../contexts/AdapterProvider.js";
+import type { IconName } from "../../icons.js";
 import styles from "./MegaMenu.module.scss";
-import { MegaMenuAccordion } from "./MegaMenuAccordion";
+import { MegaMenuAccordion } from "./MegaMenuAccordion.js";
 
 export interface MenuLink {
   label: ReactNode;

@@ -1,11 +1,11 @@
 "use client";
 
 import { forwardRef, useEffect, useRef } from "react";
-import { revealInStrip } from "../internal/reveal";
-import { useControllableState } from "../internal/useControllableState";
-import { Flex } from "./Flex";
-import { Scroller } from "./Scroller";
-import { ToggleButton, ToggleButtonProps } from "./ToggleButton";
+import { revealInStrip } from "../internal/reveal.js";
+import { useControllableState } from "../internal/useControllableState.js";
+import { Flex } from "./Flex.js";
+import { Scroller } from "./Scroller.js";
+import { ToggleButton, ToggleButtonProps } from "./ToggleButton.js";
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
   value: string;
