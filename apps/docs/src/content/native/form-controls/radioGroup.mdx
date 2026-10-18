@@ -1,0 +1,156 @@
+---
+title: "RadioGroup"
+summary: "One choice from a list of radio buttons, with a group label, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/radioGroup.mdx"
+github: "packages/native/src/components/RadioGroup.tsx"
+navLabel: "RadioGroup"
+navIcon: "switch"
+---
+
+`RadioGroup` draws a [RadioButton](/native/form-controls/radioButton) for each item in `options` and keeps one of them on. It can take a label and a description for the whole group. See the [web RadioGroup](/form-controls/radioGroup) for the same component in the browser.
+
+## Uncontrolled
+
+Pass `defaultValue` to pick the first choice. `onChange` gets the new value.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { RadioGroup } from "@once-ui-system/native";
+
+export function Plan() {
+  return (
+    <RadioGroup
+      label="Plan"
+      description="You can change it any time."
+      defaultValue="monthly"
+      onChange={(value) => console.log(value)}
+      options={[
+        { value: "monthly", label: "Monthly", description: "9 EUR a month" },
+        { value: "yearly", label: "Yearly", description: "90 EUR a year" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Plan.tsx"
+  }
+]} />
+
+## Controlled
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { RadioGroup } from "@once-ui-system/native";
+
+export function Size() {
+  const [size, setSize] = useState("m");
+  return (
+    <RadioGroup
+      label="Size"
+      value={size}
+      onChange={setSize}
+      options={[
+        { value: "s", label: "Small" },
+        { value: "m", label: "Medium" },
+        { value: "l", label: "Large", disabled: true },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Size.tsx"
+  }
+]} />
+
+## Horizontal and disabled
+
+`orientation="horizontal"` lays the options out in a row that wraps. `disabled` turns off every option.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { RadioGroup } from "@once-ui-system/native";
+
+export function Rating() {
+  return (
+    <RadioGroup
+      label="Rating"
+      orientation="horizontal"
+      defaultValue="3"
+      disabled
+      options={[
+        { value: "1", label: "1" },
+        { value: "2", label: "2" },
+        { value: "3", label: "3" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Rating.tsx"
+  }
+]} />
+
+## Custom layout
+
+For radios `options` cannot describe, put `RadioButton`s with a `value` inside the group, in any layout. The group checks the one whose `value` it holds, as on the web. They render after any `options`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, RadioButton, RadioGroup, Row } from "@once-ui-system/native";
+
+export function Milk() {
+  return (
+    <RadioGroup label="Milk" defaultValue="oat">
+      <Row gap="12">
+        <Card padding="16" radius="l" flex={1}>
+          <RadioButton value="whole" label="Whole" />
+        </Card>
+        <Card padding="16" radius="l" flex={1}>
+          <RadioButton value="oat" label="Oat" description="+200 Ft" />
+        </Card>
+      </Row>
+    </RadioGroup>
+  );
+}`,
+    language: "tsx",
+    label: "Milk.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- There is no `name`, form submission or arrow-key navigation.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `RadioGroupOption[]` | `[]` | The choices. |
+| `value` | `string` | | The chosen value, when the screen owns it. |
+| `defaultValue` | `string` | | The first choice when the group keeps its own state. |
+| `onChange` | `(value: string) => void` | | Called with the newly chosen value. |
+| `label` | `ReactNode` | | A label for the group. |
+| `description` | `ReactNode` | | A line under the group label. |
+| `disabled` | `boolean` | `false` | Turns off every option. |
+| `orientation` | `"horizontal" \| "vertical"` | `"vertical"` | `horizontal` lays the options out in a wrapping row. |
+| `children` | `ReactNode` | | `RadioButton`s with a `value`, in any layout. They render after the options. |
+| `style` | `ViewStyle` | | Style for the group. |
+
+### RadioGroupOption
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | What `onChange` reports. Required. |
+| `label` | `ReactNode` | | Text beside the radio. Required. |
+| `description` | `ReactNode` | | A line under the label. |
+| `disabled` | `boolean` | | Turns off this option. |

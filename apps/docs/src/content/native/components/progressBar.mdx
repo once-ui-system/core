@@ -1,0 +1,86 @@
+---
+title: "ProgressBar"
+summary: "A rounded track that fills to a value, with the value as a label."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/progressBar.mdx"
+github: "packages/native/src/components/ProgressBar.tsx"
+navLabel: "ProgressBar"
+navIcon: "components"
+---
+
+`ProgressBar` shows how far along something is. The bar fills to `value` between `min` and `max`, and animates over one second when the value changes. Screen readers read it as a progress bar with its value. See the [web ProgressBar page](/components/progressBar) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { ProgressBar } from "@once-ui-system/native";
+
+export function Upload() {
+  return <ProgressBar value={64} />;
+}`,
+    language: "tsx",
+    label: "ProgressBar"
+  }
+]} />
+
+## Label
+
+The label shows the value with a percent sign, under the bar by default. `labelPosition` moves it to the `top`, `left` or `right`. `showLabel={false}` hides it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, ProgressBar } from "@once-ui-system/native";
+
+export function Labels() {
+  return (
+    <Column gap="24">
+      <ProgressBar value={30} labelPosition="top" />
+      <ProgressBar value={50} labelPosition="right" />
+      <ProgressBar value={70} showLabel={false} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Label"
+  }
+]} />
+
+## Range and color
+
+`min` and `max` set the range. The label shows `value` with a % sign, as on the web. `barBackground` sets the bar color, `brand-strong` by default.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, ProgressBar, Text } from "@once-ui-system/native";
+
+export function Stamps({ stamps }: { stamps: number }) {
+  return (
+    <Column gap="8">
+      <Text variant="label-default-s">{stamps} of 10 stamps</Text>
+      <ProgressBar value={stamps} max={10} showLabel={false} barBackground="success-medium" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Range and color"
+  }
+]} />
+
+## API reference
+
+ProgressBar does not take Flex props. It fills the width; use `style` for margins.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | | The current value. Required. |
+| `min` | `number` | `0` | The start of the range. |
+| `max` | `number` | `100` | The end of the range. |
+| `showLabel` | `boolean` | `true` | Shows the value as a label. |
+| `labelPosition` | `"top" \| "bottom" \| "left" \| "right"` | `"bottom"` | Where the label sits. |
+| `barBackground` | `Colors` | `"brand-strong"` | The bar's solid color. |
+| `style` | `ViewStyle` | | Style for the outer view. |

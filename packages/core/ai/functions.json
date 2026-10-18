@@ -6,6 +6,18 @@
    "signature": "() => FieldControl | null",
    "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
   },
+  "useNavStyle": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
+   "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
+  },
   "useStylePanel": {
    "group": "components",
    "kind": "hook",
@@ -285,10 +297,10 @@
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -363,6 +375,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "home",
    "inbox",
@@ -424,6 +437,11 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
+  "NavDensity": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NavigationLayout": [
    "grid",
    "row",

@@ -6,7 +6,7 @@
   "label": "string",
   "placeholder": "string",
   "lines": "number | \"auto\" = auto",
-  "size": "TShirtSizes",
+  "size": "FieldSize",
   "error": "boolean = false",
   "errorMessage": "ReactNode",
   "description": "ReactNode",
@@ -33,12 +33,13 @@
  ],
  "mixinsRef": [],
  "types": {
-  "TShirtSizes": [
+  "FieldSize": [
    "xl",
    "l",
    "m",
    "s",
-   "xs"
+   "xs",
+   "xxs"
   ]
  }
 }

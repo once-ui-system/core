@@ -1,17 +1,18 @@
 "use client";
 
 import classNames from "clsx";
-import React, {
+import type React from "react";
+import {
   forwardRef,
-  InputHTMLAttributes,
-  ReactNode,
+  type InputHTMLAttributes,
+  type ReactNode,
   useCallback,
   useEffect,
   useId,
   useState,
 } from "react";
 import { useDebounce } from "../hooks/useDebounce";
-import { TShirtSizes } from "../types";
+import type { FieldSize } from "../types";
 import { Column } from "./Column";
 import { useFieldInvalid, useFieldSize } from "./FormContext";
 import styles from "./Input.module.scss";
@@ -23,7 +24,14 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
   id: string;
   label?: string;
   placeholder?: string;
-  size?: TShirtSizes;
+  /**
+   * Field height and type scale: `xxs` 32px, `xs` 40px, `s` 48px, `m` 56px
+   * (the default), `l` 64px, `xl` 72px. `xxs` is the height of a small
+   * `Button`, for toolbars. It has no room for a floating label, so there
+   * `label` shows as the placeholder (unless `placeholder` is set) and stays
+   * the field's accessible name through a visually hidden `<label>`.
+   */
+  size?: FieldSize;
   error?: boolean;
   errorMessage?: ReactNode;
   description?: ReactNode;
@@ -97,6 +105,12 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
+    // A 32px field has no room for a label above its value. The label stays
+    // the field's accessible name, hidden, and shows as the placeholder
+    // instead, unless the caller gave a placeholder of their own.
+    const compact = resolvedSize === "xxs";
+    const shownPlaceholder = compact ? (placeholder ?? label) : placeholder;
+    const inset = compact ? "8" : "12";
     // A `Field` around this input marks it invalid while its error shows, the
     // same as passing `error` — the message itself renders in the Field.
     const fieldInvalid = useFieldInvalid(id);
@@ -185,10 +199,18 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     // anything to point `aria-describedby` at.
     const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
     // The caller's own description comes first; it used to be overwritten.
+    // `description` is read last: it rendered with an id nothing pointed at.
     const describedBy =
-      [props["aria-describedby"], showsErrorMessage ? `${id}-error` : undefined]
+      [
+        props["aria-describedby"],
+        showsErrorMessage ? `${id}-error` : undefined,
+        description ? `${id}-description` : undefined,
+      ]
         .filter(Boolean)
         .join(" ") || undefined;
+    // Characters left, counted from what the field shows: an uncontrolled
+    // field has no `value`, and the count used to stay at `maxLength`.
+    const remaining = props.maxLength ? props.maxLength - String(fieldValue ?? "").length : 0;
 
     const inputClassNames = classNames(
       styles.input,
@@ -198,7 +220,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       {
         [styles.withPrefix]: prefix,
         [styles.withSuffix]: suffix,
-        [styles.placeholder]: placeholder,
+        [styles.placeholder]: shownPlaceholder,
         [styles.hasChildren]: children,
         [styles.error]: displayError && debouncedValue !== "",
       },
@@ -228,11 +250,16 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             styles.base,
             focusRing && styles.focusRing,
             styles[resolvedSize],
-            corners === "none" ? "radius-none" : corners ? `radius-l-${corners}` : "radius-l",
+            // Rounded like a Button of the same height: `radius-m` at xxs.
+            corners === "none"
+              ? "radius-none"
+              : corners
+                ? `radius-${compact ? "m" : "l"}-${corners}`
+                : `radius-${compact ? "m" : "l"}`,
           )}
         >
           {prefix && (
-            <Row paddingLeft="12" className={styles.prefix} position="static">
+            <Row paddingLeft={inset} className={styles.prefix} position="static">
               {prefix}
             </Row>
           )}
@@ -241,7 +268,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               {...props}
               ref={ref}
               id={id}
-              placeholder={placeholder}
+              placeholder={shownPlaceholder}
               onChange={handleChange}
               onFocus={handleFocus}
               onBlur={handleBlur}
@@ -258,9 +285,13 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                 as="label"
                 variant="label-default-m"
                 htmlFor={id}
-                className={classNames(styles.label, styles.inputLabel, {
-                  [styles.floating]: isFocused || isFilled || placeholder,
-                })}
+                className={
+                  compact
+                    ? styles.labelHidden
+                    : classNames(styles.label, styles.inputLabel, {
+                        [styles.floating]: isFocused || isFilled || placeholder,
+                      })
+                }
               >
                 {label}
               </Text>
@@ -268,35 +299,31 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             {children}
           </Column>
           {characterCount && props.maxLength && (
-            <Row paddingRight="12" className={styles.suffix} position="static">
+            <Row paddingRight={inset} className={styles.suffix} position="static">
               <Text
                 variant="label-default-s"
                 onBackground={
-                  props.maxLength - String(props.value || "").length <= 5
-                    ? "danger-weak"
-                    : props.maxLength - String(props.value || "").length <= 10
-                      ? "warning-weak"
-                      : "neutral-weak"
+                  remaining <= 5 ? "danger-weak" : remaining <= 10 ? "warning-weak" : "neutral-weak"
                 }
               >
-                {props.maxLength - String(props.value || "").length}
+                {remaining}
               </Text>
             </Row>
           )}
           {loading && (
-            <Row paddingRight="12" className={styles.suffix} position="static">
+            <Row paddingRight={inset} className={styles.suffix} position="static">
               <Spinner size="s" />
             </Row>
           )}
           {suffix && !loading && (
-            <Row paddingRight="12" className={styles.suffix} position="static">
+            <Row paddingRight={inset} className={styles.suffix} position="static">
               {suffix}
             </Row>
           )}
         </Row>
         {showsErrorMessage && (
           <Row
-            paddingX="16"
+            paddingX={compact ? "12" : "16"}
             id={`${id}-error`}
             textVariant="body-default-s"
             onBackground="danger-weak"
@@ -306,7 +333,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
         {description && (
           <Row
-            paddingX="16"
+            paddingX={compact ? "12" : "16"}
             id={`${id}-description`}
             textVariant="body-default-s"
             onBackground="neutral-weak"

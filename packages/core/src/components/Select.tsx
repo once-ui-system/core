@@ -13,6 +13,7 @@ import {
 } from "./DropdownTriggerContext";
 import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input, type InputProps } from "./Input";
@@ -94,6 +95,8 @@ const SearchInput = forwardRef<
     listboxId: string;
     activeOptionId?: string;
     names: Required<SelectLabels>;
+    /** `xxs` when the Select is; `s` otherwise, as it always was. */
+    size: "xxs" | "s";
   }
 >(
   (
@@ -110,6 +113,7 @@ const SearchInput = forwardRef<
       listboxId,
       activeOptionId,
       names,
+      size,
     },
     ref,
   ) => (
@@ -124,7 +128,7 @@ const SearchInput = forwardRef<
       aria-expanded
       aria-controls={listboxId}
       aria-activedescendant={activeOptionId}
-      size="s"
+      size={size}
       suffix={
         searchQuery ? (
           <IconButton
@@ -175,8 +179,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       options,
-      // No default: with one, `value` was never undefined, so a Select used
-      // without it ignored its own state and every pick was thrown away.
+      // No default: `undefined` is what makes it uncontrolled. A default of
+      // "" made every Select controlled, so without `value` a pick never
+      // showed and a multiple Select never kept more than one.
       value,
       onSelect,
       searchable = false,
@@ -195,6 +200,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     ref,
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
+    // An xxs Select (its own `size` or a Form's) gets an xxs search field in
+    // its panel; every other size keeps the `s` one it always had.
+    const searchSize = useFieldSize(rest.size) === "xxs" ? "xxs" : "s";
     /**
      * Focus for the whole control, not the trigger.
      *
@@ -587,6 +595,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   listboxId={listboxId}
                   activeOptionId={activeOptionId}
                   names={names}
+                  size={searchSize}
                 />
               )}
 

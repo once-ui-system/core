@@ -1,0 +1,112 @@
+---
+title: "Option"
+summary: "One row of a list to pick from, used by Select and in your own menus, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/option.mdx"
+github: "packages/native/src/components/Select.tsx"
+navLabel: "Option"
+navIcon: "components"
+---
+
+`Option` is one row of a list to pick from, at least 44pt tall. [Select](/native/form-controls/select) draws its options with it, and you can use it in your own menus, such as a list in a [Dialog](/native/components/dialog). A selected option is highlighted and shows a check. See the [web Option](/components/option) for the same component in the browser.
+
+## Basic usage
+
+`onPress` is called with the option's `value`. `label` falls back to the `value`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Column, Option } from "@once-ui-system/native";
+
+export function SizeList() {
+  const [size, setSize] = useState("m");
+  return (
+    <Column gap="4">
+      <Option value="s" label="Small" selected={size === "s"} onPress={setSize} />
+      <Option value="m" label="Medium" selected={size === "m"} onPress={setSize} />
+      <Option value="l" label="Large" selected={size === "l"} onPress={setSize} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "SizeList.tsx"
+  }
+]} />
+
+## Description, prefix and suffix
+
+`description` adds a second line. `prefix` and `suffix` take any element, such as an icon or an avatar.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Icon, Option, Tag } from "@once-ui-system/native";
+
+export function PlanList() {
+  return (
+    <Column gap="4">
+      <Option
+        value="pro"
+        label="Pro"
+        description="Unlimited projects"
+        prefix={<Icon name="sparkle" size="s" />}
+        suffix={<Tag label="Popular" />}
+        onPress={() => {}}
+      />
+      <Option value="free" label="Free" description="Three projects" onPress={() => {}} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "PlanList.tsx"
+  }
+]} />
+
+## States
+
+`disabled` dims the option and ignores presses. `danger` draws the label in the danger colour, for actions such as delete.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Option } from "@once-ui-system/native";
+
+export function ItemMenu() {
+  return (
+    <Column gap="4">
+      <Option value="rename" label="Rename" onPress={() => {}} />
+      <Option value="move" label="Move" disabled />
+      <Option value="delete" label="Delete" danger onPress={() => {}} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "ItemMenu.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- There is no `href`: an option cannot be a link. Navigate in `onPress`.
+- There is no hover or keyboard highlight. The pressed row is highlighted instead.
+- Label and description are cut to one line each.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | What `onPress` reports. Required. |
+| `label` | `ReactNode` | `value` | The option's text. |
+| `description` | `ReactNode` | | A second, smaller line. |
+| `prefix` | `ReactNode` | | An element before the label. |
+| `suffix` | `ReactNode` | | An element after the label, before the check. |
+| `selected` | `boolean` | | Highlights the option and shows a check. |
+| `disabled` | `boolean` | | Dims the option and ignores presses. |
+| `danger` | `boolean` | | Draws the label in the danger colour. |
+| `onPress` | `(value: string) => void` | | Called with `value` when pressed. |
+| `onClick` | `(value: string) => void` | | Core's name for `onPress`. Used when `onPress` is not set. |

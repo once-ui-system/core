@@ -35,6 +35,20 @@ async function getPrism() {
     // specifier in the runtime output, which browsers can't
     // resolve and fail with "Failed to resolve module specifier
     // 'prismjs'". Browser code needs a bundler-resolved path.
+    //
+    // Prism highlights every `code[class*="language-"]` on the page by itself
+    // a frame after it loads, unless `Prism.manual` is set before it
+    // evaluates. On a page of server-rendered CodeBlocks that pass reached
+    // blocks React had not hydrated yet (each sits in its own Suspense
+    // boundary, hydrated a slice at a time) and rewrote their text into
+    // token spans, so their hydration failed with a text mismatch (React
+    // #418) on whichever page lost the race. Each CodeBlock highlights its
+    // own element once it is hydrated, so the automatic pass is switched off.
+    if (typeof window !== "undefined") {
+      const global = window as unknown as { Prism?: { manual?: boolean } };
+      global.Prism = global.Prism ?? {};
+      global.Prism.manual = true;
+    }
     const mod = await import("prismjs");
     Prism = (mod as { default?: unknown }).default ?? mod;
   }
@@ -633,7 +647,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   const [copyIcon, setCopyIcon] = useState<IconName>("clipboard");
   const handleCopy = () => {
-    if (codes.length > 0 && code) {
+    // No clipboard outside a secure context (plain http): reading
+    // `writeText` off undefined threw from the click handler.
+    if (codes.length > 0 && code && navigator.clipboard) {
       navigator.clipboard
         .writeText(typeof code === "string" ? code : code.content)
         .then(() => {

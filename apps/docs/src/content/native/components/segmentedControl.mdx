@@ -1,0 +1,127 @@
+---
+title: "SegmentedControl"
+summary: "A row of buttons where one is selected, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/segmentedControl.mdx"
+github: "packages/native/src/components/SegmentedControl.tsx"
+navLabel: "Segmented Control"
+navIcon: "components"
+---
+
+`SegmentedControl` picks one value out of a few, shown as a row of buttons in a frame. Each button takes a `label` and optional icons. It fills the width by default. See the [web SegmentedControl](/components/segmentedControl) for the same component in the browser.
+
+## Uncontrolled
+
+Without `value`, the control keeps its own state. It starts on `defaultValue`, or on the first button. `onChange` is required.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { SegmentedControl } from "@once-ui-system/native";
+
+export function ViewSwitch() {
+  return (
+    <SegmentedControl
+      defaultValue="list"
+      onChange={(value) => console.log(value)}
+      buttons={[
+        { value: "list", label: "List" },
+        { value: "grid", label: "Grid" },
+        { value: "map", label: "Map", disabled: true },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "ViewSwitch.tsx"
+  }
+]} />
+
+## Controlled
+
+Pass `value` with `onChange` when the screen owns the selection.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { SegmentedControl, Text } from "@once-ui-system/native";
+
+export function Period() {
+  const [period, setPeriod] = useState("week");
+  return (
+    <>
+      <SegmentedControl
+        value={period}
+        onChange={setPeriod}
+        buttons={[
+          { value: "day", label: "Day" },
+          { value: "week", label: "Week" },
+          { value: "month", label: "Month" },
+        ]}
+      />
+      <Text>Showing one {period}.</Text>
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "Period.tsx"
+  }
+]} />
+
+## Compact
+
+`compact` draws outlined buttons without the frame around them. `fillWidth={false}` sizes the control to its buttons.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { SegmentedControl } from "@once-ui-system/native";
+
+export function Align() {
+  return (
+    <SegmentedControl
+      compact
+      fillWidth={false}
+      onChange={() => {}}
+      buttons={[
+        { value: "left", prefixIcon: "arrowLeft" },
+        { value: "right", prefixIcon: "arrowRight" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Align.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- There is no keyboard navigation. Buttons take taps from at least 44pt around them.
+- Buttons take `value`, `label`, `prefixIcon`, `suffixIcon` and `disabled` only.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `buttons` | `SegmentedControlButton[]` | | The buttons. Required. |
+| `onChange` | `(value: string) => void` | | Called with the pressed button's `value`. Required. |
+| `value` | `string` | | The selected value, when the screen owns the state. |
+| `defaultValue` | `string` | first button | The value selected first when the control keeps its own state. |
+| `fillWidth` | `boolean` | `true` | Stretches the control and its buttons to the available width. |
+| `compact` | `boolean` | `false` | Outlined buttons without the frame. |
+| `style` | `ViewStyle` | | Style for the row. |
+
+### SegmentedControlButton
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `string` | | What `onChange` reports. Required. |
+| `label` | `ReactNode` | | The button's text. |
+| `prefixIcon` | `IconSlot` | | An icon name, or any element, before the label. |
+| `suffixIcon` | `IconSlot` | | An icon name, or any element, after the label. |
+| `disabled` | `boolean` | | The button cannot be pressed. |

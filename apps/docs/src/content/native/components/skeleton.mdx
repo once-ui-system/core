@@ -1,0 +1,95 @@
+---
+title: "Skeleton"
+summary: "A pulsing placeholder that holds the space of content while it loads."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/skeleton.mdx"
+github: "packages/native/src/components/Skeleton.tsx"
+navLabel: "Skeleton"
+navIcon: "components"
+---
+
+`Skeleton` is a grey shape that pulses while content loads. It comes as a line, a circle or a block. The pulse holds still when the device's reduce motion setting is on. Screen readers read it as "Loading". See the [web Skeleton page](/components/skeleton) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Row, Skeleton } from "@once-ui-system/native";
+
+export function ProfileLoading() {
+  return (
+    <Row gap="12" vertical="center">
+      <Skeleton shape="circle" size="l" />
+      <Column flex={1} gap="8">
+        <Skeleton shape="line" size="m" width="60%" />
+        <Skeleton shape="line" size="s" />
+      </Column>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Skeleton"
+  }
+]} />
+
+## Shape and size
+
+`line` fills the width and takes its height from `size`, from `xs` (the `8` step) to `xl` (the `24` step). `circle` takes its width and height from `size`, from `xs` (the `20` step) to `xl` (the `160` step). `block` fills the width at the `80` step tall. `width` and `height` override the size, in points or as a percentage.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Skeleton } from "@once-ui-system/native";
+
+export function Shapes() {
+  return (
+    <Column gap="12">
+      <Skeleton shape="line" size="xs" />
+      <Skeleton shape="line" size="xl" width={200} />
+      <Skeleton shape="circle" size="m" />
+      <Skeleton shape="block" height={120} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Shape and size"
+  }
+]} />
+
+## Delay
+
+`delay` waits that many milliseconds before the pulse starts. Give each skeleton in a group a longer delay to stagger them.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Skeleton } from "@once-ui-system/native";
+
+export function Staggered() {
+  return (
+    <Column gap="8">
+      <Skeleton shape="line" delay={0} />
+      <Skeleton shape="line" delay={150} />
+      <Skeleton shape="line" delay={300} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Delay"
+  }
+]} />
+
+## API reference
+
+Skeleton does not take Flex props. Use `style` for margins.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `shape` | `"line" \| "circle" \| "block"` | `"line"` | The placeholder shape. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The height of a line, or the diameter of a circle. |
+| `width` | `DimensionValue` | | Overrides the width, in points or a percentage. |
+| `height` | `DimensionValue` | | Overrides the height, in points or a percentage. |
+| `delay` | `number` | `0` | Milliseconds before the pulse starts. |
+| `style` | `ViewStyle` | | Style for the skeleton. |

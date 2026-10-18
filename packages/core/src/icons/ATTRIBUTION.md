@@ -8,7 +8,7 @@ licensed; their notices are reproduced here as those licences require.
 | --- | --- | --- |
 | [Heroicons 2](https://github.com/tailwindlabs/heroicons) | most UI glyphs (`hi2`) | MIT — © Tailwind Labs |
 | [Ionicons 5](https://ionicons.com/) | food, ball, world, gift, symbol, flag (`io5`) | MIT — © Ionic |
-| [Lucide](https://lucide.dev/) | wordmark (`lu`) | ISC — © Lucide Contributors |
+| [Lucide](https://lucide.dev/) | wordmark, grip (`lu`) | ISC — © Lucide Contributors |
 | [Phosphor](https://github.com/phosphor-icons/core) | radialGauge, linearGauge (`pi`) | MIT — © Phosphor Icons |
 
 The data was obtained through [`react-icons`](https://github.com/react-icons/react-icons)

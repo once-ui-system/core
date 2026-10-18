@@ -1,0 +1,90 @@
+---
+title: "Spinner"
+summary: "A loading indicator drawn by the platform's own activity indicator."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/spinner.mdx"
+github: "packages/native/src/components/Spinner.tsx"
+navLabel: "Spinner"
+navIcon: "components"
+---
+
+`Spinner` shows that something is loading when you cannot show its shape. For content with a known layout, a [Skeleton](/native/components/skeleton) usually reads better. See the [web Spinner page](/components/spinner) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, Spinner, Text } from "@once-ui-system/native";
+
+export function Syncing() {
+  return (
+    <Row gap="8" vertical="center">
+      <Spinner size="s" />
+      <Text onBackground="neutral-weak">Syncing your card</Text>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Spinner"
+  }
+]} />
+
+## Sizes
+
+`size` sets the box, from `xs` (the `16` step) to `xl` (the `40` step), as on the web.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, Spinner } from "@once-ui-system/native";
+
+export function Sizes() {
+  return (
+    <Row gap="16" vertical="center">
+      <Spinner size="xs" />
+      <Spinner size="s" />
+      <Spinner size="m" />
+      <Spinner size="l" />
+      <Spinner size="xl" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes"
+  }
+]} />
+
+## Color and label
+
+`color` takes any color string. `ariaLabel` is what screen readers say, "Loading" by default. Use `useTheme` to pick a token color.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Spinner, useTheme } from "@once-ui-system/native";
+
+export function Uploading() {
+  const theme = useTheme();
+  return <Spinner color={theme.color("brand-solid-strong")} ariaLabel="Uploading photo" />;
+}`,
+    language: "tsx",
+    label: "Color and label"
+  }
+]} />
+
+## Differences from the web
+
+- The spinner is React Native's `ActivityIndicator`, so it looks like the platform's own. It uses the small indicator up to `m` and the large one from `l`.
+- It takes a `color` prop, `neutral-on-background-medium` by default.
+- Spinner does not take Flex props. Use `style` for margins.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The spinner size. |
+| `color` | `string` | `neutral-on-background-medium` | The spinner color. |
+| `ariaLabel` | `string` | `"Loading"` | Read out by screen readers. |
+| `style` | `ViewStyle` | | Style for the spinner. |

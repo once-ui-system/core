@@ -586,10 +586,15 @@
     "avoid": "Ordinary dialogs and confirmations — use Dialog",
     "pairsWith": ["Column"]
   },
+  "Nav": {
+    "purpose": "Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["NavItem", "NavGroup", "NavSection"]
+  },
   "NavGroup": {
     "purpose": "Collapsible group of NavItems in a sidebar, indented behind a rail",
     "tags": ["navigation"],
-    "pairsWith": ["NavItem", "Column"]
+    "pairsWith": ["NavItem", "Nav"]
   },
   "NavIcon": {
     "purpose": "Hamburger button that toggles to a close icon, for opening mobile navigation",
@@ -599,7 +604,12 @@
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],
-    "pairsWith": ["NavGroup", "Column"]
+    "pairsWith": ["Nav", "NavGroup"]
+  },
+  "NavSection": {
+    "purpose": "Titled block of sidebar rows with an optional heading action, such as Projects with an add button",
+    "tags": ["navigation"],
+    "pairsWith": ["Nav", "NavItem"]
   },
   "NextAdapterProvider": {
     "purpose": "Installs the next/link and next/image adapters alone, for an app that composes its own LayoutProvider",
@@ -772,6 +782,22 @@
     "tags": ["navigation", "basics"],
     "avoid": "Raw a elements",
     "pairsWith": ["Text", "Row"]
+  },
+  "Sortable": {
+    "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)",
+    "tags": ["data", "navigation", "chat"],
+    "avoid": "Native HTML5 draggable, which does nothing on touch and has no keyboard path",
+    "pairsWith": ["SortableItem", "Nav", "NavItem"]
+  },
+  "SortableHandle": {
+    "purpose": "Grip button a Sortable row drags by when the list has handle; drags at once on touch",
+    "tags": ["action"],
+    "pairsWith": ["Sortable", "SortableItem"]
+  },
+  "SortableItem": {
+    "purpose": "One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged",
+    "tags": ["data"],
+    "pairsWith": ["Sortable", "NavItem", "Card"]
   },
   "Spinner": {
     "purpose": "Rotating loader for async and streaming states",

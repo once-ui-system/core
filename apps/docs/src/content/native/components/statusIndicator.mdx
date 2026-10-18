@@ -1,0 +1,96 @@
+---
+title: "StatusIndicator"
+summary: "A small colored dot that shows a status."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/statusIndicator.mdx"
+github: "packages/native/src/components/StatusIndicator.tsx"
+navLabel: "StatusIndicator"
+navIcon: "components"
+---
+
+`StatusIndicator` is a round dot in the 700 step of a color scheme, such as `green` for online or `red` for an error. It extends Flex props, so margin and positioning work as on any `Flex`. See the [web StatusIndicator page](/components/statusIndicator) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, StatusIndicator, Text } from "@once-ui-system/native";
+
+export function Online() {
+  return (
+    <Row gap="8" vertical="center">
+      <StatusIndicator color="green" ariaLabel="Online" />
+      <Text>Online</Text>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "StatusIndicator"
+  }
+]} />
+
+## Sizes
+
+`size` is `s` (the `4` step), `m` (the `8` step) or `l` (the `16` step).
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, StatusIndicator } from "@once-ui-system/native";
+
+export function Sizes() {
+  return (
+    <Row gap="12" vertical="center">
+      <StatusIndicator size="s" color="blue" />
+      <StatusIndicator size="m" color="blue" />
+      <StatusIndicator size="l" color="blue" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes"
+  }
+]} />
+
+## Colors
+
+`color` takes any of the color schemes, from `blue` to `cyan`, or `gray`. `scheme` is core 3.0's name for the same prop; it works too and wins when both are set.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Row, StatusIndicator } from "@once-ui-system/native";
+
+export function Colors() {
+  return (
+    <Row gap="12" vertical="center">
+      <StatusIndicator color="green" />
+      <StatusIndicator color="yellow" />
+      <StatusIndicator color="red" />
+      <StatusIndicator scheme="violet" />
+      <StatusIndicator scheme="gray" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Colors"
+  }
+]} />
+
+## Differences from the web
+
+- Takes `scheme` as well as `color`, ahead of core 3.0.
+- Screen readers read it as an image labelled `ariaLabel`, or "green status indicator" and so on by default. Give it a label that says what the status means.
+
+## API reference
+
+StatusIndicator extends Flex props, so margin, position and the rest apply.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"s" \| "m" \| "l"` | `"m"` | The dot size. |
+| `color` | `Schemes \| "gray"` | `"blue"` | The color scheme. |
+| `scheme` | `Schemes \| "gray"` | | Core 3.0's name for `color`. Wins when both are set. |
+| `ariaLabel` | `string` | `"<color> status indicator"` | Read out by screen readers. |

@@ -1,0 +1,141 @@
+---
+title: "Input"
+summary: "A bordered text field with a floating label, error and description lines, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/input.mdx"
+github: "packages/native/src/components/Input.tsx"
+navLabel: "Input"
+navIcon: "switch"
+---
+
+`Input` is a bordered text field built on React Native's `TextInput`. Its label sits where the value goes and floats above it once the field is focused or filled. It takes every `TextInput` prop as well, such as `keyboardType`, `autoComplete` and `secureTextEntry`. See the [web Input](/form-controls/input) for the same component in the browser.
+
+## Controlled
+
+Read the text with `onChangeText`, which gets the new string. `onChange` is React Native's event, not the web's.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Input } from "@once-ui-system/native";
+
+export function EmailField() {
+  const [email, setEmail] = useState("");
+  return (
+    <Input
+      label="Email"
+      value={email}
+      onChangeText={setEmail}
+      keyboardType="email-address"
+      autoCapitalize="none"
+      autoComplete="email"
+    />
+  );
+}`,
+    language: "tsx",
+    label: "EmailField.tsx"
+  }
+]} />
+
+## Uncontrolled
+
+Pass `defaultValue` and let the field keep the text. The label stays floating while there is text.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Input } from "@once-ui-system/native";
+
+export function NameField() {
+  return <Input label="Display name" defaultValue="Lorant" />;
+}`,
+    language: "tsx",
+    label: "NameField.tsx"
+  }
+]} />
+
+## Error and description
+
+`errorMessage` shows under the field while `error` is true. `description` is a hint under it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Input } from "@once-ui-system/native";
+
+export function PasswordField() {
+  const [password, setPassword] = useState("");
+  const tooShort = password.length > 0 && password.length < 8;
+  return (
+    <Input
+      label="Password"
+      value={password}
+      onChangeText={setPassword}
+      secureTextEntry
+      error={tooShort}
+      errorMessage="Use at least 8 characters."
+      description="Letters, numbers and symbols all count."
+    />
+  );
+}`,
+    language: "tsx",
+    label: "PasswordField.tsx"
+  }
+]} />
+
+## Prefix, suffix and character count
+
+`prefix` and `suffix` take any element. `characterCount` shows how many characters are left, and needs `maxLength`. `loading` shows a spinner in place of the suffix.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Icon, Input } from "@once-ui-system/native";
+
+export function Fields() {
+  return (
+    <Column gap="16">
+      <Input label="Search" prefix={<Icon name="search" size="s" onBackground="neutral-weak" />} />
+      <Input label="Username" loading />
+      <Input label="Bio" maxLength={80} characterCount />
+      <Input placeholder="Quick note" variant="ghost" size="s" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Fields.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- Use `onChangeText` for the value. There is no `id` and no `validate` prop.
+- `disabled` makes the field read-only and dims it. React Native's `editable` is set from it.
+- `style` sets the outer column; `inputStyle` sets the text inside.
+- There is no focus ring. The border turns stronger while the field is focused.
+
+## API reference
+
+Takes every `TextInput` prop except `style` and `editable`.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | | Floats above the value once the field is focused or filled. Also the accessibility label. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The field's height, from 40 to 72 spacing steps. |
+| `error` | `boolean` | `false` | Draws the field in the danger colour and shows `errorMessage`. |
+| `errorMessage` | `ReactNode` | | Shown under the field while `error` is true. |
+| `description` | `ReactNode` | | A hint under the field. |
+| `prefix` | `ReactNode` | | An element before the text. |
+| `suffix` | `ReactNode` | | An element after the text. Hidden while `loading`. |
+| `variant` | `"default" \| "ghost"` | `"default"` | `ghost` has no border or background. |
+| `loading` | `boolean` | `false` | Shows a spinner at the end. |
+| `disabled` | `boolean` | `false` | Dims the field and stops editing. |
+| `characterCount` | `boolean` | | Shows how many characters are left. Needs `maxLength`. |
+| `style` | `ViewStyle` | | Style for the outer column. |
+| `inputStyle` | `TextStyle` | | Style for the `TextInput`. |

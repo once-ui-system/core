@@ -1,0 +1,111 @@
+---
+title: "List"
+summary: "A bulleted or numbered list of ListItem rows."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/List.mdx"
+github: "packages/native/src/components/List.tsx"
+navLabel: "List"
+navIcon: "components"
+---
+
+`List` is a column of `ListItem` rows with a bullet before each one, or a number when `as="ol"`. React Native has no list markers, so `List` counts its items and `ListItem` draws the marker itself, right-aligned in the same `20` step indent the web uses. See the [web List page](/components/List) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { List, ListItem } from "@once-ui-system/native";
+
+export function Perks() {
+  return (
+    <List gap="4">
+      <ListItem>A free coffee every ten stamps</ListItem>
+      <ListItem>Early access to new blends</ListItem>
+      <ListItem>A birthday treat</ListItem>
+    </List>
+  );
+}`,
+    language: "tsx",
+    label: "List"
+  }
+]} />
+
+## Numbered list
+
+`as="ol"` numbers the items. `start` sets the first number.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { List, ListItem } from "@once-ui-system/native";
+
+export function Steps() {
+  return (
+    <List as="ol" start={3} gap="4">
+      <ListItem>Scan the code at the till</ListItem>
+      <ListItem>Collect your stamp</ListItem>
+      <ListItem>Show the card for your free coffee</ListItem>
+    </List>
+  );
+}`,
+    language: "tsx",
+    label: "Numbered list"
+  }
+]} />
+
+## Rich items
+
+A `ListItem` takes Text props, such as `variant` and `onBackground`. When its children are only strings and `Text`, they stay in one line of text. Any other element, like a nested `List`, goes in a column next to the marker.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { List, ListItem, Text } from "@once-ui-system/native";
+
+export function Menu() {
+  return (
+    <List gap="8">
+      <ListItem variant="body-default-s" onBackground="neutral-weak">
+        <Text variant="body-strong-s">Espresso.</Text> A short, strong shot.
+      </ListItem>
+      <ListItem>
+        <Text>Milk drinks</Text>
+        <List>
+          <ListItem>Flat white</ListItem>
+          <ListItem>Cappuccino</ListItem>
+        </List>
+      </ListItem>
+    </List>
+  );
+}`,
+    language: "tsx",
+    label: "Rich items"
+  }
+]} />
+
+## Differences from the web
+
+- The markers are drawn by `ListItem` in `neutral-on-background-weak`, not by the platform. They are hidden from screen readers.
+- `List` and `ListItem` use `role="list"` and `role="listitem"` so screen readers know the structure.
+- `ListItem` only gets its marker inside a `List`. Outside one, it shows a bullet.
+
+## List API reference
+
+List extends Flex props, so spacing, alignment and the rest apply. It fills the width by default.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `as` | `"ul" \| "ol"` | `"ul"` | Bullets, or numbers with `"ol"`. |
+| `start` | `number` | `1` | The first item's number. Ignored on `"ul"`. |
+| `children` | `ReactNode` | | The `ListItem` rows. |
+
+## ListItem API reference
+
+ListItem extends Text props, such as `variant`, `onBackground`, `align` and spacing.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `variant` | `TextVariant` | `"body-default-m"` | The text style, also used for the marker. |
+| `children` | `ReactNode` | | The item's content. |

@@ -530,6 +530,7 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
             }}
           >
             {rendered.map((item, i) => {
+              const copy = infinite && (i < origin || i >= origin + count);
               const scale = scaling
                 ? Math.max(PROXIMITY_FLOOR, 1 - falloff * Math.abs(i - origin - front))
                 : 1;
@@ -549,7 +550,9 @@ const ScrollContainer = forwardRef<HTMLDivElement, ScrollContainerProps>(
                   minWidth={20}
                   // Only the middle copy is the real run; the other two are
                   // scenery and must not be read out or tabbed into.
-                  aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}
+                  // aria-hidden alone left their links and buttons in the Tab order.
+                  aria-hidden={copy ? "true" : undefined}
+                  inert={copy ? true : undefined}
                   {...tile}
                   style={{
                     ...tile.style,

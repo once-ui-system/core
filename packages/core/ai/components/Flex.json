@@ -14,7 +14,9 @@
   "l": "FlexBreakpointProps",
   "m": "FlexBreakpointProps",
   "s": "FlexBreakpointProps",
-  "xs": "FlexBreakpointProps"
+  "xs": "FlexBreakpointProps",
+  "position": "CSSProperties[\"position\"] = relative",
+  "scrollbar": "\"default\" | \"minimal\" = minimal"
  },
  "tags": [
   "layout",

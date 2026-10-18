@@ -1,0 +1,96 @@
+---
+title: "AvatarGroup"
+summary: "A row of overlapping avatars, with the rest collapsed into a count."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/avatarGroup.mdx"
+github: "packages/native/src/components/AvatarGroup.tsx"
+navLabel: "AvatarGroup"
+navIcon: "components"
+---
+
+`AvatarGroup` lays out a list of [avatars](/native/components/avatar) in a row, each one overlapping the one before it by the `8` spacing step. Each entry in `avatars` takes the same props as `Avatar`. It extends Flex props, so spacing and alignment work as on any `Flex`. See the [web AvatarGroup page](/components/avatarGroup) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { AvatarGroup } from "@once-ui-system/native";
+
+export function Team() {
+  return (
+    <AvatarGroup
+      avatars={[
+        { src: "https://example.com/ada.jpg", value: "Ada" },
+        { value: "BK" },
+        { value: "CM" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "AvatarGroup"
+  }
+]} />
+
+## Sizes
+
+`size` sets every avatar in the group. It takes a t-shirt size.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { AvatarGroup, Column } from "@once-ui-system/native";
+
+const avatars = [{ value: "AB" }, { value: "CD" }, { value: "EF" }];
+
+export function Sizes() {
+  return (
+    <Column gap="16">
+      <AvatarGroup size="s" avatars={avatars} />
+      <AvatarGroup size="m" avatars={avatars} />
+      <AvatarGroup size="l" avatars={avatars} />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes"
+  }
+]} />
+
+## Limit and reverse
+
+`limit` shows that many avatars and collapses the rest into one `+n` avatar. By default each avatar sits over the one before it; `reverse` stacks each one under the one before it instead.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { AvatarGroup } from "@once-ui-system/native";
+
+const avatars = [
+  { value: "AB" },
+  { value: "CD" },
+  { value: "EF" },
+  { value: "GH" },
+  { value: "IJ" },
+];
+
+export function Attendees() {
+  return <AvatarGroup avatars={avatars} limit={3} reverse />;
+}`,
+    language: "tsx",
+    label: "Limit and reverse"
+  }
+]} />
+
+## API reference
+
+AvatarGroup extends Flex props, so spacing, alignment and the rest apply.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `avatars` | `AvatarProps[]` | | The avatars to show. Required. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The size of every avatar. An avatar's own `size` wins. |
+| `limit` | `number` | | Avatars shown before the rest collapse into a `+n` avatar. |
+| `reverse` | `boolean` | `false` | Stacks each avatar under the one before it instead of over it. |

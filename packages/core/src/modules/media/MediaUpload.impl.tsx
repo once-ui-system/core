@@ -1,6 +1,7 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { Flex } from "../../components/Flex";
 import { Icon } from "../../components/Icon";
 import { Media } from "../../components/Media";
@@ -45,6 +46,14 @@ export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
   accept?: string;
 }
 
+/** Release the object URL held in `ref`, if any. */
+const revokeObjectUrl = (ref: { current: string | null }) => {
+  if (ref.current) {
+    URL.revokeObjectURL(ref.current);
+    ref.current = null;
+  }
+};
+
 const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
   (
     {
@@ -71,12 +80,18 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
     const [previewImage, setPreviewImage] = useState<string | null>(initialPreviewImage); // Use prop as initial state
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
+    // The object URL this component made for the current preview. Each one
+    // holds its file in memory until revoked, and none ever was.
+    const objectUrlRef = useRef<string | null>(null);
 
     useEffect(() => {
       if (initialPreviewImage) {
+        revokeObjectUrl(objectUrlRef);
         setPreviewImage(initialPreviewImage);
       }
     }, [initialPreviewImage]);
+
+    useEffect(() => () => revokeObjectUrl(objectUrlRef), []);
 
     const handleDragOver = (e: React.DragEvent) => {
       e.preventDefault();
@@ -111,7 +126,10 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
       if (!file) return;
 
       if (file.type.startsWith("image/")) {
-        setPreviewImage(URL.createObjectURL(file));
+        revokeObjectUrl(objectUrlRef);
+        const url = URL.createObjectURL(file);
+        objectUrlRef.current = url;
+        setPreviewImage(url);
 
         if (compress && file.type.startsWith("image/")) {
           compressImage(file);
@@ -146,10 +164,27 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
 
     const uploadFile = async (file: File) => {
       setUploading(true);
-      if (onFileUpload) {
-        await onFileUpload(file);
+      try {
+        if (onFileUpload) {
+          await onFileUpload(file);
+        }
+      } catch (err) {
+        // Nothing awaits this call, so a rejection would go unhandled.
+        console.error("Upload error:", err);
+      } finally {
+        // A rejected upload used to leave the spinner up for good.
+        setUploading(false);
       }
-      setUploading(false);
+    };
+
+    // The zone is the control that opens the picker, so the keyboard can
+    // reach it: it was a bare div with a click handler, out of the Tab order.
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (e.target !== e.currentTarget) return;
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        handleFileSelection();
+      }
     };
 
     return (
@@ -163,7 +198,14 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
         center
         border="neutral-medium"
         radius="l"
-        onClick={handleFileSelection}
+        role="button"
+        tabIndex={0}
+        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+          // The picker's own click bubbles up here; it must not open it again.
+          if (e.target === inputRef.current) return;
+          handleFileSelection();
+        }}
+        onKeyDown={handleKeyDown}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -216,6 +258,9 @@ const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
             if (e.target.files) {
               handleFiles(e.target.files);
             }
+            // Clear the selection, or picking the same file again fires no
+            // change event and nothing happens.
+            e.target.value = "";
           }}
         />
       </Flex>

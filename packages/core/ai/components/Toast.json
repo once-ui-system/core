@@ -8,7 +8,8 @@
   "onClose": "() => void",
   "action": "React.ReactNode",
   "children": "!React.ReactNode",
-  "duration": "number = 6000"
+  "duration": "number = 6000",
+  "announce": "boolean = true"
  },
  "tags": [
   "feedback"

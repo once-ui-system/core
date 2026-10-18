@@ -25,3 +25,10 @@
     height: 100%;
   }
 }
+// At xxs the steppers sit side by side, so it is their width the tap area has
+// to keep to instead.
+@media (pointer: coarse) {
+  .steppersRow .stepper > :global(.button)::after {
+    width: 100%;
+  }
+}

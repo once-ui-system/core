@@ -54,6 +54,15 @@ export type CondensedTShirtSizes = "s" | "m" | "l";
 
 export type TShirtSizes = CondensedTShirtSizes | "xs" | "xl";
 
+/**
+ * The sizes a text field takes: `Input`, `Textarea`, `Form` and every field
+ * built on `Input`. The t-shirt scale plus `"xxs"`, a 32px field the height of
+ * a small `Button`, for dense toolbars. Field heights run a step above the
+ * button scale (`xs` is 40px, `s` 48px), so the toolbar size needed a name
+ * below `xs` rather than a new meaning for `s`.
+ */
+export type FieldSize = TShirtSizes | "xxs";
+
 export type ResponsiveSpacingToken = TShirtSizes;
 
 export type ShadowSize = TShirtSizes;

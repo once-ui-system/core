@@ -146,6 +146,8 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - m?: GridBreakpointProps
 - s?: GridBreakpointProps
 - xs?: GridBreakpointProps
+- position?: CSSProperties["position"] = relative
+- scrollbar?: "default" | "minimal" = minimal
 
 ### Heading
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
@@ -182,7 +184,7 @@ Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - size?: CondensedTShirtSizes = m
-- color: "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan" | "gray" = blue
+- color?: "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan" | "gray" = blue
 - ariaLabel?: string = `${color} status indicator`
 - className?: string
 - style?: React.CSSProperties
@@ -212,7 +214,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Extends Scroller, Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - buttons: ButtonOption[]
-- onChange: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
+- onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - defaultValue?: string
 - fillWidth?: boolean = true
 - value?: string
@@ -375,7 +377,7 @@ Extends ToggleButton.
 - id: string
 - label?: string
 - placeholder?: string
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -397,7 +399,7 @@ Extends ToggleButton.
 - label?: string
 - placeholder?: string
 - lines?: number | "auto" = auto
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -462,7 +464,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape: "line" | "circle" | "block" = line
+- shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties
@@ -635,12 +637,13 @@ type DateConfig = { start?: Date; end?: Date; max?: Date; min?: Date; dual?: boo
 type DateRange = { startDate: Date | undefined; endDate: Date | undefined }
 type DisplayProps = { as?: ElementType; inline?: boolean; hide?: boolean; pointerEvents?: "none" | "all" | "auto"; userSelect?: UserSelect; position?: CSSProperties["position"]; overflow?: CSSProperties["overflow"]; overflowX?: CSSProperties["overflowX"]; overflowY?: CSSProperties["overflowY"]; scrollbar?: "default" | "minimal"; transition?: "micro-short" | "micro-medium" | "micro-long" | "macro-short" | "macro-medium" | "macro-long"; opacity?: Opacity; zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"; dark?: boolean; light?: boolean }
 type DotsProps = { display?: boolean; opacity?: DisplayProps["opacity"]; color?: ColorValue; size?: SpacingToken }
-type FlexValue = "0" | "1" | "8" | "10" | "2" | "3" | "4" | "12" | "5" | "6" | "7" | "9" | "11"
+type FieldSize = "xl" | "l" | "m" | "s" | "xs" | "xxs"
+type FlexValue = "0" | "1" | "8" | "10" | "2" | "3" | "4" | "9" | "12" | "5" | "6" | "7" | "11"
 type GradientProps = { display?: boolean; opacity?: DisplayProps["opacity"]; x?: number; y?: number; width?: number; height?: number; tilt?: number; colorStart?: ColorValue; colorEnd?: ColorValue }
 type GridBreakpointProps = "style" | "textVariant" | "textSize" | "textType" | "textWeight" | "background" | "solid" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "padding" | "paddingLeft" | "paddingRight" | "paddingTop" | "paddingBottom" | "paddingX" | "paddingY" | "margin" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom" | "marginX" | "marginY" | "gap" | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "onBackground" | "onSolid" | "align" | "hide" | "pointerEvents" | "position" | "overflow" | "overflowX" | "overflowY" | "scrollbar" | "transition" | "opacity" | "zIndex" | "dark" | "light" | "columns" | "rows"
 type GridProps = Grid props
-type GridSize = "1" | "8" | "10" | "2" | "3" | "4" | "12" | "5" | "6" | "7" | "9" | "11"
-type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
+type GridSize = "1" | "8" | "10" | "2" | "3" | "4" | "9" | "12" | "5" | "6" | "7" | "11"
+type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "grip" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
 type LegendConfig = { display?: boolean; direction?: "row" | "column"; position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" | "top-center" | "bottom-center" }
 type LinesProps = { display?: boolean; opacity?: DisplayProps["opacity"]; size?: SpacingToken; thickness?: number; angle?: number; color?: ColorValue }
 type MaskProps = Mask props
@@ -651,7 +654,7 @@ type RadiusSize = "xl" | "l" | "m" | "s" | "xs" | "none" | "full"
 type SeriesConfig = { key: string; color?: ColorValue }
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "32" | "1" | "2" | "4" | "64" | "160" | "8" | "12" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
+type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "32" | "1" | "2" | "4" | "64" | "160" | "12" | "8" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
 type StyleProps = { textVariant?: TextVariant; textSize?: TextSize; textType?: TextType; textWeight?: TextWeight; background?: Colors | "surface" | "overlay" | "page" | "transparent"; solid?: Colors; borderTop?: Colors | "surface" | "transparent" | boolean; borderRight?: Colors | "surface" | "transparent" | boolean; borderBottom?: Colors | "surface" | "transparent" | boolean; borderLeft?: Colors | "surface" | "transparent" | boolean; borderX?: Colors | "surface" | "transparent" | boolean; borderY?: Colors | "surface" | "transparent" | boolean; border?: Colors | "surface" | "transparent" | boolean; borderStyle?: "solid" | "dashed"; borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"; topRadius?: RadiusSize; rightRadius?: RadiusSize; bottomRadius?: RadiusSize; leftRadius?: RadiusSize; topLeftRadius?: RadiusSize; topRightRadius?: RadiusSize; bottomLeftRadius?: RadiusSize; bottomRightRadius?: RadiusSize; radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`; shadow?: ShadowSize; cursor?: CSSProperties["cursor"] | "interactive" | ReactNode; blendMode?: BlendMode; blur?: BlurSize | number; backdropBlur?: BlurSize | number; theme?: "light" | "dark"; themeBorder?: BorderStyle; themeSolid?: SolidType; themeSurface?: SurfaceStyle }
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
@@ -687,6 +690,7 @@ type curveType = "step" | "linear" | "basis" | "basisClosed" | "basisOpen" | "bu
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - In a Next.js app, import LayoutProvider from "@once-ui-system/core/next", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.
+- Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
 - Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.
@@ -757,7 +761,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Row fill paddingX="8">
     <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
@@ -775,7 +779,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
     <Column paddingTop="64" paddingBottom="16">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
   </Drawer>
 </Column>
@@ -800,7 +804,7 @@ What each part is doing:
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
   separate surface, not this one reflowed: a **`Drawer`** from the left,
-  holding the same `Nav`, opened by a header button that only shows at `s`
+  holding the same `SideNav`, opened by a header button that only shows at `s`
   (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
   Escape and focus return a hand-made overlay misses; `flush` keeps its
   `title` for screen readers only. Tie it to the path it was opened on, as

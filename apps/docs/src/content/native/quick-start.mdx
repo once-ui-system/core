@@ -1,0 +1,221 @@
+---
+title: "Quick start"
+summary: "Install @once-ui-system/native in an Expo or React Native app, wrap it in ThemeProvider and build a first screen."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/quick-start.mdx"
+github: "packages/native/README.md"
+navLabel: "Quick start"
+navIcon: "rocket"
+---
+
+This page sets up `@once-ui-system/native` in a new or existing app. For the web package, see the [web quick start](/quick-start).
+
+## Requirements
+
+| Package | Version | Notes |
+| --- | --- | --- |
+| `react` | `>=19` | |
+| `react-native` | `>=0.79` | Expo SDK 53 and up |
+| `react-native-svg` | `>=15` | Draws the icons. Included in Expo. |
+| `react-native-safe-area-context` | any | Optional. Reads the safe areas for `ThemeProvider`'s `insets`. Included in Expo. |
+
+The package is a preview. Versions are published to the `next` tag.
+
+## Install with Expo
+
+Install the package, then let Expo pick the versions of the native modules that match your SDK:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`npm install @once-ui-system/native@next
+npx expo install react-native-svg react-native-safe-area-context`,
+    language: "bash",
+    label: "Expo"
+  }
+]} />
+
+To start from nothing, create the app first with `npx create-expo-app@latest my-app`.
+
+## Install in a bare React Native app
+
+Without Expo, install the native modules yourself and link them on iOS:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`npm install @once-ui-system/native@next react-native-svg react-native-safe-area-context
+cd ios && pod install`,
+    language: "bash",
+    label: "React Native"
+  }
+]} />
+
+Rebuild the app after installing (`npx react-native run-ios` or `run-android`). A Metro reload alone does not pick up new native modules.
+
+## Wrap the app
+
+Put `ThemeProvider` at the root. It takes the same style options as the web `ThemeProvider`, with the same defaults. `theme="system"` (the default) follows the device's appearance.
+
+Pass the safe areas in through `insets`, so `Dialog`, toasts and the `safeArea` prop keep clear of the notch and the home indicator. React Native has no built-in way to read them on every platform, so read them with `react-native-safe-area-context`. `useSafeAreaInsets()` only works inside `SafeAreaProvider`, which is why the provider goes in its own component.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import { ThemeProvider, ToastProvider } from "@once-ui-system/native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+import { HomeScreen } from "./HomeScreen";
+
+function Themed({ children }: { children: ReactNode }) {
+  const insets = useSafeAreaInsets();
+  return (
+    <ThemeProvider theme="system" brand="orange" accent="indigo" neutral="sand" insets={insets}>
+      <ToastProvider>{children}</ToastProvider>
+    </ThemeProvider>
+  );
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <Themed>
+        <HomeScreen />
+      </Themed>
+    </SafeAreaProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+`ToastProvider` is only needed if you use `useToast`. It goes inside `ThemeProvider`, so toasts read the theme and the insets. Every option `ThemeProvider` takes is listed on [Configuration](/native/config).
+
+## Fonts
+
+By default, text uses the platform font: San Francisco on iOS, Roboto on Android. To use your own, load the font files in the app and pass their family names to `fonts`. It takes one family for each text type: `heading` (also used by the display variants), `body`, `label` and `code`. A type you leave out keeps the platform font.
+
+With Expo, load them with `expo-font`. This example uses Inter from `@expo-google-fonts/inter`:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code: "npx expo install expo-font @expo-google-fonts/inter",
+    language: "bash",
+    label: "Expo"
+  }
+]} />
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import { useFonts } from "expo-font";
+import { Inter_400Regular, Inter_600SemiBold } from "@expo-google-fonts/inter";
+import { ThemeProvider } from "@once-ui-system/native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+import { HomeScreen } from "./HomeScreen";
+
+function Themed({ children }: { children: ReactNode }) {
+  const insets = useSafeAreaInsets();
+  return (
+    <ThemeProvider
+      insets={insets}
+      fonts={{
+        heading: "Inter_600SemiBold",
+        body: "Inter_400Regular",
+        label: "Inter_400Regular",
+      }}
+    >
+      {children}
+    </ThemeProvider>
+  );
+}
+
+export default function App() {
+  const [loaded] = useFonts({ Inter_400Regular, Inter_600SemiBold });
+  if (!loaded) return null;
+
+  return (
+    <SafeAreaProvider>
+      <Themed>
+        <HomeScreen />
+      </Themed>
+    </SafeAreaProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+The keys passed to `useFonts` are the family names. Render nothing until the fonts have loaded, or text first draws in the platform font and then jumps. In a bare React Native app, add the font files as native assets and pass the names they register under.
+
+The theme still sets each variant's `fontWeight` from the tokens. Expo Google Fonts registers each weight as a family of its own, so with one family per type the platform picks the closest weight that family has.
+
+## A first screen
+
+Components take the same props as on the web. `Column` and `Row` lay out, `Text` and `Heading` take the same variants, and `Button` takes `onPress`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { ScrollView } from "react-native";
+import { Button, Card, Column, Heading, Input, Row, Text, useToast } from "@once-ui-system/native";
+
+export function HomeScreen() {
+  const [email, setEmail] = useState("");
+  const { addToast } = useToast();
+
+  return (
+    <ScrollView>
+      <Column fillWidth gap="24" padding="20" background="page" safeArea={["top", "bottom"]}>
+        <Column gap="8">
+          <Heading variant="display-strong-s">Morning Coffee</Heading>
+          <Text variant="body-default-m" onBackground="neutral-weak">
+            Collect a stamp with every coffee. The tenth one is on us.
+          </Text>
+        </Column>
+        <Card padding="20" gap="12">
+          <Text variant="label-default-s" onBackground="neutral-weak">Stamps</Text>
+          <Heading variant="heading-strong-xl">7 / 10</Heading>
+        </Card>
+        <Input
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+        <Row gap="8">
+          <Button
+            label="Join"
+            fillWidth
+            onPress={() => addToast({ variant: "success", message: "You are on the list." })}
+          />
+          <Button label="Later" variant="secondary" />
+        </Row>
+      </Column>
+    </ScrollView>
+  );
+}`,
+    language: "tsx",
+    label: "HomeScreen.tsx"
+  }
+]} />
+
+`background="page"` fills the screen with the theme's page colour, and `safeArea` adds the top and bottom insets to the column's padding. Bare text inside `Flex`, `Row` and `Column` is wrapped in `Text` for you, so `<Row>Hi</Row>` works as on the web.
+
+## Next steps
+
+- [Configuration](/native/config): every `ThemeProvider` option, `useTheme()` and custom icons.
+- [Responsive](/native/basics/responsive): breakpoint props, `hide`, `dark` and `light`, and safe areas.
+- [Button](/native/components/button) and the other components in this section.
+- [Overview](/native/overview): what the package covers and how it differs from the web.

@@ -1,0 +1,166 @@
+---
+title: "Flex"
+summary: "The layout view the other native components are built on, with Row and Column presets and the same spacing, size and surface props as the web."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/flex.mdx"
+github: "packages/native/src/components/Flex.tsx"
+navLabel: "Flex"
+navIcon: "components"
+---
+
+`Flex` renders a React Native `View` and takes Once UI's layout, spacing, size and surface props, so a screen is built by nesting it instead of writing style objects. `Row` and `Column` are `Flex` with `direction` preset. `Flex` is a row by default, as on the web, even though a plain `View` is a column. See the [web Flex page](/components/flex) for the full reference.
+
+## Direction and alignment
+
+`horizontal` and `vertical` name the axis you see, so they mean the same thing in a row and in a column. `center` centers on both.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Flex, Row, Text } from "@once-ui-system/native";
+
+export function Alignment() {
+  return (
+    <Column gap="16" fillWidth>
+      <Row gap="8" horizontal="between" vertical="center">
+        <Text>Left</Text>
+        <Text>Right</Text>
+      </Row>
+      <Flex center height="64" radius="m" border="neutral-alpha-medium">
+        <Text>Centered</Text>
+      </Flex>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Alignment.tsx"
+  }
+]} />
+
+## Spacing and size
+
+Spacing props take a token such as `"16"` or `"m"`, or a number of rem, as on the web. Sizes take a token, a number of rem or a percentage. `fillWidth` stretches to the parent's width, and `fit` keeps the view at its content's size.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Row, Text } from "@once-ui-system/native";
+
+export function Spacing() {
+  return (
+    <Column padding="20" gap="12" fillWidth>
+      <Row paddingX="16" paddingY="8" fit background="neutral-alpha-weak" radius="full">
+        <Text>Fits its content</Text>
+      </Row>
+      <Row width={12} height="40" background="brand-alpha-weak" radius="m" />
+      <Row width="50%" height="40" background="accent-alpha-weak" radius="m" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Spacing.tsx"
+  }
+]} />
+
+## Surface
+
+`background`, `border`, `radius` and `shadow` read the theme's tokens. `background` also takes `"surface"`, `"page"`, `"overlay"` and `"transparent"`. A `border` is 1 point wide unless you set `borderWidth`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Heading, Text } from "@once-ui-system/native";
+
+export function Surface() {
+  return (
+    <Column
+      padding="20"
+      gap="8"
+      background="surface"
+      border="neutral-alpha-medium"
+      radius="l"
+      shadow="m"
+    >
+      <Heading variant="heading-strong-s">Order shipped</Heading>
+      <Text onBackground="neutral-weak">Arrives on Thursday.</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Surface.tsx"
+  }
+]} />
+
+`radius` does not clip children. Add `overflow="hidden"` when it should; on iOS that also hides the view's own shadow.
+
+## Responsive and safe areas
+
+The breakpoint props `xl`, `l`, `m`, `s` and `xs` take an object of props that applies on screens up to that width, as on the web. `safeArea` adds the screen's safe areas to the padding, once they are passed to `ThemeProvider`. The [overview](/native/overview) shows both in detail.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Flex, Text } from "@once-ui-system/native";
+
+export function Screen() {
+  return (
+    <Column fill background="page" padding="20" safeArea>
+      <Flex gap="16" direction="row" s={{ direction: "column", gap: "8" }}>
+        <Text>First</Text>
+        <Text>Second</Text>
+      </Flex>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Screen.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **Bare text.** React Native throws on text outside a `Text`. `Flex` wraps bare strings and numbers in `Text` for you, so `<Row>Hi</Row>` works.
+- **Position.** `position` takes `relative`, `absolute` or `static`. React Native has no fixed or sticky positioning.
+- **Left out.** `solid`, single-side borders (`borderTop` and the rest), the text props (`onBackground`, `align`, `textVariant` and the rest), `transition`, `scrollbar`, `overflowX` and `overflowY` have no native equivalent.
+- **`dark` and `light`** render the view only while the theme is dark or light. They change no colours.
+- **`pointerEvents`** also takes React Native's `"box-none"` and `"box-only"`.
+- **`safeArea`** is native only.
+
+## Props
+
+`Flex`, `Row` and `Column` take the same props. They also take the spacing props (`padding`, `paddingX`, `paddingY`, `paddingTop` and the other sides, the same set for `margin`, and `gap`) and every React Native `View` prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `direction` | `"row" \| "column" \| "row-reverse" \| "column-reverse"` | `"row"` | Main axis. `Column` sets `"column"`. |
+| `horizontal` | `"start" \| "center" \| "end" \| "between" \| "around" \| "even" \| "stretch"` | | Alignment along the horizontal axis. |
+| `vertical` | same as `horizontal` | | Alignment along the vertical axis. |
+| `center` | `boolean` | | Centers children on both axes. |
+| `wrap` | `boolean` | | Lets children wrap onto new lines. |
+| `flex` | `number` | | React Native's `flex`. |
+| `background` | `Colors \| "surface" \| "page" \| "overlay" \| "transparent"` | | Background colour token. |
+| `border` | `Colors \| "surface" \| "transparent"` | | Border colour token. Adds a solid 1pt border. |
+| `borderStyle` | `"solid" \| "dashed"` | `"solid"` | Border style. |
+| `borderWidth` | `1 \| 2 \| 4 \| 8` | `1` | Border width in points. |
+| `radius` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| "full" \| "none"` | | Corner radius token. |
+| `shadow` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | | Shadow token. |
+| `overflow` | `"visible" \| "hidden" \| "scroll"` | | Pass `"hidden"` to clip children to `radius`. |
+| `width`, `height` | `SpacingToken \| number \| "<n>%"` | | Size as a token, rem or a percentage. |
+| `minWidth`, `maxWidth`, `minHeight`, `maxHeight` | `SpacingToken \| number \| "<n>%"` | | Size limits. `maxWidth` also sets the width to 100%. |
+| `fill`, `fillWidth`, `fillHeight` | `boolean` | | 100% width and height, or one of them. |
+| `fit`, `fitWidth`, `fitHeight` | `boolean` | | Keeps the view at its content's size. |
+| `aspectRatio` | `number \| string` | | Width to height ratio. |
+| `position` | `"relative" \| "absolute" \| "static"` | | Positioning. |
+| `top`, `right`, `bottom`, `left` | `SpacingToken \| number` | | Offsets, as a token or rem. |
+| `opacity` | `0 \| 10 \| 20 \| … \| 100` | | Opacity in percent. |
+| `zIndex` | `-1` to `10` | | Stacking order. |
+| `pointerEvents` | `"none" \| "all" \| "auto" \| "box-none" \| "box-only"` | | Which views take touches. |
+| `hide` | `boolean` | | Renders nothing. |
+| `dark`, `light` | `boolean` | | Renders only in the dark or light theme. |
+| `safeArea` | `boolean \| ("top" \| "right" \| "bottom" \| "left")[]` | | Adds the safe-area insets to the padding on these edges, or all four. |
+| `xl`, `l`, `m`, `s`, `xs` | `FlexBreakpointProps` | | Props that apply on screens up to that breakpoint. |
+| `style` | `StyleProp<ViewStyle>` | | Applied after the props. |

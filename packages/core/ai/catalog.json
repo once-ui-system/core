@@ -1,7 +1,7 @@
 {
  "version": "2.2.0",
- "generated": "2026-10-17",
- "iconNames": ["adjustments","arrowLeft","arrowRight","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","minimize","minus","moreHorizontal","opacity","organization","pause","paw","payment","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
+ "generated": "2026-10-18",
+ "iconNames": ["adjustments","arrowLeft","arrowRight","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","minimize","minus","moreHorizontal","opacity","organization","pause","paw","payment","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "Accordion": {"purpose":"One collapsible section: a clickable title row that shows and hides its content"},
   "AccordionGroup": {"purpose":"Stack of Accordions from an items array, with optional auto-collapse — FAQs and disclosure lists"},
@@ -80,6 +80,8 @@
   "MatrixFx": {"purpose":"Canvas dot-matrix field with reveal, flicker and an optional bulge wave"},
   "Media": {"purpose":"Image, YouTube or MP4 by src, with aspect ratio, loading state, caption and enlarge","avoid":"Raw img elements"},
   "Modal": {"purpose":"Full-screen modal with a title and an optional backdrop","avoid":"Ordinary dialogs and confirmations — use Dialog"},
+  "Nav": {"purpose":"Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside"},
+  "NavSection": {"purpose":"Titled block of sidebar rows with an optional heading action, such as Projects with an add button"},
   "NavGroup": {"purpose":"Collapsible group of NavItems in a sidebar, indented behind a rail"},
   "NavIcon": {"purpose":"Hamburger button that toggles to a close icon, for opening mobile navigation"},
   "NavItem": {"purpose":"One sidebar navigation row: label, icon, selected state, count badge or unread dot"},
@@ -111,6 +113,9 @@
   "Skeleton": {"purpose":"Loading placeholder shape (line, block, circle) with a staggerable delay in ms"},
   "Slider": {"purpose":"Range slider for a numeric value, with label and value readout"},
   "SmartLink": {"purpose":"Styled link with prefix/suffix icons and a selected state; routes through the framework adapter","avoid":"Raw a elements"},
+  "Sortable": {"purpose":"List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)","avoid":"Native HTML5 draggable, which does nothing on touch and has no keyboard path"},
+  "SortableHandle": {"purpose":"Grip button a Sortable row drags by when the list has handle; drags at once on touch"},
+  "SortableItem": {"purpose":"One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged"},
   "Spinner": {"purpose":"Rotating loader for async and streaming states"},
   "SplitView": {"purpose":"Two panes with a draggable divider, collapsing to one below a breakpoint"},
   "StatusIndicator": {"purpose":"Small coloured status dot (online, error, warning) — colour by name, not variant"},

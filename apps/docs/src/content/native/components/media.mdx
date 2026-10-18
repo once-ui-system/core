@@ -1,0 +1,137 @@
+---
+title: "Media"
+summary: "An image in a clipped box at a set aspect ratio, with a skeleton until it loads."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/media.mdx"
+github: "packages/native/src/components/Media.tsx"
+navLabel: "Media"
+navIcon: "components"
+---
+
+`Media` shows an image from a URL in a box with rounded corners and a set aspect ratio. A skeleton fills the box until the image loads. It extends Flex props, so radius, border, margin and sizes work as on any `Flex`. See the [web Media page](/components/media) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Media } from "@once-ui-system/native";
+
+export function Cover() {
+  return (
+    <Media
+      src="https://example.com/cover.jpg"
+      alt="A cup of coffee on a wooden table"
+      aspectRatio="16 / 9"
+      radius="l"
+      border="neutral-alpha-weak"
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Media"
+  }
+]} />
+
+## Loading and caption
+
+Set `loading` to show the skeleton instead of the image, for example while you fetch the URL. `caption` adds a line of text under the image.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Media } from "@once-ui-system/native";
+
+export function Gallery({ src }: { src?: string }) {
+  return (
+    <Column gap="16">
+      <Media src={src ?? ""} loading={!src} aspectRatio="1" radius="m" />
+      <Media
+        src="https://example.com/shop.jpg"
+        alt="The shop front"
+        aspectRatio="4 / 3"
+        radius="m"
+        caption="Our shop on Main Street"
+      />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Loading and caption"
+  }
+]} />
+
+## Pressable
+
+Pass `onPress` to make the image a button. `onClick` works too, as on the web. The image dims while it is pressed.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Media } from "@once-ui-system/native";
+
+export function Thumbnail({ onOpen }: { onOpen: () => void }) {
+  return (
+    <Media
+      src="https://example.com/photo.jpg"
+      alt="Open the photo"
+      aspectRatio="1"
+      radius="m"
+      maxWidth={8}
+      onPress={onOpen}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Pressable"
+  }
+]} />
+
+## Stretch
+
+With `stretch`, the image fills the box it is in and ignores `aspectRatio`. Use it for a background inside a sized container.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Media } from "@once-ui-system/native";
+
+export function Banner() {
+  return (
+    <Column height={12} fillWidth radius="l" overflow="hidden">
+      <Media src="https://example.com/banner.jpg" alt="" stretch objectFit="cover" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Stretch"
+  }
+]} />
+
+## Differences from the web
+
+- Images only. The web's `enlarge` overlay, video and YouTube embeds are not in the native package.
+- `aspectRatio` defaults to `"original"`, which takes the image's own ratio once it loads. Until then, the box is `height` rem tall, or the `80` spacing step when `height` is not set.
+- `objectFit` maps to React Native's `resizeMode`: `cover` and `contain` stay the same, `fill` becomes `stretch`, `none` becomes `center` and `scale-down` becomes `contain`.
+- An empty `alt` hides the image from screen readers, as on the web. With `alt`, the image is read out by it.
+- `fillWidth` is on by default.
+
+## API reference
+
+Media extends Flex props, so spacing, radius, border, sizes and the rest apply.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `src` | `string` | | The image URL. Required. |
+| `alt` | `string` | `""` | Read out by screen readers. Empty marks the image decorative. |
+| `aspectRatio` | `string` | `"original"` | `"16 / 9"`, `"1"` and so on. `"original"` uses the image's own ratio once loaded. |
+| `height` | `number` | | Height in rem, used when there is no ratio yet. |
+| `loading` | `boolean` | `false` | Shows the skeleton instead of the image. |
+| `objectFit` | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"` | `"cover"` | How the image fits the box. |
+| `stretch` | `boolean` | `false` | Fills the parent box, ignoring `aspectRatio`. |
+| `caption` | `ReactNode` | | Text shown under the image. |
+| `onPress` | `() => void` | | Makes the image pressable. |
+| `onClick` | `() => void` | | Same as `onPress`, the web name. |
+| `fillWidth` | `boolean` | `true` | Takes the full width of its parent. |

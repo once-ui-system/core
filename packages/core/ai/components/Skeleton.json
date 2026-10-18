@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "shape": "!\"line\" | \"circle\" | \"block\" = line",
+  "shape": "\"line\" | \"circle\" | \"block\" = line",
   "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
   "delay": "number",
   "style": "React.CSSProperties",

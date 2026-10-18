@@ -94,8 +94,12 @@
   --fld-box: calc(var(--fld-h) - 2 * var(--fld-border) - 2 * var(--fld-well));
   --fld-ink-top: calc((var(--fld-box) - var(--fld-ink)) / 2);
 
-  /* Inputs centre their ink in a fixed box; textareas grow, so they anchor to a
-     fixed top inset and share only the gap below the label. */
+  /* Where the ink block starts. `--fld-ink-top` depends only on the size token,
+     never on how tall a textarea has grown, so a textarea uses it too: its
+     floated label and first line land exactly where an input's do, and further
+     lines grow downwards from there. It used to anchor to a flat 8px instead,
+     which matched an input only near size m and pinned the label to the top
+     edge at l and xl. */
   --fld-anchor: var(--fld-ink-top);
 
   /* Distance from a text box's top edge to the cap height of its first line. */
@@ -114,12 +118,13 @@
      the text by half of itself and the ink would sit low. */
   --fld-value-bottom: max(0px, calc(var(--fld-box) - var(--fld-value-top) - var(--fld-lh)));
 
+  /* A textarea's first line, padded to sit where an input's single line falls.
+     On `.base` rather than the textarea so the label, a sibling, can centre on
+     the same line. See `.input.textarea` below. */
+  --fld-textarea-inset: max(var(--static-space-4), calc((var(--fld-box) - var(--fld-lh)) / 2));
+
   backdrop-filter: var(--backdrop-filter);
   min-height: var(--fld-h);
-
-  &:has(.textarea) {
-    --fld-anchor: var(--static-space-8);
-  }
 }
 
 /* Light theme: a white field with a firmer edge, as native text fields are.
@@ -140,6 +145,35 @@
     --fld-lh: max(var(--fld-lh-base), calc(var(--fld-fs) * 1.3));
     --fld-h: max(var(--fld-h-base), var(--fld-h-touch));
   }
+}
+
+/* The toolbar size: 32px, the height of a small Button, so a field can sit in
+   a row of small controls. Its box is 22px (32 less the border and the well),
+   one line of body-s and nothing more, so it has no floating label: Input.tsx
+   shows `label` as the placeholder and keeps it as a hidden <label>. The value
+   is inset 12px, matching the text of a small Button (8px padding plus the
+   label's 4), and Input.tsx pulls the prefix and suffix in to 8px, where a
+   small Button puts its icon.
+
+   No touch floor. xs and s gained one because they were drawn under the tap
+   minimum by accident; this size is small on purpose, and a floor would make
+   it the same field as xs on a phone. The 16px clamp still applies on touch,
+   and its 20.8px line fits the 22px box. */
+.xxs {
+  --fld-fs-base: calc(var(--font-size-body-s) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-s) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-32);
+  --fld-h-touch: 0px;
+  --fld-label-scale: 0.6;
+  --fld-inset: var(--static-space-12);
+}
+
+/* A textarea's 4px inset floor beats the centring inset here (2px, a 22px box
+   around an 18px line), and would make an xxs textarea 4px taller than the
+   input beside it — the bug the floor was lowered from 8px to fix at xs. At
+   xxs the floor is 0. `.base.xxs` so it outranks `.base` whatever the order. */
+.base.xxs {
+  --fld-textarea-inset: max(0px, calc((var(--fld-box) - var(--fld-lh)) / 2));
 }
 
 .xs {
@@ -225,6 +259,22 @@
   }
 }
 
+/* The label of an xxs field: still the field's name for a screen reader, but
+   not drawn, because the field has no room for it. The same clip pattern as
+   VisuallyHidden. */
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+}
+
 .inputLabel {
   top: 50%;
   transform: translateY(-50%);
@@ -234,8 +284,14 @@
   }
 }
 
+/* Resting, the label centres on the textarea's first line, which is where an
+   input centres its own. It used to sit at a flat 18px from the top whatever
+   the size, so it rode low in an xs or s field and high in an l or xl one.
+   Measured from the Column, like `.inputLabel`: the well, then the textarea's
+   top inset, then half a line. */
 .textareaLabel {
-  top: calc(var(--static-space-16) + var(--static-space-2));
+  top: calc(var(--fld-well) + var(--fld-textarea-inset) + var(--fld-lh) / 2);
+  transform: translateY(-50%);
 
   &.floating {
     top: var(--fld-label-top);
@@ -265,14 +321,11 @@
 
        Padding the block symmetrically puts the first line exactly where an
        input's single line falls, and lets the rest grow downwards from there.
-       Floored so the inset never collapses on a field whose content has
-       already outgrown one line. Note the floating-label rule below overrides
-       `padding-top` when there is a label, because then the value has to clear
-       the label rather than centre. */
-    --fld-textarea-inset: max(
-      var(--static-space-8),
-      calc((var(--fld-box) - var(--fld-lh)) / 2)
-    );
+       `--fld-textarea-inset` is set on `.base`. Its floor is 4px: it used to
+       be 8px, which beat the centring inset at xs and made an xs textarea 4px
+       taller than the input beside it. Note the floating-label rule below
+       overrides both paddings when there is a label, because then the value
+       has to clear the label rather than centre. */
     padding-top: var(--fld-textarea-inset);
     padding-bottom: var(--fld-textarea-inset);
   }
