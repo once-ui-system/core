@@ -3,13 +3,14 @@ import type { ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { HoverCard } from "../components/HoverCard.js";
 import { LayoutProvider } from "../contexts/LayoutProvider.js";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * 2.2's CursorCard and Hover cases (#184, #187), against their 3.0 home,
  * HoverCard `placement="cursor"` / `"cover"`: the cursor card's own
  * `transform` replaced its translate props, and both took any device with
  * touch events (a touchscreen laptop with a mouse) for a phone. The pointer is
- * now read from `(hover: none)`. A bare number is px in 3.0.
+ * now read from `(hover: none)`. A bare number is on the token scale in 3.0.
  */
 
 const inLayout = (ui: ReactElement) => render(<LayoutProvider>{ui}</LayoutProvider>);
@@ -45,7 +46,7 @@ describe("HoverCard placement=cursor", () => {
     fireEvent.mouseEnter(getByText("trigger").parentElement as HTMLElement);
     const card = getByText("card").parentElement as HTMLElement;
     expect(card.style.transform).toMatch(/^translate\(calc\(0px - 100%\)/);
-    expect(card.style.transform).toMatch(/ translate\(16px, 0\)$/);
+    expect(card.style.transform.endsWith(` translate(${t(16)}, 0)`)).toBe(true);
   });
 
   it("does not follow the pointer where it cannot hover", () => {

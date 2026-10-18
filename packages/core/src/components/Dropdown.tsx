@@ -25,6 +25,7 @@ import {
   getLastOpenedDropdown,
   setLastOpenedDropdown,
 } from "../utils/dropdownState.js";
+import { cssLength, declareTokenLengths } from "../utils/layoutClasses.js";
 import { ArrowNavigation } from "./ArrowNavigationContext.js";
 import { Button } from "./Button.js";
 import { Column } from "./Column.js";
@@ -41,15 +42,14 @@ import { Row } from "./Row.js";
 import { ScrollLock } from "./ScrollLock.js";
 
 /** A number as px, a CSS length as written. */
-const cssLength = (value: number | string) => (typeof value === "number" ? `${value}px` : value);
 
 export interface DropdownProps {
   fillWidth?: boolean;
-  /** The panel's minimum width: a number is px, a string a CSS length (`"12rem"`). */
+  /** The panel's minimum width: a number is on the token scale (`192` is 12rem), a string a CSS length. */
   minWidth?: number | CSSUnit;
   /** As `minWidth`; unset, the panel is capped at the space available. */
   maxWidth?: number | CSSUnit;
-  /** The panel's minimum height: a number is px, a string a CSS length. */
+  /** The panel's minimum height: a number is on the token scale, a string a CSS length. */
   minHeight?: number | CSSUnit;
   placement?: Placement;
   /** What opens the dropdown: a Button, an IconButton, any element. With `openOn="contextmenu"`, the region a right-click opens it over. */
@@ -273,6 +273,12 @@ const DropdownMenu = ({
           floatingStyle.maxWidth = maxWidth ? cssLength(maxWidth) : `${availableWidth}px`;
           floatingStyle.minHeight = minHeight ? cssLength(minHeight) : "0px";
           floatingStyle.maxHeight = `${availableHeight}px`;
+          declareTokenLengths(
+            floatingStyle,
+            floatingStyle.minWidth,
+            floatingStyle.maxWidth,
+            floatingStyle.minHeight,
+          );
         },
       }),
     ],

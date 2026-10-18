@@ -8,7 +8,7 @@
   "label": "ReactNode",
   "selected": "boolean = false",
   "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
-  "size": "TShirtSizes = m",
+  "size": "TShirtSizes",
   "radius": "RadiusSize",
   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "rounded": "boolean = false",

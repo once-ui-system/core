@@ -28,11 +28,11 @@ interface UserProps {
   selected?: boolean;
   /** With `dropdown`: where the menu opens. */
   placement?: Placement;
-  /** With `dropdown`: the menu's minimum width (a number is px). */
+  /** With `dropdown`: the menu's minimum width (a number is on the token scale). */
   minWidth?: DropdownProps["minWidth"];
-  /** With `dropdown`: the menu's maximum width (a number is px). */
+  /** With `dropdown`: the menu's maximum width (a number is on the token scale). */
   maxWidth?: DropdownProps["maxWidth"];
-  /** With `dropdown`: the menu's minimum height in px. */
+  /** With `dropdown`: the menu's minimum height (a number is on the token scale). */
   minHeight?: DropdownProps["minHeight"];
   /** With `dropdown`: the trigger's inline style. */
   style?: React.CSSProperties;

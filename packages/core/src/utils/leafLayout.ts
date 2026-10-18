@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import type { LeafProps } from "../interfaces.js";
-import { isCSSUnit, offsetValue, spacingClass } from "./layoutClasses.js";
+import { isCSSUnit, offsetValue, spacingClass, withTokenLengths } from "./layoutClasses.js";
 import { numericSpacingStyle } from "./spacingStyle.js";
 
 const SIDES = ["top", "right", "bottom", "left"] as const;
@@ -39,7 +39,7 @@ export function leafLayout(props: Omit<LeafProps, "className" | "style" | "fillW
       flex !== undefined && `flex-${flex}`,
       ...offsetClasses,
     ],
-    style: {
+    style: withTokenLengths({
       ...numericSpacingStyle({
         margin,
         marginTop,
@@ -54,7 +54,7 @@ export function leafLayout(props: Omit<LeafProps, "className" | "style" | "fillW
       position,
       ...(position === "sticky" && props.top === undefined ? { top: 0 } : {}),
       ...offsets,
-    },
+    }),
   };
 }
 

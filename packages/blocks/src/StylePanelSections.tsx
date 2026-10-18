@@ -7,6 +7,7 @@ import {
   type DataStyle as ChartMode,
   ColorInput,
   Column,
+  type Density,
   Flex,
   Icon,
   IconButton,
@@ -58,6 +59,13 @@ export interface StylePanelValue {
   solidStyle?: SolidStyle;
   surface?: SurfaceStyle;
   scaling?: ScalingSize;
+  /**
+   * The controls' default size, `"compact"` / `"normal"` / `"spacious"`.
+   * Bound to ThemeProvider, a new density also brings its scaling (95, 100
+   * or 105) unless a scaling was chosen; a host that owns the state passes
+   * both to the providers, which do the same.
+   */
+  density?: Density;
   transition?: TransitionStyle;
   bodySize?: BodySize;
   bodyLineHeight?: BodyLineHeight;
@@ -83,6 +91,7 @@ export interface StylePanelVisibility {
   advanced?: {
     section?: boolean;
     surface?: boolean;
+    density?: boolean;
     scaling?: boolean;
     dataStyle?: boolean;
     transition?: boolean;
@@ -156,6 +165,8 @@ export interface StylePanelRowLabels {
   effect?: ReactNode;
   /** Defaults to `"Surface"`. */
   surface?: ReactNode;
+  /** Defaults to `"Density"`. */
+  density?: ReactNode;
   /** Defaults to `"Scaling"`. */
   scaling?: ReactNode;
   /** Defaults to `"Transition"`. */
@@ -180,6 +191,8 @@ export interface StylePanelOptionLabels {
   transition?: Partial<Record<TransitionStyle, ReactNode>>;
   /** Defaults to Categorical, Divergent and Sequential. */
   dataStyle?: Partial<Record<ChartMode, ReactNode>>;
+  /** Defaults to Compact, Normal and Spacious. */
+  density?: Partial<Record<Density, ReactNode>>;
   /** Formats a scaling option, `"90"` to `"110"`. Defaults to the value as written. */
   scaling?: (value: ScalingSize) => ReactNode;
   /** Formats a text size option, `"90"` to `"110"`. Defaults to the value as written. */
@@ -294,6 +307,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     solid: "Style",
     effect: "Effect",
     surface: "Surface",
+    density: "Density",
     scaling: "Scaling",
     transition: "Transition",
     dataStyle: "Data Style",
@@ -306,6 +320,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
     surface: { filled: "Filled", translucent: "Translucent" },
     transition: { all: "All", micro: "Micro", macro: "Macro", none: "None" },
     dataStyle: { categorical: "Categorical", divergent: "Divergent", sequential: "Sequential" },
+    density: { compact: "Compact", normal: "Normal", spacious: "Spacious" },
     scaling: (value) => value,
     bodySize: (value) => value,
     bodyLineHeight: (value) => value,
@@ -393,6 +408,7 @@ function useBoundState(): Omit<StylePanelContextValue, "controlled"> {
       solidStyle: styleContext.solidStyle,
       surface: styleContext.surface,
       scaling: styleContext.scaling,
+      density: styleContext.density,
       transition: styleContext.transition,
       bodySize: styleContext.bodySize,
       bodyLineHeight: styleContext.bodyLineHeight,
@@ -896,6 +912,17 @@ const SurfaceRow = segmentedRow(
   "filled",
 );
 
+const DensityRow = segmentedRow(
+  "density",
+  "density",
+  ({ options: { density } }) => [
+    { label: density.compact, value: "compact" },
+    { label: density.normal, value: "normal" },
+    { label: density.spacious, value: "spacious" },
+  ],
+  "normal",
+);
+
 const ScalingRow = segmentedRow(
   "scaling",
   "scaling",
@@ -1040,10 +1067,11 @@ function AdvancedGroup({
   description,
   rows,
   ...rest
-}: GroupProps<"surface" | "scaling" | "dataStyle" | "transition">) {
+}: GroupProps<"surface" | "density" | "scaling" | "dataStyle" | "transition">) {
   return (
     <Group {...useGroupHeading("advanced", { title, description })} {...rest}>
       {show(rows, "surface") && <SurfaceRow />}
+      {show(rows, "density") && <DensityRow />}
       {show(rows, "scaling") && <ScalingRow />}
       {show(rows, "dataStyle") && <DataStyleRow />}
       {show(rows, "transition") && <TransitionRow />}
@@ -1063,6 +1091,7 @@ export const sections = {
   Solid: SolidRow,
   Effect: EffectRow,
   Surface: SurfaceRow,
+  Density: DensityRow,
   Scaling: ScalingRow,
   Transition: TransitionRow,
   DataStyle: DataStyleRow,

@@ -36,7 +36,7 @@
     ]
   },
   "RevealFx.translateY": {
-    "rule": "translateY as a number is px. Use a token such as \"16\" (1rem) or translateY={16}; translateY=\"1rem\" also works.",
+    "rule": "translateY as a number is on the token scale: translateY={16} is the token \"16\" (1rem). Use a token such as \"16\"; translateY=\"1rem\" also works.",
     "components": ["RevealFx"]
   },
   "LogoCloud.columns": {
@@ -181,7 +181,7 @@
     "components": ["RevealFx"]
   },
   "size.rem": {
-    "rule": "A number on any size, spacing or offset prop is px in 3.0 (it was rem in 2.x): width={32} is 32 px, maxWidth={40} is 40 px. For rem write the string, maxWidth=\"40rem\"; a digit string is the spacing token, width=\"32\" (2rem). An icon or avatar box is usually \"24\" to \"48\", or 24 to 48 as px.",
+    "rule": "A number on any size, spacing or offset prop is on the token scale in 3.0 (it was rem in 2.x): width={32} renders as width=\"32\" (2rem, 32 px at the defaults, scaled by data-scaling), maxWidth={40} is 2.5rem. For 40rem write the string, maxWidth=\"40rem\". An icon or avatar box is usually \"24\" to \"48\", or 24 to 48 as numbers.",
     "components": ["Flex", "Row", "Column", "Grid"]
   }
 }

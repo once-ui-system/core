@@ -35,7 +35,7 @@ node scripts/codemod-3.0.mjs src
 It only touches Once UI's own components (found through your imports, or by
 name in MDX), never a same-named component of yours, and running it twice
 changes nothing. Run it once, before you write 3.0 code: it reads every bare
-number as 2.x did, so on a size you wrote as 3.0 px (`width={200}`) it would
+number as 2.x did, so on a size you wrote the 3.0 way (`width={200}`) it would
 write `"200rem"`. Lines marked `!` are for you to fix by hand, one per site,
 each with its file and line. Code you have
 already moved to 3.0 can still take the import step on its own
@@ -132,25 +132,34 @@ never open); `open`/`defaultOpen`/`onOpenChange` on Kbar; `onValueCommit` on
 Slider, on pointer release and after each key; a group `disabled` on
 SegmentedControl, whose `onValueChange` is no longer required.
 
-### 6. Numbers mean px
+### 6. A number is on the token scale
 
-A bare number has one meaning per kind now: a length is **px**, a time is
-**milliseconds**, and `speed` is a **multiplier**. In 2.x a number was rem on
-sizes, spacing and offsets (and vh, a percentage or seconds on a few props),
-so `maxWidth={40}` was 640px; in 3.0 it is 40px. Run the codemod: it writes
-the rem you had as a string, `maxWidth="40rem"`, which renders exactly as
-before and still follows the root font size. Tokens are unchanged
-(`padding="16"` is the spacing step), and any CSS length string now works
-where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
-`"100dvh"`, `calc(…)`), so write whichever you prefer for new code.
+A bare number has one meaning per kind now: a length is on the **token
+scale**, a time is **milliseconds**, and `speed` is a **multiplier**. On the
+token scale a number means what the spacing token of the same name means:
+`16` = `"16"` = 1rem, and it scales with `data-scaling` as the tokens do
+(`calc(1rem * 1.1)` at 110). At the default root size (16px) and scaling, a
+number is that many px, so `width={320}` is 320px on a desktop; on a phone,
+whose root size is 15px, it is 300px, as `"320"` would be. In 2.x a number
+was rem on sizes, spacing and offsets (and vh, a percentage or seconds on a
+few props), so `maxWidth={40}` was 640px; in 3.0 it is 2.5rem. Run the
+codemod: it writes the rem you had as a string, `maxWidth="40rem"`, which
+renders exactly as before and still follows the root font size. Tokens are
+unchanged (`padding="16"` is the spacing step), and any CSS length string
+now works where a size, spacing or offset is accepted (`"320px"`,
+`"40rem"`, `"50%"`, `"100dvh"`, `calc(…)`); write px (`"320px"`) for a
+length that must not follow the root size or the scaling. A test that reads
+an inline style sees a step as its token (`var(--static-space-16)`) and any
+other number as `var(--ou-n-320)`, a custom property the element declares
+itself.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
-| `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | px | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
-| Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | px (each also takes a CSS length string) | `{n}` → `"nrem"` |
-| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | px, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object or a `const dataStyle = { … }`, and on DataThemeProvider; a TypeScript use site of the rewritten config gets ``height={dataStyle.height as `${number}rem`}``. A `const dataStyle: DataStyleConfig = { … }` with a type of yours keeps its number (rewriting it would break that type) and the use site becomes ``{`${dataStyle.height}rem`}`` |
-| Mask `x`/`y`: a percentage; `radius`: vh | a number is px; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
-| Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is px; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
+| `width`, `height`, their `min`/`max`, `minColumnWidth`, `padding*`, `margin*`, `gap`, `top`/`right`/`bottom`/`left`, `translateX`/`Y`, `blur`, `backdropBlur` as a number: rem | the token scale (16 = 1rem) | `{40}` → `"40rem"` on Once UI elements, also inside an inline breakpoint object and in both branches of a ternary of literals |
+| Avatar `size`, Media `height`, Carousel `thumbnail.height`, Animation `slideUp`/`Down`/`Left`/`Right`, DropdownWrapper and ContextMenu `minWidth`/`maxWidth`, Setting `controlWidth`, SettingAxes `axisWidth`, CodeBlock `codeHeight`, Fade `blur` as a number: rem | the token scale (each also takes a CSS length string) | `{n}` → `"nrem"` |
+| `dataStyle.height` in the config, DataThemeProvider `height`: rem (the default chart height, 24) | the token scale, or a CSS length string (`"24rem"`, the default) | `height: 24` → `"24rem"` inside a `dataStyle: { … }` object or a `const dataStyle = { … }`, and on DataThemeProvider; a TypeScript use site of the rewritten config gets ``height={dataStyle.height as `${number}rem`}``. A `const dataStyle: DataStyleConfig = { … }` with a type of yours keeps its number (rewriting it would break that type) and the use site becomes ``{`${dataStyle.height}rem`}`` |
+| Mask `x`/`y`: a percentage; `radius`: vh | a number is on the token scale; `x="50%"`, `radius="50vh"` (the default) as strings | `{50}` → `"50%"`, `radius={n}` → `"nvh"` |
+| Background `gradient.x`/`y`: a percentage; `gradient.width`/`height`: a quarter-percent of the 4× layer | a number is on the token scale; a percentage string is of the element (`width: "100%"` is what `100` was, the default) | `n` → `"n%"`, also in `mask={{ x, y, radius }}` |
 | CelebrationFx and WeatherFx `duration`, MatrixFx `bulge.duration`, FlipFx `autoFlipInterval`: seconds | milliseconds | `{4}` → `{4000}` (a literal under 50; between 50 and 1000 it asks) |
 | RevealFx `speed` (`"fast"`/`"medium"`/`"slow"` or ms) | `duration` in ms (1000/2000/3000) | rewrites |
 | ShineFx, CountFx `speed` (ms) | `duration` | renames |
@@ -158,13 +167,18 @@ where a size, spacing or offset is accepted (`"320px"`, `"40rem"`, `"50%"`,
 | ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | divides a literal by 0.3 to two decimals (`{0.6}` → `{2}`) and removes it when that is 1; reports an expression (`speed={config.speed / 0.3}`) and a literal in MDX |
 | AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
 
-Left as they were, because they were already px: Dialog, DateInput and
+Not rewritten, because they were already px, which the token scale renders
+the same at the default root size and scaling: Dialog, DateInput and
 DateRangeInput `minHeight` (DropdownWrapper's and ContextMenu's are written
-`"200px"`, since the Dropdown they merge into read numbers as rem in 2.x); Animation `blur`;
-`sizes`; AutoScroll `scrollGap`; Pulse `pulseSize`; `borderWidth`; MatrixFx
-`size`/`spacing`; Background `lines.thickness`; LinearGauge and RadialGauge
-`width`/`height` (the drawing's size: the gauge scales to its box, so set the
-box with `maxWidth`).
+`"200px"`, since the Dropdown they merge into read numbers as rem in 2.x);
+Animation `blur`; AutoScroll `scrollGap`; Pulse `pulseSize`. These are on the
+token scale now too; write `"200px"` where one must stay fixed.
+
+Still device pixels, because they are: `borderWidth` and Background
+`lines.thickness` (hairlines), `sizes` (an image hint), InfiniteScroll
+`threshold` (an observer margin), MatrixFx `size`/`spacing` (the canvas), and
+LinearGauge and RadialGauge `width`/`height` (the drawing's own units: the
+gauge scales to its box, so set the box with `maxWidth`).
 
 A variable, arithmetic or a call on one of these props is followed as far as
 its value can be read: consts of the file (the one in scope where a name is
@@ -212,7 +226,7 @@ shared scale (GlitchFx `"slow"` is a 5s cycle rather than 3.5s, `"fast"`
 
 The root barrel drops the parts other components are built from, so what is
 left is what an app composes. (`Arrow`, the hover arrow of a card or link,
-stays public: a number on its offsets is px, as everywhere.) The modules still exist inside the package; only
+stays public: a number on its offsets is on the token scale, as everywhere.) The modules still exist inside the package; only
 the exports are gone. The codemod reports every import of one, with what to use
 instead, and changes the code only where the replacement is exact
 (`DialogProvider`, `generateMetadata`).
@@ -588,7 +602,7 @@ props, the element's attributes, and `LeafProps`:
 
 | `LeafProps` | |
 | --- | --- |
-| `margin`, `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `marginX`, `marginY` | spacing token or px number, as on `Flex` |
+| `margin`, `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `marginX`, `marginY` | spacing token or number, as on `Flex` |
 | `flex`, `fillWidth` | how it sits in its row or column |
 | `position`, `top`, `right`, `bottom`, `left` | to pin it (an `Avatar` on a corner, a `Button` on a card) |
 | `className`, `style` | |

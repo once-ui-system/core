@@ -50,7 +50,7 @@ export function RadioButton({
   style,
 }: RadioButtonProps) {
   const theme = useTheme();
-  const chrome = controlChrome({ size: sizeProp, error, errorMessage });
+  const chrome = controlChrome({ size: sizeProp ?? theme.controlSize, error, errorMessage });
   const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
   const size = theme.space(CIRCLE[chrome.size]);
   return (
@@ -157,7 +157,8 @@ export function RadioGroup({
   errorMessage,
   style,
 }: RadioGroupProps) {
-  const chrome = controlChrome({ size, error, errorMessage });
+  const theme = useTheme();
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
   const text = CONTROL_TEXT[chrome.size];
   const [selected, select] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
     if (v !== undefined) onValueChange?.(v);

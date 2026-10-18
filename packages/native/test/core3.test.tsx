@@ -347,3 +347,34 @@ describe("the contract stays core 3.0's", () => {
     }
   });
 });
+
+describe("density", () => {
+  it("gives a control with no size the density's, and picks its scaling", () => {
+    let seen: { size?: string; scaling?: string } = {};
+    function Probe() {
+      const theme = native.useTheme();
+      seen = { size: theme.controlSize, scaling: theme.settings.scaling };
+      return null;
+    }
+    render(
+      <ThemeProvider density="compact">
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(seen).toEqual({ size: "s", scaling: "95" });
+    cleanup();
+    render(
+      <ThemeProvider density="spacious" scaling="90">
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(seen).toEqual({ size: "l", scaling: "90" });
+    cleanup();
+    render(
+      <ThemeProvider>
+        <Probe />
+      </ThemeProvider>,
+    );
+    expect(seen).toEqual({ size: "m", scaling: "100" });
+  });
+});

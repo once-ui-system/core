@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .tag {
@@ -197,5 +198,51 @@
 
     > .action {
         outline: none;
+    }
+}
+
+// No `size`: m, or the theme density's s or l (density.scss), with the
+// padding, text and icons Tag.tsx and InteractiveTag.tsx pick per size. The
+// padding is a utility class on the tag, so the attribute counts here.
+.auto {
+    @include density.parts(s) {
+        padding: var(--static-space-1) var(--static-space-8);
+
+        &.announce {
+            padding: var(--static-space-8) var(--static-space-12);
+
+            .icon {
+                @include density.icon(xs);
+            }
+        }
+
+        &.toggle {
+            padding: var(--static-space-2) var(--static-space-4);
+
+            .text {
+                @include density.text(body, s);
+            }
+
+            .icon {
+                @include density.icon(xs);
+            }
+        }
+    }
+
+    @include density.parts(l) {
+        padding: var(--static-space-4) var(--static-space-12);
+
+        &.announce {
+            padding: var(--static-space-16) var(--static-space-24);
+            @include density.text(label, m);
+        }
+
+        &.toggle {
+            padding: var(--static-space-8) var(--static-space-12);
+
+            .text {
+                @include density.text(body, m);
+            }
+        }
     }
 }

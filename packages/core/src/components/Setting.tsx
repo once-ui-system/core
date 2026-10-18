@@ -36,7 +36,7 @@ interface SettingRowProps extends React.ComponentProps<typeof Flex> {
   info?: React.ReactNode;
   /**
    * Cap on the trailing control area, so long rows stay readable: a number is
-   * px, a string a CSS length. Default `"14rem"` (a bare number was rem until 3.0).
+   * on the token scale (`224` is 14rem), a string a CSS length. Default `"14rem"`.
    */
   controlWidth?: number | CSSUnit;
   /** The control. */
@@ -161,8 +161,8 @@ interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
   /** One entry per axis: a short axis name and its control. */
   axes: { label: React.ReactNode; control: React.ReactNode }[];
   /**
-   * Width each axis holds before the row wraps: a number is px, a string a
-   * CSS length. Default `"13rem"` (a bare number was rem until 3.0).
+   * Width each axis holds before the row wraps: a number is on the token
+   * scale (`208` is 13rem), a string a CSS length. Default `"13rem"`.
    */
   axisWidth?: number | CSSUnit;
 }

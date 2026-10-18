@@ -48,7 +48,7 @@ export function Switch({
   style,
 }: SwitchProps) {
   const theme = useTheme();
-  const chrome = controlChrome({ size, error, errorMessage });
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
   const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
   const track = TRACK[chrome.size];
   const width = theme.space(track.width);

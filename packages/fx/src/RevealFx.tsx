@@ -17,8 +17,9 @@ interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   delay?: number;
   defaultRevealed?: boolean;
   /**
-   * How far the content travels up as it reveals: a number is px, a string a
-   * spacing token (`"16"`) or a CSS length (`"1rem"`).
+   * How far the content travels up as it reveals: a number is on the token
+   * scale (`16` is `"16"`, 1rem), a string a spacing token (`"16"`) or a CSS
+   * length (`"1rem"`).
    */
   translateY?: number | SpacingToken | CSSUnit;
   revealed?: boolean;

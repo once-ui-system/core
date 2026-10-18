@@ -7,7 +7,7 @@ import type { CSSUnit } from "../types.js";
 export interface ChartOptions {
   variant: ChartVariant;
   mode: ChartMode;
-  /** The chart's height: a number is px, or any CSS length (`"24rem"`). */
+  /** The chart's height: a number is on the token scale (`384` is 24rem), or any CSS length (`"24rem"`). */
   height: number | CSSUnit;
   axis: {
     stroke: string;

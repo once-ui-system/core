@@ -3,6 +3,7 @@ import type {
   BodyLineHeight,
   BodySize,
   BorderStyle,
+  Density,
   DeviceFontSize,
   NeutralColor,
   ScalingSize,
@@ -48,6 +49,8 @@ export interface StyleSettings {
   border: BorderStyle;
   surface: SurfaceStyle;
   scaling: ScalingSize;
+  /** The controls' default size: compact s, normal m, spacious l. */
+  density: Density;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
   desktopSize?: DeviceFontSize;
@@ -65,11 +68,19 @@ export const defaultSettings: Omit<StyleSettings, "theme"> = {
   border: "playful",
   surface: "filled",
   scaling: "100",
+  density: "normal",
   bodySize: "100",
   bodyLineHeight: "100",
 };
 
 export const tokens = tokenFile as unknown as TokenFile;
+
+/** What each density sets, as core's `DENSITIES`: a control's default size, and the scaling a theme with none takes. */
+export const DENSITIES: Record<Density, { size: "s" | "m" | "l"; scaling: ScalingSize }> = {
+  compact: { size: "s", scaling: "95" },
+  normal: { size: "m", scaling: "100" },
+  spacious: { size: "l", scaling: "105" },
+};
 
 /**
  * Every token for these settings on a screen `width` points wide, with

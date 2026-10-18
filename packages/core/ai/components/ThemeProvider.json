@@ -12,6 +12,7 @@
   "surface": "SurfaceStyle",
   "transition": "TransitionStyle",
   "scaling": "ScalingSize",
+  "density": "Density",
   "bodySize": "BodySize",
   "bodyLineHeight": "BodyLineHeight",
   "desktopSize": "DeviceFontSize",
@@ -53,6 +54,11 @@
    "playful",
    "conservative",
    "sharp"
+  ],
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
   ],
   "DeviceFontSize": [
    "16",

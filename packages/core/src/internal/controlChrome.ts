@@ -1,7 +1,7 @@
 "use client";
 
 import { type ReactNode, useId } from "react";
-import { useFieldSize } from "../components/FormContext.js";
+import { useFieldSizing } from "../components/FormContext.js";
 import type { TShirtSizes } from "../types.js";
 
 /** The three sizes a checkbox, radio or switch is drawn at. */
@@ -15,7 +15,8 @@ export type ControlSize = "s" | "m" | "l";
 export interface ControlChromeProps {
   /**
    * The control's size. Left out, it takes the enclosing `Form`'s `size`, as
-   * Input does; `"m"` outside one. `xs` draws as `s` and `xl` as `l`.
+   * Input does; outside one the theme's `density` picks it (s when compact, m
+   * when normal, l when spacious). `xs` draws as `s` and `xl` as `l`.
    */
   size?: TShirtSizes;
   /** Mark the control invalid: a danger border and `aria-invalid`. */
@@ -32,11 +33,13 @@ const shows = (node: ReactNode) =>
 
 /** The resolved size, the invalid state and the message id of one control. */
 export function useControlChrome({ size, error, errorMessage }: ControlChromeProps) {
-  const field = useFieldSize(size);
+  const { size: field, auto } = useFieldSizing(size);
   const errorId = useId();
   const showsError = shows(errorMessage);
   return {
     size: (field === "xs" ? "s" : field === "xl" ? "l" : field) as ControlSize,
+    /** No size given here or by a Form: the theme's density restyles it. */
+    auto,
     invalid: Boolean(error) || showsError,
     showsError,
     errorId,

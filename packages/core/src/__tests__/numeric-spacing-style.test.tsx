@@ -4,6 +4,7 @@ import { Column } from "../components/Column";
 import { Grid } from "../components/Grid";
 import { Heading } from "../components/Heading";
 import { Text } from "../components/Text";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * Numeric spacing is written inline as the four sides, never as the shorthand.
@@ -24,12 +25,12 @@ const sides = (el: HTMLElement, prop: "padding" | "margin") => {
 describe("numeric spacing", () => {
   it("keeps padding={n} on a client mount", () => {
     const { getByTestId } = render(<Column data-testid="c" padding={1} />);
-    expect(sides(getByTestId("c"), "padding")).toEqual(["1px", "1px", "1px", "1px"]);
+    expect(sides(getByTestId("c"), "padding")).toEqual([t(1), t(1), t(1), t(1)]);
   });
 
   it("keeps margin={n} on a client mount", () => {
     const { getByTestId } = render(<Column data-testid="c" margin={2} />);
-    expect(sides(getByTestId("c"), "margin")).toEqual(["2px", "2px", "2px", "2px"]);
+    expect(sides(getByTestId("c"), "margin")).toEqual([t(2), t(2), t(2), t(2)]);
   });
 
   it("keeps the box when four sides become one padding", () => {
@@ -37,14 +38,14 @@ describe("numeric spacing", () => {
       <Column data-testid="c" paddingTop={2} paddingRight={1} paddingBottom={2} paddingLeft={1} />,
     );
     rerender(<Column data-testid="c" padding={2} />);
-    expect(sides(getByTestId("c"), "padding")).toEqual(["2px", "2px", "2px", "2px"]);
+    expect(sides(getByTestId("c"), "padding")).toEqual([t(2), t(2), t(2), t(2)]);
   });
 
   it("lets a side beat its axis, and an axis beat the whole box", () => {
     const { getByTestId } = render(
       <Column data-testid="c" padding={1} paddingX={2} paddingLeft={3} />,
     );
-    expect(sides(getByTestId("c"), "padding")).toEqual(["1px", "2px", "1px", "3px"]);
+    expect(sides(getByTestId("c"), "padding")).toEqual([t(1), t(2), t(1), t(3)]);
   });
 
   it("applies to Grid, Text and Heading too", () => {
@@ -55,8 +56,8 @@ describe("numeric spacing", () => {
         <Heading data-testid="h" margin={1} />
       </>,
     );
-    expect(sides(getByTestId("g"), "padding")).toEqual(["1px", "1px", "1px", "1px"]);
-    expect(sides(getByTestId("t"), "margin")).toEqual(["1px", "1px", "1px", "1px"]);
-    expect(sides(getByTestId("h"), "margin")).toEqual(["1px", "1px", "1px", "1px"]);
+    expect(sides(getByTestId("g"), "padding")).toEqual([t(1), t(1), t(1), t(1)]);
+    expect(sides(getByTestId("t"), "margin")).toEqual([t(1), t(1), t(1), t(1)]);
+    expect(sides(getByTestId("h"), "margin")).toEqual([t(1), t(1), t(1), t(1)]);
   });
 });

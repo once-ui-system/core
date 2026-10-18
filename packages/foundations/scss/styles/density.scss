@@ -1,0 +1,74 @@
+@use "sass:map";
+
+// Density helpers for component modules. Emits no CSS of its own.
+
+// The theme's density, `data-density` on <html> (ThemeProvider's `density`):
+// the size a control takes when its own `size` is left out. `normal` is m,
+// the size every control already defaults to, so it needs no rule; compact
+// is s and spacious is l.
+//
+// A control left at its default renders its m classes plus an `auto` class,
+// and its module restyles that class here to its s or l look, so the theme
+// reaches it through CSS alone: in a server component and without JS. A
+// control given a `size` never gets the class, so its own size always wins.
+//
+// The attribute is read on <html> only. Rules that matched any ancestor
+// would let a `normal` subtree inside a `compact` page resolve by source
+// order rather than by which ancestor is nearer.
+$attribute: "data-density";
+
+// Density name to the size it gives a control. One table, so a rename stays cheap.
+$sizes: (
+    compact: s,
+    spacious: l,
+);
+
+// The rules inside apply under the density that gives `$size` (s or l).
+//
+// `size` is for the control's own box. The attribute sits in `:where()`, so
+// the rule weighs what the control's `.s`/`.l` class weighs: it beats `.m`
+// by coming after it, and a layout prop's utility class (`padding="16"`)
+// meets it on the same terms it meets `.m` today.
+//
+// `parts` is for the pieces inside the control a size also picks presets
+// for (its label's text, its icon), which already carry a utility class of
+// the same weight (`.font-label.font-m`): there the attribute counts, so the
+// density wins whatever order the stylesheets load in.
+@mixin size($size) {
+    @each $density, $mapped in $sizes {
+        @if $mapped == $size {
+            :global(:where(html[#{$attribute}="#{$density}"])) & {
+                @content;
+            }
+        }
+    }
+}
+
+@mixin parts($size) {
+    @each $density, $mapped in $sizes {
+        @if $mapped == $size {
+            :global(html[#{$attribute}="#{$density}"]) & {
+                @content;
+            }
+        }
+    }
+}
+
+// A text preset's size, as the `.font-<family>.font-<size>` utility sets it.
+@mixin text($family, $size) {
+    font-size: calc(var(--font-size-#{$family}-#{$size}) * var(--font-size-#{$family}-multiplier));
+    line-height: calc(var(--line-height-#{$family}-#{$size}) * var(--line-height-#{$family}-multiplier));
+}
+
+// An Icon's size, as Icon.module.scss sets it.
+$icon-sizes: (
+    xs: var(--static-space-16),
+    s: var(--static-space-20),
+    m: var(--static-space-24),
+    l: var(--static-space-32),
+    xl: var(--static-space-40),
+);
+
+@mixin icon($size) {
+    font-size: map.get($icon-sizes, $size);
+}

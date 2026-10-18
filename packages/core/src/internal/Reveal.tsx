@@ -12,7 +12,7 @@ export interface RevealProps extends React.ComponentProps<typeof Flex> {
   /** Milliseconds the reveal takes. */
   duration?: number;
   revealed?: boolean;
-  /** A number is px; a string a spacing token or a CSS length. As on RevealFx. */
+  /** A number is on the token scale; a string a spacing token or a CSS length. As on RevealFx. */
   translateY?: number | SpacingToken | CSSUnit;
   style?: React.CSSProperties;
   className?: string;

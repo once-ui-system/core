@@ -1,3 +1,5 @@
+@use "../styles/density.scss" as density;
+
 .container {
   user-select: none;
   isolation: isolate;
@@ -98,14 +100,33 @@
   --slider-track: var(--static-space-2);
 }
 
-.s {
+@mixin s {
   --slider-thumb: 14px;
   --slider-track: 3px;
 }
 
-.l {
+@mixin l {
   --slider-thumb: var(--static-space-20);
   --slider-track: 6px;
+}
+
+.s {
+  @include s;
+}
+
+.l {
+  @include l;
+}
+
+/* No `size` here or on a Form: m, or the theme density's s or l (density.scss). */
+.auto {
+  @include density.size(s) {
+    @include s;
+  }
+
+  @include density.size(l) {
+    @include l;
+  }
 }
 
 .xl {

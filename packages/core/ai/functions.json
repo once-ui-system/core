@@ -298,6 +298,11 @@
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "DeviceFontSize": [
    "16",
    "13",
@@ -538,6 +543,7 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -622,6 +628,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -645,6 +652,7 @@
    "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
@@ -663,6 +671,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",

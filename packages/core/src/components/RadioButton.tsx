@@ -125,6 +125,7 @@ const RadioButton = ({
       gap="16"
       zIndex={1}
       className={classNames(styles.container, className, styles[chrome.size], {
+        [styles.auto]: chrome.auto,
         [styles.error]: invalid,
         [styles.disabled]: disabled,
         [styles.noHover]: !hoverable,
@@ -185,9 +186,10 @@ const RadioButton = ({
               backgroundColor: "var(--neutral-on-solid-strong)",
             }}
             radius="full"
-            width={DOT[chrome.size]}
-            height={DOT[chrome.size]}
-            className={styles.icon}
+            // Left to the theme's density, the dot is sized by `.dot` in CSS.
+            width={chrome.auto ? undefined : DOT[chrome.size]}
+            height={chrome.auto ? undefined : DOT[chrome.size]}
+            className={classNames(styles.icon, chrome.auto && styles.dot)}
           />
         )}
       </Flex>
@@ -201,6 +203,7 @@ const RadioButton = ({
           labelId={labelId}
           descriptionId={descriptionId}
           size={chrome.size}
+          auto={chrome.auto}
           errorMessage={chrome.showsError ? errorMessage : undefined}
           errorId={chrome.errorId}
           onClick={disabled ? () => {} : activate}

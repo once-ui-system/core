@@ -7,7 +7,7 @@
  "props": {
   "variant": "ButtonVariant = primary",
   "tone": "Tone",
-  "size": "TShirtSizes = m",
+  "size": "TShirtSizes",
   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "label": "string",
   "weight": "\"default\" | \"strong\" = strong",

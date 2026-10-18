@@ -15,6 +15,10 @@ interface ToggleButtonCommonProps extends LeafProps {
   label?: ReactNode;
   selected?: boolean;
   variant?: "ghost" | "outline" | "subtle";
+  /**
+   * Left out, the theme's `density` picks it: s when compact, m when normal
+   * (the default), l when spacious. A size given here always wins.
+   */
   size?: TShirtSizes;
   /**
    * Corner roundness. Defaults to the button's `size`, which is right for a
@@ -52,7 +56,7 @@ const ToggleButton = ({
   label,
   selected = false,
   variant = "ghost",
-  size = "m",
+  size: sizeProp,
   radius,
   corners,
   rounded = false,
@@ -71,6 +75,10 @@ const ToggleButton = ({
 }: ToggleButtonProps & { ref?: React.Ref<HTMLElement> }) => {
   const [leaf, props] = takeLeafProps(rest);
   const layout = leafLayout(leaf);
+  // Left out, the size is m, restyled by the theme's `density` in CSS.
+  const size = sizeProp ?? "m";
+  const auto = sizeProp === undefined;
+  const iconClass = auto ? styles.icon : undefined;
   return (
     <ElementType
       ref={ref}
@@ -82,6 +90,8 @@ const ToggleButton = ({
         styles.button,
         styles[variant],
         styles[size],
+        auto && styles.auto,
+        auto && radius === undefined && styles.autoRadius,
         selected && styles.selected,
         corners === "none" || radius === "none"
           ? "radius-none"
@@ -103,7 +113,11 @@ const ToggleButton = ({
       {...props}
     >
       {prefixIcon && (
-        <Icon name={prefixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />
+        <Icon
+          name={prefixIcon}
+          size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
+          className={iconClass}
+        />
       )}
       {(label || children) && (
         <Flex
@@ -112,12 +126,17 @@ const ToggleButton = ({
           paddingX={size === "xl" ? "12" : size === "l" ? "8" : size === "s" ? "4" : "2"}
           textVariant={`label-${weight}-${size === "xl" ? "l" : size === "l" ? "m" : "s"}`}
           position="static"
+          className={auto ? styles.label : undefined}
         >
           {label || children}
         </Flex>
       )}
       {suffixIcon && (
-        <Icon name={suffixIcon} size={size === "xl" ? "m" : size === "l" ? "s" : "xs"} />
+        <Icon
+          name={suffixIcon}
+          size={size === "xl" ? "m" : size === "l" ? "s" : "xs"}
+          className={iconClass}
+        />
       )}
     </ElementType>
   );

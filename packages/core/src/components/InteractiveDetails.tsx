@@ -1,10 +1,12 @@
 "use client";
 
+import classNames from "clsx";
 import React from "react";
 import { CONTROL_TEXT, type ControlSize } from "../internal/controlChrome.js";
 import { Column } from "./Column.js";
 import { IconButton, IconButtonProps } from "./IconButton.js";
 import { Row } from "./Row.js";
+import shared from "./SharedInteractiveStyles.module.scss";
 import { Text } from "./Text.js";
 
 interface InteractiveDetailsProps {
@@ -22,6 +24,8 @@ interface InteractiveDetailsProps {
   descriptionId?: string;
   /** The control's size; sets the text presets. */
   size?: ControlSize;
+  /** No size was given: the theme's `density` restyles the text in CSS. */
+  auto?: boolean;
   /** Shown under the description, in the danger colour. */
   errorMessage?: React.ReactNode;
   /** Goes on the error message, for the control's `aria-describedby`. */
@@ -40,6 +44,7 @@ const InteractiveDetails = ({
   descriptionId,
   disabled,
   size = "m",
+  auto = false,
   errorMessage,
   errorId,
 }: InteractiveDetailsProps & { ref?: React.Ref<HTMLDivElement> }) => {
@@ -47,7 +52,7 @@ const InteractiveDetails = ({
     <Column
       ref={ref}
       cursor={disabled ? "not-allowed" : undefined}
-      className={className}
+      className={classNames(auto && shared.autoText, className)}
       onClick={onClick}
       id={id}
     >
@@ -56,6 +61,7 @@ const InteractiveDetails = ({
           as="span"
           id={labelId}
           textVariant={CONTROL_TEXT[size].label}
+          className={auto ? shared.detailLabel : undefined}
           onBackground={disabled ? "neutral-weak" : "neutral-strong"}
         >
           {label}
@@ -77,6 +83,7 @@ const InteractiveDetails = ({
           as="span"
           id={descriptionId}
           textVariant={CONTROL_TEXT[size].body}
+          className={auto ? shared.detailBody : undefined}
           onBackground="neutral-weak"
         >
           {description}
@@ -87,6 +94,7 @@ const InteractiveDetails = ({
           as="span"
           id={errorId}
           textVariant={CONTROL_TEXT[size].body}
+          className={auto ? shared.detailBody : undefined}
           onBackground="danger-weak"
         >
           {errorMessage}

@@ -3,6 +3,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Row } from "../components/Row.js";
 import type { Speed } from "../types.js";
+import { cssLength } from "../utils/layoutClasses.js";
 import { speedFactor } from "../utils/speed.js";
 import styles from "./Marquee.module.scss";
 
@@ -225,7 +226,7 @@ const Marquee = ({
     return () => observer.disconnect();
   }, [contentWidth]);
 
-  const gapStyle = typeof scrollGap === "number" ? `${scrollGap}px` : scrollGap;
+  const gapStyle = cssLength(scrollGap);
 
   return (
     <Row overflow="hidden" fillWidth ref={ref} className={className} style={style} {...flex}>

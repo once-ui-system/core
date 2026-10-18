@@ -15,6 +15,7 @@ import { Text } from "../../components/Text.js";
 import { ToggleButton } from "../../components/ToggleButton.js";
 import type { IconName } from "../../icons.js";
 import { CSSUnit, SpacingToken } from "../../types.js";
+import { cssLength, withTokenLengths } from "../../utils/layoutClasses.js";
 import { escapeHtml } from "../../utils/safe-html.js";
 import styles from "./CodeBlock.module.scss";
 
@@ -450,8 +451,8 @@ type CodeInstance = {
 
 export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   /**
-   * Cap on the code area's height before it scrolls: a number is px, a string
-   * a CSS length (`"20rem"`). Was rem until 3.0.
+   * Cap on the code area's height before it scrolls: a number is on the token
+   * scale (`320` is `"20rem"`), a string a CSS length.
    */
   codeHeight?: number | CSSUnit;
   fillHeight?: boolean;
@@ -856,11 +857,11 @@ const CodeBlock = ({
                   {language.includes("diff") ? (
                     <div
                       className={classNames(styles.pre, `language-diff`)}
-                      style={{
-                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
+                      style={withTokenLengths({
+                        maxHeight: cssLength(codeHeight),
                         overflow: "auto",
                         width: "100%",
-                      }}
+                      })}
                     >
                       {prismInstance &&
                         renderDiff(
@@ -876,9 +877,9 @@ const CodeBlock = ({
                       key={`${selectedInstance}-${highlight || "no-highlight"}`}
                       suppressHydrationWarning
                       tabIndex={-1}
-                      style={{
-                        maxHeight: typeof codeHeight === "number" ? `${codeHeight}px` : codeHeight,
-                      }}
+                      style={withTokenLengths({
+                        maxHeight: cssLength(codeHeight),
+                      })}
                       data-line={highlight}
                       ref={preRef}
                       className={classNames(

@@ -1143,6 +1143,7 @@
     {
       "when": {},
       "tokens": {
+        "scaling": 1,
         "static-space-0": 0,
         "static-space-1": "1px",
         "static-space-2": "0.125rem",
@@ -1252,6 +1253,7 @@
         "scaling": "110"
       },
       "tokens": {
+        "scaling": 1.1,
         "static-space-1": "0.0688rem",
         "static-space-2": "0.1375rem",
         "static-space-4": "0.275rem",
@@ -1296,6 +1298,7 @@
         "scaling": "105"
       },
       "tokens": {
+        "scaling": 1.05,
         "static-space-1": "0.0656rem",
         "static-space-2": "0.1313rem",
         "static-space-4": "0.2625rem",
@@ -1340,6 +1343,7 @@
         "scaling": "95"
       },
       "tokens": {
+        "scaling": 0.95,
         "static-space-1": "0.0594rem",
         "static-space-2": "0.1187rem",
         "static-space-4": "0.2375rem",
@@ -1384,6 +1388,7 @@
         "scaling": "90"
       },
       "tokens": {
+        "scaling": 0.9,
         "static-space-1": "0.0563rem",
         "static-space-2": "0.1125rem",
         "static-space-4": "0.225rem",

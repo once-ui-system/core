@@ -34,11 +34,11 @@ export interface ContextMenuImplProps {
    * `contents`, which has no box.
    */
   fillWidth?: boolean;
-  /** The panel's minimum width: a number is px, a string a CSS length (`"12rem"`, the default). */
+  /** The panel's minimum width: a number is on the token scale (`192` is 12rem), a string a CSS length (`"12rem"`, the default). */
   minWidth?: number | CSSUnit;
   /** As `minWidth`; unset, the panel is capped at the space available. */
   maxWidth?: number | CSSUnit;
-  /** The panel's minimum height: a number is px, a string a CSS length. */
+  /** The panel's minimum height: a number is on the token scale, a string a CSS length. */
   minHeight?: number | CSSUnit;
   style?: React.CSSProperties;
   className?: string;

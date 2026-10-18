@@ -1,6 +1,7 @@
 import type React from "react";
 import { Row } from "../components/Row.js";
 import type { Tone, TShirtSizes } from "../types.js";
+import { cssLength } from "../utils/layoutClasses.js";
 import styles from "./PulseRing.module.scss";
 
 export interface PulseRingProps extends React.ComponentProps<typeof Row> {
@@ -24,7 +25,11 @@ export const PulseRing = ({ ref, tone, size, pulseSize, ...flex }: PulseRingProp
         className={styles.dot}
         width={RING[size]}
         height={RING[size]}
-        style={pulseSize != null ? { width: pulseSize, height: pulseSize } : undefined}
+        style={
+          pulseSize != null
+            ? { width: cssLength(pulseSize), height: cssLength(pulseSize) }
+            : undefined
+        }
       />
     </Row>
     <Row solid={`${tone}-strong`} minWidth={DOT[size]} minHeight={DOT[size]} radius="full" />

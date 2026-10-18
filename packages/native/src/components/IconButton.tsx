@@ -59,7 +59,7 @@ export const IconButton: RefComponent<IconButtonProps, ViewRef> = forwardRef<
 >(function IconButton(
   {
     icon = "refresh",
-    size = "m",
+    size: sizeProp,
     variant = "primary",
     tone,
     corners,
@@ -79,6 +79,8 @@ export const IconButton: RefComponent<IconButtonProps, ViewRef> = forwardRef<
   ref,
 ) {
   const theme = useTheme();
+  // Left out, the theme's density picks it.
+  const size = sizeProp ?? theme.controlSize;
   const side = theme.space(SIZES[size]);
   const radiusSize = size === "s" || size === "m" ? "m" : "l";
   // As in core: the name is what the caller wrote for people, never the icon key.

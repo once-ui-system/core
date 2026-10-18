@@ -13,26 +13,31 @@ import React, {
 import { createPortal } from "react-dom";
 import { cannotHover } from "../internal/pointer.js";
 import type { CSSUnit, Placement, SpacingToken } from "../types.js";
+import { tokenLength } from "../utils/layoutClasses.js";
 import { Flex } from "./Flex.js";
 
 type TriggerType = "hover" | "click" | "manual";
 
 type EasingCurve = "linear" | "ease" | "ease-in" | "ease-out" | "ease-in-out" | "spring" | "bounce";
 
-/** A number as px and a CSS length as written, optionally negated. */
+/** A number on the token scale and a CSS length as written, optionally negated. */
 const cssLength = (value: number | string, sign: 1 | -1 = 1) =>
-  typeof value === "number" ? `${sign * value}px` : sign === 1 ? value : `calc(-1 * ${value})`;
+  typeof value === "number"
+    ? tokenLength(sign * value)
+    : sign === 1
+      ? value
+      : `calc(-1 * ${value})`;
 
 export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   trigger?: ReactNode;
   children: ReactNode;
   fade?: number;
   scale?: number;
-  /** Blur in px to animate from. */
+  /** Blur to animate from, on the token scale (`8` is 0.5rem). */
   blur?: number;
   /**
-   * Distance to slide in from: a number is px, a string a CSS length
-   * (`"1rem"`). Was rem until 3.0.
+   * Distance to slide in from: a number is on the token scale
+   * (`16` is 1rem), a string a CSS length.
    */
   slideUp?: number | CSSUnit;
   /** As `slideUp`. */
@@ -282,7 +287,7 @@ const Animation = ({
     }
 
     if (blur !== undefined) {
-      combinedStyle.filter = shouldAnimate ? "blur(0px)" : `blur(${blur}px)`;
+      combinedStyle.filter = shouldAnimate ? "blur(0px)" : `blur(${tokenLength(blur)})`;
       if (combinedStyle.opacity === undefined) {
         combinedStyle.opacity = shouldAnimate ? 1 : 0;
       }

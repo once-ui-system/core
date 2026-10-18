@@ -10,6 +10,7 @@ import type {
   TextVariant,
 } from "../types";
 import {
+  DENSITIES,
   remFor,
   resolveTokens,
   type ShadowLayer,
@@ -31,6 +32,8 @@ const LETTER_SPACING: Record<string, number> = { xl: -0.05, l: -0.04, m: -0.03, 
 /** Everything a component reads from the theme, in React Native units. */
 export interface OnceTheme {
   settings: StyleSettings;
+  /** The size a control takes when given none: the density's (m when normal). */
+  controlSize: "s" | "m" | "l";
   /** px per rem for this screen: 15 on phones, 16 on tablets, as on the web. */
   rem: number;
   /** Every resolved token, by its CSS name without `--`. */
@@ -138,6 +141,7 @@ export function createTheme(
 
   return {
     settings,
+    controlSize: DENSITIES[settings.density ?? "normal"]?.size ?? "m",
     rem,
     tokens,
     px: (name) => px(name),

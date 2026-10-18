@@ -110,7 +110,11 @@ const RadioGroup = ({
   const labelId = useId();
   const descriptionId = useId();
   const chrome = useControlChrome({ size, error, errorMessage });
-  const fieldDefaults = useMemo(() => ({ size: chrome.size }), [chrome.size]);
+  // Left to the theme's density, the radios are too.
+  const fieldDefaults = useMemo(
+    () => ({ size: chrome.auto ? undefined : chrome.size }),
+    [chrome.auto, chrome.size],
+  );
   const groupRef = useRef<HTMLDivElement | null>(null);
   const [current, setCurrent] = useControllableState<string | undefined>({
     value,

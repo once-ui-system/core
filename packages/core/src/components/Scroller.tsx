@@ -36,7 +36,7 @@ interface ScrollerAuto {
   hover?: "slow" | "pause" | "none";
   /** Run the other way. */
   reverse?: boolean;
-  /** Space after each copy of the children: a number is px, a string a CSS length. */
+  /** Space after each copy of the children: a number is on the token scale, a string a CSS length. */
   gap?: number | string;
 }
 

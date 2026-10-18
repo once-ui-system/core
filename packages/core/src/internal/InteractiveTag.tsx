@@ -63,7 +63,7 @@ const splitControlProps = (props: RestProps) => {
 export const InteractiveTag = ({
   ref,
   tone,
-  size = "m",
+  size: sizeProp,
   label,
   selected: selectedProp,
   prefixIcon,
@@ -76,6 +76,10 @@ export const InteractiveTag = ({
   textVariant,
   ...rest
 }: InteractiveTagProps) => {
+  // Left out, the size is m, restyled by the theme's `density` in CSS.
+  const size = sizeProp ?? "m";
+  const auto = sizeProp === undefined;
+  const iconClass = auto ? styles.icon : undefined;
   // A tag with only a remove button is a label, not a toggle.
   const toggles = selectedProp !== undefined || onClick !== undefined;
   const selected = selectedProp ?? false;
@@ -114,6 +118,7 @@ export const InteractiveTag = ({
   const tagClassName = classNames(
     styles.tag,
     styles.toggle,
+    auto && styles.auto,
     styles[`tone-${tone ?? "brand"}`],
     {
       [styles.selected]: selected,
@@ -124,11 +129,16 @@ export const InteractiveTag = ({
 
   const content = (
     <>
-      {prefixIcon && <Icon name={prefixIcon} size={ICON[size]} />}
+      {prefixIcon && <Icon name={prefixIcon} size={ICON[size]} className={iconClass} />}
       <Flex paddingX="8" paddingY="2">
-        <Text textVariant={textVariant ?? TEXT[size]}>{label || children}</Text>
+        <Text
+          textVariant={textVariant ?? TEXT[size]}
+          className={auto && !textVariant ? styles.text : undefined}
+        >
+          {label || children}
+        </Text>
       </Flex>
-      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
+      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} className={iconClass} />}
     </>
   );
 

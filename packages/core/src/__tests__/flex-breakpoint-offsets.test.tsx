@@ -7,6 +7,7 @@ import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
 import { ServerFlex } from "../components/ServerFlex";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * `top`, `right`, `bottom` and `left` are in every Flex breakpoint object, and
@@ -119,7 +120,7 @@ describe("Flex breakpoint offsets", () => {
       </LayoutProvider>,
     );
     const flex = container.querySelector(".display-flex") as HTMLElement;
-    expect(flex.style.top).toBe("2px");
+    expect(flex.style.top).toBe(t(2));
     expect(flex.style.left).toBe("50%");
     // The token is a class, not a style.
     expect(flex.style.bottom).toBe("");
@@ -128,6 +129,6 @@ describe("Flex breakpoint offsets", () => {
 
     const grid = container.querySelector(".display-grid") as HTMLElement;
     expect(grid.style.right).toBe("calc(100% - 4rem)");
-    expect(grid.style.top).toBe("1.5px");
+    expect(grid.style.top).toBe(t(1.5));
   });
 });

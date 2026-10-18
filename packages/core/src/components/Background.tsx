@@ -5,6 +5,7 @@ import React, { useEffect, useRef } from "react";
 import { DisplayProps } from "../interfaces.js";
 import { cssColor } from "../internal/cssColor.js";
 import { ColorValue, CSSUnit, SpacingToken } from "../types.js";
+import { tokenLength } from "../utils/layoutClasses.js";
 import styles from "./Background.module.scss";
 import { Flex } from "./Flex.js";
 import { Mask, MaskProps } from "./Mask.js";
@@ -21,15 +22,15 @@ interface GradientProps {
   display?: boolean;
   opacity?: DisplayProps["opacity"];
   /**
-   * Where the gradient's centre sits across the element: a number is px from
-   * the left edge, a string a CSS length (`"50%"`, the default, is the
+   * Where the gradient's centre sits across the element: a number is a length
+   * on the token scale from the left edge, a string a CSS length (`"50%"`, the default, is the
    * middle). Was a bare percentage until 3.0 (`x: 50` is `x: "50%"` now).
    */
   x?: number | CSSUnit;
   /** As `x`, from the top edge. */
   y?: number | CSSUnit;
   /**
-   * The gradient ellipse's horizontal radius: a number is px, a string a CSS
+   * The gradient ellipse's horizontal radius: a number is on the token scale, a string a CSS
    * length, a percentage of the element's width (`"100%"`, the default).
    * Until 3.0 a bare number was a quarter-percent (`width: 100` is
    * `width: "100%"` now).
@@ -104,14 +105,14 @@ const Background = ({
   // quarter of itself plus the 37.5% offset, and a fixed length is unchanged.
   const position = (value: number | string | undefined) => {
     if (value == null) return "50%";
-    if (typeof value === "number") return `calc(37.5% + ${value}px)`;
+    if (typeof value === "number") return `calc(37.5% + ${tokenLength(value)})`;
     const percent = /^(-?\d*\.?\d+)%$/.exec(value);
     if (percent) return `${37.5 + Number(percent[1]) / 4}%`;
     return `calc(37.5% + ${value})`;
   };
   const extent = (value: number | string | undefined) => {
     if (value == null) return "25%";
-    if (typeof value === "number") return `${value}px`;
+    if (typeof value === "number") return tokenLength(value);
     const percent = /^(-?\d*\.?\d+)%$/.exec(value);
     return percent ? `${Number(percent[1]) / 4}%` : value;
   };

@@ -763,6 +763,11 @@
    "startDate": "Date",
    "endDate": "Date"
   },
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "DeviceFontSize": [
    "16",
    "13",
@@ -1318,6 +1323,7 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -1551,6 +1557,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -1602,6 +1609,7 @@
    "surface": "Partial<Record<SurfaceStyle, ReactNode>>",
    "transition": "Partial<Record<TransitionStyle, ReactNode>>",
    "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
+   "density": "Partial<Record<Density, ReactNode>>",
    "scaling": "(value: ScalingSize) => ReactNode",
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
@@ -1621,6 +1629,7 @@
    "solid": "ReactNode",
    "effect": "ReactNode",
    "surface": "ReactNode",
+   "density": "ReactNode",
    "scaling": "ReactNode",
    "transition": "ReactNode",
    "dataStyle": "ReactNode",
@@ -1646,6 +1655,7 @@
    "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
@@ -1658,7 +1668,7 @@
    "color": "{ section?: boolean; brand?: boolean; accent?: boolean; neutral?: boolean }",
    "solidStyle": "{ section?: boolean; solid?: boolean; effect?: boolean }",
    "bodyText": "{ section?: boolean; size?: boolean; lineHeight?: boolean }",
-   "advanced": "{ section?: boolean; surface?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
+   "advanced": "{ section?: boolean; surface?: boolean; density?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
   },
   "StylePersistence": [
    "none",
@@ -1713,6 +1723,7 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
@@ -1964,8 +1975,8 @@
   },
   "UserSelect": [
    "text",
-   "none",
    "auto",
+   "none",
    "all"
   ],
   "WeatherType": [
@@ -2184,7 +2195,7 @@
    "props": {
     "variant": "ButtonVariant = primary",
     "tone": "Tone",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
     "label": "string",
     "weight": "\"default\" | \"strong\" = strong",
@@ -2648,7 +2659,7 @@
    "props": {
     "icon": "IconName = refresh",
     "id": "string",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
     "rounded": "boolean = false",
     "tooltip": "ReactNode",
@@ -3445,7 +3456,7 @@
    "props": {
     "tone": "Tone",
     "variant": "\"default\" | \"gradient\" | \"announce\" = default",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "label": "string = \"\"",
     "prefixIcon": "IconName",
     "suffixIcon": "IconName",
@@ -3574,7 +3585,7 @@
     "label": "ReactNode",
     "selected": "boolean = false",
     "variant": "\"ghost\" | \"outline\" | \"subtle\" = ghost",
-    "size": "TShirtSizes = m",
+    "size": "TShirtSizes",
     "radius": "RadiusSize",
     "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
     "rounded": "boolean = false",
@@ -4322,6 +4333,7 @@
     "surface": "SurfaceStyle",
     "transition": "TransitionStyle",
     "scaling": "ScalingSize",
+    "density": "Density",
     "bodySize": "BodySize",
     "bodyLineHeight": "BodyLineHeight",
     "desktopSize": "DeviceFontSize",

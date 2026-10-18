@@ -22,9 +22,16 @@ export const FormFieldContext = createContext<FormFieldDefaults>({});
  * Resolve a field's size. The field's own prop always wins; a `Form` only
  * supplies a default, and `"m"` remains the default outside one.
  */
-export const useFieldSize = (own?: TShirtSizes): TShirtSizes => {
+export const useFieldSize = (own?: TShirtSizes): TShirtSizes => useFieldSizing(own).size;
+
+/**
+ * As {@link useFieldSize}, and whether no size was given at all (`auto`): then
+ * the field draws at m and the theme's `density` restyles it in CSS.
+ */
+export const useFieldSizing = (own?: TShirtSizes): { size: TShirtSizes; auto: boolean } => {
   const inherited = useContext(FormFieldContext).size;
-  return own ?? inherited ?? "m";
+  const given = own ?? inherited;
+  return { size: given ?? "m", auto: given === undefined };
 };
 
 /**

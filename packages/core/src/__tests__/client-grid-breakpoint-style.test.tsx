@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { BELOW_HEADER_VALUE, breakpointStyle } from "../utils/layoutClasses";
+import { BELOW_HEADER_VALUE, breakpointStyle, tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * A breakpoint `width` or a numeric `padding` cannot be a class, so it moves
@@ -63,16 +63,16 @@ describe("ClientGrid breakpoint style", () => {
     const flex = container.querySelector(".display-flex") as HTMLElement;
     const grid = container.querySelector(".display-grid") as HTMLElement;
 
-    expect(grid.style.width).toBe("20px");
+    expect(grid.style.width).toBe(t(20));
     expect(grid.style.height).toBe("var(--static-space-72)");
     expect(grid.style.minHeight).toBe(BELOW_HEADER_VALUE);
     expect(grid.style.maxWidth).toBe("50%");
-    expect(grid.style.paddingTop).toBe("1px");
-    expect(grid.style.paddingLeft).toBe("2px");
-    expect(grid.style.paddingRight).toBe("2px");
-    expect(grid.style.marginTop).toBe("0.5px");
-    expect(grid.style.gap).toBe("1.5px");
-    expect(grid.style.top).toBe("2px");
+    expect(grid.style.paddingTop).toBe(t(1));
+    expect(grid.style.paddingLeft).toBe(t(2));
+    expect(grid.style.paddingRight).toBe(t(2));
+    expect(grid.style.marginTop).toBe(t(0.5));
+    expect(grid.style.gap).toBe(t(1.5));
+    expect(grid.style.top).toBe(t(2));
     // Parity: the same object writes the same values on both.
     for (const property of PROPERTIES) {
       expect(grid.style[property], property).toBe(flex.style[property]);
@@ -88,7 +88,7 @@ describe("ClientGrid breakpoint style", () => {
       </LayoutProvider>,
     );
     const grid = container.querySelector(".display-grid") as HTMLElement;
-    expect(grid.style.paddingTop).toBe("1px");
+    expect(grid.style.paddingTop).toBe(t(1));
     expect(grid.style.width).toBe("");
   });
 
@@ -99,7 +99,7 @@ describe("ClientGrid breakpoint style", () => {
       </LayoutProvider>,
     );
     const grid = container.querySelector(".display-grid") as HTMLElement;
-    expect(grid.style.width).toBe("20px");
+    expect(grid.style.width).toBe(t(20));
     for (const cls of ["m-p-8", "m-g-4", "m-top-16"]) expect(grid.classList).toContain(cls);
     expect(grid.style.padding).toBe("");
     expect(grid.style.gap).toBe("");
@@ -113,7 +113,7 @@ describe("ClientGrid breakpoint style", () => {
       </LayoutProvider>,
     );
     const grid = container.querySelector(".display-grid") as HTMLElement;
-    expect(grid.style.width).toBe("20px");
+    expect(grid.style.width).toBe(t(20));
     await act(async () => {
       Object.defineProperty(window, "innerWidth", { configurable: true, value: 1300 });
       window.dispatchEvent(new Event("resize"));
@@ -134,7 +134,7 @@ describe("ClientGrid breakpoint style", () => {
       </LayoutProvider>,
     );
     expect(html).toContain("display-grid");
-    expect(html).toContain("padding-top:1px");
+    expect(html).toContain(`padding-top:${t(1)}`);
     expect(html).not.toContain("20px");
     const root = html.slice(0, html.indexOf(">"));
     for (const attr of [" m=", " width=", " padding=", " columns="]) {
@@ -147,15 +147,23 @@ describe("breakpointStyle", () => {
   it("puts the style escape hatch first, so a resolved value wins over it", () => {
     const entries = breakpointStyle({ style: { width: "5px", color: "red" }, width: 10 });
     expect(entries[0]).toEqual(["width", "5px"]);
-    expect(entries.at(-1)).toEqual(["width", "10px"]);
+    expect(entries.filter(([property]) => property === "width").at(-1)).toEqual(["width", t(10)]);
+    // Then the custom property a number between the steps reads.
+    expect(entries.at(-1)).toEqual(["--ou-n-10", "calc(0.625rem * var(--scaling, 1))"]);
   });
 
-  it("applies the shorthand, then the sides, then the axes, as ClientFlex always has", () => {
+  it("applies the whole box, then the sides, then the axes, as ClientFlex always has", () => {
+    // The box as its four sides: a shorthand holding a var() reads back as "".
     expect(breakpointStyle({ padding: 1, paddingLeft: 2, paddingX: 3 })).toEqual([
-      ["padding", "1px"],
-      ["paddingLeft", "2px"],
-      ["paddingLeft", "3px"],
-      ["paddingRight", "3px"],
+      ["paddingTop", t(1)],
+      ["paddingRight", t(1)],
+      ["paddingBottom", t(1)],
+      ["paddingLeft", t(1)],
+      ["paddingLeft", t(2)],
+      ["paddingLeft", t(3)],
+      ["paddingRight", t(3)],
+      // 3 is between the steps: its `--ou-n-3` is declared with it.
+      ["--ou-n-3", "calc(0.1875rem * var(--scaling, 1))"],
     ]);
   });
 
