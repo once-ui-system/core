@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import React from "react";
-import type { CSSUnit, StaticSpacingToken } from "../types.js";
+import type { CSSUnit, SpacingToken, StaticSpacingToken } from "../types.js";
 import { Flex } from "./Flex.js";
 import styles from "./Skeleton.module.scss";
 
@@ -11,6 +11,11 @@ import styles from "./Skeleton.module.scss";
  * scale, and through Flex it would be a page-wide responsive width, so it is
  * a type error here. 2.x's bare numbers were rem: the 3.0 codemod writes
  * `width={12}` as `width="12rem"`.
+ *
+ * `minWidth` and `maxWidth` are the exception: they take what Flex's do,
+ * including the container sizes "xs"–"xl" (`maxWidth="l"` is
+ * `.max-width-l`, `var(--responsive-width-l)`), which cap a skeleton at a
+ * content column the way they cap the content it stands in for.
  */
 
 interface SkeletonProps
@@ -20,8 +25,10 @@ interface SkeletonProps
   > {
   width?: number | StaticSpacingToken | CSSUnit;
   height?: number | StaticSpacingToken | CSSUnit;
-  minWidth?: number | StaticSpacingToken | CSSUnit;
-  maxWidth?: number | StaticSpacingToken | CSSUnit;
+  /** Flex's type (`SizeProps`), including the container sizes "xs"–"xl". */
+  minWidth?: number | SpacingToken | CSSUnit;
+  /** As on Flex, including the container sizes "xs"–"xl". */
+  maxWidth?: number | SpacingToken | CSSUnit;
   minHeight?: number | StaticSpacingToken | CSSUnit;
   maxHeight?: number | StaticSpacingToken | CSSUnit;
   /** Defaults to `line`. */

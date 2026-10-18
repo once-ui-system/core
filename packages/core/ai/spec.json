@@ -3330,8 +3330,8 @@
    "props": {
     "width": "number | StaticSpacingToken | CSSUnit",
     "height": "number | StaticSpacingToken | CSSUnit",
-    "minWidth": "number | StaticSpacingToken | CSSUnit",
-    "maxWidth": "number | StaticSpacingToken | CSSUnit",
+    "minWidth": "number | SpacingToken | CSSUnit",
+    "maxWidth": "number | SpacingToken | CSSUnit",
     "minHeight": "number | StaticSpacingToken | CSSUnit",
     "maxHeight": "number | StaticSpacingToken | CSSUnit",
     "shape": "\"line\" | \"circle\" | \"block\" = line",

@@ -334,9 +334,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   imports a package it asks you to add, and ends with a formatter note. Names an
   app declares itself (an own `Badge`) and literal-typed values that need nothing
   are no longer reported.
-- **Skeleton's lengths are lengths**: `width`, `height` and their min/max take a
-  number, a static spacing token or a CSS length; `width="m"` is a type error (in
-  2.x it was a percentage step). `<Skeleton width={12} height={2.5}>` reads as
+- **Skeleton's lengths are lengths**: `width`, `height`, `minHeight` and
+  `maxHeight` take a number, a static spacing token or a CSS length; `width="m"`
+  is a type error (in 2.x it was a percentage step). `minWidth` and `maxWidth`
+  take Flex's values, container sizes included: `<Skeleton maxWidth="l">` type-checks
+  and renders `.max-width-l` as on Flex. `<Skeleton width={12} height={2.5}>` reads as
   `"12"` and `"2.5"` on the token scale; the codemod writes the 2.x numbers as rem.
 - **Nav follows the theme's `density`** when given none; its own `density` wins.
 - **The light theme's weak text reaches 4.5:1 on sand and slate**: step 500 of each

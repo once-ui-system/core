@@ -252,7 +252,9 @@ Avoid: Passing the same text as label and children — the children are dropped
 
 ### Skeleton
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- width?, height?, minWidth?, maxWidth?, minHeight?, maxHeight?: number | StaticSpacingToken | CSSUnit
+- width?, height?: number | StaticSpacingToken | CSSUnit
+- minWidth?, maxWidth?: number | SpacingToken | CSSUnit
+- minHeight?, maxHeight?: number | StaticSpacingToken | CSSUnit
 - shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number

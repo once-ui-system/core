@@ -1,9 +1,11 @@
 import { render } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { describe, expect, expectTypeOf, it } from "vitest";
+import { Flex } from "../components/Flex";
 import { Skeleton } from "../components/Skeleton";
 import { StatusIndicator } from "../components/StatusIndicator";
 import { Tag } from "../components/Tag";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import type { SizeProps } from "../interfaces";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -36,6 +38,41 @@ describe("Skeleton", () => {
     const tall = <Skeleton height="l" />;
     const fine = <Skeleton width={240} height="2.5rem" maxWidth="16" />;
     expect([wide, tall, fine]).toHaveLength(3);
+  });
+
+  // minWidth/maxWidth keep Flex's container sizes: `<Skeleton maxWidth="l">`
+  // caps a placeholder at the content column, as 2.x apps write it.
+  it("takes Flex's container sizes on minWidth and maxWidth", () => {
+    const capped = <Skeleton maxWidth="l" />;
+    const floored = <Skeleton minWidth="xs" />;
+    // @ts-expect-error — width stays strict: "m" is not a Skeleton length
+    const wide = <Skeleton width="m" />;
+    expect([capped, floored, wide]).toHaveLength(3);
+    type SkeletonProps = React.ComponentProps<typeof Skeleton>;
+    expectTypeOf<SkeletonProps["maxWidth"]>().toEqualTypeOf<SizeProps["maxWidth"]>();
+    expectTypeOf<SkeletonProps["minWidth"]>().toEqualTypeOf<SizeProps["minWidth"]>();
+  });
+
+  it('renders maxWidth="l" as Flex does', () => {
+    const { container } = render(<Skeleton shape="line" maxWidth="l" />, { wrapper: wrap });
+    const { container: flex } = render(<Flex maxWidth="l" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    const ref = flex.firstElementChild as HTMLElement;
+    expect(ref.classList.contains("max-width-l")).toBe(true);
+    expect(el.classList.contains("max-width-l")).toBe(true);
+    expect(el.style.maxWidth).toBe(ref.style.maxWidth);
+  });
+
+  it('renders minWidth="m" as Flex does', () => {
+    const { container } = render(<Skeleton shape="line" minWidth="m" />, { wrapper: wrap });
+    const { container: flex } = render(<Flex minWidth="m" />, { wrapper: wrap });
+    const el = container.firstElementChild as HTMLElement;
+    const ref = flex.firstElementChild as HTMLElement;
+    expect(ref.style.minWidth).toBe("var(--responsive-width-m)");
+    expect(el.style.minWidth).toBe(ref.style.minWidth);
+    const layout = (c: HTMLElement) =>
+      [...c.classList].filter((name) => /^min-width/.test(name)).sort();
+    expect(layout(el)).toEqual(layout(ref));
   });
 
   it("reads a number on the token scale, as everywhere", () => {

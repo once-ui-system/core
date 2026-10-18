@@ -180,10 +180,12 @@ itself.
 | ParticleFx `speed`: default 0.3 | a multiplier with 1 as the default (2.x's 0.3): divide a 2.x value by 0.3 | divides a literal by 0.3 to two decimals (`{0.6}` → `{2}`) and removes it when that is 1; an expression that is always a number becomes `{config.speed / 0.3}`; reports any other expression and a literal in MDX |
 | AutoScroll, GlitchFx, LetterFx `speed`: a keyword | a multiplier or a keyword, `"slow"`/`"medium"`/`"fast"` = 0.5/1/2 | nothing to rewrite |
 
-`Skeleton` takes its own lengths: `width`, `height` and their `min`/`max`
-are a number on the token scale, a static spacing token or a CSS length, and
-a t-shirt step (`width="m"`, which 1.x read as a percentage and Flex would
-read as a page-wide responsive width) is a type error. A 2.x
+`Skeleton` takes its own lengths: `width`, `height`, `minHeight` and
+`maxHeight` are a number on the token scale, a static spacing token or a CSS
+length, and a t-shirt step (`width="m"`, which 1.x read as a percentage and
+Flex would read as a page-wide responsive width) is a type error. `minWidth`
+and `maxWidth` take what Flex's do, so `<Skeleton maxWidth="l">` still caps a
+placeholder at the `l` container width (`.max-width-l`), as on Flex. A 2.x
 `<Skeleton width={12} height={2.5}>` was rem, and the codemod writes it
 `width="12rem" height="2.5rem"`; `size` (the line's height or the circle's
 diameter) keeps its `xs`…`xl` scale.
