@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, type ReactNode, useId } from "react";
+import React, { type ReactNode, useId } from "react";
 import type { IconName } from "../icons.js";
 import type { Placement } from "../types.js";
 import { Column } from "./Column.js";
@@ -106,55 +106,62 @@ const ContentTooltip = ({
  *   (2.x `InfoTip`).
  * - `<Tooltip label="…" />` is the bare bubble, for a caller that positions it.
  */
-const Tooltip = forwardRef<HTMLDivElement, TooltipProps>(
-  ({ label, content, prefixIcon, suffixIcon, className, style, ...flex }, ref) => {
-    if (content !== undefined) {
-      return <ContentTooltip content={content} className={className} style={style} {...flex} />;
-    }
+const Tooltip = ({
+  ref,
+  label,
+  content,
+  prefixIcon,
+  suffixIcon,
+  className,
+  style,
+  ...flex
+}: TooltipProps) => {
+  if (content !== undefined) {
+    return <ContentTooltip content={content} className={className} style={style} {...flex} />;
+  }
 
-    const {
-      children: _children,
-      size: _size,
-      placement: _placement,
-      delay: _delay,
-      ...bubble
-    } = flex;
-    return (
+  const {
+    children: _children,
+    size: _size,
+    placement: _placement,
+    delay: _delay,
+    ...bubble
+  } = flex;
+  return (
+    <Row
+      m={{ hide: true }}
+      ref={ref}
+      style={{
+        whiteSpace: "nowrap",
+        userSelect: "none",
+        ...style,
+      }}
+      vertical="center"
+      gap="4"
+      zIndex={1}
+      background="surface"
+      paddingY="4"
+      paddingX="8"
+      radius="s"
+      border="neutral-medium"
+      role="tooltip"
+      className={classNames(styles.tooltip, styles.fadeIn, className)}
+      {...bubble}
+    >
+      {prefixIcon && <Icon name={prefixIcon} size="xs" />}
       <Row
-        m={{ hide: true }}
-        ref={ref}
-        style={{
-          whiteSpace: "nowrap",
-          userSelect: "none",
-          ...style,
-        }}
+        className={styles.label}
+        paddingX="2"
         vertical="center"
-        gap="4"
-        zIndex={1}
-        background="surface"
-        paddingY="4"
-        paddingX="8"
-        radius="s"
-        border="neutral-medium"
-        role="tooltip"
-        className={classNames(styles.tooltip, styles.fadeIn, className)}
-        {...bubble}
+        textVariant="body-default-xs"
+        onBackground="neutral-strong"
       >
-        {prefixIcon && <Icon name={prefixIcon} size="xs" />}
-        <Row
-          className={styles.label}
-          paddingX="2"
-          vertical="center"
-          textVariant="body-default-xs"
-          onBackground="neutral-strong"
-        >
-          {label}
-        </Row>
-        {suffixIcon && <Icon name={suffixIcon} size="xs" />}
+        {label}
       </Row>
-    );
-  },
-);
+      {suffixIcon && <Icon name={suffixIcon} size="xs" />}
+    </Row>
+  );
+};
 
 Tooltip.displayName = "Tooltip";
 

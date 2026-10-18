@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Flex } from "./Flex.js";
 
@@ -9,7 +9,11 @@ interface CursorProps {
   elementRef: React.RefObject<HTMLElement | null>;
 }
 
-export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, elementRef }, ref) => {
+export const Cursor = ({
+  ref,
+  cursor,
+  elementRef,
+}: CursorProps & { ref?: React.Ref<HTMLDivElement> }) => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
   const [isTouchDevice, setIsTouchDevice] = useState(false);
@@ -104,7 +108,7 @@ export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, element
     </Flex>,
     document.body,
   );
-});
+};
 
 Cursor.displayName = "Cursor";
 export default Cursor;

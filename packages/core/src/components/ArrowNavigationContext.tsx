@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, forwardRef, ReactNode, useContext, useEffect, useRef } from "react";
+import React, { createContext, ReactNode, useContext, useEffect, useRef } from "react";
 import { ArrowNavigationOptions, useArrowNavigation } from "../hooks/useArrowNavigation.js";
 import { Column } from "./Column.js";
 import { FocusTrap } from "./FocusTrap.js";
@@ -27,106 +27,102 @@ export interface ArrowNavigationProps extends Omit<ArrowNavigationOptions, "cont
   restoreFocus?: boolean;
 }
 
-const ArrowNavigation = forwardRef<HTMLDivElement, ArrowNavigationProps>(
-  (
-    {
-      layout,
-      itemCount,
-      columns,
-      onSelect,
-      onFocusChange,
-      wrap,
-      initialFocusedIndex,
-      itemSelector,
-      autoFocus,
-      disabled,
-      children,
-      className,
-      style,
-      role,
-      "aria-label": ariaLabel,
-      trapFocus = false,
-      focusTrapActive = true,
-      onEscape,
-      autoFocusTrap = true,
-      restoreFocus = true,
-    },
-    ref,
-  ) => {
-    const containerRef = useRef<HTMLDivElement>(null);
+const ArrowNavigation = ({
+  ref,
+  layout,
+  itemCount,
+  columns,
+  onSelect,
+  onFocusChange,
+  wrap,
+  initialFocusedIndex,
+  itemSelector,
+  autoFocus,
+  disabled,
+  children,
+  className,
+  style,
+  role,
+  "aria-label": ariaLabel,
+  trapFocus = false,
+  focusTrapActive = true,
+  onEscape,
+  autoFocusTrap = true,
+  restoreFocus = true,
+}: ArrowNavigationProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-    const navigation = useArrowNavigation({
-      layout,
-      itemCount,
-      columns,
-      containerRef,
-      onSelect,
-      onFocusChange,
-      wrap,
-      initialFocusedIndex,
-      itemSelector,
-      autoFocus,
-      disabled,
-    });
+  const navigation = useArrowNavigation({
+    layout,
+    itemCount,
+    columns,
+    containerRef,
+    onSelect,
+    onFocusChange,
+    wrap,
+    initialFocusedIndex,
+    itemSelector,
+    autoFocus,
+    disabled,
+  });
 
-    // Focus the container when autoFocus is enabled
-    useEffect(() => {
-      if (autoFocus && containerRef.current && !disabled) {
-        // Small delay to ensure the component is fully mounted
-        const timer = setTimeout(() => {
-          if (!containerRef.current) return;
-          // This is the fallback for a list with no focusable item — the hook
-          // focuses the item at `focusedIndex` itself as soon as there is one.
-          // Both happen on mount and a 0ms timer wins or loses that race
-          // depending on how much layout work lands in between: measured in
-          // Chromium, a DatePicker's month list settled on its first option
-          // while its year list settled on this container instead. Bailing out
-          // once focus is already inside makes the outcome the same either way.
-          if (containerRef.current.contains(document.activeElement)) return;
-          containerRef.current.focus({ preventScroll: true });
-        }, 0);
-        return () => clearTimeout(timer);
-      }
-    }, [autoFocus, disabled]);
+  // Focus the container when autoFocus is enabled
+  useEffect(() => {
+    if (autoFocus && containerRef.current && !disabled) {
+      // Small delay to ensure the component is fully mounted
+      const timer = setTimeout(() => {
+        if (!containerRef.current) return;
+        // This is the fallback for a list with no focusable item — the hook
+        // focuses the item at `focusedIndex` itself as soon as there is one.
+        // Both happen on mount and a 0ms timer wins or loses that race
+        // depending on how much layout work lands in between: measured in
+        // Chromium, a DatePicker's month list settled on its first option
+        // while its year list settled on this container instead. Bailing out
+        // once focus is already inside makes the outcome the same either way.
+        if (containerRef.current.contains(document.activeElement)) return;
+        containerRef.current.focus({ preventScroll: true });
+      }, 0);
+      return () => clearTimeout(timer);
+    }
+  }, [autoFocus, disabled]);
 
-    // Determine the appropriate role based on layout if not provided
-    const defaultRole = layout === "grid" ? "grid" : "listbox";
+  // Determine the appropriate role based on layout if not provided
+  const defaultRole = layout === "grid" ? "grid" : "listbox";
 
-    // Create the navigation container
-    const navigationContainer = (
-      <Column
-        ref={containerRef}
-        className={className}
-        style={{ ...style, maxHeight: "100%", outline: "none" }}
-        onKeyDown={(e) => {
-          navigation.handleKeyDown(e);
-        }}
-        role={role || defaultRole}
-        aria-label={ariaLabel}
-        tabIndex={-1}
-      >
-        {children}
-      </Column>
-    );
+  // Create the navigation container
+  const navigationContainer = (
+    <Column
+      ref={containerRef}
+      className={className}
+      style={{ ...style, maxHeight: "100%", outline: "none" }}
+      onKeyDown={(e) => {
+        navigation.handleKeyDown(e);
+      }}
+      role={role || defaultRole}
+      aria-label={ariaLabel}
+      tabIndex={-1}
+    >
+      {children}
+    </Column>
+  );
 
-    return (
-      <ArrowNavigationContext.Provider value={navigation}>
-        {trapFocus ? (
-          <FocusTrap
-            active={focusTrapActive}
-            onEscape={onEscape}
-            autoFocus={autoFocusTrap}
-            restoreFocus={restoreFocus}
-          >
-            {navigationContainer}
-          </FocusTrap>
-        ) : (
-          navigationContainer
-        )}
-      </ArrowNavigationContext.Provider>
-    );
-  },
-);
+  return (
+    <ArrowNavigationContext.Provider value={navigation}>
+      {trapFocus ? (
+        <FocusTrap
+          active={focusTrapActive}
+          onEscape={onEscape}
+          autoFocus={autoFocusTrap}
+          restoreFocus={restoreFocus}
+        >
+          {navigationContainer}
+        </FocusTrap>
+      ) : (
+        navigationContainer
+      )}
+    </ArrowNavigationContext.Provider>
+  );
+};
 
 ArrowNavigation.displayName = "ArrowNavigation";
 
@@ -149,8 +145,8 @@ export const useArrowNavigationContext = () => {
 export function withArrowNavigation<P extends object>(
   Component: React.ComponentType<P>,
   options: Omit<ArrowNavigationProps, "children">,
-): React.FC<P & { children?: ReactNode }> {
-  return ({ children, ...props }) => (
+): (props: P & { children?: ReactNode }) => ReactNode {
+  return ({ children, ...props }: P & { children?: ReactNode }) => (
     <ArrowNavigation {...options}>
       <Component {...(props as P)}>{children}</Component>
     </ArrowNavigation>

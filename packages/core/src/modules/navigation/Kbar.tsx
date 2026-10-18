@@ -48,7 +48,7 @@ interface KbarOption {
   onClick?: () => void;
 }
 
-const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) => (
+const SectionHeader = ({ id, label }: { id: string; label: string }) => (
   <Row
     id={id}
     paddingX="12"
@@ -66,7 +66,16 @@ const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) =
  * move the active option, which `aria-activedescendant` points at, so typing
  * and choosing never fight over focus.
  */
-const KbarSearchInput: React.FC<{
+const KbarSearchInput = ({
+  placeholder,
+  searchQuery,
+  onSearchChange,
+  onKeyDown,
+  inputRef,
+  size = "m",
+  listboxId,
+  activeOptionId,
+}: {
   placeholder: string;
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -76,15 +85,6 @@ const KbarSearchInput: React.FC<{
   /** Set while there are results to show; the popup is collapsed otherwise. */
   listboxId?: string;
   activeOptionId?: string;
-}> = ({
-  placeholder,
-  searchQuery,
-  onSearchChange,
-  onKeyDown,
-  inputRef,
-  size = "m",
-  listboxId,
-  activeOptionId,
 }) => (
   <Input
     id="kbar-search"
@@ -109,7 +109,7 @@ export interface KbarTriggerProps extends Omit<React.ComponentProps<typeof Row>,
   onClick?: () => void;
 }
 
-export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...rest }) => {
+export const KbarTrigger = ({ onClick, children, ...rest }: KbarTriggerProps) => {
   return (
     <Row onClick={onClick} {...rest}>
       {children}
@@ -126,13 +126,13 @@ export interface KbarContentProps {
   size?: TShirtSizes;
 }
 
-export const KbarContent: React.FC<KbarContentProps> = ({
+export const KbarContent = ({
   open,
   onClose,
   items,
   placeholder = "Search",
   size = "m",
-}) => {
+}: KbarContentProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -500,7 +500,7 @@ export interface KbarProps {
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({
+export const Kbar = ({
   items,
   children,
   size,
@@ -508,7 +508,7 @@ export const Kbar: React.FC<KbarProps> = ({
   defaultOpen = false,
   onOpenChange,
   ...rest
-}) => {
+}: KbarProps) => {
   const [open, setOpen] = useControllableState({
     value: openProp,
     defaultValue: defaultOpen,

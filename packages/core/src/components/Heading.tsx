@@ -3,8 +3,6 @@ import {
   type ComponentPropsWithoutRef,
   type ComponentPropsWithRef,
   type ElementType,
-  type ForwardedRef,
-  forwardRef,
   type ReactNode,
 } from "react";
 
@@ -33,8 +31,9 @@ type HeadingRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
 
 /**
  * `Heading`'s public signature: generic over `as`, as it was before it took a
- * ref, and with a ref typed to the element `as` names. `forwardRef`'s own
- * return type is not generic, so it would pin `as` to one element.
+ * ref, and with a ref typed to the element `as` names. The function below is
+ * already generic; the interface adds the non-generic signature that
+ * `React.ComponentProps<typeof Heading>` reads.
  */
 interface HeadingComponent {
   <T extends ElementType = "h1">(props: HeadingProps<T> & { ref?: HeadingRef<T> }): ReactNode;
@@ -45,61 +44,59 @@ interface HeadingComponent {
   displayName?: string;
 }
 
-const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementType = "h1">(
-  {
-    as,
-    textVariant,
-    weight,
-    family,
-    onBackground,
-    onSolid,
-    align,
-    wrap = "balance",
-    padding,
-    paddingLeft,
-    paddingRight,
-    paddingTop,
-    paddingBottom,
-    paddingX,
-    paddingY,
-    margin,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginBottom,
-    marginX,
-    marginY,
-    children,
-    style,
-    truncate,
-    opacity,
-    className,
-    userSelect,
-    gap,
-    top,
-    right,
-    bottom,
-    left,
-    translateX,
-    translateY,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-    scrollbar,
-    pointerEvents,
-    transition,
-    zIndex,
-    // Typed through `DisplayProps`, with no class that fits text: `inline`,
-    // `hide` and `showIn` are display modes of Flex and Grid. Taken out
-    // so they stop reaching the DOM as attributes.
-    inline: _inline,
-    hide: _hide,
-    showIn: _showIn,
-    ...props
-  }: HeadingProps<T>,
-  ref: ForwardedRef<HTMLHeadingElement>,
-) {
+const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">({
+  ref,
+  as,
+  textVariant,
+  weight,
+  family,
+  onBackground,
+  onSolid,
+  align,
+  wrap = "balance",
+  padding,
+  paddingLeft,
+  paddingRight,
+  paddingTop,
+  paddingBottom,
+  paddingX,
+  paddingY,
+  margin,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
+  marginX,
+  marginY,
+  children,
+  style,
+  truncate,
+  opacity,
+  className,
+  userSelect,
+  gap,
+  top,
+  right,
+  bottom,
+  left,
+  translateX,
+  translateY,
+  position,
+  overflow,
+  overflowX,
+  overflowY,
+  scrollbar,
+  pointerEvents,
+  transition,
+  zIndex,
+  // Typed through `DisplayProps`, with no class that fits text: `inline`,
+  // `hide` and `showIn` are display modes of Flex and Grid. Taken out
+  // so they stop reaching the DOM as attributes.
+  inline: _inline,
+  hide: _hide,
+  showIn: _showIn,
+  ...props
+}: HeadingProps<T> & { ref?: HeadingRef<T> }) {
   const Component = as || "h1";
 
   if (onBackground && onSolid) {
@@ -204,7 +201,7 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
       {children}
     </Component>
   );
-});
+};
 
 Heading.displayName = "Heading";
 

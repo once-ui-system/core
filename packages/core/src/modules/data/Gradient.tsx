@@ -80,7 +80,7 @@ const getStopsByVariant = (
   }
 };
 
-export const LinearGradient: React.FC<LinearGradientProps> = ({
+export const LinearGradient = ({
   id,
   color,
   x1 = "0",
@@ -89,7 +89,7 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
   y2 = "1",
   stops,
   variant,
-}) => {
+}: LinearGradientProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();
@@ -103,7 +103,7 @@ export const LinearGradient: React.FC<LinearGradientProps> = ({
   );
 };
 
-export const RadialGradient: React.FC<RadialGradientProps> = ({
+export const RadialGradient = ({
   id,
   color,
   cx = "50%",
@@ -113,7 +113,7 @@ export const RadialGradient: React.FC<RadialGradientProps> = ({
   fy = "50%",
   stops,
   variant,
-}) => {
+}: RadialGradientProps) => {
   const theme = useDataTheme();
   const gradientStops = stops || getStopsByVariant(variant ?? theme.variant, true);
   return (

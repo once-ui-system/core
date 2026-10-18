@@ -10,7 +10,7 @@ export interface MissingDependencyProps {
   packageName: string;
 }
 
-export const MissingDependency: React.FC<MissingDependencyProps> = ({ component, packageName }) => (
+export const MissingDependency = ({ component, packageName }: MissingDependencyProps) => (
   <Column
     fillWidth
     minHeight="160"

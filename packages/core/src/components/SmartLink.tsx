@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import { TShirtSizes } from "../types.js";
 import { ElementType } from "./ElementType.js";
@@ -22,67 +22,63 @@ interface SmartLinkCommonProps {
 
 export type SmartLinkProps = SmartLinkCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const SmartLink = forwardRef<HTMLAnchorElement, SmartLinkProps>(
-  (
-    {
-      href,
-      prefixIcon,
-      suffixIcon,
-      fillWidth = false,
-      iconSize = "xs",
-      style,
-      className,
-      selected,
-      unstyled = false,
-      children,
-      ...props
-    },
+const SmartLink = ({
+  ref,
+  href,
+  prefixIcon,
+  suffixIcon,
+  fillWidth = false,
+  iconSize = "xs",
+  style,
+  className,
+  selected,
+  unstyled = false,
+  children,
+  ...props
+}: SmartLinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => {
+  const content = (
+    <>
+      {prefixIcon && <Icon name={prefixIcon} size={iconSize} />}
+      {children}
+      {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
+    </>
+  );
+
+  const commonProps = {
     ref,
-  ) => {
-    const content = (
-      <>
-        {prefixIcon && <Icon name={prefixIcon} size={iconSize} />}
-        {children}
-        {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
-      </>
-    );
-
-    const commonProps = {
-      ref,
-      className: classNames(
-        className,
-        "reset-button-styles focus-ring align-center display-inline-flex g-8 radius-s",
-        {
-          "fill-width": fillWidth,
-          "fit-width": !fillWidth,
-          "min-width-0": fillWidth,
-          "px-2 mx-2": !unstyled,
+    className: classNames(
+      className,
+      "reset-button-styles focus-ring align-center display-inline-flex g-8 radius-s",
+      {
+        "fill-width": fillWidth,
+        "fit-width": !fillWidth,
+        "min-width-0": fillWidth,
+        "px-2 mx-2": !unstyled,
+      },
+    ),
+    style: !unstyled
+      ? {
+          ...(selected && {
+            textDecoration: "underline",
+            textUnderlineOffset: "0.3em",
+            textUnderlineThickness: "var(--static-space-1)",
+            color: "var(--neutral-on-background-strong)",
+          }),
+          ...style,
+        }
+      : {
+          textDecoration: "none",
+          ...style,
         },
-      ),
-      style: !unstyled
-        ? {
-            ...(selected && {
-              textDecoration: "underline",
-              textUnderlineOffset: "0.3em",
-              textUnderlineThickness: "var(--static-space-1)",
-              color: "var(--neutral-on-background-strong)",
-            }),
-            ...style,
-          }
-        : {
-            textDecoration: "none",
-            ...style,
-          },
-      ...props,
-    };
+    ...props,
+  };
 
-    return (
-      <ElementType href={href} {...commonProps}>
-        {content}
-      </ElementType>
-    );
-  },
-);
+  return (
+    <ElementType href={href} {...commonProps}>
+      {content}
+    </ElementType>
+  );
+};
 
 SmartLink.displayName = "SmartLink";
 

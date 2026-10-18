@@ -1,9 +1,8 @@
-import { forwardRef } from "react";
 import { Row } from "./Row.js";
 
 interface BannerProps extends React.ComponentProps<typeof Row> {}
 
-const Banner = forwardRef<HTMLDivElement, BannerProps>(({ children, ...flex }, ref) => (
+const Banner = ({ ref, children, ...flex }: BannerProps) => (
   <Row
     fillWidth
     paddingX="16"
@@ -19,7 +18,7 @@ const Banner = forwardRef<HTMLDivElement, BannerProps>(({ children, ...flex }, r
   >
     {children}
   </Row>
-));
+);
 
 Banner.displayName = "Banner";
 

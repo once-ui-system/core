@@ -32,7 +32,7 @@ interface ChartHeaderProps
   presets?: PresetsConfig;
 }
 
-export const ChartHeader: React.FC<ChartHeaderProps> = ({
+export const ChartHeader = ({
   title,
   description,
   dateRange,
@@ -40,7 +40,7 @@ export const ChartHeader: React.FC<ChartHeaderProps> = ({
   onDateRangeChange,
   presets = { display: true, granularity: "week" },
   ...flex
-}) => {
+}: ChartHeaderProps) => {
   // Hooks first, the empty check after them: returning before a hook drops the
   // hook state whenever the header goes empty, including the cleanup of the
   // Escape listener below, which then stays on `document`.

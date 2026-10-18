@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, type MouseEventHandler, type ReactNode, useId } from "react";
+import { type MouseEventHandler, type ReactNode, useId } from "react";
 import type { IconName } from "../icons.js";
 import { InteractiveTag } from "../internal/InteractiveTag.js";
 import type { TextVariant, Tone, TShirtSizes } from "../types.js";
@@ -84,151 +84,143 @@ const LOOK = {
 const ICON = { xs: "xs", s: "xs", m: "xs", l: "xs", xl: "s" } as const;
 const ANNOUNCE_ICON = { xs: "xs", s: "xs", m: "s", l: "s", xl: "m" } as const;
 
-const Tag = forwardRef<HTMLDivElement, TagProps>(
-  (
-    {
-      tone,
-      variant = "default",
-      size = "m",
-      label = "",
-      prefixIcon,
-      suffixIcon,
-      href,
-      arrow: arrowProp,
-      effect = variant === "announce",
-      selected,
-      onClick,
-      onRemove,
-      removeButtonProps,
-      textVariant,
-      className,
-      style,
-      children,
-      ...rest
-    },
-    ref,
-  ) => {
-    const arrowId = useId();
-    const arrow = arrowProp ?? href !== undefined;
+const Tag = ({
+  ref,
+  tone,
+  variant = "default",
+  size = "m",
+  label = "",
+  prefixIcon,
+  suffixIcon,
+  href,
+  arrow: arrowProp,
+  effect = variant === "announce",
+  selected,
+  onClick,
+  onRemove,
+  removeButtonProps,
+  textVariant,
+  className,
+  style,
+  children,
+  ...rest
+}: TagProps) => {
+  const arrowId = useId();
+  const arrow = arrowProp ?? href !== undefined;
 
-    if (!href && (selected !== undefined || onRemove)) {
-      const toggle = { selected, onClick, onRemove, removeButtonProps };
-      return (
-        <InteractiveTag
-          ref={ref}
-          tone={tone}
-          size={size}
-          label={label}
-          prefixIcon={prefixIcon}
-          suffixIcon={suffixIcon}
-          textVariant={textVariant}
-          className={className}
-          style={style}
-          {...toggle}
-          {...rest}
-        >
-          {children}
-        </InteractiveTag>
-      );
-    }
-
-    const announce = variant === "announce";
-    const gradient = variant === "gradient";
-    const look = LOOK[announce ? "announce" : "default"];
-    const palette = tone ?? (announce ? "brand" : "neutral");
-    // A link tag's pointer handler, passed through for the caller.
-    const pointer = onClick
-      ? { onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement> }
-      : {};
-
-    // A static tag with onClick is a button in the tag's own look (2.x's
-    // clickable Tag): focusable, pressed by Enter and Space, not a toggle.
-    const button =
-      onClick && !href
-        ? {
-            onClick,
-            role: "button",
-            tabIndex: 0,
-            cursor: "interactive" as const,
-            onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
-              if (e.key !== "Enter" && e.key !== " ") return;
-              e.preventDefault();
-              onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
-            },
-          }
-        : {};
-
-    const box = (
-      <Row
-        fitWidth
-        background={announce ? "neutral-weak" : gradient ? undefined : `${palette}-weak`}
-        border={
-          announce
-            ? `${palette}-alpha-medium`
-            : gradient
-              ? "brand-medium"
-              : `${palette}-alpha-medium`
-        }
-        onBackground={announce ? `${palette}-strong` : gradient ? undefined : `${palette}-medium`}
-        paddingX={look.paddingX[size]}
-        paddingY={look.paddingY[size]}
-        vertical="center"
-        radius={announce ? "full" : "s"}
-        gap={announce ? undefined : "4"}
-        textVariant={announce ? (textVariant ?? look.text[size]) : undefined}
+  if (!href && (selected !== undefined || onRemove)) {
+    const toggle = { selected, onClick, onRemove, removeButtonProps };
+    return (
+      <InteractiveTag
         ref={ref}
-        data-tag-arrow={arrow ? arrowId : undefined}
-        className={classNames(
-          styles.tag,
-          gradient ? styles.gradient : undefined,
-          effect ? styles.shine : undefined,
-          announce ? styles.announce : undefined,
-          className,
-        )}
+        tone={tone}
+        size={size}
+        label={label}
+        prefixIcon={prefixIcon}
+        suffixIcon={suffixIcon}
+        textVariant={textVariant}
+        className={className}
         style={style}
-        {...button}
+        {...toggle}
         {...rest}
       >
-        {prefixIcon &&
-          (announce ? (
-            <Icon
-              marginRight="8"
-              size={ANNOUNCE_ICON[size]}
-              name={prefixIcon}
-              onBackground={`${palette}-medium`}
-            />
-          ) : (
-            <Icon name={prefixIcon} size={ICON[size]} />
-          ))}
-        {announce ? (
-          // As 2.x's Badge: the text sits in the pill itself, so children
-          // lay out with the pill's own gap and padding.
-          label || children
+        {children}
+      </InteractiveTag>
+    );
+  }
+
+  const announce = variant === "announce";
+  const gradient = variant === "gradient";
+  const look = LOOK[announce ? "announce" : "default"];
+  const palette = tone ?? (announce ? "brand" : "neutral");
+  // A link tag's pointer handler, passed through for the caller.
+  const pointer = onClick
+    ? { onClick: onClick as unknown as React.MouseEventHandler<HTMLAnchorElement> }
+    : {};
+
+  // A static tag with onClick is a button in the tag's own look (2.x's
+  // clickable Tag): focusable, pressed by Enter and Space, not a toggle.
+  const button =
+    onClick && !href
+      ? {
+          onClick,
+          role: "button",
+          tabIndex: 0,
+          cursor: "interactive" as const,
+          onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => {
+            if (e.key !== "Enter" && e.key !== " ") return;
+            e.preventDefault();
+            onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
+          },
+        }
+      : {};
+
+  const box = (
+    <Row
+      fitWidth
+      background={announce ? "neutral-weak" : gradient ? undefined : `${palette}-weak`}
+      border={
+        announce ? `${palette}-alpha-medium` : gradient ? "brand-medium" : `${palette}-alpha-medium`
+      }
+      onBackground={announce ? `${palette}-strong` : gradient ? undefined : `${palette}-medium`}
+      paddingX={look.paddingX[size]}
+      paddingY={look.paddingY[size]}
+      vertical="center"
+      radius={announce ? "full" : "s"}
+      gap={announce ? undefined : "4"}
+      textVariant={announce ? (textVariant ?? look.text[size]) : undefined}
+      ref={ref}
+      data-tag-arrow={arrow ? arrowId : undefined}
+      className={classNames(
+        styles.tag,
+        gradient ? styles.gradient : undefined,
+        effect ? styles.shine : undefined,
+        announce ? styles.announce : undefined,
+        className,
+      )}
+      style={style}
+      {...button}
+      {...rest}
+    >
+      {prefixIcon &&
+        (announce ? (
+          <Icon
+            marginRight="8"
+            size={ANNOUNCE_ICON[size]}
+            name={prefixIcon}
+            onBackground={`${palette}-medium`}
+          />
         ) : (
-          <Row style={{ userSelect: "none" }} vertical="center">
-            <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
-          </Row>
-        )}
-        {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
-        {/* The arrow follows hover on this tag only: each one has its own id. */}
-        {arrow && <Arrow trigger={`[data-tag-arrow="${arrowId}"]`} />}
-      </Row>
-    );
+          <Icon name={prefixIcon} size={ICON[size]} />
+        ))}
+      {announce ? (
+        // As 2.x's Badge: the text sits in the pill itself, so children
+        // lay out with the pill's own gap and padding.
+        label || children
+      ) : (
+        <Row style={{ userSelect: "none" }} vertical="center">
+          <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
+        </Row>
+      )}
+      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
+      {/* The arrow follows hover on this tag only: each one has its own id. */}
+      {arrow && <Arrow trigger={`[data-tag-arrow="${arrowId}"]`} />}
+    </Row>
+  );
 
-    if (!href) return box;
+  if (!href) return box;
 
-    return (
-      <SmartLink
-        unstyled
-        href={href}
-        style={{ borderRadius: announce ? "var(--radius-full)" : "var(--radius-s)" }}
-        {...pointer}
-      >
-        {box}
-      </SmartLink>
-    );
-  },
-);
+  return (
+    <SmartLink
+      unstyled
+      href={href}
+      style={{ borderRadius: announce ? "var(--radius-full)" : "var(--radius-s)" }}
+      {...pointer}
+    >
+      {box}
+    </SmartLink>
+  );
+};
 
 Tag.displayName = "Tag";
 

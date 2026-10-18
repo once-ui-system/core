@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React from "react";
 import { CONTROL_TEXT, type ControlSize } from "../internal/controlChrome.js";
 import { Column } from "./Column.js";
 import { IconButton, IconButtonProps } from "./IconButton.js";
@@ -28,77 +28,73 @@ interface InteractiveDetailsProps {
   errorId?: string;
 }
 
-const InteractiveDetails = forwardRef<HTMLDivElement, InteractiveDetailsProps>(
-  (
-    {
-      label,
-      description,
-      iconButtonProps,
-      onClick,
-      className,
-      id,
-      labelId,
-      descriptionId,
-      disabled,
-      size = "m",
-      errorMessage,
-      errorId,
-    },
-    ref,
-  ) => {
-    return (
-      <Column
-        ref={ref}
-        cursor={disabled ? "not-allowed" : undefined}
-        className={className}
-        onClick={onClick}
-        id={id}
-      >
-        <Row gap="4" vertical="center">
-          <Text
-            as="span"
-            id={labelId}
-            textVariant={CONTROL_TEXT[size].label}
-            onBackground={disabled ? "neutral-weak" : "neutral-strong"}
-          >
-            {label}
-          </Text>
-          {iconButtonProps?.tooltip && (
-            <div onClick={(e) => e.stopPropagation()}>
-              <IconButton
-                size="s"
-                variant="ghost"
-                icon="help"
-                aria-label="More information"
-                {...iconButtonProps}
-              />
-            </div>
-          )}
-        </Row>
-        {description && (
-          <Text
-            as="span"
-            id={descriptionId}
-            textVariant={CONTROL_TEXT[size].body}
-            onBackground="neutral-weak"
-          >
-            {description}
-          </Text>
+const InteractiveDetails = ({
+  ref,
+  label,
+  description,
+  iconButtonProps,
+  onClick,
+  className,
+  id,
+  labelId,
+  descriptionId,
+  disabled,
+  size = "m",
+  errorMessage,
+  errorId,
+}: InteractiveDetailsProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  return (
+    <Column
+      ref={ref}
+      cursor={disabled ? "not-allowed" : undefined}
+      className={className}
+      onClick={onClick}
+      id={id}
+    >
+      <Row gap="4" vertical="center">
+        <Text
+          as="span"
+          id={labelId}
+          textVariant={CONTROL_TEXT[size].label}
+          onBackground={disabled ? "neutral-weak" : "neutral-strong"}
+        >
+          {label}
+        </Text>
+        {iconButtonProps?.tooltip && (
+          <div onClick={(e) => e.stopPropagation()}>
+            <IconButton
+              size="s"
+              variant="ghost"
+              icon="help"
+              aria-label="More information"
+              {...iconButtonProps}
+            />
+          </div>
         )}
-        {errorMessage && (
-          <Text
-            as="span"
-            id={errorId}
-            textVariant={CONTROL_TEXT[size].body}
-            onBackground="danger-weak"
-          >
-            {errorMessage}
-          </Text>
-        )}
-      </Column>
-    );
-  },
-);
+      </Row>
+      {description && (
+        <Text
+          as="span"
+          id={descriptionId}
+          textVariant={CONTROL_TEXT[size].body}
+          onBackground="neutral-weak"
+        >
+          {description}
+        </Text>
+      )}
+      {errorMessage && (
+        <Text
+          as="span"
+          id={errorId}
+          textVariant={CONTROL_TEXT[size].body}
+          onBackground="danger-weak"
+        >
+          {errorMessage}
+        </Text>
+      )}
+    </Column>
+  );
+};
 
 InteractiveDetails.displayName = "InteractiveDetails";
 

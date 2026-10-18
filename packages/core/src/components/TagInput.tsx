@@ -1,6 +1,6 @@
 "use client";
 
-import { ChangeEventHandler, forwardRef, KeyboardEventHandler, useState } from "react";
+import { ChangeEventHandler, KeyboardEventHandler, type Ref, useState } from "react";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
 import { Input, InputProps } from "./Input.js";
@@ -16,92 +16,88 @@ interface TagInputProps extends Omit<InputProps, "value" | "defaultValue" | "onV
   onValueChange?: (value: string[]) => void;
 }
 
-const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue,
-      onValueChange,
-      onChange,
-      onKeyDown,
-      label,
-      placeholder,
-      ...inputProps
-    },
-    ref,
-  ) => {
-    const [inputValue, setInputValue] = useState("");
-    const [value, commit] = useControllableState<string[]>({
-      value: controlledValue,
-      defaultValue: [...(defaultValue ?? [])],
-      onChange: onValueChange,
-    });
+const TagInput = ({
+  ref,
+  value: controlledValue,
+  defaultValue,
+  onValueChange,
+  onChange,
+  onKeyDown,
+  label,
+  placeholder,
+  ...inputProps
+}: TagInputProps & { ref?: Ref<HTMLInputElement> }) => {
+  const [inputValue, setInputValue] = useState("");
+  const [value, commit] = useControllableState<string[]>({
+    value: controlledValue,
+    defaultValue: [...(defaultValue ?? [])],
+    onChange: onValueChange,
+  });
 
-    /** The text being typed: `onChange` is the native event of that field. */
-    const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-      setInputValue(e.target.value);
-      onChange?.(e);
-    };
+  /** The text being typed: `onChange` is the native event of that field. */
+  const handleInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setInputValue(e.target.value);
+    onChange?.(e);
+  };
 
-    const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-      // The caller's handler used to replace this one, so Enter added nothing.
-      onKeyDown?.(e);
-      if (e.defaultPrevented) return;
-      if (e.key === "Enter" || e.key === ",") {
-        e.preventDefault();
-        if (inputValue.trim()) {
-          commit([...value, inputValue.trim()]);
-          setInputValue("");
-        }
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    // The caller's handler used to replace this one, so Enter added nothing.
+    onKeyDown?.(e);
+    if (e.defaultPrevented) return;
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault();
+      if (inputValue.trim()) {
+        commit([...value, inputValue.trim()]);
+        setInputValue("");
       }
-    };
+    }
+  };
 
-    const handleRemoveTag = (index: number) => {
-      commit(value.filter((_, i) => i !== index));
-    };
+  const handleRemoveTag = (index: number) => {
+    commit(value.filter((_, i) => i !== index));
+  };
 
-    return (
-      <Input
-        ref={ref}
-        label={label}
-        placeholder={placeholder}
-        // No `aria-haspopup` or `aria-expanded`: they promised a listbox
-        // that never existed, and a plain text field may not carry
-        // `aria-expanded` at all.
-        {...inputProps}
-        value={inputValue}
-        onChange={handleInputChange}
-        onKeyDown={handleKeyDown}
-      >
-        {value.length > 0 && (
-          <Flex
-            style={{
-              margin: "calc(-1 * var(--static-space-8)) var(--static-space-8)",
-            }}
-            gap="4"
-            vertical="center"
-            wrap
-            paddingY="16"
-          >
-            {value.map((tag, index) => (
-              <Tag
-                key={index}
-                label={tag}
-                // Tags keep 2.x's look: Chip's `selected` defaulted to true.
-                selected
-                onRemove={() => handleRemoveTag(index)}
-                // The name goes on the button that removes the tag. On the
-                // tag it named the tag itself, and every remove button was
-                // just "Remove".
-                removeButtonProps={{ "aria-label": `Remove tag ${tag}` }}
-              />
-            ))}
-          </Flex>
-        )}
-      </Input>
-    );
-  },
-);
+  return (
+    <Input
+      ref={ref}
+      label={label}
+      placeholder={placeholder}
+      // No `aria-haspopup` or `aria-expanded`: they promised a listbox
+      // that never existed, and a plain text field may not carry
+      // `aria-expanded` at all.
+      {...inputProps}
+      value={inputValue}
+      onChange={handleInputChange}
+      onKeyDown={handleKeyDown}
+    >
+      {value.length > 0 && (
+        <Flex
+          style={{
+            margin: "calc(-1 * var(--static-space-8)) var(--static-space-8)",
+          }}
+          gap="4"
+          vertical="center"
+          wrap
+          paddingY="16"
+        >
+          {value.map((tag, index) => (
+            <Tag
+              key={index}
+              label={tag}
+              // Tags keep 2.x's look: Chip's `selected` defaulted to true.
+              selected
+              onRemove={() => handleRemoveTag(index)}
+              // The name goes on the button that removes the tag. On the
+              // tag it named the tag itself, and every remove button was
+              // just "Remove".
+              removeButtonProps={{ "aria-label": `Remove tag ${tag}` }}
+            />
+          ))}
+        </Flex>
+      )}
+    </Input>
+  );
+};
 
 TagInput.displayName = "TagInput";
 

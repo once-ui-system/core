@@ -13,13 +13,13 @@ export interface ChartStatusProps {
   errorState?: React.ReactNode;
 }
 
-export const ChartStatus: React.FC<ChartStatusProps> = ({
+export const ChartStatus = ({
   loading = false,
   empty = false,
   error = false,
   emptyState = "No data available for the selected period",
   errorState = "An error occurred while fetching data",
-}) => {
+}: ChartStatusProps) => {
   if (!loading && !empty && !error) {
     return null;
   }

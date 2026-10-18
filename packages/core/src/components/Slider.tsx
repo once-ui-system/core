@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, type ReactNode, useEffect, useId, useRef, useState } from "react";
+import React, { type ReactNode, useEffect, useId, useRef, useState } from "react";
 import { RangeSlider, type RangeSliderProps } from "../internal/RangeSlider.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import type { TShirtSizes } from "../types.js";
@@ -109,147 +109,137 @@ const COMMIT_KEYS = new Set([
   "End",
 ]);
 
-const SingleSlider = forwardRef<
-  HTMLInputElement,
-  SingleSliderProps & { sizeClassName?: string; footer?: ReactNode; describedBy?: string }
->(
-  (
-    {
-      range: _range,
-      value,
-      defaultValue,
-      onValueChange,
-      onValueCommit,
-      onChange,
-      onPointerUp,
-      onKeyUp,
-      onMouseDown,
-      min = 0,
-      max = 100,
-      step = 1,
-      label,
-      showValue = false,
-      disabled = false,
-      error = false,
-      errorMessage: _errorMessage,
-      size: _size,
-      sizeClassName,
-      footer,
-      describedBy,
-      className,
-      style,
-      ...props
-    },
-    ref,
-  ) => {
-    const sliderRef = useRef<HTMLInputElement>(null);
-    const [isDragging, setIsDragging] = useState(false);
-    const labelId = useId();
-    const [current, setCurrent] = useControllableState({
-      value,
-      defaultValue: defaultValue ?? min,
-      onChange: onValueChange,
-    });
+const SingleSlider = ({
+  ref,
+  range: _range,
+  value,
+  defaultValue,
+  onValueChange,
+  onValueCommit,
+  onChange,
+  onPointerUp,
+  onKeyUp,
+  onMouseDown,
+  min = 0,
+  max = 100,
+  step = 1,
+  label,
+  showValue = false,
+  disabled = false,
+  error = false,
+  errorMessage: _errorMessage,
+  size: _size,
+  sizeClassName,
+  footer,
+  describedBy,
+  className,
+  style,
+  ...props
+}: (SingleSliderProps & { sizeClassName?: string; footer?: ReactNode; describedBy?: string }) & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  const sliderRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const labelId = useId();
+  const [current, setCurrent] = useControllableState({
+    value,
+    defaultValue: defaultValue ?? min,
+    onChange: onValueChange,
+  });
 
-    const percentage = ((current - min) / (max - min)) * 100;
+  const percentage = ((current - min) / (max - min)) * 100;
 
-    // The native `onChange` hears the range input's own event, as with any
-    // `<input type="range">`; `onValueChange` hears the number.
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      setCurrent(parseFloat(e.target.value));
-      onChange?.(e);
-    };
+  // The native `onChange` hears the range input's own event, as with any
+  // `<input type="range">`; `onValueChange` hears the number.
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrent(parseFloat(e.target.value));
+    onChange?.(e);
+  };
 
-    const commit = (e: React.SyntheticEvent<HTMLInputElement>) =>
-      onValueCommit?.(parseFloat(e.currentTarget.value));
+  const commit = (e: React.SyntheticEvent<HTMLInputElement>) =>
+    onValueCommit?.(parseFloat(e.currentTarget.value));
 
-    const handlePointerUp = (e: React.PointerEvent<HTMLInputElement>) => {
-      onPointerUp?.(e);
-      if (!disabled) commit(e);
-    };
+  const handlePointerUp = (e: React.PointerEvent<HTMLInputElement>) => {
+    onPointerUp?.(e);
+    if (!disabled) commit(e);
+  };
 
-    const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      onKeyUp?.(e);
-      if (!disabled && COMMIT_KEYS.has(e.key)) commit(e);
-    };
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    onKeyUp?.(e);
+    if (!disabled && COMMIT_KEYS.has(e.key)) commit(e);
+  };
 
-    useEffect(() => {
-      if (isDragging) {
-        const handleMouseUp = () => setIsDragging(false);
-        window.addEventListener("mouseup", handleMouseUp);
-        return () => window.removeEventListener("mouseup", handleMouseUp);
-      }
-    }, [isDragging]);
+  useEffect(() => {
+    if (isDragging) {
+      const handleMouseUp = () => setIsDragging(false);
+      window.addEventListener("mouseup", handleMouseUp);
+      return () => window.removeEventListener("mouseup", handleMouseUp);
+    }
+  }, [isDragging]);
 
-    return (
-      <Column
-        fillWidth
-        gap="8"
-        className={classNames(
-          styles.container,
-          sizeClassName,
-          { [styles.error]: error },
-          className,
-        )}
-        style={style}
-      >
-        {(label || showValue) && (
-          <Row fillWidth horizontal="between" vertical="center">
-            {label && (
-              <Text id={labelId} textVariant="label-default-s" onBackground="neutral-weak">
-                {label}
-              </Text>
-            )}
-            {showValue && (
-              <Text textVariant="label-default-s" onBackground="neutral-medium">
-                {current}
-              </Text>
-            )}
-          </Row>
-        )}
-        <Row
-          fillWidth
-          height="40"
-          className={classNames(styles.sliderWrapper, {
-            [styles.disabled]: disabled,
-            [styles.dragging]: isDragging,
-          })}
-        >
-          <div className={styles.track}>
-            <div className={styles.fill} style={{ width: `${percentage}%` }} />
-          </div>
-          <input
-            ref={ref || sliderRef}
-            type="range"
-            min={min}
-            max={max}
-            step={step}
-            value={current}
-            onChange={handleChange}
-            onPointerUp={handlePointerUp}
-            onKeyUp={handleKeyUp}
-            onMouseDown={(e) => {
-              setIsDragging(true);
-              onMouseDown?.(e);
-            }}
-            disabled={disabled}
-            className={styles.input}
-            // The visible label names the input, unless the caller named it
-            // another way: aria-labelledby would override an aria-label.
-            aria-labelledby={label && !props["aria-label"] ? labelId : undefined}
-            aria-invalid={error || undefined}
-            aria-describedby={
-              [props["aria-describedby"], describedBy].filter(Boolean).join(" ") || undefined
-            }
-            {...props}
-          />
-          <div className={styles.thumb} style={{ left: `${percentage}%` }} />
+  return (
+    <Column
+      fillWidth
+      gap="8"
+      className={classNames(styles.container, sizeClassName, { [styles.error]: error }, className)}
+      style={style}
+    >
+      {(label || showValue) && (
+        <Row fillWidth horizontal="between" vertical="center">
+          {label && (
+            <Text id={labelId} textVariant="label-default-s" onBackground="neutral-weak">
+              {label}
+            </Text>
+          )}
+          {showValue && (
+            <Text textVariant="label-default-s" onBackground="neutral-medium">
+              {current}
+            </Text>
+          )}
         </Row>
-        {footer}
-      </Column>
-    );
-  },
-);
+      )}
+      <Row
+        fillWidth
+        height="40"
+        className={classNames(styles.sliderWrapper, {
+          [styles.disabled]: disabled,
+          [styles.dragging]: isDragging,
+        })}
+      >
+        <div className={styles.track}>
+          <div className={styles.fill} style={{ width: `${percentage}%` }} />
+        </div>
+        <input
+          ref={ref || sliderRef}
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={current}
+          onChange={handleChange}
+          onPointerUp={handlePointerUp}
+          onKeyUp={handleKeyUp}
+          onMouseDown={(e) => {
+            setIsDragging(true);
+            onMouseDown?.(e);
+          }}
+          disabled={disabled}
+          className={styles.input}
+          // The visible label names the input, unless the caller named it
+          // another way: aria-labelledby would override an aria-label.
+          aria-labelledby={label && !props["aria-label"] ? labelId : undefined}
+          aria-invalid={error || undefined}
+          aria-describedby={
+            [props["aria-describedby"], describedBy].filter(Boolean).join(" ") || undefined
+          }
+          {...props}
+        />
+        <div className={styles.thumb} style={{ left: `${percentage}%` }} />
+      </Row>
+      {footer}
+    </Column>
+  );
+};
 
 SingleSlider.displayName = "SingleSlider";
 
@@ -258,53 +248,47 @@ SingleSlider.displayName = "SingleSlider";
  * selecting a `[start, end]` tuple (2.x's RangeSlider, same props). Both take
  * `error` / `errorMessage` and a `size`, which a `Form` sets for every field.
  */
-const SliderImpl = forwardRef<HTMLElement, SliderProps>(
-  // The defaults both modes apply, written where the spec reads them.
-  (
-    { min = 0, max = 100, step = 1, showValue = false, disabled = false, error = false, ...others },
-    ref,
-  ) => {
-    const props = { ...others, min, max, step, showValue, disabled, error } as SliderProps;
-    const messageId = useId();
-    const size = useFieldSize(props.size);
-    const invalid = Boolean(props.error || props.errorMessage);
-    const footer = props.errorMessage ? (
-      <Text
-        id={messageId}
-        className={styles.message}
-        textVariant="body-default-s"
-        onBackground="danger-weak"
-      >
-        {props.errorMessage}
-      </Text>
-    ) : null;
-    const shared = {
-      sizeClassName: size === "m" ? undefined : styles[size],
-      footer,
-      describedBy: props.errorMessage ? messageId : undefined,
-    };
+// The defaults both modes apply, written where the spec reads them.
+const SliderImpl = ({
+  ref,
+  min = 0,
+  max = 100,
+  step = 1,
+  showValue = false,
+  disabled = false,
+  error = false,
+  ...others
+}: SliderProps & { ref?: React.Ref<HTMLElement> }) => {
+  const props = { ...others, min, max, step, showValue, disabled, error } as SliderProps;
+  const messageId = useId();
+  const size = useFieldSize(props.size);
+  const invalid = Boolean(props.error || props.errorMessage);
+  const footer = props.errorMessage ? (
+    <Text
+      id={messageId}
+      className={styles.message}
+      textVariant="body-default-s"
+      onBackground="danger-weak"
+    >
+      {props.errorMessage}
+    </Text>
+  ) : null;
+  const shared = {
+    sizeClassName: size === "m" ? undefined : styles[size],
+    footer,
+    describedBy: props.errorMessage ? messageId : undefined,
+  };
 
-    if (props.range) {
-      const { range: _range, error: _error, errorMessage: _message, size: _size, ...rest } = props;
-      return (
-        <RangeSlider
-          {...rest}
-          {...shared}
-          invalid={invalid}
-          ref={ref as React.Ref<HTMLDivElement>}
-        />
-      );
-    }
+  if (props.range) {
+    const { range: _range, error: _error, errorMessage: _message, size: _size, ...rest } = props;
     return (
-      <SingleSlider
-        {...props}
-        {...shared}
-        error={invalid}
-        ref={ref as React.Ref<HTMLInputElement>}
-      />
+      <RangeSlider {...rest} {...shared} invalid={invalid} ref={ref as React.Ref<HTMLDivElement>} />
     );
-  },
-);
+  }
+  return (
+    <SingleSlider {...props} {...shared} error={invalid} ref={ref as React.Ref<HTMLInputElement>} />
+  );
+};
 
 SliderImpl.displayName = "Slider";
 

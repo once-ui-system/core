@@ -5,7 +5,7 @@ import { MissingDependency } from "../../utils/MissingDependency.js";
 import type { DataPoint } from "./interfaces.js";
 import type { PieChartProps } from "./PieChart.impl.js";
 
-const PieChartImpl = React.lazy(() =>
+const PieChartImpl = React.lazy<React.ComponentType<PieChartProps>>(() =>
   import("./PieChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <PieChart /> requires the "recharts" package. Install it with: npm install recharts',

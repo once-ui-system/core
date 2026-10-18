@@ -32,7 +32,7 @@ export interface BarChartProps<T extends object = DataPoint> extends ChartProps<
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const BarChart: React.FC<BarChartProps> = ({
+const BarChart = ({
   title,
   description,
   data,
@@ -54,7 +54,7 @@ const BarChart: React.FC<BarChartProps> = ({
   reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: BarChartProps) => {
   const {
     variant: themeVariant,
     mode,

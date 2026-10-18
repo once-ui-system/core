@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, ReactNode, useEffect } from "react";
+import React, { ReactNode, useEffect } from "react";
 import { IconName } from "../icons.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
 import { Tone, TShirtSizes } from "../types.js";
@@ -53,109 +53,105 @@ interface IconButtonCommonProps {
 export type IconButtonProps = IconButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 type AnchorProps = IconButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const IconButton = forwardRef<HTMLButtonElement, IconButtonProps | AnchorProps>(
-  (
-    {
-      icon = "refresh",
-      size = "m",
-      id,
-      corners,
-      rounded = false,
-      tooltip,
-      tooltipPosition = "top",
-      variant = "primary",
-      tone,
-      loading = false,
-      disabled = false,
-      href,
-      children,
-      className,
-      style,
-      "aria-label": ariaLabel,
-      ...props
-    },
-    ref,
-  ) => {
-    const radiusSize = size === "s" || size === "m" ? "m" : "l";
-    const trigger = useDropdownTrigger();
+const IconButton = ({
+  ref,
+  icon = "refresh",
+  size = "m",
+  id,
+  corners,
+  rounded = false,
+  tooltip,
+  tooltipPosition = "top",
+  variant = "primary",
+  tone,
+  loading = false,
+  disabled = false,
+  href,
+  children,
+  className,
+  style,
+  "aria-label": ariaLabel,
+  ...props
+}: (IconButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const radiusSize = size === "s" || size === "m" ? "m" : "l";
+  const trigger = useDropdownTrigger();
 
-    // The name is what the caller wrote for people: aria-label, or
-    // a tooltip that is plain text. Never the icon key ("chevronRight" is not
-    // a name), and never a tooltip node cast to a string ("[object Object]").
-    const accessibleName = ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
-    const namedOtherwise =
-      Boolean(children) ||
-      Boolean(props["aria-labelledby"]) ||
-      props["aria-hidden"] === true ||
-      props["aria-hidden"] === "true";
+  // The name is what the caller wrote for people: aria-label, or
+  // a tooltip that is plain text. Never the icon key ("chevronRight" is not
+  // a name), and never a tooltip node cast to a string ("[object Object]").
+  const accessibleName = ariaLabel ?? (typeof tooltip === "string" ? tooltip : undefined);
+  const namedOtherwise =
+    Boolean(children) ||
+    Boolean(props["aria-labelledby"]) ||
+    props["aria-hidden"] === true ||
+    props["aria-hidden"] === "true";
 
-    useEffect(() => {
-      if (!accessibleName && !namedOtherwise) {
-        dev.warn(
-          `IconButton (icon "${icon}") has no accessible name. Give it an aria-label, or a tooltip that is plain text.`,
-        );
-      }
-    }, [accessibleName, namedOtherwise, icon]);
-
-    const button = (
-      <ElementType
-        id={id}
-        href={href}
-        ref={ref}
-        {...dropdownTriggerProps(trigger, href, props.onClick)}
-        disabled={disabled}
-        data-disabled={disabled ? true : undefined}
-        data-border={rounded ? "rounded" : undefined}
-        className={classNames(
-          buttonStyles.button,
-          buttonStyles[variant],
-          buttonStyles[`tone-${tone ?? defaultButtonTone(variant)}`],
-          iconStyles[size],
-          corners === "none"
-            ? "radius-none"
-            : corners
-              ? `radius-${radiusSize}-${corners}`
-              : `radius-${radiusSize}`,
-          "text-decoration-none",
-          "button",
-          disabled ? "cursor-not-allowed" : "cursor-interactive",
-          className,
-        )}
-        style={style}
-        aria-label={accessibleName}
-        aria-disabled={disabled}
-        {...props}
-      >
-        <Flex fill center>
-          {loading ? (
-            <Spinner size={size === "l" ? "s" : "xs"} />
-          ) : children ? (
-            children
-          ) : (
-            <Icon name={icon} size="s" />
-          )}
-        </Flex>
-      </ElementType>
-    );
-
-    if (tooltip) {
-      return (
-        <HoverCard
-          trigger={button}
-          placement={tooltipPosition}
-          fade={0}
-          scale={0.9}
-          duration={200}
-          offsetDistance="4"
-        >
-          <Tooltip label={tooltip} />
-        </HoverCard>
+  useEffect(() => {
+    if (!accessibleName && !namedOtherwise) {
+      dev.warn(
+        `IconButton (icon "${icon}") has no accessible name. Give it an aria-label, or a tooltip that is plain text.`,
       );
     }
+  }, [accessibleName, namedOtherwise, icon]);
 
-    return button;
-  },
-);
+  const button = (
+    <ElementType
+      id={id}
+      href={href}
+      ref={ref}
+      {...dropdownTriggerProps(trigger, href, props.onClick)}
+      disabled={disabled}
+      data-disabled={disabled ? true : undefined}
+      data-border={rounded ? "rounded" : undefined}
+      className={classNames(
+        buttonStyles.button,
+        buttonStyles[variant],
+        buttonStyles[`tone-${tone ?? defaultButtonTone(variant)}`],
+        iconStyles[size],
+        corners === "none"
+          ? "radius-none"
+          : corners
+            ? `radius-${radiusSize}-${corners}`
+            : `radius-${radiusSize}`,
+        "text-decoration-none",
+        "button",
+        disabled ? "cursor-not-allowed" : "cursor-interactive",
+        className,
+      )}
+      style={style}
+      aria-label={accessibleName}
+      aria-disabled={disabled}
+      {...props}
+    >
+      <Flex fill center>
+        {loading ? (
+          <Spinner size={size === "l" ? "s" : "xs"} />
+        ) : children ? (
+          children
+        ) : (
+          <Icon name={icon} size="s" />
+        )}
+      </Flex>
+    </ElementType>
+  );
+
+  if (tooltip) {
+    return (
+      <HoverCard
+        trigger={button}
+        placement={tooltipPosition}
+        fade={0}
+        scale={0.9}
+        duration={200}
+        offsetDistance="4"
+      >
+        <Tooltip label={tooltip} />
+      </HoverCard>
+    );
+  }
+
+  return button;
+};
 
 IconButton.displayName = "IconButton";
 

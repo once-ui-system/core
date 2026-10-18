@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { CSSUnit, SpacingToken } from "../types.js";
 import { translateValue as resolveTranslate } from "../utils/layoutClasses.js";
 import { Flex } from "./Flex.js";
@@ -26,99 +26,95 @@ interface RevealFxProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
-  (
-    {
-      children,
-      duration = 2000,
-      delay = 0,
-      defaultRevealed = false,
-      translateY,
-      revealed,
-      style,
-      className,
-      ...rest
-    },
-    ref,
-  ) => {
-    const [isRevealed, setIsRevealed] = useState(defaultRevealed);
-    const [maskRemoved, setMaskRemoved] = useState(false);
-    const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+const RevealFx = ({
+  ref,
+  children,
+  duration = 2000,
+  delay = 0,
+  defaultRevealed = false,
+  translateY,
+  revealed,
+  style,
+  className,
+  ...rest
+}: RevealFxProps) => {
+  const [isRevealed, setIsRevealed] = useState(defaultRevealed);
+  const [maskRemoved, setMaskRemoved] = useState(false);
+  const transitionTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsRevealed(true);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsRevealed(true);
 
-        // Always set a timeout to remove the mask after transition completes
-        transitionTimeoutRef.current = setTimeout(() => {
-          setMaskRemoved(true);
-        }, duration);
-      }, delay);
+      // Always set a timeout to remove the mask after transition completes
+      transitionTimeoutRef.current = setTimeout(() => {
+        setMaskRemoved(true);
+      }, duration);
+    }, delay);
 
-      return () => {
-        clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+    };
+  }, [delay]);
+
+  useEffect(() => {
+    if (revealed !== undefined) {
+      setIsRevealed(revealed);
+
+      // Reset mask removal state when revealed changes
+      setMaskRemoved(false);
+
+      // If revealed is true, set timeout to remove mask after transition
+      if (revealed) {
         if (transitionTimeoutRef.current) {
           clearTimeout(transitionTimeoutRef.current);
         }
-      };
-    }, [delay]);
 
-    useEffect(() => {
-      if (revealed !== undefined) {
-        setIsRevealed(revealed);
-
-        // Reset mask removal state when revealed changes
-        setMaskRemoved(false);
-
-        // If revealed is true, set timeout to remove mask after transition
-        if (revealed) {
-          if (transitionTimeoutRef.current) {
-            clearTimeout(transitionTimeoutRef.current);
-          }
-
-          transitionTimeoutRef.current = setTimeout(() => {
-            setMaskRemoved(true);
-          }, duration);
-        }
+        transitionTimeoutRef.current = setTimeout(() => {
+          setMaskRemoved(true);
+        }, duration);
       }
-    }, [revealed]);
-
-    const translateValue = resolveTranslate(translateY);
-
-    const revealStyle: React.CSSProperties = {
-      transitionDuration: `${duration}ms`,
-      transform: isRevealed ? "translateY(0)" : `translateY(${translateValue})`,
-      ...style,
-    };
-
-    // If mask is removed after transition, use the no-mask classes
-    if (maskRemoved) {
-      return (
-        <Flex
-          fillWidth
-          ref={ref}
-          style={revealStyle}
-          className={`${styles.revealedNoMask} ${className || ""}`}
-          {...rest}
-        >
-          {children}
-        </Flex>
-      );
     }
+  }, [revealed]);
 
+  const translateValue = resolveTranslate(translateY);
+
+  const revealStyle: React.CSSProperties = {
+    transitionDuration: `${duration}ms`,
+    transform: isRevealed ? "translateY(0)" : `translateY(${translateValue})`,
+    ...style,
+  };
+
+  // If mask is removed after transition, use the no-mask classes
+  if (maskRemoved) {
     return (
       <Flex
         fillWidth
         ref={ref}
         style={revealStyle}
-        className={`${styles.revealFx} ${isRevealed ? styles.revealed : styles.hidden} ${className || ""}`}
+        className={`${styles.revealedNoMask} ${className || ""}`}
         {...rest}
       >
         {children}
       </Flex>
     );
-  },
-);
+  }
+
+  return (
+    <Flex
+      fillWidth
+      ref={ref}
+      style={revealStyle}
+      className={`${styles.revealFx} ${isRevealed ? styles.revealed : styles.hidden} ${className || ""}`}
+      {...rest}
+    >
+      {children}
+    </Flex>
+  );
+};
 
 RevealFx.displayName = "RevealFx";
 

@@ -13,14 +13,21 @@ export const useToast = () => {
   return context;
 };
 
-const ToastProvider: React.FC<{
+const ToastProvider = ({
+  children,
+  xl,
+  l,
+  m,
+  s,
+  xs,
+}: {
   children: ReactNode;
   xl?: ToastPosition;
   l?: ToastPosition;
   m?: ToastPosition;
   s?: ToastPosition;
   xs?: ToastPosition;
-}> = ({ children, xl, l, m, s, xs }) => {
+}) => {
   // Use the same Toast interface type for the state
   const [toasts, setToasts] = useState<Toast[]>([]);
   // Ids are unique per provider by construction: a random suffix could repeat,

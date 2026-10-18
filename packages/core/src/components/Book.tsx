@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-import { forwardRef } from "react";
 import styles from "./Book.module.scss";
 import { Column } from "./Column.js";
 import { ElementType } from "./ElementType.js";
@@ -33,84 +32,82 @@ interface BookProps extends Omit<React.ComponentProps<typeof Flex>, "children"> 
  * the cover stays square-on: there is no hover to return from, and a
  * permanently rotated cover reads as a rendering fault rather than a style.
  */
-const Book = forwardRef<HTMLDivElement, BookProps>(
-  ({ src, alt, sizes, href, children, ...flex }, ref) => {
-    const content = (
-      <Row fill className={styles.wrapper}>
-        <Row fill className={styles.book}>
-          <Row
-            fill
-            className={styles.cover}
-            borderY="neutral-medium"
-            borderLeft="neutral-medium"
-            background="page"
-            leftRadius="xs"
-            rightRadius="s"
-            overflow="hidden"
-          >
-            {src && (
-              <Media
-                src={src}
-                alt={alt || "Book cover"}
-                sizes={sizes || "(max-width: 768px) 100vw, 480px"}
-                stretch
-              />
-            )}
-            {children && (
-              <Column fill position="absolute" zIndex={1} data-theme="dark">
-                {children}
-              </Column>
-            )}
-            {/* Spine shadow, blurred so it reads as depth rather than a rule. */}
-            <Row
-              className={styles.spine}
-              zIndex={2}
-              position="absolute"
-              left="0"
-              top="0"
-              fillHeight
-              width="8"
-              background="overlay"
+const Book = ({ ref, src, alt, sizes, href, children, ...flex }: BookProps) => {
+  const content = (
+    <Row fill className={styles.wrapper}>
+      <Row fill className={styles.book}>
+        <Row
+          fill
+          className={styles.cover}
+          borderY="neutral-medium"
+          borderLeft="neutral-medium"
+          background="page"
+          leftRadius="xs"
+          rightRadius="s"
+          overflow="hidden"
+        >
+          {src && (
+            <Media
+              src={src}
+              alt={alt || "Book cover"}
+              sizes={sizes || "(max-width: 768px) 100vw, 480px"}
+              stretch
             />
-          </Row>
+          )}
+          {children && (
+            <Column fill position="absolute" zIndex={1} data-theme="dark">
+              {children}
+            </Column>
+          )}
+          {/* Spine shadow, blurred so it reads as depth rather than a rule. */}
           <Row
-            className={styles.pages}
-            data-theme="dark"
-            rightRadius="s"
-            borderY="neutral-medium"
-            borderRight="neutral-medium"
-            overflow="hidden"
+            className={styles.spine}
+            zIndex={2}
             position="absolute"
-            right="0"
-            top="8"
-            bottom="8"
-            width="24"
-            background="page"
-            paddingY="8"
-            paddingRight="12"
-          >
-            <Row fill rightRadius="xs" className={styles.pageEdge} />
-          </Row>
+            left="0"
+            top="0"
+            fillHeight
+            width="8"
+            background="overlay"
+          />
+        </Row>
+        <Row
+          className={styles.pages}
+          data-theme="dark"
+          rightRadius="s"
+          borderY="neutral-medium"
+          borderRight="neutral-medium"
+          overflow="hidden"
+          position="absolute"
+          right="0"
+          top="8"
+          bottom="8"
+          width="24"
+          background="page"
+          paddingY="8"
+          paddingRight="12"
+        >
+          <Row fill rightRadius="xs" className={styles.pageEdge} />
         </Row>
       </Row>
-    );
+    </Row>
+  );
 
-    return (
-      <Row ref={ref} fillWidth aspectRatio="3/4" {...flex}>
-        {href ? (
-          <ElementType
-            href={href}
-            style={{ isolation: "isolate", height: "100%", width: "100%", textDecoration: "none" }}
-          >
-            {content}
-          </ElementType>
-        ) : (
-          content
-        )}
-      </Row>
-    );
-  },
-);
+  return (
+    <Row ref={ref} fillWidth aspectRatio="3/4" {...flex}>
+      {href ? (
+        <ElementType
+          href={href}
+          style={{ isolation: "isolate", height: "100%", width: "100%", textDecoration: "none" }}
+        >
+          {content}
+        </ElementType>
+      ) : (
+        content
+      )}
+    </Row>
+  );
+};
 
 Book.displayName = "Book";
 

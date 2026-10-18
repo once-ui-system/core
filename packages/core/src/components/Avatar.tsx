@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React from "react";
 import { IconName } from "../icons.js";
 import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types.js";
 import { isCSSUnit } from "../utils/layoutClasses.js";
@@ -53,131 +53,127 @@ function approxPx(size: unknown): number {
   return Number(match[1]) * (match[2] === "px" ? 1 : 16);
 }
 
-const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
-  (
-    {
-      size = "m",
-      value,
-      src,
-      unoptimized,
-      loading,
-      empty,
-      icon,
-      statusIndicator,
-      className,
-      style = {},
-      ...rest
-    },
-    ref,
-  ) => {
-    // A t-shirt size is a class; a number is px and a CSS length is as written.
-    const customSize =
-      typeof size === "number" ? `${size}px` : isCSSUnit(size) ? (size as string) : undefined;
-    const sizeStyle = customSize
-      ? {
-          width: customSize,
-          height: customSize,
-          minWidth: customSize,
-          minHeight: customSize,
-          ...style,
-        }
-      : style;
-    const scale = customSize ? undefined : (size as TShirtSizes);
-    const isEmpty = empty || (!src && !value);
+const Avatar = ({
+  ref,
+  size = "m",
+  value,
+  src,
+  unoptimized,
+  loading,
+  empty,
+  icon,
+  statusIndicator,
+  className,
+  style = {},
+  ...rest
+}: AvatarProps) => {
+  // A t-shirt size is a class; a number is px and a CSS length is as written.
+  const customSize =
+    typeof size === "number" ? `${size}px` : isCSSUnit(size) ? (size as string) : undefined;
+  const sizeStyle = customSize
+    ? {
+        width: customSize,
+        height: customSize,
+        minWidth: customSize,
+        minHeight: customSize,
+        ...style,
+      }
+    : style;
+  const scale = customSize ? undefined : (size as TShirtSizes);
+  const isEmpty = empty || (!src && !value);
 
-    if (value && src) {
-      throw new Error("Avatar cannot have both 'value' and 'src' props.");
-    }
+  if (value && src) {
+    throw new Error("Avatar cannot have both 'value' and 'src' props.");
+  }
 
-    if (loading) {
+  if (loading) {
+    return (
+      <Skeleton
+        {...rest}
+        border="neutral-medium"
+        shape="circle"
+        {...(customSize
+          ? { width: customSize as CSSUnit, height: customSize as CSSUnit }
+          : { size: scale })}
+        className={`${styles.avatar} ${className}`}
+        aria-busy="true"
+        aria-label="Loading avatar"
+      />
+    );
+  }
+
+  const renderContent = () => {
+    if (isEmpty) {
       return (
-        <Skeleton
-          {...rest}
-          border="neutral-medium"
-          shape="circle"
-          {...(customSize
-            ? { width: customSize as CSSUnit, height: customSize as CSSUnit }
-            : { size: scale })}
-          className={`${styles.avatar} ${className}`}
-          aria-busy="true"
-          aria-label="Loading avatar"
+        <Icon
+          onBackground="neutral-medium"
+          name={icon || "person"}
+          size="m"
+          style={customSize ? { fontSize: `calc(${customSize} / 3)` } : undefined}
+          className={styles.icon}
+          aria-label="Empty avatar"
         />
       );
     }
 
-    const renderContent = () => {
-      if (isEmpty) {
-        return (
-          <Icon
-            onBackground="neutral-medium"
-            name={icon || "person"}
-            size="m"
-            style={customSize ? { fontSize: `calc(${customSize} / 3)` } : undefined}
-            className={styles.icon}
-            aria-label="Empty avatar"
-          />
-        );
-      }
+    if (src) {
+      return (
+        <Media
+          radius="full"
+          src={src}
+          stretch
+          alt="Avatar"
+          aspectRatio="1"
+          sizes={scale ? `${sizeMapping[scale]}px` : customSize}
+          unoptimized={unoptimized}
+          className={styles.image}
+        />
+      );
+    }
 
-      if (src) {
-        return (
-          <Media
-            radius="full"
-            src={src}
-            stretch
-            alt="Avatar"
-            aspectRatio="1"
-            sizes={scale ? `${sizeMapping[scale]}px` : customSize}
-            unoptimized={unoptimized}
-            className={styles.image}
-          />
-        );
-      }
+    if (value) {
+      return (
+        <Text
+          as="span"
+          onBackground="neutral-weak"
+          textVariant={`body-default-${scale ?? "m"}`}
+          className={styles.value}
+          aria-label={`Avatar with initials ${value}`}
+        >
+          {value}
+        </Text>
+      );
+    }
 
-      if (value) {
-        return (
-          <Text
-            as="span"
-            onBackground="neutral-weak"
-            textVariant={`body-default-${scale ?? "m"}`}
-            className={styles.value}
-            aria-label={`Avatar with initials ${value}`}
-          >
-            {value}
-          </Text>
-        );
-      }
+    return null;
+  };
 
-      return null;
-    };
-
-    return (
-      <Flex
-        ref={ref}
-        role="img"
-        horizontal="center"
-        vertical="center"
-        radius="full"
-        border="neutral-strong"
-        background="surface"
-        style={sizeStyle}
-        className={`${styles.avatar} ${scale ? styles[scale] : ""} ${className || ""}`}
-        {...rest}
-      >
-        {renderContent()}
-        {statusIndicator && (
-          <StatusIndicator
-            position="absolute"
-            size={scale ? statusIndicatorSizeMapping[scale] : "l"}
-            scheme={statusIndicator.scheme}
-            className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
-            aria-label={`Status: ${statusIndicator.scheme}`}
-          />
-        )}
-      </Flex>
-    );
-  },
-);
+  return (
+    <Flex
+      ref={ref}
+      role="img"
+      horizontal="center"
+      vertical="center"
+      radius="full"
+      border="neutral-strong"
+      background="surface"
+      style={sizeStyle}
+      className={`${styles.avatar} ${scale ? styles[scale] : ""} ${className || ""}`}
+      {...rest}
+    >
+      {renderContent()}
+      {statusIndicator && (
+        <StatusIndicator
+          position="absolute"
+          size={scale ? statusIndicatorSizeMapping[scale] : "l"}
+          scheme={statusIndicator.scheme}
+          className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
+          aria-label={`Status: ${statusIndicator.scheme}`}
+        />
+      )}
+    </Flex>
+  );
+};
 
 Avatar.displayName = "Avatar";
 

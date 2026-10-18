@@ -3,7 +3,6 @@
 import type React from "react";
 import {
   createContext,
-  forwardRef,
   type ReactNode,
   useCallback,
   useContext,
@@ -104,77 +103,73 @@ interface TabsProps extends Omit<React.ComponentProps<typeof Column>, "onChange"
  * focus roves through the list with the arrow keys, Home and End, and only the
  * selected tab is in the page's Tab order.
  */
-const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  (
-    {
-      value,
-      defaultValue,
-      onValueChange,
-      orientation = "horizontal",
-      activation = "automatic",
-      children,
-      ...flex
+const Tabs = ({
+  ref,
+  value,
+  defaultValue,
+  onValueChange,
+  orientation = "horizontal",
+  activation = "automatic",
+  children,
+  ...flex
+}: TabsProps) => {
+  const baseId = useId();
+  const controlled = value !== undefined;
+  const [uncontrolled, setUncontrolled] = useState<string | undefined>(defaultValue);
+  const current = controlled ? value : uncontrolled;
+  const [panels, setPanels] = useState<ReadonlySet<string>>(() => new Set());
+
+  const select = useCallback(
+    (next: string) => {
+      if (next === current) return;
+      if (!controlled) setUncontrolled(next);
+      onValueChange?.(next);
     },
-    ref,
-  ) => {
-    const baseId = useId();
-    const controlled = value !== undefined;
-    const [uncontrolled, setUncontrolled] = useState<string | undefined>(defaultValue);
-    const current = controlled ? value : uncontrolled;
-    const [panels, setPanels] = useState<ReadonlySet<string>>(() => new Set());
+    [current, controlled, onValueChange],
+  );
 
-    const select = useCallback(
-      (next: string) => {
-        if (next === current) return;
-        if (!controlled) setUncontrolled(next);
-        onValueChange?.(next);
-      },
-      [current, controlled, onValueChange],
-    );
+  const adopt = useCallback(
+    (next: string) => {
+      if (!controlled) setUncontrolled((previous) => previous ?? next);
+    },
+    [controlled],
+  );
 
-    const adopt = useCallback(
-      (next: string) => {
-        if (!controlled) setUncontrolled((previous) => previous ?? next);
-      },
-      [controlled],
-    );
+  const registerPanel = useCallback((panel: string) => {
+    setPanels((previous) => new Set(previous).add(panel));
+    return () =>
+      setPanels((previous) => {
+        const remaining = new Set(previous);
+        remaining.delete(panel);
+        return remaining;
+      });
+  }, []);
 
-    const registerPanel = useCallback((panel: string) => {
-      setPanels((previous) => new Set(previous).add(panel));
-      return () =>
-        setPanels((previous) => {
-          const remaining = new Set(previous);
-          remaining.delete(panel);
-          return remaining;
-        });
-    }, []);
+  const context = useMemo<TabsContextValue>(
+    () => ({
+      baseId,
+      value: current,
+      controlled,
+      orientation,
+      activation,
+      select,
+      adopt,
+      panels,
+      registerPanel,
+    }),
+    [baseId, current, controlled, orientation, activation, select, adopt, panels, registerPanel],
+  );
 
-    const context = useMemo<TabsContextValue>(
-      () => ({
-        baseId,
-        value: current,
-        controlled,
-        orientation,
-        activation,
-        select,
-        adopt,
-        panels,
-        registerPanel,
-      }),
-      [baseId, current, controlled, orientation, activation, select, adopt, panels, registerPanel],
-    );
+  const Layout = orientation === "vertical" ? Row : Column;
 
-    const Layout = orientation === "vertical" ? Row : Column;
-
-    return (
-      <TabsContext.Provider value={context}>
-        <Layout ref={ref} fillWidth gap="16" {...flex}>
-          {children}
-        </Layout>
-      </TabsContext.Provider>
-    );
-  },
-);
+  return (
+    <TabsContext.Provider value={context}>
+      <Layout ref={ref} fillWidth gap="16" {...flex}>
+        {children}
+      </Layout>
+    </TabsContext.Provider>
+  );
+};
 
 Tabs.displayName = "Tabs";
 
@@ -187,97 +182,95 @@ interface TabListProps extends React.ComponentProps<typeof Row> {
  * The row (or, when `vertical`, column) of tabs. Handles the arrow keys, Home
  * and End, and keeps exactly one tab in the page's Tab order.
  */
-const TabList = forwardRef<HTMLDivElement, TabListProps>(
-  ({ children, onKeyDown, ...flex }, ref) => {
-    const { value, controlled, orientation, activation, select, adopt } = useTabsContext("TabList");
-    const listRef = useRef<HTMLDivElement | null>(null);
-    const [fallback, setFallback] = useState<string | null>(null);
+const TabList = ({ ref, children, onKeyDown, ...flex }: TabListProps) => {
+  const { value, controlled, orientation, activation, select, adopt } = useTabsContext("TabList");
+  const listRef = useRef<HTMLDivElement | null>(null);
+  const [fallback, setFallback] = useState<string | null>(null);
 
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        listRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
-    );
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      listRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
+    },
+    [ref],
+  );
 
-    // Exactly one tab must be reachable with the Tab key. That is the selected
-    // one, unless nothing is selected yet or the selected tab is disabled: then
-    // it is the first enabled tab. Uncontrolled Tabs with no default adopt that
-    // tab as the selection, which is the first tab a reader sees.
-    useIsomorphicLayoutEffect(() => {
-      const list = listRef.current;
-      if (!list) return;
-      const tabs = enabledTabs(list);
-      const reachable = tabs.some((tab) => tab.getAttribute("aria-selected") === "true");
-      const first = tabs[0]?.dataset.value ?? null;
-      if (!reachable && value === undefined && !controlled && first !== null) {
-        adopt(first);
+  // Exactly one tab must be reachable with the Tab key. That is the selected
+  // one, unless nothing is selected yet or the selected tab is disabled: then
+  // it is the first enabled tab. Uncontrolled Tabs with no default adopt that
+  // tab as the selection, which is the first tab a reader sees.
+  useIsomorphicLayoutEffect(() => {
+    const list = listRef.current;
+    if (!list) return;
+    const tabs = enabledTabs(list);
+    const reachable = tabs.some((tab) => tab.getAttribute("aria-selected") === "true");
+    const first = tabs[0]?.dataset.value ?? null;
+    if (!reachable && value === undefined && !controlled && first !== null) {
+      adopt(first);
+      return;
+    }
+    const next = reachable ? null : first;
+    if (next !== fallback) setFallback(next);
+  });
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    onKeyDown?.(event);
+    const list = listRef.current;
+    if (event.defaultPrevented || !list) return;
+    if (event.altKey || event.ctrlKey || event.metaKey) return;
+
+    const tabs = enabledTabs(list);
+    const index = tabs.indexOf(event.target as HTMLElement);
+    if (index === -1) return;
+
+    const vertical = orientation === "vertical";
+    const rtl = !vertical && list.closest("[dir]")?.getAttribute("dir") === "rtl";
+    const previousKey = vertical ? "ArrowUp" : rtl ? "ArrowRight" : "ArrowLeft";
+    const nextKey = vertical ? "ArrowDown" : rtl ? "ArrowLeft" : "ArrowRight";
+
+    let target: number;
+    switch (event.key) {
+      case previousKey:
+        target = (index - 1 + tabs.length) % tabs.length;
+        break;
+      case nextKey:
+        target = (index + 1) % tabs.length;
+        break;
+      case "Home":
+        target = 0;
+        break;
+      case "End":
+        target = tabs.length - 1;
+        break;
+      default:
         return;
-      }
-      const next = reachable ? null : first;
-      if (next !== fallback) setFallback(next);
-    });
+    }
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      onKeyDown?.(event);
-      const list = listRef.current;
-      if (event.defaultPrevented || !list) return;
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
+    event.preventDefault();
+    const tab = tabs[target];
+    tab.focus();
+    const tabValue = tab.dataset.value;
+    if (activation === "automatic" && tabValue !== undefined) select(tabValue);
+  };
 
-      const tabs = enabledTabs(list);
-      const index = tabs.indexOf(event.target as HTMLElement);
-      if (index === -1) return;
+  const Layout = orientation === "vertical" ? Column : Row;
 
-      const vertical = orientation === "vertical";
-      const rtl = !vertical && list.closest("[dir]")?.getAttribute("dir") === "rtl";
-      const previousKey = vertical ? "ArrowUp" : rtl ? "ArrowRight" : "ArrowLeft";
-      const nextKey = vertical ? "ArrowDown" : rtl ? "ArrowLeft" : "ArrowRight";
-
-      let target: number;
-      switch (event.key) {
-        case previousKey:
-          target = (index - 1 + tabs.length) % tabs.length;
-          break;
-        case nextKey:
-          target = (index + 1) % tabs.length;
-          break;
-        case "Home":
-          target = 0;
-          break;
-        case "End":
-          target = tabs.length - 1;
-          break;
-        default:
-          return;
-      }
-
-      event.preventDefault();
-      const tab = tabs[target];
-      tab.focus();
-      const tabValue = tab.dataset.value;
-      if (activation === "automatic" && tabValue !== undefined) select(tabValue);
-    };
-
-    const Layout = orientation === "vertical" ? Column : Row;
-
-    return (
-      <TabListContext.Provider value={fallback}>
-        <Layout
-          ref={setRefs}
-          gap="4"
-          role="tablist"
-          aria-orientation={orientation}
-          onKeyDown={handleKeyDown}
-          {...flex}
-        >
-          {children}
-        </Layout>
-      </TabListContext.Provider>
-    );
-  },
-);
+  return (
+    <TabListContext.Provider value={fallback}>
+      <Layout
+        ref={setRefs}
+        gap="4"
+        role="tablist"
+        aria-orientation={orientation}
+        onKeyDown={handleKeyDown}
+        {...flex}
+      >
+        {children}
+      </Layout>
+    </TabListContext.Provider>
+  );
+};
 
 TabList.displayName = "TabList";
 
@@ -295,37 +288,43 @@ interface TabProps extends Omit<ToggleButtonProps, "selected" | "value" | "role"
  * prop (`prefixIcon`, `size`, `variant`…). In a vertical list it fills the
  * width and aligns its label to the start, as a settings sidebar does.
  */
-const Tab = forwardRef<HTMLElement, TabProps>(
-  ({ value, onClick, disabled = false, fillWidth, horizontal, ...rest }, ref) => {
-    const { baseId, value: selectedValue, orientation, select, panels } = useTabsContext("Tab");
-    const fallback = useContext(TabListContext);
-    const selected = selectedValue === value;
-    const vertical = orientation === "vertical";
-    const reachable = (selected && !disabled) || fallback === value;
+const Tab = ({
+  ref,
+  value,
+  onClick,
+  disabled = false,
+  fillWidth,
+  horizontal,
+  ...rest
+}: TabProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { baseId, value: selectedValue, orientation, select, panels } = useTabsContext("Tab");
+  const fallback = useContext(TabListContext);
+  const selected = selectedValue === value;
+  const vertical = orientation === "vertical";
+  const reachable = (selected && !disabled) || fallback === value;
 
-    return (
-      <ToggleButton
-        fillWidth={fillWidth ?? vertical}
-        horizontal={horizontal ?? (vertical ? "start" : "center")}
-        {...rest}
-        ref={ref}
-        type="button"
-        role="tab"
-        id={idFor(baseId, "tab", value)}
-        data-value={value}
-        aria-selected={selected}
-        aria-controls={panels.has(value) ? idFor(baseId, "panel", value) : undefined}
-        tabIndex={reachable ? 0 : -1}
-        selected={selected}
-        disabled={disabled}
-        onClick={(event) => {
-          onClick?.(event);
-          if (!event.defaultPrevented) select(value);
-        }}
-      />
-    );
-  },
-);
+  return (
+    <ToggleButton
+      fillWidth={fillWidth ?? vertical}
+      horizontal={horizontal ?? (vertical ? "start" : "center")}
+      {...rest}
+      ref={ref}
+      type="button"
+      role="tab"
+      id={idFor(baseId, "tab", value)}
+      data-value={value}
+      aria-selected={selected}
+      aria-controls={panels.has(value) ? idFor(baseId, "panel", value) : undefined}
+      tabIndex={reachable ? 0 : -1}
+      selected={selected}
+      disabled={disabled}
+      onClick={(event) => {
+        onClick?.(event);
+        if (!event.defaultPrevented) select(value);
+      }}
+    />
+  );
+};
 
 Tab.displayName = "Tab";
 
@@ -346,30 +345,28 @@ interface TabPanelProps extends React.ComponentProps<typeof Column> {
  * keyboard user can reach a panel with no controls of its own and a screen
  * reader announces which tab it belongs to.
  */
-const TabPanel = forwardRef<HTMLDivElement, TabPanelProps>(
-  ({ value, keepMounted = false, children, ...flex }, ref) => {
-    const { baseId, value: selectedValue, registerPanel } = useTabsContext("TabPanel");
-    const selected = selectedValue === value;
+const TabPanel = ({ ref, value, keepMounted = false, children, ...flex }: TabPanelProps) => {
+  const { baseId, value: selectedValue, registerPanel } = useTabsContext("TabPanel");
+  const selected = selectedValue === value;
 
-    useEffect(() => registerPanel(value), [registerPanel, value]);
+  useEffect(() => registerPanel(value), [registerPanel, value]);
 
-    return (
-      <Column
-        fillWidth
-        {...flex}
-        ref={ref}
-        role="tabpanel"
-        id={idFor(baseId, "panel", value)}
-        aria-labelledby={idFor(baseId, "tab", value)}
-        tabIndex={0}
-        hidden={!selected}
-        hide={!selected}
-      >
-        {selected || keepMounted ? children : null}
-      </Column>
-    );
-  },
-);
+  return (
+    <Column
+      fillWidth
+      {...flex}
+      ref={ref}
+      role="tabpanel"
+      id={idFor(baseId, "panel", value)}
+      aria-labelledby={idFor(baseId, "tab", value)}
+      tabIndex={0}
+      hidden={!selected}
+      hide={!selected}
+    >
+      {selected || keepMounted ? children : null}
+    </Column>
+  );
+};
 
 TabPanel.displayName = "TabPanel";
 

@@ -12,7 +12,7 @@ export interface SwatchProps {
   variant?: ChartVariant;
 }
 
-export const Swatch: React.FC<SwatchProps> = ({ color, size = "m", variant: variantProp }) => {
+export const Swatch = ({ color, size = "m", variant: variantProp }: SwatchProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();

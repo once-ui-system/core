@@ -161,6 +161,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **An uncontrolled `EmojiPicker trigger` closes on a pick**; 2.x's
   `EmojiPickerDropdown` closed only when controlled.
 - **React 19 is the floor** for `react` and `react-dom`.
+- **`ref` is an ordinary prop** (B7): no component uses `forwardRef` or `React.FC` any
+  more. Each takes `ref` beside its other props, typed by the element it reaches, so
+  `ref`, `ComponentProps<typeof X>["ref"]` and `ComponentRef<typeof X>` are what they
+  were in 2.x. The components are plain functions now, not `forwardRef` objects.
 - **Fields and pickers report their value through `onValueChange`.** NumberInput,
   ColorInput, TagInput, DateInput, DateRangeInput, DatePicker and DateRangePicker
   `onChange(value)` and Select `onSelect(value)` become `onValueChange(value)`, same

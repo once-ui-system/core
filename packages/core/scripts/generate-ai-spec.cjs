@@ -778,6 +778,10 @@ async function main() {
     const props = {};
 
     for (const [propName, propSym] of seen) {
+      // 3.0 components take `ref` as a prop, declared beside their own props
+      // where `forwardRef` used to add it. Every component that renders an
+      // element takes one, so listing it would say nothing per component.
+      if (propName === "ref") continue;
       const pDecl = propSym.valueDeclaration ?? (propSym.declarations && propSym.declarations[0]);
       if (!pDecl) continue;
       if (isInNodeModules(pDecl)) continue; // React/DOM inherited noise

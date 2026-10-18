@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, ReactNode, SyntheticEvent } from "react";
+import React, { ReactNode, SyntheticEvent } from "react";
 import { Column } from "../components/Column.js";
 import { Row } from "../components/Row.js";
 
@@ -19,44 +19,51 @@ interface DropdownPanelProps extends Omit<React.ComponentProps<typeof Row>, "onS
  * DropdownWrapper). For a panel of your own, use a Column with
  * `border="neutral-medium"` and `background="surface"`.
  */
-const DropdownPanel = forwardRef<HTMLDivElement, DropdownPanelProps>(
-  ({ selectedOption, className, children, onEscape, onSelect, disabled = false, ...flex }, ref) => {
-    const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
-      if (disabled) return;
+const DropdownPanel = ({
+  ref,
+  selectedOption,
+  className,
+  children,
+  onEscape,
+  onSelect,
+  disabled = false,
+  ...flex
+}: DropdownPanelProps) => {
+  const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
+    if (disabled) return;
 
-      // Only handle clicks on elements that have a data-value attribute
-      const target = event.target as HTMLElement;
-      const value =
-        target.getAttribute("data-value") ||
-        target.closest("[data-value]")?.getAttribute("data-value");
+    // Only handle clicks on elements that have a data-value attribute
+    const target = event.target as HTMLElement;
+    const value =
+      target.getAttribute("data-value") ||
+      target.closest("[data-value]")?.getAttribute("data-value");
 
-      if (onSelect && value) {
-        onSelect(value);
-      }
-    };
+    if (onSelect && value) {
+      onSelect(value);
+    }
+  };
 
-    return (
-      <Row
-        ref={ref}
-        role="listbox"
-        onClick={handleSelect}
-        border="neutral-medium"
-        background="surface"
-        className={disabled ? "cursor-not-allowed" : undefined}
-        style={{ opacity: disabled ? 0.6 : undefined }}
-        // Only when it is: "false" is the default, and on a panel with no
-        // role of its own (DropdownWrapper's is "none") the attribute would
-        // still expose it, as an element the listbox around it cannot own.
-        aria-disabled={disabled || undefined}
-        {...flex}
-      >
-        <Column flex={1} overflowY="auto" gap="2">
-          {children}
-        </Column>
-      </Row>
-    );
-  },
-);
+  return (
+    <Row
+      ref={ref}
+      role="listbox"
+      onClick={handleSelect}
+      border="neutral-medium"
+      background="surface"
+      className={disabled ? "cursor-not-allowed" : undefined}
+      style={{ opacity: disabled ? 0.6 : undefined }}
+      // Only when it is: "false" is the default, and on a panel with no
+      // role of its own (DropdownWrapper's is "none") the attribute would
+      // still expose it, as an element the listbox around it cannot own.
+      aria-disabled={disabled || undefined}
+      {...flex}
+    >
+      <Column flex={1} overflowY="auto" gap="2">
+        {children}
+      </Column>
+    </Row>
+  );
+};
 
 DropdownPanel.displayName = "DropdownPanel";
 

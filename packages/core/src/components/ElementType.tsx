@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef, type ReactNode, useContext } from "react";
+import { type ReactNode, useContext } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import { sanitizeHref } from "../utils/safe-html.js";
 import { DropdownTriggerContext } from "./DropdownTriggerContext.js";
@@ -23,50 +23,46 @@ type ElementTypeProps = {
 
 const isExternalLink = (url: string) => /^https?:\/\//.test(url);
 
-const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
-  ({ href, type, onClick, onLinkClick, children: content, className, style, ...props }, ref) => {
-    const { Link } = useAdapters();
-    const safeHref = sanitizeHref(href);
+const ElementType = ({
+  ref,
+  href,
+  type,
+  onClick,
+  onLinkClick,
+  children: content,
+  className,
+  style,
+  ...props
+}: ElementTypeProps & { ref?: React.Ref<HTMLElement> }) => {
+  const { Link } = useAdapters();
+  const safeHref = sanitizeHref(href);
 
-    // A real link or button is itself the interactive element, so a Button
-    // inside it must not answer to a dropdown trigger above: it stays the
-    // plain div it has always been there (see Button), instead of nesting
-    // one interactive control inside another.
-    const trigger = useContext(DropdownTriggerContext);
-    const children = trigger ? (
-      <DropdownTriggerContext.Provider value={null}>{content}</DropdownTriggerContext.Provider>
-    ) : (
-      content
-    );
+  // A real link or button is itself the interactive element, so a Button
+  // inside it must not answer to a dropdown trigger above: it stays the
+  // plain div it has always been there (see Button), instead of nesting
+  // one interactive control inside another.
+  const trigger = useContext(DropdownTriggerContext);
+  const children = trigger ? (
+    <DropdownTriggerContext.Provider value={null}>{content}</DropdownTriggerContext.Provider>
+  ) : (
+    content
+  );
 
-    if (safeHref) {
-      // A link runs the `onClick` it is given, then `onLinkClick`. It used to
-      // run `onClick` only on a button, so a Button, IconButton or SmartLink
-      // with an `href` silently dropped its handler.
-      const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
-        onClick?.(event);
-        onLinkClick?.();
-      };
-      const isExternal = isExternalLink(safeHref);
-      if (isExternal) {
-        return (
-          <a
-            href={safeHref}
-            target="_blank"
-            rel="noreferrer"
-            ref={ref as React.Ref<HTMLAnchorElement>}
-            className={className}
-            style={style}
-            onClick={handleLinkClick}
-            {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-          >
-            {children}
-          </a>
-        );
-      }
+  if (safeHref) {
+    // A link runs the `onClick` it is given, then `onLinkClick`. It used to
+    // run `onClick` only on a button, so a Button, IconButton or SmartLink
+    // with an `href` silently dropped its handler.
+    const handleLinkClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+      onClick?.(event);
+      onLinkClick?.();
+    };
+    const isExternal = isExternalLink(safeHref);
+    if (isExternal) {
       return (
-        <Link
+        <a
           href={safeHref}
+          target="_blank"
+          rel="noreferrer"
           ref={ref as React.Ref<HTMLAnchorElement>}
           className={className}
           style={style}
@@ -74,37 +70,49 @@ const ElementType = forwardRef<HTMLElement, ElementTypeProps>(
           {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
         >
           {children}
-        </Link>
+        </a>
       );
     }
-
-    if (onClick || type === "submit" || type === "button") {
-      return (
-        <button
-          ref={ref as React.Ref<HTMLButtonElement>}
-          className={className}
-          onClick={onClick}
-          style={style}
-          type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
-          {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
-        >
-          {children}
-        </button>
-      );
-    }
-
     return (
-      <Flex
-        ref={ref as React.Ref<HTMLDivElement>}
+      <Link
+        href={safeHref}
+        ref={ref as React.Ref<HTMLAnchorElement>}
         className={className}
         style={style}
-        {...(props as React.HTMLAttributes<HTMLDivElement>)}
+        onClick={handleLinkClick}
+        {...(props as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
       >
-        {content}
-      </Flex>
+        {children}
+      </Link>
     );
-  },
-);
+  }
+
+  if (onClick || type === "submit" || type === "button") {
+    return (
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        className={className}
+        onClick={onClick}
+        style={style}
+        type={type as React.ButtonHTMLAttributes<HTMLButtonElement>["type"]}
+        {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+      >
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <Flex
+      ref={ref as React.Ref<HTMLDivElement>}
+      className={className}
+      style={style}
+      {...(props as React.HTMLAttributes<HTMLDivElement>)}
+    >
+      {content}
+    </Flex>
+  );
+};
 
 ElementType.displayName = "ElementType";
 

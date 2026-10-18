@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useId } from "react";
+import React, { useId } from "react";
 import {
   type ControlChromeProps,
   describedBy,
@@ -44,148 +44,144 @@ interface SwitchProps
   onCheckedChange?: (checked: boolean) => void;
 }
 
-const Switch = forwardRef<HTMLInputElement, SwitchProps>(
-  (
-    {
-      className,
-      style,
-      checked: checkedProp,
-      defaultChecked = false,
-      reverse = false,
-      loading = false,
-      onCheckedChange,
-      onChange,
-      onFocus,
-      onBlur,
-      disabled,
-      label,
-      description,
-      iconButtonProps,
-      id,
-      size: sizeProp,
-      error,
-      errorMessage,
-      ...rest
-    },
-    ref,
-  ) => {
-    const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
-    const labelId = useId();
-    const descriptionId = useId();
-    const hasLabel = Boolean(label);
-    const [checked, setChecked] = useControllableState({
-      value: checkedProp,
-      defaultValue: defaultChecked,
-      onChange: onCheckedChange,
-    });
-    const { inputRef, setRef, activate, relay } = useHiddenInput(ref);
-    const { aria, native } = splitAria(rest);
-    const ariaLabel = (aria["aria-label"] as string | undefined) ?? "Toggle switch";
+const Switch = ({
+  ref,
+  className,
+  style,
+  checked: checkedProp,
+  defaultChecked = false,
+  reverse = false,
+  loading = false,
+  onCheckedChange,
+  onChange,
+  onFocus,
+  onBlur,
+  disabled,
+  label,
+  description,
+  iconButtonProps,
+  id,
+  size: sizeProp,
+  error,
+  errorMessage,
+  ...rest
+}: SwitchProps & { ref?: React.Ref<HTMLInputElement> }) => {
+  const chrome = useControlChrome({ size: sizeProp, error, errorMessage });
+  const labelId = useId();
+  const descriptionId = useId();
+  const hasLabel = Boolean(label);
+  const [checked, setChecked] = useControllableState({
+    value: checkedProp,
+    defaultValue: defaultChecked,
+    onChange: onCheckedChange,
+  });
+  const { inputRef, setRef, activate, relay } = useHiddenInput(ref);
+  const { aria, native } = splitAria(rest);
+  const ariaLabel = (aria["aria-label"] as string | undefined) ?? "Toggle switch";
 
-    // Every change goes through the native input, so its `onChange` hears
-    // the same event a plain checkbox would send.
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (disabled) return;
-      setChecked(event.target.checked);
-      onChange?.(event);
-    };
+  // Every change goes through the native input, so its `onChange` hears
+  // the same event a plain checkbox would send.
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled) return;
+    setChecked(event.target.checked);
+    onChange?.(event);
+  };
 
-    const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
-      // The input's own click bubbles here too: it already changed.
-      if (disabled || event.target === inputRef.current) return;
+  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+    // The input's own click bubbles here too: it already changed.
+    if (disabled || event.target === inputRef.current) return;
+    activate();
+  };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!disabled && (event.key === "Enter" || event.key === " ")) {
+      event.preventDefault();
       activate();
-    };
+    }
+  };
 
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (!disabled && (event.key === "Enter" || event.key === " ")) {
-        event.preventDefault();
-        activate();
-      }
-    };
-
-    return (
-      <Flex
-        gap="16"
-        vertical="center"
-        horizontal={reverse ? "between" : undefined}
-        fillWidth={reverse}
-        className={classNames(styles.container, className, styles[chrome.size], {
-          [styles.error]: chrome.invalid,
-          [styles.reverse]: reverse,
-          [styles.disabled]: disabled,
-        })}
-        style={style}
-        onClick={handleClick}
-      >
-        {/* Carries the value for form submission only. The thumb below is the
+  return (
+    <Flex
+      gap="16"
+      vertical="center"
+      horizontal={reverse ? "between" : undefined}
+      fillWidth={reverse}
+      className={classNames(styles.container, className, styles[chrome.size], {
+        [styles.error]: chrome.invalid,
+        [styles.reverse]: reverse,
+        [styles.disabled]: disabled,
+      })}
+      style={style}
+      onClick={handleClick}
+    >
+      {/* Carries the value for form submission only. The thumb below is the
             control people reach, so this stays out of the accessibility tree
             rather than standing beside it as a second, unnamed switch. */}
-        <input
-          {...native}
-          ref={setRef}
-          type="checkbox"
-          checked={checked}
-          disabled={disabled}
-          onChange={handleChange}
-          className={commonStyles.hidden}
-          tabIndex={-1}
-          aria-hidden="true"
-        />
-        <Flex
-          cursor={disabled ? "not-allowed" : undefined}
-          className={classNames(styles.switch, {
+      <input
+        {...native}
+        ref={setRef}
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={handleChange}
+        className={commonStyles.hidden}
+        tabIndex={-1}
+        aria-hidden="true"
+      />
+      <Flex
+        cursor={disabled ? "not-allowed" : undefined}
+        className={classNames(styles.switch, {
+          [styles.checked]: checked,
+          [styles.disabled]: disabled,
+        })}
+      >
+        {/* The element that takes focus is the switch. It is named by the
+              visible label when there is one; `aria-label`
+              only stands in when there is nothing on screen to point at. */}
+        <div
+          {...aria}
+          role="switch"
+          aria-checked={checked}
+          aria-labelledby={hasLabel ? labelId : undefined}
+          aria-label={hasLabel ? undefined : ariaLabel}
+          aria-describedby={describedBy(
+            hasLabel && description
+              ? descriptionId
+              : (aria["aria-describedby"] as string | undefined),
+            chrome.showsError && chrome.errorId,
+          )}
+          aria-invalid={chrome.invalid || undefined}
+          aria-disabled={disabled}
+          onKeyDown={handleKeyDown}
+          onFocus={relay(onFocus)}
+          onBlur={relay(onBlur)}
+          tabIndex={disabled ? -1 : 0}
+          className={classNames(styles.element, {
             [styles.checked]: checked,
             [styles.disabled]: disabled,
           })}
         >
-          {/* The element that takes focus is the switch. It is named by the
-              visible label when there is one; `aria-label`
-              only stands in when there is nothing on screen to point at. */}
-          <div
-            {...aria}
-            role="switch"
-            aria-checked={checked}
-            aria-labelledby={hasLabel ? labelId : undefined}
-            aria-label={hasLabel ? undefined : ariaLabel}
-            aria-describedby={describedBy(
-              hasLabel && description
-                ? descriptionId
-                : (aria["aria-describedby"] as string | undefined),
-              chrome.showsError && chrome.errorId,
-            )}
-            aria-invalid={chrome.invalid || undefined}
-            aria-disabled={disabled}
-            onKeyDown={handleKeyDown}
-            onFocus={relay(onFocus)}
-            onBlur={relay(onBlur)}
-            tabIndex={disabled ? -1 : 0}
-            className={classNames(styles.element, {
-              [styles.checked]: checked,
-              [styles.disabled]: disabled,
-            })}
-          >
-            {loading && <Spinner size="xs" />}
-          </div>
-        </Flex>
-        {(label || chrome.showsError) && (
-          <InteractiveDetails
-            disabled={disabled}
-            label={label}
-            description={description}
-            iconButtonProps={iconButtonProps}
-            id={id}
-            labelId={labelId}
-            descriptionId={descriptionId}
-            size={chrome.size}
-            errorMessage={chrome.showsError ? errorMessage : undefined}
-            errorId={chrome.errorId}
-            onClick={() => {}}
-          />
-        )}
+          {loading && <Spinner size="xs" />}
+        </div>
       </Flex>
-    );
-  },
-);
+      {(label || chrome.showsError) && (
+        <InteractiveDetails
+          disabled={disabled}
+          label={label}
+          description={description}
+          iconButtonProps={iconButtonProps}
+          id={id}
+          labelId={labelId}
+          descriptionId={descriptionId}
+          size={chrome.size}
+          errorMessage={chrome.showsError ? errorMessage : undefined}
+          errorId={chrome.errorId}
+          onClick={() => {}}
+        />
+      )}
+    </Flex>
+  );
+};
 
 Switch.displayName = "Switch";
 

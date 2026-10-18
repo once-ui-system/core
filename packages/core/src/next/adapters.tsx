@@ -4,7 +4,7 @@ import NextImageModule from "next/image.js";
 import NextLinkModule from "next/link.js";
 import { usePathname, useRouter } from "next/navigation.js";
 import type React from "react";
-import { forwardRef, useCallback } from "react";
+import { useCallback } from "react";
 import {
   type AdapterImageProps,
   type AdapterLinkProps,
@@ -36,16 +36,19 @@ const interopDefault = <M,>(mod: M): Interop<M> =>
 const NextLink = interopDefault(NextLinkModule);
 const NextImage = interopDefault(NextImageModule);
 
-const NextAdapterLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(
-  ({ href, children, ...props }, ref) => (
-    <NextLink href={href} ref={ref} {...props}>
-      {children}
-    </NextLink>
-  ),
+const NextAdapterLink = ({
+  ref,
+  href,
+  children,
+  ...props
+}: AdapterLinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => (
+  <NextLink href={href} ref={ref} {...props}>
+    {children}
+  </NextLink>
 );
 NextAdapterLink.displayName = "NextAdapterLink";
 
-const NextAdapterImage: React.FC<AdapterImageProps> = ({ width, height, ...props }) => (
+const NextAdapterImage = ({ width, height, ...props }: AdapterImageProps) => (
   <NextImage width={width} height={height} {...props} />
 );
 
@@ -65,7 +68,7 @@ export interface NextAdapterProviderProps {
   children: React.ReactNode;
 }
 
-export const NextAdapterProvider: React.FC<NextAdapterProviderProps> = ({ children }) => (
+export const NextAdapterProvider = ({ children }: NextAdapterProviderProps) => (
   <AdapterProvider adapters={nextAdapters}>{children}</AdapterProvider>
 );
 
@@ -94,10 +97,10 @@ export const NextAdapterProvider: React.FC<NextAdapterProviderProps> = ({ childr
  * `NextAdapterProvider` directly; this only removes the boilerplate for the
  * common case.
  */
-export const LayoutProvider: React.FC<React.ComponentProps<typeof BaseLayoutProvider>> = ({
+export const LayoutProvider = ({
   children,
   ...props
-}) => (
+}: React.ComponentProps<typeof BaseLayoutProvider>) => (
   <NextAdapterProvider>
     <BaseLayoutProvider {...props}>{children}</BaseLayoutProvider>
   </NextAdapterProvider>

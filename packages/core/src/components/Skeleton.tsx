@@ -1,5 +1,5 @@
 import classNames from "clsx";
-import React, { forwardRef } from "react";
+import React from "react";
 import { Flex } from "./Flex.js";
 import styles from "./Skeleton.module.scss";
 
@@ -25,25 +25,31 @@ interface SkeletonProps extends React.ComponentProps<typeof Flex> {
   className?: string;
 }
 
-const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
-  ({ shape = "line", size = "m", delay, style, className, ...props }, ref) => {
-    return (
-      <Flex
-        {...props}
-        ref={ref}
-        style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}
-        radius={shape === "line" || shape === "circle" ? "full" : undefined}
-        inline
-        className={classNames(
-          styles.skeleton,
-          styles[shape],
-          size && styles["size-" + size],
-          className,
-        )}
-      />
-    );
-  },
-);
+const Skeleton = ({
+  ref,
+  shape = "line",
+  size = "m",
+  delay,
+  style,
+  className,
+  ...props
+}: SkeletonProps) => {
+  return (
+    <Flex
+      {...props}
+      ref={ref}
+      style={delay !== undefined ? { animationDelay: `${delay}ms`, ...style } : style}
+      radius={shape === "line" || shape === "circle" ? "full" : undefined}
+      inline
+      className={classNames(
+        styles.skeleton,
+        styles[shape],
+        size && styles["size-" + size],
+        className,
+      )}
+    />
+  );
+};
 
 Skeleton.displayName = "Skeleton";
 

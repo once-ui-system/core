@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Accordion } from "./Accordion.js";
@@ -36,49 +36,54 @@ interface NavGroupProps extends Omit<React.ComponentProps<typeof Row>, "title" |
  * Uncontrolled by default. Pass `open` and `onOpenChange` to drive it — which is
  * what a sidebar does when it opens the group containing the current route.
  */
-const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
-  (
-    { label, icon, children, open, onOpenChange, defaultOpen = false, selected = false, ...row },
-    ref,
-  ) => {
-    const [isOpen, setOpen] = useControllableState({
-      value: open,
-      defaultValue: defaultOpen,
-      onChange: onOpenChange,
-    });
+const NavGroup = ({
+  ref,
+  label,
+  icon,
+  children,
+  open,
+  onOpenChange,
+  defaultOpen = false,
+  selected = false,
+  ...row
+}: NavGroupProps) => {
+  const [isOpen, setOpen] = useControllableState({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
 
-    return (
-      <Row
-        ref={ref}
-        fillWidth
-        radius="m"
-        transition="micro-medium"
-        background={isOpen || selected ? "neutral-alpha-weak" : undefined}
-        {...row}
-      >
-        <Accordion
-          open={isOpen}
-          onOpenChange={setOpen}
-          paddingX="16"
-          style={{ height: "var(--static-space-40)" }}
-          title={
-            <Row fillWidth gap="12" vertical="center" textVariant="label-default-m">
-              {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
-              {label}
-            </Row>
-          }
-        >
-          <Row fillWidth gap="8" paddingX="12">
-            <Line vert background="neutral-alpha-medium" />
-            <Column fillWidth gap="4">
-              {children}
-            </Column>
+  return (
+    <Row
+      ref={ref}
+      fillWidth
+      radius="m"
+      transition="micro-medium"
+      background={isOpen || selected ? "neutral-alpha-weak" : undefined}
+      {...row}
+    >
+      <Accordion
+        open={isOpen}
+        onOpenChange={setOpen}
+        paddingX="16"
+        style={{ height: "var(--static-space-40)" }}
+        title={
+          <Row fillWidth gap="12" vertical="center" textVariant="label-default-m">
+            {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
+            {label}
           </Row>
-        </Accordion>
-      </Row>
-    );
-  },
-);
+        }
+      >
+        <Row fillWidth gap="8" paddingX="12">
+          <Line vert background="neutral-alpha-medium" />
+          <Column fillWidth gap="4">
+            {children}
+          </Column>
+        </Row>
+      </Accordion>
+    </Row>
+  );
+};
 
 NavGroup.displayName = "NavGroup";
 

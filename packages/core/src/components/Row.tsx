@@ -1,17 +1,16 @@
-import { forwardRef } from "react";
 import type { FlexElementProps, FlexLayoutProps, PolymorphicComponent } from "../interfaces.js";
 import { Flex } from "./Flex.js";
 
 /** Row's props on its default `div`; with `as`, see `PolymorphicProps`. */
 export type RowProps = FlexElementProps;
 
-const RowImpl = forwardRef<HTMLElement, FlexElementProps>(({ children, ...rest }, ref) => {
+const RowImpl = ({ ref, children, ...rest }: FlexElementProps) => {
   return (
     <Flex ref={ref as React.Ref<HTMLDivElement>} {...rest}>
       {children}
     </Flex>
   );
-});
+};
 
 RowImpl.displayName = "Row";
 

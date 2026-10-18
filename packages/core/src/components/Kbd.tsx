@@ -1,5 +1,5 @@
 import type React from "react";
-import { forwardRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { KbdCap } from "../internal/KbdCap.js";
 import { KeyCombo } from "../internal/KeyCombo.js";
 import type { Flex } from "./Flex.js";
@@ -37,7 +37,7 @@ type KbdProps = KbdCapModeProps | KbdKeysModeProps;
  * performs. The cap form renders on the server; `keys` reads the platform
  * after hydration (Ctrl first, ⌘ on Apple right after).
  */
-const Kbd = forwardRef<HTMLDivElement, KbdProps>((props, ref) => {
+const Kbd = ({ ref, ...props }: KbdProps) => {
   if (props.keys !== undefined) {
     const { keys, label, ...rest } = props as KbdKeysModeProps;
     return <KeyCombo ref={ref} keys={keys} label={label} {...rest} />;
@@ -48,7 +48,7 @@ const Kbd = forwardRef<HTMLDivElement, KbdProps>((props, ref) => {
       {label || children}
     </KbdCap>
   );
-});
+};
 
 Kbd.displayName = "Kbd";
 

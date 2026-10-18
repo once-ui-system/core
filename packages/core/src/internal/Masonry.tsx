@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import type { CSSProperties, ReactNode } from "react";
-import React, { forwardRef } from "react";
+import React from "react";
 import { Column } from "../components/Column.js";
 import { Flex } from "../components/Flex.js";
 import { SpacingToken } from "../types.js";
@@ -26,48 +26,58 @@ export interface MasonryProps
   xs?: MasonryBreakpointProps;
 }
 
-const Masonry = forwardRef<HTMLDivElement, MasonryProps>(
-  ({ children, gap = "8", columns = 3, style, className, l, m, s, xs, ...flex }, ref) => {
-    const gapValue = sizeValue(gap, "width") ?? "var(--static-space-8)";
+const Masonry = ({
+  ref,
+  children,
+  gap = "8",
+  columns = 3,
+  style,
+  className,
+  l,
+  m,
+  s,
+  xs,
+  ...flex
+}: MasonryProps) => {
+  const gapValue = sizeValue(gap, "width") ?? "var(--static-space-8)";
 
-    const classes = classNames(
-      columns && styles[`columns-${columns}`],
-      l?.columns && styles[`l-columns-${l.columns}`],
-      m?.columns && styles[`m-columns-${m.columns}`],
-      s?.columns && styles[`s-columns-${s.columns}`],
-      xs?.columns && styles[`xs-columns-${xs.columns}`],
-      className,
-    );
+  const classes = classNames(
+    columns && styles[`columns-${columns}`],
+    l?.columns && styles[`l-columns-${l.columns}`],
+    m?.columns && styles[`m-columns-${m.columns}`],
+    s?.columns && styles[`s-columns-${s.columns}`],
+    xs?.columns && styles[`xs-columns-${xs.columns}`],
+    className,
+  );
 
-    return (
-      <Flex
-        fillWidth
-        className={classes}
-        ref={ref}
-        {...flex}
-        style={{
-          display: "block",
-          columnGap: gapValue,
-          ...style,
-        }}
-      >
-        {React.Children.map(children, (child, idx) => (
-          <Column
-            key={idx}
-            fillWidth
-            fitHeight
-            style={{
-              breakInside: "avoid",
-              marginBottom: gapValue,
-            }}
-          >
-            {child}
-          </Column>
-        ))}
-      </Flex>
-    );
-  },
-);
+  return (
+    <Flex
+      fillWidth
+      className={classes}
+      ref={ref}
+      {...flex}
+      style={{
+        display: "block",
+        columnGap: gapValue,
+        ...style,
+      }}
+    >
+      {React.Children.map(children, (child, idx) => (
+        <Column
+          key={idx}
+          fillWidth
+          fitHeight
+          style={{
+            breakInside: "avoid",
+            marginBottom: gapValue,
+          }}
+        >
+          {child}
+        </Column>
+      ))}
+    </Flex>
+  );
+};
 
 export { Masonry };
 

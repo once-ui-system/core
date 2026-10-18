@@ -17,11 +17,7 @@ export interface MegaMenuAccordionProps extends React.ComponentProps<typeof Flex
 }
 
 /** The collapsed form of `MegaMenu` (`collapseBelow`), 2.x's MobileMegaMenu: one accordion per group. */
-export const MegaMenuAccordion: React.FC<MegaMenuAccordionProps> = ({
-  menuGroups,
-  onClose,
-  ...flex
-}) => {
+export const MegaMenuAccordion = ({ menuGroups, onClose, ...flex }: MegaMenuAccordionProps) => {
   const handleLinkClick = (href: string) => {
     onClose?.();
   };

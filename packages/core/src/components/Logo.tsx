@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useEffect } from "react";
+import { useEffect } from "react";
 import { useAdapters } from "../contexts/AdapterProvider.js";
 import { useToast } from "../contexts/ToastProvider.js";
 import type { SpacingToken, TShirtSizes } from "../types.js";
@@ -46,196 +46,205 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   brand?: { copy?: boolean; url?: string };
 }
 
-const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ size = "m", href, icon, wordmark, className, style, showIn, brand, ...props }, ref) => {
-    useEffect(() => {
-      if (!icon && !wordmark) {
-        console.warn(
-          "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
-        );
-      }
-    }, [icon, wordmark]);
-
-    /**
-     * One <img> for a plain source; for a per-theme source, both, each gated by
-     * the same light-flex / dark-flex classes `showIn` uses.
-     * Rendering both rather than reading the theme at runtime keeps the
-     * component server-renderable and avoids a flash on first paint.
-     */
-    /**
-     * The copy-to-clipboard actions need one concrete file. A per-theme source
-     * has two, so they take the light asset — the one a brand page shows by
-     * default and the one someone pasting a logo almost always wants.
-     */
-    const resolveSource = (source: LogoSource | undefined): string | undefined =>
-      typeof source === "string" ? source : source?.light;
-
-    const renderSource = (source: LogoSource | undefined) => {
-      if (!source) return null;
-      const imgStyle = {
-        height: `var(--static-space-${sizeMap[size]})`,
-        width: "auto",
-      };
-      if (typeof source === "string") {
-        return <img style={imgStyle} alt="Trademark" src={source} />;
-      }
-      return (
-        <>
-          <img className="light-flex" style={imgStyle} alt="Trademark" src={source.light} />
-          <img className="dark-flex" style={imgStyle} alt="Trademark" src={source.dark} />
-        </>
+const Logo = ({
+  ref,
+  size = "m",
+  href,
+  icon,
+  wordmark,
+  className,
+  style,
+  showIn,
+  brand,
+  ...props
+}: LogoProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  useEffect(() => {
+    if (!icon && !wordmark) {
+      console.warn(
+        "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
       );
-    };
+    }
+  }, [icon, wordmark]);
 
-    const content = (
+  /**
+   * One <img> for a plain source; for a per-theme source, both, each gated by
+   * the same light-flex / dark-flex classes `showIn` uses.
+   * Rendering both rather than reading the theme at runtime keeps the
+   * component server-renderable and avoids a flash on first paint.
+   */
+  /**
+   * The copy-to-clipboard actions need one concrete file. A per-theme source
+   * has two, so they take the light asset — the one a brand page shows by
+   * default and the one someone pasting a logo almost always wants.
+   */
+  const resolveSource = (source: LogoSource | undefined): string | undefined =>
+    typeof source === "string" ? source : source?.light;
+
+  const renderSource = (source: LogoSource | undefined) => {
+    if (!source) return null;
+    const imgStyle = {
+      height: `var(--static-space-${sizeMap[size]})`,
+      width: "auto",
+    };
+    if (typeof source === "string") {
+      return <img style={imgStyle} alt="Trademark" src={source} />;
+    }
+    return (
       <>
-        {renderSource(icon)}
-        {renderSource(wordmark)}
+        <img className="light-flex" style={imgStyle} alt="Trademark" src={source.light} />
+        <img className="dark-flex" style={imgStyle} alt="Trademark" src={source.dark} />
       </>
     );
+  };
 
-    const { addToast } = useToast();
-    const { Link } = useAdapters();
+  const content = (
+    <>
+      {renderSource(icon)}
+      {renderSource(wordmark)}
+    </>
+  );
 
-    const copyIconToClipboard = async () => {
-      if (!icon) {
-        addToast({
-          tone: "danger",
-          message: "No icon available to copy",
-        });
-        return;
-      }
+  const { addToast } = useToast();
+  const { Link } = useAdapters();
 
-      try {
-        const response = await fetch(resolveSource(icon) as string);
-        const svgText = await response.text();
-        await navigator.clipboard.writeText(svgText);
+  const copyIconToClipboard = async () => {
+    if (!icon) {
+      addToast({
+        tone: "danger",
+        message: "No icon available to copy",
+      });
+      return;
+    }
 
-        addToast({
-          tone: "success",
-          message: "Icon copied to clipboard as SVG",
-        });
-      } catch (error) {
-        addToast({
-          tone: "danger",
-          message: "Failed to copy icon to clipboard",
-        });
-        console.error("Error copying icon:", error);
-      }
-    };
+    try {
+      const response = await fetch(resolveSource(icon) as string);
+      const svgText = await response.text();
+      await navigator.clipboard.writeText(svgText);
 
-    const copyWordmarkToClipboard = async () => {
-      if (!wordmark) {
-        addToast({
-          tone: "danger",
-          message: "No wordmark available to copy",
-        });
-        return;
-      }
+      addToast({
+        tone: "success",
+        message: "Icon copied to clipboard as SVG",
+      });
+    } catch (error) {
+      addToast({
+        tone: "danger",
+        message: "Failed to copy icon to clipboard",
+      });
+      console.error("Error copying icon:", error);
+    }
+  };
 
-      try {
-        const response = await fetch(resolveSource(wordmark) as string);
-        const svgText = await response.text();
-        await navigator.clipboard.writeText(svgText);
+  const copyWordmarkToClipboard = async () => {
+    if (!wordmark) {
+      addToast({
+        tone: "danger",
+        message: "No wordmark available to copy",
+      });
+      return;
+    }
 
-        addToast({
-          tone: "success",
-          message: "Wordmark copied to clipboard as SVG",
-        });
-      } catch (error) {
-        addToast({
-          tone: "danger",
-          message: "Failed to copy wordmark to clipboard",
-        });
-        console.error("Error copying wordmark:", error);
-      }
-    };
+    try {
+      const response = await fetch(resolveSource(wordmark) as string);
+      const svgText = await response.text();
+      await navigator.clipboard.writeText(svgText);
 
-    const renderDropdownContent = () => {
-      return (
-        <Column fillWidth>
-          <Column fillWidth padding="4" gap="4">
-            {brand?.copy && icon && (
-              <Option
-                value="copy-icon"
-                label="Copy icon as SVG"
-                prefix={<Logo size="xs" icon={icon} style={{ opacity: 0.5 }} />}
-                onClick={copyIconToClipboard}
-              />
-            )}
-            {brand?.copy && wordmark && (
-              <Option
-                value="copy-wordmark"
-                label="Copy wordmark as SVG"
-                prefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
-                onClick={copyWordmarkToClipboard}
-              />
-            )}
-          </Column>
-          {brand?.url && (
-            <>
-              <Line />
-              <Column fillWidth padding="4">
-                <Option
-                  value="brand-guidelines"
-                  label="Visit brand guidelines"
-                  prefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
-                  href={brand.url}
-                />
-              </Column>
-            </>
+      addToast({
+        tone: "success",
+        message: "Wordmark copied to clipboard as SVG",
+      });
+    } catch (error) {
+      addToast({
+        tone: "danger",
+        message: "Failed to copy wordmark to clipboard",
+      });
+      console.error("Error copying wordmark:", error);
+    }
+  };
+
+  const renderDropdownContent = () => {
+    return (
+      <Column fillWidth>
+        <Column fillWidth padding="4" gap="4">
+          {brand?.copy && icon && (
+            <Option
+              value="copy-icon"
+              label="Copy icon as SVG"
+              prefix={<Logo size="xs" icon={icon} style={{ opacity: 0.5 }} />}
+              onClick={copyIconToClipboard}
+            />
+          )}
+          {brand?.copy && wordmark && (
+            <Option
+              value="copy-wordmark"
+              label="Copy wordmark as SVG"
+              prefix={<Icon size="xs" onBackground="neutral-weak" name="wordmark" />}
+              onClick={copyWordmarkToClipboard}
+            />
           )}
         </Column>
-      );
-    };
-
-    const enableContext = brand && ((brand.copy && (icon || wordmark)) || brand.url);
-
-    const renderLogo = () => {
-      if (href) {
-        return (
-          <Link
-            className={classNames(
-              "radius-l",
-              "display-flex",
-              "fit-height",
-              showIn === "dark" && "dark-flex",
-              showIn === "light" && "light-flex",
-              className,
-            )}
-            style={style}
-            href={href}
-            aria-label="Trademark"
-            {...props}
-          >
-            {content}
-          </Link>
-        );
-      } else {
-        return (
-          <Flex
-            className={classNames(className)}
-            showIn={showIn}
-            radius="l"
-            fitHeight
-            style={style}
-            aria-label="Trademark"
-          >
-            {content}
-          </Flex>
-        );
-      }
-    };
-
-    return enableContext ? (
-      <Dropdown openOn="contextmenu" trigger={renderLogo()} placement="bottom-start">
-        {renderDropdownContent()}
-      </Dropdown>
-    ) : (
-      renderLogo()
+        {brand?.url && (
+          <>
+            <Line />
+            <Column fillWidth padding="4">
+              <Option
+                value="brand-guidelines"
+                label="Visit brand guidelines"
+                prefix={<Icon size="xs" onBackground="neutral-weak" name="arrowUpRight" />}
+                href={brand.url}
+              />
+            </Column>
+          </>
+        )}
+      </Column>
     );
-  },
-);
+  };
+
+  const enableContext = brand && ((brand.copy && (icon || wordmark)) || brand.url);
+
+  const renderLogo = () => {
+    if (href) {
+      return (
+        <Link
+          className={classNames(
+            "radius-l",
+            "display-flex",
+            "fit-height",
+            showIn === "dark" && "dark-flex",
+            showIn === "light" && "light-flex",
+            className,
+          )}
+          style={style}
+          href={href}
+          aria-label="Trademark"
+          {...props}
+        >
+          {content}
+        </Link>
+      );
+    } else {
+      return (
+        <Flex
+          className={classNames(className)}
+          showIn={showIn}
+          radius="l"
+          fitHeight
+          style={style}
+          aria-label="Trademark"
+        >
+          {content}
+        </Flex>
+      );
+    }
+  };
+
+  return enableContext ? (
+    <Dropdown openOn="contextmenu" trigger={renderLogo()} placement="bottom-start">
+      {renderDropdownContent()}
+    </Dropdown>
+  ) : (
+    renderLogo()
+  );
+};
 
 Logo.displayName = "Logo";
 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import { Icon } from "./Icon.js";
 import { Row } from "./Row.js";
@@ -26,46 +26,44 @@ interface NavItemProps
  * and corners smaller than its height. Both are props, so a denser nav can say
  * otherwise.
  */
-const NavItem = forwardRef<HTMLElement, NavItemProps>(
-  ({ label, icon, badge, indicator, ...toggle }, ref) => {
-    const trailing = indicator || (badge !== undefined && badge > 0);
-    return (
-      <ToggleButton ref={ref} fillWidth horizontal="start" size="l" radius="m" {...toggle}>
-        <Row
-          fillWidth
-          gap="12"
-          vertical="center"
-          horizontal={trailing ? "between" : "start"}
-          textVariant="label-default-m"
-        >
-          <Row gap="12" vertical="center">
-            {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
-            {label}
-          </Row>
-          {badge !== undefined && badge > 0 && (
-            <Row
-              minWidth="16"
-              height="16"
-              paddingX="4"
-              radius="full"
-              solid="brand-strong"
-              horizontal="center"
-              vertical="center"
-              aria-label={`${badge} unread`}
-            >
-              <Text textVariant="label-default-xs" onSolid="brand-strong">
-                {badge > 9 ? "9+" : badge}
-              </Text>
-            </Row>
-          )}
-          {indicator && badge === undefined && (
-            <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
-          )}
+const NavItem = ({ ref, label, icon, badge, indicator, ...toggle }: NavItemProps) => {
+  const trailing = indicator || (badge !== undefined && badge > 0);
+  return (
+    <ToggleButton ref={ref} fillWidth horizontal="start" size="l" radius="m" {...toggle}>
+      <Row
+        fillWidth
+        gap="12"
+        vertical="center"
+        horizontal={trailing ? "between" : "start"}
+        textVariant="label-default-m"
+      >
+        <Row gap="12" vertical="center">
+          {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
+          {label}
         </Row>
-      </ToggleButton>
-    );
-  },
-);
+        {badge !== undefined && badge > 0 && (
+          <Row
+            minWidth="16"
+            height="16"
+            paddingX="4"
+            radius="full"
+            solid="brand-strong"
+            horizontal="center"
+            vertical="center"
+            aria-label={`${badge} unread`}
+          >
+            <Text textVariant="label-default-xs" onSolid="brand-strong">
+              {badge > 9 ? "9+" : badge}
+            </Text>
+          </Row>
+        )}
+        {indicator && badge === undefined && (
+          <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
+        )}
+      </Row>
+    </ToggleButton>
+  );
+};
 
 NavItem.displayName = "NavItem";
 

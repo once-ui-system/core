@@ -12,12 +12,12 @@ import styles from "./ShineText.module.scss";
  * `@once-ui-system/fx`. It is ShineFx with its defaults (a 1s sweep at 0.3
  * base opacity, still under reduced motion), so it looks the same.
  */
-export const ShineText: React.FC<React.ComponentProps<typeof Text>> = ({
+export const ShineText = ({
   className,
   style,
   children,
   ...text
-}) => {
+}: React.ComponentProps<typeof Text>) => {
   const { shouldAnimate } = useReducedMotion("auto");
   return (
     <Text

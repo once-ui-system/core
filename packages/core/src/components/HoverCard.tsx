@@ -1,6 +1,5 @@
 "use client";
 
-import { forwardRef } from "react";
 import { CursorFollower, type CursorFollowerProps } from "../internal/CursorFollower.js";
 import { HoverCover } from "../internal/HoverCover.js";
 import type { Placement } from "../types.js";
@@ -51,56 +50,60 @@ const ANIMATION_ONLY = [
  * Rich, interactive content revealed on hover or focus of a `trigger`: a
  * profile preview, a link card. For a sentence of plain text, use `Tooltip`.
  */
-const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(
-  (
-    { children, placement = "top", cursorPlacement, hideDelay, interactive, disabled, ...props },
-    ref,
-  ) => {
-    if (placement === "cover" || placement === "cursor") {
-      const { trigger, delay, touch, ...flex } = props;
-      for (const key of ANIMATION_ONLY) delete (flex as Record<string, unknown>)[key];
-      if (placement === "cover") {
-        return (
-          <HoverCover
-            ref={ref}
-            trigger={trigger}
-            overlay={children}
-            delay={delay}
-            hideDelay={hideDelay}
-            interactive={interactive}
-            disabled={disabled}
-            touch={touch}
-            {...flex}
-          />
-        );
-      }
+const HoverCard = ({
+  ref,
+  children,
+  placement = "top",
+  cursorPlacement,
+  hideDelay,
+  interactive,
+  disabled,
+  ...props
+}: HoverCardProps) => {
+  if (placement === "cover" || placement === "cursor") {
+    const { trigger, delay, touch, ...flex } = props;
+    for (const key of ANIMATION_ONLY) delete (flex as Record<string, unknown>)[key];
+    if (placement === "cover") {
       return (
-        <CursorFollower
+        <HoverCover
           ref={ref}
           trigger={trigger}
           overlay={children}
-          placement={cursorPlacement}
+          delay={delay}
+          hideDelay={hideDelay}
+          interactive={interactive}
+          disabled={disabled}
+          touch={touch}
           {...flex}
         />
       );
     }
     return (
-      <Animation
+      <CursorFollower
         ref={ref}
-        fade={0}
-        slideUp="0.5rem"
-        scale={0.9}
-        duration={200}
-        triggerType="hover"
-        placement={placement}
-        portal
-        {...props}
-      >
-        {children}
-      </Animation>
+        trigger={trigger}
+        overlay={children}
+        placement={cursorPlacement}
+        {...flex}
+      />
     );
-  },
-);
+  }
+  return (
+    <Animation
+      ref={ref}
+      fade={0}
+      slideUp="0.5rem"
+      scale={0.9}
+      duration={200}
+      triggerType="hover"
+      placement={placement}
+      portal
+      {...props}
+    >
+      {children}
+    </Animation>
+  );
+};
 
 HoverCard.displayName = "HoverCard";
 

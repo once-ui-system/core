@@ -1,13 +1,6 @@
 "use client";
 
-import React, {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Flex } from "./Flex.js";
 
 export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
@@ -24,7 +17,7 @@ export interface FlipFxProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
 }
 
-const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
+const FlipFx = ({ ref, ...props }: FlipFxProps) => {
   const {
     flipDirection = "horizontal",
     timing = 2000,
@@ -145,7 +138,7 @@ const FlipFx = forwardRef<HTMLDivElement, FlipFxProps>((props, ref) => {
       </Flex>
     </Flex>
   );
-});
+};
 
 FlipFx.displayName = "FlipFx";
 

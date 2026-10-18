@@ -34,6 +34,12 @@ already moved to 3.0 can still take the import step on its own
 
 `react` and `react-dom` 19 are the floor. Upgrade them before anything else.
 
+Components take `ref` as an ordinary prop (React 19) instead of going through
+`forwardRef`. Nothing to migrate: `ref={…}`, `ComponentProps<typeof X>["ref"]`
+and `ComponentRef`/`ElementRef<typeof X>` give the same element types as in
+2.x. Only code that treated a component as a `forwardRef` object (typed it as
+`ForwardRefExoticComponent`, or read `.render` or `$$typeof`) needs a change.
+
 ### 3. Removed names
 
 | 2.x | 3.0 | Codemod |

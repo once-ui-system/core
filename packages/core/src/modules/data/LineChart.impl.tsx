@@ -38,7 +38,7 @@ export interface LineChartProps<T extends object = DataPoint> extends ChartProps
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const LineChart: React.FC<LineChartProps> = ({
+const LineChart = ({
   title,
   description,
   data,
@@ -65,7 +65,7 @@ const LineChart: React.FC<LineChartProps> = ({
   xDomain,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: LineChartProps) => {
   const {
     variant: themeVariant,
     mode,

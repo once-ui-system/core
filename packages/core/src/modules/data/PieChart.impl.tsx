@@ -34,7 +34,7 @@ export interface PieChartProps<T extends object = DataPoint> extends ChartProps<
   origo?: { x: number; y: number };
 }
 
-const PieChart: React.FC<PieChartProps> = ({
+const PieChart = ({
   title,
   description,
   data,
@@ -54,7 +54,7 @@ const PieChart: React.FC<PieChartProps> = ({
   nameKey = "name",
   "data-viz-style": dataViz,
   ...flex
-}) => {
+}: PieChartProps) => {
   const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const [rc, setRc] = useState<any>(null);

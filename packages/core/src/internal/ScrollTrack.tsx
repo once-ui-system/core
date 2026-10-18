@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Column } from "../components/Column.js";
 import { Flex } from "../components/Flex.js";
 import { IconButton } from "../components/IconButton.js";
@@ -115,479 +115,475 @@ const PROXIMITY_FLOOR = 0.72;
  * contributes only what a track item cannot do without, which is refusing to
  * shrink. Sizing stays with the caller, through those same rest props.
  */
-const ScrollTrack = forwardRef<HTMLDivElement, ScrollTrackProps>(
-  (
-    {
-      items,
-      controlPlacement = "top-start",
-      infinite = false,
-      markers = false,
-      draggable = true,
-      step = 1,
-      clip = false,
-      proximity = false,
-      active,
-      onActiveChange,
-      tile = {},
-      ...rest
+const ScrollTrack = ({
+  ref,
+  items,
+  controlPlacement = "top-start",
+  infinite = false,
+  markers = false,
+  draggable = true,
+  step = 1,
+  clip = false,
+  proximity = false,
+  active,
+  onActiveChange,
+  tile = {},
+  ...rest
+}: ScrollTrackProps) => {
+  const count = items.length;
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  const [index, setIndex] = useState(0);
+  const [tileStep, setTileStep] = useState(0);
+  const [perView, setPerView] = useState(1);
+  const [dragPx, setDragPx] = useState(0);
+  const [animated, setAnimated] = useState(true);
+  const [dragging, setDragging] = useState(false);
+
+  /**
+   * The last index that still fills the viewport.
+   *
+   * Without wrap-around there is no reason to advance into empty space once
+   * the final tile is already in view, so the end of the run is the last
+   * whole screenful rather than the last item.
+   */
+  const maxIndex = infinite ? Number.POSITIVE_INFINITY : Math.max(0, count - perView);
+
+  /**
+   * Wrap-around is three copies of the run with the real one in the middle.
+   *
+   * Moving off either side of the middle copy lands on a real tile of the
+   * neighbouring copy, so the motion is continuous and in the direction of
+   * travel. `onTransitionEnd` then puts the index back in range with the
+   * transition switched off, which shifts the track by exactly one copy —
+   * the same tiles under the same pixels, so nothing moves on screen.
+   */
+  const rendered = useMemo(
+    () => (infinite && count > 0 ? [...items, ...items, ...items] : items),
+    [infinite, items, count],
+  );
+  const origin = infinite ? count : 0;
+
+  const measure = useCallback(() => {
+    const viewport = viewportRef.current;
+    const track = trackRef.current;
+    const first = track?.firstElementChild as HTMLElement | null;
+    if (!viewport || !track || !first) return;
+
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+    const width = first.offsetWidth + gap;
+    setTileStep(width);
+    setPerView(width > 0 ? Math.max(1, Math.round(viewport.clientWidth / width)) : 1);
+  }, []);
+
+  useEffect(() => {
+    measure();
+    const viewport = viewportRef.current;
+    if (!viewport || typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", measure);
+      return () => window.removeEventListener("resize", measure);
+    }
+    // Watches the track's own box too: a tile sized in percentages changes
+    // with the viewport, but one sized by its content changes when the
+    // content does, and only the track hears about that.
+    const observer = new ResizeObserver(measure);
+    observer.observe(viewport);
+    if (trackRef.current) observer.observe(trackRef.current);
+    return () => observer.disconnect();
+  }, [measure]);
+
+  // A shorter list can leave the index past the end of it.
+  useEffect(() => {
+    setIndex((current) => Math.min(current, infinite ? current : Math.max(0, count - 1)));
+  }, [count, infinite]);
+
+  const go = useCallback(
+    (delta: number) => {
+      setAnimated(true);
+      setIndex((current) => {
+        const next = current + delta;
+        return infinite ? next : Math.max(0, Math.min(maxIndex, next));
+      });
     },
-    ref,
-  ) => {
-    const count = items.length;
-    const viewportRef = useRef<HTMLDivElement>(null);
-    const trackRef = useRef<HTMLDivElement>(null);
+    [infinite, maxIndex],
+  );
 
-    const [index, setIndex] = useState(0);
-    const [tileStep, setTileStep] = useState(0);
-    const [perView, setPerView] = useState(1);
-    const [dragPx, setDragPx] = useState(0);
-    const [animated, setAnimated] = useState(true);
-    const [dragging, setDragging] = useState(false);
+  const goTo = useCallback(
+    (target: number) => {
+      setAnimated(true);
+      setIndex((current) => {
+        if (!infinite) return Math.max(0, Math.min(maxIndex, target));
+        // Take whichever way round is shorter, so a marker near the end of
+        // the run does not walk the whole track to reach a neighbour.
+        const here = ((current % count) + count) % count;
+        const forward = (((target - here) % count) + count) % count;
+        return current + (forward <= count - forward ? forward : forward - count);
+      });
+    },
+    [count, infinite, maxIndex],
+  );
 
-    /**
-     * The last index that still fills the viewport.
-     *
-     * Without wrap-around there is no reason to advance into empty space once
-     * the final tile is already in view, so the end of the run is the last
-     * whole screenful rather than the last item.
-     */
-    const maxIndex = infinite ? Number.POSITIVE_INFINITY : Math.max(0, count - perView);
+  /**
+   * Which item is in front, counted in `items` rather than in the track.
+   *
+   * With wrap-around the internal index is free to run past either end —
+   * that is what makes the motion continuous — so it is not a number any
+   * caller could use. This folds it back into the range of the real run,
+   * and it is the only index this component reports or accepts.
+   */
+  const activeIndex = count > 0 ? ((index % count) + count) % count : 0;
 
-    /**
-     * Wrap-around is three copies of the run with the real one in the middle.
-     *
-     * Moving off either side of the middle copy lands on a real tile of the
-     * neighbouring copy, so the motion is continuous and in the direction of
-     * travel. `onTransitionEnd` then puts the index back in range with the
-     * transition switched off, which shifts the track by exactly one copy —
-     * the same tiles under the same pixels, so nothing moves on screen.
-     */
-    const rendered = useMemo(
-      () => (infinite && count > 0 ? [...items, ...items, ...items] : items),
-      [infinite, items, count],
-    );
-    const origin = infinite ? count : 0;
+  /**
+   * Report the front item, but never on mount.
+   *
+   * The callback is read through a ref so that a caller passing a fresh
+   * arrow function on every render — which is most of them — does not make
+   * this fire again for an index that has not moved.
+   */
+  const onActiveChangeRef = useRef(onActiveChange);
+  onActiveChangeRef.current = onActiveChange;
+  const reportedRef = useRef(activeIndex);
+  useEffect(() => {
+    if (reportedRef.current === activeIndex) return;
+    reportedRef.current = activeIndex;
+    onActiveChangeRef.current?.(activeIndex);
+  }, [activeIndex]);
 
-    const measure = useCallback(() => {
-      const viewport = viewportRef.current;
-      const track = trackRef.current;
-      const first = track?.firstElementChild as HTMLElement | null;
-      if (!viewport || !track || !first) return;
+  /**
+   * Move when `active` changes.
+   *
+   * Deliberately keyed on `active` alone. Were it to depend on where the run
+   * actually is, every drag would be undone a frame after it finished by an
+   * effect insisting on the last value the caller passed — the run would
+   * fight the pointer. `active` says go here; it does not say stay here.
+   */
+  // biome-ignore lint/correctness/useExhaustiveDependencies: see above — reacting to the caller's command, not to our own position
+  useEffect(() => {
+    if (active === undefined || count === 0) return;
+    goTo(active);
+  }, [active, count]);
 
-      const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
-      const width = first.offsetWidth + gap;
-      setTileStep(width);
-      setPerView(width > 0 ? Math.max(1, Math.round(viewport.clientWidth / width)) : 1);
-    }, []);
+  /**
+   * Put the index back inside the real copy once the motion has finished.
+   *
+   * Switching the transition off for one frame is what makes the jump
+   * invisible: the index changes by a whole copy and the transform changes
+   * by exactly one copy's width, so the pixels are identical.
+   */
+  const handleTransitionEnd = useCallback(
+    (event: React.TransitionEvent<HTMLDivElement>) => {
+      // `transitionend` bubbles, so a tile animating its own background would
+      // otherwise be read as the track arriving.
+      if (event.target !== trackRef.current || event.propertyName !== "transform") return;
+      if (!infinite || count === 0) return;
+      if (index >= 0 && index < count) return;
+      setAnimated(false);
+      setIndex(((index % count) + count) % count);
+    },
+    [count, index, infinite],
+  );
 
-    useEffect(() => {
-      measure();
-      const viewport = viewportRef.current;
-      if (!viewport || typeof ResizeObserver === "undefined") {
-        window.addEventListener("resize", measure);
-        return () => window.removeEventListener("resize", measure);
-      }
-      // Watches the track's own box too: a tile sized in percentages changes
-      // with the viewport, but one sized by its content changes when the
-      // content does, and only the track hears about that.
-      const observer = new ResizeObserver(measure);
-      observer.observe(viewport);
-      if (trackRef.current) observer.observe(trackRef.current);
-      return () => observer.disconnect();
-    }, [measure]);
+  /**
+   * Put the transition back one frame after the wrap-around jump — but not
+   * while a drag is in progress.
+   *
+   * Without the `dragging` guard this fires for any `animated === false`,
+   * and a drag is the other thing that sets it false. One frame in, the
+   * transition came back on, and every `dragPx` update after that was eased
+   * over `--transition-duration-macro-long` instead of applied: the track
+   * crawled toward the pointer at 0.6s a step and never caught up. Measured
+   * before the guard — a 164px drag moved the track 46px, in increments of
+   * 40, 1, 2, 3. It only looked right on release because the commit works
+   * from the raw pointer delta, not from where the track had got to.
+   */
+  useEffect(() => {
+    if (animated || dragging) return;
+    const frame = requestAnimationFrame(() => setAnimated(true));
+    return () => cancelAnimationFrame(frame);
+  }, [animated, dragging]);
 
-    // A shorter list can leave the index past the end of it.
-    useEffect(() => {
-      setIndex((current) => Math.min(current, infinite ? current : Math.max(0, count - 1)));
-    }, [count, infinite]);
+  const drag = useRef({
+    active: false,
+    axis: null as null | "x" | "y",
+    startX: 0,
+    startY: 0,
+    lastX: 0,
+    lastT: 0,
+    velocity: 0,
+    moved: false,
+  });
 
-    const go = useCallback(
-      (delta: number) => {
-        setAnimated(true);
-        setIndex((current) => {
-          const next = current + delta;
-          return infinite ? next : Math.max(0, Math.min(maxIndex, next));
-        });
-      },
-      [infinite, maxIndex],
-    );
-
-    const goTo = useCallback(
-      (target: number) => {
-        setAnimated(true);
-        setIndex((current) => {
-          if (!infinite) return Math.max(0, Math.min(maxIndex, target));
-          // Take whichever way round is shorter, so a marker near the end of
-          // the run does not walk the whole track to reach a neighbour.
-          const here = ((current % count) + count) % count;
-          const forward = (((target - here) % count) + count) % count;
-          return current + (forward <= count - forward ? forward : forward - count);
-        });
-      },
-      [count, infinite, maxIndex],
-    );
-
-    /**
-     * Which item is in front, counted in `items` rather than in the track.
-     *
-     * With wrap-around the internal index is free to run past either end —
-     * that is what makes the motion continuous — so it is not a number any
-     * caller could use. This folds it back into the range of the real run,
-     * and it is the only index this component reports or accepts.
-     */
-    const activeIndex = count > 0 ? ((index % count) + count) % count : 0;
-
-    /**
-     * Report the front item, but never on mount.
-     *
-     * The callback is read through a ref so that a caller passing a fresh
-     * arrow function on every render — which is most of them — does not make
-     * this fire again for an index that has not moved.
-     */
-    const onActiveChangeRef = useRef(onActiveChange);
-    onActiveChangeRef.current = onActiveChange;
-    const reportedRef = useRef(activeIndex);
-    useEffect(() => {
-      if (reportedRef.current === activeIndex) return;
-      reportedRef.current = activeIndex;
-      onActiveChangeRef.current?.(activeIndex);
-    }, [activeIndex]);
-
-    /**
-     * Move when `active` changes.
-     *
-     * Deliberately keyed on `active` alone. Were it to depend on where the run
-     * actually is, every drag would be undone a frame after it finished by an
-     * effect insisting on the last value the caller passed — the run would
-     * fight the pointer. `active` says go here; it does not say stay here.
-     */
-    // biome-ignore lint/correctness/useExhaustiveDependencies: see above — reacting to the caller's command, not to our own position
-    useEffect(() => {
-      if (active === undefined || count === 0) return;
-      goTo(active);
-    }, [active, count]);
-
-    /**
-     * Put the index back inside the real copy once the motion has finished.
-     *
-     * Switching the transition off for one frame is what makes the jump
-     * invisible: the index changes by a whole copy and the transform changes
-     * by exactly one copy's width, so the pixels are identical.
-     */
-    const handleTransitionEnd = useCallback(
-      (event: React.TransitionEvent<HTMLDivElement>) => {
-        // `transitionend` bubbles, so a tile animating its own background would
-        // otherwise be read as the track arriving.
-        if (event.target !== trackRef.current || event.propertyName !== "transform") return;
-        if (!infinite || count === 0) return;
-        if (index >= 0 && index < count) return;
-        setAnimated(false);
-        setIndex(((index % count) + count) % count);
-      },
-      [count, index, infinite],
-    );
-
-    /**
-     * Put the transition back one frame after the wrap-around jump — but not
-     * while a drag is in progress.
-     *
-     * Without the `dragging` guard this fires for any `animated === false`,
-     * and a drag is the other thing that sets it false. One frame in, the
-     * transition came back on, and every `dragPx` update after that was eased
-     * over `--transition-duration-macro-long` instead of applied: the track
-     * crawled toward the pointer at 0.6s a step and never caught up. Measured
-     * before the guard — a 164px drag moved the track 46px, in increments of
-     * 40, 1, 2, 3. It only looked right on release because the commit works
-     * from the raw pointer delta, not from where the track had got to.
-     */
-    useEffect(() => {
-      if (animated || dragging) return;
-      const frame = requestAnimationFrame(() => setAnimated(true));
-      return () => cancelAnimationFrame(frame);
-    }, [animated, dragging]);
-
-    const drag = useRef({
-      active: false,
-      axis: null as null | "x" | "y",
-      startX: 0,
-      startY: 0,
-      lastX: 0,
-      lastT: 0,
+  const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (!draggable || tileStep === 0 || event.button !== 0) return;
+    drag.current = {
+      active: true,
+      axis: null,
+      startX: event.clientX,
+      startY: event.clientY,
+      lastX: event.clientX,
+      lastT: event.timeStamp,
       velocity: 0,
       moved: false,
-    });
-
-    const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-      if (!draggable || tileStep === 0 || event.button !== 0) return;
-      drag.current = {
-        active: true,
-        axis: null,
-        startX: event.clientX,
-        startY: event.clientY,
-        lastX: event.clientX,
-        lastT: event.timeStamp,
-        velocity: 0,
-        moved: false,
-      };
     };
+  };
 
-    const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-      const state = drag.current;
-      if (!state.active) return;
+  const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    if (!state.active) return;
 
-      const dx = event.clientX - state.startX;
-      const dy = event.clientY - state.startY;
+    const dx = event.clientX - state.startX;
+    const dy = event.clientY - state.startY;
 
-      /**
-       * Which axis this gesture belongs to is decided once, on the first
-       * movement past the threshold, and never revisited.
-       *
-       * A carousel that takes every gesture takes vertical ones too, and on a
-       * phone that means the page stops scrolling wherever a carousel happens
-       * to be. Deciding once rather than per-event also stops a diagonal drag
-       * from flickering between the two.
-       */
-      if (state.axis === null) {
-        if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
-        state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
-        if (state.axis === "y") {
-          state.active = false;
-          return;
-        }
-        event.currentTarget.setPointerCapture(event.pointerId);
-        setAnimated(false);
-        setDragging(true);
-      }
-
-      const elapsed = event.timeStamp - state.lastT;
-      if (elapsed > 0) state.velocity = (event.clientX - state.lastX) / elapsed;
-      state.lastX = event.clientX;
-      state.lastT = event.timeStamp;
-      state.moved = true;
-
-      // Past either end there is nothing to show, so the track follows at a
-      // fraction of the pointer and springs back on release.
-      let offset = dx;
-      if (!infinite) {
-        const over = index - dx / tileStep;
-        if (over < 0) offset = dx * RUBBER_BAND;
-        else if (over > maxIndex) offset = dx * RUBBER_BAND;
-      }
-      setDragPx(offset);
-    };
-
-    const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
-      const state = drag.current;
-      if (!state.active || state.axis !== "x") {
-        drag.current.active = false;
-        setDragging(false);
+    /**
+     * Which axis this gesture belongs to is decided once, on the first
+     * movement past the threshold, and never revisited.
+     *
+     * A carousel that takes every gesture takes vertical ones too, and on a
+     * phone that means the page stops scrolling wherever a carousel happens
+     * to be. Deciding once rather than per-event also stops a diagonal drag
+     * from flickering between the two.
+     */
+    if (state.axis === null) {
+      if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+      state.axis = Math.abs(dx) > Math.abs(dy) ? "x" : "y";
+      if (state.axis === "y") {
+        state.active = false;
         return;
       }
-      if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-        event.currentTarget.releasePointerCapture(event.pointerId);
-      }
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setAnimated(false);
+      setDragging(true);
+    }
 
-      const dx = event.clientX - state.startX;
-      const travelled = -dx / tileStep;
-      const flicked = Math.abs(state.velocity) > FLICK_VELOCITY;
-      const committed = Math.abs(travelled) > COMMIT_RATIO || flicked;
-      // A flick is a direction, not a distance: it moves one tile whichever
-      // way it was thrown, even if the pointer barely left where it started.
-      const delta = committed
-        ? Math.abs(travelled) < 1
-          ? Math.sign(travelled) || -Math.sign(state.velocity)
-          : Math.round(travelled)
-        : 0;
+    const elapsed = event.timeStamp - state.lastT;
+    if (elapsed > 0) state.velocity = (event.clientX - state.lastX) / elapsed;
+    state.lastX = event.clientX;
+    state.lastT = event.timeStamp;
+    state.moved = true;
 
-      state.active = false;
+    // Past either end there is nothing to show, so the track follows at a
+    // fraction of the pointer and springs back on release.
+    let offset = dx;
+    if (!infinite) {
+      const over = index - dx / tileStep;
+      if (over < 0) offset = dx * RUBBER_BAND;
+      else if (over > maxIndex) offset = dx * RUBBER_BAND;
+    }
+    setDragPx(offset);
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const state = drag.current;
+    if (!state.active || state.axis !== "x") {
+      drag.current.active = false;
       setDragging(false);
-      setDragPx(0);
-      go(delta);
-    };
+      return;
+    }
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
 
-    /**
-     * A drag that ends on a tile must not also open it.
-     *
-     * The pointer goes down and up on the same anchor, so the browser fires a
-     * click regardless of how far it travelled in between. This swallows that
-     * one click during the capture phase, before it reaches the tile.
-     */
-    const onClickCapture = (event: React.MouseEvent) => {
-      if (!drag.current.moved) return;
-      drag.current.moved = false;
+    const dx = event.clientX - state.startX;
+    const travelled = -dx / tileStep;
+    const flicked = Math.abs(state.velocity) > FLICK_VELOCITY;
+    const committed = Math.abs(travelled) > COMMIT_RATIO || flicked;
+    // A flick is a direction, not a distance: it moves one tile whichever
+    // way it was thrown, even if the pointer barely left where it started.
+    const delta = committed
+      ? Math.abs(travelled) < 1
+        ? Math.sign(travelled) || -Math.sign(state.velocity)
+        : Math.round(travelled)
+      : 0;
+
+    state.active = false;
+    setDragging(false);
+    setDragPx(0);
+    go(delta);
+  };
+
+  /**
+   * A drag that ends on a tile must not also open it.
+   *
+   * The pointer goes down and up on the same anchor, so the browser fires a
+   * click regardless of how far it travelled in between. This swallows that
+   * one click during the capture phase, before it reaches the tile.
+   */
+  const onClickCapture = (event: React.MouseEvent) => {
+    if (!drag.current.moved) return;
+    drag.current.moved = false;
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "ArrowLeft") {
       event.preventDefault();
-      event.stopPropagation();
-    };
+      go(-step);
+    } else if (event.key === "ArrowRight") {
+      event.preventDefault();
+      go(step);
+    }
+  };
 
-    const onKeyDown = (event: React.KeyboardEvent) => {
-      if (event.key === "ArrowLeft") {
-        event.preventDefault();
-        go(-step);
-      } else if (event.key === "ArrowRight") {
-        event.preventDefault();
-        go(step);
-      }
-    };
+  const canGoBack = infinite || index > 0;
+  const canGoForward = infinite || index < maxIndex;
 
-    const canGoBack = infinite || index > 0;
-    const canGoForward = infinite || index < maxIndex;
+  const isTopPlacement = controlPlacement.startsWith("top");
+  const markerSide = markers === true ? (isTopPlacement ? "bottom" : "top") : markers;
 
-    const isTopPlacement = controlPlacement.startsWith("top");
-    const markerSide = markers === true ? (isTopPlacement ? "bottom" : "top") : markers;
+  const controls = (
+    <Row fillWidth gap="8" horizontal={getHorizontalAlignment(controlPlacement)}>
+      <IconButton
+        icon="chevronLeft"
+        aria-label="Previous"
+        onClick={() => go(-step)}
+        disabled={!canGoBack}
+        style={{ border: "none" }}
+      />
+      <IconButton
+        icon="chevronRight"
+        aria-label="Next"
+        onClick={() => go(step)}
+        disabled={!canGoForward}
+        style={{ border: "none" }}
+      />
+    </Row>
+  );
 
-    const controls = (
-      <Row fillWidth gap="8" horizontal={getHorizontalAlignment(controlPlacement)}>
-        <IconButton
-          icon="chevronLeft"
-          aria-label="Previous"
-          onClick={() => go(-step)}
-          disabled={!canGoBack}
-          style={{ border: "none" }}
+  const markerRow = markerSide ? (
+    <Row fillWidth gap="8" horizontal="center" vertical="center" paddingY="4">
+      {items.map((_, i) => (
+        <button
+          // The list is positional and its entries are arbitrary nodes, so
+          // there is no id here to key on.
+          // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
+          key={i}
+          type="button"
+          className={styles.marker}
+          data-active={i === activeIndex ? "true" : undefined}
+          aria-label={`Go to item ${i + 1} of ${count}`}
+          aria-current={i === activeIndex ? "true" : undefined}
+          onClick={() => goTo(i)}
         />
-        <IconButton
-          icon="chevronRight"
-          aria-label="Next"
-          onClick={() => go(step)}
-          disabled={!canGoForward}
-          style={{ border: "none" }}
-        />
-      </Row>
-    );
+      ))}
+    </Row>
+  ) : null;
 
-    const markerRow = markerSide ? (
-      <Row fillWidth gap="8" horizontal="center" vertical="center" paddingY="4">
-        {items.map((_, i) => (
-          <button
-            // The list is positional and its entries are arbitrary nodes, so
-            // there is no id here to key on.
-            // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
-            key={i}
-            type="button"
-            className={styles.marker}
-            data-active={i === activeIndex ? "true" : undefined}
-            aria-label={`Go to item ${i + 1} of ${count}`}
-            aria-current={i === activeIndex ? "true" : undefined}
-            onClick={() => goTo(i)}
-          />
-        ))}
-      </Row>
-    ) : null;
+  /**
+   * Where the track really is, between two indices, while it is being moved.
+   *
+   * The settled `index` is a whole number and would step the scaling from
+   * one tile to the next, which is the opposite of what this is for: the
+   * point is that a tile grows as you drag it towards the front rather than
+   * snapping when it arrives. `dragPx` is the live offset, so dividing it by
+   * the tile pitch gives the fraction of a step the track has travelled, and
+   * the sign is negative because dragging right shows earlier items.
+   */
+  const falloff =
+    proximity === true ? PROXIMITY_FALLOFF : typeof proximity === "number" ? proximity : 0;
+  const scaling = falloff > 0 && tileStep > 0;
+  const front = index - (tileStep > 0 ? dragPx / tileStep : 0);
 
-    /**
-     * Where the track really is, between two indices, while it is being moved.
-     *
-     * The settled `index` is a whole number and would step the scaling from
-     * one tile to the next, which is the opposite of what this is for: the
-     * point is that a tile grows as you drag it towards the front rather than
-     * snapping when it arrives. `dragPx` is the live offset, so dividing it by
-     * the tile pitch gives the fraction of a step the track has travelled, and
-     * the sign is negative because dragging right shows earlier items.
-     */
-    const falloff =
-      proximity === true ? PROXIMITY_FALLOFF : typeof proximity === "number" ? proximity : 0;
-    const scaling = falloff > 0 && tileStep > 0;
-    const front = index - (tileStep > 0 ? dragPx / tileStep : 0);
+  const offset = -(index + origin) * tileStep + dragPx;
 
-    const offset = -(index + origin) * tileStep + dragPx;
-
-    return (
-      <Column ref={ref} fillWidth gap="8" aria-roledescription="carousel" {...rest}>
-        {/*
+  return (
+    <Column ref={ref} fillWidth gap="8" aria-roledescription="carousel" {...rest}>
+      {/*
           Laid out in the order it is read, rather than as a column reversed
           when the controls sit underneath. Reversing the column reverses
           everything in it, so `markers="top"` in a `bottom-*` placement came
           out underneath the controls — the markers' own side is not the
           controls' side to decide.
         */}
-        {markerSide === "top" && markerRow}
-        {isTopPlacement && controls}
+      {markerSide === "top" && markerRow}
+      {isTopPlacement && controls}
 
-        <Flex
-          ref={viewportRef}
-          fillWidth
-          className={clip ? styles.viewportClipped : styles.viewport}
-          data-dragging={dragging ? "true" : undefined}
-          onPointerDown={onPointerDown}
-          onPointerMove={onPointerMove}
-          onPointerUp={endDrag}
-          onPointerCancel={endDrag}
-          onClickCapture={onClickCapture}
-          onKeyDown={onKeyDown}
-          // The track is the thing you move, so it is the thing that takes
-          // focus and answers the arrow keys.
-          tabIndex={0}
-          role="group"
-          aria-label="Items"
+      <Flex
+        ref={viewportRef}
+        fillWidth
+        className={clip ? styles.viewportClipped : styles.viewport}
+        data-dragging={dragging ? "true" : undefined}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        onClickCapture={onClickCapture}
+        onKeyDown={onKeyDown}
+        // The track is the thing you move, so it is the thing that takes
+        // focus and answers the arrow keys.
+        tabIndex={0}
+        role="group"
+        aria-label="Items"
+      >
+        <Row
+          ref={trackRef}
+          gap="8"
+          className={styles.track}
+          onTransitionEnd={handleTransitionEnd}
+          style={{
+            transform: `translate3d(${offset}px, 0, 0)`,
+            // Spread rather than `transition: animated ? undefined : "none"`.
+            // The style object is passed through before it reaches the DOM
+            // and an `undefined` value survives that trip as the string
+            // "undefined", which is not a valid transition and overrides the
+            // one on the class — so the track moved instantly, no
+            // `transitionend` ever fired, and the wrap-around never
+            // normalised. An absent key cannot be stringified.
+            ...(animated ? {} : { transition: "none" }),
+          }}
         >
-          <Row
-            ref={trackRef}
-            gap="8"
-            className={styles.track}
-            onTransitionEnd={handleTransitionEnd}
-            style={{
-              transform: `translate3d(${offset}px, 0, 0)`,
-              // Spread rather than `transition: animated ? undefined : "none"`.
-              // The style object is passed through before it reaches the DOM
-              // and an `undefined` value survives that trip as the string
-              // "undefined", which is not a valid transition and overrides the
-              // one on the class — so the track moved instantly, no
-              // `transitionend` ever fired, and the wrap-around never
-              // normalised. An absent key cannot be stringified.
-              ...(animated ? {} : { transition: "none" }),
-            }}
-          >
-            {rendered.map((item, i) => {
-              const scale = scaling
-                ? Math.max(PROXIMITY_FLOOR, 1 - falloff * Math.abs(i - origin - front))
-                : 1;
-              return (
-                <Column
-                  // Same as above, and with wrap-around the same item appears in
-                  // three copies, so its own identity would not be unique either.
-                  // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
-                  key={i}
-                  className={styles.tile}
-                  // The one sizing default that stays. A tile with no width of
-                  // its own sizes to its content, which is fine for a card of
-                  // text and collapses to nothing for anything that fills its
-                  // parent — so the out-of-the-box carousel would depend on what
-                  // was put in it. `minWidth` is a floor, not a shape: content
-                  // wider than this still sets the tile's width.
-                  minWidth="20rem"
-                  // Only the middle copy is the real run; the other two are
-                  // scenery and must not be read out or tabbed into.
-                  aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}
-                  {...tile}
-                  style={{
-                    ...tile.style,
-                    // Only when asked. Off, a tile carries no transform at all,
-                    // so it never becomes a containing block for whatever the
-                    // caller positioned inside it.
-                    ...(scaling
-                      ? {
-                          transform: `scale(${scale})`,
-                          // Follows the pointer during a drag and eases with the
-                          // track afterwards, the same rule the track itself
-                          // uses — and for the same reason, spread rather than
-                          // set to `undefined`.
-                          ...(animated ? {} : { transition: "none" }),
-                        }
-                      : {}),
-                  }}
-                >
-                  {item}
-                </Column>
-              );
-            })}
-          </Row>
-        </Flex>
+          {rendered.map((item, i) => {
+            const scale = scaling
+              ? Math.max(PROXIMITY_FLOOR, 1 - falloff * Math.abs(i - origin - front))
+              : 1;
+            return (
+              <Column
+                // Same as above, and with wrap-around the same item appears in
+                // three copies, so its own identity would not be unique either.
+                // biome-ignore lint/suspicious/noArrayIndexKey: no stable id exists
+                key={i}
+                className={styles.tile}
+                // The one sizing default that stays. A tile with no width of
+                // its own sizes to its content, which is fine for a card of
+                // text and collapses to nothing for anything that fills its
+                // parent — so the out-of-the-box carousel would depend on what
+                // was put in it. `minWidth` is a floor, not a shape: content
+                // wider than this still sets the tile's width.
+                minWidth="20rem"
+                // Only the middle copy is the real run; the other two are
+                // scenery and must not be read out or tabbed into.
+                aria-hidden={infinite && (i < origin || i >= origin + count) ? "true" : undefined}
+                {...tile}
+                style={{
+                  ...tile.style,
+                  // Only when asked. Off, a tile carries no transform at all,
+                  // so it never becomes a containing block for whatever the
+                  // caller positioned inside it.
+                  ...(scaling
+                    ? {
+                        transform: `scale(${scale})`,
+                        // Follows the pointer during a drag and eases with the
+                        // track afterwards, the same rule the track itself
+                        // uses — and for the same reason, spread rather than
+                        // set to `undefined`.
+                        ...(animated ? {} : { transition: "none" }),
+                      }
+                    : {}),
+                }}
+              >
+                {item}
+              </Column>
+            );
+          })}
+        </Row>
+      </Flex>
 
-        {!isTopPlacement && controls}
-        {markerSide === "bottom" && markerRow}
-      </Column>
-    );
-  },
-);
+      {!isTopPlacement && controls}
+      {markerSide === "bottom" && markerRow}
+    </Column>
+  );
+};
 
 ScrollTrack.displayName = "ScrollTrack";
 

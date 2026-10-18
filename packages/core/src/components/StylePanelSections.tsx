@@ -3,7 +3,6 @@
 import classNames from "clsx";
 import {
   createContext,
-  forwardRef,
   type KeyboardEvent,
   type ReactNode,
   useCallback,
@@ -424,10 +423,15 @@ export interface StylePanelRootProps
   stacked?: boolean;
 }
 
-const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
-  { value, onValueChange, labels, stacked = false, children, ...rest },
+const Root = function Root({
   ref,
-) {
+  value,
+  onValueChange,
+  labels,
+  stacked = false,
+  children,
+  ...rest
+}: StylePanelRootProps) {
   const bound = useBoundState();
   // Controlled when `value` is set, whether or not a handler is passed.
   const controlled = value !== undefined;
@@ -458,7 +462,7 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
       </StylePanelLabelsContext.Provider>
     </StylePanelContext.Provider>
   );
-});
+};
 
 /* ---- primitives ---------------------------------------------------------- */
 

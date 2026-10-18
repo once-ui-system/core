@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type { ComponentProps } from "react";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Flex } from "./Flex.js";
 import { Grid } from "./Grid.js";
 import { Logo } from "./Logo.js";
@@ -21,63 +21,69 @@ interface LogoCloudProps extends React.ComponentProps<typeof Grid> {
 const ANIMATION_DURATION = 5000;
 const STAGGER_DELAY = 25;
 
-const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
-  ({ logos, className, style, limit = 6, rotationInterval = ANIMATION_DURATION, ...rest }, ref) => {
-    const [visibleLogos, setVisibleLogos] = useState<LogoProps[]>(() => logos.slice(0, limit));
-    const [key, setKey] = useState(0);
-    const shouldRotate = logos.length > limit;
+const LogoCloud = ({
+  ref,
+  logos,
+  className,
+  style,
+  limit = 6,
+  rotationInterval = ANIMATION_DURATION,
+  ...rest
+}: LogoCloudProps) => {
+  const [visibleLogos, setVisibleLogos] = useState<LogoProps[]>(() => logos.slice(0, limit));
+  const [key, setKey] = useState(0);
+  const shouldRotate = logos.length > limit;
 
-    useEffect(() => {
-      if (!shouldRotate) {
-        setVisibleLogos(logos);
-        return;
-      }
+  useEffect(() => {
+    if (!shouldRotate) {
+      setVisibleLogos(logos);
+      return;
+    }
 
-      const interval = setInterval(
-        () => {
-          setVisibleLogos((currentLogos) => {
-            const currentIndices = currentLogos.map((logo) => logos.findIndex((l) => l === logo));
+    const interval = setInterval(
+      () => {
+        setVisibleLogos((currentLogos) => {
+          const currentIndices = currentLogos.map((logo) => logos.findIndex((l) => l === logo));
 
-            const nextIndices = currentIndices
-              .map((index) => (index + 1) % logos.length)
-              .sort((a, b) => a - b);
+          const nextIndices = currentIndices
+            .map((index) => (index + 1) % logos.length)
+            .sort((a, b) => a - b);
 
-            const nextLogos = nextIndices.map((index) => logos[index]);
-            setKey((k) => k + 1);
-            return nextLogos;
-          });
-        },
-        rotationInterval + STAGGER_DELAY * limit,
-      );
-
-      return () => clearInterval(interval);
-    }, [logos, limit, rotationInterval, shouldRotate]);
-
-    return (
-      <Grid ref={ref} className={classNames(styles.container, className)} style={style} {...rest}>
-        {visibleLogos.map((logo, index) => (
-          <Flex
-            key={`${key}-${index}`}
-            vertical="center"
-            horizontal="center"
-            paddingX="24"
-            paddingY="20"
-            radius="l"
-          >
-            <Logo
-              className={shouldRotate ? styles.logo : styles.staticLogo}
-              style={{
-                ...logo.style,
-                animationDelay: `${index * STAGGER_DELAY}ms`,
-              }}
-              {...logo}
-            />
-          </Flex>
-        ))}
-      </Grid>
+          const nextLogos = nextIndices.map((index) => logos[index]);
+          setKey((k) => k + 1);
+          return nextLogos;
+        });
+      },
+      rotationInterval + STAGGER_DELAY * limit,
     );
-  },
-);
+
+    return () => clearInterval(interval);
+  }, [logos, limit, rotationInterval, shouldRotate]);
+
+  return (
+    <Grid ref={ref} className={classNames(styles.container, className)} style={style} {...rest}>
+      {visibleLogos.map((logo, index) => (
+        <Flex
+          key={`${key}-${index}`}
+          vertical="center"
+          horizontal="center"
+          paddingX="24"
+          paddingY="20"
+          radius="l"
+        >
+          <Logo
+            className={shouldRotate ? styles.logo : styles.staticLogo}
+            style={{
+              ...logo.style,
+              animationDelay: `${index * STAGGER_DELAY}ms`,
+            }}
+            {...logo}
+          />
+        </Flex>
+      ))}
+    </Grid>
+  );
+};
 
 LogoCloud.displayName = "LogoCloud";
 

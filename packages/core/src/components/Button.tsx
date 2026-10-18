@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { IconName } from "../icons.js";
 import { defaultButtonTone } from "../internal/buttonTone.js";
 import { Tone, TShirtSizes } from "../types.js";
@@ -56,90 +56,86 @@ interface ButtonCommonProps {
 export type ButtonProps = ButtonCommonProps & React.ButtonHTMLAttributes<HTMLButtonElement>;
 export type AnchorProps = ButtonCommonProps & React.AnchorHTMLAttributes<HTMLAnchorElement>;
 
-const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
-  (
-    {
-      variant = "primary",
-      tone,
-      size = "m",
-      corners,
-      rounded,
-      label,
-      weight = "strong",
-      children,
-      prefixIcon,
-      suffixIcon,
-      loading = false,
-      disabled = false,
-      fillWidth = false,
-      horizontal = "center",
-      href,
-      id,
-      arrowIcon = false,
-      className,
-      style,
-      ...props
-    },
-    ref,
-  ) => {
-    const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
-    const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
-    const trigger = useDropdownTrigger();
+const Button = ({
+  ref,
+  variant = "primary",
+  tone,
+  size = "m",
+  corners,
+  rounded,
+  label,
+  weight = "strong",
+  children,
+  prefixIcon,
+  suffixIcon,
+  loading = false,
+  disabled = false,
+  fillWidth = false,
+  horizontal = "center",
+  href,
+  id,
+  arrowIcon = false,
+  className,
+  style,
+  ...props
+}: (ButtonProps | AnchorProps) & { ref?: React.Ref<HTMLButtonElement> }) => {
+  const iconSize = size === "l" || size === "xl" ? "s" : size === "m" ? "s" : "xs";
+  const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
+  const trigger = useDropdownTrigger();
 
-    return (
-      <ElementType
-        id={id}
-        href={href}
-        ref={ref}
-        {...dropdownTriggerProps(trigger, href, props.onClick)}
-        disabled={disabled}
-        data-disabled={disabled ? true : undefined}
-        data-border={rounded ? "rounded" : undefined}
-        className={classNames(
-          styles.button,
-          styles[variant],
-          styles[`tone-${tone ?? defaultButtonTone(variant)}`],
-          styles[size],
-          corners === "none"
-            ? "radius-none"
-            : corners
-              ? `radius-${radiusSize}-${corners}`
-              : `radius-${radiusSize}`,
-          "text-decoration-none",
-          "button",
-          disabled ? "cursor-not-allowed" : "cursor-interactive",
-          {
-            ["fill-width"]: fillWidth,
-            ["fit-width"]: !fillWidth,
-            ["justify-" + horizontal]: horizontal,
-          },
-          className,
-        )}
-        style={style}
-        {...props}
-      >
-        {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
-        {loading && <Spinner size={size} />}
-        {(label || children) && (
-          <Flex paddingX="4" paddingY="0" textVariant={`label-${weight}-${size}`}>
-            {label || children}
-          </Flex>
-        )}
-        {arrowIcon && (
-          <Arrow
-            style={{
-              marginLeft: "calc(-1 * var(--static-space-4))",
-            }}
-            trigger={"#" + id}
-            scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
-            color={variant === "primary" ? "onSolid" : "onBackground"}
-          />
-        )}
-        {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
-      </ElementType>
-    );
-  },
-);
+  return (
+    <ElementType
+      id={id}
+      href={href}
+      ref={ref}
+      {...dropdownTriggerProps(trigger, href, props.onClick)}
+      disabled={disabled}
+      data-disabled={disabled ? true : undefined}
+      data-border={rounded ? "rounded" : undefined}
+      className={classNames(
+        styles.button,
+        styles[variant],
+        styles[`tone-${tone ?? defaultButtonTone(variant)}`],
+        styles[size],
+        corners === "none"
+          ? "radius-none"
+          : corners
+            ? `radius-${radiusSize}-${corners}`
+            : `radius-${radiusSize}`,
+        "text-decoration-none",
+        "button",
+        disabled ? "cursor-not-allowed" : "cursor-interactive",
+        {
+          ["fill-width"]: fillWidth,
+          ["fit-width"]: !fillWidth,
+          ["justify-" + horizontal]: horizontal,
+        },
+        className,
+      )}
+      style={style}
+      {...props}
+    >
+      {prefixIcon && !loading && <Icon name={prefixIcon} size={iconSize} />}
+      {loading && <Spinner size={size} />}
+      {(label || children) && (
+        <Flex paddingX="4" paddingY="0" textVariant={`label-${weight}-${size}`}>
+          {label || children}
+        </Flex>
+      )}
+      {arrowIcon && (
+        <Arrow
+          style={{
+            marginLeft: "calc(-1 * var(--static-space-4))",
+          }}
+          trigger={"#" + id}
+          scale={size === "s" ? 0.8 : size === "m" ? 0.9 : 1}
+          color={variant === "primary" ? "onSolid" : "onBackground"}
+        />
+      )}
+      {suffixIcon && <Icon name={suffixIcon} size={iconSize} />}
+    </ElementType>
+  );
+};
 
 Button.displayName = "Button";
 

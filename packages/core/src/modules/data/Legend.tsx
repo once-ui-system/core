@@ -23,7 +23,7 @@ interface LegendProps {
   variant?: ChartVariant;
 }
 
-const Legend: React.FC<LegendProps> = ({
+const Legend = ({
   payload,
   labels = "both",
   position = "top-left",
@@ -31,7 +31,7 @@ const Legend: React.FC<LegendProps> = ({
   direction,
   colors,
   variant,
-}) => {
+}: LegendProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();

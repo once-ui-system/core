@@ -1,5 +1,5 @@
 import classNames from "clsx";
-import React, { forwardRef } from "react";
+import React from "react";
 import { PulseRing } from "../internal/PulseRing.js";
 import { Schemes, Tone, TShirtSizes } from "../types.js";
 import { Flex } from "./Flex.js";
@@ -22,53 +22,49 @@ interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   style?: React.CSSProperties;
 }
 
-const StatusIndicator = forwardRef<HTMLDivElement, StatusIndicatorProps>(
-  (
-    {
-      size = "m",
-      scheme = "blue",
-      pulse = false,
-      tone = "brand",
-      pulseSize,
-      "aria-label": ariaLabel,
-      className,
-      style,
-      ...rest
-    },
-    ref,
-  ) => {
-    if (pulse) {
-      return (
-        <PulseRing
-          {...(rest as Omit<React.ComponentProps<typeof PulseRing>, "tone" | "size">)}
-          ref={ref}
-          tone={tone}
-          size={size}
-          pulseSize={pulseSize}
-          className={className}
-          style={style}
-          // Named, it is an image like the plain dot; unnamed it is decoration, as Pulse was.
-          role={ariaLabel ? "img" : undefined}
-          aria-label={ariaLabel}
-        />
-      );
-    }
+const StatusIndicator = ({
+  ref,
+  size = "m",
+  scheme = "blue",
+  pulse = false,
+  tone = "brand",
+  pulseSize,
+  "aria-label": ariaLabel,
+  className,
+  style,
+  ...rest
+}: StatusIndicatorProps) => {
+  if (pulse) {
     return (
-      <Flex
+      <PulseRing
+        {...(rest as Omit<React.ComponentProps<typeof PulseRing>, "tone" | "size">)}
         ref={ref}
+        tone={tone}
+        size={size}
+        pulseSize={pulseSize}
+        className={className}
         style={style}
-        className={classNames(styles.statusIndicator, styles[size], styles[scheme], className)}
-        // A label on a plain div is not exposed (axe: aria-prohibited-attr);
-        // as an image the dot is announced by it. `role` can still be
-        // overridden through the rest.
-        role="img"
-        aria-label={ariaLabel ?? `${scheme} status indicator`}
-        radius="full"
-        {...rest}
+        // Named, it is an image like the plain dot; unnamed it is decoration, as Pulse was.
+        role={ariaLabel ? "img" : undefined}
+        aria-label={ariaLabel}
       />
     );
-  },
-);
+  }
+  return (
+    <Flex
+      ref={ref}
+      style={style}
+      className={classNames(styles.statusIndicator, styles[size], styles[scheme], className)}
+      // A label on a plain div is not exposed (axe: aria-prohibited-attr);
+      // as an image the dot is announced by it. `role` can still be
+      // overridden through the rest.
+      role="img"
+      aria-label={ariaLabel ?? `${scheme} status indicator`}
+      radius="full"
+      {...rest}
+    />
+  );
+};
 
 StatusIndicator.displayName = "StatusIndicator";
 

@@ -1,7 +1,6 @@
 "use client";
 
 import React, {
-  forwardRef,
   KeyboardEvent,
   MouseEvent as ReactMouseEvent,
   ReactNode,
@@ -99,387 +98,383 @@ function menuOrigin(
   };
 }
 
-const ContextMenuImpl = forwardRef<HTMLDivElement, ContextMenuImplProps>(
-  (
-    {
-      children,
-      dropdown,
-      minHeight,
-      onSelect,
-      closeAfterClick = true,
-      open,
-      onOpenChange,
-      minWidth = "12rem",
-      maxWidth,
-      fillWidth = false,
-      // "bottom-start" is where the menu has always opened: its top-left
-      // corner at the pointer. The declared default used to be "bottom-end",
-      // but the prop was never read.
-      placement = "bottom-start",
-      disabled = false,
-      contents = false,
-      className,
-      style,
-      ...rest
+const ContextMenuImpl = ({
+  ref,
+  children,
+  dropdown,
+  minHeight,
+  onSelect,
+  closeAfterClick = true,
+  open,
+  onOpenChange,
+  minWidth = "12rem",
+  maxWidth,
+  fillWidth = false,
+  // "bottom-start" is where the menu has always opened: its top-left
+  // corner at the pointer. The declared default used to be "bottom-end",
+  // but the prop was never read.
+  placement = "bottom-start",
+  disabled = false,
+  contents = false,
+  className,
+  style,
+  ...rest
+}: ContextMenuImplProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [contextPosition, setContextPosition] = useState({ x: 0, y: 0 });
+  /** Where the menu is drawn: the pointer, moved back inside the viewport if it would overflow. */
+  const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [isBrowser, setIsBrowser] = useState(false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const previouslyFocusedElement = useRef<Element | null>(null);
+
+  // Control open state internally if not provided
+  const isControlled = open !== undefined;
+  const isDropdownOpen = isControlled ? open : internalIsOpen;
+
+  // Handle open state changes
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      if (!isControlled) {
+        setInternalIsOpen(open);
+      }
+      onOpenChange?.(open);
     },
-    ref,
-  ) => {
-    const [contextPosition, setContextPosition] = useState({ x: 0, y: 0 });
-    /** Where the menu is drawn: the pointer, moved back inside the viewport if it would overflow. */
-    const [menuPosition, setMenuPosition] = useState({ x: 0, y: 0 });
-    const [internalIsOpen, setInternalIsOpen] = useState(false);
-    const [isBrowser, setIsBrowser] = useState(false);
-    const [focusedIndex, setFocusedIndex] = useState(-1);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const dropdownRef = useRef<HTMLDivElement>(null);
-    const previouslyFocusedElement = useRef<Element | null>(null);
+    [isControlled, onOpenChange],
+  );
 
-    // Control open state internally if not provided
-    const isControlled = open !== undefined;
-    const isDropdownOpen = isControlled ? open : internalIsOpen;
+  // Set browser state for portal rendering
+  useEffect(() => {
+    setIsBrowser(true);
+  }, []);
 
-    // Handle open state changes
-    const handleOpenChange = useCallback(
-      (open: boolean) => {
-        if (!isControlled) {
-          setInternalIsOpen(open);
-        }
-        onOpenChange?.(open);
-      },
-      [isControlled, onOpenChange],
-    );
+  /**
+   * Open at the pointer. A context menu opened from the keyboard (Shift+F10,
+   * the Menu key) has no pointer, and some browsers report it at 0,0, the
+   * corner of the viewport: open that one at the element instead.
+   */
+  const openAt = useCallback(
+    (e: ReactMouseEvent) => {
+      let x = e.clientX;
+      let y = e.clientY;
+      if (x === 0 && y === 0 && e.target instanceof Element) {
+        const rect = e.target.getBoundingClientRect();
+        x = rect.left;
+        y = rect.bottom;
+      }
+      setContextPosition({ x, y });
+      // Laid out at the origin first, where the viewport cannot squeeze it,
+      // so the effect below measures its real size before placing it.
+      setMenuPosition({ x: 0, y: 0 });
+      handleOpenChange(true);
+    },
+    [handleOpenChange],
+  );
 
-    // Set browser state for portal rendering
-    useEffect(() => {
-      setIsBrowser(true);
-    }, []);
+  const handleContextMenu = useCallback(
+    (e: ReactMouseEvent) => {
+      if (disabled) return;
 
-    /**
-     * Open at the pointer. A context menu opened from the keyboard (Shift+F10,
-     * the Menu key) has no pointer, and some browsers report it at 0,0, the
-     * corner of the viewport: open that one at the element instead.
-     */
-    const openAt = useCallback(
-      (e: ReactMouseEvent) => {
-        let x = e.clientX;
-        let y = e.clientY;
-        if (x === 0 && y === 0 && e.target instanceof Element) {
-          const rect = e.target.getBoundingClientRect();
-          x = rect.left;
-          y = rect.bottom;
-        }
-        setContextPosition({ x, y });
-        // Laid out at the origin first, where the viewport cannot squeeze it,
-        // so the effect below measures its real size before placing it.
-        setMenuPosition({ x: 0, y: 0 });
-        handleOpenChange(true);
-      },
-      [handleOpenChange],
-    );
+      e.preventDefault();
+      e.stopPropagation();
+      openAt(e);
+    },
+    [disabled, openAt],
+  );
 
-    const handleContextMenu = useCallback(
-      (e: ReactMouseEvent) => {
-        if (disabled) return;
+  // Handle click events for MacBook support (Control+click)
+  const handleClick = useCallback(
+    (e: ReactMouseEvent) => {
+      if (disabled) return;
 
+      // Check if it's a control+click (common right-click equivalent on Mac)
+      if (e.ctrlKey || e.metaKey) {
         e.preventDefault();
         e.stopPropagation();
         openAt(e);
-      },
-      [disabled, openAt],
-    );
+      }
+    },
+    [disabled, openAt],
+  );
 
-    // Handle click events for MacBook support (Control+click)
-    const handleClick = useCallback(
-      (e: ReactMouseEvent) => {
-        if (disabled) return;
+  /**
+   * Place the menu at the pointer as `placement` says, and keep it on
+   * screen: a right-click near the bottom or right edge put most of it out
+   * of view, so there it opens on the other side of the pointer instead
+   * (see `menuOrigin`). Measured in layout pixels (`offsetWidth`), which the
+   * open animation's scale does not shrink, and before paint, so it never
+   * draws in the wrong place first.
+   */
+  useLayoutEffect(() => {
+    if (!isDropdownOpen) return;
+    const menu = dropdownRef.current;
+    const { x, y } = contextPosition;
+    if (!menu) {
+      setMenuPosition({ x, y });
+      return;
+    }
+    setMenuPosition(menuOrigin(placement, x, y, menu.offsetWidth, menu.offsetHeight));
+  }, [isDropdownOpen, contextPosition, placement]);
 
-        // Check if it's a control+click (common right-click equivalent on Mac)
-        if (e.ctrlKey || e.metaKey) {
-          e.preventDefault();
-          e.stopPropagation();
-          openAt(e);
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        isDropdownOpen &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node)
+      ) {
+        handleOpenChange(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isDropdownOpen, handleOpenChange]);
+
+  /** The items the arrow keys can land on: every item that is not disabled. */
+  const enabledItems = useCallback(
+    () =>
+      dropdownRef.current
+        ? (Array.from(dropdownRef.current.querySelectorAll(ITEM_SELECTOR)).filter(
+            isEnabled,
+          ) as HTMLElement[])
+        : [],
+    [],
+  );
+
+  /** Move focus and the highlight to one item. */
+  const focusItem = useCallback((items: HTMLElement[], index: number) => {
+    setFocusedIndex(index);
+    dropdownRef.current?.querySelectorAll(ITEM_SELECTOR).forEach((item) => {
+      item.classList.toggle("highlighted", item === items[index]);
+    });
+    items[index]?.scrollIntoView?.({ block: "nearest" });
+    items[index]?.focus({ preventScroll: true });
+  }, []);
+
+  // Focus management
+  useEffect(() => {
+    if (isDropdownOpen) {
+      // Store the currently focused element before focusing the dropdown
+      previouslyFocusedElement.current = document.activeElement;
+
+      // Reset focus index when opening
+      setFocusedIndex(-1);
+
+      // Store current scroll position
+      const scrollX = window.scrollX;
+      const scrollY = window.scrollY;
+
+      // Focus the dropdown after a small delay to ensure it's rendered
+      const timer = setTimeout(() => {
+        if (dropdownRef.current) {
+          // Force focus on the dropdown container first
+          dropdownRef.current.focus({ preventScroll: true });
+
+          const items = enabledItems();
+          if (items.length > 0) {
+            focusItem(items, 0);
+          } else {
+            // If no items, focus any focusable element
+            const focusableElements = dropdownRef.current.querySelectorAll(
+              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            );
+
+            if (focusableElements.length > 0) {
+              (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
+            }
+          }
+
+          // Restore scroll position that might have been changed by focus
+          window.scrollTo(scrollX, scrollY);
         }
-      },
-      [disabled, openAt],
-    );
+      }, 50); // Small delay to ensure DOM is ready
+      return () => clearTimeout(timer);
+    }
 
-    /**
-     * Place the menu at the pointer as `placement` says, and keep it on
-     * screen: a right-click near the bottom or right edge put most of it out
-     * of view, so there it opens on the other side of the pointer instead
-     * (see `menuOrigin`). Measured in layout pixels (`offsetWidth`), which the
-     * open animation's scale does not shrink, and before paint, so it never
-     * draws in the wrong place first.
-     */
-    useLayoutEffect(() => {
+    // Hand focus back to where it was before the menu opened.
+    const previous = previouslyFocusedElement.current;
+    previouslyFocusedElement.current = null;
+    if (previous instanceof HTMLElement && document.contains(previous)) {
+      previous.focus({ preventScroll: true });
+    }
+  }, [isDropdownOpen, enabledItems, focusItem]);
+
+  // Handle keyboard navigation
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLDivElement>) => {
       if (!isDropdownOpen) return;
-      const menu = dropdownRef.current;
-      const { x, y } = contextPosition;
-      if (!menu) {
-        setMenuPosition({ x, y });
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        // Closes this menu only, not a dialog it was opened in.
+        e.stopPropagation();
+        handleOpenChange(false);
         return;
       }
-      setMenuPosition(menuOrigin(placement, x, y, menu.offsetWidth, menu.offsetHeight));
-    }, [isDropdownOpen, contextPosition, placement]);
 
-    // Close dropdown when clicking outside
-    useEffect(() => {
-      const handleClickOutside = (e: MouseEvent) => {
-        if (
-          isDropdownOpen &&
-          dropdownRef.current &&
-          !dropdownRef.current.contains(e.target as Node)
-        ) {
-          handleOpenChange(false);
-        }
-      };
+      // Handle tab key for focus trapping
+      if (e.key === "Tab" && dropdownRef.current) {
+        // Find all focusable elements in the dropdown
+        const focusableElements = Array.from(
+          dropdownRef.current.querySelectorAll(
+            'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+          ),
+        ) as HTMLElement[];
 
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [isDropdownOpen, handleOpenChange]);
+        if (focusableElements.length === 0) return;
 
-    /** The items the arrow keys can land on: every item that is not disabled. */
-    const enabledItems = useCallback(
-      () =>
-        dropdownRef.current
-          ? (Array.from(dropdownRef.current.querySelectorAll(ITEM_SELECTOR)).filter(
-              isEnabled,
-            ) as HTMLElement[])
-          : [],
-      [],
-    );
+        // Get the first and last focusable elements
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
 
-    /** Move focus and the highlight to one item. */
-    const focusItem = useCallback((items: HTMLElement[], index: number) => {
-      setFocusedIndex(index);
-      dropdownRef.current?.querySelectorAll(ITEM_SELECTOR).forEach((item) => {
-        item.classList.toggle("highlighted", item === items[index]);
-      });
-      items[index]?.scrollIntoView?.({ block: "nearest" });
-      items[index]?.focus({ preventScroll: true });
-    }, []);
-
-    // Focus management
-    useEffect(() => {
-      if (isDropdownOpen) {
-        // Store the currently focused element before focusing the dropdown
-        previouslyFocusedElement.current = document.activeElement;
-
-        // Reset focus index when opening
-        setFocusedIndex(-1);
-
-        // Store current scroll position
-        const scrollX = window.scrollX;
-        const scrollY = window.scrollY;
-
-        // Focus the dropdown after a small delay to ensure it's rendered
-        const timer = setTimeout(() => {
-          if (dropdownRef.current) {
-            // Force focus on the dropdown container first
-            dropdownRef.current.focus({ preventScroll: true });
-
-            const items = enabledItems();
-            if (items.length > 0) {
-              focusItem(items, 0);
-            } else {
-              // If no items, focus any focusable element
-              const focusableElements = dropdownRef.current.querySelectorAll(
-                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-              );
-
-              if (focusableElements.length > 0) {
-                (focusableElements[0] as HTMLElement).focus({ preventScroll: true });
-              }
-            }
-
-            // Restore scroll position that might have been changed by focus
-            window.scrollTo(scrollX, scrollY);
+        // Handle tab and shift+tab to cycle through focusable elements
+        if (e.shiftKey) {
+          // Shift+Tab
+          if (document.activeElement === firstElement) {
+            e.preventDefault();
+            lastElement.focus();
           }
-        }, 50); // Small delay to ensure DOM is ready
-        return () => clearTimeout(timer);
+        } else {
+          // Tab
+          if (document.activeElement === lastElement) {
+            e.preventDefault();
+            firstElement.focus();
+          }
+        }
+
+        return;
       }
 
-      // Hand focus back to where it was before the menu opened.
-      const previous = previouslyFocusedElement.current;
-      previouslyFocusedElement.current = null;
-      if (previous instanceof HTMLElement && document.contains(previous)) {
-        previous.focus({ preventScroll: true });
-      }
-    }, [isDropdownOpen, enabledItems, focusItem]);
+      if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
+        e.preventDefault();
 
-    // Handle keyboard navigation
-    const handleKeyDown = useCallback(
-      (e: KeyboardEvent<HTMLDivElement>) => {
-        if (!isDropdownOpen) return;
+        const items = enabledItems();
+        if (items.length === 0) return;
 
-        if (e.key === "Escape") {
-          e.preventDefault();
-          // Closes this menu only, not a dialog it was opened in.
-          e.stopPropagation();
-          handleOpenChange(false);
-          return;
-        }
+        // From the item that has focus, so a pointer that focused one is
+        // followed; else from the last one the keys reached.
+        const active = items.indexOf(document.activeElement as HTMLElement);
+        const from = active >= 0 ? active : focusedIndex;
+        const last = items.length - 1;
+        const next =
+          e.key === "Home"
+            ? 0
+            : e.key === "End"
+              ? last
+              : e.key === "ArrowDown"
+                ? from < last
+                  ? from + 1
+                  : 0
+                : from > 0
+                  ? from - 1
+                  : last;
 
-        // Handle tab key for focus trapping
-        if (e.key === "Tab" && dropdownRef.current) {
-          // Find all focusable elements in the dropdown
-          const focusableElements = Array.from(
-            dropdownRef.current.querySelectorAll(
-              'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-            ),
-          ) as HTMLElement[];
+        focusItem(items, next);
+      } else if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
 
-          if (focusableElements.length === 0) return;
+        // Click the focused item
+        const items = enabledItems();
+        if (focusedIndex >= 0 && focusedIndex < items.length) {
+          items[focusedIndex].click();
 
-          // Get the first and last focusable elements
-          const firstElement = focusableElements[0];
-          const lastElement = focusableElements[focusableElements.length - 1];
-
-          // Handle tab and shift+tab to cycle through focusable elements
-          if (e.shiftKey) {
-            // Shift+Tab
-            if (document.activeElement === firstElement) {
-              e.preventDefault();
-              lastElement.focus();
-            }
-          } else {
-            // Tab
-            if (document.activeElement === lastElement) {
-              e.preventDefault();
-              firstElement.focus();
-            }
+          if (closeAfterClick) {
+            handleOpenChange(false);
           }
-
-          return;
         }
+      }
+    },
+    [isDropdownOpen, focusedIndex, handleOpenChange, closeAfterClick, enabledItems, focusItem],
+  );
 
-        if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
-          e.preventDefault();
+  const menu =
+    isDropdownOpen &&
+    isBrowser &&
+    createPortal(
+      <Flex
+        position="fixed"
+        zIndex={10}
+        tabIndex={0}
+        ref={(node) => {
+          dropdownRef.current = node;
+          if (typeof ref === "function") {
+            ref(node);
+          } else if (ref) {
+            ref.current = node;
+          }
+        }}
+        className={styles.fadeIn}
+        style={{
+          top: menuPosition.y,
+          left: menuPosition.x,
+        }}
+        role="menu"
+        onKeyDown={handleKeyDown}
+        onClick={(e) => {
+          const el = e.target as HTMLElement;
+          const isSelectable = el.closest(ITEM_SELECTOR);
 
-          const items = enabledItems();
-          if (items.length === 0) return;
-
-          // From the item that has focus, so a pointer that focused one is
-          // followed; else from the last one the keys reached.
-          const active = items.indexOf(document.activeElement as HTMLElement);
-          const from = active >= 0 ? active : focusedIndex;
-          const last = items.length - 1;
-          const next =
-            e.key === "Home"
-              ? 0
-              : e.key === "End"
-                ? last
-                : e.key === "ArrowDown"
-                  ? from < last
-                    ? from + 1
-                    : 0
-                  : from > 0
-                    ? from - 1
-                    : last;
-
-          focusItem(items, next);
-        } else if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-
-          // Click the focused item
-          const items = enabledItems();
-          if (focusedIndex >= 0 && focusedIndex < items.length) {
-            items[focusedIndex].click();
-
-            if (closeAfterClick) {
+          if (isSelectable && closeAfterClick) {
+            setTimeout(() => {
               handleOpenChange(false);
-            }
+            }, 50);
           }
-        }
-      },
-      [isDropdownOpen, focusedIndex, handleOpenChange, closeAfterClick, enabledItems, focusItem],
-    );
-
-    const menu =
-      isDropdownOpen &&
-      isBrowser &&
-      createPortal(
-        <Flex
-          position="fixed"
-          zIndex={10}
-          tabIndex={0}
-          ref={(node) => {
-            dropdownRef.current = node;
-            if (typeof ref === "function") {
-              ref(node);
-            } else if (ref) {
-              ref.current = node;
-            }
-          }}
-          className={styles.fadeIn}
-          style={{
-            top: menuPosition.y,
-            left: menuPosition.x,
-          }}
-          role="menu"
-          onKeyDown={handleKeyDown}
-          onClick={(e) => {
-            const el = e.target as HTMLElement;
-            const isSelectable = el.closest(ITEM_SELECTOR);
-
-            if (isSelectable && closeAfterClick) {
-              setTimeout(() => {
-                handleOpenChange(false);
-              }, 50);
-            }
-          }}
-        >
-          {/* The menu's items are menu items, and the panel around them is a
+        }}
+      >
+        {/* The menu's items are menu items, and the panel around them is a
               group in the menu, not a listbox of its own. */}
-          <OptionRoleContext.Provider value="menuitem">
-            <DropdownPanel
-              minWidth={minWidth}
-              maxWidth={maxWidth}
-              minHeight={minHeight}
-              radius="l"
-              role="group"
-              onSelect={(value) => {
-                onSelect?.(value);
-                if (closeAfterClick) {
-                  handleOpenChange(false);
-                }
-              }}
-              {...rest}
-            >
-              {dropdown}
-            </DropdownPanel>
-          </OptionRoleContext.Provider>
-        </Flex>,
-        document.body,
-      );
-
-    return (
-      <>
-        <ScrollLock enabled={isDropdownOpen} allowScrollInElement={dropdownRef} />
-        <Flex
-          ref={containerRef}
-          onContextMenu={handleContextMenu}
-          onClick={handleClick}
-          fillWidth={fillWidth}
-          className={className || ""}
-          // `display: contents` outranks the Flex's own display class, and
-          // without a box its position class contains nothing either.
-          style={
-            contents
-              ? { ...style, display: "contents" }
-              : { ...style, opacity: disabled ? 0.6 : undefined }
-          }
-          aria-disabled={disabled}
-        >
-          {children}
-          {menu}
-        </Flex>
-      </>
+        <OptionRoleContext.Provider value="menuitem">
+          <DropdownPanel
+            minWidth={minWidth}
+            maxWidth={maxWidth}
+            minHeight={minHeight}
+            radius="l"
+            role="group"
+            onSelect={(value) => {
+              onSelect?.(value);
+              if (closeAfterClick) {
+                handleOpenChange(false);
+              }
+            }}
+            {...rest}
+          >
+            {dropdown}
+          </DropdownPanel>
+        </OptionRoleContext.Provider>
+      </Flex>,
+      document.body,
     );
-  },
-);
+
+  return (
+    <>
+      <ScrollLock enabled={isDropdownOpen} allowScrollInElement={dropdownRef} />
+      <Flex
+        ref={containerRef}
+        onContextMenu={handleContextMenu}
+        onClick={handleClick}
+        fillWidth={fillWidth}
+        className={className || ""}
+        // `display: contents` outranks the Flex's own display class, and
+        // without a box its position class contains nothing either.
+        style={
+          contents
+            ? { ...style, display: "contents" }
+            : { ...style, opacity: disabled ? 0.6 : undefined }
+        }
+        aria-disabled={disabled}
+      >
+        {children}
+        {menu}
+      </Flex>
+    </>
+  );
+};
 
 ContextMenuImpl.displayName = "ContextMenuImpl";
 

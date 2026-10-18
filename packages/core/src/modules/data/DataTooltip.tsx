@@ -20,7 +20,7 @@ interface DataTooltipProps {
   variant?: ChartVariant;
 }
 
-const DataTooltip: React.FC<DataTooltipProps> = ({
+const DataTooltip = ({
   active,
   payload,
   label,
@@ -29,7 +29,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
   date = { format: "MMM d" },
   showSwatches = true,
   variant = "gradient",
-}) => {
+}: DataTooltipProps) => {
   if (!active || !payload || !payload.length) {
     return null;
   }

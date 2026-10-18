@@ -75,7 +75,7 @@ function themeInitAttributes(
   return attributes;
 }
 
-export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
+export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   const seeds: CustomSchemeSeeds = {};
   for (const [key, scheme] of Object.entries(SEED_KEYS)) {
     const seed = (config as Record<string, unknown>)[key];

@@ -5,7 +5,7 @@ import { MissingDependency } from "../../utils/MissingDependency.js";
 import type { BarChartProps } from "./BarChart.impl.js";
 import type { DataPoint } from "./interfaces.js";
 
-const BarChartImpl = React.lazy(() =>
+const BarChartImpl = React.lazy<React.ComponentType<BarChartProps>>(() =>
   import("./BarChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <BarChart /> requires the "recharts" package. Install it with: npm install recharts',

@@ -1,5 +1,5 @@
 import classNames from "clsx";
-import React, { forwardRef } from "react";
+import React from "react";
 import type { FlexPropsOf } from "../interfaces.js";
 import { Column } from "./Column.js";
 
@@ -17,48 +17,54 @@ interface ListProps extends Omit<FlexPropsOf<"ul">, "ref"> {
  * drops the browser's markers, it keeps them: the marker classes win over the
  * list reset layout primitives apply.
  */
-const List = forwardRef<HTMLUListElement | HTMLOListElement, ListProps>(
-  ({ as = "ul", start, className, children, style, ...props }, ref) => {
-    if (as === "ol") {
-      return (
-        <Column
-          as="ol"
-          // `start` is an `ol` attribute, outside the props Column types; Flex
-          // passes it through to the element.
-          {...{ start }}
-          fillWidth
-          margin="0"
-          paddingY="0"
-          paddingRight="0"
-          paddingLeft="20"
-          ref={ref as React.Ref<HTMLOListElement>}
-          className={classNames("list-decimal", className)}
-          style={style}
-          {...(props as Omit<FlexPropsOf<"ol">, "ref">)}
-        >
-          {children}
-        </Column>
-      );
-    }
-
+const List = ({
+  ref,
+  as = "ul",
+  start,
+  className,
+  children,
+  style,
+  ...props
+}: ListProps & { ref?: React.Ref<HTMLUListElement | HTMLOListElement> }) => {
+  if (as === "ol") {
     return (
       <Column
-        as="ul"
+        as="ol"
+        // `start` is an `ol` attribute, outside the props Column types; Flex
+        // passes it through to the element.
+        {...{ start }}
         fillWidth
         margin="0"
         paddingY="0"
         paddingRight="0"
         paddingLeft="20"
-        ref={ref as React.Ref<HTMLUListElement>}
-        className={classNames("list-disc", className)}
+        ref={ref as React.Ref<HTMLOListElement>}
+        className={classNames("list-decimal", className)}
         style={style}
-        {...props}
+        {...(props as Omit<FlexPropsOf<"ol">, "ref">)}
       >
         {children}
       </Column>
     );
-  },
-);
+  }
+
+  return (
+    <Column
+      as="ul"
+      fillWidth
+      margin="0"
+      paddingY="0"
+      paddingRight="0"
+      paddingLeft="20"
+      ref={ref as React.Ref<HTMLUListElement>}
+      className={classNames("list-disc", className)}
+      style={style}
+      {...props}
+    >
+      {children}
+    </Column>
+  );
+};
 
 List.displayName = "List";
 

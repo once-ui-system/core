@@ -1,17 +1,16 @@
-import { forwardRef } from "react";
 import type { FlexElementProps, FlexLayoutProps, PolymorphicComponent } from "../interfaces.js";
 import { Flex } from "./Flex.js";
 
 /** Column's props on its default `div`; with `as`, see `PolymorphicProps`. */
 export type ColumnProps = FlexElementProps;
 
-const ColumnImpl = forwardRef<HTMLElement, FlexElementProps>(({ children, ...rest }, ref) => {
+const ColumnImpl = ({ ref, children, ...rest }: FlexElementProps) => {
   return (
     <Flex direction="column" ref={ref as React.Ref<HTMLDivElement>} {...rest}>
       {children}
     </Flex>
   );
-});
+};
 
 ColumnImpl.displayName = "Column";
 

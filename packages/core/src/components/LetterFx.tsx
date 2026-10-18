@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import type { Speed } from "../types.js";
 import { speedFactor } from "../utils/speed.js";
 
@@ -73,65 +73,61 @@ type LetterFxProps = {
   style?: React.CSSProperties;
 };
 
-const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
-  (
-    {
-      children,
-      trigger = "hover",
-      speed = "medium",
-      charset = defaultCharset,
-      onTrigger,
-      className,
-      style,
-    },
-    ref,
-  ) => {
-    const [text, setText] = useState<string>(typeof children === "string" ? children : "");
-    const [inProgress, setInProgress] = useState<boolean>(false);
-    const [hasAnimated, setHasAnimated] = useState<boolean>(false);
-    const originalText = useRef<string>(typeof children === "string" ? children : "");
+const LetterFx = ({
+  ref,
+  children,
+  trigger = "hover",
+  speed = "medium",
+  charset = defaultCharset,
+  onTrigger,
+  className,
+  style,
+}: LetterFxProps & { ref?: React.Ref<HTMLSpanElement> }) => {
+  const [text, setText] = useState<string>(typeof children === "string" ? children : "");
+  const [inProgress, setInProgress] = useState<boolean>(false);
+  const [hasAnimated, setHasAnimated] = useState<boolean>(false);
+  const originalText = useRef<string>(typeof children === "string" ? children : "");
 
-    const eventHandler = useCallback(() => {
-      createEventHandler(
-        originalText.current,
-        setText,
-        inProgress,
-        setInProgress,
-        speed,
-        charset,
-        trigger === "instant" ? setHasAnimated : undefined,
-      )();
-    }, [inProgress, speed, charset, trigger, setHasAnimated]);
+  const eventHandler = useCallback(() => {
+    createEventHandler(
+      originalText.current,
+      setText,
+      inProgress,
+      setInProgress,
+      speed,
+      charset,
+      trigger === "instant" ? setHasAnimated : undefined,
+    )();
+  }, [inProgress, speed, charset, trigger, setHasAnimated]);
 
-    useEffect(() => {
-      if (typeof children === "string") {
-        setText(children);
-        originalText.current = children;
+  useEffect(() => {
+    if (typeof children === "string") {
+      setText(children);
+      originalText.current = children;
 
-        if (trigger === "instant" && !hasAnimated) {
-          eventHandler();
-        }
+      if (trigger === "instant" && !hasAnimated) {
+        eventHandler();
       }
-    }, [children, trigger, eventHandler, hasAnimated]);
+    }
+  }, [children, trigger, eventHandler, hasAnimated]);
 
-    useEffect(() => {
-      if (trigger === "custom" && onTrigger) {
-        onTrigger(eventHandler);
-      }
-    }, [trigger, onTrigger, eventHandler]);
+  useEffect(() => {
+    if (trigger === "custom" && onTrigger) {
+      onTrigger(eventHandler);
+    }
+  }, [trigger, onTrigger, eventHandler]);
 
-    return (
-      <span
-        ref={ref}
-        className={classNames(className)}
-        style={style}
-        onMouseOver={trigger === "hover" ? eventHandler : undefined}
-      >
-        {text}
-      </span>
-    );
-  },
-);
+  return (
+    <span
+      ref={ref}
+      className={classNames(className)}
+      style={style}
+      onMouseOver={trigger === "hover" ? eventHandler : undefined}
+    >
+      {text}
+    </span>
+  );
+};
 
 LetterFx.displayName = "LetterFx";
 

@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Flex } from "../components/Flex.js";
 import type { CSSUnit, SpacingToken } from "../types.js";
 import { translateValue } from "../utils/layoutClasses.js";
@@ -25,61 +25,68 @@ export interface RevealProps extends React.ComponentProps<typeof Flex> {
  * `delay` and `defaultRevealed` (neither caller sets them), the same classes
  * and the same timings, so it looks the same.
  */
-export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
-  ({ children, duration = 2000, revealed, translateY, style, className, ...rest }, ref) => {
-    const [isRevealed, setIsRevealed] = useState(false);
-    const [maskRemoved, setMaskRemoved] = useState(false);
-    const maskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const durationRef = useRef(duration);
-    durationRef.current = duration;
+export const Reveal = ({
+  ref,
+  children,
+  duration = 2000,
+  revealed,
+  translateY,
+  style,
+  className,
+  ...rest
+}: RevealProps) => {
+  const [isRevealed, setIsRevealed] = useState(false);
+  const [maskRemoved, setMaskRemoved] = useState(false);
+  const maskTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const durationRef = useRef(duration);
+  durationRef.current = duration;
 
-    const removeMaskLater = useCallback(() => {
+  const removeMaskLater = useCallback(() => {
+    if (maskTimer.current) clearTimeout(maskTimer.current);
+    maskTimer.current = setTimeout(() => setMaskRemoved(true), durationRef.current);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsRevealed(true);
+      removeMaskLater();
+    }, 0);
+    return () => {
+      clearTimeout(timer);
       if (maskTimer.current) clearTimeout(maskTimer.current);
-      maskTimer.current = setTimeout(() => setMaskRemoved(true), durationRef.current);
-    }, []);
-
-    useEffect(() => {
-      const timer = setTimeout(() => {
-        setIsRevealed(true);
-        removeMaskLater();
-      }, 0);
-      return () => {
-        clearTimeout(timer);
-        if (maskTimer.current) clearTimeout(maskTimer.current);
-      };
-    }, [removeMaskLater]);
-
-    useEffect(() => {
-      if (revealed === undefined) return;
-      setIsRevealed(revealed);
-      setMaskRemoved(false);
-      if (revealed) removeMaskLater();
-    }, [revealed, removeMaskLater]);
-
-    const offset = translateValue(translateY);
-
-    const revealStyle: React.CSSProperties = {
-      transitionDuration: `${duration}ms`,
-      transform: isRevealed ? "translateY(0)" : `translateY(${offset})`,
-      ...style,
     };
+  }, [removeMaskLater]);
 
-    const stateClass = maskRemoved
-      ? styles.revealedNoMask
-      : `${styles.reveal} ${isRevealed ? styles.revealed : styles.hidden}`;
+  useEffect(() => {
+    if (revealed === undefined) return;
+    setIsRevealed(revealed);
+    setMaskRemoved(false);
+    if (revealed) removeMaskLater();
+  }, [revealed, removeMaskLater]);
 
-    return (
-      <Flex
-        fillWidth
-        ref={ref}
-        style={revealStyle}
-        className={`${stateClass} ${className || ""}`}
-        {...rest}
-      >
-        {children}
-      </Flex>
-    );
-  },
-);
+  const offset = translateValue(translateY);
+
+  const revealStyle: React.CSSProperties = {
+    transitionDuration: `${duration}ms`,
+    transform: isRevealed ? "translateY(0)" : `translateY(${offset})`,
+    ...style,
+  };
+
+  const stateClass = maskRemoved
+    ? styles.revealedNoMask
+    : `${styles.reveal} ${isRevealed ? styles.revealed : styles.hidden}`;
+
+  return (
+    <Flex
+      fillWidth
+      ref={ref}
+      style={revealStyle}
+      className={`${stateClass} ${className || ""}`}
+      {...rest}
+    >
+      {children}
+    </Flex>
+  );
+};
 
 Reveal.displayName = "Reveal";

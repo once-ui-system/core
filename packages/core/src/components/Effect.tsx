@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React from "react";
 import type { Speed } from "../types.js";
 import { BlobFx } from "./BlobFx.js";
 import { CelebrationFx } from "./CelebrationFx.js";
@@ -50,53 +50,49 @@ interface EffectProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 
-const Effect = forwardRef<HTMLDivElement, EffectProps>(
-  (
-    {
-      type = "none",
-      colors,
-      speed,
-      reducedMotion,
-      blob,
-      matrix,
-      weather,
-      particle,
-      celebration,
-      children,
-      ...flex
-    },
-    ref,
-  ) => {
-    // Every layer is positioned identically and sits under the children, so
-    // switching `type` changes the look and nothing else.
-    const layer = { position: "absolute", fill: true, top: "0", left: "0" } as const;
-    const shared = { speed, reducedMotion };
+const Effect = ({
+  ref,
+  type = "none",
+  colors,
+  speed,
+  reducedMotion,
+  blob,
+  matrix,
+  weather,
+  particle,
+  celebration,
+  children,
+  ...flex
+}: EffectProps) => {
+  // Every layer is positioned identically and sits under the children, so
+  // switching `type` changes the look and nothing else.
+  const layer = { position: "absolute", fill: true, top: "0", left: "0" } as const;
+  const shared = { speed, reducedMotion };
 
-    const effect = (() => {
-      switch (type) {
-        case "blob":
-          return <BlobFx {...layer} {...blob} />;
-        case "matrix":
-          return <MatrixFx {...layer} {...shared} colors={colors} {...matrix} />;
-        case "weather":
-          return <WeatherFx {...layer} {...shared} colors={colors} {...weather} />;
-        case "celebration":
-          return <CelebrationFx {...layer} {...shared} colors={colors} {...celebration} />;
-        case "particle":
-          return <ParticleFx {...layer} {...shared} color={colors?.[0]} {...particle} />;
-        default:
-          return null;
-      }
-    })();
+  const effect = (() => {
+    switch (type) {
+      case "blob":
+        return <BlobFx {...layer} {...blob} />;
+      case "matrix":
+        return <MatrixFx {...layer} {...shared} colors={colors} {...matrix} />;
+      case "weather":
+        return <WeatherFx {...layer} {...shared} colors={colors} {...weather} />;
+      case "celebration":
+        return <CelebrationFx {...layer} {...shared} colors={colors} {...celebration} />;
+      case "particle":
+        return <ParticleFx {...layer} {...shared} color={colors?.[0]} {...particle} />;
+      default:
+        return null;
+    }
+  })();
 
-    return (
-      <Flex ref={ref} fill position="relative" overflow="hidden" {...flex}>
-        {effect}
-        {children}
-      </Flex>
-    );
-  },
-);
+  return (
+    <Flex ref={ref} fill position="relative" overflow="hidden" {...flex}>
+      {effect}
+      {children}
+    </Flex>
+  );
+};
 
 Effect.displayName = "Effect";
 

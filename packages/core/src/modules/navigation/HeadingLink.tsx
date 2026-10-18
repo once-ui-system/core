@@ -35,14 +35,7 @@ const variantMap = {
  * but always reachable, that copies with a toast when there is a provider
  * and without one when there is not.
  */
-export const HeadingLink: React.FC<HeadingLinkProps> = ({
-  id,
-  as,
-  children,
-  style,
-  className,
-  ...flex
-}) => {
+export const HeadingLink = ({ id, as, children, style, className, ...flex }: HeadingLinkProps) => {
   const copy = useCopySectionLink(id);
 
   return (

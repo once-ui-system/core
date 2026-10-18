@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { forwardRef, type ReactNode, useSyncExternalStore } from "react";
+import { type ReactNode, useSyncExternalStore } from "react";
 import { Row } from "../components/Row.js";
 import { Text } from "../components/Text.js";
 import { VisuallyHidden } from "../components/VisuallyHidden.js";
@@ -37,59 +37,57 @@ export interface KeyComboProps extends Omit<React.ComponentProps<typeof Row>, "c
  * combination instead ("Command+Shift+Z"), because a symbol such as ⌘ is read
  * inconsistently or not at all. Fits a sentence, a menu row, or a Tooltip.
  */
-export const KeyCombo = forwardRef<HTMLDivElement, KeyComboProps>(
-  ({ keys, label, ...flex }, ref) => {
-    const apple = useApplePlatform();
-    const alternatives = (typeof keys === "string" ? [keys] : [...keys])
-      .map((source) => source.trim())
-      .filter(Boolean)
-      .map((source) => ({
-        source,
-        steps: labelHotkey(source, apple).map((caps, step) => ({
-          step,
-          caps: caps.map((cap, position) => ({ ...cap, position })),
-        })),
-      }));
+export const KeyCombo = ({ ref, keys, label, ...flex }: KeyComboProps) => {
+  const apple = useApplePlatform();
+  const alternatives = (typeof keys === "string" ? [keys] : [...keys])
+    .map((source) => source.trim())
+    .filter(Boolean)
+    .map((source) => ({
+      source,
+      steps: labelHotkey(source, apple).map((caps, step) => ({
+        step,
+        caps: caps.map((cap, position) => ({ ...cap, position })),
+      })),
+    }));
 
-    const spoken = alternatives
-      .map(({ steps }) =>
-        steps.map(({ caps }) => caps.map((cap) => cap.spoken).join("+")).join(" then "),
-      )
-      .join(" or ");
+  const spoken = alternatives
+    .map(({ steps }) =>
+      steps.map(({ caps }) => caps.map((cap) => cap.spoken).join("+")).join(" then "),
+    )
+    .join(" or ");
 
-    const word = (text: string) => (
-      <Text as="span" textVariant="label-default-s" onBackground="neutral-weak">
-        {text}
-      </Text>
-    );
+  const word = (text: string) => (
+    <Text as="span" textVariant="label-default-s" onBackground="neutral-weak">
+      {text}
+    </Text>
+  );
 
-    return (
-      <Row ref={ref} as="span" inline gap="8" vertical="center" data-keytip="" {...flex}>
-        {label}
-        <Row as="span" gap="4" vertical="center" aria-hidden="true">
-          {alternatives.map(({ source, steps }, alternative) => (
-            <Row as="span" key={source} gap="4" vertical="center">
-              {alternative > 0 && word("or")}
-              {steps.map(({ step, caps }) => (
-                <Row as="span" key={step} gap="4" vertical="center">
-                  {step > 0 && word("then")}
-                  <Row as="span" gap="2">
-                    {caps.map((cap) => (
-                      <KbdCap key={cap.position}>{cap.cap}</KbdCap>
-                    ))}
-                  </Row>
+  return (
+    <Row ref={ref} as="span" inline gap="8" vertical="center" data-keytip="" {...flex}>
+      {label}
+      <Row as="span" gap="4" vertical="center" aria-hidden="true">
+        {alternatives.map(({ source, steps }, alternative) => (
+          <Row as="span" key={source} gap="4" vertical="center">
+            {alternative > 0 && word("or")}
+            {steps.map(({ step, caps }) => (
+              <Row as="span" key={step} gap="4" vertical="center">
+                {step > 0 && word("then")}
+                <Row as="span" gap="2">
+                  {caps.map((cap) => (
+                    <KbdCap key={cap.position}>{cap.cap}</KbdCap>
+                  ))}
                 </Row>
-              ))}
-            </Row>
-          ))}
-        </Row>
-        {/* Keeps "Undo" and "Command+Z" two words in the accessible name; a flex
-          container does not draw a whitespace-only text node. */}
-        {label !== undefined && " "}
-        <VisuallyHidden>{spoken}</VisuallyHidden>
+              </Row>
+            ))}
+          </Row>
+        ))}
       </Row>
-    );
-  },
-);
+      {/* Keeps "Undo" and "Command+Z" two words in the accessible name; a flex
+          container does not draw a whitespace-only text node. */}
+      {label !== undefined && " "}
+      <VisuallyHidden>{spoken}</VisuallyHidden>
+    </Row>
+  );
+};
 
 KeyCombo.displayName = "KeyCombo";

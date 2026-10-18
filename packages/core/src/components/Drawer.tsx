@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, type ReactNode, type RefObject, useCallback, useId, useRef } from "react";
+import { type ReactNode, type RefObject, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useOverlay } from "../internal/useOverlay.js";
 import { Column } from "./Column.js";
@@ -72,197 +72,191 @@ interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title">
  * by FocusTrap, Escape answered by the innermost overlay only, and focus
  * returned to where it came from on close.
  */
-const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
-  (
-    {
-      open,
-      onClose,
-      side = "right",
-      size = "m",
-      title,
-      description,
-      footer,
-      showClose = true,
-      closeOnClickaway = true,
-      flush = false,
-      initialFocusRef,
-      returnFocusRef,
-      children,
-      className,
-      onKeyDown,
-      ...rest
+const Drawer = ({
+  ref,
+  open,
+  onClose,
+  side = "right",
+  size = "m",
+  title,
+  description,
+  footer,
+  showClose = true,
+  closeOnClickaway = true,
+  flush = false,
+  initialFocusRef,
+  returnFocusRef,
+  children,
+  className,
+  onKeyDown,
+  ...rest
+}: DrawerProps) => {
+  const id = useId();
+  const titleId = `${id}-title`;
+  const descriptionId = `${id}-description`;
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const { mounted, visible, entered } = useOverlay({
+    open,
+    onClose,
+    overlayRef,
+    returnFocusRef,
+    exitMs: EXIT_MS,
+  });
+
+  const setPanelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
     },
-    ref,
-  ) => {
-    const id = useId();
-    const titleId = `${id}-title`;
-    const descriptionId = `${id}-description`;
-    const overlayRef = useRef<HTMLDivElement | null>(null);
-    const panelRef = useRef<HTMLDivElement | null>(null);
-    const { mounted, visible, entered } = useOverlay({
-      open,
-      onClose,
-      overlayRef,
-      returnFocusRef,
-      exitMs: EXIT_MS,
-    });
+    [ref],
+  );
 
-    const setPanelRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        panelRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
+  if (!mounted || !visible) return null;
+
+  const titleNode =
+    title === undefined ? null : typeof title === "string" ? (
+      <Heading id={titleId} textVariant="heading-strong-l">
+        {title}
+      </Heading>
+    ) : (
+      <Flex id={titleId}>{title}</Flex>
     );
 
-    if (!mounted || !visible) return null;
+  const closeButton = showClose && (
+    <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" onClick={onClose} />
+  );
 
-    const titleNode =
-      title === undefined ? null : typeof title === "string" ? (
-        <Heading id={titleId} textVariant="heading-strong-l">
-          {title}
-        </Heading>
-      ) : (
-        <Flex id={titleId}>{title}</Flex>
-      );
+  const showHeader = !flush && (title !== undefined || description !== undefined || showClose);
 
-    const closeButton = showClose && (
-      <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" onClick={onClose} />
-    );
-
-    const showHeader = !flush && (title !== undefined || description !== undefined || showClose);
-
-    return createPortal(
-      <>
-        <ScrollLock enabled={open} allowScrollInElement={panelRef} />
+  return createPortal(
+    <>
+      <ScrollLock enabled={open} allowScrollInElement={panelRef} />
+      <Flex
+        ref={overlayRef}
+        position="fixed"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        zIndex={9}
+        transition="macro-medium"
+        className={classNames(styles.overlay, entered && styles.open)}
+      >
         <Flex
-          ref={overlayRef}
-          position="fixed"
+          position="absolute"
           top="0"
           left="0"
-          right="0"
-          bottom="0"
-          zIndex={9}
+          fill
+          background="overlay"
+          aria-hidden="true"
+          data-drawer-overlay=""
+          // Keep focus in the drawer when the overlay is clicked but stays open.
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={closeOnClickaway ? onClose : undefined}
+        />
+        <Column
+          aria-labelledby={title !== undefined ? titleId : undefined}
+          aria-describedby={description !== undefined ? descriptionId : undefined}
+          position="fixed"
+          background="neutral-weak"
+          border="neutral-medium"
+          radius="xl"
+          shadow="xl"
           transition="macro-medium"
-          className={classNames(styles.overlay, entered && styles.open)}
+          overflow="hidden"
+          {...rest}
+          ref={setPanelRef}
+          role="dialog"
+          aria-modal="true"
+          data-side={side}
+          className={classNames(
+            styles.panel,
+            styles[side],
+            styles[size],
+            entered && styles.open,
+            className,
+          )}
+          onKeyDown={onKeyDown}
         >
-          <Flex
-            position="absolute"
-            top="0"
-            left="0"
-            fill
-            background="overlay"
-            aria-hidden="true"
-            data-drawer-overlay=""
-            // Keep focus in the drawer when the overlay is clicked but stays open.
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={closeOnClickaway ? onClose : undefined}
-          />
-          <Column
-            aria-labelledby={title !== undefined ? titleId : undefined}
-            aria-describedby={description !== undefined ? descriptionId : undefined}
-            position="fixed"
-            background="neutral-weak"
-            border="neutral-medium"
-            radius="xl"
-            shadow="xl"
-            transition="macro-medium"
-            overflow="hidden"
-            {...rest}
-            ref={setPanelRef}
-            role="dialog"
-            aria-modal="true"
-            data-side={side}
-            className={classNames(
-              styles.panel,
-              styles[side],
-              styles[size],
-              entered && styles.open,
-              className,
-            )}
-            onKeyDown={onKeyDown}
+          <FocusTrap
+            active={open}
+            initialFocusRef={initialFocusRef}
+            restoreFocus={false}
+            className={styles.trap}
           >
-            <FocusTrap
-              active={open}
-              initialFocusRef={initialFocusRef}
-              restoreFocus={false}
-              className={styles.trap}
-            >
-              {showHeader && (
-                <Row
-                  as="header"
-                  fillWidth
-                  paddingX="24"
-                  paddingTop="20"
-                  paddingBottom="12"
-                  gap="8"
-                  horizontal="between"
-                  vertical="start"
-                >
-                  <Column gap="4" minWidth={0}>
-                    {titleNode}
-                    {description !== undefined && (
-                      <Text
-                        id={descriptionId}
-                        textVariant="body-default-s"
-                        onBackground="neutral-weak"
-                      >
-                        {description}
-                      </Text>
-                    )}
-                  </Column>
-                  {closeButton}
-                </Row>
-              )}
-              {flush && title !== undefined && (
-                <VisuallyHidden id={titleId}>{title}</VisuallyHidden>
-              )}
-              {flush && description !== undefined && (
-                <VisuallyHidden id={descriptionId}>{description}</VisuallyHidden>
-              )}
-              {flush && closeButton && (
-                <Flex
-                  position="absolute"
-                  top="12"
-                  right="12"
-                  zIndex={1}
-                  radius="m"
-                  background="overlay"
-                >
-                  {closeButton}
-                </Flex>
-              )}
-              <Column
+            {showHeader && (
+              <Row
+                as="header"
                 fillWidth
-                flex={1}
-                overflowY="auto"
-                paddingX={flush ? undefined : "24"}
-                paddingTop={flush || showHeader ? undefined : "24"}
-                paddingBottom={flush ? undefined : "24"}
+                paddingX="24"
+                paddingTop="20"
+                paddingBottom="12"
+                gap="8"
+                horizontal="between"
+                vertical="start"
               >
-                {children}
-              </Column>
-              {footer && (
-                <Row
-                  as="footer"
-                  fillWidth
-                  borderTop="neutral-medium"
-                  horizontal="end"
-                  padding="12"
-                  gap="8"
-                >
-                  {footer}
-                </Row>
-              )}
-            </FocusTrap>
-          </Column>
-        </Flex>
-      </>,
-      document.body,
-    );
-  },
-);
+                <Column gap="4" minWidth={0}>
+                  {titleNode}
+                  {description !== undefined && (
+                    <Text
+                      id={descriptionId}
+                      textVariant="body-default-s"
+                      onBackground="neutral-weak"
+                    >
+                      {description}
+                    </Text>
+                  )}
+                </Column>
+                {closeButton}
+              </Row>
+            )}
+            {flush && title !== undefined && <VisuallyHidden id={titleId}>{title}</VisuallyHidden>}
+            {flush && description !== undefined && (
+              <VisuallyHidden id={descriptionId}>{description}</VisuallyHidden>
+            )}
+            {flush && closeButton && (
+              <Flex
+                position="absolute"
+                top="12"
+                right="12"
+                zIndex={1}
+                radius="m"
+                background="overlay"
+              >
+                {closeButton}
+              </Flex>
+            )}
+            <Column
+              fillWidth
+              flex={1}
+              overflowY="auto"
+              paddingX={flush ? undefined : "24"}
+              paddingTop={flush || showHeader ? undefined : "24"}
+              paddingBottom={flush ? undefined : "24"}
+            >
+              {children}
+            </Column>
+            {footer && (
+              <Row
+                as="footer"
+                fillWidth
+                borderTop="neutral-medium"
+                horizontal="end"
+                padding="12"
+                gap="8"
+              >
+                {footer}
+              </Row>
+            )}
+          </FocusTrap>
+        </Column>
+      </Flex>
+    </>,
+    document.body,
+  );
+};
 
 Drawer.displayName = "Drawer";
 

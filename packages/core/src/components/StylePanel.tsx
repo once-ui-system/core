@@ -1,6 +1,5 @@
 "use client";
 
-import { forwardRef } from "react";
 import {
   type StylePanelLabels,
   type StylePanelRootProps,
@@ -67,18 +66,16 @@ const visible = (section: { section?: boolean } | undefined) => section?.section
  * which case nothing is written to ThemeProvider or storage, and `labels` to
  * translate it.
  */
-const StylePanel = forwardRef<HTMLDivElement, StylePanelProps>(
-  ({ visibility, customColors, ...rest }, ref) => (
-    <sections.Root ref={ref} {...rest}>
-      {visible(visibility?.page) && <sections.Page rows={visibility?.page} />}
-      {visible(visibility?.color) && (
-        <sections.Color rows={visibility?.color} customColors={customColors} />
-      )}
-      {visible(visibility?.solidStyle) && <sections.SolidStyle rows={visibility?.solidStyle} />}
-      {visibility?.bodyText?.section === true && <sections.BodyText rows={visibility?.bodyText} />}
-      {visible(visibility?.advanced) && <sections.Advanced rows={visibility?.advanced} />}
-    </sections.Root>
-  ),
+const StylePanel = ({ ref, visibility, customColors, ...rest }: StylePanelProps) => (
+  <sections.Root ref={ref} {...rest}>
+    {visible(visibility?.page) && <sections.Page rows={visibility?.page} />}
+    {visible(visibility?.color) && (
+      <sections.Color rows={visibility?.color} customColors={customColors} />
+    )}
+    {visible(visibility?.solidStyle) && <sections.SolidStyle rows={visibility?.solidStyle} />}
+    {visibility?.bodyText?.section === true && <sections.BodyText rows={visibility?.bodyText} />}
+    {visible(visibility?.advanced) && <sections.Advanced rows={visibility?.advanced} />}
+  </sections.Root>
 );
 
 StylePanel.displayName = "StylePanel";

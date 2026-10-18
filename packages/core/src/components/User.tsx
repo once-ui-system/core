@@ -1,6 +1,5 @@
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef } from "react";
 import type { Placement } from "../types.js";
 import { Avatar, type AvatarProps } from "./Avatar.js";
 import { Column } from "./Column.js";
@@ -39,58 +38,62 @@ interface UserProps {
   style?: React.CSSProperties;
 }
 
-const UserCard = forwardRef<HTMLDivElement, UserProps>(
-  (
-    { name, children, subline, tagProps = {}, loading = false, avatarProps = {}, className },
-    ref,
-  ) => {
-    const { src, value, empty, ...restAvatarProps } = avatarProps;
-    const isEmpty = empty || (!src && !value);
+const UserCard = ({
+  ref,
+  name,
+  children,
+  subline,
+  tagProps = {},
+  loading = false,
+  avatarProps = {},
+  className,
+}: UserProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const { src, value, empty, ...restAvatarProps } = avatarProps;
+  const isEmpty = empty || (!src && !value);
 
-    return (
-      <Flex ref={ref} vertical="center" gap="8" className={classNames(className)}>
-        <Avatar
-          size="m"
-          src={src}
-          value={value}
-          empty={isEmpty}
-          loading={loading}
-          {...restAvatarProps}
-        />
-        {children}
-        {name && (
-          <Column paddingLeft="4" paddingRight="12">
-            {loading ? (
-              <Flex minWidth="6rem" paddingY="4">
-                <Skeleton width="100%" size="m" shape="line" aria-label="Loading name" />
-              </Flex>
-            ) : (
-              <Flex gap="8" vertical="center">
-                <Text textVariant="label-default-m" onBackground="neutral-strong">
-                  {name}
-                </Text>
-                {tagProps.label && (
-                  <Tag size="s" {...tagProps}>
-                    {tagProps.label}
-                  </Tag>
-                )}
-              </Flex>
-            )}
-            {loading ? (
-              <Flex paddingY="2">
-                <Skeleton width="75%" size="xs" shape="line" aria-label="Loading subline" />
-              </Flex>
-            ) : (
-              <Text wrap="nowrap" textVariant="body-default-xs" onBackground="neutral-weak">
-                {subline}
+  return (
+    <Flex ref={ref} vertical="center" gap="8" className={classNames(className)}>
+      <Avatar
+        size="m"
+        src={src}
+        value={value}
+        empty={isEmpty}
+        loading={loading}
+        {...restAvatarProps}
+      />
+      {children}
+      {name && (
+        <Column paddingLeft="4" paddingRight="12">
+          {loading ? (
+            <Flex minWidth="6rem" paddingY="4">
+              <Skeleton width="100%" size="m" shape="line" aria-label="Loading name" />
+            </Flex>
+          ) : (
+            <Flex gap="8" vertical="center">
+              <Text textVariant="label-default-m" onBackground="neutral-strong">
+                {name}
               </Text>
-            )}
-          </Column>
-        )}
-      </Flex>
-    );
-  },
-);
+              {tagProps.label && (
+                <Tag size="s" {...tagProps}>
+                  {tagProps.label}
+                </Tag>
+              )}
+            </Flex>
+          )}
+          {loading ? (
+            <Flex paddingY="2">
+              <Skeleton width="75%" size="xs" shape="line" aria-label="Loading subline" />
+            </Flex>
+          ) : (
+            <Text wrap="nowrap" textVariant="body-default-xs" onBackground="neutral-weak">
+              {subline}
+            </Text>
+          )}
+        </Column>
+      )}
+    </Flex>
+  );
+};
 
 UserCard.displayName = "UserCard";
 
@@ -98,57 +101,53 @@ UserCard.displayName = "UserCard";
  * An avatar with a name, a subline and an optional tag. With `dropdown` it is
  * the trigger of a menu (an account menu in a header).
  */
-const User = forwardRef<HTMLDivElement, UserProps>(
-  (
-    {
-      dropdown,
-      selected = false,
-      placement,
-      minWidth,
-      maxWidth,
-      minHeight,
-      className,
-      style,
-      loading,
-      ...userProps
-    },
-    ref,
-  ) => {
-    if (dropdown === undefined) {
-      return <UserCard ref={ref} loading={loading} className={className} {...userProps} />;
-    }
-    return (
-      <Dropdown
-        ref={ref}
-        minWidth={minWidth}
-        maxWidth={maxWidth}
-        minHeight={minHeight}
-        placement={placement}
-        disableTriggerClick={loading}
-        style={{
-          borderRadius: "var(--radius-full)",
-        }}
-        trigger={
-          <Column
-            tabIndex={loading ? -1 : 0}
-            padding="4"
-            radius="full"
-            cursor={loading ? "default" : "interactive"}
-            border={selected ? "neutral-medium" : "transparent"}
-            background={selected ? "neutral-strong" : "transparent"}
-            pointerEvents={loading ? "none" : "auto"}
-            className={classNames(className || "", selected ? styles.selected : "", styles.wrapper)}
-            style={style}
-          >
-            <UserCard loading={loading} {...userProps} />
-          </Column>
-        }
-      >
-        {dropdown}
-      </Dropdown>
-    );
-  },
-);
+const User = ({
+  ref,
+  dropdown,
+  selected = false,
+  placement,
+  minWidth,
+  maxWidth,
+  minHeight,
+  className,
+  style,
+  loading,
+  ...userProps
+}: UserProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  if (dropdown === undefined) {
+    return <UserCard ref={ref} loading={loading} className={className} {...userProps} />;
+  }
+  return (
+    <Dropdown
+      ref={ref}
+      minWidth={minWidth}
+      maxWidth={maxWidth}
+      minHeight={minHeight}
+      placement={placement}
+      disableTriggerClick={loading}
+      style={{
+        borderRadius: "var(--radius-full)",
+      }}
+      trigger={
+        <Column
+          tabIndex={loading ? -1 : 0}
+          padding="4"
+          radius="full"
+          cursor={loading ? "default" : "interactive"}
+          border={selected ? "neutral-medium" : "transparent"}
+          background={selected ? "neutral-strong" : "transparent"}
+          pointerEvents={loading ? "none" : "auto"}
+          className={classNames(className || "", selected ? styles.selected : "", styles.wrapper)}
+          style={style}
+        >
+          <UserCard loading={loading} {...userProps} />
+        </Column>
+      }
+    >
+      {dropdown}
+    </Dropdown>
+  );
+};
 
 User.displayName = "User";
 

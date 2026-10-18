@@ -2,7 +2,6 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef } from "react";
 import { Flex } from "../components/Flex.js";
 import { Icon } from "../components/Icon.js";
 import { IconButton, type IconButtonProps } from "../components/IconButton.js";
@@ -61,113 +60,79 @@ const splitControlProps = (props: RestProps) => {
  * beside it. Tag renders it when it is given `selected`, `onClick` or
  * `onRemove`, so a static Tag stays a server component.
  */
-export const InteractiveTag = forwardRef<HTMLDivElement, InteractiveTagProps>(
-  (
-    {
-      tone,
-      size = "m",
-      label,
-      selected: selectedProp,
-      prefixIcon,
-      suffixIcon,
-      onRemove,
-      onClick,
-      children,
-      removeButtonProps = {},
-      className,
-      textVariant,
-      ...rest
+export const InteractiveTag = ({
+  ref,
+  tone,
+  size = "m",
+  label,
+  selected: selectedProp,
+  prefixIcon,
+  suffixIcon,
+  onRemove,
+  onClick,
+  children,
+  removeButtonProps = {},
+  className,
+  textVariant,
+  ...rest
+}: InteractiveTagProps) => {
+  // A tag with only a remove button is a label, not a toggle.
+  const toggles = selectedProp !== undefined || onClick !== undefined;
+  const selected = selectedProp ?? false;
+
+  const defaultRemoveProps: IconButtonProps = {
+    icon: "close",
+    variant: "ghost",
+    size: ICON[size],
+    tooltip: "Remove",
+    onClick: (e) => {
+      e.stopPropagation();
+      onRemove?.();
     },
-    ref,
-  ) => {
-    // A tag with only a remove button is a label, not a toggle.
-    const toggles = selectedProp !== undefined || onClick !== undefined;
-    const selected = selectedProp ?? false;
+  };
 
-    const defaultRemoveProps: IconButtonProps = {
-      icon: "close",
-      variant: "ghost",
-      size: ICON[size],
-      tooltip: "Remove",
-      onClick: (e) => {
-        e.stopPropagation();
-        onRemove?.();
-      },
-    };
+  const combinedIconButtonProps = {
+    ...defaultRemoveProps,
+    ...removeButtonProps,
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+      defaultRemoveProps.onClick?.(e);
+      removeButtonProps.onClick?.(e);
+    },
+  };
 
-    const combinedIconButtonProps = {
-      ...defaultRemoveProps,
-      ...removeButtonProps,
-      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
-        defaultRemoveProps.onClick?.(e);
-        removeButtonProps.onClick?.(e);
-      },
-    };
-
-    const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
-      }
-    };
-
-    const control = toggles
-      ? { role: "button", tabIndex: 0, onKeyDown: handleKeyDown, "aria-pressed": selected }
-      : {};
-
-    const tagClassName = classNames(
-      styles.tag,
-      styles.toggle,
-      styles[`tone-${tone ?? "brand"}`],
-      {
-        [styles.selected]: selected,
-        [styles.unselected]: !selected,
-      },
-      className,
-    );
-
-    const content = (
-      <>
-        {prefixIcon && <Icon name={prefixIcon} size={ICON[size]} />}
-        <Flex paddingX="8" paddingY="2">
-          <Text textVariant={textVariant ?? TEXT[size]}>{label || children}</Text>
-        </Flex>
-        {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
-      </>
-    );
-
-    if (!onRemove) {
-      return (
-        <Flex
-          ref={ref}
-          fit
-          vertical="center"
-          radius="full"
-          paddingX={PADDING_X[size]}
-          paddingY={PADDING_Y[size]}
-          onClick={onClick}
-          cursor={toggles ? "interactive" : undefined}
-          transition="micro-medium"
-          className={tagClassName}
-          {...control}
-          {...rest}
-        >
-          {content}
-        </Flex>
-      );
+  const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onClick?.(e as unknown as React.MouseEvent<HTMLDivElement>);
     }
+  };
 
-    // With a remove button the tag is two controls side by side: its own
-    // toggle and the button that removes it. A remove button inside the
-    // toggle's role="button" would be flattened away by assistive tech
-    // (axe: "nested-interactive"), and Enter on it would reach the toggle's
-    // key handler.
-    //
-    // The box keeps the tag's look, and a pointer click anywhere on it apart
-    // from the remove button is still the tag's click. Keyboard focus lands
-    // on the toggle inside, and the styles draw it on the whole box.
-    const { control: controlProps, box } = splitControlProps(rest);
+  const control = toggles
+    ? { role: "button", tabIndex: 0, onKeyDown: handleKeyDown, "aria-pressed": selected }
+    : {};
 
+  const tagClassName = classNames(
+    styles.tag,
+    styles.toggle,
+    styles[`tone-${tone ?? "brand"}`],
+    {
+      [styles.selected]: selected,
+      [styles.unselected]: !selected,
+    },
+    className,
+  );
+
+  const content = (
+    <>
+      {prefixIcon && <Icon name={prefixIcon} size={ICON[size]} />}
+      <Flex paddingX="8" paddingY="2">
+        <Text textVariant={textVariant ?? TEXT[size]}>{label || children}</Text>
+      </Flex>
+      {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} />}
+    </>
+  );
+
+  if (!onRemove) {
     return (
       <Flex
         ref={ref}
@@ -180,15 +145,45 @@ export const InteractiveTag = forwardRef<HTMLDivElement, InteractiveTagProps>(
         cursor={toggles ? "interactive" : undefined}
         transition="micro-medium"
         className={tagClassName}
-        {...box}
+        {...control}
+        {...rest}
       >
-        <Flex vertical="center" className={styles.action} {...control} {...controlProps}>
-          {content}
-        </Flex>
-        <IconButton style={{ color: "inherit" }} {...combinedIconButtonProps} />
+        {content}
       </Flex>
     );
-  },
-);
+  }
+
+  // With a remove button the tag is two controls side by side: its own
+  // toggle and the button that removes it. A remove button inside the
+  // toggle's role="button" would be flattened away by assistive tech
+  // (axe: "nested-interactive"), and Enter on it would reach the toggle's
+  // key handler.
+  //
+  // The box keeps the tag's look, and a pointer click anywhere on it apart
+  // from the remove button is still the tag's click. Keyboard focus lands
+  // on the toggle inside, and the styles draw it on the whole box.
+  const { control: controlProps, box } = splitControlProps(rest);
+
+  return (
+    <Flex
+      ref={ref}
+      fit
+      vertical="center"
+      radius="full"
+      paddingX={PADDING_X[size]}
+      paddingY={PADDING_Y[size]}
+      onClick={onClick}
+      cursor={toggles ? "interactive" : undefined}
+      transition="micro-medium"
+      className={tagClassName}
+      {...box}
+    >
+      <Flex vertical="center" className={styles.action} {...control} {...controlProps}>
+        {content}
+      </Flex>
+      <IconButton style={{ color: "inherit" }} {...combinedIconButtonProps} />
+    </Flex>
+  );
+};
 
 InteractiveTag.displayName = "InteractiveTag";

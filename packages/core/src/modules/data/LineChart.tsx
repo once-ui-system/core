@@ -5,7 +5,7 @@ import { MissingDependency } from "../../utils/MissingDependency.js";
 import type { DataPoint } from "./interfaces.js";
 import type { LineChartProps } from "./LineChart.impl.js";
 
-const LineChartImpl = React.lazy(() =>
+const LineChartImpl = React.lazy<React.ComponentType<LineChartProps>>(() =>
   import("./LineChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <LineChart /> requires the "recharts" package. Install it with: npm install recharts',

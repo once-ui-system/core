@@ -473,7 +473,7 @@ export interface CodeBlockProps extends React.ComponentProps<typeof Flex> {
   hideCode?: boolean;
 }
 
-const CodeBlock: React.FC<CodeBlockProps> = ({
+const CodeBlock = ({
   codeHeight,
   fillHeight,
   previewPadding = "l",
@@ -493,7 +493,7 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   background = "surface",
   onInstanceChange,
   ...rest
-}) => {
+}: CodeBlockProps) => {
   const styleBackgroundColor = style?.backgroundColor;
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);

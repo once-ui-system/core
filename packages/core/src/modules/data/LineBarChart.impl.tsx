@@ -39,7 +39,7 @@ export interface LineBarChartProps<T extends object = DataPoint> extends ChartPr
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const LineBarChart: React.FC<LineBarChartProps> = ({
+const LineBarChart = ({
   title,
   description,
   data,
@@ -61,7 +61,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: LineBarChartProps) => {
   const {
     variant: themeVariant,
     mode,

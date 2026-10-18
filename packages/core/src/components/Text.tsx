@@ -3,8 +3,6 @@ import {
   type ComponentPropsWithoutRef,
   type ComponentPropsWithRef,
   type ElementType,
-  type ForwardedRef,
-  forwardRef,
   type ReactNode,
 } from "react";
 
@@ -33,8 +31,9 @@ type TextRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
 
 /**
  * `Text`'s public signature: generic over `as`, as it was before it took a
- * ref, and with a ref typed to the element `as` names. `forwardRef`'s own
- * return type is not generic, so it would pin `as` to one element.
+ * ref, and with a ref typed to the element `as` names. The function below is
+ * already generic; the interface adds the non-generic signature that
+ * `React.ComponentProps<typeof Text>` reads.
  */
 interface TextComponent {
   <T extends ElementType = "span">(props: TypeProps<T> & { ref?: TextRef<T> }): ReactNode;
@@ -45,61 +44,59 @@ interface TextComponent {
   displayName?: string;
 }
 
-const Text: TextComponent = forwardRef(function Text<T extends ElementType = "span">(
-  {
-    as,
-    textVariant,
-    weight,
-    family,
-    onBackground,
-    onSolid,
-    align,
-    wrap,
-    padding,
-    paddingLeft,
-    paddingRight,
-    paddingTop,
-    paddingBottom,
-    paddingX,
-    paddingY,
-    margin,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginBottom,
-    marginX,
-    marginY,
-    children,
-    style,
-    className,
-    truncate,
-    opacity,
-    userSelect,
-    gap,
-    top,
-    right,
-    bottom,
-    left,
-    translateX,
-    translateY,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-    scrollbar,
-    pointerEvents,
-    transition,
-    zIndex,
-    // Typed through `DisplayProps`, with no class that fits text: `inline`,
-    // `hide` and `showIn` are display modes of Flex and Grid. Taken out
-    // so they stop reaching the DOM as attributes.
-    inline: _inline,
-    hide: _hide,
-    showIn: _showIn,
-    ...props
-  }: TypeProps<T>,
-  ref: ForwardedRef<HTMLSpanElement>,
-) {
+const Text: TextComponent = function Text<T extends ElementType = "span">({
+  ref,
+  as,
+  textVariant,
+  weight,
+  family,
+  onBackground,
+  onSolid,
+  align,
+  wrap,
+  padding,
+  paddingLeft,
+  paddingRight,
+  paddingTop,
+  paddingBottom,
+  paddingX,
+  paddingY,
+  margin,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
+  marginX,
+  marginY,
+  children,
+  style,
+  className,
+  truncate,
+  opacity,
+  userSelect,
+  gap,
+  top,
+  right,
+  bottom,
+  left,
+  translateX,
+  translateY,
+  position,
+  overflow,
+  overflowX,
+  overflowY,
+  scrollbar,
+  pointerEvents,
+  transition,
+  zIndex,
+  // Typed through `DisplayProps`, with no class that fits text: `inline`,
+  // `hide` and `showIn` are display modes of Flex and Grid. Taken out
+  // so they stop reaching the DOM as attributes.
+  inline: _inline,
+  hide: _hide,
+  showIn: _showIn,
+  ...props
+}: TypeProps<T> & { ref?: TextRef<T> }) {
   const Component = as || "span";
 
   if (onBackground && onSolid) {
@@ -203,7 +200,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
       {children}
     </Component>
   );
-});
+};
 
 Text.displayName = "Text";
 

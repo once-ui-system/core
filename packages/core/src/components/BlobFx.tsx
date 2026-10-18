@@ -1,6 +1,6 @@
 "use client";
 
-import React, { forwardRef } from "react";
+import React from "react";
 import { Background } from "./Background.js";
 import { Row } from "./Row.js";
 
@@ -8,7 +8,7 @@ export interface BlobFxProps extends React.ComponentProps<typeof Row> {
   seed?: number;
 }
 
-const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, ref) => {
+const BlobFx = ({ ref, seed = 0, ...flex }: BlobFxProps) => {
   // Generate pseudo-random values based on seed for consistent variation
   const random1 = ((seed * 9301 + 49297) % 233280) / 233280;
   const random2 = ((seed * 4877 + 37991) % 233280) / 233280;
@@ -122,7 +122,7 @@ const BlobFx = forwardRef<HTMLDivElement, BlobFxProps>(({ seed = 0, ...flex }, r
       />
     </Row>
   );
-});
+};
 
 BlobFx.displayName = "BlobFx";
 

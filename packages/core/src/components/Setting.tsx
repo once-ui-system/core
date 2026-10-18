@@ -43,14 +43,14 @@ interface SettingRowProps extends React.ComponentProps<typeof Flex> {
   children?: React.ReactNode;
 }
 
-const SettingRow: React.FC<SettingRowProps> = ({
+const SettingRow = ({
   label,
   description,
   info,
   controlWidth = "14rem",
   children,
   ...flex
-}) => {
+}: SettingRowProps) => {
   const hasLabel = Boolean(label || description);
   return (
     <Row
@@ -108,7 +108,7 @@ interface SettingGroupProps extends React.ComponentProps<typeof Flex> {
  * `<Setting control open>`: a Setting whose sub-settings live *inside* its box rather than beside it, so
  * the relationship survives when the group is one of ten in a scrolling panel.
  */
-const SettingGroup: React.FC<SettingGroupProps> = ({
+const SettingGroup = ({
   label,
   description,
   info,
@@ -116,7 +116,7 @@ const SettingGroup: React.FC<SettingGroupProps> = ({
   open,
   children,
   ...flex
-}) => (
+}: SettingGroupProps) => (
   <Column
     fillWidth
     radius="l"
@@ -173,13 +173,7 @@ interface SettingAxesProps extends React.ComponentProps<typeof Flex> {
  * `axisWidth` and the row wraps when the panel is narrower, so the controls
  * stay usable instead of collapsing to a few pixels.
  */
-const SettingAxes: React.FC<SettingAxesProps> = ({
-  label,
-  info,
-  axes,
-  axisWidth = "13rem",
-  ...flex
-}) => (
+const SettingAxes = ({ label, info, axes, axisWidth = "13rem", ...flex }: SettingAxesProps) => (
   <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
     <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
       {renderLabel(label)}
@@ -214,7 +208,7 @@ type SettingProps =
   | (SettingGroupProps & { axes?: undefined; control: React.ReactNode })
   | (SettingGroupProps & { axes?: undefined; open: boolean });
 
-const Setting: React.FC<SettingProps> = (props) => {
+const Setting = (props: SettingProps) => {
   if (props.axes !== undefined) return <SettingAxes {...(props as SettingAxesProps)} />;
   if (props.control !== undefined || props.open !== undefined)
     return <SettingGroup {...(props as SettingGroupProps)} />;

@@ -68,7 +68,7 @@ const FOCUSABLE =
  * A navigation bar whose groups open panels of links, collapsing into
  * accordions at `collapseBelow`.
  */
-export const MegaMenu: React.FC<MegaMenuProps> = ({ collapseBelow, onClose, ...props }) => {
+export const MegaMenu = ({ collapseBelow, onClose, ...props }: MegaMenuProps) => {
   if (collapseBelow === undefined) return <MegaMenuBar {...props} />;
   if (collapseBelow === "always") return <MegaMenuAccordion onClose={onClose} {...props} />;
   const own = props[collapseBelow];
@@ -87,11 +87,11 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ collapseBelow, onClose, ...p
 
 MegaMenu.displayName = "MegaMenu";
 
-const MegaMenuBar: React.FC<Omit<MegaMenuProps, "collapseBelow" | "onClose">> = ({
+const MegaMenuBar = ({
   menuGroups,
   className,
   ...rest
-}) => {
+}: Omit<MegaMenuProps, "collapseBelow" | "onClose">) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

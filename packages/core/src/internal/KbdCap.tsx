@@ -1,5 +1,5 @@
 import type React from "react";
-import { forwardRef, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { Flex } from "../components/Flex.js";
 import { Text } from "../components/Text.js";
 
@@ -8,7 +8,7 @@ export interface KbdCapProps extends React.ComponentProps<typeof Flex> {
 }
 
 /** One keycap: what `<Kbd>` draws without `keys`, and each cap of a `keys` combination. */
-export const KbdCap = forwardRef<HTMLDivElement, KbdCapProps>(({ children, ...rest }, ref) => (
+export const KbdCap = ({ ref, children, ...rest }: KbdCapProps) => (
   <Flex
     as="kbd"
     ref={ref}
@@ -30,6 +30,6 @@ export const KbdCap = forwardRef<HTMLDivElement, KbdCapProps>(({ children, ...re
       {children}
     </Text>
   </Flex>
-));
+);
 
 KbdCap.displayName = "KbdCap";

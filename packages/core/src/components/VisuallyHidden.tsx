@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import type React from "react";
-import { type ElementType, forwardRef, type ReactNode } from "react";
+import { type ElementType, type ReactNode } from "react";
 import type { PolymorphicComponent, PolymorphicProps } from "../interfaces.js";
 import styles from "./VisuallyHidden.module.scss";
 
@@ -37,16 +37,21 @@ type VisuallyHiddenProps<T extends ElementType = "span"> = PolymorphicProps<
  * content from screen readers too. With `focusable` it becomes a skip link that
  * appears when a keyboard user tabs to it.
  */
-const VisuallyHiddenImpl = forwardRef<HTMLElement, VisuallyHiddenOwnProps & { as?: ElementType }>(
-  ({ as: Component = "span", focusable = false, className, children, ...rest }, ref) => (
-    <Component
-      ref={ref}
-      className={classNames(styles.hidden, focusable && styles.focusable, className)}
-      {...rest}
-    >
-      {children}
-    </Component>
-  ),
+const VisuallyHiddenImpl = ({
+  ref,
+  as: Component = "span",
+  focusable = false,
+  className,
+  children,
+  ...rest
+}: (VisuallyHiddenOwnProps & { as?: ElementType }) & { ref?: React.Ref<HTMLElement> }) => (
+  <Component
+    ref={ref}
+    className={classNames(styles.hidden, focusable && styles.focusable, className)}
+    {...rest}
+  >
+    {children}
+  </Component>
 );
 
 VisuallyHiddenImpl.displayName = "VisuallyHidden";
