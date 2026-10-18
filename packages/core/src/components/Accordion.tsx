@@ -6,6 +6,7 @@ import React, {
   useCallback,
   useEffect,
   useImperativeHandle,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -61,6 +62,8 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     ref,
   ) => {
     const headerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const contentId = `accordion-content-${useId().replace(/:/g, "")}`;
     const [isOpen, setIsOpen] = useState(open);
 
     useEffect(() => {
@@ -68,6 +71,12 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     }, [open]);
 
     const isAccordionOpen = onToggle ? open : isOpen;
+
+    // A closed panel is aria-hidden; inert keeps its links and fields out of
+    // the Tab order too. Set on the node: React 18 has no `inert` prop.
+    useEffect(() => {
+      if (contentRef.current) contentRef.current.inert = !isAccordionOpen;
+    }, [isAccordionOpen]);
 
     const toggleAccordion = useCallback(() => {
       if (onToggle) {
@@ -149,7 +158,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           onClick={handleHeaderClick}
           onKeyDown={handleHeaderKeyDown}
           aria-expanded={isAccordionOpen}
-          aria-controls="accordion-content"
+          aria-controls={contentId}
           radius={radius}
           role="button"
           {...headerRest}
@@ -169,7 +178,8 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           />
         </Row>
         <Grid
-          id="accordion-content"
+          ref={contentRef}
+          id={contentId}
           fillWidth
           transition="macro-medium"
           style={{

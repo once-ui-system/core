@@ -91,7 +91,8 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
     const markerWidth = isHorizontal ? undefined : dotSize;
 
     return (
-      <Column {...flex}>
+      // The ref was taken but never attached.
+      <Column ref={ref} {...flex}>
         {items.map((item, index) => {
           const state = item.state || "default";
           const nextState = index < items.length - 1 ? items[index + 1].state || "default" : state;

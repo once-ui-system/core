@@ -15,7 +15,7 @@ interface StyleOverlayProps extends React.ComponentProps<typeof Flex> {
 }
 
 const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
-  ({ iconButtonProps, children, zIndex = 2, ...rest }, ref) => {
+  ({ iconButtonProps, children, zIndex = 2, style, ...rest }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
 
     const togglePanel = () => {
@@ -28,10 +28,11 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
         <Flex
           as="aside"
           zIndex={3}
-          className={`${styles.panel} ${isOpen && styles.open}`}
+          className={`${styles.panel}${isOpen ? ` ${styles.open}` : ""}`}
           maxWidth={28}
           style={{
             maxHeight: "calc(100% - var(--static-space-4))",
+            ...style,
           }}
           fillHeight
           position="absolute"

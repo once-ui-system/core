@@ -62,7 +62,11 @@ const TypeFx = forwardRef<HTMLSpanElement, TypeFxProps>(
         });
 
       const run = async () => {
-        const wordsArray: string[] = JSON.parse(wordsHash);
+        // An empty list (data not loaded yet) types nothing instead of crashing on `undefined.length`.
+        const wordsArray = (JSON.parse(wordsHash) as (string | null)[]).filter(
+          (word): word is string => typeof word === "string",
+        );
+        if (wordsArray.length === 0) return;
         const isSingleWord = wordsArray.length === 1;
 
         if (delay > 0) {

@@ -175,7 +175,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       options,
-      value = "",
+      // No default: `undefined` is what makes it uncontrolled. A default of
+      // "" made every Select controlled, so without `value` a pick never
+      // showed and a multiple Select never kept more than one.
+      value,
       onSelect,
       searchable = false,
       emptyState = "No results",
@@ -205,7 +208,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
      */
     const [isFocused, setIsFocused] = useState(false);
 
-    const [internalValue, setInternalValue] = useState(multiple ? [] : value);
+    const [internalValue, setInternalValue] = useState<string | string[]>(
+      value ?? (multiple ? [] : ""),
+    );
 
     useEffect(() => {
       if (value !== undefined) {

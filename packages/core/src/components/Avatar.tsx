@@ -80,12 +80,20 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           border="neutral-medium"
           shape="circle"
           {...(typeof size === "number" ? { width: size, height: size } : { size })}
-          className={`${styles.avatar} ${className}`}
+          className={`${styles.avatar} ${className || ""}`}
+          role="img"
           aria-busy="true"
           aria-label="Loading avatar"
         />
       );
     }
+
+    // The root is the image, and an image's children are presentational: the
+    // name has to sit on the root or the avatar is announced as a nameless image.
+    const baseLabel = isEmpty ? "Empty avatar" : src ? "Avatar" : `Avatar with initials ${value}`;
+    const rootLabel = statusIndicator
+      ? `${baseLabel}, status: ${statusIndicator.color}`
+      : baseLabel;
 
     const renderContent = () => {
       if (isEmpty) {
@@ -137,6 +145,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       <Flex
         ref={ref}
         role="img"
+        aria-label={rootLabel}
         horizontal="center"
         vertical="center"
         radius="full"

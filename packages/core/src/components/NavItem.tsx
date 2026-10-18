@@ -30,7 +30,16 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
   ({ label, icon, badge, indicator, ...toggle }, ref) => {
     const trailing = indicator || (badge !== undefined && badge > 0);
     return (
-      <ToggleButton ref={ref} fillWidth horizontal="start" size="l" radius="m" {...toggle}>
+      <ToggleButton
+        ref={ref}
+        fillWidth
+        horizontal="start"
+        size="l"
+        radius="m"
+        // `selected` only paints the row; the current page has to be announced too.
+        aria-current={toggle.selected ? "page" : undefined}
+        {...toggle}
+      >
         <Row
           fillWidth
           gap="12"

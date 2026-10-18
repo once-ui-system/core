@@ -3,6 +3,7 @@
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { Row } from "./Row";
 import { Text } from "./Text";
+import { VisuallyHidden } from "./VisuallyHidden";
 
 export interface CountFxProps extends React.ComponentProps<typeof Text> {
   value: number;
@@ -320,7 +321,11 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(
             {...text}
             style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
           >
-            {renderWheelDigits(displayValue, value)}
+            {/* The strips print 0-9 per digit; read the number instead. */}
+            <span aria-hidden="true" style={{ display: "contents" }}>
+              {renderWheelDigits(displayValue, value)}
+            </span>
+            <VisuallyHidden>{formatValue(value)}</VisuallyHidden>
             {children}
           </Text>
         </span>
@@ -334,7 +339,11 @@ const CountFx = forwardRef<HTMLDivElement, CountFxProps>(
             {...text}
             style={{ display: "flex", alignItems: "center", gap: "0.1em", ...text.style }}
           >
-            {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
+            {/* The strips print 0-9 per digit; read the number instead. */}
+            <span aria-hidden="true" style={{ display: "contents" }}>
+              {renderSmoothDigits(previousValueRef.current, value, animationProgress)}
+            </span>
+            <VisuallyHidden>{formatValue(value)}</VisuallyHidden>
             {children}
           </Text>
         </span>

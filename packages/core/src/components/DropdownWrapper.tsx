@@ -37,6 +37,7 @@ import styles from "./DropdownWrapper.module.scss";
 import { Flex } from "./Flex";
 import { FocusTrap } from "./FocusTrap";
 import { IconButton } from "./IconButton";
+import { Option } from "./Option";
 import { Row } from "./Row";
 import { ScrollLock } from "./ScrollLock";
 
@@ -831,6 +832,9 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
             disableTriggerClick
               ? undefined
               : (e) => {
+                  // The trigger's own onClick below has already toggled: a
+                  // click there bubbling on to here reported the open twice.
+                  if (triggerRef.current?.contains(e.target as Node)) return;
                   if (!isOpen) {
                     handleOpenChange(true);
                     return;
@@ -1007,9 +1011,21 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
                               childElement.props.role === "option";
 
                             if (hasDataValue) {
+                              // An Option, or anything carrying `data-value`,
+                              // puts that value on the element it renders, and
+                              // the click reaches Dropdown's own onSelect above,
+                              // which reports it and closes. Reporting it here
+                              // too called onSelect twice per pick, and
+                              // replacing the child's onClick dropped the
+                              // caller's handler.
+                              const rendersValue =
+                                childElement.type === Option ||
+                                childElement.props["data-value"] !== undefined;
                               // Cast the child element to any to avoid TypeScript errors with unknown props
                               return React.cloneElement(childElement, {
                                 onClick: (val: string) => {
+                                  childElement.props.onClick?.(val);
+                                  if (rendersValue) return;
                                   onSelect?.(val);
                                   if (closeAfterClick) {
                                     handleOpenChange(false);

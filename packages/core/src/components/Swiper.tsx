@@ -369,6 +369,8 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                   transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
                 }}
                 aria-label={`Go to slide ${index + 1}`}
+                // The slide in front was shown by the dot's colour alone.
+                aria-current={activeIndex === index ? "true" : undefined}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {

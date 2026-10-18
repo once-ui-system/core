@@ -110,29 +110,33 @@ interface EmojiButtonProps {
   emoji: EmojiItem;
   index: number;
   isFocused: boolean;
+  /** The grid's one tab stop: the focused emoji, else the first. */
+  isTabStop: boolean;
   onSelect: (emoji: string) => void;
   onFocus: (index: number) => void;
 }
 
-const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiButtonProps) => {
-  return (
-    <IconButton
-      key={index}
-      tabIndex={index === 0 || isFocused ? 0 : -1}
-      variant="tertiary"
-      size="l"
-      onClick={() => onSelect(emoji.char)}
-      aria-label={emoji.description}
-      title={emoji.description}
-      className={styles.emojiButton}
-      onFocus={() => onFocus(index)}
-      role="gridcell"
-      ref={isFocused ? (el) => el?.focus() : undefined}
-    >
-      <Text variant="heading-default-xl">{emoji.char}</Text>
-    </IconButton>
-  );
-});
+const EmojiButton = memo(
+  ({ emoji, index, isFocused, isTabStop, onSelect, onFocus }: EmojiButtonProps) => {
+    return (
+      <IconButton
+        key={index}
+        tabIndex={isTabStop ? 0 : -1}
+        variant="tertiary"
+        size="l"
+        onClick={() => onSelect(emoji.char)}
+        aria-label={emoji.description}
+        title={emoji.description}
+        className={styles.emojiButton}
+        onFocus={() => onFocus(index)}
+        role="gridcell"
+        ref={isFocused ? (el) => el?.focus() : undefined}
+      >
+        <Text variant="heading-default-xl">{emoji.char}</Text>
+      </IconButton>
+    );
+  },
+);
 
 EmojiButton.displayName = "EmojiButton";
 
@@ -177,6 +181,8 @@ const EmojiPicker = ({
 
   const categoryButtons: ButtonOption[] = Object.keys(emojiData).map((category) => ({
     value: category,
+    // An icon is all a category tab shows, so it needs a name of its own.
+    "aria-label": category.charAt(0).toUpperCase() + category.slice(1),
     children: <Icon name={getCategoryIcon(category)} size="s" />,
   }));
 
@@ -214,13 +220,13 @@ const EmojiPicker = ({
     setFocusedEmojiIndex(index);
   }, []);
 
+  // The grid's columns, for its rows and for the arrow keys.
+  const emojisPerRow = Number(columns) || 6;
+
   // Handle keyboard navigation
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLDivElement>) => {
       if (filteredEmojis.length === 0) return;
-
-      // Use provided columns prop for grid navigation
-      const emojisPerRow = Number(columns) || 6;
 
       let newIndex = focusedEmojiIndex;
 
@@ -267,7 +273,7 @@ const EmojiPicker = ({
 
       setFocusedEmojiIndex(newIndex);
     },
-    [filteredEmojis, focusedEmojiIndex, handleEmojiSelect, columns],
+    [filteredEmojis, focusedEmojiIndex, handleEmojiSelect, emojisPerRow],
   );
 
   return (
@@ -302,15 +308,35 @@ const EmojiPicker = ({
             tabIndex={-1}
             role="grid"
           >
-            {filteredEmojis.map((emoji: EmojiItem, index: number) => (
-              <EmojiButton
-                key={index}
-                emoji={emoji}
-                index={index}
-                isFocused={index === focusedEmojiIndex}
-                onSelect={handleEmojiSelect}
-                onFocus={handleFocus}
-              />
+            {/* A grid owns rows, and a row owns its cells: the cells sat in
+                the grid directly, which is invalid. The rows are
+                `display: contents`, so the cells still lay out in the CSS
+                grid, and they are the same rows the arrow keys move by. */}
+            {Array.from({ length: Math.ceil(filteredEmojis.length / emojisPerRow) }, (_, row) => (
+              <Row
+                role="row"
+                key={filteredEmojis[row * emojisPerRow].char}
+                style={{ display: "contents" }}
+              >
+                {filteredEmojis
+                  .slice(row * emojisPerRow, (row + 1) * emojisPerRow)
+                  .map((emoji: EmojiItem, column: number) => {
+                    const index = row * emojisPerRow + column;
+                    return (
+                      <EmojiButton
+                        key={index}
+                        emoji={emoji}
+                        index={index}
+                        isFocused={index === focusedEmojiIndex}
+                        isTabStop={
+                          focusedEmojiIndex < 0 ? index === 0 : index === focusedEmojiIndex
+                        }
+                        onSelect={handleEmojiSelect}
+                        onFocus={handleFocus}
+                      />
+                    );
+                  })}
+              </Row>
             ))}
           </Grid>
         ) : (
@@ -325,6 +351,7 @@ const EmojiPicker = ({
           buttons={categoryButtons}
           onChange={handleCategoryChange}
           defaultValue={activeCategory}
+          aria-label="Emoji categories"
           fillWidth
         />
       )}

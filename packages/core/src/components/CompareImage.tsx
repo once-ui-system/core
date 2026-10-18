@@ -84,6 +84,19 @@ const CompareImage = ({
     setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
   }, []);
 
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    const step = e.shiftKey ? 10 : 5;
+    let next: ((current: number) => number) | null = null;
+    if (e.key === "ArrowLeft" || e.key === "ArrowDown") next = (p) => p - step;
+    else if (e.key === "ArrowRight" || e.key === "ArrowUp") next = (p) => p + step;
+    else if (e.key === "Home") next = () => 0;
+    else if (e.key === "End") next = () => 100;
+    if (!next) return;
+    e.preventDefault();
+    const move = next;
+    setPosition((current) => Math.max(0, Math.min(100, move(current))));
+  }, []);
+
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
@@ -135,12 +148,22 @@ const CompareImage = ({
           left: `${position}%`,
         }}
       >
+        {/* With no onClick this rendered a div: a keyboard could not reach the
+            handle at all. It is a real button exposed as a slider, moved with
+            the arrow keys, Home and End. */}
         <IconButton
           icon="chevronsLeftRight"
+          type="button"
+          role="slider"
           aria-label="Drag to compare"
+          aria-orientation="horizontal"
+          aria-valuemin={0}
+          aria-valuemax={100}
+          aria-valuenow={Math.round(position)}
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}
+          onKeyDown={handleKeyDown}
           style={{ cursor: "grab" }}
         />
       </Flex>

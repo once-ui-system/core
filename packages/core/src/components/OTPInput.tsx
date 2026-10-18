@@ -1,6 +1,7 @@
 "use client";
 
-import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
@@ -30,7 +31,11 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
     },
     ref,
   ) => {
-    const [values, setValues] = useState<string[]>(Array(length).fill(""));
+    const [stored, setValues] = useState<string[]>(() => Array(length).fill(""));
+    // Sized to `length` on every render: a `length` changed after mount left
+    // the new fields without a value (React's controlled-to-uncontrolled
+    // warning) and the code could never complete.
+    const values = Array.from({ length }, (_, index) => stored[index] ?? "");
     const inputsRef = useRef<Array<HTMLInputElement | null>>([]);
     // The fields' ids were `otp-0`…`otp-N`, the same in every OTPInput on a
     // page, so a label or script that found a field by id got the first one.

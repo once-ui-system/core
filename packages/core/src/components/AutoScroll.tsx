@@ -176,7 +176,9 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         }
       } else {
         animation.updatePlaybackRate(1);
-        if (animation.playState === "paused" && hover !== "pause") {
+        // The pause came from hovering, so leaving is what resumes it. The old
+        // `hover !== "pause"` check meant hover="pause" never played again.
+        if (animation.playState === "paused") {
           animation.play();
         }
       }
@@ -241,11 +243,15 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           >
             {children || childrenStable}
           </Row>
+          {/* The copy that makes the loop seamless: drawn, but not read out
+              or tabbed into a second time. */}
           <Row
             fitWidth
             horizontal="around"
             className={styles.marqueeContent}
             style={{ marginRight: gapStyle }}
+            aria-hidden="true"
+            inert
           >
             {children || childrenStable}
           </Row>

@@ -7,6 +7,7 @@ import {
   type ReactNode,
   type RefObject,
   useEffect,
+  useImperativeHandle,
   useRef,
 } from "react";
 import { getFocusableElements } from "../internal/focusable";
@@ -42,6 +43,8 @@ const FocusTrap = forwardRef<HTMLDivElement, FocusTrapProps>(
   ) => {
     const internalRef = useRef<HTMLDivElement>(null);
     const containerRef = externalRef || internalRef;
+    // The forwarded ref was accepted and never attached.
+    useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
     const previouslyFocusedElement = useRef<Element | null>(null);
 
     // Store the previously focused element when the trap becomes active

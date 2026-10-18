@@ -1,9 +1,10 @@
 "use client";
 
-import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { ColorScheme, SpacingToken } from "../types";
 import { Column } from "./Column";
-import { Flex } from "./Flex";
+import type { Flex } from "./Flex";
 import { Row } from "./Row";
 import { Text } from "./Text";
 
@@ -221,9 +222,12 @@ const Scrubber = forwardRef<HTMLDivElement, ScrubberProps>(
           aria-valuenow={value}
           aria-valuetext={formatTime(value)}
           onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.key === "ArrowLeft") onChange(clamp(value - keyStep));
-            else if (event.key === "ArrowRight") onChange(clamp(value + keyStep));
-            else if (event.key === "Home") onChange(0);
+            // Up and Down step too, as on any slider; they used to scroll the page.
+            if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+              onChange(clamp(value - keyStep));
+            } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+              onChange(clamp(value + keyStep));
+            } else if (event.key === "Home") onChange(0);
             else if (event.key === "End") onChange(duration);
             else return;
             event.preventDefault();

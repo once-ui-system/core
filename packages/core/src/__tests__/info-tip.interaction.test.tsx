@@ -1,0 +1,91 @@
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import type React from "react";
+import { describe, expect, it } from "vitest";
+import { InfoTip } from "../components/InfoTip";
+import { LayoutProvider } from "../contexts/LayoutProvider";
+import { expectNoAxeViolations } from "../test/axe";
+import { failOnConsoleError } from "../test/failOnConsoleError";
+
+const wrap = ({ children }: { children: React.ReactNode }) => (
+  <LayoutProvider>{children}</LayoutProvider>
+);
+
+failOnConsoleError();
+
+const text = "Shown on invoices and receipts.";
+const icon = () => screen.getByRole("button", { name: "More information" });
+const tip = () => screen.queryByRole("tooltip");
+
+/**
+ * InfoTip beyond its focus contract (infotip-hovercard.test.tsx): it opens
+ * for the pointer too, its layout props reach the tip box rather than the
+ * icon, its description exists only while the tip does, and several on one
+ * page each describe their own icon.
+ */
+describe("InfoTip", () => {
+  it("renders a named icon with no tip, and no axe violations, by default", async () => {
+    const { container } = render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    expect(icon()).toHaveAttribute("tabindex", "0");
+    expect(tip()).toBeNull();
+    expect(icon()).not.toHaveAccessibleDescription(text);
+    await expectNoAxeViolations(container);
+  });
+
+  it("opens on hover and closes on unhover", async () => {
+    const user = userEvent.setup();
+    render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    await user.hover(icon());
+    expect(await screen.findByRole("tooltip")).toHaveTextContent(text);
+    expect(icon()).toHaveAccessibleDescription(text);
+    await user.unhover(icon());
+    await waitFor(() => expect(tip()).toBeNull());
+  });
+
+  it("puts layout props on the tip box", async () => {
+    const user = userEvent.setup();
+    render(
+      <InfoTip maxWidth={30} data-testid="box">
+        {text}
+      </InfoTip>,
+      { wrapper: wrap },
+    );
+    await user.hover(icon());
+    const box = await screen.findByRole("tooltip");
+    expect(box).toHaveAttribute("data-testid", "box");
+    expect(icon()).not.toHaveAttribute("data-testid");
+  });
+
+  it("gives each InfoTip its own tip id", async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <InfoTip aria-label="About names">Your legal name.</InfoTip>
+        <InfoTip aria-label="About emails">Where receipts go.</InfoTip>
+      </>,
+      { wrapper: wrap },
+    );
+    const names = screen.getByRole("button", { name: "About names" });
+    const emails = screen.getByRole("button", { name: "About emails" });
+    expect(names.getAttribute("aria-describedby")).not.toBe(
+      emails.getAttribute("aria-describedby"),
+    );
+
+    await user.tab();
+    await user.tab();
+    expect(emails).toHaveFocus();
+    await waitFor(() => expect(emails).toHaveAccessibleDescription("Where receipts go."));
+    await waitFor(() => expect(screen.queryByText("Your legal name.")).toBeNull());
+  });
+
+  it("does not activate anything on Enter or Space", async () => {
+    const user = userEvent.setup();
+    render(<InfoTip>{text}</InfoTip>, { wrapper: wrap });
+    await user.tab();
+    await screen.findByRole("tooltip");
+    await user.keyboard("{Enter}");
+    await user.keyboard(" ");
+    expect(icon()).toHaveFocus();
+    expect(tip()).toHaveTextContent(text);
+  });
+});

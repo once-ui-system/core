@@ -1,7 +1,8 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
@@ -22,6 +23,17 @@ interface NumberInputProps
 
 const format = (value: number | undefined, padStart?: number) =>
   value === undefined ? "" : padStart ? value.toString().padStart(padStart, "0") : value.toString();
+
+/** Decimal places in a number, so a step can be rounded back onto its grid. */
+const decimals = (n: number) => {
+  const [, exponent] = String(n).split("e-");
+  if (exponent) return Number(exponent);
+  return (String(n).split(".")[1] ?? "").length;
+};
+
+/** `from + by` without floating-point noise: 0.2 + 0.1 is 0.3, not 0.30000000000000004. */
+const add = (from: number, by: number) =>
+  Number((from + by).toFixed(Math.max(decimals(from), decimals(by))));
 
 /** Whether the text in the field already reads as `value`: "1." and "1.50" are 1 and 1.5. */
 const shows = (text: string, value: number | undefined) =>
@@ -77,7 +89,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
     const increment = () => {
       const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue + step;
+      const newValue = add(currentValue, step);
       if (max === undefined || newValue <= max) {
         updateValue(newValue);
       }
@@ -85,7 +97,7 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 
     const decrement = () => {
       const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue - step;
+      const newValue = add(currentValue, -step);
       if (min === undefined || newValue >= min) {
         updateValue(newValue);
       }

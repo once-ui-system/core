@@ -111,14 +111,19 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
       )();
     }, [inProgress, speed, charset, trigger, setHasAnimated]);
 
+    // Only new text resets the display. This used to share an effect with the
+    // instant trigger, so every new `eventHandler` (each render, with an inline
+    // `charset` array) put the original text back over the scramble.
     useEffect(() => {
       if (typeof children === "string") {
         setText(children);
         originalText.current = children;
+      }
+    }, [children]);
 
-        if (trigger === "instant" && !hasAnimated) {
-          eventHandler();
-        }
+    useEffect(() => {
+      if (typeof children === "string" && trigger === "instant" && !hasAnimated) {
+        eventHandler();
       }
     }, [children, trigger, eventHandler, hasAnimated]);
 
@@ -135,7 +140,7 @@ const LetterFx = forwardRef<HTMLSpanElement, LetterFxProps>(
         style={style}
         onMouseOver={trigger === "hover" ? eventHandler : undefined}
       >
-        {text}
+        {typeof children === "string" ? text : children}
       </span>
     );
   },

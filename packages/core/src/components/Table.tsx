@@ -133,16 +133,18 @@ function Table({
     });
   }, [filteredRows, sortConfig, data.headers]);
 
+  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+
+  // Sliced at the clamped page: when the rows shrink under the last page,
+  // slicing at `page` showed an empty body while the label read "2 / 2".
   const paginatedRows = useMemo(() => {
     if (!paginated) return sortedRows;
 
-    const start = (page - 1) * pageSize;
+    const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
     return sortedRows.slice(start, end);
-  }, [sortedRows, paginated, page, pageSize]);
-
-  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
+  }, [sortedRows, paginated, currentPage, pageSize]);
 
   useMemo(() => {
     setPage(1);

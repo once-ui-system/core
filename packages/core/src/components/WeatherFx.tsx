@@ -104,7 +104,10 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
     const animationRef = useRef<number | undefined>(undefined);
     const particlesRef = useRef<(RainDrop | Snowflake | Leaf | Lightning)[]>([]);
     const timeRef = useRef<number>(0);
-    const isEmittingRef = useRef<boolean>(trigger === "mount" || (trigger === "manual" && active));
+    // Manual starts off: the manual-trigger effect below turns emission on for
+    // `active`, and only does so (creating the particles) when it is off. Seeding
+    // it with `active` meant `<WeatherFx trigger="manual" active />` drew nothing.
+    const isEmittingRef = useRef<boolean>(trigger === "mount");
     const emitStartTimeRef = useRef<number>(Date.now());
     const isHoveredRef = useRef<boolean>(false);
     const lastLightningTimeRef = useRef<number>(0);
@@ -1074,8 +1077,10 @@ const WeatherFx = React.forwardRef<HTMLDivElement, WeatherFxProps>(
         onClick={handleClick}
         {...rest}
       >
+        {/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: a canvas without tabIndex is not focusable; this one is decoration */}
         <canvas
           ref={canvasRef}
+          aria-hidden="true"
           style={{
             position: "absolute",
             top: 0,

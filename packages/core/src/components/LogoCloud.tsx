@@ -65,12 +65,12 @@ const LogoCloud = forwardRef<HTMLDivElement, LogoCloudProps>(
             radius="l"
           >
             <Logo
-              className={shouldRotate ? styles.logo : styles.staticLogo}
+              {...logo}
+              className={classNames(shouldRotate ? styles.logo : styles.staticLogo, logo.className)}
               style={{
                 ...logo.style,
                 animationDelay: `${index * STAGGER_DELAY}ms`,
               }}
-              {...logo}
             />
           </Flex>
         ))}

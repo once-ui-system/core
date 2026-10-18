@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useId, useState } from "react";
 import { Column } from "../../components/Column";
 import { CountFx } from "../../components/CountFx";
 import { Text } from "../../components/Text";
@@ -60,6 +60,8 @@ export const RadialGauge = ({
   ...flex
 }: RadialGaugeProps) => {
   const pad = 4;
+  // Per instance: a fixed id repeats as soon as two gauges share a page.
+  const gradientId = `${useId()}-line-gradient`;
 
   // Destructure line with individual defaults
   const lineCount = line?.count ?? 48;
@@ -166,7 +168,7 @@ export const RadialGauge = ({
         className={styles.svg}
       >
         <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
             <stop offset="0%" stopColor="var(--brand-solid-strong)" />
             <stop offset="100%" stopColor="var(--accent-solid-strong)" />
           </linearGradient>
