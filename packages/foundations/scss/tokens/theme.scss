@@ -367,14 +367,15 @@
     --solid-border-color-neutral:   var(--neutral-alpha-strong);
     --solid-border-color-danger:    var(--danger-alpha-strong);
 
-    /* code */
-    --code-moss:                    var(--scheme-moss-600);
-    --code-gray:                    var(--scheme-gray-600);
-    --code-aqua:                    var(--scheme-aqua-600);
-    --code-green:                   var(--scheme-green-600);
-    --code-blue:                    var(--scheme-blue-600);
-    --code-violet:                  var(--scheme-violet-600);
-    --code-orange:                  var(--scheme-orange-600);
+    /* code: step 500, the lightest that reads at 4.5:1 on white (600 was
+       3:1, below WCAG AA for 14px code) */
+    --code-moss:                    var(--scheme-moss-500);
+    --code-gray:                    var(--scheme-gray-500);
+    --code-aqua:                    var(--scheme-aqua-500);
+    --code-green:                   var(--scheme-green-500);
+    --code-blue:                    var(--scheme-blue-500);
+    --code-violet:                  var(--scheme-violet-500);
+    --code-orange:                  var(--scheme-orange-500);
     
     /* brand */  
     --brand-background-strong:      var(--function-brand-800);
