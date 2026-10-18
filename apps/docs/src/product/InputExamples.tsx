@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useNowState } from "./useNow";
 import {
   Input,
   Icon,
@@ -136,7 +137,7 @@ export function ColorInputAlphaExample() {
 
 // Date input example with managed state
 export function DateInputExample() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = useNowState();
   
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
@@ -155,7 +156,7 @@ export function DateInputExample() {
 
 // Date and time input example
 export function DateTimeInputExample() {
-  const [dateTime, setDateTime] = useState<Date | undefined>(new Date());
+  const [dateTime, setDateTime] = useNowState();
   
   const handleDateTimeChange = (newDateTime: Date) => {
     setDateTime(newDateTime);

@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
+import { useNowState, useRangeFromToday } from "./useNow";
 import { DatePicker, DateRangePicker } from "@once-ui-system/core";
 import type { DateRange } from "@once-ui-system/core";
 
 // Basic DatePicker example with managed state
 export function BasicDatePickerExample() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useNowState();
 
   const handleDateChange = (newDate: Date) => {
     setSelectedDate(newDate);
@@ -17,7 +18,7 @@ export function BasicDatePickerExample() {
 
 // DatePicker with time picker example
 export function DateTimePickerExample() {
-  const [dateTime, setDateTime] = useState<Date | undefined>(new Date());
+  const [dateTime, setDateTime] = useNowState();
 
   const handleDateTimeChange = (newDateTime: Date) => {
     setDateTime(newDateTime);
@@ -28,7 +29,7 @@ export function DateTimePickerExample() {
 
 // DatePicker in another locale, with its own words translated through labels
 export function LocalizedDatePickerExample() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
+  const [selectedDate, setSelectedDate] = useNowState();
 
   return (
     <DatePicker
@@ -51,10 +52,7 @@ export function LocalizedDatePickerExample() {
 
 // DateRangePicker example
 export function DateRangePickerExample() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-  });
+  const [dateRange, setDateRange] = useRangeFromToday(7);
 
   const handleRangeChange = (range: DateRange) => {
     setDateRange(range);
@@ -65,10 +63,7 @@ export function DateRangePickerExample() {
 
 // DateRangePicker with custom styling example
 export function DateRangePickerPresetsExample() {
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: new Date(),
-    endDate: new Date(new Date().setDate(new Date().getDate() + 7)),
-  });
+  const [dateRange, setDateRange] = useRangeFromToday(7);
 
   const handleRangeChange = (range: DateRange) => {
     setDateRange(range);
