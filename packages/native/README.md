@@ -28,6 +28,9 @@ export default function App() {
 
 Needs React 19 and React Native 0.79 or later (Expo SDK 53+).
 
+Docs: the "React Native" section of the Once UI docs
+(`apps/docs/src/content/native/`). This README stays the quick start.
+
 ## Components
 
 `ThemeProvider` takes core's style options with core's defaults (`theme`,
@@ -56,6 +59,10 @@ follows the device.
   they take an element, since the preview has no icon set yet.
 - **Units:** numbers on spacing and size props are rem, as on the web, and rem
   follows the device size Once UI uses (15pt on phones, 16pt on tablets).
+- **Touch:** small controls (`Button`, `Switch`, `Checkbox`) take taps from
+  core's `--touch-target` (2.75rem) around them without being drawn larger.
+- **Clipping:** `radius` does not clip children, as on the web; pass
+  `overflow="hidden"` when it should (on iOS that also hides the view's shadow).
 - **No responsive props** (`s`, `m`, …) yet; the phone breakpoint's token values
   apply on phones automatically.
 

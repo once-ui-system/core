@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { Animated, type DimensionValue, type ViewStyle } from "react-native";
+import { useEffect, useRef, useState } from "react";
+import { AccessibilityInfo, Animated, type DimensionValue, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 
@@ -29,8 +29,10 @@ export function Skeleton({
 }: SkeletonProps) {
   const theme = useTheme();
   const opacity = useRef(new Animated.Value(1)).current;
+  const reduceMotion = useReduceMotion();
 
   useEffect(() => {
+    if (reduceMotion) return;
     const pulse = Animated.loop(
       Animated.sequence([
         Animated.timing(opacity, { toValue: 0.4, duration: 800, useNativeDriver: true }),
@@ -42,7 +44,7 @@ export function Skeleton({
       clearTimeout(timer);
       pulse.stop();
     };
-  }, [opacity, delay]);
+  }, [opacity, delay, reduceMotion]);
 
   const box =
     shape === "circle"
@@ -58,6 +60,7 @@ export function Skeleton({
   return (
     <Animated.View
       accessibilityLabel="Loading"
+      aria-busy
       style={[
         box,
         width !== undefined && { width },
@@ -67,4 +70,21 @@ export function Skeleton({
       ]}
     />
   );
+}
+
+/** The device's reduce-motion setting: the pulse holds still while it is on. */
+function useReduceMotion() {
+  const [reduce, setReduce] = useState(false);
+  useEffect(() => {
+    let live = true;
+    AccessibilityInfo.isReduceMotionEnabled?.()
+      .then((on) => live && setReduce(on))
+      .catch(() => {});
+    const sub = AccessibilityInfo.addEventListener?.("reduceMotionChanged", setReduce);
+    return () => {
+      live = false;
+      sub?.remove();
+    };
+  }, []);
+  return reduce;
 }

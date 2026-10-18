@@ -6,6 +6,7 @@ import type { TShirtSizes } from "../types";
 import type { RefComponent, ViewRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
+import { touchSlop } from "./touch";
 
 export type ButtonVariant =
   | "primary"
@@ -144,6 +145,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
         aria-disabled={inactive}
         aria-busy={loading}
         disabled={inactive}
+        hitSlop={touchSlop(theme, theme.space(dims.height as "24"), Number.POSITIVE_INFINITY)}
         {...rest}
         style={({ pressed }) => {
           const colors = disabled

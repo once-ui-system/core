@@ -10,6 +10,7 @@ import {
   createTheme,
   defaultSettings,
   Feedback,
+  flexStyle,
   Heading,
   Input,
   Line,
@@ -157,5 +158,37 @@ describe("components", () => {
     vi.useRealTimers();
     expect(container.textContent).toContain("Paid");
     expect(container.textContent).toContain("LT");
+  });
+});
+
+describe("polish", () => {
+  it("wraps bare text in Flex and Card, which React Native would reject", () => {
+    render(
+      <ThemeProvider theme="light">
+        <Row>Hello {3}</Row>
+        <Card>Inside a card</Card>
+      </ThemeProvider>,
+    );
+    expect(screen.getByText("Hello")).toBeTruthy();
+    expect(screen.getByText("Inside a card")).toBeTruthy();
+  });
+
+  it("does not clip a rounded Flex unless asked, so its shadow shows on iOS", () => {
+    expect(flexStyle(light, { radius: "l", shadow: "m" }).style.overflow).toBeUndefined();
+    expect(flexStyle(light, { radius: "l", overflow: "hidden" }).style.overflow).toBe("hidden");
+  });
+
+  it("keeps the label floating after an uncontrolled Input loses focus", () => {
+    render(
+      <ThemeProvider theme="light">
+        <Input label="Name" />
+      </ThemeProvider>,
+    );
+    const field = screen.getByLabelText("Name") as HTMLInputElement;
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: "Ada" } });
+    fireEvent.blur(field);
+    // A resting label hides the control behind it; a floating one leaves it visible.
+    expect(getComputedStyle(field).opacity).not.toBe("0");
   });
 });

@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { InteractiveDetails } from "./InteractiveDetails";
+import { touchSlop } from "./touch";
 import { useControllable } from "./useControllable";
 
 export interface CheckboxProps {
@@ -42,6 +43,7 @@ export function Checkbox({
       aria-disabled={disabled}
       disabled={disabled}
       onPress={toggle}
+      hitSlop={touchSlop(theme, box, label || description ? Number.POSITIVE_INFINITY : box)}
       style={[
         {
           flexDirection: "row",
