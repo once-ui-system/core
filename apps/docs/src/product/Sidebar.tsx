@@ -373,7 +373,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
 
     // Fetch only if not loaded and no global cache
     if (!hasLoaded) {
-      fetch("/api/navigation")
+      fetch(`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/api/navigation`)
         .then((res) => res.json())
         .then((data) => {
           setNavigation(data);

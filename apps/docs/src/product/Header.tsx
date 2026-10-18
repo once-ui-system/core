@@ -38,7 +38,7 @@ export function Header() {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/navigation")
+    fetch(`${process.env.NEXT_PUBLIC_DOCS_BASE_PATH}/api/navigation`)
       .then((res) => res.json())
       .then((data) => {
         setNavigationItems(data);

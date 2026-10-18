@@ -9,7 +9,16 @@ const withMDXConfig = withMDX({
   },
 })
 
+/**
+ * The 1.x docs are served on the main docs site under /v1, which proxies
+ * that path to this deployment. See apps/docs/src/resources/versions.data.js
+ * on the current branches.
+ */
+const basePath = "/v1";
+
 const nextConfig = {
+  basePath,
+  env: { NEXT_PUBLIC_DOCS_BASE_PATH: basePath },
   // Exclude workspace source files and cache from build output
   outputFileTracingExcludes: {
     '*': [
@@ -38,6 +47,8 @@ const nextConfig = {
   },
   // Configure image optimization
   images: {
+    loader: 'custom',
+    loaderFile: './src/resources/imageLoader.js',
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
       {
@@ -50,6 +61,19 @@ const nextConfig = {
   // Add redirects from /docs/slug to /slug
   async redirects() {
     return [
+      // Links from before the move: every page now lives under /v1.
+      {
+        source: '/',
+        destination: '/v1',
+        basePath: false,
+        permanent: false,
+      },
+      {
+        source: '/:path((?!v1(?:/|$)).*)',
+        destination: '/v1/:path',
+        basePath: false,
+        permanent: false,
+      },
       {
         source: '/docs/:slug*',
         destination: '/:slug*',
