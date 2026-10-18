@@ -24,6 +24,7 @@ import { AVAILABILITY, type Availability } from "./availability";
 import { DocsContextSwitcher, flattenSlugs } from "./DocsContextSwitcher";
 
 import styles from "./Sidebar.module.scss";
+import { basePath } from "@/resources/versions";
 
 // Global navigation cache to prevent refetching
 let globalNavigationCache: any = null;
@@ -447,7 +448,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
 
     // Fetch only if not loaded and no global cache
     if (!hasLoaded) {
-      fetch("/api/navigation")
+      fetch(`${basePath}/api/navigation`)
         .then((res) => res.json())
         .then((data) => {
           setNavigation(data);
