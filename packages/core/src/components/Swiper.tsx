@@ -341,34 +341,32 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         {/* Dot Indicators */}
         {indicator && items.length > 1 && (
           <Row
-            gap="8"
             fillWidth
             horizontal="center"
             paddingX="16"
-            paddingTop={controls === "contained" ? undefined : "12"}
+            // 8px less than before on each side: the 24px buttons hold the dots
+            // where the 8px dots sat.
+            paddingTop={controls === "contained" ? undefined : "4"}
             position={controls === "contained" ? "absolute" : "relative"}
-            bottom={controls === "contained" ? "16" : undefined}
+            bottom={controls === "contained" ? "8" : undefined}
             style={{
               transform: controls === "contained" ? "translateY(-100%)" : undefined,
             }}
           >
             {items.map((_, index) => (
+              // The dot is 8px; the button around it is 24px, the smallest
+              // target WCAG 2.2 allows (axe: target-size).
               <Flex
                 key={index}
+                width="24"
+                height="24"
+                center
                 radius="full"
                 cursor="interactive"
+                className="focus-ring"
                 onClick={() => handleDotClick(index)}
-                width="8"
-                height="8"
-                style={{
-                  background:
-                    activeIndex === index
-                      ? "var(--neutral-on-background-strong)"
-                      : "var(--neutral-alpha-medium)",
-                  transition: "background 0.3s ease, transform 0.3s ease",
-                  transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
-                }}
                 aria-label={`Go to slide ${index + 1}`}
+                aria-current={activeIndex === index ? "true" : undefined}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -377,7 +375,21 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     handleDotClick(index);
                   }
                 }}
-              />
+              >
+                <Flex
+                  radius="full"
+                  width="8"
+                  height="8"
+                  style={{
+                    background:
+                      activeIndex === index
+                        ? "var(--neutral-on-background-strong)"
+                        : "var(--neutral-alpha-medium)",
+                    transition: "background 0.3s ease, transform 0.3s ease",
+                    transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
+                  }}
+                />
+              </Flex>
             ))}
           </Row>
         )}

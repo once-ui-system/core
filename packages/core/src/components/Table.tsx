@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { ReactNode, useMemo, useState } from "react";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -87,6 +88,7 @@ function Table({
   loadingState,
   ...flex
 }: TableProps) {
+  const scrollRef = useScrollableTabStop<HTMLDivElement>();
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
@@ -339,6 +341,7 @@ function Table({
 
       {/* Table Container */}
       <Flex
+        ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -346,7 +349,7 @@ function Table({
         overflowX="auto"
         overflowY={maxHeight ? "auto" : "visible"}
         style={{ maxHeight }}
-        className={styles.container}
+        className={classNames(styles.container, "focus-ring")}
       >
         <table className={tableClasses}>
           <thead className={styles.thead}>

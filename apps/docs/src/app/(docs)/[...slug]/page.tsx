@@ -168,7 +168,7 @@ export default async function Docs({
           )}
         </Column>
       </Row>
-      <Row fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+      <Row as="aside" aria-label="On this page" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
         <HeadingNav fillWidth top="80" />
       </Row>
     </>

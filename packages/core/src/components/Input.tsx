@@ -7,6 +7,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useId,
   useState,
 } from "react";
 import { useDebounce } from "../hooks/useDebounce";
@@ -59,7 +60,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      id,
+      id: idProp,
       label,
       placeholder,
       size,
@@ -89,6 +90,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    // \`id\` ties the label, error and description to the field. A field
+    // rendered without one (MDX does not typecheck) still gets them.
+    const generatedId = useId();
+    const id = idProp || `input-${generatedId}`;
     // A `Form` can set the size for every field in it; the field's own
     // prop still wins, and `"m"` is still the default on its own.
     const resolvedSize = useFieldSize(size);
