@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Compares two captures from capture.mjs shot by shot and writes a report.
 //
-//   node compare.mjs --base out/base --head out/head [--noise out/head-2] --report out/report
+//   node compare.mjs --base out/base --head out/head [--noise out/head-2] [--base-noise out/base-2] --report out/report
 //
 // A shot capture.mjs saw change on its own (marked `animated`) is not
 // counted, nor is a pixel that only moved by one pixel (sub-pixel layout). --noise is a second capture of the head build: a shot that differs
@@ -18,6 +18,7 @@ const { values: args } = parseArgs({
     base: { type: "string", default: "out/base" },
     head: { type: "string", default: "out/head" },
     noise: { type: "string" },
+    "base-noise": { type: "string" },
     report: { type: "string", default: "out/report" },
     // Changed pixels a shot may have before it counts as changed. Pixelmatch
     // already ignores anti-aliasing; this absorbs a stray sub-pixel row.
@@ -78,6 +79,15 @@ const head = await readManifest(args.head);
 const noise = args.noise ? await readManifest(args.noise) : null;
 const baseById = new Map(base.shots.filter((s) => s.file).map((s) => [s.id, s]));
 const noiseById = new Map((noise?.shots ?? []).filter((s) => s.file).map((s) => [s.id, s]));
+const baseNoise = args["base-noise"] ? await readManifest(args["base-noise"]) : null;
+const baseNoiseById = new Map((baseNoise?.shots ?? []).filter((s) => s.file).map((s) => [s.id, s]));
+
+/** True when a second capture of the same build (in `dir`) does not match `png`. */
+async function unstable(png, again, dir) {
+  if (!again) return false;
+  const n = diff(png, await readPng(dir, again.file));
+  return n.sizeChanged || n.pixels > TOLERANCE;
+}
 const headIds = new Set(head.shots.map((s) => s.id));
 
 await mkdir(path.join(args.report, "img"), { recursive: true });
@@ -102,13 +112,12 @@ for (const shot of head.shots) {
     results.push({ shot, status: "same", pixels: d.pixels });
     continue;
   }
-  const again = noiseById.get(shot.id);
-  if (again) {
-    const n = diff(b, await readPng(args.noise, again.file));
-    if (n.sizeChanged || n.pixels > TOLERANCE) {
-      results.push({ shot, status: "unstable", pixels: d.pixels });
-      continue;
-    }
+  if (
+    (await unstable(b, noiseById.get(shot.id), args.noise)) ||
+    (await unstable(a, baseNoiseById.get(shot.id), args["base-noise"]))
+  ) {
+    results.push({ shot, status: "unstable", pixels: d.pixels });
+    continue;
   }
   const name = shot.file.replace(/\.png$/, "");
   await copyFile(path.join(args.base, before.file), path.join(args.report, "img", `${name}.before.png`));
@@ -134,7 +143,7 @@ const describe = (r) =>
 const summary = [
   `### Visual check: ${changed.length ? `${changed.length} changed` : "no visual change"}`,
   "",
-  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (animated, or differ between two captures of this build; not counted), ${count("error")} not captured.`,
+  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (animated, or differ between two captures of the same build; not counted), ${count("error")} not captured.`,
   ...(changed.length
     ? [
         "",
