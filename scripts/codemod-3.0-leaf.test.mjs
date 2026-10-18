@@ -235,4 +235,25 @@ describe("G2: the trial-migration cases", () => {
 		);
 		assert.equal(out("<Row><Kbd fit>K</Kbd></Row>\n").body, "<Row><Kbd>K</Kbd></Row>\n");
 	});
+
+	it("writes Avatar border, borderWidth, borderStyle and radius as the classes and style they were", () => {
+		assert.equal(
+			out('<Row><Avatar src="a" border="brand-alpha-medium" borderWidth={2} borderStyle="dashed" radius="m" /></Row>\n').body,
+			'<Row><Avatar src="a" style={{ borderColor: "var(--brand-alpha-medium)", borderRadius: "var(--radius-m)" }} className="border-2 border-dashed" /></Row>\n',
+		);
+		assert.equal(
+			out('<Row><Avatar src="a" border="surface" radius="none" style={{ top: 1 }} /></Row>\n').body,
+			'<Row><Avatar src="a" style={{ borderColor: "var(--surface-border)", borderRadius: "0", top: 1 }} /></Row>\n',
+		);
+		assert.equal(
+			out('<Row><Avatar src="a" border="transparent" borderStyle="solid" /></Row>\n').body,
+			'<Row><Avatar src="a" style={{ borderColor: "var(--static-transparent)" }} /></Row>\n',
+		);
+	});
+
+	it("reports an Avatar borderWidth with no class of its own", () => {
+		const { body, warnings } = out('<Row><Avatar src="a" borderWidth={3} /></Row>\n');
+		assert.equal(body, '<Row><Avatar src="a" borderWidth={3} /></Row>\n');
+		assert.match(warnings.join("\n"), /<Avatar> borderWidth: not taken by a leaf/);
+	});
 });

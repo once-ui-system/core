@@ -239,9 +239,64 @@ describe("F5: Dropdown, ContextMenu, EmojiPickerDropdown, UserMenu", () => {
     );
   });
 
-  it("reports a 2.x Dropdown panel, whose name changed meaning", () => {
-    const r = run("Dropdown", '<Dropdown><Option value="a" /></Dropdown>\n');
-    assert.ok(r.warnings.some((w) => /without trigger/.test(w)));
+  it("writes a 2.x Dropdown panel as the Row and Column it rendered, and drops the import", () => {
+    const r = run("Dropdown, Option", '<Dropdown paddingY="8" radius="l" className="x" selectedOption="a"><Option value="a" /></Dropdown>\n');
+    assert.equal(r.importLine, core("Column, Option, Row").trim());
+    assert.equal(
+      r.body,
+      '<Row border="neutral-medium" background="surface" paddingY="8" radius="l"><Column flex={1} overflowY="auto" gap="2"><Option value="a" /></Column></Row>\n',
+    );
+    assert.deepEqual(r.warnings, []);
+  });
+
+  it("reports a 2.x Dropdown passed as a value, and keeps its import", () => {
+    const r = run("Dropdown, Text", "const components = { Dropdown, Text };\n<Dropdown>a</Dropdown>\n");
+    assert.match(r.importLine, /\bDropdown\b/);
+    assert.equal(r.warnings.length, 1);
+    assert.match(r.warnings[0], /^Dropdown passed as a value: it was 2\.x's bare panel/);
+    assert.deepEqual(run("Dropdown", "// a Dropdown\n<Dropdown>a</Dropdown>\n").warnings, []);
+  });
+
+  it("a panel's children on their own lines move one level in; its border replaces the default", () => {
+    const r = run(
+      "Dropdown, Text",
+      'const p = (\n  <Dropdown border="brand-medium" padding="4">\n    <Text>a</Text>\n  </Dropdown>\n);\n',
+    );
+    assert.equal(
+      r.body,
+      'const p = (\n  <Row background="surface" border="brand-medium" padding="4">\n    <Column flex={1} overflowY="auto" gap="2">\n      <Text>a</Text>\n    </Column>\n  </Row>\n);\n',
+    );
+  });
+
+  it("a disabled panel keeps its cursor, opacity and aria-disabled", () => {
+    const r = run("Dropdown", "<Dropdown disabled />\n");
+    assert.equal(
+      r.body,
+      '<Row border="neutral-medium" background="surface" className="cursor-not-allowed" style={{ opacity: 0.6 }} aria-disabled><Column flex={1} overflowY="auto" gap="2" /></Row>\n',
+    );
+  });
+
+  it("a panel inside DropdownWrapper's dropdown stays a panel, and Dropdown stays imported", () => {
+    const r = run("Dropdown, DropdownWrapper", "<DropdownWrapper trigger={t} dropdown={<Dropdown>a</Dropdown>} />\n");
+    assert.equal(r.importLine, core("Column, Dropdown, Row").trim());
+    assert.equal(
+      r.body,
+      '<Dropdown trigger={t}><Row border="neutral-medium" background="surface"><Column flex={1} overflowY="auto" gap="2">a</Column></Row></Dropdown>\n',
+    );
+  });
+
+  it("reports a panel with onSelect, a non-literal disabled, or a Row of the file's own", () => {
+    for (const [names, body] of [
+      ["Dropdown", "<Dropdown onSelect={pick}>a</Dropdown>\n"],
+      ["Dropdown", "<Dropdown disabled={off}>a</Dropdown>\n"],
+    ]) {
+      const r = run(names, body);
+      assert.equal(r.body, body);
+      assert.ok(r.warnings.some((w) => /without trigger: .*Column flex=\{1\} overflowY="auto" gap="2"/.test(w)), body);
+    }
+    const own = transform('import { Dropdown } from "@once-ui-system/core";\nimport { Row } from "./Row";\n<Dropdown>a</Dropdown>\n');
+    assert.match(own.out, /<Dropdown>a<\/Dropdown>/);
+    assert.ok(own.warnings.some((w) => /Row is another component/.test(w)));
   });
 
   it("EmojiPickerDropdown: EmojiPicker with a trigger, Dropdown props in dropdownProps", () => {

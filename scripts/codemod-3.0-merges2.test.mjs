@@ -284,12 +284,32 @@ describe("F6: an old name used as a value", () => {
 });
 
 describe("F6: an old name in a component map, a comment or text", () => {
-  it("reports a shorthand key with the survivor's name", () => {
-    const r = run("ScrollContainer, DropdownWrapper", "export const components = { ScrollContainer, DropdownWrapper, Text };\n");
-    const w = r.warnings.join("\n");
-    assert.match(w, /ScrollContainer: a shorthand key .*ScrollContainer: Scroller/);
-    assert.match(w, /DropdownWrapper: a shorthand key .*DropdownWrapper: Dropdown/);
-    assert.doesNotMatch(w, /still referenced/);
+  it("keeps a shorthand key's tag name, on the survivor", () => {
+    const r = run("ScrollContainer, DropdownWrapper, UserMenu, Text", "export const components = { ScrollContainer, DropdownWrapper, UserMenu, Text };\n");
+    assert.equal(r.importLine, core("Scroller, Dropdown, User, Text").trim());
+    assert.equal(
+      r.body,
+      "export const components = { ScrollContainer: Scroller, DropdownWrapper: Dropdown, UserMenu: User, Text };\n",
+    );
+    assert.deepEqual(r.warnings, []);
+  });
+
+  it("keeps the layout of a multi-line map", () => {
+    const r = run("ScrollContainer, Text", "const components = {\n  Text,\n  ScrollContainer,\n};\n");
+    assert.equal(r.body, "const components = {\n  Text,\n  ScrollContainer: Scroller,\n};\n");
+  });
+
+  it("reports, and leaves alone, a destructuring pattern, a JSX value and an export list", () => {
+    for (const body of [
+      "const { ScrollContainer } = registry;\n",
+      "<Slot as={ScrollContainer} />;\n",
+      "const C = cond ? ScrollContainer : Text;\n",
+      "export { ScrollContainer };\n",
+    ]) {
+      const r = run("ScrollContainer, Text", body);
+      assert.equal(r.body, body);
+      assert.ok(r.warnings.some((w) => /ScrollContainer: still referenced/.test(w)), body);
+    }
   });
 
   it("stays quiet about a comment, a string or JSX text", () => {

@@ -99,10 +99,37 @@ describe("G5: Text and Heading size", () => {
 			body(out),
 			'<Heading size="l">a</Heading>\n<Text className="font-s" weight="strong">b</Text>\n<Text weight="strong">c</Text>\n<Text className="price font-xs">d</Text>\n',
 		);
-		// Heading always writes font-m in 3.0: drop it, or a preset under a family.
+		// A Heading with no parent in the file: whether one sets a family is not known.
 		assert.equal(warnings.length, 1);
-		assert.match(warnings[0], /<Heading> size: .*drop it .*textVariant="heading-strong-l"/);
+		assert.match(warnings[0], /<Heading> size: .*direct parent.*drop it .*textVariant="<that family>-strong-l"/);
 		assert.doesNotMatch(warnings.join("\n"), /body-strong-s/);
+	});
+
+	it("drops Heading size m, writes s and xs as their class, drops l and xl under a parent with no family", () => {
+		const imports = 'import { Column, Heading, Row } from "@once-ui-system/core";\n';
+		const { out, warnings } = run(
+			'<Column gap="8">\n  <Heading as="h2" size="l">a</Heading>\n  <Heading size="m">b</Heading>\n  <Heading size="s" className="x">c</Heading>\n  <Heading size="xs">d</Heading>\n</Column>\n',
+			imports,
+		);
+		assert.equal(
+			body(out, imports),
+			'<Column gap="8">\n  <Heading as="h2">a</Heading>\n  <Heading>b</Heading>\n  <Heading className="x font-s">c</Heading>\n  <Heading className="font-xs">d</Heading>\n</Column>\n',
+		);
+		assert.deepEqual(warnings, []);
+	});
+
+	it("reports Heading size l under a parent that may set a family", () => {
+		const imports = 'import { Column, Heading } from "@once-ui-system/core";\nimport { Panel } from "./Panel";\n';
+		for (const src of [
+			'<Column textVariant="body-default-m"><Heading size="l">a</Heading></Column>\n',
+			'<Column className="font-body"><Heading size="xl">a</Heading></Column>\n',
+			'<Column {...rest}><Heading size="l">a</Heading></Column>\n',
+			'<Panel><Heading size="l">a</Heading></Panel>\n',
+		]) {
+			const { out, warnings } = run(src, imports);
+			assert.equal(body(out, imports), src);
+			assert.ok(warnings.some((w) => /<Heading> size: /.test(w)), src);
+		}
 	});
 
 	it("reports Text size beside a className it cannot extend, with the class, not a preset", () => {

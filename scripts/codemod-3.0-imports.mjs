@@ -33,6 +33,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { specifiersOf } from "./codemod-2.0.mjs";
+import { braceList, codeOnly } from "./codemod-3.0-format.mjs";
 
 const ROOT = "@once-ui-system/core";
 
@@ -200,11 +201,7 @@ function clauseParts(clause) {
 }
 
 /** `{ a, b }`, or one specifier per line when the clause was written that way. */
-function braces(texts, clause, indent) {
-	if (!clause.includes("\n")) return `{ ${texts.join(", ")} }`;
-	const inner = clause.match(/\n([ \t]*)\S/)?.[1] ?? `${indent}  `;
-	return `{\n${texts.map((text) => `${inner}${text},`).join("\n")}\n${indent}}`;
-}
+const braces = (texts, clause, indent) => braceList(texts, clause.slice(1, -1), indent);
 
 const escape = (text) => text.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
 const MARK = "\u0000";
@@ -272,7 +269,7 @@ export function transformImports(src) {
 				continue;
 			}
 			const key = `${kw}|${target}`;
-			if (!moved.has(key)) moved.set(key, { q, semi, texts: [] });
+						if (!moved.has(key)) moved.set(key, { q, semi, texts: [], clause, indent });
 			moved.get(key).texts.push(...texts);
 			lines.push(`${MARK}${key}${MARK}`);
 		}
@@ -281,7 +278,7 @@ export function transformImports(src) {
 
 	// Moved names join a named import of their subpath that the file already
 	// has, or take the place of the first statement they came from.
-	for (const [key, { q, semi, texts }] of moved) {
+	for (const [key, { q, semi, texts, clause, indent }] of moved) {
 		const [kw, target] = key.split("|");
 		const marker = `${MARK}${key}${MARK}`;
 		const names = (list) => list.map((text) => specifiersOf(text)[0].name);
@@ -296,12 +293,17 @@ export function transformImports(src) {
 			const add = unique.filter((text) => !have.some((s) => s.name === names([text])[0]));
 			out = out.replace(existing, (_, open, list, close) => {
 				const all = [...have.map((s) => s.text), ...add];
-				if (!list.includes("\n")) return `${open} ${all.join(", ")} ${close}`;
-				const inner = list.match(/\n([ \t]*)\S/)?.[1] ?? "  ";
-				return `${open}\n${all.map((t) => `${inner}${t},`).join("\n")}\n${close}`;
+				return `${open.slice(0, -1)}${braceList(all, list)}${close.slice(1)}`;
 			});
 		} else {
-			replacement = `${kw} { ${unique.join(", ")} } from ${q}${target}${q}${semi}`;
+			// A new statement is one line, as a formatter writes it when it fits;
+			// one that does not fit, split off a list written one name per line,
+			// keeps that layout.
+			const line = `${kw} { ${unique.join(", ")} } from ${q}${target}${q}${semi}`;
+			replacement =
+				clause.includes("\n") && indent.length + line.length > 80 && unique.length > 1
+					? `${kw} ${braces(unique, clause, indent)} from ${q}${target}${q}${semi}`
+					: line;
 		}
 		// Every other placeholder for this key goes, with the line break before it.
 		let first = true;
@@ -332,17 +334,25 @@ export function transformImports(src) {
 	}
 
 	// A namespace used as the list of every component (an MDX scope, a
-	// playground): in 3.0 it holds neither the effects nor the blocks.
-	const takesSplit = /(["'])@once-ui-system\/(?:fx|blocks)\1/.test(out);
+	// playground): in 3.0 it holds neither the effects nor the blocks. A file
+	// that already lists a namespace of either package beside it was written
+	// for that; importing a few effects by name (as this pass writes) was not.
+	const nsOf = (pkg) =>
+		[...out.matchAll(new RegExp(`import\\s+\\*\\s+as\\s+([\\w$]+)\\s+from\\s*(["'])${escape(pkg)}\\2`, "g"))].map((m) => m[1]);
+	const listed = (names) =>
+		names.some((n) => new RegExp(`\\.\\.\\.\\s*${escape(n)}\\b(?!\\.)|Object\\.\\w+\\(\\s*${escape(n)}\\b(?!\\.)`).test(code));
+	const code = codeOnly(out);
+	const hasSplit = listed(nsOf("@once-ui-system/fx")) || listed(nsOf("@once-ui-system/blocks"));
 	for (const local of namespaces) {
-		if (takesSplit) break;
+		if (hasSplit) break;
 		const registry = new RegExp(
-			`Object\\.(?:entries|keys|values|assign)\\(\\s*(?:\\{\\s*)?(?:\\.\\.\\.)?${escape(local)}\\b(?!\\.)|\\.\\.\\.${escape(local)}\\b(?!\\.)`,
+			`Object\\.(?:entries|keys|values|assign|fromEntries)\\(\\s*(?:\\{\\s*)?(?:\\.\\.\\.)?${escape(local)}\\b(?!\\.)|\\.\\.\\.\\s*${escape(local)}\\b(?!\\.)|\\bfor\\s*\\(\\s*(?:const|let|var)\\s+[\\w$]+\\s+in\\s+${escape(local)}\\b(?!\\.)`,
 		);
-		if (registry.test(out))
+		if (registry.test(code))
 			warnings.push(
 				`${local}: the "${ROOT}" namespace is used as a list of components (Object.entries(${local}), {...${local}}); in 3.0 it no longer holds the effects or the blocks. ` +
-					`Add them: { ...${local}, ...fx, ...blocks }, with import * as fx from "@once-ui-system/fx" and import * as blocks from "@once-ui-system/blocks"`,
+					`Add them: { ...${local}, ...fx, ...blocks }, with import * as fx from "@once-ui-system/fx" and import * as blocks from "@once-ui-system/blocks" ` +
+					`(and ...media, ...emoji from "${ROOT}/media" and "${ROOT}/emoji" if it lists Scrubber, CompareImage, the media players or EmojiPicker)`,
 			);
 	}
 

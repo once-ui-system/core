@@ -79,9 +79,66 @@ describe("E1: tone where 2.x said variant, scheme, state or hue", () => {
 		);
 	});
 
-	it("reports Timeline items it cannot see when the file builds them", () => {
-		const { warnings } = run('const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps} />\n');
-		assert.ok(warnings.some((w) => /items=\{steps\}/.test(w)));
+	it("rewrites Timeline items a same-file const holds", () => {
+		const { out, warnings } = run('const steps = [{ label: "a", state: "active" }, { label: "b", state: "default" }];\n<Timeline items={steps} />\n');
+		assert.equal(body(out), 'const steps = [{ label: "a", tone: "brand" }, { label: "b" }];\n<Timeline items={steps} />\n');
+		assert.deepEqual(warnings, []);
+		assert.equal(transform(out).out, out);
+	});
+
+	it("follows a const through .map, renaming the item's reads and the type index", () => {
+		const imports = 'import { Timeline, type TimelineItem } from "@once-ui-system/core";\n';
+		const src =
+			'const hiringSteps = [\n  { label: "Intro", state: "active" },\n  { label: "Offer", state: "default" },\n];\n' +
+			'<Timeline\n  items={hiringSteps.map((item) => ({\n    ...item,\n    state: item.state as TimelineItem["state"],\n  }))}\n/>;\n';
+		const { out, warnings } = run(src, imports);
+		assert.equal(
+			body(out, imports),
+			'const hiringSteps = [\n  { label: "Intro", tone: "brand" },\n  { label: "Offer" },\n];\n' +
+				'<Timeline\n  items={hiringSteps.map((item) => ({\n    ...item,\n    tone: item.tone as TimelineItem["tone"],\n  }))}\n/>;\n',
+		);
+		assert.deepEqual(warnings, []);
+		assert.equal(transform(out).out, out);
+	});
+
+	it("reports Timeline items it cannot see: a value, a second use, a spread", () => {
+		for (const src of [
+			'const steps = [{ label: "a", state: current }];\n<Timeline items={steps} />\n',
+			'const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps} />\nlog(steps[0].state);\n',
+			'const steps = [{ label: "a", state: "active" }, ...more];\n<Timeline items={steps} />\n',
+			'const steps = [{ label: "a", state: "active" }];\n<Timeline items={steps.map((s) => ({ ...s, state: s.done ? "success" : "active" }))} />\n',
+		]) {
+			const { out, warnings } = run(src);
+			assert.equal(body(out), src);
+			assert.ok(warnings.some((w) => /<Timeline> items=\{steps/.test(w)), src);
+		}
+	});
+
+	it("renames a Scrubber's tracks built in a useMemo, and the scheme type index", () => {
+		const imports = 'import { Scrubber, type ScrubberTrack } from "@once-ui-system/core/media";\n';
+		const src =
+			'const KIND: Record<Kind, { scheme: ScrubberTrack["scheme"] }> = { scene: { scheme: "brand" } };\n' +
+			"const tracks = useMemo<ScrubberTrack[]>(\n  () =>\n    (project?.tracks ?? []).map((track) => ({\n      id: track.id,\n      scheme: KIND[track.kind].scheme,\n" +
+			"      onAdd: (time: number) => add(track.id, time),\n      blocks: track.clips.map((clip) => ({ id: clip.id, scheme: clip.kind === \"scene\" ? clip.scheme : undefined })),\n    })),\n  [project?.tracks],\n);\n" +
+			"<Scrubber duration={1} value={0} tracks={tracks} />;\n";
+		const { out, warnings } = run(src, imports);
+		assert.equal(
+			body(out, imports),
+			src
+				.replace('ScrubberTrack["scheme"]', 'ScrubberTrack["tone"]')
+				.replace("scheme: KIND[track.kind].scheme", "tone: KIND[track.kind].scheme")
+				.replace('scheme: clip.kind === "scene"', 'tone: clip.kind === "scene"'),
+		);
+		assert.deepEqual(warnings, []);
+	});
+
+	it("leaves a Scrubber's data alone when a callback in it builds another scheme object", () => {
+		const imports = 'import { Scrubber } from "@once-ui-system/core/media";\n';
+		const src =
+			"const tracks = rows.map((r) => ({ id: r.id, scheme: r.scheme, onAdd: () => save({ scheme: r.scheme }) }));\n<Scrubber tracks={tracks} />;\n";
+		const { out, warnings } = run(src, imports);
+		assert.equal(body(out, imports), src);
+		assert.ok(warnings.some((w) => /tracks=\{tracks\}/.test(w)));
 	});
 
 	it("rewrites Table actions and Scrubber tracks", () => {

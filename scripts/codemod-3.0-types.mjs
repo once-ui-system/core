@@ -32,6 +32,7 @@ import {
 	openingTagEnd,
 	withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { elementsOf } from "./codemod-3.0-leaf.mjs";
 
 /**
  * Components that took DisplayProps and StyleProps (Flex-based), plus Logo:
@@ -217,7 +218,7 @@ function rewriteTextPieces(src, attrs, push, warn, tag) {
  * preset's), but 2.x ignored it beside `textVariant`, so there it is removed
  * to render as before.
  */
-function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
+function rewriteTextSizeWeight(src, attrs, tag, push, warn, parent = null) {
 	const size = attrs.find((a) => a.name === "size");
 	const weight = attrs.find((a) => a.name === "weight");
 	if (attrs.some((a) => a.name === "textVariant")) {
@@ -256,10 +257,36 @@ function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
 			return;
 		}
 	}
+	if (tag === "Heading" && s && /^(xs|s|m|l|xl)$/.test(s)) {
+		// 3.0 Heading writes font-m. font-m is what 2.x wrote without a size;
+		// font-s and font-xs come after it in the stylesheet, so beside it they
+		// win exactly as they did alone. font-l and font-xl come before it and
+		// lose: they are dropped only where they did nothing, under a parent
+		// in this file that sets no font family.
+		const why = { m: "3.0 Heading writes font-m itself" }[s] ?? (s === "l" || s === "xl" ? familyFree(parent) : null);
+		if (why) {
+			push({ ...remove(src, size), hit: `<Heading> size="${s}" removed (${why})` });
+			return;
+		}
+		if (s === "s" || s === "xs") {
+			const cls = attrs.find((a) => a.name === "className");
+			const lit = cls?.value ? /^\{?\s*(["'])([^"']*)\1\s*\}?$/.exec(String(cls.value).trim()) : null;
+			if (!cls) {
+				push({ at: size.at, end: size.end, text: `className="font-${s}"`, hit: `<Heading> size="${s}" → className="font-${s}"` });
+				return;
+			}
+			if (lit) {
+				push({ ...remove(src, size), hit: `<Heading> size="${s}" → className="font-${s}"` });
+				push({ at: cls.at, end: cls.end, text: `className="${`${lit[2]} font-${s}`.trim()}"`, hit: `<Heading> size="${s}" → className="font-${s}"` });
+				return;
+			}
+		}
+	}
 	if (tag === "Heading") {
 		warn(
-			`<Heading> size: removed in 3.0. 2.x's font-${s ?? "…"} class set a size only under a parent that set the font family; ` +
-				`outside one, drop it (it did nothing). Under one, write textVariant="${f}-${w}-${s ?? "m"}", which also sets the family`,
+			`<Heading> size: removed in 3.0. 2.x's font-${s ?? "…"} class set a size only when the Heading's direct parent had a font family class ` +
+				`(a textVariant, or a font-heading, font-body… className); with none, drop it (it did nothing). ` +
+				`Under one, write textVariant="<that family>-${w}-${s ?? "m"}"`,
 		);
 		return;
 	}
@@ -267,6 +294,17 @@ function rewriteTextSizeWeight(src, attrs, tag, push, warn) {
 		`<${tag}> size: removed in 3.0; write className="font-${s ?? "…"}", the class 2.x wrote (it set a size only under a parent that set the family). ` +
 			`textVariant="${f}-${w}-${s ?? "m"}" would also set the family, so the text would change size where no parent set one`,
 	);
+}
+
+/** Layout primitives whose root carries no font class unless it is given one. */
+const PLAIN_PARENTS = new Set(["Flex", "Row", "Column", "Grid"]);
+const FONT_PROPS = new Set(["textVariant", "textType", "textSize", "textWeight", "variant", "className"]);
+
+/** Why a Heading under `parent` had no font family around it in 2.x, or null when that cannot be seen. */
+function familyFree(parent) {
+	if (!parent || !PLAIN_PARENTS.has(parent.tag) || parent.spread) return null;
+	if (parent.attrs.some((a) => FONT_PROPS.has(a.name))) return null;
+	return `its parent ${parent.tag} sets no font family, so 2.x's font class did nothing there`;
 }
 
 /** G4: inline list resets that `as="ul"` now makes. */
@@ -347,6 +385,20 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 		"Text",
 		"Heading",
 	]);
+	// The element around each Heading, read once and only when a Heading has a size.
+	let elements = null;
+	const parentOf = (at) => {
+		elements ??= elementsOf(src);
+		const el = elements.find((e) => e.at === at);
+		if (!el?.parent) return null;
+		const parent = el.parent;
+		const bound = bindings.get(parent.name);
+		return {
+			tag: bound && isCore(bound.source) ? bound.canonical : bound ? null : parent.name,
+			attrs: attributesOf(src, parent.nameEnd, parent.openEnd - 1),
+			spread: /\{\s*\.\.\./.test(src.slice(parent.nameEnd, parent.openEnd)),
+		};
+	};
 	for (const tag of tags) {
 		for (const name of namesFor(tag, bindings, isCore)) {
 			const open = new RegExp(`<${name.replace(".", "\\.")}(?=[\\s/>])`, "g");
@@ -367,7 +419,7 @@ export function transformTypes(src, { isCore = isCoreSource } = {}) {
 				if (tag !== "Text" && tag !== "Heading" && showIn.has(tag))
 					rewriteTextPieces(src, attrs, push, warn, tag);
 				if (tag === "Text" || tag === "Heading")
-					rewriteTextSizeWeight(src, attrs, tag, push, warn);
+					rewriteTextSizeWeight(src, attrs, tag, push, warn, tag === "Heading" ? parentOf(m.index) : null);
 				if (LAYOUT.has(tag)) rewriteListStyle(src, attrs, tag, push);
 				if (
 					LOST_AS.has(tag) &&

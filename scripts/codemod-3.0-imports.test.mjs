@@ -6,6 +6,7 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { addToCoreImport, removeFromCoreImport } from "./codemod-3.0-format.mjs";
 import { MOVED_IMPORTS, packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
 import { transform } from "./codemod-3.0.mjs";
 
@@ -369,6 +370,21 @@ describe("a namespace import", () => {
 		);
 	});
 
+	it("still reports when the file takes only a few effects by name", () => {
+		const { warnings } = run('import * as core from "@once-ui-system/core";\nimport { RevealFx } from "@once-ui-system/fx";\nconst s = { ...core };\n');
+		assert.equal(warnings.length, 1);
+		assert.match(warnings[0], /\.\.\.media, \.\.\.emoji/);
+	});
+
+	it("reports for…in and Object.fromEntries, not a comment or a string", () => {
+		assert.equal(run('import * as core from "@once-ui-system/core";\nfor (const k in core) {}\n').warnings.length, 1);
+		assert.equal(
+			run('import * as core from "@once-ui-system/core";\nconst m = Object.fromEntries(Object.keys(core).map((k) => [k, 1]));\n').warnings.length,
+			1,
+		);
+		assert.deepEqual(run('import * as core from "@once-ui-system/core";\n// Object.entries(core)\nconst a = "{...core}";\n').warnings, []);
+	});
+
 	it("gives <core.X> the renames and merges of <X>", () => {
 		const src =
 			'import * as core from "@once-ui-system/core";\n<core.RevealFx speed="fast">a</core.RevealFx>\n<core.Button size="s" />\n';
@@ -378,5 +394,40 @@ describe("a namespace import", () => {
 		assert.match(out, /<core\.Button size="s" \/>/);
 		assert.doesNotMatch(out, /core__/);
 		assert.equal(transform(out).out, out);
+	});
+});
+
+describe("import lists keep their layout", () => {
+	it("keeps one name per line and the trailing comma when a name moves out", () => {
+		const { out } = transform('import {\n\tButton,\n\tRevealFx,\n\tText,\n} from "@once-ui-system/core";\n<RevealFx><Button /><Text /></RevealFx>\n');
+		assert.equal(
+			out,
+			'import {\n\tButton,\n\tText,\n} from "@once-ui-system/core";\nimport { RevealFx } from "@once-ui-system/fx";\n<RevealFx><Button /><Text /></RevealFx>\n',
+		);
+	});
+
+	it("adds names in alphabetical place, without a trailing comma the list did not have", () => {
+		const { out } = transform('import {\n  Dropdown,\n  Text\n} from "@once-ui-system/core";\n<Text /><Dropdown>a</Dropdown>\n');
+		assert.match(out, /^import \{\n {2}Column,\n {2}Row,\n {2}Text\n\} from "@once-ui-system\/core";\n/);
+	});
+
+	it("appends to a list that was not sorted, and skips an import inside a code sample", () => {
+		assert.equal(
+			addToCoreImport('import { Text, Button } from "@once-ui-system/core";\n', ["Row"]),
+			'import { Text, Button, Row } from "@once-ui-system/core";\n',
+		);
+		assert.equal(
+			addToCoreImport('import { Button, Text } from "@once-ui-system/core";\n', ["Row"]),
+			'import { Button, Row, Text } from "@once-ui-system/core";\n',
+		);
+		assert.equal(addToCoreImport('const s = `import { A } from "@once-ui-system/core"`;\n', ["Row"]), null);
+	});
+
+	it("drops a name from a multi-line list, and the statement when it empties", () => {
+		assert.equal(
+			removeFromCoreImport('import {\n\tA,\n\tB,\n} from "@once-ui-system/core";\n', "A"),
+			'import {\n\tB,\n} from "@once-ui-system/core";\n',
+		);
+		assert.equal(removeFromCoreImport('import { A } from "@once-ui-system/core";\nx;\n', "A"), "x;\n");
 	});
 });

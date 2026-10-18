@@ -5,6 +5,9 @@
  * Run: node --test scripts/
  */
 import assert from "node:assert/strict";
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, it } from "node:test";
 import { transform, transformUnits } from "./codemod-3.0.mjs";
 
@@ -299,12 +302,33 @@ describe("numbers the units pass used to miss", () => {
     );
   });
 
-  it("names a same-file number const used as a size, and stays quiet about a string const", () => {
-    const w = warned(
-      `${core("Column")}const MAX = 20;\nconst W = "20rem";\n<Column maxWidth={MAX} />\n<Column maxWidth={W} />\n`,
+  it("writes a same-file number const used as a size as the rem it was, and leaves a string const", () => {
+    const src = `${core("Column")}const MAX = 20;\nconst W = "20rem";\n<Column maxWidth={MAX} s={{ minWidth: MAX }} />\n<Column maxWidth={W} />\n`;
+    const { out, warnings } = transform(src);
+    assert.equal(
+      out.split("\n").slice(1).join("\n"),
+      'const MAX = 20;\nconst W = "20rem";\n<Column maxWidth={`${MAX}rem`} s={{ minWidth: `${MAX}rem` }} />\n<Column maxWidth={W} />\n',
     );
-    assert.match(w, /MAX is 20, a const in this file/);
-    assert.doesNotMatch(w, /\bW\b/);
+    assert.deepEqual(warnings, []);
+    assert.equal(transform(out).out, out);
+  });
+
+  it("writes a member of an as const object, and names one of a plain object or a shadowed const", () => {
+    const src =
+      `${core("Column")}const CAP = { plain: 20 } as const;\nconst LOOSE = { plain: 20 };\nconst N = 14;\n` +
+      "<Column maxWidth={CAP.plain} minWidth={LOOSE.plain} />\nconst Card = ({ N }) => <Column width={N} />;\n";
+    const { out, warnings } = transform(src);
+    assert.match(out, /maxWidth=\{`\$\{CAP\.plain\}rem`\} minWidth=\{LOOSE\.plain\}/);
+    assert.match(out, /<Column width=\{N\} \/>/);
+    const w = warnings.join("\n");
+    assert.match(w, /LOOSE\.plain is 20, a const in this file/);
+    assert.match(w, /N is 14, a const in this file/);
+  });
+
+  it("keeps a const passed as an argument a report, not a rewrite of the call", () => {
+    const { out, warnings } = transform(`${core("Column")}const W = 14;\n<Column width={W} gap={Math.max(W, 2)} />\n`);
+    assert.match(out, /width=\{`\$\{W\}rem`\} gap=\{Math\.max\(W, 2\)\}/);
+    assert.match(warnings.join("\n"), /gap=\{Math\.max\(W, 2\)\}/);
   });
 
   it("reads a numeric string radius on Mask, and numeric strings in Background's objects", () => {
@@ -313,5 +337,85 @@ describe("numbers the units pass used to miss", () => {
       body(`${core("Background")}<Background mask={{ radius: "50" }} gradient={{ x: "50", y: 20 }} />`),
       '<Background mask={{ radius: "50vh" }} gradient={{ x: "50%", y: "20%" }} />',
     );
+  });
+});
+
+describe("an own component that passes a size on to a layout component", () => {
+  // A small app on disk: a tsconfig with path aliases, wrappers behind them.
+  const app = (files) => {
+    const root = mkdtempSync(join(tmpdir(), "codemod-own-"));
+    for (const [name, text] of Object.entries(files)) {
+      mkdirSync(join(root, name, ".."), { recursive: true });
+      writeFileSync(join(root, name), text);
+    }
+    return root;
+  };
+  const FILES = {
+    "tsconfig.json":
+      '{\n  // comment\n  "compilerOptions": {\n    "baseUrl": ".",\n    "paths": { "@/*": ["./src/*"], "@ui/*": ["./src/components/ui/*"], },\n  },\n}\n',
+    "src/components/index.ts": 'export { Sidebar } from "./Sidebar";\nexport * from "./ui/Panel";\n',
+    "src/components/Sidebar.tsx":
+      'import { Column } from "@once-ui-system/core";\nexport const Sidebar: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex }) => {\n  return <Column fillWidth {...flex}>x</Column>;\n};\nexport default Sidebar;\n',
+    "src/components/ui/Panel.tsx":
+      'import { forwardRef } from "react";\nimport { Flex, Row } from "@once-ui-system/core";\ninterface PanelProps extends React.ComponentProps<typeof Flex> {\n  title?: string;\n}\nexport const Panel = forwardRef<HTMLDivElement, PanelProps>(({ title, children, ...rest }, ref) => (\n  <Row gap="8" {...rest} ref={ref}>{title}{children}</Row>\n));\nexport const Taker = ({ maxWidth, ...rest }: React.ComponentProps<typeof Flex>) => <Row {...rest} />;\n',
+    "src/components/Card.tsx":
+      'import { Column } from "@once-ui-system/core";\nimport { Panel } from "./ui/Panel";\nexport function Card(props: React.ComponentProps<typeof Column> & { active?: boolean }) {\n  return <Panel title={props.active ? "on" : "off"} {...props} />;\n}\n',
+  };
+  const run = (src) => {
+    const root = app(FILES);
+    try {
+      const file = join(root, "src/pages/a.tsx");
+      return transform(src, { file });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  };
+
+  it("follows relative, @/ and tsconfig paths imports, and re-exports", () => {
+    const r = run(
+      `${core("Column")}import { Sidebar } from "@/components";\nimport { Panel } from "@ui/Panel";\nimport { Card } from "../components/Card";\n<Column><Sidebar minWidth={16} /><Panel maxWidth={24} title="t" /><Card height={3} /></Column>\n`,
+    );
+    assert.match(r.out, /<Sidebar minWidth="16rem" \/>/);
+    assert.match(r.out, /<Panel maxWidth="24rem" title="t" \/>/);
+    // A props object, an intersection type, a member read and a wrapper of a wrapper.
+    assert.match(r.out, /<Card height="3rem" \/>/);
+    assert.ok(r.hits.some((h) => h.includes("Sidebar passes it on to a Column")));
+    assert.equal(r.warnings.length, 0);
+    assert.equal(transform(r.out).out, r.out);
+  });
+
+  it("reports a wrapper that takes the prop out, one it cannot read, and a default import", () => {
+    const r = run(
+      `${core("Column")}import { Taker } from "@ui/Panel";\nimport { Other } from "@/components/Other";\nimport Def from "../components/Sidebar";\n<Column><Taker maxWidth={10} /><Other maxHeight={28} /><Def width={3} /></Column>\n`,
+    );
+    assert.match(r.out, /<Taker maxWidth=\{10\} \/>/);
+    assert.match(r.out, /<Other maxHeight=\{28\} \/>/);
+    assert.match(r.out, /<Def width=\{3\} \/>/);
+    assert.equal(r.warnings.length, 3);
+    assert.match(r.warnings.join("\n"), /<Taker> maxWidth=\{10\}: if Taker passes maxWidth on/);
+  });
+
+  it("rewrites a same-file wrapper without a file to read", () => {
+    const { out } = transform(
+      `${core("Column")}const Local = ({ ...flex }: React.ComponentProps<typeof Column>) => <Column {...flex} />;\n<Local width={12} />\n`,
+    );
+    assert.match(out, /<Local width="12rem" \/>/);
+  });
+
+  it("leaves a wrapper that reads the prop itself to a report", () => {
+    const { out, warnings } = transform(
+      `${core("Column")}const W = (p: React.ComponentProps<typeof Column>) => <Column {...p} data-w={p.width} />;\n<W width={12} />\n`,
+    );
+    assert.match(out, /<W width=\{12\} \/>/);
+    assert.equal(warnings.length, 1);
+  });
+});
+
+describe("a breakpoint object chosen by a ternary", () => {
+  it("is quiet when both branches hold only strings", () => {
+    assert.equal(warned(`${core("Row")}<Row m={wide ? { direction: "column" } : {}} />\n`), "");
+  });
+  it("still reports a number in a branch", () => {
+    assert.match(warned(`${core("Row")}<Row m={wide ? { maxWidth: 2 } : {}} />\n`), /numeric sizes and spacing in it were rem/);
   });
 });

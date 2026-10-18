@@ -30,8 +30,10 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { braceList, codeOnly } from "./codemod-3.0-format.mjs";
 import { packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
-import { transformLeaf } from "./codemod-3.0-leaf.mjs";
+import { LEAVES, transformLeaf } from "./codemod-3.0-leaf.mjs";
+import { forwardsProp, isAliasSource, readSource, resolveOwn } from "./codemod-3.0-own.mjs";
 import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
 
@@ -294,12 +296,6 @@ const REMOVED_EXPORTS = {
 /** Exports 3.0 removed whose element is a pure wrapper: its tags become a fragment. F7. */
 const UNWRAPPED_EXPORTS = new Set(["DialogProvider"]);
 
-/** `{ a, b }`, or one specifier per line when the import was written that way. */
-function braceList(texts, clause) {
-  if (!clause.includes("\n")) return `{ ${texts.join(", ")} }`;
-  const inner = clause.match(/\n([ \t]*)\S/)?.[1] ?? "  ";
-  return `{\n${texts.map((t) => `${inner}${t},`).join("\n")}\n}`;
-}
 
 /**
  * Rename and report exports in `import { … } from "@once-ui-system/core…"`.
@@ -353,7 +349,7 @@ export function rewriteExports(src) {
     // A fragment, not nothing: the wrapper may hold several children.
     out = out.replace(new RegExp(`<${name}\\s*>`, "g"), "<>").replace(new RegExp(`</${name}\\s*>`, "g"), "</>");
     if (out !== before) hits.push(`<${name}> unwrapped`);
-    if (new RegExp(`\\b${name}\\b`).test(out))
+    if (new RegExp(`\\b${name}\\b`).test(codeOnly(out, { jsxText: true })))
       warnings.push(`${name}: ${REMOVED_EXPORTS[name]}; a use left in place needs removing by hand`);
   }
   for (const [from, to] of renamedLocals) {
@@ -363,7 +359,7 @@ export function rewriteExports(src) {
     }
     out = out.replace(new RegExp(`(</?)${from}(?=[\\s/>])`, "g"), `$1${to}`);
     const importLine = new RegExp(`(import\\s+(?:type\\s+)?\\{[^}]*)\\b${to}\\b(?!\\s+as)`);
-    const rest = out.replace(/import\s+(?:type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, "");
+    const rest = codeOnly(out, { jsxText: true }).replace(/import\s+(?:type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, "");
     if (new RegExp(`\\b${from}\\b`).test(rest)) {
       out = out.replace(importLine, `$1${to} as ${from}`);
       out = out.replace(new RegExp(`(</?)${to}(?=[\\s/>])`, "g"), `$1${from}`);
@@ -560,6 +556,13 @@ const NUMBER = /^-?(\d+\.?\d*|\.\d+)$/;
 const NUMERIC_STRING = /^(["'])(\d+(?:\.\d+)?)\1$/;
 const STRING = /^(["'])(?:\\.|(?!\1).)*\1$|^`[^`]*`$/;
 const CONSTANT = /^(undefined|null|true|false)$/;
+// `cond ? { direction: "column" } : {}`: every branch an object literal of
+// string values, so no number in it can change unit.
+function stringObjectsOnly(body) {
+  const q = /^([^?]*)\?\s*(\{[^{}]*\})\s*:\s*(\{[^{}]*\})$/.exec(body.replace(/"(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'/g, '""'));
+  if (!q) return false;
+  return [q[2], q[3]].every((o) => /^\{(\s*[A-Za-z_$][\w$]*\s*:\s*""\s*,?)*\s*\}$/.test(o));
+}
 
 /**
  * A numeric literal in a unit kind, as the text that replaces it: a string
@@ -776,6 +779,15 @@ function rewriteValue(kind, expr, base, label, push, warn) {
     const known = constValue(expr.trim());
     // A same-file const that holds a string is a token or a CSS length: unchanged.
     if (known && known.string) return;
+    // A `const W = 14` nothing shadows (or a member of an `as const`
+    // object) is that number wherever it is read: the use becomes the string
+    // 2.x read it as, `${W}rem`.
+    if (known && known.fixed && known.number !== 0 && (kind === "rem" || kind === "%" || kind === "vh")) {
+      const lead = expr.length - expr.trimStart().length;
+      const name = expr.trim();
+      push({ at: base + lead, end: base + lead + name.length, text: `\`\${${name}}${kind}\``, kind, label, hit: `${label}={${name}}: ${name} is ${known.number} → \`\${${name}}${kind}\`` });
+      return;
+    }
     if (known && kind !== "s") {
       warn(
         `${label}={${expr.trim()}}: ${expr.trim()} is ${known.number}, a const in this file, so this was ${known.number}${kind} in 2.x and is ${known.number}px now; ` +
@@ -814,29 +826,93 @@ function sameFileConsts(src) {
     if (/^(["'])[^"'`]*\1$/.test(t)) return { string: true };
     return null;
   };
+  const imported = importBindings(src);
+  const code = codeOnly(src, { jsxText: true });
   for (const m of src.matchAll(/\b(?:const|let|var)\s+([A-Za-z_$][\w$]*)\b/g)) seen.set(m[1], (seen.get(m[1]) ?? 0) + 1);
   for (const m of src.matchAll(/\bconst\s+([A-Za-z_$][\w$]*)\s*(?::[^=;]+)?=\s*/g)) {
     const name = m[1];
     if (seen.get(name) !== 1) continue;
+    // The same number wherever it is read: the file declares the name once,
+    // imports nothing by it, and binds it nowhere else.
+    const fixed = !imported.has(name) && !boundElsewhere(code, name, m.index);
     const at = m.index + m[0].length;
     if (src[at] === "{") {
       const end = closing(src, at);
       if (end < 0) continue;
       const tail = src.slice(end + 1, end + 20);
       if (!/^\s*(as\s+const\s*)?[;\n]/.test(tail)) continue;
+      // `as const` makes its entries readonly: a member is the number it was declared with.
+      const readonly = /^\s*as\s+const\b/.test(tail);
       const { entries } = objectEntries(src.slice(at, end + 1));
       for (const e of entries) {
         if (e.shorthand) continue;
         const lit = literalOf(e.value);
-        if (lit) found.set(`${name}.${e.key}`, lit);
+        if (lit) found.set(`${name}.${e.key}`, { ...lit, fixed: fixed && readonly });
       }
       continue;
     }
     const lineEnd = src.slice(at).search(/[;\n]/);
     const lit = literalOf(src.slice(at, lineEnd < 0 ? undefined : at + lineEnd));
-    if (lit) found.set(name, lit);
+    if (lit) found.set(name, { ...lit, fixed });
   }
   return found;
+}
+
+/**
+ * Whether `name` may be bound again somewhere in `code` (comments and strings
+ * blanked) besides the declaration at `declAt`: as a parameter, in a
+ * destructuring pattern, a catch clause. Read conservatively: a name passed
+ * as an argument or listed in an array or object counts too.
+ */
+function boundElsewhere(code, name, declAt) {
+  for (const m of code.matchAll(new RegExp(`(?<![\\w$.])${name.replace(/\$/g, "\\$")}(?![\\w$])`, "g"))) {
+    if (m.index >= declAt && m.index < declAt + 6 + name.length + 1) continue; // `const NAME`
+    let i = m.index - 1;
+    while (i >= 0 && /\s/.test(code[i])) i--;
+    let j = m.index + name.length;
+    while (j < code.length && /\s/.test(code[j])) j++;
+    const prev = code[i] ?? "";
+    const next = code[j] ?? "";
+    if (code.startsWith("=>", j)) return true;
+    // `={NAME}` and `={NAME …}`: a JSX attribute reads it.
+    if (prev === "{" && code[i - 1] === "=") continue;
+    if (!((/[([{,]/.test(prev) || code.slice(i - 2, i + 1) === "...") && /[,)}\]=:]/.test(next) && !code.startsWith("==", j))) continue;
+    // In a list: a pattern when its brackets are followed by what follows a
+    // parameter list or a destructuring (`) =>`, `) {`, `} =`, `] =`).
+    let depth = 0;
+    let open = -1;
+    for (let k = m.index - 1; k >= 0; k--) {
+      if (")]}".includes(code[k])) depth++;
+      else if ("([{".includes(code[k])) {
+        if (depth === 0) {
+          open = k;
+          break;
+        }
+        depth--;
+      }
+    }
+    if (open < 0) return true;
+    const close = closing(code, open);
+    if (close < 0) return true;
+    const after = code.slice(close + 1, close + 40);
+    if (code[open] === "(" && /^\s*(=>|\{|:)/.test(after)) return true;
+    if (code[open] !== "(" && /^\s*(=(?![=>])|\)|:)/.test(after)) return true;
+    if (code[open] !== "(" && /(\(|,)\s*$/.test(code.slice(0, open))) {
+      // A pattern inside a parameter list: `({ W }) =>`, `(a, [W]) =>`.
+      let d = 0;
+      for (let k = open - 1; k >= 0; k--) {
+        if (")]}".includes(code[k])) d++;
+        else if ("([{".includes(code[k])) {
+          if (d === 0) {
+            if (code[k] === "(" && /^\s*(=>|\{|:)/.test(code.slice(closing(code, k) + 1, closing(code, k) + 40))) return true;
+            break;
+          }
+          d--;
+        }
+      }
+    }
+  }
+  return false;
 }
 const constValue = (expr) => fileConsts.get(expr.replace(/\?\./g, ".")) ?? null;
 
@@ -876,22 +952,30 @@ function rewriteObject(paths, raw, base, label, push, warn) {
 const isOwnSource = (source) => /^(\.|@\/|~\/|#)/.test(source);
 
 /**
- * D2 on the file's own components: a wrapper defined here or imported from a
- * relative path or a path alias (`@/components/…`) often hands its size props on to a Once UI Flex (`{...flex}`),
- * where a 2.x number was rem. Whether it does cannot be seen from the call,
- * so a literal number is reported, not rewritten. Only in files that import
+ * D2 on the file's own components: a wrapper defined here, or imported from a
+ * relative path or a path alias (`@/components/…`, or any alias of the
+ * nearest tsconfig's `paths`), often hands its size props on to a Once UI
+ * Flex (`{...flex}`), where a 2.x number was rem. When its source shows that
+ * it does (its props are a layout component's and the rest of them are spread
+ * onto one; see ./codemod-3.0-own.mjs), the number becomes the rem string it
+ * was. When that cannot be seen, it is reported. Only in files that import
  * Once UI, so MDX (whose elements are Once UI's) and unrelated files stay quiet.
  */
-export function warnLocalSizes(src, { isCore = isCoreSource } = {}) {
+export function warnLocalSizes(src, { isCore = isCoreSource, file = null } = {}) {
   const warnings = [];
+  const hits = [];
+  const edits = [];
   const bindings = importBindings(src);
-  if (![...bindings.values()].some((b) => isCore(b.source))) return { warnings };
+  if (![...bindings.values()].some((b) => isCore(b.source))) return { out: src, hits, warnings };
+  const isRem = (canonical, prop) =>
+    LAYOUT_COMPONENTS.has(canonical) && !LEAVES[canonical] && REM_PROPS.has(prop) && (UNIT_TABLE[canonical]?.[prop] ?? "rem") === "rem";
   const element = /<([A-Z][\w]*)(?=[\s/>])/g;
   let m;
   while ((m = element.exec(src))) {
     const name = m[1];
     const bound = bindings.get(name);
-    if (bound ? !isOwnSource(bound.source) || isCore(bound.source) : LAYOUT_COMPONENTS.has(name)) continue;
+    const own = bound && !isCore(bound.source) && (isOwnSource(bound.source) || (file && isAliasSource(file, bound.source)));
+    if (bound ? !own : LAYOUT_COMPONENTS.has(name)) continue;
     const from = m.index + name.length + 1;
     const end = openingTagEnd(src, from);
     if (end < 0) continue;
@@ -899,12 +983,32 @@ export function warnLocalSizes(src, { isCore = isCoreSource } = {}) {
       if (!REM_PROPS.has(a.name) || a.value === null || !/^\{\s*-?\d/.test(String(a.value))) continue;
       const n = String(a.value).slice(1, -1).trim();
       if (!/^-?\d+(\.\d+)?$/.test(n) || Number(n) === 0) continue;
+      // Where the wrapper is defined: this file, or the one its import resolves to.
+      const defined = bound ? file && resolveOwn(file, bound.source) : file;
+      // A default import: which export it is cannot be read by name.
+      const byDefault = new RegExp(`import\\s+${name}\\s*(,|from)`).test(src);
+      const target =
+        !byDefault &&
+        forwardsProp({
+          file: defined || null,
+          text: bound ? (defined ? readSource(defined) : null) : src,
+          name: bound ? bound.canonical : name,
+          prop: a.name,
+          isRem,
+        });
+      if (target) {
+        edits.push({ at: src.indexOf(a.value, a.at), end: a.end, text: `"${Number(n)}rem"` });
+        hits.push(`<${name}> ${a.name}: number → "rem" string (${name} passes it on to a ${target})`);
+        continue;
+      }
       warnings.push(
         `<${name}> ${a.name}={${n}}: if ${name} passes ${a.name} on to a Once UI component, this was ${n}rem in 2.x and is ${n}px in 3.0; write "${n}rem" to keep the size`,
       );
     }
   }
-  return { warnings };
+  let out = src;
+  for (const e of edits.sort((x, y) => y.at - x.at)) out = out.slice(0, e.at) + e.text + out.slice(e.end);
+  return { out, hits, warnings };
 }
 
 /**
@@ -970,7 +1074,7 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
         const push = (e) =>
           edits.push({
             ...e,
-            hit: `<${tag}> ${e.label}: ${e.kind === "s" ? "seconds → ms" : `number → "${e.kind.replace("!", "")}" string`}`,
+            hit: `<${tag}> ${e.hit ?? `${e.label}: ${e.kind === "s" ? "seconds → ms" : `number → "${e.kind.replace("!", "")}" string`}`}`,
           });
         const warn = (w) => warnings.push(`<${tag}> ${w}`);
         for (const a of attrs) {
@@ -993,7 +1097,7 @@ export function transformUnits(src, { isCore = isCoreSource } = {}) {
           if (layout && BREAKPOINT_PROPS.has(a.name)) {
             const body = inner.trim();
             if (!body.startsWith("{")) {
-              if (!CONSTANT.test(body)) warn(`${a.name}={${body}}: numeric sizes and spacing in it were rem and are px now`);
+              if (!CONSTANT.test(body) && !stringObjectsOnly(body)) warn(`${a.name}={${body}}: numeric sizes and spacing in it were rem and are px now`);
               continue;
             }
             const { entries, opaque } = objectEntries(body);
@@ -1236,7 +1340,8 @@ function rewriteGauge(src, attrs, push, warn) {
 /**
  * An inline object or array attribute whose entries carry a renamed key.
  * `{…}` / `{[…]}` is rewritten; a variable is reported when this file shows
- * the old key anywhere, since its entries may be the ones defined here.
+ * the old key anywhere, since its entries may be the ones defined here
+ * (unless `note` is null: rewriteDataKeys follows it).
  */
 function rewriteInlineKeys(src, attrs, prop, key, replace, push, warn, note) {
   const a = attrs.find((x) => x.name === prop);
@@ -1248,7 +1353,7 @@ function rewriteInlineKeys(src, attrs, prop, key, replace, push, warn, note) {
     rewriteKeys(inner, span.at + 1, key, replace, push, warn, prop);
     return;
   }
-  if (new RegExp(`\\b${key}\\s*:`).test(src)) warn(`${prop}={${body}}: ${note}`);
+  if (note && new RegExp(`\\b${key}\\s*:`).test(src)) warn(`${prop}={${body}}: ${note}`);
 }
 
 const TIMELINE_STATE = (value) => {
@@ -1269,6 +1374,220 @@ const TABLE_ACTION_VARIANT = (value) => {
 };
 
 const RENAME_KEY = (to, hit) => (value) => ({ text: `${to}: ${value}`, hit });
+
+// ─── Data built outside the element: Timeline items, Scrubber tracks ───────
+
+/** The comma-separated parts between the brackets at `open` and `close`, as offsets. */
+function partsBetween(src, open, close) {
+  const parts = [];
+  let start = open + 1;
+  let depth = 0;
+  for (let i = open + 1; i < close; i++) {
+    const past = skipLexeme(src, i);
+    if (past !== i) {
+      i = past - 1;
+      continue;
+    }
+    const c = src[i];
+    if ("([{".includes(c)) depth++;
+    else if (")]}".includes(c)) depth--;
+    else if (c === "," && depth === 0) {
+      parts.push({ at: start, end: i });
+      start = i + 1;
+    }
+  }
+  parts.push({ at: start, end: close });
+  return parts.map((p) => trimmed(src, p.at, p.end)).filter((p) => p.end > p.at);
+}
+
+/** The index of the first top-level `ch` in `src` between `at` and `end`, or -1. */
+function topLevel(src, at, end, test) {
+  let depth = 0;
+  for (let i = at; i < end; i++) {
+    const past = skipLexeme(src, i);
+    if (past !== i) {
+      i = past - 1;
+      continue;
+    }
+    const c = src[i];
+    if ("([{".includes(c)) depth++;
+    else if (")]}".includes(c)) depth--;
+    else if (depth === 0 && test(i)) return i;
+  }
+  return -1;
+}
+
+/**
+ * The object literals a Timeline's `items` or a Scrubber's `tracks` are built
+ * from, followed through what can be read exactly: array literals, a
+ * same-file `const` used only here, `.map(p => ({ … }))` (whose `p.key` reads
+ * follow a const whose keys are renamed), `useMemo(() => …)`, a ternary, and
+ * `as`/`satisfies`. `ctx.key` is the 2.x key; `ctx.nested` the keys whose
+ * values are more of the same data (a track's `blocks`). Fills `found`
+ * (`entries`: each `key: value`; `members`: each `p.key` to rename; `decls`:
+ * consts followed) and returns false where the data cannot be seen.
+ */
+function walkData(src, at, end, ctx, found, param = null) {
+  ({ at, end } = trimmed(src, at, end));
+  if (at >= end) return false;
+  const text = src.slice(at, end);
+  const c = src[at];
+  if ((c === "[" || c === "{") && closing(src, at) === end - 1) {
+    const parts = partsBetween(src, at, end - 1);
+    if (c === "[") return parts.every((p) => !src.startsWith("...", p.at) && walkData(src, p.at, p.end, ctx, found, param));
+    let unknownSpread = false;
+    let explicit = false;
+    for (const p of parts) {
+      const part = src.slice(p.at, p.end);
+      const spread = /^\.\.\.\s*([A-Za-z_$][\w$]*)\s*$/.exec(part);
+      if (part.startsWith("...")) {
+        if (!(spread && spread[1] === param)) unknownSpread = true;
+        continue;
+      }
+      const m = /^(?:([A-Za-z_$][\w$]*)|(["'])([^"']*)\2)\s*:\s*/.exec(part);
+      const name = m ? (m[1] ?? m[3]) : /^[A-Za-z_$][\w$]*$/.test(part) ? part : null;
+      if (name === ctx.key) {
+        if (!m) return false; // `{ state }`: a variable's value
+        explicit = true;
+        found.entries.push({ keyAt: p.at, keyEnd: p.at + m[0].replace(/\s*:\s*$/, "").length, valueAt: p.at + m[0].length, valueEnd: p.end, param });
+      } else if (m && ctx.nested.has(name)) {
+        if (!walkData(src, p.at + m[0].length, p.end, ctx, found, null)) return false;
+      }
+    }
+    // A spread of something else may carry the old key, unless this object sets it.
+    return !(unknownSpread && !explicit);
+  }
+  // `x as T`, `x satisfies T`.
+  const cast = topLevel(src, at, end, (i) => /^\s(as|satisfies)\s/.test(src.slice(i - 1, i + 11)) && /\s/.test(src[i - 1]));
+  if (cast > at) {
+    const word = /^(as|satisfies)/.exec(src.slice(cast))?.[0];
+    if (word) return walkData(src, at, cast, ctx, found, param);
+  }
+  // `cond ? a : b`, `a ?? b`, `a || b`, `c && a`.
+  const q = topLevel(src, at, end, (i) => src[i] === "?" && src[i + 1] !== "." && src[i + 1] !== "?" && src[i - 1] !== "?");
+  if (q > 0) {
+    let nested = 0;
+    const colon = topLevel(src, q + 1, end, (i) => {
+      if (src[i] === "?" && src[i + 1] !== "." && src[i + 1] !== "?" && src[i - 1] !== "?") nested++;
+      else if (src[i] === ":" && nested-- === 0) return true;
+      return false;
+    });
+    if (colon < 0) return false;
+    return walkData(src, q + 1, colon, ctx, found, param) && walkData(src, colon + 1, end, ctx, found, param);
+  }
+  // `.map(cb)` (after any chain), and `useMemo(() => …)`.
+  if (src[end - 1] === ")") {
+    let open = -1;
+    for (let i = end - 2, depth = 0; i >= at; i--) {
+      if (")]}".includes(src[i])) depth++;
+      else if ("([{".includes(src[i])) {
+        if (depth === 0) {
+          open = i;
+          break;
+        }
+        depth--;
+      }
+    }
+    if (open < 0 || closing(src, open) !== end - 1) return false;
+    const callee = src.slice(at, open).replace(/\s+$/, "");
+    const args = partsBetween(src, open, end - 1);
+    const fn = args[0] && /^(?:async\s+)?(?:\(\s*([A-Za-z_$][\w$]*)?\s*(?::[^,)]*)?(?:,[^)]*)?\)|([A-Za-z_$][\w$]*))\s*(?::[^=]*)?=>\s*/.exec(src.slice(args[0].at, args[0].end));
+    if (!fn) return false;
+    const bodyAt = args[0].at + fn[0].length;
+    if (src[bodyAt] === "{") return false; // a block body: its return cannot be followed
+    const p = fn[1] ?? fn[2] ?? null;
+    if (/^(?:React\.)?useMemo\s*(?:<[\s\S]*>)?$/.test(callee)) return walkData(src, bodyAt, args[0].end, ctx, found, null);
+    const map = /^([\s\S]*?)\s*\??\.\s*map$/.exec(callee);
+    if (!map) return false;
+    // Items read through `p.key` come from the array mapped: a const whose keys are renamed too.
+    const source = /^[A-Za-z_$][\w$]*$/.test(map[1].trim()) ? map[1].trim() : null;
+    const before = found.entries.length;
+    const followed = source ? walkData(src, at, at + map[1].length, ctx, found, null) : false;
+    if (source && !followed) found.entries.length = before;
+    // `p.key` reads the array mapped: renamed with it when it is a followed
+    // const, else it is the app's own data and stays.
+    const reads = p && followed ? [...src.slice(bodyAt, args[0].end).matchAll(new RegExp(`(?<![\\w$.])${p}\\s*\\??\\.\\s*${ctx.key}(?![\\w$])`, "g"))] : [];
+    for (const r of reads) {
+      const keyAt = bodyAt + r.index + r[0].length - ctx.key.length;
+      found.members.push({ at: keyAt, end: keyAt + ctx.key.length });
+    }
+    return walkData(src, bodyAt, args[0].end, ctx, found, followed ? p : null);
+  }
+  // A same-file const, declared once and used only here.
+  if (/^[A-Za-z_$][\w$]*$/.test(text)) {
+    const decl = [...src.matchAll(new RegExp(`(?<![\\w$.])(?:let|var|const)\\s+${text}\\b`, "g"))];
+    if (decl.length !== 1 || !decl[0][0].startsWith("const")) return false;
+    const code = codeOnly(src, { jsxText: true });
+    const uses = [...code.matchAll(new RegExp(`(?<![\\w$.])${text}(?![\\w$])(?!\\s*:(?!:))(?!\\s*=(?![=>]))`, "g"))].filter(
+      (u) => !/\b(const|let|var)\s+$/.test(code.slice(Math.max(0, u.index - 8), u.index)),
+    );
+    if (uses.length !== 1) return false;
+    const head = new RegExp(`\\bconst\\s+${text}\\s*(?::[^=]+)?=\\s*`, "g");
+    head.lastIndex = decl[0].index;
+    const h = head.exec(src);
+    if (!h || h.index !== decl[0].index) return false;
+    const initAt = h.index + h[0].length;
+    const initEnd = topLevel(src, initAt, src.length, (i) => src[i] === ";" || (src[i] === "\n" && /^\n\s*(?:const|let|var|export|function|import|type|interface|\/\/|\/\*|$)/.test(src.slice(i))));
+    if (initEnd < 0) return false;
+    found.decls.push(text);
+    return walkData(src, initAt, initEnd, ctx, found, null);
+  }
+  return false;
+}
+
+/**
+ * E1 on a Timeline's `items` or a Scrubber's `tracks` that are not an inline
+ * literal: the same key rewrite, through `walkData`. Every bare use of the old
+ * key in the data must be one the walk reached, or nothing is changed and it
+ * is reported.
+ */
+function rewriteDataKeys(src, attrs, prop, ctx, replace, push, warn, note) {
+  const a = attrs.find((x) => x.name === prop);
+  if (!a?.value || !String(a.value).startsWith("{")) return;
+  const body = String(a.value).slice(1, -1).trim();
+  if (body.startsWith("{") || body.startsWith("[")) return; // inline: rewriteInlineKeys
+  const span = valueSpan(src, a);
+  const found = { entries: [], members: [], decls: [] };
+  const ok = walkData(src, span.at + 1, span.end - 1, ctx, found);
+  const edits = [];
+  let bad = !ok;
+  if (ok) {
+    // Every bare `key` in what was walked is an entry the walk saw.
+    const code = codeOnly(src);
+    const spans = [{ at: span.at, end: span.end }];
+    for (const name of found.decls) {
+      const h = new RegExp(`\\bconst\\s+${name}\\b`).exec(src);
+      const initEnd = topLevel(src, h.index, src.length, (i) => src[i] === ";" || (src[i] === "\n" && /^\n\s*(?:const|let|var|export|function|import|type|interface|\/\/|\/\*|$)/.test(src.slice(i))));
+      spans.push({ at: h.index, end: initEnd });
+    }
+    const bare = spans.reduce((n, s) => n + [...code.slice(s.at, s.end).matchAll(new RegExp(`(?<![\\w$.])${ctx.key}(?![\\w$])`, "g"))].length, 0);
+    if (bare !== found.entries.length) bad = true;
+    for (const e of found.entries) {
+      if (bad) break;
+      const value = src.slice(e.valueAt, e.valueEnd);
+      const through = e.param && new RegExp(`^${e.param}\\s*\\??\\.\\s*${ctx.key}\\b`).test(value.trim());
+      if (through) {
+        edits.push({ at: e.keyAt, end: e.keyEnd, text: ctx.to, hit: `${ctx.key} → ${ctx.to}` });
+        continue;
+      }
+      const r = replace(value.trim());
+      if (!r) {
+        bad = true;
+        break;
+      }
+      edits.push({ at: e.keyAt, end: e.valueEnd, text: r.text, remove: r.remove, hit: r.hit });
+    }
+    for (const m of found.members) edits.push({ at: m.at, end: m.end, text: ctx.to, hit: `.${ctx.key} → .${ctx.to}` });
+  }
+  if (bad) {
+    if (new RegExp(`\\b${ctx.key}\\s*:`).test(src)) warn(`${prop}={${String(a.value).slice(1, -1).trim()}}: ${note}`);
+    return;
+  }
+  for (const e of edits) push(e);
+}
+
+/** E1 in types: `TimelineItem["state"]`, `ScrubberTrack["scheme"]` and `ScrubberBlock["scheme"]` name the tone now. */
+const TYPE_INDEX_RENAMES = { TimelineItem: ["state", "tone"], ScrubberTrack: ["scheme", "tone"], ScrubberBlock: ["scheme", "tone"] };
 
 /**
  * F3: Badge and Chip are Tag. The element and its import become Tag, and
@@ -1391,10 +1710,7 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
       }
       // Anything else that still names it (a value, a map of components).
       const bound = importBindings(src).get(tag);
-      const code = out
-        .replace(/import[^;]*;/g, "")
-        .replace(/\/\*[\s\S]*?\*\//g, "")
-        .replace(/(^|[^:])\/\/[^\n]*/g, "$1");
+      const code = codeOnly(out, { jsxText: true }).replace(/import[^;]*;/g, "");
       const reference = new RegExp(`(?:[{(\\[,=:?]\\s*|\\btypeof\\s+)${tag}\\b|\\b${tag}\\s*[,})\\].]`);
       if (bound && isCore(bound.source) && reference.test(code))
         warnings.push(`${tag}: removed in 3.0, use Tag; a reference left in place needs renaming by hand`);
@@ -1450,18 +1766,41 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
         if (tag === "Button" || tag === "IconButton") rewriteButton(out, attrs, tag, push, warn);
         if (tag === "Tag") rewriteTagScheme(out, attrs, push, warn);
         if (tag === "LinearGauge" || tag === "RadialGauge") rewriteGauge(out, attrs, push, warn);
-        if (tag === "Timeline")
-          rewriteInlineKeys(out, attrs, "items", "state", TIMELINE_STATE, push, warn, 'items[].state is items[].tone in 3.0 ("active" is "brand", "default" is no tone)');
+        if (tag === "Timeline") {
+          const note = 'items[].state is items[].tone in 3.0 ("active" is "brand", "default" is no tone)';
+          rewriteInlineKeys(out, attrs, "items", "state", TIMELINE_STATE, push, warn, null);
+          rewriteDataKeys(out, attrs, "items", { key: "state", to: "tone", nested: new Set() }, TIMELINE_STATE, push, warn, note);
+        }
         if (tag === "Table")
           rewriteInlineKeys(out, attrs, "actions", "variant", TABLE_ACTION_VARIANT, push, warn, 'actions[].variant "danger" is variant: "primary", tone: "danger" in 3.0');
-        if (tag === "Scrubber")
-          rewriteInlineKeys(out, attrs, "tracks", "scheme", RENAME_KEY("tone", "scheme → tone"), push, warn, "tracks[].scheme and blocks[].scheme are tone in 3.0");
+        if (tag === "Scrubber") {
+          const note = "tracks[].scheme and blocks[].scheme are tone in 3.0";
+          const rename = RENAME_KEY("tone", "scheme → tone");
+          rewriteInlineKeys(out, attrs, "tracks", "scheme", rename, push, warn, null);
+          rewriteDataKeys(out, attrs, "tracks", { key: "scheme", to: "tone", nested: new Set(["blocks"]) }, rename, push, warn, note);
+        }
         if (tag === "Avatar")
           rewriteInlineKeys(out, attrs, "statusIndicator", "color", RENAME_KEY("scheme", "statusIndicator.color → scheme"), push, warn, "statusIndicator.color is statusIndicator.scheme in 3.0");
       }
     }
   }
   out = applyEdits(out, edits, hits);
+
+  // E1 in types: an indexed access of the renamed key names the new one.
+  {
+    const typeBindings = importBindings(out);
+    for (const [type, [from, to]] of Object.entries(TYPE_INDEX_RENAMES)) {
+      for (const [bound, b] of typeBindings) {
+        // `import { type TimelineItem }` binds "type TimelineItem" there.
+        const local = bound.replace(/^type\s+/, "");
+        if (b.canonical.replace(/^type\s+/, "") !== type || !isCore(b.source)) continue;
+        const re = new RegExp(`(?<![\\w$.])(${local}\\s*\\[\\s*)(["'])${from}\\2(\\s*\\])`, "g");
+        const before = out;
+        out = out.replace(re, `$1$2${to}$2$3`);
+        if (out !== before) hits.push(`${type}["${from}"] → ${type}["${to}"]`);
+      }
+    }
+  }
 
   // E1: `addToast({ variant })` → `addToast({ tone })`, in files that show toasts.
   if (/\buse(?:Optional)?Toast\b/.test(out) && /\baddToast\b/.test(out)) {
@@ -1514,7 +1853,7 @@ function applyEdits(src, edits, hits) {
  * that moved to a package (RevealFx → fx, StylePanel → blocks) is imported
  * from it by name, since the namespace no longer holds it.
  */
-export function transform(src) {
+export function transform(src, { file = null } = {}) {
   const namespaces = [
     ...src.matchAll(/(?<![\w$.])import\s+\*\s+as\s+([\w$]+)\s+from\s*(["'])@once-ui-system\/core\2/g),
   ].map((m) => m[1]);
@@ -1527,14 +1866,14 @@ export function transform(src) {
       return `${open}${ns}__${name}`;
     });
   }
-  if (!used.size) return transformFile(src);
+  if (!used.size) return transformFile(src, { file });
   // After the last import, so a pass that adds a name to "the" core import finds the file's own first.
   const imports = [...text.matchAll(/^import[^;]*?from\s*["'][^"']+["'];?[ \t]*$/gm)];
   const last = imports.at(-1);
   const at = last ? last.index + last[0].length : 0;
   const synthetic = `\nimport { ${[...used].map(([local, { name }]) => `${name} as ${local}`).join(", ")} } from "@once-ui-system/core";`;
   text = text.slice(0, at) + synthetic + text.slice(at);
-  const result = transformFile(text);
+  const result = transformFile(text, { file });
   let out = result.out;
   const bound = new Set([...importBindings(out).keys()]);
   const extra = [];
@@ -1566,7 +1905,7 @@ export function transform(src) {
       }
       const unique = [...new Set(keep)];
       if (!unique.length) return "\u0000";
-      return `${open} ${unique.join(", ")} ${close}`;
+      return `${open.slice(0, -1)}${braceList(unique, clause)}${close.slice(1)}`;
     },
   );
   for (const run of extra) run();
@@ -1578,7 +1917,7 @@ export function transform(src) {
   return { out, hits, warnings };
 }
 
-function transformFile(src) {
+function transformFile(src, { file = null } = {}) {
   // E/F3 first: Badge and Chip become Tag before the passes below read Tag.
   const tone = transformTone(src);
   const exp = rewriteExports(tone.out);
@@ -1631,7 +1970,10 @@ function transformFile(src) {
   out = units.out;
   hits.push(...units.hits);
   warnings.push(...units.warnings);
-  warnings.push(...warnLocalSizes(out).warnings);
+  const local = warnLocalSizes(out, { file });
+  out = local.out;
+  hits.push(...local.hits);
+  warnings.push(...local.warnings);
   const config = transformDataStyle(out);
   out = config.out;
   hits.push(...config.hits);
@@ -1706,7 +2048,7 @@ if (invokedDirectly) {
   const install = new Set();
   for (const f of files) {
     const src = fs.readFileSync(f, "utf8");
-    const { out, hits, warnings } = transform(src);
+    const { out, hits, warnings } = transform(src, { file: f });
     for (const name of packagesAdded(src, out)) install.add(name);
     if (!hits.length && !warnings.length) continue;
     console.log(f);

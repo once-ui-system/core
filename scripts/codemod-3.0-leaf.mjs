@@ -57,6 +57,7 @@ import {
 	openingTagEnd,
 	withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { addToCoreImport } from "./codemod-3.0-format.mjs";
 
 /** The leaves, and the layout-named props each keeps as its own. */
 const TEXT_OWN = [
@@ -415,6 +416,38 @@ function leafRound(src, isCore) {
 			}
 		}
 
+		// Avatar's border and radius: 2.x put them on its root Flex after its own
+		// border="neutral-strong" radius="full", so they replaced those. 3.0's
+		// Avatar keeps its own, so a width or style becomes the class 2.x wrote
+		// (border-2 and border-dashed come after border-1 and border-solid in
+		// the stylesheet, so they win), and a colour or radius the declaration
+		// its class made, inline (its class would lose to the Avatar's own).
+		if (tag === "Avatar" && !spread && !attrs.some((a) => a.name === "loading")) {
+			const cls = [];
+			const style = [];
+			const done2 = [];
+			for (const a of dropped) {
+				const v = a.value === null ? null : literalValue(a.value);
+				if (v === null) continue;
+				if (a.name === "borderWidth" && BORDER_WIDTHS.has(v)) cls.push([a, `border-${v}`]);
+				else if (a.name === "borderStyle" && (v === "dashed" || v === "solid")) cls.push([a, v === "solid" ? null : "border-dashed"]);
+				else if (a.name === "border" && borderColor(v)) style.push([a, `borderColor: "${borderColor(v)}"`]);
+				else if (a.name === "radius" && RADII.has(v)) style.push([a, `borderRadius: "${v === "none" ? "0" : `var(--radius-${v})`}"`]);
+				else continue;
+				done2.push(a);
+			}
+			const classes = cls.map(([, c]) => c).filter(Boolean);
+			const merged = classes.length ? withClassName(src, attrs, classes, cls.find(([, c]) => c)[0]) : { ops: [] };
+			const styled = style.length ? styleWith(src, attrs, style.map(([, e]) => e), style[0][0]) : { ops: [] };
+			if (merged && styled && done2.length) {
+				const placed = [...merged.ops, ...styled.ops];
+				ops.push(...placed);
+				for (const a of done2) if (!placed.some((o) => o.at === a.at)) ops.push({ ...remove(src, a), text: "" });
+				done.push(`<Avatar> ${done2.map((a) => a.name).join(", ")} → ${[classes.length && `className="${classes.join(" ")}"`, style.length && "style"].filter(Boolean).join(" and ")} (what 2.x's classes did)`);
+				dropped = dropped.filter((a) => !done2.includes(a));
+			}
+		}
+
 		const finish = (extraWarning) => {
 			if (extraWarning) warnings.push(extraWarning);
 			if (!ops.length) return;
@@ -545,6 +578,44 @@ function classFor(tag, a) {
 		return `font-${parts.join("-")} font-${weight} font-${size}`;
 	}
 	return null;
+}
+
+const BORDER_WIDTHS = new Set(["1", "2", "4", "6", "8"]);
+const RADII = new Set(["none", "xs", "s", "m", "l", "xl", "full"]);
+const SCHEMES = /^(neutral|brand|accent|info|danger|warning|success)$/;
+
+/** The colour 2.x's border class for `value` declared (`.brand-border-medium`), or null. */
+function borderColor(value) {
+	if (value === "transparent") return "var(--static-transparent)";
+	if (value === "surface") return "var(--surface-border)";
+	const [scheme, a, b] = value.split("-");
+	if (!SCHEMES.test(scheme)) return null;
+	if (a === "alpha" && /^(weak|medium|strong)$/.test(b ?? "")) return `var(--${scheme}-alpha-${b})`;
+	if (b === undefined && /^(weak|medium|strong)$/.test(a ?? "")) return `var(--${scheme}-border-${a})`;
+	return null;
+}
+
+/**
+ * Ops that put `entries` first in the element's inline style: a literal
+ * `style={{ … }}` keeps its own entries after them (they beat the 2.x class),
+ * another expression is spread after them. A missing style is written where
+ * `at` was.
+ */
+function styleWith(src, attrs, entries, at) {
+	const style = attrs.find((a) => a.name === "style");
+	if (!style) return { ops: [{ at: at.at, end: at.end, text: `style={{ ${entries.join(", ")} }}` }] };
+	const raw = String(style.value ?? "").trim();
+	if (!raw.startsWith("{")) return null;
+	const inline = /^\{\s*\{([\s\S]*)\}\s*\}$/.exec(raw);
+	const rest = inline ? inline[1].trim().replace(/,\s*$/, "") : `...${raw.slice(1, -1).trim()}`;
+	if (inline && rest.includes("\n")) {
+		// A style object written over several lines gains its entries on lines of their own.
+		const indent = /\n([ \t]*)\S/.exec(inline[1])?.[1] ?? "  ";
+		const close = /\n([ \t]*)$/.exec(inline[1])?.[1] ?? "";
+		const body = inline[1].replace(/^\s*\n/, "").replace(/\s*$/, "");
+		return { ops: [{ at: style.at, end: style.end, text: `style={{\n${entries.map((e) => `${indent}${e},`).join("\n")}\n${body}\n${close}}}` }] };
+	}
+	return { ops: [{ at: style.at, end: style.end, text: `style={{ ${[...entries, ...(rest ? [rest] : [])].join(", ")} }}` }] };
 }
 
 /** `"1"`, `{1}`, `{"1"}`, `{-1}` → the text of the literal; anything else → null. */
@@ -699,30 +770,14 @@ function withWrapperImports(src, hits, warnings, isCore) {
 	const bindings = importBindings(src);
 	const missing = [...used].filter((n) => !bindings.has(n));
 	if (!missing.length) return src;
-	const IMPORT = /^import\s+\{([^}]*)\}\s*from\s*(["'])(@once-ui-system\/core)\2/gm;
-	let m;
-	while ((m = IMPORT.exec(src))) {
-		// Not one inside a code sample (a template string).
-		if ((src.slice(0, m.index).match(/`/g) ?? []).length % 2 === 0) break;
-	}
-	if (!m || !isCore(m[3])) {
+	const out = addToCoreImport(src, missing);
+	if (out === null) {
 		// MDX and code samples import nothing; their components are in scope.
 		if ([...bindings.values()].some((b) => isCore(b.source)))
 			warnings.push(`${missing.join(", ")}: import them from "@once-ui-system/core"`);
 		return src;
 	}
-	const inner = m[1];
-	const multiline = inner.includes("\n");
-	const parts = inner
-		.split(",")
-		.map((p) => p.trim())
-		.filter(Boolean);
-	const all = [...parts, ...missing].sort((a, b) =>
-		a.replace(/^type\s+/, "").localeCompare(b.replace(/^type\s+/, "")),
-	);
-	const indent = multiline ? (/\n([ \t]+)\S/.exec(inner)?.[1] ?? "  ") : "";
-	const list = multiline ? `\n${all.map((p) => `${indent}${p},`).join("\n")}\n` : ` ${all.join(", ")} `;
-	return src.slice(0, m.index) + `import {${list}} from ${m[2]}${m[3]}${m[2]}` + src.slice(m.index + m[0].length);
+	return out;
 }
 
 /** Apply edits right to left so earlier offsets stay valid; an overlapping edit is dropped. */

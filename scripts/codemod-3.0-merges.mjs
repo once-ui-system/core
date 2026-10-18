@@ -56,6 +56,7 @@ import {
   specifiersOf,
   withLeadingSpace,
 } from "./codemod-2.0.mjs";
+import { addToCoreImport, braceList, codeOnly, removeFromCoreImport } from "./codemod-3.0-format.mjs";
 
 // ─── A small JSX-aware scanner ──────────────────────────────────────────────
 
@@ -115,21 +116,6 @@ function skipGroup(src, i) {
   let j = i + 1;
   while (j < src.length && src[j] !== close) j = skipToken(src, j);
   return j + 1;
-}
-
-/**
- * `src` with comments and string contents blanked (lengths kept), and with
- * JSX text too when `jsxText` is set: what is left are the names code uses.
- */
-function codeOnly(src, { jsxText = false } = {}) {
-  const blank = (m) => m.replace(/[^\n]/g, " ");
-  let out = src.replace(/\/\*[\s\S]*?\*\//g, blank).replace(/(^|[^:\w"'`\\])(\/\/.*)$/gm, (m, a, c) => a + blank(c));
-  if (jsxText)
-    out = out.replace(
-      /((?<!=)>|\})((?:[^<>{}();=&]|&#?\w+;)*[A-Za-z](?:[^<>{}();=&]|&#?\w+;)*)(?=<\/?[A-Za-z])/g,
-      (m, open, text) => `${open}${blank(text)}`,
-    );
-  return out.replace(/"(?:[^"\\\n]|\\.)*"|'(?:[^'\\\n]|\\.)*'/g, (m) => m[0] + blank(m.slice(1, -1)) + m[0]);
 }
 
 /**
@@ -963,17 +949,89 @@ function rewriteMergedImports(src, warnings, hits, typeRenames = new Map()) {
     }
     if (!changed) return whole;
     // One specifier per line when the import was written that way.
-    const list = clause.includes("\n")
-      ? `{\n${out.map((t) => `${clause.match(/\n([ \t]*)\S/)?.[1] ?? "  "}${t},`).join("\n")}\n}`
-      : `{ ${out.join(", ")} }`;
+    const list = braceList(out, clause);
     return `${keyword} ${typeOnly ? "type " : ""}${list} from ${q}${source}${q}`;
   });
+}
+
+/** 2.x Dropdown's own props, which its panel took out of the Row's. */
+const PANEL_OWN = new Set(["selectedOption", "onEscape", "onSelect", "disabled", "className", "children"]);
+
+/**
+ * A 2.x `<Dropdown>` panel with no trigger, as the element it rendered:
+ *
+ *   <Row border="neutral-medium" background="surface" {...props}>
+ *     <Column flex={1} overflowY="auto" gap="2">{children}</Column>
+ *   </Row>
+ *
+ * Its props (padding, radius, a border of its own…) went on the Row after
+ * those two, so they stay, and a border or background the panel set replaces
+ * the default. `className` was taken out and dropped; `selectedOption` and
+ * `onEscape` were never read. `disabled` added `cursor-not-allowed`, an
+ * opacity of 0.6 (replaced by a style of the panel's own) and
+ * `aria-disabled`. `onSelect` read the `data-value` of what was clicked, a
+ * handler 3.0's Row does not have: reported, as is a disabled that is not a
+ * literal, and a Row or Column name this file gives another component.
+ */
+function rewritePanel(src, lt, tag, local, bindings) {
+  for (const name of ["Row", "Column"]) {
+    const b = bindings.get(name);
+    if (b && !(isCoreSource(b.source) && b.canonical === name)) return { why: `${name} is another component in this file` };
+  }
+  if (tag.attrs.some((a) => a.name === "onSelect")) return { why: "onSelect read the data-value of the clicked element; wire that onClick yourself" };
+  const disabled = tag.attrs.find((a) => a.name === "disabled");
+  const on = disabled ? expressionOf(disabled) : "false";
+  if (on !== "true" && on !== "false") return { why: "disabled is not a literal" };
+  const end = elementEnd(src, lt);
+  const hits = [`<${local}> panel → <Row border background><Column flex={1} overflowY="auto" gap="2">, what 2.x rendered`];
+  const kept = tag.attrs.filter((a) => !PANEL_OWN.has(a.name));
+  if (tag.attrs.some((a) => a.name === "className")) hits.push(`<${local}> className removed (2.x's panel ignored it)`);
+  const added = [];
+  if (!kept.some((a) => a.name === "border")) added.push('border="neutral-medium"');
+  if (!kept.some((a) => a.name === "background")) added.push('background="surface"');
+  if (on === "true") {
+    added.push('className="cursor-not-allowed"');
+    if (!kept.some((a) => a.name === "style")) added.push("style={{ opacity: 0.6 }}");
+    added.push("aria-disabled");
+  }
+  // The attributes as written, with the panel's own cut out.
+  const tagClose = tag.selfClosing ? tag.slash : tag.gt;
+  let attrText = src.slice(tag.nameEnd, tagClose);
+  for (const a of [...tag.attrs].reverse()) {
+    if (!PANEL_OWN.has(a.name)) continue;
+    const from = withLeadingSpace(src, a.at) - tag.nameEnd;
+    attrText = attrText.slice(0, Math.max(0, from)) + attrText.slice(a.end - tag.nameEnd);
+  }
+  // Added attributes first (the panel's own replaced them), on lines of their own when its were.
+  const trailing = attrText.match(/\s*$/)[0];
+  const body0 = attrText.slice(0, attrText.length - trailing.length);
+  const lineIndent = /^\s*\n([ \t]*)\S/.exec(body0)?.[1];
+  const sep = lineIndent !== undefined ? `\n${lineIndent}` : " ";
+  const head = `<Row${added.map((a) => `${sep}${a}`).join("")}${body0}${trailing.includes("\n") ? trailing : ""}`;
+  const inner = '<Column flex={1} overflowY="auto" gap="2"';
+  if (tag.selfClosing) return { text: `${head}>${inner} /></Row>`, end, hits };
+  const children = childrenEnd(src, tag.gt + 1);
+  const body = src.slice(tag.gt + 1, children.at);
+  const lineStart = src.lastIndexOf("\n", lt - 1) + 1;
+  const indent = /^[ \t]*$/.test(src.slice(lineStart, lt)) ? src.slice(lineStart, lt) : null;
+  const unit = (indent ?? "").includes("\t") ? "\t" : "  ";
+  if (indent !== null && /^[ \t]*\n/.test(body) && /\n[ \t]*$/.test(body)) {
+    // Children on lines of their own move one level in, inside the Column.
+    const moved = body.replace(/\n(?=[ \t]*\S)/g, `\n${unit}`).replace(/\n[ \t]*$/, "");
+    return { text: `${head}>\n${indent}${unit}${inner}>${moved}\n${indent}${unit}</Column>\n${indent}</Row>`, end, hits };
+  }
+  return { text: `${head}>${inner}>${body}</Column></Row>`, end, hits };
 }
 
 /**
  * The merges pass. Runs on a file's source after the other 3.0 passes and
  * returns `{ out, hits, warnings }` like they do.
  */
+/** `text` with its import and re-export lists blanked (lengths kept). */
+function blankImports(text) {
+  return text.replace(/(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g, (m) => m.replace(/[^\n]/g, " "));
+}
+
 export function transformMerges(src, { remProps, breakpointProps } = {}) {
   UNITS = { rem: remProps ?? new Set(), breakpoints: breakpointProps ?? new Set() };
   const hits = [];
@@ -981,20 +1039,45 @@ export function transformMerges(src, { remProps, breakpointProps } = {}) {
   const bindings = importBindings(src);
   let out = src;
 
-  // The old panel's name now means the trigger-and-panel component.
+  // The old panel's name now means the trigger-and-panel component. A 2.x
+  // panel on its own becomes what it rendered (see rewritePanel).
+  let panels = 0;
+  // Passed as a value (an MDX components map, a registry), it hands out the new component.
+  for (const local of localNamesFor("Dropdown", bindings)) {
+    if (!isCoreSource(bindings.get(local)?.source ?? "") || local.includes("__")) continue;
+    const code = blankImports(codeOnly(src, { jsxText: true })).replace(new RegExp(`</?${local}(?=[\\s/>])`, "g"), "");
+    if (new RegExp(`(?<![\\w$.])${local}(?![\\w$])`).test(code))
+      warnings.push(
+        `${local} passed as a value: it was 2.x's bare panel and is the trigger-and-panel component in 3.0; ` +
+          'pass a component of your own that renders <Row border="neutral-medium" background="surface"><Column flex={1} overflowY="auto" gap="2">{children}</Column></Row>',
+      );
+  }
   for (const local of localNamesFor("Dropdown", bindings)) {
     const re = new RegExp(`<${local}(?=[\\s/>])`, "g");
-    let m;
-    while ((m = re.exec(out))) {
+    let from = 0;
+    for (;;) {
+      re.lastIndex = from;
+      const m = re.exec(out);
+      if (!m) break;
+      from = m.index + 1;
       const tag = parseTag(out, m.index);
-      if (tag && !tag.attrs.some((a) => a.name === "trigger" || a.spread))
-        warnings.push(
-          `<${local}> without trigger: Dropdown is the trigger-and-panel component in 3.0 (2.x DropdownWrapper). ` +
-            'A panel on its own is a Column with border="neutral-medium" background="surface" radius="l"; ' +
-            "a panel inside DropdownWrapper's dropdown is not needed (its children go straight into Dropdown)",
-        );
+      if (!tag || tag.attrs.some((a) => a.name === "trigger" || a.spread)) continue;
+      const imported = isCoreSource(bindings.get(local)?.source ?? "") && !local.includes("__");
+      const done = imported ? rewritePanel(out, m.index, tag, local, bindings) : { why: "it is not imported from core here" };
+      if (done.text !== undefined) {
+        out = out.slice(0, m.index) + done.text + out.slice(done.end);
+        hits.push(...done.hits);
+        panels++;
+        continue;
+      }
+      warnings.push(
+        `<${local}> without trigger: Dropdown is the trigger-and-panel component in 3.0 (2.x DropdownWrapper). ` +
+          'A 2.x panel on its own rendered <Row border="neutral-medium" background="surface" …its props><Column flex={1} overflowY="auto" gap="2">…children</Column></Row>' +
+          ` (it ignored className); write that (${done.why})`,
+      );
     }
   }
+  if (panels) out = addToCoreImport(out, ["Column", "Row"]) ?? out;
 
   // 2.x Table's `data` shape, before DataTable takes the name. A Table this
   // file defines itself is not Once UI's.
@@ -1069,10 +1152,8 @@ export function transformMerges(src, { remProps, breakpointProps } = {}) {
   }
 
   // An old name still used some other way: as a value, in `typeof`, in a type.
-  const code = codeOnly(out, { jsxText: true }).replace(
-    /(import|export)\s+(type\s+)?\{[^}]*\}\s*from\s*["'][^"']+["'];?/g,
-    "",
-  );
+  // Comments, strings and JSX text are blanked (lengths kept), and so are the
+  // import statements, so offsets in `code` are offsets in `out`.
   const after = importBindings(out);
   for (const name of [...Object.keys(MERGED_EXPORTS), ...Object.keys(MERGED_TYPES)]) {
     const imported = bindings.get(name);
@@ -1080,17 +1161,69 @@ export function transformMerges(src, { remProps, breakpointProps } = {}) {
     if (after.has(name)) continue;
     const survivor = MERGED_EXPORTS[name] ?? MERGED_TYPES[name];
     // `{ ScrollContainer, Dialog }`: a component map (MDX components, a registry).
-    if (MERGED_EXPORTS[name] && new RegExp(`[{,]\\s*${name}\\s*(?=[,}])`).test(code)) {
-      warnings.push(
-        `${name}: a shorthand key of an object (a component map?) after the merge into ${survivor}; ` +
-          `write ${name}: ${survivor} to keep the old tag name working with the 3.0 props, or rename the key to ${survivor}`,
-      );
-      continue;
+    if (MERGED_EXPORTS[name] && after.has(survivor)) {
+      const keys = shorthandKeys(blankImports(codeOnly(out, { jsxText: true })), name);
+      if (keys.length) {
+        for (const at of keys.reverse()) out = `${out.slice(0, at)}${name}: ${survivor}${out.slice(at + name.length)}`;
+        hits.push(`{ ${name} } → { ${name}: ${survivor} } (a component map's key keeps the old tag name)`);
+      }
     }
+    // An object key (`{ ScrollContainer: Scroller }`) names nothing.
+    const key = new RegExp(`(?<=[{,]\\s*)${name}(?=\\s*:(?!:))`, "g");
+    const code = blankImports(codeOnly(out, { jsxText: true })).replace(key, (m) => " ".repeat(m.length));
     if (new RegExp(`(?<![\\w$.])${name}(?![\\w$])`).test(code))
       warnings.push(
-        `${name}: still referenced after the merge into ${MERGED_EXPORTS[name] ?? MERGED_TYPES[name]}; rename it by hand`,
+        `${name}: still referenced after the merge into ${survivor}; rename it by hand` +
+          (MERGED_EXPORTS[name] ? ` (an object key can keep the old name: ${name}: ${survivor})` : ""),
       );
   }
+  // A Dropdown import whose 2.x panels all became Rows, and that nothing else uses now.
+  if (panels) {
+    for (const local of localNamesFor("Dropdown", after)) {
+      if (!isCoreSource(after.get(local)?.source ?? "")) continue;
+      if (new RegExp(`(?<![\\w$.])${local}(?![\\w$])`).test(blankImports(codeOnly(out, { jsxText: true })))) continue;
+      out = removeFromCoreImport(out, local);
+      hits.push(`${local} removed from the import (its panels are Rows now)`);
+    }
+  }
   return { out, hits, warnings };
+}
+
+/**
+ * Offsets of `name` written as a shorthand property of an object literal,
+ * `{ ScrollContainer, Text }`, in `code` (comments and strings blanked). Not a
+ * destructuring pattern (`const { A } = x`, a parameter), an `export { A }`
+ * list or a JSX expression container (`as={A}`, `>{A}<`), where `A: B` would
+ * mean something else or not parse.
+ */
+function shorthandKeys(code, name) {
+  const found = [];
+  const re = new RegExp(`(?<=[{,]\\s*)${name}(?=\\s*[,}])`, "g");
+  for (const m of code.matchAll(re)) {
+    // The brace that opens the literal: the nearest unclosed `{` before it.
+    let depth = 0;
+    let open = -1;
+    for (let i = m.index - 1; i >= 0; i--) {
+      const c = code[i];
+      if (")]}".includes(c)) depth++;
+      else if ("([{".includes(c)) {
+        if (depth === 0) {
+          open = c === "{" ? i : -1;
+          break;
+        }
+        depth--;
+      }
+    }
+    if (open < 0) continue;
+    const close = skipGroup(code, open) - 1;
+    const inner = code.slice(open + 1, close);
+    const lead = code.slice(Math.max(0, open - 40), open);
+    const tail = code.slice(close + 1, close + 40);
+    if (/\bexport\s*$|\bimport\s*$|\b(const|let|var)\s*$|\bfunction\b[^(]*\($/.test(lead)) continue;
+    if (/^\s*(=(?![=>])|:|\)\s*=>|\)\s*\{|,[^)]*\)\s*=>)/.test(tail)) continue; // a pattern
+    // One bare name in braces is a JSX expression when it sits on an attribute or among children.
+    if (!inner.includes(",") && /(?:[\w$-]=|>|\})\s*$/.test(lead)) continue;
+    found.push(m.index);
+  }
+  return found;
 }

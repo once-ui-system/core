@@ -35,7 +35,9 @@ stays that way, a closing tag on its own line stays there), but it writes
 the attributes it adds on one line: run your formatter afterwards (`biome
 check --write`, `prettier --write`). Code that generates Once UI source (a
 template string of JSX, a Figma or CMS mapper that emits props) is not
-migrated: update what it emits by hand.
+migrated: update what it emits by hand. Neither is content kept outside the
+repo (MDX in a CMS or a database still using 2.x tag names and props): map the
+old tags in your MDX components, or migrate that content where it lives.
 
 ### 2. React 19
 
@@ -156,13 +158,15 @@ box with `maxWidth`).
 What the codemod reports, for you to finish: a variable, arithmetic or a call
 on one of these props (`maxWidth={layout.content.width}`: write
 ``{`${layout.content.width}rem`}``, or change the value at its source to a rem
-string or px), a breakpoint object passed by name, and spreads; a const of
-this file that holds a number (`const COLUMN_WIDTH = 20` used as
-`maxWidth={COLUMN_WIDTH}`), named with its value; and a number on one of these
-props on a component of your own (defined in the file, or imported from a
-relative path or a path alias such as `@/` or `~/`), which was rem if the
-component hands it on to a Once UI one (`<Book minWidth={14} {...flex}>`):
-write `"14rem"` there. Mask `radius="50"` and the numeric strings in
+string or px), a breakpoint object passed by name, and spreads. A const of
+this file that holds a number and is not shadowed (`const COLUMN_WIDTH = 20`
+used as `maxWidth={COLUMN_WIDTH}`) becomes ``{`${COLUMN_WIDTH}rem`}``. A number
+on one of these props on a component of your own (defined in the file, or
+imported from a relative path, `@/`, `~/`, or an alias in your tsconfig or
+jsconfig `paths`) becomes a rem string when the codemod can read that the
+component hands the prop on to a Once UI layout component (`<Book
+minWidth={14}>`, where Book spreads its props onto a `Row`); otherwise it is
+reported: write `"14rem"` there if it does. Mask `radius="50"` and the numeric strings in
 Background's objects (`x: "50"`) read as the numbers they were. Values in a
 config object other than `dataStyle` (`layout.content.width: 44`) are not Once UI props, so the
 codemod cannot see them: change them to `"44rem"` there.
@@ -225,8 +229,8 @@ so `variant` never means typography.
 | Table `actions[].variant: "danger"` | `variant: "primary", tone: "danger"` | rewrites an inline array; reports one built elsewhere in the file |
 | Feedback, Toast `variant`; `addToast({ variant })` | `tone` (Feedback now takes any tone) | renames; `addToast({ variant })` shorthand is reported |
 | Tag, Pulse `scheme`; Tag `scheme="gradient"` | `tone`; `variant="gradient"` | rewrites |
-| Scrubber `tracks[].scheme`, `blocks[].scheme` | `tone` | rewrites an inline array; reports a variable |
-| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`) | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array; reports one built elsewhere in the file |
+| Scrubber `tracks[].scheme`, `blocks[].scheme`; the `ScrubberTrack["scheme"]` and `ScrubberBlock["scheme"]` types | `tone` | rewrites an inline array, and one built in the file (a const used once, `.map(… => ({ … }))`, `useMemo`); reports the rest |
+| Timeline `items[].state` (`"active"`, `"success"`, `"danger"`, `"default"`); `TimelineItem["state"]` | `tone` (`"brand"`, `"success"`, `"danger"`, none) | rewrites an inline array, and one built in the file as for Scrubber; reports the rest |
 | LinearGauge, RadialGauge `hue="success"` / `hue={[a, b]}` | `tone="success"` (also `"warning"`) / `hueRange={[a, b]}` | rewrites a literal or a ternary of tones; reports a variable |
 | StatusIndicator `color`, Avatar `statusIndicator={{ color }}` | `scheme` | renames |
 | Text, Heading, ListItem, CountFx, ShineFx, TypeFx, FadingLettersFx `variant` | `textVariant` | renames |
@@ -286,9 +290,9 @@ comment, a string or JSX text is not one). It does the same for
 `<core.Modal>` through `import * as core`, importing a survivor that left the
 root from its package (`<core.RevealFx>` becomes `<RevealFx>` from
 `@once-ui-system/fx`). An old name left as a shorthand key of a component map
-(`const components = { ScrollContainer, Text }`, an MDX components object) is
-reported with the key to write: `ScrollContainer: Scroller` keeps an MDX
-`<ScrollContainer>` tag working, with Scroller's props.
+(`const components = { ScrollContainer, Text }`, an MDX components object)
+becomes `ScrollContainer: Scroller`, which keeps an MDX `<ScrollContainer>` tag
+working, with Scroller's props.
 
 | 2.x | 3.0 | Codemod |
 | --- | --- | --- |
@@ -300,7 +304,7 @@ reported with the key to write: `ScrollContainer: Scroller` keeps an MDX
 | `Hover` | `HoverCard placement="cover"`, with `delay`, `hideDelay` | moves `overlay` into the children; reports when the element had children of its own, which 2.x ignored |
 | `CursorCard` | `HoverCard placement="cursor"`, its corner as `cursorPlacement` | moves `overlay` into the children and `placement` to `cursorPlacement` |
 | `DropdownWrapper` | `Dropdown`: the wrapper's API under the short name; the menu is the children (`dropdown` stays as a deprecated alias) | renames; moves `dropdown` into the children, unwrapping a fragment |
-| `Dropdown` (2.x, the bare panel) | internal; use `Dropdown` with a `trigger`, or a `Column` for a static panel | reports each `<Dropdown>` without `trigger`, and `DropdownProps`, whose meaning changed |
+| `Dropdown` (2.x, the bare panel) | internal; use `Dropdown` with a `trigger`, or the panel's own layout for a static one | writes each `<Dropdown>` without `trigger` as what it rendered (`<Row border="neutral-medium" background="surface"><Column flex={1} overflowY="auto" gap="2">…</Column></Row>`, `disabled` as its class, opacity and `aria-disabled`), drops the import when nothing else uses it; reports `onSelect`, a variable `disabled`, `Dropdown` passed as a value (a components map), and `DropdownProps`, whose meaning changed |
 | `ContextMenu` | `Dropdown openOn="contextmenu"`, with `disabled` and `contents` | the children become `trigger`, `dropdown` the children |
 | `EmojiPickerDropdown` | `EmojiPicker trigger={…}`, with `open` / `defaultOpen` / `onOpenChange`, `placement`, `closeAfterClick` and `dropdownProps` | renames; props that were the dropdown's move into `dropdownProps` |
 | `UserMenu` | `User dropdown={…}`, with `selected`, `placement` and the menu's size props | renames; adds `dropdown={null}` when there was none, so the user still renders as a trigger |
@@ -405,7 +409,7 @@ changes until you set one; the default is the 2.x look.
 | --- | --- | --- |
 | `dark` / `light` (Flex, Row, Column, Grid, Logo and the components built on them) | `showIn="dark"` / `showIn="light"` | rewrites; `dark={cond}` becomes `showIn={cond ? "dark" : undefined}`; reports both at once |
 | `textSize`, `textWeight`, `textType` on layout components | `textVariant="type-weight-size"` | folds three literals; removes size and weight beside a `textVariant`, which overrode them; reports the rest |
-| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it. A Text `size` literal becomes the class 2.x wrote (`size="s"` → `className="font-s"`, merged into a literal className); a Heading `size` is reported: drop it where no parent sets the family (it did nothing), or write the preset under one (3.0's Heading always sets its own size) |
+| Text / Heading `size` | `textVariant` (a preset sets family, weight and size; `size` alone only applied under a parent that set the family) | removes it beside `textVariant`, where 2.x ignored it. A Text `size` literal becomes the class 2.x wrote (`size="s"` → `className="font-s"`, merged into a literal className); a Heading `size="m"` goes, `s`/`xs` become `className="font-s"`/`"font-xs"`, and `l`/`xl` go under a parent in the file that sets no family (they did nothing); under one that may, it is reported: write that family's preset (`textVariant="heading-strong-l"`), since 3.0's Heading always sets its own size |
 | Text / Heading `weight` beside `textVariant` | kept; it now swaps the preset's weight (2.x ignored it there) | removes it beside `textVariant`, so the page renders as before |
 
 Check a Text that had `size` beside `weight` before you turn it into a
@@ -603,8 +607,11 @@ It adds `Row` or `Column` to your Once UI import, and renames
 with the props to move: a parent it cannot see in the same file (the wrapper
 could change its layout), a spread, offsets, styling on a `Button` (a
 wrapper's padding is not the button's), sizes on a `ProgressBar`, and a look
-of its own on a `Kbd` or `Avatar` (`border`, `paddingX`), which goes in
-`style`. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
+of its own on a `Kbd` (`paddingX`), which goes in `style`. An `Avatar`'s
+`borderWidth`/`borderStyle` literals become the classes 2.x wrote
+(`className="border-2 border-dashed"`), and `border`/`radius` the `style` they
+resolved to (`borderColor: "var(--brand-alpha-medium)"`, `borderRadius:
+"var(--radius-m)"`), since 3.0's Avatar sets its own. `node scripts/codemod-3.0-leaf.mjs <dir>` runs this
 step on its own. The AI validator reports the same props (`layout.leafProps`)
 and names the wrapper.
 
