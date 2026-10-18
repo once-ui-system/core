@@ -214,6 +214,13 @@ export async function generateMetadata() {
 
 Without a provider, the paths are `/api/og/fetch`, `/api/og/proxy` and `/api/og/generate`. `OgCard`'s `serviceConfig` and `useOgData`'s explicit arguments still take precedence.
 
+<PropsTable
+  component="OgRoutesProvider"
+  describe={{
+    routes: "Any of fetch, proxy and generate. A path left out keeps its default.",
+  }}
+/>
+
 ## What is refused
 
 Before anything is requested, and again for every redirect:

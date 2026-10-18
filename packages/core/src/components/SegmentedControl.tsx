@@ -13,7 +13,8 @@ interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
 interface SegmentedControlProps
   extends Omit<React.ComponentProps<typeof Scroller>, "onChange" | "defaultValue"> {
   buttons: ButtonOption[];
-  onChange: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
+  /** Optional for an uncontrolled control that only needs `defaultValue`. */
+  onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void;
   defaultValue?: string;
   fillWidth?: boolean;
   value?: string;
@@ -62,7 +63,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       event.stopPropagation();
       const newSelected = clickedButton.value;
       setInternalSelected(newSelected);
-      onChange(newSelected, event);
+      onChange?.(newSelected, event);
     };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -97,7 +98,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
           if (focusedIndex >= 0 && focusedIndex < buttons.length) {
             const focusedButton = buttons[focusedIndex];
             setInternalSelected(focusedButton.value);
-            onChange(focusedButton.value);
+            onChange?.(focusedButton.value);
           }
           break;
         default:

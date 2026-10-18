@@ -103,16 +103,14 @@ unsaved-changes prompt sit in between.
 ## API reference
 
 <PropsTable
-  content={[
-    ["active", "boolean", "-", "Whether the trap is on. Required."],
-    ["children", "React.ReactNode"],
-    ["onEscape", "() => void", "-", "Called on the Escape key. The trap does not close itself."],
-    ["initialFocusRef", "RefObject<HTMLElement>", "-", "Element to focus on activation, instead of the first focusable one."],
-    ["returnFocusRef", "RefObject<HTMLElement>", "-", "Element to focus on deactivation, instead of the previously focused one."],
-    ["containerRef", "RefObject<HTMLDivElement>", "-", "Supply the container ref when the caller also needs it."],
-    ["autoFocus", "boolean", "true", "Move focus into the region when it activates."],
-    ["restoreFocus", "boolean", "true", "Return focus when it deactivates."],
-    ["className", "string"],
-    ["style", "React.CSSProperties"],
-  ]}
+  component="FocusTrap"
+  describe={{
+    active: "Whether the trap is on. Required.",
+    onEscape: "Called on the Escape key. The trap does not close itself.",
+    initialFocusRef: "Element to focus on activation, instead of the first focusable one.",
+    returnFocusRef: "Element to focus on deactivation, instead of the previously focused one.",
+    containerRef: "Supply the container ref when the caller also needs it.",
+    autoFocus: "Move focus into the region when it activates.",
+    restoreFocus: "Return focus when it deactivates.",
+  }}
 />
