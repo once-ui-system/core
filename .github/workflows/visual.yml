@@ -3,9 +3,10 @@
 # a demo whose code did not change now looks different. Demos whose code
 # changed count as new, so docs edits don't trip it.
 #
-# The head is captured twice; a shot that differs between those two captures
-# is animated or unstable and is reported but never fails the run. Base
-# captures are cached per base commit, so most runs build the docs once.
+# Both sides are captured twice; a shot that differs between the two captures
+# of either build is animated or unstable and is reported but never fails the
+# run. Base captures are cached per base commit, so most runs build the docs
+# once.
 #
 # Intended visual change: add the `visual-change` label. The report (before,
 # after and diff images) is the `visual-report` artifact of every run.
@@ -65,8 +66,10 @@ jobs:
         if: matrix.side == 'base'
         uses: actions/cache@v4
         with:
-          path: shots/base
-          key: visual-base-${{ steps.target.outputs.sha }}-${{ steps.target.outputs.image }}-${{ hashFiles('tools/scripts/visual/*.mjs', 'tools/scripts/visual/package-lock.json') }}
+          path: |
+            shots/base
+            shots/base-2
+          key: visual-base-v2-${{ steps.target.outputs.sha }}-${{ steps.target.outputs.image }}-${{ hashFiles('tools/scripts/visual/*.mjs', 'tools/scripts/visual/package-lock.json') }}
 
       - name: Check out the site
         if: steps.cache.outputs.cache-hit != 'true'
@@ -108,9 +111,7 @@ jobs:
           (cd site/apps/docs && npx next start -p 3300 > "$RUNNER_TEMP/next.log" 2>&1 &)
           for i in $(seq 1 60); do curl -sf http://localhost:3300/sitemap.xml > /dev/null && break; sleep 2; done
           node tools/scripts/visual/capture.mjs --url http://localhost:3300 --out "shots/${{ matrix.side }}"
-          if [ "${{ matrix.side }}" = head ]; then
-            node tools/scripts/visual/capture.mjs --url http://localhost:3300 --out shots/head-2
-          fi
+          node tools/scripts/visual/capture.mjs --url http://localhost:3300 --out "shots/${{ matrix.side }}-2"
 
       - uses: actions/upload-artifact@v4
         with:
@@ -147,7 +148,7 @@ jobs:
         id: compare
         run: |
           set +e
-          node scripts/visual/compare.mjs --base shots/base --head shots/head --noise shots/head-2 --report report
+          node scripts/visual/compare.mjs --base shots/base --head shots/head --noise shots/head-2 --base-noise shots/base-2 --report report
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"
           if [ "$code" != 0 ] && [ "$code" != 3 ]; then exit "$code"; fi
