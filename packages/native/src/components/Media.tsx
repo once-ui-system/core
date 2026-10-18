@@ -69,12 +69,19 @@ export const Media: RefComponent<MediaProps, ViewRef> = forwardRef<ViewRef, Medi
     const [failed, setFailed] = useState(false);
     // React Native reports the image's size on load; the web build does not.
     const [natural, setNatural] = useState<number>();
-    const { style: flex, rest } = flexStyle(theme, {
+    const {
+      style: flex,
+      rest,
+      userStyle,
+      hidden,
+    } = flexStyle(theme, {
       direction: "column",
       overflow: "hidden",
       fillWidth,
       ...props,
     });
+
+    if (hidden) return null;
 
     const ratio = parseAspectRatio(aspectRatio) ?? natural;
     const box: Writable<ViewStyle> = { ...flex };
@@ -131,12 +138,12 @@ export const Media: RefComponent<MediaProps, ViewRef> = forwardRef<ViewRef, Medi
         aria-busy={busy}
         onPress={handler}
         {...rest}
-        style={({ pressed }) => [box, pressed && { opacity: 0.8 }, props.style]}
+        style={({ pressed }) => [box, pressed && { opacity: 0.8 }, userStyle]}
       >
         {content}
       </Pressable>
     ) : (
-      <View ref={ref} aria-busy={busy} {...rest} style={[box, props.style]}>
+      <View ref={ref} aria-busy={busy} {...rest} style={[box, userStyle]}>
         {content}
       </View>
     );

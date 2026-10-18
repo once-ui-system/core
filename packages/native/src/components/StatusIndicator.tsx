@@ -24,7 +24,8 @@ export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forw
   ref,
 ) {
   const theme = useTheme();
-  const { style, rest } = flexStyle(theme, { radius: "full", ...props });
+  const { style, rest, userStyle, hidden } = flexStyle(theme, { radius: "full", ...props });
+  if (hidden) return null;
   const px = theme.space(SIZES[size]);
   return (
     <View
@@ -35,7 +36,7 @@ export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forw
       style={[
         style,
         { width: px, height: px, backgroundColor: theme.color(`scheme-${color}-700`) },
-        props.style ?? {},
+        userStyle,
       ]}
     />
   );

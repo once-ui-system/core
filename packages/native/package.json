@@ -1,7 +1,7 @@
 {
   "name": "@once-ui-system/native",
   "version": "0.1.0-preview.0",
-  "description": "Once UI for React Native (preview): 15 core components with the same props and design tokens as @once-ui-system/core.",
+  "description": "Once UI for React Native (preview): core components with the same props and design tokens as @once-ui-system/core.",
   "keywords": [
     "once-ui",
     "react-native",

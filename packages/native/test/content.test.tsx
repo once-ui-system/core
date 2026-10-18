@@ -224,3 +224,17 @@ describe("content", () => {
     expect(screen.getByRole("img", { name: "Closed" })).toBeTruthy();
   });
 });
+
+describe("Flex props on Media and StatusIndicator", () => {
+  it("honour hide and a breakpoint's style", () => {
+    const { container } = render(
+      <ThemeProvider theme="dark">
+        <Media src="https://example.com/a.jpg" alt="Latte" hide />
+        <StatusIndicator color="green" xl={{ style: { marginTop: 7 } }} ariaLabel="Open" />
+      </ThemeProvider>,
+    );
+    expect(container.querySelector("img")).toBeNull();
+    const dot = container.querySelector('[aria-label="Open"]') as HTMLElement;
+    expect(dot.style.marginTop).toBe("7px");
+  });
+});

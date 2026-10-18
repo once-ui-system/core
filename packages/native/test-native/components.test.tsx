@@ -2,12 +2,18 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import {
+  Accordion,
   Avatar,
   Feedback,
   IconButton,
   Input,
+  Media,
   ProgressBar,
   SegmentedControl,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
   Tag,
   Textarea,
   ThemeProvider,
@@ -97,5 +103,38 @@ describe("components on React Native", () => {
     expect(screen.getByText("New")).toBeTruthy();
     expect(screen.getByRole("progressbar", { value: { now: 40 } })).toBeTruthy();
     expect(screen.getByText("Payment failed")).toBeTruthy();
+  });
+
+  it("switches Tabs panels", async () => {
+    await wrap(
+      <Tabs defaultValue="hot">
+        <TabList>
+          <Tab value="hot" label="Hot" />
+          <Tab value="iced" label="Iced" />
+        </TabList>
+        <TabPanel value="hot">Flat white</TabPanel>
+        <TabPanel value="iced">Cold brew</TabPanel>
+      </Tabs>,
+    );
+    expect(screen.getByText("Flat white")).toBeTruthy();
+    await fireEvent.press(screen.getByRole("tab", { name: "Iced" }));
+    expect(screen.getByRole("tab", { name: "Iced", selected: true })).toBeTruthy();
+    expect(screen.getByText("Cold brew")).toBeTruthy();
+    expect(screen.queryByText("Flat white")).toBeNull();
+  });
+
+  it("opens an Accordion with LayoutAnimation", async () => {
+    await wrap(<Accordion title="Allergens">Contains milk.</Accordion>);
+    expect(screen.queryByText("Contains milk.")).toBeNull();
+    await fireEvent.press(screen.getByRole("button", { name: "Allergens" }));
+    expect(screen.getByRole("button", { name: "Allergens", expanded: true })).toBeTruthy();
+    expect(screen.getByText("Contains milk.")).toBeTruthy();
+  });
+
+  it("names Media by its alt text and takes the loaded size", async () => {
+    await wrap(<Media src="https://example.com/latte.jpg" alt="Latte art" aspectRatio="4 / 3" />);
+    const image = screen.getByRole("image", { name: "Latte art" });
+    await fireEvent(image, "load", { nativeEvent: { source: { width: 400, height: 300 } } });
+    expect(image).toBeTruthy();
   });
 });
