@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { Avatar } from "../components/Avatar";
@@ -9,18 +9,23 @@ import { EmojiPicker } from "../components/EmojiPicker";
 import { Feedback } from "../components/Feedback";
 import { Fieldset } from "../components/Fieldset";
 import { Icon } from "../components/Icon";
+import { IconButton } from "../components/IconButton";
 import { NumberInput } from "../components/NumberInput";
 import { ProgressBar } from "../components/ProgressBar";
 import { RadioGroup } from "../components/RadioGroup";
 import { Setting, SettingAxes } from "../components/Setting";
 import { Skeleton } from "../components/Skeleton";
 import { Slider } from "../components/Slider";
+import { StyleOverlay } from "../components/StyleOverlay";
 import { Switch } from "../components/Switch";
 import { Table } from "../components/Table";
 import { Textarea } from "../components/Textarea";
 import { Timeline } from "../components/Timeline";
 import { ToggleButton } from "../components/ToggleButton";
+import { TypeFx } from "../components/TypeFx";
+import { DataThemeProvider } from "../contexts/DataThemeProvider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { ThemeProvider } from "../contexts/ThemeProvider";
 import { LinearGauge } from "../modules/data/LinearGauge";
 import { RadialGauge } from "../modules/data/RadialGauge";
 import { expectNoAxeViolations } from "../test/axe";
@@ -273,5 +278,37 @@ describe("accessibility drill", () => {
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(3);
     expect(items[1]).toHaveAttribute("aria-current", "step");
+  });
+
+  it("opens the StyleOverlay from the keyboard and closes it with Escape", async () => {
+    render(
+      <ThemeProvider>
+        <DataThemeProvider>
+          <StyleOverlay>
+            <IconButton icon="sparkle" aria-label="Open style panel" />
+          </StyleOverlay>
+        </DataThemeProvider>
+      </ThemeProvider>,
+      { wrapper: wrap },
+    );
+    // Role queries trip on a jsdom computed-style bug inside StylePanel.
+    const trigger = document.querySelector<HTMLElement>('[aria-label="Open style panel"]');
+    expect(trigger?.tagName).toBe("BUTTON");
+    fireEvent.click(trigger as HTMLElement);
+    await waitFor(() =>
+      expect(document.querySelector('[aria-label="Close style panel"]')).toHaveFocus(),
+    );
+    fireEvent.keyDown(document, { key: "Escape" });
+    await waitFor(() =>
+      expect(document.querySelector('[aria-label="Open style panel"]')).toHaveFocus(),
+    );
+  });
+
+  it("reads TypeFx's words whole, not letter by letter", () => {
+    const { container } = render(<TypeFx words={["websites", "apps"]} trigger="custom" />, {
+      wrapper: wrap,
+    });
+    expect(container).toHaveTextContent("websites, apps");
+    expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull();
   });
 });
