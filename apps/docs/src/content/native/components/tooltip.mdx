@@ -1,0 +1,65 @@
+---
+title: "Tooltip"
+summary: "The small surface bubble a hint is drawn in, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/tooltip.mdx"
+github: "packages/native/src/components/Tooltip.tsx"
+navLabel: "Tooltip"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Tooltip` draws the bubble a short hint sits in: a label on the surface colour, with an optional icon on either side. Like the web component, it only draws the bubble. To show a hint when an icon is pressed, use [InfoTip](/native/components/infoTip). See the [web Tooltip](/components/tooltip) for the browser version.
+
+## Basic usage
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Tooltip } from "@once-ui-system/native";
+
+export function Copied() {
+  return <Tooltip label="Copied" prefixIcon="check" />;
+}`,
+    language: "tsx",
+    label: "Tooltip"
+  }
+]} />
+
+## Positioned by hand
+
+It takes Flex props, so you can place it over other content yourself.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Tooltip } from "@once-ui-system/native";
+
+export function Hint() {
+  return (
+    <Column position="relative">
+      <Tooltip label="Swipe to delete" position="absolute" top="8" right="8" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Positioned"
+  }
+]} />
+
+## Differences from the web
+
+- On the web `Tooltip` hides itself on screens up to the `m` breakpoint, where there is no hover. On a phone it always shows.
+- There is no fade-in animation and no `tooltip` role, which React Native does not have.
+- A string `label` is drawn on one line. Pass an element for anything else.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | | The hint. Required. |
+| `prefixIcon` | `IconName` | | An icon before the label. |
+| `suffixIcon` | `IconName` | | An icon after the label. |
+| `...FlexProps` | `FlexProps` | | Spacing, surface and position props, as on `Flex`. |

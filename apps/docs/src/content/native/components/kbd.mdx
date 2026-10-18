@@ -1,0 +1,62 @@
+---
+title: "Kbd"
+summary: "A keyboard key, for shortcuts on tablets and hardware keyboards, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/kbd.mdx"
+github: "packages/native/src/components/Kbd.tsx"
+navLabel: "Kbd"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Kbd` draws a key of a keyboard, to show a shortcut. It is most useful on a tablet or a phone with a hardware keyboard. Pass the key's name as `label` or as children. See the [web Kbd page](/components/kbd) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Kbd, Row } from "@once-ui-system/native";
+
+export function Shortcut() {
+  return (
+    <Row gap="4" vertical="center">
+      <Kbd label="⌘" />
+      <Kbd>K</Kbd>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Kbd"
+  }
+]} />
+
+## Customization
+
+Kbd takes Flex props, so you can change its background, border, padding or size.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Kbd } from "@once-ui-system/native";
+
+export function Enter() {
+  return <Kbd label="Enter" minWidth="64" background="brand-weak" border="brand-medium" />;
+}`,
+    language: "tsx",
+    label: "Custom"
+  }
+]} />
+
+## Differences from the web
+
+- Kbd is a `View`. Inside a `Text` it sits in the line as a nested view, but its baseline may not line up exactly with the text around it. In a row of other views, use it as is.
+- The label is always `label-default-s` in `neutral-medium`. Pass your own `Text` as children for a different style.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | | The key's name. Used instead of `children` when set. |
+| `children` | `ReactNode` | | The key's name, when `label` is not set. |
+| `...flex` | `FlexProps` | | Flex props. The defaults are `minWidth="32"`, `background="neutral-strong"`, `border="neutral-strong"`, `radius="s"`, `paddingX="4"` and `paddingY="2"`. |

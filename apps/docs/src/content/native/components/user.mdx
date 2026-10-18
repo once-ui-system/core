@@ -1,0 +1,72 @@
+---
+title: "User"
+summary: "An avatar with a name, a tag and a subline, as in a list of people, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/user.mdx"
+github: "packages/native/src/components/User.tsx"
+navLabel: "User"
+navIcon: "components"
+status: "unreleased"
+---
+
+`User` shows a person: an [Avatar](/native/components/avatar), their name, an optional [Tag](/native/components/tag) and a subline such as a role or an email. While `loading`, skeletons stand in for the name and subline. See the [web User](/components/user) for the browser version.
+
+## Basic usage
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { User } from "@once-ui-system/native";
+
+export function Staff() {
+  return (
+    <User
+      name="Lorant Toth"
+      subline="Head barista"
+      tagProps={{ label: "Admin", scheme: "brand" }}
+      avatarProps={{ src: "https://example.com/lorant.jpg" }}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Staff.tsx"
+  }
+]} />
+
+## Loading
+
+`loading` turns the avatar, name and subline into skeletons.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { User } from "@once-ui-system/native";
+
+export function Pending() {
+  return <User name="Loading" subline="Loading" loading />;
+}`,
+    language: "tsx",
+    label: "Loading"
+  }
+]} />
+
+## Differences from the web
+
+- Long names and sublines are cut to one line with an ellipsis, so the row keeps its height on a narrow screen.
+- The subline is left out when there is none, instead of an empty line.
+- `avatarProps` takes the native `Avatar` props, which have no `empty`.
+- `className` is replaced by `style`.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `name` | `string` | | The person's name. |
+| `subline` | `ReactNode` | | A line under the name. |
+| `tagProps` | `TagProps` | | A tag after the name, shown when it has a `label`. |
+| `avatarProps` | `AvatarProps` | | Props for the avatar: `src`, `value`, `size` and so on. |
+| `loading` | `boolean` | `false` | Shows skeletons instead of the avatar, name and subline. |
+| `children` | `ReactNode` | | Content between the avatar and the name. |
+| `style` | `ViewStyle` | | Style for the outer row. |

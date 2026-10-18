@@ -1,0 +1,84 @@
+---
+title: "Timeline"
+summary: "Steps joined by a line, each with a dot coloured by its state, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/timeline.mdx"
+github: "packages/native/src/components/Timeline.tsx"
+navLabel: "Timeline"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Timeline` shows a sequence of steps, such as an order's progress. Each step has a dot coloured by its `state`, a label, a description and any children. The line between two steps fades from one step's colour to the next. See the [web Timeline](/components/timeline) for the browser version.
+
+## Basic usage
+
+`marker` draws inside the dot, such as a step number. Screen readers hear a list, with the `active` step selected.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Timeline } from "@once-ui-system/native";
+
+export function OrderStatus() {
+  return (
+    <Timeline
+      size="s"
+      items={[
+        { label: "Ordered", description: "8:02", state: "success", marker: "1" },
+        { label: "Brewing", description: "About 4 minutes", state: "active", marker: "2" },
+        { label: "Ready for pickup", marker: "3" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "OrderStatus.tsx"
+  }
+]} />
+
+## Right-aligned and horizontal
+
+`alignment="right"` puts the dots on the right. `direction="row"` lays the steps side by side, which suits three or four short steps on a phone.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Timeline } from "@once-ui-system/native";
+
+const steps = [
+  { label: "Cart", state: "success" as const },
+  { label: "Pay", state: "active" as const },
+  { label: "Done" },
+];
+
+export function Layouts() {
+  return (
+    <>
+      <Timeline alignment="right" items={steps} />
+      <Timeline direction="row" size="xs" items={steps} />
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "Layouts"
+  }
+]} />
+
+## Differences from the web
+
+- The fading line is drawn with react-native-svg, since React Native has no CSS gradients.
+- A string `marker` gets the label style and the dot's text colour. Pass an element, such as an `Icon`, for anything else.
+- Steps are list items, and the active one is announced as selected in place of `aria-current="step"`.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `items` | `TimelineItem[]` | | The steps, each with optional `label`, `description`, `state`, `marker` and `children`. Required. |
+| `alignment` | `"left" \| "right"` | `"left"` | Which side the dots are on, for a vertical timeline. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The dots' size. |
+| `direction` | `"column" \| "row"` | `"column"` | `"row"` lays the steps side by side. |
+| `...FlexProps` | `FlexProps` | | Spacing, size and surface props, as on `Flex`. |

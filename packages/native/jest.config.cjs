@@ -6,6 +6,9 @@
 module.exports = {
   preset: "@react-native/jest-preset",
   testMatch: ["<rootDir>/test-native/**/*.test.tsx"],
+  // The first test in each file loads React Native's modules on first use,
+  // which takes several seconds on a CI runner with the suites in parallel.
+  testTimeout: 20000,
   // pnpm keeps packages under node_modules/.pnpm, so it has to be let through
   // for React Native's untranspiled sources to reach Babel.
   transformIgnorePatterns: [
