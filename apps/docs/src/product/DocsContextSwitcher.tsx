@@ -74,6 +74,7 @@ export function DocsContextSwitcher({ slugs }: { slugs: string[] }) {
           <Row
             width="32"
             height="32"
+            minWidth="32"
             radius="m"
             center
             background="neutral-alpha-weak"
@@ -94,7 +95,7 @@ export function DocsContextSwitcher({ slugs }: { slugs: string[] }) {
         </Row>
       }
       dropdown={
-        <Column minWidth={16} padding="4" gap="2">
+        <Column fillWidth padding="4" gap="2">
           {PLATFORMS.length > 1 && (
             <>
               <Row paddingX="12" paddingTop="8" paddingBottom="4">
