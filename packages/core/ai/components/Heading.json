@@ -19,6 +19,7 @@
   "Column",
   "RevealFx"
  ],
+ "avoid": "Layout props: it takes padding and margin but no s/m/l breakpoints, flex, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
