@@ -20,7 +20,9 @@ item (see `ROADMAP.md`, Week 4).
   off the page instead of relying on borders alone. Neutral text is a step darker
   (`on-background-medium` 400 → 300, `weak` 500 → 400) and coloured `weak` text moves
   to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
-  mode is unchanged. Apps that set `background="page"` on white-only artwork may want
+  mode is unchanged. Light solid fills (buttons, badges, `data-solid="color"` brand
+  solids and `--brand-color-*`) move from step 600 to 500, the same step dark mode
+  uses: white labels on 600 measured 3:1, below AA. Apps that set `background="page"` on white-only artwork may want
   `surface` instead.
 
 ### Fixed

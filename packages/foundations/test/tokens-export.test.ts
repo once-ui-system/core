@@ -40,7 +40,7 @@ describe("token export", () => {
       "{function-brand-300}",
     );
     expect(layer({ theme: "light", solid: "color" })?.tokens["brand-solid-strong"]).toBe(
-      "{function-brand-600}",
+      "{function-brand-500}",
     );
     // Lengths keep their unit, since rem follows the device font size.
     expect(layer({ border: "playful" })?.tokens["radius-m"]).toBe("0.75rem");
