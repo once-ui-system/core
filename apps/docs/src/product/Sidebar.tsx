@@ -246,7 +246,7 @@ const NavigationItemComponent: React.FC<{
           const recency = (variant: ColorScheme | undefined) => (
             <Row gap="4" vertical="center" flex={0}>
               <Pulse scheme={variant} size="s" />
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Text variant="label-default-xs" onBackground="neutral-medium">
                 {item.navTag}
               </Text>
             </Row>
@@ -313,7 +313,7 @@ const ResourceLinkComponent: React.FC<{
       {tag && (
         <Row gap="4" vertical="center" flex={0}>
           <Pulse scheme="brand" size="s" />
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Text variant="label-default-xs" onBackground="neutral-medium">
             {tag}
           </Text>
         </Row>
