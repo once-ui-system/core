@@ -67,7 +67,7 @@ export default function App() {
 
 | Component | Notes |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow and sizes. `Flex` is a row, as on the web. |
+| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow, sizes, position, `hide`, responsive props and `safeArea`. `Flex` is a row, as on the web. |
 | `Text`, `Heading` | `variant`, `onBackground`, `onSolid`, `truncate`. |
 | `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`. |
 | `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
@@ -85,12 +85,62 @@ export default function App() {
 
 `useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
 
+## Responsive props
+
+`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web: `xl`, `l`, `m`, `s` and `xs`. Each one applies on screens up to its width (480, 768, 1024 and 1440 points; `xl` on every screen), and a smaller breakpoint wins over a larger one, as in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`<Column gap="16" s={{ direction: "row", gap: "4" }} m={{ hide: true }}>
+  …
+</Column>`,
+    language: "tsx",
+    label: "Responsive.tsx"
+  }
+]} />
+
+They take layout, spacing, sizes, position and offsets, colours, borders, radius, shadow, opacity, `zIndex`, `hide` and `style`. Text styles, `solid`, single-side borders, transitions and scrollbars have no native equivalent and are not supported. `position` can be `relative`, `absolute` or `static`: React Native has no fixed or sticky positioning.
+
+## Safe areas
+
+Phones keep parts of the screen for the notch, the status bar and the home indicator. React Native has no built-in way to read them on every platform, so pass them to `ThemeProvider`, for example from `react-native-safe-area-context` (included in Expo):
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+
+function Themed({ children }) {
+  return <ThemeProvider insets={useSafeAreaInsets()}>{children}</ThemeProvider>;
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <Themed>
+        <Column fill background="page" padding="20" safeArea>
+          …
+        </Column>
+      </Themed>
+    </SafeAreaProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+With the insets in place, `Dialog` sheets clear the home indicator and toasts appear above it. Add `safeArea` to a `Flex`, `Row` or `Column` to pad it by the safe areas: `safeArea` for every edge, or a list such as `safeArea={["top", "bottom"]}`. `useTheme().insets` gives them to your own components.
+
 ## Differences from the web
 
 - **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
-- **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
+- **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them.
 
 ## Design tokens
 

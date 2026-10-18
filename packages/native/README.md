@@ -36,12 +36,12 @@ Docs: the "React Native" section of the Once UI docs
 `ThemeProvider` takes core's style options with core's defaults (`theme`,
 `brand`, `accent`, `neutral`, `solid`, `solidStyle`, `border`, `surface`,
 `scaling`, `bodySize`, `bodyLineHeight`, `mobileSize`, `tabletSize`,
-`desktopSize`), plus `fonts` for families the app has loaded. `theme="system"`
-follows the device.
+`desktopSize`), plus `fonts` for families the app has loaded and `insets` for
+the safe areas. `theme="system"` follows the device.
 
 | Component | Notes |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border`, `radius`, `shadow`, sizes. `Flex` is a row by default, as on the web. |
+| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border`, `radius`, `shadow`, sizes, `position` and offsets, `opacity`, `zIndex`, `hide`, the breakpoint props `xl`…`xs`, and `safeArea`. `Flex` is a row by default, as on the web. |
 | `Text`, `Heading` | `variant` (`body-default-m`, …), `onBackground`, `onSolid`, `truncate`. |
 | `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`; pressed replaces hover. |
 | `Card` | Pressable when given `onPress` (or core's `onClick`), `selected`. |
@@ -57,7 +57,62 @@ follows the device.
 
 `useTheme()` gives the resolved theme to your own components:
 `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`,
-`theme.text("heading-strong-m")`, `theme.shadow("m")`.
+`theme.text("heading-strong-m")`, `theme.shadow("m")`, and `theme.width`,
+`theme.breakpoints` and `theme.insets`.
+
+## Responsive props
+
+`Flex`, `Row`, `Column` and `Card` take core's breakpoint objects: `xl`, `l`,
+`m`, `s` and `xs`. Each applies at and below its max-width (`xs` 480, `s` 768,
+`m` 1024, `l` 1440; `xl` at every width), larger first, so the smaller one
+wins, as in the browser. The width is the window's, read by `ThemeProvider`.
+
+```tsx
+<Column gap="16" s={{ direction: "row", gap: "4" }} m={{ hide: true }}>
+```
+
+Every key of core's `FlexBreakpointProps` that has a native style works:
+`direction`, `horizontal`, `vertical`, `center`, `wrap`, `flex`, the spacing
+props, `top`/`right`/`bottom`/`left`, the size and `fill`/`fit` props,
+`aspectRatio`, `background`, `border`, `borderStyle`, `borderWidth`, `radius`,
+`shadow`, `opacity`, `zIndex`, `pointerEvents`, `position`, `hide`, `dark`,
+`light`, `overflow` and `style`. Not supported, here or on the base props:
+`solid`, `borderTop`…`borderY`, `onBackground`, `onSolid`, `align`,
+`textVariant`/`textSize`/`textWeight`/`textType`, `transition`, `scrollbar`,
+`overflowX` and `overflowY`. `position` takes `relative`, `absolute` and
+`static`; React Native has no `fixed` or `sticky`.
+
+## Safe areas
+
+React Native has no cross-platform API for the notch and home indicator, so
+pass the insets to `ThemeProvider`, for example from
+[react-native-safe-area-context](https://github.com/AppAndFlow/react-native-safe-area-context)
+(included in Expo):
+
+```tsx
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+
+function Themed({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider insets={useSafeAreaInsets()}>{children}</ThemeProvider>;
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <Themed>
+        <Column fill background="page" padding="20" safeArea>
+          …
+        </Column>
+      </Themed>
+    </SafeAreaProvider>
+  );
+}
+```
+
+`Dialog` then clears the home indicator and toasts stack above it. `safeArea`
+on `Flex` (`true`, or edges such as `["top", "bottom"]`) adds the insets to
+that view's padding: the native side of core's `--safe-area-*` tokens. Without
+`insets` they are all 0. `theme.insets` gives them to your own components.
 
 ## Differences from core
 
@@ -67,8 +122,8 @@ follows the device.
   core's `--touch-target` (2.75rem) around them without being drawn larger.
 - **Clipping:** `radius` does not clip children, as on the web; pass
   `overflow="hidden"` when it should (on iOS that also hides the view's shadow).
-- **No responsive props** (`s`, `m`, …) yet; the phone breakpoint's token values
-  apply on phones automatically.
+- **Safe areas:** read from `ThemeProvider`'s `insets` rather than CSS `env()`;
+  see [Safe areas](#safe-areas).
 
 ## Tokens
 

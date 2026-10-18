@@ -71,6 +71,8 @@ export function Dialog({
               borderTopLeftRadius: theme.radius("xl"),
               borderTopRightRadius: theme.radius("xl"),
               paddingTop: theme.space("8"),
+              // Clear the home indicator: the sheet sits on the screen's bottom edge.
+              paddingBottom: theme.insets.bottom,
             },
             style,
           ]}

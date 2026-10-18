@@ -7,11 +7,15 @@ export { Chip, type ChipProps } from "./components/Chip";
 export { Dialog, type DialogProps } from "./components/Dialog";
 export { Feedback, type FeedbackProps } from "./components/Feedback";
 export {
+  type Breakpoint,
   Column,
   Flex,
+  type FlexBreakpointProps,
   type FlexProps,
   flexStyle,
   Row,
+  responsiveProps,
+  type SafeAreaEdge,
   type SpacingProps,
   spacingStyle,
 } from "./components/Flex";
@@ -69,5 +73,12 @@ export {
   tokens,
 } from "./theme/resolve";
 export { ThemeProvider, type ThemeProviderProps, useTheme } from "./theme/ThemeProvider";
-export { createTheme, type FontFamilies, type OnceTheme } from "./theme/theme";
+export {
+  type Breakpoints,
+  createTheme,
+  type FontFamilies,
+  type Insets,
+  NO_INSETS,
+  type OnceTheme,
+} from "./theme/theme";
 export type * from "./types";
