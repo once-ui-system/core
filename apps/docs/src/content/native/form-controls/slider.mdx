@@ -1,0 +1,100 @@
+---
+title: "Slider"
+summary: "A thumb on a track for picking a number in a range, dragged with a finger, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/slider.mdx"
+github: "packages/native/src/components/Slider.tsx"
+navLabel: "Slider"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`Slider` picks one number between `min` and `max`. Drag anywhere on the track and the thumb follows your finger, landing on a multiple of `step`. Screen readers announce it as an adjustable control and change it by `step` with a swipe up or down. For a range with two thumbs, use [RangeSlider](/native/form-controls/rangeSlider). See the [web Slider](/components/slider) for the browser version.
+
+## Basic usage
+
+Without `value` the slider keeps its own state, starting at `defaultValue` (or `min`). `showValue` prints the value beside the label.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Slider } from "@once-ui-system/native";
+
+export function Volume() {
+  return <Slider label="Volume" defaultValue={40} showValue />;
+}`,
+    language: "tsx",
+    label: "Volume.tsx"
+  }
+]} />
+
+## Controlled
+
+Pass `value` and update it in `onChange` to own the state. `onChange` gets a number on every step of the drag.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Slider } from "@once-ui-system/native";
+
+export function Strength() {
+  const [shots, setShots] = useState(2);
+  return (
+    <Slider
+      label="Espresso shots"
+      min={1}
+      max={4}
+      value={shots}
+      onChange={setShots}
+      showValue
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Strength.tsx"
+  }
+]} />
+
+## Steps and decimals
+
+`step` can be a fraction. Values snap to multiples of `step` from `min`, without floating-point noise. Use `ariaLabel` when there is no visible label.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Slider } from "@once-ui-system/native";
+
+export function Grind() {
+  return <Slider ariaLabel="Grind size" min={0} max={2} step={0.25} defaultValue={1} />;
+}`,
+    language: "tsx",
+    label: "Steps"
+  }
+]} />
+
+## Differences from the web
+
+- The thumb follows a drag anywhere on the track, through a `PanResponder`. Once a drag starts, a scroll view around the slider cannot take it over; a vertical swipe that starts on the slider still scrolls the page.
+- The track has no hover state. The thumb grows while it is dragged, as on the web.
+- There is no hidden `<input type="range">`, so the native HTML input props (`name`, `id`, `onInput`…) are gone. Use `ariaLabel` for the accessible name when there is no `label`.
+- Screen readers adjust the slider with the platform's increment and decrement actions instead of the arrow keys.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | | The value, when the host owns the state. Pair with `onChange`. |
+| `defaultValue` | `number` | `min` | The starting value when the slider keeps its own state. |
+| `onChange` | `(value: number) => void` | | Called with the new value. |
+| `min` | `number` | `0` | The lowest value. |
+| `max` | `number` | `100` | The highest value. |
+| `step` | `number` | `1` | Values land on multiples of this from `min`. |
+| `label` | `string` | | A label above the track. It also names the slider. |
+| `showValue` | `boolean` | `false` | Shows the value beside the label. |
+| `disabled` | `boolean` | `false` | Dims the slider. It ignores drags and actions. |
+| `ariaLabel` | `string` | | The accessible name, when there is no `label`. |
+| `style` | `ViewStyle` | | Style for the outer view. |

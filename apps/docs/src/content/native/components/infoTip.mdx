@@ -1,0 +1,69 @@
+---
+title: "InfoTip"
+summary: "An info icon that shows a sentence of context when it is pressed, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/infoTip.mdx"
+github: "packages/native/src/components/InfoTip.tsx"
+navLabel: "InfoTip"
+navIcon: "components"
+status: "unreleased"
+---
+
+`InfoTip` is the "what is this?" icon. A tap opens a short explanation beside the icon, kept on screen, and a tap anywhere closes it. It lets a setting explain itself without spending a line on a description. Screen readers hear the explanation as the icon's hint. See the [web InfoTip](/components/infoTip) for the browser version.
+
+## Basic usage
+
+Put it beside the text it explains. `size` matches the icon to that text.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { InfoTip, Row, Text } from "@once-ui-system/native";
+
+export function RoundUp() {
+  return (
+    <Row gap="4" vertical="center">
+      <Text variant="label-default-m">Round up for charity</Text>
+      <InfoTip size="s">We round your total to the next euro and donate the difference.</InfoTip>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Setting.tsx"
+  }
+]} />
+
+## Naming the icon
+
+`ariaLabel` names the icon for screen readers. Change it to translate it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { InfoTip } from "@once-ui-system/native";
+
+export function Hinweis() {
+  return <InfoTip ariaLabel="Mehr Informationen">Wird auf deiner Quittung angezeigt.</InfoTip>;
+}`,
+    language: "tsx",
+    label: "Translated"
+  }
+]} />
+
+## Differences from the web
+
+- It opens on press, not on hover or focus. The tip shows in a transparent modal above the screen, so a parent's `overflow` cannot clip it, and the back button closes it.
+- The tip sits below the icon, or above it when the icon is low on the screen, and stays 16 points from the screen edges.
+- The explanation is the icon's accessibility hint when it is a string, in place of `aria-describedby`.
+- `ariaLabel` replaces `aria-label`.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | The explanation. A sentence or two. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"xs"` | The icon's size. |
+| `ariaLabel` | `string` | `"More information"` | The icon's accessible name. |
+| `...FlexProps` | `FlexProps` | | Props for the tip's surface, as on `Flex`. |

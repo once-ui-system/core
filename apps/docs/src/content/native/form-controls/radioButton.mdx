@@ -1,0 +1,89 @@
+---
+title: "RadioButton"
+summary: "A circle that turns on to pick one option, with a label and description, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/radioButton.mdx"
+github: "packages/native/src/components/RadioGroup.tsx"
+navLabel: "RadioButton"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`RadioButton` is a 20pt circle, filled with the brand colour and a dot when checked. A tap only turns it on: turning the others off is up to the group. Inside a [RadioGroup](/native/form-controls/radioGroup), a button with a `value` is checked by the group, as on the web. See the [web RadioButton](/form-controls/radioButton) for the same component in the browser.
+
+## Controlled
+
+Keep the chosen value in state and check the button that matches it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Column, RadioButton } from "@once-ui-system/native";
+
+export function Delivery() {
+  const [method, setMethod] = useState("standard");
+  return (
+    <Column gap="16">
+      <RadioButton
+        label="Standard"
+        description="3 to 5 days"
+        checked={method === "standard"}
+        onToggle={() => setMethod("standard")}
+      />
+      <RadioButton
+        label="Express"
+        description="Next day"
+        checked={method === "express"}
+        onToggle={() => setMethod("express")}
+      />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Delivery.tsx"
+  }
+]} />
+
+## Uncontrolled and disabled
+
+Without `checked`, a radio keeps its own state from `defaultChecked`. Once on, it stays on.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, RadioButton } from "@once-ui-system/native";
+
+export function Options() {
+  return (
+    <Column gap="16">
+      <RadioButton label="Remember this device" defaultChecked />
+      <RadioButton label="Pickup in store" disabled />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Options.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- The handler is `onToggle`. There is no `name` or form submission.
+- Pressing a radio that is already on does nothing.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | | The state, when the screen owns it. |
+| `defaultChecked` | `boolean` | `false` | The first state when the radio keeps its own. |
+| `value` | `string` | | Inside a `RadioGroup`, the group checks the button whose `value` it holds. |
+| `onToggle` | `(checked: boolean) => void` | | Called with `true` when an unchecked radio is pressed. |
+| `label` | `ReactNode` | | Text beside the circle. A string is also the accessibility label. |
+| `description` | `ReactNode` | | A line under the label. |
+| `disabled` | `boolean` | `false` | Dims the radio and ignores taps. |
+| `ariaLabel` | `string` | `"Radio button"` | The accessibility label when `label` is not a string. |
+| `style` | `ViewStyle` | | Style for the row. |

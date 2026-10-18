@@ -26,7 +26,7 @@ It is a preview. Most apps should keep shipping Once UI on phones as the web bui
 
 ## Install
 
-Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag.
+Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag. The [quick start](/native/quick-start) covers Expo and bare React Native apps, safe areas and fonts.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -65,81 +65,25 @@ export default function App() {
 
 ## Components
 
-| Component | Notes |
+Each component has its own page with examples, a props table and what differs from the web.
+
+| Group | Components |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow, sizes, position, `hide`, responsive props and `safeArea`. `Flex` is a row, as on the web. |
-| `Text`, `Heading` | `variant`, `onBackground`, `onSolid`, `truncate`. |
-| `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`. |
-| `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
-| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
-| `Switch`, `Checkbox` | Controlled or not, with a label and description. |
-| `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
-| `Dialog` | Opens as a bottom sheet. The back button and a tap outside close it. |
-| `ToastProvider`, `useToast` | `addToast({ variant, message })`, as on the web. Toasts stack at the bottom of the screen. |
-| `Select` | Opens its options in a bottom sheet, with `multiple` and `searchable`. |
-| `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
-| `Chip`, `Badge`, `ProgressBar` | As on the web. |
-| `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
-| `Media` | Shows an image at the shape you give it, such as `aspectRatio="16 / 9"`, with a loading placeholder until it arrives. Takes `radius`, `border`, a `caption` and `onPress`. |
-| `List`, `ListItem` | A bulleted list, or a numbered one with `as="ol"`. |
-| `Tabs`, `TabList`, `Tab`, `TabPanel` | Switch between panels of content, as on the web. The first tab is selected unless you pick one. |
-| `ToggleButton` | A quiet button that stays highlighted while `selected`. |
-| `Accordion` | A header that opens and closes the content under it, with a short animation. |
-| `AvatarGroup`, `StatusIndicator` | As on the web. |
+| Layout | [`Flex`](/native/components/flex), [`Card`](/native/components/card), [`Line`](/native/components/line), [`Grid`](/native/components/grid) |
+| Type | [`Text`](/native/components/text), [`Heading`](/native/components/heading) |
+| Actions | [`Button`](/native/components/button), [`IconButton`](/native/components/iconButton), [`ToggleButton`](/native/components/toggleButton), [`SegmentedControl`](/native/components/segmentedControl) |
+| Form controls | [`Input`](/native/form-controls/input), [`Textarea`](/native/form-controls/textarea), [`Select`](/native/form-controls/select), [`Checkbox`](/native/form-controls/checkbox), [`Switch`](/native/form-controls/switch), [`RadioGroup`](/native/form-controls/radioGroup), [`Chip`](/native/form-controls/chip), [`Slider`](/native/form-controls/slider), [`RangeSlider`](/native/form-controls/rangeSlider), [`NumberInput`](/native/form-controls/numberInput), [`PasswordInput`](/native/form-controls/passwordInput), [`OTPInput`](/native/form-controls/otpInput) |
+| Content | [`Icon`](/native/components/icon), [`Media`](/native/components/media), [`Avatar`](/native/components/avatar), [`AvatarGroup`](/native/components/avatarGroup), [`Badge`](/native/components/badge), [`Tag`](/native/components/tag), [`List`](/native/components/List), [`StatusIndicator`](/native/components/statusIndicator), [`User`](/native/components/user), [`BlockQuote`](/native/components/blockquote), [`Timeline`](/native/components/timeline), [`Kbd`](/native/components/kbd), [`InlineCode`](/native/components/inlineCode), [`CodeBlock`](/native/components/codeBlock) |
+| Feedback | [`Feedback`](/native/components/feedback), [`ProgressBar`](/native/components/progressBar), [`Spinner`](/native/components/spinner), [`Skeleton`](/native/components/skeleton), [`Toast`](/native/components/toast), [`Banner`](/native/components/banner) |
+| Overlays and disclosure | [`Dialog`](/native/components/dialog), [`Tabs`](/native/components/tabs), [`Accordion`](/native/components/accordion), [`DropdownWrapper`](/native/components/dropdownWrapper), [`ContextMenu`](/native/components/contextMenu), [`Tooltip`](/native/components/tooltip), [`InfoTip`](/native/components/infoTip) |
+| Navigation | [`Breadcrumbs`](/native/components/breadcrumbs), [`Pagination`](/native/components/pagination) |
+| Data | [`BarChart`](/native/data/barChart), [`LineChart`](/native/data/lineChart) |
 
-`IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
+`Dialog` opens as a bottom sheet, and so do `Select`'s options. `ThemeProvider`, `useTheme()`, `IconProvider` and fonts are on the [config page](/native/config).
 
-`useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
+## Responsive props and safe areas
 
-## Responsive props
-
-`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web: `xl`, `l`, `m`, `s` and `xs`. Each one applies on screens up to its width (480, 768, 1024 and 1440 points; `xl` on every screen), and a smaller breakpoint wins over a larger one, as in the browser.
-
-<CodeBlock marginTop="8" marginBottom="24"
-codes={[
-  {
-    code:
-`<Column gap="16" s={{ direction: "row", gap: "4" }} m={{ hide: true }}>
-  …
-</Column>`,
-    language: "tsx",
-    label: "Responsive.tsx"
-  }
-]} />
-
-They take layout, spacing, sizes, position and offsets, colours, borders, radius, shadow, opacity, `zIndex`, `hide` and `style`. Text styles, `solid`, single-side borders, transitions and scrollbars have no native equivalent and are not supported. `position` can be `relative`, `absolute` or `static`: React Native has no fixed or sticky positioning.
-
-## Safe areas
-
-Phones keep parts of the screen for the notch, the status bar and the home indicator. React Native has no built-in way to read them on every platform, so pass them to `ThemeProvider`, for example from `react-native-safe-area-context` (included in Expo):
-
-<CodeBlock marginTop="8" marginBottom="24"
-codes={[
-  {
-    code:
-`import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
-
-function Themed({ children }) {
-  return <ThemeProvider insets={useSafeAreaInsets()}>{children}</ThemeProvider>;
-}
-
-export default function App() {
-  return (
-    <SafeAreaProvider>
-      <Themed>
-        <Column fill background="page" padding="20" safeArea>
-          …
-        </Column>
-      </Themed>
-    </SafeAreaProvider>
-  );
-}`,
-    language: "tsx",
-    label: "App.tsx"
-  }
-]} />
-
-With the insets in place, `Dialog` sheets clear the home indicator and toasts appear above it. Add `safeArea` to a `Flex`, `Row` or `Column` to pad it by the safe areas: `safeArea` for every edge, or a list such as `safeArea={["top", "bottom"]}`. `useTheme().insets` gives them to your own components.
+`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web (`xl`, `l`, `m`, `s`, `xs`), and `safeArea` pads a view clear of the notch and home indicator once the app passes the screen's insets to `ThemeProvider`. See [responsive layouts](/native/basics/responsive) and the [quick start](/native/quick-start).
 
 ## Differences from the web
 
@@ -149,7 +93,7 @@ With the insets in place, `Dialog` sheets clear the home indicator and toasts ap
 - **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
 - **Tabs** have no arrow-key navigation, so `activation` has no effect.
 - **Core 3.0 names.** `Accordion` also takes `defaultOpen` and `onOpenChange`, `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code written for 3.0 works here too.
-- **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them.
+- **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them (see the [quick start](/native/quick-start)).
 
 ## Design tokens
 

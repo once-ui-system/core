@@ -2,6 +2,12 @@
   "title": "React Native",
   "order": 10,
   "pages": {
-    "overview": 1
+    "overview": 1,
+    "quick-start": 2,
+    "config": 3,
+    "basics": 4,
+    "form-controls": 5,
+    "components": 6,
+    "data": 7
   }
 }

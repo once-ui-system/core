@@ -9,6 +9,8 @@ import {
   Input,
   Media,
   ProgressBar,
+  RadioButton,
+  RadioGroup,
   SegmentedControl,
   Tab,
   TabList,
@@ -38,6 +40,35 @@ describe("components on React Native", () => {
     await fireEvent.changeText(screen.getByLabelText("Note"), "Oat flat white");
     // Like core, the count is what is left: 40 - 14.
     expect(screen.getByText("26")).toBeTruthy();
+  });
+
+  it("lets a RadioGroup check RadioButton children by value", async () => {
+    const onChange = jest.fn();
+    await wrap(
+      <RadioGroup defaultValue="oat" onChange={onChange}>
+        <RadioButton value="whole" label="Whole milk" />
+        <RadioButton value="oat" label="Oat" />
+      </RadioGroup>,
+    );
+    expect(screen.getByRole("radio", { name: "Oat", checked: true })).toBeTruthy();
+    await fireEvent.press(screen.getByRole("radio", { name: "Whole milk" }));
+    expect(onChange).toHaveBeenCalledWith("whole");
+    expect(screen.getByRole("radio", { name: "Whole milk", checked: true })).toBeTruthy();
+    expect(screen.getByRole("radio", { name: "Oat", checked: false })).toBeTruthy();
+  });
+
+  it("grows Textarea by default and fixes it to a number of lines", async () => {
+    await wrap(
+      <>
+        <Textarea label="Auto" />
+        <Textarea label="Fixed" lines={4} />
+      </>,
+    );
+    expect(screen.getByLabelText("Auto").props.scrollEnabled).toBe(false);
+    const fixed = screen.getByLabelText("Fixed");
+    expect(fixed.props.scrollEnabled).toBe(true);
+    const style = Object.assign({}, ...[fixed.props.style].flat(Infinity).filter(Boolean));
+    expect(style.height).toBe(style.lineHeight * 4);
   });
 
   it("switches SegmentedControl tabs", async () => {
