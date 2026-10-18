@@ -6,7 +6,7 @@
   "description": "React.ReactNode",
   "disabled": "boolean",
   "iconButtonProps": "IconButtonProps",
-  "onClick": "() => void",
+  "onClick": "!() => void",
   "className": "string",
   "id": "string",
   "labelId": "string",

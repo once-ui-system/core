@@ -182,7 +182,7 @@ Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - size?: CondensedTShirtSizes = m
-- color?: "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan" | "gray" = blue
+- color: "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan" | "gray" = blue
 - ariaLabel?: string = `${color} status indicator`
 - className?: string
 - style?: React.CSSProperties
@@ -212,7 +212,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Extends Scroller, Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - buttons: ButtonOption[]
-- onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
+- onChange: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - defaultValue?: string
 - fillWidth?: boolean = true
 - value?: string
@@ -462,7 +462,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape?: "line" | "circle" | "block" = line
+- shape: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties

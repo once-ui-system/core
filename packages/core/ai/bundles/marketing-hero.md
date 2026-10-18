@@ -195,7 +195,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - children: ReactNode
 - trigger?: "hover" | "instant" | "custom" = hover
 - speed?: "fast" | "medium" | "slow" = medium
-- charset?: string | string[] = defaultCharset
+- charset?: string[] = defaultCharset
 - onTrigger?: (triggerFn: () => void) => void
 - className?: string
 - style?: React.CSSProperties
@@ -355,7 +355,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Skeleton
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- shape?: "line" | "circle" | "block" = line
+- shape: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
 - style?: React.CSSProperties
