@@ -80,6 +80,12 @@ export default function App() {
 | `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
 | `Chip`, `Badge`, `ProgressBar` | As on the web. |
 | `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+| `Media` | Shows an image at the shape you give it, such as `aspectRatio="16 / 9"`, with a loading placeholder until it arrives. Takes `radius`, `border`, a `caption` and `onPress`. |
+| `List`, `ListItem` | A bulleted list, or a numbered one with `as="ol"`. |
+| `Tabs`, `TabList`, `Tab`, `TabPanel` | Switch between panels of content, as on the web. The first tab is selected unless you pick one. |
+| `ToggleButton` | A quiet button that stays highlighted while `selected`. |
+| `Accordion` | A header that opens and closes the content under it, with a short animation. |
+| `AvatarGroup`, `StatusIndicator` | As on the web. |
 
 `IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
 
@@ -90,6 +96,8 @@ export default function App() {
 - **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
+- **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
+- **Tabs** have no arrow-key navigation, so `activation` has no effect.
 - **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
 
 ## Design tokens
