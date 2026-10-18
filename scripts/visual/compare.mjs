@@ -3,9 +3,9 @@
 //
 //   node compare.mjs --base out/base --head out/head [--noise out/head-2] --report out/report
 //
-// --noise is a second capture of the head build: a shot that differs between
-// the two head captures is animated or otherwise unstable, so a base/head
-// difference there is not counted. Exits 3 when a stable shot changed.
+// A shot capture.mjs saw change on its own (marked `animated`) is not
+// counted. --noise is a second capture of the head build: a shot that differs
+// between the two head captures loads unstably, so it is not counted either. Exits 3 when a stable shot changed.
 
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
@@ -55,6 +55,10 @@ for (const shot of head.shots) {
     results.push({ shot, status: "new" });
     continue;
   }
+  if (shot.animated || before.animated) {
+    results.push({ shot, status: "unstable" });
+    continue;
+  }
   const [a, b] = await Promise.all([readPng(args.base, before.file), readPng(args.head, shot.file)]);
   const d = diff(a, b);
   if (!d.sizeChanged && d.pixels <= TOLERANCE) {
@@ -93,7 +97,7 @@ const describe = (r) =>
 const summary = [
   `### Visual check: ${changed.length ? `${changed.length} changed` : "no visual change"}`,
   "",
-  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (differ between two captures of this build, not counted), ${count("error")} not captured.`,
+  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (animated, or differ between two captures of this build; not counted), ${count("error")} not captured.`,
   ...(changed.length
     ? [
         "",

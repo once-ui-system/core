@@ -13,6 +13,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { parseArgs } from "node:util";
 import { chromium } from "playwright";
+import { PNG } from "pngjs";
 
 const { values: args } = parseArgs({
   options: {
@@ -28,6 +29,7 @@ const OUT = path.resolve(args.out);
 const DEMO_WIDTH = 1280;
 const BLOCK_WIDTHS = [1280, 390];
 const TILE_HEIGHT = 1200;
+const ANIMATION_PROBE_MS = 400;
 // The preview box CodeBlock renders above its code.
 const DEMO_SELECTOR = '[tabindex="-1"].overlay-background';
 // Pages with no live demos, or whose content is not about how a component looks.
@@ -35,16 +37,16 @@ const SKIP = /^\/(api|changelog|roadmap|index$)/;
 
 // Same instant, same random numbers and no remote requests on every capture.
 const FIXED_TIME = new Date("2026-01-15T12:00:00Z");
-// Playwright's clock.setFixedTime slows every setTimeout to a crawl, so the
-// date is shifted here instead: it starts at FIXED_TIME and keeps running.
+// Playwright's clock.setFixedTime slows every setTimeout to a crawl, so Date
+// is frozen here instead. Timers and animation frames keep running.
 const INIT_SCRIPT = `(() => {
   const RealDate = Date;
-  const offset = ${FIXED_TIME.getTime()} - RealDate.now();
-  class ShiftedDate extends RealDate {
-    constructor(...a) { super(...(a.length ? a : [RealDate.now() + offset])); }
-    static now() { return RealDate.now() + offset; }
+  const fixed = ${FIXED_TIME.getTime()};
+  class FixedDate extends RealDate {
+    constructor(...a) { super(...(a.length ? a : [fixed])); }
+    static now() { return fixed; }
   }
-  globalThis.Date = ShiftedDate;
+  globalThis.Date = FixedDate;
   let seed = 1234567;
   Math.random = () => {
     seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
@@ -143,8 +145,13 @@ async function captureDemos(context, route, shots) {
       await page.waitForTimeout(150);
       await settle(page);
       const file = `${id}.png`;
-      await box.screenshot({ path: path.join(OUT, file), animations: "disabled", caret: "hide", timeout: 15_000 });
-      shots.push({ id, page: route, width: DEMO_WIDTH, kind: "demo", code: code.slice(0, 400), file });
+      const options = { animations: "disabled", caret: "hide", timeout: 15_000 };
+      const first = await box.screenshot({ ...options, path: path.join(OUT, file) });
+      // A demo that changes on its own (canvas effects, timers, autoplay) is
+      // marked animated; compare.mjs does not count it.
+      await page.waitForTimeout(ANIMATION_PROBE_MS);
+      const animated = !first.equals(await box.screenshot(options));
+      shots.push({ id, page: route, width: DEMO_WIDTH, kind: "demo", code: code.slice(0, 400), file, animated });
     } catch (error) {
       shots.push({ id, page: route, width: DEMO_WIDTH, kind: "demo", error: String(error).slice(0, 300) });
     }
@@ -158,26 +165,37 @@ async function captureTiles(context, route, shots) {
     const page = await openPage(context, route, width);
     // Scroll through once so lazy and reveal-on-scroll sections render.
     await page.evaluate(async () => {
-      for (let y = 0; y < document.body.scrollHeight; y += 600) {
+      for (const img of document.querySelectorAll('img[loading="lazy"]')) img.loading = "eager";
+      for (let y = 0; y < document.body.scrollHeight; y += 400) {
         window.scrollTo(0, y);
-        await new Promise((r) => setTimeout(r, 60));
+        await new Promise((r) => setTimeout(r, 120));
       }
       window.scrollTo(0, 0);
     });
+    // Charts and other lazy chunks load when scrolled into view.
+    await page.waitForLoadState("networkidle").catch(() => {});
     const height = await waitForStable(page, () => document.documentElement.scrollHeight);
     log("scrolled", route, width, height);
     await settle(page);
-    const buffer = await page.screenshot({ fullPage: true, animations: "disabled", caret: "hide", timeout: 60_000 });
-    const { PNG } = await import("pngjs");
-    const full = PNG.sync.read(buffer);
+    const options = { fullPage: true, animations: "disabled", caret: "hide", timeout: 60_000 };
+    const full = PNG.sync.read(await page.screenshot(options));
+    await page.waitForTimeout(ANIMATION_PROBE_MS);
+    const again = PNG.sync.read(await page.screenshot(options));
     for (let top = 0, n = 0; top < full.height; top += TILE_HEIGHT, n += 1) {
       const h = Math.min(TILE_HEIGHT, full.height - top);
       const tile = new PNG({ width: full.width, height: h });
       PNG.bitblt(full, tile, 0, top, full.width, h, 0, 0);
+      const animated =
+        again.width !== full.width ||
+        again.height !== full.height ||
+        Buffer.compare(
+          full.data.subarray(top * full.width * 4, (top + h) * full.width * 4),
+          again.data.subarray(top * full.width * 4, (top + h) * full.width * 4),
+        ) !== 0;
       const id = `${slug(route)}@${width}__tile${String(n).padStart(2, "0")}`;
       const file = `${id}.png`;
       await writeFile(path.join(OUT, file), PNG.sync.write(tile));
-      shots.push({ id, page: route, width, kind: "tile", file, pageHeight: height });
+      shots.push({ id, page: route, width, kind: "tile", file, pageHeight: height, animated });
     }
     await page.close();
   }
