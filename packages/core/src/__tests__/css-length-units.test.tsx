@@ -48,6 +48,11 @@ describe("px, rem and em lengths", () => {
     expect(styleOf(renderToStaticMarkup(<Flex width="auto" />))).toContain("width:auto");
   });
 
+  it("take fit as fit-content, the way agents write fitHeight", () => {
+    expect(styleOf(renderToStaticMarkup(<Flex height="fit" />))).toContain("height:fit-content");
+    expect(styleOf(renderToStaticMarkup(<Grid width="fit" />))).toContain("width:fit-content");
+  });
+
   it("render as offsets inline rather than as a class", () => {
     const html = renderToStaticMarkup(<Flex position="absolute" top="12px" left="1rem" />);
     expect(html).not.toContain("top-12px");

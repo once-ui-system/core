@@ -65,13 +65,15 @@ export function isCSSUnit(value: string): boolean {
 /**
  * A size prop (`width`, `minHeight`, `minColumnWidth`…) as a CSS value: a
  * number is rem, a static token is its `--static-space-*` step, a t-shirt
- * size is the responsive width or height, and a CSS unit or `auto` passes through.
+ * size is the responsive width or height, `fit` is fit-content, and a CSS unit
+ * or `auto` passes through.
  * Anything else is no value at all, as before.
  */
 export function sizeValue(value: unknown, type: "width" | "height"): string | undefined {
   if (typeof value === "number") return `${value}rem`;
   if (typeof value !== "string") return undefined;
   if (value === "auto") return value;
+  if (value === "fit") return "fit-content";
   if (isCSSUnit(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
   if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-${type}-${value})`;

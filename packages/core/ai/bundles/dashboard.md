@@ -547,8 +547,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - flex?: FlexValue
 
 ### SizeProps
-- width?: number | SpacingToken | CSSUnit | "auto"
-- height?: number | SpacingToken | CSSUnit | "below-header"
+- width?: number | SpacingToken | CSSUnit | "auto" | "fit"
+- height?: number | SpacingToken | CSSUnit | "below-header" | "fit"
 - maxWidth?: number | SpacingToken | CSSUnit
 - minWidth?: number | SpacingToken | CSSUnit
 - minHeight?: number | SpacingToken | CSSUnit | "below-header"

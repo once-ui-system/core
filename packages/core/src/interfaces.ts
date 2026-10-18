@@ -109,14 +109,15 @@ export interface TextBreakpointHide {
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
-  /** A number is rem; a string is a spacing token or a CSS unit. `"auto"` undoes a width, e.g. `width={20} s={{ width: "auto" }}`. */
-  width?: number | SpacingToken | CSSUnit | "auto";
+  /** A number is rem; a string is a spacing token or a CSS unit. `"auto"` undoes a width, e.g. `width={20} s={{ width: "auto" }}`; `"fit"` is fit-content, like `fitWidth`. */
+  width?: number | SpacingToken | CSSUnit | "auto" | "fit";
   /**
    * A number is rem; a string is a spacing token or a CSS unit.
    * `"below-header"` is the viewport below the app header,
    * `calc(100dvh - var(--header-height))`, for an app shell's scrolling pane.
+   * `"fit"` is fit-content, like `fitHeight`.
    */
-  height?: number | SpacingToken | CSSUnit | "below-header";
+  height?: number | SpacingToken | CSSUnit | "below-header" | "fit";
   maxWidth?: number | SpacingToken | CSSUnit;
   minWidth?: number | SpacingToken | CSSUnit;
   /** As `height`, including `"below-header"`. */
