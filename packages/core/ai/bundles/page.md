@@ -496,7 +496,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.
 - Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}). Width props take a number, a spacing token or a CSS unit, never "auto": to undo a width at a breakpoint write s={{ fillWidth: true }} or s={{ width: "100%" }}. Text and Heading take padding but no radius, border or flex; put those on the wrapper.
 - vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: "baseline" }}.
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.
