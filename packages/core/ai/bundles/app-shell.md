@@ -60,7 +60,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ### Motion
 
-- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
+- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`, `Animation`/`HoverCard`/`Hover`/`Skeleton` delays) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
 - `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
@@ -102,14 +102,15 @@ comes from when it is not the root:
 Naming one of these from the root does not resolve — except `defineConfig`,
 which is on both, and `LayoutProvider`, which resolves and then silently
 renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
-name is a type error, not a blank space — take names (the IconName type below).
+name is a type error, not a blank space — take names (the IconName type below). Brand marks
+are not in the set: an app registers them by augmenting `IconLibraryOverrides`.
 
 ### Types — the common type errors
 
 Every type a prop names is defined in the slice's (or bundle's) `types`.
 
-- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
-- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`.
+- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. `Text` and `Heading` take only `s={{ hide: true }}`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
+- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`; for baseline-aligned text write `style={{ alignItems: "baseline" }}`.
 - Spacing (`gap`, `padding`, …) takes the SpacingToken values below: `"4"`, `"8"`, `"12"`, `"16"`, `"20"`, `"24"`, `"32"`, `"40"`… — there is no `"6"` or `"10"`.
 - `Row`, `Column` and `Grid` have no `span` or `type`. A clickable row is a `Button` or a native `<button>`; a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
 - A form is a native `<form onSubmit={…}>` around a `Column`. `Column as="form"` types `onSubmit` for a `div`.
@@ -126,7 +127,7 @@ If design intent unclear, ask: content style, layout width, color approach, deco
 
 ## Components
 
-Props marked `?` are optional; `= x` is the default. A component's mixins add the props listed under Mixins.
+Props marked `?` are optional; `= x` is the default; `- a, b?: T` is two props of type `T`. A component's mixins add the props listed under Mixins.
 
 ### Column
 Extends Flex with direction="column".
@@ -149,16 +150,21 @@ Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no othe
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
 Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 
+### Nav
+Extends Column, Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- density?: NavDensity = normal
+- variant?: NavVariant = solid
+- rail?: boolean = true
+
 ### NavGroup
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- label: ReactNode
+- label, children: ReactNode
 - icon?: IconName
-- children: ReactNode
 - open?: boolean
 - onToggle?: () => void
-- defaultOpen?: boolean = false
-- selected?: boolean = false
+- defaultOpen, selected?: boolean = false
 
 ### NavItem
 Extends ToggleButton.
@@ -168,24 +174,17 @@ Extends ToggleButton.
 - indicator?: boolean
 
 ### ToggleButton
-- label?: ReactNode
-- selected?: boolean = false
+- label, children?: ReactNode
+- selected, rounded, fillWidth, truncate, disabled?: boolean = false
 - variant?: "ghost" | "outline" | "subtle" = ghost
 - size?: TShirtSizes = m
 - radius?: RadiusSize
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- rounded?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
-- fillWidth?: boolean = false
 - weight?: "default" | "strong" = default
-- truncate?: boolean = false
-- disabled?: boolean = false
-- prefixIcon?: IconName
-- suffixIcon?: IconName
-- className?: string
+- prefixIcon, suffixIcon?: IconName
+- className, href?: string
 - style?: React.CSSProperties
-- children?: ReactNode
-- href?: string
 
 ### Drawer
 Extends Flex.
@@ -194,15 +193,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - onClose: () => void
 - side?: "left" | "right" | "top" | "bottom" = right
 - size?: "s" | "m" | "l" | "full" = m
-- title?: ReactNode
-- description?: ReactNode
-- footer?: ReactNode
-- showClose?: boolean = true
-- closeOnClickaway?: boolean = true
+- title, description, footer, children?: ReactNode
+- showClose, closeOnClickaway?: boolean = true
 - flush?: boolean = false
-- initialFocusRef?: RefObject<HTMLElement | null>
-- returnFocusRef?: RefObject<HTMLElement | null>
-- children?: ReactNode
+- initialFocusRef, returnFocusRef?: RefObject<HTMLElement | null>
 
 ### Breadcrumbs
 Extends Flex.
@@ -221,55 +215,36 @@ Extends User, DropdownWrapper.
 - style?: React.CSSProperties
 
 ### User
-- name?: string
-- children?: React.ReactNode
-- subline?: React.ReactNode
-- tag?: string
+- name, tag, className?: string
+- children, subline?: React.ReactNode
 - tagProps?: TagProps = {}
 - loading?: boolean = false
 - avatarProps?: AvatarProps = {}
-- className?: string
 
 ### DropdownWrapper
-- fillWidth?: boolean = false
-- minWidth?: number
-- maxWidth?: number
-- minHeight?: number
+- fillWidth, nested, disableTriggerClick?: boolean = false
+- minWidth, maxWidth, minHeight, optionsCount?: number
 - placement?: Placement = bottom-start
-- trigger: ReactNode
-- dropdown: ReactNode
-- selectedOption?: string
+- trigger, dropdown: ReactNode
+- selectedOption, className, dropdownId?: string
 - style?: React.CSSProperties
-- className?: string
 - onSelect?: (value: string) => void
-- closeAfterClick?: boolean = true
-- handleArrowNavigation?: boolean = true
+- closeAfterClick, handleArrowNavigation?: boolean = true
 - open?: boolean
 - onOpenChange?: (open: boolean) => void
-- nested?: boolean = false
 - navigationLayout?: NavigationLayout
 - columns?: number | string = 8
-- optionsCount?: number
-- dropdownId?: string
-- disableTriggerClick?: boolean = false
-- onFocusCapture?: React.FocusEventHandler<HTMLDivElement>
-- onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
+- onFocusCapture, onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
 
 ### Option
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- label?: React.ReactNode
+- label, prefix, suffix, description, children?: React.ReactNode
 - href?: string
 - value: string
-- prefix?: React.ReactNode
-- suffix?: React.ReactNode
-- description?: React.ReactNode
-- danger?: boolean
-- selected?: boolean
+- danger, selected, highlighted?: boolean
 - disabled?: boolean = false
-- highlighted?: boolean
 - tabIndex?: number
-- children?: React.ReactNode
 - onClick?: (value: string) => void
 - onLinkClick?: () => void
 
@@ -279,6 +254,19 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - inputSize?: TShirtSizes
 - open?: boolean
 - onOpenChange?: (open: boolean) => void
+
+### Kbd
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- label, className?: string
+- children?: ReactNode
+- style?: React.CSSProperties
+
+### KeyTip
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- keys: string | readonly string[]
+- label?: ReactNode
 
 ### Line
 Extends Flex.
@@ -291,21 +279,15 @@ Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - data: { headers: TableHeader[]; rows: ReactNode[][]; }
 - onRowClick?: (rowIndex: number) => void
-- searchable?: boolean = false
+- searchable, striped, compact, loading, stickyHeader, paginated?: boolean = false
 - searchPlaceholder?: string = Search...
-- striped?: boolean = false
 - hoverable?: boolean = true
-- compact?: boolean = false
-- loading?: boolean = false
-- emptyState?: ReactNode
+- emptyState, loadingState?: ReactNode
 - actions?: TableAction[]
-- stickyHeader?: boolean = false
 - rowClassName?: (rowIndex: number) => string
 - cellClassName?: (rowIndex: number, cellIndex: number) => string
-- paginated?: boolean = false
 - defaultPageSize?: number = 10
 - pageSizeOptions?: number[] = [5, 10, 20, 50]
-- loadingState?: ReactNode
 
 ### Tag
 Extends Flex.
@@ -313,16 +295,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - scheme?: ColorScheme | "gradient" = neutral
 - size?: CondensedTShirtSizes = m
 - label?: string = ""
-- prefixIcon?: IconName
-- suffixIcon?: IconName
+- prefixIcon, suffixIcon?: IconName
 - children?: ReactNode
 
 ### Icon
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - name: IconName
-- onBackground?: `${ColorScheme}-${ColorWeight}`
-- onSolid?: `${ColorScheme}-${ColorWeight}`
+- onBackground, onSolid?: `${ColorScheme}-${ColorWeight}`
 - size?: TShirtSizes = m
 - decorative?: boolean = true
 - tooltip?: ReactNode
@@ -332,11 +312,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
-- xl?: GridBreakpointProps
-- l?: GridBreakpointProps
-- m?: GridBreakpointProps
-- s?: GridBreakpointProps
-- xs?: GridBreakpointProps
+- xl, l, m, s, xs?: GridBreakpointProps
 - position?: CSSProperties["position"] = relative
 - scrollbar?: "default" | "minimal" = minimal
 
@@ -344,110 +320,76 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
 - size?: TShirtSizes = m
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- label?: string
+- label, href, className, id?: string
 - weight?: "default" | "strong" = strong
 - rounded?: boolean
-- prefixIcon?: IconName
-- suffixIcon?: IconName
-- loading?: boolean = false
-- disabled?: boolean = false
-- fillWidth?: boolean = false
+- prefixIcon, suffixIcon?: IconName
+- loading, disabled, fillWidth, arrowIcon?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
-- href?: string
-- className?: string
 - style?: React.CSSProperties
-- id?: string
-- arrowIcon?: boolean = false
 - color?: `${ColorScheme}-${ColorWeight}`
 
 ### IconButton
 - icon?: IconName = refresh
-- id?: string
+- id, className, href, ariaLabel?: string
 - size?: TShirtSizes = m
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- rounded?: boolean = false
-- tooltip?: ReactNode
+- rounded, loading, disabled?: boolean = false
+- tooltip, children?: ReactNode
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
-- loading?: boolean = false
-- disabled?: boolean = false
-- className?: string
 - style?: React.CSSProperties
-- href?: string
-- children?: ReactNode
 - color?: `${ColorScheme}-${ColorWeight}`
-- ariaLabel?: string
 
 ### Input
 - id: string
-- label?: string
-- placeholder?: string
+- label, placeholder, className?: string
 - size?: FieldSize
-- error?: boolean = false
-- errorMessage?: ReactNode
-- description?: ReactNode
+- error, focusRing, loading?: boolean = false
+- errorMessage, description, prefix, suffix?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- className?: string
 - style?: React.CSSProperties
-- prefix?: ReactNode
-- suffix?: ReactNode
 - variant?: "default" | "ghost" = default
-- focusRing?: boolean = false
 - characterCount?: boolean
 - cursor?: undefined | "interactive"
 - validate?: (value: ReactNode) => ReactNode | null
-- loading?: boolean = false
 - span?: number
 
 ### Textarea
 - id: string
-- label?: string
-- placeholder?: string
+- label, placeholder, className?: string
 - lines?: number | "auto" = auto
 - size?: FieldSize
-- error?: boolean = false
-- errorMessage?: ReactNode
-- description?: ReactNode
+- error, focusRing, disabled?: boolean = false
+- errorMessage, description, prefix, suffix?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- className?: string
-- prefix?: ReactNode
-- suffix?: ReactNode
 - variant?: "default" | "ghost" = default
-- focusRing?: boolean = false
 - characterCount?: boolean
 - resize?: "horizontal" | "vertical" | "both" | "none" = vertical
 - validate?: (value: ReactNode) => ReactNode | null
-- disabled?: boolean = false
 - span?: number
 
 ### Badge
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Passing the same text as title and children — both render
-- title?: string
+- title, href, className, id?: string
 - icon?: IconName
 - arrow?: boolean = href ? true : false
 - children?: React.ReactNode
-- href?: string
 - effect?: boolean = true
-- className?: string
 - style?: React.CSSProperties
-- id?: string
 
 ### Avatar
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - size?: TShirtSizes | number = m
-- value?: string
-- src?: string
-- unoptimized?: boolean
-- loading?: boolean
-- empty?: boolean
+- value, src, className?: string
+- unoptimized, loading, empty?: boolean
 - icon?: IconName
 - statusIndicator?: { color: "green" | "yellow" | "red" | "gray"; }
 - style?: React.CSSProperties = {}
-- className?: string
 
 ### Dialog
 Extends Flex.
@@ -455,14 +397,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - open: boolean
 - onClose: () => void
 - title: ReactNode | string
-- description?: ReactNode
-- children?: ReactNode
-- footer?: ReactNode
-- base?: boolean
-- stack?: boolean
-- flush?: boolean = false
+- description, children, footer?: ReactNode
+- base, stack?: boolean
+- flush, hideClose?: boolean = false
 - showClose?: boolean = !hideClose
-- hideClose?: boolean = false
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 - closeOnClickaway?: boolean = true
@@ -492,14 +430,12 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ## Mixins
 
 ### CommonProps
-- onBackground?: Colors
-- onSolid?: Colors
+- onBackground, onSolid?: Colors
 - align?: CSSProperties["textAlign"]
 
 ### DisplayProps
 - as?: ElementType
-- inline?: boolean
-- hide?: boolean
+- inline, hide, dark, light?: boolean
 - pointerEvents?: "none" | "all" | "auto"
 - userSelect?: UserSelect
 - position?: CSSProperties["position"]
@@ -510,54 +446,25 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - transition?: "micro-short" | "micro-medium" | "micro-long" | "macro-short" | "macro-medium" | "macro-long"
 - opacity?: Opacity
 - zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"
-- dark?: boolean
-- light?: boolean
 
 ### FlexProps
 - direction?: "row" | "column" | "row-reverse" | "column-reverse"
-- horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
-- vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
-- center?: boolean
-- wrap?: boolean
+- horizontal, vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
+- center, wrap?: boolean
 - flex?: FlexValue
 
 ### SizeProps
 - width?: number | SpacingToken | CSSUnit | "auto" | "fit"
 - height?: number | SpacingToken | CSSUnit | "below-header" | "fit"
-- maxWidth?: number | SpacingToken | CSSUnit
-- minWidth?: number | SpacingToken | CSSUnit
-- minHeight?: number | SpacingToken | CSSUnit | "below-header"
-- maxHeight?: number | SpacingToken | CSSUnit | "below-header"
-- fit?: boolean
-- fitWidth?: boolean
-- fitHeight?: boolean
-- fill?: boolean
-- fillWidth?: boolean
-- fillHeight?: boolean
+- maxWidth, minWidth?: number | SpacingToken | CSSUnit
+- minHeight, maxHeight?: number | SpacingToken | CSSUnit | "below-header"
+- fit, fitWidth, fitHeight, fill, fillWidth, fillHeight?: boolean
 - aspectRatio?: CSSProperties["aspectRatio"]
 
 ### SpacingProps
-- padding?: SpacingToken | number
-- paddingLeft?: SpacingToken | number
-- paddingRight?: SpacingToken | number
-- paddingTop?: SpacingToken | number
-- paddingBottom?: SpacingToken | number
-- paddingX?: SpacingToken | number
-- paddingY?: SpacingToken | number
-- margin?: SpacingToken | number
-- marginLeft?: SpacingToken | number
-- marginRight?: SpacingToken | number
-- marginTop?: SpacingToken | number
-- marginBottom?: SpacingToken | number
-- marginX?: SpacingToken | number
-- marginY?: SpacingToken | number
+- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number
 - gap?: SpacingToken | number | "-1"
-- top?: SpacingToken | number | CSSUnit
-- right?: SpacingToken | number | CSSUnit
-- bottom?: SpacingToken | number | CSSUnit
-- left?: SpacingToken | number | CSSUnit
-- translateX?: SpacingToken | number | CSSUnit
-- translateY?: SpacingToken | number | CSSUnit
+- top, right, bottom, left, translateX, translateY?: SpacingToken | number | CSSUnit
 
 ### StyleProps
 - textVariant?: TextVariant
@@ -566,28 +473,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - textWeight?: TextWeight
 - background?: Colors | "surface" | "overlay" | "page" | "transparent"
 - solid?: Colors
-- borderTop?: Colors | "surface" | "transparent" | boolean
-- borderRight?: Colors | "surface" | "transparent" | boolean
-- borderBottom?: Colors | "surface" | "transparent" | boolean
-- borderLeft?: Colors | "surface" | "transparent" | boolean
-- borderX?: Colors | "surface" | "transparent" | boolean
-- borderY?: Colors | "surface" | "transparent" | boolean
-- border?: Colors | "surface" | "transparent" | boolean
+- borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, border?: Colors | "surface" | "transparent" | boolean
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
-- topRadius?: RadiusSize
-- rightRadius?: RadiusSize
-- bottomRadius?: RadiusSize
-- leftRadius?: RadiusSize
-- topLeftRadius?: RadiusSize
-- topRightRadius?: RadiusSize
-- bottomLeftRadius?: RadiusSize
-- bottomRightRadius?: RadiusSize
+- topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
 - cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
 - blendMode?: BlendMode
-- blur?: BlurSize | number
-- backdropBlur?: BlurSize | number
+- blur, backdropBlur?: BlurSize | number
 - theme?: "light" | "dark"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
@@ -603,16 +496,11 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - family?: TextType
 - truncate?: boolean
 - flex?: FlexValue | number
-- xl?: TextBreakpointHide
-- l?: TextBreakpointHide
-- m?: TextBreakpointHide
-- s?: TextBreakpointHide
-- xs?: TextBreakpointHide
+- xl, l, m, s, xs?: TextBreakpointHide
 
 ### GridProps
-- columns?: GridSize
+- columns, rows?: GridSize
 - minColumnWidth?: number | SpacingToken | CSSUnit
-- rows?: GridSize
 
 ## Types
 
@@ -623,26 +511,28 @@ type BlurSize = "xl" | "l" | "m" | "s" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
 type BreadcrumbItem = { label: ReactNode; href?: string; prefixIcon?: IconName }
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
-type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
+// type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type CondensedTShirtSizes = "l" | "m" | "s"
-type FieldSize = "xl" | "l" | "m" | "s" | "xs" | "xxs"
-type FlexValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
+// type FieldSize is one of these strings: xl l m s xs xxs
+// type FlexValue is one of these strings: 0 1 2 3 4 5 6 7 8 9 10 11 12
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // style textVariant textSize textType textWeight background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex dark light columns rows
-type GridSize = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
+// type GridSize is one of these strings: 1 2 3 4 5 6 7 8 9 10 11 12
 // type IconName is one of these names, and only these:
 // symbol security opacity dark light copy help filter info danger warning code link search time video image enter send checkbox document adjustments arrowLeft arrowRight arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer dislike download edit eye eyeDropper eyeOff file flag folder food forward gift globe grip heart home inbox like linearGauge lock logout mail maximize minimize minus moreHorizontal organization pause paw payment person personRemove play plus radialGauge refresh return screen settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
+type NavDensity = "normal" | "compact" | "spacious"
+type NavVariant = "solid" | "subtle" | "minimal"
 type NavigationLayout = "grid" | "row" | "column"
-type Opacity = "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100"
+// type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type Placement = "top" | "right" | "bottom" | "left" | `${"top" | "right" | "bottom" | "left"}-${"start" | "end"}`
 type RadiusNest = "4" | "8"
-type RadiusSize = "xl" | "l" | "m" | "s" | "xs" | "none" | "full"
+// type RadiusSize is one of these strings: xl l m s xs none full
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "1" | "2" | "4" | "8" | "12" | "32" | "64" | "160" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
+// type SpacingToken is one of these strings: xl l m s xs 0 1 2 4 8 12 32 64 160 16 20 24 40 48 56 72 80 104 128
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "danger"; onClick: (rowIndex: number) => void; disabled?: (rowIndex: number) => boolean }
@@ -661,30 +551,12 @@ type UserSelect = "auto" | "none" | "text" | "all"
 
 ## Gotchas
 
-- Use fill not fillWidth fillHeight; center not horizontal="center" vertical="center"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.
-- Never write props equal to defaults or implied by another prop on the element: position="relative", direction on Row/Column, variant="primary" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).
-- Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.
-- A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width="32" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale ("160" is the largest), so height="320" is a type error: write height={20}. An icon or avatar box is usually "24" to "48".
-- gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
-- Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.
-- Wrap a Column in a native <form onSubmit={handleSubmit}>. Column as="form" keeps the div event types, so a FormEvent<HTMLFormElement> handler (and noValidate) is a type error.
-- Timing props on RevealFx (delay, speed), ShineFx (speed), CountFx (speed), TypeFx (speed, delay), Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay) are milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger). speed on MatrixFx, WeatherFx, ParticleFx, CelebrationFx and Effect is a multiplier, where 0.5 is half speed.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
-- In a Next.js app, import LayoutProvider from "@once-ui-system/core/next", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
-- Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.
-- Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.
 - Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
-- Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, Badge, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border="rounded" on Button and IconButton, data-brand anywhere.
-- Bare border (and borderTop, borderBottom, borderX, …) draws the default border: --default-border, neutral-alpha-weak unless the app sets it in its custom CSS. Do not write border="neutral-alpha-weak" to get it, which pins the colour; name a colour only to deviate, e.g. border="neutral-alpha-medium" or border="brand-alpha-medium".
-- zIndex is for an isolated stacking group: an absolute decorative layer and its content sibling (zIndex={1}), or a sticky header over its pane. Never on a lone element, never a page-wide ladder of 3 / 5 / 9 — restructure the tree instead.
-- Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.
-- Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
-- vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: "baseline" }}.
 
 ## Quality bar
 

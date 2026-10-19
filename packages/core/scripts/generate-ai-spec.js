@@ -1255,9 +1255,10 @@ const BASE_BUNDLE = {
   title: "Any other page",
   description:
     "The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step",
-  // A form page with no task bundle (an onboarding wizard in the dry run)
-  // opened these two slices after this bundle, a turn that re-sent it.
-  components: ["Switch", "SegmentedControl"],
+  // A form page with no task bundle (an onboarding wizard in the dry runs)
+  // opened these slices with or after this bundle; as JSON slices they cost
+  // several times their Markdown, and after it a turn that re-sent it.
+  components: ["Switch", "SegmentedControl", "Select", "Checkbox", "Card"],
 };
 
 // A slice lists only its own props: NavItem's `href` and `selected` live on
@@ -1280,6 +1281,16 @@ function withParents(names, slices) {
 // `!T` marks a required prop in the spec; Markdown bundles write TypeScript.
 const propLine = (name, type) =>
   type.startsWith("!") ? `- ${name}: ${type.slice(1)}` : `- ${name}?: ${type}`;
+
+// Props with the same type, optionality and default share one line
+// ("- paddingX, paddingY?: SpacingToken | number"). The spacing, border and
+// radius families, and className/label/id on every component, were a third
+// of each bundle's component and mixin lists, and the bundle is the floor of
+// a run's tokens once a task takes three calls.
+const propLines = (props) =>
+  [...Map.groupBy(Object.entries(props ?? {}), ([, type]) => type)].map(([type, entries]) =>
+    propLine(entries.map(([name]) => name).join(", "), type),
+  );
 
 // A member that is already a type expression (`string & {}`, a template
 // literal) stays as it is; anything else is a literal value.
@@ -1328,12 +1339,21 @@ const familyKeys = (keys) =>
     .map((k) => (keys.some((o) => o !== k && new RegExp(`^${k}[A-Z]`).test(o)) ? `${k}*` : k));
 
 const typeLine = (name, type) => {
-  if (Array.isArray(type) && /^\w+BreakpointProps$/.test(name) && type.every((k) => /^\w+$/.test(k))) {
+  if (
+    Array.isArray(type) &&
+    /^\w+BreakpointProps$/.test(name) &&
+    type.every((k) => /^\w+$/.test(k))
+  ) {
     const component = name.replace(/BreakpointProps$/, "");
     return `// type ${name}: an object of these ${component} props, all optional (padding* is padding, paddingX, paddingTop and the rest):\n// ${familyKeys(type).join(" ")}`;
   }
   if (name === "IconName" && Array.isArray(type) && type.every((n) => /^[\w-]+$/.test(n))) {
     return `// type IconName is one of these names, and only these:\n// ${type.join(" ")}`;
+  }
+  // A long union of plain words or numbers spends most of its tokens on
+  // quotes and pipes; as a word list, like IconName, it is about half.
+  if (Array.isArray(type) && type.length >= 6 && type.every((v) => /^-?[\w]+$/.test(v))) {
+    return `// type ${name} is one of these strings: ${type.join(" ")}`;
   }
   if (Array.isArray(type)) return `type ${name} = ${compressUnion(type)}`;
   if (typeof type === "string") return `type ${name} = ${type}`;
@@ -1374,7 +1394,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     if (slice.preferOver) lines.push(`Use instead of ${slice.preferOver}.`);
     if (slice.avoid) lines.push(`Avoid: ${slice.avoid}`);
     if (slice.call) lines.push(`Call: \`${slice.call}\``);
-    for (const [prop, type] of Object.entries(slice.props ?? {})) lines.push(propLine(prop, type));
+    lines.push(...propLines(slice.props));
     if (slice.returns) lines.push(`Returns: ${JSON.stringify(slice.returns)}`);
     sections.push(lines.join("\n"));
     Object.assign(mixins, slice.resolvedMixins);
@@ -1386,12 +1406,14 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
   Object.assign(types, typesFor(mixins), typesFor(hooks.map((name) => functions[name])));
 
   const nameSet = new Set(names);
+  // A gotcha the rules already state (`inRules`) stays in gotchas.json for
+  // readers without a bundle; in a bundle it would be the rules twice.
   const gotchaIds = [
     ...new Set([
       ...(task.gotchas ?? []),
       ...Object.keys(gotchas).filter((id) => gotchas[id].components?.some((c) => nameSet.has(c))),
     ]),
-  ].filter((id) => gotchas[id]);
+  ].filter((id) => gotchas[id] && !gotchas[id].inRules);
 
   let example = "";
   if (task.example) {
@@ -1412,7 +1434,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "",
     "## Components",
     "",
-    "Props marked `?` are optional; `= x` is the default. A component's mixins add the props listed under Mixins.",
+    "Props marked `?` are optional; `= x` is the default; `- a, b?: T` is two props of type `T`. A component's mixins add the props listed under Mixins.",
     "",
     sections.join("\n\n"),
     "",
@@ -1427,11 +1449,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "## Mixins",
     "",
     Object.entries(mixins)
-      .map(([name, props]) =>
-        [`### ${name}`, ...Object.entries(props).map(([prop, type]) => propLine(prop, type))].join(
-          "\n",
-        ),
-      )
+      .map(([name, props]) => [`### ${name}`, ...propLines(props)].join("\n"))
       .join("\n\n"),
     "",
     "## Types",
