@@ -62,6 +62,20 @@ describe("FileTree", () => {
     expect(onExpandChange).toHaveBeenCalledWith(["src"], items[0]);
   });
 
+  it("selects a nested file on click without selecting or collapsing its folder", async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    render(<FileTree items={items} defaultExpandedIds={["src"]} onSelect={onSelect} />);
+
+    await user.click(screen.getByRole("treeitem", { name: "App.tsx" }));
+    expect(onSelect).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole("treeitem", { name: "App.tsx" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("treeitem", { name: "src" })).toHaveAttribute("aria-expanded", "true");
+  });
+
   it("supports controlled selection and expansion", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();

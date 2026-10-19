@@ -220,7 +220,10 @@ const FileTree = forwardRef<HTMLDivElement, FileTreeProps>(
               event.stopPropagation();
               setActiveId(item.id);
             }}
-            onClick={() => {
+            onClick={(event) => {
+              // Child rows sit inside their folder's row, so stop the click
+              // here or the folder would also select and collapse.
+              event.stopPropagation();
               setActiveId(item.id);
               onItemClick?.(item);
               selectItem(item);
