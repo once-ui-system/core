@@ -2,6 +2,22 @@
 
 This package ships an agent-first codegen harness under `ai/`, next to this file. Use it when **writing Once UI code**, not full MDX documentation pages. Paths below are relative to this file (in an app: `node_modules/@once-ui-system/core/`).
 
+## Starting an app
+
+A new signed-in app (sidebar, top bar, content panel) starts from `ai/starters/app/`: a working Next.js App Router setup with Once UI's CSS, fonts, providers and theme in `src/app/layout.tsx`, the shell mounted once in `src/app/(app)/layout.tsx`, and two pages. Copy it over the create-next-app files, then edit it rather than rewriting it:
+
+```bash
+cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/ && rm -f src/app/page.module.css src/app/globals.css
+```
+
+No `src/` folder? Copy into the project root instead.
+
+- `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette all read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
+- `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme` (`theme` itself stays `"system"`, or the theme switch stops working).
+- `src/components/AppShell.tsx`: the frame. Change it only to change the frame; it already covers the app-shell bundle's quality bar.
+
+Then build each page from the bundle below that fits it.
+
 ## Writing a page or feature
 
 Every file you read is sent again on every later turn, so read what you need in one step, then write.

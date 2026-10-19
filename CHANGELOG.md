@@ -15,6 +15,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **An app starter agents copy instead of writing: `ai/starters/app/`.** A Next.js App
+  Router setup with Once UI's CSS, fonts, providers and a switchable dark-first theme in
+  the root layout, and a signed-in shell (sidebar with `Nav`, top bar with breadcrumb,
+  ⌘K palette, theme switch and account menu, raised content panel, phone drawer) mounted
+  once for its routes. The product name, user and nav live in one file. `AGENTS.md` and
+  the section `once-ui-init-agent` writes point agents at it. In our own test runs on the
+  same five-route app, agents starting from it used about half the tokens and model calls
+  and passed the same checks, where agents without it locked the theme switch or lost
+  the app fonts.
+
 - **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
   the visitor can change.** `theme: "light"` forces light and ignores `setTheme`, so a
   light site with a working theme switch had no clean setup; two agents rebuilding the
