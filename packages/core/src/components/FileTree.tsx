@@ -229,18 +229,16 @@ const FileTree = forwardRef<HTMLDivElement, FileTreeProps>(
               selectItem(item);
               if (item.type === "folder" && item.children.length > 0) toggleFolder(item);
             }}
-            style={{ "--tree-depth": depth } as React.CSSProperties}
+            style={{ "--tree-depth": depth, "--tree-leaf": isExpandable ? 0 : 1 } as React.CSSProperties}
           >
             <span className={styles.itemContent}>
-              {isExpandable ? (
+              {isExpandable && (
                 <Icon
                   name="chevronRight"
                   size="xs"
                   onBackground="neutral-weak"
                   className={classNames(styles.disclosure, isExpanded && styles.disclosureOpen)}
                 />
-              ) : (
-                <span className={styles.disclosureSpacer} aria-hidden="true" />
               )}
               <Icon
                 name={item.icon ?? (isFolder ? "folder" : "file")}

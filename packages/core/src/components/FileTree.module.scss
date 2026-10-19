@@ -14,13 +14,16 @@
   transition: background var(--transition-micro-medium), color var(--transition-micro-medium);
 }
 
-/* Indent with a margin so the highlight starts at the row's own depth, and
-   hug the content instead of stretching across the tree. */
+/* Indent with a margin so the highlight starts at the row's own depth and
+   every row stretches to the same right edge. Files have no disclosure
+   chevron, so their indent also covers its width and gap, keeping their icon
+   aligned with sibling folders' icons and the padding equal on both sides. */
 .item > .itemContent {
   min-height: var(--static-space-32);
-  max-width: calc(100% - (var(--tree-depth) - 1) * var(--static-space-20));
-  align-self: flex-start;
-  margin-inline-start: calc((var(--tree-depth) - 1) * var(--static-space-20));
+  margin-inline-start: calc(
+    (var(--tree-depth) - 1) * var(--static-space-20) + var(--tree-leaf, 0) *
+      (var(--static-space-12) + var(--static-space-8))
+  );
   padding-inline: var(--static-space-8);
 }
 
@@ -62,11 +65,6 @@
 
 .disclosureOpen {
   transform: rotate(90deg);
-}
-
-.disclosureSpacer {
-  width: var(--static-space-12);
-  flex: 0 0 auto;
 }
 
 .label {
