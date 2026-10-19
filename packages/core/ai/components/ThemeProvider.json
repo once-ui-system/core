@@ -3,6 +3,7 @@
  "group": "contexts",
  "props": {
   "theme": "Theme = system",
+  "defaultTheme": "Theme = system",
   "neutral": "NeutralColor | \"custom\"",
   "brand": "Schemes | \"custom\"",
   "accent": "Schemes | \"custom\"",
@@ -21,6 +22,9 @@
   "brandSeed": "string",
   "accentSeed": "string",
   "neutralSeed": "string",
+  "brandScale": "SchemeScale",
+  "accentScale": "SchemeScale",
+  "neutralScale": "SchemeScale",
   "children": "!React.ReactNode",
   "persistence": "StylePersistence = local"
  },
@@ -81,6 +85,21 @@
    "105",
    "110"
   ],
+  "SchemeRampWeight": [
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "1000",
+   "1100",
+   "1200"
+  ],
+  "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "Schemes": [
    "blue",
    "indigo",
