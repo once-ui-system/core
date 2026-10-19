@@ -1,8 +1,8 @@
 :root {
-    --font-heading: var(--font-heading);
-    --font-body:    var(--font-body);
-    --font-label:   var(--font-label);
-    --font-code:    var(--font-code);
+    /* --font-heading, --font-body, --font-label and --font-code are not
+       declared here: the app sets them (next/font's variable classes, or its
+       own CSS). Declaring each as var() of itself made a cycle that left the
+       font invalid whenever this rule won the cascade. */
 
     --font-size-display-multiplier:   1;
     --font-size-heading-multiplier:   1;

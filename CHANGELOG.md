@@ -15,6 +15,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
+  the visitor can change.** `theme: "light"` forces light and ignores `setTheme`, so a
+  light site with a working theme switch had no clean setup; two agents rebuilding the
+  same app both worked around it. `ThemeInit` paints `defaultTheme` before first load,
+  and choosing "System" with a non-system default is now saved, so a reload keeps it.
+- **`brandScale`, `accentScale` and `neutralScale`: exact brand colours, step by step.**
+  `{ 100: "#…", …, 1200: "#…" }`, the same shape as the native package's. A seed fills
+  the steps a scale leaves out; without a seed the scale needs step 600. `ThemeInit`
+  renders them on the server like a seed. Before this, matching a brand book meant
+  overriding semantic variables in CSS with selector hacks.
+- **Icons `arrowUp`, `arrowDown`, `cube`, `grid`, `newspaper`, `people` and `menu`.**
+
 - **`size="xxs"` on every text field: 32px, the height of a small `Button`.** Field
   heights run a step above the button scale (`xs` 40px, `s` 48px, `m` 56px), so a
   dashboard toolbar could not be all small controls: the shortest field was as tall
@@ -47,6 +59,14 @@ item (see `ROADMAP.md`, Week 4).
   `arrayMove`.
 
 ### Fixed
+
+- **`ThemeProvider` no longer causes a hydration mismatch.** It read the saved theme
+  during the first render, so anything showing `theme` or `resolvedTheme` rendered
+  differently on the server (React #418). The saved theme is now applied in a layout
+  effect, before paint.
+- **`--font-heading`, `--font-body`, `--font-label` and `--font-code` are no longer
+  declared as themselves on `:root`.** The self-reference is a cycle, so the font was
+  invalid whenever that rule won the cascade over the app's next/font variables.
 
 - **A docs page of CodeBlocks could fail hydration at random (React #418).** Prism
   highlights every `code[class*="language-"]` in the document a frame after it loads
