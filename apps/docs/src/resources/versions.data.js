@@ -29,7 +29,7 @@ export const VERSIONS = [
     path: "/beta",
     origin: "https://next.docs.once-ui.com",
     branch: "feat/3-0-breaking-cleanup",
-    published: false,
+    published: true,
     mounted: false,
     samePaths: true,
   },
