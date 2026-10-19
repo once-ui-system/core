@@ -41,17 +41,12 @@ Never open `ai/spec.json`: it is the full machine spec, for tooling.
 | `ai/bundles/list-page.md` | List / table page: A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state | SegmentedControl, Select, Table, DropdownWrapper, Option |
 | `ai/bundles/editor.md` | Editor shell: A toolbar, a resizable two-pane split (layers and canvas) and a timeline spanning both — video editor, page builder, diff view | SplitView, Scrubber, ToggleButton, Media, MediaVideoPlayer |
 | `ai/bundles/docs-page.md` | Docs or blog article: An MDX article: breadcrumb trail, title and summary, Markdown rendered through the /mdx component map, and an on-page heading nav | Breadcrumbs, HeadingNav, MdxHeading, Feedback, CodeBlock |
-| `ai/bundles/app-shell.md` | App shell: Signed-in app frame shared by several routes: sidebar with nested nav groups and the current route highlighted, header with breadcrumb, account or workspace menu and command palette, phone drawer | NavGroup, NavItem, Drawer, Breadcrumbs, UserMenu, DropdownWrapper, Option, Kbar, Line, Table |
-| `ai/bundles/page.md` | Any other page: The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step | Column, Row, Grid, Heading, Text, Button, IconButton, Icon, Input, Textarea, Tag, Badge, Avatar, Dialog, Skeleton, VisuallyHidden; this bundle alone also has Switch, SegmentedControl |
+| `ai/bundles/app-shell.md` | App shell: Signed-in app frame shared by several routes: sidebar with nested nav groups and the current route highlighted, header with breadcrumb, account or workspace menu and command palette, phone drawer | Nav, NavGroup, NavItem, Drawer, Breadcrumbs, UserMenu, DropdownWrapper, Option, Kbar, Kbd, KeyTip, Line, Table |
+| `ai/bundles/page.md` | Any other page: The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step | Column, Row, Grid, Heading, Text, Button, IconButton, Icon, Input, Textarea, Tag, Badge, Avatar, Dialog, Skeleton, VisuallyHidden; this bundle alone also has Switch, SegmentedControl, Select, Checkbox, Card |
 <!-- tasks:end -->
 
 Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`. Without a bundle, app shells, sidebars and editors are in `ai/layouts.md`, and Pro blocks to compose from are listed in `ai/examples/blocks/manifest.json`.
 
-## Imports
+## Setup
 
-- Most things come from `@once-ui-system/core`. Charts come from `/data`, `CodeBlock` from `/code`, `MediaUpload` from `/media`, the MDX map from `/mdx`, `defineConfig` from `/config`; `ai/manifest.json` → `imports` lists every entry point with its exports.
-- In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next`: the root export renders links and images as plain `<a>` and `<img>`. The OG route handlers come from there too.
-
-## Setup and remote fallback
-
-`npx once-ui-init-agent` writes AGENTS.md, CLAUDE.md and a Cursor rule into a consumer app. Without `node_modules`, use https://docs.once-ui.com/ai/manifest.json (may not match your installed version exactly).
+`npx once-ui-init-agent` points a consumer app's AGENTS.md, CLAUDE.md and Cursor rules here. Without `node_modules`, use https://docs.once-ui.com/ai/manifest.json (may not match your installed version exactly).

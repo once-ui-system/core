@@ -59,7 +59,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ## Motion
 
-- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
+- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`, `Animation`/`HoverCard`/`Hover`/`Skeleton` delays) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
 - `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
@@ -102,14 +102,15 @@ entry and `functions.json` entry says `importFrom` when it is not the root:
 Naming one of these from the root does not resolve — except `defineConfig`,
 which is on both, and `LayoutProvider`, which resolves and then silently
 renders links and images as plain `<a>` and `<img>` in a Next.js app. `IconName` is a real union, so an unregistered icon
-name is a type error, not a blank space — take names from `iconNames` in `catalog.json`.
+name is a type error, not a blank space — take names from `iconNames` in `catalog.json`. Brand marks
+are not in the set: an app registers them by augmenting `IconLibraryOverrides`.
 
 ## Types — the common type errors
 
 Every type a prop names is defined in the slice's (or bundle's) `types`.
 
-- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
-- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`.
+- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. `Text` and `Heading` take only `s={{ hide: true }}`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
+- `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`; for baseline-aligned text write `style={{ alignItems: "baseline" }}`.
 - Spacing (`gap`, `padding`, …) takes the tokens in `tokens.json`: `"4"`, `"8"`, `"12"`, `"16"`, `"20"`, `"24"`, `"32"`, `"40"`… — there is no `"6"` or `"10"`.
 - `Row`, `Column` and `Grid` have no `span` or `type`. A clickable row is a `Button` or a native `<button>`; a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
 - A form is a native `<form onSubmit={…}>` around a `Column`. `Column as="form"` types `onSubmit` for a `div`.
