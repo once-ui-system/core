@@ -581,8 +581,7 @@ export function textLayout({
 /**
  * Whether the element is hidden at a wider breakpoint than each of xl, l, m,
  * s and xs (the base `hide` counts as wider than all of them). A `-show`
- * class is display: none outside its media query, so it is only emitted where
- * this is true.
+ * class only undoes a wider hide, so it is only emitted where this is true.
  */
 export function hiddenAboveBreakpoints(
   hide: boolean | undefined,
