@@ -15,6 +15,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
+  the visitor can change.** `theme: "light"` forces light and ignores `setTheme`, so a
+  light site with a working theme switch had no clean setup; two agents rebuilding the
+  same app both worked around it. `ThemeInit` paints `defaultTheme` before first load,
+  and choosing "System" with a non-system default is now saved, so a reload keeps it.
+- **`brandScale`, `accentScale` and `neutralScale`: exact brand colours, step by step.**
+  `{ 100: "#…", …, 1200: "#…" }`, the same shape as the native package's. A seed fills
+  the steps a scale leaves out; without a seed the scale needs step 600. `ThemeInit`
+  renders them on the server like a seed. Before this, matching a brand book meant
+  overriding semantic variables in CSS with selector hacks.
+- **Icons `arrowUp`, `arrowDown`, `cube`, `grid`, `newspaper`, `people` and `menu`.**
+
 - **`size="xxs"` on every text field: 32px, the height of a small `Button`.** Field
   heights run a step above the button scale (`xs` 40px, `s` 48px, `m` 56px), so a
   dashboard toolbar could not be all small controls: the shortest field was as tall
@@ -59,6 +71,20 @@ item (see `ROADMAP.md`, Week 4).
   with `hide`. Width and height props take `"auto"` and `"fit"` (fit-content).
   `VisuallyHidden as="a"` takes `href`.
 
+### Changed
+
+- **Light mode has depth, like dark mode.** The light page background is now a soft
+  off-white (`neutral-1200`) and surfaces stay white, so cards, dialogs and panels lift
+  off the page instead of relying on borders alone. Neutral text is a step darker
+  (`on-background-medium` 400 → 300, `weak` 500 → 400) and coloured `weak` text moves
+  to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
+  mode is unchanged. Light solid fills (buttons, badges, `data-solid="color"` brand
+  solids and `--brand-color-*`) move from step 600 to 500, the same step dark mode
+  uses: white labels on 600 measured 3:1, below AA. In light mode `Input`, `Textarea`
+  and the fields built on them are white with a `neutral-border-strong` edge instead of a
+  gray fill, which read as disabled. Apps that set `background="page"` on white-only artwork may want
+  `surface` instead.
+
 ### Fixed
 
 - **`hide: false` at a breakpoint no longer hides anything.** `s={{ hide: open }}` on a
@@ -73,6 +99,16 @@ item (see `ROADMAP.md`, Week 4).
   extra span that took the body line height; the row now measures as designed.
 - **`MatrixFx` is no longer blank under reduced motion.** Its first size report cleared
   the canvas and nothing redrew it; a real resize now rebuilds the grid and redraws.
+- **`ThemeProvider` no longer causes a hydration mismatch.** It read the saved theme
+  during the first render, so anything showing `theme` or `resolvedTheme` rendered
+  differently on the server (React #418). The saved theme is now applied in a layout
+  effect, before paint.
+- **`--font-heading`, `--font-body`, `--font-label` and `--font-code` no longer beat the
+  app's own fonts.** Their placeholder declarations (each `var()` of itself) sat on
+  `:root`, so they won over a next/font class on `<html>` whenever tokens.css loaded
+  later, and the cycle left the font invalid. They are declared on `:where(:root)` now,
+  at zero specificity.
+
 - **A docs page of CodeBlocks could fail hydration at random (React #418).** Prism
   highlights every `code[class*="language-"]` in the document a frame after it loads
   unless `Prism.manual` is set first. That pass reached server-rendered CodeBlocks React
