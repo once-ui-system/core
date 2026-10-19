@@ -6,7 +6,7 @@ This package ships an agent-first codegen harness under `ai/`, next to this file
 
 Every file you read is sent again on every later turn, so read what you need in one step, then write.
 
-1. Pick the bundle below closest to what you are building and read it, together with any project files you need (in a Next.js app at least `app/layout.tsx`, which mounts the providers), in a single step. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Then write the code.
+1. Pick the bundle below closest to what you are building and read it, together with any project files you need (in a Next.js app at least `app/layout.tsx`, which mounts the providers), in a single step. Open those project files by path: listing their folder first costs a turn, and every turn re-sends the bundle. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Then write the code.
 2. Need a component the bundle does not list? Every bundle has the components in the `page.md` row; the Adds column names what each one carries on top. Read the `ai/components/<Name>.json` of anything else your page needs in that same step, not after the bundle.
 3. Nothing fits? Read `ai/bundles/page.md` (the rules and the common components) with the `ai/components/<Name>.json` slices your page needs, in one step. `ai/catalog.json` names every component with its purpose.
 
