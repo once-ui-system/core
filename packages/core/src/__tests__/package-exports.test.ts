@@ -70,3 +70,17 @@ describe("the ./mdx subpath", () => {
     }
   });
 });
+
+describe("package bin entries", () => {
+  // npm 11 drops a `bin` path that starts with "./" at publish, which shipped
+  // 2.2.0 without `once-ui-init-agent` and `once-ui-validate-ai-code`.
+  it("writes every bin path without a leading ./ and points at a shipped file", () => {
+    const bins = Object.entries((pkg as { bin?: Record<string, string> }).bin ?? {});
+    expect(bins.length).toBeGreaterThan(0);
+    for (const [name, path] of bins) {
+      expect(path, name).not.toMatch(/^\.\//);
+      expect(existsSync(join(PKG_ROOT, path)), name).toBe(true);
+      expect((pkg as { files: string[] }).files, name).toContain(path);
+    }
+  });
+});

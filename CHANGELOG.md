@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-10-19
+
 ### Added
 
 - **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
@@ -57,6 +59,19 @@ item (see `ROADMAP.md`, Week 4).
   spacing, and a closed `NavGroup` opens when a row is held over it. With `handle`, rows
   drag only from a `Sortable.Handle`. No dependency. Also new: the `grip` icon and
   `arrayMove`.
+- **A file and folder tree: `FileTree`.** Pass `items` (files, and folders with
+  `children`) and it renders an indented tree that the arrow keys walk: Up, Down, Home and
+  End move through the visible rows, Right opens a folder or steps into it, Left closes
+  it or goes to its parent, and Enter or Space selects. Selection and open folders work controlled (`selectedId`,
+  `expandedIds`) or uncontrolled (`defaultSelectedId`, `defaultExpandedIds`), with
+  `onSelect`, `onExpandChange` and `onItemClick`; `renderItem`, `emptyState`, `loading`
+  and `loadingState` cover custom rows and empty or loading trees. Contributed by
+  @kadrxy.
+- **`Kbar` opens from your own button.** `open` and `onOpenChange` make it controlled,
+  `children` is optional, and ⌘K still toggles it.
+- **Props agents kept reaching for.** `Text` and `Heading` take `flex`, and `xl` to `xs`
+  with `hide`. Width and height props take `"auto"` and `"fit"` (fit-content).
+  `VisuallyHidden as="a"` takes `href`.
 
 ### Changed
 
@@ -74,6 +89,18 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`hide: false` at a breakpoint no longer hides anything.** `s={{ hide: open }}` on a
+  `Column` hid it on desktop whenever `open` was false, and `l={{ hide: true }}
+  s={{ hide: false }}` stayed hidden above `l`. A breakpoint's show class now applies
+  only inside its own media query, and is emitted only where a wider breakpoint hides
+  the element.
+- **`Textarea`'s floating label lines up with `Input`'s at every size.** The resting
+  label sat 18px from the top at every size, so it rode low in `xs` and `s` fields and
+  high in `l` and `xl`, and an `xs` textarea was 4px taller than the input beside it.
+- **A `Setting` row with a string label is 4px shorter.** The label was wrapped in an
+  extra span that took the body line height; the row now measures as designed.
+- **`MatrixFx` is no longer blank under reduced motion.** Its first size report cleared
+  the canvas and nothing redrew it; a real resize now rebuilds the grid and redraws.
 - **`ThemeProvider` no longer causes a hydration mismatch.** It read the saved theme
   during the first render, so anything showing `theme` or `resolvedTheme` rendered
   differently on the server (React #418). The saved theme is now applied in a layout
@@ -100,8 +127,41 @@ item (see `ROADMAP.md`, Week 4).
   (`"bottom-right"`, `"top-left"` and the rest) instead of the start/end alignments it
   never handled.
 
+### Accessibility
+
+- **Dialogs and focus.** In `Dialog` and `FocusTrap`, Tab walks the page order and
+  wraps, and focus moves into a dialog when it opens. The dialog's description is its
+  `aria-describedby`, and `aria-labelledby` is set only when a title renders. The
+  `StyleOverlay` trigger is a real button and its panel a named dialog that takes focus
+  and closes on Escape.
+- **Keyboard.** `InfoTip` and other hover triggers open with Enter and Space;
+  `ContextMenu` closes on Escape; `Select` options show keyboard focus; `NumberInput`'s
+  steppers leave the Tab order (the arrow keys step); the `MediaVideoPlayer` seek bar
+  takes focus, reads the time, and jumps with Home and End; an enlargeable `Media`
+  image is a button; `Swiper` keeps focus when Previous or Next disappears at an end;
+  a scrolling `DataTable` can be focused, as `Table` can.
+- **Announcements.** The first toast is read (the `Toaster` live region exists before
+  it), danger and warning `Feedback` are alerts and the rest polite status, `TypeFx` and
+  `LetterFx` are read once instead of every frame, `Timeline` is a list with
+  `aria-current="step"`, `LinearGauge` and `RadialGauge` are named meters, and
+  CodeBlock's Copy says "Copied".
+- **States.** A disabled `Fieldset` disables the `Checkbox`, `Switch`, `RadioButton` and
+  `RadioGroup` inside it. `ToggleButton` is `type="button"` with `aria-pressed`,
+  `Button` and `IconButton` set `aria-busy` while loading, and a focused field's border
+  darkens. Under `prefers-reduced-motion` transitions end at once (`Spinner` keeps
+  turning).
+- **No shared ids.** `Table`, `Kbar` and the gauges no longer reuse a fixed id when a page
+  has two of them.
+
 ### Docs
 
+- **Agents need fewer follow-up reads.** A new `app-shell` task bundle carries the
+  sidebar and header components, `selectNavHref`, `useTheme` and both shell layouts.
+  Bundles include the props of the components they extend and name the task's hooks;
+  the settings bundle adds `Table` and `NavItem`, and `page.md` adds `Switch` and
+  `SegmentedControl`. `IconName` and the breakpoint keys are plain word lists, so every
+  bundle is about 3% smaller. `AGENTS.md` tells agents to read `app/layout.tsx` with the
+  bundle and to open project files by path.
 - **Every example and props table is checked against the code.** `check:docs` in the
   docs app typechecks the 1,300-odd examples on the docs site, in the agent harness's
   rules, recipes and gotchas, and in the READMEs against the built package, and checks
@@ -122,7 +182,17 @@ item (see `ROADMAP.md`, Week 4).
   `relative` and `scrollbar` to `minimal`; the spec read the defaults from the wrong
   file and listed none.
 
-## [2.2.0] — 2026-10-17
+## [2.2.1] — 2026-10-18
+
+### Fixed
+
+- **The `bin` paths are written without `./`.** npm 11 warns that `./scripts/...` bin
+  paths are invalid and may drop them in a later version; `once-ui-init-agent` and
+  `once-ui-validate-ai-code` keep working either way.
+- **`RevealFx` clears its mask timer on unmount.** Unmounting it while `revealed` was
+  animating set state on an unmounted component.
+
+## [2.2.0] — 2026-10-18
 
 ### Added
 
