@@ -64,9 +64,11 @@ item (see `ROADMAP.md`, Week 4).
   during the first render, so anything showing `theme` or `resolvedTheme` rendered
   differently on the server (React #418). The saved theme is now applied in a layout
   effect, before paint.
-- **`--font-heading`, `--font-body`, `--font-label` and `--font-code` are no longer
-  declared as themselves on `:root`.** The self-reference is a cycle, so the font was
-  invalid whenever that rule won the cascade over the app's next/font variables.
+- **`--font-heading`, `--font-body`, `--font-label` and `--font-code` no longer beat the
+  app's own fonts.** Their placeholder declarations (each `var()` of itself) sat on
+  `:root`, so they won over a next/font class on `<html>` whenever tokens.css loaded
+  later, and the cycle left the font invalid. They are declared on `:where(:root)` now,
+  at zero specificity.
 
 - **A docs page of CodeBlocks could fail hydration at random (React #418).** Prism
   highlights every `code[class*="language-"]` in the document a frame after it loads

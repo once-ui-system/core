@@ -1,9 +1,15 @@
-:root {
-    /* --font-heading, --font-body, --font-label and --font-code are not
-       declared here: the app sets them (next/font's variable classes, or its
-       own CSS). Declaring each as var() of itself made a cycle that left the
-       font invalid whenever this rule won the cascade. */
+:where(:root) {
+    /* The app sets these (next/font's variable classes, or its own CSS).
+       Declared at zero specificity so any rule of the app's wins: at :root
+       this self-reference won over a next/font class on <html> whenever
+       tokens.css loaded later, and the cycle left the font invalid. */
+    --font-heading: var(--font-heading);
+    --font-body:    var(--font-body);
+    --font-label:   var(--font-label);
+    --font-code:    var(--font-code);
+}
 
+:root {
     --font-size-display-multiplier:   1;
     --font-size-heading-multiplier:   1;
     --font-size-body-multiplier:      1;
