@@ -2,7 +2,8 @@ import fs from 'fs';
 import path from 'path';
 import frontMatter from 'front-matter';
 import { Schemes } from '@once-ui-system/core';
-import { toAvailability, type Availability } from '@/product/availability';
+import type { Availability } from '@/product/availability';
+import { availabilityOf } from '@/product/published';
 
 interface NavigationItem {
     slug: string;
@@ -12,7 +13,9 @@ interface NavigationItem {
     navLabel?: string;
     navIcon?: string;
     navTagVariant?: Schemes;
-    /** Whether this can be installed today. See product/availability.ts. */
+    /** The name the page documents, when it is not the title. See product/published.ts. */
+    exportName?: string | false;
+    /** Whether this can be installed today. Filled by `withAvailability`. */
     status?: Availability;
     keywords?: string;
     children?: NavigationItem[];
@@ -139,7 +142,7 @@ export default function getNavigation(dirPath = path.join(process.cwd(), 'src/co
         navLabel: attributes.navLabel,
         navIcon: attributes.navIcon,
         navTagVariant: attributes.navTagVariant,
-        status: toAvailability(attributes.status),
+        exportName: attributes.export,
         keywords: attributes.keywords,
         order: pageOrder !== undefined ? pageOrder : attributes.order,
         updatedAt: attributes.updatedAt,
@@ -155,4 +158,14 @@ export default function getNavigation(dirPath = path.join(process.cwd(), 'src/co
   const sortedItems = sortItems(navigationItems);
   
   return sortedItems;
+}
+/** The tree with each page's `status` read from the published package. */
+export async function withAvailability(items: NavigationItem[]): Promise<NavigationItem[]> {
+  return Promise.all(
+    items.map(async (item) =>
+      item.children
+        ? { ...item, children: await withAvailability(item.children) }
+        : { ...item, status: await availabilityOf(item) },
+    ),
+  );
 }

@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import frontMatter from "front-matter";
 import { Schemes } from "@once-ui-system/core";
-import { toAvailability, type Availability } from "@/product/availability";
+import type { Availability } from "@/product/availability";
 
 interface Post {
   slug: string;
@@ -19,7 +19,9 @@ interface Post {
     updatedAt: string;
     image?: string;
     order?: number;
-    /** Whether this can be installed today. See product/availability.ts. */
+    /** The name the page documents, when it is not the title. See product/published.ts. */
+    exportName?: string | false;
+    /** Whether this can be installed today. Filled from npm, see product/published.ts. */
     status?: Availability;
   };
 }
@@ -86,7 +88,7 @@ export function getPages(customPath = ["src", "content"]): Post[] {
             github: attributes.github,
             updatedAt: attributes.updatedAt || '',
             image: attributes.image,
-            status: toAvailability(attributes.status),
+            exportName: attributes.export,
             // Priority: 1. Frontmatter order, 2. meta.json order, 3. undefined
             order: attributes.order !== undefined ? Number(attributes.order) : (metaOrder !== undefined ? Number(metaOrder) : undefined),
           },
