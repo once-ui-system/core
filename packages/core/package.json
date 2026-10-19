@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "publishConfig": {
     "access": "public"
   },
@@ -48,8 +48,8 @@
     "docs": "https://docs.once-ui.com/once-ui/ai-coding"
   },
   "bin": {
-    "once-ui-init-agent": "./scripts/init-agent.js",
-    "once-ui-validate-ai-code": "./scripts/validate-ai-code.js"
+    "once-ui-init-agent": "scripts/init-agent.js",
+    "once-ui-validate-ai-code": "scripts/validate-ai-code.js"
   },
   "sideEffects": [
     "*.css",

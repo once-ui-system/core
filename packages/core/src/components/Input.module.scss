@@ -127,6 +127,18 @@
   min-height: var(--fld-h);
 }
 
+/* Light theme: a white field with a firmer edge, as native text fields are.
+   The tinted fill that reads as a well in dark mode reads as disabled on a
+   light page. Matched on the utility classes the default variant sets, so the
+   ghost variant and the error state below keep their own colours. */
+:global([data-theme="light"]) :not(.error) > .base:global(.neutral-background-alpha-weak) {
+  background-color: var(--neutral-background-weak);
+}
+
+:global([data-theme="light"]) :not(.error) > .base:global(.neutral-border-medium) {
+  border-color: var(--neutral-border-strong);
+}
+
 @media (hover: none) and (pointer: coarse) {
   .base {
     --fld-fs: max(var(--fld-fs-base), 16px);
