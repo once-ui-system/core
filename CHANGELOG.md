@@ -86,7 +86,17 @@ item (see `ROADMAP.md`, Week 4).
   `relative` and `scrollbar` to `minimal`; the spec read the defaults from the wrong
   file and listed none.
 
-## [2.2.0] — 2026-10-17
+## [2.2.1] — 2026-10-18
+
+### Fixed
+
+- **The `bin` paths are written without `./`.** npm 11 warns that `./scripts/...` bin
+  paths are invalid and may drop them in a later version; `once-ui-init-agent` and
+  `once-ui-validate-ai-code` keep working either way.
+- **`RevealFx` clears its mask timer on unmount.** Unmounting it while `revealed` was
+  animating set state on an unmounted component.
+
+## [2.2.0] — 2026-10-18
 
 ### Added
 
