@@ -47,6 +47,7 @@ export * from "./FadingLettersFx";
 export * from "./Feedback";
 export * from "./Field";
 export * from "./Fieldset";
+export * from "./FileTree";
 export * from "./Flex";
 export * from "./FlipFx";
 export * from "./FocusTrap";
