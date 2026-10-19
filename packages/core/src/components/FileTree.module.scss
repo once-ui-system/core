@@ -29,12 +29,14 @@
 }
 
 @media (hover: hover) {
-  .item:hover > .itemContent {
+  /* Rows nest inside their folder's row, so hover the content, not the item,
+     or every ancestor folder lights up too. */
+  .itemContent:hover {
     background: var(--neutral-alpha-weak);
     color: var(--neutral-on-background-strong);
   }
 
-  .item.selected:hover > .itemContent {
+  .item.selected > .itemContent:hover {
     background: var(--brand-alpha-weak);
   }
 }
