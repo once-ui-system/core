@@ -81,6 +81,12 @@
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
   },
+  "selectNavHref": {
+   "group": "utils",
+   "kind": "function",
+   "signature": "(pathname: string, hrefs: string[]) => string | null",
+   "doc": "Which of a set of hrefs a pathname is currently on."
+  },
   "defaultAdapters": {
    "group": "contexts",
    "kind": "value",

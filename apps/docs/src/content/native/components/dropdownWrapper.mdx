@@ -1,0 +1,159 @@
+---
+title: "DropdownWrapper"
+summary: "A trigger that opens a menu anchored under it, flipping above when there is no room, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/dropdownWrapper.mdx"
+github: "packages/native/src/components/DropdownWrapper.tsx"
+navLabel: "DropdownWrapper"
+navIcon: "components"
+status: "unreleased"
+---
+
+`DropdownWrapper` opens a menu next to its trigger. It measures the trigger on screen and draws the menu in a transparent modal over everything else, under the trigger by default. If there is no room below, the menu opens above. Pressing outside the menu or the back button closes it. The menu is a `Dropdown`, the bordered surface, and its items are usually [Option](/native/components/option)s. See the [web DropdownWrapper page](/components/dropdownWrapper) for the web version.
+
+## Basic usage
+
+Pass the trigger and the menu's content. The wrapper keeps its own open state. Pressing an `Option` calls `onSelect` with its value and closes the menu.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, DropdownWrapper, Option } from "@once-ui-system/native";
+
+export function FileActions({ onAction }: { onAction: (action: string) => void }) {
+  return (
+    <DropdownWrapper
+      trigger={<Button variant="secondary" label="Actions" suffixIcon="chevronDown" />}
+      onSelect={onAction}
+      dropdown={
+        <>
+          <Option value="rename" label="Rename" />
+          <Option value="duplicate" label="Duplicate" />
+          <Option value="delete" label="Delete" danger />
+        </>
+      }
+    />
+  );
+}`,
+    language: "tsx",
+    label: "FileActions.tsx"
+  }
+]} />
+
+## Controlled with a selected option
+
+Pass `open` and `onOpenChange` to control the menu. `selectedOption` marks the `Option` with that value as selected, unless the option sets `selected` itself.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Button, DropdownWrapper, Option } from "@once-ui-system/native";
+
+const options = [
+  { value: "name", label: "Name" },
+  { value: "date", label: "Date modified" },
+  { value: "size", label: "Size" },
+];
+
+export function SortMenu() {
+  const [open, setOpen] = useState(false);
+  const [sort, setSort] = useState("name");
+  return (
+    <DropdownWrapper
+      open={open}
+      onOpenChange={setOpen}
+      selectedOption={sort}
+      onSelect={setSort}
+      trigger={
+        <Button
+          variant="secondary"
+          suffixIcon="chevronDown"
+          label={options.find((o) => o.value === sort)?.label}
+        />
+      }
+      dropdown={options.map((o) => (
+        <Option key={o.value} value={o.value} label={o.label} />
+      ))}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "SortMenu.tsx"
+  }
+]} />
+
+## Placement and width
+
+`placement` picks the side of the trigger and the edge the menu lines up with. It defaults to `"bottom-start"`. `fillWidth` stretches the trigger and gives the menu its width. `minWidth` and `maxWidth` are in rem, as on the web. With `closeAfterClick={false}` the menu stays open after a pick.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, DropdownWrapper, Option } from "@once-ui-system/native";
+
+export function FilterMenu({ onToggle }: { onToggle: (value: string) => void }) {
+  return (
+    <DropdownWrapper
+      placement="bottom-end"
+      minWidth={14}
+      closeAfterClick={false}
+      onSelect={onToggle}
+      trigger={<Button variant="tertiary" label="Filter" prefixIcon="filter" />}
+      dropdown={
+        <>
+          <Option value="unread" label="Unread" />
+          <Option value="starred" label="Starred" />
+        </>
+      }
+    />
+  );
+}`,
+    language: "tsx",
+    label: "FilterMenu.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- The menu is drawn in a transparent React Native `Modal`, placed with `measureInWindow`. It is placed when it opens and does not follow the trigger if the screen scrolls underneath it.
+- `onSelect`, `selectedOption` and `closeAfterClick` reach every `Option` written in `dropdown`, also inside fragments and layout elements such as `Column`. They do not reach options rendered inside a component of your own, or other elements with a `data-value`: handle those with `open` and `onOpenChange`.
+- A trigger that is pressable itself, such as a `Button`, keeps its own `onPress`; the wrapper adds its toggle after it. A screen reader reads the trigger as one button that opens a menu.
+- `isOpen` is accepted as another name for `open`.
+- There is no keyboard or arrow navigation, so `handleArrowNavigation`, `navigationLayout`, `columns`, `optionsCount` and `dropdownId` are not available. There is no `nested` mode, no `onFocusCapture` or `onBlurCapture`, and no `className`.
+- The web's `Dropdown` is a row around a column; the native one is a column that scrolls when the screen holds it short.
+
+## API reference
+
+### DropdownWrapper
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `trigger` | `ReactNode` | | What opens the menu. Required. |
+| `dropdown` | `ReactNode` | | The menu's content, usually `Option`s. Required. |
+| `open` | `boolean` | | The open state, controlled. Leave it out for the wrapper to keep its own. |
+| `isOpen` | `boolean` | | Another name for `open`. `open` wins when both are set. |
+| `onOpenChange` | `(open: boolean) => void` | | Called when the menu opens or closes. |
+| `placement` | `Placement` | `"bottom-start"` | `"top"`, `"right"`, `"bottom"` or `"left"`, optionally with `-start` or `-end`. |
+| `closeAfterClick` | `boolean` | `true` | Closes the menu when an `Option` is pressed. |
+| `onSelect` | `(value: string) => void` | | Called with a pressed `Option`'s value. |
+| `selectedOption` | `string` | | Marks the `Option` with this value as selected. |
+| `fillWidth` | `boolean` | `false` | The trigger fills its container and the menu matches its width. |
+| `minWidth` | `number` | | The menu's minimum width, in rem. |
+| `maxWidth` | `number` | | The menu's maximum width, in rem. It never grows past the screen. |
+| `minHeight` | `number` | | The menu's minimum height, in points. |
+| `disableTriggerClick` | `boolean` | `false` | Presses on the trigger do nothing. `open` still works. |
+| `style` | `StyleProp<ViewStyle>` | | Style for the view around the trigger. |
+
+### Dropdown
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | The options. |
+| `onSelect` | `(value: string) => void` | | Called with an `Option`'s value when it is pressed, after its own `onPress`. |
+| `selectedOption` | `string` | | Marks the `Option` with this value as selected. |
+| `disabled` | `boolean` | `false` | Dims the surface and disables its options. |
+| Flex props | `FlexProps` | | Padding, radius, border, background and the rest, as on `Flex`. |

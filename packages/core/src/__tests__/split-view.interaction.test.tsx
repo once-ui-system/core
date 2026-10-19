@@ -123,3 +123,28 @@ describe("SplitView: collapsed", () => {
     expect(screen.getByText("2")).toBeInTheDocument();
   });
 });
+
+describe("SplitView direction", () => {
+  // Before the layout stylesheet loads, the container is not a flex box and
+  // its computed direction is the default `row`; the prop must win.
+  it("splits top and bottom from direction=column before the styles load", () => {
+    render(<SplitView {...panels} direction="column" collapseBelow={false} />, { wrapper });
+    expect(separator()).toHaveAttribute("aria-orientation", "horizontal");
+  });
+
+  it("follows the computed direction once the container is a flex box", () => {
+    const real = window.getComputedStyle;
+    vi.spyOn(window, "getComputedStyle").mockImplementation((el) => {
+      const style = real(el);
+      return el instanceof HTMLElement && el.querySelector('[role="separator"]')
+        ? ({ ...style, display: "flex", flexDirection: "column" } as CSSStyleDeclaration)
+        : style;
+    });
+    try {
+      render(<SplitView {...panels} collapseBelow={false} />, { wrapper });
+      expect(separator()).toHaveAttribute("aria-orientation", "horizontal");
+    } finally {
+      vi.restoreAllMocks();
+    }
+  });
+});

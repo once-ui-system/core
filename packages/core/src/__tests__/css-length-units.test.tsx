@@ -42,6 +42,17 @@ describe("px, rem and em lengths", () => {
     expect(grid).toContain("height:10rem");
   });
 
+  it("take auto as a width, so a breakpoint can undo a fixed one", () => {
+    // Agents wrote `width={10} s={{ width: "auto" }}` and failed the type.
+    expect(sizeValue("auto", "width")).toBe("auto");
+    expect(styleOf(renderToStaticMarkup(<Flex width="auto" />))).toContain("width:auto");
+  });
+
+  it("take fit as fit-content, the way agents write fitHeight", () => {
+    expect(styleOf(renderToStaticMarkup(<Flex height="fit" />))).toContain("height:fit-content");
+    expect(styleOf(renderToStaticMarkup(<Grid width="fit" />))).toContain("width:fit-content");
+  });
+
   it("render as offsets inline rather than as a class", () => {
     const html = renderToStaticMarkup(<Flex position="absolute" top="12px" left="1rem" />);
     expect(html).not.toContain("top-12px");

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 // Compares two captures from capture.mjs shot by shot and writes a report.
 //
-//   node compare.mjs --base out/base --head out/head [--noise out/head-2] --report out/report
+//   node compare.mjs --base out/base --head out/head [--noise out/head-2] [--base-noise out/base-2] --report out/report
 //
 // A shot capture.mjs saw change on its own (marked `animated`) is not
-// counted. --noise is a second capture of the head build: a shot that differs
+// counted, nor is a pixel that only moved by one pixel (sub-pixel layout). --noise is a second capture of the head build: a shot that differs
 // between the two head captures loads unstably, so it is not counted either. Exits 3 when a stable shot changed.
 
 import { copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
@@ -18,6 +18,7 @@ const { values: args } = parseArgs({
     base: { type: "string", default: "out/base" },
     head: { type: "string", default: "out/head" },
     noise: { type: "string" },
+    "base-noise": { type: "string" },
     report: { type: "string", default: "out/report" },
     // Changed pixels a shot may have before it counts as changed. Pixelmatch
     // already ignores anti-aliasing; this absorbs a stray sub-pixel row.
@@ -29,10 +30,47 @@ const TOLERANCE = Number(args.tolerance);
 const readManifest = async (dir) => JSON.parse(await readFile(path.join(dir, "manifest.json"), "utf8"));
 const readPng = async (dir, file) => PNG.sync.read(await readFile(path.join(dir, file)));
 
+// Two RGBA pixels that read as the same colour.
+const close = (p, i, q, j) =>
+  Math.abs(p[i] - q[j]) + Math.abs(p[i + 1] - q[j + 1]) + Math.abs(p[i + 2] - q[j + 2]) <= 48;
+
+/** True when the pixel at (x, y) of `p` also appears within one pixel of (x, y) in `q`. */
+function nearby(p, q, width, height, x, y) {
+  const i = (y * width + x) * 4;
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      const nx = x + dx;
+      const ny = y + dy;
+      if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+      if (close(p, i, q, (ny * width + nx) * 4)) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Changed pixels between two same-size shots. A pixel whose colour is found
+ * within one pixel in the other shot (both ways) is not counted: text or a
+ * border landing a sub-pixel apart between two runners, not a visual change.
+ */
 function diff(a, b) {
   if (a.width !== b.width || a.height !== b.height) return { sizeChanged: true, pixels: Infinity };
-  const out = new PNG({ width: a.width, height: a.height });
-  const pixels = pixelmatch(a.data, b.data, out.data, a.width, a.height, { threshold: 0.1 });
+  const { width, height } = a;
+  const out = new PNG({ width, height });
+  const raw = pixelmatch(a.data, b.data, out.data, width, height, { threshold: 0.1, diffMask: true });
+  if (raw === 0) return { sizeChanged: false, pixels: 0, out };
+  let pixels = 0;
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const i = (y * width + x) * 4;
+      if (out.data[i + 3] === 0) continue;
+      if (nearby(a.data, b.data, width, height, x, y) && nearby(b.data, a.data, width, height, x, y)) {
+        out.data[i + 3] = 0;
+      } else {
+        pixels++;
+      }
+    }
+  }
   return { sizeChanged: false, pixels, out };
 }
 
@@ -41,6 +79,15 @@ const head = await readManifest(args.head);
 const noise = args.noise ? await readManifest(args.noise) : null;
 const baseById = new Map(base.shots.filter((s) => s.file).map((s) => [s.id, s]));
 const noiseById = new Map((noise?.shots ?? []).filter((s) => s.file).map((s) => [s.id, s]));
+const baseNoise = args["base-noise"] ? await readManifest(args["base-noise"]) : null;
+const baseNoiseById = new Map((baseNoise?.shots ?? []).filter((s) => s.file).map((s) => [s.id, s]));
+
+/** True when a second capture of the same build (in `dir`) does not match `png`. */
+async function unstable(png, again, dir) {
+  if (!again) return false;
+  const n = diff(png, await readPng(dir, again.file));
+  return n.sizeChanged || n.pixels > TOLERANCE;
+}
 const headIds = new Set(head.shots.map((s) => s.id));
 
 await mkdir(path.join(args.report, "img"), { recursive: true });
@@ -65,13 +112,12 @@ for (const shot of head.shots) {
     results.push({ shot, status: "same", pixels: d.pixels });
     continue;
   }
-  const again = noiseById.get(shot.id);
-  if (again) {
-    const n = diff(b, await readPng(args.noise, again.file));
-    if (n.sizeChanged || n.pixels > TOLERANCE) {
-      results.push({ shot, status: "unstable", pixels: d.pixels });
-      continue;
-    }
+  if (
+    (await unstable(b, noiseById.get(shot.id), args.noise)) ||
+    (await unstable(a, baseNoiseById.get(shot.id), args["base-noise"]))
+  ) {
+    results.push({ shot, status: "unstable", pixels: d.pixels });
+    continue;
   }
   const name = shot.file.replace(/\.png$/, "");
   await copyFile(path.join(args.base, before.file), path.join(args.report, "img", `${name}.before.png`));
@@ -97,7 +143,7 @@ const describe = (r) =>
 const summary = [
   `### Visual check: ${changed.length ? `${changed.length} changed` : "no visual change"}`,
   "",
-  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (animated, or differ between two captures of this build; not counted), ${count("error")} not captured.`,
+  `${count("same")} same, ${changed.length} changed, ${count("new")} new, ${removed.length} gone, ${count("unstable")} unstable (animated, or differ between two captures of the same build; not counted), ${count("error")} not captured.`,
   ...(changed.length
     ? [
         "",

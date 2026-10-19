@@ -57,6 +57,10 @@ const BARRELS = [
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
   { file: path.join(SRC, "hooks", "index.ts"), group: "hooks" },
+  // `selectNavHref` is a root export the layouts tell agents to call, but no
+  // barrel above reaches it, so no file gave its signature. The rest of
+  // utils/ is internal, so only this file.
+  { file: path.join(SRC, "utils", "navMatch.ts"), group: "utils" },
   // The providers and their hooks are root exports too. Without this an
   // agent knew `ThemeProvider` only from the layouts and never saw
   // `useToast`, `useTheme` or `useStyle` with a signature.
@@ -1251,8 +1255,27 @@ const BASE_BUNDLE = {
   title: "Any other page",
   description:
     "The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step",
-  components: [],
+  // A form page with no task bundle (an onboarding wizard in the dry run)
+  // opened these two slices after this bundle, a turn that re-sent it.
+  components: ["Switch", "SegmentedControl"],
 };
+
+// A slice lists only its own props: NavItem's `href` and `selected` live on
+// ToggleButton, Select's `onSelect` on DropdownWrapper. In the 2026-10-18 dry
+// run agents guessed those or opened another slice for them, so a bundle
+// carries every parent a component extends, except the layout primitives,
+// whose props are the mixins it already lists.
+const LAYOUT_PARENTS = new Set(["Flex", "Row", "Column", "Grid", "Text"]);
+function withParents(names, slices) {
+  const out = [];
+  const add = (name) => {
+    if (out.includes(name) || !slices[name]) return;
+    out.push(name);
+    for (const parent of slices[name].extends ?? []) if (!LAYOUT_PARENTS.has(parent)) add(parent);
+  };
+  for (const name of names) add(name);
+  return out;
+}
 
 // `!T` marks a required prop in the spec; Markdown bundles write TypeScript.
 const propLine = (name, type) =>
@@ -1295,7 +1318,23 @@ function compressUnion(values) {
   return out.join(" | ");
 }
 
+// Two types appear in every bundle and cost more as TypeScript than as a
+// list. A breakpoint object's keys (`GridBreakpointProps`) collapse a
+// family like padding, paddingX, paddingTop … to `padding*`. IconName's
+// quotes and pipes doubled its size, so its names are one plain word list.
+const familyKeys = (keys) =>
+  keys
+    .filter((k) => !keys.some((base) => k !== base && new RegExp(`^${base}[A-Z]`).test(k)))
+    .map((k) => (keys.some((o) => o !== k && new RegExp(`^${k}[A-Z]`).test(o)) ? `${k}*` : k));
+
 const typeLine = (name, type) => {
+  if (Array.isArray(type) && /^\w+BreakpointProps$/.test(name) && type.every((k) => /^\w+$/.test(k))) {
+    const component = name.replace(/BreakpointProps$/, "");
+    return `// type ${name}: an object of these ${component} props, all optional (padding* is padding, paddingX, paddingTop and the rest):\n// ${familyKeys(type).join(" ")}`;
+  }
+  if (name === "IconName" && Array.isArray(type) && type.every((n) => /^[\w-]+$/.test(n))) {
+    return `// type IconName is one of these names, and only these:\n// ${type.join(" ")}`;
+  }
   if (Array.isArray(type)) return `type ${name} = ${compressUnion(type)}`;
   if (typeof type === "string") return `type ${name} = ${type}`;
   const fields = Object.entries(type).map(([key, value]) => {
@@ -1314,7 +1353,7 @@ const typeLine = (name, type) => {
 // not any one file, was most of the 3.7x total over shadcn/ui. JSON keys and
 // escaped quotes cost tokens too, and tags or pairings help no one writing.
 function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = {}) {
-  const names = [...new Set([...task.components, ...COMMON_COMPONENTS])].filter((n) => slices[n]);
+  const names = withParents([...new Set([...task.components, ...COMMON_COMPONENTS])], slices);
   const mixins = {};
   const types = {};
   const sections = [];
@@ -1341,7 +1380,9 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     Object.assign(mixins, slice.resolvedMixins);
     Object.assign(types, slice.types);
   }
-  const hooks = COMMON_HOOKS.filter((name) => functions[name]);
+  const hooks = [...new Set([...(task.functions ?? []), ...COMMON_HOOKS])].filter(
+    (name) => functions[name],
+  );
   Object.assign(types, typesFor(mixins), typesFor(hooks.map((name) => functions[name])));
 
   const nameSet = new Set(names);
@@ -1396,7 +1437,9 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "## Types",
     "",
     "```ts",
+    // A mixin is listed prop by prop above; its type line would say it twice.
     ...Object.keys(types)
+      .filter((name) => !mixins[name])
       .sort()
       .map((name) => typeLine(name, types[name])),
     "```",
@@ -1412,11 +1455,11 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     .map((id) => markdownSection("recipes.md", id))
     .filter(Boolean);
   if (recipes.length) out.push("", "## Recipes", "", ...recipes);
-  if (task.layout) {
-    const [file, anchor] = task.layout.split("#");
-    const layout = markdownSection(file, anchor);
-    if (layout) out.push("", "## Layout shell", "", layout);
-  }
+  const layouts = [task.layout ?? []]
+    .flat()
+    .map((ref) => markdownSection(...ref.split("#")))
+    .filter(Boolean);
+  if (layouts.length) out.push("", "## Layout shell", "", ...layouts);
   if (example) {
     out.push("", `## Gold example (\`${task.example}\`)`, "", "```tsx", example, "```");
   }
@@ -1480,14 +1523,19 @@ function writeAgentsTaskTable(taskIndex) {
   const end = "<!-- tasks:end -->";
   const text = fs.readFileSync(agentsPath, "utf8");
   if (!text.includes(start) || !text.includes(end)) return;
+  // Naming what each bundle adds to the common components lets an agent
+  // fetch the slices its page needs beyond them in the same step as the
+  // bundle, instead of in a turn after it that re-sends the whole bundle.
+  const common = new Set([...COMMON_COMPONENTS, ...LAYOUT_PARENTS]);
   const rows = taskIndex.tasks.map(({ id, file }) => {
     const task = JSON.parse(fs.readFileSync(path.join(OUT_DIR, file), "utf8"));
-    return `| \`ai/bundles/${id}.md\` | ${task.title}: ${task.description} |`;
+    const adds = task.components.filter((name) => !common.has(name)).join(", ");
+    return `| \`ai/bundles/${id}.md\` | ${task.title}: ${task.description} | ${adds} |`;
   });
   rows.push(
-    `| \`ai/bundles/${BASE_BUNDLE.id}.md\` | ${BASE_BUNDLE.title}: ${BASE_BUNDLE.description} |`,
+    `| \`ai/bundles/${BASE_BUNDLE.id}.md\` | ${BASE_BUNDLE.title}: ${BASE_BUNDLE.description} | ${COMMON_COMPONENTS.join(", ")}; this bundle alone also has ${BASE_BUNDLE.components.join(", ")} |`,
   );
-  const table = ["| Bundle | For |", "|---|---|", ...rows].join("\n");
+  const table = ["| Bundle | For | Adds |", "|---|---|---|", ...rows].join("\n");
   const next = `${text.slice(0, text.indexOf(start) + start.length)}\n${table}\n${text.slice(text.indexOf(end))}`;
   if (next !== text) fs.writeFileSync(agentsPath, next);
 }

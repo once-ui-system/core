@@ -44,6 +44,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
     columns: [{ key: "name", header: "Name" }],
     rows: [{ id: "1", name: "Ada" }],
   },
+  FileTree: { items: [{ id: "readme", name: "README.md", type: "file" }] },
   FadingLettersFx: { text: "Hello", animationState: "visible" },
   FormErrorSummary: { errors: { email: "Enter an email" } },
   InfiniteScroll: {

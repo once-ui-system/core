@@ -1,0 +1,64 @@
+---
+title: "Banner"
+summary: "A full-width strip on the brand's solid colour, for a notice above a screen, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/banner.mdx"
+github: "packages/native/src/components/Banner.tsx"
+navLabel: "Banner"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Banner` is a full-width strip on the brand's solid colour, for a notice at the top of a screen. Text inside is centred, in `label-default-s`, in the brand's on-solid colour. See the [web Banner](/components/banner) for the browser version.
+
+## Basic usage
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Banner } from "@once-ui-system/native";
+
+export function Notice() {
+  return <Banner>Free delivery on orders over €20 this week</Banner>;
+}`,
+    language: "tsx",
+    label: "Banner"
+  }
+]} />
+
+## With an action
+
+It takes Flex props and any children, such as a button. Add `safeArea={["top"]}` when it sits at the very top of the screen.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Banner, Button } from "@once-ui-system/native";
+
+export function Update({ onUpdate }: { onUpdate: () => void }) {
+  return (
+    <Banner safeArea={["top"]}>
+      A new version is available
+      <Button size="s" variant="secondary" label="Update" onPress={onUpdate} />
+    </Banner>
+  );
+}`,
+    language: "tsx",
+    label: "With an action"
+  }
+]} />
+
+## Differences from the web
+
+- Core's `solid="brand-medium"` is drawn as a background colour, since native `Flex` has no `solid` prop. Pass `background` to replace it.
+- Only string children get the on-solid text style. Wrap other text in `Text` with `onSolid="brand-strong"`.
+- Children wrap onto more lines when they do not fit the screen's width.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | The notice. Strings are drawn in the banner's text style. |
+| `...FlexProps` | `FlexProps` | | Spacing, size, surface and position props, as on `Flex`. |

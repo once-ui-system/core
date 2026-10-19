@@ -90,6 +90,8 @@ const ParticleFx = React.forwardRef<HTMLDivElement, ParticleFxProps>(
       // Create particles using translate3d instead of left/top
       for (let i = 0; i < effectiveDensity; i++) {
         const el = document.createElement("div");
+        // Lets a test or a screenshot tool find (and hide) the particles.
+        el.setAttribute("data-fx-particle", "");
         el.style.cssText = `
           position:absolute;left:0;top:0;
           width:${parsedSize};height:${parsedSize};

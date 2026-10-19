@@ -61,7 +61,12 @@ const FREEZE_CSS = `*, *::before, *::after {
   animation-iteration-count: 1 !important; transition: none !important;
   caret-color: transparent !important; scroll-behavior: auto !important;
 }
-nextjs-portal, [data-nextjs-toast] { display: none !important; }`;
+nextjs-portal, [data-nextjs-toast] { display: none !important; }
+/* Canvas effects (MatrixFx, WeatherFx, …) draw their first frame whenever
+   the observer and the frame loop get to it, so a shot catches it or not by
+   timing; ParticleFx places its dots by Math.random in mount order. Their
+   box stays; only the drawing is hidden. */
+canvas, [data-fx-particle] { visibility: hidden !important; }`;
 
 const log = (...parts) => process.env.VISUAL_DEBUG && console.error(new Date().toISOString().slice(11, 19), ...parts);
 const sha = (text) => createHash("sha1").update(text).digest("hex").slice(0, 10);

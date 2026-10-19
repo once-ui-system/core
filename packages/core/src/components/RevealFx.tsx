@@ -99,11 +99,9 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
           }, getSpeedDurationMs());
         }
       }
-
+      // An unmount mid-transition left this timer to set state afterwards.
       return () => {
-        if (transitionTimeoutRef.current) {
-          clearTimeout(transitionTimeoutRef.current);
-        }
+        if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
       };
     }, [revealed]);
 

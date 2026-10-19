@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Flex, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, ParticleFx, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, useToast } from "@once-ui-system/core";
+import { Heading, Text, Button, Column, Badge, Logo, Line, LetterFx, StylePanel, Carousel, Media, EmojiPicker, EmojiPickerDropdown, OgCard, Icon, Textarea, Row, IconButton, Select, Option, DropdownWrapper, AutoScroll, User, Table, ContextMenu, BlockQuote, RevealFx, DatePicker, DateInput, DateRangeInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, CountFx, Feedback, MasonryGrid, TagInput, Avatar, Background, Flex, Chip, Fade, Hover, Pulse, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, LogoCloud, SmartLink, Swiper, Scroller, ParticleFx, Arrow, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, ScrollToTop, CompareImage, InteractiveDetails, InfiniteScroll, PasswordInput, NumberInput, ColorInput, OTPInput, AvatarGroup, UserMenu, ThemeSwitcher, Timeline, NavIcon, CursorCard, FlipFx, GlitchFx, HoloFx, Card, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx, Input, Dialog, FadingLettersFx, FileTree, useToast } from "@once-ui-system/core";
 import { BarChart, LineChart } from "@once-ui-system/core/data";
 import { CodeBlock } from "@once-ui-system/core/code";
 
@@ -3028,6 +3028,107 @@ export default function ComponentsCheck() {
                       date: new Date(2025, 3),
                       Visitors: 3100,
                       Pageviews: 6300,
+                    },
+                  ]}
+                />
+              ),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "file-tree",
+      name: "File navigation",
+      description: "A realistic project tree with selected files and collapsed folders",
+      components: [
+        {
+          name: "FileTree",
+          variations: [
+            {
+              value: "default",
+              label: "Project structure",
+              element: (
+                <FileTree
+                  fillWidth
+                  defaultExpandedIds={["src", "components"]}
+                  defaultSelectedId="file-tree"
+                  items={[
+                    {
+                      id: "src",
+                      name: "src",
+                      type: "folder",
+                      children: [
+                        {
+                          id: "components",
+                          name: "components",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "file-tree",
+                              name: "FileTree.tsx",
+                              type: "file",
+                              icon: "code",
+                            },
+                            {
+                              id: "file-tree-styles",
+                              name: "FileTree.module.scss",
+                              type: "file",
+                              icon: "code",
+                            },
+                            {
+                              id: "button",
+                              name: "Button.tsx",
+                              type: "file",
+                              icon: "code",
+                            },
+                          ],
+                        },
+                        {
+                          id: "hooks",
+                          name: "hooks",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "use-file-tree",
+                              name: "useFileTree.ts",
+                              type: "file",
+                              icon: "code",
+                            },
+                          ],
+                        },
+                        {
+                          id: "assets",
+                          name: "assets",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "logo",
+                              name: "logo.svg",
+                              type: "file",
+                              icon: "image",
+                            },
+                          ],
+                        },
+                        {
+                          id: "app",
+                          name: "App.tsx",
+                          type: "file",
+                          icon: "code",
+                        },
+                      ],
+                    },
+                    {
+                      id: "package",
+                      name: "package.json",
+                      type: "file",
+                      icon: "settings",
+                    },
+                    {
+                      id: "readme",
+                      name: "README.md",
+                      type: "file",
+                      icon: "document",
                     },
                   ]}
                 />

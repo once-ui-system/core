@@ -1,0 +1,77 @@
+---
+title: "BlockQuote"
+summary: "A large quote between short rules, with who said it and where, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/blockquote.mdx"
+github: "packages/native/src/components/BlockQuote.tsx"
+navLabel: "BlockQuote"
+navIcon: "components"
+status: "unreleased"
+---
+
+`BlockQuote` sets a quote in `heading-strong-xl` between two short rules. It can add a line before and after the quote, the author with an avatar, and a link to the source that opens in the browser. See the [web BlockQuote](/components/blockquote) for the browser version.
+
+## Basic usage
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BlockQuote } from "@once-ui-system/native";
+
+export function Review() {
+  return (
+    <BlockQuote
+      preline="From our regulars"
+      author={{ name: "Ada", avatar: "https://example.com/ada.jpg" }}
+      link={{ href: "example.com/reviews", label: "Read the review" }}
+    >
+      The best flat white in town, and they remember your name.
+    </BlockQuote>
+  );
+}`,
+    language: "tsx",
+    label: "Review.tsx"
+  }
+]} />
+
+## Alignment and separators
+
+`align` sets the text to the left, centre or right. `separator` picks which rules to draw.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { BlockQuote } from "@once-ui-system/native";
+
+export function Motto() {
+  return (
+    <BlockQuote align="left" separator="none" subline="Our first menu, 2019">
+      Slow coffee, fast smiles.
+    </BlockQuote>
+  );
+}`,
+    language: "tsx",
+    label: "Aligned"
+  }
+]} />
+
+## Differences from the web
+
+- `link` opens in the browser with `Linking.openURL`. A bare domain gets `https://`, as on the web.
+- Only a string quote gets the heading style. Pass `Text` elements for anything else.
+- `className` and `style` are replaced by Flex props, which go on the quote's column, as on the web.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | The quote. Required. |
+| `preline` | `ReactNode` | | A line above the quote. |
+| `subline` | `ReactNode` | | A line below the quote. |
+| `author` | `{ name?: ReactNode; avatar?: string }` | | Who said it, with an optional avatar image. |
+| `link` | `{ href: string; label: string }` | | The source, opened in the browser. |
+| `align` | `"center" \| "left" \| "right"` | `"center"` | Where the text sits. |
+| `separator` | `"top" \| "bottom" \| "both" \| "none"` | `"both"` | Which short rules to draw. |
+| `...FlexProps` | `FlexProps` | | Props for the quote's column, as on `Flex`. |
