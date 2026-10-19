@@ -9,6 +9,11 @@
     "switch": 5,
     "radioButton": 6,
     "radioGroup": 7,
-    "chip": 8
+    "chip": 8,
+    "slider": 9,
+    "rangeSlider": 10,
+    "numberInput": 11,
+    "passwordInput": 12,
+    "otpInput": 13
   }
 }

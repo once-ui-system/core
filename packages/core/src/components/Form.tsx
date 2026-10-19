@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import type { GridSize, SpacingToken, TShirtSizes } from "../types";
+import type { FieldSize, GridSize, SpacingToken } from "../types";
 import styles from "./Form.module.scss";
 import { FormFieldContext, FormStatusContext } from "./FormContext";
 import { Grid } from "./Grid";
@@ -46,7 +46,7 @@ interface FormProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "onSubmit
    * it. Passed down by context rather than cloned onto the children, so a
    * child that is not a field does not pick up a stray attribute.
    */
-  size?: TShirtSizes;
+  size?: FieldSize;
   /** Render a real `<form>` rather than a `<div>`. */
   as?: "div" | "form";
   /**
@@ -365,7 +365,13 @@ const Form = forwardRef<HTMLDivElement, FormProps>(
         fillWidth
         columns={String(base) as GridSize}
         gap={DENSITY_GAP[density]}
-        className={classNames(styles.form, stacked && styles.stacked, columnClasses, className)}
+        className={classNames(
+          styles.form,
+          stacked && styles.stacked,
+          resolvedSize === "xxs" && styles.xxs,
+          columnClasses,
+          className,
+        )}
         style={style}
         data-density={density}
         {...rest}

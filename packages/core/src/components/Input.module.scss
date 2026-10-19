@@ -135,6 +135,35 @@
   }
 }
 
+/* The toolbar size: 32px, the height of a small Button, so a field can sit in
+   a row of small controls. Its box is 22px (32 less the border and the well),
+   one line of body-s and nothing more, so it has no floating label: Input.tsx
+   shows `label` as the placeholder and keeps it as a hidden <label>. The value
+   is inset 12px, matching the text of a small Button (8px padding plus the
+   label's 4), and Input.tsx pulls the prefix and suffix in to 8px, where a
+   small Button puts its icon.
+
+   No touch floor. xs and s gained one because they were drawn under the tap
+   minimum by accident; this size is small on purpose, and a floor would make
+   it the same field as xs on a phone. The 16px clamp still applies on touch,
+   and its 20.8px line fits the 22px box. */
+.xxs {
+  --fld-fs-base: calc(var(--font-size-body-s) * var(--font-size-body-multiplier));
+  --fld-lh-base: calc(var(--line-height-body-s) * var(--line-height-body-multiplier));
+  --fld-h-base: var(--static-space-32);
+  --fld-h-touch: 0px;
+  --fld-label-scale: 0.6;
+  --fld-inset: var(--static-space-12);
+}
+
+/* A textarea's 4px inset floor beats the centring inset here (2px, a 22px box
+   around an 18px line), and would make an xxs textarea 4px taller than the
+   input beside it — the bug the floor was lowered from 8px to fix at xs. At
+   xxs the floor is 0. `.base.xxs` so it outranks `.base` whatever the order. */
+.base.xxs {
+  --fld-textarea-inset: max(0px, calc((var(--fld-box) - var(--fld-lh)) / 2));
+}
+
 .xs {
   --fld-fs-base: calc(var(--font-size-body-s) * var(--font-size-body-multiplier));
   --fld-lh-base: calc(var(--line-height-body-s) * var(--line-height-body-multiplier));
@@ -216,6 +245,22 @@
   &.floating {
     transform: scale(var(--fld-label-scale));
   }
+}
+
+/* The label of an xxs field: still the field's name for a screen reader, but
+   not drawn, because the field has no room for it. The same clip pattern as
+   VisuallyHidden. */
+.labelHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
 }
 
 .inputLabel {

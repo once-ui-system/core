@@ -303,13 +303,14 @@ const handleChange = (e) => {
 
 ## Sizes
 
-The Textarea component supports five sizes: extra small, small, medium, large, and extra large.
+The Textarea component supports the same six sizes as Input, from `xxs` (a 32px first line, for a one-line note in a toolbar) to `xl`. At `xxs` a `label` shows as the placeholder, as it does on Input.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column fillWidth gap="16">
+      <Textarea id="size-xxs" placeholder="Extra Extra Small" size="xxs" />
       <Textarea id="size-xs" placeholder="Extra Small" size="xs" />
       <Textarea id="size-s" placeholder="Small" size="s" />
       <Textarea id="size-m" placeholder="Medium" size="m" />
@@ -320,7 +321,8 @@ The Textarea component supports five sizes: extra small, small, medium, large, a
   codes={[
     {
       code:
-`<Textarea id="size-xs" placeholder="Extra Small" size="xs" />
+`<Textarea id="size-xxs" placeholder="Extra Extra Small" size="xxs" />
+<Textarea id="size-xs" placeholder="Extra Small" size="xs" />
 <Textarea id="size-s" placeholder="Small" size="s" />
 <Textarea id="size-m" placeholder="Medium" size="m" />
 <Textarea id="size-l" placeholder="Large" size="l" />

@@ -22,8 +22,10 @@ import {
   useTheme,
   useToast,
 } from "../src";
+import { Code } from "./Code";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
+import { Stats } from "./Stats";
 
 /** A loyalty-card screen built only from the preview components. */
 function Screen() {
@@ -132,7 +134,7 @@ export function App({
   screen = "card",
 }: {
   theme: "light" | "dark";
-  screen?: "card" | "order" | "sheet" | "menu";
+  screen?: "card" | "order" | "sheet" | "menu" | "stats" | "code";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -141,6 +143,10 @@ export function App({
           <Screen />
         ) : screen === "menu" ? (
           <Menu />
+        ) : screen === "stats" ? (
+          <Stats />
+        ) : screen === "code" ? (
+          <Code />
         ) : (
           <Order sheet={screen === "sheet"} />
         )}

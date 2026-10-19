@@ -47,6 +47,34 @@ else (an undo, a reset, a drag on a timeline) shows up in it. There is no need
 to remount it with a `key`. It does not rewrite what the user is typing: a
 partial entry such as `-` or `1.` stays as typed until it reads as a number.
 
+## Toolbar size
+
+`size="xxs"` draws a 32px field, the height of a `size="s"` Button. Two steppers stacked in it would get 15px each, so at this size they sit side by side, down then up.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NumberInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [value, setValue] = useState<number>(0);
+
+<NumberInput
+    id="quantity"
+    label="Quantity"
+    size="xxs"
+    value={value}
+    onChange={setValue}
+    min={0}
+    max={100}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

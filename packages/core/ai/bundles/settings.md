@@ -79,8 +79,9 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"` |
-| Screen-reader text, skip link | `VisuallyHidden` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"`; a key cap is `Kbd` |
+| Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
+| Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
 
 ### Imports
@@ -141,10 +142,12 @@ Use instead of Flex with direction="row".
 
 ### Heading
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 - wrap?: CSSProperties["textWrap"] = balance
 
 ### Text
 Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
+Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 
 ### Button
 - variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
@@ -188,6 +191,26 @@ Extends ToggleButton.
 - children?: ReactNode
 - disabled?: boolean = false
 
+### ToggleButton
+- label?: ReactNode
+- selected?: boolean = false
+- variant?: "ghost" | "outline" | "subtle" = ghost
+- size?: TShirtSizes = m
+- radius?: RadiusSize
+- corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
+- rounded?: boolean = false
+- horizontal?: "start" | "center" | "end" | "between" = center
+- fillWidth?: boolean = false
+- weight?: "default" | "strong" = default
+- truncate?: boolean = false
+- disabled?: boolean = false
+- prefixIcon?: IconName
+- suffixIcon?: IconName
+- className?: string
+- style?: React.CSSProperties
+- children?: ReactNode
+- href?: string
+
 ### TabPanel
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
@@ -198,7 +221,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### Form
 - density?: "stacked" | "tight" | "spacious" = tight
 - columns?: FormColumns
-- size?: TShirtSizes
+- size?: FieldSize
 - as?: "div" | "form" = div
 - onSubmit?: (event: React.FormEvent<HTMLFormElement>) => unknown
 - pending?: boolean
@@ -210,7 +233,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - id: string
 - label?: string
 - placeholder?: string
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -240,6 +263,31 @@ Extends Input, DropdownWrapper.
 - fillWidth?: boolean = true
 - multiple?: boolean = false
 - labels?: SelectLabels
+
+### DropdownWrapper
+- fillWidth?: boolean = false
+- minWidth?: number
+- maxWidth?: number
+- minHeight?: number
+- placement?: Placement = bottom-start
+- trigger: ReactNode
+- dropdown: ReactNode
+- selectedOption?: string
+- style?: React.CSSProperties
+- className?: string
+- onSelect?: (value: string) => void
+- closeAfterClick?: boolean = true
+- handleArrowNavigation?: boolean = true
+- open?: boolean
+- onOpenChange?: (open: boolean) => void
+- nested?: boolean = false
+- navigationLayout?: NavigationLayout
+- columns?: number | string = 8
+- optionsCount?: number
+- dropdownId?: string
+- disableTriggerClick?: boolean = false
+- onFocusCapture?: React.FocusEventHandler<HTMLDivElement>
+- onBlurCapture?: React.FocusEventHandler<HTMLDivElement>
 
 ### Setting
 Extends Flex.
@@ -287,6 +335,17 @@ Extends InteractiveDetails.
 - reverse?: boolean = false
 - ariaLabel?: string = Toggle switch
 - onToggle?: (checked: boolean) => void
+
+### InteractiveDetails
+- label?: React.ReactNode
+- description?: React.ReactNode
+- disabled?: boolean
+- iconButtonProps?: IconButtonProps
+- onClick?: () => void
+- className?: string
+- id?: string
+- labelId?: string
+- descriptionId?: string
 
 ### Slider
 - value?: number
@@ -354,6 +413,34 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - style?: React.CSSProperties = {}
 - className?: string
 
+### Table
+Extends Flex.
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- data: { headers: TableHeader[]; rows: ReactNode[][]; }
+- onRowClick?: (rowIndex: number) => void
+- searchable?: boolean = false
+- searchPlaceholder?: string = Search...
+- striped?: boolean = false
+- hoverable?: boolean = true
+- compact?: boolean = false
+- loading?: boolean = false
+- emptyState?: ReactNode
+- actions?: TableAction[]
+- stickyHeader?: boolean = false
+- rowClassName?: (rowIndex: number) => string
+- cellClassName?: (rowIndex: number, cellIndex: number) => string
+- paginated?: boolean = false
+- defaultPageSize?: number = 10
+- pageSizeOptions?: number[] = [5, 10, 20, 50]
+- loadingState?: ReactNode
+
+### NavItem
+Extends ToggleButton.
+- label: ReactNode
+- icon?: IconName
+- badge?: number
+- indicator?: boolean
+
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
 - xl?: GridBreakpointProps
@@ -400,7 +487,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - label?: string
 - placeholder?: string
 - lines?: number | "auto" = auto
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -511,8 +598,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - flex?: FlexValue
 
 ### SizeProps
-- width?: number | SpacingToken | CSSUnit
-- height?: number | SpacingToken | CSSUnit | "below-header"
+- width?: number | SpacingToken | CSSUnit | "auto" | "fit"
+- height?: number | SpacingToken | CSSUnit | "below-header" | "fit"
 - maxWidth?: number | SpacingToken | CSSUnit
 - minWidth?: number | SpacingToken | CSSUnit
 - minHeight?: number | SpacingToken | CSSUnit | "below-header"
@@ -591,6 +678,12 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - weight?: TextWeight
 - family?: TextType
 - truncate?: boolean
+- flex?: FlexValue | number
+- xl?: TextBreakpointHide
+- l?: TextBreakpointHide
+- m?: TextBreakpointHide
+- s?: TextBreakpointHide
+- xs?: TextBreakpointHide
 
 ### GridProps
 - columns?: GridSize
@@ -609,13 +702,16 @@ type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type CondensedTShirtSizes = "l" | "m" | "s"
-type DisplayProps = { as?: ElementType; inline?: boolean; hide?: boolean; pointerEvents?: "none" | "all" | "auto"; userSelect?: UserSelect; position?: CSSProperties["position"]; overflow?: CSSProperties["overflow"]; overflowX?: CSSProperties["overflowX"]; overflowY?: CSSProperties["overflowY"]; scrollbar?: "default" | "minimal"; transition?: "micro-short" | "micro-medium" | "micro-long" | "macro-short" | "macro-medium" | "macro-long"; opacity?: Opacity; zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"; dark?: boolean; light?: boolean }
-type FlexValue = "0" | "1" | "8" | "10" | "2" | "3" | "4" | "9" | "12" | "5" | "6" | "7" | "11"
+type FieldSize = "xl" | "l" | "m" | "s" | "xs" | "xxs"
+type FlexValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
 type FormColumns = "number" | Partial<Record<Breakpoint, number>>
-type GridBreakpointProps = "style" | "textVariant" | "textSize" | "textType" | "textWeight" | "background" | "solid" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "padding" | "paddingLeft" | "paddingRight" | "paddingTop" | "paddingBottom" | "paddingX" | "paddingY" | "margin" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom" | "marginX" | "marginY" | "gap" | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "onBackground" | "onSolid" | "align" | "hide" | "pointerEvents" | "position" | "overflow" | "overflowX" | "overflowY" | "scrollbar" | "transition" | "opacity" | "zIndex" | "dark" | "light" | "columns" | "rows"
-type GridProps = Grid props
-type GridSize = "1" | "8" | "10" | "2" | "3" | "4" | "9" | "12" | "5" | "6" | "7" | "11"
-type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "grip" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
+// type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
+// style textVariant textSize textType textWeight background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex dark light columns rows
+type GridSize = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
+type IconButtonProps = IconButton props
+// type IconName is one of these names, and only these:
+// symbol security opacity dark light copy help filter info danger warning code link search time video image enter send checkbox document adjustments arrowLeft arrowRight arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer dislike download edit eye eyeDropper eyeOff file flag folder food forward gift globe grip heart home inbox like linearGauge lock logout mail maximize minimize minus moreHorizontal organization pause paw payment person personRemove play plus radialGauge refresh return screen settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type NavigationLayout = "grid" | "row" | "column"
 type Opacity = "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100"
 type OptionProps = Option props
 type Placement = "top" | "right" | "bottom" | "left" | `${"top" | "right" | "bottom" | "left"}-${"start" | "end"}`
@@ -625,10 +721,12 @@ type SelectLabels = { search?: string; clear?: string }
 type SelectOptionType = Omit<OptionProps, "selected">
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "32" | "1" | "2" | "4" | "64" | "160" | "12" | "8" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
-type StyleProps = { textVariant?: TextVariant; textSize?: TextSize; textType?: TextType; textWeight?: TextWeight; background?: Colors | "surface" | "overlay" | "page" | "transparent"; solid?: Colors; borderTop?: Colors | "surface" | "transparent" | boolean; borderRight?: Colors | "surface" | "transparent" | boolean; borderBottom?: Colors | "surface" | "transparent" | boolean; borderLeft?: Colors | "surface" | "transparent" | boolean; borderX?: Colors | "surface" | "transparent" | boolean; borderY?: Colors | "surface" | "transparent" | boolean; border?: Colors | "surface" | "transparent" | boolean; borderStyle?: "solid" | "dashed"; borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"; topRadius?: RadiusSize; rightRadius?: RadiusSize; bottomRadius?: RadiusSize; leftRadius?: RadiusSize; topLeftRadius?: RadiusSize; topRightRadius?: RadiusSize; bottomLeftRadius?: RadiusSize; bottomRightRadius?: RadiusSize; radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`; shadow?: ShadowSize; cursor?: CSSProperties["cursor"] | "interactive" | ReactNode; blendMode?: BlendMode; blur?: BlurSize | number; backdropBlur?: BlurSize | number; theme?: "light" | "dark"; themeBorder?: BorderStyle; themeSolid?: SolidType; themeSurface?: SurfaceStyle }
+type SpacingToken = "xl" | "l" | "m" | "s" | "xs" | "0" | "1" | "2" | "4" | "8" | "12" | "32" | "64" | "160" | "16" | "20" | "24" | "40" | "48" | "56" | "72" | "80" | "104" | "128"
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
+type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "danger"; onClick: (rowIndex: number) => void; disabled?: (rowIndex: number) => boolean }
+type TableHeader = { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right" }
+type TextBreakpointHide = { hide?: boolean }
 type TextSize = "xl" | "l" | "m" | "s" | "xs"
 type TextType = "label" | "body" | "code" | "heading" | "display"
 type TextVariant = `${"label" | "body" | "code" | "heading" | "display"}-${"default" | "medium" | "strong" | "normal"}-${"xl" | "xs" | "l" | "m" | "s"}`
@@ -645,7 +743,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Never write props equal to defaults or implied by another prop on the element: position="relative", direction on Row/Column, variant="primary" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).
 - Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.
 - Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.
-- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).
+- Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.
 - A number on width, height, minWidth or minHeight is rem, not px: width={32} is 512 px. For a pixel size write the spacing token string, width="32" (32 px), or the rem value, width={2}. Token strings stop at the spacing scale ("160" is the largest), so height="320" is a type error: write height={20}. An icon or avatar box is usually "24" to "48".
 - gap, padding and margin take spacing tokens ("0", "1", "2", "4", "8", "12", "16", "20", "24", "32", "40", "48", "56", "64", "72", "80", "104", "128", "160", or xs–xl). "6" and "10" are not tokens and are type errors.
 - Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: "span 2" }}.
@@ -655,6 +753,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Icon names must come from the IconName type below, and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - In a Next.js app, import LayoutProvider from "@once-ui-system/core/next", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.
+- Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
 - Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.

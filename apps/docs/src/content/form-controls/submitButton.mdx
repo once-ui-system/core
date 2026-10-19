@@ -8,7 +8,6 @@ navLabel: "SubmitButton"
 navIcon: "switch"
 navTag: "New"
 navTagVariant: "success"
-status: "unreleased"
 ---
 
 `SubmitButton` is a `Button` with `type="submit"` that follows its form. When a `Form`'s `onSubmit` returns a promise, the form is pending until it settles: the button shows a spinner, can swap its label for `pendingLabel`, and ignores further presses, so a double click sends one request. The form is marked `aria-busy` meanwhile.

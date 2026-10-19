@@ -1,7 +1,7 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MatrixFx } from "../components/MatrixFx";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -30,6 +30,44 @@ const giveLayout = () =>
     toJSON: () => ({}),
   });
 
+/** A ResizeObserver that reports on observe, as browsers do, and on demand. */
+const installResizeObserver = () => {
+  const callbacks: ResizeObserverCallback[] = [];
+  class ReportingObserver {
+    constructor(private callback: ResizeObserverCallback) {
+      callbacks.push(callback);
+    }
+    observe() {
+      this.callback([], this as unknown as ResizeObserver);
+    }
+    unobserve() {}
+    disconnect() {}
+  }
+  vi.stubGlobal("ResizeObserver", ReportingObserver);
+  return {
+    fire: () =>
+      act(() => {
+        for (const callback of callbacks) callback([], {} as ResizeObserver);
+      }),
+  };
+};
+
+/** Counts writes to canvas.width/height; each one clears the bitmap. */
+const countCanvasSizeWrites = () => {
+  let writes = 0;
+  for (const prop of ["width", "height"] as const) {
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLCanvasElement.prototype, prop);
+    vi.spyOn(HTMLCanvasElement.prototype, prop, "set").mockImplementation(function (
+      this: HTMLCanvasElement,
+      value: number,
+    ) {
+      writes++;
+      descriptor?.set?.call(this, value);
+    });
+  }
+  return () => writes;
+};
+
 /**
  * MatrixFx paints a dot grid on a decorative canvas behind its children,
  * revealed instantly, on mount, on hover/click or by `active`. A static grid
@@ -43,6 +81,9 @@ describe("MatrixFx", () => {
     installIntersectingObserver();
     mockReducedMotion(false);
     giveLayout();
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
   });
 
   it("renders children over a decorative canvas", async () => {
@@ -87,6 +128,76 @@ describe("MatrixFx", () => {
     render(<MatrixFx flicker bulge={{ type: "wave" }} />, { wrapper });
     frames.step(10, 20);
     expect(canvas.calls.get("fillRect")).toBeGreaterThan(0);
+    expect(frames.pending()).toHaveLength(0);
+  });
+
+  // The ResizeObserver reports once on observe. Under reduced motion the grid
+  // was drawn once and the loop stopped; that report then rewrote
+  // canvas.width/height, which clears the canvas, and nothing redrew it.
+  it("keeps a reduced-motion grid when the observer reports an unchanged size", () => {
+    mockReducedMotion(true);
+    const observer = installResizeObserver();
+    const sizeWrites = countCanvasSizeWrites();
+    const frames = controlAnimationFrames();
+    render(<MatrixFx size={1.5} spacing={5} fps={24} flicker />, { wrapper });
+    frames.step(5, 50);
+    expect(canvas.calls.get("fillRect")).toBeGreaterThan(0);
+    const writes = sizeWrites();
+    observer.fire();
+    frames.step(5, 50);
+    expect(sizeWrites()).toBe(writes);
+    expect(frames.pending()).toHaveLength(0);
+  });
+
+  it("redraws a stopped grid after a real resize, then stops again", () => {
+    mockReducedMotion(true);
+    const observer = installResizeObserver();
+    const frames = controlAnimationFrames();
+    render(<MatrixFx flicker />, { wrapper });
+    frames.step(5, 20);
+    const drawn = canvas.calls.get("fillRect") ?? 0;
+    expect(drawn).toBeGreaterThan(0);
+    expect(frames.pending()).toHaveLength(0);
+
+    vi.mocked(HTMLElement.prototype.getBoundingClientRect).mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 60,
+      height: 40,
+      right: 60,
+      bottom: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+    observer.fire();
+    frames.step(5, 20);
+    expect(canvas.calls.get("fillRect") ?? 0).toBeGreaterThan(drawn);
+    expect(frames.pending()).toHaveLength(0);
+  });
+
+  it("redraws a static (no flicker) grid after a real resize", () => {
+    const observer = installResizeObserver();
+    const frames = controlAnimationFrames();
+    render(<MatrixFx reducedMotion={false} />, { wrapper });
+    frames.step(5, 20);
+    const drawn = canvas.calls.get("fillRect") ?? 0;
+    expect(frames.pending()).toHaveLength(0);
+
+    vi.mocked(HTMLElement.prototype.getBoundingClientRect).mockReturnValue({
+      left: 0,
+      top: 0,
+      width: 50,
+      height: 50,
+      right: 50,
+      bottom: 50,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    });
+    observer.fire();
+    frames.step(5, 20);
+    expect(canvas.calls.get("fillRect") ?? 0).toBeGreaterThan(drawn);
     expect(frames.pending()).toHaveLength(0);
   });
 

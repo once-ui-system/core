@@ -4,6 +4,7 @@ import { Card } from "../components/Card";
 import { Effect } from "../components/Effect";
 import { Media } from "../components/Media";
 import { Setting, SettingAxes, SettingGroup } from "../components/Setting";
+import { Switch } from "../components/Switch";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -167,6 +168,46 @@ describe("Setting", () => {
     const body = screen.getByText("Opacity").closest(".border-top-1");
     expect(body).not.toBeNull();
     expect(body?.className).not.toContain("surface-background");
+  });
+
+  // A string label used to sit in an extra <span id> wrapper. As a flex item
+  // that span was blockified with the body font and line height, which made the
+  // label box 21px instead of 17px and every string-label row 4px taller.
+  it("puts the label id on the label Text itself, with no wrapper around it", () => {
+    render(
+      <Setting label="Microphone">
+        <Switch />
+      </Setting>,
+      { wrapper: wrap },
+    );
+    const label = screen.getByText("Microphone");
+    expect(label.id).not.toBe("");
+    expect(label.parentElement?.tagName).not.toBe("SPAN");
+    expect(screen.getByRole("switch")).toHaveAttribute("aria-labelledby", label.id);
+    expect(screen.getByRole("switch", { name: "Microphone" })).toBeInTheDocument();
+  });
+
+  it("names the control by a node label through a display: contents wrapper", () => {
+    render(
+      <Setting label={<strong>Camera</strong>}>
+        <Switch />
+      </Setting>,
+      { wrapper: wrap },
+    );
+    const wrapper = screen.getByText("Camera").parentElement as HTMLElement;
+    expect(wrapper.id).not.toBe("");
+    expect(wrapper.style.display).toBe("contents");
+    expect(screen.getByRole("switch", { name: "Camera" })).toBeInTheDocument();
+  });
+
+  it("puts a SettingAxes label id on the label Text itself", () => {
+    render(<SettingAxes label="Tilt" axes={[{ label: "X", control: <Switch /> }]} />, {
+      wrapper: wrap,
+    });
+    const label = screen.getByText("Tilt");
+    expect(label.id).not.toBe("");
+    expect(label.parentElement?.tagName).not.toBe("SPAN");
+    expect(screen.getByRole("switch", { name: "Tilt X" })).toBeInTheDocument();
   });
 
   it("renders one row per axis", () => {

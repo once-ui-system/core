@@ -80,6 +80,32 @@ const handleDateTimeChange = (newDateTime: Date) => {
 - **Formatted Display**: Displays selected date in a readable format
 - **Dropdown Integration**: Uses `DropdownWrapper` for a clean UI experience
 
+## Toolbar size
+
+`size="xxs"` draws a 32px field, the height of a `size="s"` Button, for a date filter in a toolbar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DateInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [date, setDate] = useState<Date>(new Date());
+
+<DateInput
+    id="date"
+    placeholder="Select date"
+    size="xxs"
+    value={date}
+    onChange={setDate}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

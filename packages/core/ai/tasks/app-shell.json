@@ -1,0 +1,49 @@
+{
+  "id": "app-shell",
+  "title": "App shell",
+  "description": "Signed-in app frame shared by several routes: sidebar with nested nav groups and the current route highlighted, header with breadcrumb, account or workspace menu and command palette, phone drawer",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "NavGroup",
+    "NavItem",
+    "Drawer",
+    "Breadcrumbs",
+    "UserMenu",
+    "DropdownWrapper",
+    "Option",
+    "Kbar",
+    "Line",
+    "Table",
+    "Tag",
+    "Icon"
+  ],
+  "functions": ["selectNavHref", "useTheme"],
+  "recipes": [],
+  "layout": ["layouts.md#1-app-shell-with-a-sidebar", "layouts.md#2-data-driven-navigation"],
+  "blocks": {
+    "manifest": "examples/blocks/manifest.json",
+    "primary": ["Sidebar1", "Header1"],
+    "compose": ["Dashboard1", "Table1"]
+  },
+  "gotchas": [
+    "layout.shorthands",
+    "layout.defaults",
+    "Icon.names",
+    "layout.responsiveProps",
+    "size.rem",
+    "spacing.tokens",
+    "layout.noSpanOrType",
+    "Column.form"
+  ],
+  "quality": {
+    "mount": "Mount the shell once, in the `layout.tsx` of the routes it frames, and read the route with `usePathname()`; a shell rendered by each page loses its open groups and collapsed state on every navigation",
+    "current": "`selectNavHref` picks the highlighted item and opens the group that holds it",
+    "collapse": "A collapsed sidebar keeps every item reachable: icons with a tooltip or aria-label, the group label as the icon's name",
+    "phone": "At s the sidebar hides and a header button opens the same nav in a left Drawer; following a link closes it",
+    "header": "Breadcrumbs from the route, and the account or workspace switcher as a DropdownWrapper or UserMenu with Option rows",
+    "palette": "A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it"
+  }
+}

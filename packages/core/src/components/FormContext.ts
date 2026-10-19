@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { TShirtSizes } from "../types";
+import type { FieldSize } from "../types";
 
 /**
  * What a `Form` hands down to the fields inside it.
@@ -13,7 +13,7 @@ import type { TShirtSizes } from "../types";
  * in the DOM.
  */
 export interface FormFieldDefaults {
-  size?: TShirtSizes;
+  size?: FieldSize;
 }
 
 export const FormFieldContext = createContext<FormFieldDefaults>({});
@@ -22,7 +22,7 @@ export const FormFieldContext = createContext<FormFieldDefaults>({});
  * Resolve a field's size. The field's own prop always wins; a `Form` only
  * supplies a default, and `"m"` remains the default outside one.
  */
-export const useFieldSize = (own?: TShirtSizes): TShirtSizes => {
+export const useFieldSize = (own?: FieldSize): FieldSize => {
   const inherited = useContext(FormFieldContext).size;
   return own ?? inherited ?? "m";
 };

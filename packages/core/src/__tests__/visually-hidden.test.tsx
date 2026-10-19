@@ -85,6 +85,20 @@ describe("VisuallyHidden", () => {
     expect(screen.getByRole("link", { name: "Skip to content" })).toHaveFocus();
   });
 
+  it('renders the skip link itself with as="a" and an href', async () => {
+    const user = userEvent.setup();
+    render(
+      <VisuallyHidden as="a" href="#main" focusable>
+        Skip to content
+      </VisuallyHidden>,
+      { wrapper: wrap },
+    );
+    await user.tab();
+    const link = screen.getByRole("link", { name: "Skip to content" });
+    expect(link).toHaveAttribute("href", "#main");
+    expect(link).toHaveFocus();
+  });
+
   it("renders on the server: no hooks, no client directive", () => {
     const source = readFileSync(join(SOURCE, "VisuallyHidden.tsx"), "utf8");
     expect(source.startsWith('"use client"')).toBe(false);
