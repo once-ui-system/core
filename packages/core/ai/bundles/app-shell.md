@@ -383,7 +383,7 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - id: string
 - label?: string
 - placeholder?: string
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -405,7 +405,7 @@ Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProp
 - label?: string
 - placeholder?: string
 - lines?: number | "auto" = auto
-- size?: TShirtSizes
+- size?: FieldSize
 - error?: boolean = false
 - errorMessage?: ReactNode
 - description?: ReactNode
@@ -627,10 +627,11 @@ type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type CondensedTShirtSizes = "l" | "m" | "s"
+type FieldSize = "xl" | "l" | "m" | "s" | "xs" | "xxs"
 type FlexValue = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
 type GridBreakpointProps = "style" | "textVariant" | "textSize" | "textType" | "textWeight" | "background" | "solid" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "padding" | "paddingLeft" | "paddingRight" | "paddingTop" | "paddingBottom" | "paddingX" | "paddingY" | "margin" | "marginLeft" | "marginRight" | "marginTop" | "marginBottom" | "marginX" | "marginY" | "gap" | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "onBackground" | "onSolid" | "align" | "hide" | "pointerEvents" | "position" | "overflow" | "overflowX" | "overflowY" | "scrollbar" | "transition" | "opacity" | "zIndex" | "dark" | "light" | "columns" | "rows"
 type GridSize = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12"
-type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
+type IconName = "symbol" | "security" | "opacity" | "dark" | "light" | "copy" | "help" | "filter" | "info" | "danger" | "warning" | "code" | "link" | "search" | "time" | "video" | "image" | "enter" | "send" | "checkbox" | "document" | "adjustments" | "arrowLeft" | "arrowRight" | "arrowUpRight" | "ball" | "banknotes" | "barChart" | "bell" | "bolt" | "book" | "bookmark" | "calendar" | "cart" | "chat" | "check" | "chevronDoubleLeft" | "chevronDoubleRight" | "chevronDown" | "chevronLeft" | "chevronRight" | "chevronUp" | "chevronsLeftRight" | "clipboard" | "close" | "computer" | "dislike" | "download" | "edit" | "eye" | "eyeDropper" | "eyeOff" | "file" | "flag" | "folder" | "food" | "forward" | "gift" | "globe" | "grip" | "heart" | "home" | "inbox" | "like" | "linearGauge" | "lock" | "logout" | "mail" | "maximize" | "minimize" | "minus" | "moreHorizontal" | "organization" | "pause" | "paw" | "payment" | "person" | "personRemove" | "play" | "plus" | "radialGauge" | "refresh" | "return" | "screen" | "settings" | "smiley" | "sparkle" | "star" | "starFill" | "store" | "tag" | "trash" | "trend" | "trendDown" | "trendUp" | "upload" | "volume" | "volumeOff" | "wordmark" | "world"
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
 type NavigationLayout = "grid" | "row" | "column"
 type Opacity = "0" | "10" | "20" | "30" | "40" | "50" | "60" | "70" | "80" | "90" | "100"
@@ -669,6 +670,7 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Timing props on RevealFx (delay, speed), ShineFx (speed), CountFx (speed), TypeFx (speed, delay), Animation and HoverCard (delay, duration), Hover (delay, hideDelay) and Skeleton (delay) are milliseconds — stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 2.0 reads 0.1 as a tenth of a millisecond, i.e. no stagger). speed on MatrixFx, WeatherFx, ParticleFx, CelebrationFx and Effect is a multiplier, where 0.5 is half speed.
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - In a Next.js app, import LayoutProvider from "@once-ui-system/core/next", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.
+- Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
 - Colors are semantic tokens ({scheme}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.
@@ -714,7 +716,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Row fill paddingX="8">
     <Column s={{ hide: true }} maxWidth={18} fitHeight position="sticky" top="56">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
     <Row fill horizontal="center" topRadius="l" overflow="hidden">
       <Row
@@ -732,7 +734,7 @@ const menuOpen = menuPath === pathname;
   </Row>
   <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
     <Column paddingTop="64" paddingBottom="16">
-      <Nav nav={nav} pathname={pathname} />
+      <SideNav nav={nav} pathname={pathname} />
     </Column>
   </Drawer>
 </Column>
@@ -757,7 +759,7 @@ What each part is doing:
   top only, since the bottom is off-screen.
 - **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
   separate surface, not this one reflowed: a **`Drawer`** from the left,
-  holding the same `Nav`, opened by a header button that only shows at `s`
+  holding the same `SideNav`, opened by a header button that only shows at `s`
   (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
   Escape and focus return a hand-made overlay misses; `flush` keeps its
   `title` for screen readers only. Tie it to the path it was opened on, as
@@ -767,13 +769,13 @@ What each part is doing:
 ### 2. Data-driven navigation
 
 ```tsx
-import { NavGroup, NavItem, selectNavHref } from "@once-ui-system/core";
+import { Nav, NavGroup, NavItem, selectNavHref } from "@once-ui-system/core";
 
 const current = selectNavHref(pathname, nav.flatMap((i) =>
   i.items ? i.items.map((s) => s.href) : [i.href],
 ));
 
-<Column fill gap="4" paddingX="8">
+<Nav fill paddingX="8" aria-label="Main">
   {nav.map((item) =>
     item.items ? (
       <NavGroup
@@ -801,9 +803,12 @@ const current = selectNavHref(pathname, nav.flatMap((i) =>
       />
     ),
   )}
-</Column>
+</Nav>
 ```
 
+- **`Nav` sets the look once.** `density="compact"` for a dashboard's 32px
+  rows, `variant="subtle"` or `"minimal"` for a docs or chat sidebar,
+  `rail={false}` to drop the line down open groups. Every row inside follows.
 - **`selectNavHref` over `===` or `startsWith`.** An equality check leaves a
   nested route (`/settings/billing/invoices/42`) with nothing highlighted; a
   prefix check lights the parent up alongside its child. It returns the longest

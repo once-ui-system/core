@@ -1,9 +1,10 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
-import { CondensedTShirtSizes } from "../types";
+import type { CondensedTShirtSizes } from "../types";
 import { getCalendarNames } from "../utils/calendarLocale";
 import {
   clearLastOpenedDropdown,
@@ -250,8 +251,17 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
     // Track if calendar is synced to selected value
     const [isCalendarSynced, setIsCalendarSynced] = useState(false);
 
+    /**
+     * Whether focus was in the picker when a change of `value` unmounted the
+     * grid to re-sync it. A pick from the keyboard in a controlled picker
+     * (and DateRangePicker's start pick) changes `value`, and the remounted
+     * grid found focus on the page and left it there.
+     */
+    const refocusAfterSync = useRef(false);
+
     // Sync currentMonth/currentYear to value on mount and when value changes
     useEffect(() => {
+      if (rootRef.current?.contains(document.activeElement)) refocusAfterSync.current = true;
       // Reset calendar sync to ensure proper re-sync
       setIsCalendarSynced(false);
 
@@ -269,6 +279,11 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         setIsCalendarSynced(true);
       }
     }, [value, monthIsControlled]);
+
+    // The grid has remounted and taken focus back (see `initialFocusedIndex`).
+    useEffect(() => {
+      if (isCalendarSynced) refocusAfterSync.current = false;
+    }, [isCalendarSynced]);
 
     // Additional sync effect that runs when the component becomes ready
     useEffect(() => {
@@ -630,7 +645,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         const isDisabled = (minDate && currentDate < minDate) || (maxDate && currentDate > maxDate);
 
         // Calculate border radius for disabled days
-        let disabledRadius: "left" | "right" | "none" | undefined = undefined;
+        let disabledRadius: "left" | "right" | "none" | undefined;
         if (isDisabled) {
           // Find consecutive disabled days
           let consecutiveDisabledStart = day;
@@ -1117,7 +1132,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                 // value set from outside, it took focus from the page. Where
                 // the keys start is the day that has focus (FollowFocusedDay).
                 initialFocusedIndex={
-                  focusIsInside() && startDay !== undefined ? pickableDays.indexOf(startDay) : -1
+                  (focusIsInside() || refocusAfterSync.current) && startDay !== undefined
+                    ? pickableDays.indexOf(startDay)
+                    : -1
                 }
                 wrap
                 itemSelector={DAY_SELECTOR}

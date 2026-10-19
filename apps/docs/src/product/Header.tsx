@@ -24,6 +24,7 @@ import {
 } from "@/resources/platforms";
 import { Sidebar, NavigationItem } from "./Sidebar";
 import { flattenSlugs } from "./DocsContextSwitcher";
+import { basePath } from "@/resources/versions";
 
 export function Header() {
   const [sidebarVisible, setSidebarVisible] = useState(false);
@@ -47,7 +48,7 @@ export function Header() {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([]);
 
   useEffect(() => {
-    fetch("/api/navigation")
+    fetch(`${basePath}/api/navigation`)
       .then((res) => res.json())
       .then((data) => {
         setNavigationItems(data);

@@ -156,6 +156,7 @@ const TOKEN_ALIASES = [
   "StaticSpacingToken",
   "ResponsiveSpacingToken",
   "TShirtSizes",
+  "FieldSize",
   "ColorScheme",
   "ColorWeight",
   "Colors",

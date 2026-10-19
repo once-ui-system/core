@@ -55,6 +55,32 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
   ]}
 />
 
+## Toolbar size
+
+`size="xxs"` starts the field at 32px, the height of a `size="s"` Button. It grows as chips are added, like every size.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [tags, setTags] = useState<string[]>(["React", "Next.js"]);
+
+<TagInput
+    id="interests"
+    placeholder="Add interest"
+    size="xxs"
+    value={tags}
+    onChange={setTags}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

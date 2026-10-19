@@ -70,7 +70,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         const slideWidth = container.clientWidth;
         const newIndex = Math.round(scrollLeft / slideWidth);
 
-        if (newIndex !== activeIndex && newIndex >= 0 && newIndex < items.length) {
+        if (newIndex >= 0 && newIndex < items.length) {
           setActiveIndex(newIndex);
         }
       };
@@ -83,9 +83,17 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          // isIntersecting is also true for a neighbour that only touches the
+          // edge, so only a slide that is at least half in view counts.
+          // A slide with no width yet (its image still loading) reports a
+          // ratio of 1, so every slide claimed to be in view at once.
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRatio >= 0.5 &&
+            entry.boundingClientRect.width > 0
+          ) {
             const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (index !== -1 && index !== activeIndex) {
+            if (index !== -1) {
               setActiveIndex(index);
             }
           }
@@ -102,7 +110,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         observer.disconnect();
         container.removeEventListener("scroll", handleScroll);
       };
-    }, [activeIndex, items.length]);
+    }, [items.length]);
 
     const scrollToIndex = useCallback((index: number) => {
       const container = scrollContainerRef.current;

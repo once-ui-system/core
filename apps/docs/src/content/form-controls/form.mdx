@@ -156,6 +156,30 @@ A last row that does not fill is handled too. Three fields in two columns make a
   ]}
 />
 
+## Toolbar size
+
+`size="xxs"` makes every field 32px, the height of a `size="s"` Button, and rounds a stacked group at `radius-m` to match. Labels show as placeholders at this size.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Form density="stacked" size="xxs">
+      <Input id="xxs-email" label="Email" />
+      <Input id="xxs-workspace" label="Workspace" />
+    </Form>}
+  codes={[
+    {
+      code:
+`<Form density="stacked" size="xxs">
+    <Input id="email" label="Email" />
+    <Input id="workspace" label="Workspace" />
+</Form>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
 ## Focus
 
 In a stacked group the fields overlap by a pixel, so a focused field has to paint above its neighbours — all four of them in two dimensions. `Form` lifts the focused cell for you. Turn the ring itself on with `focusRing` on the fields, which is worth doing for a form a keyboard user has to get through.

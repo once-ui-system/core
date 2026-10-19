@@ -84,6 +84,9 @@ const GlitchFx = forwardRef<HTMLDivElement, GlitchFxProps>(
           zIndex={0}
           opacity={50}
           className={classNames(styles.glitchLayer, styles.blueShift)}
+          // A decorative copy: read and tabbed to once, in the layer above.
+          aria-hidden="true"
+          inert
         >
           {children}
         </Flex>
@@ -97,6 +100,9 @@ const GlitchFx = forwardRef<HTMLDivElement, GlitchFxProps>(
           zIndex={0}
           opacity={50}
           className={classNames(styles.glitchLayer, styles.redShift)}
+          // A decorative copy: read and tabbed to once, in the layer above.
+          aria-hidden="true"
+          inert
         >
           {children}
         </Flex>

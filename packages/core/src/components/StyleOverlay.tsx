@@ -26,7 +26,7 @@ const closedTrigger: DropdownTriggerState = {
 };
 
 const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
-  ({ iconButtonProps, children, zIndex = 2, ...rest }, ref) => {
+  ({ iconButtonProps, children, zIndex = 2, style, ...rest }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
     const triggerRef = useRef<HTMLDivElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
@@ -72,10 +72,11 @@ const StyleOverlay = forwardRef<HTMLDivElement, StyleOverlayProps>(
           aria-label="Style panel"
           aria-hidden={!isOpen || undefined}
           zIndex={3}
-          className={`${styles.panel} ${isOpen && styles.open}`}
+          className={`${styles.panel}${isOpen ? ` ${styles.open}` : ""}`}
           maxWidth={28}
           style={{
             maxHeight: "calc(100% - var(--static-space-4))",
+            ...style,
           }}
           fillHeight
           position="absolute"

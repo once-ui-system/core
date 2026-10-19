@@ -82,7 +82,8 @@ export const LinearGauge = ({
 
   const renderLines = () => {
     const lines = [];
-    const spacing = (width - pad * 2) / (lineCount - 1);
+    // One tick has no gap to divide; dividing by zero put NaN in its x.
+    const spacing = lineCount > 1 ? (width - pad * 2) / (lineCount - 1) : 0;
 
     for (let j = 0; j < lineCount; j++) {
       const x = pad + j * spacing;

@@ -6,6 +6,7 @@ import {
   retiredPageRedirects,
   retiredSectionRedirects,
 } from "./src/resources/redirects.js";
+import { currentVersion, versionRewrites } from "./src/resources/versions.data.js";
 
 const withMDXConfig = withMDX({
   extension: /\.mdx?$/,
@@ -16,6 +17,14 @@ const withMDXConfig = withMDX({
 });
 
 const nextConfig = {
+  // A version other than the stable one is served under its path on the
+  // stable site (docs.once-ui.com/beta), which mounts it with the rewrites
+  // below. See src/resources/versions.data.js.
+  basePath: currentVersion.path || undefined,
+  env: { NEXT_PUBLIC_DOCS_BASE_PATH: currentVersion.path },
+  async rewrites() {
+    return { beforeFiles: versionRewrites() };
+  },
   // Exclude workspace source files and cache from build output
   outputFileTracingExcludes: {
     "*": [
@@ -44,6 +53,10 @@ const nextConfig = {
   },
   // Configure image optimization
   images: {
+    ...(currentVersion.path && {
+      loader: "custom",
+      loaderFile: "./src/resources/imageLoader.js",
+    }),
     formats: ["image/avif", "image/webp"],
     // Next 16 only accepts a local src without a query string unless this is
     // set, and setting it replaces that default, so the first entry restates

@@ -64,6 +64,21 @@
     "rule": "Fixed in 2.1: NumberInput follows its value prop after mount (an undo, a reset, a change made elsewhere) without rewriting what the user is typing. Pass value and onChange; do not remount it with a key to push a new value in.",
     "components": ["NumberInput"]
   },
+  "field.size": {
+    "rule": "Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size=\"s\" Button (32px), as in a toolbar or filter row, takes size=\"xxs\", which is 32px too; Form size=\"xxs\" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.",
+    "components": [
+      "Input",
+      "Select",
+      "Textarea",
+      "NumberInput",
+      "DateInput",
+      "DateRangeInput",
+      "PasswordInput",
+      "ColorInput",
+      "TagInput",
+      "Form"
+    ]
+  },
   "Select.closed": {
     "rule": "Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onSelect; do not build a local picker from DropdownWrapper and Options to get this.",
     "components": ["Select"]

@@ -21,9 +21,11 @@ interface UserProps {
 
 const User = forwardRef<HTMLDivElement, UserProps>(
   (
-    { name, children, subline, tagProps = {}, loading = false, avatarProps = {}, className },
+    { name, children, subline, tag, tagProps = {}, loading = false, avatarProps = {}, className },
     ref,
   ) => {
+    // `tag` is the documented shorthand; it was declared and never read.
+    const tagLabel = tagProps.label ?? tag;
     const { src, value, empty, ...restAvatarProps } = avatarProps;
     const isEmpty = empty || (!src && !value);
 
@@ -42,23 +44,39 @@ const User = forwardRef<HTMLDivElement, UserProps>(
           <Column paddingLeft="4" paddingRight="12">
             {loading ? (
               <Flex minWidth={6} paddingY="4">
-                <Skeleton width="100%" size="m" shape="line" aria-label="Loading name" />
+                {/* Named like the avatar's skeleton: an aria-label on an element
+                    with no role is prohibited, and was never announced. */}
+                <Skeleton
+                  width="100%"
+                  size="m"
+                  shape="line"
+                  role="img"
+                  aria-busy="true"
+                  aria-label="Loading name"
+                />
               </Flex>
             ) : (
               <Flex gap="8" vertical="center">
                 <Text variant="label-default-m" onBackground="neutral-strong">
                   {name}
                 </Text>
-                {tagProps.label && (
+                {tagLabel && (
                   <Tag size="s" {...tagProps}>
-                    {tagProps.label}
+                    {tagLabel}
                   </Tag>
                 )}
               </Flex>
             )}
             {loading ? (
               <Flex paddingY="2">
-                <Skeleton width="75%" size="xs" shape="line" aria-label="Loading subline" />
+                <Skeleton
+                  width="75%"
+                  size="xs"
+                  shape="line"
+                  role="img"
+                  aria-busy="true"
+                  aria-label="Loading subline"
+                />
               </Flex>
             ) : (
               <Text wrap="nowrap" variant="body-default-xs" onBackground="neutral-weak">

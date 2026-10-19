@@ -435,8 +435,12 @@ const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(
           onClick={(e) => {
             const el = e.target as HTMLElement;
             const isSelectable = el.closest(ITEM_SELECTOR);
+            // An item with a value is Dropdown's to pick, and its onSelect
+            // below has closed the menu already: closing it again here
+            // reported the close to onOpenChange a second time.
+            const pickedByDropdown = el.closest("[data-value]");
 
-            if (isSelectable && closeAfterClick) {
+            if (isSelectable && !pickedByDropdown && closeAfterClick) {
               setTimeout(() => {
                 handleOpenChange(false);
               }, 50);

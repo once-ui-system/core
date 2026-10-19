@@ -564,6 +564,12 @@ export const Kbar: React.FC<KbarProps> = ({
       {children != null && (
         <KbarTrigger
           tabIndex={0}
+          // It is the element Tab lands on (its Button child stays a plain
+          // div), so it is the button: it had no role, and said nothing about
+          // the palette it opens.
+          role="button"
+          aria-haspopup="dialog"
+          aria-expanded={open}
           onClick={handleOpen}
           onKeyDown={(e: React.KeyboardEvent) => {
             if (e.key === "Enter" || e.key === " ") {
