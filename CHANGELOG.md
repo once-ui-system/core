@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.3.0] — 2026-10-19
+
 ### Added
 
 - **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
