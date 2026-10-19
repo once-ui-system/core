@@ -1255,7 +1255,9 @@ const BASE_BUNDLE = {
   title: "Any other page",
   description:
     "The rules and the components nearly every page uses, with their types and gotchas. Read it with the `components/<Name>.json` slices your page adds, in one step",
-  components: [],
+  // A form page with no task bundle (an onboarding wizard in the dry run)
+  // opened these two slices after this bundle, a turn that re-sent it.
+  components: ["Switch", "SegmentedControl"],
 };
 
 // A slice lists only its own props: NavItem's `href` and `selected` live on
@@ -1316,7 +1318,23 @@ function compressUnion(values) {
   return out.join(" | ");
 }
 
+// Two types appear in every bundle and cost more as TypeScript than as a
+// list. A breakpoint object's keys (`GridBreakpointProps`) collapse a
+// family like padding, paddingX, paddingTop … to `padding*`. IconName's
+// quotes and pipes doubled its size, so its names are one plain word list.
+const familyKeys = (keys) =>
+  keys
+    .filter((k) => !keys.some((base) => k !== base && new RegExp(`^${base}[A-Z]`).test(k)))
+    .map((k) => (keys.some((o) => o !== k && new RegExp(`^${k}[A-Z]`).test(o)) ? `${k}*` : k));
+
 const typeLine = (name, type) => {
+  if (Array.isArray(type) && /^\w+BreakpointProps$/.test(name) && type.every((k) => /^\w+$/.test(k))) {
+    const component = name.replace(/BreakpointProps$/, "");
+    return `// type ${name}: an object of these ${component} props, all optional (padding* is padding, paddingX, paddingTop and the rest):\n// ${familyKeys(type).join(" ")}`;
+  }
+  if (name === "IconName" && Array.isArray(type) && type.every((n) => /^[\w-]+$/.test(n))) {
+    return `// type IconName is one of these names, and only these:\n// ${type.join(" ")}`;
+  }
   if (Array.isArray(type)) return `type ${name} = ${compressUnion(type)}`;
   if (typeof type === "string") return `type ${name} = ${type}`;
   const fields = Object.entries(type).map(([key, value]) => {
@@ -1515,7 +1533,7 @@ function writeAgentsTaskTable(taskIndex) {
     return `| \`ai/bundles/${id}.md\` | ${task.title}: ${task.description} | ${adds} |`;
   });
   rows.push(
-    `| \`ai/bundles/${BASE_BUNDLE.id}.md\` | ${BASE_BUNDLE.title}: ${BASE_BUNDLE.description} | ${COMMON_COMPONENTS.join(", ")} |`,
+    `| \`ai/bundles/${BASE_BUNDLE.id}.md\` | ${BASE_BUNDLE.title}: ${BASE_BUNDLE.description} | ${COMMON_COMPONENTS.join(", ")}; this bundle alone also has ${BASE_BUNDLE.components.join(", ")} |`,
   );
   const table = ["| Bundle | For | Adds |", "|---|---|---|", ...rows].join("\n");
   const next = `${text.slice(0, text.indexOf(start) + start.length)}\n${table}\n${text.slice(text.indexOf(end))}`;

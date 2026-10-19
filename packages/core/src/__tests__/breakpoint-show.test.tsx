@@ -4,11 +4,11 @@ import { ServerFlex } from "../components/ServerFlex";
 import { ServerGrid } from "../components/ServerGrid";
 
 /**
- * `.s-flex-show` is display: none outside its media query, so it reads "show
- * only from s down". `s={{ hide: selected }}` emitted it whenever `selected`
- * was false, which hid the element on desktop: a list/detail page rendered
- * empty at 1440px in the token dry run. The show class now appears only where
- * a wider breakpoint hides the element.
+ * `.s-flex-show` used to be display: none outside its media query, and
+ * `s={{ hide: selected }}` emitted it whenever `selected` was false, which hid
+ * the element on desktop: a list/detail page rendered empty at 1440px in the
+ * token dry run. The show class now appears only where a wider breakpoint
+ * hides the element, and foundations gives it no base rule.
  */
 const classesOf = (html: string) => {
   const at = html.indexOf('class="') + 7;

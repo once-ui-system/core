@@ -167,9 +167,9 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
-    // `-flex-show` is display: none outside its media query (it reads "show
-    // from here down"), so it only belongs where a wider breakpoint hides the
-    // element. `s={{ hide: open }}` with `open` false used to hide it on desktop.
+    // A show class only undoes a wider hide, so it is emitted only under one.
+    // When it carried a base display: none, `s={{ hide: open }}` with `open`
+    // false hid the element on desktop.
     const hiddenAbove = hiddenAboveBreakpoints(hide, [cascadedXl, cascadedL, cascadedM, cascadedS]);
 
     const getVariantClasses = (variant: TextVariant) => {

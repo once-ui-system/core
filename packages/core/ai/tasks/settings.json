@@ -24,7 +24,9 @@
     "NumberInput",
     "Checkbox",
     "MediaUpload",
-    "Avatar"
+    "Avatar",
+    "Table",
+    "NavItem"
   ],
   "recipes": [],
   "example": "examples/settings.tsx",

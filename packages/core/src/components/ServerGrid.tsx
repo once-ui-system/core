@@ -59,8 +59,7 @@ function breakpointClasses(
     ...spacingClasses(breakpoint, props),
     props.position && `${breakpoint}-position-${props.position}`,
     props.hide === true && `${breakpoint}-grid-hide`,
-    // `-grid-show` is display: none outside its media query, so it only
-    // belongs where a wider breakpoint hides the grid.
+    // A show class only undoes a wider hide, so it is emitted only under one.
     props.hide === false && hiddenAbove && `${breakpoint}-grid-show`,
     props.columns && `${breakpoint}-columns-${props.columns}`,
     props.rows && `${breakpoint}-rows-${props.rows}`,
