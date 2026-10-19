@@ -279,6 +279,11 @@
     "tags": ["feedback"],
     "pairsWith": ["Form", "Dialog"]
   },
+  "FileTree": {
+    "purpose": "Accessible hierarchical file and folder explorer with selection and expandable folders",
+    "tags": ["navigation", "data", "a11y"],
+    "pairsWith": ["Icon", "Column", "Text"]
+  },
   "Flex": {
     "purpose": "Layout primitive every component builds on — use directly only when direction changes at breakpoints",
     "tags": ["layout", "basics"],
