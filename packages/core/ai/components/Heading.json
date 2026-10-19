@@ -19,6 +19,7 @@
   "Column",
   "RevealFx"
  ],
+ "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
  "mixinsRef": [
   "CommonProps",
   "DisplayProps",
@@ -79,7 +80,13 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  }
 }

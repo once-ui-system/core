@@ -1,7 +1,7 @@
 import classNames from "clsx";
-import { CSSProperties, forwardRef } from "react";
+import { type CSSProperties, forwardRef } from "react";
 
-import {
+import type {
   CommonProps,
   DisplayProps,
   FlexBreakpointProps,
@@ -10,9 +10,10 @@ import {
   SpacingProps,
   StyleProps,
 } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import {
   BELOW_HEADER,
+  hiddenAboveBreakpoints,
   isCSSUnit,
   offsetClasses,
   scrollsOn,
@@ -166,6 +167,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
+    // `-flex-show` is display: none outside its media query (it reads "show
+    // from here down"), so it only belongs where a wider breakpoint hides the
+    // element. `s={{ hide: open }}` with `open` false used to hide it on desktop.
+    const hiddenAbove = hiddenAboveBreakpoints(hide, [cascadedXl, cascadedL, cascadedM, cascadedS]);
 
     const getVariantClasses = (variant: TextVariant) => {
       const parts = variant.split("-");
@@ -357,15 +362,15 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedS?.position && `s-position-${cascadedS.position}`,
         cascadedXs?.position && `xs-position-${cascadedXs.position}`,
         cascadedXl?.hide === true && "xl-flex-hide",
-        cascadedXl?.hide === false && "xl-flex-show",
+        cascadedXl?.hide === false && hiddenAbove.xl && "xl-flex-show",
         cascadedL?.hide === true && "l-flex-hide",
-        cascadedL?.hide === false && "l-flex-show",
+        cascadedL?.hide === false && hiddenAbove.l && "l-flex-show",
         cascadedM?.hide === true && "m-flex-hide",
-        cascadedM?.hide === false && "m-flex-show",
+        cascadedM?.hide === false && hiddenAbove.m && "m-flex-show",
         cascadedS?.hide === true && "s-flex-hide",
-        cascadedS?.hide === false && "s-flex-show",
+        cascadedS?.hide === false && hiddenAbove.s && "s-flex-show",
         cascadedXs?.hide === true && "xs-flex-hide",
-        cascadedXs?.hide === false && "xs-flex-show",
+        cascadedXs?.hide === false && hiddenAbove.xs && "xs-flex-show",
         xl?.direction && `xl-flex-${xl.direction}`,
         l?.direction && `l-flex-${l.direction}`,
         m?.direction && `m-flex-${m.direction}`,

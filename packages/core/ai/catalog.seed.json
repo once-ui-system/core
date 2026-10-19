@@ -326,6 +326,7 @@
   },
   "Heading": {
     "purpose": "Semantic h1–h6 with display and heading variants",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Text", "Column", "RevealFx"]
   },
@@ -881,6 +882,7 @@
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Heading", "Column", "Row"]
   },

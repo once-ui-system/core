@@ -17,7 +17,7 @@ type Task = {
   components: string[];
   example?: string;
   gotchas?: string[];
-  layout?: string;
+  layout?: string | string[];
   blocks?: { manifest?: string; primary?: string[]; compose?: string[]; patterns?: string[] };
 };
 
@@ -57,8 +57,8 @@ describe("ai task bundles", () => {
         (id) => !blockIds.has(id) && !existsSync(path.join(AI, "examples", "blocks", `${id}.tsx`)),
       );
       expect(missing).toEqual([]);
-      if (task.layout) {
-        const [file, anchor] = task.layout.split("#");
+      for (const ref of [task.layout ?? []].flat()) {
+        const [file, anchor] = ref.split("#");
         const text = readFileSync(path.join(AI, file), "utf8");
         const slugs = [...text.matchAll(/^#+\s+(.*)$/gm)].map((m) =>
           m[1]

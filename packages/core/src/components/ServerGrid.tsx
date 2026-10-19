@@ -1,7 +1,7 @@
 import classNames from "clsx";
-import { CSSProperties, forwardRef } from "react";
+import { type CSSProperties, forwardRef } from "react";
 
-import {
+import type {
   CommonProps,
   DisplayProps,
   GridBreakpointProps,
@@ -10,9 +10,10 @@ import {
   SpacingProps,
   StyleProps,
 } from "../interfaces";
-import { ColorScheme, ColorWeight } from "../types";
+import type { ColorScheme, ColorWeight } from "../types";
 import {
   BELOW_HEADER,
+  hiddenAboveBreakpoints,
   isCSSUnit,
   offsetClasses,
   scrollsOn,
@@ -51,13 +52,16 @@ interface ServerGridProps
 function breakpointClasses(
   breakpoint: string,
   props: GridBreakpointProps | undefined,
+  hiddenAbove = false,
 ): (string | false | undefined)[] {
   if (!props) return [];
   return [
     ...spacingClasses(breakpoint, props),
     props.position && `${breakpoint}-position-${props.position}`,
     props.hide === true && `${breakpoint}-grid-hide`,
-    props.hide === false && `${breakpoint}-grid-show`,
+    // `-grid-show` is display: none outside its media query, so it only
+    // belongs where a wider breakpoint hides the grid.
+    props.hide === false && hiddenAbove && `${breakpoint}-grid-show`,
     props.columns && `${breakpoint}-columns-${props.columns}`,
     props.rows && `${breakpoint}-rows-${props.rows}`,
     props.overflow && `${breakpoint}-overflow-${props.overflow}`,
@@ -181,6 +185,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
+    const hiddenAbove = hiddenAboveBreakpoints(hide, [cascadedXl, cascadedL, cascadedM, cascadedS]);
 
     const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
       if (!value) return undefined;
@@ -313,11 +318,11 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     classes +=
       " " +
       classNames(
-        ...breakpointClasses("xl", cascadedXl),
-        ...breakpointClasses("l", cascadedL),
-        ...breakpointClasses("m", cascadedM),
-        ...breakpointClasses("s", cascadedS),
-        ...breakpointClasses("xs", cascadedXs),
+        ...breakpointClasses("xl", cascadedXl, hiddenAbove.xl),
+        ...breakpointClasses("l", cascadedL, hiddenAbove.l),
+        ...breakpointClasses("m", cascadedM, hiddenAbove.m),
+        ...breakpointClasses("s", cascadedS, hiddenAbove.s),
+        ...breakpointClasses("xs", cascadedXs, hiddenAbove.xs),
       );
 
     const parsePosition = (value: number | string | undefined): string | undefined => {

@@ -65,12 +65,15 @@ export function isCSSUnit(value: string): boolean {
 /**
  * A size prop (`width`, `minHeight`, `minColumnWidth`…) as a CSS value: a
  * number is rem, a static token is its `--static-space-*` step, a t-shirt
- * size is the responsive width or height, and a CSS unit passes through.
+ * size is the responsive width or height, `fit` is fit-content, and a CSS unit
+ * or `auto` passes through.
  * Anything else is no value at all, as before.
  */
 export function sizeValue(value: unknown, type: "width" | "height"): string | undefined {
   if (typeof value === "number") return `${value}rem`;
   if (typeof value !== "string") return undefined;
+  if (value === "auto") return value;
+  if (value === "fit") return "fit-content";
   if (isCSSUnit(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
   if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-${type}-${value})`;
@@ -573,4 +576,23 @@ export function textLayout({
       transform: translateTransform(translateX, translateY),
     },
   };
+}
+
+/**
+ * Whether the element is hidden at a wider breakpoint than each of xl, l, m,
+ * s and xs (the base `hide` counts as wider than all of them). A `-show`
+ * class is display: none outside its media query, so it is only emitted where
+ * this is true.
+ */
+export function hiddenAboveBreakpoints(
+  hide: boolean | undefined,
+  wider: ({ hide?: boolean } | undefined)[],
+): Record<"xl" | "l" | "m" | "s" | "xs", boolean> {
+  const result = { xl: false, l: false, m: false, s: false, xs: false };
+  let hidden = hide === true;
+  (["xl", "l", "m", "s", "xs"] as const).forEach((bp, i) => {
+    result[bp] = hidden;
+    if (wider[i]?.hide === true) hidden = true;
+  });
+  return result;
 }
