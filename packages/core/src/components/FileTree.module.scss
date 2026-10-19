@@ -14,10 +14,14 @@
   transition: background var(--transition-micro-medium), color var(--transition-micro-medium);
 }
 
+/* Indent with a margin so the highlight starts at the row's own depth, and
+   hug the content instead of stretching across the tree. */
 .item > .itemContent {
   min-height: var(--static-space-32);
-  padding-inline-start: calc(var(--static-space-8) + (var(--tree-depth) - 1) * var(--static-space-20));
-  padding-inline-end: var(--static-space-8);
+  max-width: calc(100% - (var(--tree-depth) - 1) * var(--static-space-20));
+  align-self: flex-start;
+  margin-inline-start: calc((var(--tree-depth) - 1) * var(--static-space-20));
+  padding-inline: var(--static-space-8);
 }
 
 .itemContent {
