@@ -812,6 +812,23 @@
    "xs",
    "xxs"
   ],
+  "FileTreeFile": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"file\"",
+   "icon": "IconName"
+  },
+  "FileTreeFolder": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"folder\"",
+   "icon": "IconName",
+   "children": "!FileTreeItem[]"
+  },
+  "FileTreeItem": [
+   "FileTreeFolder",
+   "FileTreeFile"
+  ],
   "FlexBreakpointProps": [
    "style",
    "direction",
@@ -3001,6 +3018,35 @@
     "legend": "ReactNode",
     "description": "ReactNode",
     "span": "number"
+   }
+  },
+  "FileTree": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!FileTreeItem[]",
+    "selectedId": "string | null",
+    "defaultSelectedId": "string",
+    "expandedIds": "string[]",
+    "defaultExpandedIds": "string[] = []",
+    "onSelect": "(item: FileTreeItem) => void",
+    "onExpandChange": "(expandedIds: string[], item: FileTreeFolder) => void",
+    "onItemClick": "(item: FileTreeItem) => void",
+    "renderItem": "( item: FileTreeItem, state: { selected: boolean; expanded: boolean; depth: number }, ) => React.ReactNode",
+    "emptyState": "React.ReactNode",
+    "loading": "boolean = false",
+    "loadingState": "React.ReactNode",
+    "aria-label": "string"
    }
   },
   "Flex": {

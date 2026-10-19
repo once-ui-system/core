@@ -49,6 +49,7 @@
   "Feedback": {"purpose":"Inline alert with variant colour, icon, title, description and optional close"},
   "Field": {"purpose":"Label, hint and error around one control, with the id, aria-describedby, aria-invalid and aria-required wired for you"},
   "Fieldset": {"purpose":"Titled form section: a real fieldset with legend and description, laying its fields out like a Form grid"},
+  "FileTree": {"purpose":"Accessible hierarchical file and folder explorer with selection and expandable folders"},
   "Flex": {"purpose":"Layout primitive every component builds on — use directly only when direction changes at breakpoints","avoid":"Static row/column layouts — use Row or Column instead"},
   "FlipFx": {"purpose":"Card that flips between a front and back face on click, timer or control"},
   "FocusTrap": {"purpose":"Keeps Tab focus inside a region while active, with Escape handling and focus restore on close"},

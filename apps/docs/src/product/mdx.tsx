@@ -53,6 +53,7 @@ import {
   Feedback,
   Field,
   Fieldset,
+  FileTree,
   Flex,
   FlipFx,
   FocusTrap,
@@ -124,10 +125,10 @@ import {
   SmartLink,
   Spinner,
   SplitView,
-  SubmitButton,
   StatusIndicator,
   StyleOverlay,
   StylePanel,
+  SubmitButton,
   Swiper,
   Switch,
   Tab,
@@ -364,6 +365,7 @@ const mdxComponents = createMdxComponents({
   Card,
   CursorCard,
   Feedback,
+  FileTree,
 
   // ─── Core form controls ───
   Form,
