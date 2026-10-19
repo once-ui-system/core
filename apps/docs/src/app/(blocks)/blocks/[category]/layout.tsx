@@ -1,4 +1,5 @@
 import { Row } from "@once-ui-system/core";
+import { Panel } from "@/product";
 import { OnThisPage } from "../components/OnThisPage";
 import { SideBar } from "../components/SideBar";
 
@@ -25,19 +26,21 @@ export default function BlocksLayout({ children }: { children: React.ReactNode }
       >
         <SideBar />
       </Row>
-      {children}
-      <Row
-        fillHeight
-        maxWidth={17}
-        paddingY="8"
-        paddingX="2"
-        position="sticky"
-        style={{ height: "calc(100vh - var(--static-space-56))" }}
-        top="56"
-        l={{ hide: true }}
-      >
-        <OnThisPage />
-      </Row>
+      <Panel>
+        {children}
+        <Row
+          fillHeight
+          maxWidth={17}
+          paddingY="8"
+          paddingX="2"
+          position="sticky"
+          style={{ height: "calc(100vh - var(--static-space-56))" }}
+          top="56"
+          l={{ hide: true }}
+        >
+          <OnThisPage />
+        </Row>
+      </Panel>
     </Row>
   );
 }

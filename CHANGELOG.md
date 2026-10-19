@@ -68,6 +68,20 @@ item (see `ROADMAP.md`, Week 4).
   drag only from a `Sortable.Handle`. No dependency. Also new: the `grip` icon and
   `arrayMove`.
 
+### Changed
+
+- **Light mode has depth, like dark mode.** The light page background is now a soft
+  off-white (`neutral-1200`) and surfaces stay white, so cards, dialogs and panels lift
+  off the page instead of relying on borders alone. Neutral text is a step darker
+  (`on-background-medium` 400 → 300, `weak` 500 → 400) and coloured `weak` text moves
+  to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
+  mode is unchanged. Light solid fills (buttons, badges, `data-solid="color"` brand
+  solids and `--brand-color-*`) move from step 600 to 500, the same step dark mode
+  uses: white labels on 600 measured 3:1, below AA. In light mode `Input`, `Textarea`
+  and the fields built on them are white with a `neutral-border-strong` edge instead of a
+  gray fill, which read as disabled. Apps that set `background="page"` on white-only artwork may want
+  `surface` instead.
+
 ### Fixed
 
 - **`ThemeProvider` no longer causes a hydration mismatch.** It read the saved theme
