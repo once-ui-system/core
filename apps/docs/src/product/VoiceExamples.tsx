@@ -98,15 +98,8 @@ export function MascotStatesExample() {
     <Column fillWidth gap="24" horizontal="center" paddingY="24">
       <Row gap="40" vertical="center" wrap horizontal="center">
         <Mascot size="xl" state={state} mood={mood} />
-        <Mascot size="xl" state={state} mood={mood} shape="orb" eyes="pill" />
-        <Mascot
-          size="xl"
-          state={state}
-          mood={mood}
-          shape="squircle"
-          eyes="visor"
-          accessory="antenna"
-        />
+        <Mascot size="xl" state={state} mood={mood} roundness={1} eyes="round" color="accent" />
+        <Mascot size="xl" state={state} mood={mood} aspect={1.25} eyes="wide" color="neutral" />
       </Row>
       <Column gap="12" horizontal="center" fillWidth maxWidth={36}>
         <SegmentedControl

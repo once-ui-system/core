@@ -481,7 +481,7 @@
     "pairsWith": ["WorkingIndicator", "Text"]
   },
   "Mascot": {
-    "purpose": "Animated assistant character: states, moods, eyes follow pointer, lip-syncs audio",
+    "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
