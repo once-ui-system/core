@@ -129,6 +129,9 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A labelled `TagInput` with tags no longer draws its label over the first tag.** The
+  resting label sat at half the field's height, and the tags make the field taller; the
+  label now floats above while there are tags, as it does once there is text.
 - **Chart `data` takes rows typed with an `interface`, and `readonly` arrays.**
   `DataPoint[]` has an index signature, which an interface never satisfies, so
   `data={revenue}` with `revenue: RevenuePoint[]` failed to compile (2 of the 7
