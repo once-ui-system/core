@@ -224,7 +224,10 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
               flexDirection: "row",
               alignItems: "center",
               justifyContent: JUSTIFY[horizontal],
-              alignSelf: fillWidth ? "stretch" : "flex-start",
+              // As core's `width: 100%`: full width in a column, an equal share in a row.
+              ...(fillWidth
+                ? { width: "100%", flexShrink: 1, alignSelf: "stretch" }
+                : { alignSelf: "flex-start" }),
               height: theme.space(dims.height as "24"),
               minHeight: theme.space(dims.height as "24"),
               paddingHorizontal: theme.space(dims.x as "4"),

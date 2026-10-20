@@ -54,7 +54,7 @@ export function Avatar({
   const textSize = scale ? TEXT[scale] : "m";
   const isEmpty = empty || (!src && !value);
 
-  if (loading) return <Skeleton shape="circle" width={px} height={px} style={style} />;
+  if (loading) return <Skeleton shape="circle" style={[{ width: px, height: px }, style]} />;
 
   return (
     <View
