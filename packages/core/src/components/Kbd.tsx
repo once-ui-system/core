@@ -28,7 +28,10 @@ const Kbd = forwardRef<HTMLDivElement, KbdProps>(
       onBackground="neutral-medium"
       border="neutral-strong"
       className={className}
-      style={style}
+      // A key cap is one unit: "Ctrl K" broke onto two lines whenever its row
+      // got tight (in an Input's suffix it stood 38px tall and stretched a
+      // 32px field), so it neither wraps nor gives up width to its neighbours.
+      style={{ whiteSpace: "nowrap", flexShrink: 0, ...style }}
       {...rest}
     >
       <Text as="span" variant="label-default-s">
