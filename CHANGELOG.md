@@ -15,6 +15,17 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
+  field.** Chips, a model picker or attachments go on the left after the attach button,
+  a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps
+  the paper plane. Two agents rebuilding the same assistant app both hand-built this
+  around the composer. Without the new props the composer renders exactly as before.
+- **`scroll={false}` and option `description` on `SegmentedControl`.** In a narrow
+  sidebar the scroll strip clipped the last option behind its Next button; without it the
+  options share the row equally and truncate a label that does not fit. `description`
+  adds a second, dimmer line under an option's label.
+- **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
+  that opens a menu.
 - **AI working states: `WorkingIndicator` and `LogoSpinner`.** `LogoSpinner` is a loader
   drawn from the Once UI mark: the four tiles part, turn a quarter and click back
   (`variant="wave"` lifts them one at a time). `WorkingIndicator` puts it next to a verb
@@ -22,7 +33,6 @@ item (see `ROADMAP.md`, Week 4).
   optional elapsed count and hint. The words are yours to replace through `verbs`, or
   extend from the exported `workingVerbs`. Both take the brand color, so they follow a
   chat theme, and both keep signalling under reduced motion without moving.
-
 - **Voice chat animation: `VoiceVisualizer` and `useAudioLevel`.** An orb (or a compact
   bar meter) with its own motion for idle, listening, thinking and speaking. Hand it a
   microphone `MediaStream`, the reply's `<audio>` element or an `AnalyserNode` and it
@@ -30,6 +40,12 @@ item (see `ROADMAP.md`, Week 4).
   or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
   same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
   stop and live audio shows as glow and bar height.
+
+### Fixed
+
+- **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
+  38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
+  its width in a tight row.
 
 ## [2.3.0] — 2026-10-19
 

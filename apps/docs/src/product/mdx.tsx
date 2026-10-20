@@ -189,6 +189,7 @@ import {
   CelebrationFxExample,
   CharacterCountExample,
   ChatComposerExample,
+  ChatComposerToolbarExample,
   ChatConversationExample,
   ChipWithIconsExample,
   ClientEmojiPicker,
@@ -433,6 +434,7 @@ const mdxComponents = createMdxComponents({
   ChatConversationExample,
   VoiceStatesExample,
   ChatComposerExample,
+  ChatComposerToolbarExample,
   ConversationListExample,
 
   // ─── Core overlay ───

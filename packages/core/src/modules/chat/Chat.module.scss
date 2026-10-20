@@ -119,6 +119,11 @@
   padding-bottom: var(--static-space-8);
 }
 
+/* The hint and send button keep their width; the chips beside them wrap. */
+.toolbarEnd {
+  flex-shrink: 0;
+}
+
 .attachment {
   max-width: 16rem;
   min-width: 0;
