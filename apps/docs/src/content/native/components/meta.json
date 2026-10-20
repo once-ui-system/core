@@ -42,6 +42,8 @@
     "breadcrumbs": 38,
     "pagination": 39,
     "timeline": 40,
-    "scroller": 41
+    "scroller": 41,
+    "drawer": 42,
+    "nav": 43
   }
 }

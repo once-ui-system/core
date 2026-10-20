@@ -1,0 +1,149 @@
+---
+title: "Nav"
+summary: "An app's navigation: a bottom tab bar, or a list of rows in a drawer or sidebar, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/components/nav.mdx"
+github: "packages/native/src/components/Nav.tsx"
+navLabel: "Nav"
+navIcon: "components"
+---
+
+`Nav`, `NavItem`, `NavSection` and `NavGroup` take the same props as on the web. As a column (the default) they are a list of rows, for a drawer or a tablet sidebar. As a row (`direction="row"`) they are the phone's bottom tab bar: the items share the width, each an icon over its label, with a line along the top and the home indicator's inset below. See the [web Nav](/components/nav) for the same components in the browser.
+
+<Row fillWidth horizontal="center" marginY="24">
+  <Media
+    src="/images/native/tab-bar.png"
+    alt="A bookings screen with a four-tab bar at the bottom"
+    aspectRatio="390 / 844"
+    maxWidth={20}
+    radius="l"
+    border="neutral-alpha-weak"
+  />
+</Row>
+
+## Bottom tab bar
+
+Put the bar last in the screen's column, under a view with `flex={1}`. The current tab is `selected` and drawn in the brand colour. A number `badge` is a count on the icon (0 hides it, above 9 prints 9+); `indicator` is a dot.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Column, Nav, NavItem, Text } from "@once-ui-system/native";
+
+const TABS = [
+  { icon: "home", label: "Today" },
+  { icon: "calendar", label: "Bookings" },
+  { icon: "person", label: "Account" },
+] as const;
+
+export function Tabs() {
+  const [tab, setTab] = useState(0);
+  return (
+    <Column flex={1} background="page">
+      <Column flex={1} padding="16">
+        <Text>{TABS[tab].label}</Text>
+      </Column>
+      <Nav direction="row">
+        {TABS.map((t, i) => (
+          <NavItem
+            key={t.label}
+            icon={t.icon}
+            label={t.label}
+            badge={t.label === "Bookings" ? 3 : undefined}
+            selected={tab === i}
+            onPress={() => setTab(i)}
+          />
+        ))}
+      </Nav>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Tabs.tsx"
+  }
+]} />
+
+With React Navigation or Expo Router, render the same `Nav` from the tab navigator's `tabBar` prop and call `navigation.navigate` in `onPress`.
+
+## Rows
+
+As a column, `density` sets the row height (`compact` 32, `normal` 40, `spacious` 48) and `variant` how the current row stands out (`solid` fills it, `subtle` fills it and dims the others, `minimal` marks it by weight alone). `NavSection` adds a small heading over a block of rows; `NavGroup` folds a set of rows behind a header, with a rail down the side.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Nav, NavGroup, NavItem, NavSection } from "@once-ui-system/native";
+
+export function Menu() {
+  return (
+    <Nav density="compact" variant="subtle">
+      <NavSection label="Venue">
+        <NavItem icon="home" label="Today" selected />
+        <NavItem icon="calendar" label="Bookings" badge={3} />
+        <NavItem icon="inbox" label="Messages" indicator />
+      </NavSection>
+      <NavGroup icon="settings" label="Venue settings" defaultOpen>
+        <NavItem label="Opening hours" />
+        <NavItem label="Tables" />
+      </NavGroup>
+    </Nav>
+  );
+}`,
+    language: "tsx",
+    label: "Menu.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **Tab bar.** A row `Nav` is a bottom tab bar on the phone. On the web a row `Nav` lays its rows side by side.
+- **No links.** A `NavItem` has no `href`: navigate in `onPress` (or core's `onClick`).
+- **Sortable.** Rows can't be dragged into a `NavGroup`.
+- **Core 3.0 names.** `NavGroup` also takes `onOpenChange(open)`.
+
+## API reference
+
+### Nav
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `direction` | `"column" \| "row"` | `"column"` | A list of rows, or a bottom tab bar. |
+| `density` | `"compact" \| "normal" \| "spacious"` | `"normal"` | Row height and text size. |
+| `variant` | `"solid" \| "subtle" \| "minimal"` | `"solid"` | How the current row stands out. |
+| `rail` | `boolean` | `true` | The line down an open `NavGroup`. |
+
+`Nav` also takes every [`Flex`](/native/components/flex) prop.
+
+### NavItem
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | | The text. Required. |
+| `icon` | `IconName` | | Leading icon, or the tab's icon. |
+| `selected` | `boolean` | `false` | The current page or tab. |
+| `badge` | `number \| ReactNode` | | A count (0 hides it, above 9 prints 9+) or a short label. |
+| `indicator` | `boolean` | | A dot, for unread without a number. |
+| `disabled` | `boolean` | `false` | Dims the item and ignores presses. |
+| `onPress` / `onClick` | `() => void` | | Called on a tap. |
+
+### NavSection
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | | The heading over the rows. |
+| `action` | `ReactNode` | | A control at the end of the heading. |
+
+### NavGroup
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `ReactNode` | | The header's text. Required. |
+| `icon` | `IconName` | | Leading icon. |
+| `open` | `boolean` | | Open state, when you own it. |
+| `defaultOpen` | `boolean` | `false` | Starting state when the group owns it. |
+| `onToggle` | `() => void` | | Called on the header. |
+| `onOpenChange` | `(open: boolean) => void` | | Called with the next state. |
+| `selected` | `boolean` | `false` | Marks the header itself as current. |
