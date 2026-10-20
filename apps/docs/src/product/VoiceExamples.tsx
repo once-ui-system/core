@@ -3,6 +3,9 @@
 import {
   Button,
   Column,
+  Mascot,
+  type MascotMood,
+  type MascotState,
   Row,
   SegmentedControl,
   Text,
@@ -66,6 +69,58 @@ export function VoiceStatesExample() {
             {error}
           </Text>
         )}
+      </Column>
+    </Column>
+  );
+}
+
+const MASCOT_STATES: { label: string; value: MascotState }[] = [
+  { label: "Idle", value: "idle" },
+  { label: "Listening", value: "listening" },
+  { label: "Thinking", value: "thinking" },
+  { label: "Speaking", value: "speaking" },
+  { label: "Sleeping", value: "sleeping" },
+];
+
+const MASCOT_MOODS: { label: string; value: MascotMood }[] = [
+  { label: "Neutral", value: "neutral" },
+  { label: "Happy", value: "happy" },
+  { label: "Surprised", value: "surprised" },
+  { label: "Sad", value: "sad" },
+];
+
+// Move the pointer around: the eyes follow it.
+export function MascotStatesExample() {
+  const [state, setState] = useState<MascotState>("idle");
+  const [mood, setMood] = useState<MascotMood>("neutral");
+
+  return (
+    <Column fillWidth gap="24" horizontal="center" paddingY="24">
+      <Row gap="40" vertical="center" wrap horizontal="center">
+        <Mascot size="xl" state={state} mood={mood} />
+        <Mascot size="xl" state={state} mood={mood} shape="orb" eyes="pill" />
+        <Mascot
+          size="xl"
+          state={state}
+          mood={mood}
+          shape="squircle"
+          eyes="visor"
+          accessory="antenna"
+        />
+      </Row>
+      <Column gap="12" horizontal="center" fillWidth maxWidth={36}>
+        <SegmentedControl
+          aria-label="Mascot state"
+          buttons={MASCOT_STATES}
+          value={state}
+          onChange={(value) => setState(value as MascotState)}
+        />
+        <SegmentedControl
+          aria-label="Mascot mood"
+          buttons={MASCOT_MOODS}
+          value={mood}
+          onChange={(value) => setMood(value as MascotMood)}
+        />
       </Column>
     </Column>
   );

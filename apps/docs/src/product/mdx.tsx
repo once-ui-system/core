@@ -84,6 +84,7 @@ import {
   Logo,
   LogoCloud,
   LogoSpinner,
+  Mascot,
   Mask,
   MasonryGrid,
   MatrixFx,
@@ -293,6 +294,7 @@ import {
   ValidationInputExample,
   ValidationTextareaExample,
   VoiceStatesExample,
+  MascotStatesExample,
   WeatherFxExample,
 } from "@/product";
 
@@ -432,6 +434,7 @@ const mdxComponents = createMdxComponents({
   ConversationItem,
   ChatConversationExample,
   VoiceStatesExample,
+  MascotStatesExample,
   ChatComposerExample,
   ConversationListExample,
 
@@ -445,6 +448,7 @@ const mdxComponents = createMdxComponents({
   LogoSpinner,
   WorkingIndicator,
   VoiceVisualizer,
+  Mascot,
   Skeleton,
   FocusTrap,
   ScrollLock,
