@@ -1,4 +1,4 @@
-import { Children, forwardRef, type ReactNode } from "react";
+import { Children, createContext, forwardRef, type ReactNode } from "react";
 import {
   type DimensionValue,
   type StyleProp,
@@ -321,6 +321,16 @@ export function wrapText(children: ReactNode): ReactNode {
   );
 }
 
+/**
+ * The main axis of the nearest Flex or Card, so a child can align itself the
+ * way core's CSS would: a `Button` keeps its own width in a column but follows
+ * the row's `vertical` alignment in a row. `null` outside any Flex.
+ */
+export const FlexDirectionContext = createContext<"row" | "column" | null>(null);
+
+export const axisOf = (style: ViewStyle) =>
+  String(style.flexDirection ?? "column").startsWith("row") ? "row" : "column";
+
 /** Core's `Flex`: a row by default, as on the web (React Native's `View` is a column). */
 export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexProps>(
   function Flex(props, ref) {
@@ -329,7 +339,9 @@ export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexPr
     if (hidden) return null;
     return (
       <View ref={ref} {...rest} style={[style, userStyle]}>
-        {wrapText(props.children)}
+        <FlexDirectionContext.Provider value={axisOf(style)}>
+          {wrapText(props.children)}
+        </FlexDirectionContext.Provider>
       </View>
     );
   },

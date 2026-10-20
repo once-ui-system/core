@@ -128,3 +128,20 @@ describe("Tavilio feedback", () => {
     expect(control().props.refreshing).toBe(false);
   });
 });
+
+describe("Buttons in a row", () => {
+  it("follow the row's vertical alignment and keep their width in a column", async () => {
+    await wrap(
+      <>
+        <Row vertical="center">
+          <Button label="Edit" />
+        </Row>
+        <Button label="Alone" />
+      </>,
+    );
+    const inRow = StyleSheet.flatten(screen.getByRole("button", { name: "Edit" }).props.style);
+    const alone = StyleSheet.flatten(screen.getByRole("button", { name: "Alone" }).props.style);
+    expect(inRow.alignSelf).toBeUndefined();
+    expect(alone.alignSelf).toBe("flex-start");
+  });
+});
