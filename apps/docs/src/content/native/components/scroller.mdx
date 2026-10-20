@@ -1,0 +1,81 @@
+---
+title: "Scroller"
+summary: "A scrolling row or column with Flex layout, pull to refresh and safe-area padding, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/scroller.mdx"
+github: "packages/native/src/components/Scroller.tsx"
+navLabel: "Scroller"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Scroller` is a `ScrollView` that takes the [Flex](/native/components/flex) props. Layout props such as `gap`, `padding`, `vertical` and `safeArea` lay out the content, while size props such as `flex`, `height` and margins size the scroller itself. It scrolls sideways by default, as the [web Scroller](/components/scroller) does. Use `direction="column"` for a screen.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, Scroller, Text } from "@once-ui-system/native";
+
+export function Venues({ names }: { names: string[] }) {
+  return (
+    <Scroller gap="12" paddingX="16">
+      {names.map((name) => (
+        <Card key={name} padding="16" width={10}>
+          <Text>{name}</Text>
+        </Card>
+      ))}
+    </Scroller>
+  );
+}`,
+    language: "tsx",
+    label: "Row"
+  }
+]} />
+
+## A scrolling screen
+
+A `"column"` scroller fills its screen when you give it `flex={1}`. `safeArea={["bottom"]}` adds the home indicator's inset from `ThemeProvider`'s `insets` to the bottom padding, so the last item clears it. The content grows to at least the screen's height, so `vertical="center"` centers an empty state.
+
+`onRefresh` adds pull to refresh, with the spinner in the theme's colours. When `onRefresh` returns a promise, the spinner shows until it settles. Pass `refreshing` to drive the spinner yourself.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Scroller, Text } from "@once-ui-system/native";
+
+export function Bookings({ reload }: { reload: () => Promise<void> }) {
+  return (
+    <Scroller
+      direction="column"
+      flex={1}
+      gap="16"
+      padding="16"
+      safeArea={["bottom"]}
+      onRefresh={reload}
+    >
+      <Text>Tonight</Text>
+    </Scroller>
+  );
+}`,
+    language: "tsx",
+    label: "Screen"
+  }
+]} />
+
+## Differences from the web
+
+- There are no scroll buttons or edge fades, since a phone scrolls by touch. `fadeColor`, `onItemClick` and `labels` are left out.
+- `onRefresh`, `refreshing` and `showScrollbar` are new. The scroll bar is hidden by default, as on the web.
+- Flex props are split between the scroll view (size, margins, background, border, radius, position) and its content (direction, alignment, gap, padding, `safeArea`).
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `direction` | `"row" \| "column"` | `"row"` | The scroll axis. |
+| `onRefresh` | `() => unknown` | | Pull to refresh, on a `"column"` scroller. A returned promise keeps the spinner showing until it settles. |
+| `refreshing` | `boolean` | | Shows the refresh spinner, when you drive it yourself. |
+| `showScrollbar` | `boolean` | `false` | Shows the scroll bar. |
+| `...FlexProps` | `FlexProps` | | Spacing, size, surface and position props, as on `Flex`. |
