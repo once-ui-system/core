@@ -41,8 +41,11 @@ describe("ai harness without spec.json", () => {
     expect(rules).toMatch(/Never open `spec\.json`/);
   });
 
+  // 25,000 until 2.4; raised by 500 bytes, about 125 tokens, for the AI
+  // components (loader, working line, voice, mascot) so no existing purpose
+  // had to be cut to fit them.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(25_000);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(25_500);
   });
 });
 
@@ -81,12 +84,16 @@ describe("ai task bundles as one Markdown read", () => {
     (id, file) => {
       const task = read(file) as { components: string[]; gotchas?: string[]; example?: string };
       const md = readFileSync(path.join(AI, "bundles", `${id}.md`), "utf8");
-      const gotchas = read("gotchas.json") as Record<string, { rule: string }>;
+      const gotchas = read("gotchas.json") as Record<string, { rule: string; inRules?: boolean }>;
       for (const name of [...task.components, "Button", "IconButton", "Input", "Dialog"]) {
         if (Object.hasOwn(spec.components, name)) expect(md).toContain(`\n### ${name}`);
       }
       // The end of each rule: the start may point at a file the bundle replaces.
-      for (const id of task.gotchas ?? []) expect(md).toContain(gotchas[id].rule.slice(-60));
+      // A gotcha the rules already state is in the bundle once, as a rule.
+      for (const id of task.gotchas ?? []) {
+        if (gotchas[id].inRules) expect(md).not.toContain(`- ${gotchas[id].rule}`);
+        else expect(md).toContain(gotchas[id].rule.slice(-60));
+      }
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);

@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.2.0",
- "generated": "2026-10-18",
+ "version": "2.3.0",
+ "generated": "2026-10-19",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -73,8 +73,8 @@
    "rows": "GridSize"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
    "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
@@ -145,6 +145,9 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   },
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextProps": {
    "as": "T",
    "variant": "TextVariant",
@@ -152,13 +155,21 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  },
  "iconNames": [
   "adjustments",
+  "arrowDown",
   "arrowLeft",
   "arrowRight",
+  "arrowUp",
   "arrowUpRight",
   "ball",
   "banknotes",
@@ -184,6 +195,7 @@
   "code",
   "computer",
   "copy",
+  "cube",
   "danger",
   "dark",
   "dislike",
@@ -202,6 +214,7 @@
   "forward",
   "gift",
   "globe",
+  "grid",
   "grip",
   "heart",
   "help",
@@ -217,14 +230,17 @@
   "logout",
   "mail",
   "maximize",
+  "menu",
   "minimize",
   "minus",
   "moreHorizontal",
+  "newspaper",
   "opacity",
   "organization",
   "pause",
   "paw",
   "payment",
+  "people",
   "person",
   "personRemove",
   "play",
@@ -803,6 +819,23 @@
    "xs",
    "xxs"
   ],
+  "FileTreeFile": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"file\"",
+   "icon": "IconName"
+  },
+  "FileTreeFolder": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"folder\"",
+   "icon": "IconName",
+   "children": "!FileTreeItem[]"
+  },
+  "FileTreeItem": [
+   "FileTreeFolder",
+   "FileTreeFile"
+  ],
   "FlexBreakpointProps": [
    "style",
    "direction",
@@ -879,17 +912,17 @@
   "FlexValue": [
    "0",
    "1",
-   "8",
-   "10",
    "2",
    "3",
    "4",
-   "9",
-   "12",
    "5",
    "6",
    "7",
-   "11"
+   "8",
+   "9",
+   "10",
+   "11",
+   "12"
   ],
   "FormColumns": [
    "number",
@@ -997,17 +1030,17 @@
   "GridProps": "Grid props",
   "GridSize": [
    "1",
-   "8",
-   "10",
    "2",
    "3",
    "4",
-   "9",
-   "12",
    "5",
    "6",
    "7",
-   "11"
+   "8",
+   "9",
+   "10",
+   "11",
+   "12"
   ],
   "IconButtonProps": "IconButton props",
   "IconComponent": [
@@ -1029,6 +1062,7 @@
    "warning",
    "code",
    "link",
+   "menu",
    "search",
    "time",
    "video",
@@ -1037,9 +1071,12 @@
    "send",
    "checkbox",
    "document",
+   "grid",
    "adjustments",
+   "arrowDown",
    "arrowLeft",
    "arrowRight",
+   "arrowUp",
    "arrowUpRight",
    "ball",
    "banknotes",
@@ -1062,6 +1099,7 @@
    "clipboard",
    "close",
    "computer",
+   "cube",
    "dislike",
    "download",
    "edit",
@@ -1088,10 +1126,12 @@
    "minimize",
    "minus",
    "moreHorizontal",
+   "newspaper",
    "organization",
    "pause",
    "paw",
    "payment",
+   "people",
    "person",
    "personRemove",
    "play",
@@ -1312,6 +1352,7 @@
   },
   "OnceUIStyleConfig": {
    "theme": "Theme",
+   "defaultTheme": "Theme",
    "neutral": "NeutralColor | \"custom\"",
    "brand": "Schemes | \"custom\"",
    "accent": "Schemes | \"custom\"",
@@ -1329,7 +1370,10 @@
    "cursorInteractive": "InteractiveCursor",
    "brandSeed": "string",
    "accentSeed": "string",
-   "neutralSeed": "string"
+   "neutralSeed": "string",
+   "brandScale": "SchemeScale",
+   "accentScale": "SchemeScale",
+   "neutralScale": "SchemeScale"
   },
   "Opacity": [
    "0",
@@ -1397,6 +1441,20 @@
    "105",
    "110"
   ],
+  "SchemeRampWeight": [
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "1000",
+   "1100",
+   "1200"
+  ],
   "Schemes": [
    "blue",
    "indigo",
@@ -1412,6 +1470,7 @@
    "aqua",
    "cyan"
   ],
+  "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "ScrollContainerControlPlacement": [
    "top-start",
    "top-end",
@@ -1506,14 +1565,14 @@
    "s",
    "xs",
    "0",
-   "32",
    "1",
    "2",
    "4",
+   "8",
+   "12",
+   "32",
    "64",
    "160",
-   "12",
-   "8",
    "16",
    "20",
    "24",
@@ -1764,6 +1823,9 @@
    "align": "\"left\" | \"center\" | \"right\""
   },
   "TagProps": "Tag props",
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextSize": [
    "xl",
    "l",
@@ -2989,6 +3051,35 @@
     "legend": "ReactNode",
     "description": "ReactNode",
     "span": "number"
+   }
+  },
+  "FileTree": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!FileTreeItem[]",
+    "selectedId": "string | null",
+    "defaultSelectedId": "string",
+    "expandedIds": "string[]",
+    "defaultExpandedIds": "string[] = []",
+    "onSelect": "(item: FileTreeItem) => void",
+    "onExpandChange": "(expandedIds: string[], item: FileTreeFolder) => void",
+    "onItemClick": "(item: FileTreeItem) => void",
+    "renderItem": "( item: FileTreeItem, state: { selected: boolean; expanded: boolean; depth: number }, ) => React.ReactNode",
+    "emptyState": "React.ReactNode",
+    "loading": "boolean = false",
+    "loadingState": "React.ReactNode",
+    "aria-label": "string"
    }
   },
   "Flex": {
@@ -4910,8 +5001,10 @@
    "group": "modules",
    "props": {
     "items": "!KbarItem[]",
-    "children": "!React.ReactNode",
-    "inputSize": "TShirtSizes"
+    "children": "React.ReactNode",
+    "inputSize": "TShirtSizes",
+    "open": "boolean",
+    "onOpenChange": "(open: boolean) => void"
    }
   },
   "MegaMenu": {
@@ -5560,6 +5653,7 @@
    "group": "contexts",
    "props": {
     "theme": "Theme = system",
+    "defaultTheme": "Theme = system",
     "neutral": "NeutralColor | \"custom\"",
     "brand": "Schemes | \"custom\"",
     "accent": "Schemes | \"custom\"",
@@ -5578,6 +5672,9 @@
     "brandSeed": "string",
     "accentSeed": "string",
     "neutralSeed": "string",
+    "brandScale": "SchemeScale",
+    "accentScale": "SchemeScale",
+    "neutralScale": "SchemeScale",
     "children": "!React.ReactNode",
     "persistence": "StylePersistence = local"
    }
@@ -5825,6 +5922,12 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "selectNavHref": {
+   "group": "utils",
+   "kind": "function",
+   "signature": "(pathname: string, hrefs: string[]) => string | null",
+   "doc": "Which of a set of hrefs a pathname is currently on."
   },
   "defaultAdapters": {
    "group": "contexts",

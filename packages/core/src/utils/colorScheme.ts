@@ -198,6 +198,19 @@ export type CustomScheme = "brand" | "accent" | "neutral";
 export type CustomSchemeSeeds = Partial<Record<CustomScheme, string | undefined>>;
 
 /**
+ * A scheme written out step by step, `{ 100: "#…", …, 1200: "#…" }`, for a
+ * brand whose exact colours are fixed. Same shape as the native package's
+ * `SchemeScale`. Steps left out come from the seed when there is one; the
+ * `600-*` alphas are made from step 600 unless given.
+ */
+export type SchemeScale = Partial<
+  Record<SchemeRampWeight | "600-15" | "600-30" | "600-50", string>
+>;
+
+/** One scale per custom scheme. */
+export type CustomSchemeScales = Partial<Record<CustomScheme, SchemeScale | undefined>>;
+
+/**
  * The custom properties `data-<scheme>="custom"` reads — `--scheme-brand-100`
  * through `-1200` and the three `-600-*` alphas — generated from each seed.
  *
@@ -213,19 +226,84 @@ export type CustomSchemeSeeds = Partial<Record<CustomScheme, string | undefined>
  * document.documentElement.setAttribute("data-brand", "custom");
  * ```
  */
-export function customSchemeProperties(seeds: CustomSchemeSeeds): Record<string, string> {
+export function customSchemeProperties(
+  seeds: CustomSchemeSeeds,
+  scales: CustomSchemeScales = {},
+): Record<string, string> {
   const properties: Record<string, string> = {};
   for (const name of ["brand", "accent", "neutral"] as const) {
     const seed = seeds[name];
-    if (!seed) continue;
-    const scheme = generateColorScheme(seed);
-    if (!scheme) continue;
-    for (const [weight, value] of Object.entries(scheme)) {
-      properties[`--scheme-${name}-${weight}`] = value;
+    const generated = seed ? generateColorScheme(seed) : null;
+    // A scale's steps win over the seed's, so a seed can fill the ramp while
+    // the scale pins the steps the brand book fixes.
+    const scale: SchemeScale = { ...generated, ...scales[name] };
+    if (!scale[600]) continue;
+    for (const [step, value] of Object.entries(scale)) {
+      if (value) properties[`--scheme-${name}-${step}`] = value;
     }
-    for (const [suffix, value] of Object.entries(schemeAlphaVariants(scheme))) {
-      properties[`--scheme-${name}-${suffix}`] = value;
+    for (const [suffix, value] of Object.entries(schemeAlphaVariants(scale as SchemeRamp))) {
+      if (!scale[suffix as "600-15"]) properties[`--scheme-${name}-${suffix}`] = value;
     }
   }
   return properties;
+}
+
+/**
+ * A scale for each theme, `{ light: { … }, dark: { … } }`: a ramp tuned for a
+ * light page often reads wrong on a dark one. A theme left out uses the other
+ * theme's scale, and a seed fills the steps either one leaves out.
+ */
+export type SchemeScaleByTheme = { light?: SchemeScale; dark?: SchemeScale };
+
+/** One scale for both themes, or one per theme. */
+export type ThemedSchemeScale = SchemeScale | SchemeScaleByTheme;
+
+/** One scale per custom scheme, flat or per theme. */
+export type CustomSchemeThemedScales = Partial<Record<CustomScheme, ThemedSchemeScale | undefined>>;
+
+/** Whether a scale is written per theme rather than once for both. */
+export const isSchemeScaleByTheme = (scale: ThemedSchemeScale): scale is SchemeScaleByTheme =>
+  "light" in scale || "dark" in scale;
+
+/**
+ * {@link customSchemeProperties}, with per-theme scales. A scheme with one
+ * scale lands in `root`, exactly as `customSchemeProperties` returns it; a
+ * scheme with a scale per theme lands in `light` and `dark` instead, for a
+ * stylesheet to key off `data-theme`. `byTheme` names those schemes.
+ */
+export function customSchemeThemeProperties(
+  seeds: CustomSchemeSeeds,
+  scales: CustomSchemeThemedScales = {},
+): {
+  root: Record<string, string>;
+  light: Record<string, string>;
+  dark: Record<string, string>;
+  byTheme: CustomScheme[];
+} {
+  const flatSeeds: CustomSchemeSeeds = {};
+  const flatScales: CustomSchemeScales = {};
+  const light: Record<string, string> = {};
+  const dark: Record<string, string> = {};
+  const byTheme: CustomScheme[] = [];
+  for (const name of ["brand", "accent", "neutral"] as const) {
+    const scale = scales[name];
+    if (!scale || !isSchemeScaleByTheme(scale)) {
+      flatSeeds[name] = seeds[name];
+      flatScales[name] = scale;
+      continue;
+    }
+    const seed = { [name]: seeds[name] };
+    const step600 = `--scheme-${name}-600`;
+    let lightProperties = customSchemeProperties(seed, { [name]: scale.light ?? scale.dark });
+    let darkProperties = customSchemeProperties(seed, { [name]: scale.dark ?? scale.light });
+    // A theme whose scale has no step 600, and no seed to fill it, would
+    // point at nothing: it takes the other theme's ramp instead.
+    if (!lightProperties[step600]) lightProperties = darkProperties;
+    if (!darkProperties[step600]) darkProperties = lightProperties;
+    if (!lightProperties[step600]) continue;
+    Object.assign(light, lightProperties);
+    Object.assign(dark, darkProperties);
+    byTheme.push(name);
+  }
+  return { root: customSchemeProperties(flatSeeds, flatScales), light, dark, byTheme };
 }

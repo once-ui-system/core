@@ -308,3 +308,23 @@ export function ToolbarFieldsExample() {
     </Row>
   );
 }
+
+export function OTPInputLabelsExample() {
+  return (
+    <OTPInput
+      length={6}
+      labels={{ group: "Code de vérification", digit: (n, of) => `Chiffre ${n} sur ${of}` }}
+    />
+  );
+}
+
+export function TagInputLabelsExample() {
+  return (
+    <TagInput
+      id="themen"
+      label="Themen"
+      defaultValue={["Design", "Code"]}
+      labels={{ remove: (tag) => `${tag} entfernen`, removed: (tag) => `${tag} entfernt` }}
+    />
+  );
+}

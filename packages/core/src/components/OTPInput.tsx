@@ -2,11 +2,25 @@
 
 import type React from "react";
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
+import { mergeLabels } from "../internal/labels";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Input } from "./Input";
 import styles from "./OTPInput.module.scss";
 import { Text } from "./Text";
+
+/** The group's and the fields' accessible names. Omitted fields keep the English default. */
+interface OTPInputLabels {
+  /** Names the group of fields, unless `aria-label` or `aria-labelledby` is given. Defaults to `"One-time code"`. */
+  group?: string;
+  /** Names each field. Defaults to `` (position, length) => `OTP digit ${position} of ${length}` ``. */
+  digit?: (position: number, length: number) => string;
+}
+
+const DEFAULT_LABELS: Required<OTPInputLabels> = {
+  group: "One-time code",
+  digit: (position, length) => `OTP digit ${position} of ${length}`,
+};
 
 interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {
   length?: number;
@@ -15,6 +29,8 @@ interface OTPInputProps extends React.HTMLAttributes<HTMLDivElement> {
   errorMessage?: React.ReactNode;
   disabled?: boolean;
   autoFocus?: boolean;
+  /** The group's and the fields' names, for a translated interface. */
+  labels?: OTPInputLabels;
 }
 
 const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
@@ -26,6 +42,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
       errorMessage,
       disabled = false,
       autoFocus = false,
+      labels,
       className,
       ...props
     },
@@ -44,6 +61,13 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
     // described by it; Input marks them invalid from `error`.
     const errorId = `${idPrefix}otp-error`;
     const showsErrorMessage = error && Boolean(errorMessage);
+    const names = mergeLabels(DEFAULT_LABELS, labels);
+    // The fields read as one labelled group, the code, rather than as loose
+    // fields; a caller's own name for it wins.
+    const groupName =
+      props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined
+        ? {}
+        : { "aria-label": names.group };
 
     useEffect(() => {
       if (autoFocus && inputsRef.current[0]) {
@@ -53,6 +77,13 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 
     const handleChange = (index: number, value: string) => {
       if (disabled) return;
+
+      // A whole code arriving at once, as the browser's one-time-code autofill
+      // sets it, fills every field rather than being refused.
+      if (value.length > 1 && /^\d+$/.test(value)) {
+        fill(index, value);
+        return;
+      }
 
       if (value === "" || /^[0-9]$/.test(value)) {
         const newValues = [...values];
@@ -80,7 +111,11 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
       const digits = event.clipboardData.getData("text").replace(/\D/g, "");
       event.preventDefault();
       if (!digits) return;
+      fill(index, digits);
+    };
 
+    /** Spreads a run of digits over the fields: see `handlePaste`. */
+    const fill = (index: number, digits: string) => {
       const start = digits.length >= length ? 0 : index;
       const newValues = [...values];
       for (let i = 0; i < digits.length && start + i < length; i++) {
@@ -149,7 +184,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
       // each digit they overrode the field's own handlers and duplicated ids;
       // a caller's `onChange` or `onKeyDown` still sees every digit's event as
       // it bubbles up, after the field has handled it.
-      <Column gap="8" ref={ref} className={className} {...props}>
+      <Column gap="8" ref={ref} className={className} role="group" {...groupName} {...props}>
         <Flex gap="8" center onClick={handleContainerClick}>
           {Array.from({ length }, (_, index) => (
             <Input
@@ -161,6 +196,9 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               type="text"
               placeholder=" "
               inputMode="numeric"
+              // The browser offers a code from a text message for the first field;
+              // `handleChange` spreads it over the rest.
+              autoComplete={index === 0 ? "one-time-code" : "off"}
               maxLength={1}
               disabled={disabled}
               error={error}
@@ -169,7 +207,7 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
               onPaste={(e) => handlePaste(index, e)}
-              aria-label={`OTP digit ${index + 1} of ${length}`}
+              aria-label={names.digit(index + 1, length)}
               className={styles.inputs}
             />
           ))}
@@ -188,5 +226,5 @@ const OTPInput = forwardRef<HTMLDivElement, OTPInputProps>(
 
 OTPInput.displayName = "OTPInput";
 
-export type { OTPInputProps };
+export type { OTPInputLabels, OTPInputProps };
 export { OTPInput };

@@ -1,0 +1,390 @@
+/* WorkingIndicator */
+.working {
+  min-width: 0;
+}
+
+.verb {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Each new verb rises into place. Keyed on the verb, so it runs per change. */
+.verbEnter {
+  animation: working-verb-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes working-verb-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* A highlight sweeps across the letters. The text keeps its own color under
+   the highlight, so it reads the same in both themes. */
+.shimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--neutral-on-background-weak) 0%,
+    var(--neutral-on-background-weak) 35%,
+    var(--neutral-on-background-strong) 50%,
+    var(--neutral-on-background-weak) 65%,
+    var(--neutral-on-background-weak) 100%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: working-shimmer 2.4s linear infinite;
+
+  &.verbEnter {
+    animation:
+      working-verb-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+      working-shimmer 2.4s linear infinite;
+  }
+}
+
+@keyframes working-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* The global rule would freeze the sweep mid-letter; plain text instead. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    color: var(--neutral-on-background-medium);
+    background-image: none;
+  }
+}
+
+.separator {
+  padding: 0 0.375em;
+}
+
+/* VoiceVisualizer
+   `--voice-level` (0–1) and `--voice-bar-N` come from audio when the component
+   is `data-live`; otherwise each state plays a stand-in animation. */
+.voice {
+  --voice-level: 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.voice-orb {
+  width: var(--voice-d);
+  height: var(--voice-d);
+
+  &.voice-s {
+    --voice-d: 2rem;
+  }
+  &.voice-m {
+    --voice-d: 4rem;
+  }
+  &.voice-l {
+    --voice-d: 7.5rem;
+  }
+  &.voice-xl {
+    --voice-d: 12.5rem;
+  }
+}
+
+.voiceOrb {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 32% 26%,
+      color-mix(in srgb, var(--voice-color) 25%, white) 0%,
+      transparent 38%
+    ),
+    radial-gradient(
+      circle at 50% 45%,
+      var(--voice-color) 0%,
+      var(--voice-glow) 55%,
+      color-mix(in srgb, var(--voice-glow) 55%, black) 100%
+    );
+  box-shadow:
+    0 0 calc(var(--voice-d) * (0.12 + var(--voice-level) * 0.4)) 0 var(--voice-soft),
+    inset 0 calc(var(--voice-d) * -0.06) calc(var(--voice-d) * 0.18) 0
+      color-mix(in srgb, var(--voice-glow) 60%, black);
+  transform: scale(calc(0.92 + var(--voice-level) * 0.2));
+  transition:
+    transform 0.08s linear,
+    box-shadow 0.08s linear,
+    opacity var(--transition-micro-medium);
+}
+
+/* A slow conic swirl inside the orb; it speeds up while thinking. */
+.voiceSwirl {
+  position: absolute;
+  inset: -25%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    color-mix(in srgb, var(--voice-color) 30%, white) 70deg,
+    transparent 150deg,
+    color-mix(in srgb, var(--voice-glow) 70%, black) 230deg,
+    transparent 320deg
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.7;
+  /* Softened so the gradient's center never shows as a point. */
+  filter: blur(calc(var(--voice-d) * 0.07));
+  animation: voice-swirl 9s linear infinite;
+}
+
+.voiceRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--voice-soft);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.voice:not([data-live]) {
+  &[data-state="idle"] .voiceOrb {
+    animation: voice-breathe 4.2s ease-in-out infinite;
+  }
+
+  &[data-state="listening"] {
+    .voiceOrb {
+      animation: voice-listen 1.8s ease-in-out infinite;
+    }
+    .voiceRing {
+      animation: voice-ripple 2.4s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+    }
+    .voiceRingLate {
+      animation-delay: 1.2s;
+    }
+  }
+
+  &[data-state="speaking"] .voiceOrb {
+    animation: voice-talk 1.3s ease-in-out infinite;
+  }
+}
+
+.voice[data-state="thinking"] {
+  .voiceOrb {
+    transform: scale(0.84);
+    animation: voice-ponder 2.6s ease-in-out infinite;
+  }
+  .voiceSwirl {
+    opacity: 0.9;
+    animation-duration: 1.6s;
+  }
+}
+
+/* Live listening: the rings follow the voice instead of rippling on a timer. */
+.voice[data-live][data-state="listening"] .voiceRing {
+  opacity: calc(var(--voice-level) * 0.9);
+  transform: scale(calc(1 + var(--voice-level) * 0.35));
+  transition:
+    transform 0.08s linear,
+    opacity 0.08s linear;
+}
+
+.voice[data-live][data-state="listening"] .voiceRingLate {
+  transform: scale(calc(1 + var(--voice-level) * 0.7));
+  opacity: calc(var(--voice-level) * 0.5);
+}
+
+.voice[data-state="idle"] .voiceOrb {
+  opacity: 0.85;
+}
+
+@keyframes voice-swirl {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes voice-breathe {
+  0%,
+  100% {
+    transform: scale(0.92);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+}
+
+@keyframes voice-listen {
+  0%,
+  100% {
+    transform: scale(0.94);
+  }
+  50% {
+    transform: scale(1.02);
+  }
+}
+
+@keyframes voice-ripple {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+/* Uneven beats, like syllables. */
+@keyframes voice-talk {
+  0%,
+  100% {
+    transform: scale(0.95);
+  }
+  14% {
+    transform: scale(1.08);
+  }
+  28% {
+    transform: scale(0.99);
+  }
+  42% {
+    transform: scale(1.12);
+  }
+  58% {
+    transform: scale(0.97);
+  }
+  74% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes voice-ponder {
+  0%,
+  100% {
+    transform: scale(0.84);
+  }
+  50% {
+    transform: scale(0.88);
+  }
+}
+
+/* Bars */
+.voice-bars {
+  gap: var(--voice-gap);
+
+  &.voice-s {
+    --voice-height: var(--static-space-16);
+    --voice-width: 3px;
+    --voice-gap: 2px;
+  }
+  &.voice-m {
+    --voice-height: var(--static-space-24);
+    --voice-width: 4px;
+    --voice-gap: 3px;
+  }
+  &.voice-l {
+    --voice-height: var(--static-space-40);
+    --voice-width: 6px;
+    --voice-gap: 4px;
+  }
+  &.voice-xl {
+    --voice-height: var(--static-space-64);
+    --voice-width: 10px;
+    --voice-gap: 6px;
+  }
+  height: var(--voice-height);
+}
+
+.voiceBar {
+  display: block;
+  width: var(--voice-width);
+  min-height: var(--voice-width);
+  height: calc(var(--voice-width) + var(--voice-bar) * (var(--voice-height) - var(--voice-width)));
+  border-radius: var(--voice-width);
+  background: var(--voice-color);
+  transition: height 0.07s linear;
+}
+
+.voice-bars[data-state="idle"] .voiceBar {
+  opacity: 0.5;
+}
+
+.voice-bars:not([data-live]) {
+  &[data-state="listening"] .voiceBar {
+    animation: voice-bar-listen 1.6s ease-in-out infinite;
+    animation-delay: calc(var(--voice-offset) * 0.18s);
+  }
+
+  &[data-state="speaking"] .voiceBar {
+    animation: voice-bar-talk 0.9s ease-in-out infinite;
+    animation-delay: calc(var(--voice-index) * -0.37s);
+  }
+}
+
+/* Thinking: dots that bounce in turn, live or not, since there is no sound. */
+.voice-bars[data-state="thinking"] .voiceBar {
+  height: var(--voice-width);
+  animation: voice-bar-think 1.2s ease-in-out infinite;
+  animation-delay: calc(var(--voice-index) * 0.12s);
+}
+
+@keyframes voice-bar-listen {
+  0%,
+  100% {
+    height: var(--voice-width);
+  }
+  50% {
+    height: calc(var(--voice-height) * 0.45);
+  }
+}
+
+@keyframes voice-bar-talk {
+  0%,
+  100% {
+    height: calc(var(--voice-height) * 0.3);
+  }
+  25% {
+    height: calc(var(--voice-height) * 0.85);
+  }
+  50% {
+    height: calc(var(--voice-height) * 0.45);
+  }
+  75% {
+    height: var(--voice-height);
+  }
+}
+
+@keyframes voice-bar-think {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.45;
+  }
+  30% {
+    transform: translateY(calc(var(--voice-height) * -0.25));
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: the stand-ins stop (the global rule ends them on their rest
+   frame). Live audio stays, but the orb answers with glow instead of size. */
+@media (prefers-reduced-motion: reduce) {
+  .voiceOrb {
+    transform: scale(0.92);
+  }
+  .voice[data-live] .voiceOrb {
+    opacity: calc(0.7 + var(--voice-level) * 0.3);
+  }
+  .voice[data-live][data-state="listening"] .voiceRing {
+    transform: none;
+  }
+}

@@ -36,11 +36,11 @@ function Host({
   );
 }
 
-const swatch = (name: string) => screen.getByRole("button", { name });
+const swatch = (name: string) => screen.getByRole("radio", { name });
 
 /**
- * The panel's swatch rows are toggle buttons (one tab stop each, Enter/Space
- * choose) and its option rows are segmented tab lists. Controlled, each choice
+ * Every row of options is a radio group named by its label (one tab stop, the
+ * arrows move and choose, Enter/Space choose). Controlled, each choice
  * reports the whole next value plus just the change; bound, it writes to
  * ThemeProvider. `visibility` drops sections and rows.
  */
@@ -49,14 +49,14 @@ describe("StylePanel interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Host initial={{ brand: "blue" }} onChange={onChange} />, { wrapper });
-    expect(swatch("Brand colour: blue")).toHaveAttribute("aria-pressed", "true");
+    expect(swatch("Brand colour: blue")).toHaveAttribute("aria-checked", "true");
 
     await user.click(swatch("Corner style: rounded"));
     expect(onChange).toHaveBeenLastCalledWith(
       { brand: "blue", border: "rounded" },
       { border: "rounded" },
     );
-    expect(swatch("Corner style: rounded")).toHaveAttribute("aria-pressed", "true");
+    expect(swatch("Corner style: rounded")).toHaveAttribute("aria-checked", "true");
 
     await user.click(swatch("Neutral colour: sand"));
     expect(onChange).toHaveBeenLastCalledWith(
@@ -77,24 +77,118 @@ describe("StylePanel interaction", () => {
     expect(onChange).toHaveBeenLastCalledWith({ accent: "green" }, { accent: "green" });
   });
 
-  it("gives each swatch one tab stop", async () => {
+  it("gives each swatch row one tab stop, the arrows moving and choosing", async () => {
     const user = userEvent.setup();
-    render(<Host />, { wrapper });
-    swatch("Corner style: sharp").focus();
+    const onChange = vi.fn();
+    render(<Host initial={{ border: "playful" }} onChange={onChange} />, { wrapper });
+    const shape = screen.getByRole("radiogroup", { name: "Shape" });
+    // Chosen, the swatch is the stop; nothing chosen, the first one is.
+    expect(swatch("Corner style: playful")).toHaveAttribute("tabindex", "0");
+    expect(swatch("Corner style: sharp")).toHaveAttribute("tabindex", "-1");
+    expect(swatch("Brand colour: blue")).toHaveAttribute("tabindex", "0");
+    expect(swatch("Brand colour: red")).toHaveAttribute("tabindex", "-1");
+
+    swatch("Corner style: playful").focus();
+    await user.keyboard("{ArrowRight}");
+    expect(swatch("Corner style: rounded")).toHaveFocus();
+    expect(swatch("Corner style: rounded")).toHaveAttribute("aria-checked", "true");
+    expect(onChange).toHaveBeenLastCalledWith({ border: "rounded" }, { border: "rounded" });
+    await user.keyboard("{ArrowRight}");
+    expect(swatch("Corner style: sharp")).toHaveFocus();
+    await user.keyboard("{ArrowUp}");
+    expect(swatch("Corner style: rounded")).toHaveFocus();
+    await user.keyboard("{Home}");
+    expect(swatch("Corner style: sharp")).toHaveAttribute("aria-checked", "true");
+
+    // Tab leaves the group rather than walking its swatches.
     await user.tab();
-    expect(swatch("Corner style: conservative")).toHaveFocus();
-    await user.tab();
-    expect(swatch("Corner style: playful")).toHaveFocus();
+    expect(shape.contains(document.activeElement)).toBe(false);
+    expect(swatch("Brand colour: blue")).toHaveFocus();
+  });
+
+  it("names every option group by its row and exposes it as a radio group", async () => {
+    const { container } = render(<Host initial={{ solid: "inverse" }} />, { wrapper });
+    const groups = screen
+      .getAllByRole("radiogroup")
+      .map((group) => group.getAttribute("aria-label") ?? group.getAttribute("aria-labelledby"));
+    expect(groups.every(Boolean)).toBe(true);
+    for (const name of [
+      "Theme",
+      "Shape",
+      "Brand",
+      "Accent",
+      "Neutral",
+      "Style",
+      "Effect",
+      "Surface",
+      "Scaling",
+      "Data Style",
+      "Transition",
+    ]) {
+      expect(screen.getByRole("radiogroup", { name })).toBeInTheDocument();
+    }
+    expect(screen.queryAllByRole("tablist")).toHaveLength(0);
+    expect(screen.queryAllByRole("button", { name: /colour|Corner|theme/ })).toHaveLength(0);
+    const style = screen.getByRole("radiogroup", { name: "Style" });
+    expect(within(style).getByRole("radio", { name: "Inverse" })).toHaveAttribute(
+      "aria-checked",
+      "true",
+    );
+    expect(within(style).getByRole("radio", { name: "Inverse" })).toHaveAttribute("tabindex", "0");
+    expect(within(style).getByRole("radio", { name: "Color" })).toHaveAttribute("tabindex", "-1");
+    // A segmented row is one radio group, not a tablist inside one.
+    expect(style.querySelector('[role="tablist"], [role="radiogroup"]')).toBeNull();
+    await expectNoAxeViolations(container);
+  });
+
+  it("moves and chooses with the arrows on a segmented row and the theme row", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<Host initial={{ surface: "filled", theme: "dark" }} onChange={onChange} />, {
+      wrapper,
+    });
+    const surface = screen.getByRole("radiogroup", { name: "Surface" });
+    within(surface).getByRole("radio", { name: "Filled" }).focus();
+    await user.keyboard("{ArrowRight}");
+    expect(within(surface).getByRole("radio", { name: "Translucent" })).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith(
+      { surface: "translucent", theme: "dark" },
+      { surface: "translucent" },
+    );
+
+    expect(swatch("Dark theme")).toHaveAttribute("tabindex", "0");
+    expect(swatch("System theme")).toHaveAttribute("tabindex", "-1");
+    swatch("Dark theme").focus();
+    await user.keyboard("{ArrowRight}");
+    expect(swatch("Light theme")).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith(
+      { surface: "translucent", theme: "light" },
+      { theme: "light" },
+    );
+  });
+
+  it("names a group by the default row label when the row hides its label", () => {
+    render(
+      <StylePanel.Root value={{}} onChange={vi.fn()}>
+        <StylePanel.Shape label={false} />
+        <StylePanel.Surface label={false} />
+        <StylePanel.Brand label="Marke" />
+      </StylePanel.Root>,
+      { wrapper },
+    );
+    expect(screen.getByRole("radiogroup", { name: "Shape" })).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup", { name: "Surface" })).toBeInTheDocument();
+    expect(screen.getByRole("radiogroup", { name: "Marke" })).toBeInTheDocument();
   });
 
   it("reports a segmented choice", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Host onChange={onChange} />, { wrapper });
-    await user.click(screen.getByRole("tab", { name: "Plastic" }));
+    await user.click(screen.getByRole("radio", { name: "Plastic" }));
     expect(onChange).toHaveBeenLastCalledWith({ solidStyle: "plastic" }, { solidStyle: "plastic" });
-    expect(screen.getByRole("tab", { name: "Plastic" })).toHaveAttribute("aria-selected", "true");
-    await user.click(screen.getByRole("tab", { name: "110" }));
+    expect(screen.getByRole("radio", { name: "Plastic" })).toHaveAttribute("aria-checked", "true");
+    await user.click(screen.getByRole("radio", { name: "110" }));
     expect(onChange).toHaveBeenLastCalledWith(
       { solidStyle: "plastic", scaling: "110" },
       { scaling: "110" },
@@ -105,7 +199,7 @@ describe("StylePanel interaction", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(<Host onChange={onChange} />, { wrapper });
-    await user.click(screen.getByRole("tab", { name: "Divergent" }));
+    await user.click(screen.getByRole("radio", { name: "Divergent" }));
     expect(onChange).toHaveBeenLastCalledWith(
       { chartMode: "divergent" },
       { chartMode: "divergent" },
@@ -116,7 +210,7 @@ describe("StylePanel interaction", () => {
     const user = userEvent.setup();
     render(<StylePanel />, { wrapper });
     await user.click(swatch("Corner style: playful"));
-    expect(swatch("Corner style: playful")).toHaveAttribute("aria-pressed", "true");
+    expect(swatch("Corner style: playful")).toHaveAttribute("aria-checked", "true");
     expect(document.documentElement).toHaveAttribute("data-border", "playful");
   });
 
@@ -129,9 +223,9 @@ describe("StylePanel interaction", () => {
       />,
       { wrapper },
     );
-    expect(screen.queryByRole("button", { name: /Brand colour/ })).toBeNull();
-    expect(screen.queryByRole("button", { name: /Corner style/ })).toBeNull();
-    expect(screen.getByRole("button", { name: "Dark theme" })).toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: /Brand colour/ })).toBeNull();
+    expect(screen.queryByRole("radio", { name: /Corner style/ })).toBeNull();
+    expect(screen.getByRole("radio", { name: "Dark theme" })).toBeInTheDocument();
     expect(screen.queryByText("Body text")).toBeNull();
 
     rerender(
@@ -149,9 +243,9 @@ describe("StylePanel interaction", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    expect(screen.queryByRole("button", { name: /Brand colour/ })).toBeNull();
+    expect(screen.queryByRole("radio", { name: /Brand colour/ })).toBeNull();
     const page = within(container);
-    await user.click(page.getByRole("button", { name: "Corner style: sharp" }));
+    await user.click(page.getByRole("radio", { name: "Corner style: sharp" }));
     expect(onChange).toHaveBeenLastCalledWith({ border: "sharp" }, { border: "sharp" });
     await expectNoAxeViolations(container);
   });

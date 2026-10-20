@@ -15,6 +15,200 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`"auto"` on every margin prop.** `marginLeft="auto"` pushes an item to the end of its
+  row and `marginX="auto"` centres a block, on Flex, Row, Column, Grid, Text and Heading
+  and in breakpoint objects (`s={{ marginLeft: "0" }}` undoes it). Margins took tokens
+  and numbers only, so this was a type error agents hit in 3 benchmark first attempts,
+  one of them in the 2.1.0 claim run. Foundations adds the `.m-auto`…`.ml-auto` classes
+  and their breakpoint variants; padding and gap have no `auto`.
+
+- **`onSelect` on `UserMenu`.** Called with the `value` of the Option picked from
+  `dropdown`, by click or keyboard: DropdownWrapper's `onSelect`, passed through, so a
+  menu of actions needs no `onClick` on every Option.
+
+- **Validator rules for the type errors agents still make.** `validate-ai-code` now
+  names the fix where tsc only names the rejected prop: CSS alignment names
+  (`horizontal="space-between"`, `"flex-start"`) and a bare `between` on Row or Column
+  (`--fix` rewrites both), `vertical="baseline"`; `href`, `type` and `span` on a layout
+  primitive and `as="form"` with a form-typed handler (use `Card href`, `Card onClick`,
+  `gridColumn`, a native `<form>`); `mobileDirection`-style names and a breakpoint
+  object on a component that takes none (`Button s={{ fillWidth }}`). Over the
+  benchmark transcripts it flags 25 of the 76 Once UI attempts that failed typecheck,
+  and 1 of 185 that passed.
+- **`semantics="radio"` on `SegmentedControl` and `ThemeSwitcher`.** For a choice
+  among settings rather than a view switch: a `radiogroup` of `radio`s with one tab
+  stop, where the arrow keys move and choose. The defaults (`"tabs"`, `"toggle"`)
+  are unchanged.
+- **`labels` on `OTPInput` and `TagInput`, `interactive` on `Chip`, `pauseLabel` and
+  `playLabel` on `Carousel`'s `play`.** The new names and announcements below can be
+  translated. `<Chip interactive={false} onRemove>` makes the label plain text, for a
+  chip whose one action is its removal.
+- **Search, filters and a toolbar on `DataTable`.** `searchable` adds a 32px search
+  field, and a column's `filter: { options }` adds a select beside it; `toolbar` takes
+  your own controls. Both work on DataTable's state or yours (`search`, `filters` and
+  their change handlers). On the client DataTable filters the rows itself; with `count`
+  or `total` it only reports, and `onQueryChange` hands a server table its page, page
+  size, sort, search and filters in one call per change. A query that matches nothing
+  now shows "No results" with a clear button, not "No data available".
+- **Responsive and user-picked columns on `DataTable`, and `hide` on `Table` headers.**
+  `hide: { s: true }` drops a column at a breakpoint and below with CSS, so the server
+  render is already right; tables no longer have to overflow sideways on a phone or
+  wait for JavaScript to hide a column. `columnsMenu` lets readers show and hide
+  columns, and `columnVisibility` lets the app save that choice.
+- **`keepRowsWhileLoading` on `DataTable`.** While a server table loads the next page
+  or search, the last rows stay on screen, dimmed, instead of flashing skeleton rows on
+  every keystroke.
+
+- **Scales per theme: `brandScale={{ light: { … }, dark: { … } }}`.** One ramp served
+  both themes, so an accent tuned for dark (a lime that glows on near-black) read wrong
+  on light, and fixing it took CSS. The flat shape still applies to both; a theme left
+  out uses the other's. `ThemeInit` renders both on the server, keyed off `data-theme`,
+  and a `theme="dark"` subtree gets the dark ramp. Same for `accentScale` and
+  `neutralScale`.
+- **`pageBackground` and `surfaceBackground` in `once-ui.config` `style`.** The light
+  page (off-white) and the filled surface (white) could only change through selector
+  overrides. Each takes a token or any CSS colour, once or `{ light, dark }`, and
+  `ThemeInit` renders it before the first paint.
+- **A weight per font family: `--font-body-weight-strong` and friends.** `.font-strong`
+  and the other weight classes read `--font-weight-display-*` on every family, so bolder
+  body text also changed headlines and labels. `--font-<family>-weight-<weight>` (for
+  `heading`, `body`, `label`, `code`) now changes only that family; unset, each still
+  falls back to the display weight, so nothing renders differently.
+
+- **`Tag` and `Badge` inside a sentence: `as="span"`.** Both rendered divs, which are not
+  allowed in a `<p>`, so a status tag in body copy was invalid HTML and hydration
+  warnings. With `as="span"` every element in them (the Badge arrow included) is a span
+  and they flow inline. The default is still the div, unchanged.
+- **`StatusIndicator` takes theme roles and every palette.** `color` adds `brand`,
+  `accent`, `neutral`, `info`, `danger`, `warning` and `success`, which follow the theme's
+  scheme for that role, plus `rose`, `mint`, `dusk`, `sand` and `slate`. The existing
+  names paint as before.
+- **`NavItem` `badge` takes text.** `badge="New"` prints as given and is read as its text;
+  a number is still a count that hides at 0, prints `9+` above 9 and reads "12 unread".
+- **`titleVariant` on `Accordion` and `AccordionGroup`, and `radius="none"` on
+  `Accordion`.** The title was fixed in `heading-strong-s`, so a FAQ in body type needed a
+  wrapper per title; the default is unchanged.
+- **`text` on `Logo`: a text wordmark.** For a brand with no wordmark file, the name is set
+  in the heading font at the logo's size, after the icon, and names the link. `wordmark`
+  stays an image source.
+- **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
+  field.** Chips, a model picker or attachments go on the left after the attach button,
+  a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps
+  the paper plane. Two agents rebuilding the same assistant app both hand-built this
+  around the composer. Without the new props the composer renders exactly as before.
+- **`scroll={false}` and option `description` on `SegmentedControl`.** In a narrow
+  sidebar the scroll strip clipped the last option behind its Next button; without it the
+  options share the row equally and truncate a label that does not fit. `description`
+  adds a second, dimmer line under an option's label.
+- **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
+  that opens a menu.
+- **AI working states: `WorkingIndicator` and `LogoSpinner`.** `LogoSpinner` is a loader
+  drawn from the Once UI mark: the four tiles part, turn a quarter and click back
+  (`variant="wave"` lifts them one at a time). `WorkingIndicator` puts it next to a verb
+  that changes every few seconds ("Imagining…", "Noodling…", "Kerning…"), with an
+  optional elapsed count and hint. The words are yours to replace through `verbs`, or
+  extend from the exported `workingVerbs`. Both take the brand color, so they follow a
+  chat theme, and both keep signalling under reduced motion without moving.
+- **Voice chat animation: `VoiceVisualizer` and `useAudioLevel`.** An orb (or a compact
+  bar meter) with its own motion for idle, listening, thinking and speaking. Hand it a
+  microphone `MediaStream`, the reply's `<audio>` element or an `AnalyserNode` and it
+  follows the real sound, written to CSS variables each frame so React never re-renders;
+  or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
+  same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
+  stop and live audio shows as glow and bar height.
+- **A mascot for assistants: `Mascot` and `mascotLook`.** One soft, single-color shape with
+  eyes that idles, listens, thinks, speaks and sleeps, with eight moods on top (happy,
+  surprised, sad, skeptical, wink, focused, determined). By default the eyes are tiles of
+  the Once UI mark, and while it thinks they turn like `LogoSpinner`. Eyes follow the
+  pointer across a body that reads as round, lids shape each expression, and speaking
+  moves the body (and mouth) with a `level` or the reply's audio `source`. Every part of
+  the look is a prop: color, outline (`roundness`, `aspect`, `bodyPath`), `surface`, eye
+  shape, size and placement, `mouth`, `brows`, `cheeks`, an SVG `accessory` and a
+  `personality`; `seed` (or `mascotLook(seed)`) picks a whole look so each product gets
+  its own character. Under reduced motion it holds still and keeps its expressions.
+
+### Fixed
+
+- **A labelled `TagInput` with tags no longer draws its label over the first tag.** The
+  resting label sat at half the field's height, and the tags make the field taller; the
+  label now floats above while there are tags, as it does once there is text.
+- **Chart `data` takes rows typed with an `interface`, and `readonly` arrays.**
+  `DataPoint[]` has an index signature, which an interface never satisfies, so
+  `data={revenue}` with `revenue: RevenuePoint[]` failed to compile (2 of the 7
+  first-attempt type errors in the 2.1.0 claim run). Every chart reads the rows by key
+  as before.
+
+- **Avatar's `statusIndicator` takes every StatusIndicator colour.** The dot is a
+  StatusIndicator, but `color` named only green, yellow, red and gray, so
+  `{ color: "orange" }` for "away" failed to compile and would have rendered fine.
+
+- **DateRangeInput and DateRangePicker take a `value` with either end left out.**
+  `{}` is no range and `{ startDate }` a range still being picked, so the
+  `{ startDate?: Date; endDate?: Date }` state apps write type-checks. `onChange` still
+  hands back both keys.
+- **`StylePanel`'s rows are radio groups.** Each row of swatches or segments is a
+  `radiogroup` named by the row's label, its options `radio`s: one Tab stop per row
+  instead of one per swatch (over forty in the colour rows), and the arrow keys move
+  and choose. The segmented rows were tab lists with no panels. Looks and `labels`
+  are unchanged.
+- **`OTPInput` reads as one code.** The boxes are a `group` named "One-time code"
+  (or by `aria-label`); the first asks for `autocomplete="one-time-code"`, and a whole
+  code set by autofill fills every box instead of being refused.
+- **`TagInput`'s tags are a list, and Backspace removes the last one.** In an empty
+  field Backspace takes the last tag, and a polite live region says which tag went.
+  A tag's label is no longer a focusable "pressed" toggle that did nothing, and
+  removing a tag puts focus back in the field rather than on the page.
+- **`HoverCard`'s links and buttons can be reached from the keyboard.** The card is
+  in a portal at the end of the page, so Tab from its trigger skipped it, and blurring
+  the trigger closed it. While it is open, Tab now goes from the trigger into the card
+  and on to what follows the trigger; focus moving between the two keeps it open, and
+  Escape from inside the card returns focus to the trigger. The trigger is marked
+  `aria-expanded`/`aria-controls` (or `aria-describedby` for a card of text). Only
+  keyboard focus opens it; the pointer behaves as before.
+- **`Carousel` autoplay can always be stopped (WCAG 2.2.2).** `play={{ auto: true }}`
+  had no pause button and an interval of 0: each `play` field now has its own default
+  (`interval` 3000, `controls` on unless `false`). Autoplay holds while the pointer is
+  over the carousel, stops when keyboard focus comes in (the button then offers Play),
+  and does not start under reduced motion. The
+  carousel is a named group with `aria-roledescription="carousel"`, each slide a
+  "slide" ("2 of 5"), and slide changes are announced politely only while it is not
+  moving on its own.
+- **Text in a `theme="dark"` (or `data-theme`) subtree follows the subtree's theme.**
+  The default text colour was resolved once on `<html>` and inherited, so a dark hero on
+  a light page kept dark text unless every `Text` set `onBackground`. An element with
+  `data-theme` now reads `--neutral-on-background-strong` again, at zero specificity, so
+  colour classes still win. Pages without a themed subtree are unchanged.
+
+- **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
+  38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
+  its width in a tight row.
+
+## [2.3.0] — 2026-10-19
+
+### Added
+
+- **An app starter agents copy instead of writing: `ai/starters/app/`.** A Next.js App
+  Router setup with Once UI's CSS, fonts, providers and a switchable dark-first theme in
+  the root layout, and a signed-in shell (sidebar with `Nav`, top bar with breadcrumb,
+  ⌘K palette, theme switch and account menu, raised content panel, phone drawer) mounted
+  once for its routes. The product name, user and nav live in one file. `AGENTS.md` and
+  the section `once-ui-init-agent` writes point agents at it. In our own test runs on the
+  same five-route app, agents starting from it used about half the tokens and model calls
+  and passed the same checks, where agents without it locked the theme switch or lost
+  the app fonts.
+
+- **`defaultTheme` on `ThemeProvider` and in `once-ui.config` `style`: a starting theme
+  the visitor can change.** `theme: "light"` forces light and ignores `setTheme`, so a
+  light site with a working theme switch had no clean setup; two agents rebuilding the
+  same app both worked around it. `ThemeInit` paints `defaultTheme` before first load,
+  and choosing "System" with a non-system default is now saved, so a reload keeps it.
+- **`brandScale`, `accentScale` and `neutralScale`: exact brand colours, step by step.**
+  `{ 100: "#…", …, 1200: "#…" }`, the same shape as the native package's. A seed fills
+  the steps a scale leaves out; without a seed the scale needs step 600. `ThemeInit`
+  renders them on the server like a seed. Before this, matching a brand book meant
+  overriding semantic variables in CSS with selector hacks.
+- **Icons `arrowUp`, `arrowDown`, `cube`, `grid`, `newspaper`, `people` and `menu`.**
+
 - **`size="xxs"` on every text field: 32px, the height of a small `Button`.** Field
   heights run a step above the button scale (`xs` 40px, `s` 48px, `m` 56px), so a
   dashboard toolbar could not be all small controls: the shortest field was as tall
@@ -45,8 +239,57 @@ item (see `ROADMAP.md`, Week 4).
   spacing, and a closed `NavGroup` opens when a row is held over it. With `handle`, rows
   drag only from a `Sortable.Handle`. No dependency. Also new: the `grip` icon and
   `arrayMove`.
+- **A file and folder tree: `FileTree`.** Pass `items` (files, and folders with
+  `children`) and it renders an indented tree that the arrow keys walk: Up, Down, Home and
+  End move through the visible rows, Right opens a folder or steps into it, Left closes
+  it or goes to its parent, and Enter or Space selects. Selection and open folders work controlled (`selectedId`,
+  `expandedIds`) or uncontrolled (`defaultSelectedId`, `defaultExpandedIds`), with
+  `onSelect`, `onExpandChange` and `onItemClick`; `renderItem`, `emptyState`, `loading`
+  and `loadingState` cover custom rows and empty or loading trees. Contributed by
+  @kadrxy.
+- **`Kbar` opens from your own button.** `open` and `onOpenChange` make it controlled,
+  `children` is optional, and ⌘K still toggles it.
+- **Props agents kept reaching for.** `Text` and `Heading` take `flex`, and `xl` to `xs`
+  with `hide`. Width and height props take `"auto"` and `"fit"` (fit-content).
+  `VisuallyHidden as="a"` takes `href`.
+
+### Changed
+
+- **Light mode has depth, like dark mode.** The light page background is now a soft
+  off-white (`neutral-1200`) and surfaces stay white, so cards, dialogs and panels lift
+  off the page instead of relying on borders alone. Neutral text is a step darker
+  (`on-background-medium` 400 → 300, `weak` 500 → 400) and coloured `weak` text moves
+  to 400, so every text token stays above WCAG AA 4.5:1 on the new page colour. Dark
+  mode is unchanged. Light solid fills (buttons, badges, `data-solid="color"` brand
+  solids and `--brand-color-*`) move from step 600 to 500, the same step dark mode
+  uses: white labels on 600 measured 3:1, below AA. In light mode `Input`, `Textarea`
+  and the fields built on them are white with a `neutral-border-strong` edge instead of a
+  gray fill, which read as disabled. Apps that set `background="page"` on white-only artwork may want
+  `surface` instead.
 
 ### Fixed
+
+- **`hide: false` at a breakpoint no longer hides anything.** `s={{ hide: open }}` on a
+  `Column` hid it on desktop whenever `open` was false, and `l={{ hide: true }}
+  s={{ hide: false }}` stayed hidden above `l`. A breakpoint's show class now applies
+  only inside its own media query, and is emitted only where a wider breakpoint hides
+  the element.
+- **`Textarea`'s floating label lines up with `Input`'s at every size.** The resting
+  label sat 18px from the top at every size, so it rode low in `xs` and `s` fields and
+  high in `l` and `xl`, and an `xs` textarea was 4px taller than the input beside it.
+- **A `Setting` row with a string label is 4px shorter.** The label was wrapped in an
+  extra span that took the body line height; the row now measures as designed.
+- **`MatrixFx` is no longer blank under reduced motion.** Its first size report cleared
+  the canvas and nothing redrew it; a real resize now rebuilds the grid and redraws.
+- **`ThemeProvider` no longer causes a hydration mismatch.** It read the saved theme
+  during the first render, so anything showing `theme` or `resolvedTheme` rendered
+  differently on the server (React #418). The saved theme is now applied in a layout
+  effect, before paint.
+- **`--font-heading`, `--font-body`, `--font-label` and `--font-code` no longer beat the
+  app's own fonts.** Their placeholder declarations (each `var()` of itself) sat on
+  `:root`, so they won over a next/font class on `<html>` whenever tokens.css loaded
+  later, and the cycle left the font invalid. They are declared on `:where(:root)` now,
+  at zero specificity.
 
 - **A docs page of CodeBlocks could fail hydration at random (React #418).** Prism
   highlights every `code[class*="language-"]` in the document a frame after it loads
@@ -64,8 +307,41 @@ item (see `ROADMAP.md`, Week 4).
   (`"bottom-right"`, `"top-left"` and the rest) instead of the start/end alignments it
   never handled.
 
+### Accessibility
+
+- **Dialogs and focus.** In `Dialog` and `FocusTrap`, Tab walks the page order and
+  wraps, and focus moves into a dialog when it opens. The dialog's description is its
+  `aria-describedby`, and `aria-labelledby` is set only when a title renders. The
+  `StyleOverlay` trigger is a real button and its panel a named dialog that takes focus
+  and closes on Escape.
+- **Keyboard.** `InfoTip` and other hover triggers open with Enter and Space;
+  `ContextMenu` closes on Escape; `Select` options show keyboard focus; `NumberInput`'s
+  steppers leave the Tab order (the arrow keys step); the `MediaVideoPlayer` seek bar
+  takes focus, reads the time, and jumps with Home and End; an enlargeable `Media`
+  image is a button; `Swiper` keeps focus when Previous or Next disappears at an end;
+  a scrolling `DataTable` can be focused, as `Table` can.
+- **Announcements.** The first toast is read (the `Toaster` live region exists before
+  it), danger and warning `Feedback` are alerts and the rest polite status, `TypeFx` and
+  `LetterFx` are read once instead of every frame, `Timeline` is a list with
+  `aria-current="step"`, `LinearGauge` and `RadialGauge` are named meters, and
+  CodeBlock's Copy says "Copied".
+- **States.** A disabled `Fieldset` disables the `Checkbox`, `Switch`, `RadioButton` and
+  `RadioGroup` inside it. `ToggleButton` is `type="button"` with `aria-pressed`,
+  `Button` and `IconButton` set `aria-busy` while loading, and a focused field's border
+  darkens. Under `prefers-reduced-motion` transitions end at once (`Spinner` keeps
+  turning).
+- **No shared ids.** `Table`, `Kbar` and the gauges no longer reuse a fixed id when a page
+  has two of them.
+
 ### Docs
 
+- **Agents need fewer follow-up reads.** A new `app-shell` task bundle carries the
+  sidebar and header components, `selectNavHref`, `useTheme` and both shell layouts.
+  Bundles include the props of the components they extend and name the task's hooks;
+  the settings bundle adds `Table` and `NavItem`, and `page.md` adds `Switch` and
+  `SegmentedControl`. `IconName` and the breakpoint keys are plain word lists, so every
+  bundle is about 3% smaller. `AGENTS.md` tells agents to read `app/layout.tsx` with the
+  bundle and to open project files by path.
 - **Every example and props table is checked against the code.** `check:docs` in the
   docs app typechecks the 1,300-odd examples on the docs site, in the agent harness's
   rules, recipes and gotchas, and in the READMEs against the built package, and checks
@@ -86,7 +362,17 @@ item (see `ROADMAP.md`, Week 4).
   `relative` and `scrollbar` to `minimal`; the spec read the defaults from the wrong
   file and listed none.
 
-## [2.2.0] — 2026-10-17
+## [2.2.1] — 2026-10-18
+
+### Fixed
+
+- **The `bin` paths are written without `./`.** npm 11 warns that `./scripts/...` bin
+  paths are invalid and may drop them in a later version; `once-ui-init-agent` and
+  `once-ui-validate-ai-code` keep working either way.
+- **`RevealFx` clears its mask timer on unmount.** Unmounting it while `revealed` was
+  animating set state on an unmounted component.
+
+## [2.2.0] — 2026-10-18
 
 ### Added
 

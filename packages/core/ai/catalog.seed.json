@@ -189,7 +189,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },
@@ -279,6 +279,11 @@
     "tags": ["feedback"],
     "pairsWith": ["Form", "Dialog"]
   },
+  "FileTree": {
+    "purpose": "Accessible hierarchical file and folder explorer with selection and expandable folders",
+    "tags": ["navigation", "data", "a11y"],
+    "pairsWith": ["Icon", "Column", "Text"]
+  },
   "Flex": {
     "purpose": "Layout primitive every component builds on — use directly only when direction changes at breakpoints",
     "tags": ["layout", "basics"],
@@ -326,6 +331,7 @@
   },
   "Heading": {
     "purpose": "Semantic h1–h6 with display and heading variants",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Text", "Column", "RevealFx"]
   },
@@ -468,6 +474,16 @@
     "purpose": "Grid of partner or customer logos with optional rotation — always set columns",
     "tags": ["marketing", "social-proof"],
     "pairsWith": ["Grid", "Logo"]
+  },
+  "LogoSpinner": {
+    "purpose": "Once UI mark loader, for AI and brand loading states",
+    "tags": ["feedback", "chat", "ai"],
+    "pairsWith": ["WorkingIndicator", "Text"]
+  },
+  "Mascot": {
+    "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
+    "tags": ["ai", "chat", "decoration"],
+    "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
@@ -881,6 +897,7 @@
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Heading", "Column", "Row"]
   },
@@ -966,9 +983,19 @@
     "tags": ["accessibility"],
     "pairsWith": ["Button", "SmartLink"]
   },
+  "VoiceVisualizer": {
+    "purpose": "Voice chat orb or bars for idle, listening, thinking, speaking; follows audio level",
+    "tags": ["chat", "ai", "media"],
+    "pairsWith": ["WorkingIndicator", "ChatComposer"]
+  },
   "WeatherFx": {
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "WorkingIndicator": {
+    "purpose": "AI working line: mark loader plus cycling verbs (Imagining…)",
+    "tags": ["chat", "feedback", "ai"],
+    "pairsWith": ["ChatMessageList", "LogoSpinner"]
   }
 }

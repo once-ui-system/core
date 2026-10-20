@@ -289,7 +289,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                   compact
                     ? styles.labelHidden
                     : classNames(styles.label, styles.inputLabel, {
-                        [styles.floating]: isFocused || isFilled || placeholder,
+                        // Children are values drawn in the field (TagInput's tags). With
+                        // the label resting at 50% of a field they had made taller, it
+                        // sat on top of the first tag.
+                        [styles.floating]: isFocused || isFilled || placeholder || !!children,
                       })
                 }
               >

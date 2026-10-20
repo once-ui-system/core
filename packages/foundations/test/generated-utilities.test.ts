@@ -14,6 +14,7 @@ import {
   SCHEMES,
   WEIGHTS,
   JUSTIFY_ALIGNMENTS,
+  MARGIN_AUTO_PREFIXES,
   FLEX_DIRECTIONS,
   OFFSET_SIDES,
   OFFSET_TOKENS,
@@ -58,6 +59,19 @@ describe("generated utilities", () => {
     expect(SPACING_FAMILIES.length).toBe(15);
     expect(SPACING_TOKENS.length).toBe(24);
     expect(SPACING_FAMILIES.length * SPACING_TOKENS.length).toBe(360);
+  });
+
+  it("gives the margin families, and only them, an auto value at every breakpoint", () => {
+    const css = readFileSync(GENERATED, "utf8");
+    for (const { prefix } of MARGIN_AUTO_PREFIXES) {
+      expect(css).toContain(`.${prefix}-auto {`);
+      for (const { key } of BREAKPOINTS_CASCADE) expect(css).toContain(`.${key}-${prefix}-auto {`);
+    }
+    expect(MARGIN_AUTO_PREFIXES.map((f) => f.prefix)).toEqual(["m", "mx", "my", "mt", "mr", "mb", "ml"]);
+    expect(css).toMatch(/\.ml-auto \{\n {2}margin-left: auto;\n\}/);
+    expect(css).not.toMatch(/\.(p[xytrbl]?|g)-auto \{/);
+    // A side still follows the shorthand, so `margin="16" marginLeft="auto"` keeps the auto.
+    expect(css.indexOf(".m-auto {")).toBeLessThan(css.indexOf(".ml-16 {"));
   });
 
   it("carries every token the layout layer defines", () => {
@@ -160,22 +174,19 @@ describe("generated utilities", () => {
   });
 
   /**
-   * `.<bp>-flex-show` is hidden by a base rule and revealed inside its own
-   * query, so the pair reads as "show only at this width". l, m and s had the
-   * base rule; xs did not, which left `.xs-flex-show` visible at every width
-   * instead of only the narrowest. Measured in Chromium before the fix:
-   * l/m/s computed `none` above their breakpoint, xs computed `block`.
-   *
-   * The class name existed either way, so the class-name snapshot could never
-   * have caught this. Only the rule count can.
+   * `.<bp>-flex-show` and `.<bp>-grid-show` live only inside their own query.
+   * A base display: none hid `l={{ hide: true }} s={{ hide: false }}` above l,
+   * where nothing hides it; the components emit a show class only under a
+   * wider hide, which covers the wider widths on its own.
    */
-  it("hides every flex-show variant outside its own breakpoint", () => {
-    const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
-    const base = css.split("@media")[0];
-    for (const { key } of BREAKPOINTS) {
-      expect(base, `base .${key}-flex-show`).toMatch(
-        new RegExp(`\\.${key}-flex-show \\{\\s*display: none;`),
-      );
+  it("gives no show class a rule outside its own breakpoint", () => {
+    for (const file of ["flex", "grid"]) {
+      const css = readFileSync(join(ROOT, `scss/styles/${file}.generated.scss`), "utf8");
+      const base = css.split("@media")[0];
+      for (const { key } of BREAKPOINTS) {
+        expect(base, `base .${key}-${file}-show`).not.toContain(`.${key}-${file}-show`);
+        expect(css, `.${key}-${file}-show`).toContain(`.${key}-${file}-show {`);
+      }
     }
   });
 

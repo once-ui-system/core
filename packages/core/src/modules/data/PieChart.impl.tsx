@@ -12,7 +12,7 @@ import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { RadialGradient } from "./Gradient";
-import { ChartProps, ChartVariant } from "./interfaces";
+import { ChartProps, ChartVariant, DataPoint } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { getDistributedColor } from "./utils/colorDistribution";
@@ -33,7 +33,7 @@ export interface PieChartProps extends ChartProps {
 const PieChart: React.FC<PieChartProps> = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -51,6 +51,8 @@ const PieChart: React.FC<PieChartProps> = ({
   "data-viz-style": dataViz,
   ...flex
 }) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const [rc, setRc] = useState<any>(null);

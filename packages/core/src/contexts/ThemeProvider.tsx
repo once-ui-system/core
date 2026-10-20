@@ -1,9 +1,20 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from "react";
 import { Schemes } from "../types";
-import { customSchemeProperties } from "../utils/colorScheme";
+import type { ThemedSchemeScale } from "../utils/colorScheme";
 import { dev } from "../utils/devLogger";
+import { type ThemeColor, themeStyle } from "../utils/themeCss";
+
+export type { ThemeColor } from "../utils/themeCss";
 
 export type Theme = "dark" | "light" | "system";
 /** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */
@@ -71,7 +82,18 @@ export type DataStyle = "categorical" | "divergent" | "sequential";
  * `data-solid-style`).
  */
 export interface OnceUIStyleConfig {
+  /**
+   * On `ThemeProvider`, `"light"` or `"dark"` *forces* that theme: a visitor's
+   * choice is ignored and `setTheme` cannot change it. For a theme that is
+   * only the starting point, leave this `"system"` and set `defaultTheme`.
+   */
   theme?: Theme;
+  /**
+   * The theme a visitor sees until they choose one, which they can then
+   * change. `"light"` gives a light site with a working theme switch.
+   * `ThemeInit` reads it too, so the first paint is already right.
+   */
+  defaultTheme?: Theme;
   neutral?: NeutralColor | "custom";
   brand?: Schemes | "custom";
   accent?: Schemes | "custom";
@@ -102,6 +124,32 @@ export interface OnceUIStyleConfig {
   accentSeed?: string;
   /** As {@link OnceUIStyleConfig.brandSeed}, for `neutral: "custom"`. */
   neutralSeed?: string;
+  /**
+   * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for exact
+   * brand colours. Implies `brand: "custom"`. Steps it leaves out come from
+   * `brandSeed`; without a seed it needs at least step 600.
+   *
+   * One scale serves both themes. For a ramp per theme, write
+   * `{ light: { … }, dark: { … } }`; a theme left out uses the other's.
+   */
+  brandScale?: ThemedSchemeScale;
+  /** As {@link OnceUIStyleConfig.brandScale}, for `accent: "custom"`. */
+  accentScale?: ThemedSchemeScale;
+  /** As {@link OnceUIStyleConfig.brandScale}, for `neutral: "custom"`. */
+  neutralScale?: ThemedSchemeScale;
+  /**
+   * The page background (`--page-background`, `background="page"`): a token
+   * such as `"neutral-background-weak"` or any CSS colour, for both themes or
+   * `{ light, dark }`. Unset, light mode keeps its off-white neutral step and
+   * dark mode its own. `ThemeInit` renders it, so the first paint is right.
+   */
+  pageBackground?: ThemeColor;
+  /**
+   * The filled surface's background (`--surface-background`,
+   * `background="surface"`), as {@link OnceUIStyleConfig.pageBackground}.
+   * Applies with `surface: "filled"`; a translucent surface keeps its own.
+   */
+  surfaceBackground?: ThemeColor;
 }
 
 interface StyleOptions {
@@ -208,32 +256,29 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
   }
 }
 
-const getInitialTheme = (store: StylePersistenceAdapter | null): Theme => {
-  if (typeof window === "undefined") return "system";
+const isTheme = (value: unknown): value is Theme =>
+  value === "light" || value === "dark" || value === "system";
 
-  const savedTheme = (store?.get?.("data-theme") ?? null) as Theme | null;
-  if (savedTheme && (savedTheme === "light" || savedTheme === "dark")) {
-    return savedTheme;
-  }
-
-  const domTheme = document.documentElement.getAttribute("data-theme");
-  if (domTheme === "dark" || domTheme === "light") {
-    return "system";
-  }
-
-  return "system";
+/** The visitor's saved choice, else the default. Client only. */
+const getStoredTheme = (store: StylePersistenceAdapter | null, defaultTheme: Theme): Theme => {
+  const savedTheme = store?.get?.("data-theme") ?? null;
+  return isTheme(savedTheme) ? savedTheme : defaultTheme;
 };
 
-const getInitialResolvedTheme = (): "light" | "dark" => {
-  if (typeof window === "undefined") return "dark";
-
+/** What ThemeInit painted, else the fallback. Client only. */
+const getDomResolvedTheme = (fallback: "light" | "dark"): "light" | "dark" => {
   const domTheme = document.documentElement.getAttribute("data-theme");
-  return domTheme === "dark" || domTheme === "light" ? (domTheme as "light" | "dark") : "dark";
+  return domTheme === "dark" || domTheme === "light" ? domTheme : fallback;
 };
+
+// Layout effect on the client, so the stored theme is in state before paint;
+// a plain effect on the server, where layout effects warn.
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export function ThemeProvider({
   children,
   theme: propTheme = "system",
+  defaultTheme = "system",
   neutral,
   brand,
   accent,
@@ -252,19 +297,32 @@ export function ThemeProvider({
   brandSeed,
   accentSeed,
   neutralSeed,
+  brandScale,
+  accentScale,
+  neutralScale,
+  pageBackground,
+  surfaceBackground,
   persistence = "local",
 }: ThemeProviderProps) {
   const store = useMemo(() => resolvePersistence(persistence), [persistence]);
-  // If propTheme is light/dark, use it directly (forced mode)
-  // Otherwise, use the stored preference from localStorage/DOM
-  const initialThemeValue = propTheme !== "system" ? propTheme : getInitialTheme(store);
+  const isForced = propTheme !== "system";
+  // The first render is the same on the server and the client, so nothing
+  // that reads the theme mismatches on hydration; the saved choice and what
+  // ThemeInit painted are read in the layout effect below, before paint.
+  const [theme, setTheme] = useState<Theme>(isForced ? propTheme : defaultTheme);
+  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(
+    isForced ? propTheme : defaultTheme === "light" ? "light" : "dark",
+  );
+  // False until the saved theme is in state: before that, writing `theme` to
+  // the DOM would overwrite what ThemeInit painted with the default.
+  const [themeSynced, setThemeSynced] = useState(isForced);
 
-  // For resolvedTheme, if propTheme is light/dark, use that directly
-  // Otherwise, get from DOM
-  const initialResolvedValue = propTheme !== "system" ? propTheme : getInitialResolvedTheme();
-
-  const [theme, setTheme] = useState<Theme>(initialThemeValue);
-  const [resolvedTheme, setResolvedTheme] = useState<"light" | "dark">(initialResolvedValue);
+  useIsomorphicLayoutEffect(() => {
+    if (isForced) return;
+    setTheme(getStoredTheme(store, defaultTheme));
+    setResolvedTheme((current) => getDomResolvedTheme(current));
+    setThemeSynced(true);
+  }, [isForced, store, defaultTheme]);
 
   const getResolvedTheme = useCallback((t: Theme): "light" | "dark" => {
     if (t === "system") {
@@ -301,7 +359,6 @@ export function ThemeProvider({
     (newTheme: Theme) => {
       try {
         // If propTheme is light/dark, we always use that for the DOM (forced mode)
-        const isForced = propTheme !== "system";
         const resolved = isForced
           ? propTheme
           : newTheme === "system"
@@ -312,7 +369,9 @@ export function ThemeProvider({
 
         // Only persist if not in forced mode
         if (!isForced) {
-          if (newTheme === "system") {
+          // With a light or dark default, "system" has to be saved: removing
+          // the key would bring the default back on the next load.
+          if (newTheme === "system" && defaultTheme === "system") {
             store?.remove?.("data-theme");
           } else {
             store?.set("data-theme", newTheme);
@@ -331,7 +390,7 @@ export function ThemeProvider({
         dev.error("Error setting theme:", e);
       }
     },
-    [propTheme],
+    [propTheme, isForced, defaultTheme, store],
   );
 
   const storedValues = typeof window !== "undefined" ? getStoredStyleValues(store) : {};
@@ -357,15 +416,32 @@ export function ThemeProvider({
   // `data-<name>="custom"` reads. ThemeInit puts the same values in a server-
   // rendered <style>; writing them here as well is what lets a seed change
   // after load, and what makes a seed work in an app without ThemeInit.
-  const schemeProperties = useMemo(
-    () => customSchemeProperties({ brand: brandSeed, accent: accentSeed, neutral: neutralSeed }),
-    [brandSeed, accentSeed, neutralSeed],
-  );
+  // A scale per theme and the backgrounds cannot be inline styles, which know
+  // no theme: they go in a <style> of their own, the rules ThemeInit renders.
+  // Scales are compared by value, so a config object written inline in the
+  // JSX does not rebuild the stylesheet on every render.
+  const scalesKey = JSON.stringify([brandScale, accentScale, neutralScale]);
+  const backgroundsKey = JSON.stringify([pageBackground, surfaceBackground]);
+  const styleSheet = useMemo(() => {
+    const [brand, accent, neutral] = JSON.parse(scalesKey) as (ThemedSchemeScale | null)[];
+    const [page, surface] = JSON.parse(backgroundsKey) as (ThemeColor | null)[];
+    return themeStyle({
+      seeds: { brand: brandSeed, accent: accentSeed, neutral: neutralSeed },
+      scales: {
+        brand: brand ?? undefined,
+        accent: accent ?? undefined,
+        neutral: neutral ?? undefined,
+      },
+      pageBackground: page ?? undefined,
+      surfaceBackground: surface ?? undefined,
+    });
+  }, [brandSeed, accentSeed, neutralSeed, scalesKey, backgroundsKey]);
+  const { root: schemeProperties, css: themeCss, schemes } = styleSheet;
   // A seed implies "custom" when the scheme is not named — but only a seed
   // that parsed, or the scheme would point at properties that do not exist.
-  if (!brand && schemeProperties["--scheme-brand-600"]) directProps.brand = "custom";
-  if (!accent && schemeProperties["--scheme-accent-600"]) directProps.accent = "custom";
-  if (!neutral && schemeProperties["--scheme-neutral-600"]) directProps.neutral = "custom";
+  if (!brand && schemes.includes("brand")) directProps.brand = "custom";
+  if (!accent && schemes.includes("accent")) directProps.accent = "custom";
+  if (!neutral && schemes.includes("neutral")) directProps.neutral = "custom";
 
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,
@@ -405,7 +481,8 @@ export function ThemeProvider({
 
           if (key === "theme") {
             if (value === "system") {
-              store?.remove?.("data-theme");
+              if (defaultTheme === "system") store?.remove?.("data-theme");
+              else store?.set("data-theme", "system");
               const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
                 ? "dark"
                 : "light";
@@ -428,6 +505,7 @@ export function ThemeProvider({
       Object.entries(style).forEach(([key, value]) => {
         if (value && key !== "setStyle") {
           if (key === "theme") {
+            if (!themeSynced) return;
             // If propTheme is light/dark, always use that for the DOM (forced mode)
             if (propTheme !== "system") {
               document.documentElement.setAttribute(`data-${camelToKebab(key)}`, propTheme);
@@ -445,7 +523,7 @@ export function ThemeProvider({
         }
       });
     }
-  }, [style, propTheme]);
+  }, [style, propTheme, themeSynced]);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -456,6 +534,17 @@ export function ThemeProvider({
       for (const property of Object.keys(schemeProperties)) root.style.removeProperty(property);
     };
   }, [schemeProperties]);
+
+  // Before paint, so switching to a per-theme scale never shows a frame of
+  // the old ramp.
+  useIsomorphicLayoutEffect(() => {
+    if (!themeCss || typeof document === "undefined") return;
+    const sheet = document.createElement("style");
+    sheet.setAttribute("data-once-ui-theme-style", "");
+    sheet.textContent = themeCss;
+    document.head.appendChild(sheet);
+    return () => sheet.remove();
+  }, [themeCss]);
 
   return (
     <ThemeProviderContext.Provider value={themeValue}>
