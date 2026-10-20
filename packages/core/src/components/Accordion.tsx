@@ -11,7 +11,7 @@ import React, {
   useState,
 } from "react";
 import type { IconName } from "../icons";
-import { CondensedTShirtSizes } from "../types";
+import type { CondensedTShirtSizes, RadiusSize, TextVariant } from "../types";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -31,7 +31,10 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   icon?: IconName;
   iconRotation?: number;
   size?: CondensedTShirtSizes;
-  radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  /** Corner radius of the header. `none` for square corners, e.g. flush in a card. */
+  radius?: RadiusSize;
+  /** Text style of the title. Defaults to `heading-strong-s`; `body-default-m` for a FAQ in body copy. */
+  titleVariant?: TextVariant;
   open?: boolean;
   onToggle?: () => void;
   className?: string;
@@ -50,6 +53,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       onToggle,
       iconRotation = 180,
       radius = "m",
+      titleVariant = "heading-strong-s",
       icon = "chevronDown",
       size = "m",
       className,
@@ -164,7 +168,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           role="button"
           {...headerRest}
         >
-          <Row fillWidth textVariant="heading-strong-s">
+          <Row fillWidth textVariant={titleVariant}>
             {title}
           </Row>
           <Icon
