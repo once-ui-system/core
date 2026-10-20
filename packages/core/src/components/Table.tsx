@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import { ReactNode, useId, useMemo, useState } from "react";
+import { type ColumnHide, columnHideClasses } from "../internal/columnHide";
 import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -22,6 +23,11 @@ type TableHeader = {
   sortable?: boolean;
   width?: string;
   align?: "left" | "center" | "right";
+  /**
+   * Hide the column, header and cells, at a breakpoint and below, such as
+   * `{ s: true }`. CSS only, so it holds in the server render.
+   */
+  hide?: ColumnHide;
 };
 
 type TableAction = {
@@ -174,10 +180,15 @@ function Table({
     // A header without a key (untyped MDX tables omit it) is never the
     // sorted one, even before anything is sorted.
     const isActive = sortConfig !== null && sortConfig.key === header.key;
-    const thClasses = classNames(styles.th, getAlignClass(header.align, "th"), {
-      [styles.thSortable]: header.sortable,
-      [styles.thActive]: isActive,
-    });
+    const thClasses = classNames(
+      styles.th,
+      getAlignClass(header.align, "th"),
+      {
+        [styles.thSortable]: header.sortable,
+        [styles.thActive]: isActive,
+      },
+      columnHideClasses(header.hide),
+    );
 
     const content = (
       <Row
@@ -255,6 +266,7 @@ function Table({
           const tdClasses = classNames(
             styles.td,
             getAlignClass(header?.align, "td"),
+            columnHideClasses(header?.hide),
             cellClassName?.(originalIndex, cellIndex),
           );
 

@@ -189,7 +189,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },

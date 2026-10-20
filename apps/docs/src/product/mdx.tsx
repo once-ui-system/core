@@ -220,6 +220,8 @@ import {
   DataTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
+  DataTableServerQueryExample,
+  DataTableToolbarExample,
   DateInputExample,
   DateRangeInputExamples,
   DateRangePickerExample,
@@ -614,6 +616,8 @@ const mdxComponents = createMdxComponents({
   DataTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
+  DataTableServerQueryExample,
+  DataTableToolbarExample,
   RadioGroupControlledExample,
   RangeSliderPriceExample,
 });
