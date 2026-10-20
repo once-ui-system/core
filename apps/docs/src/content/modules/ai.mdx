@@ -1,7 +1,7 @@
 ---
 title: "AI"
 export: "WorkingIndicator"
-summary: "Pieces for AI products: a loader drawn from the Once UI mark and a working line that cycles through playful verbs while an assistant thinks."
+summary: "Pieces for AI products: a loader drawn from the Once UI mark, a working line that cycles through playful verbs, and voice chat animations that follow the audio."
 updatedAt: "2026-10-20"
 docs: "once-ui/modules/ai.mdx"
 github: "modules/ai/WorkingIndicator.tsx"
@@ -108,6 +108,64 @@ a quiet hint after it.
   ]}
 />
 
+## VoiceVisualizer
+
+The animation for a voice conversation. Each state moves differently: idle breathes, listening
+ripples, thinking swirls and speaking pulses like syllables. Give it the microphone stream while
+listening and the reply's `<audio>` element while speaking, and it follows the real sound. Use
+`orb` for a full-screen voice mode and `bars` for a composer or a call bar.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <VoiceStatesExample />
+  }
+  codes={[
+    {
+      code:
+`const [stream, setStream] = useState<MediaStream | null>(null);
+
+<VoiceVisualizer state="listening" source={stream} />
+<VoiceVisualizer variant="bars" state="speaking" source={replyAudioElement} />`,
+      language: "tsx",
+      label: "Audio"
+    },
+    {
+      code:
+`<VoiceVisualizer state={state} level={levelFromYourSdk} />`,
+      language: "tsx",
+      label: "Level"
+    }
+  ]}
+/>
+
+Levels are written straight to CSS variables every frame, so a live microphone never re-renders
+React. When your voice SDK already gives you a loudness number, pass it as `level` instead. To drive
+something of your own, `useAudioLevel(source)` returns the same loudness from 0 to 1.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="32" center>
+      <VoiceVisualizer size="s" state="speaking" />
+      <VoiceVisualizer size="m" state="speaking" color="accent" />
+      <VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<VoiceVisualizer size="s" state="speaking" />
+<VoiceVisualizer size="m" state="speaking" color="accent" />
+<VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />`,
+      language: "tsx",
+      label: "Sizes and colors"
+    }
+  ]}
+/>
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
@@ -144,6 +202,10 @@ where the product's own loader belongs.
 so a screen reader announces it once instead of reading every new verb. With reduced motion the
 tiles stop moving and fade in turn, the verbs swap without sliding and the shimmer is off.
 
+`VoiceVisualizer` is a `status` region that announces its state ("Listening", "Speaking"). With
+reduced motion its stand-in animations stop; real audio still shows, as glow on the orb and as bar
+height, because that is feedback the person needs while they talk.
+
 ## API reference
 
 <PropsTable
@@ -160,6 +222,20 @@ tiles stop moving and fade in turn, the verbs swap without sliding and the shimm
     loader: "The loader before the words; false for none.",
     size: "Text and loader size.",
     ariaLabel: "What screen readers announce once.",
+  }}
+/>
+
+<PropsTable
+  component="VoiceVisualizer"
+  describe={{
+    state: "idle, listening, thinking or speaking.",
+    variant: "orb or bars.",
+    level: "Loudness from 0 to 1; takes precedence over source.",
+    source: "A MediaStream, an audio or video element, or an AnalyserNode.",
+    size: "s, m, l or xl.",
+    color: "brand, accent or neutral.",
+    bars: "Number of bars in the bars variant.",
+    ariaLabel: "What screen readers announce; defaults to the state.",
   }}
 />
 
