@@ -209,40 +209,40 @@ export function RadioGroup({
         invalid: chrome.invalid,
       }}
     >
-    <Column
-      gap="12"
-      accessibilityRole="radiogroup"
-      accessibilityLabel={typeof label === "string" ? label : ariaLabel}
-      style={style}
-    >
-      {(label || description) && (
-        <Column gap="4">
-          {label && <Text textVariant={text.label}>{label}</Text>}
-          {description && (
-            <Text textVariant={text.body} onBackground="neutral-weak">
-              {description}
-            </Text>
-          )}
-        </Column>
-      )}
-      <List gap="16" wrap={orientation === "horizontal"}>
-        {options.map((o) => (
-          <RadioButton
-            key={o.value}
-            value={o.value}
-            label={o.label}
-            description={o.description}
-            disabled={o.disabled}
-          />
-        ))}
-        {children}
-      </List>
-      {chrome.showsError && (
-        <Text textVariant={text.body} onBackground="danger-weak" accessibilityLiveRegion="polite">
-          {errorMessage}
-        </Text>
-      )}
-    </Column>
+      <Column
+        gap="12"
+        accessibilityRole="radiogroup"
+        accessibilityLabel={typeof label === "string" ? label : ariaLabel}
+        style={style}
+      >
+        {(label || description) && (
+          <Column gap="4">
+            {label && <Text textVariant={text.label}>{label}</Text>}
+            {description && (
+              <Text textVariant={text.body} onBackground="neutral-weak">
+                {description}
+              </Text>
+            )}
+          </Column>
+        )}
+        <List gap="16" wrap={orientation === "horizontal"}>
+          {options.map((o) => (
+            <RadioButton
+              key={o.value}
+              value={o.value}
+              label={o.label}
+              description={o.description}
+              disabled={o.disabled}
+            />
+          ))}
+          {children}
+        </List>
+        {chrome.showsError && (
+          <Text textVariant={text.body} onBackground="danger-weak" accessibilityLiveRegion="polite">
+            {errorMessage}
+          </Text>
+        )}
+      </Column>
     </RadioGroupContext.Provider>
   );
 }

@@ -1,0 +1,26 @@
+{
+ "name": "Feedback",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An inline alert tinted by its tone, announced when it appears.",
+ "mixins": [],
+ "props": {
+  "tone": "Tone = \"info\"",
+  "showIcon": "boolean = true",
+  "icon": "IconSlot",
+  "title": "string",
+  "description": "string",
+  "showCloseButton": "boolean = false",
+  "onClose": "() => void",
+  "children": "ReactNode",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "Tone": "ColorScheme"
+ }
+}

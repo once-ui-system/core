@@ -1,0 +1,36 @@
+{
+ "name": "Textarea",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An `Input` that takes several lines.",
+ "mixins": [
+  "InputProps"
+ ],
+ "reactNative": [
+  "TextInputProps"
+ ],
+ "props": {
+  "lines": "number | \"auto\" = \"auto\""
+ },
+ "resolvedMixins": {
+  "InputProps": {
+   "style": "ViewStyle",
+   "disabled": "boolean",
+   "label": "string",
+   "size": "TShirtSizes",
+   "error": "boolean",
+   "errorMessage": "ReactNode",
+   "description": "ReactNode",
+   "prefix": "ReactNode",
+   "suffix": "ReactNode",
+   "variant": "\"default\" | \"ghost\"",
+   "loading": "boolean",
+   "characterCount": "boolean",
+   "onValueChange": "(value: string) => void",
+   "inputStyle": "TextStyle"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

@@ -1,0 +1,41 @@
+{
+ "name": "Tag",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A label, an announcement pill, or a toggle with an optional remove button.",
+ "mixins": [],
+ "props": {
+  "tone": "Tone",
+  "variant": "\"default\" | \"gradient\" | \"announce\" = \"default\"",
+  "size": "TShirtSizes",
+  "label": "string",
+  "prefixIcon": "IconSlot",
+  "suffixIcon": "IconSlot",
+  "href": "string",
+  "arrow": "boolean",
+  "effect": "boolean",
+  "selected": "boolean",
+  "onClick": "() => void",
+  "onPress": "() => void",
+  "onRemove": "() => void",
+  "removeButtonProps": "Partial<IconButtonProps>",
+  "textVariant": "TextVariant",
+  "children": "ReactNode",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconButtonProps": "IconButton props",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "TextSize": "TShirtSizes",
+  "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
+  "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
+  "TextWeight": "\"default\" | \"normal\" | \"medium\" | \"strong\"",
+  "Tone": "ColorScheme",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

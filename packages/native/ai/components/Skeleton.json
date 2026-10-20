@@ -1,0 +1,23 @@
+{
+ "name": "Skeleton",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A pulsing placeholder while content loads.",
+ "mixins": [],
+ "props": {
+  "shape": "\"line\" | \"circle\" | \"block\" = \"line\"",
+  "size": "TShirtSizes = \"m\"",
+  "width": "number | SpacingToken | Length | `${number}%`",
+  "height": "number | SpacingToken | Length | `${number}%`",
+  "delay": "number = 0",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "Length": "`${number}px` | `${number}rem`",
+  "ResponsiveSpacingToken": "TShirtSizes",
+  "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
+  "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

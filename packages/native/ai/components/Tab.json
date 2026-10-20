@@ -1,0 +1,42 @@
+{
+ "name": "Tab",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One tab: a `ToggleButton` with the `tab` role, so it takes every ToggleButton prop.",
+ "mixins": [
+  "ToggleButtonProps"
+ ],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "value": "!string",
+  "disabled": "boolean = false"
+ },
+ "resolvedMixins": {
+  "ToggleButtonProps": {
+   "radius": "RadiusSize",
+   "style": "ViewStyle",
+   "onClick": "() => void",
+   "children": "ReactNode",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
+   "fillWidth": "boolean",
+   "label": "ReactNode",
+   "size": "TShirtSizes",
+   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "rounded": "boolean",
+   "weight": "\"default\" | \"strong\"",
+   "truncate": "boolean",
+   "prefixIcon": "IconSlot",
+   "suffixIcon": "IconSlot"
+  }
+ },
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

@@ -21,7 +21,10 @@ const SIZES = { s: "4", m: "8", l: "16" } as const;
 export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forwardRef<
   ViewRef,
   StatusIndicatorProps
->(function StatusIndicator({ size = "m", scheme, color: colorProp, "aria-label": ariaLabel, ...props }, ref) {
+>(function StatusIndicator(
+  { size = "m", scheme, color: colorProp, "aria-label": ariaLabel, ...props },
+  ref,
+) {
   const color = scheme ?? colorProp ?? "blue";
   const theme = useTheme();
   const { style, rest, userStyle, hidden } = flexStyle(theme, { radius: "full", ...props });

@@ -1,0 +1,20 @@
+{
+ "name": "Toast",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A short message on a surface card that hides itself.",
+ "mixins": [],
+ "props": {
+  "tone": "!Tone",
+  "children": "!ReactNode",
+  "showIcon": "boolean = true",
+  "onClose": "() => void",
+  "action": "ReactNode",
+  "duration": "number = 6000",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "Tone": "ColorScheme"
+ }
+}

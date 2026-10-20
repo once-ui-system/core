@@ -35,6 +35,10 @@ Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`. Withou
 - Most things come from `@once-ui-system/core`. Charts come from `/data`, `CodeBlock` from `/code`, `MediaUpload` from `/media`, the MDX map from `/mdx`, `defineConfig` from `/config`; `ai/manifest.json` → `imports` lists every entry point with its exports.
 - In a Next.js app, import `LayoutProvider` from `@once-ui-system/core/next`: the root export renders links and images as plain `<a>` and `<img>`. The OG route handlers come from there too.
 
+## Phone apps
+
+`@once-ui-system/native` has the same components and props for React Native, with its own harness for phone screens: `node_modules/@once-ui-system/native/AGENTS.md`. For an app on the web and on phones, build each from its own package's bundles and share the content and the theme options.
+
 ## Setup and remote fallback
 
 `npx once-ui-init-agent` writes AGENTS.md, CLAUDE.md and a Cursor rule into a consumer app. Without `node_modules`, use https://docs.once-ui.com/ai/manifest.json (may not match your installed version exactly).

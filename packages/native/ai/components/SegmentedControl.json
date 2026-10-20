@@ -1,0 +1,24 @@
+{
+ "name": "SegmentedControl",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A row of toggle buttons where one is selected.",
+ "mixins": [],
+ "props": {
+  "buttons": "!SegmentedControlButton[]",
+  "value": "string",
+  "defaultValue": "string",
+  "onValueChange": "(value: string) => void",
+  "disabled": "boolean = false",
+  "fillWidth": "boolean = true",
+  "compact": "boolean = false",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "SegmentedControlButton": "{ value: string; label?: ReactNode; prefixIcon?: IconSlot; suffixIcon?: IconSlot; disabled?: boolean }"
+ }
+}

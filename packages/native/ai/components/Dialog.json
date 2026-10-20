@@ -1,0 +1,24 @@
+{
+ "name": "Dialog",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Core's `Dialog`, shown as a bottom sheet by default: the shape phones use for a modal task (`variant=\"center\"` for a card in the middle).",
+ "mixins": [],
+ "props": {
+  "open": "!boolean",
+  "onClose": "!() => void",
+  "title": "ReactNode",
+  "description": "ReactNode",
+  "children": "ReactNode",
+  "footer": "ReactNode",
+  "showClose": "boolean = true",
+  "variant": "\"center\" | \"sheet\" = \"sheet\"",
+  "backdrop": "ReactNode",
+  "minHeight": "number",
+  "onHeightChange": "(height: number) => void",
+  "closeOnClickaway": "boolean = true",
+  "flush": "boolean = false",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {}
+}

@@ -184,9 +184,7 @@ describe("safe areas", () => {
     vi.useFakeTimers();
     function Saver() {
       const { addToast } = useToast();
-      return (
-        <Button label="Save" onPress={() => addToast({ tone: "info", message: "Saved" })} />
-      );
+      return <Button label="Save" onPress={() => addToast({ tone: "info", message: "Saved" })} />;
     }
     render(
       <ThemeProvider theme="light" insets={notch}>
