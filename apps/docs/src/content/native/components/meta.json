@@ -42,8 +42,9 @@
     "breadcrumbs": 38,
     "pagination": 39,
     "timeline": 40,
-    "drawer": 41,
-    "nav": 42,
-    "table": 43
+    "scroller": 41,
+    "drawer": 42,
+    "nav": 43,
+    "table": 44
   }
 }
