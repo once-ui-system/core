@@ -13,6 +13,7 @@ import {
 } from "./DropdownTriggerContext";
 import { DropdownWrapper, type DropdownWrapperProps } from "./DropdownWrapper";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { Icon } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Input, type InputProps } from "./Input";
@@ -94,6 +95,8 @@ const SearchInput = forwardRef<
     listboxId: string;
     activeOptionId?: string;
     names: Required<SelectLabels>;
+    /** `xxs` when the Select is; `s` otherwise, as it always was. */
+    size: "xxs" | "s";
   }
 >(
   (
@@ -110,6 +113,7 @@ const SearchInput = forwardRef<
       listboxId,
       activeOptionId,
       names,
+      size,
     },
     ref,
   ) => (
@@ -124,7 +128,7 @@ const SearchInput = forwardRef<
       aria-expanded
       aria-controls={listboxId}
       aria-activedescendant={activeOptionId}
-      size="s"
+      size={size}
       suffix={
         searchQuery ? (
           <IconButton
@@ -175,7 +179,10 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
   (
     {
       options,
-      value = "",
+      // No default: `undefined` is what makes it uncontrolled. A default of
+      // "" made every Select controlled, so without `value` a pick never
+      // showed and a multiple Select never kept more than one.
+      value,
       onSelect,
       searchable = false,
       emptyState = "No results",
@@ -193,6 +200,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
     ref,
   ) => {
     const names = mergeLabels(DEFAULT_LABELS, labels);
+    // An xxs Select (its own `size` or a Form's) gets an xxs search field in
+    // its panel; every other size keeps the `s` one it always had.
+    const searchSize = useFieldSize(rest.size) === "xxs" ? "xxs" : "s";
     /**
      * Focus for the whole control, not the trigger.
      *
@@ -205,7 +215,9 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
      */
     const [isFocused, setIsFocused] = useState(false);
 
-    const [internalValue, setInternalValue] = useState(multiple ? [] : value);
+    const [internalValue, setInternalValue] = useState<string | string[]>(
+      value ?? (multiple ? [] : ""),
+    );
 
     useEffect(() => {
       if (value !== undefined) {
@@ -374,15 +386,22 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
       }
     };
 
+    // A searchable Select moves focus to its query field. The panel stays
+    // `visibility: hidden` until it is positioned, and a hidden field cannot
+    // take focus, so a single deferred focus() landed nowhere: keep trying
+    // each frame until it sticks (a few frames at most).
     useEffect(() => {
-      if (isDropdownOpen) {
-        // If searchable is true, focus the search input
-        if (searchable) {
-          setTimeout(() => {
-            searchRef.current?.focus();
-          }, 0);
-        }
-      }
+      if (!isDropdownOpen || !searchable) return;
+      let frame = 0;
+      let tries = 0;
+      const attempt = () => {
+        const field = searchRef.current;
+        if (field) field.focus();
+        if (document.activeElement === field || ++tries > 30) return;
+        frame = requestAnimationFrame(attempt);
+      };
+      frame = requestAnimationFrame(attempt);
+      return () => cancelAnimationFrame(frame);
     }, [isDropdownOpen, searchable]);
 
     // Filter options based on search query
@@ -576,6 +595,7 @@ const Select = forwardRef<HTMLDivElement, SelectProps>(
                   listboxId={listboxId}
                   activeOptionId={activeOptionId}
                   names={names}
+                  size={searchSize}
                 />
               )}
 

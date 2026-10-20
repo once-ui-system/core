@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { IconButton } from "./IconButton";
@@ -49,6 +50,8 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
     const [activeIndex, setActiveIndex] = useState<number>(0);
     const [isDragging, setIsDragging] = useState(false);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
+    // The track scrolls sideways; a keyboard reaches it to scroll with arrows.
+    const scrollTabStopRef = useScrollableTabStop(scrollContainerRef);
     const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
     const isScrollingProgrammatically = useRef(false);
     const dragStartX = useRef(0);
@@ -67,7 +70,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         const slideWidth = container.clientWidth;
         const newIndex = Math.round(scrollLeft / slideWidth);
 
-        if (newIndex !== activeIndex && newIndex >= 0 && newIndex < items.length) {
+        if (newIndex >= 0 && newIndex < items.length) {
           setActiveIndex(newIndex);
         }
       };
@@ -80,9 +83,17 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
 
       const observer = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          // isIntersecting is also true for a neighbour that only touches the
+          // edge, so only a slide that is at least half in view counts.
+          // A slide with no width yet (its image still loading) reports a
+          // ratio of 1, so every slide claimed to be in view at once.
+          if (
+            entry.isIntersecting &&
+            entry.intersectionRatio >= 0.5 &&
+            entry.boundingClientRect.width > 0
+          ) {
             const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
-            if (index !== -1 && index !== activeIndex) {
+            if (index !== -1) {
               setActiveIndex(index);
             }
           }
@@ -99,7 +110,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         observer.disconnect();
         container.removeEventListener("scroll", handleScroll);
       };
-    }, [activeIndex, items.length]);
+    }, [items.length]);
 
     const scrollToIndex = useCallback((index: number) => {
       const container = scrollContainerRef.current;
@@ -120,14 +131,33 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
       }, 500);
     }, []);
 
+    // Previous and Next leave at the ends. When the one that has focus goes,
+    // focus moves to the other instead of falling back to the page.
+    const prevButtonRef = useRef<HTMLButtonElement>(null);
+    const nextButtonRef = useRef<HTMLButtonElement>(null);
+    const refocusNav = useRef<"prev" | "next" | null>(null);
+
+    useEffect(() => {
+      const target = refocusNav.current;
+      if (!target) return;
+      const gone = target === "prev" ? activeIndex === 0 : activeIndex === items.length - 1;
+      if (!gone) return;
+      refocusNav.current = null;
+      const active = document.activeElement;
+      if (active && active !== document.body) return;
+      (target === "prev" ? nextButtonRef : prevButtonRef).current?.focus();
+    }, [activeIndex, items.length]);
+
     const handlePrevClick = () => {
       if (activeIndex > 0) {
+        if (activeIndex === 1) refocusNav.current = "prev";
         scrollToIndex(activeIndex - 1);
       }
     };
 
     const handleNextClick = () => {
       if (activeIndex < items.length - 1) {
+        if (activeIndex === items.length - 2) refocusNav.current = "next";
         scrollToIndex(activeIndex + 1);
       }
     };
@@ -223,10 +253,10 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
           >
             {/* Scroll Container */}
             <Row
-              ref={scrollContainerRef}
+              ref={scrollTabStopRef}
               fillWidth
               fillHeight={stretch}
-              className={styles.scrollContainer}
+              className={`${styles.scrollContainer} focus-ring`}
               onMouseDown={handleMouseDown}
               overflowX="auto"
               style={{
@@ -302,6 +332,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     >
                       <Flex radius="m" background="surface">
                         <IconButton
+                          ref={prevButtonRef}
                           onClick={handlePrevClick}
                           variant="secondary"
                           icon="chevronLeft"
@@ -324,6 +355,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     >
                       <Flex radius="m" background="surface">
                         <IconButton
+                          ref={nextButtonRef}
                           onClick={handleNextClick}
                           variant="secondary"
                           icon="chevronRight"
@@ -341,34 +373,32 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         {/* Dot Indicators */}
         {indicator && items.length > 1 && (
           <Row
-            gap="8"
             fillWidth
             horizontal="center"
             paddingX="16"
-            paddingTop={controls === "contained" ? undefined : "12"}
+            // 8px less than before on each side: the 24px buttons hold the dots
+            // where the 8px dots sat.
+            paddingTop={controls === "contained" ? undefined : "4"}
             position={controls === "contained" ? "absolute" : "relative"}
-            bottom={controls === "contained" ? "16" : undefined}
+            bottom={controls === "contained" ? "8" : undefined}
             style={{
               transform: controls === "contained" ? "translateY(-100%)" : undefined,
             }}
           >
             {items.map((_, index) => (
+              // The dot is 8px; the button around it is 24px, the smallest
+              // target WCAG 2.2 allows (axe: target-size).
               <Flex
                 key={index}
+                width="24"
+                height="24"
+                center
                 radius="full"
                 cursor="interactive"
+                className="focus-ring"
                 onClick={() => handleDotClick(index)}
-                width="8"
-                height="8"
-                style={{
-                  background:
-                    activeIndex === index
-                      ? "var(--neutral-on-background-strong)"
-                      : "var(--neutral-alpha-medium)",
-                  transition: "background 0.3s ease, transform 0.3s ease",
-                  transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
-                }}
                 aria-label={`Go to slide ${index + 1}`}
+                aria-current={activeIndex === index ? "true" : undefined}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => {
@@ -377,7 +407,21 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
                     handleDotClick(index);
                   }
                 }}
-              />
+              >
+                <Flex
+                  radius="full"
+                  width="8"
+                  height="8"
+                  style={{
+                    background:
+                      activeIndex === index
+                        ? "var(--neutral-on-background-strong)"
+                        : "var(--neutral-alpha-medium)",
+                    transition: "background 0.3s ease, transform 0.3s ease",
+                    transform: activeIndex === index ? "scale(1.2)" : "scale(1)",
+                  }}
+                />
+              </Flex>
             ))}
           </Row>
         )}

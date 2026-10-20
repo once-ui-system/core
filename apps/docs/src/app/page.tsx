@@ -35,7 +35,7 @@ export async function generateMetadata() {
 
 export default function Home() {
   return (
-    <Row fillWidth horizontal="center">
+    <Row as="main" id="main-content" fillWidth horizontal="center">
       <Row fillWidth horizontal="center" padding="l">
       <BlobFx maxWidth="l" data-solid="color" height={32} fillWidth position="absolute" translateY="-60%" />
         <Column fillWidth gap="xl" horizontal="center">

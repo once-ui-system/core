@@ -108,7 +108,7 @@ Customize the appearance of banners using Flex props.
 </Banner>
 
 <Banner solid="danger-medium" onSolid="danger-strong">
-    <Icon name="alert" size="s" />
+    <Icon name="danger" size="s" />
     Critical error detected in the system.
 </Banner>`,
       language: "tsx",
@@ -129,7 +129,7 @@ Add interactive elements to banners.
     <Column fillWidth>
       <Banner horizontal="between">
         Accept our privacy policy to continue.
-        <Row gap="8">
+        <Row gap="8" data-theme="dark">
           <Button size="s">Decline</Button>
           <Button size="s" variant="secondary">Accept</Button>
         </Row>
@@ -144,7 +144,7 @@ Add interactive elements to banners.
       code:
 `<Banner horizontal="between">
     Accept our privacy policy to continue.
-    <Row gap="8">
+    <Row gap="8" data-theme="dark">
       <Button size="s">Decline</Button>
       <Button size="s" variant="secondary">Accept</Button>
     </Row>
@@ -158,6 +158,7 @@ Add interactive elements to banners.
 ## API reference
 
 <PropsTable
+  component="Banner"
   content={[
     ["children"],
     ["...flex"]

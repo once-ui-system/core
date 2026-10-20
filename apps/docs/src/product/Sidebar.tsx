@@ -243,7 +243,7 @@ const NavigationItemComponent: React.FC<{
           const recency = (variant: ColorScheme | undefined) => (
             <Row gap="4" vertical="center" flex={0}>
               <Pulse scheme={variant} size="s" />
-              <Text variant="label-default-xs" onBackground="neutral-weak">
+              <Text variant="label-default-xs" onBackground="neutral-medium">
                 {item.navTag}
               </Text>
             </Row>
@@ -310,7 +310,7 @@ const ResourceLinkComponent: React.FC<{
       {tag && (
         <Row gap="4" vertical="center" flex={0}>
           <Pulse scheme="brand" size="s" />
-          <Text variant="label-default-xs" onBackground="neutral-weak">
+          <Text variant="label-default-xs" onBackground="neutral-medium">
             {tag}
           </Text>
         </Row>
@@ -477,6 +477,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
         fillHeight
         gap="4"
         as="nav"
+        aria-label="Documentation"
         overflowY="auto"
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}

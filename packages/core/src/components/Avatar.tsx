@@ -80,7 +80,7 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
           border="neutral-medium"
           shape="circle"
           {...(typeof size === "number" ? { width: size, height: size } : { size })}
-          className={`${styles.avatar} ${className}`}
+          className={`${styles.avatar} ${className || ""}`}
           aria-busy="true"
           aria-label="Loading avatar"
         />
@@ -96,7 +96,6 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             size="m"
             style={typeof size === "number" ? { fontSize: `${size / 3}rem` } : undefined}
             className={styles.icon}
-            aria-label="Empty avatar"
           />
         );
       }
@@ -123,7 +122,6 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
             onBackground="neutral-weak"
             variant={`body-default-${typeof size === "string" ? size : "m"}`}
             className={styles.value}
-            aria-label={`Avatar with initials ${value}`}
           >
             {value}
           </Text>
@@ -133,10 +131,16 @@ const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
       return null;
     };
 
+    // role="img" makes everything inside presentational, so the name the
+    // children used to carry lives on the wrapper (axe: role-img-alt).
+    const baseLabel = value ? `Avatar with initials ${value}` : isEmpty ? "Empty avatar" : "Avatar";
+    const label = statusIndicator ? `${baseLabel}, status: ${statusIndicator.color}` : baseLabel;
+
     return (
       <Flex
         ref={ref}
         role="img"
+        aria-label={label}
         horizontal="center"
         vertical="center"
         radius="full"

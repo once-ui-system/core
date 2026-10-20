@@ -12,6 +12,7 @@ export function SliderBasicExample() {
       onChange={setValue}
       min={0}
       max={100}
+      aria-label="Value"
     />
   );
 }

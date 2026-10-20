@@ -98,7 +98,9 @@ export function generateMetadata({
 
   return {
     metadataBase: new URL(
-      normalizedBaseURL.startsWith("https://") ? normalizedBaseURL : `https://${normalizedBaseURL}`,
+      // Keep an explicit scheme: an `http://localhost:3000` base used to become
+      // `https://http://localhost:3000`.
+      /^https?:\/\//.test(normalizedBaseURL) ? normalizedBaseURL : `https://${normalizedBaseURL}`,
     ),
     title,
     description,

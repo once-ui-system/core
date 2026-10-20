@@ -191,11 +191,11 @@ Use the `size` prop to set the height of the input.
   marginBottom="24"
   preview={
     <Column fillWidth gap="4">
-      <Textarea size="xs" label="Extra small textarea" />
-      <Textarea size="s" label="Small textarea" />
-      <Textarea size="m" label="Medium textarea" />
-      <Textarea size="l" label="Large textarea" />
-      <Textarea size="xl" label="Extra large textarea" />
+      <Textarea id="height-xs" size="xs" label="Extra small textarea" />
+      <Textarea id="height-s" size="s" label="Small textarea" />
+      <Textarea id="height-m" size="m" label="Medium textarea" />
+      <Textarea id="height-l" size="l" label="Large textarea" />
+      <Textarea id="height-xl" size="xl" label="Extra large textarea" />
     </Column>
   }
   codes={[
@@ -303,13 +303,14 @@ const handleChange = (e) => {
 
 ## Sizes
 
-The Textarea component supports five sizes: extra small, small, medium, large, and extra large.
+The Textarea component supports the same six sizes as Input, from `xxs` (a 32px first line, for a one-line note in a toolbar) to `xl`. At `xxs` a `label` shows as the placeholder, as it does on Input.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Column fillWidth gap="16">
+      <Textarea id="size-xxs" placeholder="Extra Extra Small" size="xxs" />
       <Textarea id="size-xs" placeholder="Extra Small" size="xs" />
       <Textarea id="size-s" placeholder="Small" size="s" />
       <Textarea id="size-m" placeholder="Medium" size="m" />
@@ -320,11 +321,12 @@ The Textarea component supports five sizes: extra small, small, medium, large, a
   codes={[
     {
       code:
-`<Textarea placeholder="Extra Small" size="xs" />
-<Textarea placeholder="Small" size="s" />
-<Textarea placeholder="Medium" size="m" />
-<Textarea placeholder="Large" size="l" />
-<Textarea placeholder="Extra Large" size="xl" />`,
+`<Textarea id="size-xxs" placeholder="Extra Extra Small" size="xxs" />
+<Textarea id="size-xs" placeholder="Extra Small" size="xs" />
+<Textarea id="size-s" placeholder="Small" size="s" />
+<Textarea id="size-m" placeholder="Medium" size="m" />
+<Textarea id="size-l" placeholder="Large" size="l" />
+<Textarea id="size-xl" placeholder="Extra Large" size="xl" />`,
       language: "tsx",
       label: "Sizes"
     }

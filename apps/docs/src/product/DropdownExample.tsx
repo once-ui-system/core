@@ -17,6 +17,7 @@ export function BasicRawDropdown() {
   
   return (
     <Dropdown
+      aria-label="Options"
       selectedOption={selected}
       onSelect={handleSelect}
       padding="4"
@@ -53,6 +54,7 @@ export function IconsRawDropdown() {
   
   return (
     <Dropdown
+      aria-label="Options"
       selectedOption={selected}
       onSelect={handleSelect}
       padding="8"
@@ -94,6 +96,7 @@ export function DescriptionRawDropdown() {
   
   return (
     <Dropdown
+      aria-label="Options"
       selectedOption={selected}
       onSelect={handleSelect}
       padding="8"
@@ -133,6 +136,7 @@ export function CustomStyledRawDropdown() {
   
   return (
     <Dropdown
+      aria-label="Options"
       selectedOption={selected}
       onSelect={handleSelect}
       radius="m-8"

@@ -129,10 +129,17 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
       let initialized = false;
       let disposed = false;
 
+      // Returns whether the canvas now has a size. Writing canvas.width or
+      // height clears the bitmap even when the value is the same, so an
+      // unchanged box is left alone: a static grid (reduced motion, or no
+      // flicker) is drawn once and nothing would paint it back.
       const applySize = (): boolean => {
         const rect = container.getBoundingClientRect();
         if (rect.width <= 0 || rect.height <= 0) {
           return false;
+        }
+        if (rect.width === canvasWidth && rect.height === canvasHeight) {
+          return true;
         }
         canvasWidth = rect.width;
         canvasHeight = rect.height;
@@ -145,14 +152,26 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         return true;
       };
 
+      // A real resize cleared the canvas and left the grid, its center and the
+      // cached static frame sized for the old box, and a stopped loop would
+      // never redraw it. Rebuild for the new size and restart the loop.
       const handleResize = () => {
+        if (!initialized) {
+          setup();
+          return;
+        }
         const prevW = canvasWidth;
         const prevH = canvasHeight;
         if (!applySize()) return;
-        if (initialized && (prevW !== canvasWidth || prevH !== canvasHeight)) {
-          dotsRef.current = [];
-          isStaticRef.current = false;
+        if (prevW === canvasWidth && prevH === canvasHeight) return;
+        if (animationRef.current) {
+          cancelAnimationFrame(animationRef.current);
+          animationRef.current = undefined;
         }
+        dotsRef.current = [];
+        isStaticRef.current = false;
+        initialized = false;
+        setup();
       };
 
       window.addEventListener("resize", handleResize);
@@ -247,7 +266,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         const startTime = Date.now();
         const frameInterval = 1000 / fps;
 
-        const bulgeEnabled = !!bulge;
+        // Under reduced motion nothing keeps moving: no flicker, no bulge wave.
+        // Without this, either one kept the frame loop running indefinitely.
+        const bulgeEnabled = !!bulge && shouldAnimate;
+        const flickering = flicker && shouldAnimate;
         const bulgeType = bulge?.type ?? "ripple";
         const bulgeDuration = bulge?.duration ?? 3;
         const bulgeIntensity = bulge?.intensity ?? 10;
@@ -297,7 +319,9 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           // If static and we have cached image, just render that and stop animating
           if (isStaticRef.current && cachedImageData) {
             ctx.putImageData(cachedImageData, 0, 0);
-            // Don't request another frame - animation is complete
+            // Don't request another frame - animation is complete. Clear the
+            // ref so the loop can be restarted.
+            animationRef.current = undefined;
             return;
           }
 
@@ -345,7 +369,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           // For instant trigger, show all dots immediately at full opacity
           if (trigger === "instant") {
             // Check if we're in a static state (no flicker, no active bulge)
-            const isCurrentlyStatic = !flicker && (!bulgeEnabled || !showBulge);
+            const isCurrentlyStatic = !flickering && (!bulgeEnabled || !showBulge);
 
             if (isCurrentlyStatic && isStaticRef.current && cachedImageData) {
               // Use cached render
@@ -357,7 +381,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                 let opacity = dot.baseOpacity;
 
                 // Apply flicker effect if enabled
-                if (flicker) {
+                if (flickering) {
                   const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
                   const flickerMultiplier = 0.6 + flickerValue * 0.4; // Oscillate between 0.6 and 1.0
                   opacity *= flickerMultiplier;
@@ -510,7 +534,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                   opacity = Math.min(1, fadeIn * fadeIn) * dot.baseOpacity;
 
                   // Apply flicker effect if enabled
-                  if (flicker) {
+                  if (flickering) {
                     const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
                     const flickerMultiplier = 0.6 + flickerValue * 0.4;
                     opacity *= flickerMultiplier;
@@ -580,7 +604,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               });
             } else {
               // Animation complete - show all dots with optional flicker
-              const isCurrentlyStatic = !flicker && (!bulgeEnabled || !showBulge);
+              const isCurrentlyStatic = !flickering && (!bulgeEnabled || !showBulge);
 
               if (isCurrentlyStatic && isStaticRef.current && cachedImageData) {
                 // Use cached render for completed static state
@@ -590,7 +614,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                   ctx.fillStyle = dot.color;
                   let opacity = dot.baseOpacity;
 
-                  if (flicker) {
+                  if (flickering) {
                     const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
                     const flickerMultiplier = 0.6 + flickerValue * 0.4;
                     opacity *= flickerMultiplier;
@@ -667,7 +691,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
             // Only continue animating if mount animation is incomplete or there's something dynamic
             const isCurrentlyStatic =
-              mountAnimationCompleteRef.current && !flicker && (!bulgeEnabled || !showBulge);
+              mountAnimationCompleteRef.current && !flickering && (!bulgeEnabled || !showBulge);
             if (!isCurrentlyStatic) {
               animationRef.current = requestAnimationFrame(animate);
             } else {
@@ -683,8 +707,9 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
               // Revealing animation with explosive easing
               const now = Date.now();
               const elapsed = (now - revealStartTimeRef.current) / 1000;
-              // Cubic easing: starts very slow, then explodes
-              const revealProgress = Math.pow(elapsed, 3) * speed * 3;
+              // Cubic easing: starts very slow, then explodes. Under reduced
+              // motion the grid shows in full at once.
+              const revealProgress = shouldAnimate ? Math.pow(elapsed, 3) * speed * 3 : 2.0;
 
               // Cap progress to prevent infinite growth (max offset is ~1.3)
               const cappedProgress = Math.min(revealProgress, 2.0);
@@ -703,7 +728,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                   opacity = Math.min(1, fadeIn * fadeIn) * dot.baseOpacity;
 
                   // Apply flicker effect if enabled
-                  if (flicker) {
+                  if (flickering) {
                     const flickerValue = Math.sin(time * dot.flickerSpeed * 3 + dot.flickerPhase);
                     const flickerMultiplier = 0.6 + flickerValue * 0.4; // Oscillate between 0.6 and 1.0
                     opacity *= flickerMultiplier;
@@ -779,8 +804,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                 const hideSpeed = speed * 6; // Faster to handle max progress of 2.0
                 const hideProgress = Math.pow(elapsed, 2) * hideSpeed;
 
-                // Reverse from the progress we had when hide started
-                const reverseProgress = Math.max(0, hideStartProgressRef.current - hideProgress);
+                // Reverse from the progress we had when hide started. Under
+                // reduced motion the grid is gone at once.
+                const reverseProgress = shouldAnimate
+                  ? Math.max(0, hideStartProgressRef.current - hideProgress)
+                  : 0;
 
                 if (reverseProgress > 0.01) {
                   // Small threshold to ensure completion
@@ -795,7 +823,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
                       opacity = Math.min(1, fadeIn * fadeIn) * dot.baseOpacity;
 
                       // Apply flicker effect if enabled
-                      if (flicker) {
+                      if (flickering) {
                         const flickerValue = Math.sin(
                           time * dot.flickerSpeed * 3 + dot.flickerPhase,
                         );
@@ -850,8 +878,11 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
           ctx.globalAlpha = 1;
 
           // Only continue animating if there's active animation or dynamic content
-          const hasActiveAnimation = isHoveredRef.current || hideStartProgressRef.current > 0;
-          const hasDynamicContent = flicker || (bulgeEnabled && showBulge);
+          // Under reduced motion a revealed grid is drawn in one frame, so
+          // there is nothing more to animate while it stays revealed.
+          const hasActiveAnimation =
+            (isHoveredRef.current && shouldAnimate) || hideStartProgressRef.current > 0;
+          const hasDynamicContent = flickering || (bulgeEnabled && showBulge);
           if (hasActiveAnimation || hasDynamicContent) {
             animationRef.current = requestAnimationFrame(animate);
           } else {
@@ -867,13 +898,7 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
 
       setup();
 
-      const resizeObserver = new ResizeObserver(() => {
-        if (!initialized) {
-          setup();
-        } else {
-          handleResize();
-        }
-      });
+      const resizeObserver = new ResizeObserver(handleResize);
       resizeObserver.observe(container);
 
       return () => {
@@ -1041,8 +1066,10 @@ const MatrixFx = React.forwardRef<HTMLDivElement, MatrixFxProps>(
         onClick={handleClick}
         {...rest}
       >
+        {/* biome-ignore lint/a11y/noAriaHiddenOnFocusable: a canvas without tabIndex is not focusable; this one is decoration */}
         <canvas
           ref={canvasRef}
+          aria-hidden="true"
           style={{
             position: "absolute",
             top: 0,

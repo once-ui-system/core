@@ -3,6 +3,7 @@
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { type BreakpointKey, useLayout } from "../contexts/LayoutProvider";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Card } from "./Card";
 import { Column } from "./Column";
 import { Row } from "./Row";
@@ -103,7 +104,15 @@ function SplitView({
   ...flex
 }: SplitViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [direction, setDirection] = useState<"row" | "column">("row");
+  // A panel whose content overflows scrolls, so it has to take focus.
+  const leftScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const rightScrollRef = useScrollableTabStop<HTMLDivElement>();
+  // From the prop when there is one: the computed style is only right once
+  // the stylesheet that sets it has loaded, which can be after mount.
+  const directionProp = flex.direction;
+  const [direction, setDirection] = useState<"row" | "column">(
+    directionProp?.startsWith("column") ? "column" : "row",
+  );
   const { maxWidth } = useLayout();
   const [activePanel, setActivePanel] = useState<"left" | "right">("left");
 
@@ -113,13 +122,27 @@ function SplitView({
   useEffect(() => {
     const updateDirection = () => {
       if (!containerRef.current) return;
-      const flexDir = window.getComputedStyle(containerRef.current).flexDirection;
-      setDirection(flexDir === "column" ? "column" : "row");
+      const style = window.getComputedStyle(containerRef.current);
+      // Not a flex box yet: the layout classes have not loaded, so the
+      // computed direction says nothing. Keep what the prop says.
+      if (!style.display.includes("flex")) {
+        setDirection(directionProp?.startsWith("column") ? "column" : "row");
+        return;
+      }
+      setDirection(style.flexDirection.startsWith("column") ? "column" : "row");
     };
     updateDirection();
     window.addEventListener("resize", updateDirection);
-    return () => window.removeEventListener("resize", updateDirection);
-  }, []);
+    // A breakpoint or a late stylesheet changes the layout without a window
+    // resize; the container's own size changes with it.
+    const observer =
+      typeof ResizeObserver === "undefined" ? null : new ResizeObserver(updateDirection);
+    if (containerRef.current) observer?.observe(containerRef.current);
+    return () => {
+      window.removeEventListener("resize", updateDirection);
+      observer?.disconnect();
+    };
+  }, [directionProp]);
 
   const collapsed = collapseBelow !== false && maxWidth(collapseBelow);
 
@@ -150,7 +173,9 @@ function SplitView({
   return (
     <Row ref={containerRef} fill {...flex}>
       <Column
+        ref={leftScrollRef}
         fill
+        className="focus-ring"
         style={{
           [isHorizontal ? "width" : "height"]: `${splitRatio * 100}%`,
           [isHorizontal ? "minWidth" : "minHeight"]: 0,
@@ -213,7 +238,9 @@ function SplitView({
       </Row>
 
       <Column
+        ref={rightScrollRef}
         fill
+        className="focus-ring"
         style={{
           [isHorizontal ? "width" : "height"]: `${(1 - splitRatio) * 100}%`,
           [isHorizontal ? "minWidth" : "minHeight"]: 0,

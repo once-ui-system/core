@@ -83,7 +83,13 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  },
  "types": {

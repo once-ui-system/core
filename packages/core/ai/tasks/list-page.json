@@ -12,7 +12,9 @@
     "Select",
     "Table",
     "Tag",
-    "Skeleton"
+    "Skeleton",
+    "DropdownWrapper",
+    "Option"
   ],
   "recipes": [],
   "example": "examples/list-page.tsx",

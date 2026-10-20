@@ -1,0 +1,24 @@
+// The list is the rows' offset parent, so the engine can measure where a row
+// sits without the transforms a drag puts on it.
+.list {
+    position: relative;
+}
+
+// A press and hold on a row picks it up, so it must not select its text or
+// open the iOS callout first.
+.item {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+
+    &[data-dragging] {
+        pointer-events: none;
+    }
+}
+
+// A grip drags at once with a finger: no press and hold, and no scrolling
+// from it.
+.handle {
+    cursor: grab;
+    touch-action: none;
+}

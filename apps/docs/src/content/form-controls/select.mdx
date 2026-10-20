@@ -41,7 +41,7 @@ The `Select` component offers a dropdown menu for selecting from a list of optio
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Select"
@@ -94,7 +94,7 @@ Enable search functionality to filter options in large lists.
       { label: "Japan", value: "jp" },
       { label: "Brazil", value: "br" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Searchable"
@@ -149,7 +149,7 @@ Customize the message shown when no options match the search query.
       { label: "United Kingdom", value: "uk" },
       { label: "Australia", value: "au" }
     ]}
-    onSelect={country => setSelectedCountry(country)}
+    onSelect={(country) => setSelectedCountry(country as string)}
 />`,
             language: "tsx",
             label: "Empty State"
@@ -183,6 +183,48 @@ Set `multiple` to allow selecting more than one option. The `value` and `onSelec
 />`,
       language: "tsx",
       label: "Multiple selection"
+    }
+  ]}
+/>
+
+## Toolbar size
+
+`size="xxs"` draws a 32px field, the height of a `size="s"` Button, for a filter in a toolbar. The label shows as the placeholder, and a searchable Select opens an `xxs` search field to match. Every other size keeps the `s` search field it had.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<Select
+            id="xxs-select"
+            size="xxs"
+            label="Status"
+            searchable
+            options={[
+                { label: "Paid", value: "paid" },
+                { label: "Pending", value: "pending" },
+                { label: "Refunded", value: "refunded" }
+            ]}
+        />}
+  codes={[
+    {
+      code:
+`const [status, setStatus] = useState("");
+
+<Select
+    id="xxs-select"
+    size="xxs"
+    label="Status"
+    searchable
+    value={status}
+    options={[
+      { label: "Paid", value: "paid" },
+      { label: "Pending", value: "pending" },
+      { label: "Refunded", value: "refunded" }
+    ]}
+    onSelect={(next) => setStatus(next as string)}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
     }
   ]}
 />

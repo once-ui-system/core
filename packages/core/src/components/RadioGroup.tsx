@@ -12,6 +12,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled";
 import { Column } from "./Column";
 import type { IconButtonProps } from "./IconButton";
 import { RadioButton } from "./RadioButton";
@@ -91,7 +92,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
       name,
       label,
       description,
-      disabled = false,
+      disabled: disabledProp = false,
       orientation = "vertical",
       children,
       onKeyDown,
@@ -99,6 +100,7 @@ const RadioGroup = forwardRef<HTMLDivElement, RadioGroupProps>(
     },
     ref,
   ) => {
+    const disabled = useFieldsetDisabled(disabledProp);
     const labelId = useId();
     const descriptionId = useId();
     const groupRef = useRef<HTMLDivElement | null>(null);

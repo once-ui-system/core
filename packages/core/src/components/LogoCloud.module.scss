@@ -10,6 +10,14 @@
     transform-origin: center;
 }
 
+// Under reduced motion the logos are simply there: no blur-and-scale entry.
+@media (prefers-reduced-motion: reduce) {
+    .logo,
+    .staticLogo {
+        animation: none;
+    }
+}
+
 @keyframes fadeIn {
     0% {
         opacity: 0;

@@ -108,11 +108,11 @@ export const { style, dataStyle } = defineConfig({
 
 A 2.0 `Providers` that casts each value (`brand={style.brand as Schemes}`) still compiles; `defineConfig` is what makes the casts unnecessary.
 
-If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`.
+If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`. A forced theme ignores `setTheme`, so a theme switch stops working. To start visitors on light or dark and still let them switch, leave `theme` as `system` and set `defaultTheme` instead; `ThemeInit` reads it too, so the first paint is right.
 
 ## Custom color
 
-The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself.
+The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself. For exact colours from a brand book, give `brandScale`, `accentScale` or `neutralScale` the steps themselves, `{ 100: "#…", …, 1200: "#…" }`; a seed fills any step the scale leaves out.
 
 <CodeBlock
   marginTop="16"
@@ -278,10 +278,11 @@ The 2.0 form, with attribute names as keys (`"solid-style": style.solidStyle`), 
 ### ThemeInit
 
 <PropsTable
-  content={[
-    ["config", "OnceUIStyleConfig", "-", "The style section of once-ui.config, as written."],
-    ["dataStyle", "{ mode?: \"categorical\" | \"divergent\" | \"sequential\" }", "-", "The dataStyle section; its mode becomes data-viz-style."],
-  ]}
+  component="ThemeInit"
+  describe={{
+    config: "The style section of once-ui.config, as written.",
+    dataStyle: "The dataStyle section; its mode becomes data-viz-style.",
+  }}
 />
 
 ## Style your app
@@ -344,6 +345,7 @@ and `remove` may return a promise; nothing waits on them.
 ### ThemeProvider
 
 <PropsTable
+  component="ThemeProvider"
   content={[
     ["children", "ReactNode"],
     ["theme", ["system", "dark", "light"], "system"],
@@ -358,10 +360,10 @@ and `remove` may return a promise; nothing waits on them.
     ["scaling", ["90", "95", "100", "105", "110"], "100"],
     ["bodySize", ["90", "95", "100", "105", "110"], "100"],
     ["bodyLineHeight", ["90", "100", "110", "120"], "100"],
-    ["desktopSize", ["13", "14", "15", "16", "17", "18"], "16", "Root font size in px above 1024px."],
-    ["tabletSize", ["13", "14", "15", "16", "17", "18"], "16", "Root font size in px from 769px to 1024px."],
-    ["mobileSize", ["13", "14", "15", "16", "17", "18"], "15", "Root font size in px at 768px and below."],
-    ["cursorInteractive", ["pointer", "default"], "pointer", "The cursor over interactive elements."],
+    ["desktopSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px above 1024px. Unset, the stylesheet's 16px applies."],
+    ["tabletSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px from 769px to 1024px. Unset, the stylesheet's 16px applies."],
+    ["mobileSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px at 768px and below. Unset, the stylesheet's 15px applies."],
+    ["cursorInteractive", ["pointer", "default"], "-", "The cursor over interactive elements. Unset, the stylesheet's pointer applies."],
     ["brandSeed", "string", "-", "A colour to generate the brand scheme from. Implies brand=\"custom\" when brand is not set."],
     ["accentSeed", "string", "-", "As brandSeed, for the accent scheme."],
     ["neutralSeed", "string", "-", "As brandSeed, for the neutral scheme."],

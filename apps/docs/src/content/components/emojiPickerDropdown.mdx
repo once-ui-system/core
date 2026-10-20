@@ -57,7 +57,7 @@ You can use an `IconButton` as the trigger for a more compact UI.
 
 <Row gap="16" vertical="center">
   <EmojiPickerDropdown
-    trigger={<IconButton icon="smiley" variant="secondary" />}
+    trigger={<IconButton icon="smiley" variant="secondary" aria-label="Pick an emoji" />}
     onSelect={(emoji) => setSelectedEmoji(emoji)}
   />
   {selectedEmoji && (
@@ -238,7 +238,7 @@ const [selectedEmoji, setSelectedEmoji] = useState("");
   content={[
     ["trigger", "ReactElement", "-", "The element that triggers the dropdown (required)"],
     ["closeAfterClick", "boolean", "true", "Whether to close dropdown after selecting emoji"],
-    ["placement", "Placement", "bottom", "Position of dropdown relative to trigger"],
+    ["placement", "Placement", "bottom-start", "Position of dropdown relative to trigger"],
     ["open", "boolean", "-", "Controlled open state"],
     ["onOpenChange", "(open: boolean) => void", "-", "Callback when open state changes"],
     ["fillWidth", "boolean", "-", "Whether dropdown matches trigger width"]

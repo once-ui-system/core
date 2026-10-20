@@ -1,6 +1,7 @@
 import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
+import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { AdapterProvider } from "../contexts/AdapterProvider";
@@ -167,5 +168,53 @@ describe("Kbar accessibility", () => {
     await user.keyboard("{Escape}");
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(trigger).toHaveFocus();
+  });
+});
+
+/** Opening from a Button: the palette was only reachable through its own wrapper row. */
+describe("Kbar controlled", () => {
+  const Controlled = ({ onOpenChange }: { onOpenChange?: (open: boolean) => void }) => {
+    const [open, setOpen] = useState(false);
+    return (
+      <>
+        <button type="button" onClick={() => setOpen(true)}>
+          Search
+        </button>
+        <Kbar
+          items={items}
+          open={open}
+          onOpenChange={(next) => {
+            setOpen(next);
+            onOpenChange?.(next);
+          }}
+        />
+      </>
+    );
+  };
+
+  it("opens from a button elsewhere and renders no trigger of its own", async () => {
+    const user = userEvent.setup();
+    const { container } = render(<Controlled />, { wrapper: wrap });
+    expect(container.querySelectorAll("[tabindex='0']")).toHaveLength(0);
+    await user.click(screen.getByRole("button", { name: "Search" }));
+    expect(await screen.findByRole("dialog", { name: "Command palette" })).toBeInTheDocument();
+  });
+
+  it("reports Escape and the shortcut through onOpenChange", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    render(<Controlled onOpenChange={onOpenChange} />, { wrapper: wrap });
+    await user.keyboard("{Control>}k{/Control}");
+    await screen.findByRole("dialog", { name: "Command palette" });
+    expect(onOpenChange).toHaveBeenLastCalledWith(true);
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(onOpenChange).toHaveBeenLastCalledWith(false);
+    expect(screen.getByRole("button", { name: "Search" })).toBeInTheDocument();
+  });
+
+  it("stays open on mount when it starts open", async () => {
+    render(<Kbar items={items} open onOpenChange={() => {}} />, { wrapper: wrap });
+    expect(await screen.findByRole("dialog", { name: "Command palette" })).toBeInTheDocument();
   });
 });

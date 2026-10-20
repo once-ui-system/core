@@ -13,7 +13,9 @@ import { Scroller } from "../../components/Scroller";
 import { StyleOverlay } from "../../components/StyleOverlay";
 import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
+import { VisuallyHidden } from "../../components/VisuallyHidden";
 import type { IconName } from "../../icons";
+import { useScrollableTabStop } from "../../internal/scrollableTabStop";
 import { SpacingToken } from "../../types";
 import { escapeHtml } from "../../utils/safe-html";
 import styles from "./CodeBlock.module.scss";
@@ -33,6 +35,20 @@ async function getPrism() {
     // specifier in the runtime output, which browsers can't
     // resolve and fail with "Failed to resolve module specifier
     // 'prismjs'". Browser code needs a bundler-resolved path.
+    //
+    // Prism highlights every `code[class*="language-"]` on the page by itself
+    // a frame after it loads, unless `Prism.manual` is set before it
+    // evaluates. On a page of server-rendered CodeBlocks that pass reached
+    // blocks React had not hydrated yet (each sits in its own Suspense
+    // boundary, hydrated a slice at a time) and rewrote their text into
+    // token spans, so their hydration failed with a text mismatch (React
+    // #418) on whichever page lost the race. Each CodeBlock highlights its
+    // own element once it is hydrated, so the automatic pass is switched off.
+    if (typeof window !== "undefined") {
+      const global = window as unknown as { Prism?: { manual?: boolean } };
+      global.Prism = global.Prism ?? {};
+      global.Prism.manual = true;
+    }
     const mod = await import("prismjs");
     Prism = (mod as { default?: unknown }).default ?? mod;
   }
@@ -500,6 +516,11 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
   const codeRef = useRef<HTMLElement>(null);
   const preRef = useRef<HTMLPreElement>(null);
   const [selectedInstance, setSelectedInstance] = useState(0);
+  // Code and previews wider or taller than their box scroll; a keyboard has to
+  // be able to reach them to scroll (axe: scrollable-region-focusable).
+  const previewScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const codeScrollRef = useScrollableTabStop<HTMLDivElement>();
+  const diffScrollRef = useScrollableTabStop<HTMLDivElement>();
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -626,7 +647,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   const [copyIcon, setCopyIcon] = useState<IconName>("clipboard");
   const handleCopy = () => {
-    if (codes.length > 0 && code) {
+    // No clipboard outside a secure context (plain http): reading
+    // `writeText` off undefined threw from the click handler.
+    if (codes.length > 0 && code && navigator.clipboard) {
       navigator.clipboard
         .writeText(typeof code === "string" ? code : code.content)
         .then(() => {
@@ -792,7 +815,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                     <IconButton
                       variant="tertiary"
                       icon="sparkle"
-                      aria-label="Explain this code"
+                      // It opens the style panel; it used to be named
+                      // "Explain this code".
+                      aria-label="Code block style"
                       color="neutral-weak"
                     />
                   </Flex>
@@ -828,7 +853,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
             radius="l"
             border
             padding={previewPadding}
+            ref={previewScrollRef}
             tabIndex={-1}
+            className="focus-ring"
             horizontal="center"
             overflowY="auto"
           >
@@ -864,10 +891,17 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
                   isCollapsed ? { maxHeight: collapsedMaxHeight, overflow: "hidden" } : undefined
                 }
               >
-                <Row overflowX="auto" fillWidth tabIndex={-1}>
+                <Row
+                  ref={codeScrollRef}
+                  overflowX="auto"
+                  fillWidth
+                  tabIndex={-1}
+                  className="focus-ring"
+                >
                   {language.includes("diff") ? (
                     <div
-                      className={classNames(styles.pre, `language-diff`)}
+                      ref={diffScrollRef}
+                      className={classNames(styles.pre, `language-diff`, "focus-ring")}
                       style={{
                         maxHeight: `${codeHeight}rem`,
                         overflow: "auto",
@@ -988,6 +1022,9 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   return (
     <>
+      {/* The copy button only swaps its icon, which says nothing to a screen
+          reader; this says it. On the page from the start, so it is read. */}
+      <VisuallyHidden role="status">{copyIcon === "check" ? "Copied" : ""}</VisuallyHidden>
       {renderCodeBlock(false)}
       {isFullscreen &&
         ReactDOM.createPortal(

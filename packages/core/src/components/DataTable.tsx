@@ -4,6 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { isValidElement, type ReactNode, useEffect, useMemo, useState } from "react";
 import { pageCount, withDefaultLabels } from "../internal/pagination";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { dev } from "../utils/devLogger";
 import { Checkbox } from "./Checkbox";
 import { Column } from "./Column";
@@ -245,6 +246,7 @@ function DataTable<T>({
   );
   const selectionControlled = selected !== undefined;
   const currentSelected = selectionControlled ? selected : uncontrolledSelected;
+  const scrollRef = useScrollableTabStop<HTMLDivElement>();
   const selectedSet = useMemo(() => new Set(currentSelected), [currentSelected]);
 
   const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
@@ -509,6 +511,9 @@ function DataTable<T>({
   return (
     <Column fillWidth gap="m" {...flex}>
       <Flex
+        // A table wider than its box scrolls, and a keyboard can only scroll
+        // what it can focus: a tab stop while it overflows, as Table has.
+        ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -516,7 +521,7 @@ function DataTable<T>({
         overflowX="auto"
         overflowY={maxHeight !== undefined ? "auto" : "visible"}
         maxHeight={maxHeight}
-        className={tableStyles.container}
+        className={classNames(tableStyles.container, "focus-ring")}
       >
         <table
           className={classNames(tableStyles.table, {
@@ -559,7 +564,13 @@ function DataTable<T>({
           paddingX="s"
           horizontal={perPageOptions?.length ? "between" : "end"}
           size="s"
-          aria-label={text.pagination}
+          // Named after the table it pages, so two tables on one page do not
+          // give two landmarks the same name (axe: landmark-unique).
+          aria-label={
+            ariaLabel && text.pagination
+              ? `${ariaLabel} ${text.pagination.toLowerCase()}`
+              : text.pagination
+          }
           labels={{
             previous: text.previous,
             next: text.next,

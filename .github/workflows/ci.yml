@@ -1,6 +1,6 @@
 # Quality gates for @once-ui-system/core: every pull request and every push to
 # main must build, typecheck, pass its tests, add no lint errors and keep the
-# docs app building.
+# docs app building, in step with the code and free of browser errors.
 name: CI
 
 on:
@@ -101,8 +101,24 @@ jobs:
       - name: Build core
         run: pnpm --filter @once-ui-system/core build
 
+      # Every example on the site and in the agent harness is typechecked
+      # against the built package, and every props table against the spec,
+      # so a renamed prop or a wrong default fails here instead of on a page.
+      - name: Docs match the code
+        run: pnpm --filter @once-ui-system/docs check:docs
+
       - name: Build docs
         run: pnpm --filter @once-ui-system/docs build
+
+      # Typechecking can't see an example that throws when used, or a page
+      # that logs errors in the browser. Every page of the built site is opened
+      # in the runner's Chrome, scrolled, and its previews' controls pressed.
+      - name: Docs pages run in a browser
+        working-directory: apps/docs
+        run: |
+          pnpm start -p 3000 > /tmp/docs-server.log 2>&1 &
+          for i in $(seq 60); do curl -sf -o /dev/null http://localhost:3000/sitemap.xml && break; sleep 1; done
+          pnpm check:render
 
   native:
     name: Native preview and token export

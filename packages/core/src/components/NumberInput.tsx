@@ -1,12 +1,15 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useState } from "react";
+import type React from "react";
+import { forwardRef, useState } from "react";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
+import { useFieldSize } from "./FormContext";
 import { IconButton } from "./IconButton";
 import { Input } from "./Input";
 import styles from "./NumberInput.module.scss";
+import { Row } from "./Row";
 
 interface NumberInputProps
   extends Omit<React.ComponentProps<typeof Input>, "type" | "value" | "defaultValue" | "onChange"> {
@@ -22,6 +25,17 @@ interface NumberInputProps
 
 const format = (value: number | undefined, padStart?: number) =>
   value === undefined ? "" : padStart ? value.toString().padStart(padStart, "0") : value.toString();
+
+/** Decimal places in a number, so a step can be rounded back onto its grid. */
+const decimals = (n: number) => {
+  const [, exponent] = String(n).split("e-");
+  if (exponent) return Number(exponent);
+  return (String(n).split(".")[1] ?? "").length;
+};
+
+/** `from + by` without floating-point noise: 0.2 + 0.1 is 0.3, not 0.30000000000000004. */
+const add = (from: number, by: number) =>
+  Number((from + by).toFixed(Math.max(decimals(from), decimals(by))));
 
 /** Whether the text in the field already reads as `value`: "1." and "1.50" are 1 and 1.5. */
 const shows = (text: string, value: number | undefined) =>
@@ -75,21 +89,35 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       onChange?.(newValue);
     };
 
-    const increment = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue + step;
-      if (max === undefined || newValue <= max) {
-        updateValue(newValue);
+    // A 32px field has no room for two steppers stacked: each would get 15px.
+    // At xxs they sit side by side instead, down then up.
+    const compact = useFieldSize(props.size) === "xxs";
+
+    /**
+     * Step by `by`, clamped to `min`/`max`. A step that would pass a bound
+     * used to do nothing, so 8 with step 5 and max 10 could never reach 10;
+     * now it lands on the bound. A step from an empty field starts from 0, or
+     * from `min` when 0 is below it. Nothing is reported when the value would
+     * not change (already at the bound).
+     */
+    const stepBy = (by: number) => {
+      const parsed = parseFloat(localValue);
+      const empty = Number.isNaN(parsed);
+      if (empty && min !== undefined && 0 < min && by > 0) {
+        updateValue(min);
+        return;
       }
+      const currentValue = empty ? 0 : parsed;
+      let newValue = add(currentValue, by);
+      if (max !== undefined && newValue > max) newValue = max;
+      if (min !== undefined && newValue < min) newValue = min;
+      if (!empty && newValue === currentValue) return;
+      updateValue(newValue);
     };
 
-    const decrement = () => {
-      const currentValue = parseFloat(localValue) || 0;
-      const newValue = currentValue - step;
-      if (min === undefined || newValue >= min) {
-        updateValue(newValue);
-      }
-    };
+    const increment = () => stepBy(step);
+
+    const decrement = () => stepBy(-step);
 
     return (
       <Input
@@ -101,52 +129,110 @@ const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
         min={min}
         max={max}
         step={step}
+        // The field itself steps with the arrow keys, so the stepper buttons
+        // are for the pointer only and stay out of the Tab order: two extra
+        // stops per field made a form of numbers three times as long to tab.
         suffix={
-          <>
-            <Flex position="static" minWidth={1.25}></Flex>
-            <Column
-              position="absolute"
-              right="0"
-              top="0"
-              borderLeft="neutral-medium"
-              fillHeight
-              background="neutral-alpha-weak"
-            >
-              <Flex
+          compact ? (
+            <>
+              {/* Room for the steppers (two 28px cells and their borders),
+                  less the suffix's own 8px. */}
+              <Flex position="static" minWidth={3.25}></Flex>
+              <Row
+                className={styles.steppersRow}
+                position="absolute"
+                right="0"
+                top="0"
+                borderLeft="neutral-medium"
                 fillHeight
-                position="static"
-                borderBottom="neutral-medium"
-                transition="micro-medium"
-                vertical="center"
-                paddingX="4"
-                className={classNames(styles.stepper)}
+                background="neutral-alpha-weak"
               >
-                <IconButton
-                  icon="chevronUp"
-                  variant="ghost"
-                  size="s"
-                  onClick={increment}
-                  aria-label="Increment value"
-                />
-              </Flex>
-              <Flex
+                <Flex
+                  fillHeight
+                  position="static"
+                  borderRight="neutral-medium"
+                  transition="micro-medium"
+                  vertical="center"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronDown"
+                    variant="ghost"
+                    size="xs"
+                    onClick={decrement}
+                    aria-label="Decrement value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+                <Flex
+                  fillHeight
+                  position="static"
+                  vertical="center"
+                  transition="micro-medium"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronUp"
+                    variant="ghost"
+                    size="xs"
+                    onClick={increment}
+                    aria-label="Increment value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+              </Row>
+            </>
+          ) : (
+            <>
+              <Flex position="static" minWidth={1.25}></Flex>
+              <Column
+                position="absolute"
+                right="0"
+                top="0"
+                borderLeft="neutral-medium"
                 fillHeight
-                position="static"
-                vertical="center"
-                transition="micro-medium"
-                paddingX="4"
-                className={classNames(styles.stepper)}
+                background="neutral-alpha-weak"
               >
-                <IconButton
-                  icon="chevronDown"
-                  variant="ghost"
-                  size="s"
-                  onClick={decrement}
-                  aria-label="Decrement value"
-                />
-              </Flex>
-            </Column>
-          </>
+                <Flex
+                  fillHeight
+                  position="static"
+                  borderBottom="neutral-medium"
+                  transition="micro-medium"
+                  vertical="center"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronUp"
+                    variant="ghost"
+                    size="s"
+                    onClick={increment}
+                    aria-label="Increment value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+                <Flex
+                  fillHeight
+                  position="static"
+                  vertical="center"
+                  transition="micro-medium"
+                  paddingX="4"
+                  className={classNames(styles.stepper)}
+                >
+                  <IconButton
+                    icon="chevronDown"
+                    variant="ghost"
+                    size="s"
+                    onClick={decrement}
+                    aria-label="Decrement value"
+                    tabIndex={-1}
+                  />
+                </Flex>
+              </Column>
+            </>
+          )
         }
         className={styles.numberInput}
       />

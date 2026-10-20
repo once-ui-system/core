@@ -13,7 +13,7 @@
 
   <br/>
 
-  The indie design system for Next.js apps
+  The open-source, agentic design system for React
 
   [![npm version](https://img.shields.io/npm/v/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
@@ -122,6 +122,35 @@ We welcome contributions! Before submitting a PR:
 
 ## Sponsors
 
-Once UI is an indie project. Individuals can [sponsor us through GitHub Sponsors](https://github.com/sponsors/once-ui-system) and get featured on our site.
+Once UI is an indie project, kept going by the companies and people who use it.
 
-Companies can partner with us through dedicated sponsor tiers — logo placement, recognition on ecosystem releases, and top-tier partnership options. See [once-ui.com/support](https://once-ui.com/support) for tiers and benefits, or reach out through the site to talk it through.
+### Company sponsors
+
+Founding and Ecosystem sponsors get their logo here.
+
+<table>
+  <tr>
+    <td align="center" width="400">
+      <a href="https://once-ui.com/sponsors"><b>Founding</b></a><br/>
+      <sub>$2,000 / month · one partner at a time</sub><br/><br/>
+      <a href="https://once-ui.com/sponsors">Your logo here</a>
+    </td>
+    <td align="center" width="400">
+      <a href="https://once-ui.com/sponsors"><b>Ecosystem</b></a><br/>
+      <sub>$750 / month</sub><br/><br/>
+      <a href="https://once-ui.com/sponsors">Your logo here</a>
+    </td>
+  </tr>
+</table>
+
+| Tier | Price | Where your logo runs |
+| --- | --- | --- |
+| Founding | $2,000 / month | This README, the documentation site and once-ui.com/sponsors; named in every release; a standing line to the team |
+| Ecosystem | $750 / month | This README and once-ui.com/sponsors; named in every release for the term |
+| Supporter | $250 / month | once-ui.com/sponsors; named in the quarter's release notes |
+
+See [once-ui.com/sponsors](https://once-ui.com/sponsors) for the details, or get in touch through the form there.
+
+### Individual sponsors
+
+Individuals can [sponsor us through GitHub Sponsors](https://github.com/sponsors/once-ui-system) or [thanks.dev](https://thanks.dev/u/gh/once-ui-system) and get featured on our site.

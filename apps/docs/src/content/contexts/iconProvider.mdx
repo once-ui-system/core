@@ -201,7 +201,7 @@ Overwrite the default icons used in Once UI components (for example the chevron 
 
 ## Icon component
 
-The <SmartLink suffixIcon="arrowUpRight" href="/components/icon">`Icon`</SmartLink> component is a wrapper around icon instances to control their size and color. We recommend
+The <SmartLink style={{ textDecoration: "underline" }} suffixIcon="arrowUpRight" href="/components/icon">`Icon`</SmartLink> component is a wrapper around icon instances to control their size and color. We recommend
 inserting icons through this component.
 
 <CodeBlock
@@ -255,3 +255,12 @@ const known = Object.keys(icons);
 Unlike the other context hooks, `useIcons()` does not throw outside a provider —
 it returns the default library, so a component that only needs built-in icons
 works with no provider in the tree.
+
+## API reference
+
+<PropsTable
+  component="IconProvider"
+  describe={{
+    icons: "Icons to add or replace, keyed by name. Merged over the built-in library.",
+  }}
+/>

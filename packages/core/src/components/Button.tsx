@@ -93,6 +93,9 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps | AnchorProps>(
         ref={ref}
         {...dropdownTriggerProps(trigger, href, props.onClick)}
         disabled={disabled}
+        // A loading button is still there but busy, which a screen reader can
+        // announce; the spinner alone says nothing.
+        aria-busy={loading || undefined}
         data-disabled={disabled ? true : undefined}
         data-border={rounded ? "rounded" : undefined}
         className={classNames(

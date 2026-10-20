@@ -84,6 +84,25 @@ const CompareImage = ({
     setPosition(Math.max(0, Math.min(100, (x / containerWidth) * 100)));
   }, []);
 
+  // The handle is a slider: arrows move it by 1%, Page Up/Down by 10%, Home
+  // and End to the edges. Before, it could only be dragged with a pointer.
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const steps: Record<string, (p: number) => number> = {
+      ArrowLeft: (p) => p - 1,
+      ArrowDown: (p) => p - 1,
+      ArrowRight: (p) => p + 1,
+      ArrowUp: (p) => p + 1,
+      PageDown: (p) => p - 10,
+      PageUp: (p) => p + 10,
+      Home: () => 0,
+      End: () => 100,
+    };
+    const step = steps[e.key];
+    if (!step) return;
+    e.preventDefault();
+    setPosition((p) => Math.max(0, Math.min(100, step(p))));
+  }, []);
+
   useEffect(() => {
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mouseup", handleMouseUp);
@@ -130,14 +149,24 @@ const CompareImage = ({
         radius="l"
         background="surface"
         fitHeight
-        className={styles.dragIcon}
+        className={`${styles.dragIcon} focus-ring`}
         style={{
           left: `${position}%`,
         }}
+        role="slider"
+        tabIndex={0}
+        aria-label="Compare images"
+        aria-orientation="horizontal"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(position)}
+        aria-valuetext={`${Math.round(position)}% ${leftContent.alt || "left image"}`}
+        onKeyDown={handleKeyDown}
       >
         <IconButton
           icon="chevronsLeftRight"
-          aria-label="Drag to compare"
+          aria-hidden="true"
+          tabIndex={-1}
           variant="secondary"
           onMouseDown={handleMouseDown}
           onTouchStart={handleMouseDown}

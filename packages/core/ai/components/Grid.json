@@ -14,7 +14,9 @@
   "l": "GridBreakpointProps",
   "m": "GridBreakpointProps",
   "s": "GridBreakpointProps",
-  "xs": "GridBreakpointProps"
+  "xs": "GridBreakpointProps",
+  "position": "CSSProperties[\"position\"] = relative",
+  "scrollbar": "\"default\" | \"minimal\" = minimal"
  },
  "tags": [
   "layout",
@@ -63,8 +65,8 @@
    "rows": "GridSize"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
    "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",

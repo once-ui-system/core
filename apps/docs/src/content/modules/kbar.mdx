@@ -1,7 +1,7 @@
 ---
 title: "Kbar"
 summary: "The Kbar component provides a command palette for quick navigation and actions throughout your application using keyboard shortcuts."
-updatedAt: "2026-06-30"
+updatedAt: "2026-10-18"
 docs: "once-ui/modules/kbar.mdx"
 github: "modules/navigation/Kbar.tsx"
 navLabel: "Kbar"
@@ -18,7 +18,7 @@ The `Kbar` component provides a powerful command palette for your application, a
   codes={[
     {
       code:
-`const kbarItems = [
+`const kbarItems: KbarItem[] = [
     {
       id: 'home',
       name: 'Home',
@@ -59,14 +59,46 @@ label: "Kbar"
 ]}
 />
 
+## Open from your own control
+
+To open the palette from a header button, a menu item or a sidebar link, control it with `open` and `onOpenChange` and leave out `children`. ⌘K still toggles it, and Escape hands focus back to your button.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`"use client";
+
+function Header() {
+    const [open, setOpen] = useState(false);
+    return (
+      <Row as="header" horizontal="between" vertical="center">
+        <Logo />
+        <Button prefixIcon="search" variant="secondary" onClick={() => setOpen(true)}>
+          Search
+        </Button>
+        <Kbar items={kbarItems} open={open} onOpenChange={setOpen} />
+      </Row>
+    );
+}`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="Kbar"
   describe={{
     items: "The commands, each with a label, an action and optional keywords.",
-    children: "The trigger that opens it.",
+    children: "The trigger that opens it. Leave it out when your own control opens the palette.",
     inputSize: "Size of the search field.",
+    open: "Controlled open state, for opening the palette from a Button, a menu item or anywhere else.",
+    onOpenChange: "Called with the next open state when ⌘K, the trigger, Escape, an option or a route change opens or closes the palette.",
   }}
   content={[
     ["children"]

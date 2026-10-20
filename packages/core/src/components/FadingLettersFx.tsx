@@ -61,6 +61,10 @@ const FadingLettersFx = forwardRef<HTMLSpanElement, FadingLettersFxProps>(
         return (
           <span key={wordIdx} className={styles.word}>
             {wordLetters}
+            {/* Keeps the words apart in the text (copy, search, screen readers).
+                Trailing white space in an inline-flex box is not rendered, so the
+                gap stays the word's margin. */}
+            {wordIdx < words.length - 1 ? " " : null}
           </span>
         );
       });

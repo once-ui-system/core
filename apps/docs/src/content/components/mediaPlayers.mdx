@@ -65,15 +65,15 @@ recorder.ondataavailable = (event) => {
 />
 
 <PropsTable
+  component="MediaVideoPlayer"
   label="MediaVideoPlayer"
-  content={[
-    ["src", "string", "-", "Video source. Required."],
-    ["autoplay", "boolean", "false", "Start playing as soon as the video can play."],
-    ["loop", "boolean", "false", "Restart when playback reaches the end."],
-    ["muted", "boolean", "true", "Start muted. Autoplay is blocked with sound in most browsers."],
-    ["objectFit", "CSSProperties[\"objectFit\"]", "\"cover\"", "How the frame fits its box."],
-    ["className", "string"],
-  ]}
+  describe={{
+    src: "Video source. Required.",
+    autoplay: "Start playing as soon as the video can play.",
+    loop: "Restart when playback reaches the end.",
+    muted: "Start muted. Autoplay is blocked with sound in most browsers.",
+    objectFit: "How the frame fits its box.",
+  }}
 />
 
 ## MediaAudioPlayer
@@ -127,14 +127,14 @@ const current = chapters.findLast((chapter) => chapter.start <= time);
 />
 
 <PropsTable
+  component="MediaAudioPlayer"
   label="MediaAudioPlayer"
-  content={[
-    ["src", "string", "-", "Audio source. Required."],
-    ["autoplay", "boolean", "false", "Start playing as soon as the audio can play."],
-    ["loop", "boolean", "false", "Restart when playback reaches the end."],
-    ["label", "string", "\"Audio player\"", "Accessible name for the player group."],
-    ["onTimeUpdate", "(currentTime: number) => void", "-", "Fires on every timeupdate with the position in seconds."],
-    ["onPlayingChange", "(playing: boolean) => void", "-", "Fires when playback starts or stops."],
-    ["...flex"],
-  ]}
+  describe={{
+    src: "Audio source. Required.",
+    autoplay: "Start playing as soon as the audio can play.",
+    loop: "Restart when playback reaches the end.",
+    label: "Accessible name for the player group.",
+    onTimeUpdate: "Fires on every timeupdate with the position in seconds.",
+    onPlayingChange: "Fires when playback starts or stops.",
+  }}
 />

@@ -200,6 +200,26 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
       }
     }, [triggerType, handleMouseLeave]);
 
+    // A hover trigger that is a role="button" element of its own (InfoTip's
+    // icon) has no action but this card, so Enter and Space toggle it, as a
+    // button should. Native buttons and links keep their own action.
+    const handleTriggerKeyDown = useCallback(
+      (event: React.KeyboardEvent<HTMLElement>) => {
+        if (triggerType !== "hover" || isControlled) return;
+        if (event.key !== "Enter" && event.key !== " ") return;
+        const target = event.target as HTMLElement;
+        if (target.getAttribute("role") !== "button") return;
+        if (target.closest("button, a[href], input, select, textarea")) return;
+        event.preventDefault();
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+          timeoutRef.current = null;
+        }
+        setInternalActive((active) => !active);
+      },
+      [triggerType, isControlled, setInternalActive],
+    );
+
     const handleClick = useCallback(() => {
       if (triggerType === "click") {
         setIsClicked(!isClicked);
@@ -344,6 +364,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
               onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
               onFocus={triggerType === "hover" ? handleFocus : undefined}
               onBlur={triggerType === "hover" ? handleBlur : undefined}
+              onKeyDown={triggerType === "hover" ? handleTriggerKeyDown : undefined}
               onClick={triggerType === "click" ? handleClick : undefined}
             >
               {trigger}
@@ -390,6 +411,7 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
             onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
             onFocus={triggerType === "hover" ? handleFocus : undefined}
             onBlur={triggerType === "hover" ? handleBlur : undefined}
+            onKeyDown={triggerType === "hover" ? handleTriggerKeyDown : undefined}
             onClick={triggerType === "click" ? handleClick : undefined}
           >
             {trigger}

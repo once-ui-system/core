@@ -1,6 +1,8 @@
 "use client";
 
 import React, { forwardRef, useEffect, useMemo, useRef, useState } from "react";
+import { useReducedMotion } from "../hooks/useReducedMotion";
+import { prefersReducedMotionNow } from "../internal/reducedMotion";
 import styles from "./AutoScroll.module.scss";
 import { Row } from "./Row";
 
@@ -45,6 +47,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
     });
     const [contentWidth, setContentWidth] = useState(0);
     const previousReverseRef = useRef(reverse);
+    const { prefersReducedMotion } = useReducedMotion();
 
     // Stable reference to children to prevent unnecessary re-renders
     const childrenStable = useMemo(() => children, []);
@@ -114,6 +117,9 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         animationRef.current = null;
       }
 
+      // Under reduced motion the content stays where it is.
+      if (prefersReducedMotion || prefersReducedMotionNow()) return;
+
       // Always animate, even if content is not wider than container
       // If content is not wider than container, we'll use the content width as the animation distance
       // This ensures there's always some movement
@@ -160,7 +166,7 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           animationRef.current = null;
         }
       };
-    }, [speed, reverse, contentWidth]);
+    }, [speed, reverse, contentWidth, prefersReducedMotion]);
 
     // Handle hover effects
     useEffect(() => {
@@ -176,7 +182,9 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
         }
       } else {
         animation.updatePlaybackRate(1);
-        if (animation.playState === "paused" && hover !== "pause") {
+        // The pause came from hovering, so leaving is what resumes it. The old
+        // `hover !== "pause"` check meant hover="pause" never played again.
+        if (animation.playState === "paused") {
           animation.play();
         }
       }
@@ -241,11 +249,15 @@ const AutoScroll = forwardRef<HTMLDivElement, AutoScrollProps>(
           >
             {children || childrenStable}
           </Row>
+          {/* The copy that makes the loop seamless: drawn, but not read out
+              or tabbed into a second time. */}
           <Row
             fitWidth
             horizontal="around"
             className={styles.marqueeContent}
             style={{ marginRight: gapStyle }}
+            aria-hidden="true"
+            inert
           >
             {children || childrenStable}
           </Row>
