@@ -10,8 +10,11 @@ import {
   useState,
 } from "react";
 import { Schemes } from "../types";
-import { customSchemeProperties, type SchemeScale } from "../utils/colorScheme";
+import type { ThemedSchemeScale } from "../utils/colorScheme";
 import { dev } from "../utils/devLogger";
+import { type ThemeColor, themeStyle } from "../utils/themeCss";
+
+export type { ThemeColor } from "../utils/themeCss";
 
 export type Theme = "dark" | "light" | "system";
 /** Every neutral scheme tokens.css ships a `[data-neutral]` mapping for. */
@@ -125,12 +128,28 @@ export interface OnceUIStyleConfig {
    * The brand scheme step by step, `{ 100: "#…", …, 1200: "#…" }`, for exact
    * brand colours. Implies `brand: "custom"`. Steps it leaves out come from
    * `brandSeed`; without a seed it needs at least step 600.
+   *
+   * One scale serves both themes. For a ramp per theme, write
+   * `{ light: { … }, dark: { … } }`; a theme left out uses the other's.
    */
-  brandScale?: SchemeScale;
+  brandScale?: ThemedSchemeScale;
   /** As {@link OnceUIStyleConfig.brandScale}, for `accent: "custom"`. */
-  accentScale?: SchemeScale;
+  accentScale?: ThemedSchemeScale;
   /** As {@link OnceUIStyleConfig.brandScale}, for `neutral: "custom"`. */
-  neutralScale?: SchemeScale;
+  neutralScale?: ThemedSchemeScale;
+  /**
+   * The page background (`--page-background`, `background="page"`): a token
+   * such as `"neutral-background-weak"` or any CSS colour, for both themes or
+   * `{ light, dark }`. Unset, light mode keeps its off-white neutral step and
+   * dark mode its own. `ThemeInit` renders it, so the first paint is right.
+   */
+  pageBackground?: ThemeColor;
+  /**
+   * The filled surface's background (`--surface-background`,
+   * `background="surface"`), as {@link OnceUIStyleConfig.pageBackground}.
+   * Applies with `surface: "filled"`; a translucent surface keeps its own.
+   */
+  surfaceBackground?: ThemeColor;
 }
 
 interface StyleOptions {
@@ -281,6 +300,8 @@ export function ThemeProvider({
   brandScale,
   accentScale,
   neutralScale,
+  pageBackground,
+  surfaceBackground,
   persistence = "local",
 }: ThemeProviderProps) {
   const store = useMemo(() => resolvePersistence(persistence), [persistence]);
@@ -395,19 +416,32 @@ export function ThemeProvider({
   // `data-<name>="custom"` reads. ThemeInit puts the same values in a server-
   // rendered <style>; writing them here as well is what lets a seed change
   // after load, and what makes a seed work in an app without ThemeInit.
-  const schemeProperties = useMemo(
-    () =>
-      customSchemeProperties(
-        { brand: brandSeed, accent: accentSeed, neutral: neutralSeed },
-        { brand: brandScale, accent: accentScale, neutral: neutralScale },
-      ),
-    [brandSeed, accentSeed, neutralSeed, brandScale, accentScale, neutralScale],
-  );
+  // A scale per theme and the backgrounds cannot be inline styles, which know
+  // no theme: they go in a <style> of their own, the rules ThemeInit renders.
+  // Scales are compared by value, so a config object written inline in the
+  // JSX does not rebuild the stylesheet on every render.
+  const scalesKey = JSON.stringify([brandScale, accentScale, neutralScale]);
+  const backgroundsKey = JSON.stringify([pageBackground, surfaceBackground]);
+  const styleSheet = useMemo(() => {
+    const [brand, accent, neutral] = JSON.parse(scalesKey) as (ThemedSchemeScale | null)[];
+    const [page, surface] = JSON.parse(backgroundsKey) as (ThemeColor | null)[];
+    return themeStyle({
+      seeds: { brand: brandSeed, accent: accentSeed, neutral: neutralSeed },
+      scales: {
+        brand: brand ?? undefined,
+        accent: accent ?? undefined,
+        neutral: neutral ?? undefined,
+      },
+      pageBackground: page ?? undefined,
+      surfaceBackground: surface ?? undefined,
+    });
+  }, [brandSeed, accentSeed, neutralSeed, scalesKey, backgroundsKey]);
+  const { root: schemeProperties, css: themeCss, schemes } = styleSheet;
   // A seed implies "custom" when the scheme is not named — but only a seed
   // that parsed, or the scheme would point at properties that do not exist.
-  if (!brand && schemeProperties["--scheme-brand-600"]) directProps.brand = "custom";
-  if (!accent && schemeProperties["--scheme-accent-600"]) directProps.accent = "custom";
-  if (!neutral && schemeProperties["--scheme-neutral-600"]) directProps.neutral = "custom";
+  if (!brand && schemes.includes("brand")) directProps.brand = "custom";
+  if (!accent && schemes.includes("accent")) directProps.accent = "custom";
+  if (!neutral && schemes.includes("neutral")) directProps.neutral = "custom";
 
   const [style, setStyleState] = useState<StyleOptions>({
     ...defaultStyleOptions,
@@ -500,6 +534,17 @@ export function ThemeProvider({
       for (const property of Object.keys(schemeProperties)) root.style.removeProperty(property);
     };
   }, [schemeProperties]);
+
+  // Before paint, so switching to a per-theme scale never shows a frame of
+  // the old ramp.
+  useIsomorphicLayoutEffect(() => {
+    if (!themeCss || typeof document === "undefined") return;
+    const sheet = document.createElement("style");
+    sheet.setAttribute("data-once-ui-theme-style", "");
+    sheet.textContent = themeCss;
+    document.head.appendChild(sheet);
+    return () => sheet.remove();
+  }, [themeCss]);
 
   return (
     <ThemeProviderContext.Provider value={themeValue}>

@@ -154,6 +154,7 @@ import {
   User,
   UserMenu,
   VisuallyHidden,
+  VoiceVisualizer,
   WeatherFx,
   WorkingIndicator,
 } from "@once-ui-system/core";
@@ -294,6 +295,7 @@ import {
   UseHotkeysExample,
   ValidationInputExample,
   ValidationTextareaExample,
+  VoiceStatesExample,
   WeatherFxExample,
 } from "@/product";
 
@@ -432,6 +434,7 @@ const mdxComponents = createMdxComponents({
   TypingIndicator,
   ConversationItem,
   ChatConversationExample,
+  VoiceStatesExample,
   ChatComposerExample,
   ChatComposerToolbarExample,
   ConversationListExample,
@@ -445,6 +448,7 @@ const mdxComponents = createMdxComponents({
   Spinner,
   LogoSpinner,
   WorkingIndicator,
+  VoiceVisualizer,
   Skeleton,
   FocusTrap,
   ScrollLock,

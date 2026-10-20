@@ -978,6 +978,11 @@
     "tags": ["accessibility"],
     "pairsWith": ["Button", "SmartLink"]
   },
+  "VoiceVisualizer": {
+    "purpose": "Voice chat orb or bars for idle, listening, thinking, speaking; follows audio level",
+    "tags": ["chat", "ai", "media"],
+    "pairsWith": ["WorkingIndicator", "ChatComposer"]
+  },
   "WeatherFx": {
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
     "tags": ["decoration", "effect"],

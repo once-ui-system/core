@@ -84,6 +84,22 @@ describe("defineConfig", () => {
     // @ts-expect-error — strok is not an axis key
     defineConfig({ dataStyle: { axis: { strok: "red" } } });
   });
+
+  it("checks a key that takes either shape against both", () => {
+    // A scale once or per theme, a background once or per theme.
+    defineConfig({
+      style: {
+        brandScale: { 600: "#18372A" },
+        accentScale: { light: { 600: "#4E7A00" }, dark: { 600: "#B8F23A" } },
+        pageBackground: "#F7F5EF",
+        surfaceBackground: { light: "#fff", dark: "neutral-background-strong" },
+      },
+    });
+    // @ts-expect-error — lite is neither a step nor a theme
+    defineConfig({ style: { brandScale: { lite: { 600: "#fff" } } } });
+    // @ts-expect-error — dim is not a theme
+    defineConfig({ style: { pageBackground: { dim: "#000" } } });
+  });
 });
 
 describe("the config as written goes to the providers", () => {
