@@ -1,6 +1,7 @@
 {
   "Background.gradient.width": {
     "rule": "Quarter-percent units: 400 = 100% of container. Soft glows use width 100–200, not 500.",
+    "inRules": true,
     "components": ["Background"]
   },
   "Background.gradient.x": {
@@ -9,18 +10,22 @@
   },
   "Background.absolute": {
     "rule": "Every absolute decorative layer needs top=\"0\" left=\"0\" or it offsets by parent padding.",
+    "inRules": true,
     "components": ["Background", "MatrixFx", "BlobFx"]
   },
   "Card.interactive": {
     "rule": "Card is for interactive surfaces only (href or onClick). Static panels use Column + background=\"surface\" border radius=\"l\".",
+    "inRules": true,
     "components": ["Card"]
   },
   "Fade.edge": {
     "rule": "Fade is an edge overlay strip on scroll containers, not a content wrapper.",
+    "inRules": true,
     "components": ["Fade"]
   },
   "RevealFx.delay": {
     "rule": "Time is milliseconds everywhere in 3.0: RevealFx (duration, delay), ShineFx and CountFx (duration), TypeFx (charDuration, delay, hold), CelebrationFx and WeatherFx (duration — 5000, not 5), MatrixFx bulge.duration, FlipFx autoFlipInterval, Animation and HoverCard (delay, duration; HoverCard placement=\"cover\" also hideDelay) and Skeleton (delay). Stagger with delay={index * 100}, never index * 0.1 (that was 1.8.x; 0.1 is a tenth of a millisecond, i.e. no stagger). speed is only a multiplier (1 the default, 0.5 half) or \"slow\"/\"medium\"/\"fast\" (0.5/1/2), on MatrixFx, WeatherFx, ParticleFx, CelebrationFx, Effect, Scroller auto, GlitchFx and LetterFx; RevealFx/ShineFx/CountFx speed is duration and TypeFx speed is charDuration since 3.0.",
+    "inRules": true,
     "components": [
       "RevealFx",
       "ShineFx",
@@ -37,10 +42,12 @@
   },
   "RevealFx.translateY": {
     "rule": "translateY as a number is on the token scale: translateY={16} is the token \"16\" (1rem). Use a token such as \"16\"; translateY=\"1rem\" also works.",
+    "inRules": true,
     "components": ["RevealFx"]
   },
   "LogoCloud.columns": {
     "rule": "LogoCloud extends Grid — always set columns and responsive overrides or logos stack in one column.",
+    "inRules": true,
     "components": ["LogoCloud"]
   },
   "StatusIndicator.scheme": {
@@ -49,6 +56,7 @@
   },
   "Icon.names": {
     "rule": "Icon names must come from iconNames in catalog.json (spec.json has the same list), and IconName is a real union in 2.0 (an unregistered name is a type error, not a blank space). Do not guess a plausible name, and do not cast one with `as IconName` to silence the check. Brand marks are not in the set — an app registers those itself by augmenting IconLibraryOverrides.",
+    "inRules": true,
     "components": ["Icon", "Button", "IconButton"]
   },
   "Icon.cast": {
@@ -57,6 +65,7 @@
   },
   "LayoutProvider.next": {
     "rule": "In a Next.js app, import LayoutProvider from \"@once-ui-system/core/next\", not the package root. The root export installs the plain DOM adapters, so SmartLink, Button/Card/ToggleButton with href, Media, Logo, MegaMenu and Kbar render a plain <a> and <img>: no client-side navigation, no next/image, and no error to say so. An app that composes NextAdapterProvider (or AdapterProvider with nextAdapters) itself is already covered.",
+    "inRules": true,
     "components": ["LayoutProvider", "SmartLink", "Media", "Button", "Card"]
   },
   "Toast.stable": {
@@ -102,14 +111,17 @@
   },
   "color.tokens": {
     "rule": "Colors are semantic tokens ({tone}-{weight}), never hex/rgb. background also accepts surface | overlay | page | transparent.",
+    "inRules": true,
     "components": ["Column", "Row", "Text", "Button"]
   },
   "color.svgPaint": {
     "rule": "Inline SVG paint is not a hex or rgb literal either: write fill or stroke as currentColor and set the colour with onBackground on the wrapper, or name a token as var(--brand-solid-strong). A literal never follows the theme.",
+    "inRules": true,
     "components": ["Icon", "Row", "Column"]
   },
   "color.background-weak": {
     "rule": "*-background-weak is nearly the page color — invisible as accent. Use alpha tokens (brand-alpha-medium) for glows.",
+    "inRules": true,
     "components": ["Background"]
   },
   "api.renamed": {
@@ -127,42 +139,52 @@
   },
   "layout.shorthands": {
     "rule": "Use fill not fillWidth fillHeight; center not horizontal=\"center\" vertical=\"center\"; Row/Column not Flex direction=, and Row for a Flex with no direction (Flex defaults to row). Flex is for a direction that changes at a breakpoint.",
+    "inRules": true,
     "components": ["Row", "Column", "Flex", "Grid"]
   },
   "theme.typedProps": {
     "rule": "Theme a subtree with the typed props theme, themeBorder, themeSolid and themeSurface — on Flex, Row, Column, Grid and every component built on them (Background, Tag, the effects) — not raw data-theme, data-border, data-solid or data-surface. Keep the raw attribute only where no prop exists: data-border=\"rounded\" on Button and IconButton, data-brand anywhere.",
+    "inRules": true,
     "components": ["Row", "Column", "Flex", "Grid", "Background"]
   },
   "layout.defaults": {
     "rule": "Never write props equal to defaults or implied by another prop on the element: position=\"relative\", direction on Row/Column, variant=\"primary\" on Button, fillWidth beside maxWidth (maxWidth already fills the width), minWidth={0} beside fillWidth (fillWidth already sets min-width: 0).",
+    "inRules": true,
     "components": ["Row", "Column", "Grid", "Button"]
   },
   "Logo.themes": {
     "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with showIn=\"dark\" and showIn=\"light\": twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep showIn for a logo that should only appear in one theme.",
+    "inRules": true,
     "components": ["Logo"]
   },
   "border.default": {
     "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border: --default-border, neutral-alpha-weak unless the app sets it in its custom CSS. Do not write border=\"neutral-alpha-weak\" to get it, which pins the colour; name a colour only to deviate, e.g. border=\"neutral-alpha-medium\" or border=\"brand-alpha-medium\".",
+    "inRules": true,
     "components": ["Row", "Column", "Card"]
   },
   "zIndex.scope": {
     "rule": "zIndex is for an isolated stacking group: an absolute decorative layer and its content sibling (zIndex={1}), or a sticky header over its pane. Never on a lone element, never a page-wide ladder of 3 / 5 / 9 — restructure the tree instead.",
+    "inRules": true,
     "components": ["Row", "Column", "Background"]
   },
   "section.gaps": {
     "rule": "Gap between page sections: 80–160 (typical 104). Inside sections: 24–40.",
+    "inRules": true,
     "components": ["Column"]
   },
   "heading.scale": {
     "rule": "Hero = display-strong-l/xl; section titles = display-strong-xs/s — never heading-* for section titles.",
+    "inRules": true,
     "components": ["Heading"]
   },
   "animation.budget": {
     "rule": "Entry animation budget: hero + at most 1–2 key moments. Animate coherent blocks all-or-none within a sibling set.",
+    "inRules": true,
     "components": ["RevealFx", "CountFx"]
   },
   "CountFx.trigger": {
     "rule": "CountFx has no trigger prop — drive value from useInViewport latch instead.",
+    "inRules": true,
     "components": ["CountFx"]
   },
   "overflow.hero": {
@@ -170,31 +192,46 @@
     "components": ["Column", "Background"]
   },
   "layout.responsiveProps": {
-    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid. Button, Text, Heading and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there (s={{ hide: true }}).",
+    "rule": "Responsive xl/l/m/s/xs props exist only on Flex, Row, Column and Grid; Text and Heading take just s={{ hide: true }}. Button and the rest have none: to change one at a breakpoint, wrap it in a Row or Column and put the breakpoint prop there. Text and Heading take padding and flex but no radius or border; put those on the wrapper.",
+    "inRules": true,
     "components": ["Flex", "Row", "Column", "Grid", "Button", "Text"]
   },
   "layout.leafProps": {
     "rule": "Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).",
     "components": ["Button", "Text", "Heading", "Icon", "Input", "Row", "Column"]
   },
+  "layout.noBaseline": {
+    "rule": "vertical and horizontal take start, center, end, between, around, even or stretch. There is no baseline; for baseline-aligned text use style={{ alignItems: \"baseline\" }}.",
+    "inRules": true,
+    "components": ["Flex", "Row", "Column"]
+  },
   "spacing.tokens": {
     "rule": "gap, padding and margin take spacing tokens (\"0\", \"1\", \"2\", \"4\", \"8\", \"12\", \"16\", \"20\", \"24\", \"32\", \"40\", \"48\", \"56\", \"64\", \"72\", \"80\", \"104\", \"128\", \"160\", or xs–xl). \"6\" and \"10\" are not tokens and are type errors.",
+    "inRules": true,
     "components": ["Flex", "Row", "Column", "Grid"]
   },
   "layout.noSpanOrType": {
-    "rule": "Row, Column and Grid have no span prop: a Grid child spanning columns uses style={{ gridColumn: \"span 2\" }}.",
+    "rule": "Row, Column and Grid have no span and no type prop. A clickable row is a Button (or a native <button>), and a Grid child spanning columns uses style={{ gridColumn: \"span 2\" }}.",
+    "inRules": true,
     "components": ["Row", "Column", "Grid"]
   },
   "Checkbox.checked": {
     "rule": "Checkbox, Switch and RadioButton take checked (or defaultChecked) and onCheckedChange(checked: boolean); onChange is the native event of their input. onToggle was 2.x; isChecked and isIndeterminate were 1.x.",
+    "inRules": true,
     "components": ["Checkbox", "Switch", "RadioButton"]
   },
   "RevealFx.primaryContent": {
     "rule": "Never wrap primary content (headlines, prices, KPIs, CTAs) in RevealFx: it stays blurred and unreadable until the reveal ends. Reveal secondary sections only, with duration={1000}.",
+    "inRules": true,
     "components": ["RevealFx"]
   },
   "size.rem": {
     "rule": "A number on any size, spacing or offset prop is on the token scale in 3.0 (it was rem in 2.x): width={32} renders as width=\"32\" (2rem, 32 px at the defaults, scaled by data-scaling), maxWidth={40} is 2.5rem. For 40rem write the string, maxWidth=\"40rem\". An icon or avatar box is usually \"24\" to \"48\", or 24 to 48 as numbers.",
+    "inRules": true,
     "components": ["Flex", "Row", "Column", "Grid"]
+  },
+  "Chart.xAxis": {
+    "rule": "The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: \"visitors\" }]} with data={[{ date: \"Oct 1\", visitors: 1840 }]}.",
+    "components": ["LineChart", "BarChart", "LineBarChart"]
   }
 }

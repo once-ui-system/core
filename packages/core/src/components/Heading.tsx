@@ -1,19 +1,19 @@
 import classNames from "clsx";
-import {
-  type ComponentPropsWithoutRef,
-  type ComponentPropsWithRef,
-  type ElementType,
-  type ReactNode,
+import type {
+  ComponentPropsWithoutRef,
+  ComponentPropsWithRef,
+  ElementType,
+  ReactNode,
 } from "react";
 
-import {
+import type {
   CommonProps,
   DisplayProps,
-  type LeafProps,
-  type TextElement,
+  LeafProps,
+  TextElement,
   TextProps,
 } from "../interfaces.js";
-import { ColorScheme, ColorWeight, TextVariant } from "../types.js";
+import type { ColorScheme, ColorWeight, TextVariant } from "../types.js";
 import { withWeight } from "../utils/layoutClasses.js";
 import { leafLayout } from "../utils/leafLayout.js";
 
@@ -73,6 +73,11 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
   truncate,
   opacity,
   className,
+  xl,
+  l,
+  m,
+  s,
+  xs,
   ...props
 }: HeadingProps<T> & { ref?: HeadingRef<T> }) {
   const Component = as || "h1";
@@ -132,6 +137,11 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
     family && `font-family-${family}`,
     fillWidth && "fill-width",
     ...layout.classes,
+    xl?.hide && "xl-flex-hide",
+    l?.hide && "l-flex-hide",
+    m?.hide && "m-flex-hide",
+    s?.hide && "s-flex-hide",
+    xs?.hide && "xs-flex-hide",
   );
 
   const combinedStyle = {

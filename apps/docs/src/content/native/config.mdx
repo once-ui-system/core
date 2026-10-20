@@ -6,7 +6,6 @@ docs: "once-ui/native/config.mdx"
 github: "packages/native/src/theme/ThemeProvider.tsx"
 navLabel: "Configuration"
 navIcon: "settings"
-status: "unreleased"
 ---
 
 A native app is configured through one provider, `ThemeProvider`. It takes the style options of the web `ThemeProvider`, with the same names and the same defaults, and resolves them against the same design tokens. A native screen and a web page with the same options get the same colours, spacing, radii and type. For the web setup, see the [web configuration](/config) and the web [ThemeProvider](/contexts/themeProvider).
@@ -195,7 +194,7 @@ export function Stamp({ count }: { count: number }) {
 | `border(value)` | `(value) => string` | A `border` prop value (`"neutral-alpha-weak"`, `"surface"`) as a colour. |
 | `onBackground(value)` | `(value) => string` | Text colour for an `onBackground` value, such as `"neutral-weak"`. |
 | `onSolid(value)` | `(value) => string` | Text colour for an `onSolid` value, such as `"brand-strong"`. |
-| `space(value)` | `(value: SpacingToken \| number) => number` | A spacing token (`"16"`, `"l"`) or a number of rem, in points. |
+| `space(value)` | `(value: SpacingToken \| number \| Length) => number` | A spacing token (`"16"`, `"l"`), a number of points or a length (`"1.5rem"`), in points. |
 | `radius(size)` | `(size: RadiusSize) => number` | A radius in points. `"full"` is 9999, `"none"` is 0. |
 | `shadow(size)` | `(size: ShadowSize) => ViewStyle` | A shadow style: `boxShadow` with every layer, plus `shadow*` and `elevation` fallbacks. |
 | `text(variant)` | `(variant: TextVariant) => TextStyle` | `fontSize`, `lineHeight`, `fontWeight`, the family from `fonts`, and letter spacing for display sizes. |

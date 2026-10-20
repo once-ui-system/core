@@ -111,8 +111,8 @@ describe.each([
       <>
         {/* @ts-expect-error — padding is a layout prop: wrap the text in a Column */}
         <Component padding="8">x</Component>
-        {/* @ts-expect-error — breakpoint objects belong to Flex, Row, Column and Grid */}
-        <Component s={{ hide: true }}>x</Component>
+        {/* @ts-expect-error — only `hide` changes at a breakpoint on text */}
+        <Component s={{ direction: "column" }}>x</Component>
         {/* @ts-expect-error */}
         <Component hide>x</Component>
         {/* @ts-expect-error */}

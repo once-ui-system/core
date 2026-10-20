@@ -74,7 +74,7 @@ describe("LeafProps", () => {
         {/* @ts-expect-error */}
         <ToggleButton background="surface">A</ToggleButton>
         {/* @ts-expect-error */}
-        <Text s={{ hide: true }}>a</Text>
+        <Text s={{ direction: "column" }}>a</Text>
         {/* @ts-expect-error */}
         <Text maxWidth={320}>a</Text>
         {/* @ts-expect-error */}

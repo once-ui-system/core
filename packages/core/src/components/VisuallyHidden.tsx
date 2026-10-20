@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import type React from "react";
-import { type ElementType, type ReactNode } from "react";
+import type { ElementType, ReactNode } from "react";
 import type { PolymorphicComponent, PolymorphicProps } from "../interfaces.js";
 import styles from "./VisuallyHidden.module.scss";
 
@@ -16,7 +16,8 @@ interface VisuallyHiddenOwnProps {
   /**
    * Show the content while it, or anything inside it, has keyboard focus. This
    * is the skip-link pattern: put a link inside and it appears on the first
-   * Tab, then hides again when focus moves on.
+   * Tab, then hides again when focus moves on. Or render the link itself:
+   * `<VisuallyHidden as="a" href="#main" focusable>`.
    */
   focusable?: boolean;
   className?: string;

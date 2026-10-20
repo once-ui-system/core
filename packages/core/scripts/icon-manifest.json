@@ -3,6 +3,10 @@
     "family": "hi2",
     "symbol": "HiOutlineAdjustmentsHorizontal"
   },
+  "arrowDown": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowDown"
+  },
   "arrowLeft": {
     "family": "hi2",
     "symbol": "HiOutlineArrowLeft"
@@ -10,6 +14,10 @@
   "arrowRight": {
     "family": "hi2",
     "symbol": "HiOutlineArrowRight"
+  },
+  "arrowUp": {
+    "family": "hi2",
+    "symbol": "HiOutlineArrowUp"
   },
   "arrowUpRight": {
     "family": "hi2",
@@ -83,13 +91,13 @@
     "family": "hi2",
     "symbol": "HiChevronRight"
   },
-  "chevronUp": {
-    "family": "hi2",
-    "symbol": "HiChevronUp"
-  },
   "chevronsLeftRight": {
     "family": "lu",
     "symbol": "LuChevronsLeftRight"
+  },
+  "chevronUp": {
+    "family": "hi2",
+    "symbol": "HiChevronUp"
   },
   "clipboard": {
     "family": "hi2",
@@ -110,6 +118,10 @@
   "copy": {
     "family": "hi2",
     "symbol": "HiOutlineDocumentDuplicate"
+  },
+  "cube": {
+    "family": "hi2",
+    "symbol": "HiOutlineCube"
   },
   "danger": {
     "family": "hi2",
@@ -183,6 +195,10 @@
     "family": "hi2",
     "symbol": "HiOutlineGlobeAlt"
   },
+  "grid": {
+    "family": "hi2",
+    "symbol": "HiOutlineSquares2X2"
+  },
   "grip": {
     "family": "lu",
     "symbol": "LuGripVertical"
@@ -243,6 +259,10 @@
     "family": "hi2",
     "symbol": "HiOutlineArrowsPointingOut"
   },
+  "menu": {
+    "family": "hi2",
+    "symbol": "HiOutlineBars3"
+  },
   "minimize": {
     "family": "hi2",
     "symbol": "HiOutlineArrowsPointingIn"
@@ -254,6 +274,10 @@
   "moreHorizontal": {
     "family": "hi2",
     "symbol": "HiOutlineEllipsisHorizontal"
+  },
+  "newspaper": {
+    "family": "hi2",
+    "symbol": "HiOutlineNewspaper"
   },
   "opacity": {
     "family": "pi",
@@ -274,6 +298,10 @@
   "payment": {
     "family": "hi2",
     "symbol": "HiOutlineCreditCard"
+  },
+  "people": {
+    "family": "hi2",
+    "symbol": "HiOutlineUsers"
   },
   "person": {
     "family": "hi2",

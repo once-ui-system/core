@@ -51,8 +51,8 @@
   },
   "type": "module",
   "bin": {
-    "once-ui-init-agent": "./scripts/init-agent.cjs",
-    "once-ui-validate-ai-code": "./scripts/validate-ai-code.cjs"
+    "once-ui-init-agent": "scripts/init-agent.cjs",
+    "once-ui-validate-ai-code": "scripts/validate-ai-code.cjs"
   },
   "sideEffects": [
     "*.css"

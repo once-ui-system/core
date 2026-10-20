@@ -6,7 +6,6 @@ docs: "once-ui/native/components/avatar.mdx"
 github: "packages/native/src/components/Avatar.tsx"
 navLabel: "Avatar"
 navIcon: "components"
-status: "unreleased"
 ---
 
 `Avatar` shows a person's picture in a circle. Without `src`, it shows the initials from `value` on a neutral background. Screen readers read it as one image, labelled by `value`. See the [web Avatar page](/components/avatar) for the web version.
@@ -32,7 +31,7 @@ export function People() {
 
 ## Sizes
 
-`size` takes a t-shirt size, from `xs` (20px) to `xl` (160px), or a number of rem.
+`size` takes a t-shirt size, from `xs` (20px) to `xl` (160px), or a number of points (`40`).
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -90,7 +89,7 @@ export function Presence() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| number` | `"m"` | A t-shirt size, or a number of rem. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| number` | `"m"` | A t-shirt size, or a number of points (`40`). |
 | `src` | `string` | | The image URL. |
 | `value` | `string` | | Initials shown when there is no image. Also used in the screen reader label. |
 | `loading` | `boolean` | | Shows a circular skeleton instead. |

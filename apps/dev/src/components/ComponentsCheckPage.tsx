@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Heading, Text, Button, Column, Logo, Line, Carousel, Media, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, Feedback, TagInput, Avatar, Background, Flex, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, SmartLink, Scroller, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, Card, Input, Dialog, useToast } from "@once-ui-system/core";
+import { FileTree, Heading, Text, Button, Column, Logo, Line, Carousel, Media, OgCard, Icon, Textarea, Row, IconButton, Select, Option, Dropdown, User, Table, BlockQuote, DatePicker, DateInput, Grid, AccordionGroup, Accordion, Kbar, Spinner, ListItem, List, ProgressBar, Feedback, TagInput, Avatar, Background, Flex, Fade, Tooltip, Checkbox, Switch, RadioButton, Skeleton, HoverCard, SmartLink, Scroller, Mask, Tag, Kbd, InlineCode, StatusIndicator, SegmentedControl, InfiniteScroll, NumberInput, ColorInput, OTPInput, AvatarGroup, ThemeSwitcher, Timeline, NavIcon, Card, Input, Dialog, useToast } from "@once-ui-system/core";
 import { LetterFx, RevealFx, CountFx, ParticleFx, FlipFx, GlitchFx, HoloFx, MatrixFx, ShineFx, TiltFx, TypeFx, WeatherFx, CountdownFx } from "@once-ui-system/fx";
 import { StylePanel, StyleOverlay, LogoCloud, ScrollToTop } from "@once-ui-system/blocks";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
@@ -2971,6 +2971,107 @@ export default function ComponentsCheck() {
                       date: new Date(2025, 3),
                       Visitors: 3100,
                       Pageviews: 6300,
+                    },
+                  ]}
+                />
+              ),
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: "file-tree",
+      name: "File navigation",
+      description: "A realistic project tree with selected files and collapsed folders",
+      components: [
+        {
+          name: "FileTree",
+          variations: [
+            {
+              value: "default",
+              label: "Project structure",
+              element: (
+                <FileTree
+                  fillWidth
+                  defaultExpandedIds={["src", "components"]}
+                  defaultSelectedId="file-tree"
+                  items={[
+                    {
+                      id: "src",
+                      name: "src",
+                      type: "folder",
+                      children: [
+                        {
+                          id: "components",
+                          name: "components",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "file-tree",
+                              name: "FileTree.tsx",
+                              type: "file",
+                              icon: "code",
+                            },
+                            {
+                              id: "file-tree-styles",
+                              name: "FileTree.module.scss",
+                              type: "file",
+                              icon: "code",
+                            },
+                            {
+                              id: "button",
+                              name: "Button.tsx",
+                              type: "file",
+                              icon: "code",
+                            },
+                          ],
+                        },
+                        {
+                          id: "hooks",
+                          name: "hooks",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "use-file-tree",
+                              name: "useFileTree.ts",
+                              type: "file",
+                              icon: "code",
+                            },
+                          ],
+                        },
+                        {
+                          id: "assets",
+                          name: "assets",
+                          type: "folder",
+                          children: [
+                            {
+                              id: "logo",
+                              name: "logo.svg",
+                              type: "file",
+                              icon: "image",
+                            },
+                          ],
+                        },
+                        {
+                          id: "app",
+                          name: "App.tsx",
+                          type: "file",
+                          icon: "code",
+                        },
+                      ],
+                    },
+                    {
+                      id: "package",
+                      name: "package.json",
+                      type: "file",
+                      icon: "settings",
+                    },
+                    {
+                      id: "readme",
+                      name: "README.md",
+                      type: "file",
+                      icon: "document",
                     },
                   ]}
                 />

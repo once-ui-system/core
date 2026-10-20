@@ -22,6 +22,7 @@ export * from "./Fade.js";
 export * from "./Feedback.js";
 export * from "./Field.js";
 export * from "./Fieldset.js";
+export * from "./FileTree.js";
 export * from "./Flex.js";
 export * from "./FocusTrap.js";
 export * from "./Form.js";

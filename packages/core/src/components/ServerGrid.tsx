@@ -2,10 +2,11 @@ import classNames from "clsx";
 import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
 
 import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces.js";
-import { ColorScheme, ColorWeight } from "../types.js";
+import type { ColorScheme, ColorWeight } from "../types.js";
 import {
   BELOW_HEADER,
   elementReset,
+  hiddenAboveBreakpoints,
   isCSSUnit,
   offsetClasses,
   offsetValue,
@@ -38,13 +39,15 @@ export type ServerGridProps = GridLayoutProps &
 function breakpointClasses(
   breakpoint: string,
   props: GridBreakpointProps | undefined,
+  hiddenAbove = false,
 ): (string | false | undefined)[] {
   if (!props) return [];
   return [
     ...spacingClasses(breakpoint, props),
     props.position && `${breakpoint}-position-${props.position}`,
     props.hide === true && `${breakpoint}-grid-hide`,
-    props.hide === false && `${breakpoint}-grid-show`,
+    // A show class only undoes a wider hide, so it is emitted only under one.
+    props.hide === false && hiddenAbove && `${breakpoint}-grid-show`,
     props.columns && `${breakpoint}-columns-${props.columns}`,
     props.rows && `${breakpoint}-rows-${props.rows}`,
     props.overflow && `${breakpoint}-overflow-${props.overflow}`,
@@ -169,6 +172,7 @@ const ServerGrid = ({
   const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
   const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
   const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
+  const hiddenAbove = hiddenAboveBreakpoints(hide, [cascadedXl, cascadedL, cascadedM, cascadedS]);
 
   const generateDynamicClass = (type: string, value: string | "-1" | undefined) => {
     if (!value) return undefined;
@@ -302,11 +306,11 @@ const ServerGrid = ({
   classes +=
     " " +
     classNames(
-      ...breakpointClasses("xl", cascadedXl),
-      ...breakpointClasses("l", cascadedL),
-      ...breakpointClasses("m", cascadedM),
-      ...breakpointClasses("s", cascadedS),
-      ...breakpointClasses("xs", cascadedXs),
+      ...breakpointClasses("xl", cascadedXl, hiddenAbove.xl),
+      ...breakpointClasses("l", cascadedL, hiddenAbove.l),
+      ...breakpointClasses("m", cascadedM, hiddenAbove.m),
+      ...breakpointClasses("s", cascadedS, hiddenAbove.s),
+      ...breakpointClasses("xs", cascadedXs, hiddenAbove.xs),
     );
 
   // A spacing token as well as a number or a CSS unit, as on ServerFlex.

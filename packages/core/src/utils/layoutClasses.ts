@@ -156,12 +156,15 @@ export function cssLength<T extends string | undefined>(value: number | T): stri
 /**
  * A size prop (`width`, `minHeight`, `minColumnWidth`…) as a CSS value: a
  * number is on the token scale, a static token is its `--static-space-*` step, a t-shirt
- * size is the responsive width or height, and a CSS length passes through.
+ * size is the responsive width or height, `fit` is fit-content, and a CSS
+ * length or `auto` passes through.
  * Anything else is no value at all, as before.
  */
 export function sizeValue(value: unknown, type: "width" | "height"): string | undefined {
   if (typeof value === "number") return tokenLength(value);
   if (typeof value !== "string") return undefined;
+  if (value === "auto") return value;
+  if (value === "fit") return "fit-content";
   if (isCSSUnit(value)) return value;
   if (STATIC_SPACING.has(value)) return `var(--static-space-${value})`;
   if (RESPONSIVE_SIZES.has(value)) return `var(--responsive-${type}-${value})`;
@@ -733,4 +736,22 @@ export function withWeight<V extends string>(variant: V, weight: string | undefi
   const parts = variant.split("-");
   parts[parts.length - 2] = weight;
   return parts.join("-") as V;
+}
+
+/**
+ * Whether the element is hidden at a wider breakpoint than each of xl, l, m,
+ * s and xs (the base `hide` counts as wider than all of them). A `-show`
+ * class only undoes a wider hide, so it is only emitted where this is true.
+ */
+export function hiddenAboveBreakpoints(
+  hide: boolean | undefined,
+  wider: ({ hide?: boolean } | undefined)[],
+): Record<"xl" | "l" | "m" | "s" | "xs", boolean> {
+  const result = { xl: false, l: false, m: false, s: false, xs: false };
+  let hidden = hide === true;
+  (["xl", "l", "m", "s", "xs"] as const).forEach((bp, i) => {
+    result[bp] = hidden;
+    if (wider[i]?.hide === true) hidden = true;
+  });
+  return result;
 }

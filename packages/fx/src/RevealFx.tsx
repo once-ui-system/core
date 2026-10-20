@@ -84,6 +84,10 @@ const RevealFx = ({
         }, duration);
       }
     }
+    // An unmount mid-transition left this timer to set state afterwards.
+    return () => {
+      if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+    };
   }, [revealed]);
 
   const translateValue = resolveTranslate(translateY);

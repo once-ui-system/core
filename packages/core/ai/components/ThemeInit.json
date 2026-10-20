@@ -65,6 +65,7 @@
   ],
   "OnceUIStyleConfig": {
    "theme": "Theme",
+   "defaultTheme": "Theme",
    "neutral": "NeutralColor | \"custom\"",
    "brand": "Schemes | \"custom\"",
    "accent": "Schemes | \"custom\"",
@@ -83,7 +84,10 @@
    "cursorInteractive": "InteractiveCursor",
    "brandSeed": "string",
    "accentSeed": "string",
-   "neutralSeed": "string"
+   "neutralSeed": "string",
+   "brandScale": "SchemeScale",
+   "accentScale": "SchemeScale",
+   "neutralScale": "SchemeScale"
   },
   "ScalingSize": [
    "90",
@@ -92,6 +96,21 @@
    "105",
    "110"
   ],
+  "SchemeRampWeight": [
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "1000",
+   "1100",
+   "1200"
+  ],
+  "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "Schemes": [
    "blue",
    "indigo",

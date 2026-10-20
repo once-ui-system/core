@@ -6,7 +6,7 @@ import type {
   ReactNode,
 } from "react";
 import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider.js";
-import {
+import type {
   BlendMode,
   BlurSize,
   Colors,
@@ -133,6 +133,20 @@ export interface TextProps<T extends ElementType = "span">
    */
   weight?: TextWeight;
   truncate?: boolean;
+  /**
+   * Hide from this breakpoint down: `s={{ hide: true }}`. Text takes only
+   * `hide` here; anything else that changes at a breakpoint goes on a Row or
+   * Column wrapper.
+   */
+  xl?: TextBreakpointHide;
+  l?: TextBreakpointHide;
+  m?: TextBreakpointHide;
+  s?: TextBreakpointHide;
+  xs?: TextBreakpointHide;
+}
+
+export interface TextBreakpointHide {
+  hide?: boolean;
 }
 
 /**
@@ -165,15 +179,16 @@ export interface SizeProps {
    * times `[data-scaling]` (`320` is 20rem, 320px at the default root size).
    * A string is a spacing token (`"16"` is `--static-space-16`), a t-shirt
    * size, or a CSS length (`"320px"`, `"50%"`, `"100dvh"`, `calc(…)`). Write
-   * px for a length that must not scale.
+   * px for a length that must not scale. `"auto"` undoes a width, e.g.
+   * `width={320} s={{ width: "auto" }}`; `"fit"` is fit-content, like `fitWidth`.
    */
-  width?: number | SpacingToken | CSSUnit;
+  width?: number | SpacingToken | CSSUnit | "auto" | "fit";
   /**
-   * As `width`.
+   * As `width`; `"fit"` is fit-content, like `fitHeight`.
    * `"below-header"` is the viewport below the app header,
    * `calc(100dvh - var(--header-height))`, for an app shell's scrolling pane.
    */
-  height?: number | SpacingToken | CSSUnit | "below-header";
+  height?: number | SpacingToken | CSSUnit | "below-header" | "fit";
   maxWidth?: number | SpacingToken | CSSUnit;
   minWidth?: number | SpacingToken | CSSUnit;
   /** As `height`, including `"below-header"`. */

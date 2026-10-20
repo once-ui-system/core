@@ -70,7 +70,12 @@
    "wrap": "CSSProperties[\"textWrap\"]",
    "family": "TextType",
    "weight": "TextWeight",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  },
  "types": {

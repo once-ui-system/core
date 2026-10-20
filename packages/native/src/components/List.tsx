@@ -83,7 +83,12 @@ export const ListItem: RefComponent<ListItemProps, ViewRef> = forwardRef<ViewRef
           {marker}
         </Text>
         {isInline(children) ? (
-          <Text textVariant={textVariant} paddingLeft="8" {...text} style={[{ flex: 1 }, ...styles]}>
+          <Text
+            textVariant={textVariant}
+            paddingLeft="8"
+            {...text}
+            style={[{ flex: 1 }, ...styles]}
+          >
             {children}
           </Text>
         ) : (

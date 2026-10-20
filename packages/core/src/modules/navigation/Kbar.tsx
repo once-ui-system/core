@@ -489,7 +489,11 @@ export const KbarContent = ({
 
 export interface KbarProps {
   items: KbarItem[];
-  children: React.ReactNode;
+  /**
+   * The trigger, wrapped in a focusable row that opens the palette. Leave it
+   * out to open the palette from your own Button or menu item with `open`.
+   */
+  children?: React.ReactNode;
   /** The search field's height. */
   size?: TShirtSizes;
   /** Open or not, controlled. Leave it out to let Kbar keep its own state,
@@ -559,25 +563,27 @@ export const Kbar = ({
 
   return (
     <>
-      <KbarTrigger
-        tabIndex={0}
-        // It is the element Tab lands on (its Button child stays a plain
-        // div), so it is the button: it had no role, and said nothing about
-        // the palette it opens.
-        role="button"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        onClick={handleOpen}
-        onKeyDown={(e: React.KeyboardEvent) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleOpen();
-          }
-        }}
-        {...rest}
-      >
-        {children}
-      </KbarTrigger>
+      {children != null && (
+        <KbarTrigger
+          tabIndex={0}
+          // It is the element Tab lands on (its Button child stays a plain
+          // div), so it is the button: it had no role, and said nothing about
+          // the palette it opens.
+          role="button"
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onClick={handleOpen}
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleOpen();
+            }
+          }}
+          {...rest}
+        >
+          {children}
+        </KbarTrigger>
+      )}
       {open &&
         createPortal(
           <KbarContent open={open} onClose={handleClose} items={items} size={size} />,

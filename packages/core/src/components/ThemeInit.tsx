@@ -3,8 +3,10 @@ import type { OnceUIStyleConfig } from "../contexts/ThemeProvider.js";
 import type { ChartMode } from "../modules/data/interfaces.js";
 import {
   type CustomScheme,
+  type CustomSchemeScales,
   type CustomSchemeSeeds,
   customSchemeProperties,
+  type SchemeScale,
 } from "../utils/colorScheme.js";
 import { DENSITIES, densityScaling } from "../utils/density.js";
 import { safeScriptJson } from "../utils/safe-html.js";
@@ -51,6 +53,16 @@ const SEED_KEYS: Record<string, CustomScheme> = {
   neutralSeed: "neutral",
 };
 
+/** Style keys that pin a custom scheme's steps rather than naming an attribute. */
+const SCALE_KEYS: Record<string, CustomScheme> = {
+  brandScale: "brand",
+  accentScale: "accent",
+  neutralScale: "neutral",
+};
+
+/** Keys the script reads itself instead of copying onto `<html>`. */
+const SCRIPT_KEYS = new Set(["defaultTheme"]);
+
 /**
  * The attributes the inline script writes, keyed without the `data-` prefix.
  * Resolved here, on the server, so the script stays a dumb copy loop.
@@ -62,11 +74,12 @@ function themeInitAttributes(
 ): Record<string, string> {
   const attributes: Record<string, string> = {};
   for (const [key, value] of Object.entries(config)) {
-    if (value === undefined || value === null || value === "" || key in SEED_KEYS) continue;
+    if (value === undefined || value === null || value === "") continue;
+    if (key in SEED_KEYS || key in SCALE_KEYS || SCRIPT_KEYS.has(key)) continue;
     attributes[toKebab(key)] = String(value);
   }
-  // A seed implies "custom" when the scheme is not named, as on
-  // ThemeProvider — and only a seed that parsed.
+  // A seed or scale implies "custom" when the scheme is not named, as on
+  // ThemeProvider — and only one that produced a scheme.
   for (const scheme of Object.values(SEED_KEYS)) {
     if (!attributes[scheme] && schemeProperties[`--scheme-${scheme}-600`]) {
       attributes[scheme] = "custom";
@@ -95,7 +108,13 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   }
   // Generated here, on the server, so a custom scheme is in the document
   // before anything paints: no flash of a page with no brand colour.
-  const schemeProperties = customSchemeProperties(seeds);
+  const scales: CustomSchemeScales = {};
+  for (const [key, scheme] of Object.entries(SCALE_KEYS)) {
+    const scale = (config as Record<string, unknown>)[key];
+    if (scale && typeof scale === "object") scales[scheme] = scale as SchemeScale;
+  }
+  const schemeProperties = customSchemeProperties(seeds, scales);
+  const defaultTheme = (config as Record<string, unknown>).defaultTheme;
   const attributes = themeInitAttributes(config, dataStyle, schemeProperties);
   const densityScales = derivedScaling(attributes);
   if (densityScales) attributes.scaling = densityScales[attributes.density];
@@ -114,6 +133,7 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
               const root = document.documentElement;
               const config = ${safeScriptJson(attributes)};
               const densityScaling = ${safeScriptJson(densityScales)};
+              const defaultTheme = ${safeScriptJson(typeof defaultTheme === "string" ? defaultTheme : null)};
 
               // Apply config defaults FIRST (prevents FOUC)
               Object.entries(config).forEach(([key, value]) => {
@@ -129,14 +149,17 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
 
               // Priority:
               // 1. localStorage
-              // 2. config.theme
+              // 2. config.defaultTheme
+              // 3. config.theme
               const savedTheme = localStorage.getItem('data-theme');
-              const finalTheme = savedTheme ?? config.theme;
+              const finalTheme = savedTheme ?? defaultTheme ?? config.theme;
 
               root.setAttribute('data-theme', resolveTheme(finalTheme));
 
               // Apply overrides AFTER theme
               Object.keys(config).forEach(key => {
+                // The saved theme can be "system", resolved above.
+                if (key === 'theme') return;
                 const value = localStorage.getItem('data-' + key);
                 if (value) {
                   root.setAttribute('data-' + key, value);

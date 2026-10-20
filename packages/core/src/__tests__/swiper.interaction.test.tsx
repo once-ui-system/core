@@ -164,12 +164,13 @@ describe("Swiper: navigation", () => {
 });
 
 describe("Swiper: visibility", () => {
-  it("ignores a neighbour that only touches the edge of the view", () => {
-    let callback: IntersectionObserverCallback = () => {};
+  /** Captures the observer's callback so a test can report what the browser would. */
+  const observe = () => {
+    const seen: { callback: IntersectionObserverCallback } = { callback: () => {} };
     const Real = globalThis.IntersectionObserver;
     globalThis.IntersectionObserver = class {
       constructor(cb: IntersectionObserverCallback) {
-        callback = cb;
+        seen.callback = cb;
       }
       observe() {}
       unobserve() {}
@@ -178,18 +179,47 @@ describe("Swiper: visibility", () => {
         return [];
       }
     } as unknown as typeof IntersectionObserver;
+    return { seen, restore: () => (globalThis.IntersectionObserver = Real) };
+  };
+  const entry = (target: Element, ratio: number, width = 400) =>
+    ({
+      target,
+      isIntersecting: true,
+      intersectionRatio: ratio,
+      boundingClientRect: { width } as DOMRectReadOnly,
+    }) as IntersectionObserverEntry;
+
+  it("ignores a neighbour that only touches the edge of the view", () => {
+    const { seen, restore } = observe();
     try {
       render(<Carousel mode="snap" items={items} />, { wrapper });
       const slides = [...scroller().children];
-      const entry = (target: Element, ratio: number) =>
-        ({ target, isIntersecting: true, intersectionRatio: ratio }) as IntersectionObserverEntry;
       // What the browser reports first: the slide in view, and the next one touching its edge.
       act(() => {
-        callback([entry(slides[0], 1), entry(slides[1], 0)], {} as IntersectionObserver);
+        seen.callback([entry(slides[0], 1), entry(slides[1], 0)], {} as IntersectionObserver);
       });
       expect(dot(1)).toHaveAttribute("aria-current", "true");
     } finally {
-      globalThis.IntersectionObserver = Real;
+      restore();
+    }
+  });
+
+  it("ignores slides that have no width yet", () => {
+    const { seen, restore } = observe();
+    try {
+      render(<Carousel mode="snap" items={items} />, { wrapper });
+      const slides = [...scroller().children];
+      // Before the images load every slide is zero wide, and a zero-area
+      // target that intersects reports a ratio of 1.
+      act(() => {
+        seen.callback(
+          slides.map((slide) => entry(slide, 1, 0)),
+          {} as IntersectionObserver,
+        );
+      });
+      expect(dot(1)).toHaveAttribute("aria-current", "true");
+    } finally {
+      restore();
     }
   });
 });

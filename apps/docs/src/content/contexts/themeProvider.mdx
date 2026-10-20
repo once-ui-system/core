@@ -110,11 +110,11 @@ export const { style, dataStyle } = defineConfig({
 
 A 2.0 `Providers` that casts each value (`brand={style.brand as Schemes}`) still compiles; `defineConfig` is what makes the casts unnecessary.
 
-If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`.
+If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`. A forced theme ignores `setTheme`, so a theme switch stops working. To start visitors on light or dark and still let them switch, leave `theme` as `system` and set `defaultTheme` instead; `ThemeInit` reads it too, so the first paint is right.
 
 ## Custom color
 
-The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself.
+The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself. For exact colours from a brand book, give `brandScale`, `accentScale` or `neutralScale` the steps themselves, `{ 100: "#…", …, 1200: "#…" }`; a seed fills any step the scale leaves out.
 
 <CodeBlock
   marginTop="16"

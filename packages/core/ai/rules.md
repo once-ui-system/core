@@ -367,6 +367,15 @@ A denser or roomier app is `style.density` (`"compact"`, `"normal"`, `"spacious"
 Checkbox, RadioButton, RadioGroup and Slider with no `size` take s, m or l from it, and
 it picks `scaling` 95/100/105 unless `scaling` is set. A `size` on a control still wins.
 
+30d. The theme a visitor starts on is `defaultTheme` in `style`; `ThemeInit`
+paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
+`"dark"` *forces* the theme on `ThemeProvider` — `setTheme` then does nothing —
+so leave `theme` out (or `"system"`) for a switchable site. Exact brand colours
+go in `brandScale`, `accentScale` or `neutralScale`, one colour per step
+(`{ 100: "#…", …, 1200: "#…" }`); a seed fills the steps a scale leaves out.
+Both render on the server through `ThemeInit`. Do not override the semantic
+variables (`--page-background`, `--brand-solid-strong`…) in CSS instead.
+
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so
 take icon names from `catalog.json`'s `iconNames` rather than guessing a plausible
