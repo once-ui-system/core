@@ -15,6 +15,22 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`Tag` and `Badge` inside a sentence: `as="span"`.** Both rendered divs, which are not
+  allowed in a `<p>`, so a status tag in body copy was invalid HTML and hydration
+  warnings. With `as="span"` every element in them (the Badge arrow included) is a span
+  and they flow inline. The default is still the div, unchanged.
+- **`StatusIndicator` takes theme roles and every palette.** `color` adds `brand`,
+  `accent`, `neutral`, `info`, `danger`, `warning` and `success`, which follow the theme's
+  scheme for that role, plus `rose`, `mint`, `dusk`, `sand` and `slate`. The existing
+  names paint as before.
+- **`NavItem` `badge` takes text.** `badge="New"` prints as given and is read as its text;
+  a number is still a count that hides at 0, prints `9+` above 9 and reads "12 unread".
+- **`titleVariant` on `Accordion` and `AccordionGroup`, and `radius="none"` on
+  `Accordion`.** The title was fixed in `heading-strong-s`, so a FAQ in body type needed a
+  wrapper per title; the default is unchanged.
+- **`text` on `Logo`: a text wordmark.** For a brand with no wordmark file, the name is set
+  in the heading font at the logo's size, after the icon, and names the link. `wordmark`
+  stays an image source.
 - **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
   field.** Chips, a model picker or attachments go on the left after the attach button,
   a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps

@@ -69,4 +69,55 @@
     &.cyan {
         background-color: var(--scheme-cyan-700);
     }
+
+    &.rose {
+        background-color: var(--scheme-rose-700);
+    }
+
+    &.mint {
+        background-color: var(--scheme-mint-700);
+    }
+
+    &.dusk {
+        background-color: var(--scheme-dusk-700);
+    }
+
+    &.sand {
+        background-color: var(--scheme-sand-700);
+    }
+
+    &.slate {
+        background-color: var(--scheme-slate-700);
+    }
+
+    // Roles: the 700 step of whichever scheme the theme assigns, the same step
+    // the palette names above use.
+
+    &.neutral {
+        background-color: var(--function-neutral-700);
+    }
+
+    &.brand {
+        background-color: var(--function-brand-700);
+    }
+
+    &.accent {
+        background-color: var(--function-accent-700);
+    }
+
+    &.info {
+        background-color: var(--function-info-700);
+    }
+
+    &.danger {
+        background-color: var(--function-danger-700);
+    }
+
+    &.warning {
+        background-color: var(--function-warning-700);
+    }
+
+    &.success {
+        background-color: var(--function-success-700);
+    }
 }

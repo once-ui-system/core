@@ -17,8 +17,12 @@ interface NavItemProps
   label: ReactNode;
   /** Leading icon. Omit it for a child item inside a NavGroup, which is indented instead. */
   icon?: IconName;
-  /** A count in a pill at the end of the row. Anything above 9 prints as 9+. */
-  badge?: number;
+  /**
+   * A pill at the end of the row. A number is a count: 0 hides it, anything
+   * above 9 prints as 9+ and a screen reader hears "12 unread". Anything else
+   * (`"New"`, `"Beta"`) prints as given and is read as its text.
+   */
+  badge?: number | ReactNode;
   /** A dot at the end of the row, for unread with no number worth showing. */
   indicator?: boolean;
 }
@@ -33,7 +37,13 @@ interface NavItemProps
 const NavItem = forwardRef<HTMLElement, NavItemProps>(
   ({ label, icon, badge, indicator, size, className, ...toggle }, ref) => {
     const { variant, density, sizes } = useNavStyle();
-    const trailing = indicator || (badge !== undefined && badge > 0);
+    const count = typeof badge === "number" ? badge : undefined;
+    // A number shows above 0, as it always did; any other badge shows unless empty.
+    const showBadge =
+      count !== undefined
+        ? count > 0
+        : badge !== undefined && badge !== null && badge !== false && badge !== "";
+    const trailing = indicator || showBadge;
     const selected = Boolean(toggle.selected);
     // `solid` keeps today's look: every row at full contrast, the current one
     // filled. The other two dim the rest and set the current row in strong.
@@ -71,7 +81,7 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
             )}
             {label}
           </Row>
-          {badge !== undefined && badge > 0 && (
+          {showBadge && (
             <Row
               minWidth="16"
               height="16"
@@ -80,10 +90,10 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
               solid="brand-strong"
               horizontal="center"
               vertical="center"
-              aria-label={`${badge} unread`}
+              aria-label={count !== undefined ? `${count} unread` : undefined}
             >
               <Text variant="label-default-xs" onSolid="brand-strong">
-                {badge > 9 ? "9+" : badge}
+                {count !== undefined ? (count > 9 ? "9+" : count) : badge}
               </Text>
             </Row>
           )}
