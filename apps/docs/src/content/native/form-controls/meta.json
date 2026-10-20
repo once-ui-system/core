@@ -19,6 +19,8 @@
     "field": 15,
     "fieldset": 16,
     "submitButton": 17,
-    "formErrorSummary": 18
+    "formErrorSummary": 18,
+    "datePicker": 19,
+    "dateInput": 20
   }
 }

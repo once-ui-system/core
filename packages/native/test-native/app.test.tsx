@@ -2,6 +2,7 @@ import { describe, expect, it, jest } from "@jest/globals";
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
 import { Button } from "../src/components/Button";
+import { DateInput, DatePicker, monthGrid } from "../src/components/DatePicker";
 import { Drawer } from "../src/components/Drawer";
 import { Field, Fieldset, FormErrorSummary, SubmitButton } from "../src/components/Field";
 import { corners, Form, place } from "../src/components/Form";
@@ -155,5 +156,53 @@ describe("Form", () => {
     expect(screen.getByLabelText("Phone").props.editable).toBe(false);
     expect(screen.getByText("Check the highlighted fields")).toBeTruthy();
     expect(screen.getAllByText("•")).toHaveLength(1);
+  });
+
+  it("gives an empty error summary no cell", async () => {
+    await wrap(
+      <Form testID="form" density="spacious">
+        <FormErrorSummary errors={{}} />
+        <Input label="Name" />
+      </Form>,
+    );
+    expect(screen.getByTestId("form").children).toHaveLength(1);
+  });
+});
+
+describe("DatePicker", () => {
+  it("lays a month out in whole weeks from the locale's first day", () => {
+    // October 2026 starts on a Thursday.
+    const sunday = monthGrid(2026, 9, 0);
+    expect(sunday[0].getDate()).toBe(27);
+    expect(sunday).toHaveLength(35);
+    expect(monthGrid(2026, 9, 1)[0].getDate()).toBe(28);
+  });
+
+  it("picks a day, keeps blocked days out, and moves between months", async () => {
+    const onChange = jest.fn();
+    await wrap(
+      <DatePicker
+        defaultDate={new Date(2026, 9, 24)}
+        minDate={new Date(2026, 9, 20)}
+        onValueChange={onChange}
+      />,
+    );
+    expect(screen.getByText("October 2026")).toBeTruthy();
+    await fireEvent.press(screen.getByLabelText("Monday, October 26, 2026"));
+    expect(onChange.mock.calls[0][0]).toEqual(new Date(2026, 9, 26));
+    await fireEvent.press(screen.getByLabelText("Monday, October 19, 2026"));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    await fireEvent.press(screen.getByLabelText("Next month"));
+    expect(screen.getByText("November 2026")).toBeTruthy();
+  });
+
+  it("opens from a DateInput and closes on a pick", async () => {
+    const onChange = jest.fn();
+    await wrap(<DateInput label="Date" defaultValue={new Date(2026, 9, 24)} onChange={onChange} />);
+    expect(screen.getByDisplayValue("Oct 24, 2026", { includeHiddenElements: true })).toBeTruthy();
+    await fireEvent.press(screen.getByRole("button", { name: "Date" }));
+    await fireEvent.press(await screen.findByLabelText("Tuesday, October 27, 2026"));
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(screen.getByDisplayValue("Oct 27, 2026", { includeHiddenElements: true })).toBeTruthy();
   });
 });

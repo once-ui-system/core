@@ -53,6 +53,7 @@ the safe areas. `theme="system"` follows the device.
 | `Nav`, `NavItem`, `NavSection`, `NavGroup` | As a column, a drawer's or sidebar's rows with core's `density` and `variant`; with `direction="row"`, the phone's bottom tab bar. |
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ variant, message })` as in core; toasts stack at the bottom and hide after 6 s. |
 | `Form`, `Field`, `Fieldset`, `SubmitButton`, `FormErrorSummary` | Core's form layout: `density` (`stacked` fuses the fields), `columns` and `span`, one `size`; `Field` wires label, hint and error onto its control; `SubmitButton` calls `onSubmit` and shows a spinner while its promise runs. |
+| `DatePicker`, `DateInput` | A month grid with core's `value`, `minDate`, `maxDate`, `range` and `locale` (names and first weekday from `Intl`); `DateInput` opens it in a bottom sheet. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `multiple`, `searchable`. |
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
 | `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
