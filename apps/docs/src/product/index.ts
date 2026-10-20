@@ -53,3 +53,4 @@ export * from "./SemanticColorSection";
 export * from "./ColorSchemeGrid";
 export * from "./AdditionalTokens";
 export * from "./Cta";
+export * from "./VoiceExamples";

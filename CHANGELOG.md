@@ -49,6 +49,13 @@ item (see `ROADMAP.md`, Week 4).
   optional elapsed count and hint. The words are yours to replace through `verbs`, or
   extend from the exported `workingVerbs`. Both take the brand color, so they follow a
   chat theme, and both keep signalling under reduced motion without moving.
+- **Voice chat animation: `VoiceVisualizer` and `useAudioLevel`.** An orb (or a compact
+  bar meter) with its own motion for idle, listening, thinking and speaking. Hand it a
+  microphone `MediaStream`, the reply's `<audio>` element or an `AnalyserNode` and it
+  follows the real sound, written to CSS variables each frame so React never re-renders;
+  or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
+  same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
+  stop and live audio shows as glow and bar height.
 
 ### Fixed
 
