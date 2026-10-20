@@ -461,6 +461,12 @@ function typography() {
       "font-weight: var(--font-weight-normal);",
       "color: var(--neutral-on-background-strong);",
     ]),
+    // A `data-theme` subtree redeclares the colour tokens, but `color` is
+    // inherited as the value <html> computed, so text in a dark hero on a
+    // light page stayed dark. Reading the token again on the subtree fixes
+    // that; at zero specificity any colour class or component rule still
+    // wins, and <html>'s own rule above is unaffected.
+    rule(":where([data-theme])", ["color: var(--neutral-on-background-strong);"]),
     rule("h1, h2, h3, h4, h5, h6, p", ["margin: 0;"]),
     rule(".font-size-inherit", ["font-size: inherit;"]),
     rule(".font-weight-inherit", ["font-weight: inherit;"]),
@@ -469,6 +475,21 @@ function typography() {
   // All four weights read the display ramp, whatever family they land on.
   for (const w of FONT_WEIGHTS) {
     out.push(rule(`.font-${w}`, [`font-weight: var(--font-weight-display-${w});`]));
+  }
+  // Each family can take its own weight, `--font-<family>-weight-<weight>`,
+  // which falls back to the display ramp: unset, nothing changes, and setting
+  // `--font-body-weight-strong` leaves display and label text alone. `:where`
+  // keeps these at the single class's specificity, so whatever overrode
+  // `.font-strong` before still does.
+  for (const { name } of FONT_TYPES) {
+    if (name === "display") continue;
+    for (const w of FONT_WEIGHTS) {
+      out.push(
+        rule(`:where(.font-${name}).font-${w},\n:where(.font-${name}) > .font-${w}`, [
+          `font-weight: var(--font-${name}-weight-${w}, var(--font-weight-display-${w}));`,
+        ]),
+      );
+    }
   }
 
   for (const { name, family, scale, tracking } of FONT_TYPES) {
