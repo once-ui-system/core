@@ -143,6 +143,13 @@ export { StatusIndicator, type StatusIndicatorProps } from "./components/StatusI
 export { Switch, type SwitchProps } from "./components/Switch";
 export type { Length, SpacingValue } from "./components/spacing";
 export {
+  extractText,
+  Table,
+  type TableAction,
+  type TableHeader,
+  type TableProps,
+} from "./components/Table";
+export {
   Tab,
   TabList,
   type TabListProps,

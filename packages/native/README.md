@@ -63,6 +63,7 @@ the safe areas. `theme="system"` follows the device.
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ tone, message })` as in core; toasts stack at the bottom and hide after 6 s. |
 | `Form`, `Field`, `Fieldset`, `SubmitButton`, `FormErrorSummary` | Core's form layout: `density` (`stacked` fuses the fields), `columns` and `span`, one `size`; `Field` wires label, hint and error onto its control; `SubmitButton` calls `onSubmit` and shows a spinner while its promise runs. |
 | `DatePicker`, `DateInput` | A month grid with core's `value`, `minDate`, `maxDate`, `range` and `locale` (names and first weekday from `Intl`); `DateInput` opens it in a bottom sheet. |
+| `Table` | Core's `data` (headers and rows), `searchable`, sortable columns (numbers sort as numbers), `onRowClick`, row `actions`, `loading`, `emptyState`, `paginated`; a column's `hide` drops it on small screens. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `value` / `defaultValue` / `onValueChange`, `open` / `defaultOpen` / `onOpenChange`, `multiple`, `searchable`. |
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value` / `defaultValue` / `onValueChange` as in core (RadioButton `onCheckedChange`), SegmentedControl `disabled`. |
 | `Tag` | A label in its `tone`; `variant="announce"` is the pill 2.x called Badge (`href`, `arrow`); `selected`, `onClick` and `onRemove` make the toggle 2.x called Chip. |
