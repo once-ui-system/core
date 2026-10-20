@@ -24,6 +24,7 @@ import {
 } from "../src";
 import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
+import { Guests } from "./Guests";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
 import { Shell } from "./Shell";
@@ -147,7 +148,8 @@ export function App({
     | "drawer"
     | "form"
     | "form-errors"
-    | "calendar";
+    | "calendar"
+    | "table";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -160,6 +162,8 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "table" ? (
+          <Guests />
         ) : screen === "calendar" ? (
           <Calendar />
         ) : screen === "form" || screen === "form-errors" ? (

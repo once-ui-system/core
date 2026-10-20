@@ -13,7 +13,8 @@ const screen =
   param === "drawer" ||
   param === "form" ||
   param === "form-errors" ||
-  param === "calendar"
+  param === "calendar" ||
+  param === "table"
     ? param
     : "card";
 const root = document.getElementById("root");
