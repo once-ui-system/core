@@ -480,6 +480,11 @@
     "tags": ["feedback", "chat", "ai"],
     "pairsWith": ["WorkingIndicator", "Text"]
   },
+  "Mascot": {
+    "purpose": "Animated assistant character: states, moods, eyes follow pointer, lip-syncs audio",
+    "tags": ["ai", "chat", "decoration"],
+    "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
+  },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],
