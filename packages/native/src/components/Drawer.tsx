@@ -2,7 +2,6 @@ import { type ReactNode, useEffect, useRef, useState } from "react";
 import {
   Animated,
   Modal,
-  Pressable,
   ScrollView,
   useWindowDimensions,
   View,
@@ -11,6 +10,7 @@ import {
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
 import { IconButton } from "./IconButton";
+import { Scrim } from "./Scrim";
 import { Heading, Text } from "./Text";
 import { useReduceMotion } from "./useReduceMotion";
 
@@ -122,24 +122,7 @@ export function Drawer({
 
   return (
     <Modal visible={mounted} transparent animationType="none" onRequestClose={onClose}>
-      <Animated.View
-        style={{
-          position: "absolute",
-          top: 0,
-          right: 0,
-          bottom: 0,
-          left: 0,
-          backgroundColor: theme.color("backdrop"),
-          opacity: progress,
-        }}
-      >
-        <Pressable
-          accessibilityLabel="Close"
-          accessible={closeOnClickaway}
-          onPress={closeOnClickaway ? onClose : undefined}
-          style={{ flex: 1 }}
-        />
-      </Animated.View>
+      <Scrim theme={theme} progress={progress} onPress={closeOnClickaway ? onClose : undefined} />
       <Animated.View
         accessibilityViewIsModal
         aria-modal
