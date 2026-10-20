@@ -7,11 +7,13 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import { createPortal } from "react-dom";
+import { getFocusableElements } from "../internal/focusable";
 import { cannotHover } from "../internal/pointer";
 import type { Placement, SpacingToken } from "../types";
 import { Flex } from "./Flex";
@@ -46,6 +48,9 @@ export interface AnimationProps extends React.ComponentProps<typeof Flex> {
   placement?: Placement;
   offsetDistance?: SpacingToken;
 }
+
+/** Anything in a card a keyboard could act on, rendered yet or not. */
+const INTERACTIVE = 'a[href], button, input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 const easingCurves: Record<EasingCurve, string> = {
   linear: "linear",
@@ -97,6 +102,19 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
     const wrapperRef = useRef<HTMLDivElement>(null);
     const floatingRef = useRef<HTMLDivElement>(null);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const cardId = useId();
+    // Set by a press on the trigger, so the focus that follows is not taken
+    // for keyboard focus.
+    const pressedRef = useRef(false);
+    const handlePress = () => {
+      pressedRef.current = true;
+    };
+    // Whether the card has held something to act on, so the trigger keeps
+    // saying it is collapsed once it closes.
+    const interactiveRef = useRef(false);
+    // The attributes this component put on the trigger, and only those, are
+    // taken off again.
+    const ownAttributesRef = useRef<Set<string>>(new Set());
 
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
@@ -184,41 +202,102 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
+        pressedRef.current = false;
         setInternalActive(false);
       }
     }, [triggerType]);
 
     const handleFocus = useCallback(() => {
-      if (triggerType === "hover") {
+      // Keyboard focus opens the card, where `:focus-visible` would show a
+      // ring. Focus from a press does not: the pointer's own hover (a tap's
+      // compatibility mouse events, on touch) is what opens it then.
+      // Tracked here rather than read from `:focus-visible`, which not every
+      // engine answers the same way.
+      const pressed = pressedRef.current;
+      pressedRef.current = false;
+      if (triggerType === "hover" && !pressed) {
         handleMouseEnter();
       }
     }, [triggerType, handleMouseEnter]);
 
-    const handleBlur = useCallback(() => {
-      if (triggerType === "hover") {
+    // Focus moving between the trigger and the card keeps it open: Tab goes
+    // from one into the other. Leaving both closes it.
+    const handleBlur = useCallback(
+      (event: React.FocusEvent<HTMLElement>) => {
+        if (triggerType !== "hover") return;
+        const next = event.relatedTarget as Node | null;
+        if (next && (wrapperRef.current?.contains(next) || floatingRef.current?.contains(next))) {
+          return;
+        }
         handleMouseLeave();
+      },
+      [triggerType, handleMouseLeave],
+    );
+
+    /** The trigger's last tab stop: where Shift+Tab from the card goes back to. */
+    const triggerStop = () => {
+      const stops = wrapperRef.current ? getFocusableElements(wrapperRef.current) : [];
+      return stops[stops.length - 1] ?? null;
+    };
+
+    /**
+     * A card in a portal sits at the end of the page, so Tab from its trigger
+     * skipped it and its links and buttons were out of a keyboard's reach.
+     * While it is open, Tab from the trigger goes into the card, and Tab past
+     * the card's last stop goes on to whatever follows the trigger.
+     */
+    const tabIntoCard = (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key !== "Tab" || event.shiftKey || !portal || !isActive) return false;
+      const card = floatingRef.current;
+      const stops = card ? getFocusableElements(card) : [];
+      const last = triggerStop();
+      if (stops.length === 0 || (last && document.activeElement !== last)) return false;
+      event.preventDefault();
+      stops[0].focus();
+      return true;
+    };
+
+    const handleCardKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+      if (event.key !== "Tab" || event.defaultPrevented) return;
+      const card = floatingRef.current;
+      const wrapper = wrapperRef.current;
+      if (!card || !wrapper) return;
+      const stops = getFocusableElements(card);
+      if (stops.length === 0) return;
+      if (event.shiftKey && document.activeElement === stops[0]) {
+        const back = triggerStop();
+        if (!back) return;
+        event.preventDefault();
+        back.focus();
+      } else if (!event.shiftKey && document.activeElement === stops[stops.length - 1]) {
+        const after = getFocusableElements(document.body).find(
+          (element) =>
+            !card.contains(element) &&
+            !wrapper.contains(element) &&
+            Boolean(wrapper.compareDocumentPosition(element) & Node.DOCUMENT_POSITION_FOLLOWING),
+        );
+        if (!after) return;
+        event.preventDefault();
+        after.focus();
       }
-    }, [triggerType, handleMouseLeave]);
+    };
 
     // A hover trigger that is a role="button" element of its own (InfoTip's
     // icon) has no action but this card, so Enter and Space toggle it, as a
     // button should. Native buttons and links keep their own action.
-    const handleTriggerKeyDown = useCallback(
-      (event: React.KeyboardEvent<HTMLElement>) => {
-        if (triggerType !== "hover" || isControlled) return;
-        if (event.key !== "Enter" && event.key !== " ") return;
-        const target = event.target as HTMLElement;
-        if (target.getAttribute("role") !== "button") return;
-        if (target.closest("button, a[href], input, select, textarea")) return;
-        event.preventDefault();
-        if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = null;
-        }
-        setInternalActive((active) => !active);
-      },
-      [triggerType, isControlled, setInternalActive],
-    );
+    const handleTriggerKeyDown = (event: React.KeyboardEvent<HTMLElement>) => {
+      if (triggerType !== "hover" || tabIntoCard(event) || isControlled) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+      const target = event.target as HTMLElement;
+      if (target.getAttribute("role") !== "button") return;
+      if (target.closest("button, a[href], input, select, textarea")) return;
+      event.preventDefault();
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
+      }
+      setInternalActive((active) => !active);
+    };
 
     const handleClick = useCallback(() => {
       if (triggerType === "click") {
@@ -248,12 +327,54 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
           clearTimeout(timeoutRef.current);
           timeoutRef.current = null;
         }
+        // Focus inside the card would go down with it: it goes back to the trigger.
+        if (floatingRef.current?.contains(document.activeElement)) triggerStop()?.focus();
         setInternalActive(false);
       };
 
       document.addEventListener("keydown", handleEscape);
       return () => document.removeEventListener("keydown", handleEscape);
     }, [triggerType, isControlled, internalActive]);
+
+    // The trigger says what the card is to it. A card with something to act
+    // on is a disclosure the trigger expands (`aria-expanded`,
+    // `aria-controls`); one with only text describes the trigger while it is
+    // open (`aria-describedby`), unless the trigger already names a
+    // description or its name is the card's text, as an IconButton's tooltip
+    // is. Set on the trigger's focusable element, which HoverCard does not
+    // render, and never over an attribute the trigger set itself.
+    useEffect(() => {
+      if (!portal || triggerType !== "hover") return;
+      const own = ownAttributesRef.current;
+      // Nothing to put on or take off: a closed card that never opened.
+      if (!isActive && own.size === 0 && !interactiveRef.current) return;
+      const target = wrapperRef.current?.querySelector<HTMLElement>(INTERACTIVE);
+      if (!target) return;
+      const put = (name: string, value: string) => {
+        if (target.hasAttribute(name) && !own.has(name)) return;
+        target.setAttribute(name, value);
+        own.add(name);
+      };
+      const drop = (name: string) => {
+        if (!own.has(name)) return;
+        target.removeAttribute(name);
+        own.delete(name);
+      };
+      const card = floatingRef.current;
+      if (isActive && card) {
+        if (card.querySelector(INTERACTIVE)) {
+          interactiveRef.current = true;
+          put("aria-expanded", "true");
+          put("aria-controls", card.id);
+        } else if (target.getAttribute("aria-label")?.trim() !== card.textContent?.trim()) {
+          put("aria-describedby", card.id);
+        }
+      } else {
+        if (interactiveRef.current) put("aria-expanded", "false");
+        drop("aria-controls");
+        drop("aria-describedby");
+      }
+    }, [isActive, portal, triggerType]);
 
     const getAnimationStyle = (): React.CSSProperties => {
       // For portals, always use center origin for consistent animations
@@ -363,6 +484,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
               onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
               onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
               onFocus={triggerType === "hover" ? handleFocus : undefined}
+              onPointerDown={triggerType === "hover" ? handlePress : undefined}
+              onMouseDown={triggerType === "hover" ? handlePress : undefined}
               onBlur={triggerType === "hover" ? handleBlur : undefined}
               onKeyDown={triggerType === "hover" ? handleTriggerKeyDown : undefined}
               onClick={triggerType === "click" ? handleClick : undefined}
@@ -390,7 +513,16 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
                   onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
                   onMouseLeave={triggerType === "hover" ? handleMouseLeave : undefined}
                   aria-hidden={!isActive}
+                  id={cardId}
                   {...flex}
+                  onBlur={(event: React.FocusEvent<HTMLDivElement>) => {
+                    flex.onBlur?.(event);
+                    handleBlur(event);
+                  }}
+                  onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+                    flex.onKeyDown?.(event);
+                    if (triggerType === "hover") handleCardKeyDown(event);
+                  }}
                 >
                   {children}
                 </Flex>,
@@ -410,6 +542,8 @@ const Animation = forwardRef<HTMLDivElement, AnimationProps>(
           <Flex
             onMouseEnter={triggerType === "hover" ? handleMouseEnter : undefined}
             onFocus={triggerType === "hover" ? handleFocus : undefined}
+            onPointerDown={triggerType === "hover" ? handlePress : undefined}
+            onMouseDown={triggerType === "hover" ? handlePress : undefined}
             onBlur={triggerType === "hover" ? handleBlur : undefined}
             onKeyDown={triggerType === "hover" ? handleTriggerKeyDown : undefined}
             onClick={triggerType === "click" ? handleClick : undefined}

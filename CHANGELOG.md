@@ -15,6 +15,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`semantics="radio"` on `SegmentedControl` and `ThemeSwitcher`.** For a choice
+  among settings rather than a view switch: a `radiogroup` of `radio`s with one tab
+  stop, where the arrow keys move and choose. The defaults (`"tabs"`, `"toggle"`)
+  are unchanged.
+- **`labels` on `OTPInput` and `TagInput`, `interactive` on `Chip`, `pauseLabel` and
+  `playLabel` on `Carousel`'s `play`.** The new names and announcements below can be
+  translated. `<Chip interactive={false} onRemove>` makes the label plain text, for a
+  chip whose one action is its removal.
 - **Search, filters and a toolbar on `DataTable`.** `searchable` adds a 32px search
   field, and a column's `filter: { options }` adds a select beside it; `toolbar` takes
   your own controls. Both work on DataTable's state or yours (`search`, `filters` and
@@ -98,6 +106,33 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`StylePanel`'s rows are radio groups.** Each row of swatches or segments is a
+  `radiogroup` named by the row's label, its options `radio`s: one Tab stop per row
+  instead of one per swatch (over forty in the colour rows), and the arrow keys move
+  and choose. The segmented rows were tab lists with no panels. Looks and `labels`
+  are unchanged.
+- **`OTPInput` reads as one code.** The boxes are a `group` named "One-time code"
+  (or by `aria-label`); the first asks for `autocomplete="one-time-code"`, and a whole
+  code set by autofill fills every box instead of being refused.
+- **`TagInput`'s tags are a list, and Backspace removes the last one.** In an empty
+  field Backspace takes the last tag, and a polite live region says which tag went.
+  A tag's label is no longer a focusable "pressed" toggle that did nothing, and
+  removing a tag puts focus back in the field rather than on the page.
+- **`HoverCard`'s links and buttons can be reached from the keyboard.** The card is
+  in a portal at the end of the page, so Tab from its trigger skipped it, and blurring
+  the trigger closed it. While it is open, Tab now goes from the trigger into the card
+  and on to what follows the trigger; focus moving between the two keeps it open, and
+  Escape from inside the card returns focus to the trigger. The trigger is marked
+  `aria-expanded`/`aria-controls` (or `aria-describedby` for a card of text). Only
+  keyboard focus opens it; the pointer behaves as before.
+- **`Carousel` autoplay can always be stopped (WCAG 2.2.2).** `play={{ auto: true }}`
+  had no pause button and an interval of 0: each `play` field now has its own default
+  (`interval` 3000, `controls` on unless `false`). Autoplay holds while the pointer is
+  over the carousel, stops when keyboard focus comes in (the button then offers Play),
+  and does not start under reduced motion. The
+  carousel is a named group with `aria-roledescription="carousel"`, each slide a
+  "slide" ("2 of 5"), and slide changes are announced politely only while it is not
+  moving on its own.
 - **Text in a `theme="dark"` (or `data-theme`) subtree follows the subtree's theme.**
   The default text colour was resolved once on `<html>` and inherited, so a dark hero on
   a light page kept dark text unless every `Text` set `onBackground`. An element with

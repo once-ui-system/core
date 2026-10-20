@@ -119,6 +119,46 @@ Use `defaultValue` to define an initial active button in uncontrolled mode. Don'
   ]}
 />
 
+## Radio group
+
+A tab strip is the default, for switching views. For one choice among settings, `semantics="radio"` makes the segments a `radiogroup` of `radio`s: the arrow keys move and choose, as native radios do. Name it with `aria-label` or `aria-labelledby`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth horizontal="center">
+      <SegmentedControl
+        fillWidth={false}
+        semantics="radio"
+        aria-label="Density"
+        defaultValue="comfortable"
+        buttons={[
+          { value: "compact", label: "Compact" },
+          { value: "comfortable", label: "Comfortable" },
+        ]}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+    fillWidth={false}
+    semantics="radio"
+    aria-label="Density"
+    defaultValue="comfortable"
+    buttons={[
+      { value: "compact", label: "Compact" },
+      { value: "comfortable", label: "Comfortable" },
+    ]}
+/>`,
+      language: "tsx",
+      label: "Radio group"
+    }
+  ]}
+/>
+
 ## Compact
 
 Use `compact` to create a compact variant.
@@ -283,6 +323,7 @@ Options that do not fit scroll behind a Next button. In a narrow sidebar that cl
   component="SegmentedControl"
   describe={{
     compact: "Tighter padding, for dense toolbars.",
+    semantics: "`tabs` (a tab strip) or `radio` (one choice from a set of settings, a radio group).",
     scroll: "`false` shares the width between the options and truncates labels, instead of scrolling them.",
   }}
   content={[

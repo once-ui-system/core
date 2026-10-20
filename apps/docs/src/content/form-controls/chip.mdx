@@ -132,6 +132,21 @@ const handleRemove = (id) => {
   ]}
 />
 
+When removing is the chip's only action, `interactive={false}` makes its label plain text, so it is not a second tab stop that does nothing. TagInput's tags work this way.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<PlainLabelChipExample />}
+  codes={[
+    {
+      code: `<Chip label="Berlin" interactive={false} onRemove={() => removeCity("Berlin")} />`,
+      language: "tsx",
+      label: "Remove only"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -143,6 +158,7 @@ const handleRemove = (id) => {
     suffixIcon: "Icon after the label.",
     onClick: "Called when the chip body is clicked.",
     onRemove: "Adds a remove control, called when it is used.",
+    interactive: "With onRemove, whether the label is a control of its own. False makes it plain text.",
     children: "Extra content after the label.",
     iconButtonProps: "Passed through to the remove control.",
   }}

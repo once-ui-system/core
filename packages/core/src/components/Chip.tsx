@@ -17,6 +17,13 @@ interface ChipProps extends React.ComponentProps<typeof Flex> {
   /** An icon after the label, such as `chevronDown` on a chip that opens a menu. */
   suffixIcon?: IconName;
   onRemove?: () => void;
+  /**
+   * With `onRemove`, whether the label is a control of its own, a toggle
+   * beside the remove button. Defaults to `true`. `false` makes it plain
+   * text, for a chip whose one action is its removal (TagInput's tags): no
+   * extra tab stop that does nothing, and no "pressed" on every tag.
+   */
+  interactive?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
@@ -31,6 +38,7 @@ type RestProps = Omit<
   | "prefixIcon"
   | "suffixIcon"
   | "onRemove"
+  | "interactive"
   | "onClick"
   | "children"
   | "iconButtonProps"
@@ -60,6 +68,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
       prefixIcon,
       suffixIcon,
       onRemove,
+      interactive = true,
       onClick,
       children,
       iconButtonProps = {},
@@ -172,10 +181,9 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         {...box}
       >
         <Flex
-          role="button"
-          tabIndex={0}
-          onKeyDown={handleKeyDown}
-          aria-pressed={selected}
+          {...(interactive
+            ? { role: "button", tabIndex: 0, onKeyDown: handleKeyDown, "aria-pressed": selected }
+            : {})}
           vertical="center"
           className={styles.action}
           {...control}
