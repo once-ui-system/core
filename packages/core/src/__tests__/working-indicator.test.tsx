@@ -23,7 +23,7 @@ describe("LogoSpinner", () => {
 
   it("takes a scheme's foreground, or the text color with inherit", () => {
     const { rerender } = render(<LogoSpinner color="accent" />);
-    expect(screen.getByRole("status").style.color).toBe("var(--accent-on-background-strong)");
+    expect(screen.getByRole("status").style.color).toBe("var(--function-accent-500)");
     rerender(<LogoSpinner color="inherit" />);
     expect(screen.getByRole("status").style.color).toBe("");
   });

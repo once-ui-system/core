@@ -5,7 +5,7 @@ import type { TShirtSizes } from "../types";
 import { Flex } from "./Flex";
 import styles from "./LogoSpinner.module.scss";
 
-/** The colors the mark takes: a scheme's strong foreground, or the surrounding text color. */
+/** The colors the mark takes: the brand or accent hue, the strongest neutral text, or the surrounding text color. */
 export type LogoSpinnerColor = "brand" | "accent" | "neutral" | "inherit";
 
 export interface LogoSpinnerProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
@@ -21,6 +21,14 @@ export interface LogoSpinnerProps extends Omit<React.ComponentProps<typeof Flex>
   speed?: number;
   ariaLabel?: string;
 }
+
+/* The hue at full strength whatever `data-solid` says (brand and accent),
+   the way --brand-color-strong is; neutral is the strongest text color. */
+const COLOR: Record<Exclude<LogoSpinnerColor, "inherit">, string> = {
+  brand: "var(--brand-color-strong)",
+  accent: "var(--function-accent-500)",
+  neutral: "var(--neutral-on-background-strong)",
+};
 
 /**
  * The four tiles of the Once UI mark, top, right, bottom, left, in the order
@@ -82,7 +90,7 @@ const LogoSpinner = forwardRef<HTMLDivElement, LogoSpinnerProps>(
         className={classNames(styles.root, styles[size], styles[variant], className)}
         style={
           {
-            ...(color !== "inherit" && { color: `var(--${color}-on-background-strong)` }),
+            ...(color !== "inherit" && { color: COLOR[color] }),
             ...(speed && { "--logo-spinner-duration": `${speed}s` }),
             ...style,
           } as React.CSSProperties
