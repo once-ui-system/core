@@ -90,12 +90,44 @@ Supports full Once UI palette for flexibility.
   ]}
 />
 
+## Theme roles
+
+A role (`brand`, `accent`, `neutral`, `info`, `danger`, `warning`, `success`) takes the colour
+the theme assigns it, so `danger` follows the app's danger scheme. A palette name stays that
+fixed colour; `rose`, `mint`, `dusk`, `sand` and `slate` are there as well.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12" vertical="center">
+      <StatusIndicator color="success" ariaLabel="Online" />
+      <StatusIndicator color="warning" ariaLabel="Degraded" />
+      <StatusIndicator color="danger" ariaLabel="Down" />
+      <StatusIndicator color="brand" ariaLabel="Syncing" />
+      <StatusIndicator color="sand" ariaLabel="Archived" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<StatusIndicator color="success" ariaLabel="Online" />
+<StatusIndicator color="warning" ariaLabel="Degraded" />
+<StatusIndicator color="danger" ariaLabel="Down" />
+<StatusIndicator color="brand" ariaLabel="Syncing" />
+<StatusIndicator color="sand" ariaLabel="Archived" />`,
+      language: "tsx",
+      label: "Roles"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="StatusIndicator"
   describe={{
-    color: "Which state it shows.",
+    color: "Which state it shows: a palette name, or a theme role such as danger or brand.",
     size: "Dot size.",
     ariaLabel: "What assistive tech announces. Set it to the meaning, not the colour.",
   }}

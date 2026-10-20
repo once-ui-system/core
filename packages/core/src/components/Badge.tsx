@@ -31,10 +31,15 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
       className,
       style,
       id,
+      as,
+      inline,
       ...rest
     },
     ref,
   ) => {
+    // `as="span"` makes the badge phrasing content, so it can sit inside a
+    // sentence: the badge and its arrow render spans and flow inline.
+    const phrasing = as === "span";
     // Every Badge used to fall back to `id="badge"`, so a page with several
     // had duplicate ids and each arrow followed the first badge's hover.
     const generatedId = useId();
@@ -43,6 +48,8 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
     const content = (
       <Flex
         id={badgeId}
+        as={as}
+        inline={inline ?? (phrasing || undefined)}
         paddingX="20"
         paddingY="12"
         fitWidth
@@ -59,7 +66,7 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         {icon && <Icon marginRight="8" size="s" name={icon} onBackground="brand-medium" />}
         {title}
         {children}
-        {arrow && <Arrow trigger={`[id="${badgeId}"]`} />}
+        {arrow && <Arrow trigger={`[id="${badgeId}"]`} as={phrasing ? "span" : undefined} />}
       </Flex>
     );
 

@@ -41,8 +41,11 @@ describe("ai harness without spec.json", () => {
     expect(rules).toMatch(/Never open `spec\.json`/);
   });
 
+  // 25,000 until 2.4; raised by 500 bytes, about 125 tokens, for the AI
+  // components (loader, working line, voice, mascot) so no existing purpose
+  // had to be cut to fit them.
   it("keeps the catalog small enough to load on every task", () => {
-    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(25_000);
+    expect(statSync(path.join(AI, "catalog.json")).size).toBeLessThan(25_500);
   });
 });
 

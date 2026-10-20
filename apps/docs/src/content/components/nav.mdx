@@ -27,6 +27,7 @@ differ per product and stay yours to compose.
       <NavItem href="#" icon="sparkle" label="Presets" />
       <NavItem href="#" icon="inbox" label="Inbox" badge={42} />
       <NavItem href="#" icon="bell" label="Activity" indicator />
+      <NavItem href="#" icon="barChart" label="Reports" badge="New" />
     </Column>
   }
   codes={[
@@ -35,22 +36,23 @@ differ per product and stay yours to compose.
 `<NavItem href="/projects" icon="home" label="Projects" selected />
 <NavItem href="/presets" icon="sparkle" label="Presets" />
 <NavItem href="/inbox" icon="inbox" label="Inbox" badge={42} />
-<NavItem href="/activity" icon="bell" label="Activity" indicator />`,
+<NavItem href="/activity" icon="bell" label="Activity" indicator />
+<NavItem href="/reports" icon="barChart" label="Reports" badge="New" />`,
       language: "tsx",
       label: "NavItem"
     }
   ]}
 />
 
-`badge` prints a count and caps it at `9+`; `indicator` is the dot for unread
-with no number worth showing.
+`badge` prints a count and caps it at `9+`; text such as `"New"` prints as given.
+`indicator` is the dot for unread with no number worth showing.
 
 <PropsTable
   component="NavItem"
   describe={{
     label: "The text.",
     icon: "Leading icon. Leave it off inside a NavGroup, where the rail carries the hierarchy instead.",
-    badge: "A count in a pill at the end of the row. Above 9 it prints 9+, with the real number on the label for assistive tech.",
+    badge: "A pill at the end of the row. A number is a count: above 9 it prints 9+, with the real number on the label for assistive tech. Text such as \"New\" prints as given.",
     indicator: "A dot at the end of the row, when there is no number worth showing.",
   }}
 />

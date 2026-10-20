@@ -37,6 +37,12 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   style?: React.CSSProperties;
   icon?: LogoSource;
   wordmark?: LogoSource;
+  /**
+   * A text wordmark, for a brand with no wordmark file: the name set in the
+   * heading font at the logo's height, after the icon if there is one.
+   * `wordmark` stays an image source.
+   */
+  text?: string;
   href?: string;
   dark?: boolean;
   light?: boolean;
@@ -44,14 +50,17 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ size = "m", href, icon, wordmark, className, style, dark, light, brand, ...props }, ref) => {
+  (
+    { size = "m", href, icon, wordmark, text, className, style, dark, light, brand, ...props },
+    ref,
+  ) => {
     useEffect(() => {
-      if (!icon && !wordmark) {
+      if (!icon && !wordmark && !text) {
         console.warn(
           "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
         );
       }
-    }, [icon, wordmark]);
+    }, [icon, wordmark, text]);
 
     /**
      * One <img> for a plain source; for a per-theme source, both, each gated by
@@ -67,6 +76,10 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const resolveSource = (source: LogoSource | undefined): string | undefined =>
       typeof source === "string" ? source : source?.light;
 
+    // With a text wordmark the text names the logo, so the images beside it
+    // are decorative; an image-only logo keeps "Trademark".
+    const alt = text ? "" : "Trademark";
+
     const renderSource = (source: LogoSource | undefined) => {
       if (!source) return null;
       const imgStyle = {
@@ -74,13 +87,33 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
         width: "auto",
       };
       if (typeof source === "string") {
-        return <img style={imgStyle} alt="Trademark" src={source} />;
+        return <img style={imgStyle} alt={alt} src={source} />;
       }
       return (
         <>
-          <img className="light-flex" style={imgStyle} alt="Trademark" src={source.light} />
-          <img className="dark-flex" style={imgStyle} alt="Trademark" src={source.dark} />
+          <img className="light-flex" style={imgStyle} alt={alt} src={source.light} />
+          <img className="dark-flex" style={imgStyle} alt={alt} src={source.dark} />
         </>
+      );
+    };
+
+    const renderText = () => {
+      if (!text) return null;
+      const height = `var(--static-space-${sizeMap[size]})`;
+      return (
+        <span
+          className="font-heading neutral-on-background-strong"
+          style={{
+            fontSize: `calc(${height} * 0.75)`,
+            lineHeight: height,
+            fontWeight: "var(--font-weight-heading-strong)",
+            letterSpacing: "-0.02em",
+            whiteSpace: "nowrap",
+            marginLeft: icon ? `calc(${height} / 4)` : undefined,
+          }}
+        >
+          {text}
+        </span>
       );
     };
 
@@ -88,6 +121,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       <>
         {renderSource(icon)}
         {renderSource(wordmark)}
+        {renderText()}
       </>
     );
 
@@ -202,7 +236,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             )}
             style={style}
             href={href}
-            aria-label="Trademark"
+            aria-label={text || "Trademark"}
             {...props}
           >
             {content}
@@ -217,7 +251,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             radius="l"
             fitHeight
             style={style}
-            aria-label="Trademark"
+            aria-label={text ? undefined : "Trademark"}
           >
             {content}
           </Flex>
