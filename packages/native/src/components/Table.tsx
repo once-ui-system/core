@@ -72,6 +72,16 @@ function hiddenAt(hide: TableHeader["hide"], width: number, limits: Record<Break
   return hidden;
 }
 
+function headerLabel(content: ReactNode) {
+  return typeof content === "string" ? (
+    <Text variant="label-strong-s" onBackground="neutral-medium" numberOfLines={1}>
+      {content}
+    </Text>
+  ) : (
+    content
+  );
+}
+
 const ALIGN = { left: "flex-start", center: "center", right: "flex-end" } as const;
 
 function columnStyle(header: TableHeader): ViewStyle {
@@ -155,14 +165,7 @@ export function Table({
     <Row background="neutral-alpha-weak" borderBottom="neutral-medium" accessibilityRole="header">
       {columns.map(({ header }) => {
         const active = sort?.key === header.key;
-        const label =
-          typeof header.content === "string" ? (
-            <Text variant="label-strong-s" onBackground="neutral-medium" numberOfLines={1}>
-              {header.content}
-            </Text>
-          ) : (
-            header.content
-          );
+        const label = headerLabel(header.content);
         return header.sortable ? (
           <Pressable
             key={header.key}
