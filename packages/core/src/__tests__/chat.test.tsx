@@ -257,6 +257,90 @@ describe("ChatComposer", () => {
   });
 });
 
+/**
+ * The row under the field: `toolbar` on the left after attach, `hint`,
+ * `actions` and send on the right. Without either prop the composer stays
+ * one row, with send beside the field.
+ */
+describe("ChatComposer toolbar", () => {
+  const row = () => screen.getByTestId("chips").parentElement as HTMLElement;
+
+  it("puts attach and the toolbar on the left of a row under the field, send on the right", () => {
+    render(
+      <ChatComposer
+        onSend={() => {}}
+        attach
+        actions={<button type="button">Model</button>}
+        hint="Enter to send"
+        toolbar={<span data-testid="chips">Your library</span>}
+      />,
+      { wrapper },
+    );
+    const toolbarRow = row().parentElement as HTMLElement;
+    const [start, end] = Array.from(toolbarRow.children) as HTMLElement[];
+    expect(start).toContainElement(screen.getByRole("button", { name: "Attach files" }));
+    expect(start).toContainElement(screen.getByTestId("chips"));
+    expect(end.textContent).toBe("Enter to sendModel");
+    expect(end).toContainElement(screen.getByRole("button", { name: "Send" }));
+    // The row comes after the field, inside the same surface.
+    const field = screen.getByRole("textbox");
+    expect(
+      field.compareDocumentPosition(toolbarRow) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(field.closest("[data-surface='field']")).toContainElement(toolbarRow);
+  });
+
+  it("turns on with only a hint, and sends from the row", async () => {
+    const onSend = vi.fn();
+    render(<ChatComposer onSend={onSend} hint="Enter to send" />, { wrapper });
+    const send = screen.getByRole("button", { name: "Send" });
+    expect(send.closest("[data-surface='field']")).toBeTruthy();
+    expect(screen.getByText("Enter to send").parentElement).toContainElement(send);
+    await userEvent.type(screen.getByRole("textbox"), "hi");
+    await userEvent.click(send);
+    expect(onSend).toHaveBeenCalledWith({ text: "hi", files: [] });
+  });
+
+  it("keeps send beside the field without toolbar or hint", () => {
+    render(<ChatComposer onSend={() => {}} attach />, { wrapper });
+    const send = screen.getByRole("button", { name: "Send" });
+    // Before: attach, the field's column, send; nothing under the field.
+    const surface = screen.getByRole("textbox").closest("[data-surface='field']") as HTMLElement;
+    const [, middle, last] = Array.from(surface.children) as HTMLElement[];
+    expect(last).toContainElement(send);
+    expect(middle.children).toHaveLength(1);
+  });
+
+  it("takes a custom send icon", () => {
+    const { container } = render(
+      <ChatComposer onSend={() => {}} sendIcon="arrowUp" hint="Enter to send" />,
+      { wrapper },
+    );
+    const plain = render(<ChatComposer onSend={() => {}} />, { wrapper }).container;
+    const iconOf = (root: HTMLElement) =>
+      root.querySelector("button[aria-label='Send'] svg")?.innerHTML;
+    expect(iconOf(container)).toBeTruthy();
+    expect(iconOf(container)).not.toBe(iconOf(plain));
+  });
+
+  it("has no axe violations with a toolbar", async () => {
+    const { container } = render(
+      <ChatComposer
+        onSend={() => {}}
+        attach
+        hint="Enter to send"
+        toolbar={
+          <button type="button" aria-pressed="false">
+            Your library
+          </button>
+        }
+      />,
+      { wrapper },
+    );
+    await expectNoAxeViolations(container);
+  });
+});
+
 describe("TypingIndicator", () => {
   it("is a status with a visible label", () => {
     render(<TypingIndicator label="Ana is typing" />);

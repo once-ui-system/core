@@ -175,4 +175,28 @@ describe("Chip", () => {
     expect(chip.className).toMatch(/_chip_/);
     expect(chip.className).toMatch(/_unselected_/);
   });
+
+  it("draws suffixIcon after the label and prefixIcon before it, both hidden from the name", async () => {
+    const { container } = render(
+      <Chip label="Q4 pricing" prefixIcon="document" suffixIcon="chevronDown" />,
+      { wrapper },
+    );
+    const chip = screen.getByRole("button", { name: "Q4 pricing" });
+    const parts = Array.from(chip.children);
+    expect(parts).toHaveLength(3);
+    expect(parts[0].querySelector("svg")).not.toBeNull();
+    expect(parts[1].textContent).toBe("Q4 pricing");
+    expect(parts[2].querySelector("svg")).not.toBeNull();
+    expect(parts[2]).toHaveAttribute("aria-hidden", "true");
+    await expectNoAxeViolations(container);
+  });
+
+  it("keeps suffixIcon inside the chip's control when it is removable", () => {
+    render(<Chip label="Q4 pricing" suffixIcon="chevronDown" onRemove={() => {}} />, {
+      wrapper,
+    });
+    const control = screen.getByRole("button", { name: "Q4 pricing" });
+    expect(control.lastElementChild?.querySelector("svg")).not.toBeNull();
+    expect(control).not.toContainElement(screen.getByRole("button", { name: "Remove" }));
+  });
 });
