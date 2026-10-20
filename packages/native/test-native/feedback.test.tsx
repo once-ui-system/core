@@ -59,23 +59,17 @@ describe("Tavilio feedback", () => {
     expect(converted).toMatch(/^#[0-9a-f]{6}$/);
   });
 
-  it("sizes Skeleton in rem like Flex, with fillWidth", async () => {
-    let rem = 0;
-    function Rem() {
-      rem = useTheme().rem;
-      return null;
-    }
+  it("sizes Skeleton in points like Flex, with fillWidth", async () => {
     await wrap(
       <>
-        <Rem />
         <Skeleton testID="a" shape="block" width={2} height={4.5} />
         <Skeleton testID="b" shape="block" height={4.5} fillWidth />
       </>,
     );
     const a = StyleSheet.flatten(screen.getByTestId("a").props.style);
     const b = StyleSheet.flatten(screen.getByTestId("b").props.style);
-    expect(a.width).toBe(2 * rem);
-    expect(a.height).toBe(4.5 * rem);
+    expect(a.width).toBe(2);
+    expect(a.height).toBe(4.5);
     expect(b.width).toBe("100%");
   });
 
