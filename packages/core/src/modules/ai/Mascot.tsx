@@ -137,7 +137,8 @@ function Mouth({ state, mood, y }: { state: MascotState; mood: MascotMood; y: nu
     return <ellipse cx={100} cy={y} rx={4} ry={3} className={styles.ink} />;
   }
   if (state === "thinking") {
-    return <path d={`M92 ${y + 1} Q100 ${y - 2} 108 ${y + 1}`} className={styles.line} />;
+    // A slanted "hmm".
+    return <path d={`M92 ${y + 2} L108 ${y - 2}`} className={styles.line} />;
   }
   switch (mood) {
     case "happy":

@@ -263,7 +263,7 @@
 
 .mascot[data-live] .talk {
   animation: none;
-  transform: scale(calc(0.9 + var(--mascot-level) * 0.2), calc(0.2 + var(--mascot-level) * 1.1));
+  transform: scale(calc(0.9 + var(--mascot-level) * 0.2), calc(0.3 + var(--mascot-level) * 1));
   transition: transform 0.06s linear;
 }
 
