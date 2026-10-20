@@ -80,6 +80,36 @@ The `HoverCard` component is a syntactic sugar for the `Animation` component wit
 />
 
 
+## Keyboard
+
+The card opens when its trigger takes keyboard focus (not the focus a click gives, since the pointer already opened it by hovering), and closes on Escape or when focus leaves both the trigger and the card. While it is open, Tab moves from the trigger into the card's links and buttons, and on past them to what follows the trigger; Escape from inside the card returns focus to the trigger. A card with something to act on marks its trigger `aria-expanded` and `aria-controls`; a card of text describes the trigger while open (`aria-describedby`), unless the trigger already has a description. The trigger itself must be focusable: a button, a link, or an element with `tabIndex={0}`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <HoverCard trigger={<Button variant="secondary" size="s" label="Lorant" />}>
+      <Column padding="16" gap="8" radius="l" background="page" border="neutral-alpha-medium">
+        <Text variant="label-default-s">Design engineer</Text>
+        <SmartLink href="/components/avatar">Profile</SmartLink>
+      </Column>
+    </HoverCard>
+  }
+  codes={[
+    {
+      code:
+`<HoverCard trigger={<Button variant="secondary" size="s" label="Lorant" />}>
+  <Column padding="16" gap="8" radius="l" background="page" border="neutral-alpha-medium">
+    <Text variant="label-default-s">Design engineer</Text>
+    <SmartLink href="/profile">Profile</SmartLink>
+  </Column>
+</HoverCard>`,
+      language: "tsx",
+      label: "Keyboard"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable

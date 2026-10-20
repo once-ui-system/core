@@ -29,6 +29,7 @@ import {
   useStyle,
 } from "../contexts/ThemeProvider";
 import { mergeLabels } from "../internal/labels";
+import { radioGroupKeyDown } from "../internal/radioKeys";
 import { revealInStrip } from "../internal/reveal";
 import type { ChartMode } from "../modules/data/interfaces";
 import { type Schemes, schemes } from "../types";
@@ -346,6 +347,20 @@ const STACKED_LINE = {
   gap: "12",
 } as const;
 
+/**
+ * The id of the row's visible label, which names the row's option group. Null
+ * when the row shows no label (`label={false}`): the group then falls back to
+ * the row's default label, when that is a string.
+ */
+const StyleRowLabelContext = createContext<string | null>(null);
+
+/** The props that name a row's option group: its visible label, else `fallback`. */
+function useGroupName(fallback: ReactNode) {
+  const labelId = useContext(StyleRowLabelContext);
+  if (labelId) return { "aria-labelledby": labelId };
+  return typeof fallback === "string" ? { "aria-label": fallback } : {};
+}
+
 /** A prop the caller set — including `false` or `null` — wins over the label. */
 const prefer = <T,>(prop: T | undefined, label: T): T => (prop === undefined ? label : prop);
 
@@ -460,9 +475,9 @@ const Root = forwardRef<HTMLDivElement, StylePanelRootProps>(function Root(
 
 /* ---- primitives ---------------------------------------------------------- */
 
-function RowLabel({ children }: { children: ReactNode }) {
+function RowLabel({ id, children }: { id?: string; children: ReactNode }) {
   return (
-    <Flex textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
+    <Flex id={id} textVariant="label-default-s" minWidth={3} onBackground="neutral-strong">
       {children}
     </Flex>
   );
@@ -474,18 +489,21 @@ function RowLabel({ children }: { children: ReactNode }) {
  *  drop the divider. */
 function Row({ label, children, className, ...rest }: StyleRowProps) {
   const stacked = useContext(StylePanelStackedContext);
+  const labelId = useId();
   return (
-    <Flex
-      className={classNames(styles.row, className)}
-      fillWidth
-      paddingX={stacked ? "16" : "24"}
-      paddingY="16"
-      {...(stacked ? STACKED_LINE : INLINE_LINE)}
-      {...rest}
-    >
-      {label !== false && <RowLabel>{label}</RowLabel>}
-      {children}
-    </Flex>
+    <StyleRowLabelContext.Provider value={label !== false ? labelId : null}>
+      <Flex
+        className={classNames(styles.row, className)}
+        fillWidth
+        paddingX={stacked ? "16" : "24"}
+        paddingY="16"
+        {...(stacked ? STACKED_LINE : INLINE_LINE)}
+        {...rest}
+      >
+        {label !== false && <RowLabel id={labelId}>{label}</RowLabel>}
+        {children}
+      </Flex>
+    </StyleRowLabelContext.Provider>
   );
 }
 
@@ -520,10 +538,11 @@ function activateOnKey(event: KeyboardEvent<HTMLElement>, activate: () => void) 
   activate();
 }
 
-/** One swatch: a toggle button, named and pressed, with a decorative face. */
+/** One swatch: a radio in its row's group, named and checked, with a decorative face. */
 function Swatch({
   label,
   pressed,
+  tabStop,
   onSelect,
   scroll,
   dataBorder,
@@ -531,6 +550,8 @@ function Swatch({
 }: {
   label: string;
   pressed: boolean;
+  /** The group's one Tab stop: the chosen swatch, or the first while none is. */
+  tabStop: boolean;
   onSelect: () => void;
   scroll?: boolean;
   dataBorder?: string;
@@ -545,7 +566,12 @@ function Swatch({
   useEffect(() => {
     const swatch = ref.current;
     if (!scroll || !pressed || !swatch) return;
-    revealInStrip(swatch, swatch.parentElement, document.activeElement === swatch);
+    // The strip is the Scroller's scrolling row, which holds the radio group.
+    revealInStrip(
+      swatch,
+      swatch.parentElement?.parentElement ?? null,
+      document.activeElement === swatch,
+    );
   }, [scroll, pressed]);
 
   return (
@@ -554,10 +580,10 @@ function Swatch({
       {...(dataBorder ? { "data-border": dataBorder } : {})}
       marginRight={scroll ? "2" : undefined}
       center
-      tabIndex={0}
-      role="button"
+      tabIndex={tabStop ? 0 : -1}
+      role="radio"
       aria-label={label}
-      aria-pressed={pressed}
+      aria-checked={pressed}
       className={classNames(styles.select, pressed ? styles.selected : "")}
       onClick={onSelect}
       onKeyDown={(event) => activateOnKey(event, onSelect)}
@@ -579,12 +605,16 @@ function Swatches<T extends string>({
   swatchClass,
   dataBorder,
   trailing,
+  trailingChecked = false,
   scrollLabels,
+  name,
 }: {
   options: readonly T[];
   selected: T | undefined;
   onSelect: (value: T) => void;
   ariaLabel: (value: T) => string;
+  /** The group's name when its row shows no label: the row's default label. */
+  name: ReactNode;
   scroll?: boolean;
   /** The strip's scroll buttons, when `scroll` is set. */
   scrollLabels?: ScrollerLabels;
@@ -592,12 +622,18 @@ function Swatches<T extends string>({
   dataBorder?: boolean;
   /** One more swatch after the options, in the same strip. */
   trailing?: ReactNode;
+  /** Whether `trailing` is the chosen swatch, which makes it the Tab stop. */
+  trailingChecked?: boolean;
 }) {
-  const items = options.map((option) => (
+  const groupName = useGroupName(name);
+  const checked =
+    (trailing != null && trailingChecked) || options.some((option) => option === selected);
+  const items = options.map((option, index) => (
     <Swatch
       key={option}
       label={ariaLabel(option)}
       pressed={selected === option}
+      tabStop={checked ? selected === option : index === 0}
       onSelect={() => onSelect(option)}
       scroll={scroll}
       dataBorder={dataBorder ? option : undefined}
@@ -608,13 +644,20 @@ function Swatches<T extends string>({
     </Swatch>
   ));
 
+  // A radio group: one Tab stop, and the arrows move and choose. In a strip
+  // that scrolls it is the row of swatches inside the Scroller rather than the
+  // Scroller, which also holds the scroll buttons.
+  const group = { role: "radiogroup", ...groupName, onKeyDown: radioGroupKeyDown } as const;
+
   return scroll ? (
     <Scroller minWidth={0} fitWidth className={styles.strip} labels={scrollLabels}>
-      {items}
-      {trailing}
+      <Flex {...group} style={{ minWidth: "max-content" }}>
+        {items}
+        {trailing}
+      </Flex>
     </Scroller>
   ) : (
-    <Flex gap="4">
+    <Flex gap="4" {...group}>
       {items}
       {trailing}
     </Flex>
@@ -633,9 +676,21 @@ function ThemeRow({ label, ...rest }: StyleRowProps) {
     : {};
   return (
     <Row label={prefer(label, labels.rows.theme)} {...rest}>
-      <ThemeSwitcher labels={labels.themeSwitcher} {...controlled} />
+      <ThemeOptions name={labels.rows.theme} labels={labels.themeSwitcher} {...controlled} />
     </Row>
   );
+}
+
+/**
+ * The Theme row's switcher: a radio group named by the row's label. Rendered
+ * inside the Row, so that it can read the label's id.
+ */
+function ThemeOptions({
+  name,
+  ...switcher
+}: React.ComponentProps<typeof ThemeSwitcher> & { name: ReactNode }) {
+  const groupName = useGroupName(name);
+  return <ThemeSwitcher semantics="radio" {...groupName} {...switcher} />;
 }
 
 function ShapeRow({ label, ...rest }: StyleRowProps) {
@@ -648,6 +703,7 @@ function ShapeRow({ label, ...rest }: StyleRowProps) {
         selected={mounted ? value.border : undefined}
         onSelect={(border) => set({ border })}
         ariaLabel={(shape) => labels.swatches.shape(labels.names.shapes[shape])}
+        name={labels.rows.shape}
         dataBorder
       />
     </Row>
@@ -694,6 +750,7 @@ function schemeRow(key: StylePanelSchemeRow) {
     const labels = useStylePanelLabels();
     const stacked = useContext(StylePanelStackedContext);
     const pickerId = useId();
+    const labelId = useId();
     const current = mounted ? value[key] : undefined;
     const rowLabel = prefer(label, labels.rows[key]);
 
@@ -703,6 +760,8 @@ function schemeRow(key: StylePanelSchemeRow) {
         selected={current as Schemes}
         onSelect={(scheme) => set({ [key]: scheme as Schemes })}
         ariaLabel={(scheme) => labels.swatches.scheme(labels.names.schemes[scheme as Schemes], key)}
+        name={labels.rows[key]}
+        trailingChecked={current === "custom"}
         swatchClass={(scheme) => styles[scheme]}
         scroll
         scrollLabels={labels.scroller}
@@ -733,22 +792,25 @@ function schemeRow(key: StylePanelSchemeRow) {
       <Row label={false} direction="row" {...row}>
         <Column fillWidth gap="16">
           <Flex fillWidth {...(stacked ? STACKED_LINE : INLINE_LINE)} {...line}>
-            {rowLabel !== false && <RowLabel>{rowLabel}</RowLabel>}
-            {swatches(
-              <Swatch
-                label={labels.custom.swatch(key)}
-                pressed={chosen}
-                onSelect={() => set({ [key]: "custom", [seedKey]: seed ?? DEFAULT_SEED })}
-                scroll
-              >
-                <div
-                  className={classNames(styles.swatch, styles.custom, !seed && styles.empty)}
-                  style={seed ? { background: seed } : undefined}
+            {rowLabel !== false && <RowLabel id={labelId}>{rowLabel}</RowLabel>}
+            <StyleRowLabelContext.Provider value={rowLabel !== false ? labelId : null}>
+              {swatches(
+                <Swatch
+                  label={labels.custom.swatch(key)}
+                  pressed={chosen}
+                  tabStop={chosen}
+                  onSelect={() => set({ [key]: "custom", [seedKey]: seed ?? DEFAULT_SEED })}
+                  scroll
                 >
-                  {!seed && <Icon name="plus" size="xs" onBackground="neutral-medium" />}
-                </div>
-              </Swatch>,
-            )}
+                  <div
+                    className={classNames(styles.swatch, styles.custom, !seed && styles.empty)}
+                    style={seed ? { background: seed } : undefined}
+                  >
+                    {!seed && <Icon name="plus" size="xs" onBackground="neutral-medium" />}
+                  </div>
+                </Swatch>,
+              )}
+            </StyleRowLabelContext.Provider>
           </Flex>
           {chosen && (
             <ColorInput
@@ -783,6 +845,7 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
         options={neutrals}
         selected={mounted ? value.neutral : undefined}
         onSelect={(neutral) => set({ neutral })}
+        name={labels.rows.neutral}
         ariaLabel={(neutral) =>
           labels.swatches.neutral(labels.names.neutrals[neutral as NeutralColor])
         }
@@ -798,13 +861,24 @@ function NeutralRow({ label, ...rest }: StyleRowProps) {
  * A row's segmented options. Beside a label they stop at 22rem; stacked, they
  * have the row to themselves, so they take all of it, and the buttons drop a
  * size so that the longer rows fit a sidebar. Either way the scroll buttons
- * are translated with the rest of the panel.
+ * are translated with the rest of the panel. One choice from a set, they are
+ * a radio group named by the row's label, as the swatch rows are.
  */
-function Options({ buttons, ...rest }: Omit<SegmentedControlProps, "labels">) {
+function Options({
+  buttons,
+  name,
+  ...rest
+}: Omit<SegmentedControlProps, "labels"> & {
+  /** The group's name when its row shows no label: the row's default label. */
+  name: ReactNode;
+}) {
   const stacked = useContext(StylePanelStackedContext);
   const labels = useStylePanelLabels();
+  const groupName = useGroupName(name);
   return (
     <SegmentedControl
+      semantics="radio"
+      {...groupName}
       maxWidth={stacked ? undefined : 22}
       minWidth={0}
       labels={labels.scroller}
@@ -845,6 +919,7 @@ function segmentedRow<K extends keyof StylePanelValue>(
           onChange={(next) => set({ [key]: next } as Partial<StylePanelValue>)}
           value={mounted ? (value[key] as string | undefined) : undefined}
           defaultValue={defaultValue}
+          name={labels.rows[row]}
           buttons={buttons(labels)}
         />
       </Row>
@@ -933,6 +1008,7 @@ function BoundDataStyleControl() {
       onChange={(next) => setChartOptions({ mode: next as ChartMode })}
       value={mode}
       defaultValue="categorical"
+      name={labels.rows.dataStyle}
       buttons={dataStyleButtons(labels)}
     />
   );
@@ -948,6 +1024,7 @@ function DataStyleRow({ label, ...rest }: StyleRowProps) {
           onChange={(next) => set({ chartMode: next as ChartMode })}
           value={mounted ? value.chartMode : undefined}
           defaultValue="categorical"
+          name={labels.rows.dataStyle}
           buttons={dataStyleButtons(labels)}
         />
       ) : (

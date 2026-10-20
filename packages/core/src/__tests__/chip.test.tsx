@@ -175,4 +175,16 @@ describe("Chip", () => {
     expect(chip.className).toMatch(/_chip_/);
     expect(chip.className).toMatch(/_unselected_/);
   });
+
+  it("makes the label plain text beside the remove button with interactive={false}", async () => {
+    const { container } = render(<Chip label="Design" interactive={false} onRemove={vi.fn()} />, {
+      wrapper,
+    });
+    expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual([
+      "Remove",
+    ]);
+    expect(screen.getByText("Design").closest("[tabindex]")).toBeNull();
+    expect(container.querySelector("[aria-pressed]")).toBeNull();
+    await expectNoAxeViolations(container);
+  });
 });

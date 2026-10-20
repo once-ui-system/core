@@ -81,6 +81,39 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
   ]}
 />
 
+## Keyboard and screen readers
+
+The tags are a list, each with a remove button named after its tag. Backspace in an empty field removes the last tag, and a polite live region says which; after a remove button is used, focus goes back to the field. `labels` translates the button names and the announcement.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <TagInput
+      id="themen"
+      label="Themen"
+      defaultValue={["Design", "Code"]}
+      labels={{ remove: (tag) => `${tag} entfernen`, removed: (tag) => `${tag} entfernt` }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<TagInput
+    id="themen"
+    label="Themen"
+    defaultValue={["Design", "Code"]}
+    labels={{
+      remove: (tag) => \`\${tag} entfernen\`,
+      removed: (tag) => \`\${tag} entfernt\`,
+    }}
+/>`,
+      language: "tsx",
+      label: "Translated"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -89,6 +122,7 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
     value: "The tags, as an array of strings, controlled. Leave it out and the input keeps its own list.",
     defaultValue: "The starting tags when `value` is left out.",
     onChange: "Receives the whole new array, after an add or a remove.",
+    labels: "The remove buttons' names and the removal announcement, to translate them.",
   }}
 />
 
