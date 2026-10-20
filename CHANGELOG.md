@@ -13,6 +13,32 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Scales per theme: `brandScale={{ light: { … }, dark: { … } }}`.** One ramp served
+  both themes, so an accent tuned for dark (a lime that glows on near-black) read wrong
+  on light, and fixing it took CSS. The flat shape still applies to both; a theme left
+  out uses the other's. `ThemeInit` renders both on the server, keyed off `data-theme`,
+  and a `theme="dark"` subtree gets the dark ramp. Same for `accentScale` and
+  `neutralScale`.
+- **`pageBackground` and `surfaceBackground` in `once-ui.config` `style`.** The light
+  page (off-white) and the filled surface (white) could only change through selector
+  overrides. Each takes a token or any CSS colour, once or `{ light, dark }`, and
+  `ThemeInit` renders it before the first paint.
+- **A weight per font family: `--font-body-weight-strong` and friends.** `.font-strong`
+  and the other weight classes read `--font-weight-display-*` on every family, so bolder
+  body text also changed headlines and labels. `--font-<family>-weight-<weight>` (for
+  `heading`, `body`, `label`, `code`) now changes only that family; unset, each still
+  falls back to the display weight, so nothing renders differently.
+
+### Fixed
+
+- **Text in a `theme="dark"` (or `data-theme`) subtree follows the subtree's theme.**
+  The default text colour was resolved once on `<html>` and inherited, so a dark hero on
+  a light page kept dark text unless every `Text` set `onBackground`. An element with
+  `data-theme` now reads `--neutral-on-background-strong` again, at zero specificity, so
+  colour classes still win. Pages without a themed subtree are unchanged.
+
 ## [2.3.0] — 2026-10-19
 
 ### Added
