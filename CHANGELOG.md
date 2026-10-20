@@ -36,6 +36,41 @@ item (see `ROADMAP.md`, Week 4).
   benchmark transcripts it flags 25 of the 76 Once UI attempts that failed typecheck,
   and 1 of 185 that passed.
 
+- **`Tag` and `Badge` inside a sentence: `as="span"`.** Both rendered divs, which are not
+  allowed in a `<p>`, so a status tag in body copy was invalid HTML and hydration
+  warnings. With `as="span"` every element in them (the Badge arrow included) is a span
+  and they flow inline. The default is still the div, unchanged.
+- **`StatusIndicator` takes theme roles and every palette.** `color` adds `brand`,
+  `accent`, `neutral`, `info`, `danger`, `warning` and `success`, which follow the theme's
+  scheme for that role, plus `rose`, `mint`, `dusk`, `sand` and `slate`. The existing
+  names paint as before.
+- **`NavItem` `badge` takes text.** `badge="New"` prints as given and is read as its text;
+  a number is still a count that hides at 0, prints `9+` above 9 and reads "12 unread".
+- **`titleVariant` on `Accordion` and `AccordionGroup`, and `radius="none"` on
+  `Accordion`.** The title was fixed in `heading-strong-s`, so a FAQ in body type needed a
+  wrapper per title; the default is unchanged.
+- **`text` on `Logo`: a text wordmark.** For a brand with no wordmark file, the name is set
+  in the heading font at the logo's size, after the icon, and names the link. `wordmark`
+  stays an image source.
+- **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
+  field.** Chips, a model picker or attachments go on the left after the attach button,
+  a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps
+  the paper plane. Two agents rebuilding the same assistant app both hand-built this
+  around the composer. Without the new props the composer renders exactly as before.
+- **`scroll={false}` and option `description` on `SegmentedControl`.** In a narrow
+  sidebar the scroll strip clipped the last option behind its Next button; without it the
+  options share the row equally and truncate a label that does not fit. `description`
+  adds a second, dimmer line under an option's label.
+- **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
+  that opens a menu.
+- **AI working states: `WorkingIndicator` and `LogoSpinner`.** `LogoSpinner` is a loader
+  drawn from the Once UI mark: the four tiles part, turn a quarter and click back
+  (`variant="wave"` lifts them one at a time). `WorkingIndicator` puts it next to a verb
+  that changes every few seconds ("Imagining…", "Noodling…", "Kerning…"), with an
+  optional elapsed count and hint. The words are yours to replace through `verbs`, or
+  extend from the exported `workingVerbs`. Both take the brand color, so they follow a
+  chat theme, and both keep signalling under reduced motion without moving.
+
 ### Fixed
 
 - **Chart `data` takes rows typed with an `interface`, and `readonly` arrays.**
@@ -52,6 +87,10 @@ item (see `ROADMAP.md`, Week 4).
   `{}` is no range and `{ startDate }` a range still being picked, so the
   `{ startDate?: Date; endDate?: Date }` state apps write type-checks. `onChange` still
   hands back both keys.
+
+- **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
+  38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
+  its width in a tight row.
 
 ## [2.3.0] — 2026-10-19
 

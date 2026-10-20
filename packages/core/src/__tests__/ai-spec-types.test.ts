@@ -73,6 +73,7 @@ const NOT_A_TYPE = new Set([
   "Retry",
   "Send",
   "Typing",
+  "Working",
   "Write",
   // a generic parameter, not a nameable type: `items: T[]` on InfiniteScroll
   "T",

@@ -475,6 +475,11 @@
     "tags": ["marketing", "social-proof"],
     "pairsWith": ["Grid", "Logo"]
   },
+  "LogoSpinner": {
+    "purpose": "Once UI mark loader, for AI and brand loading states",
+    "tags": ["feedback", "chat", "ai"],
+    "pairsWith": ["WorkingIndicator", "Text"]
+  },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],
@@ -977,5 +982,10 @@
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "WorkingIndicator": {
+    "purpose": "AI working line: mark loader plus cycling verbs (Imagining…)",
+    "tags": ["chat", "feedback", "ai"],
+    "pairsWith": ["ChatMessageList", "LogoSpinner"]
   }
 }

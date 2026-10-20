@@ -27,10 +27,16 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
       suffixIcon,
       className,
       children,
+      as,
+      inline,
       ...rest
     },
     ref,
   ) => {
+    // `as="span"` makes the whole tag phrasing content, so it can sit inside a
+    // sentence (`<p>Status: <Tag as="span">Beta</Tag></p>`): every element is a
+    // span and the tag flows inline. Without it, the div renders as before.
+    const phrasing = as === "span";
     const paddingX = size === "s" ? "8" : size === "m" ? "8" : "12";
     const paddingY = size === "s" ? "1" : size === "m" ? "2" : "4";
 
@@ -46,6 +52,8 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
         radius="s"
         gap="4"
         ref={ref}
+        as={as}
+        inline={inline ?? (phrasing || undefined)}
         className={classNames(
           styles.tag,
           scheme === "gradient" ? styles.gradient : undefined,
@@ -54,7 +62,7 @@ const Tag = forwardRef<HTMLDivElement, TagProps>(
         {...rest}
       >
         {prefixIcon && <Icon name={prefixIcon} size="xs" />}
-        <Row style={{ userSelect: "none" }} vertical="center">
+        <Row as={phrasing ? "span" : undefined} style={{ userSelect: "none" }} vertical="center">
           <Text variant="label-default-s">{label || children}</Text>
         </Row>
         {suffixIcon && <Icon name={suffixIcon} size="xs" />}

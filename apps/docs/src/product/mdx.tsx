@@ -83,6 +83,7 @@ import {
   ListItem,
   Logo,
   LogoCloud,
+  LogoSpinner,
   Mask,
   MasonryGrid,
   MatrixFx,
@@ -154,6 +155,7 @@ import {
   UserMenu,
   VisuallyHidden,
   WeatherFx,
+  WorkingIndicator,
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import {
@@ -186,6 +188,7 @@ import {
   CelebrationFxExample,
   CharacterCountExample,
   ChatComposerExample,
+  ChatComposerToolbarExample,
   ChatConversationExample,
   ChipWithIconsExample,
   ClientEmojiPicker,
@@ -428,6 +431,7 @@ const mdxComponents = createMdxComponents({
   ConversationItem,
   ChatConversationExample,
   ChatComposerExample,
+  ChatComposerToolbarExample,
   ConversationListExample,
 
   // ─── Core overlay ───
@@ -437,6 +441,8 @@ const mdxComponents = createMdxComponents({
   Toast,
   Toaster,
   Spinner,
+  LogoSpinner,
+  WorkingIndicator,
   Skeleton,
   FocusTrap,
   ScrollLock,

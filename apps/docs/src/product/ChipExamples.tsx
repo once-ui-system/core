@@ -27,6 +27,7 @@ export function ChipWithIconsExample() {
       <Chip label="Discord" prefixIcon="discord" />
       <Chip label="Style" prefixIcon="style" />
       <Chip label="Favorite" prefixIcon="like" />
+      <Chip label="Sort" suffixIcon="chevronDown" selected={false} />
     </Row>
   );
 }

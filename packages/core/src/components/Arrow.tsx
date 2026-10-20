@@ -24,6 +24,7 @@ const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
       className,
       translateX,
       translateY,
+      as,
       ...flex
     },
     _ref,
@@ -55,6 +56,7 @@ const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
     return (
       <Flex
         ref={ref}
+        as={as}
         center
         className={classNames(styles.arrowContainer, className)}
         style={{
@@ -69,12 +71,14 @@ const Arrow = forwardRef<HTMLDivElement, ArrowProps>(
         {...flex}
       >
         <Flex
+          as={as === "span" ? "span" : undefined}
           radius="full"
           position="absolute"
           className={classNames(styles.arrowHead, styles[color])}
           height={0.0875}
         />
         <Flex
+          as={as === "span" ? "span" : undefined}
           radius="full"
           position="absolute"
           className={classNames(styles.arrowHead, styles[color])}
