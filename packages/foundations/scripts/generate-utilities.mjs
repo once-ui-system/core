@@ -200,14 +200,10 @@ function flex() {
     out.push(rule(`.flex-${dir}`, [`flex-direction: ${dir};`]));
   }
 
-  // `.<bp>-flex-show` is hidden by default and revealed inside its own query,
-  // so the pair reads as "show only at this width". The hand-written file had
-  // this for l, m and s and omitted it for xs, which left `.xs-flex-show`
-  // visible at every width instead of only the narrowest — the one place the
-  // four siblings disagreed, and invisible without comparing them side by side.
-  for (const { key } of BREAKPOINTS_CASCADE) {
-    out.push(rule(`.${key}-flex-show`, ["display: none;"]));
-  }
+  // `.<bp>-flex-show` has no base rule. It used to be display: none outside
+  // its query ("show only at this width"), which hid `l={{ hide: true }}
+  // s={{ hide: false }}` above l, where nothing hides it. Flex now emits the
+  // show class only under a wider hide, and that hide covers the wider widths.
 
   for (const { suffix, value } of JUSTIFY_ALIGNMENTS) {
     out.push(rule(`.justify-${suffix}`, [`justify-content: ${value};`]));
@@ -412,16 +408,8 @@ function grid() {
     out.push(rule(`.rows-${n}`, [`grid-template-rows: ${gridTemplate(n)};`]));
   }
 
-  // The same pairing `flex.scss` uses: hidden by a base rule, revealed inside
-  // its own query, so `.<bp>-grid-show` means "show only at this width". The
-  // hand-written file had none of these four base rules, so every
-  // `.<bp>-grid-show` was visible at every width — measured in Chromium, all
-  // four computed `block` above their breakpoint where they should have
-  // computed `none`. Flex had the same hole at xs alone; grid had it at all of
-  // them, and no call site in the fleet had noticed.
-  for (const { key } of BREAKPOINTS_CASCADE) {
-    out.push(rule(`.${key}-grid-show`, ["display: none;"]));
-  }
+  // `.<bp>-grid-show` has no base rule, for the reason given in flex(): Grid
+  // emits it only under a wider hide, which already covers the wider widths.
 
   out.push(rule(".grid-hide", ["display: none;"]));
   out.push(rule(".grid-show", ["display: grid;"]));

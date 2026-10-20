@@ -1,0 +1,109 @@
+---
+title: "FileTree"
+summary: "An accessible, keyboard-navigable tree for files and folders."
+updatedAt: "2026-10-19"
+docs: "once-ui/components/fileTree.mdx"
+github: "components/FileTree.tsx"
+navLabel: "FileTree"
+navIcon: "components"
+---
+
+`FileTree` displays nested files and folders. Use the arrow keys to move through visible rows, expand or collapse folders, and select an item.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <FileTree
+      defaultExpandedIds={["src", "components"]}
+      defaultSelectedId="button"
+      items={[
+        {
+          id: "src",
+          name: "src",
+          type: "folder",
+          children: [
+            {
+              id: "components",
+              name: "components",
+              type: "folder",
+              children: [
+                { id: "button", name: "Button.tsx", type: "file", icon: "code" },
+                { id: "dialog", name: "Dialog.tsx", type: "file", icon: "code" }
+              ]
+            },
+            { id: "app", name: "App.tsx", type: "file", icon: "code" }
+          ]
+        },
+        { id: "package", name: "package.json", type: "file", icon: "document" }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<FileTree
+  defaultExpandedIds={["src", "components"]}
+  defaultSelectedId="button"
+  items={[
+    {
+      id: "src",
+      name: "src",
+      type: "folder",
+      children: [
+        {
+          id: "components",
+          name: "components",
+          type: "folder",
+          children: [
+            { id: "button", name: "Button.tsx", type: "file", icon: "code" }
+          ]
+        }
+      ]
+    }
+  ]}
+/>`,
+      language: "tsx",
+      label: "FileTree"
+    }
+  ]}
+/>
+
+## Data model
+
+Each item has a unique `id`, a display `name`, and a discriminating `type`. Files may provide an optional `icon`; folders contain a recursive `children` array.
+
+```tsx
+type FileTreeItem =
+  | { id: string; name: string; type: "file"; icon?: IconName }
+  | { id: string; name: string; type: "folder"; icon?: IconName; children: FileTreeItem[] };
+```
+
+## Controlled selection and expansion
+
+Use `selectedId` with `onSelectedIdChange` to control selection (`onSelect` fires on every choice, also of the selected item), and `expandedIds` with `onExpandedIdsChange` to control open folders. Omit those state props to let the component manage the state internally; use `defaultSelectedId` and `defaultExpandedIds` for initial state.
+
+```tsx
+<FileTree
+  items={items}
+  selectedId={selectedId}
+  onSelectedIdChange={setSelectedId}
+  expandedIds={expandedIds}
+  onExpandedIdsChange={(ids) => setExpandedIds(ids)}
+/>
+```
+
+`onItemClick` reports pointer clicks. `renderItem` replaces the row label and receives the item plus its `selected`, `expanded`, and `depth` state. `emptyState` and `loadingState` customize the corresponding placeholders; set `loading` to show the loading state.
+
+## API reference
+
+<PropsTable component="FileTree" />
+
+## Keyboard interaction
+
+- Up and Down move between visible rows; Home and End move to the first and last row.
+- Right opens a closed folder or focuses its first child.
+- Left closes an open folder or focuses its parent.
+- Enter and Space select the focused item.
+
+The component uses the ARIA tree pattern and exposes selection and expansion state to assistive technology.

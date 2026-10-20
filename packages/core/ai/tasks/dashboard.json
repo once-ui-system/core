@@ -41,7 +41,9 @@
     "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
-    "RevealFx.primaryContent"
+    "RevealFx.primaryContent",
+    "layout.noBaseline",
+    "Chart.xAxis"
   ],
   "quality": {
     "statCard": "Column surface recipe — not Card",

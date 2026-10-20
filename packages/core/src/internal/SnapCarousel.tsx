@@ -87,7 +87,13 @@ const SnapCarousel = ({
       entries.forEach((entry) => {
         // isIntersecting is also true for a neighbour that only touches the
         // edge, so only a slide that is at least half in view counts.
-        if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+        // A slide with no width yet (its image still loading) reports a
+        // ratio of 1, so every slide claimed to be in view at once.
+        if (
+          entry.isIntersecting &&
+          entry.intersectionRatio >= 0.5 &&
+          entry.boundingClientRect.width > 0
+        ) {
           const index = slideRefs.current.indexOf(entry.target as HTMLDivElement);
           if (index !== -1) {
             setActiveIndex(index);

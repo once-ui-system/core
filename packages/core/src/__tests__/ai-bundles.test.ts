@@ -81,12 +81,16 @@ describe("ai task bundles as one Markdown read", () => {
     (id, file) => {
       const task = read(file) as { components: string[]; gotchas?: string[]; example?: string };
       const md = readFileSync(path.join(AI, "bundles", `${id}.md`), "utf8");
-      const gotchas = read("gotchas.json") as Record<string, { rule: string }>;
+      const gotchas = read("gotchas.json") as Record<string, { rule: string; inRules?: boolean }>;
       for (const name of [...task.components, "Button", "IconButton", "Input", "Dialog"]) {
         if (Object.hasOwn(spec.components, name)) expect(md).toContain(`\n### ${name}`);
       }
       // The end of each rule: the start may point at a file the bundle replaces.
-      for (const id of task.gotchas ?? []) expect(md).toContain(gotchas[id].rule.slice(-60));
+      // A gotcha the rules already state is in the bundle once, as a rule.
+      for (const id of task.gotchas ?? []) {
+        if (gotchas[id].inRules) expect(md).not.toContain(`- ${gotchas[id].rule}`);
+        else expect(md).toContain(gotchas[id].rule.slice(-60));
+      }
       expect(md).toContain("## Layout");
       if (task.example) expect(md).toContain(`## Gold example (\`${task.example}\`)`);
       expect(md).not.toMatch(/see spec\.json/);

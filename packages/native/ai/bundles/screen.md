@@ -234,13 +234,13 @@ A pulsing placeholder while content loads.
 - padding?, paddingLeft?, paddingRight?, paddingTop?, paddingBottom?, paddingX?, paddingY?, margin?, marginLeft?, marginRight?, marginTop?, marginBottom?, marginX?, marginY?, gap?: SpacingValue
 
 ### TextProps
+- style?: TextStyle | TextStyle[]
 - textVariant?: TextVariant — The typography preset, `${family}-${weight}-${size}` (`"body-default-m"`, `"heading-strong-l"`), as in core 3.0 (2.x and the first native preview called it `variant`).
-- family?: TextType — Swaps the preset's family and keeps its size and weight, as in core.
-- weight?: TextWeight — Swaps the preset's weight and keeps the rest, as in core.
 - onBackground?, onSolid?: `${ColorScheme}-${ColorWeight}`
 - align?: "left" | "center" | "right" | "justify"
 - truncate?: boolean — One line, ending in an ellipsis.
-- style?: TextStyle | TextStyle[]
+- family?: TextType — Swaps the preset's family and keeps its size and weight, as in core.
+- weight?: TextWeight — Swaps the preset's weight and keeps the rest, as in core.
 
 ## Types
 
@@ -280,7 +280,7 @@ type ZIndex = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10
 
 ## Icons
 
-adjustments, arrowLeft, arrowRight, arrowUpRight, ball, banknotes, barChart, bell, bolt, book, bookmark, calendar, cart, chat, check, checkbox, chevronDoubleLeft, chevronDoubleRight, chevronDown, chevronLeft, chevronRight, chevronUp, chevronsLeftRight, clipboard, close, code, computer, copy, danger, dark, dislike, document, download, edit, enter, eye, eyeDropper, eyeOff, file, filter, flag, folder, food, forward, gift, globe, grip, heart, help, home, image, inbox, info, light, like, linearGauge, link, lock, logout, mail, maximize, minimize, minus, moreHorizontal, opacity, organization, pause, paw, payment, person, personRemove, play, plus, radialGauge, refresh, return, screen, search, security, send, settings, smiley, sparkle, star, starFill, store, symbol, tag, time, trash, trend, trendDown, trendUp, upload, video, volume, volumeOff, warning, wordmark, world
+adjustments, arrowDown, arrowLeft, arrowRight, arrowUp, arrowUpRight, ball, banknotes, barChart, bell, bolt, book, bookmark, calendar, cart, chat, check, checkbox, chevronDoubleLeft, chevronDoubleRight, chevronDown, chevronLeft, chevronRight, chevronUp, chevronsLeftRight, clipboard, close, code, computer, copy, cube, danger, dark, dislike, document, download, edit, enter, eye, eyeDropper, eyeOff, file, filter, flag, folder, food, forward, gift, globe, grid, grip, heart, help, home, image, inbox, info, light, like, linearGauge, link, lock, logout, mail, maximize, menu, minimize, minus, moreHorizontal, newspaper, opacity, organization, pause, paw, payment, people, person, personRemove, play, plus, radialGauge, refresh, return, screen, search, security, send, settings, smiley, sparkle, star, starFill, store, symbol, tag, time, trash, trend, trendDown, trendUp, upload, video, volume, volumeOff, warning, wordmark, world
 
 ## Gotchas
 

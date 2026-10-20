@@ -1,0 +1,90 @@
+---
+title: "Pagination"
+summary: "Page through a long list with previous and next, page numbers and an optional page size, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/pagination.mdx"
+github: "packages/native/src/components/Pagination.tsx"
+navLabel: "Pagination"
+navIcon: "components"
+status: "unreleased"
+---
+
+`Pagination` pages through a long list: previous and next buttons, the first and last pages, the pages around the current one, and an ellipsis for the rest. The number of buttons stays the same wherever you are, so the row keeps its width. Pass `total` pages, or `count` items and `perPage`. See the [web Pagination](/components/pagination) for the browser version.
+
+## Basic usage
+
+Without `page`, Pagination keeps its own state, starting at `defaultPage`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Pagination } from "@once-ui-system/native";
+
+export function Orders({ onPage }: { onPage: (page: number) => void }) {
+  return <Pagination total={12} onPageChange={onPage} />;
+}`,
+    language: "tsx",
+    label: "Orders.tsx"
+  }
+]} />
+
+## Controlled with a page size
+
+Pass `page` and `onPageChange` to own the state, as server-side paging needs. `perPageOptions` adds a page-size select; when the size changes, the page moves so the first item on screen stays on screen.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Pagination } from "@once-ui-system/native";
+
+export function Products({ count }: { count: number }) {
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(10);
+  return (
+    <Pagination
+      count={count}
+      page={page}
+      onPageChange={setPage}
+      perPage={perPage}
+      onPerPageChange={setPerPage}
+      perPageOptions={[10, 25, 50]}
+      size="s"
+      siblings={0}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Products.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- On a phone, `siblings={0}` keeps the row to one line on most screens. The row wraps when it does not fit.
+- The page-size select is a native [Select](/native/form-controls/select), labelled with `labels.perPage` inside the field, and opens a bottom sheet.
+- Page buttons are named "Page 3" and the current one is announced as selected, in place of `aria-current="page"`. There is no `nav` landmark, so there is no `aria-label`.
+- Focus does not move back to the current page when an arrow disables itself at either end.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `page` | `number` | | The current page, from 1, when the host owns the state. Pair with `onPageChange`. |
+| `defaultPage` | `number` | `1` | The first page shown when Pagination keeps its own state. |
+| `onPageChange` | `(page: number) => void` | | Called with the new page. Not called for the page already shown. |
+| `total` | `number` | | How many pages there are. |
+| `count` | `number` | | How many items there are. With `perPage`, gives the page count. |
+| `perPage` | `number` | | Items per page, when the host owns it. Pair with `onPerPageChange`. |
+| `defaultPerPage` | `number` | `10` | Items per page when Pagination keeps its own state. |
+| `perPageOptions` | `number[]` | | Page sizes to offer in a select. |
+| `onPerPageChange` | `(perPage: number) => void` | | Called with the new page size. |
+| `siblings` | `number` | `1` | Pages drawn on each side of the current page. |
+| `boundaries` | `number` | `1` | Pages always drawn at each end. |
+| `showFirstLast` | `boolean` | `false` | Adds buttons to the first and last page. |
+| `size` | `"s" \| "m" \| "l"` | `"m"` | The buttons' size. |
+| `disabled` | `boolean` | `false` | Disables every control. |
+| `labels` | `Partial<PaginationLabels>` | | The buttons' names and the per-page label, to translate them. |
+| `...FlexProps` | `FlexProps` | | Spacing, size and surface props for the row, as on `Flex`. |

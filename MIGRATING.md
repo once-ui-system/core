@@ -127,6 +127,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | RadioGroup, SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher `onChange(value)` | `onValueChange(value)` (SegmentedControl keeps its `(value, event?)`) | renames |
 | StylePanel and `StylePanel.Root` `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
 | Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
+| FileTree `onExpandChange(ids, item)` | `onExpandedIdsChange(ids, item)`; `onSelectedIdChange(id, item)` is new, `onSelect` stays | renames |
 | Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |
 | Accordion, NavGroup `onToggle()` | `onOpenChange(open)`, which receives the next state; a zero-argument toggle still works | renames and reports every use |
 | Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | renames `open` to `defaultOpen` where no `onToggle`/`onOpenChange` is set; reports it beside a spread or a `defaultOpen`, and an `open={expr}` (2.x also followed the value when it changed later; control it with `onOpenChange` if it does) |

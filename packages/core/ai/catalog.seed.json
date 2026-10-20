@@ -213,6 +213,11 @@
     "tags": ["feedback"],
     "pairsWith": ["Form", "Dialog"]
   },
+  "FileTree": {
+    "purpose": "Accessible hierarchical file and folder explorer with selection and expandable folders",
+    "tags": ["navigation", "data", "a11y"],
+    "pairsWith": ["Icon", "Column", "Text"]
+  },
   "Flex": {
     "purpose": "Layout primitive every component builds on — use directly only when direction changes at breakpoints",
     "tags": ["layout", "basics"],
@@ -260,6 +265,7 @@
   },
   "Heading": {
     "purpose": "Semantic h1–h6 with display and heading variants",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Text", "Column", "RevealFx"]
   },
@@ -745,6 +751,7 @@
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Heading", "Column", "Row"]
   },

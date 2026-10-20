@@ -1,0 +1,28 @@
+{
+ "name": "DropdownWrapper",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A trigger that opens a menu of Options under it (or above when there is no room): row actions, an account menu",
+ "mixins": [],
+ "props": {
+  "trigger": "!ReactNode",
+  "dropdown": "!ReactNode",
+  "open": "boolean",
+  "isOpen": "boolean",
+  "onOpenChange": "(open: boolean) => void",
+  "placement": "Placement = \"bottom-start\"",
+  "closeAfterClick": "boolean = true",
+  "onSelect": "(value: string) => void",
+  "selectedOption": "string",
+  "fillWidth": "boolean = false",
+  "minWidth": "number | Length",
+  "maxWidth": "number | Length",
+  "minHeight": "number",
+  "disableTriggerClick": "boolean = false",
+  "style": "StyleProp<ViewStyle>"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "Length": "`${number}px` | `${number}rem`",
+  "Placement": "\"top\" | \"right\" | \"bottom\" | \"left\" | `${\"top\" | \"right\" | \"bottom\" | \"left\"}-${\"start\" | \"end\"}`"
+ }
+}

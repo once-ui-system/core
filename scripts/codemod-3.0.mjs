@@ -93,6 +93,8 @@ const VALUE_CONTRACT_CONTROLS = {
   "StylePanel.Root": { onChange: "onValueChange" },
   Pagination: { onChange: "onPageChange" },
   Scrubber: { onChange: "onValueChange", onSelect: "onSelectedChange" },
+  // Same `(expandedIds, item)` signature; `onSelect` stays the action.
+  FileTree: { onExpandChange: "onExpandedIdsChange" },
   // C4: `onToggle()` → `onOpenChange(open)`. Flagged in FLAGGED as well.
   Accordion: { onToggle: "onOpenChange" },
   NavGroup: { onToggle: "onOpenChange" },

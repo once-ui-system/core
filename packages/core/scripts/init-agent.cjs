@@ -44,6 +44,11 @@ project files you need, in one step. A bundle is complete (rules, component prop
 so write from it; open \`ai/components/<Name>.json\` only for a component it does not list, all in one step. When
 nothing fits, start from \`node_modules/@once-ui-system/core/AGENTS.md\`. Never open \`ai/spec.json\`.
 
+New signed-in app (sidebar, top bar, content panel)? Start from the working starter instead of writing the root
+layout and shell: \`cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/\`, then edit
+\`src/resources/app.ts\` (name, user, nav) and \`src/resources/once-ui.config.ts\` (theme), and add pages under
+\`src/app/(app)/\`. Details: "Starting an app" in \`node_modules/@once-ui-system/core/AGENTS.md\`.
+
 ${bundleTable()}Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
 
 In a Next.js app, import \`LayoutProvider\` from \`@once-ui-system/core/next\`, not the package root —

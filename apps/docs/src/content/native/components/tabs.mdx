@@ -6,7 +6,6 @@ docs: "once-ui/native/components/tabs.mdx"
 github: "packages/native/src/components/Tabs.tsx"
 navLabel: "Tabs"
 navIcon: "components"
-status: "unreleased"
 ---
 
 `Tabs` holds one `TabList` of `Tab`s and a `TabPanel` for each tab, matched by `value`. Each `Tab` is a [ToggleButton](/components/toggleButton) with the tab role, so it takes every ToggleButton prop. The first enabled tab is selected unless you pick one. See the [web Tabs](/components/tabs) for the same component in the browser.
@@ -92,7 +91,7 @@ codes={[
 export function SettingsTabs() {
   return (
     <Tabs orientation="vertical">
-      <TabList width={8}>
+      <TabList width="8rem">
         <Tab value="account" label="Account" prefixIcon="person" />
         <Tab value="billing" label="Billing" />
       </TabList>

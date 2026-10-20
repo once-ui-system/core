@@ -302,7 +302,10 @@ describe("the contract stays core 3.0's", () => {
       const source = readFileSync(join(SRC, file), "utf8");
       // Props, not prose: `ariaLabel?:`, `onToggle?:` and friends. (`scheme`
       // stays in 3.0 as a palette hue, as on Avatar's status dot.)
-      for (const removed of ["ariaLabel", "onToggle", "hideClose", "onSelect"]) {
+      // `onSelect` stays the action on menus, as on core 3.0's Dropdown.
+      const menu = file === "DropdownWrapper.tsx" || file === "ContextMenu.tsx";
+      const names = ["ariaLabel", "onToggle", "hideClose", ...(menu ? [] : ["onSelect"])];
+      for (const removed of names) {
         expect({
           file,
           prop: removed,

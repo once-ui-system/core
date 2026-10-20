@@ -41,6 +41,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
     leftContent: { src: "/a.jpg", alt: "Before" },
     rightContent: { src: "/b.jpg", alt: "After" },
   },
+  FileTree: { items: [{ id: "readme", name: "README.md", type: "file" }] },
   FormErrorSummary: { errors: { email: "Enter an email" } },
   InfiniteScroll: {
     items: ["a", "b"],

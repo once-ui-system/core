@@ -1,0 +1,130 @@
+---
+title: "ContextMenu"
+summary: "A menu that opens where the user long-presses, the phone's right-click, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/contextMenu.mdx"
+github: "packages/native/src/components/ContextMenu.tsx"
+navLabel: "ContextMenu"
+navIcon: "components"
+status: "unreleased"
+---
+
+`ContextMenu` opens a menu when the user long-presses its children. The menu opens at the press point, with its top-left corner under the finger by default. Near an edge of the screen it opens on the other side of the point. It uses the same menu as [DropdownWrapper](/native/components/dropdownWrapper): pressing outside it or the back button closes it. See the [web ContextMenu page](/components/contextMenu) for the web version.
+
+## Basic usage
+
+Wrap the element and pass the menu's content, usually [Option](/native/components/option)s. Pressing an option calls `onSelect` with its value and closes the menu.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, ContextMenu, Option, Text } from "@once-ui-system/native";
+
+export function FileRow({ onAction }: { onAction: (action: string) => void }) {
+  return (
+    <ContextMenu
+      onSelect={onAction}
+      dropdown={
+        <>
+          <Option value="share" label="Share" />
+          <Option value="rename" label="Rename" />
+          <Option value="delete" label="Delete" danger />
+        </>
+      }
+    >
+      <Card padding="16" radius="l">
+        <Text>Invoice-0042.pdf</Text>
+      </Card>
+    </ContextMenu>
+  );
+}`,
+    language: "tsx",
+    label: "FileRow.tsx"
+  }
+]} />
+
+## Pressable children
+
+A pressable child, such as a `Button`, keeps its own `onPress` for a short press. A long press opens the menu after the child's own `onLongPress`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, ContextMenu, Option } from "@once-ui-system/native";
+
+export function OpenButton({ onOpen }: { onOpen: () => void }) {
+  return (
+    <ContextMenu
+      placement="top-start"
+      dropdown={
+        <>
+          <Option value="new-tab" label="Open in new tab" />
+          <Option value="copy" label="Copy link" />
+        </>
+      }
+    >
+      <Button label="Open" onPress={onOpen} />
+    </ContextMenu>
+  );
+}`,
+    language: "tsx",
+    label: "OpenButton.tsx"
+  }
+]} />
+
+## Controlled and disabled
+
+Pass `open` and `onOpenChange` to control the menu. `disabled` ignores long presses and dims the children.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { ContextMenu, Option, Text } from "@once-ui-system/native";
+
+export function Message({ locked }: { locked: boolean }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <ContextMenu
+      open={open}
+      onOpenChange={setOpen}
+      disabled={locked}
+      dropdown={<Option value="reply" label="Reply" />}
+    >
+      <Text>See you at 6.</Text>
+    </ContextMenu>
+  );
+}`,
+    language: "tsx",
+    label: "Message.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- A long press opens the menu, in place of a right-click or Control-click. A screen reader's long press has no point, so the menu opens under the children, as the web does for a menu opened from the keyboard. There is no haptic feedback.
+- The long press reaches a pressable child through its `onLongPress`. A child that is pressable but does not pass `onLongPress` on to its `Pressable` does not open the menu. With several children, the long press is only caught outside pressable ones.
+- `onSelect`, `selectedOption` and `closeAfterClick` reach the `Option`s written in `dropdown`, as in [DropdownWrapper](/native/components/dropdownWrapper#differences-from-the-web).
+- There is no `contents` mode or `className`, and no arrow-key navigation. The region around the children sits at its content's width unless `fillWidth` is set.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `ReactNode` | | What a long press opens the menu on. Required. |
+| `dropdown` | `ReactNode` | | The menu's content, usually `Option`s. Required. |
+| `placement` | `Placement` | `"bottom-start"` | Which side of the press point the menu opens on, and which edge lines up with it. |
+| `open` | `boolean` | | The open state, controlled. |
+| `onOpenChange` | `(open: boolean) => void` | | Called when the menu opens or closes. |
+| `onSelect` | `(value: string) => void` | | Called with a pressed `Option`'s value. |
+| `selectedOption` | `string` | | Marks the `Option` with this value as selected. |
+| `closeAfterClick` | `boolean` | `true` | Closes the menu when an `Option` is pressed. |
+| `disabled` | `boolean` | `false` | Ignores long presses and dims the children. |
+| `fillWidth` | `boolean` | `false` | The region around the children fills its container's width. |
+| `minWidth` | `number \| Length` | `"12rem"` | The menu's minimum width: a number is points. |
+| `maxWidth` | `number \| Length` | | The menu's maximum width, as `minWidth`. |
+| `minHeight` | `number` | | The menu's minimum height, in points. |
+| `style` | `StyleProp<ViewStyle>` | | Style for the region around the children. |

@@ -1,0 +1,180 @@
+---
+title: "CodeBlock"
+summary: "Code snippets with tabs, a copy button, line numbers and syntax colours, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/codeBlock.mdx"
+github: "packages/native/src/components/CodeBlock.tsx"
+navLabel: "CodeBlock"
+navIcon: "components"
+status: "unreleased"
+---
+
+`CodeBlock` shows one or more snippets of code in a surface with a header. Pass them in `codes`, each with `code`, `language` and `label`. With several snippets the header becomes a row of tabs. The code is set in the code font and scrolls sideways instead of wrapping. A small built-in tokenizer colours keywords, strings, comments and numbers for `js`, `jsx`, `ts`, `tsx`, `css`, `bash` and `json`, with the same `--code-*` colours as the web. Other languages show as plain text. See the [web CodeBlock page](/modules/codeBlock) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { CodeBlock } from "@once-ui-system/native";
+
+export function Install() {
+  return (
+    <CodeBlock
+      codes={[{ code: "pnpm add @once-ui-system/native", language: "bash", label: "Terminal" }]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "CodeBlock"
+  }
+]} />
+
+## Multiple snippets
+
+Each entry of `codes` gets a tab. `onInstanceChange` is called with the index of the tab the user picks.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { CodeBlock } from "@once-ui-system/native";
+
+const codes = [
+  { code: "export const size = 16;", language: "ts", label: "size.ts" },
+  { code: ".title { font-size: 16px; }", language: "css", label: "title.css" },
+  { code: '{ "size": 16 }', language: "json", label: "size.json" },
+];
+
+export function Snippets() {
+  return <CodeBlock codes={codes} onInstanceChange={(index) => console.log(index)} />;
+}`,
+    language: "tsx",
+    label: "Tabs"
+  }
+]} />
+
+## Copying
+
+The copy button is on by default. Pass `onCopy` to put the code on the clipboard yourself, for example with `expo-clipboard`. Without `onCopy`, CodeBlock uses React Native's own `Clipboard`. React Native 0.87 still ships it, but marks it deprecated and logs a warning the first time it is used. After a copy the icon turns into a check for five seconds, and screen readers hear "Copied". Set `copyButton={false}` to hide the button.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import * as Clipboard from "expo-clipboard";
+import { CodeBlock } from "@once-ui-system/native";
+
+export function Copyable() {
+  return (
+    <CodeBlock
+      onCopy={(code) => Clipboard.setStringAsync(code)}
+      codes={[{ code: "npx expo start", language: "bash", label: "Start" }]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "onCopy"
+  }
+]} />
+
+## Line numbers and highlights
+
+`lineNumbers` adds a gutter. `startLineNumber` sets the first number. `highlight` on an entry marks lines, as `"1,3-5"`, with a brand tint and a brand edge.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { CodeBlock } from "@once-ui-system/native";
+
+const code = ["function greet(name: string) {", "  return 'Hi ' + name;", "}"].join("\\n");
+
+export function Numbered() {
+  return (
+    <CodeBlock
+      lineNumbers
+      codes={[{ code, language: "ts", label: "greet.ts", startLineNumber: 12, highlight: "13" }]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Line numbers"
+  }
+]} />
+
+## Compact, collapsible and preview
+
+`compact` removes the header and floats the copy button over the code. `isCollapsible` shows the first `maxLines` lines and a "View code" button. `preview` renders a live example above the code, and `reloadButton` adds a button that mounts it again.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button, CodeBlock } from "@once-ui-system/native";
+
+export function Example({ code }: { code: string }) {
+  return (
+    <CodeBlock
+      reloadButton
+      isCollapsible
+      maxLines={4}
+      preview={<Button label="Order" />}
+      codes={[{ code, language: "tsx", label: "Order.tsx" }]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Preview"
+  }
+]} />
+
+## Diffs
+
+Set `language` to `["diff", "tsx"]` for a unified diff. Added lines get a success tint and deleted lines a danger tint. The code after the sign is coloured in the second language.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { CodeBlock } from "@once-ui-system/native";
+
+const diff = ["@@ -1 +1 @@", "-let total = 0;", "+const total = 0;"].join("\\n");
+
+export function Change() {
+  return <CodeBlock lineNumbers codes={[{ code: diff, language: ["diff", "ts"], label: "total.ts" }]} />;
+}`,
+    language: "tsx",
+    label: "Diff"
+  }
+]} />
+
+## Differences from the web
+
+- Colours come from a small built-in tokenizer, not Prism, and there is no `prismjs` dependency. It knows `js`, `jsx`, `ts`, `tsx`, `css`, `bash` and `json`, plus the aliases `javascript`, `typescript`, `mdx`, `sh`, `shell`, `zsh`, `jsonc` and `scss`. It colours keywords, strings, comments, numbers, booleans, function calls, JSX tags, JSON keys, CSS properties and at-rules, and bash variables. It does not know regular expression literals or CSS selectors. Other languages are plain text.
+- `onCopy` is new. The web writes to `navigator.clipboard`. Here, without `onCopy`, the button uses React Native's deprecated `Clipboard`.
+- There is no `fullscreenButton` and no `styleButton`. The style panel is a web overlay.
+- A diff has one column of line numbers, for the new file. Deleted lines have no number. The web shows the old and new numbers side by side.
+- The collapsed view cuts the code at `maxLines` and shows the "View code" button under it. There is no fade over the last lines.
+- Long lines scroll sideways and are never wrapped, as `white-space: pre` on the web. `codeHeight` adds a vertical scroll past that height: a number is points, `"20rem"` scales with the root size.
+- The tabs are `ToggleButton`s in a horizontal scroll, announced to screen readers as tabs.
+- The code uses the body-s size with a line height of 1.75, as the web, in `fonts.code` from `ThemeProvider`. Without it, the platform monospace font is used (Menlo on iOS, monospace on Android).
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `codes` | `CodeInstance[]` | `[]` | The snippets. Each has `code` (a string, or `{ content, error }`), `language` (a string, or `["diff", language]`), `label`, and optional `highlight`, `prefixIcon` and `startLineNumber`. |
+| `copyButton` | `boolean` | `true` | Shows the copy button. |
+| `onCopy` | `(code: string) => unknown` | | Puts the code on the clipboard. Without it, React Native's deprecated `Clipboard` is used. |
+| `lineNumbers` | `boolean` | `false` | Adds a line number gutter. |
+| `compact` | `boolean` | `false` | Removes the header. The copy button floats over the code. |
+| `preview` | `ReactNode` | | A live example above the code. |
+| `previewPadding` | `SpacingToken` | `"l"` | Padding around the preview. |
+| `reloadButton` | `boolean` | `false` | A button that mounts the preview again. |
+| `codeHeight` | `number \| Length` | | The code's maximum height: a number is points. It scrolls past it. |
+| `isCollapsible` | `boolean` | `false` | Shows only `maxLines` lines until "View code" is pressed. |
+| `maxLines` | `number` | `5` | Lines shown while collapsed. |
+| `hideCode` | `boolean` | `false` | Hides the code, leaving the header and preview. |
+| `onInstanceChange` | `(index: number) => void` | | Called when a tab is picked. |
+| `highlight` | `string` | | Deprecated. Set `highlight` on each entry of `codes` instead. |
+| `...flex` | `FlexProps` | | Flex props for the outer surface, such as `background`, `radius` and `marginTop`. |

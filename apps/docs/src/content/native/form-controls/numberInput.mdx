@@ -1,0 +1,103 @@
+---
+title: "NumberInput"
+summary: "An Input for a number, with minus and plus buttons that step it within a range, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/numberInput.mdx"
+github: "packages/native/src/components/NumberInput.tsx"
+navLabel: "NumberInput"
+navIcon: "switch"
+status: "unreleased"
+---
+
+`NumberInput` is an [Input](/native/form-controls/input) for a number. The − and + buttons step the value by `step` and stop at `min` and `max`. Typing works too, and `onValueChange` gets a number whenever the text reads as one. The keyboard is a number pad, with a minus key when `min` allows negative numbers. See the [web NumberInput](/form-controls/numberInput) for the browser version.
+
+## Basic usage
+
+Without `value` the field keeps its own text, starting from `defaultValue`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { NumberInput } from "@once-ui-system/native";
+
+export function Guests() {
+  return <NumberInput label="Guests" defaultValue={2} min={1} max={8} />;
+}`,
+    language: "tsx",
+    label: "Guests.tsx"
+  }
+]} />
+
+## Controlled
+
+Pass `value` and update it in `onValueChange`. A new `value` from outside replaces the text, unless the text already reads as that number, so typing `1.` is not undone.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { NumberInput } from "@once-ui-system/native";
+
+export function Quantity() {
+  const [quantity, setQuantity] = useState(1);
+  return (
+    <NumberInput
+      label="Quantity"
+      value={quantity}
+      onValueChange={setQuantity}
+      min={0}
+      description="Up to 12 per order."
+      max={12}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Quantity.tsx"
+  }
+]} />
+
+## Decimals and padding
+
+A fractional `step` rounds each step to its decimals, so 0.1 + 0.2 shows as 0.3. `padStart` pads the number with leading zeros.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { NumberInput } from "@once-ui-system/native";
+
+export function Settings() {
+  return (
+    <>
+      <NumberInput label="Ratio" defaultValue={1.5} step={0.1} min={0} />
+      <NumberInput label="Minute" defaultValue={5} padStart={2} min={0} max={59} />
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "Decimals"
+  }
+]} />
+
+## Differences from the web
+
+- The steppers are a − and a + button after the value, sized for a finger, instead of two small chevrons stacked on the right edge.
+- A stepper is disabled when its next step would pass `min` or `max`. On the web it stays enabled and does nothing.
+- Steps are rounded to the decimals of `step`, so fractional steps do not show floating-point noise.
+- `keyboardType` defaults to a number pad: `decimal-pad` when `min` is 0 or more, otherwise a keyboard with a minus key. Pass `keyboardType` to change it.
+- `suffix` is taken by the steppers, as on the web. The other `Input` props work as on [Input](/native/form-controls/input).
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `value` | `number` | | The number, when the host owns the state. Pair with `onValueChange`. |
+| `defaultValue` | `number \| string` | | The starting number when there is no `value`. A string is parsed. |
+| `onValueChange` | `(value: number) => void` | | Called with the number, whenever the text reads as one. |
+| `min` | `number` | | The lowest value the − button reaches. |
+| `max` | `number` | | The highest value the + button reaches. |
+| `step` | `number` | `1` | How far each button press moves the value. |
+| `padStart` | `number` | | Pads the shown number with leading zeros to this many digits. |
+| `...InputProps` | `InputProps` | | Every other `Input` prop except `suffix`: `label`, `error`, `description`, `size` and the rest. |

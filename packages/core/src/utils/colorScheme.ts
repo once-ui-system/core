@@ -198,6 +198,19 @@ export type CustomScheme = "brand" | "accent" | "neutral";
 export type CustomSchemeSeeds = Partial<Record<CustomScheme, string | undefined>>;
 
 /**
+ * A scheme written out step by step, `{ 100: "#…", …, 1200: "#…" }`, for a
+ * brand whose exact colours are fixed. Same shape as the native package's
+ * `SchemeScale`. Steps left out come from the seed when there is one; the
+ * `600-*` alphas are made from step 600 unless given.
+ */
+export type SchemeScale = Partial<
+  Record<SchemeRampWeight | "600-15" | "600-30" | "600-50", string>
+>;
+
+/** One scale per custom scheme. */
+export type CustomSchemeScales = Partial<Record<CustomScheme, SchemeScale | undefined>>;
+
+/**
  * The custom properties `data-<scheme>="custom"` reads — `--scheme-brand-100`
  * through `-1200` and the three `-600-*` alphas — generated from each seed.
  *
@@ -213,18 +226,23 @@ export type CustomSchemeSeeds = Partial<Record<CustomScheme, string | undefined>
  * document.documentElement.setAttribute("data-brand", "custom");
  * ```
  */
-export function customSchemeProperties(seeds: CustomSchemeSeeds): Record<string, string> {
+export function customSchemeProperties(
+  seeds: CustomSchemeSeeds,
+  scales: CustomSchemeScales = {},
+): Record<string, string> {
   const properties: Record<string, string> = {};
   for (const name of ["brand", "accent", "neutral"] as const) {
     const seed = seeds[name];
-    if (!seed) continue;
-    const scheme = generateColorScheme(seed);
-    if (!scheme) continue;
-    for (const [weight, value] of Object.entries(scheme)) {
-      properties[`--scheme-${name}-${weight}`] = value;
+    const generated = seed ? generateColorScheme(seed) : null;
+    // A scale's steps win over the seed's, so a seed can fill the ramp while
+    // the scale pins the steps the brand book fixes.
+    const scale: SchemeScale = { ...generated, ...scales[name] };
+    if (!scale[600]) continue;
+    for (const [step, value] of Object.entries(scale)) {
+      if (value) properties[`--scheme-${name}-${step}`] = value;
     }
-    for (const [suffix, value] of Object.entries(schemeAlphaVariants(scheme))) {
-      properties[`--scheme-${name}-${suffix}`] = value;
+    for (const [suffix, value] of Object.entries(schemeAlphaVariants(scale as SchemeRamp))) {
+      if (!scale[suffix as "600-15"]) properties[`--scheme-${name}-${suffix}`] = value;
     }
   }
   return properties;

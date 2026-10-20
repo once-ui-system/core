@@ -31,14 +31,14 @@
    "gap": "SpacingValue"
   },
   "TextProps": {
+   "style": "TextStyle | TextStyle[]",
    "textVariant": "TextVariant",
-   "family": "TextType",
-   "weight": "TextWeight",
    "onBackground": "`${ColorScheme}-${ColorWeight}`",
    "onSolid": "`${ColorScheme}-${ColorWeight}`",
    "align": "\"left\" | \"center\" | \"right\" | \"justify\"",
    "truncate": "boolean",
-   "style": "TextStyle | TextStyle[]"
+   "family": "TextType",
+   "weight": "TextWeight"
   }
  },
  "types": {
