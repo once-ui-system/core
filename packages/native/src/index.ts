@@ -33,6 +33,7 @@ export type {
 } from "./components/charts/interfaces";
 export { LineChart, type LineChartProps } from "./components/charts/LineChart";
 export { Dialog, type DialogProps } from "./components/Dialog";
+export { Drawer, type DrawerProps } from "./components/Drawer";
 export {
   Dropdown,
   type DropdownProps,
@@ -80,6 +81,19 @@ export { Kbd, type KbdProps } from "./components/Kbd";
 export { Line, type LineProps } from "./components/Line";
 export { List, ListItem, type ListItemProps, type ListProps } from "./components/List";
 export { Media, type MediaProps } from "./components/Media";
+export {
+  Nav,
+  type NavDensity,
+  NavGroup,
+  type NavGroupProps,
+  NavItem,
+  type NavItemProps,
+  type NavProps,
+  NavSection,
+  type NavSectionProps,
+  type NavVariant,
+  useNavStyle,
+} from "./components/Nav";
 export { NumberInput, type NumberInputProps } from "./components/NumberInput";
 export { OTPInput, type OTPInputProps } from "./components/OTPInput";
 export { Pagination, type PaginationLabels, type PaginationProps } from "./components/Pagination";

@@ -50,7 +50,7 @@ the safe areas. `theme="system"` follows the device.
 
 | Component | Notes |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border`, `radius`, `shadow`, sizes, `position` and offsets, `opacity`, `zIndex`, `hide`, the breakpoint props `xl`…`xs`, and `safeArea`. `Flex` is a row by default, as on the web. |
+| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border` and single sides (`borderTop`…`borderY`), `radius`, `shadow`, sizes, `position` and offsets, `opacity`, `zIndex`, `hide`, the breakpoint props `xl`…`xs`, and `safeArea`. `Flex` is a row by default, as on the web. |
 | `Text`, `Heading` | `textVariant` (`body-default-m`, …), with `weight` and `family` swapping the preset's; `onBackground`, `onSolid`, `truncate`. |
 | `Button` | Six variants (`primary`, `secondary`, `tertiary`, `ghost`, `link`, `subtle`) in any `tone`, five sizes, `corners`, `loading`, `disabled`, `fillWidth`; `onPress` or core's `onClick`, `href` opens a URL; pressed replaces hover. |
 | `Card` | Pressable when given `onPress` (or core's `onClick`), `href`, `selected`. |
@@ -58,6 +58,8 @@ the safe areas. `theme="system"` follows the device.
 | `Switch`, `Checkbox` | `checked` / `defaultChecked` / `onCheckedChange`, label and description, `size`, `error` / `errorMessage`. |
 | `Icon`, `IconButton`, `IconProvider` | Core's built-in icons, drawn with `react-native-svg`. `IconButton` takes `tone`, `variant` and `aria-label` (or a plain-text `tooltip`). `prefixIcon`/`suffixIcon` on `Button` and `Tag` take a name as in core, or any element. `IconProvider` adds icons: core's SVG data or a component taking `size` and `color` (for example from `@expo/vector-icons`). |
 | `Dialog` | A bottom sheet with core's props (`open`, `onClose`, `title`, `description`, `footer`, `showClose`, `backdrop`); `variant="center"` for a card in the middle. The back button and a tap on the backdrop close it. |
+| `Drawer` | Core's props (`side`, `size`, `title`, `footer`, `showClose`, `flush`): a panel that slides in from one edge, clear of the notch and home indicator. |
+| `Nav`, `NavItem`, `NavSection`, `NavGroup` | As a column, a drawer's or sidebar's rows with core's `density` and `variant`; with `direction="row"`, the phone's bottom tab bar. |
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ tone, message })` as in core; toasts stack at the bottom and hide after 6 s. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `value` / `defaultValue` / `onValueChange`, `open` / `defaultOpen` / `onOpenChange`, `multiple`, `searchable`. |
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value` / `defaultValue` / `onValueChange` as in core (RadioButton `onCheckedChange`), SegmentedControl `disabled`. |

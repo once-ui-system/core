@@ -25,6 +25,7 @@ import {
 import { Code } from "./Code";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
+import { Shell } from "./Shell";
 import { Stats } from "./Stats";
 
 /** A loyalty-card screen built only from the preview components. */
@@ -134,7 +135,7 @@ export function App({
   screen = "card",
 }: {
   theme: "light" | "dark";
-  screen?: "card" | "order" | "sheet" | "menu" | "stats" | "code";
+  screen?: "card" | "order" | "sheet" | "menu" | "stats" | "code" | "shell" | "drawer";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -147,6 +148,8 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "shell" || screen === "drawer" ? (
+          <Shell drawer={screen === "drawer"} />
         ) : (
           <Order sheet={screen === "sheet"} />
         )}

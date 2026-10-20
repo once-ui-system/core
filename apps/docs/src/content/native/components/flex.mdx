@@ -66,7 +66,7 @@ export function Spacing() {
 
 ## Surface
 
-`background`, `border`, `radius` and `shadow` read the theme's tokens. `background` also takes `"surface"`, `"page"`, `"overlay"` and `"transparent"`. A `border` is 1 point wide unless you set `borderWidth`.
+`background`, `border`, `radius` and `shadow` read the theme's tokens. `background` also takes `"surface"`, `"page"`, `"overlay"` and `"transparent"`. A `border` is 1 point wide unless you set `borderWidth`; `border` alone (`true`) draws the default `neutral-alpha-weak`. `borderTop`, `borderRight`, `borderBottom`, `borderLeft`, `borderX` and `borderY` draw one side, or a pair, as on the web: a tab bar's top line, a header's bottom line. With any of them set, only those sides are drawn.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -125,7 +125,7 @@ export function Screen() {
 
 - **Bare text.** React Native throws on text outside a `Text`. `Flex` wraps bare strings and numbers in `Text` for you, so `<Row>Hi</Row>` works.
 - **Position.** `position` takes `relative`, `absolute` or `static`. React Native has no fixed or sticky positioning.
-- **Left out.** `solid`, single-side borders (`borderTop` and the rest), the text props (`onBackground`, `align`, `textVariant` and the rest), `transition`, `scrollbar`, `overflowX` and `overflowY` have no native equivalent.
+- **Left out.** `solid`, the text props (`onBackground`, `align`, `textVariant` and the rest), `transition`, `scrollbar`, `overflowX` and `overflowY` have no native equivalent.
 - **`dark` and `light`** render the view only while the theme is dark or light. They change no colours.
 - **`pointerEvents`** also takes React Native's `"box-none"` and `"box-only"`.
 - **`safeArea`** is native only.
@@ -143,7 +143,8 @@ export function Screen() {
 | `wrap` | `boolean` | | Lets children wrap onto new lines. |
 | `flex` | `number` | | React Native's `flex`. |
 | `background` | `Colors \| "surface" \| "page" \| "overlay" \| "transparent"` | | Background colour token. |
-| `border` | `Colors \| "surface" \| "transparent"` | | Border colour token. Adds a solid 1pt border. |
+| `border` | `Colors \| "surface" \| "transparent" \| boolean` | | Border colour token, or `true` for `neutral-alpha-weak`. Adds a solid 1pt border. |
+| `borderTop`, `borderRight`, `borderBottom`, `borderLeft`, `borderX`, `borderY` | `Colors \| "surface" \| "transparent" \| boolean` | | A 1pt border on those sides only, in its own colour or `border`'s. |
 | `borderStyle` | `"solid" \| "dashed"` | `"solid"` | Border style. |
 | `borderWidth` | `1 \| 2 \| 4 \| 8` | `1` | Border width in points. |
 | `radius` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| "full" \| "none"` | | Corner radius token. |
