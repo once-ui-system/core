@@ -13,6 +13,26 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
+  field.** Chips, a model picker or attachments go on the left after the attach button,
+  a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps
+  the paper plane. Two agents rebuilding the same assistant app both hand-built this
+  around the composer. Without the new props the composer renders exactly as before.
+- **`scroll={false}` and option `description` on `SegmentedControl`.** In a narrow
+  sidebar the scroll strip clipped the last option behind its Next button; without it the
+  options share the row equally and truncate a label that does not fit. `description`
+  adds a second, dimmer line under an option's label.
+- **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
+  that opens a menu.
+
+### Fixed
+
+- **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
+  38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
+  its width in a tight row.
+
 ## [2.3.0] — 2026-10-19
 
 ### Added
