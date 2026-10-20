@@ -1,7 +1,7 @@
 "use client";
 
 import React, { forwardRef, useCallback, useState } from "react";
-import { CondensedTShirtSizes } from "../types";
+import type { CondensedTShirtSizes, TextVariant } from "../types";
 import { Accordion } from "./Accordion";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -16,12 +16,14 @@ export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
   items: AccordionItem[];
   size?: CondensedTShirtSizes;
   autoCollapse?: boolean;
+  /** Text style of every item's title, as on Accordion. Defaults to `heading-strong-s`. */
+  titleVariant?: TextVariant;
   className?: string;
   style?: React.CSSProperties;
 }
 
 const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
-  ({ items, size = "m", style, className, autoCollapse = true, ...rest }, ref) => {
+  ({ items, size = "m", style, className, autoCollapse = true, titleVariant, ...rest }, ref) => {
     const [openAccordion, setOpenAccordion] = useState<number | null>(null);
 
     const handleAccordionToggle = useCallback((index: number) => {
@@ -64,6 +66,7 @@ const AccordionGroup = forwardRef<HTMLDivElement, AccordionGroupProps>(
               <Accordion
                 title={item.title}
                 size={size}
+                titleVariant={titleVariant}
                 {...(autoCollapse
                   ? {
                       open: openAccordion === index,
