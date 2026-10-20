@@ -19,7 +19,7 @@ export interface LogoSpinnerProps extends Omit<FlexProps, "children"> {
   color?: LogoSpinnerColor;
   /** Seconds per cycle. */
   speed?: number;
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 const COLOR: Record<LogoSpinnerColor, string> = {
@@ -147,7 +147,7 @@ export function LogoSpinner({
   variant = "twist",
   color = "brand",
   speed,
-  ariaLabel = "Loading",
+  "aria-label": ariaLabel = "Loading",
   ...flex
 }: LogoSpinnerProps) {
   const theme = useTheme();

@@ -45,7 +45,7 @@ describe("Mascot", () => {
     expect(screen.getByLabelText("Assistant")).toBeTruthy();
     await wrap(<Mascot state="thinking" mood="happy" />);
     expect(screen.getByLabelText("Assistant, thinking")).toBeTruthy();
-    await wrap(<Mascot state="sleeping" ariaLabel="Lumen" />);
+    await wrap(<Mascot state="sleeping" aria-label="Lumen" />);
     expect(screen.getByLabelText("Lumen")).toBeTruthy();
   });
 
@@ -121,7 +121,7 @@ describe("Mascot", () => {
 
 describe("LogoSpinner", () => {
   it("is a progress bar with a label", async () => {
-    await wrap(<LogoSpinner ariaLabel="Generating" />);
+    await wrap(<LogoSpinner aria-label="Generating" />);
     expect(screen.getByLabelText("Generating").props.accessibilityRole).toBe("progressbar");
   });
 

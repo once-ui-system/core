@@ -102,7 +102,7 @@ export function Characters({ userId }: { userId: string }) {
 
 ## Accessibility
 
-The mascot is one image. Screen readers hear "Assistant" and the state, such as "Assistant, thinking". Pass `ariaLabel` to name it after your product. With reduce motion turned on in the device settings, it holds still and keeps its expressions.
+The mascot is one image. Screen readers hear "Assistant" and the state, such as "Assistant, thinking". Pass `aria-label` to name it after your product. With reduce motion turned on in the device settings, it holds still and keeps its expressions.
 
 ## Differences from the web
 
@@ -136,5 +136,5 @@ The mascot is one image. Screen readers hear "Assistant" and the state, such as 
 | `lookAt` | `"pointer" \| "center" \| { x: number; y: number }` | `"pointer"` | Where the eyes look. `pointer` looks ahead on a phone. |
 | `level` | `number` | | Loudness from 0 to 1 while speaking. |
 | `size` | `"s" \| "m" \| "l" \| "xl" \| number` | `"l"` | 32, 48, 96 or 160 points, or a number of points. |
-| `ariaLabel` | `string` | | What screen readers hear. Defaults to "Assistant" and the state. |
+| `aria-label` | `string` | | What screen readers hear. Defaults to "Assistant" and the state. |
 | `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |

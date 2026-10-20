@@ -44,7 +44,7 @@ export function Assistant() {
   return (
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20">
-        <Heading variant="heading-strong-l">Assistant</Heading>
+        <Heading textVariant="heading-strong-l">Assistant</Heading>
         <Card padding="20" gap="16" center>
           <Mascot
             size="xl"
@@ -56,38 +56,38 @@ export function Assistant() {
             <SegmentedControl
               buttons={STATES.map((value) => ({ value, label: value }))}
               value={state}
-              onChange={(value) => setState(value as MascotState)}
+              onValueChange={(value) => setState(value as MascotState)}
               compact
             />
           </Scroller>
           <WorkingIndicator showElapsed detail="tap to stop" />
         </Card>
 
-        <Text variant="label-strong-m">Moods</Text>
+        <Text textVariant="label-strong-m">Moods</Text>
         <Row wrap gap="12">
           {MOODS.map((mood) => (
             <Column key={mood} center gap="4" width="72">
               <Mascot size="m" mood={mood} brows mouth="smile" />
-              <Text variant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-xs" onBackground="neutral-weak">
                 {mood}
               </Text>
             </Column>
           ))}
         </Row>
 
-        <Text variant="label-strong-m">Seeds</Text>
+        <Text textVariant="label-strong-m">Seeds</Text>
         <Row wrap gap="12">
           {["acme", "lumen", "tavilio", "aveiro", "chirio", "frametic"].map((seed) => (
             <Column key={seed} center gap="4" width="72">
               <Mascot size="m" seed={seed} />
-              <Text variant="body-default-xs" onBackground="neutral-weak">
+              <Text textVariant="body-default-xs" onBackground="neutral-weak">
                 {seed}
               </Text>
             </Column>
           ))}
         </Row>
 
-        <Text variant="label-strong-m">Loaders</Text>
+        <Text textVariant="label-strong-m">Loaders</Text>
         <Row gap="16" vertical="center">
           <LogoSpinner size="xl" />
           <LogoSpinner size="xl" variant="wave" color="accent" />

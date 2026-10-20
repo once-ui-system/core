@@ -80,7 +80,7 @@ export interface MascotProps extends MascotLook, Omit<FlexProps, "children"> {
   level?: number;
   size?: "s" | "m" | "l" | "xl" | number;
   /** What screen readers hear. Defaults to "Assistant" and the state. */
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
@@ -387,7 +387,7 @@ export function Mascot({
   lookAt = "pointer",
   level,
   size = "l",
-  ariaLabel,
+  "aria-label": ariaLabel,
   ...flex
 }: MascotProps) {
   const theme = useTheme();
