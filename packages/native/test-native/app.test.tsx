@@ -1,7 +1,11 @@
 import { describe, expect, it, jest } from "@jest/globals";
 import { act, fireEvent, render, screen } from "@testing-library/react-native";
 import type { ReactNode } from "react";
+import { Button } from "../src/components/Button";
 import { Drawer } from "../src/components/Drawer";
+import { Field, Fieldset, FormErrorSummary, SubmitButton } from "../src/components/Field";
+import { corners, Form, place } from "../src/components/Form";
+import { Input } from "../src/components/Input";
 import { Nav, NavGroup, NavItem, NavSection } from "../src/components/Nav";
 import { Text } from "../src/components/Text";
 import { ThemeProvider } from "../src/theme";
@@ -89,5 +93,67 @@ describe("Nav", () => {
     expect(screen.queryByText("Launch")).toBeNull();
     await fireEvent.press(screen.getByText("Projects"));
     expect(await screen.findByText("Launch")).toBeTruthy();
+  });
+});
+
+describe("Form", () => {
+  it("places spans row by row and rounds only the group's outer corners", () => {
+    // Three fields in two columns: the second keeps its bottom-right corner.
+    const cells = corners(place([1, 1, 1], 2), 2);
+    expect(cells.map((c) => c.round)).toEqual([
+      { tl: true, tr: false, bl: false, br: false },
+      { tl: false, tr: true, bl: false, br: true },
+      { tl: false, tr: false, bl: true, br: true },
+    ]);
+    expect(cells[2].fuseTop).toBe(true);
+    expect(cells[1].fuseLeft).toBe(true);
+    // A span that does not fit moves to the next row.
+    expect(place([1, 2], 2).map((p) => p.row)).toEqual([0, 1]);
+  });
+
+  it("submits from a SubmitButton and ignores taps while the promise runs", async () => {
+    let finish: () => void = () => {};
+    const onSubmit = jest.fn(() => new Promise<void>((done) => (finish = done)));
+    await wrap(
+      <Form as="form" onSubmit={onSubmit}>
+        <Input label="Email" />
+        <SubmitButton label="Send" pendingLabel="Sending" />
+      </Form>,
+    );
+    await fireEvent.press(screen.getByText("Send"));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText("Sending")).toBeTruthy();
+    await fireEvent.press(screen.getByText("Sending"));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+    await act(async () => finish());
+    expect(await screen.findByText("Send")).toBeTruthy();
+  });
+
+  it("wires a Field's label, error and hint onto its control", async () => {
+    await wrap(
+      <Field label="Email" error="Enter an email" hint="For the receipt" required>
+        <Input />
+      </Field>,
+    );
+    const input = screen.getByLabelText("Email");
+    expect(input.props.accessibilityHint).toBe("Enter an email. For the receipt");
+    expect(screen.getByText("Enter an email")).toBeTruthy();
+    expect(screen.getByText("*", { includeHiddenElements: true })).toBeTruthy();
+  });
+
+  it("disables the fields in a disabled Fieldset, and lists errors in a summary", async () => {
+    await wrap(
+      <Form>
+        <FormErrorSummary errors={{ email: "Enter an email", name: "" }} />
+        <Fieldset legend="Contact" disabled>
+          <Input label="Phone" />
+        </Fieldset>
+        <Button label="Plain" />
+      </Form>,
+    );
+    expect(screen.getByText("Contact")).toBeTruthy();
+    expect(screen.getByLabelText("Phone").props.editable).toBe(false);
+    expect(screen.getByText("Check the highlighted fields")).toBeTruthy();
+    expect(screen.getAllByText("•")).toHaveLength(1);
   });
 });

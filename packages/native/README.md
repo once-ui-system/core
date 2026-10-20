@@ -61,6 +61,7 @@ the safe areas. `theme="system"` follows the device.
 | `Drawer` | Core's props (`side`, `size`, `title`, `footer`, `showClose`, `flush`): a panel that slides in from one edge, clear of the notch and home indicator. |
 | `Nav`, `NavItem`, `NavSection`, `NavGroup` | As a column, a drawer's or sidebar's rows with core's `density` and `variant`; with `direction="row"`, the phone's bottom tab bar. |
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ tone, message })` as in core; toasts stack at the bottom and hide after 6 s. |
+| `Form`, `Field`, `Fieldset`, `SubmitButton`, `FormErrorSummary` | Core's form layout: `density` (`stacked` fuses the fields), `columns` and `span`, one `size`; `Field` wires label, hint and error onto its control; `SubmitButton` calls `onSubmit` and shows a spinner while its promise runs. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `value` / `defaultValue` / `onValueChange`, `open` / `defaultOpen` / `onOpenChange`, `multiple`, `searchable`. |
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value` / `defaultValue` / `onValueChange` as in core (RadioButton `onCheckedChange`), SegmentedControl `disabled`. |
 | `Tag` | A label in its `tone`; `variant="announce"` is the pill 2.x called Badge (`href`, `arrow`); `selected`, `onClick` and `onRemove` make the toggle 2.x called Chip. |

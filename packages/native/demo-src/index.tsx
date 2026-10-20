@@ -10,7 +10,9 @@ const screen =
   param === "stats" ||
   param === "code" ||
   param === "shell" ||
-  param === "drawer"
+  param === "drawer" ||
+  param === "form" ||
+  param === "form-errors"
     ? param
     : "card";
 const root = document.getElementById("root");

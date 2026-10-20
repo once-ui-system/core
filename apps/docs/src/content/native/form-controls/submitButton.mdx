@@ -1,0 +1,36 @@
+---
+title: "SubmitButton"
+summary: "A Button that submits its Form and shows a spinner while the submit runs, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/form-controls/submitButton.mdx"
+github: "packages/native/src/components/Field.tsx"
+navLabel: "SubmitButton"
+navIcon: "components"
+---
+
+`SubmitButton` takes every [`Button`](/native/components/button) prop plus `pendingLabel` and `pending`, as on the web. Inside a `Form` with `as="form"` it calls the form's `onSubmit`; while the returned promise runs it shows a spinner, swaps to `pendingLabel` and ignores taps. See the [web SubmitButton](/form-controls/submitButton) for the same component in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`<Form as="form" onSubmit={save}>
+  <Input label="Display name" />
+  <SubmitButton label="Save" pendingLabel="Saving…" />
+</Form>`,
+    language: "tsx",
+    label: "Profile.tsx"
+  }
+]} />
+
+Outside a form, or for a submit the form does not track, set `pending` yourself.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `pendingLabel` | `string` | | The label while the form submits. |
+| `pending` | `boolean` | | Forces the pending look. |
+| `onPress` / `onClick` | `() => void` | | Called before the form submits. Not called while pending. |
+
+Every other prop is `Button`'s.
