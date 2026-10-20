@@ -29,6 +29,13 @@ export type {
   SeriesConfig,
 } from "./components/charts/interfaces";
 export { LineChart, type LineChartProps } from "./components/charts/LineChart";
+export {
+  DateInput,
+  type DateInputProps,
+  DatePicker,
+  type DatePickerLabels,
+  type DatePickerProps,
+} from "./components/DatePicker";
 export { Dialog, type DialogProps } from "./components/Dialog";
 export { Drawer, type DrawerProps } from "./components/Drawer";
 export {

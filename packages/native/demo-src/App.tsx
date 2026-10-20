@@ -22,7 +22,7 @@ import {
   useTheme,
   useToast,
 } from "../src";
-import { Booking } from "./Booking";
+import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
@@ -146,7 +146,8 @@ export function App({
     | "shell"
     | "drawer"
     | "form"
-    | "form-errors";
+    | "form-errors"
+    | "calendar";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -159,6 +160,8 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "calendar" ? (
+          <Calendar />
         ) : screen === "form" || screen === "form-errors" ? (
           <Booking errors={screen === "form-errors"} />
         ) : screen === "shell" || screen === "drawer" ? (
