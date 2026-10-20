@@ -11,6 +11,7 @@
  */
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import { Worker } from "node:worker_threads";
 import { transform } from "./codemod-2.0.mjs";
 
 const core = (names) => `import { ${names} } from "@once-ui-system/core";\n`;
@@ -35,6 +36,70 @@ describe("comments inside a tag", () => {
   it("does not rewrite an old prop name mentioned in a comment", () => {
     const src = `${core("Dialog")}<Dialog\n  // isOpen is set by the parent\n  open={a} />`;
     assert.deepEqual(hits(src), []);
+  });
+});
+
+/**
+ * Run transform in a worker so a scanner that never advances fails the test
+ * instead of hanging the suite: a synchronous infinite loop cannot be
+ * interrupted by node:test's own timeout.
+ */
+function transformWithin(src, ms = 5000) {
+  const worker = new Worker(
+    `const { parentPort, workerData } = require("node:worker_threads");
+     import(workerData.url).then(({ transform }) => parentPort.postMessage(transform(workerData.src).hits));`,
+    { eval: true, workerData: { src, url: new URL("./codemod-2.0.mjs", import.meta.url).href } },
+  );
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => {
+      worker.terminate();
+      reject(new Error(`transform did not finish within ${ms} ms`));
+    }, ms);
+    worker.once("message", (h) => { clearTimeout(timer); worker.terminate(); resolve(h); });
+    worker.once("error", (e) => { clearTimeout(timer); reject(e); });
+  });
+}
+
+describe("JSX text inside a value", () => {
+  // `//` and `/*` in JSX text are text, not comments. Read as a comment, the
+  // `//` in https:// swallowed the rest of the line, closing brace included,
+  // and on the second such Input in a file the scanner stopped advancing and
+  // the codemod hung forever.
+  it("does not hang on two Inputs with https:// in a prefix element", async () => {
+    const src = `${core("Column, Input, Text")}export function C() {
+  if (a) {
+    return <Input id="a" prefix={<Text>https://</Text>} height="s" />;
+  }
+}
+export function D() {
+  return <Column><Input id="b" prefix={<Text>https://</Text>} height="s" /></Column>;
+}`;
+    assert.deepEqual(await transformWithin(src), ["<Input> height → size", "<Input> height → size"]);
+  });
+
+  it("migrates an Input whose prefix element holds https://", () => {
+    const src = `${core("Input, Text")}<Input prefix={<Text>https://</Text>} height="s" />`;
+    assert.deepEqual(hits(src), ["<Input> height → size"]);
+  });
+
+  it("migrates an Input whose prefix string holds https://", async () => {
+    const src = `${core("Input")}<Input prefix="https://" height="s" />\n<Input prefix="https://" radius="m" />`;
+    assert.deepEqual((await transformWithin(src)).sort(), ["<Input> height → size", "<Input> radius → corners"]);
+  });
+
+  it("does not open a block comment on /* in JSX text", () => {
+    const src = `${core("Input, Text")}<Input prefix={<Text>/* glob</Text>} height="s" />\n<Input radius="m" />`;
+    assert.deepEqual(hits(src).sort(), ["<Input> height → size", "<Input> radius → corners"]);
+  });
+
+  it("does not open a string on an apostrophe in JSX text", () => {
+    const src = `${core("Input, Text")}<Input prefix={<Text>don't</Text>} height="s" />\n<Input radius="m" />`;
+    assert.deepEqual(hits(src).sort(), ["<Input> height → size", "<Input> radius → corners"]);
+  });
+
+  it("still compares with < inside an expression", () => {
+    const src = `${core("Input")}<Input disabled={a < b} height="s" />`;
+    assert.deepEqual(hits(src), ["<Input> height → size"]);
   });
 });
 

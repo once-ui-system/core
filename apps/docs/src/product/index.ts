@@ -26,6 +26,7 @@ export * from "./InfiniteScrollExample";
 export * from "./InputExamples";
 export * from "./InteractiveDetailsExamples";
 export * from "./NavIconExample";
+export * from "./NavItemExamples";
 export * from "./PageList";
 export * from "./ProgressBarExample";
 export * from "./CopyPage";

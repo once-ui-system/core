@@ -312,7 +312,7 @@ const REWRITES = { Skeleton: rewriteSkeleton, Textarea: rewriteTextarea };
  * and the whole element would be skipped without a word. Every scanner that
  * tracks quotes or braces must therefore skip comments first.
  */
-function skipComment(src, i) {
+export function skipComment(src, i) {
   if (src[i] !== "/") return i;
   if (src[i + 1] === "/") {
     let j = i + 2;
@@ -326,33 +326,121 @@ function skipComment(src, i) {
   return i;
 }
 
-/** Find the end of the opening tag, skipping strings, comments and nested {...}. */
-function openingTagEnd(src, from) {
-  let i = from, depth = 0, quote = null;
-  while (i < src.length) {
-    const c = src[i];
-    if (quote) {
-      if (c === quote && src[i - 1] !== "\\") quote = null;
-      i++;
+/**
+ * Keywords after which `<` opens JSX rather than comparing. After any other
+ * word or a closing bracket (`a < b`, `useState<string>`, `x[0] < y`) it is
+ * an operator or a type argument.
+ */
+const JSX_AFTER_WORD = /(?:^|[^\w$])(?:return|yield|await|default|else|do|case)$/;
+
+/**
+ * Whether the `<` at `i` opens a JSX element (or fragment) inside an
+ * expression. A guess from the surrounding text, so every caller treats a
+ * failed parse as "not JSX after all" and carries on with `<` as a plain
+ * character.
+ */
+function jsxStartsAt(src, i) {
+  if (src[i] !== "<" || !/[A-Za-z_$>]/.test(src[i + 1] ?? "")) return false;
+  let k = i - 1;
+  while (k >= 0 && /\s/.test(src[k])) k--;
+  if (k < 0) return true;
+  if (/[\w$)\]]/.test(src[k])) return JSX_AFTER_WORD.test(src.slice(Math.max(0, k - 8), k + 1));
+  return true;
+}
+
+/**
+ * If a JSX element starts at `i`, return the index just past it, else -1.
+ *
+ * JSX text is not code. `<Text>https://</Text>` holds a `//` that is not a
+ * comment, and `<Text>don't</Text>` an apostrophe that is not a string, so a
+ * scanner that reads children as JavaScript loses its place: the `//` used to
+ * swallow the rest of the line, closing brace and all, and the brace count was
+ * then wrong for every tag after it. Children are therefore skipped as text,
+ * and only their `{...}` expressions and nested elements are scanned.
+ */
+export function skipJsx(src, i) {
+  if (src[i] !== "<") return -1;
+  let j = i + 1;
+  // Opening tag: name, then attributes up to `>` or `/>`.
+  while (j < src.length) {
+    const past = skipComment(src, j);
+    if (past !== j) { j = past; continue; }
+    const c = src[j];
+    if (c === '"' || c === "'" || c === "{") {
+      const { end } = readValue(src, j);
+      if (end <= j) return -1;
+      j = end;
       continue;
     }
+    if (c === "<") {                                          // prefix=<X /> (element as a value)
+      const end = skipJsx(src, j);
+      if (end < 0) return -1;
+      j = end;
+      continue;
+    }
+    if (c === "/" && src[j + 1] === ">") return j + 2;
+    if (c === ">") break;
+    j++;
+  }
+  if (j >= src.length) return -1;
+  j++;
+  // Children: text, {expressions} and nested elements, up to the first `</`,
+  // which closes this element because nested ones were skipped whole.
+  while (j < src.length) {
+    const c = src[j];
+    if (c === "{") {
+      const { end } = readValue(src, j);
+      if (end <= j) return -1;
+      j = end;
+    } else if (c === "<" && src[j + 1] === "/") {
+      const close = src.indexOf(">", j + 2);
+      return close < 0 ? -1 : close + 1;
+    } else if (c === "<" && /[A-Za-z_$>]/.test(src[j + 1] ?? "")) {
+      const end = skipJsx(src, j);
+      if (end < 0) return -1;
+      j = end;
+    } else j++;
+  }
+  return -1;
+}
+
+/**
+ * Find the end of the opening tag, skipping strings, comments, nested {...}
+ * and elements passed as values. Returns -1 when the tag cannot be read.
+ */
+export function openingTagEnd(src, from) {
+  let i = from;
+  while (i < src.length) {
     const past = skipComment(src, i);
     if (past !== i) { i = past; continue; }
-    if (c === '"' || c === "'" || c === "`") quote = c;
-    else if (c === "{") depth++;
-    else if (c === "}") depth--;
-    else if (c === ">" && depth === 0) return i;
+    const c = src[i];
+    if (c === '"' || c === "'" || c === "{") {
+      const { end } = readValue(src, i);
+      if (end <= i) return -1;
+      i = end;
+      continue;
+    }
+    if (c === "<") {
+      const end = skipJsx(src, i);
+      if (end > i) { i = end; continue; }
+    }
+    if (c === ">") return i;
     i++;
   }
   return -1;
 }
 
-/** Read the raw attribute value that starts at `i` ("..." or {...}). */
-function readValue(src, i) {
+/**
+ * Read the raw attribute value that starts at `i` ("..." or {...}). When it
+ * cannot be read (an unclosed brace or quote) `end` is `i`, and callers must
+ * stop rather than loop on the same position.
+ */
+export function readValue(src, i) {
   if (src[i] === '"' || src[i] === "'") {
     const q = src[i];
     let j = i + 1;
     while (j < src.length && !(src[j] === q && src[j - 1] !== "\\")) j++;
+    if (j >= src.length) return { raw: "", end: i };
     return { raw: src.slice(i, j + 1), end: j + 1 };
   }
   if (src[i] === "{") {
@@ -365,6 +453,10 @@ function readValue(src, i) {
       }
       const past = skipComment(src, j);
       if (past !== j) { j = past; continue; }
+      if (jsxStartsAt(src, j)) {
+        const end = skipJsx(src, j);
+        if (end > j) { j = end; continue; }
+      }
       if (src[j] === '"' || src[j] === "'" || src[j] === "`") quote = src[j];
       else if (src[j] === "{") depth++;
       else if (src[j] === "}" && --depth === 0) return { raw: src.slice(i, j + 1), end: j + 1 };
@@ -382,7 +474,7 @@ function readValue(src, i) {
  * and rewriting it would rename the caller's local variable. So values are
  * skipped wholesale and only names sitting at depth 0 are returned.
  */
-function attributesOf(src, from, to) {
+export function attributesOf(src, from, to) {
   const attrs = [];
   let i = from;
   while (i < to) {
@@ -390,7 +482,12 @@ function attributesOf(src, from, to) {
     if (/\s/.test(c)) { i++; continue; }
     const past = skipComment(src, i);
     if (past !== i) { i = past; continue; }                   // // or /* */ between attributes
-    if (c === "{") { i = readValue(src, i).end; continue; }   // spread {...props}
+    if (c === "{") {                                          // spread {...props}
+      const { end } = readValue(src, i);
+      if (end <= i) break;                                    // unreadable: stop, never spin
+      i = end;
+      continue;
+    }
     if (!/[A-Za-z_]/.test(c)) { i++; continue; }
     let j = i;
     while (j < to && /[\w:.-]/.test(src[j])) j++;
@@ -402,7 +499,9 @@ function attributesOf(src, from, to) {
       while (v < to && /\s/.test(src[v])) v++;
       const { raw, end } = readValue(src, v);
       attrs.push({ name, at: i, value: raw, end });
-      i = end;
+      // An unreadable value would leave `end` where it started, and the loop
+      // would read the same attribute forever. Step past it instead.
+      i = Math.max(end, v + 1);
     } else {
       attrs.push({ name, at: i, value: null, end: j });       // boolean shorthand
       i = j;
