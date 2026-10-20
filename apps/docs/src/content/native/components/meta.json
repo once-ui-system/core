@@ -45,6 +45,9 @@
     "scroller": 41,
     "drawer": 42,
     "nav": 43,
-    "table": 44
+    "table": 44,
+    "mascot": 45,
+    "workingIndicator": 46,
+    "logoSpinner": 47
   }
 }
