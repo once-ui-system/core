@@ -23,6 +23,8 @@ type ZIndex = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export const BREAKPOINTS = ["xl", "l", "m", "s", "xs"] as const;
 export type Breakpoint = (typeof BREAKPOINTS)[number];
 
+type BorderValue = Colors | "surface" | "transparent" | boolean;
+
 export type SafeAreaEdge = "top" | "right" | "bottom" | "left";
 
 /**
@@ -37,7 +39,20 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "poin
   wrap?: boolean;
   flex?: number;
   background?: Colors | "surface" | "page" | "overlay" | "transparent";
-  border?: Colors | "surface" | "transparent";
+  /** `true` draws core's default border, `neutral-alpha-weak`. */
+  border?: BorderValue;
+  /**
+   * One side (or `X` = left and right, `Y` = top and bottom), as in core: a
+   * bottom tab bar's `borderTop`, a sticky header's `borderBottom`. With any
+   * of these set, only those sides are drawn, in their own colour, falling
+   * back to `border`'s.
+   */
+  borderTop?: BorderValue;
+  borderRight?: BorderValue;
+  borderBottom?: BorderValue;
+  borderLeft?: BorderValue;
+  borderX?: BorderValue;
+  borderY?: BorderValue;
   borderStyle?: "solid" | "dashed";
   borderWidth?: 1 | 2 | 4 | 8;
   radius?: RadiusSize;
@@ -94,7 +109,7 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "poin
 
 /**
  * The keys of core's `FlexBreakpointProps` that have a native equivalent.
- * Core's `solid`, `borderTop`…`borderY`, `onBackground`, `onSolid`, `align`,
+ * Core's `solid`, `onBackground`, `onSolid`, `align`,
  * the `text*` props, `transition`, `scrollbar`, `overflowX` and `overflowY`
  * are left out, as they are on the base props.
  */
@@ -126,6 +141,12 @@ export type FlexBreakpointProps = Pick<
   | "aspectRatio"
   | "background"
   | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
   | "borderStyle"
   | "borderWidth"
   | "radius"
@@ -160,6 +181,12 @@ const ALIGN: Record<Alignment, ViewStyle["alignItems"]> = {
   even: "stretch",
   stretch: "stretch",
 };
+
+export function borderColor(theme: OnceTheme, value: BorderValue): string {
+  return theme.border(
+    value === true ? "neutral-alpha-weak" : (value as Colors | "surface" | "transparent"),
+  );
+}
 
 function size(theme: OnceTheme, value: Size | undefined): DimensionValue | undefined {
   if (value === undefined) return undefined;
@@ -207,6 +234,12 @@ export function flexStyle(
     flex,
     background,
     border,
+    borderTop,
+    borderRight,
+    borderBottom,
+    borderLeft,
+    borderX,
+    borderY,
     borderStyle,
     borderWidth,
     radius,
@@ -261,8 +294,24 @@ export function flexStyle(
   if (wrap) style.flexWrap = "wrap";
   if (flex !== undefined) style.flex = flex;
   if (background) style.backgroundColor = theme.background(background);
-  if (border) {
-    style.borderColor = theme.border(border);
+  const sides = {
+    Top: borderTop ?? borderY,
+    Right: borderRight ?? borderX,
+    Bottom: borderBottom ?? borderY,
+    Left: borderLeft ?? borderX,
+  };
+  const anySide = Object.values(sides).some(Boolean);
+  if (border) style.borderColor = borderColor(theme, border);
+  if (anySide) {
+    // As core's `border-reset`: only the named sides are drawn, one pixel wide.
+    for (const [edge, value] of Object.entries(sides)) {
+      const key = edge as keyof typeof sides;
+      style[`border${key}Width`] = value ? 1 : 0;
+      if (typeof value === "string") style[`border${key}Color`] = theme.border(value);
+      else if (value && !border) style[`border${key}Color`] = borderColor(theme, true);
+    }
+    style.borderStyle = borderStyle ?? "solid";
+  } else if (border) {
     style.borderWidth = borderWidth ?? 1;
     style.borderStyle = borderStyle ?? "solid";
   }

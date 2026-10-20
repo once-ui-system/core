@@ -43,8 +43,10 @@
     "pagination": 39,
     "timeline": 40,
     "scroller": 41,
-    "mascot": 42,
-    "workingIndicator": 43,
-    "logoSpinner": 44
+    "drawer": 42,
+    "nav": 43,
+    "mascot": 44,
+    "workingIndicator": 45,
+    "logoSpinner": 46
   }
 }

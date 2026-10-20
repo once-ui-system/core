@@ -9,6 +9,8 @@ const screen =
   param === "menu" ||
   param === "stats" ||
   param === "code" ||
+  param === "shell" ||
+  param === "drawer" ||
   param === "assistant"
     ? param
     : "card";
