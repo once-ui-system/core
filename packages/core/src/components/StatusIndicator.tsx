@@ -1,13 +1,19 @@
 import classNames from "clsx";
 import React, { forwardRef } from "react";
-import { CondensedTShirtSizes } from "../types";
+import { ColorScheme, CondensedTShirtSizes } from "../types";
 import { Flex } from "./Flex";
 import styles from "./StatusIndicator.module.scss";
 
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   size?: CondensedTShirtSizes;
-  /** Defaults to `blue`. */
+  /**
+   * Defaults to `blue`. A palette name (`blue`, `sand`, ...) is that fixed
+   * colour; a role (`brand`, `accent`, `neutral`, `info`, `danger`, `warning`,
+   * `success`) follows the theme's scheme for it, so `danger` stays the app's
+   * danger colour if the theme changes it.
+   */
   color?:
+    | ColorScheme
     | "blue"
     | "indigo"
     | "violet"
@@ -21,7 +27,12 @@ interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
     | "emerald"
     | "aqua"
     | "cyan"
-    | "gray";
+    | "gray"
+    | "rose"
+    | "mint"
+    | "dusk"
+    | "sand"
+    | "slate";
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;

@@ -101,6 +101,31 @@ Supports all Once UI design tokens including brand, neutral, danger, success, an
   ]}
 />
 
+## Inside text
+
+A Tag is a div by default, which is not allowed inside a paragraph. With `as="span"` every
+element in it is a span and it flows inline, so it can sit in a sentence. It looks the same.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Text as="p" variant="body-default-m">
+      Exports are <Tag as="span" scheme="brand" label="Beta" /> while we finish the API.
+    </Text>
+  }
+  codes={[
+    {
+      code:
+`<Text as="p" variant="body-default-m">
+  Exports are <Tag as="span" scheme="brand" label="Beta" /> while we finish the API.
+</Text>`,
+      language: "tsx",
+      label: "Inside text"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
