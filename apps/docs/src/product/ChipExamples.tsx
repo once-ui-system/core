@@ -91,3 +91,20 @@ export function CustomRemovableChipExample() {
     </Row>
   );
 }
+
+export function PlainLabelChipExample() {
+  const [cities, setCities] = useState(["Berlin"]);
+
+  return (
+    <Row gap="8" wrap>
+      {cities.map((city) => (
+        <Chip
+          key={city}
+          label={city}
+          interactive={false}
+          onRemove={() => setCities(cities.filter((item) => item !== city))}
+        />
+      ))}
+    </Row>
+  );
+}

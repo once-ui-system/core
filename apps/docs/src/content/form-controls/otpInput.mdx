@@ -47,12 +47,7 @@ The boxes are one group, named "One-time code", and each box says which digit it
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={
-    <OTPInput
-      length={6}
-      labels={{ group: "Code de vérification", digit: (n, of) => `Chiffre ${n} sur ${of}` }}
-    />
-  }
+  preview={<OTPInputLabelsExample />}
   codes={[
     {
       code:
