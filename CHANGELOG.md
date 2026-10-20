@@ -26,6 +26,13 @@ item (see `ROADMAP.md`, Week 4).
   adds a second, dimmer line under an option's label.
 - **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
   that opens a menu.
+- **AI working states: `WorkingIndicator` and `LogoSpinner`.** `LogoSpinner` is a loader
+  drawn from the Once UI mark: the four tiles part, turn a quarter and click back
+  (`variant="wave"` lifts them one at a time). `WorkingIndicator` puts it next to a verb
+  that changes every few seconds ("Imagining…", "Noodling…", "Kerning…"), with an
+  optional elapsed count and hint. The words are yours to replace through `verbs`, or
+  extend from the exported `workingVerbs`. Both take the brand color, so they follow a
+  chat theme, and both keep signalling under reduced motion without moving.
 
 ### Fixed
 

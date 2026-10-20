@@ -1,0 +1,73 @@
+/* WorkingIndicator */
+.working {
+  min-width: 0;
+}
+
+.verb {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Each new verb rises into place. Keyed on the verb, so it runs per change. */
+.verbEnter {
+  animation: working-verb-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+@keyframes working-verb-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.375rem);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* A highlight sweeps across the letters. The text keeps its own color under
+   the highlight, so it reads the same in both themes. */
+.shimmer {
+  color: transparent;
+  background-image: linear-gradient(
+    90deg,
+    var(--neutral-on-background-weak) 0%,
+    var(--neutral-on-background-weak) 35%,
+    var(--neutral-on-background-strong) 50%,
+    var(--neutral-on-background-weak) 65%,
+    var(--neutral-on-background-weak) 100%
+  );
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  animation: working-shimmer 2.4s linear infinite;
+
+  &.verbEnter {
+    animation:
+      working-verb-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+      working-shimmer 2.4s linear infinite;
+  }
+}
+
+@keyframes working-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: 0% 0;
+  }
+}
+
+/* The global rule would freeze the sweep mid-letter; plain text instead. */
+@media (prefers-reduced-motion: reduce) {
+  .shimmer {
+    color: var(--neutral-on-background-medium);
+    background-image: none;
+  }
+}
+
+.separator {
+  padding: 0 0.375em;
+}
