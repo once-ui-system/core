@@ -202,8 +202,11 @@ export function Pagination({
   return (
     <Row gap="16" vertical="center" wrap {...flex}>
       {perPageOptions && perPageOptions.length > 0 && (
+        // The select's field is `fillWidth`: it needs a parent with a width of its own,
+        // or it stretches across the whole row, under the page buttons.
         <Row width={8}>
           <Select
+            style={{ width: "100%" }}
             label={text.perPage}
             size={SELECT_SIZE[size]}
             value={String(currentPerPage)}

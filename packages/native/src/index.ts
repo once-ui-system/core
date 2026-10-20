@@ -145,6 +145,13 @@ export { Spinner, type SpinnerProps } from "./components/Spinner";
 export { StatusIndicator, type StatusIndicatorProps } from "./components/StatusIndicator";
 export { Switch, type SwitchProps } from "./components/Switch";
 export {
+  extractText,
+  Table,
+  type TableAction,
+  type TableHeader,
+  type TableProps,
+} from "./components/Table";
+export {
   Tab,
   TabList,
   type TabListProps,

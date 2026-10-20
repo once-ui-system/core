@@ -25,6 +25,7 @@ import {
 import { Assistant } from "./Assistant";
 import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
+import { Guests } from "./Guests";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
 import { Shell } from "./Shell";
@@ -149,6 +150,7 @@ export function App({
     | "form"
     | "form-errors"
     | "calendar"
+    | "table"
     | "assistant";
 }) {
   return (
@@ -162,6 +164,8 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "table" ? (
+          <Guests />
         ) : screen === "calendar" ? (
           <Calendar />
         ) : screen === "form" || screen === "form-errors" ? (
