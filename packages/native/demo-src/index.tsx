@@ -8,7 +8,8 @@ const screen =
   param === "sheet" ||
   param === "menu" ||
   param === "stats" ||
-  param === "code"
+  param === "code" ||
+  param === "assistant"
     ? param
     : "card";
 const root = document.getElementById("root");

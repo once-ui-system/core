@@ -42,6 +42,9 @@
     "breadcrumbs": 38,
     "pagination": 39,
     "timeline": 40,
-    "scroller": 41
+    "scroller": 41,
+    "mascot": 42,
+    "workingIndicator": 43,
+    "logoSpinner": 44
   }
 }

@@ -184,7 +184,7 @@ export function schemeAlphaVariants(scheme: SchemeRamp): Record<string, string> 
 }
 
 /** Any colour `parseSeed` reads, as hex; anything else unchanged. */
-function toHex(value: string): string {
+export function toHex(value: string): string {
   if (value.startsWith("#")) return value;
   const lch = parseSeed(value);
   return lch ? format(lch) : value;
@@ -223,4 +223,26 @@ export function customSchemeTokens(
     }
   }
   return tokens;
+}
+
+/**
+ * CSS `color-mix(in srgb, a weight, b)`: `weight` of `a`, the rest `b`. Either
+ * may carry alpha, and `"transparent"` mixes as clear black. Returns hex.
+ */
+export function mixColors(a: string, b: string, weight: number): string {
+  const channels = (value: string) => {
+    if (value === "transparent") return [0, 0, 0, 0];
+    const hex = toHex(value).replace(/^#/, "");
+    const n = Number.parseInt(hex.slice(0, 6), 16);
+    const alpha = hex.length === 8 ? Number.parseInt(hex.slice(6), 16) / 255 : 1;
+    return Number.isNaN(n) ? [0, 0, 0, 0] : [(n >> 16) & 255, (n >> 8) & 255, n & 255, alpha];
+  };
+  const w = clamp01(weight);
+  const [r1, g1, b1, a1] = channels(a);
+  const [r2, g2, b2, a2] = channels(b);
+  const alpha = a1 * w + a2 * (1 - w);
+  // Premultiplied, as color-mix() does, so a clear side doesn't darken the other.
+  const mix = (c1: number, c2: number) =>
+    alpha === 0 ? 0 : (c1 * a1 * w + c2 * a2 * (1 - w)) / alpha / 255;
+  return `#${hex2(mix(r1, r2))}${hex2(mix(g1, g2))}${hex2(mix(b1, b2))}${alpha < 1 ? hex2(alpha) : ""}`;
 }

@@ -1,0 +1,93 @@
+---
+title: "WorkingIndicator"
+summary: "Says an assistant is working, with the moving mark and a playful verb that changes every few seconds."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/components/workingIndicator.mdx"
+github: "packages/native/src/components/WorkingIndicator.tsx"
+navLabel: "WorkingIndicator"
+navIcon: "components"
+---
+
+`WorkingIndicator` shows a [LogoSpinner](/native/components/logoSpinner) and a verb that changes every few seconds, such as "Imagining…", "Noodling…" or "Kerning…". A light sweep moves across the words. See the [web WorkingIndicator](/modules/ai#workingindicator) for the browser version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { WorkingIndicator } from "@once-ui-system/native";
+
+export function Thinking() {
+  return <WorkingIndicator />;
+}`,
+    language: "tsx",
+    label: "WorkingIndicator"
+  }
+]} />
+
+## Your own words
+
+`verbs` replaces the list. Spread `workingVerbs` to add to it instead. `shuffle={false}` walks the list in order, and `interval` sets the milliseconds each verb stays. `label` shows one fixed line, such as what the assistant is actually doing.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, WorkingIndicator, workingVerbs } from "@once-ui-system/native";
+
+export function Voices() {
+  return (
+    <Column gap="12">
+      <WorkingIndicator verbs={[...workingVerbs, "Frothing", "Tamping"]} />
+      <WorkingIndicator verbs={["Reading", "Comparing", "Writing"]} shuffle={false} interval={2000} />
+      <WorkingIndicator label="Searching your orders" />
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Your own words"
+  }
+]} />
+
+## Elapsed time and a hint
+
+`showElapsed` counts the seconds since the indicator appeared, or since `startedAt`, so the count survives a remount. `detail` adds quiet text after it.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { WorkingIndicator } from "@once-ui-system/native";
+
+export function Running({ startedAt }: { startedAt: number }) {
+  return <WorkingIndicator showElapsed startedAt={startedAt} detail="tap to stop" size="s" />;
+}`,
+    language: "tsx",
+    label: "Elapsed time"
+  }
+]} />
+
+## Accessibility
+
+The row is one accessible element named by `ariaLabel`, "Working" by default, so a screen reader hears it once instead of every new verb. With reduce motion turned on, the verbs change without rising in and the sweep turns off.
+
+## Differences from the web
+
+- React Native can't clip a gradient to text, so the sweep colors each letter instead. It looks the same, but very long labels cost more to draw. Pass `shimmer={false}` for those.
+- `loader` takes any React Native element, or `false` for none.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `verbs` | `readonly string[]` | `workingVerbs` | The words to cycle through. |
+| `label` | `ReactNode` | | A fixed line instead of the cycling verbs. |
+| `interval` | `number` | `2800` | Milliseconds each verb stays. |
+| `shuffle` | `boolean` | `true` | Visit the verbs in a random order, never the same one twice in a row. |
+| `shimmer` | `boolean` | `true` | A light sweep across the words. |
+| `showElapsed` | `boolean` | `false` | Show the seconds since `startedAt`. |
+| `startedAt` | `Date \| number` | | When the work began. |
+| `detail` | `ReactNode` | | Quiet text after the verb. |
+| `loader` | `ReactNode \| false` | `LogoSpinner` | The loader before the words. |
+| `size` | `"s" \| "m" \| "l"` | `"m"` | The text and loader size. |
+| `ariaLabel` | `string` | `"Working"` | What screen readers announce. |
+| `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |
