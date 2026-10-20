@@ -23,6 +23,21 @@ item (see `ROADMAP.md`, Week 4).
   `playLabel` on `Carousel`'s `play`.** The new names and announcements below can be
   translated. `<Chip interactive={false} onRemove>` makes the label plain text, for a
   chip whose one action is its removal.
+- **Scales per theme: `brandScale={{ light: { … }, dark: { … } }}`.** One ramp served
+  both themes, so an accent tuned for dark (a lime that glows on near-black) read wrong
+  on light, and fixing it took CSS. The flat shape still applies to both; a theme left
+  out uses the other's. `ThemeInit` renders both on the server, keyed off `data-theme`,
+  and a `theme="dark"` subtree gets the dark ramp. Same for `accentScale` and
+  `neutralScale`.
+- **`pageBackground` and `surfaceBackground` in `once-ui.config` `style`.** The light
+  page (off-white) and the filled surface (white) could only change through selector
+  overrides. Each takes a token or any CSS colour, once or `{ light, dark }`, and
+  `ThemeInit` renders it before the first paint.
+- **A weight per font family: `--font-body-weight-strong` and friends.** `.font-strong`
+  and the other weight classes read `--font-weight-display-*` on every family, so bolder
+  body text also changed headlines and labels. `--font-<family>-weight-<weight>` (for
+  `heading`, `body`, `label`, `code`) now changes only that family; unset, each still
+  falls back to the display weight, so nothing renders differently.
 
 - **`Tag` and `Badge` inside a sentence: `as="span"`.** Both rendered divs, which are not
   allowed in a `<p>`, so a status tag in body copy was invalid HTML and hydration
@@ -58,6 +73,13 @@ item (see `ROADMAP.md`, Week 4).
   optional elapsed count and hint. The words are yours to replace through `verbs`, or
   extend from the exported `workingVerbs`. Both take the brand color, so they follow a
   chat theme, and both keep signalling under reduced motion without moving.
+- **Voice chat animation: `VoiceVisualizer` and `useAudioLevel`.** An orb (or a compact
+  bar meter) with its own motion for idle, listening, thinking and speaking. Hand it a
+  microphone `MediaStream`, the reply's `<audio>` element or an `AnalyserNode` and it
+  follows the real sound, written to CSS variables each frame so React never re-renders;
+  or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
+  same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
+  stop and live audio shows as glow and bar height.
 
 ### Fixed
 
@@ -88,6 +110,11 @@ item (see `ROADMAP.md`, Week 4).
   carousel is a named group with `aria-roledescription="carousel"`, each slide a
   "slide" ("2 of 5"), and slide changes are announced politely only while it is not
   moving on its own.
+- **Text in a `theme="dark"` (or `data-theme`) subtree follows the subtree's theme.**
+  The default text colour was resolved once on `<html>` and inherited, so a dark hero on
+  a light page kept dark text unless every `Text` set `onBackground`. An element with
+  `data-theme` now reads `--neutral-on-background-strong` again, at zero specificity, so
+  colour classes still win. Pages without a themed subtree are unchanged.
 
 - **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
   38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
