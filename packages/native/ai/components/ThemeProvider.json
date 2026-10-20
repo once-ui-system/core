@@ -1,0 +1,43 @@
+{
+ "name": "ThemeProvider",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Root provider: core's style options with core's defaults (theme, brand, neutral, solid, border, scaling…), plus fonts and the screen's safe-area insets",
+ "mixins": [],
+ "props": {
+  "theme": "Theme = \"system\"",
+  "brand": "Schemes",
+  "accent": "Schemes",
+  "neutral": "NeutralColor",
+  "solid": "SolidType",
+  "solidStyle": "SolidStyle",
+  "border": "BorderStyle",
+  "surface": "SurfaceStyle",
+  "scaling": "ScalingSize",
+  "density": "Density",
+  "bodySize": "BodySize",
+  "bodyLineHeight": "BodyLineHeight",
+  "desktopSize": "DeviceFontSize",
+  "tabletSize": "DeviceFontSize",
+  "mobileSize": "DeviceFontSize",
+  "fonts": "FontFamilies",
+  "insets": "Insets = NO_INSETS",
+  "children": "!ReactNode"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BodyLineHeight": "\"90\" | \"100\" | \"110\" | \"120\"",
+  "BodySize": "\"90\" | \"95\" | \"100\" | \"105\" | \"110\"",
+  "BorderStyle": "\"rounded\" | \"playful\" | \"conservative\" | \"sharp\"",
+  "Density": "\"compact\" | \"normal\" | \"spacious\"",
+  "DeviceFontSize": "\"13\" | \"14\" | \"15\" | \"16\" | \"17\" | \"18\"",
+  "FontFamilies": "{ heading?: string; body?: string; label?: string; code?: string }",
+  "Insets": "{ top: number; right: number; bottom: number; left: number }",
+  "NeutralColor": "\"sand\" | \"gray\" | \"slate\" | \"rose\" | \"mint\" | \"dusk\"",
+  "ScalingSize": "\"90\" | \"95\" | \"100\" | \"105\" | \"110\"",
+  "Schemes": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\"",
+  "SolidStyle": "\"flat\" | \"plastic\"",
+  "SolidType": "\"color\" | \"contrast\" | \"inverse\"",
+  "SurfaceStyle": "\"filled\" | \"translucent\"",
+  "Theme": "\"dark\" | \"light\" | \"system\""
+ }
+}

@@ -1,0 +1,23 @@
+{
+ "name": "RangeSlider",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Two thumbs on one track, selecting a `[start, end]` range, such as a price filter.",
+ "mixins": [],
+ "props": {
+  "value": "[number, number]",
+  "defaultValue": "[number, number]",
+  "onValueChange": "(value: [number, number]) => void",
+  "min": "number = 0",
+  "max": "number = 100",
+  "step": "number = 1",
+  "minDistance": "number = 0",
+  "label": "string",
+  "showValue": "boolean = false",
+  "formatValue": "(value: number) => string = String",
+  "thumbLabels": "[string, string] = [\"Minimum\", \"Maximum\"]",
+  "disabled": "boolean = false",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {}
+}

@@ -1,0 +1,26 @@
+{
+ "name": "Icon",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One of the built-in icons, or one registered with `IconProvider`.",
+ "mixins": [],
+ "props": {
+  "name": "!IconName",
+  "size": "TShirtSizes = \"m\"",
+  "onBackground": "`${ColorScheme}-${ColorWeight}`",
+  "onSolid": "`${ColorScheme}-${ColorWeight}`",
+  "color": "string",
+  "decorative": "boolean = true",
+  "aria-label": "string",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "ColorWeight": "\"weak\" | \"medium\" | \"strong\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

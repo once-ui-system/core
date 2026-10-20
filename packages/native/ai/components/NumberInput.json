@@ -1,0 +1,45 @@
+{
+ "name": "NumberInput",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An `Input` for a number, with − and + buttons that step it by `step` within `min` and `max`.",
+ "mixins": [
+  "InputProps"
+ ],
+ "reactNative": [
+  "TextInputProps"
+ ],
+ "props": {
+  "value": "number",
+  "defaultValue": "number | string",
+  "onValueChange": "(value: number) => void",
+  "min": "number",
+  "max": "number",
+  "step": "number = 1",
+  "padStart": "number"
+ },
+ "resolvedMixins": {
+  "InputProps": {
+   "style": "ViewStyle",
+   "disabled": "boolean",
+   "variant": "\"default\" | \"ghost\"",
+   "size": "TShirtSizes",
+   "label": "string",
+   "error": "boolean",
+   "errorMessage": "ReactNode",
+   "description": "ReactNode",
+   "prefix": "ReactNode",
+   "suffix": "ReactNode",
+   "loading": "boolean",
+   "characterCount": "boolean",
+   "onValueChange": "(value: string) => void",
+   "inputStyle": "TextStyle",
+   "type": "InputType",
+   "reveal": "boolean"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "InputType": "\"text\" | \"password\" | \"email\" | \"tel\" | \"url\" | \"number\" | \"search\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

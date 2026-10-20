@@ -1,0 +1,37 @@
+{
+ "name": "ToggleButton",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A quiet button that stays highlighted while `selected`.",
+ "mixins": [],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "label": "ReactNode",
+  "children": "ReactNode",
+  "selected": "boolean = false",
+  "variant": "\"ghost\" | \"outline\" | \"subtle\" = \"ghost\"",
+  "size": "TShirtSizes = \"m\"",
+  "radius": "RadiusSize",
+  "rounded": "boolean = false",
+  "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = \"center\"",
+  "fillWidth": "boolean = false",
+  "weight": "\"default\" | \"strong\" = \"default\"",
+  "truncate": "boolean",
+  "disabled": "boolean = false",
+  "prefixIcon": "IconSlot",
+  "suffixIcon": "IconSlot",
+  "onClick": "() => void",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "RadiusSize": "TShirtSizes | \"full\" | \"none\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

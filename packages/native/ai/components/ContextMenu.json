@@ -1,0 +1,27 @@
+{
+ "name": "ContextMenu",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A long press on `children` opens a menu at the press point, the phone's right-click.",
+ "mixins": [],
+ "props": {
+  "children": "!ReactNode",
+  "dropdown": "!ReactNode",
+  "placement": "Placement = \"bottom-start\"",
+  "fillWidth": "boolean = false",
+  "minWidth": "number | Length = \"12rem\"",
+  "maxWidth": "number | Length",
+  "minHeight": "number",
+  "onSelect": "(value: string) => void",
+  "closeAfterClick": "boolean = true",
+  "open": "boolean",
+  "onOpenChange": "(open: boolean) => void",
+  "selectedOption": "string",
+  "disabled": "boolean = false",
+  "style": "StyleProp<ViewStyle>"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "Length": "`${number}px` | `${number}rem`",
+  "Placement": "\"top\" | \"right\" | \"bottom\" | \"left\" | `${\"top\" | \"right\" | \"bottom\" | \"left\"}-${\"start\" | \"end\"}`"
+ }
+}

@@ -1,0 +1,17 @@
+{
+ "name": "Spinner",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Rotating loader for async and streaming states",
+ "mixins": [],
+ "props": {
+  "size": "TShirtSizes = \"m\"",
+  "color": "string",
+  "aria-label": "string",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

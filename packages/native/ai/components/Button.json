@@ -1,0 +1,41 @@
+{
+ "name": "Button",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Action button with variants, sizes, prefix/suffix icons and a loading state; onPress runs it",
+ "mixins": [],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "variant": "ButtonVariant = \"primary\"",
+  "tone": "Tone",
+  "size": "TShirtSizes",
+  "corners": "ButtonCorners",
+  "label": "string",
+  "children": "ReactNode",
+  "weight": "\"default\" | \"strong\" = \"strong\"",
+  "rounded": "boolean",
+  "prefixIcon": "IconSlot",
+  "suffixIcon": "IconSlot",
+  "loading": "boolean = false",
+  "disabled": "boolean = false",
+  "fillWidth": "boolean = false",
+  "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = \"center\"",
+  "onClick": "() => void",
+  "href": "string",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ButtonCorners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "ButtonVariant": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"link\" | \"subtle\"",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "Tone": "ColorScheme",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

@@ -1,0 +1,86 @@
+{
+  "web.form": {
+    "rule": "There is no Form: fields go in a Column gap=\"16\", and the submit Button reads their state. Two fields side by side are a Row gap=\"12\" with flex={1} on a Column around each.",
+    "components": ["Input", "Select"]
+  },
+  "web.setting": {
+    "rule": "There is no Setting: a settings row is a Row vertical=\"center\" gap=\"16\" paddingY=\"12\" with a Column flex={1} (label Text, description Text onBackground=\"neutral-weak\") and the control after it. Switch and Checkbox carry their own label and description; pass reverse to put the control on the right.",
+    "components": ["Switch", "Checkbox"]
+  },
+  "web.table": {
+    "rule": "There is no Table: records are rows in a FlatList (or a Column of rows for a short list), each a Row (a Card direction=\"row\" when it opens something) with an Avatar or Icon, a Column flex={1} of two Texts, and a Tag or the value at the end, a Line between rows.",
+    "components": ["Row", "Line"]
+  },
+  "web.nav": {
+    "rule": "There is no Nav or NavItem: a bottom tab bar is a Row safeArea={[\"bottom\"]} under a Line on background=\"surface\", outside the ScrollView, of one Card per tab (flex={1} center, border and background \"transparent\", accessibilityRole=\"tab\") holding an Icon over a label-default-xs Text, brand-strong when selected and neutral-weak otherwise. With Expo Router it is the tabBar of its Tabs layout.",
+    "components": ["Card", "Icon", "Line"]
+  },
+  "web.scroller": {
+    "rule": "There is no Scroller: a screen scrolls in React Native's ScrollView (contentContainerStyle={{ flexGrow: 1 }}), a long list in FlatList; a row of chips that scrolls sideways is a horizontal ScrollView with showsHorizontalScrollIndicator={false}.",
+    "components": ["Column"]
+  },
+  "web.link": {
+    "rule": "href opens a URL outside the app. Moving between screens is the router: onPress={() => router.push(\"/rewards\")}. There is no SmartLink; a link in a sentence is a Button variant=\"link\" or a pressable Text from React Native.",
+    "components": ["Button", "Card", "Tag"]
+  },
+  "border.side": {
+    "rule": "borderTop, borderBottom and the other single-side borders do not exist: put a <Line /> above or below the view instead.",
+    "components": ["Row", "Column", "Line"]
+  },
+  "Card.interactive": {
+    "rule": "Card is for pressable surfaces (onPress or onClick). A static panel is a Column background=\"surface\" border=\"neutral-alpha-weak\" radius=\"l\" padding=\"16\".",
+    "components": ["Card"]
+  },
+  "radius.clip": {
+    "rule": "radius does not clip children on React Native: add overflow=\"hidden\" when an image or filled child must follow the corners. On iOS it also hides the view's shadow, so put shadow on a wrapper.",
+    "components": ["Row", "Column", "Card", "Media"]
+  },
+  "press.onPress": {
+    "rule": "Press handlers are onPress; onClick also works so web code moves over. Never wrap a Button or Card in a Pressable or TouchableOpacity to make it pressable, and never pad a small control to make it tappable: it already takes taps from 44pt around it.",
+    "components": ["Button", "IconButton", "Card", "ToggleButton", "Tag"]
+  },
+  "state.names": {
+    "rule": "State props are core 3.0's: checked/defaultChecked/onCheckedChange (Switch, Checkbox, RadioButton), value/defaultValue/onValueChange (Input, Select, SegmentedControl, RadioGroup, Tabs), open/defaultOpen/onOpenChange (Select, Accordion). onToggle, onChange and isChecked are older names and type errors.",
+    "components": ["Switch", "Checkbox", "Input", "Select", "SegmentedControl", "Tabs", "Accordion"]
+  },
+  "tone.variant": {
+    "rule": "Color is tone, look is variant: Button variant=\"secondary\" tone=\"danger\", Tag tone=\"success\", Feedback tone=\"warning\", addToast({ tone: \"success\", message }). variant=\"danger\" was 2.x.",
+    "components": ["Button", "IconButton", "Tag", "Feedback", "Toast"]
+  },
+  "Tag.badgeChip": {
+    "rule": "Badge and Chip are Tag: variant=\"announce\" with arrow for the pill that leads somewhere; selected with onPress for a filter chip; onRemove adds a remove button.",
+    "components": ["Tag"]
+  },
+  "text.wrap": {
+    "rule": "Every string is in Text or Heading, with textVariant (not variant) for the preset and onBackground for the color. A number shown big is Text textVariant=\"display-strong-s\".",
+    "components": ["Text", "Heading"]
+  },
+  "spacing.tokens": {
+    "rule": "gap, padding and margin take spacing tokens (\"0\", \"1\", \"2\", \"4\", \"8\", \"12\", \"16\", \"20\", \"24\", \"32\", \"40\", \"48\", \"56\", \"64\", \"72\", \"80\", \"104\", \"128\", \"160\", or xs–xl). \"6\" and \"10\" are not tokens and are type errors.",
+    "components": ["Row", "Column"]
+  },
+  "color.tokens": {
+    "rule": "Colors are semantic tokens ({scheme}-{weight}, -alpha- for a tint), never hex or rgb. On your own React Native view use theme.color(\"brand-solid-strong\") from useTheme().",
+    "components": ["Row", "Column", "Text", "Icon"]
+  },
+  "icon.names": {
+    "rule": "Icon names come from the Icons list in this file. Never guess a name or cast one with as IconName; an app adds others with IconProvider.",
+    "components": ["Icon", "IconButton", "Button", "Tag", "ToggleButton"]
+  },
+  "safeArea.edges": {
+    "rule": "safeArea goes on the views at the screen's edges and needs ThemeProvider insets={useSafeAreaInsets()} at the root: safeArea={[\"top\"]} on a screen without a header, safeArea={[\"bottom\"]} on the tab bar or a bottom action row. Never add the insets by hand.",
+    "components": ["Row", "Column"]
+  },
+  "list.flatlist": {
+    "rule": "A list that can grow (orders, messages, customers) is a FlatList with keyExtractor and ItemSeparatorComponent={Line}, not items mapped inside a ScrollView.",
+    "components": ["Row", "Line"]
+  },
+  "Dialog.sheet": {
+    "rule": "Dialog is a bottom sheet with open and onClose; actions go in footer as Buttons with fillWidth inside a Row gap=\"12\". The back button and a tap on the backdrop call onClose.",
+    "components": ["Dialog"]
+  },
+  "Card.direction": {
+    "rule": "Card is a Column by default (direction=\"column\"), with an l radius and a neutral border: a row card needs direction=\"row\", and a pressable list row also radius=\"none\" border=\"transparent\" background=\"transparent\".",
+    "components": ["Card"]
+  }
+}

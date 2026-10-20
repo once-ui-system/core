@@ -1,0 +1,36 @@
+{
+  "id": "settings",
+  "title": "Settings screen",
+  "description": "A profile header, sections of settings rows with one control each, a picker, an edit sheet with fields and a confirmed sign-out",
+  "components": [
+    "Column",
+    "Row",
+    "Heading",
+    "Text",
+    "Avatar",
+    "Button",
+    "Switch",
+    "Select",
+    "Input",
+    "Line",
+    "Feedback",
+    "Dialog"
+  ],
+  "example": "examples/settings.tsx",
+  "gotchas": [
+    "web.setting",
+    "web.form",
+    "state.names",
+    "tone.variant",
+    "Dialog.sheet",
+    "border.side",
+    "text.wrap",
+    "spacing.tokens"
+  ],
+  "quality": {
+    "sections": "A label-default-s section title over a panel (background=\"surface\" border radius=\"l\" paddingX=\"16\") of rows, a Line between rows",
+    "rows": "One control per row, paddingY=\"12\"; Switch reverse with its own label and description puts the control on the right",
+    "editing": "Editing happens in a Dialog sheet: fields in a Column gap=\"16\" inside KeyboardAvoidingView, Cancel and Save in the footer",
+    "danger": "Sign out last, Button variant=\"secondary\" tone=\"danger\" fillWidth, confirmed in a Dialog"
+  }
+}

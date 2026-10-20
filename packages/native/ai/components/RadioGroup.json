@@ -1,0 +1,33 @@
+{
+ "name": "RadioGroup",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One choice out of `options`, with an optional group label.",
+ "mixins": [
+  "ControlChromeProps"
+ ],
+ "props": {
+  "options": "RadioGroupOption[] = []",
+  "value": "string",
+  "defaultValue": "string",
+  "onValueChange": "(value: string) => void",
+  "aria-label": "string",
+  "label": "ReactNode",
+  "description": "ReactNode",
+  "disabled": "boolean = false",
+  "orientation": "\"horizontal\" | \"vertical\" = \"vertical\"",
+  "children": "ReactNode",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {
+  "ControlChromeProps": {
+   "size": "TShirtSizes",
+   "error": "boolean",
+   "errorMessage": "ReactNode"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "RadioGroupOption": "{ value: string; label: ReactNode; description?: ReactNode; disabled?: boolean }",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

@@ -47,6 +47,10 @@ Never open `ai/spec.json`: it is the full machine spec, for tooling.
 
 Validate generated code: `npx once-ui-validate-ai-code path/to/file.tsx`. Without a bundle, app shells, sidebars and editors are in `ai/layouts.md`, and Pro blocks to compose from are listed in `ai/examples/blocks/manifest.json`.
 
+## Phone apps
+
+`@once-ui-system/native` has the same components and props for React Native, with its own harness for phone screens: `node_modules/@once-ui-system/native/AGENTS.md`. For an app on the web and on phones, build each from its own package's bundles and share the content and the theme options.
+
 ## Setup
 
 `npx once-ui-init-agent` points a consumer app's AGENTS.md, CLAUDE.md and Cursor rules here. Without `node_modules`, use https://docs.once-ui.com/ai/manifest.json (may not match your installed version exactly).

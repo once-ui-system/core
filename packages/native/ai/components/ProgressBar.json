@@ -1,0 +1,21 @@
+{
+ "name": "ProgressBar",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A rounded track that fills to `value`, with the value as a label.",
+ "mixins": [],
+ "props": {
+  "value": "!number",
+  "min": "number = 0",
+  "max": "number = 100",
+  "showLabel": "boolean = true",
+  "labelPosition": "\"top\" | \"bottom\" | \"left\" | \"right\" = \"bottom\"",
+  "barBackground": "Colors = \"brand-strong\"",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "ColorWeight": "\"weak\" | \"medium\" | \"strong\""
+ }
+}

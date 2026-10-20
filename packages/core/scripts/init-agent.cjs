@@ -54,6 +54,9 @@ ${bundleTable()}Validate: \`npx once-ui-validate-ai-code path/to/file.tsx\`
 In a Next.js app, import \`LayoutProvider\` from \`@once-ui-system/core/next\`, not the package root —
 the root export renders links and images as plain \`<a>\` and \`<img>\`.
 
+For a React Native app (\`@once-ui-system/native\`), read \`node_modules/@once-ui-system/native/AGENTS.md\` instead: the same
+components and props, with bundles for phone screens.
+
 Remote fallback: https://docs.once-ui.com/ai/manifest.json
 ${MARKER_END}
 `;
