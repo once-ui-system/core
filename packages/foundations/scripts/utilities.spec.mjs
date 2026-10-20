@@ -50,6 +50,14 @@ export const SPACING_FAMILIES = [
 ];
 
 /**
+ * `auto` is a margin value, not a spacing step: `marginLeft="auto"` pushes an
+ * item to the end of its row and `marginX="auto"` centres a block. Padding
+ * and gap have no `auto`, so only the margin families get it, at the base and
+ * at every breakpoint.
+ */
+export const MARGIN_AUTO_PREFIXES = SPACING_FAMILIES.filter(({ prefix }) => prefix.startsWith("m"));
+
+/**
  * Not part of the token matrix: a negative one-pixel gap that laps adjacent
  * borders onto each other so a row of bordered children reads as one hairline
  * instead of two. It takes a child selector, so it stays a hand-written pair

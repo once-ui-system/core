@@ -11,7 +11,12 @@ export interface DateRange {
 }
 
 export interface DateRangePickerProps extends Omit<React.ComponentProps<typeof Flex>, "onChange"> {
-  value?: DateRange;
+  /**
+   * The selected range. Either end may be left out, so a range typed
+   * `{ startDate?: Date; endDate?: Date }` and an empty `{}` are taken as
+   * they are; `onChange` always hands back both keys.
+   */
+  value?: Partial<DateRange>;
   onChange?: (range: DateRange) => void;
   minDate?: Date;
   maxDate?: Date;

@@ -144,13 +144,18 @@ export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
   paddingBottom?: SpacingToken | number;
   paddingX?: SpacingToken | number;
   paddingY?: SpacingToken | number;
-  margin?: SpacingToken | number;
-  marginLeft?: SpacingToken | number;
-  marginRight?: SpacingToken | number;
-  marginTop?: SpacingToken | number;
-  marginBottom?: SpacingToken | number;
-  marginX?: SpacingToken | number;
-  marginY?: SpacingToken | number;
+  /**
+   * A spacing token, a number (rem), or `"auto"`: `marginLeft="auto"` pushes
+   * an item to the end of its row, `marginX="auto"` centres a block. Every
+   * margin prop takes it, at breakpoints too (`s={{ marginLeft: "0" }}`).
+   */
+  margin?: SpacingToken | number | "auto";
+  marginLeft?: SpacingToken | number | "auto";
+  marginRight?: SpacingToken | number | "auto";
+  marginTop?: SpacingToken | number | "auto";
+  marginBottom?: SpacingToken | number | "auto";
+  marginX?: SpacingToken | number | "auto";
+  marginY?: SpacingToken | number | "auto";
   gap?: SpacingToken | number | "-1";
   top?: SpacingToken | number | CSSUnit;
   right?: SpacingToken | number | CSSUnit;

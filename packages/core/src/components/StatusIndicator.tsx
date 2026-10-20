@@ -4,6 +4,29 @@ import { ColorScheme, CondensedTShirtSizes } from "../types";
 import { Flex } from "./Flex";
 import styles from "./StatusIndicator.module.scss";
 
+/** The colours a status dot takes, here and on Avatar's `statusIndicator`. */
+export type StatusIndicatorColor =
+  | ColorScheme
+  | "blue"
+  | "indigo"
+  | "violet"
+  | "magenta"
+  | "pink"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "moss"
+  | "green"
+  | "emerald"
+  | "aqua"
+  | "cyan"
+  | "gray"
+  | "rose"
+  | "mint"
+  | "dusk"
+  | "sand"
+  | "slate";
+
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   size?: CondensedTShirtSizes;
   /**
@@ -12,27 +35,7 @@ interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
    * `success`) follows the theme's scheme for it, so `danger` stays the app's
    * danger colour if the theme changes it.
    */
-  color?:
-    | ColorScheme
-    | "blue"
-    | "indigo"
-    | "violet"
-    | "magenta"
-    | "pink"
-    | "red"
-    | "orange"
-    | "yellow"
-    | "moss"
-    | "green"
-    | "emerald"
-    | "aqua"
-    | "cyan"
-    | "gray"
-    | "rose"
-    | "mint"
-    | "dusk"
-    | "sand"
-    | "slate";
+  color?: StatusIndicatorColor;
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;

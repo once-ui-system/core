@@ -6,7 +6,7 @@ import { Flex } from "./Flex";
 import { Icon } from "./Icon";
 import { Media } from "./Media";
 import { Skeleton } from "./Skeleton";
-import { StatusIndicator } from "./StatusIndicator";
+import { StatusIndicator, type StatusIndicatorColor } from "./StatusIndicator";
 import { Text } from "./Text";
 
 interface AvatarProps extends React.ComponentProps<typeof Flex> {
@@ -17,8 +17,13 @@ interface AvatarProps extends React.ComponentProps<typeof Flex> {
   loading?: boolean;
   empty?: boolean;
   icon?: IconName;
+  /**
+   * A status dot on the avatar, in any colour StatusIndicator takes: it is a
+   * StatusIndicator. `color` named only four of them, so `"orange"` for "away"
+   * was a type error that rendered fine.
+   */
   statusIndicator?: {
-    color: "green" | "yellow" | "red" | "gray";
+    color: StatusIndicatorColor;
   };
   style?: React.CSSProperties;
   className?: string;

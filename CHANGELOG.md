@@ -15,6 +15,26 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`"auto"` on every margin prop.** `marginLeft="auto"` pushes an item to the end of its
+  row and `marginX="auto"` centres a block, on Flex, Row, Column, Grid, Text and Heading
+  and in breakpoint objects (`s={{ marginLeft: "0" }}` undoes it). Margins took tokens
+  and numbers only, so this was a type error agents hit in 3 benchmark first attempts,
+  one of them in the 2.1.0 claim run. Foundations adds the `.m-auto`…`.ml-auto` classes
+  and their breakpoint variants; padding and gap have no `auto`.
+
+- **`onSelect` on `UserMenu`.** Called with the `value` of the Option picked from
+  `dropdown`, by click or keyboard: DropdownWrapper's `onSelect`, passed through, so a
+  menu of actions needs no `onClick` on every Option.
+
+- **Validator rules for the type errors agents still make.** `validate-ai-code` now
+  names the fix where tsc only names the rejected prop: CSS alignment names
+  (`horizontal="space-between"`, `"flex-start"`) and a bare `between` on Row or Column
+  (`--fix` rewrites both), `vertical="baseline"`; `href`, `type` and `span` on a layout
+  primitive and `as="form"` with a form-typed handler (use `Card href`, `Card onClick`,
+  `gridColumn`, a native `<form>`); `mobileDirection`-style names and a breakpoint
+  object on a component that takes none (`Button s={{ fillWidth }}`). Over the
+  benchmark transcripts it flags 25 of the 76 Once UI attempts that failed typecheck,
+  and 1 of 185 that passed.
 - **`semantics="radio"` on `SegmentedControl` and `ThemeSwitcher`.** For a choice
   among settings rather than a view switch: a `radiogroup` of `radio`s with one tab
   stop, where the arrow keys move and choose. The defaults (`"tabs"`, `"toggle"`)
@@ -106,6 +126,20 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **Chart `data` takes rows typed with an `interface`, and `readonly` arrays.**
+  `DataPoint[]` has an index signature, which an interface never satisfies, so
+  `data={revenue}` with `revenue: RevenuePoint[]` failed to compile (2 of the 7
+  first-attempt type errors in the 2.1.0 claim run). Every chart reads the rows by key
+  as before.
+
+- **Avatar's `statusIndicator` takes every StatusIndicator colour.** The dot is a
+  StatusIndicator, but `color` named only green, yellow, red and gray, so
+  `{ color: "orange" }` for "away" failed to compile and would have rendered fine.
+
+- **DateRangeInput and DateRangePicker take a `value` with either end left out.**
+  `{}` is no range and `{ startDate }` a range still being picked, so the
+  `{ startDate?: Date; endDate?: Date }` state apps write type-checks. `onChange` still
+  hands back both keys.
 - **`StylePanel`'s rows are radio groups.** Each row of swatches or segments is a
   `radiogroup` named by the row's label, its options `radio`s: one Tab stop per row
   instead of one per swatch (over forty in the colour rows), and the arrow keys move
