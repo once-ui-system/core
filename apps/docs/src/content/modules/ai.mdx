@@ -1,0 +1,177 @@
+---
+title: "AI"
+export: "WorkingIndicator"
+summary: "Pieces for AI products: a loader drawn from the Once UI mark and a working line that cycles through playful verbs while an assistant thinks."
+updatedAt: "2026-10-20"
+docs: "once-ui/modules/ai.mdx"
+github: "modules/ai/WorkingIndicator.tsx"
+navLabel: "AI"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Use these where an assistant is doing something the person is waiting on. Every piece takes the
+brand color, so inside a themed chat it follows the chat's theme, and every piece keeps saying
+"working" under reduced motion without moving.
+
+## WorkingIndicator
+
+A moving mark and a verb that changes every few seconds, like "Imagining…" or "Noodling…". The
+first render always shows the first verb, so server and client agree; the order shuffles after
+mount.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <WorkingIndicator />
+  }
+  codes={[
+    {
+      code:
+`<WorkingIndicator />`,
+      language: "tsx",
+      label: "Default"
+    }
+  ]}
+/>
+
+### Your own words
+
+Pass `verbs` to give a product its own voice, or spread `workingVerbs` to add to the default list.
+`label` shows one fixed line instead, for a step you can name.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <WorkingIndicator verbs={["Brewing", "Steeping", "Pouring"]} />
+      <WorkingIndicator label="Searching the docs…" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`import { WorkingIndicator, workingVerbs } from "@once-ui-system/core";
+
+<WorkingIndicator verbs={["Brewing", "Steeping", "Pouring"]} />
+<WorkingIndicator verbs={[...workingVerbs, "Defragmenting"]} />
+<WorkingIndicator label="Searching the docs…" />`,
+      language: "tsx",
+      label: "Verbs"
+    }
+  ]}
+/>
+
+### Elapsed time and a hint
+
+`showElapsed` counts seconds since `startedAt` (or since the indicator appeared), and `detail` adds
+a quiet hint after it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <WorkingIndicator showElapsed detail="esc to stop" />
+  }
+  codes={[
+    {
+      code:
+`<WorkingIndicator showElapsed startedAt={run.startedAt} detail="esc to stop" />`,
+      language: "tsx",
+      label: "Elapsed"
+    }
+  ]}
+/>
+
+### Sizes
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16">
+      <WorkingIndicator size="s" />
+      <WorkingIndicator size="m" />
+      <WorkingIndicator size="l" />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<WorkingIndicator size="s" />
+<WorkingIndicator size="m" />
+<WorkingIndicator size="l" />`,
+      language: "tsx",
+      label: "Sizes"
+    }
+  ]}
+/>
+
+## LogoSpinner
+
+The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
+them back; `wave` lifts one tile at a time. Keep `Spinner` for buttons and fields, and use this one
+where the product's own loader belongs.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="32" center>
+      <LogoSpinner size="xl" />
+      <LogoSpinner size="xl" variant="wave" />
+      <LogoSpinner size="xl" color="accent" />
+      <LogoSpinner size="xl" color="neutral" speed={2.4} />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<LogoSpinner size="xl" />
+<LogoSpinner size="xl" variant="wave" />
+<LogoSpinner size="xl" color="accent" />
+<LogoSpinner size="xl" color="neutral" speed={2.4} />`,
+      language: "tsx",
+      label: "Variants"
+    }
+  ]}
+/>
+
+## Accessibility
+
+`WorkingIndicator` is one `status` region with a fixed name, "Working" unless you pass `ariaLabel`,
+so a screen reader announces it once instead of reading every new verb. With reduced motion the
+tiles stop moving and fade in turn, the verbs swap without sliding and the shimmer is off.
+
+## API reference
+
+<PropsTable
+  component="WorkingIndicator"
+  describe={{
+    verbs: "The words to cycle through. Defaults to workingVerbs.",
+    label: "A fixed line instead of the cycling verbs.",
+    interval: "Milliseconds each verb stays.",
+    shuffle: "Random order, never the same verb twice in a row.",
+    shimmer: "A light sweep across the words.",
+    showElapsed: "Show seconds since startedAt.",
+    startedAt: "When the work began, as a Date or epoch milliseconds.",
+    detail: "Quiet text after the verb.",
+    loader: "The loader before the words; false for none.",
+    size: "Text and loader size.",
+    ariaLabel: "What screen readers announce once.",
+  }}
+/>
+
+<PropsTable
+  component="LogoSpinner"
+  describe={{
+    size: "Loader size, the same footprint as Spinner.",
+    variant: "twist or wave.",
+    color: "brand, accent, neutral, or inherit for the text color.",
+    speed: "Seconds per cycle.",
+    ariaLabel: "What assistive tech announces.",
+  }}
+/>

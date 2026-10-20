@@ -8,6 +8,7 @@
 // at runtime. Reaching them through their own subpath keeps the specifier out
 // of the graph of everyone who does not ask for it.
 
+export * from "./ai";
 export * from "./chat";
 
 // The types these components take, so consumers can annotate their own nav

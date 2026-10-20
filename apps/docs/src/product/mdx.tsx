@@ -83,6 +83,7 @@ import {
   ListItem,
   Logo,
   LogoCloud,
+  LogoSpinner,
   Mask,
   MasonryGrid,
   MatrixFx,
@@ -154,6 +155,7 @@ import {
   UserMenu,
   VisuallyHidden,
   WeatherFx,
+  WorkingIndicator,
 } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import {
@@ -437,6 +439,8 @@ const mdxComponents = createMdxComponents({
   Toast,
   Toaster,
   Spinner,
+  LogoSpinner,
+  WorkingIndicator,
   Skeleton,
   FocusTrap,
   ScrollLock,
