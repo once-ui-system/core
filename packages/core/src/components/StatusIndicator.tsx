@@ -4,24 +4,27 @@ import { CondensedTShirtSizes } from "../types";
 import { Flex } from "./Flex";
 import styles from "./StatusIndicator.module.scss";
 
+/** The colours a status dot takes, here and on Avatar's `statusIndicator`. */
+export type StatusIndicatorColor =
+  | "blue"
+  | "indigo"
+  | "violet"
+  | "magenta"
+  | "pink"
+  | "red"
+  | "orange"
+  | "yellow"
+  | "moss"
+  | "green"
+  | "emerald"
+  | "aqua"
+  | "cyan"
+  | "gray";
+
 interface StatusIndicatorProps extends React.ComponentProps<typeof Flex> {
   size?: CondensedTShirtSizes;
   /** Defaults to `blue`. */
-  color?:
-    | "blue"
-    | "indigo"
-    | "violet"
-    | "magenta"
-    | "pink"
-    | "red"
-    | "orange"
-    | "yellow"
-    | "moss"
-    | "green"
-    | "emerald"
-    | "aqua"
-    | "cyan"
-    | "gray";
+  color?: StatusIndicatorColor;
   ariaLabel?: string;
   className?: string;
   style?: React.CSSProperties;

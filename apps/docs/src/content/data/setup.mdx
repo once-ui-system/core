@@ -232,6 +232,31 @@ When working with time series data, use the `date` prop to define the date forma
   ]}
 />
 
+Rows typed with your own `interface` and `readonly` arrays are taken as they are, so the type you already have for the data is the one you pass.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`interface RevenuePoint {
+  month: string;
+  revenue: number;
+}
+
+const revenue: readonly RevenuePoint[] = [
+  { month: "Jan", revenue: 12400 },
+  { month: "Feb", revenue: 15100 },
+];
+
+<LineChart title="Revenue" series={{ key: "revenue" }} data={revenue} />`,
+      language: "tsx",
+      label: "Typed rows"
+    }
+  ]}
+/>
+
 ### Context
 
 Render textual context above the chart with the `title` and `description` props.

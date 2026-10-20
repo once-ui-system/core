@@ -76,7 +76,13 @@ interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "
   title?: React.ReactNode;
   description?: React.ReactNode;
   series: SeriesConfig | SeriesConfig[];
-  data: DataPoint[];
+  /**
+   * One object per point: the x-axis value and a number per series key, as
+   * `DataPoint`. Rows typed with an `interface` (`RevenuePoint[]`) and
+   * `readonly` arrays are taken as they are; an interface has no index
+   * signature, so `DataPoint[]` alone rejected them.
+   */
+  data: readonly DataPoint[] | readonly object[];
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;

@@ -48,6 +48,33 @@ The `UserMenu` component renders a user avatar and name, and opens a dropdown fo
   ]}
 />
 
+## Handling a choice
+
+`onSelect` gets the `value` of the Option picked from `dropdown`, by click or keyboard, and the menu closes. It is DropdownWrapper's `onSelect`, passed through.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<UserMenu
+    name="Lorant One"
+    subline="Design Engineer"
+    onSelect={(value) => (value === "logout" ? signOut() : router.push("/settings"))}
+    dropdown={
+      <Column gap="4" padding="4" minWidth={10}>
+        <Option value="settings" label="Settings" />
+        <Option value="logout" label="Log out" />
+      </Column>
+    }
+/>`,
+      language: "tsx",
+      label: "onSelect"
+    }
+  ]}
+/>
+
 ## Loading state
 
 You can show skeleton content while loading profile data by setting `loading={true}`.
@@ -76,6 +103,7 @@ You can show skeleton content while loading profile data by setting `loading={tr
     selected: "Mark the trigger as active while the menu is open.",
     placement: "Which side the menu opens on.",
     dropdown: "The menu contents.",
+    onSelect: "Called with the picked Option's value.",
   }}
   content={[
     ["name", "string"],
