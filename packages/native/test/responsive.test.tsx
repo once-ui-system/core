@@ -177,7 +177,9 @@ describe("safe areas", () => {
         <Dialog open onClose={() => {}} title="Redeem" />
       </ThemeProvider>,
     );
-    expect(getComputedStyle(screen.getByRole("dialog")).paddingBottom).toBe("34px");
+    // react-native-web's Modal is a dialog too; the sheet is the inner one.
+    const sheet = screen.getAllByRole("dialog").at(-1) as HTMLElement;
+    expect(getComputedStyle(sheet).paddingBottom).toBe("34px");
   });
 
   it("stacks toasts above the bottom inset", () => {
