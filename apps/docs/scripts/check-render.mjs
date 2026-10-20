@@ -38,6 +38,9 @@ const IGNORE = [
   /\/_vercel\/(insights|speed-insights)\//,
   /youtube\.com|googleapis\.com|googlevideo\.com|doubleclick\.net/,
   /WebGL|WebGPU|GroupMarkerNotSet|swiftshader/i,
+  // The YouTube player on /components/media probes the Compute Pressure API,
+  // which its iframe isn't granted; the message doesn't name the embed.
+  /Permissions policy violation: compute-pressure/,
 ];
 const ignored = (text) => IGNORE.some((re) => re.test(text));
 
