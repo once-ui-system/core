@@ -8,6 +8,7 @@ import { Field, Fieldset, FormErrorSummary, SubmitButton } from "../src/componen
 import { corners, Form, place } from "../src/components/Form";
 import { Input } from "../src/components/Input";
 import { Nav, NavGroup, NavItem, NavSection } from "../src/components/Nav";
+import { Table } from "../src/components/Table";
 import { Text } from "../src/components/Text";
 import { ThemeProvider } from "../src/theme";
 
@@ -204,5 +205,54 @@ describe("DatePicker", () => {
     await fireEvent.press(await screen.findByLabelText("Tuesday, October 27, 2026"));
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(screen.getByDisplayValue("Oct 27, 2026", { includeHiddenElements: true })).toBeTruthy();
+  });
+});
+
+describe("Table", () => {
+  const data = {
+    headers: [
+      { content: "Guest", key: "name", sortable: true },
+      { content: "Visits", key: "visits", sortable: true },
+      { content: "Last visit", key: "last", hide: { s: true } },
+    ],
+    rows: [
+      ["Bence", "4", "Oct 20"],
+      ["Anna", "12", "Oct 18"],
+      ["Dóra", "9", "Oct 12"],
+    ],
+  };
+
+  it("sorts numbers as numbers, searches and pages", async () => {
+    await wrap(<Table data={data} searchable paginated defaultPageSize={2} />);
+    await fireEvent.press(screen.getByText("Visits"));
+    let names = screen.getAllByText(/^(Anna|Bence|Dóra)$/).map((n) => n.props.children);
+    expect(names).toEqual(["Bence", "Dóra"]);
+    await fireEvent.press(screen.getByText("Visits"));
+    names = screen.getAllByText(/^(Anna|Bence|Dóra)$/).map((n) => n.props.children);
+    expect(names).toEqual(["Anna", "Dóra"]);
+    await fireEvent.changeText(screen.getByLabelText("Search..."), "ann");
+    expect(screen.queryByText("Dóra")).toBeNull();
+    expect(screen.getByText("Anna")).toBeTruthy();
+  });
+
+  it("taps a row and runs a row action with the row's index", async () => {
+    const onRowClick = jest.fn();
+    const onClick = jest.fn();
+    await wrap(
+      <Table
+        data={data}
+        onRowClick={onRowClick}
+        actions={[{ icon: "trash", label: "Delete", onClick }]}
+      />,
+    );
+    await fireEvent.press(screen.getByText("Anna"));
+    expect(onRowClick).toHaveBeenCalledWith(1);
+    await fireEvent.press(screen.getAllByLabelText("Delete")[2]);
+    expect(onClick).toHaveBeenCalledWith(2);
+  });
+
+  it("shows the empty state", async () => {
+    await wrap(<Table data={{ headers: data.headers, rows: [] }} emptyState="No guests yet" />);
+    expect(screen.getByText("No guests yet")).toBeTruthy();
   });
 });

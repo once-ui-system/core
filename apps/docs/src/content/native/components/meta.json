@@ -44,6 +44,7 @@
     "timeline": 40,
     "scroller": 41,
     "drawer": 42,
-    "nav": 43
+    "nav": 43,
+    "table": 44
   }
 }
