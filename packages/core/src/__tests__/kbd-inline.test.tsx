@@ -1,5 +1,6 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { Input } from "../components/Input";
 import { Kbd } from "../components/Kbd";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
@@ -25,6 +26,28 @@ describe("Kbd", () => {
     const { container } = render(<Kbd>Esc</Kbd>, { wrapper: wrap });
     const el = container.querySelector("kbd") as HTMLElement;
     expect(el.className).toMatch(/\bfit\b/);
+  });
+
+  // "Ctrl K" in an Input's suffix broke onto two lines: the cap stood 38px
+  // tall and stretched a 32px xxs field to 40px (measured in Chromium).
+  it("stays on one line and keeps its width in a tight row", () => {
+    const { container } = render(
+      <Input id="search" size="xxs" placeholder="Search" suffix={<Kbd>Ctrl K</Kbd>} />,
+      { wrapper: wrap },
+    );
+    const el = container.querySelector("kbd") as HTMLElement;
+    expect(el.style.whiteSpace).toBe("nowrap");
+    expect(el.style.flexShrink).toBe("0");
+  });
+
+  it("merges a caller's style over its own", () => {
+    const { container } = render(<Kbd style={{ whiteSpace: "normal", color: "red" }}>Esc</Kbd>, {
+      wrapper: wrap,
+    });
+    const el = container.querySelector("kbd") as HTMLElement;
+    expect(el.style.whiteSpace).toBe("normal");
+    expect(el.style.flexShrink).toBe("0");
+    expect(el.style.color).toBe("red");
   });
 
   it("can still be overridden", () => {

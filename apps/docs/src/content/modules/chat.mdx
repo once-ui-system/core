@@ -200,6 +200,35 @@ The input bar. The field grows with the draft up to about eight lines, Enter sen
   ]}
 />
 
+### Toolbar
+
+`toolbar` adds a row under the field for chips, a model picker or other controls, and `hint` puts quiet text such as "Enter to send" before the send button. With either one, the attach button moves to the start of that row, and `actions` and send to its end. `sendIcon` swaps the send button's icon. Without them the composer stays one row.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ChatComposerToolbarExample />}
+  codes={[
+    {
+      code:
+`<ChatComposer
+  attach
+  sendIcon="arrowUp"
+  hint={<><Kbd>Enter</Kbd> to send</>}
+  toolbar={
+    <>
+      <Chip label="Your library" prefixIcon="document" />
+      <Chip label="Q4 pricing" suffixIcon="chevronDown" selected={false} />
+    </>
+  }
+  onSend={({ text }) => ask(text)}
+/>`,
+      language: "tsx",
+      label: "Toolbar"
+    }
+  ]}
+/>
+
 <PropsTable
   component="ChatComposer"
   describe={{
@@ -218,6 +247,9 @@ The input bar. The field grows with the draft up to about eight lines, Enter sen
     removeLabel: "The label of an attachment's remove button, from its file name.",
     prefix: "Content before the field, such as an emoji picker.",
     actions: "More controls before the send button.",
+    toolbar: "Controls in a row under the field, after the attach button.",
+    hint: "Quiet text before the send button, such as \"Enter to send\". Turns on the row under the field.",
+    sendIcon: "The send button's icon.",
     maxLength: "The longest draft allowed.",
     id: "The field's id. One is generated when it is left out.",
   }}
