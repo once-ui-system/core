@@ -116,13 +116,16 @@ item (see `ROADMAP.md`, Week 4).
   or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
   same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
   stop and live audio shows as glow and bar height.
-- **A mascot for assistants: `Mascot`.** One soft, single-color shape with a pair of eyes
-  that idles, listens, thinks, speaks and sleeps, with a mood on top (happy, surprised,
-  sad). When it looks around (at the pointer, by default) the eyes slide over the body
-  and the nearer one narrows, as if it were round; while speaking the body pulses with a
-  `level` or the reply's audio `source`. `color` takes a scheme or any CSS color and
-  every shade comes from it; `roundness`, `aspect` and `eyes` change its shape. Under
-  reduced motion it holds still and keeps its expressions.
+- **A mascot for assistants: `Mascot` and `mascotLook`.** One soft, single-color shape with
+  eyes that idles, listens, thinks, speaks and sleeps, with eight moods on top (happy,
+  surprised, sad, skeptical, wink, focused, determined). By default the eyes are tiles of
+  the Once UI mark, and while it thinks they turn like `LogoSpinner`. Eyes follow the
+  pointer across a body that reads as round, lids shape each expression, and speaking
+  moves the body (and mouth) with a `level` or the reply's audio `source`. Every part of
+  the look is a prop: color, outline (`roundness`, `aspect`, `bodyPath`), `surface`, eye
+  shape, size and placement, `mouth`, `brows`, `cheeks`, an SVG `accessory` and a
+  `personality`; `seed` (or `mascotLook(seed)`) picks a whole look so each product gets
+  its own character. Under reduced motion it holds still and keeps its expressions.
 
 ### Fixed
 

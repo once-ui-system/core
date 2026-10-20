@@ -169,9 +169,10 @@ something of your own, `useAudioLevel(source)` returns the same loudness from 0 
 ## Mascot
 
 A companion for an assistant: one soft, single-color shape with a pair of eyes. It idles, listens,
-thinks, speaks and sleeps, with a mood on top. When it looks around, the eyes slide over the body
-and the one nearer the edge narrows, as if the body were round; while speaking, the body pulses with
-the reply's audio.
+thinks, speaks and sleeps, with a mood on top (happy, surprised, sad, skeptical, wink, focused,
+determined). By default the eyes are tiles of the Once UI mark, and while it thinks they turn like
+the `LogoSpinner`. When it looks around, the eyes slide over the body and the one nearer the edge
+narrows, as if the body were round; while speaking, the body pulses with the reply's audio.
 
 <CodeBlock
   marginTop="16"
@@ -193,28 +194,36 @@ the reply's audio.
 
 ### Make it yours
 
-`color` takes a scheme or any CSS color, and every shade, highlight and shadow comes from it.
-`roundness` runs from a rounded square (0) to a circle (1), `aspect` makes it tall or wide, and
-`eyes` picks `pill`, `round` or `wide`. From CSS, `--mascot-color` and `--mascot-eye` recolor it.
+Every part of the look is a prop, so two products never have to share a character. `color` takes a
+scheme or any CSS color and every shade comes from it; `roundness`, `aspect` or your own `bodyPath`
+set the outline; `surface` is `glossy`, `matte`, `flat` or `glass`. `eyes` is `tile`, `pill`,
+`round`, `wide`, `dot` or your own path, placed with `eyeSize`, `eyeSpacing` and `eyeHeight`.
+`mouth`, `brows` and `cheeks` add features that follow the mood, `accessory` draws your own SVG with
+the body, and `personality` makes it `calm` or `bouncy`. Or pass a `seed` (a product name, a user
+id) and `mascotLook(seed)` picks a whole look; props you pass still win.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="32" center wrap>
-      <Mascot size="l" roundness={1} eyes="round" color="#ff5a36" />
-      <Mascot size="l" roundness={0.3} color="#5ee68a" />
-      <Mascot size="l" aspect={1.3} eyes="wide" color="accent" />
-      <Mascot size="l" aspect={0.8} roundness={0.9} color="neutral" lookAt="center" />
+      <Mascot size="l" eyes="pill" brows mouth="smile" color="#3fb6ff" />
+      <Mascot size="l" surface="matte" roundness={0.3} cheeks mouth="dot" color="#5ee68a" />
+      <Mascot size="l" surface="glass" eyes="wide" aspect={1.3} color="accent" />
+      <Mascot size="l" surface="flat" eyes="dot" mouth="smile" color="#ffc53d" personality="bouncy" />
+      <Mascot size="l" seed="acme" />
+      <Mascot size="l" seed="zest" />
     </Row>
   }
   codes={[
     {
       code:
-`<Mascot roundness={1} eyes="round" color="#ff5a36" />
-<Mascot roundness={0.3} color="#5ee68a" />
-<Mascot aspect={1.3} eyes="wide" color="accent" />
-<Mascot aspect={0.8} roundness={0.9} color="neutral" lookAt="center" />`,
+`<Mascot eyes="pill" brows mouth="smile" color="#3fb6ff" />
+<Mascot surface="matte" roundness={0.3} cheeks mouth="dot" color="#5ee68a" />
+<Mascot surface="glass" eyes="wide" aspect={1.3} color="accent" />
+<Mascot surface="flat" eyes="dot" mouth="smile" color="#ffc53d" personality="bouncy" />
+<Mascot seed="acme" />
+<Mascot seed="zest" />`,
       language: "tsx",
       label: "Customize"
     }
@@ -301,11 +310,23 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
   component="Mascot"
   describe={{
     state: "idle, listening, thinking, speaking or sleeping.",
-    mood: "neutral, happy, surprised or sad.",
+    mood: "neutral, happy, surprised, sad, skeptical, wink, focused or determined.",
+    seed: "Picks a whole look (mascotLook); props you pass win over it.",
     color: "brand, accent, neutral or any CSS color; every shade comes from it.",
     roundness: "0, a rounded square, to 1, a circle.",
     aspect: "Width over height: below 1 is tall, above 1 is wide.",
-    eyes: "pill, round or wide.",
+    bodyPath: "Your own outline: an SVG path in a 200 × 200 box.",
+    surface: "glossy, matte, flat or glass.",
+    eyes: "tile (Once UI, turns while thinking), pill, round, wide, dot, or { path }.",
+    eyeSize: "Scale of the eyes, 1 by default.",
+    eyeSpacing: "Distance between the eyes, 1 by default.",
+    eyeHeight: "-1 (up) to 1 (down).",
+    eyeColor: "Color of the eyes and features.",
+    mouth: "none, smile, dot or line; follows the mood and moves while speaking.",
+    brows: "Brows that follow the mood.",
+    cheeks: "Blush under the eyes.",
+    accessory: "SVG drawn with the body in its 200 × 200 box.",
+    personality: "calm, default or bouncy.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",
     source: "Audio to pulse with: an element, a stream or an AnalyserNode.",

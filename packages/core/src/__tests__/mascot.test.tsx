@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { Mascot } from "../modules/ai/Mascot";
+import { Mascot, mascotLook } from "../modules/ai/Mascot";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -21,19 +21,43 @@ describe("Mascot", () => {
     expect(img.getAttribute("data-mood")).toBe("happy");
   });
 
-  it("draws one body and two eyes, and nothing else", () => {
-    const { container } = render(<Mascot />);
-    expect(container.querySelectorAll("rect")).toHaveLength(2);
-    expect(container.querySelectorAll("text")).toHaveLength(0);
+  it("draws Once UI tile eyes by default, other eye shapes on request", () => {
+    const { container, rerender } = render(<Mascot />);
+    const img = screen.getByRole("img");
+    expect(img.getAttribute("data-eyes")).toBe("tile");
+    expect(container.querySelectorAll("g[clip-path*='-top-'] path")).toHaveLength(2);
+    rerender(<Mascot eyes="pill" />);
+    expect(img.getAttribute("data-eyes")).toBe("shape");
+    expect(container.querySelectorAll("g[clip-path*='-top-'] rect")).toHaveLength(2);
+    rerender(<Mascot eyes={{ path: "M0 -10 L10 0 L0 10 L-10 0Z" }} />);
+    expect(container.querySelector("g[clip-path*='-top-'] path")?.getAttribute("d")).toBe(
+      "M0 -10 L10 0 L0 10 L-10 0Z",
+    );
   });
 
-  it("closes its eyes into arcs when happy or asleep, with z's while sleeping", () => {
-    const { container, rerender } = render(<Mascot mood="happy" />);
-    expect(container.querySelectorAll("rect")).toHaveLength(0);
+  it("shows z's only while sleeping", () => {
+    const { container, rerender } = render(<Mascot />);
     expect(container.querySelectorAll("text")).toHaveLength(0);
     rerender(<Mascot state="sleeping" />);
-    expect(container.querySelectorAll("rect")).toHaveLength(0);
     expect(container.querySelectorAll("text")).toHaveLength(2);
+  });
+
+  it("adds a mouth, brows, cheeks and an accessory when asked", () => {
+    const { container } = render(
+      <Mascot mouth="smile" brows cheeks accessory={<circle data-testid="hat" r={4} />} />,
+    );
+    expect(container.querySelectorAll("path[class*='brow']")).toHaveLength(2);
+    expect(container.querySelectorAll("ellipse[class*='cheek']")).toHaveLength(2);
+    expect(container.querySelector("[data-testid='hat']")).toBeTruthy();
+  });
+
+  it("gives the same seed the same look, and lets props win over it", () => {
+    expect(mascotLook("acme")).toEqual(mascotLook("acme"));
+    expect(mascotLook("acme")).not.toEqual(mascotLook("lumen"));
+    render(<Mascot seed="acme" color="#123456" surface="flat" />);
+    const img = screen.getByRole("img");
+    expect(img.style.getPropertyValue("--mascot-color")).toBe("#123456");
+    expect(img.getAttribute("data-surface")).toBe("flat");
   });
 
   it("takes a scheme or any CSS color", () => {
@@ -84,7 +108,7 @@ describe("Mascot", () => {
     const { container } = render(<Mascot eyes="wide" size={64} />);
     const img = screen.getByRole("img");
     expect(img.style.width).toBe("64px");
-    const eye = container.querySelector("rect");
+    const eye = container.querySelector("g[clip-path*='-top-'] rect");
     expect(Number(eye?.getAttribute("width"))).toBeGreaterThan(Number(eye?.getAttribute("height")));
   });
 
