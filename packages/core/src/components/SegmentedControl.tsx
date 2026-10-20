@@ -25,6 +25,14 @@ interface SegmentedControlProps
   value?: string;
   compact?: boolean;
   /**
+   * What the segments are to assistive technology. `"tabs"` (the default) is
+   * a tab strip: arrows move focus, Enter or Space selects. `"radio"` is one
+   * choice from a set, for a setting rather than a view switch: a
+   * `radiogroup` of `radio`s, where the arrows move focus and select, as
+   * native radios do. Name it with `aria-label` or `aria-labelledby`.
+   */
+  semantics?: "tabs" | "radio";
+  /**
    * `false` lays the options out in a plain row that shares the width (equally
    * with `fillWidth`) and truncates a label that does not fit, instead of a
    * strip that scrolls. For a narrow sidebar, where two or three options
@@ -44,6 +52,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       fillWidth = true,
       value,
       compact = false,
+      semantics = "tabs",
       scroll = true,
       className,
       style,
@@ -92,6 +101,17 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       return -1;
     };
 
+    const radio = semantics === "radio";
+
+    /** Focus a segment; in a radio group, moving is choosing. */
+    const moveTo = (index: number) => {
+      buttonRefs.current[index]?.focus();
+      const button = buttons[index];
+      if (!radio || !button || button.value === internalSelected) return;
+      setInternalSelected(button.value);
+      onChange?.(button.value);
+    };
+
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
       const focusedIndex = buttonRefs.current.findIndex((ref) => ref === document.activeElement);
 
@@ -100,15 +120,13 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
         case "ArrowUp":
           event.preventDefault();
           // If nothing is focused, focus the last item
-          buttonRefs.current[enabledFrom(focusedIndex === -1 ? 0 : focusedIndex, -1)]?.focus();
+          moveTo(enabledFrom(focusedIndex === -1 ? 0 : focusedIndex, -1));
           break;
         case "ArrowRight":
         case "ArrowDown":
           event.preventDefault();
           // If nothing is focused, focus the first item
-          buttonRefs.current[
-            enabledFrom(focusedIndex === -1 ? buttons.length - 1 : focusedIndex, 1)
-          ]?.focus();
+          moveTo(enabledFrom(focusedIndex === -1 ? buttons.length - 1 : focusedIndex, 1));
           break;
         case "Enter":
         case " ": // Space key
@@ -141,8 +159,8 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
 
     const tablist = (
       <Flex
-        role="tablist"
-        aria-orientation="horizontal"
+        role={radio ? "radiogroup" : "tablist"}
+        aria-orientation={radio ? undefined : "horizontal"}
         aria-label={ariaLabel}
         aria-labelledby={ariaLabelledBy}
         aria-describedby={ariaDescribedBy}
@@ -214,14 +232,15 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
                 onClick?.(event);
                 handleButtonClick({ ...button, onClick }, event);
               }}
-              role="tab"
+              role={radio ? "radio" : "tab"}
               className={classNames(className, {
                 [styles.shrink]: !scroll,
                 [styles.share]: !scroll && fillWidth,
                 [styles.twoLine]: description !== undefined,
               })}
               style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
-              aria-selected={index === selectedIndex}
+              aria-selected={radio ? undefined : index === selectedIndex}
+              aria-checked={radio ? index === selectedIndex : undefined}
               // No made-up `aria-controls`: it pointed at `panel-<value>`,
               // which nothing renders. A button that does control a panel
               // passes the panel's id as `aria-controls`, spread below.

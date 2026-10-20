@@ -4,6 +4,7 @@ import classNames from "clsx";
 import React, { forwardRef } from "react";
 import { type Theme, useTheme } from "../contexts/ThemeProvider";
 import { mergeLabels } from "../internal/labels";
+import { radioGroupKeyDown } from "../internal/radioKeys";
 import { Column } from "./Column";
 import { IconButton } from "./IconButton";
 import { Row } from "./Row";
@@ -71,10 +72,30 @@ interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onC
    * fields keep the English: "System theme", "Dark theme", "Light theme".
    */
   labels?: ThemeSwitcherLabels;
+  /**
+   * What the options are to assistive technology. `"toggle"` (the default)
+   * is a group of toggle buttons, the active one pressed, each its own tab
+   * stop. `"radio"` is a `radiogroup` of `radio`s, for a settings form: one
+   * tab stop, on the active theme, and the arrows move and choose. Name it
+   * with `aria-label` or `aria-labelledby`.
+   */
+  semantics?: "toggle" | "radio";
 }
 
 const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  ({ collapsed, direction = "row", labels, value, onChange, className, ...flex }, ref) => {
+  (
+    {
+      collapsed,
+      direction = "row",
+      labels,
+      value,
+      onChange,
+      semantics = "toggle",
+      className,
+      ...flex
+    },
+    ref,
+  ) => {
     const { theme: providerTheme, setTheme } = useTheme();
     const controlled = value !== undefined;
     const theme = controlled ? value : providerTheme;
@@ -133,8 +154,21 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
       onChange?.(next);
     };
 
+    const radio = semantics === "radio";
+    // A radio group's one tab stop: the active theme, or the first option
+    // until the active one is known.
+    const anyActive = known && THEMES.some(({ value: option }) => option === theme);
+    const group = radio ? { role: "radiogroup", onKeyDown: radioGroupKeyDown } : {};
+
     const options = ordered.map(({ value: option, icon }, index) => {
       const active = known && theme === option;
+      const state = radio
+        ? {
+            role: "radio",
+            "aria-checked": active,
+            tabIndex: (anyActive ? active : index === 0) ? 0 : -1,
+          }
+        : { "aria-pressed": active };
       return (
         <Row
           key={option}
@@ -150,7 +184,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
             variant={active ? "primary" : "tertiary"}
             onClick={() => choose(option)}
             aria-label={names[option]}
-            aria-pressed={active}
+            {...state}
             suppressHydrationWarning
           />
         </Row>
@@ -178,6 +212,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
           fit
           className={classNames(styles.anchor, pending && styles.pending, className)}
           suppressHydrationWarning
+          {...group}
           {...flex}
         >
           <Column
@@ -203,6 +238,7 @@ const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         radius="full"
         suppressHydrationWarning
         className={classNames(collapsed && styles.collapsed, pending && styles.pending, className)}
+        {...group}
         {...flex}
       >
         {options}
