@@ -134,7 +134,7 @@ export function NavSection({ label, action, children, ...column }: NavSectionPro
           paddingTop="8"
         >
           {typeof label === "string" ? (
-            <Text variant={`label-default-${sizes.section}`} onBackground="neutral-weak">
+            <Text textVariant={`label-default-${sizes.section}`} onBackground="neutral-weak">
               {label}
             </Text>
           ) : (
@@ -184,7 +184,7 @@ function Badge({ badge, indicator }: Pick<NavItemProps, "badge" | "indicator">) 
         aria-label={count !== undefined ? `${count} unread` : undefined}
         style={fill}
       >
-        <Text variant="label-default-xs" onSolid="brand-strong">
+        <Text textVariant="label-default-xs" onSolid="brand-strong">
           {count !== undefined ? (count > 9 ? "9+" : String(count)) : badge}
         </Text>
       </Row>
@@ -253,7 +253,7 @@ export function NavItem({
         )}
         {typeof label === "string" ? (
           <Text
-            variant={`label-${selected ? "strong" : "default"}-xs`}
+            textVariant={`label-${selected ? "strong" : "default"}-xs`}
             onBackground={tone}
             numberOfLines={1}
           >
@@ -308,7 +308,7 @@ export function NavItem({
         )}
         {typeof label === "string" ? (
           <Text
-            variant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
+            textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
             onBackground={textTone}
             numberOfLines={1}
             style={{ flexShrink: 1 }}
@@ -331,8 +331,6 @@ export interface NavGroupProps extends Omit<FlexProps, "children"> {
   /** Open state, when the host owns it. */
   open?: boolean;
   defaultOpen?: boolean;
-  /** Called on the header. */
-  onToggle?: () => void;
   /** Core 3.0's change handler: called with the next state. */
   onOpenChange?: (open: boolean) => void;
   /** Marks the header itself as the current page. */
@@ -346,7 +344,6 @@ export function NavGroup({
   children,
   open,
   defaultOpen = false,
-  onToggle,
   onOpenChange,
   selected = false,
   ...row
@@ -357,7 +354,6 @@ export function NavGroup({
   const isOpen = open ?? own;
   const toggle = () => {
     if (open === undefined) setOwn(!isOpen);
-    onToggle?.();
     onOpenChange?.(!isOpen);
   };
   return (
@@ -369,7 +365,7 @@ export function NavGroup({
     >
       <Accordion
         open={isOpen}
-        onToggle={toggle}
+        onOpenChange={toggle}
         size={sizes.text === "s" ? "s" : "m"}
         headerProps={{ paddingLeft: sizes.x, minHeight: sizes.height }}
         contentProps={{ paddingTop: "4", paddingBottom: "8" }}
@@ -378,7 +374,7 @@ export function NavGroup({
             {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
             {typeof label === "string" ? (
               <Text
-                variant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
+                textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
                 onBackground={emphasis && !selected ? "neutral-weak" : "neutral-strong"}
               >
                 {label}

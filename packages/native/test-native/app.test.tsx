@@ -199,7 +199,9 @@ describe("DatePicker", () => {
 
   it("opens from a DateInput and closes on a pick", async () => {
     const onChange = jest.fn();
-    await wrap(<DateInput label="Date" defaultValue={new Date(2026, 9, 24)} onChange={onChange} />);
+    await wrap(
+      <DateInput label="Date" defaultValue={new Date(2026, 9, 24)} onValueChange={onChange} />,
+    );
     expect(screen.getByDisplayValue("Oct 24, 2026", { includeHiddenElements: true })).toBeTruthy();
     await fireEvent.press(screen.getByRole("button", { name: "Date" }));
     await fireEvent.press(await screen.findByLabelText("Tuesday, October 27, 2026"));

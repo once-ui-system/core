@@ -47,7 +47,7 @@ export function Guests() {
           { content: "Tier", key: "tier", width: "88px" },
         ],
         rows: [
-          ["Anna Kovács", "12", "Oct 18", <Tag size="s" scheme="warning" label="Gold" />],
+          ["Anna Kovács", "12", "Oct 18", <Tag size="s" tone="warning" label="Gold" />],
           ["Bence Szabó", "4", "Oct 20", <Tag size="s" label="Silver" />],
         ],
       }}
@@ -110,6 +110,7 @@ A header's `width` is `"120px"` for a fixed column or `"30%"` for a share; colum
 | --- | --- | --- |
 | `icon` | `IconName` | The button's icon. |
 | `label` | `string` | Its spoken name. |
-| `variant` | `"primary" \| "secondary" \| "tertiary" \| "danger"` | Defaults to `"tertiary"`. |
+| `variant` | `"primary" \| "secondary" \| "tertiary" \| "ghost"` | Defaults to `"tertiary"`. |
+| `tone` | `Tone` | The palette, such as `"danger"`. |
 | `onClick` | `(rowIndex: number) => void` | Called with the row's index. |
 | `disabled` | `(rowIndex: number) => boolean` | Disables it for some rows. |

@@ -8,7 +8,7 @@ navLabel: "DatePicker"
 navIcon: "components"
 ---
 
-`DatePicker` takes the same main props as on the web (`value`, `defaultDate`, `onChange`, `minDate`, `maxDate`, `size`, `range`, `locale`, `labels`). It shows a month of days between previous and next buttons, marks today, and keeps days outside `minDate`…`maxDate` from being picked. With `locale`, the month and weekday names and the week's first day follow that locale, as on the web. See the [web DatePicker](/form-controls/datePicker) for the same component in the browser.
+`DatePicker` takes the same main props as on the web (`value`, `defaultDate`, `onValueChange`, `minDate`, `maxDate`, `size`, `range`, `locale`, `labels`). It shows a month of days between previous and next buttons, marks today, and keeps days outside `minDate`…`maxDate` from being picked. With `locale`, the month and weekday names and the week's first day follow that locale, as on the web. See the [web DatePicker](/form-controls/datePicker) for the same component in the browser.
 
 <Row fillWidth horizontal="center" marginY="24">
   <Media
@@ -34,7 +34,7 @@ export function Day() {
   const [date, setDate] = useState(new Date());
   return (
     <Card padding="16">
-      <DatePicker value={date} onChange={setDate} minDate={new Date()} fillWidth />
+      <DatePicker value={date} onValueChange={setDate} minDate={new Date()} fillWidth />
     </Card>
   );
 }`,
@@ -64,7 +64,7 @@ codes={[
 
 - **No time picker** yet: `timePicker` and `defaultTime` are left out. Use an `Input` for the time.
 - **No month and year menus**: the header moves one month at a time.
-- **Core 3.0 names.** `onValueChange` works beside `onChange`.
+- **Core 3.0 names.** The change handler is `onValueChange`, as on the web (2.x called it `onChange`).
 
 ## API reference
 
@@ -72,7 +72,7 @@ codes={[
 | --- | --- | --- | --- |
 | `value` | `Date` | | The picked day, when you own it. |
 | `defaultDate` | `Date` | | The first picked day when the picker owns it. |
-| `onChange` / `onValueChange` | `(date: Date) => void` | | Called with the day picked, keeping its time of day. |
+| `onValueChange` | `(date: Date) => void` | | Called with the day picked, keeping its time of day. |
 | `minDate` | `Date` | | The first day that can be picked. |
 | `maxDate` | `Date` | | The last day that can be picked. |
 | `size` | `"s" \| "m" \| "l"` | `"m"` | Day cells of 32, 40 or 48. |

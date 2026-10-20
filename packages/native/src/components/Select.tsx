@@ -220,7 +220,12 @@ export function Select({
               </Row>
             )}
             {visible.length === 0 ? (
-              <Text textVariant="body-default-s" onBackground="neutral-weak" paddingX="12" paddingY="8">
+              <Text
+                textVariant="body-default-s"
+                onBackground="neutral-weak"
+                paddingX="12"
+                paddingY="8"
+              >
                 {emptyState}
               </Text>
             ) : (

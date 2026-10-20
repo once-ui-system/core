@@ -21,8 +21,7 @@ export interface DatePickerProps extends Omit<FlexProps, "children"> {
   value?: Date;
   /** The starting date when there is no `value`. */
   defaultDate?: Date;
-  onChange?: (date: Date) => void;
-  /** Core 3.0's name for `onChange`; both are called. */
+  /** Called with the picked day, as core 3.0's `onValueChange` (2.x's `onChange`). */
   onValueChange?: (date: Date) => void;
   minDate?: Date;
   maxDate?: Date;
@@ -60,7 +59,6 @@ export function monthGrid(year: number, month: number, firstDayOfWeek: number) {
 export function DatePicker({
   value,
   defaultDate,
-  onChange,
   onValueChange,
   minDate,
   maxDate,
@@ -98,7 +96,6 @@ export function DatePicker({
     const next = new Date(day);
     if (selected) next.setHours(selected.getHours(), selected.getMinutes(), 0, 0);
     if (value === undefined) setOwn(next);
-    onChange?.(next);
     onValueChange?.(next);
   };
 
@@ -109,17 +106,21 @@ export function DatePicker({
           icon="chevronLeft"
           variant="tertiary"
           size="m"
-          ariaLabel={labels?.previousMonth ?? "Previous month"}
+          aria-label={labels?.previousMonth ?? "Previous month"}
           onPress={() => move(-1)}
         />
-        <Text variant="label-strong-m" accessibilityRole="header" accessibilityLiveRegion="polite">
+        <Text
+          textVariant="label-strong-m"
+          accessibilityRole="header"
+          accessibilityLiveRegion="polite"
+        >
           {names.monthYear(shown.month, shown.year)}
         </Text>
         <IconButton
           icon="chevronRight"
           variant="tertiary"
           size="m"
-          ariaLabel={labels?.nextMonth ?? "Next month"}
+          aria-label={labels?.nextMonth ?? "Next month"}
           onPress={() => move(1)}
         />
       </Row>
@@ -127,7 +128,7 @@ export function DatePicker({
         {order.map((d) => (
           <View key={d} style={{ width: cell, alignItems: "center" }}>
             <Text
-              variant="label-default-s"
+              textVariant="label-default-s"
               onBackground="neutral-weak"
               accessibilityLabel={names.weekdayLabels[d]}
             >
@@ -188,7 +189,7 @@ export function DatePicker({
                   ]}
                 >
                   <Text
-                    variant={isSelected ? "label-strong-s" : "label-default-s"}
+                    textVariant={isSelected ? "label-strong-s" : "label-default-s"}
                     onBackground={blocked || outside ? "neutral-weak" : "neutral-strong"}
                     onSolid={isSelected ? "brand-strong" : undefined}
                     style={
@@ -212,14 +213,16 @@ export function DatePicker({
 }
 
 export interface DateInputProps
-  extends Omit<InputProps, "value" | "defaultValue" | "onChange" | "onChangeText"> {
+  extends Omit<
+    InputProps,
+    "value" | "defaultValue" | "onChange" | "onChangeText" | "onValueChange"
+  > {
   /** Core's id. Kept so web code compiles; not used on native. */
   id?: string;
   value?: Date;
   /** The starting date when there is no `value`. */
   defaultValue?: Date;
-  onChange?: (date: Date) => void;
-  /** Core 3.0's name for `onChange`; both are called. */
+  /** Called with the picked day, as core 3.0's `onValueChange` (2.x's `onChange`). */
   onValueChange?: (date: Date) => void;
   minDate?: Date;
   maxDate?: Date;
@@ -240,7 +243,6 @@ export function DateInput({
   id: _id,
   value,
   defaultValue,
-  onChange,
   onValueChange,
   minDate,
   maxDate,
@@ -303,9 +305,8 @@ export function DateInput({
             maxDate={maxDate}
             locale={locale}
             labels={labels}
-            onChange={(next) => {
+            onValueChange={(next) => {
               if (value === undefined) setOwn(next);
-              onChange?.(next);
               onValueChange?.(next);
               setOpen(false);
             }}

@@ -93,8 +93,15 @@ export default function RootLayout() {
 ### ThemeProvider
 Root provider: core's style options with core's defaults (theme, brand, neutral, solid, border, scaling…), plus fonts and the screen's safe-area insets
 - theme?: Theme = "system" — `"system"` follows the device's appearance.
-- brand?, accent?: Schemes
-- neutral?: NeutralColor
+- brand?: Schemes | "custom" — `"custom"` reads `brandSeed` or `brandScale`, as `data-brand="custom"` does on the web.
+- accent?: Schemes | "custom"
+- neutral?: NeutralColor | "custom"
+- brandSeed?: string — A colour to generate the brand scheme from (hex, `rgb()` or `oklch()`), for `brand: "custom"`, which it implies when `brand` is not set.
+- accentSeed?: string — As `brandSeed`, for `accent: "custom"`.
+- neutralSeed?: string — As `brandSeed`, for `neutral: "custom"`.
+- brandScale?: SchemeScale — The brand scheme step by step (`100`…`1200`), the native side of the `--scheme-brand-*` properties a web app sets in its own CSS.
+- accentScale?: SchemeScale — As `brandScale`, for `accent: "custom"`.
+- neutralScale?: SchemeScale — As `brandScale`, for `neutral: "custom"`.
 - solid?: SolidType
 - solidStyle?: SolidStyle
 - border?: BorderStyle
@@ -208,16 +215,17 @@ Also takes React Native's PressableProps.
 
 ### Skeleton
 A pulsing placeholder while content loads.
+Mixins: FlexProps, SpacingProps.
+Also takes React Native's ViewProps.
 - shape?: "line" | "circle" | "block" = "line"
 - size?: TShirtSizes = "m"
-- width?: number | SpacingToken | Length | `${number}%` — Overrides: a number of points (px, as in core 3.0), a token, `"320px"`, `"20rem"` or `"50%"`.
-- height?: number | SpacingToken | Length | `${number}%`
 - delay?: number = 0 — Milliseconds before the pulse starts, to stagger several skeletons.
-- style?: ViewStyle
 
 ## Hooks
 
+- `useFormPending`: `(): boolean`
 - `useIcons`: `(): Record<string, NativeIcon>`
+- `useNavStyle`: `(): { inNav: boolean; sizes: { readonly height: "32"; readonly x: "8"; readonly gap: "2"; readonly iconGap: "8"; readonly text: "s"; readonly section: "xs"; readonly inset: "12"; } | { readonly height: "40"; readonly x: "16"; readonly gap: "4"; readonly iconGap: "12"; readonly text: "m"; readonly section: "s"; readonly inset: "24"; } | { readonly height: "48"; readonly x: "16"; readonly gap: "4"; readonly iconGap: "12"; readonly text: "m"; readonly section: "s"; readonly inset: "24"; }; density: NavDensity; variant: NavVariant; rail: boolean; tabs: boolean; }`
 - `useToast`: `(): ToastContextValue`
 - `useTheme`: `(): OnceTheme`
 
@@ -230,7 +238,9 @@ A pulsing placeholder while content loads.
 - center?, wrap?: boolean
 - flex?: number
 - background?: Colors | "surface" | "page" | "overlay" | "transparent"
-- border?: Colors | "surface" | "transparent"
+- border?: BorderValue — `true` draws core's default border, `neutral-alpha-weak`.
+- borderTop?: BorderValue — One side (or `X` = left and right, `Y` = top and bottom), as in core: a bottom tab bar's `borderTop`, a sticky header's `borderBottom`.
+- borderRight?, borderBottom?, borderLeft?, borderX?, borderY?: BorderValue
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8
 - shadow?: ShadowSize
@@ -271,6 +281,7 @@ type Alignment = "start" | "center" | "end" | "between" | "around" | "even" | "s
 type BodyLineHeight = "90" | "100" | "110" | "120"
 type BodySize = "90" | "95" | "100" | "105" | "110"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
+type BorderValue = Colors | "surface" | "transparent" | boolean
 type BuiltInIconName = one of the names listed under Icons
 type ButtonCorners = "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost" | "link" | "subtle"
@@ -280,7 +291,7 @@ type ColorWeight = "weak" | "medium" | "strong"
 type CondensedTShirtSizes = "s" | "m" | "l"
 type Density = "compact" | "normal" | "spacious"
 type DeviceFontSize = "13" | "14" | "15" | "16" | "17" | "18"
-type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
+type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
 type FlexProps = Flex props
 type FontFamilies = { heading?: string; body?: string; label?: string; code?: string }
 type IconLibraryOverrides = {} (an app augments it to register its own icon names)
@@ -294,7 +305,9 @@ type RadiusSize = TShirtSizes | "full" | "none"
 type ResponsiveSpacingToken = TShirtSizes
 type SafeAreaEdge = "top" | "right" | "bottom" | "left"
 type ScalingSize = "90" | "95" | "100" | "105" | "110"
+type SchemeRampWeight = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 1000 | 1100 | 1200
 type Schemes = "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan"
+type SchemeScale = Partial< Record<SchemeRampWeight | "600-15" | "600-30" | "600-50", string> >
 type ShadowSize = TShirtSizes
 type Size = number | SpacingToken | Length | `${number}%`
 type SolidStyle = "flat" | "plastic"

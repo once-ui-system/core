@@ -1,6 +1,7 @@
 import { type ReactNode, useMemo, useState } from "react";
 import { Pressable, ScrollView, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
+import type { Tone } from "../types";
 import { BREAKPOINTS, type Breakpoint, Column, type FlexProps, Row } from "./Flex";
 import { Icon, type IconName } from "./Icon";
 import { IconButton } from "./IconButton";
@@ -24,7 +25,9 @@ export type TableAction = {
   icon: IconName;
   label?: string;
   tooltip?: string;
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
+  /** The action's palette. 2.x's `variant: "danger"` is `variant: "primary", tone: "danger"`. */
+  tone?: Tone;
   onClick: (rowIndex: number) => void;
   disabled?: (rowIndex: number) => boolean;
 };
@@ -74,7 +77,7 @@ function hiddenAt(hide: TableHeader["hide"], width: number, limits: Record<Break
 
 function headerLabel(content: ReactNode) {
   return typeof content === "string" ? (
-    <Text variant="label-strong-s" onBackground="neutral-medium" numberOfLines={1}>
+    <Text textVariant="label-strong-s" onBackground="neutral-medium" numberOfLines={1}>
       {content}
     </Text>
   ) : (
@@ -219,7 +222,7 @@ export function Table({
   ) : shown.length === 0 ? (
     <Column padding="24" horizontal="center">
       {typeof emptyState === "string" || emptyState === undefined ? (
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           {emptyState ?? "No results"}
         </Text>
       ) : (
@@ -249,7 +252,7 @@ export function Table({
         {columns.map(({ header, index: at }) => (
           <View key={header.key} style={cellBox(header)}>
             {typeof row[at] === "string" || typeof row[at] === "number" ? (
-              <Text variant="body-default-s">{row[at]}</Text>
+              <Text textVariant="body-default-s">{row[at]}</Text>
             ) : (
               row[at]
             )}
@@ -263,7 +266,8 @@ export function Table({
                 icon={action.icon}
                 size="m"
                 variant={action.variant ?? "tertiary"}
-                ariaLabel={action.label ?? action.tooltip ?? action.icon}
+                tone={action.tone}
+                aria-label={action.label ?? action.tooltip ?? action.icon}
                 disabled={action.disabled?.(index)}
                 onPress={() => action.onClick(index)}
               />
@@ -302,7 +306,7 @@ export function Table({
       {paginated && sorted.length > 0 && (
         <Pagination
           page={current}
-          onChange={setPage}
+          onPageChange={setPage}
           count={sorted.length}
           perPage={pageSize}
           perPageOptions={pageSizeOptions}

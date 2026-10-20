@@ -89,7 +89,7 @@ export function Field({
       {renders(label) && (
         <Row paddingX="4" gap="4" vertical="center">
           {plain(label) ? (
-            <Text variant="label-strong-s" onBackground="neutral-strong">
+            <Text textVariant="label-strong-s" onBackground="neutral-strong">
               {label}
             </Text>
           ) : (
@@ -97,7 +97,7 @@ export function Field({
           )}
           {required && (
             <Text
-              variant="label-strong-s"
+              textVariant="label-strong-s"
               onBackground="danger-weak"
               accessibilityElementsHidden
               importantForAccessibility="no"
@@ -111,7 +111,7 @@ export function Field({
       {invalid && (
         <Text
           paddingX="16"
-          variant="body-default-s"
+          textVariant="body-default-s"
           onBackground="danger-weak"
           accessibilityLiveRegion="polite"
         >
@@ -119,7 +119,7 @@ export function Field({
         </Text>
       )}
       {renders(hint) && (
-        <Text paddingX="16" variant="body-default-s" onBackground="neutral-weak">
+        <Text paddingX="16" textVariant="body-default-s" onBackground="neutral-weak">
           {hint}
         </Text>
       )}
@@ -160,12 +160,12 @@ export function Fieldset({
       {(renders(legend) || renders(description)) && (
         <Column gap="4" paddingX="4">
           {renders(legend) && (
-            <Heading variant="heading-strong-s" accessibilityRole="header">
+            <Heading textVariant="heading-strong-s" accessibilityRole="header">
               {legend}
             </Heading>
           )}
           {renders(description) && (
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               {description}
             </Text>
           )}
@@ -263,14 +263,14 @@ export function FormErrorSummary({
   if (items.length === 0) return null;
   return (
     <View ref={ref} accessible={false}>
-      <Feedback variant="danger" title={title} {...rest}>
+      <Feedback tone="danger" title={title} {...rest}>
         <Column gap="4">
           {items.map((item, i) => (
             <Row key={item.id ?? i} gap="8">
-              <Text variant="body-default-s" onBackground="danger-weak">
+              <Text textVariant="body-default-s" onBackground="danger-weak">
                 •
               </Text>
-              <Text variant="body-default-s" onBackground="danger-weak" style={{ flex: 1 }}>
+              <Text textVariant="body-default-s" onBackground="danger-weak" style={{ flex: 1 }}>
                 {item.message}
               </Text>
             </Row>

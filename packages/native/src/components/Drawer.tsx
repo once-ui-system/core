@@ -137,15 +137,15 @@ export function Drawer({
         {showHeader && (
           <Row paddingX="24" paddingTop="20" paddingBottom="12" gap="12" vertical="start">
             <Column flex={1} gap="4">
-              {title && <Heading variant="heading-strong-l">{title}</Heading>}
+              {title && <Heading textVariant="heading-strong-l">{title}</Heading>}
               {description && (
-                <Text variant="body-default-s" onBackground="neutral-weak">
+                <Text textVariant="body-default-s" onBackground="neutral-weak">
                   {description}
                 </Text>
               )}
             </Column>
             {showClose && (
-              <IconButton icon="close" variant="tertiary" ariaLabel="Close" onPress={onClose} />
+              <IconButton icon="close" variant="tertiary" aria-label="Close" onPress={onClose} />
             )}
           </Row>
         )}
@@ -165,7 +165,7 @@ export function Drawer({
         </ScrollView>
         {flush && showClose && (
           <View style={{ position: "absolute", top: theme.space("12"), right: theme.space("12") }}>
-            <IconButton icon="close" variant="secondary" ariaLabel="Close" onPress={onClose} />
+            <IconButton icon="close" variant="secondary" aria-label="Close" onPress={onClose} />
           </View>
         )}
         {footer && (
