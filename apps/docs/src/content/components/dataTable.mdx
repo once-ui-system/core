@@ -1,7 +1,7 @@
 ---
 title: "DataTable"
-summary: "A table of typed rows from column definitions, with sorting, row selection, pagination, and empty and loading states."
-updatedAt: "2026-10-11"
+summary: "A table of typed rows from column definitions, with sorting, search and filters, row selection, pagination, column visibility, and empty and loading states."
+updatedAt: "2026-10-20"
 docs: "once-ui/components/dataTable.mdx"
 github: "components/DataTable.tsx"
 navLabel: "DataTable"
@@ -122,6 +122,73 @@ below; `perPageOptions` adds a page-size select.
   ]}
 />
 
+## Search, filters and columns
+
+`searchable` adds a search field above the table, and a column with a `filter`
+adds a select of its `options`. Both are 32px controls, the height of a small
+`Button`, so your own controls fit beside them in `toolbar`. DataTable keeps the
+search and the filters itself (from `defaultSearch` and `defaultFilters`), or
+follows `search` and `filters` with `onSearchChange` and `onFiltersChange`.
+`filters` is keyed by column: `{ status: "paid" }`, or a list for a `multiple`
+filter. A new search or filter returns to the first page.
+
+The search matches any column's `row[key]`, ignoring case; pass `matchSearch` to
+search otherwise. A filter passes rows whose `row[key]` is the picked value (or
+holds it, for an array); give it a `match` function for anything else. When
+nothing matches, DataTable says so, with a button that clears the search and
+filters, instead of the no-data state; pass your own as `noResultsState`.
+
+`hide` drops a column, header and cells, at a breakpoint and below:
+`hide: { s: true }`. It is CSS, so the server render is already right. Readers
+choose columns themselves from `columnsMenu`; `columnVisibility` with
+`onColumnVisibilityChange` puts that choice in your hands, to save it. Give a
+column a `label` when its header is not plain text, to name its filter and menu
+entry. Narrow this example to see Issued, then Customer, drop out.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableToolbarExample />}
+  codes={[
+    {
+      code:
+`const columns: DataTableColumn<Invoice>[] = [
+  { key: "id", header: "Invoice", sortable: true },
+  { key: "customer", header: "Customer", sortable: true, hide: { xs: true } },
+  {
+    key: "status",
+    header: "Status",
+    cell: (invoice) => <Tag size="s" scheme={scheme[invoice.status]}>{invoice.status}</Tag>,
+    filter: {
+      options: [
+        { value: "paid", label: "Paid" },
+        { value: "pending", label: "Pending" },
+        { value: "overdue", label: "Overdue" },
+      ],
+    },
+  },
+  { key: "issued", header: "Issued", sortable: true, hide: { s: true } },
+  { key: "amount", header: "Amount", align: "right", sortable: true },
+];
+
+<DataTable
+  aria-label="Invoices"
+  columns={columns}
+  rows={invoices}
+  searchable
+  columnsMenu
+  toolbar={<Button size="s" variant="secondary" prefixIcon="download">Export</Button>}
+  paginated
+  defaultPerPage={5}
+/>`,
+      language: "tsx",
+      label: "Toolbar"
+    }
+  ]}
+/>
+
+`Table` takes the same `hide` on its headers.
+
 ## Server-side data
 
 When the server sorts and pages, pass the current page's rows with `count`, the
@@ -155,6 +222,46 @@ const { rows, count, loading } = useInvoices({ page, perPage: 5, sort });
 />`,
       language: "tsx",
       label: "Server-side"
+    }
+  ]}
+/>
+
+With `count` or `total` the search and filters are the server's to apply: DataTable
+reports them and shows the rows you pass. Rather than one handler per piece,
+`onQueryChange` hands you the page, page size, sort, search and filters together,
+once per change, ready to fetch with. `keepRowsWhileLoading` keeps the last page on
+screen, dimmed, while the next one loads, so the table does not flash skeletons on
+every keystroke. Debounce the fetch if your API is slow to answer.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<DataTableServerQueryExample />}
+  codes={[
+    {
+      code:
+`const [query, setQuery] = useState<DataTableQuery>({
+  page: 1, perPage: 5, sort: null, search: "", filters: {},
+});
+const { rows, count, loading } = useInvoices(query);
+
+<DataTable
+  aria-label="Invoices"
+  columns={columns}
+  rows={rows}
+  count={count}
+  page={query.page}
+  perPage={query.perPage}
+  sort={query.sort}
+  search={query.search}
+  filters={query.filters}
+  onQueryChange={setQuery}
+  searchable
+  loading={loading}
+  keepRowsWhileLoading
+/>`,
+      language: "tsx",
+      label: "Server query"
     }
   ]}
 />
@@ -234,8 +341,24 @@ marked `aria-busy`, and sorting, selection and pagination are disabled.
     onPerPageChange: "Called with the new page size.",
     count: "Rows on the server. The rows are then one page, sorted and sliced by the host.",
     total: "Pages on the server, as count.",
+    searchable: "Add a search field to the toolbar.",
+    search: "The search text when the host owns it.",
+    defaultSearch: "The search text to start with.",
+    onSearchChange: "Called with the search text on each change.",
+    matchSearch: "Whether a row matches the trimmed, lowercased query. Defaults to any column's row[key] containing it.",
+    filters: "The active filters by column key when the host owns them.",
+    defaultFilters: "The filters to start with.",
+    onFiltersChange: "Called with every active filter after each change.",
+    columnVisibility: "Which columns show, by key, when the host owns it; false hides a column.",
+    defaultColumnVisibility: "The column visibility to start with.",
+    onColumnVisibilityChange: "Called with the new column visibility.",
+    columnsMenu: "Add a menu that shows and hides columns.",
+    toolbar: "Your own controls at the end of the toolbar.",
+    onQueryChange: "Called once per change with page, perPage, sort, search and filters.",
     loading: "Show skeleton rows and disable the controls.",
+    keepRowsWhileLoading: "While loading, keep the rows on screen, dimmed, instead of skeletons.",
     emptyState: "What to show when there are no rows.",
+    noResultsState: "What to show when the search or filters match no rows.",
     stickyHeader: "Keep the header row in view while the rows scroll.",
     striped: "Alternate row backgrounds.",
     hoverable: "Highlight the row under the pointer.",
@@ -258,6 +381,20 @@ marked `aria-busy`, and sorting, selection and pagination are disabled.
     ["sort", "(a: T, b: T) => number", "-", "Ascending comparator. Without it rows compare by row[key]."],
     ["align", ["left", "center", "right"], "left", "Aligns the header and the cells."],
     ["width", "string", "-", "A CSS width for the column."],
+    ["label", "string", "-", "The column's name in plain text, for its filter and the columns menu."],
+    ["filter", "DataTableColumnFilter<T>", "-", "Add a select to the toolbar that filters by this column."],
+    ["hide", "Partial<Record<\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\", boolean>>", "-", "Hide the column at a breakpoint and below; false shows it again under a wider hide."],
+  ]}
+/>
+
+### DataTableColumnFilter
+
+<PropsTable
+  label="Field"
+  content={[
+    ["options", "{ value: string; label: React.ReactNode }[]", "-", "The values to filter by.", true],
+    ["multiple", "boolean", "false", "Let the reader pick several values; a row matches any of them."],
+    ["match", "(row: T, value: string | string[]) => boolean", "-", "Whether a row passes. Defaults to row[key] being, or holding, the value."],
   ]}
 />
 
@@ -270,6 +407,11 @@ marked `aria-busy`, and sorting, selection and pagination are disabled.
     ["selectRow", "string", "\"Select row\"", "Each row checkbox's name, unless getRowLabel names it."],
     ["pagination", "string", "\"Pagination\"", "The pagination landmark's name."],
     ["perPage", "string", "\"Rows per page\"", "The per-page select's label."],
+    ["search", "string", "\"Search\"", "The search field's name and placeholder."],
+    ["filterAll", "string", "\"All\"", "The filter option that clears a filter."],
+    ["columns", "string", "\"Columns\"", "The columns menu's button."],
+    ["noResults, noResultsHint, clearFilters", "string", "-", "The no-results state's heading, line and button."],
+    ["results", "(count: number) => string", "-", "What a screen reader hears after the search or a filter changes."],
     ["previous, next, first, last", "string", "-", "As on Pagination."],
   ]}
 />

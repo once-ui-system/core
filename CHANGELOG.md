@@ -13,6 +13,24 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Search, filters and a toolbar on `DataTable`.** `searchable` adds a 32px search
+  field, and a column's `filter: { options }` adds a select beside it; `toolbar` takes
+  your own controls. Both work on DataTable's state or yours (`search`, `filters` and
+  their change handlers). On the client DataTable filters the rows itself; with `count`
+  or `total` it only reports, and `onQueryChange` hands a server table its page, page
+  size, sort, search and filters in one call per change. A query that matches nothing
+  now shows "No results" with a clear button, not "No data available".
+- **Responsive and user-picked columns on `DataTable`, and `hide` on `Table` headers.**
+  `hide: { s: true }` drops a column at a breakpoint and below with CSS, so the server
+  render is already right; tables no longer have to overflow sideways on a phone or
+  wait for JavaScript to hide a column. `columnsMenu` lets readers show and hide
+  columns, and `columnVisibility` lets the app save that choice.
+- **`keepRowsWhileLoading` on `DataTable`.** While a server table loads the next page
+  or search, the last rows stay on screen, dimmed, instead of flashing skeleton rows on
+  every keystroke.
+
 ## [2.3.0] — 2026-10-19
 
 ### Added
