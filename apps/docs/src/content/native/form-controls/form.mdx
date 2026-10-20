@@ -1,0 +1,102 @@
+---
+title: "Form"
+summary: "Spacing, columns, grouping and submit state for a set of fields, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/form-controls/form.mdx"
+github: "packages/native/src/components/Form.tsx"
+navLabel: "Form"
+navIcon: "components"
+---
+
+`Form` takes the same props as on the web (`density`, `columns`, `size`, `as`, `onSubmit`, `pending`). It lays its fields out in rows and columns, gives them all one size, and tells a [`SubmitButton`](/native/form-controls/submitButton) when a submit is running. With `density="stacked"` the fields fuse onto shared borders and only the group's outer corners stay round. See the [web Form](/form-controls/form) for the same component in the browser.
+
+<Row fillWidth horizontal="center" marginY="24">
+  <Media
+    src="/images/native/form.png"
+    alt="A booking form with a stacked group of fields, an error summary and a submit button"
+    aspectRatio="390 / 844"
+    maxWidth={20}
+    radius="l"
+    border="neutral-alpha-weak"
+  />
+</Row>
+
+## Submitting
+
+React Native has no form element, so the `SubmitButton` inside a `Form` with `as="form"` calls `onSubmit`. Return a promise and the form stays pending until it settles: the button shows its spinner, swaps to `pendingLabel` and ignores taps, so a double tap sends one request.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Form, Input, SubmitButton } from "@once-ui-system/native";
+
+export function SignIn() {
+  return (
+    <Form as="form" onSubmit={() => fetch("/api/sign-in", { method: "POST" })}>
+      <Input label="Email" autoComplete="email" />
+      <Input label="Password" secureTextEntry />
+      <SubmitButton label="Sign in" pendingLabel="Signing in…" fillWidth />
+    </Form>
+  );
+}`,
+    language: "tsx",
+    label: "SignIn.tsx"
+  }
+]} />
+
+## Stacked fields
+
+`density="stacked"` joins the fields into one block. The corners come from the fields that actually rendered, so hiding one never leaves the group ending on a square edge. `tight` (the default, 8) and `spacious` (24) keep every field separate.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`<Form density="stacked">
+  <Input label="Name" />
+  <Input label="Phone" />
+  <Input label="Email" />
+</Form>`,
+    language: "tsx",
+    label: "Contact.tsx"
+  }
+]} />
+
+## Columns
+
+`columns` takes a number, or one per breakpoint (`{ xs: 1, m: 2 }`). A child's `span` takes several columns.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`<Form columns={2}>
+  <Input label="Party" />
+  <Input label="Time" />
+  <Field span={2}>
+    <Textarea label="Notes" />
+  </Field>
+</Form>`,
+    language: "tsx",
+    label: "Visit.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- **No form element.** `onSubmit` takes no event, and only a `SubmitButton` submits. The keyboard's return key does not; call your submit from `onSubmitEditing` on the last field if you want it to.
+- **Columns** are rows of flexible cells rather than a CSS grid.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `density` | `"stacked" \| "tight" \| "spacious"` | `"tight"` | Gap and grouping. |
+| `columns` | `number \| { xl?, l?, m?, s?, xs? }` | `1` | Columns, flat or per breakpoint. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | | Size for every field that sets none. |
+| `as` | `"div" \| "form"` | `"div"` | `"form"` lets a `SubmitButton` inside submit. |
+| `onSubmit` | `() => unknown` | | Called by the `SubmitButton`. A returned promise keeps the form pending. |
+| `pending` | `boolean` | | Marks the form as submitting from outside. |
+
+`Form` also takes every [`Flex`](/native/components/flex) prop.
