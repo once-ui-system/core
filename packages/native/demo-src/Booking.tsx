@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import {
+  Card,
   Column,
+  DateInput,
+  DatePicker,
   Field,
   Fieldset,
   Form,
@@ -15,6 +18,32 @@ import {
   Textarea,
   useTheme,
 } from "../src";
+
+/** A calendar with a stay picked: DatePicker on its own and with a range. */
+export function Calendar() {
+  const theme = useTheme();
+  return (
+    <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
+      <Column padding="20" gap="20" safeArea={["top"]}>
+        <Heading variant="heading-strong-l">Pick a date</Heading>
+        <Card padding="16" radius="xl">
+          <DatePicker
+            defaultDate={new Date(2026, 9, 24)}
+            minDate={new Date(2026, 9, 20)}
+            fillWidth
+          />
+        </Card>
+        <Card padding="16" radius="xl">
+          <DatePicker
+            locale="hu"
+            range={{ startDate: new Date(2026, 9, 12), endDate: new Date(2026, 9, 16) }}
+            fillWidth
+          />
+        </Card>
+      </Column>
+    </ScrollView>
+  );
+}
 
 /** A booking form: Form, Field, Fieldset, SubmitButton and FormErrorSummary. */
 export function Booking({ errors: showErrors = false }: { errors?: boolean }) {
@@ -49,6 +78,7 @@ export function Booking({ errors: showErrors = false }: { errors?: boolean }) {
             </Field>
           </Fieldset>
           <Fieldset legend="Visit" columns={2}>
+            <DateInput label="Date" defaultValue={new Date(2026, 9, 24)} span={2} />
             <Select
               label="Party"
               value={party}

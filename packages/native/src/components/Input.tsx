@@ -36,6 +36,8 @@ export interface InputProps extends Omit<TextInputProps, "style" | "editable"> {
     | "top-right"
     | "bottom-right"
     | "bottom-left";
+  /** How many columns to take inside a `Form`; `Form` reads it. */
+  span?: number;
   /** Shows how many characters are left; needs `maxLength`. */
   characterCount?: boolean;
   /**
@@ -101,6 +103,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       loading = false,
       disabled: ownDisabled,
       corners,
+      span: _span,
       characterCount,
       onValueChange,
       type = "text",
