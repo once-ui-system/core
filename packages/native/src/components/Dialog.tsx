@@ -1,9 +1,11 @@
-import type { ReactNode } from "react";
-import { Modal, Pressable, ScrollView, View, type ViewStyle } from "react-native";
+import { type ReactNode, useEffect, useRef, useState } from "react";
+import { Animated, Modal, ScrollView, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
 import { IconButton } from "./IconButton";
+import { Scrim } from "./Scrim";
 import { Heading, Text } from "./Text";
+import { useReduceMotion } from "./useReduceMotion";
 
 export interface DialogProps {
   open: boolean;
@@ -63,13 +65,33 @@ export function Dialog({
   const pad = flush ? 0 : theme.space("24");
   const sheet = variant === "sheet";
 
+  const reduceMotion = useReduceMotion();
+  const progress = useRef(new Animated.Value(open ? 1 : 0)).current;
+  // Stays mounted through the slide down, then unmounts.
+  const [mounted, setMounted] = useState(open);
+  const [height, setHeight] = useState(0);
+
+  useEffect(() => {
+    if (open) setMounted(true);
+    const animation = Animated.timing(progress, {
+      toValue: open ? 1 : 0,
+      duration: reduceMotion ? 0 : 240,
+      useNativeDriver: true,
+    });
+    animation.start(({ finished }) => {
+      if (finished && !open) setMounted(false);
+    });
+    return () => animation.stop();
+  }, [open, progress, reduceMotion]);
+
+  // The scrim fades while the sheet slides up from below its own height (a centred card fades in).
+  const translateY = progress.interpolate({
+    inputRange: [0, 1],
+    outputRange: [height || 1000, 0],
+  });
+
   return (
-    <Modal
-      visible={open}
-      transparent
-      animationType={sheet ? "slide" : "fade"}
-      onRequestClose={onClose}
-    >
+    <Modal visible={mounted} transparent animationType="none" onRequestClose={onClose}>
       <View
         style={{
           flex: 1,
@@ -77,25 +99,16 @@ export function Dialog({
           padding: sheet ? 0 : theme.space("16"),
         }}
       >
-        <Pressable
-          accessibilityLabel="Close"
-          accessible={closeOnClickaway}
-          onPress={closeOnClickaway ? onClose : undefined}
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            backgroundColor: theme.color("backdrop"),
-          }}
-        />
+        <Scrim theme={theme} progress={progress} onPress={closeOnClickaway ? onClose : undefined} />
         {backdrop}
-        <View
+        <Animated.View
           accessibilityViewIsModal
+          onLayout={(event) => {
+            setHeight(event.nativeEvent.layout.height);
+            onHeightChange?.(event.nativeEvent.layout.height);
+          }}
           aria-modal
           role="dialog"
-          onLayout={onHeightChange ? (e) => onHeightChange(e.nativeEvent.layout.height) : undefined}
           style={[
             {
               maxHeight: "90%",
@@ -112,8 +125,9 @@ export function Dialog({
                   borderBottomWidth: 0,
                   borderTopLeftRadius: theme.radius("xl"),
                   borderTopRightRadius: theme.radius("xl"),
+                  transform: [{ translateY }],
                 }
-              : { borderRadius: theme.radius("xl"), ...theme.shadow("xl") },
+              : { borderRadius: theme.radius("xl"), ...theme.shadow("xl"), opacity: progress },
             style,
           ]}
         >
@@ -169,7 +183,7 @@ export function Dialog({
             </Row>
           )}
           {!footer && <View style={{ height: theme.space("16") }} />}
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
