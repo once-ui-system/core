@@ -119,6 +119,7 @@ export {
   type RadioGroupProps,
 } from "./components/RadioGroup";
 export { RangeSlider, type RangeSliderProps } from "./components/RangeSlider";
+export { Scroller, type ScrollerProps, type ScrollerRef } from "./components/Scroller";
 export {
   SegmentedControl,
   type SegmentedControlButton,
@@ -163,6 +164,12 @@ export { Tooltip, type TooltipProps } from "./components/Tooltip";
 export { touchSlop } from "./components/touch";
 export { User, type UserProps } from "./components/User";
 export type { IconNode } from "./icons/types";
+export {
+  type CustomScheme,
+  customSchemeTokens,
+  generateColorScheme,
+  type SchemeScale,
+} from "./theme/colorScheme";
 export {
   defaultSettings,
   resolveTokens,
