@@ -189,7 +189,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },
@@ -479,6 +479,11 @@
     "purpose": "Once UI mark loader, for AI and brand loading states",
     "tags": ["feedback", "chat", "ai"],
     "pairsWith": ["WorkingIndicator", "Text"]
+  },
+  "Mascot": {
+    "purpose": "Animated assistant character: states, moods, eyes follow pointer, lip-syncs audio",
+    "tags": ["ai", "chat", "decoration"],
+    "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",

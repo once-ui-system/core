@@ -35,6 +35,22 @@ item (see `ROADMAP.md`, Week 4).
   object on a component that takes none (`Button s={{ fillWidth }}`). Over the
   benchmark transcripts it flags 25 of the 76 Once UI attempts that failed typecheck,
   and 1 of 185 that passed.
+- **Search, filters and a toolbar on `DataTable`.** `searchable` adds a 32px search
+  field, and a column's `filter: { options }` adds a select beside it; `toolbar` takes
+  your own controls. Both work on DataTable's state or yours (`search`, `filters` and
+  their change handlers). On the client DataTable filters the rows itself; with `count`
+  or `total` it only reports, and `onQueryChange` hands a server table its page, page
+  size, sort, search and filters in one call per change. A query that matches nothing
+  now shows "No results" with a clear button, not "No data available".
+- **Responsive and user-picked columns on `DataTable`, and `hide` on `Table` headers.**
+  `hide: { s: true }` drops a column at a breakpoint and below with CSS, so the server
+  render is already right; tables no longer have to overflow sideways on a phone or
+  wait for JavaScript to hide a column. `columnsMenu` lets readers show and hide
+  columns, and `columnVisibility` lets the app save that choice.
+- **`keepRowsWhileLoading` on `DataTable`.** While a server table loads the next page
+  or search, the last rows stay on screen, dimmed, instead of flashing skeleton rows on
+  every keystroke.
+
 - **Scales per theme: `brandScale={{ light: { … }, dark: { … } }}`.** One ramp served
   both themes, so an accent tuned for dark (a lime that glows on near-black) read wrong
   on light, and fixing it took CSS. The flat shape still applies to both; a theme left
@@ -92,6 +108,13 @@ item (see `ROADMAP.md`, Week 4).
   or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
   same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
   stop and live audio shows as glow and bar height.
+- **A mascot for assistants: `Mascot`.** A character with a face that idles, listens,
+  thinks, speaks and sleeps, with a mood on top (happy, surprised, sad). Its eyes follow
+  the pointer, and while speaking its mouth opens with a `level` or the reply's audio
+  `source`. The default body is the Once UI mark with a face; `orb` and `squircle` are
+  softer, with four eye styles, an antenna or halo, and cheeks. It takes the brand hue,
+  and `palette` (or `--mascot-*` variables) recolors any part. Under reduced motion it
+  holds still and keeps its expressions.
 
 ### Fixed
 
