@@ -4,6 +4,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Dialog } from "./Dialog";
 import { Column, Row } from "./Flex";
+import { FormCellContext } from "./FormContext";
 import { Icon } from "./Icon";
 import { Input } from "./Input";
 import { Text } from "./Text";
@@ -171,37 +172,40 @@ export function Select({
           />
         </View>
       </Pressable>
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setQuery("");
-        }}
-        title={label}
-      >
-        <Column gap="4">
-          {searchable && (
-            <Row paddingBottom="8">
-              <Input
-                label={labels?.search ?? "Search"}
-                value={query}
-                onChangeText={setQuery}
-                size="s"
-                prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
-              />
-            </Row>
-          )}
-          {visible.length === 0 ? (
-            <Text variant="body-default-s" onBackground="neutral-weak" paddingX="12" paddingY="8">
-              {emptyState}
-            </Text>
-          ) : (
-            visible.map((o) => (
-              <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
-            ))
-          )}
-        </Column>
-      </Dialog>
+      {/* The sheet's search box is not the form's field: it keeps its own corners. */}
+      <FormCellContext.Provider value={null}>
+        <Dialog
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            setQuery("");
+          }}
+          title={label}
+        >
+          <Column gap="4">
+            {searchable && (
+              <Row paddingBottom="8">
+                <Input
+                  label={labels?.search ?? "Search"}
+                  value={query}
+                  onChangeText={setQuery}
+                  size="s"
+                  prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+                />
+              </Row>
+            )}
+            {visible.length === 0 ? (
+              <Text variant="body-default-s" onBackground="neutral-weak" paddingX="12" paddingY="8">
+                {emptyState}
+              </Text>
+            ) : (
+              visible.map((o) => (
+                <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
+              ))
+            )}
+          </Column>
+        </Dialog>
+      </FormCellContext.Provider>
     </View>
   );
 }

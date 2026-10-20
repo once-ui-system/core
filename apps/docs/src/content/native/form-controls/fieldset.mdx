@@ -1,0 +1,53 @@
+---
+title: "Fieldset"
+summary: "A titled section of a form, laid out like a Form, that can disable its fields at once, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/form-controls/fieldset.mdx"
+github: "packages/native/src/components/Field.tsx"
+navLabel: "Fieldset"
+navIcon: "components"
+---
+
+`Fieldset` takes the same props as on the web (`legend`, `description`, `disabled`, plus `Form`'s `density`, `columns` and `size`). The legend is a heading a screen reader can jump to, the fields inside are laid out by a [`Form`](/native/form-controls/form), and `disabled` disables every field inside. See the [web Fieldset](/form-controls/fieldset) for the same component in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Fieldset, Form, Input, SubmitButton } from "@once-ui-system/native";
+
+export function Checkout({ paid }: { paid: boolean }) {
+  return (
+    <Form as="form" density="spacious" onSubmit={pay}>
+      <Fieldset legend="Delivery" density="stacked">
+        <Input label="Street" />
+        <Input label="City" />
+      </Fieldset>
+      <Fieldset legend="Payment" description="Charged when the order ships." disabled={paid}>
+        <Input label="Card number" keyboardType="number-pad" />
+      </Fieldset>
+      <SubmitButton label="Pay" fillWidth />
+    </Form>
+  );
+}`,
+    language: "tsx",
+    label: "Checkout.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- `disabled` reaches `Input` and the fields built on it (`Textarea`, `Select`, `NumberInput`, `PasswordInput`). Other controls take their own `disabled`.
+- `name` is left out: React Native has no form data.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `legend` | `ReactNode` | | The section's heading. |
+| `description` | `ReactNode` | | A line under the legend. |
+| `disabled` | `boolean` | | Disables the fields inside. |
+| `density` | `"stacked" \| "tight" \| "spacious"` | `"tight"` | As on `Form`. |
+| `columns` | `number \| { xl?, l?, m?, s?, xs? }` | `1` | As on `Form`. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | | As on `Form`; the outer form's size carries in. |
+| `span` | `number` | | Columns to take inside an outer `Form`. |

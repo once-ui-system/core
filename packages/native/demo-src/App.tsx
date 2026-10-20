@@ -23,6 +23,7 @@ import {
   useToast,
 } from "../src";
 import { Assistant } from "./Assistant";
+import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
@@ -145,6 +146,9 @@ export function App({
     | "code"
     | "shell"
     | "drawer"
+    | "form"
+    | "form-errors"
+    | "calendar"
     | "assistant";
 }) {
   return (
@@ -158,6 +162,10 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "calendar" ? (
+          <Calendar />
+        ) : screen === "form" || screen === "form-errors" ? (
+          <Booking errors={screen === "form-errors"} />
         ) : screen === "shell" || screen === "drawer" ? (
           <Shell drawer={screen === "drawer"} />
         ) : screen === "assistant" ? (

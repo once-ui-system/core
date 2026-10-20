@@ -11,6 +11,9 @@ const screen =
   param === "code" ||
   param === "shell" ||
   param === "drawer" ||
+  param === "form" ||
+  param === "form-errors" ||
+  param === "calendar" ||
   param === "assistant"
     ? param
     : "card";
