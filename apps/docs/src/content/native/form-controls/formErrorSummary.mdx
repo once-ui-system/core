@@ -1,0 +1,42 @@
+---
+title: "FormErrorSummary"
+summary: "Every error in a form in one alert after a failed submit, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/form-controls/formErrorSummary.mdx"
+github: "packages/native/src/components/Field.tsx"
+navLabel: "FormErrorSummary"
+navIcon: "components"
+---
+
+`FormErrorSummary` takes the same props as on the web (`errors`, `title`, `autoFocus`). It renders nothing while there are no errors, so it can sit at the top of a form permanently; after a failed submit it lists every error in a danger alert and moves the screen reader to it. `errors` is a list of `{ id, message }` or a map from field to message, the shape most validation libraries return. See the [web FormErrorSummary](/form-controls/formErrorSummary) for the same component in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`const [errors, setErrors] = useState<Record<string, string>>({});
+
+<Form as="form" onSubmit={async () => setErrors(await validate())}>
+  <FormErrorSummary errors={errors} />
+  <Field label="Email" error={errors.email}>
+    <Input />
+  </Field>
+  <SubmitButton label="Continue" />
+</Form>`,
+    language: "tsx",
+    label: "Signup.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- Entries are plain text. On the web each one moves focus to its field; React Native has no ids to find a control by.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `errors` | `{ id?, message }[] \| Record<string, ReactNode>` | | The errors. Empty messages are skipped. Required. |
+| `title` | `string` | `"Check the highlighted fields"` | The alert's heading. |
+| `autoFocus` | `boolean` | `true` | Moves the screen reader to the summary when its errors change. |
+| `span` | `number` | | Columns to take inside a `Form`. |

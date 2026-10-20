@@ -52,6 +52,7 @@ the safe areas. `theme="system"` follows the device.
 | `Drawer` | Core's props (`side`, `size`, `title`, `footer`, `showClose`, `flush`): a panel that slides in from one edge, clear of the notch and home indicator. |
 | `Nav`, `NavItem`, `NavSection`, `NavGroup` | As a column, a drawer's or sidebar's rows with core's `density` and `variant`; with `direction="row"`, the phone's bottom tab bar. |
 | `ToastProvider`, `useToast`, `Toast` | `addToast({ variant, message })` as in core; toasts stack at the bottom and hide after 6 s. |
+| `Form`, `Field`, `Fieldset`, `SubmitButton`, `FormErrorSummary` | Core's form layout: `density` (`stacked` fuses the fields), `columns` and `span`, one `size`; `Field` wires label, hint and error onto its control; `SubmitButton` calls `onSubmit` and shows a spinner while its promise runs. |
 | `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `multiple`, `searchable`. |
 | `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
 | `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
