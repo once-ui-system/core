@@ -238,6 +238,12 @@ export interface FormErrorSummaryProps extends Omit<FeedbackProps, "variant" | "
   span?: number;
 }
 
+const errorItems = (errors: FormErrorSummaryProps["errors"]): FormErrorItem[] =>
+  (Array.isArray(errors)
+    ? errors
+    : Object.entries(errors).map(([id, message]) => ({ id, message }))
+  ).filter((item) => renders(item.message));
+
 /** Core's `FormErrorSummary`: every error in a form in one alert, after a failed submit. */
 export function FormErrorSummary({
   errors,
@@ -246,11 +252,7 @@ export function FormErrorSummary({
   span: _span,
   ...rest
 }: FormErrorSummaryProps) {
-  const items = (
-    Array.isArray(errors)
-      ? errors
-      : Object.entries(errors).map(([id, message]) => ({ id, message }))
-  ).filter((item) => renders(item.message));
+  const items = errorItems(errors);
   const ref = useRef<ViewRef>(null);
   const signature = `${items.map((item) => item.id ?? "").join("|")}#${items.length}`;
   // biome-ignore lint/correctness/useExhaustiveDependencies: `signature` is the trigger
@@ -278,3 +280,7 @@ export function FormErrorSummary({
     </View>
   );
 }
+
+/** Tells a `Form` to give no cell (and no gap) to a summary with nothing to show. */
+FormErrorSummary.drawsNothing = (props: FormErrorSummaryProps) =>
+  errorItems(props.errors).length === 0;

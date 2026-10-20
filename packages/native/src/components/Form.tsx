@@ -185,9 +185,14 @@ export function Form({
     [size, outer.size, outer.disabled],
   );
 
-  const items = Children.toArray(children).filter(isValidElement) as ReactElement<{
-    span?: number;
-  }>[];
+  // A child that says it draws nothing (FormErrorSummary with no errors) takes no
+  // cell, so it leaves no gap at the top of the form.
+  const items = (
+    Children.toArray(children).filter(isValidElement) as ReactElement<{ span?: number }>[]
+  ).filter(
+    (child) =>
+      !(child.type as { drawsNothing?: (props: unknown) => boolean }).drawsNothing?.(child.props),
+  );
   const count = columnsAt(columns, theme.width, theme.breakpoints);
   const spans = items.map((child) =>
     typeof child.props.span === "number" && Number.isFinite(child.props.span)
