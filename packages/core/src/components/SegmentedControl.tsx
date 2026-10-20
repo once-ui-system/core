@@ -1,13 +1,18 @@
 "use client";
 
-import { forwardRef, useEffect, useRef, useState } from "react";
+import classNames from "clsx";
+import { forwardRef, type ReactNode, useEffect, useRef, useState } from "react";
 import { revealInStrip } from "../internal/reveal";
 import { Flex } from "./Flex";
 import { Scroller } from "./Scroller";
+import styles from "./SegmentedControl.module.scss";
+import { Text } from "./Text";
 import { ToggleButton, type ToggleButtonProps } from "./ToggleButton";
 
 interface ButtonOption extends Omit<ToggleButtonProps, "selected"> {
   value: string;
+  /** A second, dimmer line under the label. The option grows to fit both. */
+  description?: ReactNode;
 }
 
 interface SegmentedControlProps
@@ -27,6 +32,13 @@ interface SegmentedControlProps
    * native radios do. Name it with `aria-label` or `aria-labelledby`.
    */
   semantics?: "tabs" | "radio";
+  /**
+   * `false` lays the options out in a plain row that shares the width (equally
+   * with `fillWidth`) and truncates a label that does not fit, instead of a
+   * strip that scrolls. For a narrow sidebar, where two or three options
+   * scrolling behind a Next button clip the last one. Defaults to `true`.
+   */
+  scroll?: boolean;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -41,6 +53,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       value,
       compact = false,
       semantics = "tabs",
+      scroll = true,
       className,
       style,
       // The tablist's name and description go to the tablist, below.
@@ -144,6 +157,113 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
       );
     }, [selectedIndex]);
 
+    const tablist = (
+      <Flex
+        role={radio ? "radiogroup" : "tablist"}
+        aria-orientation={radio ? undefined : "horizontal"}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-describedby={ariaDescribedBy}
+        fillWidth={fillWidth}
+        // Scrolling, never narrower than its options: when they overflow, the
+        // border goes round all of them and scrolls with them, instead of
+        // ending at the edge of the strip with the last options outside it.
+        // Not scrolling, it may shrink, and the options with it.
+        style={scroll ? { minWidth: "max-content" } : { minWidth: 0 }}
+        gap={compact ? "-1" : "2"}
+        padding={compact ? "0" : "4"}
+        radius="l"
+        border={compact ? undefined : "neutral-alpha-weak"}
+      >
+        {buttons.map(({ onClick, description, ...button }, index) => {
+          const content = button.label ?? button.children;
+          // A description, or a label that may have to truncate, needs its own
+          // box inside the button; a plain scrolling option, or an icon-only
+          // one, renders as before.
+          const wrapped =
+            description !== undefined || (!scroll && content != null && content !== "") ? (
+              <span
+                className={styles.text}
+                style={{
+                  alignItems:
+                    button.horizontal === "start"
+                      ? "flex-start"
+                      : button.horizontal === "end"
+                        ? "flex-end"
+                        : "center",
+                }}
+              >
+                <span className={styles.label}>{content}</span>
+                {/* Between flex items the space draws nothing, and keeps the
+                    two lines apart in the tab's name: "Fast Quick answers". */}
+                {description !== undefined && " "}
+                {description !== undefined && (
+                  <Text
+                    as="span"
+                    variant="body-default-xs"
+                    onBackground="neutral-weak"
+                    className={styles.label}
+                  >
+                    {description}
+                  </Text>
+                )}
+              </span>
+            ) : undefined;
+          return (
+            <ToggleButton
+              ref={(el) => {
+                buttonRefs.current[index] = el as HTMLButtonElement;
+              }}
+              variant={compact ? "outline" : "ghost"}
+              corners={
+                compact
+                  ? index === 0
+                    ? "left"
+                    : index === buttons.length - 1
+                      ? "right"
+                      : "none"
+                  : undefined
+              }
+              key={button.value}
+              selected={index === selectedIndex}
+              // The option's own `onClick` runs as well; spread below, it
+              // used to replace this one and the segment stopped selecting.
+              onClick={(event) => {
+                onClick?.(event);
+                handleButtonClick({ ...button, onClick }, event);
+              }}
+              role={radio ? "radio" : "tab"}
+              className={classNames(className, {
+                [styles.shrink]: !scroll,
+                [styles.share]: !scroll && fillWidth,
+                [styles.twoLine]: description !== undefined,
+              })}
+              style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
+              aria-selected={radio ? undefined : index === selectedIndex}
+              aria-checked={radio ? index === selectedIndex : undefined}
+              // No made-up `aria-controls`: it pointed at `panel-<value>`,
+              // which nothing renders. A button that does control a panel
+              // passes the panel's id as `aria-controls`, spread below.
+              tabIndex={index === selectedIndex ? 0 : -1}
+              fillWidth={fillWidth}
+              {...button}
+              {...(wrapped && { label: wrapped, children: undefined })}
+            />
+          );
+        })}
+      </Flex>
+    );
+
+    if (!scroll) {
+      // The Scroller's own props mean nothing without it.
+      const { fadeColor: _fade, onItemClick: _item, labels: _labels, ...flexProps } = scrollerProps;
+      return (
+        <Flex ref={ref} fillWidth={fillWidth} minWidth={0} {...flexProps} onKeyDown={handleKeyDown}>
+          {tablist}
+        </Flex>
+      );
+    }
+
     return (
       <Scroller
         ref={ref}
@@ -156,61 +276,7 @@ const SegmentedControl = forwardRef<HTMLDivElement, SegmentedControlProps>(
         {/* The tablist is the row of tabs, not the Scroller around it: once
             the options overflow, the Scroller also holds its scroll buttons,
             and a tablist may own only tabs. */}
-        <Flex
-          role={radio ? "radiogroup" : "tablist"}
-          aria-orientation={radio ? undefined : "horizontal"}
-          aria-label={ariaLabel}
-          aria-labelledby={ariaLabelledBy}
-          aria-describedby={ariaDescribedBy}
-          fillWidth={fillWidth}
-          // Never narrower than its options: when they overflow, the border
-          // goes round all of them and scrolls with them, instead of ending
-          // at the edge of the strip with the last options outside it.
-          style={{ minWidth: "max-content" }}
-          gap={compact ? "-1" : "2"}
-          padding={compact ? "0" : "4"}
-          radius="l"
-          border={compact ? undefined : "neutral-alpha-weak"}
-        >
-          {buttons.map(({ onClick, ...button }, index) => {
-            return (
-              <ToggleButton
-                ref={(el) => {
-                  buttonRefs.current[index] = el as HTMLButtonElement;
-                }}
-                variant={compact ? "outline" : "ghost"}
-                corners={
-                  compact
-                    ? index === 0
-                      ? "left"
-                      : index === buttons.length - 1
-                        ? "right"
-                        : "none"
-                    : undefined
-                }
-                key={button.value}
-                selected={index === selectedIndex}
-                // The option's own `onClick` runs as well; spread below, it
-                // used to replace this one and the segment stopped selecting.
-                onClick={(event) => {
-                  onClick?.(event);
-                  handleButtonClick({ ...button, onClick }, event);
-                }}
-                role={radio ? "radio" : "tab"}
-                className={className}
-                style={{ opacity: index !== selectedIndex && !compact ? 0.6 : 1, ...style }}
-                aria-selected={radio ? undefined : index === selectedIndex}
-                aria-checked={radio ? index === selectedIndex : undefined}
-                // No made-up `aria-controls`: it pointed at `panel-<value>`,
-                // which nothing renders. A button that does control a panel
-                // passes the panel's id as `aria-controls`, spread below.
-                tabIndex={index === selectedIndex ? 0 : -1}
-                fillWidth={fillWidth}
-                {...button}
-              />
-            );
-          })}
-        </Flex>
+        {tablist}
       </Scroller>
     );
   },

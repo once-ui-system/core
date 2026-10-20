@@ -270,6 +270,53 @@ Distribute the button widths evenly across the container.
   ]}
 />
 
+## Narrow spaces
+
+Options that do not fit scroll behind a Next button. In a narrow sidebar that clips the last one; `scroll={false}` keeps them in a plain row that shares the width equally and truncates a label that does not fit. An option's `description` adds a second, dimmer line under its label. Without `onChange` the control keeps its own selection, starting from `defaultValue`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" maxWidth={16} fillWidth>
+      <SegmentedControl
+        scroll={false}
+        aria-label="Library view"
+        buttons={[
+          { value: "library", label: "Library" },
+          { value: "projects", label: "Projects" },
+          { value: "shared", label: "Shared" },
+        ]}
+      />
+      <SegmentedControl
+        scroll={false}
+        aria-label="Answer mode"
+        defaultValue="deep"
+        buttons={[
+          { value: "fast", label: "Fast", description: "Quick answers" },
+          { value: "deep", label: "Deep", description: "Reads sources" },
+        ]}
+      />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<SegmentedControl
+  scroll={false}
+  aria-label="Answer mode"
+  defaultValue="deep"
+  buttons={[
+    { value: "fast", label: "Fast", description: "Quick answers" },
+    { value: "deep", label: "Deep", description: "Reads sources" },
+  ]}
+/>`,
+      language: "tsx",
+      label: "Narrow spaces"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -277,6 +324,7 @@ Distribute the button widths evenly across the container.
   describe={{
     compact: "Tighter padding, for dense toolbars.",
     semantics: "`tabs` (a tab strip) or `radio` (one choice from a set of settings, a radio group).",
+    scroll: "`false` shares the width between the options and truncates labels, instead of scrolling them.",
   }}
   content={[
     ["className"],

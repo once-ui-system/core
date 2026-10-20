@@ -14,6 +14,8 @@ interface ChipProps extends React.ComponentProps<typeof Flex> {
   label: string;
   selected?: boolean;
   prefixIcon?: IconName;
+  /** An icon after the label, such as `chevronDown` on a chip that opens a menu. */
+  suffixIcon?: IconName;
   onRemove?: () => void;
   /**
    * With `onRemove`, whether the label is a control of its own, a toggle
@@ -34,6 +36,7 @@ type RestProps = Omit<
   | "label"
   | "selected"
   | "prefixIcon"
+  | "suffixIcon"
   | "onRemove"
   | "interactive"
   | "onClick"
@@ -63,6 +66,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
       label,
       selected = true,
       prefixIcon,
+      suffixIcon,
       onRemove,
       interactive = true,
       onClick,
@@ -117,6 +121,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         <Flex paddingX="8" paddingY="2">
           <Text variant="body-default-s">{label || children}</Text>
         </Flex>
+        {suffixIcon && <Icon name={suffixIcon} size="s" />}
       </>
     );
 

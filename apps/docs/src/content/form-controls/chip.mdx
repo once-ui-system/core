@@ -64,7 +64,7 @@ Chips can be in a selected or unselected state to indicate active filters or sel
 
 ## Prefix & Suffix
 
-Enhance chips with prefix icons to improve visual communication.
+Enhance chips with prefix icons to improve visual communication. `suffixIcon` puts one after the label, such as a chevron on a chip that opens a menu.
 
 <CodeBlock
   marginTop="16"
@@ -78,7 +78,8 @@ Enhance chips with prefix icons to improve visual communication.
 `<Chip label="Tag" prefixIcon="tag" />
 <Chip label="User" prefixIcon="person" />
 <Chip label="Location" prefixIcon="globe" />
-<Chip label="Favorite" prefixIcon="heart" />`,
+<Chip label="Favorite" prefixIcon="heart" />
+<Chip label="Sort" suffixIcon="chevronDown" selected={false} />`,
       language: "tsx",
       label: "Prefix & Suffix"
     }
@@ -154,6 +155,7 @@ When removing is the chip's only action, `interactive={false}` makes its label p
     label: "The text.",
     selected: "Whether it reads as chosen.",
     prefixIcon: "Icon before the label.",
+    suffixIcon: "Icon after the label.",
     onClick: "Called when the chip body is clicked.",
     onRemove: "Adds a remove control, called when it is used.",
     interactive: "With onRemove, whether the label is a control of its own. False makes it plain text.",
