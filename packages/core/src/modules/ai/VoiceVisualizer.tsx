@@ -89,6 +89,14 @@ const VoiceVisualizer = forwardRef<HTMLDivElement, VoiceVisualizerProps>(
       }
     }, [level, bars]);
 
+    // Once nothing drives it, drop the last values so the stand-in starts from rest.
+    useEffect(() => {
+      const node = root.current;
+      if (!node || live) return;
+      node.style.removeProperty("--voice-level");
+      for (let i = 0; i < bars; i++) node.style.removeProperty(`--voice-bar-${i}`);
+    }, [live, bars]);
+
     // A source: read it every frame and write the variables directly.
     useEffect(() => {
       const node = root.current;

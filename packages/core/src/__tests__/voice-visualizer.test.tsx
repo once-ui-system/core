@@ -32,6 +32,14 @@ describe("VoiceVisualizer", () => {
     expect(bars[0]).toBe(bars[2]);
   });
 
+  it("drops the last level when the level goes away", () => {
+    const { rerender } = render(<VoiceVisualizer variant="bars" bars={3} level={0.8} />);
+    rerender(<VoiceVisualizer variant="bars" bars={3} state="thinking" />);
+    const root = screen.getByRole("status");
+    expect(root.style.getPropertyValue("--voice-level")).toBe("");
+    expect(root.style.getPropertyValue("--voice-bar-1")).toBe("");
+  });
+
   it("plays its stand-in animation when there is no audio", () => {
     render(<VoiceVisualizer state="listening" />);
     expect(screen.getByRole("status").hasAttribute("data-live")).toBe(false);
