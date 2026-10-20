@@ -1,7 +1,7 @@
 ---
 title: "AI"
 export: "WorkingIndicator"
-summary: "Pieces for AI products: a loader drawn from the Once UI mark, a working line that cycles through playful verbs, and voice chat animations that follow the audio."
+summary: "Pieces for AI products: a loader drawn from the Once UI mark, a working line that cycles through playful verbs, voice chat animations that follow the audio, and a customizable mascot."
 updatedAt: "2026-10-20"
 docs: "once-ui/modules/ai.mdx"
 github: "modules/ai/WorkingIndicator.tsx"
@@ -166,6 +166,68 @@ something of your own, `useAudioLevel(source)` returns the same loudness from 0 
   ]}
 />
 
+## Mascot
+
+A companion for an assistant: a character with a face that idles, listens, thinks, speaks and
+sleeps, with a mood on top. Its eyes follow the pointer, and while speaking its mouth opens with the
+reply's audio. The default body is the Once UI mark with a face; `orb` and `squircle` are softer.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <MascotStatesExample />
+  }
+  codes={[
+    {
+      code:
+`<Mascot state="thinking" />
+<Mascot state="listening" mood="happy" shape="orb" eyes="pill" />
+<Mascot state="speaking" source={replyAudioElement} shape="squircle" eyes="visor" accessory="antenna" />`,
+      language: "tsx",
+      label: "States"
+    }
+  ]}
+/>
+
+### Make it yours
+
+Shape, eyes, accessory and cheeks are props, and the body takes the brand hue, so a chat theme
+recolors it. `palette` sets any part to your own colors; from CSS, the same parts are the
+`--mascot-body`, `--mascot-body-deep`, `--mascot-ink`, `--mascot-sclera`, `--mascot-cheek`,
+`--mascot-glow` and `--mascot-halo` variables.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="32" center wrap>
+      <Mascot size="l" shape="orb" eyes="dot" accessory="halo" mood="happy" />
+      <Mascot size="l" eyes="pill" color="accent" cheeks={false} />
+      <Mascot size="l" shape="squircle" color="neutral" lookAt="center" />
+      <Mascot
+        size="l"
+        shape="orb"
+        palette={{ body: "#ff8a3d", bodyDeep: "#c2410c", ink: "#2b1300" }}
+      />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Mascot shape="orb" eyes="dot" accessory="halo" mood="happy" />
+<Mascot eyes="pill" color="accent" cheeks={false} />
+<Mascot shape="squircle" color="neutral" lookAt="center" />
+<Mascot
+  shape="orb"
+  palette={{ body: "#ff8a3d", bodyDeep: "#c2410c", ink: "#2b1300" }}
+/>`,
+      language: "tsx",
+      label: "Customize"
+    }
+  ]}
+/>
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
@@ -206,6 +268,9 @@ tiles stop moving and fade in turn, the verbs swap without sliding and the shimm
 reduced motion its stand-in animations stop; real audio still shows, as glow on the orb and as bar
 height, because that is feedback the person needs while they talk.
 
+`Mascot` is one image named for what it is doing ("Assistant, thinking"). With reduced motion it
+holds still and keeps its poses and expressions; it does not blink, bob or talk on its own.
+
 ## API reference
 
 <PropsTable
@@ -236,6 +301,25 @@ height, because that is feedback the person needs while they talk.
     color: "brand, accent or neutral.",
     bars: "Number of bars in the bars variant.",
     ariaLabel: "What screen readers announce; defaults to the state.",
+  }}
+/>
+
+<PropsTable
+  component="Mascot"
+  describe={{
+    state: "idle, listening, thinking, speaking or sleeping.",
+    mood: "neutral, happy, surprised or sad.",
+    shape: "mark, orb or squircle.",
+    eyes: "round, pill, visor or dot.",
+    accessory: "none, antenna or halo.",
+    cheeks: "Blush under the eyes.",
+    color: "brand, accent or neutral.",
+    palette: "CSS colors for body, bodyDeep, ink, sclera, cheek, glow and halo.",
+    lookAt: "pointer, center, or a direction from -1 to 1.",
+    level: "Loudness from 0 to 1 that opens the mouth while speaking.",
+    source: "Audio to lip-sync to: an element, a stream or an AnalyserNode.",
+    size: "s, m, l, xl or a number of pixels.",
+    ariaLabel: "What screen readers hear.",
   }}
 />
 

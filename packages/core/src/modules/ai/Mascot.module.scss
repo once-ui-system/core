@@ -1,0 +1,375 @@
+/* Mascot
+   Every color is a variable (the `palette` prop sets them), so a product can
+   also restyle the character from CSS:
+   --mascot-body, --mascot-body-deep, --mascot-ink, --mascot-sclera,
+   --mascot-shine, --mascot-cheek, --mascot-glow, --mascot-halo. */
+.mascot {
+  --mascot-body: var(--mascot-hue);
+  --mascot-body-deep: var(--mascot-hue-deep);
+  --mascot-ink: #15141c;
+  --mascot-sclera: #fff;
+  --mascot-shine: #fff;
+  --mascot-cheek: rgb(255 110 150 / 0.4);
+  --mascot-glow: color-mix(in srgb, var(--mascot-body) 30%, white);
+  --mascot-halo: #ffd76a;
+  --mascot-look-x: 0;
+  --mascot-look-y: 0;
+  --mascot-level: 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.stopLight {
+  stop-color: color-mix(in srgb, var(--mascot-body) 55%, white);
+}
+
+.stopMid {
+  stop-color: var(--mascot-body);
+}
+
+.stopDeep {
+  stop-color: color-mix(in srgb, var(--mascot-body-deep) 65%, black);
+}
+
+.ink {
+  fill: var(--mascot-ink);
+}
+
+.sclera {
+  fill: var(--mascot-sclera);
+}
+
+.shine {
+  fill: var(--mascot-shine);
+}
+
+.tongue {
+  fill: #ff7a93;
+}
+
+.line {
+  fill: none;
+  stroke: var(--mascot-ink);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.cheek {
+  fill: var(--mascot-cheek);
+}
+
+.visor {
+  fill: var(--mascot-ink);
+  opacity: 0.88;
+}
+
+.glow {
+  fill: var(--mascot-glow);
+  filter: drop-shadow(0 0 4px var(--mascot-glow));
+}
+
+.halo {
+  fill: none;
+  stroke: var(--mascot-halo);
+  stroke-width: 5;
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--mascot-halo) 60%, transparent));
+}
+
+.stalk {
+  stroke: color-mix(in srgb, var(--mascot-body-deep) 70%, black);
+  stroke-width: 5;
+  stroke-linecap: round;
+}
+
+.bulb {
+  fill: var(--mascot-glow);
+  filter: drop-shadow(0 0 5px var(--mascot-glow));
+}
+
+.shadow {
+  fill: var(--neutral-alpha-medium);
+  transform-origin: 100px 192px;
+}
+
+.float,
+.body,
+.face,
+.eyes,
+.pupil,
+.eye,
+.talk,
+.antenna {
+  transform-box: view-box;
+}
+
+.body {
+  transform-origin: 100px 120px;
+  transition: transform 0.4s cubic-bezier(0.3, 1.4, 0.5, 1);
+}
+
+/* The eyes look where --mascot-look-* points; the whole face follows a
+   little, so the head seems to turn. */
+.pupil {
+  transform: translate(
+    calc(var(--mascot-look-x) * 5px),
+    calc(var(--mascot-look-y) * 5px)
+  );
+  transition: transform 0.14s ease-out;
+}
+
+.face {
+  transform: translate(
+    calc(var(--mascot-look-x) * 4px),
+    calc(var(--mascot-look-y) * 3px)
+  );
+  transition: transform 0.2s ease-out;
+}
+
+.eyes {
+  transform-origin: 100px 100px;
+  transition: transform 0.25s ease-out;
+}
+
+/* Idle life: a slow bob and a blink now and then. */
+.float {
+  animation: mascot-bob 3.6s ease-in-out infinite;
+}
+
+.shadow {
+  animation: mascot-shadow 3.6s ease-in-out infinite;
+}
+
+.eye {
+  animation: mascot-blink 5.2s infinite;
+}
+
+.eye + .eye {
+  animation-delay: 0.04s;
+}
+
+@keyframes mascot-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes mascot-shadow {
+  0%,
+  100% {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(0.86);
+    opacity: 0.7;
+  }
+}
+
+@keyframes mascot-blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  95% {
+    transform: scaleY(0.1);
+  }
+}
+
+/* Listening: leans in, eyes a little wider. */
+.mascot[data-state="listening"] {
+  .body {
+    transform: rotate(-5deg) translateY(-2px);
+  }
+  .eyes {
+    transform: scale(1.08);
+  }
+  .antenna {
+    transform-origin: 100px 30px;
+    animation: mascot-wiggle 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes mascot-wiggle {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  25% {
+    transform: rotate(-8deg);
+  }
+  75% {
+    transform: rotate(8deg);
+  }
+}
+
+/* Thinking: looks up and aside, squints, bubbles rise. */
+.mascot[data-state="thinking"] {
+  .pupil {
+    transform: translate(4px, -5px);
+  }
+  .face {
+    transform: translate(3px, -2px);
+  }
+  .eyes {
+    transform: scaleY(0.88);
+  }
+  .body {
+    transform: rotate(4deg);
+  }
+}
+
+.thought circle {
+  fill: var(--mascot-glow);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mascot-thought 1.5s ease-in-out infinite;
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes mascot-thought {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(0.55);
+    opacity: 0.4;
+  }
+}
+
+/* Speaking: the mouth opens with the level, or talks on its own. */
+.talk {
+  transform: scaleY(0.6);
+  animation: mascot-talk 0.75s ease-in-out infinite;
+}
+
+.mascot[data-live] .talk {
+  animation: none;
+  transform: scale(calc(0.9 + var(--mascot-level) * 0.2), calc(0.3 + var(--mascot-level) * 1));
+  transition: transform 0.06s linear;
+}
+
+.mascot[data-state="speaking"] .float {
+  animation-duration: 1.8s;
+}
+
+@keyframes mascot-talk {
+  0%,
+  100% {
+    transform: scaleY(0.6);
+  }
+  20% {
+    transform: scaleY(1.15);
+  }
+  40% {
+    transform: scaleY(0.35);
+  }
+  65% {
+    transform: scaleY(1);
+  }
+  80% {
+    transform: scaleY(0.5);
+  }
+}
+
+/* Sleeping: slow breath, no blink, letters drift up. */
+.mascot[data-state="sleeping"] {
+  .float {
+    animation: mascot-breathe 5s ease-in-out infinite;
+  }
+  .body {
+    transform: rotate(3deg) translateY(4px);
+  }
+}
+
+@keyframes mascot-breathe {
+  0%,
+  100% {
+    transform: scale(1, 1);
+  }
+  50% {
+    transform: scale(1.02, 0.98);
+  }
+}
+
+.zzz text {
+  fill: var(--neutral-on-background-medium);
+  font: 600 22px var(--font-label, sans-serif);
+  animation: mascot-zzz 3s ease-in-out infinite;
+
+  &:nth-child(2) {
+    font-size: 16px;
+    animation-delay: 1.5s;
+  }
+}
+
+@keyframes mascot-zzz {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.25;
+    transform: translateY(-6px);
+  }
+}
+
+/* Moods */
+.mascot[data-mood="happy"]:not([data-state="sleeping"]) .float {
+  animation: mascot-hop 1.4s cubic-bezier(0.3, 0, 0.3, 1) infinite;
+}
+
+@keyframes mascot-hop {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0) scale(1, 1);
+  }
+  20% {
+    transform: translateY(-10px) scale(0.98, 1.02);
+  }
+  45% {
+    transform: translateY(0) scale(1.04, 0.96);
+  }
+}
+
+.mascot[data-mood="surprised"] .eyes {
+  transform: scale(1.18);
+}
+
+.mascot[data-mood="sad"] {
+  .eyes {
+    transform: translateY(3px) scaleY(0.9);
+  }
+  .float {
+    animation-duration: 6s;
+  }
+}
+
+/* Reduced motion: the global rule ends each animation on its rest frame;
+   poses and expressions stay. The cursor-following eyes are kept: they move
+   only when the person moves. */
+@media (prefers-reduced-motion: reduce) {
+  .mascot[data-live] .talk {
+    transform: scaleY(calc(0.3 + var(--mascot-level) * 0.7));
+  }
+}

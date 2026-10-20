@@ -20,3 +20,11 @@
 .selectedRow {
   background: var(--brand-alpha-weak);
 }
+
+// `keepRowsWhileLoading`: the last rows stay in place, dimmed and inert,
+// until the next ones arrive.
+.dimmedBody {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: var(--transition-micro-medium);
+}
