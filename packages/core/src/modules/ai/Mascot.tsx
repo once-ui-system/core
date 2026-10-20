@@ -10,52 +10,24 @@ import styles from "./Mascot.module.scss";
 export type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
 export type MascotMood = "neutral" | "happy" | "surprised" | "sad";
 
-export interface MascotPalette {
-  body?: string;
-  /** The shaded side of the body. */
-  bodyDeep?: string;
-  /** Pupils, mouth and closed eyes. */
-  ink?: string;
-  /** The whites of round eyes. */
-  sclera?: string;
-  cheek?: string;
-  /** Visor eyes, the antenna bulb and thought bubbles. */
-  glow?: string;
-  halo?: string;
-}
-
-const PALETTE_VARS: Record<keyof MascotPalette, string> = {
-  body: "--mascot-body",
-  bodyDeep: "--mascot-body-deep",
-  ink: "--mascot-ink",
-  sclera: "--mascot-sclera",
-  cheek: "--mascot-cheek",
-  glow: "--mascot-glow",
-  halo: "--mascot-halo",
-};
-
 export interface MascotProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   /** What the assistant is doing. Each state has its own pose and motion. */
   state?: MascotState;
   /** The expression on top of the state. */
   mood?: MascotMood;
-  /** `mark`: the Once UI tiles with a face. `orb` and `squircle` for a softer character. */
-  shape?: "mark" | "orb" | "squircle";
-  /** `round` eyes with pupils, solid `pill`s, a robot `visor`, or small `dot`s. */
-  eyes?: "round" | "pill" | "visor" | "dot";
-  /** Something on top of the head. */
-  accessory?: "none" | "antenna" | "halo";
-  /** Blush under the eyes. */
-  cheeks?: boolean;
-  /** The body takes this scheme's hue. */
-  color?: "brand" | "accent" | "neutral";
-  /** Any CSS colors for single parts, over `color`. Each is also a `--mascot-*` variable. */
-  palette?: MascotPalette;
+  /** A scheme (`brand`, `accent`, `neutral`) or any CSS color. Every shade is derived from it. */
+  color?: "brand" | "accent" | "neutral" | (string & {});
+  /** From 0, a rounded square, through a squircle, to 1, a circle. */
+  roundness?: number;
+  /** Width over height of the body: below 1 is tall, above 1 is wide. */
+  aspect?: number;
+  /** Tall `pill`s, `round` dots or `wide` slits. */
+  eyes?: "pill" | "round" | "wide";
   /** `pointer` follows the cursor, `{ x, y }` from -1 to 1 looks that way, `center` looks ahead. */
   lookAt?: "pointer" | "center" | { x: number; y: number };
-  /** Loudness from 0 to 1 that opens the mouth while speaking. Takes precedence over `source`. */
+  /** Loudness from 0 to 1 that makes the body pulse while speaking. Takes precedence over `source`. */
   level?: number;
-  /** The reply's `<audio>` element, a stream or an `AnalyserNode`, for lip sync. */
+  /** The reply's `<audio>` element, a stream or an `AnalyserNode`, to pulse with. */
   source?: AudioLevelSource | null;
   size?: "s" | "m" | "l" | "xl" | number;
   /** What screen readers hear. Defaults to "Assistant" and the state. */
@@ -63,6 +35,7 @@ export interface MascotProps extends Omit<React.ComponentProps<typeof Flex>, "ch
 }
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
+const SCHEMES = new Set(["brand", "accent", "neutral"]);
 
 const STATE_LABEL: Record<MascotState, string> = {
   idle: "Assistant",
@@ -72,111 +45,98 @@ const STATE_LABEL: Record<MascotState, string> = {
   sleeping: "Assistant, asleep",
 };
 
-/* The Once UI mark's tiles in a 200 box: left, top, right, bottom. */
-const MARK_TILES = [
-  "M81.6393 341.413C55.4536 315.228 55.4536 272.772 81.6393 246.587L156.146 172.08L264.52 280.453C272.002 287.935 272.002 300.065 264.52 307.547L156.146 415.92L81.6393 341.413Z",
-  "M173.08 155.146L247.587 80.6393C273.772 54.4536 316.228 54.4536 342.413 80.6393L416.92 155.146L308.547 263.52C301.065 271.002 288.935 271.002 281.453 263.52L173.08 155.146Z",
-  "M325.48 307.547C317.998 300.065 317.998 287.935 325.48 280.453L433.854 172.08L508.361 246.587C534.546 272.772 534.546 315.228 508.361 341.413L433.854 415.92L325.48 307.547Z",
-  "M173.08 432.854L281.453 324.48C288.935 316.998 301.065 316.998 308.547 324.48L416.92 432.854L342.413 507.361C316.228 533.546 273.772 533.546 247.587 507.361L173.08 432.854Z",
-];
-
-/** Where the face sits on each body: eye centers apart from the middle, eye height, mouth height. */
-const FACE = {
-  mark: { eyeX: 37, eyeY: 100, mouthY: 138, top: 18 },
-  orb: { eyeX: 25, eyeY: 98, mouthY: 130, top: 26 },
-  squircle: { eyeX: 27, eyeY: 96, mouthY: 130, top: 26 },
+const EYE = {
+  pill: { w: 22, h: 40 },
+  round: { w: 28, h: 28 },
+  wide: { w: 36, h: 18 },
 } as const;
 
-function Eye({ kind, x, y }: { kind: NonNullable<MascotProps["eyes"]>; x: number; y: number }) {
-  if (kind === "round") {
-    return (
-      <g className={styles.eye} style={{ transformOrigin: `${x}px ${y}px` }}>
-        <ellipse cx={x} cy={y} rx={13} ry={15} className={styles.sclera} />
-        <g className={styles.pupil}>
-          <circle cx={x} cy={y + 1} r={7} className={styles.ink} />
-          <circle cx={x + 2.5} cy={y - 2} r={2.2} className={styles.shine} />
-        </g>
-      </g>
-    );
+const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
+
+/** A superellipse around (100, 104): exponent 2 is a circle, higher is squarer. */
+function bodyPath(roundness: number, aspect: number) {
+  const n = 2 + (1 - clamp(roundness, 0, 1)) * 4;
+  const scale = clamp(aspect, 0.6, 1.6);
+  const a = scale >= 1 ? 82 : 82 * scale;
+  const b = scale >= 1 ? 78 / scale : 78;
+  const points: string[] = [];
+  for (let i = 0; i < 72; i++) {
+    const t = (i / 72) * Math.PI * 2;
+    const c = Math.cos(t);
+    const s = Math.sin(t);
+    const x = 100 + a * Math.sign(c) * Math.abs(c) ** (2 / n);
+    const y = 104 + b * Math.sign(s) * Math.abs(s) ** (2 / n);
+    points.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
   }
-  if (kind === "pill") {
-    return (
-      <g className={styles.eye} style={{ transformOrigin: `${x}px ${y}px` }}>
-        <g className={styles.pupil}>
-          <rect x={x - 6} y={y - 13} width={12} height={26} rx={6} className={styles.ink} />
-          <circle cx={x + 1.5} cy={y - 6} r={2.2} className={styles.shine} />
-        </g>
-      </g>
-    );
-  }
+  return { d: `M${points.join("L")}Z`, top: 104 - b, bottom: 104 + b };
+}
+
+function Eye({
+  side,
+  kind,
+  closed,
+}: {
+  side: -1 | 1;
+  kind: NonNullable<MascotProps["eyes"]>;
+  closed?: "happy" | "sleep";
+}) {
+  const x = 100 + side * 29;
+  const y = 96;
+  const { w, h } = EYE[kind];
   return (
-    <g className={styles.eye} style={{ transformOrigin: `${x}px ${y}px` }}>
-      <g className={styles.pupil}>
-        <circle
-          cx={x}
-          cy={y}
-          r={kind === "visor" ? 6.5 : 6}
-          className={kind === "visor" ? styles.glow : styles.ink}
-        />
+    <g className={classNames(styles.eye, side < 0 ? styles.left : styles.right)}>
+      <g className={styles.lid}>
+        {closed ? (
+          <path
+            d={
+              closed === "happy"
+                ? `M${x - 13} ${y + 6} Q${x} ${y - 14} ${x + 13} ${y + 6}`
+                : `M${x - 13} ${y} Q${x} ${y + 11} ${x + 13} ${y}`
+            }
+            className={styles.arc}
+          />
+        ) : (
+          <>
+            <rect
+              x={x - w / 2}
+              y={y - h / 2}
+              width={w}
+              height={h}
+              rx={Math.min(w, h) / 2}
+              className={styles.ink}
+            />
+            <ellipse
+              cx={x - w * 0.16}
+              cy={y - h * 0.24}
+              rx={w * 0.17}
+              ry={Math.min(w, h) * 0.17}
+              className={styles.glint}
+            />
+          </>
+        )}
       </g>
     </g>
   );
 }
 
-function Mouth({ state, mood, y }: { state: MascotState; mood: MascotMood; y: number }) {
-  if (state === "speaking") {
-    // Scaled on Y by the level (or the stand-in talk animation).
-    return (
-      <g className={styles.talk} style={{ transformOrigin: `100px ${y}px` }}>
-        <ellipse cx={100} cy={y} rx={10} ry={8} className={styles.ink} />
-        <ellipse cx={100} cy={y + 4} rx={5.5} ry={3} className={styles.tongue} />
-      </g>
-    );
-  }
-  if (state === "sleeping") {
-    return <ellipse cx={100} cy={y} rx={4} ry={3} className={styles.ink} />;
-  }
-  if (state === "thinking") {
-    // A slanted "hmm".
-    return <path d={`M92 ${y + 2} L108 ${y - 2}`} className={styles.line} />;
-  }
-  switch (mood) {
-    case "happy":
-      return (
-        <path
-          d={`M86 ${y - 3} Q100 ${y - 3} 114 ${y - 3} Q112 ${y + 13} 100 ${y + 13} Q88 ${y + 13} 86 ${y - 3}Z`}
-          className={styles.ink}
-        />
-      );
-    case "surprised":
-      return <ellipse cx={100} cy={y + 1} rx={6} ry={7.5} className={styles.ink} />;
-    case "sad":
-      return <path d={`M89 ${y + 5} Q100 ${y - 4} 111 ${y + 5}`} className={styles.line} />;
-    default:
-      return <path d={`M89 ${y - 2} Q100 ${y + 8} 111 ${y - 2}`} className={styles.line} />;
-  }
-}
-
 /**
- * An animated companion for an assistant: a character with a face that idles,
- * listens, thinks, speaks and sleeps, with a mood on top. Its eyes can follow
- * the pointer, and its mouth opens with the reply's audio.
+ * An animated companion for an assistant: one soft, single-color shape with a
+ * pair of eyes. It idles, listens, thinks, speaks and sleeps, with a mood on
+ * top. The eyes slide over the body as if it were round when it looks around,
+ * and the body pulses with the reply's audio.
  *
- * Shape, eyes, accessory and cheeks are props; colors come from the scheme,
- * and `palette` (or the `--mascot-*` variables, from CSS) recolors any part. With reduced motion
- * it holds still, keeps its expressions, and does not blink or bob.
+ * `color`, `roundness`, `aspect` and `eyes` make it yours. With reduced motion
+ * it holds still and keeps its expressions.
  */
 const Mascot = forwardRef<HTMLDivElement, MascotProps>(
   (
     {
       state = "idle",
       mood = "neutral",
-      shape = "mark",
-      eyes = "round",
-      accessory = "none",
-      cheeks = true,
       color = "brand",
-      palette,
+      roundness = 0.7,
+      aspect = 1,
+      eyes = "pill",
       lookAt = "pointer",
       level,
       source,
@@ -198,9 +158,10 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
       [forwardedRef],
     );
     const id = useId().replace(/[^a-zA-Z0-9_-]/g, "");
-    const face = FACE[shape];
     const px = typeof size === "number" ? size : SIZE[size];
     const live = level !== undefined || Boolean(source);
+    const body = bodyPath(roundness, aspect);
+    const closed = state === "sleeping" ? "sleep" : mood === "happy" ? "happy" : undefined;
 
     // Where the eyes look: a fixed direction, ahead, or toward the pointer.
     const lookX = typeof lookAt === "object" ? lookAt.x : 0;
@@ -208,8 +169,8 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
     useEffect(() => {
       const node = root.current;
       if (!node) return;
-      node.style.setProperty("--mascot-look-x", String(Math.max(-1, Math.min(1, lookX))));
-      node.style.setProperty("--mascot-look-y", String(Math.max(-1, Math.min(1, lookY))));
+      node.style.setProperty("--mascot-look-x", String(clamp(lookX, -1, 1)));
+      node.style.setProperty("--mascot-look-y", String(clamp(lookY, -1, 1)));
       if (lookAt !== "pointer") return;
       let frame = 0;
       let pending: PointerEvent | undefined;
@@ -221,8 +182,8 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
         const dy = pending.clientY - (box.top + box.height / 2);
         // Full deflection a few body-widths away, so it doesn't twitch up close.
         const reach = Math.max(box.width * 3, 240);
-        node.style.setProperty("--mascot-look-x", Math.max(-1, Math.min(1, dx / reach)).toFixed(3));
-        node.style.setProperty("--mascot-look-y", Math.max(-1, Math.min(1, dy / reach)).toFixed(3));
+        node.style.setProperty("--mascot-look-x", clamp(dx / reach, -1, 1).toFixed(3));
+        node.style.setProperty("--mascot-look-y", clamp(dy / reach, -1, 1).toFixed(3));
       };
       const onMove = (event: PointerEvent) => {
         pending = event;
@@ -235,14 +196,15 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
       };
     }, [lookAt, lookX, lookY]);
 
-    // Lip sync: a level from props, or a source read every frame.
+    // Speaking pulse: a level from props, or a source read every frame.
     useEffect(() => {
       const node = root.current;
       if (!node) return;
       if (level !== undefined) {
-        node.style.setProperty("--mascot-level", String(Math.max(0, Math.min(1, level))));
+        node.style.setProperty("--mascot-level", String(clamp(level, 0, 1)));
         return;
       }
+      node.style.removeProperty("--mascot-level");
       if (!source) return;
       const meter = createAudioMeter(source);
       if (!meter) return;
@@ -258,8 +220,6 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
       };
     }, [level, source]);
 
-    const fill = `url(#${id}-body)`;
-
     return (
       <Flex
         ref={ref}
@@ -268,21 +228,13 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
         aria-label={ariaLabel ?? STATE_LABEL[state]}
         data-state={state}
         data-mood={mood}
-        data-shape={shape}
         data-live={live || undefined}
         className={classNames(styles.mascot, className)}
         style={
           {
             width: px,
             height: px,
-            "--mascot-hue": `var(--function-${color}-500)`,
-            "--mascot-hue-deep": `var(--function-${color}-400)`,
-            ...Object.fromEntries(
-              Object.entries(palette ?? {}).map(([part, value]) => [
-                PALETTE_VARS[part as keyof MascotPalette],
-                value,
-              ]),
-            ),
+            "--mascot-color": SCHEMES.has(color) ? `var(--function-${color}-500)` : color,
             ...style,
           } as React.CSSProperties
         }
@@ -290,103 +242,46 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
       >
         <svg viewBox="0 0 200 200" className={styles.svg} aria-hidden="true" focusable="false">
           <defs>
-            <radialGradient
-              id={`${id}-body`}
-              cx="38%"
-              cy="30%"
-              r="80%"
-              gradientUnits="objectBoundingBox"
-            >
-              <stop offset="0%" className={styles.stopLight} />
-              <stop offset="55%" className={styles.stopMid} />
-              <stop offset="100%" className={styles.stopDeep} />
+            <radialGradient id={`${id}-light`} cx="34%" cy="26%" r="62%">
+              <stop offset="0%" stopColor="#fff" stopOpacity="0.5" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0" />
             </radialGradient>
+            <radialGradient id={`${id}-shade`} cx="44%" cy="38%" r="70%">
+              <stop offset="55%" stopColor="#000" stopOpacity="0" />
+              <stop offset="100%" stopColor="#000" stopOpacity="0.42" />
+            </radialGradient>
+            <linearGradient id={`${id}-rim`} x1="0" y1="0" x2="0" y2="1">
+              <stop offset="72%" stopColor="#fff" stopOpacity="0" />
+              <stop offset="100%" stopColor="#fff" stopOpacity="0.22" />
+            </linearGradient>
+            <clipPath id={`${id}-clip`}>
+              <path d={body.d} />
+            </clipPath>
           </defs>
-          <ellipse cx={100} cy={192} rx={52} ry={6} className={styles.shadow} />
+          <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />
           <g className={styles.float}>
-            <g className={styles.body}>
-              {accessory === "antenna" && (
-                <g className={styles.antenna}>
-                  <path d={`M100 ${face.top + 4} L100 ${face.top - 12}`} className={styles.stalk} />
-                  <circle cx={100} cy={face.top - 15} r={6} className={styles.bulb} />
+            <g className={styles.body} style={{ transformOrigin: `100px ${body.bottom}px` }}>
+              <path d={body.d} className={styles.fill} />
+              <g clipPath={`url(#${id}-clip)`}>
+                <path d={body.d} fill={`url(#${id}-shade)`} />
+                <path d={body.d} fill={`url(#${id}-rim)`} />
+                <g className={styles.sheen}>
+                  <path d={body.d} fill={`url(#${id}-light)`} />
+                  <ellipse cx={70} cy={body.top + 26} rx={20} ry={11} className={styles.spec} />
                 </g>
-              )}
-              {shape === "mark" ? (
-                <g transform="translate(6 6) scale(0.32)" fill={fill}>
-                  {MARK_TILES.map((d) => (
-                    <path key={d} d={d} className={styles.tile} />
-                  ))}
-                </g>
-              ) : shape === "orb" ? (
-                <circle cx={100} cy={104} r={78} fill={fill} />
-              ) : (
-                <rect x={24} y={30} width={152} height={146} rx={62} fill={fill} />
-              )}
-              {accessory === "halo" && (
-                <ellipse cx={100} cy={face.top - 8} rx={34} ry={8} className={styles.halo} />
-              )}
+              </g>
               <g className={styles.face}>
-                {eyes === "visor" && (
-                  <rect
-                    x={100 - face.eyeX - 20}
-                    y={face.eyeY - 15}
-                    width={(face.eyeX + 20) * 2}
-                    height={30}
-                    rx={15}
-                    className={styles.visor}
-                  />
-                )}
-                <g className={styles.eyes}>
-                  {state === "sleeping" ? (
-                    [-1, 1].map((side) => (
-                      <path
-                        key={side}
-                        d={`M${100 + side * face.eyeX - 9} ${face.eyeY} Q${100 + side * face.eyeX} ${face.eyeY + 7} ${100 + side * face.eyeX + 9} ${face.eyeY}`}
-                        className={styles.line}
-                      />
-                    ))
-                  ) : (
-                    <>
-                      <Eye kind={eyes} x={100 - face.eyeX} y={face.eyeY} />
-                      <Eye kind={eyes} x={100 + face.eyeX} y={face.eyeY} />
-                    </>
-                  )}
-                </g>
-                {cheeks && (
-                  <>
-                    <ellipse
-                      cx={100 - face.eyeX - 6}
-                      cy={face.eyeY + 20}
-                      rx={8}
-                      ry={4.5}
-                      className={styles.cheek}
-                    />
-                    <ellipse
-                      cx={100 + face.eyeX + 6}
-                      cy={face.eyeY + 20}
-                      rx={8}
-                      ry={4.5}
-                      className={styles.cheek}
-                    />
-                  </>
-                )}
-                <Mouth state={state} mood={mood} y={face.mouthY} />
+                <Eye side={-1} kind={eyes} closed={closed} />
+                <Eye side={1} kind={eyes} closed={closed} />
               </g>
             </g>
           </g>
-          {state === "thinking" && (
-            <g className={styles.thought}>
-              <circle cx={160} cy={40} r={6} />
-              <circle cx={176} cy={26} r={8} />
-              <circle cx={190} cy={8} r={6} />
-            </g>
-          )}
           {state === "sleeping" && (
             <g className={styles.zzz}>
-              <text x={150} y={46}>
+              <text x={156} y={44}>
                 z
               </text>
-              <text x={166} y={28}>
+              <text x={172} y={26}>
                 z
               </text>
             </g>

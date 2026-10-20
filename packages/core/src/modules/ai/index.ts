@@ -1,6 +1,6 @@
 export type { AudioLevelSource } from "./audioLevel";
 export { useAudioLevel } from "./audioLevel";
-export type { MascotMood, MascotPalette, MascotProps, MascotState } from "./Mascot";
+export type { MascotMood, MascotProps, MascotState } from "./Mascot";
 export { Mascot } from "./Mascot";
 export type { VoiceState, VoiceVisualizerProps } from "./VoiceVisualizer";
 export { VoiceVisualizer } from "./VoiceVisualizer";

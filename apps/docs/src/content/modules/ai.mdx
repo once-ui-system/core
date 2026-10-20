@@ -168,9 +168,10 @@ something of your own, `useAudioLevel(source)` returns the same loudness from 0 
 
 ## Mascot
 
-A companion for an assistant: a character with a face that idles, listens, thinks, speaks and
-sleeps, with a mood on top. Its eyes follow the pointer, and while speaking its mouth opens with the
-reply's audio. The default body is the Once UI mark with a face; `orb` and `squircle` are softer.
+A companion for an assistant: one soft, single-color shape with a pair of eyes. It idles, listens,
+thinks, speaks and sleeps, with a mood on top. When it looks around, the eyes slide over the body
+and the one nearer the edge narrows, as if the body were round; while speaking, the body pulses with
+the reply's audio.
 
 <CodeBlock
   marginTop="16"
@@ -182,8 +183,8 @@ reply's audio. The default body is the Once UI mark with a face; `orb` and `squi
     {
       code:
 `<Mascot state="thinking" />
-<Mascot state="listening" mood="happy" shape="orb" eyes="pill" />
-<Mascot state="speaking" source={replyAudioElement} shape="squircle" eyes="visor" accessory="antenna" />`,
+<Mascot state="listening" mood="happy" />
+<Mascot state="speaking" source={replyAudioElement} />`,
       language: "tsx",
       label: "States"
     }
@@ -192,36 +193,28 @@ reply's audio. The default body is the Once UI mark with a face; `orb` and `squi
 
 ### Make it yours
 
-Shape, eyes, accessory and cheeks are props, and the body takes the brand hue, so a chat theme
-recolors it. `palette` sets any part to your own colors; from CSS, the same parts are the
-`--mascot-body`, `--mascot-body-deep`, `--mascot-ink`, `--mascot-sclera`, `--mascot-cheek`,
-`--mascot-glow` and `--mascot-halo` variables.
+`color` takes a scheme or any CSS color, and every shade, highlight and shadow comes from it.
+`roundness` runs from a rounded square (0) to a circle (1), `aspect` makes it tall or wide, and
+`eyes` picks `pill`, `round` or `wide`. From CSS, `--mascot-color` and `--mascot-eye` recolor it.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="32" center wrap>
-      <Mascot size="l" shape="orb" eyes="dot" accessory="halo" mood="happy" />
-      <Mascot size="l" eyes="pill" color="accent" cheeks={false} />
-      <Mascot size="l" shape="squircle" color="neutral" lookAt="center" />
-      <Mascot
-        size="l"
-        shape="orb"
-        palette={{ body: "#ff8a3d", bodyDeep: "#c2410c", ink: "#2b1300" }}
-      />
+      <Mascot size="l" roundness={1} eyes="round" color="#ff5a36" />
+      <Mascot size="l" roundness={0.3} color="#5ee68a" />
+      <Mascot size="l" aspect={1.3} eyes="wide" color="accent" />
+      <Mascot size="l" aspect={0.8} roundness={0.9} color="neutral" lookAt="center" />
     </Row>
   }
   codes={[
     {
       code:
-`<Mascot shape="orb" eyes="dot" accessory="halo" mood="happy" />
-<Mascot eyes="pill" color="accent" cheeks={false} />
-<Mascot shape="squircle" color="neutral" lookAt="center" />
-<Mascot
-  shape="orb"
-  palette={{ body: "#ff8a3d", bodyDeep: "#c2410c", ink: "#2b1300" }}
-/>`,
+`<Mascot roundness={1} eyes="round" color="#ff5a36" />
+<Mascot roundness={0.3} color="#5ee68a" />
+<Mascot aspect={1.3} eyes="wide" color="accent" />
+<Mascot aspect={0.8} roundness={0.9} color="neutral" lookAt="center" />`,
       language: "tsx",
       label: "Customize"
     }
@@ -269,7 +262,7 @@ reduced motion its stand-in animations stop; real audio still shows, as glow on 
 height, because that is feedback the person needs while they talk.
 
 `Mascot` is one image named for what it is doing ("Assistant, thinking"). With reduced motion it
-holds still and keeps its poses and expressions; it does not blink, bob or talk on its own.
+holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own.
 
 ## API reference
 
@@ -309,15 +302,13 @@ holds still and keeps its poses and expressions; it does not blink, bob or talk 
   describe={{
     state: "idle, listening, thinking, speaking or sleeping.",
     mood: "neutral, happy, surprised or sad.",
-    shape: "mark, orb or squircle.",
-    eyes: "round, pill, visor or dot.",
-    accessory: "none, antenna or halo.",
-    cheeks: "Blush under the eyes.",
-    color: "brand, accent or neutral.",
-    palette: "CSS colors for body, bodyDeep, ink, sclera, cheek, glow and halo.",
+    color: "brand, accent, neutral or any CSS color; every shade comes from it.",
+    roundness: "0, a rounded square, to 1, a circle.",
+    aspect: "Width over height: below 1 is tall, above 1 is wide.",
+    eyes: "pill, round or wide.",
     lookAt: "pointer, center, or a direction from -1 to 1.",
-    level: "Loudness from 0 to 1 that opens the mouth while speaking.",
-    source: "Audio to lip-sync to: an element, a stream or an AnalyserNode.",
+    level: "Loudness from 0 to 1 that makes the body pulse while speaking.",
+    source: "Audio to pulse with: an element, a stream or an AnalyserNode.",
     size: "s, m, l, xl or a number of pixels.",
     ariaLabel: "What screen readers hear.",
   }}

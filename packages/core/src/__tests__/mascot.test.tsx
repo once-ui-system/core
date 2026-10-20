@@ -21,21 +21,42 @@ describe("Mascot", () => {
     expect(img.getAttribute("data-mood")).toBe("happy");
   });
 
-  it("draws the Once UI tiles for the mark shape, one body for the others", () => {
-    const { container, rerender } = render(<Mascot shape="mark" />);
-    expect(container.querySelectorAll("g[transform] path")).toHaveLength(4);
-    rerender(<Mascot shape="orb" />);
-    expect(container.querySelectorAll("g[transform] path")).toHaveLength(0);
-    expect(container.querySelector("circle[r='78']")).toBeTruthy();
+  it("draws one body and two eyes, and nothing else", () => {
+    const { container } = render(<Mascot />);
+    expect(container.querySelectorAll("rect")).toHaveLength(2);
+    expect(container.querySelectorAll("text")).toHaveLength(0);
   });
 
-  it("closes its eyes and shows z's while sleeping", () => {
-    const { container } = render(<Mascot state="sleeping" />);
-    expect(container.querySelectorAll("ellipse[rx='13']")).toHaveLength(0);
+  it("closes its eyes into arcs when happy or asleep, with z's while sleeping", () => {
+    const { container, rerender } = render(<Mascot mood="happy" />);
+    expect(container.querySelectorAll("rect")).toHaveLength(0);
+    expect(container.querySelectorAll("text")).toHaveLength(0);
+    rerender(<Mascot state="sleeping" />);
+    expect(container.querySelectorAll("rect")).toHaveLength(0);
     expect(container.querySelectorAll("text")).toHaveLength(2);
   });
 
-  it("opens the mouth with a level, clamped", () => {
+  it("takes a scheme or any CSS color", () => {
+    const { rerender } = render(<Mascot color="accent" />);
+    const img = screen.getByRole("img");
+    expect(img.style.getPropertyValue("--mascot-color")).toBe("var(--function-accent-500)");
+    rerender(<Mascot color="#ff5a36" />);
+    expect(img.style.getPropertyValue("--mascot-color")).toBe("#ff5a36");
+  });
+
+  it("changes its outline with roundness and aspect", () => {
+    const outline = (ui: ReactElement) => {
+      const { container, unmount } = render(ui);
+      const d = container.querySelector("svg > g path")?.getAttribute("d");
+      unmount();
+      return d;
+    };
+    const base = outline(<Mascot />);
+    expect(outline(<Mascot roundness={1} />)).not.toBe(base);
+    expect(outline(<Mascot aspect={1.3} />)).not.toBe(base);
+  });
+
+  it("pulses with a level, clamped", () => {
     render(<Mascot state="speaking" level={2} />);
     const img = screen.getByRole("img");
     expect(img.hasAttribute("data-live")).toBe(true);
@@ -59,18 +80,12 @@ describe("Mascot", () => {
     expect(Number(img.style.getPropertyValue("--mascot-look-x"))).toBeGreaterThan(0);
   });
 
-  it("recolors single parts from palette", () => {
-    render(<Mascot palette={{ body: "#ff8a3d", ink: "#2b1300" }} />);
-    const img = screen.getByRole("img");
-    expect(img.style.getPropertyValue("--mascot-body")).toBe("#ff8a3d");
-    expect(img.style.getPropertyValue("--mascot-ink")).toBe("#2b1300");
-  });
-
-  it("takes accessories, eyes and a pixel size", () => {
-    const { container } = render(<Mascot accessory="halo" eyes="visor" size={64} />);
+  it("takes a pixel size and eye styles", () => {
+    const { container } = render(<Mascot eyes="wide" size={64} />);
     const img = screen.getByRole("img");
     expect(img.style.width).toBe("64px");
-    expect(container.querySelectorAll("rect")).toHaveLength(1);
+    const eye = container.querySelector("rect");
+    expect(Number(eye?.getAttribute("width"))).toBeGreaterThan(Number(eye?.getAttribute("height")));
   });
 
   it("renders on the server with stable gradient ids", () => {
@@ -79,13 +94,13 @@ describe("Mascot", () => {
         <Mascot state="listening" />
       </LayoutProvider>,
     );
-    const id = html.match(/id="([^"]+)-body"/)?.[1];
+    const id = html.match(/id="([^"]+)-light"/)?.[1];
     expect(id).toBeTruthy();
-    expect(html).toContain(`url(#${id}-body)`);
+    expect(html).toContain(`url(#${id}-light)`);
   });
 
   it("has no axe violations", async () => {
-    const { container } = render(<Mascot state="speaking" accessory="antenna" />);
+    const { container } = render(<Mascot state="speaking" />);
     await expectNoAxeViolations(container);
   });
 });
