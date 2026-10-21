@@ -92,6 +92,19 @@ export { Input, type InputProps, Textarea, type TextareaProps } from "./componen
 export { Kbd, type KbdProps } from "./components/Kbd";
 export { Line, type LineProps } from "./components/Line";
 export { List, ListItem, type ListItemProps, type ListProps } from "./components/List";
+export {
+  LogoSpinner,
+  type LogoSpinnerColor,
+  type LogoSpinnerProps,
+} from "./components/LogoSpinner";
+export {
+  Mascot,
+  type MascotLook,
+  type MascotMood,
+  type MascotProps,
+  type MascotState,
+  mascotLook,
+} from "./components/Mascot";
 export { Media, type MediaProps } from "./components/Media";
 export {
   Nav,
@@ -163,6 +176,8 @@ export { ToggleButton, type ToggleButtonProps } from "./components/ToggleButton"
 export { Tooltip, type TooltipProps } from "./components/Tooltip";
 export { touchSlop } from "./components/touch";
 export { User, type UserProps } from "./components/User";
+export { WorkingIndicator, type WorkingIndicatorProps } from "./components/WorkingIndicator";
+export { workingVerbs } from "./components/workingVerbs";
 export type { IconNode } from "./icons/types";
 export {
   type CustomScheme,

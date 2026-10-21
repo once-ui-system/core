@@ -1,8 +1,9 @@
-import { forwardRef, type ReactNode } from "react";
+import { forwardRef, type ReactNode, useContext } from "react";
 import { Pressable, type PressableProps, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { OnceTheme } from "../theme/theme";
 import type { TShirtSizes } from "../types";
+import { FlexDirectionContext } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import type { RefComponent, ViewRef } from "./refs";
 import { Spinner } from "./Spinner";
@@ -134,6 +135,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
     ref,
   ) {
     const theme = useTheme();
+    const row = useContext(FlexDirectionContext) === "row";
     const dims = SIZES[size];
     const radiusSize = size === "xs" ? "s" : size === "s" || size === "m" ? "m" : "l";
     const textSize = size === "xs" ? "s" : size === "xl" ? "l" : size;
@@ -166,7 +168,9 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
               // As core's `width: 100%`: full width in a column, an equal share in a row.
               ...(fillWidth
                 ? { width: "100%", flexShrink: 1, alignSelf: "stretch" }
-                : { alignSelf: "flex-start" }),
+                : row
+                  ? {}
+                  : { alignSelf: "flex-start" }),
               height: theme.space(dims.height as "24"),
               minHeight: theme.space(dims.height as "24"),
               paddingHorizontal: theme.space(dims.x as "4"),

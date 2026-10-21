@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
-import { AccessibilityInfo, Animated } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
+import { useReduceMotion } from "./motion";
 
 /**
  * As core, Skeleton takes the Flex props, so `width`, `height`, `fillWidth`
@@ -69,21 +70,4 @@ export function Skeleton({ shape = "line", size = "m", delay = 0, ...flex }: Ske
       ]}
     />
   );
-}
-
-/** The device's reduce-motion setting: the pulse holds still while it is on. */
-function useReduceMotion() {
-  const [reduce, setReduce] = useState(false);
-  useEffect(() => {
-    let live = true;
-    AccessibilityInfo.isReduceMotionEnabled?.()
-      .then((on) => live && setReduce(on))
-      .catch(() => {});
-    const sub = AccessibilityInfo.addEventListener?.("reduceMotionChanged", setReduce);
-    return () => {
-      live = false;
-      sub?.remove();
-    };
-  }, []);
-  return reduce;
 }

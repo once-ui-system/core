@@ -14,7 +14,8 @@ const screen =
   param === "form" ||
   param === "form-errors" ||
   param === "calendar" ||
-  param === "table"
+  param === "table" ||
+  param === "assistant"
     ? param
     : "card";
 const root = document.getElementById("root");
