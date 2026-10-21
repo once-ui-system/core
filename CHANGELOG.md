@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.5.0] — 2026-10-21
+
 ### Added
 
 - **Animated reactions: `Reactions` and `Reaction`** (Social module). `Reactions` is the
