@@ -69,6 +69,38 @@ AccordionGroup applies smart border-radius: the first item gets top-radius, the 
   ]}
 />
 
+## Title style
+
+`titleVariant` sets every item's title style; the default is `heading-strong-s`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <AccordionGroup
+      titleVariant="body-strong-m"
+      items={[
+        { title: "Can I cancel?", content: <Text onBackground="neutral-weak">Any time, from settings.</Text> },
+        { title: "Do you offer refunds?", content: <Text onBackground="neutral-weak">Within 30 days.</Text> }
+      ]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<AccordionGroup
+  titleVariant="body-strong-m"
+  items={[
+    { title: "Can I cancel?", content: <Text onBackground="neutral-weak">Any time, from settings.</Text> },
+    { title: "Do you offer refunds?", content: <Text onBackground="neutral-weak">Within 30 days.</Text> }
+  ]}
+/>`,
+      language: "tsx",
+      label: "Title style"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -76,6 +108,7 @@ AccordionGroup applies smart border-radius: the first item gets top-radius, the 
   describe={{
     autoCollapse: "Close the open item when another one is opened.",
     items: "Each item's title and content, and `defaultOpen` to start it open (with autoCollapse, only the first such item).",
+    titleVariant: "Text style of every item's title.",
   }}
   content={[
     ["style"],

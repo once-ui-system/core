@@ -104,12 +104,12 @@ describe("Table: 2.x data={{ headers, rows }} as columns and array rows", () => 
       <Table aria-label="Members" searchable columns={columns} rows={rows} />,
       { wrapper: wrap },
     );
-    await user.type(screen.getByRole("textbox", { name: "Search..." }), "invited");
+    await user.type(screen.getByRole("textbox", { name: "Search" }), "invited");
     expect(names()).toEqual(["Ada"]);
     expect(screen.getByText("1 of 3")).toBeInTheDocument();
     await expectNoAxeViolations(container);
-    await user.type(screen.getByRole("textbox", { name: "Search..." }), "zzz");
-    expect(screen.getByText("Try adjusting your search")).toBeInTheDocument();
+    await user.type(screen.getByRole("textbox", { name: "Search" }), "zzz");
+    expect(screen.getByText("Try a different search or filter")).toBeInTheDocument();
   });
 
   it("calls onRowClick and actions with the row and its index", async () => {

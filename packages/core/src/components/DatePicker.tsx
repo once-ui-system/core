@@ -183,6 +183,7 @@ const Calendar = ({
   open,
   locale,
   labels,
+  onClick,
   ...rest
 }: CalendarProps) => {
   const names = mergeLabels(DEFAULT_LABELS, labels);
@@ -823,6 +824,9 @@ const Calendar = ({
         if (isYearOpen) {
           setIsYearOpen(false);
         }
+        // A caller's onClick runs as well. It used to arrive in `rest`,
+        // spread after this handler, and replace it.
+        onClick?.(event as React.MouseEvent<HTMLDivElement>);
       }}
       ref={setRootRef}
       className={classNames(styles.calendar, className)}

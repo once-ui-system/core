@@ -276,6 +276,32 @@ You can set the static and responsive spacing tokens for different margin proper
     ]}
 />
 
+### Auto margin
+
+Every margin prop also takes `"auto"`, at the base and in a breakpoint object: `marginLeft="auto"` pushes an item to the end of its row, and `marginX="auto"` centres a block with a width. The classes are `.m-auto`, `.mx-auto`, `.my-auto`, `.mt-auto`, `.mr-auto`, `.mb-auto` and `.ml-auto`, with an `.s-ml-auto`-style variant at each breakpoint. Padding and gap have no `auto`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth vertical="center" gap="8" padding="16" border="neutral-alpha-medium" radius="l">
+      <Text>Invoices</Text>
+      <Text marginLeft="auto" onBackground="neutral-weak">3 due</Text>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Row fillWidth vertical="center" gap="8">
+  <Text>Invoices</Text>
+  <Text marginLeft="auto" s={{ hide: true }}>3 due</Text>
+</Row>`,
+      language: "tsx",
+      label: "Auto margin"
+    }
+  ]}
+/>
+
 ## Padding
 
 You can set the static and responsive spacing tokens for different padding properties on any element with utility classes or inline-styles.

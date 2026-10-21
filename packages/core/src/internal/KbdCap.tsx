@@ -1,5 +1,5 @@
 import type React from "react";
-import { type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Flex } from "../components/Flex.js";
 import { Text } from "../components/Text.js";
 
@@ -8,7 +8,7 @@ export interface KbdCapProps extends React.ComponentProps<typeof Flex> {
 }
 
 /** One keycap: what `<Kbd>` draws without `keys`, and each cap of a `keys` combination. */
-export const KbdCap = ({ ref, children, ...rest }: KbdCapProps) => (
+export const KbdCap = ({ ref, children, style, ...rest }: KbdCapProps) => (
   <Flex
     as="kbd"
     ref={ref}
@@ -24,6 +24,10 @@ export const KbdCap = ({ ref, children, ...rest }: KbdCapProps) => (
     paddingY="2"
     onBackground="neutral-medium"
     border="neutral-strong"
+    // A key cap is one unit: "Ctrl K" broke onto two lines whenever its row
+    // got tight (in an Input's suffix it stood 38px tall and stretched a
+    // 32px field), so it neither wraps nor gives up width to its neighbours.
+    style={{ whiteSpace: "nowrap", flexShrink: 0, ...style }}
     {...rest}
   >
     <Text as="span" textVariant="label-default-s">

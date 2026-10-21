@@ -209,3 +209,60 @@
 .selectedRow {
   background: var(--brand-alpha-weak);
 }
+
+// `keepRowsWhileLoading`: the last rows stay in place, dimmed and inert,
+// until the next ones arrive.
+.dimmedBody {
+  opacity: 0.5;
+  pointer-events: none;
+  transition: var(--transition-micro-medium);
+}
+
+// A column's `hide`, per breakpoint: each one hides at and below its width
+// (xl: above l), and a show class undoes a wider breakpoint's hide. Widest
+// first, so where two apply the narrower one wins.
+@include breakpoints.xl {
+  .hideXl {
+    display: none;
+  }
+}
+
+@include breakpoints.l {
+  .hideL {
+    display: none;
+  }
+
+  .showL {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.m {
+  .hideM {
+    display: none;
+  }
+
+  .showM {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.s {
+  .hideS {
+    display: none;
+  }
+
+  .showS {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.xs {
+  .hideXs {
+    display: none;
+  }
+
+  .showXs {
+    display: table-cell;
+  }
+}

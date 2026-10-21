@@ -9,6 +9,7 @@ import { IconButton } from "../../components/IconButton.js";
 import { Row } from "../../components/Row.js";
 import { Text } from "../../components/Text.js";
 import { Textarea } from "../../components/Textarea.js";
+import type { IconName } from "../../icons.js";
 import styles from "./Chat.module.scss";
 
 export interface ChatComposerMessage {
@@ -49,6 +50,18 @@ export interface ChatComposerProps
   prefix?: ReactNode;
   /** More controls before the send button. */
   actions?: ReactNode;
+  /**
+   * Controls under the field, such as tags or a model picker. With it, or
+   * with `hint`, the composer lays out in two rows: the field on top, and
+   * under it the attach button and `toolbar` on the left, `hint`, `actions`
+   * and send on the right.
+   */
+  toolbar?: ReactNode;
+  /** Quiet text before the send button, such as "Enter to send". Turns on
+   *  the row under the field, like `toolbar`. */
+  hint?: ReactNode;
+  /** The send button's icon. Defaults to `"send"`. */
+  sendIcon?: IconName;
   maxLength?: number;
   id?: string;
   /** The textarea. */
@@ -76,6 +89,9 @@ const ChatComposer = ({
   removeLabel = (fileName) => `Remove ${fileName}`,
   prefix,
   actions,
+  toolbar,
+  hint,
+  sendIcon = "send",
   maxLength,
   id,
   className,
@@ -138,6 +154,56 @@ const ChatComposer = ({
     addFiles(event.clipboardData.files);
   };
 
+  const attachButton = attach && (
+    <>
+      <IconButton
+        icon="plus"
+        variant="tertiary"
+        aria-label={attachLabel}
+        tooltip={attachLabel}
+        disabled={disabled}
+        onClick={() => fileInput.current?.click()}
+      />
+      <input
+        ref={fileInput}
+        type="file"
+        hidden
+        tabIndex={-1}
+        accept={attachOptions.accept}
+        multiple={multiple}
+        onChange={(event) => {
+          addFiles(event.target.files);
+          // Picking the same file again after removing it must fire a change.
+          event.target.value = "";
+        }}
+      />
+    </>
+  );
+
+  const sendButton = (
+    <IconButton
+      icon={sendIcon}
+      aria-label={sendLabel}
+      tooltip={sendLabel}
+      loading={busy}
+      disabled={!canSend}
+      onClick={send}
+    />
+  );
+
+  // Without `toolbar` or `hint` the composer is one row, as it always was:
+  // attach and `prefix` before the field, `actions` and send after it. With
+  // either, attach, `actions` and send move to the row under the field.
+  const hasToolbar = toolbar != null || hint != null;
+  const before = hasToolbar
+    ? prefix
+    : (attach || prefix) && (
+        <>
+          {attachButton}
+          {prefix}
+        </>
+      );
+
   return (
     <Column fillWidth gap="8" className={classNames(styles.composer, className)} {...flex}>
       <Textarea
@@ -153,49 +219,19 @@ const ChatComposer = ({
         onPaste={handlePaste}
         style={{ maxHeight: "12rem", overflowY: "auto" }}
         prefix={
-          (attach || prefix) && (
+          before && (
             <Row gap="4" vertical="center" className={styles.composerEdge}>
-              {attach && (
-                <>
-                  <IconButton
-                    icon="plus"
-                    variant="tertiary"
-                    aria-label={attachLabel}
-                    tooltip={attachLabel}
-                    disabled={disabled}
-                    onClick={() => fileInput.current?.click()}
-                  />
-                  <input
-                    ref={fileInput}
-                    type="file"
-                    hidden
-                    tabIndex={-1}
-                    accept={attachOptions.accept}
-                    multiple={multiple}
-                    onChange={(event) => {
-                      addFiles(event.target.files);
-                      // Picking the same file again after removing it must fire a change.
-                      event.target.value = "";
-                    }}
-                  />
-                </>
-              )}
-              {prefix}
+              {before}
             </Row>
           )
         }
         suffix={
-          <Row gap="4" vertical="center" className={styles.composerEdge}>
-            {actions}
-            <IconButton
-              icon="send"
-              aria-label={sendLabel}
-              tooltip={sendLabel}
-              loading={busy}
-              disabled={!canSend}
-              onClick={send}
-            />
-          </Row>
+          !hasToolbar && (
+            <Row gap="4" vertical="center" className={styles.composerEdge}>
+              {actions}
+              {sendButton}
+            </Row>
+          )
         }
       >
         {files.length > 0 && (
@@ -228,6 +264,23 @@ const ChatComposer = ({
                 />
               </Row>
             ))}
+          </Row>
+        )}
+        {hasToolbar && (
+          <Row fillWidth gap="8" vertical="center" horizontal="between" padding="4">
+            <Row gap="4" vertical="center" wrap minWidth={0}>
+              {attachButton}
+              {toolbar}
+            </Row>
+            <Row gap="8" vertical="center" className={styles.toolbarEnd}>
+              {hint != null && (
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
+                  {hint}
+                </Text>
+              )}
+              {actions}
+              {sendButton}
+            </Row>
           </Row>
         )}
       </Textarea>

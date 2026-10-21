@@ -12,6 +12,8 @@ const ANIMATION_ONLY = new Set([
   "components/MatrixFx.tsx",
   "components/ParticleFx.tsx",
   "components/WeatherFx.tsx",
+  // Shuffles which verb shows next, after mount; the first render is fixed.
+  "modules/ai/WorkingIndicator.tsx",
 ]);
 
 const sources = (dir: string): string[] =>

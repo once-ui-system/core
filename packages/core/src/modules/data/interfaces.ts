@@ -90,7 +90,12 @@ interface ChartProps<T extends object = DataPoint>
   title?: React.ReactNode;
   description?: React.ReactNode;
   series: SeriesConfig<T> | SeriesConfig<T>[];
-  data: T[];
+  /**
+   * One object per point: the x-axis value and a number per series key.
+   * Rows typed with an `interface` (`RevenuePoint[]`) and `readonly` arrays
+   * are taken as they are.
+   */
+  data: readonly T[];
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;

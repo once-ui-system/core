@@ -55,7 +55,7 @@
    "title": "React.ReactNode",
    "description": "React.ReactNode",
    "series": "!SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]",
-   "data": "!DataPoint[]",
+   "data": "!readonly DataPoint[]",
    "legend": "LegendConfig",
    "date": "DateConfig",
    "emptyState": "React.ReactNode",

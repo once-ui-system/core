@@ -8,6 +8,7 @@
 // at runtime. Reaching them through their own subpath keeps the specifier out
 // of the graph of everyone who does not ask for it.
 
+export * from "./ai/index.js";
 export * from "./chat/index.js";
 export { HeadingLink } from "./navigation/HeadingLink.js";
 // The types these components take, so consumers can annotate their own nav
@@ -21,3 +22,4 @@ export type {
 } from "./navigation/index.js";
 export { HeadingNav, Kbar, MegaMenu } from "./navigation/index.js";
 export * from "./seo/index.js";
+export * from "./social/index.js";

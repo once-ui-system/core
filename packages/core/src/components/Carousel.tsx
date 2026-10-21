@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "../internal/Reveal.js";
+import { prefersReducedMotionNow } from "../internal/reducedMotion.js";
 import { SnapCarousel } from "../internal/SnapCarousel.js";
-import { CSSUnit, SpacingToken } from "../types.js";
+import type { CSSUnit, SpacingToken } from "../types.js";
 import styles from "./Carousel.module.scss";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
@@ -52,11 +53,22 @@ interface CarouselProps extends React.ComponentProps<typeof Flex> {
   unoptimized?: boolean;
   defaultRevealed?: boolean;
   thumbnail?: ThumbnailItem;
+  /**
+   * Autoplay. `auto` starts it, every `interval` ms (3000 by default), with a
+   * pause button (`controls`, on unless `false`). It holds while the pointer
+   * is over the carousel, stops when keyboard focus comes into it, and does
+   * not start for a visitor who asks for reduced motion; the button then
+   * reads Play.
+   * `pauseLabel` and `playLabel` name the button ("Pause slideshow", "Play
+   * slideshow" by default).
+   */
   play?: {
     auto?: boolean;
     interval?: number;
     controls?: boolean;
     progress?: boolean;
+    pauseLabel?: string;
+    playLabel?: string;
   };
 }
 
@@ -82,10 +94,23 @@ const FadeCarousel = ({
   const [initialTransition, setInitialTransition] = useState(defaultRevealed);
   const [isPlaying, setIsPlaying] = useState<boolean>(play.auto || false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
+  // The pointer over the carousel holds autoplay until it leaves, without
+  // changing what the button says: someone reading a slide, or about to
+  // press its controls, does not have it move away (WCAG 2.2.2). Keyboard
+  // focus coming in stops it, as the WAI-ARIA carousel does, and the button
+  // then offers Play.
+  const [hovered, setHovered] = useState(false);
+  const pressedRef = useRef(false);
+  // Each field of `play` falls back on its own. `play={{ auto: true }}`
+  // used to have no pause button and an interval of 0.
+  const interval = play.interval ?? 3000;
+  const playControls = play.controls !== false;
+  const running = isPlaying && !hovered;
 
-  // Initialize auto-play state when props change
+  // Initialize auto-play state when props change. A visitor who asks for
+  // reduced motion gets the carousel paused, and can still press Play.
   useEffect(() => {
-    setIsPlaying(play.auto || false);
+    setIsPlaying(Boolean(play.auto) && !prefersReducedMotionNow());
   }, [play.auto]);
   const nextImageRef = useRef<HTMLImageElement | null>(null);
   const transitionTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
@@ -145,13 +170,12 @@ const FadeCarousel = ({
   useEffect(() => {
     let progressTimer: NodeJS.Timeout | undefined;
 
-    if (isPlaying && play.progress && items.length > 1) {
+    if (running && play.progress && items.length > 1) {
       // Reset progress when slide changes
       setProgressPercent(0);
 
       // Update progress every 50ms
       const updateFrequency = 50; // ms
-      const interval = play.interval || 3000; // Default to 3000ms if undefined
       const totalSteps = Math.floor(interval / updateFrequency);
       let currentStep = 0;
 
@@ -167,7 +191,7 @@ const FadeCarousel = ({
         clearInterval(progressTimer);
       }
     };
-  }, [isPlaying, activeIndex, play.interval, play.progress, items.length]);
+  }, [running, activeIndex, interval, play.progress, items.length]);
 
   // Handle auto-play functionality
   useEffect(() => {
@@ -178,11 +202,11 @@ const FadeCarousel = ({
     }
 
     // Start auto-play if enabled
-    if (isPlaying && items.length > 1) {
+    if (running && items.length > 1) {
       autoPlayIntervalRef.current = setInterval(() => {
         // Simply call the next function which already has looping logic
         handleNextWithLoop();
-      }, play.interval);
+      }, interval);
     }
 
     // Cleanup function
@@ -192,7 +216,7 @@ const FadeCarousel = ({
         autoPlayIntervalRef.current = undefined;
       }
     };
-  }, [isPlaying, items.length, play.interval, handleNextWithLoop]);
+  }, [running, items.length, interval, handleNextWithLoop]);
 
   // Handle initial transition
   useEffect(() => {
@@ -209,6 +233,8 @@ const FadeCarousel = ({
 
   // Toggle play/pause function
   const togglePlayPause = () => {
+    // Pressing Play under the pointer means play now, not on leaving.
+    if (!isPlaying) setHovered(false);
     setIsPlaying((prev) => !prev);
   };
 
@@ -216,18 +242,50 @@ const FadeCarousel = ({
     return null;
   }
 
+  const slideProps = {
+    role: "group",
+    "aria-roledescription": "slide",
+    "aria-label": `${activeIndex + 1} of ${items.length}`,
+  } as const;
+  const named = flex["aria-label"] !== undefined || flex["aria-labelledby"] !== undefined;
+
   return (
     <Column
       ref={ref}
       fillWidth
       fillHeight={stretch}
       gap="8"
+      // A carousel, as the WAI-ARIA pattern names it: a group whose slides
+      // say which of how many they are. Name it with `aria-label`.
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={named ? undefined : "Carousel"}
       {...flex}
       aspectRatio={undefined}
       // The ref was never attached, and this replaced the caller's `style`.
       style={{ isolation: "isolate", ...flex.style }}
+      onMouseEnter={(event: React.MouseEvent<HTMLDivElement>) => {
+        flex.onMouseEnter?.(event);
+        setHovered(true);
+      }}
+      onMouseLeave={(event: React.MouseEvent<HTMLDivElement>) => {
+        flex.onMouseLeave?.(event);
+        pressedRef.current = false;
+        setHovered(false);
+      }}
+      onPointerDown={(event: React.PointerEvent<HTMLDivElement>) => {
+        flex.onPointerDown?.(event);
+        pressedRef.current = true;
+      }}
+      onFocus={(event: React.FocusEvent<HTMLDivElement>) => {
+        flex.onFocus?.(event);
+        const pressed = pressedRef.current;
+        pressedRef.current = false;
+        const entering = !event.currentTarget.contains(event.relatedTarget as Node | null);
+        if (entering && !pressed) setIsPlaying(false);
+      }}
     >
-      {items.length > 1 && play.controls && play.auto && (
+      {items.length > 1 && playControls && play.auto && (
         <Flex position="absolute" top="16" right="16" zIndex={1}>
           <Flex radius="m" background="surface">
             <IconButton
@@ -237,7 +295,11 @@ const FadeCarousel = ({
               }}
               variant="secondary"
               icon={isPlaying ? "pause" : "play"}
-              aria-label={isPlaying ? "Pause slideshow" : "Play slideshow"}
+              aria-label={
+                isPlaying
+                  ? (play.pauseLabel ?? "Pause slideshow")
+                  : (play.playLabel ?? "Play slideshow")
+              }
             />
           </Flex>
         </Flex>
@@ -250,6 +312,9 @@ const FadeCarousel = ({
         translateY={translateY}
         aspectRatio={aspectRatio === "original" ? undefined : aspectRatio}
         duration={300}
+        // A new slide is announced when someone changes it, not every few
+        // seconds while it plays on its own.
+        aria-live={running ? "off" : "polite"}
         onTouchStart={(e: React.TouchEvent) => {
           touchStartXRef.current = e.touches[0].clientX;
         }}
@@ -276,6 +341,9 @@ const FadeCarousel = ({
       >
         {typeof items[activeIndex]?.slide === "string" ? (
           <Media
+            // A new image for each slide, so the live region announces it.
+            key={activeIndex}
+            {...slideProps}
             stretch={stretch}
             sizes={sizes}
             unoptimized={unoptimized}
@@ -289,6 +357,7 @@ const FadeCarousel = ({
           />
         ) : (
           <Flex
+            {...slideProps}
             fill
             overflow="hidden"
             radius={flex.radius || "l"}

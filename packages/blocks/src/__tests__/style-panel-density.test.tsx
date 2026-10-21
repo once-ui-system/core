@@ -48,13 +48,13 @@ describe("StylePanel Density", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    act(() => screen.getByRole("tab", { name: "Compact" }).click());
+    act(() => screen.getByRole("radio", { name: "Compact" }).click());
     expect(root.getAttribute("data-density")).toBe("compact");
     expect(root.getAttribute("data-scaling")).toBe("95");
 
     // A scaling chosen here is the theme's own from then on.
-    act(() => screen.getByRole("tab", { name: "110" }).click());
-    act(() => screen.getByRole("tab", { name: "Spacious" }).click());
+    act(() => screen.getByRole("radio", { name: "110" }).click());
+    act(() => screen.getByRole("radio", { name: "Spacious" }).click());
     expect(root.getAttribute("data-density")).toBe("spacious");
     expect(root.getAttribute("data-scaling")).toBe("110");
   });
@@ -67,7 +67,7 @@ describe("StylePanel Density", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    act(() => screen.getByRole("tab", { name: "Spacious" }).click());
+    act(() => screen.getByRole("radio", { name: "Spacious" }).click());
     expect(onValueChange).toHaveBeenCalledWith(
       expect.objectContaining({ density: "spacious" }),
       expect.objectContaining({ density: "spacious" }),

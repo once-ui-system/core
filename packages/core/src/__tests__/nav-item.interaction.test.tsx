@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
+import { Avatar } from "../components/Avatar";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -50,6 +51,23 @@ describe("NavItem: rendering", () => {
     });
     expect(screen.getByText("9+")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Inbox 42 unread" })).toBeInTheDocument();
+    await expectNoAxeViolations(container);
+  });
+
+  it("puts a prefix before the label and keeps the link named by its label", async () => {
+    const { container } = render(
+      <NavItem
+        href="/people/ada"
+        label="Ada Lovelace"
+        prefix={<Avatar size="xs" value="AL" data-testid="avatar" />}
+      />,
+      { wrapper },
+    );
+    const link = screen.getByRole("link", { name: "Ada Lovelace" });
+    const avatar = screen.getByTestId("avatar");
+    expect(link).toContainElement(avatar);
+    // Before the label in document order.
+    expect(link.textContent).toBe("ALAda Lovelace");
     await expectNoAxeViolations(container);
   });
 

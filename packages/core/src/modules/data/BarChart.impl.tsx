@@ -35,7 +35,7 @@ export interface BarChartProps<T extends object = DataPoint> extends ChartProps<
 const BarChart = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -55,6 +55,8 @@ const BarChart = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }: BarChartProps) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,

@@ -6,9 +6,9 @@
  ],
  "props": {
   "size": "TShirtSizes = m",
-  "scheme": "Schemes | \"gray\" = blue",
+  "scheme": "StatusIndicatorScheme = blue",
   "pulse": "boolean = false",
-  "tone": "Tone = brand",
+  "tone": "Tone",
   "pulseSize": "string | number"
  },
  "tags": [
@@ -45,7 +45,7 @@
   }
  },
  "types": {
-  "Schemes": [
+  "StatusIndicatorScheme": [
    "blue",
    "indigo",
    "violet",
@@ -58,7 +58,13 @@
    "green",
    "emerald",
    "aqua",
-   "cyan"
+   "cyan",
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "TShirtSizes": [
    "s",

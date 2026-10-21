@@ -54,8 +54,22 @@ export interface TagProps extends Omit<React.ComponentProps<typeof Flex>, "onCli
   onClick?: MouseEventHandler<HTMLDivElement>;
   /** Adds a remove button. Removing is never a click on the tag. */
   onRemove?: () => void;
+  /**
+   * With `onRemove`, whether the label is a control of its own, a toggle
+   * beside the remove button. Defaults to true when `selected` or `onClick`
+   * is given. `false` makes it plain text in the selected look, for a tag
+   * whose one action is its removal (TagInput's tags): no extra tab stop
+   * that does nothing, and no "pressed" on every tag.
+   */
+  interactive?: boolean;
   /** Props for the remove button, such as its `aria-label`. 2.x's Chip `iconButtonProps`. */
   removeButtonProps?: Partial<IconButtonProps>;
+  /**
+   * `"span"` makes the whole tag phrasing content, so it can sit inside a
+   * sentence (`<p>Status: <Tag as="span">Beta</Tag></p>`): every element is a
+   * span and the tag flows inline. Defaults to `"div"`.
+   */
+  as?: "div" | "span";
   children?: ReactNode;
 }
 
@@ -102,11 +116,14 @@ const Tag = ({
   selected,
   onClick,
   onRemove,
+  interactive,
   removeButtonProps,
   textVariant,
   className,
   style,
   children,
+  as,
+  inline,
   ...rest
 }: TagProps) => {
   const arrowId = useId();
@@ -117,7 +134,7 @@ const Tag = ({
   const arrow = arrowProp ?? href !== undefined;
 
   if (!href && (selected !== undefined || onRemove)) {
-    const toggle = { selected, onClick, onRemove, removeButtonProps };
+    const toggle = { selected, onClick, onRemove, interactive, removeButtonProps };
     return (
       <InteractiveTag
         ref={ref}
@@ -129,6 +146,8 @@ const Tag = ({
         textVariant={textVariant}
         className={className}
         style={style}
+        as={as}
+        inline={inline}
         {...toggle}
         {...rest}
       >
@@ -137,6 +156,10 @@ const Tag = ({
     );
   }
 
+  // `as="span"` makes the whole tag phrasing content, so it can sit inside a
+  // sentence (`<p>Status: <Tag as="span">Beta</Tag></p>`): every element is a
+  // span and the tag flows inline. Without it, the div renders as before.
+  const phrasing = as === "span";
   const announce = variant === "announce";
   const gradient = variant === "gradient";
   const look = LOOK[announce ? "announce" : "default"];
@@ -178,6 +201,8 @@ const Tag = ({
       gap={announce ? undefined : "4"}
       textVariant={announce ? (textVariant ?? look.text[size]) : undefined}
       ref={ref}
+      as={as}
+      inline={inline ?? (phrasing || undefined)}
       data-tag-arrow={arrow ? arrowId : undefined}
       className={classNames(
         styles.tag,
@@ -208,13 +233,15 @@ const Tag = ({
         // lay out with the pill's own gap and padding.
         label || children
       ) : (
-        <Row style={{ userSelect: "none" }} vertical="center">
+        <Row as={phrasing ? "span" : undefined} style={{ userSelect: "none" }} vertical="center">
           <Text textVariant={textVariant ?? look.text[size]}>{label || children}</Text>
         </Row>
       )}
       {suffixIcon && <Icon name={suffixIcon} size={ICON[size]} className={iconClass} />}
       {/* The arrow follows hover on this tag only: each one has its own id. */}
-      {arrow && <Arrow trigger={`[data-tag-arrow="${arrowId}"]`} />}
+      {arrow && (
+        <Arrow trigger={`[data-tag-arrow="${arrowId}"]`} as={phrasing ? "span" : undefined} />
+      )}
     </Row>
   );
 

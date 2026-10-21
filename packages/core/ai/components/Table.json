@@ -15,6 +15,19 @@
   "onRowClick": "(row: T, index: number) => void",
   "searchable": "boolean = false",
   "searchPlaceholder": "string = Search...",
+  "search": "string",
+  "defaultSearch": "string = \"\"",
+  "onSearchChange": "(search: string) => void",
+  "matchSearch": "(row: T, query: string) => boolean",
+  "filters": "TableFilters",
+  "defaultFilters": "TableFilters",
+  "onFiltersChange": "(filters: TableFilters) => void",
+  "columnVisibility": "Record<string, boolean>",
+  "defaultColumnVisibility": "Record<string, boolean>",
+  "onColumnVisibilityChange": "(visibility: Record<string, boolean>) => void",
+  "columnsMenu": "boolean = false",
+  "toolbar": "ReactNode",
+  "onQueryChange": "(query: TableQuery) => void",
   "actions": "TableAction<T>[]",
   "rowClassName": "(row: T, index: number) => string | undefined",
   "cellClassName": "(row: T, index: number, columnIndex: number) => string | undefined",
@@ -40,7 +53,9 @@
   "count": "number",
   "total": "number",
   "loading": "boolean = false",
+  "keepRowsWhileLoading": "boolean = false",
   "emptyState": "ReactNode",
+  "noResultsState": "ReactNode",
   "stickyHeader": "boolean = false",
   "striped": "boolean = false",
   "hoverable": "boolean = true",
@@ -176,6 +191,14 @@
   }
  },
  "types": {
+  "BreakpointKey": [
+   "s",
+   "xl",
+   "l",
+   "m",
+   "xs"
+  ],
+  "ColumnHide": "Partial<Record<BreakpointKey, boolean>>",
   "TableAction": {
    "icon": "!string",
    "label": "string",
@@ -192,7 +215,22 @@
    "sortable": "boolean",
    "sort": "(a: T, b: T) => number",
    "align": "\"left\" | \"center\" | \"right\"",
-   "width": "string"
+   "width": "string",
+   "label": "string",
+   "filter": "TableColumnFilter<T>",
+   "hide": "ColumnHide"
+  },
+  "TableColumnFilter": {
+   "options": "!{ value: string; label: ReactNode }[]",
+   "multiple": "boolean",
+   "match": "(row: T, value: TableFilterValue) => boolean"
+  },
+  "TableFilterValue": [
+   "string",
+   "string[]"
+  ],
+  "TableFilters": {
+   "[key: string]": "TableFilterValue"
   },
   "TableLabels": {
    "selectAll": "!string",
@@ -200,11 +238,24 @@
    "pagination": "!string",
    "search": "!string",
    "actions": "!string",
+   "filterAll": "!string",
+   "columns": "!string",
+   "noResults": "!string",
+   "noResultsHint": "!string",
+   "clearFilters": "!string",
+   "results": "!(count: number) => string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",
    "last": "!string",
    "perPage": "!string"
+  },
+  "TableQuery": {
+   "page": "!number",
+   "perPage": "!number",
+   "sort": "!TableSort | null",
+   "search": "!string",
+   "filters": "!TableFilters"
   },
   "TableSort": {
    "key": "!string",

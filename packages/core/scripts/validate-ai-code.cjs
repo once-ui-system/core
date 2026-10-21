@@ -1057,6 +1057,49 @@ const PRE_3_BUTTON_VARIANTS = {
   quaternary: 'variant="ghost"',
 };
 
+/**
+ * CSS's own spellings of the alignment values, which `horizontal` and
+ * `vertical` take by their short names. Written from memory (5 of 60 rc.0
+ * runs without the harness), each one is a strict-tsc error.
+ */
+const CSS_ALIGN = {
+  "space-between": "between",
+  "space-around": "around",
+  "space-evenly": "even",
+  "flex-start": "start",
+  "flex-end": "end",
+};
+const CSS_ALIGN_VALUE = new RegExp(
+  `((?:^|[\\s{,])(?:horizontal|vertical)\\s*(?:=\\s*\\{?\\s*|:\\s*)(["'\`]))(${Object.keys(CSS_ALIGN).join("|")})(\\2)`,
+  "g",
+);
+const BASELINE_VALUE =
+  /(?:^|[\s{,])(?:horizontal|vertical)\s*(?:=\s*\{?\s*|:\s*)["'`]baseline["'`]/;
+
+/**
+ * `between`, `around` and `even` written bare, the way `center` is. They are
+ * values of `horizontal` / `vertical`, not props: the main axis is
+ * `horizontal` on a Row and `vertical` on a Column.
+ */
+const BARE_ALIGN = ["between", "around", "even"];
+const MAIN_AXIS = { Row: "horizontal", Column: "vertical" };
+const bareAlign = (attrs, value) =>
+  new RegExp(`(?:^|\\s)${value}(?=[\\s/]|$)`).test(ownProps(attrs));
+
+/** The layout primitives, which render a `div` unless `as` says otherwise. */
+const LAYOUT = new Set(["Flex", "Row", "Column", "Grid"]);
+
+/**
+ * Responsive props written the way other libraries name them. Each is a
+ * breakpoint object on Flex, Row, Column and Grid.
+ */
+const NAMED_BREAKPOINT_PROPS = {
+  mobileDirection: ["s", "direction"],
+  tabletDirection: ["m", "direction"],
+  mobileColumns: ["s", "columns"],
+  tabletColumns: ["m", "columns"],
+};
+
 function validate(source, spec, iconNames, options = {}) {
   const issues = [];
 
@@ -1118,6 +1161,112 @@ function validate(source, spec, iconNames, options = {}) {
     add(
       "layout.leafProps",
       `${t.name} is a leaf in 3.0 and does not take ${list}: put ${dropped.length > 1 ? "them" : "it"} on a <${wrapper}> around it (a leaf keeps margins, flex, fillWidth, position and the offsets, className and style)`,
+    );
+  }
+
+  // Each of these is a strict-tsc error an agent made on a first attempt in
+  // the benchmark runs. tsc names the prop it rejects; these name the fix.
+  const cssAlign = new Set();
+  for (const t of tags) {
+    for (const m of ownProps(t.attrs).matchAll(CSS_ALIGN_VALUE)) cssAlign.add(m[3]);
+  }
+  for (const value of cssAlign) {
+    add(
+      "layout.alignValues",
+      `"${value}" is CSS's name — horizontal and vertical take "${CSS_ALIGN[value]}"`,
+      "align-values",
+    );
+  }
+  if (tags.some((t) => BASELINE_VALUE.test(ownProps(t.attrs)))) {
+    add(
+      "layout.alignValues",
+      'horizontal and vertical have no "baseline" — for baseline-aligned text write style={{ alignItems: "baseline" }}',
+    );
+  }
+
+  const bare = new Set();
+  for (const t of tags) {
+    if (!LAYOUT.has(t.name) || t.name === "Grid") continue;
+    for (const value of BARE_ALIGN) {
+      if (bareAlign(t.attrs, value)) bare.add(`${t.name}.${value}`);
+    }
+  }
+  for (const key of bare) {
+    const [name, value] = key.split(".");
+    const axis = MAIN_AXIS[name];
+    add(
+      "layout.alignValues",
+      axis
+        ? `${value} on ${name} is not a prop — write ${axis}="${value}"`
+        : `${value} on ${name} is not a prop — write horizontal="${value}" (or vertical, for a column)`,
+      axis ? "align-values" : undefined,
+    );
+  }
+
+  // A layout primitive renders a div and types its props for one, whatever
+  // `as` says: it has no href, type or span, and its onSubmit is a div's.
+  // Only what fails to type-check is reported: `as="form"` with an inferred
+  // handler compiles, so it needs noValidate or an HTMLFormElement handler.
+  const interactive = new Map();
+  for (const t of tags) {
+    if (!LAYOUT.has(t.name)) continue;
+    const as = stringValue(propValue(t.attrs, "as"));
+    if (hasProp(t.attrs, "href")) {
+      interactive.set(
+        "link",
+        `<${t.name}${as === "a" ? ' as="a"' : ""} href> — a layout primitive has no href, and as="a" skips the app's link adapter (no client-side navigation). Use <Card href> for a clickable row or panel, or SmartLink for a text link`,
+      );
+    }
+    if (hasProp(t.attrs, "type")) {
+      interactive.set(
+        "button",
+        `<${t.name}${as === "button" ? ' as="button"' : ""} type> — a layout primitive has no type. Use <Card onClick> (it renders a button; selected sets aria-pressed), Button or ToggleButton`,
+      );
+    }
+    const formTyped =
+      hasProp(t.attrs, "noValidate") ||
+      (hasProp(t.attrs, "onSubmit") && /\bHTMLFormElement\b/.test(source));
+    if (as === "form" && formTyped) {
+      interactive.set(
+        "form",
+        `<${t.name} as="form"> keeps a div's event types, so an onSubmit taking FormEvent<HTMLFormElement>, and noValidate, are type errors — wrap the ${t.name} in a native <form onSubmit={…}>`,
+      );
+    }
+    if (hasProp(t.attrs, "span")) {
+      interactive.set(
+        "span",
+        `span on <${t.name}> is not a prop — a Grid child spanning columns writes style={{ gridColumn: "span 2" }}`,
+      );
+    }
+  }
+  for (const message of interactive.values()) add("layout.primitiveProps", message);
+
+  const breakpointNames = new Set();
+  for (const t of tags) {
+    for (const [prop, [bp, key]] of Object.entries(NAMED_BREAKPOINT_PROPS)) {
+      if (hasProp(t.attrs, prop)) {
+        breakpointNames.add(`${prop} is not a prop — write ${bp}={{ ${key}: … }}`);
+      }
+    }
+  }
+  for (const message of breakpointNames) add("responsive.props", message);
+
+  // A breakpoint object on a component that takes none, per the spec: Button
+  // s={{ fillWidth: true }} was 5 of 60 rc.0 first attempts with the harness.
+  const unsupported = new Set();
+  for (const t of tags) {
+    if (!spec.components?.[t.name]) continue;
+    const accepted = acceptedProps(spec, t.name);
+    for (const bp of BREAKPOINTS) {
+      const value = propValue(t.attrs, bp);
+      if (value && /^\{\s*\{/.test(value) && !(bp in accepted)) unsupported.add(`${t.name}|${bp}`);
+    }
+  }
+  for (const key of unsupported) {
+    const [name, bp] = key.split("|");
+    add(
+      "responsive.props",
+      `<${name}> takes no ${bp}={{…}}: breakpoint objects are on Flex, Row, Column, Grid and the components built on them, and Text and Heading take only { hide }. Put the change on a Row or Column around it`,
     );
   }
 
@@ -1573,6 +1722,28 @@ function typedThemeProps(source, spec) {
   });
 }
 
+/**
+ * CSS alignment names to the short ones, and a bare `between` / `around` /
+ * `even` on a Row or Column to its main axis — unless the element already sets
+ * that axis, where there is no telling which one was meant.
+ */
+function alignValues(source) {
+  return rewriteTags(source, (attrs, name) => {
+    let out = replaceOwnProps(
+      attrs,
+      CSS_ALIGN_VALUE,
+      (_m, lead, _q, value, close) => `${lead}${CSS_ALIGN[value]}${close}`,
+    );
+    const axis = MAIN_AXIS[name];
+    if (!axis || hasProp(out, axis)) return out;
+    const value = BARE_ALIGN.find((v) => bareAlign(out, v));
+    if (value && BARE_ALIGN.filter((v) => bareAlign(out, v)).length === 1) {
+      out = replaceOwnProps(out, new RegExp(`(^|\\s)${value}(?=[\\s/]|$)`), `$1${axis}="${value}"`);
+    }
+    return out;
+  });
+}
+
 function applyFixes(source, issues, spec = loadSpec()) {
   let out = source;
   for (const issue of issues) {
@@ -1612,6 +1783,9 @@ function applyFixes(source, issues, spec = loadSpec()) {
           "$1",
         ),
       );
+    }
+    if (issue.fix === "align-values") {
+      out = alignValues(out);
     }
     if (issue.fix === "next-layout-provider") {
       out = moveLayoutProviderToNext(out);

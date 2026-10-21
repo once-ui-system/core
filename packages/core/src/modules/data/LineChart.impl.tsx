@@ -41,7 +41,7 @@ export interface LineChartProps<T extends object = DataPoint> extends ChartProps
 const LineChart = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -66,6 +66,8 @@ const LineChart = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }: LineChartProps) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,

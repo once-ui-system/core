@@ -12,13 +12,24 @@ import { Text } from "./Text.js";
 import { ToggleButton } from "./ToggleButton.js";
 
 interface NavItemProps
-  extends Omit<React.ComponentProps<typeof ToggleButton>, "label" | "prefixIcon"> {
+  extends Omit<React.ComponentProps<typeof ToggleButton>, "label" | "prefixIcon" | "prefix"> {
   /** The text. */
   label: ReactNode;
   /** Leading icon. Omit it for a child item inside a NavGroup, which is indented instead. */
   icon?: IconName;
-  /** A count in a pill at the end of the row. Anything above 9 prints as 9+. */
-  badge?: number;
+  /**
+   * Any node before the label, such as an `Avatar` for a link to a person or
+   * a team. Takes the icon's place in the row; pass `icon` too and the icon
+   * comes first. It is decorative: hidden from assistive tech, so the row is
+   * named by its label alone ("Ada Lovelace", not "Avatar Ada Lovelace").
+   */
+  prefix?: ReactNode;
+  /**
+   * A pill at the end of the row. A number is a count: 0 hides it, anything
+   * above 9 prints as 9+ and a screen reader hears "12 unread". Anything else
+   * (`"New"`, `"Beta"`) prints as given and is read as its text.
+   */
+  badge?: number | ReactNode;
   /** A dot at the end of the row, for unread with no number worth showing. */
   indicator?: boolean;
 }
@@ -34,6 +45,7 @@ const NavItem = ({
   ref,
   label,
   icon,
+  prefix,
   badge,
   indicator,
   size,
@@ -41,7 +53,13 @@ const NavItem = ({
   ...toggle
 }: NavItemProps) => {
   const { variant, density, sizes } = useNavStyle();
-  const trailing = indicator || (badge !== undefined && badge > 0);
+  const count = typeof badge === "number" ? badge : undefined;
+  // A number shows above 0, as it always did; any other badge shows unless empty.
+  const showBadge =
+    count !== undefined
+      ? count > 0
+      : badge !== undefined && badge !== null && badge !== false && badge !== "";
+  const trailing = indicator || showBadge;
   const selected = Boolean(toggle.selected);
   // `solid` keeps today's look: every row at full contrast, the current one
   // filled. The other two dim the rest and set the current row in strong.
@@ -77,9 +95,14 @@ const NavItem = ({
               size="xs"
             />
           )}
+          {prefix !== undefined && prefix !== null && prefix !== false && (
+            <Row vertical="center" aria-hidden="true">
+              {prefix}
+            </Row>
+          )}
           {label}
         </Row>
-        {badge !== undefined && badge > 0 && (
+        {showBadge && (
           <Row
             minWidth="16"
             height="16"
@@ -88,10 +111,10 @@ const NavItem = ({
             solid="brand-strong"
             horizontal="center"
             vertical="center"
-            aria-label={`${badge} unread`}
+            aria-label={count !== undefined ? `${count} unread` : undefined}
           >
             <Text textVariant="label-default-xs" onSolid="brand-strong">
-              {badge > 9 ? "9+" : badge}
+              {count !== undefined ? (count > 9 ? "9+" : count) : badge}
             </Text>
           </Row>
         )}

@@ -56,8 +56,8 @@ describe("Table interaction", () => {
     expect(screen.getByText("2 of 5")).toBeInTheDocument();
     await user.clear(screen.getByPlaceholderText("Find"));
     await user.type(screen.getByPlaceholderText("Find"), "zzz");
-    expect(screen.getByText("No data available")).toBeInTheDocument();
-    expect(screen.getByText("Try adjusting your search")).toBeInTheDocument();
+    expect(screen.getByText("No results")).toBeInTheDocument();
+    expect(screen.getByText("Try a different search or filter")).toBeInTheDocument();
   });
 
   it("reports the original row index on row click, sorted or not", async () => {

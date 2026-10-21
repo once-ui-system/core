@@ -12,6 +12,7 @@
   "className": "string",
   "dropdown": "React.ReactNode",
   "selected": "boolean = false",
+  "onSelect": "(value: string) => void",
   "placement": "Placement",
   "minWidth": "DropdownProps[\"minWidth\"]",
   "maxWidth": "DropdownProps[\"maxWidth\"]",

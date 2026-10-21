@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import { CondensedTShirtSizes } from "../types.js";
+import type { CondensedTShirtSizes, TextVariant } from "../types.js";
 import { Accordion } from "./Accordion.js";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
@@ -18,6 +18,8 @@ export interface AccordionGroupProps extends React.ComponentProps<typeof Flex> {
   items: AccordionItem[];
   size?: CondensedTShirtSizes;
   autoCollapse?: boolean;
+  /** Text style of every item's title, as on Accordion. Defaults to `heading-strong-s`. */
+  titleVariant?: TextVariant;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -29,6 +31,7 @@ const AccordionGroup = ({
   style,
   className,
   autoCollapse = true,
+  titleVariant,
   ...rest
 }: AccordionGroupProps) => {
   // With autoCollapse the group owns which one item is open; without it,
@@ -76,6 +79,7 @@ const AccordionGroup = ({
             <Accordion
               title={item.title}
               size={size}
+              titleVariant={titleVariant}
               {...(autoCollapse
                 ? {
                     open: openAccordion === index,

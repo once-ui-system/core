@@ -307,3 +307,79 @@ describe("Tag, as a toggle (2.x Chip)", () => {
     expect(tag.className).toMatch(/_unselected_/);
   });
 });
+
+describe("Tag, ported from 2.4's Chip (#253, #259)", () => {
+  // 2.4's `interactive={false}`: in 3.0 a tag with only `onRemove` is already
+  // a plain label beside its remove button.
+  it("makes the label plain text beside the remove button with onRemove alone", async () => {
+    const { container } = render(<Tag label="Design" onRemove={vi.fn()} />, { wrapper });
+    expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual([
+      "Remove",
+    ]);
+    expect(screen.getByText("Design").closest("[tabindex]")).toBeNull();
+    expect(container.querySelector("[aria-pressed]")).toBeNull();
+    await expectNoAxeViolations(container);
+  });
+
+  it("keeps the selected look as plain text with interactive={false}", async () => {
+    const { container } = render(
+      <Tag label="Design" selected interactive={false} onRemove={vi.fn()} />,
+      { wrapper },
+    );
+    expect(screen.getAllByRole("button").map((b) => b.getAttribute("aria-label"))).toEqual([
+      "Remove",
+    ]);
+    expect(screen.getByText("Design").closest("[tabindex]")).toBeNull();
+    expect(container.querySelector("[aria-pressed]")).toBeNull();
+    expect(container.firstElementChild?.className).toMatch(/_selected_/);
+    await expectNoAxeViolations(container);
+  });
+
+  it("draws suffixIcon after the label and prefixIcon before it, both hidden from the name", async () => {
+    const { container } = render(
+      <Tag label="Q4 pricing" prefixIcon="document" suffixIcon="chevronDown" selected />,
+      { wrapper },
+    );
+    const tag = screen.getByRole("button", { name: "Q4 pricing" });
+    const parts = Array.from(tag.children);
+    expect(parts).toHaveLength(3);
+    expect(parts[0].querySelector("svg")).not.toBeNull();
+    expect(parts[1].textContent).toBe("Q4 pricing");
+    expect(parts[2].querySelector("svg")).not.toBeNull();
+    expect(parts[2]).toHaveAttribute("aria-hidden", "true");
+    await expectNoAxeViolations(container);
+  });
+
+  it("keeps suffixIcon inside the tag's control when it is removable", () => {
+    render(<Tag label="Q4 pricing" suffixIcon="chevronDown" selected onRemove={() => {}} />, {
+      wrapper,
+    });
+    const control = screen.getByRole("button", { name: "Q4 pricing" });
+    expect(control.lastElementChild?.querySelector("svg")).not.toBeNull();
+    expect(control).not.toContainElement(screen.getByRole("button", { name: "Remove" }));
+  });
+});
+
+describe("Tag, inline (#252)", () => {
+  it('renders every element as a span with as="span", so it sits in a sentence', () => {
+    const { container } = render(
+      <p>
+        Status: <Tag as="span" label="Beta" />
+      </p>,
+      { wrapper },
+    );
+    const p = container.querySelector("p") as HTMLElement;
+    expect(p.querySelector("div")).toBeNull();
+    expect(p.querySelector("span")?.className).toContain("display-inline-flex");
+  });
+
+  it('keeps an announcement and its arrow inside the sentence with as="span"', () => {
+    const { container } = render(
+      <p>
+        New: <Tag as="span" variant="announce" arrow label="Reactions" />
+      </p>,
+      { wrapper },
+    );
+    expect((container.querySelector("p") as HTMLElement).querySelector("div")).toBeNull();
+  });
+});

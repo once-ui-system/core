@@ -1,5 +1,6 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { describe, expect, it, vi } from "vitest";
 import { Accordion } from "../components/Accordion";
 import { Avatar } from "../components/Avatar";
 import { Checkbox } from "../components/Checkbox";
@@ -8,9 +9,11 @@ import { Dialog } from "../components/Dialog";
 import { EmojiPicker } from "../components/EmojiPicker";
 import { Feedback } from "../components/Feedback";
 import { Fieldset } from "../components/Fieldset";
+import { HoverCard } from "../components/HoverCard";
 import { Icon } from "../components/Icon";
 import { IconButton } from "../components/IconButton";
 import { NumberInput } from "../components/NumberInput";
+import { OTPInput } from "../components/OTPInput";
 import { ProgressBar } from "../components/ProgressBar";
 import { RadioGroup } from "../components/RadioGroup";
 import { Setting } from "../components/Setting";
@@ -18,6 +21,7 @@ import { Skeleton } from "../components/Skeleton";
 import { Slider } from "../components/Slider";
 import { Switch } from "../components/Switch";
 import { Table } from "../components/Table";
+import { TagInput } from "../components/TagInput";
 import { Textarea } from "../components/Textarea";
 import { Timeline } from "../components/Timeline";
 import { ToggleButton } from "../components/ToggleButton";
@@ -275,5 +279,169 @@ describe("accessibility drill", () => {
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(3);
     expect(items[1]).toHaveAttribute("aria-current", "step");
+  });
+
+  it("reads OTPInput as one labelled code with a one-time-code field first", async () => {
+    const onComplete = vi.fn();
+    const { container } = render(
+      <OTPInput length={6} error errorMessage="Wrong code" onComplete={onComplete} />,
+      { wrapper: wrap },
+    );
+    const group = screen.getByRole("group", { name: "One-time code" });
+    const fields = within(group).getAllByRole("textbox") as HTMLInputElement[];
+    expect(fields).toHaveLength(6);
+    expect(fields[0]).toHaveAttribute("autocomplete", "one-time-code");
+    expect(fields[1]).toHaveAttribute("autocomplete", "off");
+    expect(fields[5]).toHaveAccessibleName("OTP digit 6 of 6");
+    expect(fields[2]).toHaveAttribute("aria-invalid", "true");
+    expect(fields[2]).toHaveAccessibleDescription("Wrong code");
+    await expectNoAxeViolations(container);
+
+    // The browser's autofill sets the whole code on the first field at once.
+    fireEvent.change(fields[0], { target: { value: "482913" } });
+    expect(fields.map((field) => field.value).join("")).toBe("482913");
+    expect(onComplete).toHaveBeenCalledWith("482913");
+  });
+
+  it("names OTPInput's group and fields from labels, or from the caller's aria-label", () => {
+    render(
+      <>
+        <OTPInput
+          length={4}
+          labels={{ group: "Code de vérification", digit: (n, of) => `Chiffre ${n} sur ${of}` }}
+        />
+        <OTPInput length={4} aria-label="Backup code" />
+      </>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("group", { name: "Code de vérification" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Chiffre 2 sur 4" })).toBeInTheDocument();
+    expect(screen.getByRole("group", { name: "Backup code" })).toBeInTheDocument();
+  });
+
+  it("lists TagInput's tags, removes the last with Backspace and says so", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { container } = render(
+      <TagInput
+        id="skills"
+        label="Skills"
+        description="Press Enter to add a skill"
+        defaultValue={["React", "Sass"]}
+        onValueChange={onChange}
+      />,
+      { wrapper: wrap },
+    );
+    const field = screen.getByRole("textbox", { name: "Skills" });
+    expect(field).toHaveAccessibleDescription("Press Enter to add a skill");
+    const items = within(screen.getByRole("list")).getAllByRole("listitem");
+    expect(items.map((item) => item.textContent)).toEqual(["React", "Sass"]);
+    // Before: each tag's label was a focusable toggle, "pressed", that did nothing.
+    expect(screen.queryByRole("button", { name: "React" })).toBeNull();
+    expect(within(items[1]).getByRole("button", { name: "Remove tag Sass" })).toBeInTheDocument();
+    await expectNoAxeViolations(container);
+
+    await user.click(field);
+    await user.keyboard("{Backspace}");
+    expect(onChange).toHaveBeenLastCalledWith(["React"]);
+    const live = container.querySelector('[aria-live="polite"]');
+    expect(live).toHaveTextContent("Removed tag Sass");
+
+    // A removed tag's button leaves with it; focus goes back to the field.
+    await user.click(screen.getByRole("button", { name: "Remove tag React" }));
+    expect(onChange).toHaveBeenLastCalledWith([]);
+    expect(field).toHaveFocus();
+    expect(live).toHaveTextContent("Removed tag React");
+    await user.keyboard("{Backspace}");
+    expect(onChange).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps Backspace editing the text while TagInput's field has some", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    render(<TagInput id="t" label="Tags" defaultValue={["a"]} onValueChange={onChange} />, {
+      wrapper: wrap,
+    });
+    await user.type(screen.getByRole("textbox", { name: "Tags" }), "bc{Backspace}");
+    expect(screen.getByRole("textbox", { name: "Tags" })).toHaveValue("b");
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("lets the keyboard reach a HoverCard's links, and leave them", async () => {
+    const user = userEvent.setup();
+    render(
+      <>
+        <HoverCard trigger={<button type="button">Ada</button>}>
+          <a href="/ada">Profile</a>
+          <a href="/ada/posts">Posts</a>
+        </HoverCard>
+        <button type="button">After</button>
+      </>,
+      { wrapper: wrap },
+    );
+    const trigger = screen.getByRole("button", { name: "Ada" });
+    await user.tab();
+    expect(trigger).toHaveFocus();
+    const profile = await screen.findByRole("link", { name: "Profile" });
+    const card = document.getElementById(trigger.getAttribute("aria-controls") ?? "");
+    expect(card).toContainElement(profile);
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    await waitFor(() => expect(card?.style.visibility).toBe("visible"));
+    await expectNoAxeViolations(document.body);
+
+    // Before: Tab went from the trigger straight to "After", closing the card.
+    await user.tab();
+    expect(profile).toHaveFocus();
+    await user.tab();
+    expect(screen.getByRole("link", { name: "Posts" })).toHaveFocus();
+    await user.tab({ shift: true });
+    await user.tab({ shift: true });
+    expect(trigger).toHaveFocus();
+    await user.tab();
+    await user.tab();
+    await user.tab();
+    expect(screen.getByRole("button", { name: "After" })).toHaveFocus();
+    await waitFor(() => expect(screen.queryByRole("link", { name: "Profile" })).toBeNull());
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(trigger).not.toHaveAttribute("aria-controls");
+  });
+
+  it("returns focus to the HoverCard's trigger on Escape from inside the card", async () => {
+    const user = userEvent.setup();
+    render(
+      <HoverCard trigger={<button type="button">Ada</button>}>
+        <a href="/ada">Profile</a>
+      </HoverCard>,
+      { wrapper: wrap },
+    );
+    await user.tab();
+    const link = await screen.findByRole("link", { name: "Profile" });
+    await waitFor(() => expect(link.parentElement?.style.visibility).toBe("visible"));
+    await user.tab();
+    expect(link).toHaveFocus();
+    await user.keyboard("{Escape}");
+    await waitFor(() => expect(screen.queryByRole("link", { name: "Profile" })).toBeNull());
+    expect(screen.getByRole("button", { name: "Ada" })).toHaveFocus();
+  });
+
+  it("opens a HoverCard on keyboard focus, not on the focus a press gives", async () => {
+    render(
+      <HoverCard trigger={<button type="button">Ada</button>}>
+        <span>Design engineer</span>
+      </HoverCard>,
+      { wrapper: wrap },
+    );
+    const trigger = screen.getByRole("button", { name: "Ada" });
+    fireEvent.pointerDown(trigger);
+    fireEvent.mouseDown(trigger);
+    fireEvent.focus(trigger);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+    expect(screen.queryByText("Design engineer")).toBeNull();
+    fireEvent.blur(trigger);
+    fireEvent.focus(trigger);
+    expect(await screen.findByText("Design engineer")).toBeInTheDocument();
+    // Text only: it describes the trigger while open, and expands nothing.
+    await waitFor(() => expect(trigger).toHaveAccessibleDescription("Design engineer"));
+    expect(trigger).not.toHaveAttribute("aria-expanded");
   });
 });

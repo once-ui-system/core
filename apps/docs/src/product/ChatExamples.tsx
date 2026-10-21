@@ -6,6 +6,8 @@ import {
   ChatMessageList,
   Column,
   ConversationItem,
+  Kbd,
+  Tag,
   TypingIndicator,
 } from "@once-ui-system/core";
 import { useEffect, useRef, useState } from "react";
@@ -86,6 +88,45 @@ export function ChatComposerExample() {
         onSend={({ text, files }) =>
           setSent(`${text || "(no text)"}${files.length ? ` + ${files.length} file(s)` : ""}`)
         }
+      />
+      {sent && <TypingIndicator bubble={false} label={`Sent: ${sent}`} />}
+    </Column>
+  );
+}
+
+// A toolbar row under the field: scope chips on the left, a hint and send on
+// the right.
+export function ChatComposerToolbarExample() {
+  const [scope, setScope] = useState("library");
+  const [sent, setSent] = useState<string | null>(null);
+  return (
+    <Column fillWidth gap="8">
+      <ChatComposer
+        attach
+        placeholder="Ask anything"
+        sendIcon="arrowUp"
+        hint={
+          <>
+            <Kbd>Enter</Kbd> to send
+          </>
+        }
+        toolbar={
+          <>
+            <Tag
+              label="Your library"
+              prefixIcon="document"
+              selected={scope === "library"}
+              onClick={() => setScope("library")}
+            />
+            <Tag
+              label="Q4 pricing"
+              suffixIcon="chevronDown"
+              selected={scope === "q4"}
+              onClick={() => setScope("q4")}
+            />
+          </>
+        }
+        onSend={({ text }) => setSent(text)}
       />
       {sent && <TypingIndicator bubble={false} label={`Sent: ${sent}`} />}
     </Column>

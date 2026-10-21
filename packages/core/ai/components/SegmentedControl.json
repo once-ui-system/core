@@ -20,6 +20,8 @@
   "disabled": "boolean = false",
   "fillWidth": "boolean = true",
   "compact": "boolean = false",
+  "semantics": "\"tabs\" | \"radio\" = tabs",
+  "scroll": "boolean = true",
   "className": "string",
   "style": "React.CSSProperties"
  },
@@ -151,6 +153,7 @@
  "types": {
   "ButtonOption": {
    "value": "!string",
+   "description": "ReactNode",
    "label": "ReactNode",
    "style": "CSSProperties",
    "className": "string",

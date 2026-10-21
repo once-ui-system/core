@@ -159,7 +159,7 @@ You can customize the aspect ratio of the carousel to fit your design needs.
 
 ## Auto Play
 
-You can enable auto play with the `play` prop.
+You can enable auto play with the `play` prop. Each field has its own default: `play={{ auto: true }}` moves every 3000ms with a pause button. Autoplay holds while the pointer is over the carousel, stops when keyboard focus comes into it, and does not start for a visitor who asks for reduced motion; the button then offers Play. Name the button in another language with `pauseLabel` and `playLabel`, and the carousel itself with `aria-label`.
 
 <CodeBlock
   marginTop="16"
@@ -168,6 +168,7 @@ You can enable auto play with the `play` prop.
     <Carousel
       controls={false}
       indicator={false}
+      aria-label="Theme previews"
       play={{auto: true, interval: 5000, controls: true, progress: true}}
       items={[
         { slide: "/images/docs/once-ui/vibe-coding-light.jpg", alt: "Vibe coding light theme" },
@@ -181,6 +182,7 @@ You can enable auto play with the `play` prop.
 `<Carousel
     controls={false}
     indicator={false}
+    aria-label="Theme previews"
     play={{auto: true, interval: 5000, controls: true, progress: true}}
     items={[
       { slide: "/images/1.jpg", alt: "Image 1" },
@@ -476,7 +478,7 @@ You can place custom content inside the slides as `ReactNode`, not just images.
     priority: "Eager-load the first slide. Use it when the carousel is above the fold.",
     stretch: "Drop the intrinsic aspect ratio and let slides fill their box.",
     thumbnail: "Sizing of the thumbnail strip when indicator is \"thumbnail\".",
-    play: "Autoplay behaviour and the controls shown for it.",
+    play: "Autoplay: `auto`, `interval` (3000), `controls` (the pause button, on unless false), `progress`, and the button's `pauseLabel` and `playLabel`.",
     mode: "\"fade\" (the default) cross-fades slides; \"snap\" is a touch-first snapping track (2.x Swiper).",
   }}
   content={[

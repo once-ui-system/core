@@ -48,6 +48,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
     renderItem: (item: string) => item,
     loadMore: async () => false,
   },
+  Reaction: { value: "❤️" },
+  Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
   SegmentedControl: {
     value: "a",
     onValueChange: noop,

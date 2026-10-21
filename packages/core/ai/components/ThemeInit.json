@@ -85,9 +85,11 @@
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
   },
   "ScalingSize": [
    "90",
@@ -111,6 +113,10 @@
    "1200"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "Schemes": [
    "blue",
    "indigo",
@@ -144,6 +150,10 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
   "ThemeInitAttributeConfig": {
    "theme": "!string",
    "brand": "!string",
@@ -160,6 +170,10 @@
   "ThemeInitConfig": [
    "OnceUIStyleConfig",
    "ThemeInitAttributeConfig"
+  ],
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
   ],
   "TransitionStyle": [
    "none",

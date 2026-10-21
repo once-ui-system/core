@@ -186,13 +186,13 @@
    "`var(${string})`"
   ],
   "EasingCurve": [
+   "bounce",
    "linear",
    "ease",
    "ease-in",
    "ease-out",
    "ease-in-out",
-   "spring",
-   "bounce"
+   "spring"
   ],
   "Placement": [
    "top",

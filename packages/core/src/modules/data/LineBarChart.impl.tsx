@@ -42,7 +42,7 @@ export interface LineBarChartProps<T extends object = DataPoint> extends ChartPr
 const LineBarChart = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -62,6 +62,8 @@ const LineBarChart = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }: LineBarChartProps) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,

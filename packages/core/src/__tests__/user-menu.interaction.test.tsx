@@ -126,6 +126,27 @@ describe("UserMenu", () => {
     await waitFor(() => expect(options()).toHaveLength(0));
   });
 
+  // Agents reached for DropdownWrapper's onSelect on UserMenu (bundle-trim
+  // dry run, 2026-10-19); it is the same callback, forwarded.
+  it("calls onSelect with the picked option's value, by click and by keyboard", async () => {
+    const user = userEvent.setup();
+    const onSelect = vi.fn();
+    const { container } = render(<Menu onSelect={onSelect} />, { wrapper: wrap });
+
+    await user.click(screen.getByText("Lorant One"));
+    await waitForOpen();
+    await user.click(screen.getByRole("option", { name: "Log out" }));
+    expect(onSelect).toHaveBeenCalledWith("logout");
+    await waitFor(() => expect(options()).toHaveLength(0));
+
+    await user.click(screen.getByText("Lorant One"));
+    await waitForOpen();
+    await user.keyboard("{Enter}");
+    expect(onSelect).toHaveBeenLastCalledWith("settings");
+    expect(onSelect).toHaveBeenCalledTimes(2);
+    await expectNoAxeViolations(container);
+  });
+
   it("is out of the tab order and does not open while loading", async () => {
     const user = userEvent.setup();
     const { container } = render(<Menu loading />, { wrapper: wrap });

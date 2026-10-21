@@ -49,6 +49,12 @@ const TRANSFORMS = {
   Switch: { ariaLabel: "aria-label" },
   Scrubber: { ariaLabel: "aria-label" },
   StatusIndicator: { ariaLabel: "aria-label" },
+  // 2.4's loaders and ai/social modules.
+  LogoSpinner: { ariaLabel: "aria-label" },
+  WorkingIndicator: { ariaLabel: "aria-label" },
+  VoiceVisualizer: { ariaLabel: "aria-label" },
+  Mascot: { ariaLabel: "aria-label" },
+  Reactions: { ariaLabel: "aria-label" },
 };
 
 /**
@@ -1434,6 +1440,9 @@ const TONE_RENAMES = {
   Toast: { variant: "tone" },
   Pulse: { scheme: "tone" },
   StatusIndicator: { color: "scheme" },
+  // 2.4: `color` was a theme role (brand, accent, neutral, inherit).
+  LogoSpinner: { color: "tone" },
+  VoiceVisualizer: { color: "tone" },
 };
 
 /** E2: Button and IconButton `variant` values that were a tone or a twin. */

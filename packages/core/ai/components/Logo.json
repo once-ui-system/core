@@ -8,6 +8,7 @@
   "size": "TShirtSizes = m",
   "icon": "LogoSource",
   "wordmark": "LogoSource",
+  "text": "string",
   "href": "string",
   "showIn": "\"dark\" | \"light\"",
   "brand": "{ copy?: boolean; url?: string }"

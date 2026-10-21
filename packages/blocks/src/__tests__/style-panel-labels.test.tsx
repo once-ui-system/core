@@ -170,14 +170,18 @@ const de: StylePanelLabels = {
   themeSwitcher: { system: "Systemdesign", dark: "Dunkles Design", light: "Helles Design" },
 };
 
+/** Every option is a radio: the swatches and themes are named by aria-label, */
 const buttonNames = (container: HTMLElement = document.body) =>
   within(container)
-    .getAllByRole("button")
+    .getAllByRole("radio")
+    .filter((radio) => radio.hasAttribute("aria-label"))
     .map((button) => button.getAttribute("aria-label"));
 
+/** the segmented options by their text. */
 const tabNames = (container: HTMLElement = document.body) =>
   within(container)
-    .getAllByRole("tab")
+    .getAllByRole("radio")
+    .filter((radio) => !radio.hasAttribute("aria-label"))
     .map((tab) => tab.textContent?.trim());
 
 describe("StylePanel without labels", () => {
@@ -278,15 +282,15 @@ describe("StylePanel labels", () => {
     expect(screen.getByText("Diagrammstil")).toBeInTheDocument();
     expect(screen.getByText("Seite")).toBeInTheDocument();
     expect(screen.getByText("Erscheinungsbild")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Blau als Markenfarbe" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "Blau als Markenfarbe" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
-    expect(screen.getByRole("button", { name: "Dunkles Design" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Ecken verspielt" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Invertiert" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "105 %" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Sequenziell" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Dunkles Design" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Ecken verspielt" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Invertiert" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "105 %" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Sequenziell" })).toBeInTheDocument();
   });
 
   it("lose to a row's or group's own props", () => {
@@ -312,7 +316,7 @@ describe("StylePanel labels", () => {
     expect(screen.queryByText("Marke")).not.toBeInTheDocument();
     expect(screen.getAllByText("Akzent")).toHaveLength(1);
     // The swatches are still translated.
-    expect(screen.getByRole("button", { name: "Blau als Markenfarbe" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Blau als Markenfarbe" })).toBeInTheDocument();
   });
 
   it("keep the English for whatever they leave out", () => {
@@ -333,10 +337,10 @@ describe("StylePanel labels", () => {
     expect(screen.getByText("Customize color schemes")).toBeInTheDocument();
     expect(screen.getByText("Marke")).toBeInTheDocument();
     expect(screen.getByText("Accent")).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Invertiert" })).toBeInTheDocument();
-    expect(screen.getByRole("tab", { name: "Contrast" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Grauton gray" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Brand colour: blue" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Invertiert" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Contrast" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Grauton gray" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Brand colour: blue" })).toBeInTheDocument();
     expect(buttonNames().slice(0, 3)).toEqual(["System theme", "Dunkel", "Light theme"]);
   });
 
@@ -351,6 +355,8 @@ describe("StylePanel labels", () => {
 describe("ThemeSwitcher labels", () => {
   it("name the options, keeping the English for any left out", () => {
     render(<ThemeSwitcher labels={{ system: "Système", dark: "Sombre" }} />, { wrapper });
-    expect(buttonNames()).toEqual(["Système", "Sombre", "Light theme"]);
+    expect(
+      screen.getAllByRole("button").map((button) => button.getAttribute("aria-label")),
+    ).toEqual(["Système", "Sombre", "Light theme"]);
   });
 });

@@ -22,7 +22,7 @@
   "unoptimized": "boolean",
   "defaultRevealed": "boolean",
   "thumbnail": "ThumbnailItem",
-  "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; }"
+  "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; pauseLabel?: string; playLabel?: string; }"
  },
  "tags": [
   "media",

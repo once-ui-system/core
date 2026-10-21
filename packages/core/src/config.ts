@@ -55,10 +55,23 @@ type Exactly<T, Shape> = T extends readonly unknown[]
   : T extends (...args: never[]) => unknown
     ? T
     : T extends object
-      ? string extends keyof Shape
+      ? string extends KeysOf<Shape>
         ? T
-        : { [K in keyof T]: K extends keyof Shape ? Exactly<T[K], NonNullable<Shape[K]>> : never }
+        : {
+            [K in keyof T]: K extends KeysOf<Shape>
+              ? Exactly<T[K], NonNullable<ValueAt<Shape, K>>>
+              : never;
+          }
       : T;
+
+/**
+ * The keys of every member of a union shape, and the value a key has in the
+ * members that declare it — so a key whose type is a union of objects (a
+ * scale written once or per theme) checks against each, not against the few
+ * keys they happen to share.
+ */
+type KeysOf<Shape> = Shape extends unknown ? keyof Shape : never;
+type ValueAt<Shape, K> = Shape extends unknown ? (K extends keyof Shape ? Shape[K] : never) : never;
 
 type CheckedConfig<T> = {
   [K in keyof T]: K extends keyof OnceUIConfigSections

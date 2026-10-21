@@ -32,6 +32,7 @@ type RestProps = Omit<
   | "prefixIcon"
   | "suffixIcon"
   | "onRemove"
+  | "interactive"
   | "onClick"
   | "children"
   | "removeButtonProps"
@@ -69,6 +70,7 @@ export const InteractiveTag = ({
   prefixIcon,
   suffixIcon,
   onRemove,
+  interactive,
   onClick,
   children,
   removeButtonProps = {},
@@ -81,8 +83,9 @@ export const InteractiveTag = ({
   const size = sizeProp ?? "m";
   const auto = sizeProp === undefined;
   const iconClass = auto ? styles.icon : undefined;
-  // A tag with only a remove button is a label, not a toggle.
-  const toggles = selectedProp !== undefined || onClick !== undefined;
+  // A tag with only a remove button is a label, not a toggle; so is one
+  // whose caller says so with `interactive={false}`.
+  const toggles = interactive ?? (selectedProp !== undefined || onClick !== undefined);
   const selected = selectedProp ?? false;
 
   const defaultRemoveProps: IconButtonProps = {

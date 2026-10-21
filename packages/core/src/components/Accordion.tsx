@@ -4,7 +4,7 @@ import classNames from "clsx";
 import React, { useCallback, useEffect, useId, useImperativeHandle, useRef } from "react";
 import type { IconName } from "../icons.js";
 import { useControllableState } from "../internal/useControllableState.js";
-import { TShirtSizes } from "../types.js";
+import type { RadiusSize, TextVariant, TShirtSizes } from "../types.js";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column.js";
 import { Flex } from "./Flex.js";
@@ -24,7 +24,10 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   icon?: IconName;
   iconRotation?: number;
   size?: TShirtSizes;
-  radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  /** Corner radius of the header. `none` for square corners, e.g. flush in a card. */
+  radius?: RadiusSize;
+  /** Text style of the title. Defaults to `heading-strong-s`; `body-default-m` for a FAQ in body copy. */
+  titleVariant?: TextVariant;
   /** Open or not, controlled. Leave it out to let the accordion keep its own
    *  state, starting from `defaultOpen`. */
   open?: boolean;
@@ -52,6 +55,7 @@ const Accordion = ({
   onOpenChange,
   iconRotation = 180,
   radius = "m",
+  titleVariant = "heading-strong-s",
   icon = "chevronDown",
   size = "m",
   className,
@@ -157,7 +161,7 @@ const Accordion = ({
         role="button"
         {...headerRest}
       >
-        <Row fillWidth textVariant="heading-strong-s">
+        <Row fillWidth textVariant={titleVariant}>
           {title}
         </Row>
         <Icon

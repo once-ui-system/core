@@ -27,6 +27,11 @@ interface UserProps {
   dropdown?: React.ReactNode;
   /** With `dropdown`: draw the trigger as selected. */
   selected?: boolean;
+  /**
+   * With `dropdown`: called with an Option's `value` when it is picked from
+   * the menu, as on Dropdown, which this forwards it to.
+   */
+  onSelect?: (value: string) => void;
   /** With `dropdown`: where the menu opens. */
   placement?: Placement;
   /** With `dropdown`: the menu's minimum width (a number is on the token scale). */
@@ -113,6 +118,7 @@ const User = ({
   minWidth,
   maxWidth,
   minHeight,
+  onSelect,
   className,
   style,
   loading,
@@ -128,6 +134,7 @@ const User = ({
       maxWidth={maxWidth}
       minHeight={minHeight}
       placement={placement}
+      {...{ onSelect }}
       disableTriggerClick={loading}
       style={{
         borderRadius: "var(--radius-full)",

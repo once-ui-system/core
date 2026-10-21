@@ -39,6 +39,12 @@ interface LogoProps
   size?: TShirtSizes;
   icon?: LogoSource;
   wordmark?: LogoSource;
+  /**
+   * A text wordmark, for a brand with no wordmark file: the name set in the
+   * heading font at the logo's height, after the icon if there is one.
+   * `wordmark` stays an image source.
+   */
+  text?: string;
   href?: string;
   /**
    * Show this logo only in one theme. For a logo that changes with the
@@ -54,6 +60,7 @@ const Logo = ({
   href,
   icon,
   wordmark,
+  text,
   className,
   style,
   showIn,
@@ -64,12 +71,12 @@ const Logo = ({
   const [leaf, props] = takeLeafProps(rest);
   const layout = leafLayout(leaf);
   useEffect(() => {
-    if (!icon && !wordmark) {
+    if (!icon && !wordmark && !text) {
       console.warn(
         "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
       );
     }
-  }, [icon, wordmark]);
+  }, [icon, wordmark, text]);
 
   /**
    * One <img> for a plain source; for a per-theme source, both, each gated by
@@ -85,6 +92,10 @@ const Logo = ({
   const resolveSource = (source: LogoSource | undefined): string | undefined =>
     typeof source === "string" ? source : source?.light;
 
+  // With a text wordmark the text names the logo, so the images beside it
+  // are decorative; an image-only logo keeps "Trademark".
+  const alt = text ? "" : "Trademark";
+
   const renderSource = (source: LogoSource | undefined) => {
     if (!source) return null;
     const imgStyle = {
@@ -92,13 +103,33 @@ const Logo = ({
       width: "auto",
     };
     if (typeof source === "string") {
-      return <img style={imgStyle} alt="Trademark" src={source} />;
+      return <img style={imgStyle} alt={alt} src={source} />;
     }
     return (
       <>
-        <img className="light-flex" style={imgStyle} alt="Trademark" src={source.light} />
-        <img className="dark-flex" style={imgStyle} alt="Trademark" src={source.dark} />
+        <img className="light-flex" style={imgStyle} alt={alt} src={source.light} />
+        <img className="dark-flex" style={imgStyle} alt={alt} src={source.dark} />
       </>
+    );
+  };
+
+  const renderText = () => {
+    if (!text) return null;
+    const height = `var(--static-space-${sizeMap[size]})`;
+    return (
+      <span
+        className="font-heading neutral-on-background-strong"
+        style={{
+          fontSize: `calc(${height} * 0.75)`,
+          lineHeight: height,
+          fontWeight: "var(--font-weight-heading-strong)",
+          letterSpacing: "-0.02em",
+          whiteSpace: "nowrap",
+          marginLeft: icon ? `calc(${height} / 4)` : undefined,
+        }}
+      >
+        {text}
+      </span>
     );
   };
 
@@ -106,6 +137,7 @@ const Logo = ({
     <>
       {renderSource(icon)}
       {renderSource(wordmark)}
+      {renderText()}
     </>
   );
 
@@ -222,7 +254,7 @@ const Logo = ({
           )}
           style={{ ...layout.style, ...style }}
           href={href}
-          aria-label="Trademark"
+          aria-label={text || "Trademark"}
           {...props}
         >
           {content}
@@ -237,7 +269,7 @@ const Logo = ({
           fitHeight
           fillWidth={fillWidth}
           style={{ ...layout.style, ...style }}
-          aria-label="Trademark"
+          aria-label={text ? undefined : "Trademark"}
         >
           {content}
         </Flex>

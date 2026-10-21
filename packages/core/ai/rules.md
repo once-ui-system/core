@@ -373,8 +373,11 @@ paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
 so leave `theme` out (or `"system"`) for a switchable site. Exact brand colours
 go in `brandScale`, `accentScale` or `neutralScale`, one colour per step
 (`{ 100: "#…", …, 1200: "#…" }`); a seed fills the steps a scale leaves out.
-Both render on the server through `ThemeInit`. Do not override the semantic
-variables (`--page-background`, `--brand-solid-strong`…) in CSS instead.
+A ramp per theme is `{ light: { … }, dark: { … } }`. The page and filled-surface
+colours are `pageBackground` and `surfaceBackground` (a token or CSS colour, or
+`{ light, dark }`). All render on the server through `ThemeInit`. Do not
+override the semantic variables (`--page-background`, `--brand-solid-strong`…)
+in CSS instead.
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so

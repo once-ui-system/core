@@ -135,6 +135,7 @@ Use the T-shirt size model, a number on the token scale (`40` is the `"40"` step
     <Row gap="16" horizontal="center">
       <Avatar value="G" statusIndicator={{ scheme: "green" }} />
       <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+      <Avatar value="O" statusIndicator={{ scheme: "orange" }} />
       <Avatar value="R" statusIndicator={{ scheme: "red" }} />
       <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
     </Row>
@@ -145,6 +146,7 @@ Use the T-shirt size model, a number on the token scale (`40` is the `"40"` step
 `<Row gap="16">
     <Avatar value="G" statusIndicator={{ scheme: "green" }} />
     <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+    <Avatar value="O" statusIndicator={{ scheme: "orange" }} />
     <Avatar value="R" statusIndicator={{ scheme: "red" }} />
     <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
 </Row>`,
@@ -186,6 +188,7 @@ Use the T-shirt size model, a number on the token scale (`40` is the `"40"` step
   component="Avatar"
   describe={{
     unoptimized: "Bypass the image optimizer, for sources it cannot process.",
+    statusIndicator: "A status dot, in any StatusIndicator colour: { color: \"orange\" }.",
   }}
   content={[
     ["style"],

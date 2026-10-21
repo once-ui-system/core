@@ -75,9 +75,9 @@ describe("StyleOverlay", () => {
       { wrapper },
     );
     await user.click(screen.getByRole("button", { name: "Customize" }));
-    await user.click(screen.getByRole("button", { name: "Corner style: sharp" }));
-    expect(screen.getByRole("button", { name: "Corner style: sharp" })).toHaveAttribute(
-      "aria-pressed",
+    await user.click(screen.getByRole("radio", { name: "Corner style: sharp" }));
+    expect(screen.getByRole("radio", { name: "Corner style: sharp" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });

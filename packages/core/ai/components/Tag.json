@@ -22,7 +22,9 @@
   "selected": "boolean",
   "onClick": "MouseEventHandler<HTMLDivElement>",
   "onRemove": "() => void",
+  "interactive": "boolean",
   "removeButtonProps": "Partial<IconButtonProps>",
+  "as": "\"div\" | \"span\"",
   "children": "ReactNode"
  },
  "tags": [

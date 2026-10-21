@@ -68,11 +68,11 @@ describe("StylePanel stacked", () => {
 
 describe("StylePanel's option rows", () => {
   // The button's size shows in its radius class.
-  const scalingTab = () => screen.getByRole("tab", { name: "100" });
+  const scalingTab = () => screen.getByRole("radio", { name: "100" });
 
   /** The SegmentedControl around a row's options. */
   const optionsOf = (tab: HTMLElement) =>
-    tab.closest('[role="tablist"]')?.parentElement?.parentElement;
+    tab.closest('[role="radiogroup"]')?.parentElement?.parentElement;
 
   it("keep their size inline, and stop at 22rem beside the label", () => {
     render(<StylePanel value={{}} onValueChange={vi.fn()} />, { wrapper });
@@ -88,7 +88,7 @@ describe("StylePanel's option rows", () => {
   it("drop a size when stacked, so a sidebar fits more of them", () => {
     render(<StylePanel stacked value={{}} onValueChange={vi.fn()} />, { wrapper });
     expect(scalingTab()).toHaveClass("radius-m");
-    expect(screen.getByRole("tab", { name: "Contrast" })).toHaveClass("radius-m");
+    expect(screen.getByRole("radio", { name: "Contrast" })).toHaveClass("radius-m");
   });
 });
 
@@ -135,7 +135,7 @@ describe("the chosen swatch", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function (
       this: HTMLElement,
     ) {
-      if (this.getAttribute("role") !== "button" || !this.parentElement) {
+      if (this.getAttribute("role") !== "radio" || !this.parentElement) {
         return DOMRect.fromRect({ x: 0, y: 0, width: 200, height: 40 });
       }
       const index = Array.from(this.parentElement.children).indexOf(this);
@@ -157,7 +157,7 @@ describe("the chosen swatch", () => {
 
   /** Where a swatch's right edge has to land: 40px, a swatch, short of the strip's 200px. */
   const revealed = (name: string) => {
-    const swatch = screen.getByRole("button", { name });
+    const swatch = screen.getByRole("radio", { name });
     const index = Array.from(swatch.parentElement?.children ?? []).indexOf(swatch);
     return (index + 1) * 40 - 160;
   };
@@ -181,8 +181,8 @@ describe("the chosen swatch", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    expect(screen.getByRole("button", { name: `Brand colour: ${near}` })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: `Brand colour: ${near}` })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
     // The second swatch spans 40–80px, inside the 40–160px clear of both buttons.

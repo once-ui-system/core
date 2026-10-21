@@ -2,7 +2,7 @@
 title: "Nav, NavItem and NavGroup"
 export: "Nav"
 summary: "The rows a product sidebar is made of, one setting for their look, and the route matcher that decides which one is current."
-updatedAt: "2026-10-18"
+updatedAt: "2026-10-20"
 docs: "once-ui/components/nav.mdx"
 github: "components/NavItem.tsx"
 navLabel: "Nav"
@@ -27,6 +27,7 @@ differ per product and stay yours to compose.
       <NavItem href="#" icon="sparkle" label="Presets" />
       <NavItem href="#" icon="inbox" label="Inbox" badge={42} />
       <NavItem href="#" icon="bell" label="Activity" indicator />
+      <NavItem href="#" icon="barChart" label="Reports" badge="New" />
     </Column>
   }
   codes={[
@@ -35,22 +36,50 @@ differ per product and stay yours to compose.
 `<NavItem href="/projects" icon="home" label="Projects" selected />
 <NavItem href="/presets" icon="sparkle" label="Presets" />
 <NavItem href="/inbox" icon="inbox" label="Inbox" badge={42} />
-<NavItem href="/activity" icon="bell" label="Activity" indicator />`,
+<NavItem href="/activity" icon="bell" label="Activity" indicator />
+<NavItem href="/reports" icon="barChart" label="Reports" badge="New" />`,
       language: "tsx",
       label: "NavItem"
     }
   ]}
 />
 
-`badge` prints a count and caps it at `9+`; `indicator` is the dot for unread
-with no number worth showing.
+`badge` prints a count and caps it at `9+`; text such as `"New"` prints as given.
+`indicator` is the dot for unread with no number worth showing.
+
+## With an avatar
+
+A link to a person, a team or a workspace can lead with its avatar. Pass it, or
+any other node, as `prefix`: it sits where the icon would, and stays out of the
+row's accessible name so the link reads as the label alone.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NavItemAvatarExample />}
+  codes={[
+    {
+      code:
+`<NavItem
+  href="/people/ada"
+  label="Ada Lovelace"
+  prefix={<Avatar size="xs" src="/avatars/ada.png" />}
+  badge={3}
+  selected
+/>`,
+      language: "tsx",
+      label: "NavItem"
+    }
+  ]}
+/>
 
 <PropsTable
   component="NavItem"
   describe={{
     label: "The text.",
     icon: "Leading icon. Leave it off inside a NavGroup, where the rail carries the hierarchy instead.",
-    badge: "A count in a pill at the end of the row. Above 9 it prints 9+, with the real number on the label for assistive tech.",
+    prefix: "Any node before the label, such as an Avatar. Decorative: hidden from assistive tech, so the row is named by its label.",
+    badge: "A pill at the end of the row. A number is a count: above 9 it prints 9+, with the real number on the label for assistive tech. Text such as \"New\" prints as given.",
     indicator: "A dot at the end of the row, when there is no number worth showing.",
   }}
 />

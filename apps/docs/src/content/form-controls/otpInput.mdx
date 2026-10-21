@@ -40,11 +40,36 @@ const handleComplete = (code: string) => {
   ]}
 />
 
+## Screen readers and autofill
+
+The boxes are one group, named "One-time code", and each box says which digit it is ("OTP digit 2 of 6"). The first box asks the browser for a code from a text message (`autocomplete="one-time-code"`), and a whole code arriving at once, by autofill or paste, fills every box. With `error`, every box is invalid and described by `errorMessage`. Name the group with `aria-label`, or translate both names with `labels`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<OTPInputLabelsExample />}
+  codes={[
+    {
+      code:
+`<OTPInput
+    length={6}
+    labels={{
+      group: "Code de vérification",
+      digit: (n, of) => \`Chiffre \${n} sur \${of}\`,
+    }}
+/>`,
+      language: "tsx",
+      label: "Translated"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="OTPInput"
   describe={{
+    labels: "The group's and the boxes' accessible names, to translate them.",
     length: "How many digits, and so how many boxes.",
     value: "The code typed so far, controlled. Leave it out and the boxes keep their own.",
     defaultValue: "The starting code when `value` is left out.",

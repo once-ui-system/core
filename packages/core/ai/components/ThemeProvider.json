@@ -23,9 +23,11 @@
   "brandSeed": "string",
   "accentSeed": "string",
   "neutralSeed": "string",
-  "brandScale": "SchemeScale",
-  "accentScale": "SchemeScale",
-  "neutralScale": "SchemeScale",
+  "brandScale": "ThemedSchemeScale",
+  "accentScale": "ThemedSchemeScale",
+  "neutralScale": "ThemedSchemeScale",
+  "pageBackground": "ThemeColor",
+  "surfaceBackground": "ThemeColor",
   "children": "!React.ReactNode",
   "persistence": "StylePersistence = local"
  },
@@ -106,6 +108,10 @@
    "1200"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "Schemes": [
    "blue",
    "indigo",
@@ -148,6 +154,14 @@
    "dark",
    "light",
    "system"
+  ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
   ],
   "TransitionStyle": [
    "none",

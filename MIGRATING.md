@@ -350,7 +350,7 @@ below the table, looks and behaves the same; the old exports are gone. The codem
 the import (keeping an alias, adding the survivor once), renames the prop types
 (`ModalProps` → `DialogProps`, `DropdownWrapperProps` → `DropdownProps`,
 `HoverProps` / `CursorCardProps` → `HoverCardProps`, `DataTableColumn` →
-`TableColumn`, `RangeSliderProps` → `SliderProps`, and so on), and reports any
+`TableColumn`, `DataTableQuery` → `TableQuery`, `RangeSliderProps` → `SliderProps`, and so on), and reports any
 other use of an old name, such as passing it as a value (a mention in a
 comment, a string or JSX text is not one). It does the same for
 `<core.Modal>` through `import * as core`, importing a survivor that left the
@@ -374,7 +374,7 @@ working, with Scroller's props.
 | `ContextMenu` | `Dropdown openOn="contextmenu"`, with `disabled` and `contents` | the children become `trigger`, `dropdown` the children |
 | `EmojiPickerDropdown` | `EmojiPicker trigger={…}`, with `open` / `defaultOpen` / `onOpenChange`, `placement`, `closeAfterClick` and `dropdownProps` | renames; props that were the dropdown's move into `dropdownProps` |
 | `UserMenu` | `User dropdown={…}`, with `selected`, `placement` and the menu's size props | renames; adds `dropdown={null}` when there was none, so the user still renders as a trigger |
-| `DataTable` | `Table`: the DataTable API under the short name (`columns`, `rows`, sorting, selection, `pagination`, `loading`, `emptyState`), plus `searchable`, `actions`, `onRowClick`, `rowClassName`, `cellClassName`, `loadingState` and `showFirstLast` | renames, with the `DataTable*` types |
+| `DataTable` | `Table`: the DataTable API under the short name (`columns`, `rows`, sorting, selection, `pagination`, search and filters, `columnVisibility`, `onQueryChange`, `loading`, `emptyState`), plus `searchable`, `actions`, `onRowClick`, `rowClassName`, `cellClassName`, `loadingState` and `showFirstLast` | renames, with the `DataTable*` types |
 | `Table` (2.x, `data={{ headers, rows }}`) | `Table columns={…} rows={…}`: a header's `content` is the column's `header`; rows may still be arrays, read by position | splits an inline `data` or a plain variable (`x.headers.map(…)`, `rows={x.rows}`); `defaultPageSize` → `defaultPerPage`, `pageSizeOptions` → `perPageOptions`; keeps 2.x's page-size select and first/last buttons when paginated; `onRowClick`, `rowClassName`, `cellClassName` and inline `actions` callbacks get the row first; reports any other `data` |
 | `DateRangePicker` | `DatePicker range`; `dual` is `months={2}` | adds `range`; `dual` becomes `months={2}` (an expression `x ? 2 : 1`, `false` dropped) |
 | `DateRangeInput` | `DateInput range` | adds `range`; every prop carries over |

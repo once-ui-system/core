@@ -12,7 +12,7 @@
   "loading": "boolean",
   "empty": "boolean",
   "icon": "IconName",
-  "statusIndicator": "{ scheme: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
+  "statusIndicator": "{ scheme: StatusIndicatorScheme; tone?: undefined } | { tone: Tone; scheme?: undefined }",
   "style": "CSSProperties = {}"
  },
  "tags": [
@@ -182,12 +182,42 @@
    "wordmark",
    "world"
   ],
+  "StatusIndicatorScheme": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan",
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
   "TShirtSizes": [
    "s",
    "xl",
    "l",
    "m",
    "xs"
+  ],
+  "Tone": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
   ]
  }
 }

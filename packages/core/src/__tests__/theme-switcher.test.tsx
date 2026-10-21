@@ -161,4 +161,31 @@ describe("ThemeSwitcher", () => {
     const collapsed = render(<ThemeSwitcher collapsed direction="column" />, { wrapper });
     await expectNoAxeViolations(collapsed.container);
   });
+
+  it("as a radio group, has one tab stop on the active theme and the arrows choose", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { container, rerender } = render(
+      <ThemeSwitcher semantics="radio" aria-label="Theme" value="dark" onValueChange={onChange} />,
+      { wrapper },
+    );
+    const radio = (name: string) => screen.getByRole("radio", { name });
+    expect(screen.getByRole("radiogroup", { name: "Theme" })).toBeInTheDocument();
+    expect(radio("Dark theme")).toHaveAttribute("aria-checked", "true");
+    expect(radio("Dark theme")).not.toHaveAttribute("aria-pressed");
+    expect(radio("Dark theme")).toHaveAttribute("tabindex", "0");
+    expect(radio("System theme")).toHaveAttribute("tabindex", "-1");
+    await user.tab();
+    expect(radio("Dark theme")).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+    expect(radio("Light theme")).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith("light");
+    rerender(
+      <ThemeSwitcher semantics="radio" aria-label="Theme" value="light" onValueChange={onChange} />,
+    );
+    await user.keyboard("{ArrowRight}");
+    expect(radio("System theme")).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith("system");
+    await expectNoAxeViolations(container);
+  });
 });

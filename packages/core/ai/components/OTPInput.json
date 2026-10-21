@@ -13,7 +13,8 @@
   "error": "boolean = false",
   "errorMessage": "React.ReactNode",
   "disabled": "boolean = false",
-  "autoFocus": "boolean = false"
+  "autoFocus": "boolean = false",
+  "labels": "OTPInputLabels"
  },
  "tags": [
   "form",
@@ -46,6 +47,12 @@
    "left": "SpacingToken | number | CSSUnit",
    "className": "string",
    "style": "CSSProperties"
+  }
+ },
+ "types": {
+  "OTPInputLabels": {
+   "group": "string",
+   "digit": "(position: number, length: number) => string"
   }
  }
 }

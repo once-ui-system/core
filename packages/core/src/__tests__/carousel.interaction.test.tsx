@@ -179,4 +179,104 @@ describe("Carousel: autoplay", () => {
     advance(1400);
     expect(shown()).toBe("Second");
   });
+
+  // Before: `play={{ auto: true }}` had no pause button (`controls` was not
+  // defaulted per field) and an interval of 0; WCAG 2.2.2 needs a way to stop it.
+  it("gives `play={{ auto: true }}` a pause button and the 3000ms interval", () => {
+    render(<Carousel items={items} play={{ auto: true }} />, { wrapper });
+    expect(button("Pause slideshow")).toBeInTheDocument();
+    advance(2000);
+    expect(shown()).toBe("First");
+    advance(1400);
+    expect(shown()).toBe("Second");
+  });
+
+  it("holds while hovered, keeping the button's state, and plays at once on Play", () => {
+    render(<Carousel items={items} play={{ auto: true, interval: 1000 }} />, { wrapper });
+    const carousel = screen.getByRole("group", { name: "Carousel" });
+    fireEvent.mouseEnter(carousel);
+    advance(5000);
+    expect(shown()).toBe("First");
+    expect(button("Pause slideshow")).toBeInTheDocument();
+    fireEvent.mouseLeave(carousel);
+    advance(1350);
+    expect(shown()).toBe("Second");
+
+    // Paused and played again under the pointer, it moves without the pointer leaving.
+    fireEvent.mouseEnter(carousel);
+    fireEvent.click(button("Pause slideshow"));
+    fireEvent.click(button("Play slideshow"));
+    advance(1350);
+    expect(shown()).toBe("Third");
+  });
+
+  it("stops when keyboard focus comes in, until Play is pressed", () => {
+    render(
+      <>
+        <button type="button">Before</button>
+        <Carousel items={items} play={{ auto: true, interval: 1000 }} />
+      </>,
+      { wrapper },
+    );
+    fireEvent.focus(button("Pause slideshow"), { relatedTarget: button("Before") });
+    expect(button("Play slideshow")).toBeInTheDocument();
+    advance(5000);
+    expect(shown()).toBe("First");
+    // Moving inside does not stop it again once it is playing.
+    fireEvent.click(button("Play slideshow"));
+    fireEvent.focus(button("Next slide"), { relatedTarget: button("Pause slideshow") });
+    advance(1350);
+    expect(shown()).toBe("Second");
+  });
+
+  it("keeps playing when a press focuses one of its buttons", () => {
+    render(<Carousel items={items} play={{ auto: true, interval: 1000 }} />, { wrapper });
+    fireEvent.pointerDown(button("Next slide"));
+    fireEvent.focus(button("Next slide"));
+    expect(button("Pause slideshow")).toBeInTheDocument();
+  });
+
+  it("does not start for reduced motion, and offers Play instead", () => {
+    const matchMedia = window.matchMedia;
+    window.matchMedia = ((query: string) => ({
+      matches: query.includes("reduce"),
+      media: query,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+    })) as unknown as typeof window.matchMedia;
+    try {
+      render(<Carousel items={items} play={{ auto: true, interval: 1000 }} />, { wrapper });
+      advance(5000);
+      expect(shown()).toBe("First");
+      fireEvent.click(button("Play slideshow"));
+      advance(1350);
+      expect(shown()).toBe("Second");
+    } finally {
+      window.matchMedia = matchMedia;
+    }
+  });
+
+  it("is a named carousel of slides, announced politely only while it is not moving", async () => {
+    const { container } = render(
+      <Carousel
+        aria-label="Product shots"
+        items={items}
+        play={{ auto: true, interval: 1000, pauseLabel: "Pause", playLabel: "Play" }}
+      />,
+      { wrapper },
+    );
+    const carousel = screen.getByRole("group", { name: "Product shots" });
+    expect(carousel).toHaveAttribute("aria-roledescription", "carousel");
+    const slide = screen.getByRole("group", { name: "1 of 3" });
+    expect(slide).toHaveAttribute("aria-roledescription", "slide");
+    expect(slide).toContainElement(screen.getAllByRole("img")[0]);
+    const live = container.querySelector("[aria-live]");
+    expect(live).toContainElement(slide);
+    expect(live).toHaveAttribute("aria-live", "off");
+    fireEvent.click(button("Pause"));
+    expect(live).toHaveAttribute("aria-live", "polite");
+    expect(button("Play")).toBeInTheDocument();
+    vi.useRealTimers();
+    await expectNoAxeViolations(container);
+  });
 });

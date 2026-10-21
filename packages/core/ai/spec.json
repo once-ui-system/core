@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.0",
- "generated": "2026-10-20",
+ "generated": "2026-10-21",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -25,7 +25,7 @@
    "title": "React.ReactNode",
    "description": "React.ReactNode",
    "series": "!SeriesConfig<DataPoint> | SeriesConfig<DataPoint>[]",
-   "data": "!DataPoint[]",
+   "data": "!readonly DataPoint[]",
    "legend": "LegendConfig",
    "date": "DateConfig",
    "emptyState": "React.ReactNode",
@@ -334,6 +334,11 @@
    "disabled": "boolean",
    "disableHighlighting": "boolean"
   },
+  "AudioLevelSource": [
+   "HTMLMediaElement",
+   "MediaStream",
+   "AnalyserNode"
+  ],
   "AvatarProps": "Avatar props",
   "AwaitedReactNode": [
    "undefined",
@@ -478,6 +483,7 @@
   },
   "ButtonOption": {
    "value": "!string",
+   "description": "ReactNode",
    "label": "ReactNode",
    "style": "CSSProperties",
    "className": "string",
@@ -683,6 +689,7 @@
    "medium",
    "weak"
   ],
+  "ColumnHide": "Partial<Record<BreakpointKey, boolean>>",
   "CondensedTShirtSizes": [
    "s",
    "l",
@@ -826,13 +833,13 @@
   },
   "DropdownProps": "Dropdown props",
   "EasingCurve": [
+   "bounce",
    "linear",
    "ease",
    "ease-in",
    "ease-out",
    "ease-in-out",
-   "spring",
-   "bounce"
+   "spring"
   ],
   "EffectType": [
    "none",
@@ -1237,6 +1244,45 @@
    "string",
    "{ light: string; dark: string; }"
   ],
+  "LogoSpinnerTone": [
+   "neutral",
+   "brand",
+   "accent",
+   "inherit"
+  ],
+  "MascotLook": {
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\""
+  },
+  "MascotMood": [
+   "neutral",
+   "happy",
+   "surprised",
+   "sad",
+   "skeptical",
+   "wink",
+   "focused",
+   "determined"
+  ],
+  "MascotState": [
+   "idle",
+   "listening",
+   "thinking",
+   "speaking",
+   "sleeping"
+  ],
   "MaskOptions": {
    "maskPosition": "string"
   },
@@ -1404,9 +1450,11 @@
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
   },
   "Opacity": [
    "0",
@@ -1422,6 +1470,10 @@
    "100"
   ],
   "OptionProps": "Option props",
+  "OTPInputLabels": {
+   "group": "string",
+   "digit": "(position: number, length: number) => string"
+  },
   "PaginationLabels": {
    "previous": "!string",
    "next": "!string",
@@ -1467,6 +1519,34 @@
    "none",
    "full"
   ],
+  "ReactionChange": {
+   "option": "!ReactionOption",
+   "selected": "!boolean"
+  },
+  "ReactionMotion": [
+   "pop",
+   "none",
+   "beat",
+   "nod",
+   "shake",
+   "droop",
+   "flicker",
+   "spin",
+   "wave",
+   "bounce"
+  ],
+  "ReactionOption": {
+   "value": "!string",
+   "label": "string",
+   "emoji": "string",
+   "src": "string",
+   "motion": "ReactionMotion"
+  },
+  "ReactionValue": [
+   "null",
+   "string",
+   "string[]"
+  ],
   "ScalingSize": [
    "90",
    "95",
@@ -1504,6 +1584,10 @@
    "cyan"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "ScrollerAuto": {
    "speed": "Speed",
    "hover": "\"slow\" | \"pause\" | \"none\"",
@@ -1650,6 +1734,27 @@
    "80",
    "104",
    "128"
+  ],
+  "StatusIndicatorScheme": [
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan",
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
   ],
   "StreamingOptions": {
    "initialData": "!T[]",
@@ -1889,23 +1994,55 @@
    "sortable": "boolean",
    "sort": "(a: T, b: T) => number",
    "align": "\"left\" | \"center\" | \"right\"",
-   "width": "string"
+   "width": "string",
+   "label": "string",
+   "filter": "TableColumnFilter<T>",
+   "hide": "ColumnHide"
   },
+  "TableColumnFilter": {
+   "options": "!{ value: string; label: ReactNode }[]",
+   "multiple": "boolean",
+   "match": "(row: T, value: TableFilterValue) => boolean"
+  },
+  "TableFilters": {
+   "[key: string]": "TableFilterValue"
+  },
+  "TableFilterValue": [
+   "string",
+   "string[]"
+  ],
   "TableLabels": {
    "selectAll": "!string",
    "selectRow": "!string",
    "pagination": "!string",
    "search": "!string",
    "actions": "!string",
+   "filterAll": "!string",
+   "columns": "!string",
+   "noResults": "!string",
+   "noResultsHint": "!string",
+   "clearFilters": "!string",
+   "results": "!(count: number) => string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",
    "last": "!string",
    "perPage": "!string"
   },
+  "TableQuery": {
+   "page": "!number",
+   "perPage": "!number",
+   "sort": "!TableSort | null",
+   "search": "!string",
+   "filters": "!TableFilters"
+  },
   "TableSort": {
    "key": "!string",
    "direction": "!\"asc\" | \"desc\""
+  },
+  "TagInputLabels": {
+   "remove": "(tag: string) => string",
+   "removed": "(tag: string) => string"
   },
   "TagProps": "Tag props",
   "TextBreakpointHide": {
@@ -2031,6 +2168,14 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
+  ],
   "ThemeInitAttributeConfig": {
    "theme": "!string",
    "brand": "!string",
@@ -2119,6 +2264,12 @@
    "none",
    "all"
   ],
+  "VoiceState": [
+   "idle",
+   "listening",
+   "thinking",
+   "speaking"
+  ],
   "WeatherType": [
    "rain",
    "snow",
@@ -2150,7 +2301,8 @@
     "icon": "IconName = chevronDown",
     "iconRotation": "number = 180",
     "size": "TShirtSizes = m",
-    "radius": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | \"full\" = m",
+    "radius": "RadiusSize = m",
+    "titleVariant": "TextVariant = heading-strong-s",
     "open": "boolean",
     "defaultOpen": "boolean = false",
     "onOpenChange": "(open: boolean) => void",
@@ -2175,6 +2327,7 @@
     "items": "!AccordionItem[]",
     "size": "CondensedTShirtSizes = m",
     "autoCollapse": "boolean = true",
+    "titleVariant": "TextVariant",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -2228,7 +2381,8 @@
    "props": {
     "trigger": "!string",
     "scale": "number = 0.8",
-    "color": "\"onBackground\" | \"onSolid\" = onBackground"
+    "color": "\"onBackground\" | \"onSolid\" = onBackground",
+    "as": "\"div\" | \"span\""
    }
   },
   "Avatar": {
@@ -2244,7 +2398,7 @@
     "loading": "boolean",
     "empty": "boolean",
     "icon": "IconName",
-    "statusIndicator": "{ scheme: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
+    "statusIndicator": "{ scheme: StatusIndicatorScheme; tone?: undefined } | { tone: Tone; scheme?: undefined }",
     "style": "CSSProperties = {}"
    }
   },
@@ -2394,7 +2548,7 @@
     "unoptimized": "boolean",
     "defaultRevealed": "boolean",
     "thumbnail": "ThumbnailItem",
-    "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; }"
+    "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; pauseLabel?: string; playLabel?: string; }"
    }
   },
   "Checkbox": {
@@ -2972,9 +3126,23 @@
     "size": "TShirtSizes = m",
     "icon": "LogoSource",
     "wordmark": "LogoSource",
+    "text": "string",
     "href": "string",
     "showIn": "\"dark\" | \"light\"",
     "brand": "{ copy?: boolean; url?: string }"
+   }
+  },
+  "LogoSpinner": {
+   "group": "components",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "size": "TShirtSizes = m",
+    "variant": "\"twist\" | \"wave\" = twist",
+    "tone": "LogoSpinnerTone = brand",
+    "speed": "number",
+    "aria-label": "string"
    }
   },
   "Mask": {
@@ -3102,7 +3270,8 @@
    "props": {
     "label": "!ReactNode",
     "icon": "IconName",
-    "badge": "number",
+    "prefix": "ReactNode",
+    "badge": "number | ReactNode",
     "indicator": "boolean"
    }
   },
@@ -3193,7 +3362,8 @@
     "error": "boolean = false",
     "errorMessage": "React.ReactNode",
     "disabled": "boolean = false",
-    "autoFocus": "boolean = false"
+    "autoFocus": "boolean = false",
+    "labels": "OTPInputLabels"
    }
   },
   "Pagination": {
@@ -3354,6 +3524,8 @@
     "disabled": "boolean = false",
     "fillWidth": "boolean = true",
     "compact": "boolean = false",
+    "semantics": "\"tabs\" | \"radio\" = tabs",
+    "scroll": "boolean = true",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -3553,9 +3725,9 @@
    ],
    "props": {
     "size": "TShirtSizes = m",
-    "scheme": "Schemes | \"gray\" = blue",
+    "scheme": "StatusIndicatorScheme = blue",
     "pulse": "boolean = false",
-    "tone": "Tone = brand",
+    "tone": "Tone",
     "pulseSize": "string | number"
    }
   },
@@ -3612,6 +3784,19 @@
     "onRowClick": "(row: T, index: number) => void",
     "searchable": "boolean = false",
     "searchPlaceholder": "string = Search...",
+    "search": "string",
+    "defaultSearch": "string = \"\"",
+    "onSearchChange": "(search: string) => void",
+    "matchSearch": "(row: T, query: string) => boolean",
+    "filters": "TableFilters",
+    "defaultFilters": "TableFilters",
+    "onFiltersChange": "(filters: TableFilters) => void",
+    "columnVisibility": "Record<string, boolean>",
+    "defaultColumnVisibility": "Record<string, boolean>",
+    "onColumnVisibilityChange": "(visibility: Record<string, boolean>) => void",
+    "columnsMenu": "boolean = false",
+    "toolbar": "ReactNode",
+    "onQueryChange": "(query: TableQuery) => void",
     "actions": "TableAction<T>[]",
     "rowClassName": "(row: T, index: number) => string | undefined",
     "cellClassName": "(row: T, index: number, columnIndex: number) => string | undefined",
@@ -3637,7 +3822,9 @@
     "count": "number",
     "total": "number",
     "loading": "boolean = false",
+    "keepRowsWhileLoading": "boolean = false",
     "emptyState": "ReactNode",
+    "noResultsState": "ReactNode",
     "stickyHeader": "boolean = false",
     "striped": "boolean = false",
     "hoverable": "boolean = true",
@@ -3733,7 +3920,9 @@
     "selected": "boolean",
     "onClick": "MouseEventHandler<HTMLDivElement>",
     "onRemove": "() => void",
+    "interactive": "boolean",
     "removeButtonProps": "Partial<IconButtonProps>",
+    "as": "\"div\" | \"span\"",
     "children": "ReactNode"
    }
   },
@@ -3748,7 +3937,8 @@
    "props": {
     "value": "string[]",
     "defaultValue": "readonly string[]",
-    "onValueChange": "(value: string[]) => void"
+    "onValueChange": "(value: string[]) => void",
+    "labels": "TagInputLabels"
    }
   },
   "Text": {
@@ -3812,7 +4002,8 @@
     "onValueChange": "(theme: Theme) => void",
     "collapsed": "boolean",
     "direction": "\"row\" | \"column\" = row",
-    "labels": "ThemeSwitcherLabels"
+    "labels": "ThemeSwitcherLabels",
+    "semantics": "\"toggle\" | \"radio\" = toggle"
    }
   },
   "Timeline": {
@@ -3903,6 +4094,7 @@
     "className": "string",
     "dropdown": "React.ReactNode",
     "selected": "boolean = false",
+    "onSelect": "(value: string) => void",
     "placement": "Placement",
     "minWidth": "DropdownProps[\"minWidth\"]",
     "maxWidth": "DropdownProps[\"maxWidth\"]",
@@ -3979,6 +4171,72 @@
     "onClose": "() => void"
    }
   },
+  "Mascot": {
+   "group": "modules",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "state": "MascotState = idle",
+    "mood": "MascotMood = neutral",
+    "seed": "string | number",
+    "accessory": "React.ReactNode",
+    "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
+    "level": "number",
+    "source": "AudioLevelSource | null",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" | number | CSSUnit = l",
+    "aria-label": "string",
+    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+    "roundness": "number",
+    "aspect": "number",
+    "bodyPath": "string",
+    "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+    "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+    "eyeSize": "number",
+    "eyeSpacing": "number",
+    "eyeHeight": "number",
+    "eyeColor": "string",
+    "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+    "brows": "boolean",
+    "cheeks": "boolean",
+    "personality": "\"calm\" | \"default\" | \"bouncy\""
+   }
+  },
+  "VoiceVisualizer": {
+   "group": "modules",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "state": "VoiceState = idle",
+    "variant": "\"orb\" | \"bars\" = orb",
+    "level": "number",
+    "source": "AudioLevelSource | null",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "tone": "\"brand\" | \"accent\" | \"neutral\" = brand",
+    "bars": "number = 5",
+    "aria-label": "string"
+   }
+  },
+  "WorkingIndicator": {
+   "group": "modules",
+   "mixins": [
+    "LeafProps"
+   ],
+   "props": {
+    "verbs": "readonly string[] = workingVerbs",
+    "label": "ReactNode",
+    "interval": "number = 2800",
+    "shuffle": "boolean = true",
+    "shimmer": "boolean = true",
+    "showElapsed": "boolean = false",
+    "startedAt": "Date | number",
+    "detail": "ReactNode",
+    "loader": "ReactNode | false",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "aria-label": "string"
+   }
+  },
   "ChatComposer": {
    "group": "modules",
    "mixins": [
@@ -4005,6 +4263,9 @@
     "removeLabel": "(fileName: string) => string = (fileName) => `Remove ${fileName}`",
     "prefix": "ReactNode",
     "actions": "ReactNode",
+    "toolbar": "ReactNode",
+    "hint": "ReactNode",
+    "sendIcon": "IconName = send",
     "maxLength": "number",
     "id": "string"
    }
@@ -4126,6 +4387,52 @@
     "image": "string",
     "sameAs": "string[] = []",
     "author": "{ name: string; url?: string; image?: string; }"
+   }
+  },
+  "Reaction": {
+   "group": "modules",
+   "props": {
+    "value": "!string",
+    "label": "string",
+    "emoji": "string",
+    "src": "string",
+    "motion": "ReactionMotion",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "trigger": "\"hover\" | \"loop\" | \"manual\" = hover",
+    "playKey": "number | string",
+    "decorative": "boolean = false",
+    "children": "React.ReactNode"
+   }
+  },
+  "Reactions": {
+   "group": "modules",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "options": "!ReactionOption[]",
+    "counts": "Record<string, number>",
+    "value": "ReactionValue",
+    "defaultValue": "ReactionValue",
+    "onValueChange": "(value: ReactionValue, change: ReactionChange) => void",
+    "multiple": "boolean = false",
+    "showAll": "boolean = false",
+    "picker": "boolean = true",
+    "open": "boolean",
+    "defaultOpen": "boolean = false",
+    "onOpenChange": "(open: boolean) => void",
+    "effect": "\"burst\" | \"float\" | \"none\" = burst",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "disabled": "boolean = false",
+    "renderGlyph": "(option: ReactionOption) => ReactNode",
+    "addLabel": "string = Add reaction",
+    "aria-label": "string",
+    "renderCount": "(count: number, value: string) => ReactNode"
    }
   },
   "BarChart": {
@@ -4612,9 +4919,11 @@
     "brandSeed": "string",
     "accentSeed": "string",
     "neutralSeed": "string",
-    "brandScale": "SchemeScale",
-    "accentScale": "SchemeScale",
-    "neutralScale": "SchemeScale",
+    "brandScale": "ThemedSchemeScale",
+    "accentScale": "ThemedSchemeScale",
+    "neutralScale": "ThemedSchemeScale",
+    "pageBackground": "ThemeColor",
+    "surfaceBackground": "ThemeColor",
     "children": "!React.ReactNode",
     "persistence": "StylePersistence = local"
    }
@@ -5253,6 +5562,30 @@
    "kind": "hook",
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
+  },
+  "useAudioLevel": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(source: AudioLevelSource | null | undefined) => number",
+   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
+  },
+  "mascotLook": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotLook",
+   "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "workingVerbs": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "What `WorkingIndicator` cycles through by default."
+  },
+  "reactionMotion": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
+   "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
   },
   "useArrowNavigation": {
    "group": "hooks",

@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 
 /**
  * StylePanel merges its labels and scrolls its swatch strips as core's own
- * controls do, through copies of two of core's internal helpers (they are not
+ * controls do, through copies of three of core's internal helpers (they are not
  * public API). These hold each copy to the original, word for word, so a
  * change to one fails here until the other follows. Workspace only: the
  * published package has no tests.
@@ -17,7 +17,7 @@ const body = (file: string) =>
     .trim();
 
 describe("copies of core's internal helpers", () => {
-  it.each(["labels.ts", "reveal.ts"])("%s is core's, word for word", (file) => {
+  it.each(["labels.ts", "radioKeys.ts", "reveal.ts"])("%s is core's, word for word", (file) => {
     expect(body(path.join(OWN, file))).toBe(body(path.join(CORE, file)));
   });
 });

@@ -1,0 +1,229 @@
+---
+title: "Social"
+export: "Reactions"
+summary: "Animated reactions for posts, comments and chat: each reaction has its own gesture, a pick bursts and updates the count, and an app can bring its own images."
+updatedAt: "2026-10-21"
+docs: "once-ui/modules/social.mdx"
+github: "modules/social/Reactions.tsx"
+navLabel: "Social"
+navIcon: "modules"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+Reactions are the smallest way to answer a post, so they should feel good to leave. Every reaction
+moves in its own way: a heart beats, a thumbs-up nods, a laugh shakes, fire flickers. Picking one
+plays its gesture, sends a few copies flying out of the chip and updates the count. To roll the
+number, pass `renderCount` and draw it with CountFx from `@once-ui-system/fx`.
+
+## Reactions
+
+A chip for each reaction in use, with how many people left it, and an add button that opens every
+option. Tap a chip to add your reaction or take it back. One reaction per person by default.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Reactions
+      options={[
+        { value: "❤️", label: "Love" },
+        { value: "👍", label: "Like" },
+        { value: "😂", label: "Haha" },
+        { value: "😮", label: "Wow" },
+        { value: "😢", label: "Sad" },
+        { value: "🔥", label: "Fire" },
+      ]}
+      counts={{ "❤️": 12, "👍": 4, "😂": 2 }}
+      defaultValue="❤️"
+    />
+  }
+  codes={[
+    {
+      code:
+`const options = [
+  { value: "❤️", label: "Love" },
+  { value: "👍", label: "Like" },
+  { value: "😂", label: "Haha" },
+  { value: "😮", label: "Wow" },
+  { value: "😢", label: "Sad" },
+  { value: "🔥", label: "Fire" },
+];
+
+<Reactions
+  options={options}
+  counts={post.reactionCounts}
+  value={post.myReaction}
+  onValueChange={(value, { option, selected }) => react(post.id, option.value, selected)}
+/>`,
+      language: "tsx",
+      label: "Feed post"
+    }
+  ]}
+/>
+
+### Counts that keep up
+
+`counts` includes the viewer's own reaction, as `value` has it. When the viewer picks another one,
+the numbers move at once, before your server answers; when new `counts` arrive, they take over, and
+the viewer is never counted twice. So you can send the change and refetch, without keeping an
+optimistic copy of the counts yourself.
+
+### Several per person
+
+`multiple` lets a person leave several reactions, as in chat. `value` is then a list.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Reactions
+      size="s"
+      multiple
+      effect="float"
+      options={[
+        { value: "👍", label: "Like" },
+        { value: "🎉", label: "Party" },
+        { value: "👀", label: "Looking" },
+        { value: "🔥", label: "Fire" },
+      ]}
+      counts={{ "👍": 3, "👀": 1 }}
+      defaultValue={["👍"]}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Reactions size="s" multiple effect="float" options={options} counts={counts} value={mine} onValueChange={setMine} />`,
+      language: "tsx",
+      label: "Chat"
+    }
+  ]}
+/>
+
+### Effects
+
+`effect="burst"` (the default) sends six small copies out of the chip, `float` lifts one larger copy
+up and away, and `none` keeps only the gesture.
+
+## Your own reactions
+
+A reaction can be an image instead of an emoji: give it `src`, such as an uploaded animated WebP or
+GIF. It plays as it is, so set `motion="none"` when the image already moves, or pick a gesture for a
+still one. An emoji can take a different gesture too.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Reactions
+      size="l"
+      options={[
+        { value: "party", label: "Party", src: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f389/512.webp", motion: "none" },
+        { value: "ship", label: "Ship it", src: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f680/512.webp", motion: "none" },
+        { value: "orbit", label: "Orbit", emoji: "🪐", motion: "spin" },
+      ]}
+      counts={{ party: 5, ship: 2, orbit: 1 }}
+    />
+  }
+  codes={[
+    {
+      code:
+`<Reactions
+  options={[
+    { value: "party", label: "Party", src: "/reactions/party.webp", motion: "none" },
+    { value: "ship", label: "Ship it", src: "/reactions/ship.webp", motion: "none" },
+    { value: "orbit", label: "Orbit", emoji: "🪐", motion: "spin" },
+  ]}
+  counts={counts}
+/>`,
+      language: "tsx",
+      label: "Custom"
+    }
+  ]}
+/>
+
+Store the `value` with each reaction, not the image, so an app can change a reaction's picture later.
+A counted value that `options` no longer lists still shows, as plain text, so no one's reaction
+disappears when the set changes. For an animated set that matches the emoji, Google's
+[Noto Animated Emoji](https://googlefonts.github.io/noto-emoji-animation/) (CC BY 4.0) works as
+`src`, as above. To draw a reaction any other way, such as with Lottie, pass `renderGlyph`.
+
+## Reaction
+
+One reaction on its own, with its gesture. It plays once each time the pointer arrives
+(`trigger="hover"`), every few seconds (`loop`), or when `playKey` changes (`manual`).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" wrap>
+      <Reaction value="❤️" size="xl" trigger="loop" />
+      <Reaction value="👍" size="xl" trigger="loop" />
+      <Reaction value="😂" size="xl" trigger="loop" />
+      <Reaction value="😮" size="xl" trigger="loop" />
+      <Reaction value="😢" size="xl" trigger="loop" />
+      <Reaction value="🔥" size="xl" trigger="loop" />
+      <Reaction value="🎉" size="xl" trigger="loop" />
+      <Reaction value="👋" size="xl" trigger="loop" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Reaction value="❤️" size="xl" trigger="loop" />
+<Reaction value="party" label="Party" src="/reactions/party.webp" />`,
+      language: "tsx",
+      label: "Gestures"
+    }
+  ]}
+/>
+
+The gestures are `beat`, `nod`, `shake`, `pop`, `droop`, `flicker`, `spin`, `wave` and `bounce`.
+Known emoji get a fitting one (`reactionMotion` tells you which); anything else bounces.
+
+## Accessibility
+
+The row is a group named "Reactions". Each chip is a toggle button named for its reaction and count
+("Love, 12") with `aria-pressed` for the viewer's own. The add button opens a group of toggle
+buttons that the arrow keys move through; Escape closes it and gives focus back. With reduced motion
+nothing moves: the gestures and the burst are off, and the reactions still
+change at once.
+
+## API reference
+
+<PropsTable
+  component="Reactions"
+  describe={{
+    options: "The reactions people can pick: value, label, emoji or src, motion.",
+    counts: "People per reaction, by value, including the viewer's own.",
+    value: "The viewer's reaction: a value or null, or a list with multiple.",
+    defaultValue: "The starting value when uncontrolled.",
+    onValueChange: "Called with the next value and { option, selected }.",
+    multiple: "Several reactions per person.",
+    showAll: "A chip for every option, even at zero.",
+    picker: "The add button that opens every option.",
+    effect: "burst, float or none.",
+    size: "s, m or l.",
+    renderGlyph: "Draw a reaction yourself, such as with Lottie.",
+    addLabel: "The add button's name.",
+    renderCount: "Draw a count yourself, such as with CountFx from @once-ui-system/fx.",
+    "aria-label": "The group's name.",
+  }}
+/>
+
+<PropsTable
+  component="Reaction"
+  describe={{
+    value: "What the reaction is stored as; the emoji drawn when there is no emoji or src.",
+    label: "What screen readers hear.",
+    emoji: "The emoji to draw.",
+    src: "An image instead, such as an animated WebP.",
+    motion: "beat, nod, shake, pop, droop, flicker, spin, wave, bounce or none.",
+    size: "s, m, l or xl.",
+    trigger: "hover, loop or manual.",
+    playKey: "Change it to play the gesture again.",
+    decorative: "Hidden from screen readers when a control already names it.",
+  }}
+/>

@@ -12,7 +12,8 @@
  "props": {
   "trigger": "!string",
   "scale": "number = 0.8",
-  "color": "\"onBackground\" | \"onSolid\" = onBackground"
+  "color": "\"onBackground\" | \"onSolid\" = onBackground",
+  "as": "\"div\" | \"span\""
  },
  "tags": [
   "decoration",

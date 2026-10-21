@@ -18,6 +18,8 @@ interface ArrowProps extends Omit<React.ComponentProps<typeof Flex>, "children" 
   scale?: number;
   /** Drawn for a background (`onBackground`, the default) or on a solid fill. */
   color?: "onBackground" | "onSolid";
+  /** `"span"` inside phrasing content, such as a Tag in a sentence. Defaults to `"div"`. */
+  as?: "div" | "span";
 }
 
 /**
@@ -34,6 +36,7 @@ const Arrow = ({
   className,
   translateX,
   translateY,
+  as,
   ...flex
 }: ArrowProps) => {
   const node = useRef<HTMLDivElement | null>(null);
@@ -66,6 +69,7 @@ const Arrow = ({
   return (
     <Flex
       ref={setRef}
+      as={as}
       center
       aria-hidden="true"
       className={classNames(styles.arrowContainer, className)}
@@ -78,12 +82,15 @@ const Arrow = ({
       {...flex}
     >
       <Flex
+        // Inside a span (a Tag in a sentence) the heads are spans too.
+        as={as === "span" ? "span" : undefined}
         radius="full"
         position="absolute"
         className={classNames(styles.arrowHead, styles[color])}
         height="0.0875rem"
       />
       <Flex
+        as={as === "span" ? "span" : undefined}
         radius="full"
         position="absolute"
         className={classNames(styles.arrowHead, styles[color])}

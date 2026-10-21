@@ -40,6 +40,7 @@ export * from "./Line.js";
 export * from "./List.js";
 export * from "./ListItem.js";
 export * from "./Logo.js";
+export * from "./LogoSpinner.js";
 export * from "./Mask.js";
 export * from "./Media.js";
 export * from "./Nav.js";

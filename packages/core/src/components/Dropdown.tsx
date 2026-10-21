@@ -1031,9 +1031,17 @@ const DropdownMenu = ({
                         if (React.isValidElement(child)) {
                           // Only add onClick handler to elements that have data-value or are interactive
                           const childElement = child as React.ReactElement<any>;
+                          // A `value` prop alone does not make a child an
+                          // option: Option is matched by type. Reading any
+                          // `value` as one caught a DatePicker (its `value`
+                          // is the date), replaced its own click handler
+                          // with "pick and close", and so every click in the
+                          // time panel that was not a day (the hour and
+                          // minute chevrons, AM/PM, back to calendar)
+                          // closed the dropdown.
                           const hasDataValue =
                             childElement.props["data-value"] ||
-                            childElement.props.value ||
+                            childElement.type === Option ||
                             childElement.type === "button" ||
                             childElement.props.role === "option";
 

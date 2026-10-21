@@ -145,6 +145,34 @@ The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSee
 
 `ThemeInit` generates the scheme on the server and renders it into a `<style>` next to its script, so the page paints with the custom brand colour from the first frame. `ThemeProvider` applies the same values on the client, which is what lets a seed change at runtime, for example in an editor previewing a colour. A seed that cannot be parsed is ignored, and the scheme keeps its default rather than pointing at nothing.
 
+A ramp tuned for a light page often reads wrong on a dark one. Give a scale per theme as `{ light: { … }, dark: { … } }`; a theme you leave out uses the other's, and a seed still fills missing steps. `ThemeInit` renders both, keyed off `data-theme`, so the first paint is right in either theme and a `theme="dark"` section on a light page gets the dark ramp.
+
+The page background and the filled surface (cards, menus, dialogs) take a token or any CSS colour through `pageBackground` and `surfaceBackground`, once for both themes or `{ light, dark }`. A theme you leave out keeps the default: in light mode an off-white page under white surfaces.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  isCollapsible={false}
+  lineNumbers
+  codes={[
+    {
+      code:
+`export const { style } = defineConfig({
+  style: {
+    accentScale: {
+      light: { 100: "#0B1A00", 600: "#4E7A00", 1200: "#F6FBEA" },
+      dark: { 100: "#101A04", 600: "#B8F23A", 1200: "#F4FFE0" },
+    },
+    pageBackground: { light: "#F7F5EF" },
+    surfaceBackground: { light: "#FFFDF8", dark: "neutral-background-strong" },
+  },
+});`,
+      language: "tsx",
+      label: "once-ui.config.ts"
+    }
+  ]}
+/>
+
 To hand-pick every step instead, set the scheme to `custom` and supply the `--scheme-*` variables yourself. You can generate palettes using the [Once UI customize page](https://once-ui.com/customize).
 
 <CodeBlock
@@ -399,6 +427,11 @@ and `remove` may return a promise; nothing waits on them.
     ["brandSeed", "string", "-", "A colour to generate the brand scheme from. Implies brand=\"custom\" when brand is not set."],
     ["accentSeed", "string", "-", "As brandSeed, for the accent scheme."],
     ["neutralSeed", "string", "-", "As brandSeed, for the neutral scheme."],
+    ["brandScale", "ThemedSchemeScale", "-", "The brand scheme's steps, once or { light, dark }. Implies brand=\"custom\" when brand is not set."],
+    ["accentScale", "ThemedSchemeScale", "-", "As brandScale, for the accent scheme."],
+    ["neutralScale", "ThemedSchemeScale", "-", "As brandScale, for the neutral scheme."],
+    ["pageBackground", "ThemeColor", "-", "The page background: a token or CSS colour, once or { light, dark }."],
+    ["surfaceBackground", "ThemeColor", "-", "The filled surface's background, as pageBackground."],
     ["persistence", "\"local\" | \"none\" | StylePersistenceAdapter", "\"local\""],
   ]}
 />

@@ -1,0 +1,38 @@
+{
+ "name": "Reaction",
+ "group": "modules",
+ "props": {
+  "value": "!string",
+  "label": "string",
+  "emoji": "string",
+  "src": "string",
+  "motion": "ReactionMotion",
+  "size": "\"s\" | \"m\" | \"l\" | \"xl\" = m",
+  "trigger": "\"hover\" | \"loop\" | \"manual\" = hover",
+  "playKey": "number | string",
+  "decorative": "boolean = false",
+  "children": "React.ReactNode"
+ },
+ "tags": [
+  "social",
+  "effect"
+ ],
+ "pairsWith": [
+  "Reactions"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "ReactionMotion": [
+   "pop",
+   "none",
+   "beat",
+   "nod",
+   "shake",
+   "droop",
+   "flicker",
+   "spin",
+   "wave",
+   "bounce"
+  ]
+ }
+}

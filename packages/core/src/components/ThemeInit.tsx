@@ -1,15 +1,15 @@
 import type React from "react";
 import type { OnceUIStyleConfig } from "../contexts/ThemeProvider.js";
 import type { ChartMode } from "../modules/data/interfaces.js";
-import {
-  type CustomScheme,
-  type CustomSchemeScales,
-  type CustomSchemeSeeds,
-  customSchemeProperties,
-  type SchemeScale,
+import type {
+  CustomScheme,
+  CustomSchemeSeeds,
+  CustomSchemeThemedScales,
+  ThemedSchemeScale,
 } from "../utils/colorScheme.js";
 import { DENSITIES, densityScaling } from "../utils/density.js";
 import { safeScriptJson } from "../utils/safe-html.js";
+import { type ThemeColor, themeCssValue, themeStyle } from "../utils/themeCss.js";
 
 /**
  * The shape `ThemeInit` took in 2.0: attribute names rather than the config's
@@ -63,6 +63,9 @@ const SCALE_KEYS: Record<string, CustomScheme> = {
 /** Keys the script reads itself instead of copying onto `<html>`. */
 const SCRIPT_KEYS = new Set(["defaultTheme"]);
 
+/** Keys that become stylesheet rules rather than attributes. */
+const STYLE_KEYS = new Set(["pageBackground", "surfaceBackground"]);
+
 /**
  * The attributes the inline script writes, keyed without the `data-` prefix.
  * Resolved here, on the server, so the script stays a dumb copy loop.
@@ -70,20 +73,19 @@ const SCRIPT_KEYS = new Set(["defaultTheme"]);
 function themeInitAttributes(
   config: ThemeInitConfig,
   dataStyle: ThemeInitProps["dataStyle"],
-  schemeProperties: Record<string, string>,
+  schemes: CustomScheme[],
 ): Record<string, string> {
   const attributes: Record<string, string> = {};
   for (const [key, value] of Object.entries(config)) {
     if (value === undefined || value === null || value === "") continue;
-    if (key in SEED_KEYS || key in SCALE_KEYS || SCRIPT_KEYS.has(key)) continue;
+    if (key in SEED_KEYS || key in SCALE_KEYS || SCRIPT_KEYS.has(key) || STYLE_KEYS.has(key))
+      continue;
     attributes[toKebab(key)] = String(value);
   }
   // A seed or scale implies "custom" when the scheme is not named, as on
   // ThemeProvider — and only one that produced a scheme.
-  for (const scheme of Object.values(SEED_KEYS)) {
-    if (!attributes[scheme] && schemeProperties[`--scheme-${scheme}-600`]) {
-      attributes[scheme] = "custom";
-    }
+  for (const scheme of schemes) {
+    if (!attributes[scheme]) attributes[scheme] = "custom";
   }
   if (dataStyle?.mode) attributes["viz-style"] = dataStyle.mode;
   return attributes;
@@ -108,19 +110,26 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   }
   // Generated here, on the server, so a custom scheme is in the document
   // before anything paints: no flash of a page with no brand colour.
-  const scales: CustomSchemeScales = {};
+  const scales: CustomSchemeThemedScales = {};
   for (const [key, scheme] of Object.entries(SCALE_KEYS)) {
     const scale = (config as Record<string, unknown>)[key];
-    if (scale && typeof scale === "object") scales[scheme] = scale as SchemeScale;
+    if (scale && typeof scale === "object") scales[scheme] = scale as ThemedSchemeScale;
   }
-  const schemeProperties = customSchemeProperties(seeds, scales);
+  const { pageBackground, surfaceBackground } = config as {
+    pageBackground?: ThemeColor;
+    surfaceBackground?: ThemeColor;
+  };
+  // A scale per theme and the backgrounds become rules keyed off
+  // `data-theme`, which the script below sets before anything paints.
+  const { root, css, schemes } = themeStyle({ seeds, scales, pageBackground, surfaceBackground });
   const defaultTheme = (config as Record<string, unknown>).defaultTheme;
-  const attributes = themeInitAttributes(config, dataStyle, schemeProperties);
+  const attributes = themeInitAttributes(config, dataStyle, schemes);
   const densityScales = derivedScaling(attributes);
   if (densityScales) attributes.scaling = densityScales[attributes.density];
-  const schemeCss = Object.entries(schemeProperties)
-    .map(([property, value]) => `${property}:${value};`)
+  const rootCss = Object.entries(root)
+    .map(([property, value]) => (themeCssValue(value) ? `${property}:${value.trim()};` : ""))
     .join("");
+  const schemeCss = (rootCss ? `html:root{${rootCss}}` : "") + css;
 
   const script = (
     <script
@@ -197,8 +206,8 @@ export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
         // `html:root` rather than `:root`: a seed is the page's own choice, so
         // it outranks a static custom palette declared on a plain `:root`
         // (an app's own brand scheme) whatever order the stylesheets load in.
-        // biome-ignore lint/security/noDangerouslySetInnerHtml: generated oklch() values only; the seed itself never reaches the CSS
-        dangerouslySetInnerHTML={{ __html: `html:root{${schemeCss}}` }}
+        // biome-ignore lint/security/noDangerouslySetInnerHtml: generated oklch() values, and config colours themeCssValue has checked for anything that could end a declaration
+        dangerouslySetInnerHTML={{ __html: schemeCss }}
       />
       {script}
     </>

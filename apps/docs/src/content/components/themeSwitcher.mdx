@@ -32,6 +32,22 @@ Use `ThemeSwitcher` to provide users with a quick way to toggle between themes. 
   assistive technology with `aria-pressed`.
 - Automatically updates the global theme via `useTheme().setTheme`.
 - Renders a row of three icons: `system`, `dark`, `light`.
+- In a settings form, `semantics="radio"` makes it a `radiogroup` instead: one
+  tab stop on the active theme, and the arrow keys move and choose. Name it
+  with `aria-label`, as StylePanel's Theme row does with its label.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ThemeSwitcher semantics="radio" aria-label="Theme" />}
+  codes={[
+    {
+      code: `<ThemeSwitcher semantics="radio" aria-label="Theme" />`,
+      language: "tsx",
+      label: "Radio group"
+    }
+  ]}
+/>
 
 ## Collapsed
 
@@ -141,6 +157,7 @@ A [StylePanel](/components/stylePanel#owning-the-state) with `value` and
   component="ThemeSwitcher"
   describe={{
     labels: "The options' accessible names, to translate them.",
+    semantics: "`toggle` (toggle buttons, the default) or `radio` (a radio group with one tab stop).",
     value: "The active theme, when you own the state. The switcher then sets nothing.",
     onValueChange: "Called with the chosen theme.",
   }}

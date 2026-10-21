@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -24,6 +25,8 @@ import { KbdCap } from "../../internal/KbdCap.js";
 import { useControllableState } from "../../internal/useControllableState.js";
 import type { TShirtSizes } from "../../types.js";
 import styles from "./Kbar.module.scss";
+
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export interface KbarItem {
   id: string;
@@ -317,8 +320,10 @@ export const KbarContent = ({
   }, [open]);
 
   // Hand focus back to whatever had it before the palette opened — usually
-  // its trigger — when it closes or unmounts.
-  useEffect(() => {
+  // its trigger — when it closes or unmounts. A layout effect runs before the
+  // palette leaves the DOM; a passive one ran after, so focus sat on <body> in
+  // between and a slow machine could see it there.
+  useIsomorphicLayoutEffect(() => {
     if (!open) return;
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     return () => {

@@ -101,7 +101,8 @@ describe("G1: as is typed by the element", () => {
     >();
     expectTypeOf<ComponentProps<typeof Column>>().toHaveProperty("onClick");
     expectTypeOf<ComponentProps<typeof Column>>().not.toHaveProperty("as");
-    expectTypeOf<CardLike>().not.toHaveProperty("as");
+    // Tag's one `as` is typed: `"span"` puts it in a sentence (2.4, #252).
+    expectTypeOf<CardLike["as"]>().toEqualTypeOf<"div" | "span" | undefined>();
     // Text-based components were `any` before: they now have real props.
     expectTypeOf<ComponentProps<typeof Text>>().not.toBeAny();
     expectTypeOf<ComponentProps<typeof Heading>>().toHaveProperty("textVariant");
@@ -206,7 +207,7 @@ describe("G3: values agents reach for", () => {
     expect(charts).toBeTruthy();
     // The component infers the row type from `data`.
     type LineProps = Parameters<typeof LineChart<RevenueRow>>[0];
-    expectTypeOf<LineProps["data"]>().toEqualTypeOf<RevenueRow[]>();
+    expectTypeOf<LineProps["data"]>().toEqualTypeOf<readonly RevenueRow[]>();
     // With no row type, the default index-signature row still works.
     const loose: BarChartProps = { data: [{ label: "a", x: 1 }], series: { key: "x" } };
     expect(loose).toBeTruthy();

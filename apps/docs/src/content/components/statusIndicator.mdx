@@ -90,6 +90,36 @@ Supports full Once UI palette for flexibility.
   ]}
 />
 
+## Theme roles
+
+`tone` takes a theme role (`brand`, `accent`, `neutral`, `info`, `danger`, `warning`, `success`) and follows the colour the theme assigns it, so `danger` stays the app's danger colour. `scheme` takes a fixed palette colour; `rose`, `mint`, `dusk`, `sand` and `slate` are there as well.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="12" vertical="center">
+      <StatusIndicator tone="success" aria-label="Online" />
+      <StatusIndicator tone="warning" aria-label="Degraded" />
+      <StatusIndicator tone="danger" aria-label="Down" />
+      <StatusIndicator tone="brand" aria-label="Syncing" />
+      <StatusIndicator scheme="sand" aria-label="Archived" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<StatusIndicator tone="success" aria-label="Online" />
+<StatusIndicator tone="warning" aria-label="Degraded" />
+<StatusIndicator tone="danger" aria-label="Down" />
+<StatusIndicator tone="brand" aria-label="Syncing" />
+<StatusIndicator scheme="sand" aria-label="Archived" />`,
+      language: "tsx",
+      label: "Roles"
+    }
+  ]}
+/>
+
 ## Pulse
 
 With `pulse`, the dot sits in a ring that keeps pulsing outward, to draw the eye to something live (2.x's `Pulse`). A pulsing dot takes its palette from `tone` (default `"brand"`) rather than `scheme`, and `pulseSize` overrides the ring's size. It is decorative unless you give it an `aria-label`, which makes it an image like the plain dot.
@@ -204,7 +234,7 @@ Customize the pulse ring dimensions with the `pulseSize` prop, accepting a numbe
     pulse: "Pulse a ring out from the dot. Decorative unless aria-label is set.",
     tone: "The pulsing dot's palette. Only with pulse; the plain dot takes scheme.",
     pulseSize: "How far the ring travels, overriding the size's default. Only with pulse.",
-    scheme: "The palette hue of the dot (2.x called it color).",
+    scheme: "The dot's colour: a palette name, or a theme role such as danger or brand (2.x called it color).",
     size: "Dot size.",
   }}
   content={[

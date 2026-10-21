@@ -14,7 +14,8 @@
   "onValueChange": "(theme: Theme) => void",
   "collapsed": "boolean",
   "direction": "\"row\" | \"column\" = row",
-  "labels": "ThemeSwitcherLabels"
+  "labels": "ThemeSwitcherLabels",
+  "semantics": "\"toggle\" | \"radio\" = toggle"
  },
  "tags": [
   "navigation",

@@ -10,7 +10,8 @@
  "props": {
   "value": "string[]",
   "defaultValue": "readonly string[]",
-  "onValueChange": "(value: string[]) => void"
+  "onValueChange": "(value: string[]) => void",
+  "labels": "TagInputLabels"
  },
  "tags": [
   "form"
@@ -41,6 +42,12 @@
    "left": "SpacingToken | number | CSSUnit",
    "className": "string",
    "style": "CSSProperties"
+  }
+ },
+ "types": {
+  "TagInputLabels": {
+   "remove": "(tag: string) => string",
+   "removed": "(tag: string) => string"
   }
  }
 }

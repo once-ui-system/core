@@ -54,6 +54,26 @@ describe("Avatar: accessible name", () => {
     ).toBeInTheDocument();
     await expectNoAxeViolations(container);
   });
+
+  // The status dot is a StatusIndicator; its colour type named only four of
+  // the StatusIndicator's, so "orange" failed strict tsc (2.1.0 claim run).
+  it("takes any StatusIndicator hue, and draws that hue's dot", async () => {
+    const { container } = render(<Avatar value="LT" statusIndicator={{ scheme: "orange" }} />, {
+      wrapper,
+    });
+    expect(
+      screen.getByRole("img", { name: "Avatar with initials LT, status: orange" }),
+    ).toBeInTheDocument();
+    expect(container.querySelector('[class*="orange"]')).not.toBeNull();
+    await expectNoAxeViolations(container);
+  });
+
+  it("takes a theme role as tone", () => {
+    render(<Avatar value="LT" statusIndicator={{ tone: "success" }} />, { wrapper });
+    expect(
+      screen.getByRole("img", { name: "Avatar with initials LT, status: success" }),
+    ).toBeInTheDocument();
+  });
 });
 
 describe("Avatar: states and sizes", () => {

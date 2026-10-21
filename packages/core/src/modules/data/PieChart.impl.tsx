@@ -37,7 +37,7 @@ export interface PieChartProps<T extends object = DataPoint> extends ChartProps<
 const PieChart = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -55,6 +55,8 @@ const PieChart = ({
   "data-viz-style": dataViz,
   ...flex
 }: PieChartProps) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const [rc, setRc] = useState<any>(null);

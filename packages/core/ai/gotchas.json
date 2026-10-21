@@ -51,7 +51,7 @@
     "components": ["LogoCloud"]
   },
   "StatusIndicator.scheme": {
-    "rule": "StatusIndicator takes scheme=\"green\" | \"red\" | \"orange\" | \"gray\" etc., a palette hue — not a tone (brand, danger…) and not color, its 2.x name. Avatar's statusIndicator is { scheme }.",
+    "rule": "StatusIndicator takes scheme=\"green\" | \"red\" | \"orange\" | \"sand\" etc., a fixed palette hue, or tone=\"success\" | \"danger\" | \"brand\" etc., a theme role that follows the theme; not color, its 2.x name, and not variant. Avatar's statusIndicator is { scheme } or { tone }.",
     "components": ["StatusIndicator"]
   },
   "Icon.names": {
@@ -156,6 +156,14 @@
     "rule": "A logo that changes with the theme is one Logo with a source per theme: <Logo wordmark={{ light: \"/logo-light.svg\", dark: \"/logo-dark.svg\" }} /> (icon takes the same pair). Do not render two Logos with showIn=\"dark\" and showIn=\"light\": twice the elements, two places to keep in sync, and a hidden link in the focus order. Keep showIn for a logo that should only appear in one theme.",
     "inRules": true,
     "components": ["Logo"]
+  },
+  "Logo.text": {
+    "rule": "wordmark is an image source. For a name set in type, use <Logo icon=\"/mark.svg\" text=\"Acme\" />.",
+    "components": ["Logo"]
+  },
+  "Tag.inline": {
+    "rule": "Tag is a div by default; inside a sentence (<Text as=\"p\">, <p>) give it as=\"span\".",
+    "components": ["Tag"]
   },
   "border.default": {
     "rule": "Bare border (and borderTop, borderBottom, borderX, …) draws the default border: --default-border, neutral-alpha-weak unless the app sets it in its custom CSS. Do not write border=\"neutral-alpha-weak\" to get it, which pins the colour; name a colour only to deviate, e.g. border=\"neutral-alpha-medium\" or border=\"brand-alpha-medium\".",

@@ -161,4 +161,36 @@ describe("SegmentedControl: interaction", () => {
     expect(onChange).toHaveBeenCalledWith("grid", expect.anything());
     expect(tab("Grid")).toHaveAttribute("aria-selected", "true");
   });
+
+  it("as a radio group, is one Tab stop and the arrows move and select", async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    const { container } = render(
+      <SegmentedControl
+        semantics="radio"
+        aria-label="Density"
+        buttons={views}
+        defaultValue="grid"
+        onValueChange={onChange}
+      />,
+      { wrapper: wrap },
+    );
+    const group = screen.getByRole("radiogroup", { name: "Density" });
+    expect(screen.queryByRole("tablist")).toBeNull();
+    const radio = (name: string) => screen.getByRole("radio", { name });
+    expect(radio("Grid")).toHaveAttribute("aria-checked", "true");
+    expect(radio("Grid")).not.toHaveAttribute("aria-selected");
+    expect(radio("List")).toHaveAttribute("tabindex", "-1");
+    await user.tab();
+    expect(radio("Grid")).toHaveFocus();
+    await user.keyboard("{ArrowRight}");
+    expect(radio("Board")).toHaveFocus();
+    expect(radio("Board")).toHaveAttribute("aria-checked", "true");
+    expect(onChange).toHaveBeenLastCalledWith("board");
+    await user.keyboard("{ArrowRight}");
+    expect(radio("List")).toHaveFocus();
+    expect(onChange).toHaveBeenLastCalledWith("list");
+    expect(group).toContainElement(radio("List"));
+    await expectNoAxeViolations(container);
+  });
 });

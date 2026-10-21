@@ -1,14 +1,14 @@
 import React from "react";
 import { IconName } from "../icons.js";
 import type { LeafPropsOf } from "../interfaces.js";
-import { CondensedTShirtSizes, CSSUnit, TShirtSizes } from "../types.js";
+import { CondensedTShirtSizes, CSSUnit, Tone, TShirtSizes } from "../types.js";
 import { isCSSUnit, tokenLength, withTokenLengths } from "../utils/layoutClasses.js";
 import styles from "./Avatar.module.scss";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { Media } from "./Media.js";
 import { Skeleton } from "./Skeleton.js";
-import { StatusIndicator } from "./StatusIndicator.js";
+import { StatusIndicator, type StatusIndicatorScheme } from "./StatusIndicator.js";
 import { Text } from "./Text.js";
 
 interface AvatarProps extends LeafPropsOf<"div"> {
@@ -22,10 +22,15 @@ interface AvatarProps extends LeafPropsOf<"div"> {
   loading?: boolean;
   empty?: boolean;
   icon?: IconName;
-  /** A status dot; `scheme` is its palette hue (2.x called it `color`). */
-  statusIndicator?: {
-    scheme: "green" | "yellow" | "red" | "gray";
-  };
+  /**
+   * A status dot on the avatar, as StatusIndicator draws it: `scheme` is a
+   * palette hue (2.x called it `color`), `tone` a theme role such as
+   * `"success"` that follows the theme. Every hue StatusIndicator takes works,
+   * so `"orange"` for "away" is no longer a type error.
+   */
+  statusIndicator?:
+    | { scheme: StatusIndicatorScheme; tone?: undefined }
+    | { tone: Tone; scheme?: undefined };
 }
 
 const sizeMapping: Record<TShirtSizes, number> = {
@@ -161,7 +166,8 @@ const Avatar = ({
   // role="img" makes everything inside presentational, so the name the
   // children used to carry lives on the wrapper (axe: role-img-alt).
   const baseLabel = value ? `Avatar with initials ${value}` : isEmpty ? "Empty avatar" : "Avatar";
-  const label = statusIndicator ? `${baseLabel}, status: ${statusIndicator.scheme}` : baseLabel;
+  const status = statusIndicator && (statusIndicator.tone ?? statusIndicator.scheme);
+  const label = status ? `${baseLabel}, status: ${status}` : baseLabel;
 
   return (
     <Flex
@@ -183,8 +189,9 @@ const Avatar = ({
           position="absolute"
           size={scale ? statusIndicatorSizeMapping[scale] : "l"}
           scheme={statusIndicator.scheme}
+          tone={statusIndicator.tone}
           className={`${styles.className || ""} ${styles.indicator} ${size === "xl" || approxPx(size) >= 160 ? styles.position : ""}`}
-          aria-label={`Status: ${statusIndicator.scheme}`}
+          aria-label={`Status: ${status}`}
         />
       )}
     </Flex>
