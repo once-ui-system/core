@@ -15,6 +15,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
+  preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
+  takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
+  border, surface, theme, seeds, scales, page and surface backgrounds) and `fonts` a family
+  per role. A seed or scale becomes a custom scheme for that subtree only, in a server-
+  rendered `<style>`, so two scopes with different brands sit side by side and the first
+  paint is right. Recolouring a nested brand, accent, neutral or solid relies on the
+  nested-token fix (#282).
 - **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
   every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
   fields and the blocked sign over disabled controls. The browser draws them from the
