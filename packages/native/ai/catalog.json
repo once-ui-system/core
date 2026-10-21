@@ -43,6 +43,7 @@
   "List": {"purpose":"A column of `ListItem`s with bullets, or numbers when `as=\"ol\"`."},
   "ListItem": {"purpose":"One line of a `List`, its marker in `neutral-on-background-weak`."},
   "LogoSpinner": {"purpose":"The four tiles of the Once UI mark, moving."},
+  "Markdown": {"purpose":"Markdown rendered with Once UI, as core's MDX components render it on the web: headings, body text, links, inline code, `CodeBlock`, `BlockQuote` style quotes, `List`, `Table`, `Media` and `Line`."},
   "Mascot": {"purpose":"An animated companion for an assistant, one soft, single-color shape with eyes."},
   "Media": {"purpose":"A clipped box at `aspectRatio` with a skeleton until the image loads."},
   "Nav": {"purpose":"Core's `Nav`."},
