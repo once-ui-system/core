@@ -18,6 +18,9 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`@once-ui-system/foundations` is published** (3.0.0-beta.0 on `next`):
+  the design tokens, utility CSS, SCSS sources and `tokens.json` for stacks
+  without React. Core still inlines them, so a core app installs nothing new.
 - **`vertical="baseline"`** on Flex, Row and Column, and **`"auto"` margins**
   (`marginLeft="auto"`, `marginX="auto"`, also in breakpoint objects), as classes.
 - **`error`, `errorMessage` and `size`** on Checkbox, Switch, RadioButton and
