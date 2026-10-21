@@ -111,8 +111,7 @@
     },
     "./map": {
       "types": "./dist/modules/map/index.d.ts",
-      "import": "./dist/modules/map/index.js",
-      "require": "./dist/modules/map/index.js"
+      "default": "./dist/modules/map/index.js"
     },
     "./mdx": {
       "types": "./dist/modules/mdx/index.d.ts",

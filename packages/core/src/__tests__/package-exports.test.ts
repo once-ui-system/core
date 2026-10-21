@@ -94,6 +94,7 @@ describe("the 3.0 exports map", () => {
       "./code",
       "./emoji",
       "./media",
+      "./map",
       "./mdx",
       "./package.json",
     ]);
