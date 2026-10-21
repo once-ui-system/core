@@ -2029,26 +2029,9 @@
         "accent-border-weak": "{function-accent-200}",
         "accent-alpha-strong": "{function-accent-600-50}",
         "accent-alpha-medium": "{function-accent-600-30}",
-        "accent-alpha-weak": "{function-accent-600-15}"
-      }
-    },
-    {
-      "when": {
-        "theme": "dark"
-      },
-      "tokens": {
+        "accent-alpha-weak": "{function-accent-600-15}",
         "page-background": "{neutral-background-weak}",
-        "backdrop": "{static-black-medium}",
-        "solid-border-color-brand": "{brand-alpha-strong}",
         "solid-border-color-neutral": "{neutral-alpha-strong}",
-        "solid-border-color-danger": "{danger-alpha-strong}",
-        "code-moss": "{scheme-moss-800}",
-        "code-gray": "{scheme-gray-800}",
-        "code-aqua": "{scheme-aqua-800}",
-        "code-green": "{scheme-green-800}",
-        "code-blue": "{scheme-blue-800}",
-        "code-violet": "{scheme-violet-800}",
-        "code-orange": "{scheme-orange-800}",
         "neutral-background-strong": "{function-neutral-300}",
         "neutral-background-medium": "{function-neutral-200}",
         "neutral-background-weak": "{function-neutral-100}",
@@ -2066,7 +2049,24 @@
         "neutral-border-weak": "{function-neutral-200}",
         "neutral-alpha-strong": "{function-neutral-600-50}",
         "neutral-alpha-medium": "{function-neutral-600-30}",
-        "neutral-alpha-weak": "{function-neutral-600-15}",
+        "neutral-alpha-weak": "{function-neutral-600-15}"
+      }
+    },
+    {
+      "when": {
+        "theme": "dark"
+      },
+      "tokens": {
+        "backdrop": "{static-black-medium}",
+        "solid-border-color-brand": "{brand-alpha-strong}",
+        "solid-border-color-danger": "{danger-alpha-strong}",
+        "code-moss": "{scheme-moss-800}",
+        "code-gray": "{scheme-gray-800}",
+        "code-aqua": "{scheme-aqua-800}",
+        "code-green": "{scheme-green-800}",
+        "code-blue": "{scheme-blue-800}",
+        "code-violet": "{scheme-violet-800}",
+        "code-orange": "{scheme-orange-800}",
         "info-background-strong": "{function-info-300}",
         "info-background-medium": "{function-info-200}",
         "info-background-weak": "{function-info-100}",
@@ -2178,26 +2178,9 @@
         "accent-border-weak": "{function-accent-1000}",
         "accent-alpha-strong": "{function-accent-600-50}",
         "accent-alpha-medium": "{function-accent-600-30}",
-        "accent-alpha-weak": "{function-accent-600-15}"
-      }
-    },
-    {
-      "when": {
-        "theme": "light"
-      },
-      "tokens": {
+        "accent-alpha-weak": "{function-accent-600-15}",
         "page-background": "{function-neutral-1200}",
-        "backdrop": "{static-white-medium}",
-        "solid-border-color-brand": "{brand-alpha-strong}",
         "solid-border-color-neutral": "{neutral-alpha-strong}",
-        "solid-border-color-danger": "{danger-alpha-strong}",
-        "code-moss": "{scheme-moss-500}",
-        "code-gray": "{scheme-gray-500}",
-        "code-aqua": "{scheme-aqua-500}",
-        "code-green": "{scheme-green-500}",
-        "code-blue": "{scheme-blue-500}",
-        "code-violet": "{scheme-violet-500}",
-        "code-orange": "{scheme-orange-500}",
         "neutral-background-strong": "{function-neutral-800}",
         "neutral-background-medium": "{function-neutral-1000}",
         "neutral-background-weak": "{static-white}",
@@ -2215,7 +2198,24 @@
         "neutral-border-weak": "{function-neutral-1000}",
         "neutral-alpha-strong": "{function-neutral-600-50}",
         "neutral-alpha-medium": "{function-neutral-600-30}",
-        "neutral-alpha-weak": "{function-neutral-600-15}",
+        "neutral-alpha-weak": "{function-neutral-600-15}"
+      }
+    },
+    {
+      "when": {
+        "theme": "light"
+      },
+      "tokens": {
+        "backdrop": "{static-white-medium}",
+        "solid-border-color-brand": "{brand-alpha-strong}",
+        "solid-border-color-danger": "{danger-alpha-strong}",
+        "code-moss": "{scheme-moss-500}",
+        "code-gray": "{scheme-gray-500}",
+        "code-aqua": "{scheme-aqua-500}",
+        "code-green": "{scheme-green-500}",
+        "code-blue": "{scheme-blue-500}",
+        "code-violet": "{scheme-violet-500}",
+        "code-orange": "{scheme-orange-500}",
         "info-background-strong": "{function-info-800}",
         "info-background-medium": "{function-info-1000}",
         "info-background-weak": "{static-white}",

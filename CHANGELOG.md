@@ -39,7 +39,8 @@ item (see `ROADMAP.md`, Week 4).
   (`--brand-solid-*`, `--brand-background-*`, `--brand-alpha-*`, the solid border and inset)
   were resolved on `<html>`, so a section with only `data-brand="red"` kept the page's brand
   unless it also set `data-theme`. They now resolve again on every nested `data-brand`, in
-  dark and light and under every `data-solid` style; `data-accent` gets the same.
+  dark and light and under every `data-solid` style. `data-accent` and `data-neutral`
+  get the same (the neutral ramp, `--page-background`, surfaces and contrast solids).
 - **A cursor keyword survives a `style` object.** `Flex`/`Grid` with `style` (or a responsive
   value that needs the client) dropped `cursor="interactive"` and every other keyword, and a
   keyword with a class was also written inline, where nothing could restyle it.

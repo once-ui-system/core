@@ -62,6 +62,7 @@
 [data-neutral="rose"]
 [data-neutral="sand"]
 [data-neutral="slate"]
+[data-neutral]
 [data-scaling="105"]
 [data-scaling="110"]
 [data-scaling="90"]
