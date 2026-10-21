@@ -13,6 +13,29 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **`prefix` on `NavItem`.** Any node before the label, such as an `Avatar` on a link to
+  a person or a team. NavItem left out ToggleButton's `prefixIcon` and had only `icon`, an
+  icon name, so a sidebar of people had to pass a hand-built Row as `label`. The prefix
+  sits where the icon would and is hidden from assistive tech, so the link is still named
+  by its label alone.
+
+- **`optimizePackageImports` in the Next.js setup.** The installation page and the agent
+  app starter (`ai/starters/app/next.config.ts`) now set
+  `experimental.optimizePackageImports: ["@once-ui-system/core"]`. Without it, a server
+  component importing from the package root shipped about 110 kB of extra JavaScript on
+  every route of an app migrated to Once UI.
+
+### Fixed
+
+- **The 2.0 codemod no longer hangs on `https://` in JSX text.** In
+  `<Input prefix={<Text>https://</Text>} />` the scanner read `//` as a line comment and
+  swallowed the closing brace, so the Input was skipped; with a second such element later
+  in the file, attribute scanning stopped advancing and the codemod never finished. The
+  shared scanner helpers now skip JSX children as text (so `//`, `/*` and apostrophes in
+  them open nothing) and stop on a value they cannot read instead of looping on it.
+
 ## [2.4.0] — 2026-10-20
 
 ### Added
