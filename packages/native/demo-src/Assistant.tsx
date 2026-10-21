@@ -33,6 +33,7 @@ export function Assistant() {
   const theme = useTheme();
   const [state, setState] = useState<MascotState>("idle");
   const [level, setLevel] = useState(0);
+  const [working, setWorking] = useState<"flat" | "cube">("flat");
 
   // A stand-in voice so speaking moves with a level, as it would with audio.
   useEffect(() => {
@@ -48,6 +49,7 @@ export function Assistant() {
         <Card padding="20" gap="16" center>
           <Mascot
             size="xl"
+            working={working === "cube" ? "cube" : undefined}
             state={state}
             level={state === "speaking" ? level : undefined}
             mouth="smile"
@@ -61,6 +63,16 @@ export function Assistant() {
               fillWidth={false}
             />
           </Scroller>
+          <SegmentedControl
+            buttons={[
+              { value: "flat", label: "flat" },
+              { value: "cube", label: "cube" },
+            ]}
+            value={working}
+            onValueChange={(value) => setWorking(value as "flat" | "cube")}
+            compact
+            fillWidth={false}
+          />
           <WorkingIndicator showElapsed detail="tap to stop" />
         </Card>
 

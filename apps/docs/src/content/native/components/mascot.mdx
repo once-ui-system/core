@@ -1,7 +1,7 @@
 ---
 title: "Mascot"
 summary: "An animated companion for an assistant that idles, listens, thinks, speaks and sleeps, with a mood on top."
-updatedAt: "2026-10-20"
+updatedAt: "2026-10-21"
 docs: "once-ui/native/components/mascot.mdx"
 github: "packages/native/src/components/Mascot.tsx"
 navLabel: "Mascot"
@@ -100,21 +100,43 @@ export function Characters({ userId }: { userId: string }) {
   }
 ]} />
 
+## Cube while thinking
+
+With `working="cube"`, the mascot turns into the 2 × 2 Once UI cube while `state` is `thinking`: its face fades, the body firms into eight pieces and the layers start turning. When it stops thinking it turns the layers back until the cube is solved, holds the Once UI mark for a beat, hops and softens back into the mascot with a happy face. There is no extra prop or callback: the cube shows only while it thinks.
+
+`sides` colors the cube: `classic` (the default, the front takes `color`), `tints` of `color`, `mono`, or a color per side such as `{ top: "#ffffff", right: "#e8333c" }`. `face="flat"` paints the eyes, brows and mouth on without light, and `surface="flat"` makes every side one flat color. In this mode the mascot starts from the cube's own look: `roundness` 0.75, `aspect` 1.12, `round` eyes, a smile and brows. `bodyPath` and `accessory` are not drawn.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Mascot } from "@once-ui-system/native";
+
+export function Thinking({ busy }: { busy: boolean }) {
+  return <Mascot working="cube" state={busy ? "thinking" : "idle"} sides="tints" size="xl" />;
+}`,
+    language: "tsx",
+    label: "Cube"
+  }
+]} />
+
 ## Accessibility
 
-The mascot is one image. Screen readers hear "Assistant" and the state, such as "Assistant, thinking". Pass `aria-label` to name it after your product. With reduce motion turned on in the device settings, it holds still and keeps its expressions.
+The mascot is one image. Screen readers hear "Assistant" and the state, such as "Assistant, thinking". Pass `aria-label` to name it after your product. With reduce motion turned on in the device settings, it holds still and keeps its expressions. In cube mode the cube does not turn, the morphs are quicker and the logo beat is short.
 
 ## Differences from the web
 
 - There is no pointer on a phone, so `lookAt="pointer"`, the web default, looks ahead. Pass `{ x, y }` from -1 to 1 to make it look somewhere.
 - `source`, an audio element or stream on the web, is not available. Pass `level` from your audio library instead.
 - `accessory` takes react-native-svg elements, such as `Circle` and `Path`, not DOM `<svg>` elements.
+- Core draws `working="cube"` with WebGL. React Native has no WebGL, so here the cube is projected with the same camera and drawn with react-native-svg: each piece's faces facing the camera are filled with their side's color, shaded by the way they face, and drawn far to near. The blob end of the morph is this mascot's own body, which fades into the pieces as they firm up. There is no flat fallback, since nothing is missing.
 - The animations are computed in JavaScript each frame and drawn with react-native-svg, so keep the number of mascots on one screen small.
 
 ## API reference
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
+| `working` | `"cube"` | | Turns it into the Once UI cube while it thinks, then solves it and softens back. |
 | `state` | `"idle" \| "listening" \| "thinking" \| "speaking" \| "sleeping"` | `"idle"` | What the assistant is doing. |
 | `mood` | `"neutral" \| "happy" \| "surprised" \| "sad" \| "skeptical" \| "wink" \| "focused" \| "determined"` | `"neutral"` | The expression on top of the state. |
 | `seed` | `string \| number` | | Picks a whole look. Props you pass win over it. |
@@ -132,6 +154,8 @@ The mascot is one image. Screen readers hear "Assistant" and the state, such as 
 | `brows` | `boolean` | `false` | Brows that follow the mood. |
 | `cheeks` | `boolean` | `false` | Blushed cheeks. |
 | `personality` | `"calm" \| "default" \| "bouncy"` | `"default"` | How it moves. |
+| `sides` | `"classic" \| "tints" \| "mono" \| Partial<Record<"top" \| "front" \| "right" \| "bottom" \| "back" \| "left", string>>` | `"classic"` | With `working="cube"`, the cube's sides. The front follows `color` unless you set it. |
+| `face` | `"3d" \| "flat"` | `"3d"` | With `working="cube"`, `flat` paints the features on without light. |
 | `accessory` | `ReactNode` | | react-native-svg elements drawn with the body. |
 | `lookAt` | `"pointer" \| "center" \| { x: number; y: number }` | `"pointer"` | Where the eyes look. `pointer` looks ahead on a phone. |
 | `level` | `number` | | Loudness from 0 to 1 while speaking. |

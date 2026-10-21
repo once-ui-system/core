@@ -11,6 +11,7 @@
   "ViewProps"
  ],
  "props": {
+  "working": "\"cube\"",
   "state": "MascotState = \"idle\"",
   "mood": "MascotMood = \"neutral\"",
   "seed": "string | number",
@@ -95,7 +96,9 @@
    "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
    "brows": "boolean",
    "cheeks": "boolean",
-   "personality": "\"calm\" | \"default\" | \"bouncy\""
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
   },
   "SpacingProps": {
    "padding": "SpacingValue",

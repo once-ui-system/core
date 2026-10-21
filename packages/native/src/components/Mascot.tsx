@@ -1,20 +1,12 @@
 import { type ReactNode, useEffect, useId, useRef } from "react";
 import { View } from "react-native";
-import Svg, {
-  ClipPath,
-  Defs,
-  Ellipse,
-  G,
-  LinearGradient,
-  Path,
-  RadialGradient,
-  Rect,
-  Stop,
-  Text as SvgText,
-} from "react-native-svg";
+import Svg, { ClipPath, Defs, Ellipse, G, Path, Rect, Text as SvgText } from "react-native-svg";
 import { mixColors, toHex } from "../theme/colorScheme";
 import { useTheme } from "../theme/ThemeProvider";
 import { type FlexProps, flexStyle } from "./Flex";
+import { MascotCube } from "./MascotCube";
+import { BodyDefs, BodyLayers, bodyShape } from "./mascot/body";
+import { mascotLook, SCHEMES, SIZE, STATE_LABEL } from "./mascot/look";
 import {
   clonePose,
   easePose,
@@ -26,6 +18,8 @@ import {
 } from "./mascot/pose";
 import { useFrameTime, useReduceMotion } from "./motion";
 
+export { bodyShape } from "./mascot/body";
+export { mascotLook } from "./mascot/look";
 export type { MascotMood, MascotState } from "./mascot/pose";
 
 /** Everything that makes one character look different from another. */
@@ -60,9 +54,27 @@ export interface MascotLook {
   cheeks?: boolean;
   /** How it moves: `calm` is slow and small, `bouncy` is quick and springy. */
   personality?: "calm" | "default" | "bouncy";
+  /**
+   * With `working="cube"`: the cube's sides. `classic` (default), `tints` of the color, `mono`,
+   * or a color per side. The front follows `color` unless you set it.
+   */
+  sides?:
+    | "classic"
+    | "tints"
+    | "mono"
+    | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>;
+  /** With `working="cube"`: `flat` paints the eyes, brows and mouth on without light. */
+  face?: "3d" | "flat";
 }
 
 export interface MascotProps extends MascotLook, Omit<FlexProps, "children"> {
+  /**
+   * `cube`: while it thinks the mascot turns into a 2 × 2 cube, the Once UI mark, and solves it
+   * with no face showing. When it stops thinking the cube clicks into place, shows the logo for a
+   * beat and softens back into the mascot. Drawn with react-native-svg, as core draws it with
+   * WebGL; `bodyPath` and `accessory` are not drawn in this mode.
+   */
+  working?: "cube";
   /** What the assistant is doing. Each state has its own pose and motion. */
   state?: MascotState;
   /** The expression on top of the state. */
@@ -83,10 +95,7 @@ export interface MascotProps extends MascotLook, Omit<FlexProps, "children"> {
   "aria-label"?: string;
 }
 
-const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
-const SCHEMES = new Set(["brand", "accent", "neutral"]);
-
-const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor">> = {
+const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> = {
   color: "brand",
   roundness: 0.7,
   aspect: 1,
@@ -99,14 +108,6 @@ const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor">> = {
   brows: false,
   cheeks: false,
   personality: "default",
-};
-
-const STATE_LABEL: Record<MascotState, string> = {
-  idle: "Assistant",
-  listening: "Assistant, listening",
-  thinking: "Assistant, thinking",
-  speaking: "Assistant, speaking",
-  sleeping: "Assistant, asleep",
 };
 
 /* The top tile of the Once UI mark (590 box), centered on 0,0 below. */
@@ -123,72 +124,8 @@ const EYE_BOX = {
   custom: { w: 40, h: 40 },
 } as const;
 
-/** How much of each layer shows, per surface (Mascot.module.scss). */
-const SURFACE = {
-  glossy: { light: 1, shade: 1, rim: 1, spec: 0.32 },
-  matte: { light: 0.45, shade: 1, rim: 0, spec: 0 },
-  flat: { light: 0, shade: 0, rim: 0, spec: 0 },
-  glass: { light: 1, shade: 0.5, rim: 1, spec: 0.6 },
-} as const;
-
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 const n = (value: number) => Number(value.toFixed(2));
-
-/** A superellipse around (100, 104): exponent 2 is a circle, higher is squarer. */
-export function bodyShape(roundness: number, aspect: number) {
-  const exponent = 2 + (1 - clamp(roundness, 0, 1)) * 4;
-  const scale = clamp(aspect, 0.6, 1.6);
-  const a = scale >= 1 ? 82 : 82 * scale;
-  const b = scale >= 1 ? 78 / scale : 78;
-  const points: string[] = [];
-  for (let i = 0; i < 72; i++) {
-    const t = (i / 72) * Math.PI * 2;
-    const c = Math.cos(t);
-    const s = Math.sin(t);
-    const x = 100 + a * Math.sign(c) * Math.abs(c) ** (2 / exponent);
-    const y = 104 + b * Math.sign(s) * Math.abs(s) ** (2 / exponent);
-    points.push(`${x.toFixed(2)} ${y.toFixed(2)}`);
-  }
-  return { d: `M${points.join("L")}Z`, top: 104 - b, bottom: 104 + b, halfWidth: a };
-}
-
-/* A small deterministic generator, so a seed always gives the same character. */
-function random(seed: string | number) {
-  let h = 2166136261;
-  for (const char of String(seed)) h = Math.imul(h ^ char.charCodeAt(0), 16777619);
-  return () => {
-    h += 0x6d2b79f5;
-    let t = h;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/**
- * A whole look from a seed: a user id, a product name, any string or number.
- * The same seed gives the same character as core's `mascotLook`, on the web
- * and on the phone.
- */
-export function mascotLook(seed: string | number): MascotLook {
-  const next = random(seed);
-  const pick = <T,>(items: readonly T[]) => items[Math.floor(next() * items.length)];
-  const range = (min: number, max: number) => Math.round((min + next() * (max - min)) * 100) / 100;
-  return {
-    color: `oklch(0.72 0.16 ${Math.round(next() * 360)})`,
-    roundness: range(0.2, 1),
-    aspect: range(0.8, 1.3),
-    surface: pick(["glossy", "glossy", "matte", "flat", "glass"] as const),
-    eyes: pick(["tile", "pill", "round", "wide", "dot"] as const),
-    eyeSize: range(0.85, 1.25),
-    eyeSpacing: range(0.8, 1.25),
-    eyeHeight: range(-0.35, 0.3),
-    mouth: pick(["none", "none", "smile", "dot", "line"] as const),
-    brows: next() < 0.35,
-    cheeks: next() < 0.4,
-    personality: pick(["calm", "default", "default", "bouncy"] as const),
-  };
-}
 
 function EyeShape({
   kind,
@@ -364,8 +301,23 @@ function Mouth({
  * Every part of the look is a prop (`MascotLook`), or comes from a `seed`,
  * and a seed gives the same character as on the web. With reduce motion on it
  * holds still and keeps its expressions.
+ *
+ * `working="cube"` turns it into the Once UI cube while it thinks: it solves
+ * the cube, shows the logo and softens back with its face (`MascotCube`).
  */
 export function Mascot({
+  working,
+  state = "idle",
+  mood = "neutral",
+  lookAt = "pointer",
+  size = "l",
+  ...rest
+}: MascotProps) {
+  const props = { ...rest, state, mood, lookAt, size };
+  return working === "cube" ? <MascotCube {...props} /> : <FlatMascot {...props} />;
+}
+
+function FlatMascot({
   state = "idle",
   mood = "neutral",
   seed,
@@ -387,9 +339,11 @@ export function Mascot({
   lookAt = "pointer",
   level,
   size = "l",
+  sides: _sides,
+  face: _face,
   "aria-label": ariaLabel,
   ...flex
-}: MascotProps) {
+}: Omit<MascotProps, "working">) {
   const theme = useTheme();
   const reduceMotion = useReduceMotion();
   const time = useFrameTime(!reduceMotion);
@@ -456,8 +410,6 @@ export function Mascot({
   const scheme = String(look.color);
   const body = SCHEMES.has(scheme) ? theme.color(`function-${scheme}-500`) : toHex(scheme);
   const ink = eyeColor ? toHex(eyeColor) : mixColors(body, "#0c0b12", 0.12);
-  const glass = look.surface === "glass";
-  const layers = SURFACE[look.surface];
 
   const shape = bodyShape(look.roundness, look.aspect);
   const outline = bodyPath ? { d: bodyPath, top: 26, bottom: 182, halfWidth: 82 } : shape;
@@ -477,23 +429,7 @@ export function Mascot({
       style={[style, { width: px, height: px, flexShrink: 0 }, userStyle]}
     >
       <Svg width="100%" height="100%" viewBox="0 0 200 200" style={{ overflow: "visible" }}>
-        <Defs>
-          <RadialGradient id={`${id}-light`} cx="34%" cy="26%" r="62%">
-            <Stop offset="0%" stopColor="#fff" stopOpacity={0.5} />
-            <Stop offset="100%" stopColor="#fff" stopOpacity={0} />
-          </RadialGradient>
-          <RadialGradient id={`${id}-shade`} cx="44%" cy="38%" r="70%">
-            <Stop offset="55%" stopColor="#000" stopOpacity={0} />
-            <Stop offset="100%" stopColor="#000" stopOpacity={0.42} />
-          </RadialGradient>
-          <LinearGradient id={`${id}-rim`} x1="0" y1="0" x2="0" y2="1">
-            <Stop offset="72%" stopColor="#fff" stopOpacity={0} />
-            <Stop offset="100%" stopColor="#fff" stopOpacity={0.22} />
-          </LinearGradient>
-          <ClipPath id={`${id}-clip`}>
-            <Path d={outline.d} />
-          </ClipPath>
-        </Defs>
+        <BodyDefs id={id} d={outline.d} />
         <Ellipse
           cx={100}
           cy={196}
@@ -509,31 +445,15 @@ export function Mascot({
           <G
             transform={`translate(100 ${n(outline.bottom)}) rotate(${n(bodyRotate)}) scale(${n(bodySx)} ${n(bodySy)}) translate(-100 ${n(-outline.bottom)})`}
           >
-            <Path d={outline.d} fill={glass ? mixColors(body, "transparent", 0.45) : body} />
-            <G clipPath={`url(#${id}-clip)`}>
-              <Path d={outline.d} fill={`url(#${id}-shade)`} opacity={layers.shade} />
-              <Path d={outline.d} fill={`url(#${id}-rim)`} opacity={layers.rim} />
-              <G transform={`translate(${n(lookX * -9)} ${n(lookY * -7)})`}>
-                <Path d={outline.d} fill={`url(#${id}-light)`} opacity={layers.light} />
-                <Ellipse
-                  cx={70}
-                  cy={outline.top + 26}
-                  rx={20}
-                  ry={11}
-                  fill="#fff"
-                  opacity={layers.spec}
-                />
-              </G>
-            </G>
-            {glass && (
-              <Path
-                d={outline.d}
-                fill="none"
-                stroke={mixColors(body, "#ffffff", 0.4)}
-                strokeOpacity={0.6}
-                strokeWidth={2}
-              />
-            )}
+            <BodyLayers
+              id={id}
+              d={outline.d}
+              top={outline.top}
+              body={body}
+              surface={look.surface}
+              lookX={lookX}
+              lookY={lookY}
+            />
             {accessory ? <G>{accessory}</G> : null}
             <G
               transform={`translate(${n(now.gx * 24 + motion.flick.x)} ${n(now.gy * 16 + motion.flick.y)})`}
