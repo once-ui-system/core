@@ -443,7 +443,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
-- cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
+- cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number | CSSUnit
 - theme?: "light" | "dark"
@@ -479,6 +479,7 @@ type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | 
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent">
+type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
 // type FieldSize is one of these strings: s xl l m xs xxs
 // type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
 // center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex

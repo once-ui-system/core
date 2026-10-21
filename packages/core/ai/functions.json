@@ -433,6 +433,12 @@
    "outline",
    "gradient"
   ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
+  ],
   "DataThemeState": {
    "setChartOptions": "!(options: Partial<ChartOptions>) => void",
    "variant": "!ChartVariant",
@@ -722,6 +728,7 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
@@ -892,7 +899,8 @@
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
-   "cursorInteractive": "InteractiveCursor"
+   "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue"
   },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
@@ -936,6 +944,7 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
   "SurfaceStyle": [

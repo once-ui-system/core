@@ -2,6 +2,7 @@
 
 import { type Ref, useEffect, useRef, useState } from "react";
 import { useLayout } from "../contexts/LayoutProvider.js";
+import { isCursorNode } from "../utils/cursor.js";
 import {
   applyBreakpointStyle,
   type BreakpointOverride,
@@ -101,8 +102,10 @@ const ClientGrid = ({
     };
   }, []);
 
-  // Determine if we should hide the default cursor
-  const shouldHideCursor = typeof cursor === "object" && cursor && !isTouchDevice;
+  // A node as `cursor` follows the pointer and hides the native cursor
+  // over this element's own surface (`data-cursor-follow` in the
+  // stylesheet); a keyword or a preset goes through to ServerGrid.
+  const follow = isCursorNode(cursor) && !isTouchDevice;
 
   // Pass hide prop directly to ServerGrid - it will handle responsive hiding via CSS classes
   // No need for client-side logic that causes re-renders on every resize
@@ -110,6 +113,7 @@ const ClientGrid = ({
     <>
       <ServerGrid
         {...props}
+        cursor={isCursorNode(cursor) ? undefined : cursor}
         xl={xl}
         l={l}
         m={m}
@@ -117,14 +121,9 @@ const ClientGrid = ({
         xs={xs}
         hide={hide}
         ref={combinedRef}
-        style={{
-          ...props.style,
-          cursor: shouldHideCursor ? "none" : props.style?.cursor,
-        }}
+        {...(follow && { "data-cursor-follow": "" })}
       />
-      {typeof cursor === "object" && cursor && !isTouchDevice && (
-        <Cursor cursor={cursor} elementRef={elementRef} />
-      )}
+      {follow && <Cursor cursor={cursor} elementRef={elementRef} />}
     </>
   );
 };

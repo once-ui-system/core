@@ -31,6 +31,7 @@ import { Button } from "./Button.js";
 import { Column } from "./Column.js";
 import styles from "./Dropdown.module.scss";
 import {
+  DropdownCloseContext,
   DropdownComboboxContext,
   DropdownTriggerContext,
   type DropdownTriggerState,
@@ -839,103 +840,252 @@ const DropdownMenu = ({
     [isOpen, handleOpenChange, handleArrowNavigation],
   );
 
+  /** For content that closes the panel itself: see DropdownCloseContext. */
+  const closeFromContent = useCallback(() => {
+    handleOpenChange(false);
+    setFocusedIndex(-1);
+  }, [handleOpenChange]);
+
   return (
     // The combobox flag is this wrapper's alone: a dropdown inside it is not one.
     <DropdownComboboxContext.Provider value={false}>
-      <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
-      <Column
-        fillWidth={fillWidth}
-        fitWidth={!fillWidth}
-        transition="macro-medium"
-        style={{
-          ...style,
-        }}
-        className={className}
-        ref={wrapperRef}
-        onFocusCapture={onFocusCapture}
-        onBlurCapture={onBlurCapture}
-        onClick={
-          disableTriggerClick
-            ? undefined
-            : (e) => {
-                // The trigger's own onClick below has already toggled: a
-                // click there bubbling on to here reported the open twice.
-                if (triggerRef.current?.contains(e.target as Node)) return;
-                if (!isOpen) {
-                  handleOpenChange(true);
-                  return;
-                }
-              }
-        }
-        // A combobox handles its own keys, the panel's included.
-        onKeyDown={isCombobox ? undefined : handleKeyDown}
-        tabIndex={-1}
-        data-role="dropdown-wrapper"
-      >
-        <Row
-          ref={triggerRef}
-          id={triggerId}
+      <DropdownCloseContext.Provider value={closeFromContent}>
+        <ScrollLock enabled={isOpen} allowScrollInElement={dropdownRef} />
+        <Column
           fillWidth={fillWidth}
           fitWidth={!fillWidth}
+          transition="macro-medium"
+          style={{
+            ...style,
+          }}
+          className={className}
+          ref={wrapperRef}
+          onFocusCapture={onFocusCapture}
+          onBlurCapture={onBlurCapture}
           onClick={
             disableTriggerClick
               ? undefined
               : (e) => {
-                  // If already open, close on trigger click
-                  if (isOpen) {
-                    handleOpenChange(false);
+                  // The trigger's own onClick below has already toggled: a
+                  // click there bubbling on to here reported the open twice.
+                  if (triggerRef.current?.contains(e.target as Node)) return;
+                  if (!isOpen) {
+                    handleOpenChange(true);
                     return;
                   }
-                  handleOpenChange(true);
                 }
           }
+          // A combobox handles its own keys, the panel's included.
           onKeyDown={isCombobox ? undefined : handleKeyDown}
-          // With a trigger that is not a control of its own (a span, an
-          // Avatar), this row is the button: one, not two nested ones, and
-          // in the tab order, or no keyboard can open the panel.
-          role={wrapperIsTrigger ? "button" : undefined}
-          tabIndex={wrapperIsTrigger ? 0 : undefined}
-          data-is-dropdown="true"
-          aria-haspopup={wrapperIsTrigger ? "true" : undefined}
-          aria-expanded={wrapperIsTrigger ? isOpen : undefined}
-          className="dropdown-trigger"
+          tabIndex={-1}
+          data-role="dropdown-wrapper"
         >
-          <DropdownTriggerContext.Provider value={triggerState}>
-            {trigger}
-          </DropdownTriggerContext.Provider>
-        </Row>
-        {isOpen &&
-          dropdown &&
-          isBrowser &&
-          createPortal(
-            <FocusTrap
-              containerRef={portalRef}
-              // Not `isOpen`: the panel is `visibility: hidden` until Floating
-              // UI has measured it, and a hidden element cannot take focus, so
-              // autofocusing before then silently lands nowhere.
-              active={isOpen && isPositioned}
-              onEscape={() => handleOpenChange(false)}
-              // A combobox keeps focus in its field; the trap only holds Tab
-              // inside the panel once the combobox has put focus there (a
-              // searchable Select's query field).
-              autoFocus={!isCombobox}
-              restoreFocus={!isCombobox}
-            >
-              {handleArrowNavigation && !isCombobox ? (
-                <ArrowNavigation
-                  layout={navigationLayout}
-                  itemCount={optionsCount}
-                  columns={typeof columns === "string" ? parseInt(columns, 10) || 8 : columns}
-                  onSelect={handleOptionSelect}
-                  onFocusChange={handleFocusChange}
-                  wrap
-                  autoFocus={isPositioned}
-                  initialFocusedIndex={focusedIndex}
-                  itemSelector='.option, [role="option"], [data-value]'
-                  role={navigationLayout === "grid" ? "grid" : "listbox"}
-                  // Named after the trigger: see `triggerId`.
-                  disabled={getLastOpenedDropdown() !== dropdownId.current}
-                >
+          <Row
+            ref={triggerRef}
+            id={triggerId}
+            fillWidth={fillWidth}
+            fitWidth={!fillWidth}
+            onClick={
+              disableTriggerClick
+                ? undefined
+                : (e) => {
+                    // If already open, close on trigger click
+                    if (isOpen) {
+                      handleOpenChange(false);
+                      return;
+                    }
+                    handleOpenChange(true);
+                  }
+            }
+            onKeyDown={isCombobox ? undefined : handleKeyDown}
+            // With a trigger that is not a control of its own (a span, an
+            // Avatar), this row is the button: one, not two nested ones, and
+            // in the tab order, or no keyboard can open the panel.
+            role={wrapperIsTrigger ? "button" : undefined}
+            tabIndex={wrapperIsTrigger ? 0 : undefined}
+            data-is-dropdown="true"
+            aria-haspopup={wrapperIsTrigger ? "true" : undefined}
+            aria-expanded={wrapperIsTrigger ? isOpen : undefined}
+            className="dropdown-trigger"
+          >
+            <DropdownTriggerContext.Provider value={triggerState}>
+              {trigger}
+            </DropdownTriggerContext.Provider>
+          </Row>
+          {isOpen &&
+            dropdown &&
+            isBrowser &&
+            createPortal(
+              <FocusTrap
+                containerRef={portalRef}
+                // Not `isOpen`: the panel is `visibility: hidden` until Floating
+                // UI has measured it, and a hidden element cannot take focus, so
+                // autofocusing before then silently lands nowhere.
+                active={isOpen && isPositioned}
+                onEscape={() => handleOpenChange(false)}
+                // A combobox keeps focus in its field; the trap only holds Tab
+                // inside the panel once the combobox has put focus there (a
+                // searchable Select's query field).
+                autoFocus={!isCombobox}
+                restoreFocus={!isCombobox}
+              >
+                {handleArrowNavigation && !isCombobox ? (
+                  <ArrowNavigation
+                    layout={navigationLayout}
+                    itemCount={optionsCount}
+                    columns={typeof columns === "string" ? parseInt(columns, 10) || 8 : columns}
+                    onSelect={handleOptionSelect}
+                    onFocusChange={handleFocusChange}
+                    wrap
+                    autoFocus={isPositioned}
+                    initialFocusedIndex={focusedIndex}
+                    itemSelector='.option, [role="option"], [data-value]'
+                    role={navigationLayout === "grid" ? "grid" : "listbox"}
+                    // Named after the trigger: see `triggerId`.
+                    disabled={getLastOpenedDropdown() !== dropdownId.current}
+                  >
+                    <Flex
+                      zIndex={9}
+                      className={`${styles.fadeIn} dropdown-portal`}
+                      minWidth={minWidth}
+                      ref={dropdownRef}
+                      style={{
+                        position: strategy,
+                        top: y ?? 0,
+                        left: x ?? 0,
+                        // Floating UI reports 0,0 until it has measured, so the
+                        // panel would otherwise paint once at the edge of the
+                        // positioning context before jumping to the trigger.
+                        // Hidden rather than unmounted: it has to be in the DOM
+                        // to be measured at all.
+                        visibility: isPositioned ? "visible" : "hidden",
+                        transformOrigin,
+                      }}
+                      data-role="dropdown-portal"
+                      data-is-dropdown="true"
+                      data-dropdown-id={dropdownId.current}
+                      data-is-active={getLastOpenedDropdown() === dropdownId.current}
+                      onKeyDown={(e) => {
+                        // If handleArrowNavigation is false, let all keyboard events pass through
+                        if (!handleArrowNavigation) {
+                          return;
+                        }
+
+                        // Let FocusTrap handle Tab key
+                        // Let ArrowNavigation handle arrow keys
+                        if (
+                          e.key !== "Tab" &&
+                          e.key !== "ArrowUp" &&
+                          e.key !== "ArrowDown" &&
+                          e.key !== "ArrowLeft" &&
+                          e.key !== "ArrowRight"
+                        ) {
+                          handleKeyDown(e);
+                        }
+                      }}
+                      onMouseDown={(e) => {
+                        // Allow interactive elements (inputs, buttons, etc.) to work normally
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onPointerDown={(e) => {
+                        // Allow interactive elements (inputs, buttons, etc.) to work normally
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                      onTouchStart={(e) => {
+                        // Allow interactive elements (inputs, buttons, etc.) to work normally
+                        const target = e.target as HTMLElement;
+                        const isInteractive = target.closest(
+                          'input, textarea, select, button, [role="button"], a',
+                        );
+                        if (!isInteractive) {
+                          e.preventDefault();
+                        }
+                      }}
+                    >
+                      <DropdownPanel
+                        // The size() middleware sets the portal's width; the
+                        // visible panel must fill it or it sits detached at the
+                        // portal's left edge on "-end" placements.
+                        fillWidth
+                        minWidth={minWidth}
+                        radius="l"
+                        padding="0"
+                        // ArrowNavigation above is the listbox; Dropdown's own
+                        // listbox role here nested a listbox in a listbox.
+                        // "none": a plain box, like any other in between.
+                        role="none"
+                        selectedOption={selectedOption}
+                        onSelect={(value) => {
+                          onSelect?.(value);
+                          if (closeAfterClick) {
+                            handleOpenChange(false);
+                            setFocusedIndex(-1);
+                          }
+                        }}
+                      >
+                        {React.Children.map(dropdown, (child) => {
+                          if (React.isValidElement(child)) {
+                            // Only add onClick handler to elements that have data-value or are interactive
+                            const childElement = child as React.ReactElement<any>;
+                            // A `value` prop alone does not make a child an
+                            // option: Option is matched by type. Reading any
+                            // `value` as one caught a DatePicker (its `value`
+                            // is the date), replaced its own click handler
+                            // with "pick and close", and so every click in the
+                            // time panel that was not a day (the hour and
+                            // minute chevrons, AM/PM, back to calendar)
+                            // closed the dropdown.
+                            const hasDataValue =
+                              childElement.props["data-value"] ||
+                              childElement.type === Option ||
+                              childElement.type === "button" ||
+                              childElement.props.role === "option";
+
+                            if (hasDataValue) {
+                              // An Option, or anything carrying `data-value`,
+                              // puts that value on the element it renders, and
+                              // the click reaches Dropdown's own onSelect above,
+                              // which reports it and closes. Reporting it here
+                              // too called onSelect twice per pick, and
+                              // replacing the child's onClick dropped the
+                              // caller's handler.
+                              const rendersValue =
+                                childElement.type === Option ||
+                                childElement.props["data-value"] !== undefined;
+                              // Cast the child element to any to avoid TypeScript errors with unknown props
+                              return React.cloneElement(childElement, {
+                                onClick: (val: string) => {
+                                  childElement.props.onClick?.(val);
+                                  if (rendersValue) return;
+                                  onSelect?.(val);
+                                  if (closeAfterClick) {
+                                    handleOpenChange(false);
+                                    setFocusedIndex(-1);
+                                  }
+                                },
+                              });
+                            }
+                            // Return the child unchanged if it doesn't need an onClick handler
+                            return child;
+                          }
+                          return child;
+                        })}
+                      </DropdownPanel>
+                    </Flex>
+                  </ArrowNavigation>
+                ) : (
                   <Flex
                     zIndex={9}
                     className={`${styles.fadeIn} dropdown-portal`}
@@ -945,11 +1095,8 @@ const DropdownMenu = ({
                       position: strategy,
                       top: y ?? 0,
                       left: x ?? 0,
-                      // Floating UI reports 0,0 until it has measured, so the
-                      // panel would otherwise paint once at the edge of the
-                      // positioning context before jumping to the trigger.
-                      // Hidden rather than unmounted: it has to be in the DOM
-                      // to be measured at all.
+                      // See the portal above: hidden until Floating UI has
+                      // measured, so it cannot paint at 0,0 first.
                       visibility: isPositioned ? "visible" : "hidden",
                       transformOrigin,
                     }}
@@ -958,20 +1105,14 @@ const DropdownMenu = ({
                     data-dropdown-id={dropdownId.current}
                     data-is-active={getLastOpenedDropdown() === dropdownId.current}
                     onKeyDown={(e) => {
-                      // If handleArrowNavigation is false, let all keyboard events pass through
-                      if (!handleArrowNavigation) {
+                      // If handleArrowNavigation is false, let all keyboard events pass through.
+                      // So does a combobox's panel: the combobox handles its keys.
+                      if (!handleArrowNavigation || isCombobox) {
                         return;
                       }
 
                       // Let FocusTrap handle Tab key
-                      // Let ArrowNavigation handle arrow keys
-                      if (
-                        e.key !== "Tab" &&
-                        e.key !== "ArrowUp" &&
-                        e.key !== "ArrowDown" &&
-                        e.key !== "ArrowLeft" &&
-                        e.key !== "ArrowRight"
-                      ) {
+                      if (e.key !== "Tab") {
                         handleKeyDown(e);
                       }
                     }}
@@ -1007,16 +1148,14 @@ const DropdownMenu = ({
                     }}
                   >
                     <DropdownPanel
-                      // The size() middleware sets the portal's width; the
-                      // visible panel must fill it or it sits detached at the
-                      // portal's left edge on "-end" placements.
                       fillWidth
                       minWidth={minWidth}
                       radius="l"
                       padding="0"
-                      // ArrowNavigation above is the listbox; Dropdown's own
-                      // listbox role here nested a listbox in a listbox.
-                      // "none": a plain box, like any other in between.
+                      // Not a listbox, as Dropdown is on its own: this panel
+                      // holds whatever the caller put in it (a date grid, an
+                      // emoji picker), and a combobox brings its own listbox,
+                      // which this one would wrap.
                       role="none"
                       selectedOption={selectedOption}
                       onSelect={(value) => {
@@ -1027,145 +1166,15 @@ const DropdownMenu = ({
                         }
                       }}
                     >
-                      {React.Children.map(dropdown, (child) => {
-                        if (React.isValidElement(child)) {
-                          // Only add onClick handler to elements that have data-value or are interactive
-                          const childElement = child as React.ReactElement<any>;
-                          // A `value` prop alone does not make a child an
-                          // option: Option is matched by type. Reading any
-                          // `value` as one caught a DatePicker (its `value`
-                          // is the date), replaced its own click handler
-                          // with "pick and close", and so every click in the
-                          // time panel that was not a day (the hour and
-                          // minute chevrons, AM/PM, back to calendar)
-                          // closed the dropdown.
-                          const hasDataValue =
-                            childElement.props["data-value"] ||
-                            childElement.type === Option ||
-                            childElement.type === "button" ||
-                            childElement.props.role === "option";
-
-                          if (hasDataValue) {
-                            // An Option, or anything carrying `data-value`,
-                            // puts that value on the element it renders, and
-                            // the click reaches Dropdown's own onSelect above,
-                            // which reports it and closes. Reporting it here
-                            // too called onSelect twice per pick, and
-                            // replacing the child's onClick dropped the
-                            // caller's handler.
-                            const rendersValue =
-                              childElement.type === Option ||
-                              childElement.props["data-value"] !== undefined;
-                            // Cast the child element to any to avoid TypeScript errors with unknown props
-                            return React.cloneElement(childElement, {
-                              onClick: (val: string) => {
-                                childElement.props.onClick?.(val);
-                                if (rendersValue) return;
-                                onSelect?.(val);
-                                if (closeAfterClick) {
-                                  handleOpenChange(false);
-                                  setFocusedIndex(-1);
-                                }
-                              },
-                            });
-                          }
-                          // Return the child unchanged if it doesn't need an onClick handler
-                          return child;
-                        }
-                        return child;
-                      })}
+                      {dropdown}
                     </DropdownPanel>
                   </Flex>
-                </ArrowNavigation>
-              ) : (
-                <Flex
-                  zIndex={9}
-                  className={`${styles.fadeIn} dropdown-portal`}
-                  minWidth={minWidth}
-                  ref={dropdownRef}
-                  style={{
-                    position: strategy,
-                    top: y ?? 0,
-                    left: x ?? 0,
-                    // See the portal above: hidden until Floating UI has
-                    // measured, so it cannot paint at 0,0 first.
-                    visibility: isPositioned ? "visible" : "hidden",
-                    transformOrigin,
-                  }}
-                  data-role="dropdown-portal"
-                  data-is-dropdown="true"
-                  data-dropdown-id={dropdownId.current}
-                  data-is-active={getLastOpenedDropdown() === dropdownId.current}
-                  onKeyDown={(e) => {
-                    // If handleArrowNavigation is false, let all keyboard events pass through.
-                    // So does a combobox's panel: the combobox handles its keys.
-                    if (!handleArrowNavigation || isCombobox) {
-                      return;
-                    }
-
-                    // Let FocusTrap handle Tab key
-                    if (e.key !== "Tab") {
-                      handleKeyDown(e);
-                    }
-                  }}
-                  onMouseDown={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest(
-                      'input, textarea, select, button, [role="button"], a',
-                    );
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onPointerDown={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest(
-                      'input, textarea, select, button, [role="button"], a',
-                    );
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                  onTouchStart={(e) => {
-                    // Allow interactive elements (inputs, buttons, etc.) to work normally
-                    const target = e.target as HTMLElement;
-                    const isInteractive = target.closest(
-                      'input, textarea, select, button, [role="button"], a',
-                    );
-                    if (!isInteractive) {
-                      e.preventDefault();
-                    }
-                  }}
-                >
-                  <DropdownPanel
-                    fillWidth
-                    minWidth={minWidth}
-                    radius="l"
-                    padding="0"
-                    // Not a listbox, as Dropdown is on its own: this panel
-                    // holds whatever the caller put in it (a date grid, an
-                    // emoji picker), and a combobox brings its own listbox,
-                    // which this one would wrap.
-                    role="none"
-                    selectedOption={selectedOption}
-                    onSelect={(value) => {
-                      onSelect?.(value);
-                      if (closeAfterClick) {
-                        handleOpenChange(false);
-                        setFocusedIndex(-1);
-                      }
-                    }}
-                  >
-                    {dropdown}
-                  </DropdownPanel>
-                </Flex>
-              )}
-            </FocusTrap>,
-            document.body,
-          )}
-      </Column>
+                )}
+              </FocusTrap>,
+              document.body,
+            )}
+        </Column>
+      </DropdownCloseContext.Provider>
     </DropdownComboboxContext.Provider>
   );
 };

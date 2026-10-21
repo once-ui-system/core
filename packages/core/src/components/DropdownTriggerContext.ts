@@ -49,6 +49,13 @@ export const DropdownTriggerContext = createContext<DropdownTriggerState | null>
 export const DropdownComboboxContext = createContext(false);
 
 /**
+ * Closes the Dropdown whose panel this element is in, or null outside
+ * one. Internal: lets content that is not an option (a DatePicker's Apply
+ * button) close the panel it sits in without the caller wiring `isOpen`.
+ */
+export const DropdownCloseContext = createContext<(() => void) | null>(null);
+
+/**
  * The dropdown this element is the trigger of, or null. A trigger that reads
  * it renders as a button, so it registers itself for as long as it does.
  */

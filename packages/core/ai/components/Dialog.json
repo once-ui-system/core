@@ -141,7 +141,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",

@@ -9,7 +9,7 @@
   flex-direction: column;
   border-radius: var(--radius-s);
   color: var(--neutral-on-background-medium);
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   outline: none;
   transition: background var(--transition-micro-medium), color var(--transition-micro-medium);
 }

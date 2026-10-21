@@ -42,3 +42,35 @@ describe("--brand-color-*", () => {
     }
   });
 });
+
+/**
+ * A custom property that reads another resolves where it is declared: set on
+ * `<html>`, `--brand-solid-strong: var(--function-brand-500)` keeps `<html>`'s
+ * brand in every descendant, so a section with only `data-brand="red"` changed
+ * `--function-brand-*` and recoloured nothing. Every rule that derives a token
+ * from the brand (or accent) or neutral palette must also match a nested
+ * `data-brand` or `data-neutral`.
+ */
+const RULES = [...THEME.matchAll(/(?:^|\n)([^{}\n/][^{}]*)\{([^{}]*)\}/g)];
+
+describe.each([
+  {
+    attribute: "brand",
+    derives:
+      /--(?:brand|accent|solid-[\w-]+-color-brand)[\w-]*:\s*var\(--(?:function-(?:brand|accent)|brand-|accent-)/,
+  },
+  {
+    attribute: "neutral",
+    derives: /--[\w-]+:\s*var\(--(?:function-)?neutral-/,
+  },
+])("nested data-$attribute", ({ attribute, derives }) => {
+  it("re-derives every token that reads its palette", () => {
+    const deriving = RULES.filter(
+      ([, selector, body]) => /\[data-(?:theme|solid)/.test(selector) && derives.test(body),
+    );
+    expect(deriving.length).toBeGreaterThan(0);
+    for (const [, selector] of deriving) {
+      expect(selector, selector.trim()).toMatch(new RegExp(`\\[data-${attribute}\\]`));
+    }
+  });
+});

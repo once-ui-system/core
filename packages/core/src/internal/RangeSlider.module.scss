@@ -7,13 +7,13 @@
 }
 
 .wrapper {
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   // Horizontal drags move a thumb; vertical ones still scroll the page.
   touch-action: pan-y;
 
   &.disabled {
     opacity: 0.4;
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
   }
 
   &.dragging {
@@ -67,7 +67,7 @@
   }
 
   .disabled & {
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
   }
 }
 

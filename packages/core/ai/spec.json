@@ -161,7 +161,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
@@ -743,6 +743,12 @@
    "bottom-right",
    "bottom-left"
   ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
+  ],
   "curveType": [
    "step",
    "linear",
@@ -794,6 +800,7 @@
    "month": "(month: string) => string",
    "year": "(year: number) => string",
    "backToCalendar": "string",
+   "apply": "string",
    "hours": "string",
    "minutes": "string",
    "am": "string",
@@ -1457,6 +1464,7 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
@@ -1871,7 +1879,8 @@
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
-   "cursorInteractive": "InteractiveCursor"
+   "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue"
   },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
@@ -2006,7 +2015,7 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
@@ -2033,8 +2042,28 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
+  "StyleScopeConfig": {
+   "solid": "SolidType",
+   "border": "BorderStyle",
+   "neutral": "NeutralColor | \"custom\"",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "solidStyle": "SolidStyle",
+   "surface": "SurfaceStyle",
+   "brandSeed": "string",
+   "accentSeed": "string",
+   "neutralSeed": "string",
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor",
+   "theme": "\"light\" | \"dark\" | \"system\""
+  },
+  "StyleScopeFonts": "Partial<Record<\"heading\" | \"body\" | \"label\" | \"code\", string>>",
   "SurfaceStyle": [
    "filled",
    "translucent"
@@ -2718,6 +2747,7 @@
     "previousMonth": "boolean",
     "nextMonth": "boolean",
     "timePicker": "boolean",
+    "onApply": "(date: Date) => void",
     "defaultTime": "{ hours: number; minutes: number; }",
     "nested": "boolean",
     "currentMonth": "number",
@@ -3790,6 +3820,23 @@
     "pulse": "boolean = false",
     "tone": "Tone",
     "pulseSize": "string | number"
+   }
+  },
+  "StyleScope": {
+   "group": "components",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "config": "StyleScopeConfig = {}",
+    "fonts": "StyleScopeFonts",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
    }
   },
   "SubmitButton": {
@@ -4980,6 +5027,7 @@
     "tabletSize": "DeviceFontSize",
     "mobileSize": "DeviceFontSize",
     "cursorInteractive": "InteractiveCursor",
+    "cursor": "CursorPresetValue",
     "brandSeed": "string",
     "accentSeed": "string",
     "neutralSeed": "string",

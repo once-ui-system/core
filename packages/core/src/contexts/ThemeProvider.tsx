@@ -11,6 +11,7 @@ import {
 } from "react";
 import type { Schemes } from "../types.js";
 import type { ThemedSchemeScale } from "../utils/colorScheme.js";
+import type { CursorPresetValue } from "../utils/cursor.js";
 import { DEFAULT_DENSITY, type Density, densityScaling } from "../utils/density.js";
 import { dev } from "../utils/devLogger.js";
 import { type ThemeColor, themeStyle } from "../utils/themeCss.js";
@@ -130,6 +131,14 @@ export interface OnceUIStyleConfig {
   /** `data-cursor-interactive`. */
   cursorInteractive?: InteractiveCursor;
   /**
+   * `data-cursor`: a cursor preset for the whole app, `"soft"`, `"rounded"`
+   * or `"dot"`. The browser draws it, with its own pointer, text and
+   * disabled states over the controls. Unset (or `"system"`), the browser's
+   * own cursors. A Flex or Grid can set another one, or `"system"`, for its
+   * subtree with its `cursor` prop.
+   */
+  cursor?: CursorPresetValue;
+  /**
    * A colour to generate the brand scheme from — hex, `rgb()` or `oklch()` —
    * for `brand: "custom"`, which it implies when `brand` is not set.
    * `ThemeInit` renders the scheme on the server, so it is there before the
@@ -188,6 +197,7 @@ interface StyleOptions {
   tabletSize?: DeviceFontSize;
   mobileSize?: DeviceFontSize;
   cursorInteractive?: InteractiveCursor;
+  cursor?: CursorPresetValue;
 }
 
 type ThemeProviderState = {
@@ -260,6 +270,7 @@ function getStoredStyleValues(store: StylePersistenceAdapter | null) {
       "tablet-size",
       "mobile-size",
       "cursor-interactive",
+      "cursor",
     ];
 
     for (const kebabKey of styleKeys) {
@@ -314,6 +325,7 @@ export function ThemeProvider({
   tabletSize,
   mobileSize,
   cursorInteractive,
+  cursor,
   brandSeed,
   accentSeed,
   neutralSeed,
@@ -432,6 +444,7 @@ export function ThemeProvider({
   if (tabletSize) directProps.tabletSize = tabletSize;
   if (mobileSize) directProps.mobileSize = mobileSize;
   if (cursorInteractive) directProps.cursorInteractive = cursorInteractive;
+  if (cursor) directProps.cursor = cursor;
 
   // A seed's scheme, written as the `--scheme-<name>-*` properties that
   // `data-<name>="custom"` reads. ThemeInit puts the same values in a server-

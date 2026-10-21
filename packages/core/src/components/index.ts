@@ -68,6 +68,7 @@ export * from "./Sortable.js";
 export * from "./Spinner.js";
 export * from "./SplitView.js";
 export * from "./StatusIndicator.js";
+export * from "./StyleScope.js";
 export * from "./SubmitButton.js";
 export * from "./Switch.js";
 export * from "./Table.js";

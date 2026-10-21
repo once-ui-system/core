@@ -197,13 +197,17 @@ const pro: Prompt[] = [
     id: "magic-store",
     title: "Storefront",
     description:
-      "Magic Store on Fourthwall: catalogue, product pages, cart and checkout. Fourthwall handles payment, shipping and fulfilment, so the build is the storefront rather than the commerce backend.",
+      "Stack's store on Fourthwall: catalogue, product pages, cart and checkout. Fourthwall handles payment, shipping and fulfilment, so the build is the storefront rather than the commerce backend.",
     prompt: `${harness}
 
-Bootstrap a storefront from Magic Store
-(once-ui.com/products/magic-store). Clone the template, then:
+Bootstrap a storefront from Once UI Stack (once-ui.com/stack). From the
+Stack repo, scaffold the store surface with the Fourthwall slice:
 
-1. Point it at my Fourthwall shop - set the storefront token in .env
+  node scripts/scaffold.mjs --surfaces landing,store --slices fourthwall --out ../my-store
+
+Then:
+
+1. Point it at my Fourthwall shop - set FOURTHWALL_STOREFRONT_TOKEN in .env
 2. Replace the brand: logo, name, and the brand and accent schemes
 3. Adapt the collections and product pages to <what you sell>
 4. Keep the cart and checkout flow as shipped; Fourthwall owns payment,

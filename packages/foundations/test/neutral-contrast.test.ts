@@ -24,9 +24,13 @@ const onWhite = (hex: string) => 1.05 / (luminance(hex) + 0.05);
 
 describe("light theme: neutral-on-background-weak", () => {
   const theme = scss("theme.scss");
-  const step = /\[data-theme="light"\][^{]*\{[^}]*--neutral-on-background-weak:\s*var\(--function-neutral-(\d+)\)/.exec(
-    theme,
-  )?.[1];
+  // The light block itself: its selector list opens with a bare
+  // `[data-theme="light"]`. The dark block also names it, as the ancestor
+  // of a dark subtree (`[data-theme="light"] [data-theme="dark"]…`).
+  const step =
+    /(?:^|\n)\[data-theme="light"\](?:,|\s*(?=\{))[^{]*\{[^}]*--neutral-on-background-weak:\s*var\(--function-neutral-(\d+)\)/.exec(
+      theme,
+    )?.[1];
   const functions = scss("function.scss");
   const schemes = scss("scheme.scss");
   const neutrals = [...functions.matchAll(/\[data-neutral="(\w+)"\]/g)]
@@ -35,11 +39,15 @@ describe("light theme: neutral-on-background-weak", () => {
 
   it("is a step of the neutral palette, for every neutral a theme can pick", () => {
     expect(step).toBeDefined();
-    expect(neutrals).toEqual(expect.arrayContaining(["gray", "sand", "slate", "rose", "mint", "dusk"]));
+    expect(neutrals).toEqual(
+      expect.arrayContaining(["gray", "sand", "slate", "rose", "mint", "dusk"]),
+    );
   });
 
   it.each(neutrals)("%s reads at least 4.5:1 on white", (neutral) => {
-    const m = new RegExp(`--scheme-${neutral}-${step}:\\s*oklch\\(([\\d.]+) ([\\d.]+) ([\\d.]+)\\)`).exec(schemes);
+    const m = new RegExp(
+      `--scheme-${neutral}-${step}:\\s*oklch\\(([\\d.]+) ([\\d.]+) ([\\d.]+)\\)`,
+    ).exec(schemes);
     expect(m, `--scheme-${neutral}-${step}`).not.toBeNull();
     const hex = oklchToHex(Number(m?.[1]), Number(m?.[2]), Number(m?.[3]));
     expect(onWhite(hex)).toBeGreaterThanOrEqual(4.5);

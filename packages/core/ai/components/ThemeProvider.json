@@ -20,6 +20,7 @@
   "tabletSize": "DeviceFontSize",
   "mobileSize": "DeviceFontSize",
   "cursorInteractive": "InteractiveCursor",
+  "cursor": "CursorPresetValue",
   "brandSeed": "string",
   "accentSeed": "string",
   "neutralSeed": "string",
@@ -60,6 +61,12 @@
    "playful",
    "conservative",
    "sharp"
+  ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
   ],
   "Density": [
    "normal",

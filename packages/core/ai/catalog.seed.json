@@ -25,7 +25,7 @@
     "pairsWith": ["HoverCard", "Column"]
   },
   "Arrow": {
-    "purpose": "Small animated arrow that slides in while the element its trigger selector names is hovered — the arrow on a card or link",
+    "purpose": "Small arrow that slides in while the element its trigger selector names is hovered — the arrow on a card or link",
     "tags": ["decoration", "action"],
     "pairsWith": ["Card", "SmartLink"]
   },
@@ -188,7 +188,7 @@
     "pairsWith": ["DatePicker", "Form"]
   },
   "DatePicker": {
-    "purpose": "Inline calendar for picking a date and optional time, with min/max bounds; `range` picks a date range over one or two months",
+    "purpose": "Inline calendar to pick a date and optional time, with min/max bounds; `range` picks a range over one or two months",
     "tags": ["form"],
     "pairsWith": ["DateInput", "ChartHeader", "Column"]
   },
@@ -198,7 +198,7 @@
     "pairsWith": ["Button", "Column", "OTPInput"]
   },
   "Drawer": {
-    "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock — mobile navigation, filters and side panels",
+    "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels",
     "tags": ["overlay", "navigation"],
     "pairsWith": ["NavItem", "Column", "Button"]
   },
@@ -269,7 +269,7 @@
     "pairsWith": ["ScrollLock"]
   },
   "Form": {
-    "purpose": "Grid of form fields with one density setting for their gap and grouping, and an onSubmit whose promise drives a pending state",
+    "purpose": "Grid of form fields with one density for their gap and grouping, and an onSubmit whose promise drives a pending state",
     "tags": ["form", "layout"],
     "pairsWith": ["Input", "Select", "Textarea", "Button"]
   },
@@ -531,7 +531,7 @@
     "pairsWith": ["SmartLink", "Row"]
   },
   "Meta": {
-    "purpose": "Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards",
+    "purpose": "Meta.generate: Next.js metadata with Open Graph and Twitter cards",
     "tags": ["seo", "next"],
     "pairsWith": ["Schema"]
   },
@@ -697,7 +697,7 @@
     "pairsWith": ["Input", "Form", "Column"]
   },
   "Setting": {
-    "purpose": "Settings row: label and description on the left, one control on the right; `axes` for X/Y pairs, `control` and `open` for a group",
+    "purpose": "Settings row: label and description left, one control right; `axes` for X/Y pairs, `control` and `open` for a group",
     "tags": ["settings", "form"],
     "pairsWith": ["Switch", "Select", "Slider", "Tooltip"]
   },
@@ -900,6 +900,11 @@
     "tags": ["settings", "theme"],
     "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
   },
+  "StyleScope": {
+    "purpose": "Site colours, theme and fonts on one subtree",
+    "tags": ["theme", "layout"],
+    "pairsWith": ["ThemeProvider", "Column"]
+  },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
     "tags": ["form", "action"],
@@ -941,7 +946,7 @@
     "pairsWith": ["TabList", "Tab", "TabPanel"]
   },
   "Tag": {
-    "purpose": "Compact label: a status or category with a tone; variant=\"announce\" + href for a 'New' pill; selected/onRemove for a filter token",
+    "purpose": "Compact status or category label with a tone; variant=\"announce\" + href for a 'New' pill; selected/onRemove for a filter token",
     "tags": ["typography", "data", "form", "marketing"],
     "avoid": "Passing the same text as label and children — the children are dropped",
     "pairsWith": ["Row", "Table", "Heading", "TagInput"]
@@ -973,7 +978,7 @@
     "pairsWith": ["Dialog", "Column", "Tag"]
   },
   "ThemeInit": {
-    "purpose": "Inline script for the document head that applies the theme config before first paint, preventing a flash",
+    "purpose": "Head script that applies the theme before first paint, so it never flashes",
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },
@@ -1020,7 +1025,7 @@
     "pairsWith": ["IconButton", "Text", "Setting"]
   },
   "TypeFx": {
-    "purpose": "Typewriter effect that types and deletes a list of words; `mode=\"fade\"` fades the letters in one by one instead; timings in ms",
+    "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in one by one instead; timings in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
   },

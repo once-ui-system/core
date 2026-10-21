@@ -82,3 +82,82 @@ describe("DatePicker time panel in a Dropdown", () => {
     expect(onClick).toHaveBeenCalled();
   });
 });
+
+/**
+ * "Back to calendar" was the only way out of the time panel, and it read as
+ * going back, not as applying. Apply confirms the date and time and closes
+ * the dropdown it is in; on its own the picker returns to the calendar.
+ */
+describe("DatePicker Apply button", () => {
+  const toTimePanel = async (user: ReturnType<typeof userEvent.setup>) => {
+    const day = await screen.findByRole("button", { name: /24/ });
+    await user.click(day);
+    await act(async () => {
+      vi.advanceTimersByTime(500);
+    });
+    await screen.findByLabelText("Minutes");
+  };
+
+  it("reports the date and time and closes the dropdown", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onApply = vi.fn();
+      render(
+        <Dropdown trigger={<Button>Schedule</Button>}>
+          <DatePicker timePicker defaultValue={new Date(2026, 9, 23, 18, 1)} onApply={onApply} />
+        </Dropdown>,
+        { wrapper: wrap },
+      );
+      await user.click(screen.getByRole("button", { name: "Schedule" }));
+      await toTimePanel(user);
+      const [, minutesUp] = screen.getAllByRole("button", { name: "Increment value" });
+      await user.click(minutesUp);
+
+      await user.click(screen.getByRole("button", { name: "Apply" }));
+      const applied = onApply.mock.calls.at(-1)?.[0] as Date;
+      expect(applied.getDate()).toBe(24);
+      expect(applied.getMinutes()).toBe(2);
+      await waitFor(() => expect(screen.queryByLabelText("Minutes")).not.toBeInTheDocument());
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("returns to the calendar when it is not in a dropdown", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      const onApply = vi.fn();
+      render(<DatePicker timePicker value={new Date(2026, 9, 23, 18, 1)} onApply={onApply} />, {
+        wrapper: wrap,
+      });
+      await toTimePanel(user);
+      await user.click(screen.getByRole("button", { name: "Apply" }));
+      expect(onApply).toHaveBeenCalledTimes(1);
+      await act(async () => {
+        vi.advanceTimersByTime(500);
+      });
+      await waitFor(() => expect(screen.queryByLabelText("Minutes")).not.toBeInTheDocument());
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("can be translated", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    try {
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+      render(
+        <DatePicker timePicker value={new Date(2026, 9, 23, 18, 1)} labels={{ apply: "Kész" }} />,
+        {
+          wrapper: wrap,
+        },
+      );
+      await toTimePanel(user);
+      expect(screen.getByRole("button", { name: "Kész" })).toBeInTheDocument();
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+});

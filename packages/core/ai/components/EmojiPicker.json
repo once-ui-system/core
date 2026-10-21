@@ -141,7 +141,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",
@@ -253,6 +253,12 @@
    "success-alpha-medium",
    "success-alpha-weak"
   ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
+  ],
   "DropdownProps": "Dropdown props",
   "GridSize": [
    "1",
@@ -330,7 +336,7 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number | CSSUnit",
    "backdropBlur": "BlurSize | number | CSSUnit",

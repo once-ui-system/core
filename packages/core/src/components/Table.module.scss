@@ -17,7 +17,7 @@
   }
 
   &.clickable .row {
-    cursor: pointer;
+    cursor: var(--cursor-pointer, pointer);
 
     @media (hover: hover) {
       &:hover {
@@ -99,7 +99,7 @@
 }
 
 .thSortable {
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
 
   @media (hover: hover) {
     &:hover {

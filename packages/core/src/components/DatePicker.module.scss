@@ -48,7 +48,7 @@
       
       &:disabled {
           opacity: 0.5;
-          cursor: not-allowed;
+          cursor: var(--cursor-disabled, not-allowed);
           transform: none;
       }
   }
@@ -85,7 +85,7 @@
   
     &:disabled {
       opacity: 0.5;
-      cursor: not-allowed;
+      cursor: var(--cursor-disabled, not-allowed);
       transform: none;
     }
   }

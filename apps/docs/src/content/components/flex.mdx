@@ -1,7 +1,7 @@
 ---
 title: "Flex"
 summary: "The layout primitive every other component is built on: one element, a direction, and token-driven spacing, size and surface."
-updatedAt: "2026-10-17"
+updatedAt: "2026-10-21"
 docs: "once-ui/components/flex.mdx"
 github: "components/Flex.tsx"
 navLabel: "Flex"
@@ -289,6 +289,118 @@ or hides an element depending on the theme around it.
     userSelect: "\"none\" keeps a handle or a timeline label from being selected mid-drag.",
     showIn: "\"dark\" or \"light\": show only while the theme around it is that one. To make a subtree dark, use theme=\"dark\".",
   }}
+/>
+
+## Cursor
+
+`cursor` takes a CSS keyword (`"interactive"` for anything clickable), a
+preset, or a node to draw at the pointer.
+
+### Presets
+
+A preset restyles every cursor inside the element: the arrow over the page,
+the pointer over buttons and links, the I-beam over text fields and the
+blocked sign over disabled controls. The browser draws it, so it never lags
+and touch screens never see it. `soft` is a dark wedge with a white rim that
+reads on light and dark pages alike, `rounded` is the classic arrow rounded
+off and turns light in dark mode, and `dot` is a small dot that opens into a
+ring over anything clickable. `"system"` turns a preset off below it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="12" s={{ direction: "column" }}>
+      {["soft", "rounded", "dot"].map((preset) => (
+        <Column key={preset} cursor={preset} flex={1} gap="12" padding="16" radius="l" border="neutral-alpha-medium" background="surface">
+          <Text textVariant="label-strong-s">{preset}</Text>
+          <Input id={`cursor-${preset}`} placeholder="Type here" />
+          <Row gap="8">
+            <Button size="s">Click</Button>
+            <Button size="s" variant="secondary" disabled>Disabled</Button>
+          </Row>
+        </Column>
+      ))}
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Column cursor="soft">
+  <Input id="name" placeholder="Type here" />   // I-beam
+  <Button>Click</Button>                         // pointer
+  <Button disabled>Disabled</Button>             // blocked
+</Column>`,
+      language: "tsx",
+      label: "Preset"
+    }
+  ]}
+/>
+
+For the whole app, set `cursor` in the `style` section of `once-ui.config`
+(or on `ThemeProvider`). `ThemeInit` writes it before the first paint:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// once-ui.config
+const style = {
+  theme: "system",
+  cursor: "soft", // "rounded", "dot" or "system"
+  // ...
+};`,
+      language: "ts",
+      label: "App-wide"
+    }
+  ]}
+/>
+
+Controls follow the preset on their own. `cursorInteractive: "default"`
+still keeps the arrow over them, the preset's arrow.
+
+### A node that follows the pointer
+
+Pass a node and it is drawn at the pointer over the element's own surface. It
+steps aside wherever the native cursor is back, over a button, a link, a text
+field or a nested element with a cursor of its own, so the two never show at
+once. It moves without a React render, fades in and out (instantly with
+reduced motion), and touch input never shows it.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column
+      fillWidth
+      gap="16"
+      padding="32"
+      radius="l"
+      border="neutral-alpha-medium"
+      background="surface"
+      cursor={<Row as="span" inline fit solid="brand-strong" padding="12" radius="full"><Icon name="arrowUpRight" onSolid="brand-strong" /></Row>}
+    >
+      <Text onBackground="neutral-weak">Hover the card, then the button.</Text>
+      <Row>
+        <Button size="s">The pointer comes back here</Button>
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Column
+  cursor={<Row as="span" inline fit solid="brand-strong" padding="12" radius="full"><Icon name="arrowUpRight" /></Row>}
+>
+  <Text>Hover the card, then the button.</Text>
+  <Button>The pointer comes back here</Button>
+</Column>`,
+      language: "tsx",
+      label: "Follower"
+    }
+  ]}
 />
 
 ## Text

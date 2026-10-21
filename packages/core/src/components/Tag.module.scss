@@ -165,7 +165,7 @@
 
     &:disabled {
         background: var(--neutral-solid-weak);
-        cursor: not-allowed;
+        cursor: var(--cursor-disabled, not-allowed);
     }
 
     // A toggle without a remove button is the control itself.

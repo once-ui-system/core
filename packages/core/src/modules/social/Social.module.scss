@@ -256,7 +256,7 @@
   background: var(--neutral-alpha-weak);
   color: var(--neutral-on-background-medium);
   font: inherit;
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   transition:
     background var(--transition-micro-medium),
     border-color var(--transition-micro-medium),
@@ -291,7 +291,7 @@
   }
 
   &:disabled {
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
     opacity: 0.5;
     transform: none;
   }
@@ -415,7 +415,7 @@
   border: 0;
   border-radius: var(--radius-full);
   background: transparent;
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   transition:
     transform var(--transition-micro-medium),
     background var(--transition-micro-medium);

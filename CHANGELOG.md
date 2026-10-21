@@ -382,6 +382,49 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
+  preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
+  takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
+  border, surface, theme, seeds, scales, page and surface backgrounds) and `fonts` a family
+  per role. A seed or scale becomes a custom scheme for that subtree only, in a server-
+  rendered `<style>`, so two scopes with different brands sit side by side and the first
+  paint is right. Recolouring a nested brand, accent, neutral or solid relies on the
+  nested-token fix (#282).
+- **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
+  every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
+  fields and the blocked sign over disabled controls. The browser draws them from the
+  stylesheet (`data-cursor`), so they never lag and touch never sees them. `rounded` and
+  `dot` turn light in dark mode. For the whole app, `cursor` in the config's `style` (or on
+  `ThemeProvider`); `ThemeInit` writes it before the first paint. `"system"` turns a preset
+  off below it. Components that point or block (`.cursor-pointer`, `.cursor-not-allowed`,
+  Table rows, Accordion, sliders) read the new `--cursor-pointer` / `--cursor-default` /
+  `--cursor-text` / `--cursor-disabled` properties, so they follow a preset; unset, they are
+  the browser's cursors as before.
+
+### Fixed
+
+- **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
+  of buttons, links and inputs: the native pointer showed beside it, and an input lost its
+  I-beam. It now steps aside wherever the native cursor is back, and over a nested element
+  with a follower of its own. It moves without a React render (it re-rendered on every
+  pointer move), no longer flashes in the top-left corner on entry, sits above dialogs and
+  menus, ignores touch input on hybrid devices, and fades in and out (instantly under
+  reduced motion).
+- **`data-brand` on a nested element recolours it on its own.** The brand tokens
+  (`--brand-solid-*`, `--brand-background-*`, `--brand-alpha-*`, the solid border and inset)
+  were resolved on `<html>`, so a section with only `data-brand="red"` kept the page's brand
+  unless it also set `data-theme`. They now resolve again on every nested `data-brand`, in
+  dark and light and under every `data-solid` style. `data-accent` and `data-neutral`
+  get the same (the neutral ramp, `--page-background`, surfaces and contrast solids).
+  The solids follow the nearest `data-solid`, and an element with its own `data-solid` keeps it.
+- **A cursor keyword survives a `style` object.** `Flex`/`Grid` with `style` (or a responsive
+  value that needs the client) dropped `cursor="interactive"` and every other keyword, and a
+  keyword with a class was also written inline, where nothing could restyle it.
+
+## [2.5.0] — 2026-10-21
+
+### Added
+
 - **Animated reactions: `Reactions` and `Reaction`** (Social module). `Reactions` is the
   row under a post, comment or message: a chip per reaction in use with its count, and an
   add button that opens every option. Each reaction has its own gesture (a heart beats, a
@@ -393,6 +436,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   as an animated WebP) with a `motion` of its choice, or drawn by `renderGlyph`. Nothing
   moves under reduced motion. `Reaction` is one glyph with its gesture, on hover, on a
   loop or on demand.
+
+- **Apply button in DatePicker's time panel.** "Back to calendar" was the only way out of
+  the time panel and read as going back, not as confirming. Apply calls the new `onApply`
+  with the picked date and time and closes the `DateInput` or `DropdownWrapper` the picker
+  is in; a standalone picker returns to the calendar. Its text is `labels.apply`.
+
+### Fixed
+
+- **DatePicker time panel in a `DropdownWrapper` closed on the stepper chevrons.**
+  DropdownWrapper read any child with a `value` prop as an option and gave it a "pick and
+  close" click handler, which replaced DatePicker's own. Day clicks survived, but the hour
+  and minute chevrons, AM/PM and "Back to calendar" closed the dropdown. Options are now
+  matched by type (`Option`, `data-value`, `role="option"`, a native button). DatePicker
+  also runs a caller's `onClick` next to its own instead of losing its handler to it.
 
 ## [2.4.0] — 2026-10-20
 

@@ -3,6 +3,7 @@ import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
 
 import type { FlexLayoutProps } from "../interfaces.js";
 import { type ColorScheme, type ColorWeight, SpacingToken, type TextVariant } from "../types.js";
+import { cursorProps } from "../utils/cursor.js";
 import {
   BELOW_HEADER,
   crossAxisClass,
@@ -198,6 +199,8 @@ const ServerFlex = ({
     return `${scheme}-${type}-${weight}`;
   };
 
+  const cursorProp = cursorProps(cursor);
+
   let classes = classNames(
     inline ? "display-inline-flex" : "display-flex",
     elementReset(Component),
@@ -304,7 +307,7 @@ const ServerFlex = ({
     maxHeight === BELOW_HEADER && "max-height-below-header",
     shadow && `shadow-${shadow}`,
     zIndex !== undefined && `z-index-${zIndex}`,
-    typeof cursor === "string" && `cursor-${cursor}`,
+    cursorProp.className,
     userSelect && `user-select-${userSelect}`,
     blendMode && `blend-mode-${blendMode}`,
     typeof blur === "string" && !isCSSUnit(blur) && `blur-${blur}`,
@@ -446,7 +449,7 @@ const ServerFlex = ({
     height: sizeValue(height, "height"),
     aspectRatio: aspectRatio,
     textAlign: align,
-    cursor: typeof cursor === "string" ? cursor : undefined,
+    cursor: cursorProp.style,
     ...numericSpacingStyle({
       padding,
       paddingX,
@@ -485,6 +488,7 @@ const ServerFlex = ({
       {...(Component === "button" && { type: "button" })}
       className={classes}
       style={withTokenLengths(combinedStyle)}
+      {...cursorProp.attributes}
       {...rest}
       {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
     >

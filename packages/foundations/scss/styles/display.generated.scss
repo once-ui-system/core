@@ -1319,15 +1319,15 @@
 }
 
 .cursor-pointer {
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
 }
 
 .cursor-default {
-  cursor: default;
+  cursor: var(--cursor-default, default);
 }
 
 .cursor-text {
-  cursor: text;
+  cursor: var(--cursor-text, text);
 }
 
 .cursor-move {
@@ -1335,7 +1335,7 @@
 }
 
 .cursor-not-allowed {
-  cursor: not-allowed;
+  cursor: var(--cursor-disabled, not-allowed);
 }
 
 .cursor-wait {

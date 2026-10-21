@@ -63,6 +63,7 @@ import {
   offsetValue,
   spacingVar,
 } from "./utilities.spec.mjs";
+import { CURSOR_PRESETS, CURSOR_SYSTEM, cursorImage } from "./cursors.spec.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -528,6 +529,124 @@ function typography() {
   return out.join("\n");
 }
 
+/*
+ * What a preset changes over the controls inside it. Low specificity
+ * (`:where`), so a component that sets its own cursor keeps it; components
+ * that point or block read the same properties, so they follow the preset.
+ */
+const CURSOR_CLICKABLE = [
+  "a[href]",
+  "button",
+  "select",
+  "summary",
+  "label[for]",
+  '[role="button"]',
+  '[role="link"]',
+  '[role="tab"]',
+  '[role="menuitem"]',
+  '[role="menuitemcheckbox"]',
+  '[role="menuitemradio"]',
+  '[role="option"]',
+  '[role="checkbox"]',
+  '[role="radio"]',
+  '[role="switch"]',
+  ...["checkbox", "radio", "range", "file", "color", "submit", "button", "reset", "image"].map(
+    (type) => `input[type="${type}"]`,
+  ),
+];
+const CURSOR_TEXT = [
+  `input:not(${["checkbox", "radio", "range", "file", "color", "submit", "button", "reset", "image", "hidden"].map((type) => `[type="${type}"]`).join(", ")})`,
+  "textarea",
+  '[contenteditable]:not([contenteditable="false"])',
+];
+const CURSOR_DISABLED = [":disabled", '[aria-disabled="true"]'];
+
+function cursor() {
+  const out = [];
+  const preset = (name) => `[data-cursor="${name}"]`;
+  const presets = CURSOR_PRESETS.map((p) => preset(p.name)).join(", ");
+  const states = (set) => [
+    `--cursor-default: ${cursorImage(set.default)};`,
+    `--cursor-pointer: ${cursorImage(set.pointer)};`,
+    `--cursor-text: ${cursorImage(set.text)};`,
+    `--cursor-disabled: ${cursorImage(set.disabled)};`,
+    "--cursor-interactive: var(--cursor-pointer);",
+  ];
+
+  for (const { name, light, dark } of CURSOR_PRESETS) {
+    const on = preset(name);
+    if (!dark) {
+      out.push(rule(on, states(light)));
+      continue;
+    }
+    // A dark subtree inside a light page (or the reverse) draws its own set:
+    // the properties are declared again where `data-theme` changes.
+    out.push(rule(`${on},\n${on} [data-theme="light"]`, states(light)));
+    out.push(
+      rule(
+        `[data-theme="dark"]${on},\n[data-theme="dark"] ${on},\n${on} [data-theme="dark"]`,
+        states(dark),
+      ),
+    );
+  }
+
+  // The arrow over the page, again where a themed subtree redraws it. No
+  // specificity, so a control's own cursor always wins over it.
+  const themed = CURSOR_PRESETS.filter((p) => p.dark)
+    .map((p) => preset(p.name))
+    .join(", ");
+  out.push(
+    rule(`:where(${presets}),\n:where(${themed}) :where([data-theme])`, [
+      "cursor: var(--cursor-default);",
+    ]),
+  );
+
+  // `system` hands a subtree back to the browser's own cursors.
+  out.push(
+    rule(preset(CURSOR_SYSTEM), [
+      "--cursor-default: default;",
+      "--cursor-pointer: pointer;",
+      "--cursor-text: text;",
+      "--cursor-disabled: not-allowed;",
+      "--cursor-interactive: pointer;",
+    ]),
+  );
+  out.push(rule(`:where(${preset(CURSOR_SYSTEM)})`, ["cursor: auto;"]));
+
+  // `cursorInteractive: "default"` keeps the arrow over controls, the preset's arrow.
+  const keep = 'html[data-cursor-interactive="default"]';
+  out.push(
+    rule(
+      [
+        `${keep}:is(${presets}, ${preset(CURSOR_SYSTEM)})`,
+        `${keep} :is(${presets}, ${preset(CURSOR_SYSTEM)})`,
+        `${keep} :is(${presets}) [data-theme]`,
+      ].join(",\n"),
+      ["--cursor-interactive: var(--cursor-default);"],
+    ),
+  );
+
+  // Over controls. A custom cursor that follows the pointer (`[data-cursor-follow]`,
+  // Flex and Grid with a node as `cursor`) hides the native one over its own
+  // surface and hands controls back their cursor, so they never show two.
+  const scope = `:where(${presets}, [data-cursor-follow])`;
+  out.push(rule("[data-cursor-follow]", ["cursor: none;"]));
+  out.push(
+    rule(`${scope} :where(${CURSOR_CLICKABLE.join(", ")})`, [
+      "cursor: var(--cursor-interactive, pointer);",
+    ]),
+  );
+  out.push(
+    rule(`${scope} :where(${CURSOR_TEXT.join(", ")})`, ["cursor: var(--cursor-text, text);"]),
+  );
+  out.push(
+    rule(`${scope} :where(${CURSOR_DISABLED.join(", ")})`, [
+      "cursor: var(--cursor-disabled, not-allowed);",
+    ]),
+  );
+  return out.join("\n");
+}
+
 const TARGETS = [
   { file: "scss/styles/breakpoints.scss", build: breakpoints },
   { file: "scss/styles/typography.generated.scss", build: typography },
@@ -541,6 +660,7 @@ const TARGETS = [
   { file: "scss/styles/flex.generated.scss", build: flex },
   { file: "scss/styles/spacing.generated.scss", build: spacing },
   { file: "scss/styles/position.generated.scss", build: position },
+  { file: "scss/styles/cursor.generated.scss", build: cursor },
 ];
 
 const check = process.argv.includes("--check");

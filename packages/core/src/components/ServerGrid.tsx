@@ -3,6 +3,7 @@ import type { CSSProperties, ElementType, HTMLAttributes, Ref } from "react";
 
 import type { GridBreakpointProps, GridLayoutProps, GridProps } from "../interfaces.js";
 import type { ColorScheme, ColorWeight } from "../types.js";
+import { cursorProps } from "../utils/cursor.js";
 import {
   BELOW_HEADER,
   elementReset,
@@ -202,6 +203,8 @@ const ServerGrid = ({
   // a server component.
   const minColumnWidthValue = sizeValue(minColumnWidth, "width");
 
+  const cursorProp = cursorProps(cursor);
+
   let classes = classNames(
     position && `position-${position}`,
     inline ? "display-inline-grid" : "display-grid",
@@ -293,7 +296,7 @@ const ServerGrid = ({
     // The preset's three classes, as Flex writes them. 2.x typed
     // `textVariant` here and never applied it.
     ...(textVariant ? variantClasses(textVariant) : []),
-    typeof cursor === "string" && `cursor-${cursor}`,
+    cursorProp.className,
     userSelect && `user-select-${userSelect}`,
     blendMode && `blend-mode-${blendMode}`,
     typeof blur === "string" && !isCSSUnit(blur) && `blur-${blur}`,
@@ -327,8 +330,7 @@ const ServerGrid = ({
     height: sizeValue(height, "height"),
     aspectRatio: aspectRatio,
     textAlign: align,
-    // Hide default cursor when using custom cursor
-    cursor: typeof cursor === "string" ? cursor : undefined,
+    cursor: cursorProp.style,
     ...numericSpacingStyle({
       padding,
       paddingX,
@@ -367,6 +369,7 @@ const ServerGrid = ({
       {...(Component === "button" && { type: "button" })}
       className={classes}
       style={withTokenLengths(combinedStyle)}
+      {...cursorProp.attributes}
       {...rest}
       {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
     >

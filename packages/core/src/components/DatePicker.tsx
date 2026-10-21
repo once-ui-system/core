@@ -1,7 +1,7 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { Reveal } from "../internal/Reveal.js";
 import { CondensedTShirtSizes } from "../types.js";
@@ -16,6 +16,7 @@ import { Button } from "./Button.js";
 import { Column } from "./Column.js";
 import styles from "./DatePicker.module.scss";
 import { Dropdown } from "./Dropdown.js";
+import { DropdownCloseContext } from "./DropdownTriggerContext.js";
 import { Flex } from "./Flex.js";
 import { Icon } from "./Icon.js";
 import { IconButton } from "./IconButton.js";
@@ -47,6 +48,8 @@ export interface DatePickerLabels {
   year?: (year: number) => string;
   /** The time panel's way back to the days. Defaults to `"Back to calendar"`. */
   backToCalendar?: string;
+  /** The time panel's button that confirms the date and time. Defaults to `"Apply"`. */
+  apply?: string;
   /** The hour field's name and placeholder. Defaults to `"Hours"`. */
   hours?: string;
   /** The minute field's name and placeholder. Defaults to `"Minutes"`. */
@@ -64,6 +67,7 @@ const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
   month: (month) => `Month: ${month}, change month`,
   year: (year) => `Year: ${year}, change year`,
   backToCalendar: "Back to calendar",
+  apply: "Apply",
   hours: "Hours",
   minutes: "Minutes",
   am: undefined,
@@ -93,6 +97,12 @@ interface CalendarProps
   previousMonth?: boolean;
   nextMonth?: boolean;
   timePicker?: boolean;
+  /**
+   * Called with the picked date and time when the time panel's Apply button is
+   * pressed. Inside a Dropdown (or a DateInput) Apply also closes the panel; on
+   * its own the picker goes back to the calendar.
+   */
+  onApply?: (date: Date) => void;
   defaultTime?: {
     hours: number;
     minutes: number;
@@ -165,6 +175,7 @@ const Calendar = ({
   defaultValue,
   onValueChange,
   timePicker = false,
+  onApply,
   previousMonth = true,
   nextMonth = true,
   minDate,
@@ -407,6 +418,26 @@ const Calendar = ({
       setIsTimeSelector(show);
       setIsTransitioning(true);
     }, 400);
+  };
+
+  const closeDropdown = useContext(DropdownCloseContext);
+
+  /**
+   * Confirms the picked date and time. Every change already reaches
+   * `onValueChange`; this is the explicit "done" the time panel lacked, where
+   * the only way out was "Back to calendar", which read as going back rather
+   * than applying.
+   */
+  const handleApply = () => {
+    if (!selectedDate) return;
+    const date = new Date(selectedDate);
+    if (selectedTime) {
+      date.setHours(selectedTime.hours);
+      date.setMinutes(selectedTime.minutes);
+    }
+    onApply?.(date);
+    if (closeDropdown) closeDropdown();
+    else handleTimeToggle(false);
   };
 
   const handleDateSelect = (date: Date) => {
@@ -1111,6 +1142,9 @@ const Calendar = ({
                 aria-label={names.minutes}
               />
             </Flex>
+            <Button fillWidth variant="primary" size={size} onClick={handleApply}>
+              {names.apply}
+            </Button>
           </Column>
         ) : isMonthOpen || isYearOpen ? (
           // While a month or year list is open the arrow keys are that

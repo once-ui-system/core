@@ -522,7 +522,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
-- cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
+- cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number | CSSUnit
 - theme?: "light" | "dark"
@@ -582,6 +582,7 @@ type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transpare
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>
+type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
 type DataPoint = { [key: string]?: string | number | Date | undefined; label?: string }
 type DataStyle = "categorical" | "divergent" | "sequential"
 type DateConfig = { start?: Date; end?: Date; max?: Date; min?: Date; dual?: boolean; format?: string; presets?: PresetsConfig; selector?: boolean; onChange?: (range: DateRange) => void }
