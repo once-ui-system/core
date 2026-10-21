@@ -1,0 +1,32 @@
+{
+ "name": "Sections",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "items": "SectionItem[] = []",
+  "resolveHref": "SectionBaseProps[\"resolveHref\"]",
+  "renderCustom": "(item: SectionItem, index: number) => ReactNode"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "HeroSection"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "SectionBaseProps": {
+   "layout": "string",
+   "width": "string",
+   "eyebrow": "string",
+   "title": "string",
+   "description": "string",
+   "resolveHref": "(href: string) => string"
+  },
+  "SectionItem": {
+   "id": "string",
+   "type": "!string",
+   "props": "Record<string, unknown>"
+  }
+ }
+}

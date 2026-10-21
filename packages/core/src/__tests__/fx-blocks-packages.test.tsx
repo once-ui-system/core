@@ -38,6 +38,21 @@ const FX = [
   "WeatherFx",
 ];
 const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
+/** The page sections, new in blocks with 3.0 (never in core). */
+const PAGE_SECTIONS = [
+  "AboutSection",
+  "ContactSection",
+  "CtaSection",
+  "FaqSection",
+  "FeaturesSection",
+  "HeroSection",
+  "LogosSection",
+  "PricingSection",
+  "Sections",
+  "StatsSection",
+  "TeamSection",
+  "TestimonialsSection",
+];
 /** 3.0, F11: StylePanel's sections, plain named exports of blocks. */
 const SECTIONS = [
   "Root",
@@ -65,7 +80,7 @@ const SECTIONS = [
 ].map((part) => `StylePanel${part}`);
 const PACKAGES = [
   ["@once-ui-system/fx", FX, []],
-  ["@once-ui-system/blocks", BLOCKS, SECTIONS],
+  ["@once-ui-system/blocks", [...BLOCKS, ...PAGE_SECTIONS], SECTIONS],
 ] as const;
 
 type Entry = { group: string; importFrom?: string };
@@ -79,9 +94,12 @@ const slice = (name: string) =>
   );
 
 describe("core's root", () => {
-  it.each([...FX, ...BLOCKS, ...SECTIONS, "useStylePanel"])("no longer exports %s", (name) => {
-    expect(name in core).toBe(false);
-  });
+  it.each([...FX, ...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])(
+    "no longer exports %s",
+    (name) => {
+      expect(name in core).toBe(false);
+    },
+  );
 
   it("renders CodeBlock actions in its header, where styleButton was", async () => {
     const wrap = ({ children }: { children: React.ReactNode }) => (

@@ -1,4 +1,9 @@
 {
+  "AboutSection": {
+    "purpose": "Site section: story beside a picture",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "Accordion": {
     "purpose": "One collapsible section: a clickable title row that shows and hides its content",
     "tags": ["content", "disclosure"],
@@ -142,6 +147,11 @@
     "tags": ["media", "marketing"],
     "pairsWith": ["Column", "Media"]
   },
+  "ContactSection": {
+    "purpose": "Site section: contact details as links",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "ConversationItem": {
     "purpose": "Inbox row: avatar, name, last message, time and unread count; a link with href, a button with onClick",
     "tags": ["chat", "navigation"],
@@ -156,6 +166,11 @@
     "purpose": "Animated number that counts or rolls to its value — stats and prices; speed in ms",
     "tags": ["effect", "data", "marketing"],
     "pairsWith": ["Text", "Row"]
+  },
+  "CtaSection": {
+    "purpose": "Site section: the closing call to action",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "DataThemeProvider": {
     "purpose": "App-wide defaults for the data-viz components: chart variant, mode, height, axis and ticks; read with useDataTheme",
@@ -207,6 +222,16 @@
     "tags": ["effect", "chat"],
     "avoid": "Wrapping content — it is an absolute edge overlay, not a container",
     "pairsWith": ["Column", "Row"]
+  },
+  "FaqSection": {
+    "purpose": "Site section: questions and answers",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
+  "FeaturesSection": {
+    "purpose": "Site section: features with icons",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "Feedback": {
     "purpose": "Inline alert with variant colour, icon, title, description and optional close",
@@ -278,6 +303,11 @@
     "purpose": "Auto-generated table of contents from the page's headings, highlighting the section in view",
     "tags": ["navigation", "docs"],
     "pairsWith": ["HeadingLink", "Column"]
+  },
+  "HeroSection": {
+    "purpose": "Site section: h1, lead, buttons, picture",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "HoloFx": {
     "purpose": "Holographic sheen and texture over an image or card, following the pointer",
@@ -393,6 +423,11 @@
     "purpose": "Once UI mark loader, for AI and brand loading states",
     "tags": ["feedback", "chat", "ai"],
     "pairsWith": ["WorkingIndicator", "Text"]
+  },
+  "LogosSection": {
+    "purpose": "Site section: client or press logos",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "Mascot": {
     "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
@@ -570,6 +605,11 @@
     "tags": ["data", "chart", "dashboard"],
     "pairsWith": ["ChartHeader", "Legend"]
   },
+  "PricingSection": {
+    "purpose": "Site section: plans side by side, one highlighted",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "ProgressBar": {
     "purpose": "Linear progress bar for a value between min and max, with optional label",
     "tags": ["data", "feedback", "onboarding"],
@@ -641,6 +681,11 @@
     "tags": ["media", "control"],
     "pairsWith": ["MediaVideoPlayer", "MediaAudioPlayer"]
   },
+  "Sections": {
+    "purpose": "Renders stored sections [{ type, props }]; fields in sectionSchemas",
+    "tags": ["marketing"],
+    "pairsWith": ["HeroSection"]
+  },
   "SegmentedControl": {
     "purpose": "Pick one of 2–5 options from a row of buttons (billing period, view mode)",
     "tags": ["control", "dashboard"],
@@ -702,6 +747,11 @@
     "purpose": "Two panes with a draggable divider, collapsing to one below a breakpoint",
     "tags": ["layout", "chat", "settings"],
     "pairsWith": ["Column", "Row"]
+  },
+  "StatsSection": {
+    "purpose": "Site section: a few large figures",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "StatusIndicator": {
     "purpose": "Small coloured status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring in a `tone` for a live state",
@@ -900,6 +950,16 @@
     "purpose": "Field that collects a list of values as removable chips",
     "tags": ["form"],
     "pairsWith": ["Input", "Tag"]
+  },
+  "TeamSection": {
+    "purpose": "Site section: people with photo, role and bio",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
+  "TestimonialsSection": {
+    "purpose": "Site section: customer quotes",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",

@@ -253,6 +253,7 @@
   "lock",
   "logout",
   "mail",
+  "mapPin",
   "maximize",
   "menu",
   "minimize",
@@ -267,6 +268,7 @@
   "people",
   "person",
   "personRemove",
+  "phone",
   "play",
   "plus",
   "radialGauge",
@@ -320,6 +322,10 @@
    "href": "!string",
    "hrefLang": "!string"
   },
+  "AnySection": [
+   "ComponentClass<any, any>",
+   "FunctionComponent<any>"
+  ],
   "ArrowNavigationOptions": {
    "layout": "!NavigationLayout",
    "itemCount": "!number",
@@ -1166,6 +1172,7 @@
    "lock",
    "logout",
    "mail",
+   "mapPin",
    "maximize",
    "minimize",
    "minus",
@@ -1178,6 +1185,7 @@
    "people",
    "person",
    "personRemove",
+   "phone",
    "play",
    "plus",
    "radialGauge",
@@ -1627,6 +1635,62 @@
    "resizable": "boolean",
    "onAdd": "(time: number) => void"
   },
+  "SectionBaseProps": {
+   "layout": "string",
+   "width": "string",
+   "eyebrow": "string",
+   "title": "string",
+   "description": "string",
+   "resolveHref": "(href: string) => string"
+  },
+  "SectionField": {
+   "key": "!string",
+   "kind": "!SectionFieldKind",
+   "label": "!string",
+   "options": "readonly string[]",
+   "split": "\"lines\" | \"paragraphs\"",
+   "fields": "SectionField[]",
+   "max": "number",
+   "rowTitle": "string",
+   "when": "{ key: string; is: readonly string[] }",
+   "hint": "string"
+  },
+  "SectionFieldKind": [
+   "boolean",
+   "link",
+   "textarea",
+   "image",
+   "text",
+   "list",
+   "choice"
+  ],
+  "SectionItem": {
+   "id": "string",
+   "type": "!string",
+   "props": "Record<string, unknown>"
+  },
+  "SectionSchema": {
+   "type": "!SectionType",
+   "component": "!string",
+   "label": "!string",
+   "description": "!string",
+   "layouts": "!readonly string[]",
+   "fields": "!SectionField[]",
+   "sample": "!Record<string, unknown>"
+  },
+  "SectionType": [
+   "about",
+   "hero",
+   "features",
+   "stats",
+   "testimonials",
+   "team",
+   "pricing",
+   "faq",
+   "logos",
+   "cta",
+   "contact"
+  ],
   "SelectLabels": {
    "search": "string",
    "clear": "string"
@@ -5883,6 +5947,181 @@
     "customColors": "boolean",
     "stacked": "boolean"
    }
+  },
+  "AboutSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "body": "string",
+    "image": "string",
+    "imageAlt": "string",
+    "imageSide": "string",
+    "primaryLabel": "string",
+    "primaryHref": "string",
+    "secondaryLabel": "string",
+    "secondaryHref": "string"
+   }
+  },
+  "ContactSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "email": "string",
+    "phone": "string",
+    "address": "string",
+    "hours": "string",
+    "mapHref": "string",
+    "primaryLabel": "string",
+    "primaryHref": "string"
+   }
+  },
+  "CtaSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "primaryLabel": "string",
+    "primaryHref": "string",
+    "secondaryLabel": "string",
+    "secondaryHref": "string"
+   }
+  },
+  "FaqSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ question?: string; answer?: string }[]"
+   }
+  },
+  "FeaturesSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "columns": "string",
+    "items": "{ icon?: string; title?: string; description?: string }[]"
+   }
+  },
+  "HeroSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "primaryLabel": "string",
+    "primaryHref": "string",
+    "secondaryLabel": "string",
+    "secondaryHref": "string",
+    "image": "string",
+    "imageAlt": "string"
+   }
+  },
+  "LogosSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ src?: string; srcDark?: string; href?: string }[]"
+   }
+  },
+  "PricingSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ name?: string; price?: string; period?: string; description?: string; features?: string; ctaLabel?: string; ctaHref?: string; badge?: string; highlighted?: boolean; }[]"
+   }
+  },
+  "Sections": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "items": "SectionItem[] = []",
+    "resolveHref": "SectionBaseProps[\"resolveHref\"]",
+    "renderCustom": "(item: SectionItem, index: number) => ReactNode"
+   }
+  },
+  "StatsSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ value?: string; label?: string; description?: string }[]"
+   }
+  },
+  "TeamSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "columns": "string",
+    "items": "{ name?: string; role?: string; bio?: string; photo?: string }[]"
+   }
+  },
+  "TestimonialsSection": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "props": {
+    "layout": "string",
+    "width": "string",
+    "eyebrow": "string",
+    "title": "string",
+    "description": "string",
+    "resolveHref": "(href: string) => string",
+    "items": "{ quote?: string; name?: string; role?: string; avatar?: string }[]"
+   }
   }
  },
  "functions": {
@@ -6120,6 +6359,98 @@
    "importFrom": "@once-ui-system/blocks",
    "kind": "hook",
    "signature": "() => StylePanelContextValue"
+  },
+  "aboutLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"stacked\"]"
+  },
+  "contactLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"cards\", \"centered\"]"
+  },
+  "ctaLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"banner\", \"split\", \"minimal\"]"
+  },
+  "faqLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"stacked\", \"split\", \"grid\"]"
+  },
+  "featuresLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\", \"split\"]"
+  },
+  "heroLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\"]"
+  },
+  "logosLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"grid\"]"
+  },
+  "pricingLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\"]"
+  },
+  "statsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"cards\"]"
+  },
+  "teamLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"list\"]"
+  },
+  "testimonialsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"spotlight\", \"plain\"]"
+  },
+  "sectionComponents": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, AnySection>",
+   "doc": "The component for each section type."
+  },
+  "sectionSchemas": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, SectionSchema>"
+  },
+  "sectionTypes": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SectionType[]",
+   "doc": "Every section type, in the order an editor offers them."
+  },
+  "isSectionType": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(value: unknown) => value is SectionType"
   }
  },
  "shorthands": {
