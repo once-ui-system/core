@@ -1,0 +1,90 @@
+---
+title: "Markdown"
+summary: "Render Markdown, such as a post body or release notes, with Once UI components in React Native."
+updatedAt: "2026-10-21"
+docs: "once-ui/native/components/markdown.mdx"
+github: "packages/native/src/components/Markdown.tsx"
+navLabel: "Markdown"
+navIcon: "components"
+---
+
+`Markdown` takes a Markdown string and draws it with the same components core's [MDX components](/modules/mdx) use on the web. Headings, body text, links, inline code, `CodeBlock`, quotes, `List`, `Table`, `Media` and `Line` all look the same as on your site. Use it for content you store as Markdown, such as posts, comments, release notes or help articles.
+
+<Row fillWidth horizontal="center" marginY="24">
+  <Media
+    src="/images/native/markdown.png"
+    alt="A restaurant post with a heading, bold and italic text, a bulleted list with inline code, a quote, a numbered list, a link and a table"
+    aspectRatio="390 / 844"
+    maxWidth={20}
+    radius="l"
+    border="neutral-alpha-weak"
+  />
+</Row>
+
+## Basic usage
+
+Pass the source as the child. The parser runs on the device and has no dependencies.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Markdown } from "@once-ui-system/native";
+
+export function PostBody({ body }: { body: string }) {
+  return <Markdown>{body}</Markdown>;
+}`,
+    language: "tsx",
+    label: "PostBody.tsx"
+  }
+]} />
+
+## Links
+
+By default, tapping a link opens its URL with `Linking.openURL`. Pass `onLinkPress` to route links inside your app instead.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Markdown } from "@once-ui-system/native";
+import { router } from "expo-router";
+import { Linking } from "react-native";
+
+export function Article({ body }: { body: string }) {
+  return (
+    <Markdown
+      onLinkPress={(href) =>
+        href.startsWith("/") ? router.push(href) : Linking.openURL(href)
+      }
+    >
+      {body}
+    </Markdown>
+  );
+}`,
+    language: "tsx",
+    label: "Article.tsx"
+  }
+]} />
+
+## What it reads
+
+- **Blocks:** `#` and underlined headings, paragraphs, fenced code with a language, `>` quotes, `-` and `1.` lists (nested, and an ordered list keeps its first number), GFM tables with `:---:` alignment, `---` rules, and an image on its own line.
+- **Inline:** `**bold**`, `*italic*`, `~~strikethrough~~`, `` `code` ``, `[links](url)`, `<https://…>` and bare URLs, and line breaks made with two trailing spaces or a backslash.
+
+To get at the parsed tree, for example to build an excerpt, use `parseMarkdown(source)` and `parseInline(text)`, which are exported too.
+
+## Differences from the web
+
+- **A string, not MDX.** On the web, MDX compiles at build time and can use components as tags. On a phone, `Markdown` parses plain Markdown when it renders. Raw HTML and MDX tags show up as text.
+- **No heading anchors.** Headings are announced as headers with their level, but they don't get link anchors.
+- **Images** are drawn with `Media` at full width. An image inside a sentence shows its alt text.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `children` | `string` | | The Markdown source. Required. |
+| `onLinkPress` | `(href: string) => void` | | Called when a link is tapped. Without it, `Linking.openURL` opens the link. |
+
+`Markdown` also takes every `Flex` prop for its column, such as `gap`, `padding` or `maxWidth`.
