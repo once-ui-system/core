@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
-import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider";
+import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider.js";
 
 // Default breakpoints
 export const DEFAULT_BREAKPOINTS = {
@@ -30,7 +30,7 @@ interface LayoutProviderProps {
   children: ReactNode;
 }
 
-const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
+const LayoutProvider = ({ children }: LayoutProviderProps) => {
   // Fixed, and deliberately so. The utility classes carry these widths inside
   // their media queries, and a prebuilt stylesheet cannot honour a width the
   // app picks at runtime — `@media` does not read custom properties. Letting

@@ -1,19 +1,19 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { useLayout } from "../contexts/LayoutProvider";
-import { ToastPosition } from "../types";
-import { Column } from "./Column";
-import { Row } from "./Row";
-import { Toast } from "./Toast";
+import { useLayout } from "../contexts/LayoutProvider.js";
+import { ToastPosition, Tone } from "../types.js";
+import { Column } from "./Column.js";
+import { Row } from "./Row.js";
+import { Toast } from "./Toast.js";
 import styles from "./Toaster.module.scss";
 
 interface ToasterProps {
   toasts: {
     id: string;
-    variant: "success" | "danger" | "warning" | "info";
+    tone: Tone;
     message: React.ReactNode;
     action?: React.ReactNode;
     duration?: number;
@@ -26,91 +26,98 @@ interface ToasterProps {
   xs?: ToastPosition;
 }
 
-const Toaster = forwardRef<HTMLDivElement, ToasterProps>(
-  ({ toasts, removeToast, xl, l, m, s, xs }, ref) => {
-    const [mounted, setMounted] = useState(false);
-    const { currentBreakpoint } = useLayout();
+const Toaster = ({
+  ref,
+  toasts,
+  removeToast,
+  xl,
+  l,
+  m,
+  s,
+  xs,
+}: ToasterProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const [mounted, setMounted] = useState(false);
+  const { currentBreakpoint } = useLayout();
 
-    useEffect(() => {
-      setMounted(true);
-      return () => setMounted(false);
-    }, []);
+  useEffect(() => {
+    setMounted(true);
+    return () => setMounted(false);
+  }, []);
 
-    if (!mounted) return null;
+  if (!mounted) return null;
 
-    const getCascadedPosition = (): ToastPosition => {
-      const breakpointOrder = ["xl", "l", "m", "s", "xs"];
-      const breakpointProps = { xl, l, m, s, xs };
-      const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
+  const getCascadedPosition = (): ToastPosition => {
+    const breakpointOrder = ["xl", "l", "m", "s", "xs"];
+    const breakpointProps = { xl, l, m, s, xs };
+    const currentIndex = breakpointOrder.indexOf(currentBreakpoint);
 
-      let activePosition: ToastPosition = "bottom";
+    let activePosition: ToastPosition = "bottom";
 
-      if (currentIndex === -1) return activePosition;
+    if (currentIndex === -1) return activePosition;
 
-      for (let i = 0; i <= currentIndex; i++) {
-        const bp = breakpointOrder[i] as keyof typeof breakpointProps;
-        if (breakpointProps[bp]) {
-          activePosition = breakpointProps[bp] as ToastPosition;
-        }
+    for (let i = 0; i <= currentIndex; i++) {
+      const bp = breakpointOrder[i] as keyof typeof breakpointProps;
+      if (breakpointProps[bp]) {
+        activePosition = breakpointProps[bp] as ToastPosition;
       }
+    }
 
-      return activePosition;
-    };
+    return activePosition;
+  };
 
-    const actualPosition = getCascadedPosition();
-    const isTop = actualPosition === "top";
+  const actualPosition = getCascadedPosition();
+  const isTop = actualPosition === "top";
 
-    return createPortal(
-      <Column
-        zIndex={10}
-        fillWidth
-        maxWidth={32}
-        position="fixed"
-        className={classNames(styles.toastContainer, styles[actualPosition])}
-        // One polite live region that is on the page before the first toast:
-        // a region inserted together with its text is often not read at all.
-        // Toasts are added to it, so each is announced once as it appears; a
-        // danger toast is still its own alert and interrupts.
-        role="region"
-        aria-label="Notifications"
-        aria-live="polite"
-        aria-relevant="additions text"
-      >
-        {toasts.map((toast, index, array) => {
-          const reverseIndex = array.length - 1 - index;
-          const yDirection = isTop ? -1 : 1;
+  return createPortal(
+    <Column
+      zIndex={10}
+      fillWidth
+      maxWidth="32rem"
+      position="fixed"
+      className={classNames(styles.toastContainer, styles[actualPosition])}
+      // One polite live region that is on the page before the first toast:
+      // a region inserted together with its text is often not read at all.
+      // Toasts are added to it, so each is announced once as it appears; a
+      // danger toast is still its own alert and interrupts.
+      role="region"
+      aria-label="Notifications"
+      aria-live="polite"
+      aria-relevant="additions text"
+    >
+      {toasts.map((toast, index, array) => {
+        const reverseIndex = array.length - 1 - index;
+        const yDirection = isTop ? -1 : 1;
 
-          return (
-            <Row
-              padding="4"
-              fillWidth
-              position="absolute"
-              key={toast.id}
-              className={classNames(styles.toastWrapper, styles[actualPosition])}
-              style={{
-                transformOrigin: isTop ? "top center" : "bottom center",
-                transform: `scale(${1 - reverseIndex * 0.05}) translateY(${yDirection * (1 - reverseIndex * 10)}%)`,
-                opacity: reverseIndex === 0 ? 1 : 0.9,
-              }}
+        return (
+          <Row
+            padding="4"
+            fillWidth
+            position="absolute"
+            key={toast.id}
+            className={classNames(styles.toastWrapper, styles[actualPosition])}
+            style={{
+              transformOrigin: isTop ? "top center" : "bottom center",
+              transform: `scale(${1 - reverseIndex * 0.05}) translateY(${yDirection * (1 - reverseIndex * 10)}%)`,
+              opacity: reverseIndex === 0 ? 1 : 0.9,
+            }}
+          >
+            <Toast
+              className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
+              tone={toast.tone}
+              onClose={() => removeToast(toast.id)}
+              action={toast.action}
+              duration={toast.duration}
+              announce={toast.tone === "danger"}
             >
-              <Toast
-                className={classNames(styles.toastAnimation, styles[`animation-${actualPosition}`])}
-                variant={toast.variant}
-                onClose={() => removeToast(toast.id)}
-                action={toast.action}
-                duration={toast.duration}
-                announce={toast.variant === "danger"}
-              >
-                {toast.message}
-              </Toast>
-            </Row>
-          );
-        })}
-      </Column>,
-      document.body,
-    );
-  },
-);
+              {toast.message}
+            </Toast>
+          </Row>
+        );
+      })}
+    </Column>,
+    document.body,
+  );
+};
 
 Toaster.displayName = "Toaster";
 

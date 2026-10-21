@@ -7,7 +7,13 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": ["**", "!src/icons/data.ts"]
+    "includes": [
+      "**",
+      "!src/icons/data.ts",
+      "!ai/components",
+      "!ai/catalog.json",
+      "!ai/manifest.json"
+    ]
   },
   "formatter": {
     "enabled": true,

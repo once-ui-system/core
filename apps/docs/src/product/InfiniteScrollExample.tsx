@@ -24,7 +24,7 @@ export function InfiniteScrollExample() {
   }, [items]);
   
   return (
-    <Column fillWidth height={40} overflow="auto" 
+    <Column fillWidth height="40rem" overflow="auto" 
       gap="16"
       padding="16">
       <InfiniteScroll
@@ -39,7 +39,7 @@ export function InfiniteScrollExample() {
             lines={{display: true, color: "neutral-alpha-weak"}}
             fillWidth
             radius="m"
-            minHeight={8}
+            minHeight="8rem"
             border="neutral-alpha-medium"
             shadow="m"
           />

@@ -8,12 +8,12 @@ import { touchSlop } from "./touch";
 import { useControlledValue } from "./useControllable";
 
 export interface RangeSliderProps {
-  /** The selected `[start, end]`, when the host owns the state. Pair with `onChange`. */
+  /** The selected `[start, end]`, when the host owns the state. Pair with `onValueChange`. */
   value?: [number, number];
   /** The range selected first when RangeSlider manages its own state. Defaults to `[min, max]`. */
   defaultValue?: [number, number];
   /** Called with the new `[start, end]`, start never above end. */
-  onChange?: (value: [number, number]) => void;
+  onValueChange?: (value: [number, number]) => void;
   min?: number;
   max?: number;
   /** Every value lands on a multiple of `step` from `min`. */
@@ -48,7 +48,7 @@ const THUMBS: Thumb[] = [0, 1];
 export function RangeSlider({
   value,
   defaultValue,
-  onChange,
+  onValueChange,
   min = 0,
   max = 100,
   step = 1,
@@ -61,7 +61,7 @@ export function RangeSlider({
   style,
 }: RangeSliderProps) {
   const theme = useTheme();
-  const [raw, setValue] = useControlledValue(value, defaultValue ?? [min, max], onChange);
+  const [raw, setValue] = useControlledValue(value, defaultValue ?? [min, max], onValueChange);
   const [dragging, setDragging] = useState<Grab | null>(null);
   const grab = useRef<Grab | null>(null);
 
@@ -132,12 +132,12 @@ export function RangeSlider({
       {(label || showValue) && (
         <Row fillWidth horizontal="between" vertical="center">
           {label && (
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {label}
             </Text>
           )}
           {showValue && (
-            <Text variant="label-default-s" onBackground="neutral-medium">
+            <Text textVariant="label-default-s" onBackground="neutral-medium">
               {formatValue(start)} – {formatValue(end)}
             </Text>
           )}

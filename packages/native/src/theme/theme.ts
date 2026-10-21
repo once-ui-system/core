@@ -1,4 +1,5 @@
 import type { TextStyle, ViewStyle } from "react-native";
+import type { Length } from "../components/spacing";
 import type {
   ColorScheme,
   Colors,
@@ -9,6 +10,7 @@ import type {
   TextVariant,
 } from "../types";
 import {
+  DENSITIES,
   remFor,
   resolveTokens,
   type ShadowLayer,
@@ -59,6 +61,8 @@ export interface OnceTheme {
   breakpoints: Breakpoints;
   /** Safe-area insets passed to `ThemeProvider`; zeros when none were. */
   insets: Insets;
+  /** The size a control takes when given none: the density's (m when normal). */
+  controlSize: "s" | "m" | "l";
   /** px per rem for this screen: 15 on phones, 16 on tablets, as on the web. */
   rem: number;
   /** Every resolved token, by its CSS name without `--`. */
@@ -73,8 +77,11 @@ export interface OnceTheme {
   /** `on-background` / `on-solid` text colour for a `"brand-strong"`-style value. */
   onBackground: (value: `${ColorScheme}-${ColorWeight}`) => string;
   onSolid: (value: `${ColorScheme}-${ColorWeight}`) => string;
-  /** A spacing token, or a number of rem, in points. */
-  space: (value: SpacingToken | number) => number;
+  /**
+   * A spacing token (`"16"`, `"m"`), a number of points (px, as a number is
+   * in core 3.0), or a `"24px"` / `"1.5rem"` string, in points.
+   */
+  space: (value: SpacingToken | number | Length) => number;
   radius: (size: RadiusSize) => number;
   shadow: (size: ShadowSize) => ViewStyle;
   text: (variant: TextVariant) => TextStyle;
@@ -85,10 +92,8 @@ export function createTheme(
   width: number,
   fonts: FontFamilies = {},
   insets: Insets = NO_INSETS,
-  /** Extra tokens, such as `customSchemeTokens()` for a `"custom"` scheme. */
-  extra: Record<string, TokenValue> = {},
 ): OnceTheme {
-  const tokens = resolveTokens(settings, width, tokenFile, extra);
+  const tokens = resolveTokens(settings, width);
   const rem = remFor(tokens, width);
   const px = (name: string, fallback = 0) => toPx(tokens[name], rem) ?? fallback;
 
@@ -109,9 +114,13 @@ export function createTheme(
     return color(`${scheme}-${kind}-${weight}`);
   };
 
-  const space = (value: SpacingToken | number) => {
-    if (typeof value === "number") return value * rem;
-    return /^\d+$/.test(value) ? px(`static-space-${value}`) : px(`responsive-space-${value}`);
+  const space = (value: SpacingToken | number | Length) => {
+    // 3.0: a number is px (density-independent points here), never rem.
+    if (typeof value === "number") return value;
+    if (/^\d+$/.test(value)) return px(`static-space-${value}`);
+    const length = toPx(value, rem);
+    if (length !== undefined) return length;
+    return px(`responsive-space-${value}`);
   };
 
   const radius = (size: RadiusSize) => {
@@ -167,6 +176,7 @@ export function createTheme(
     width,
     breakpoints: { xs, s, m, l, xl: Number.POSITIVE_INFINITY },
     insets,
+    controlSize: DENSITIES[settings.density ?? "normal"]?.size ?? "m",
     rem,
     tokens,
     px: (name) => px(name),

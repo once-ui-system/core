@@ -155,7 +155,7 @@ export function Change() {
 - There is no `fullscreenButton` and no `styleButton`. The style panel is a web overlay.
 - A diff has one column of line numbers, for the new file. Deleted lines have no number. The web shows the old and new numbers side by side.
 - The collapsed view cuts the code at `maxLines` and shows the "View code" button under it. There is no fade over the last lines.
-- Long lines scroll sideways and are never wrapped, as `white-space: pre` on the web. `codeHeight` adds a vertical scroll past that height, in rem.
+- Long lines scroll sideways and are never wrapped, as `white-space: pre` on the web. `codeHeight` adds a vertical scroll past that height: a number is points, `"20rem"` scales with the root size.
 - The tabs are `ToggleButton`s in a horizontal scroll, announced to screen readers as tabs.
 - The code uses the body-s size with a line height of 1.75, as the web, in `fonts.code` from `ThemeProvider`. Without it, the platform monospace font is used (Menlo on iOS, monospace on Android).
 
@@ -171,7 +171,7 @@ export function Change() {
 | `preview` | `ReactNode` | | A live example above the code. |
 | `previewPadding` | `SpacingToken` | `"l"` | Padding around the preview. |
 | `reloadButton` | `boolean` | `false` | A button that mounts the preview again. |
-| `codeHeight` | `number` | | The code's maximum height in rem. It scrolls past it. |
+| `codeHeight` | `number \| Length` | | The code's maximum height: a number is points. It scrolls past it. |
 | `isCollapsible` | `boolean` | `false` | Shows only `maxLines` lines until "View code" is pressed. |
 | `maxLines` | `number` | `5` | Lines shown while collapsed. |
 | `hideCode` | `boolean` | `false` | Hides the code, leaving the header and preview. |

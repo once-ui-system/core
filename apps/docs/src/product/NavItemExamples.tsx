@@ -13,7 +13,7 @@ const people = [
 export function NavItemAvatarExample() {
   const [current, setCurrent] = useState("ada");
   return (
-    <Column maxWidth={20} gap="4" padding="8" radius="l" border>
+    <Column maxWidth="20rem" gap="4" padding="8" radius="l" border>
       {people.map((person) => (
         <NavItem
           key={person.id}

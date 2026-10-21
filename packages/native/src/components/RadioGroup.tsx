@@ -2,7 +2,12 @@ import { createContext, type ReactNode, useContext } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
-import { InteractiveDetails } from "./InteractiveDetails";
+import {
+  CONTROL_TEXT,
+  type ControlChromeProps,
+  controlChrome,
+  InteractiveDetails,
+} from "./InteractiveDetails";
 import { Text } from "./Text";
 import { touchSlop } from "./touch";
 import { useControllable, useControlledValue } from "./useControllable";
@@ -12,31 +17,47 @@ const RadioGroupContext = createContext<{
   value: string | undefined;
   disabled: boolean;
   select: (value: string) => void;
+  size: ReturnType<typeof controlChrome>["size"];
+  invalid: boolean;
 } | null>(null);
 
-export interface RadioButtonProps {
+export interface RadioButtonProps extends ControlChromeProps {
+  /** Chosen or not, controlled. Leave it out to let the radio keep its own state. */
   checked?: boolean;
+  /** The starting state of an uncontrolled radio (no `checked`). */
   defaultChecked?: boolean;
   /** Inside a RadioGroup, the group checks the button whose `value` it holds. */
   value?: string;
-  onToggle?: (checked: boolean) => void;
+  /**
+   * Called with the state the radio moves to, as core 3.0's (2.x's
+   * `onToggle`): `true` when it becomes the chosen one. As with a native
+   * radio, picking it again does nothing.
+   */
+  onCheckedChange?: (checked: boolean) => void;
   label?: ReactNode;
   description?: ReactNode;
   disabled?: boolean;
-  ariaLabel?: string;
+  /** The name when there is no text `label`, as core's `aria-label`. */
+  "aria-label"?: string;
   style?: ViewStyle;
 }
+
+// SharedInteractiveStyles.module.scss: the circle per size, in static spacing steps.
+const CIRCLE = { s: "16", m: "20", l: "24" } as const;
 
 /** Core's `RadioButton`: a 20pt circle, brand-filled with a dot when checked. */
 export function RadioButton({
   checked,
   defaultChecked = false,
   value,
-  onToggle,
+  onCheckedChange,
   label,
   description,
   disabled: disabledProp = false,
-  ariaLabel = "Radio button",
+  "aria-label": ariaLabel = "Radio button",
+  size: sizeProp,
+  error,
+  errorMessage,
   style,
 }: RadioButtonProps) {
   const theme = useTheme();
@@ -45,15 +66,20 @@ export function RadioButton({
   const group = useContext(RadioGroupContext);
   const inGroup = group !== null && value !== undefined;
   const disabled = disabledProp || (inGroup && group.disabled);
+  const chrome = controlChrome({
+    size: sizeProp ?? (inGroup ? group.size : theme.controlSize),
+    error: error ?? (inGroup ? group.invalid : undefined),
+    errorMessage,
+  });
   const [on, toggle] = useControllable(
     inGroup ? group.value === value : checked,
     defaultChecked,
     (next) => {
       if (inGroup) group.select(value);
-      onToggle?.(next);
+      onCheckedChange?.(next);
     },
   );
-  const size = theme.space("20");
+  const size = theme.space(CIRCLE[chrome.size]);
   return (
     <Pressable
       accessibilityRole="radio"
@@ -80,7 +106,13 @@ export function RadioButton({
           height: size,
           borderRadius: 9999,
           borderWidth: 1,
-          borderColor: theme.color(on ? "solid-border-color-brand" : "solid-border-color-neutral"),
+          borderColor: theme.color(
+            on
+              ? "solid-border-color-brand"
+              : chrome.invalid
+                ? "danger-border-medium"
+                : "solid-border-color-neutral",
+          ),
           backgroundColor: theme.color(on ? "brand-solid-medium" : "surface-background"),
           alignItems: "center",
           justifyContent: "center",
@@ -97,7 +129,13 @@ export function RadioButton({
           />
         )}
       </View>
-      <InteractiveDetails label={label} description={description} disabled={disabled} />
+      <InteractiveDetails
+        label={label}
+        description={description}
+        errorMessage={chrome.showsError ? errorMessage : undefined}
+        disabled={disabled}
+        size={chrome.size}
+      />
     </Pressable>
   );
 }
@@ -109,11 +147,20 @@ export interface RadioGroupOption {
   disabled?: boolean;
 }
 
-export interface RadioGroupProps {
+export interface RadioGroupProps extends ControlChromeProps {
+  /** One RadioButton per option, in order. */
   options?: RadioGroupOption[];
+  /** The selected option's `value`, controlled. Pair with `onValueChange`. */
   value?: string;
+  /** The option selected first when the group keeps its own state. Without it, none is. */
   defaultValue?: string;
-  onChange?: (value: string) => void;
+  /**
+   * Called with the newly selected `value`, as core 3.0's (2.x's `onChange`).
+   * Not called for the option already selected.
+   */
+  onValueChange?: (value: string) => void;
+  /** Names the group when it has no visible `label`, as core's `aria-label`. */
+  "aria-label"?: string;
   label?: ReactNode;
   description?: ReactNode;
   disabled?: boolean;
@@ -131,26 +178,48 @@ export function RadioGroup({
   options = [],
   value,
   defaultValue,
-  onChange,
+  onValueChange,
+  "aria-label": ariaLabel,
   label,
   description,
   disabled = false,
   orientation = "vertical",
+  size,
+  error,
+  errorMessage,
   children,
   style,
 }: RadioGroupProps) {
+  const theme = useTheme();
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
+  const text = CONTROL_TEXT[chrome.size];
   const [selected, select] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
-    if (v !== undefined) onChange?.(v);
+    if (v !== undefined) onValueChange?.(v);
   });
   const List = orientation === "horizontal" ? Row : Column;
   return (
-    <RadioGroupContext.Provider value={{ value: selected, disabled, select }}>
-      <Column gap="12" accessibilityRole="radiogroup" style={style}>
+    <RadioGroupContext.Provider
+      value={{
+        value: selected,
+        disabled,
+        select: (v) => {
+          if (v !== selected) select(v);
+        },
+        size: chrome.size,
+        invalid: chrome.invalid,
+      }}
+    >
+      <Column
+        gap="12"
+        accessibilityRole="radiogroup"
+        accessibilityLabel={typeof label === "string" ? label : ariaLabel}
+        style={style}
+      >
         {(label || description) && (
           <Column gap="4">
-            {label && <Text variant="label-default-m">{label}</Text>}
+            {label && <Text textVariant={text.label}>{label}</Text>}
             {description && (
-              <Text variant="body-default-s" onBackground="neutral-weak">
+              <Text textVariant={text.body} onBackground="neutral-weak">
                 {description}
               </Text>
             )}
@@ -168,6 +237,11 @@ export function RadioGroup({
           ))}
           {children}
         </List>
+        {chrome.showsError && (
+          <Text textVariant={text.body} onBackground="danger-weak" accessibilityLiveRegion="polite">
+            {errorMessage}
+          </Text>
+        )}
       </Column>
     </RadioGroupContext.Provider>
   );

@@ -5,10 +5,9 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
-import { MasonryGrid } from "../components/MasonryGrid";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import type { SpacingToken } from "../types";
-import { STATIC_SPACING_TOKENS, sizeValue } from "../utils/layoutClasses";
+import { STATIC_SPACING_TOKENS, sizeValue, tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * `ServerFlex`, `ClientFlex` and `ServerGrid` each kept their own list of the
@@ -50,7 +49,7 @@ describe("size tokens", () => {
     }
     expect(sizeValue("m", "width")).toBe("var(--responsive-width-m)");
     expect(sizeValue("m", "height")).toBe("var(--responsive-height-m)");
-    expect(sizeValue(12, "width")).toBe("12rem");
+    expect(sizeValue(12, "width")).toBe(t(12));
     expect(sizeValue("50%", "width")).toBe("50%");
     expect(sizeValue("calc(100% - 1rem)", "height")).toBe("calc(100% - 1rem)");
     expect(sizeValue("73", "width")).toBeUndefined();
@@ -90,12 +89,12 @@ describe("size tokens", () => {
     expect(flex.style.minHeight).toBe("var(--static-space-72)");
   });
 
-  it("writes 72 as a MasonryGrid gap", () => {
+  it("writes 72 as a masonry Grid gap", () => {
     const { container } = render(
       <LayoutProvider>
-        <MasonryGrid gap="72">
+        <Grid masonry gap="72">
           <span>a</span>
-        </MasonryGrid>
+        </Grid>
       </LayoutProvider>,
     );
     const grid = container.querySelector(".display-flex") as HTMLElement;

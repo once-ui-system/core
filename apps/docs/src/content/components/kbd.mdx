@@ -104,36 +104,143 @@ You can use either the `children` prop or the `label` prop to set the content of
 
 ## Customization
 
-The Kbd component inherits all Flex props, allowing for customization of its appearance.
+Kbd keeps its keycap look and takes the leaf props: margins, `flex`,
+`fillWidth`, `position` and the offsets. For a one-off colour or size, set
+`style` (or `className`), which wins over the keycap's own classes.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="16" vertical="center">
-      <Kbd background="brand-medium" border="brand-medium" onBackground="brand-weak">Cmd</Kbd>
-      <Kbd background="accent-medium" border="accent-medium" onBackground="accent-weak">Alt</Kbd>
-      <Kbd paddingX="8" paddingY="4">Space</Kbd>
+      <Kbd style={{ background: "var(--brand-background-medium)", borderColor: "var(--brand-border-medium)", color: "var(--brand-on-background-weak)" }}>Cmd</Kbd>
+      <Kbd style={{ background: "var(--accent-background-medium)", borderColor: "var(--accent-border-medium)", color: "var(--accent-on-background-weak)" }}>Alt</Kbd>
+      <Kbd style={{ padding: "var(--static-space-4) var(--static-space-8)" }}>Space</Kbd>
     </Row>
   }
   codes={[
     {
       code:
-`<Kbd background="brand-medium" border="brand-medium" onBackground="brand-weak">Cmd</Kbd>
-<Kbd background="accent-medium" border="accent-medium" onBackground="accent-weak">Alt</Kbd>
-<Kbd paddingX="8" paddingY="4">Space</Kbd>`,
+`<Kbd
+  style={{
+    background: "var(--brand-background-medium)",
+    borderColor: "var(--brand-border-medium)",
+    color: "var(--brand-on-background-weak)",
+  }}
+>
+  Cmd
+</Kbd>
+<Kbd style={{ padding: "var(--static-space-4) var(--static-space-8)" }}>Space</Kbd>`,
       language: "tsx",
       label: "Custom styling"
     }
   ]}
 />
 
+## Shortcuts with keys
+
+With `keys`, Kbd draws a whole shortcut as keycaps for the reader's platform, after the action `label` names (2.x's `KeyTip`). It takes the same string [`useHotkeys`](/hooks/useHotkeys) registers, so one constant drives both and the hint cannot drift from the binding. `mod` shows as ⌘ on macOS and iOS and as Ctrl everywhere else.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="16" horizontal="center">
+      <Kbd label="Search" keys="mod+k" />
+      <Kbd label="Redo" keys="mod+shift+z" />
+      <Kbd label="Go to inbox" keys="g i" />
+      <Kbd label="Next" keys={["j", "down"]} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`const SEARCH = "mod+k";
+
+useHotkeys(SEARCH, () => setOpen(true));
+
+<Kbd label="Search" keys={SEARCH} />
+<Kbd label="Redo" keys="mod+shift+z" />
+<Kbd label="Go to inbox" keys="g i" />
+<Kbd label="Next" keys={["j", "down"]} />`,
+      language: "tsx",
+      label: "Shortcut"
+    }
+  ]}
+/>
+
+A space separates the steps of a sequence, drawn with "then"; an array lists
+alternatives, drawn with "or". The full syntax is on the
+[`useHotkeys`](/hooks/useHotkeys) page.
+
+### In a tooltip
+
+A hover that names the action and its keys teaches the shortcut. Pass a Kbd with `keys` as a
+tooltip's label:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="8">
+      <IconButton icon="arrowLeft" variant="secondary" tooltip={<Kbd label="Undo" keys="mod+z" />} aria-label="Undo" />
+      <IconButton icon="arrowRight" variant="secondary" tooltip={<Kbd label="Redo" keys="mod+shift+z" />} aria-label="Redo" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<IconButton
+  icon="arrowLeft"
+  tooltip={<Kbd label="Undo" keys="mod+z" />}
+  aria-label="Undo"
+/>`,
+      language: "tsx",
+      label: "Tooltip"
+    }
+  ]}
+/>
+
+### In a sentence
+
+Kbd is inline, so it sits in a line of text.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Text textVariant="body-default-m">
+      Press <Kbd keys="shift+?" /> to see every shortcut.
+    </Text>
+  }
+  codes={[
+    {
+      code:
+`<Text>
+  Press <Kbd keys="shift+?" /> to see every shortcut.
+</Text>`,
+      language: "tsx",
+      label: "Inline"
+    }
+  ]}
+/>
+
+### Screen readers
+
+Symbols such as ⌘ and ⇧ are read inconsistently, or not at all. The keycaps are
+hidden from assistive technology, and a screen reader hears the combination spelled
+out instead: "Undo, Command+Z" on a Mac, "Undo, Control+Z" elsewhere.
+
+The page renders Ctrl on the server, where the platform is unknown, and switches to
+⌘ right after it hydrates on Apple platforms, without a hydration warning.
+
 ## API reference
 
 <PropsTable
   component="Kbd"
   describe={{
-    label: "The key, as a string.",
+    keys: "A shortcut in useHotkeys syntax, drawn as caps; an array lists alternatives.",
+    label: "The key as a string or, with keys, the action shown before them.",
     children: "The key, when it needs markup.",
   }}
   content={[

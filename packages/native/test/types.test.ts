@@ -19,6 +19,7 @@ const native = aliases(NATIVE);
 const core = {
   ...aliases(readFileSync(join(CORE, "src/types.ts"), "utf8")),
   ...aliases(readFileSync(join(CORE, "src/contexts/ThemeProvider.tsx"), "utf8")),
+  ...aliases(readFileSync(join(CORE, "src/utils/density.ts"), "utf8")),
 };
 
 describe("shared types", () => {

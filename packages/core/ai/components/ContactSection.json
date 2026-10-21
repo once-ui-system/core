@@ -1,0 +1,27 @@
+{
+ "name": "ContactSection",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "layout": "string",
+  "width": "string",
+  "eyebrow": "string",
+  "title": "string",
+  "description": "string",
+  "resolveHref": "(href: string) => string",
+  "email": "string",
+  "phone": "string",
+  "address": "string",
+  "hours": "string",
+  "mapHref": "string",
+  "primaryLabel": "string",
+  "primaryHref": "string"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "Sections"
+ ],
+ "mixinsRef": []
+}

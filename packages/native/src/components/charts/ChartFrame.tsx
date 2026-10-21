@@ -2,7 +2,7 @@ import { type ReactNode, useState } from "react";
 import { type LayoutChangeEvent, Platform, Pressable, View } from "react-native";
 import { G, Line, Text as SvgText } from "react-native-svg";
 import { useTheme } from "../../theme/ThemeProvider";
-import { borderColor, type FlexProps, flexStyle } from "../Flex";
+import { type FlexProps, flexStyle } from "../Flex";
 import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import type { ChartProps, ChartVariant, LegendConfig } from "./interfaces";
@@ -48,7 +48,7 @@ export function ChartFrame({
   const { style, rest, userStyle, hidden } = flexStyle(theme, {
     direction: "column",
     fillWidth: true,
-    height: 24,
+    height: "24rem",
     radius: "l",
     border: "neutral-alpha-weak",
     overflow: "hidden",
@@ -79,7 +79,7 @@ export function ChartFrame({
           ...(hasHeader
             ? {
                 borderTopWidth: 1,
-                borderTopColor: borderColor(theme, props.border || true),
+                borderTopColor: theme.border(props.border ?? "neutral-alpha-weak"),
               }
             : {}),
         }}

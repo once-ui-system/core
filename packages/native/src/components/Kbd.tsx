@@ -35,7 +35,7 @@ export const Kbd: RefComponent<KbdProps, ViewRef> = forwardRef<ViewRef, KbdProps
   if (hidden) return null;
   return (
     <View ref={ref} {...rest} style={[style, userStyle]}>
-      <Text variant="label-default-s" onBackground="neutral-medium">
+      <Text textVariant="label-default-s" onBackground="neutral-medium">
         {label || children}
       </Text>
     </View>

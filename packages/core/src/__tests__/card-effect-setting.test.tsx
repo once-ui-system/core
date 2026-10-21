@@ -1,9 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { Card } from "../components/Card";
-import { Effect } from "../components/Effect";
 import { Media } from "../components/Media";
-import { Setting, SettingAxes, SettingGroup } from "../components/Setting";
+import { Setting } from "../components/Setting";
 import { Switch } from "../components/Switch";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 
@@ -92,32 +91,6 @@ describe("Card interactivity", () => {
   });
 });
 
-describe("Effect", () => {
-  it("renders its content with no layer when switched off", () => {
-    const { container } = render(<Effect type="none">Hero</Effect>, { wrapper: wrap });
-    expect(screen.getByText("Hero")).toBeInTheDocument();
-    expect(container.querySelector("canvas")).toBeNull();
-  });
-
-  it("paints a canvas layer for a canvas-backed effect", () => {
-    const { container } = render(<Effect type="matrix">Hero</Effect>, { wrapper: wrap });
-    expect(container.querySelector("canvas")).not.toBeNull();
-    expect(screen.getByText("Hero")).toBeInTheDocument();
-  });
-
-  it("keeps the content in place across a swap — that is the point", () => {
-    const { container, rerender } = render(<Effect type="matrix">Hero</Effect>, { wrapper: wrap });
-    const before = container.firstElementChild?.className;
-    rerender(
-      <LayoutProvider>
-        <Effect type="blob">Hero</Effect>
-      </LayoutProvider>,
-    );
-    expect(container.firstElementChild?.className).toBe(before);
-    expect(screen.getByText("Hero")).toBeInTheDocument();
-  });
-});
-
 describe("Setting", () => {
   it("renders the label, description and control together", () => {
     render(
@@ -133,17 +106,17 @@ describe("Setting", () => {
 
   it("hides a group's body until it is open", () => {
     const { rerender } = render(
-      <SettingGroup label="Watermark" control={<span>toggle</span>}>
+      <Setting label="Watermark" control={<span>toggle</span>}>
         <Setting label="Opacity" />
-      </SettingGroup>,
+      </Setting>,
       { wrapper: wrap },
     );
     expect(screen.queryByText("Opacity")).toBeNull();
     rerender(
       <LayoutProvider>
-        <SettingGroup label="Watermark" control={<span>toggle</span>} open>
+        <Setting label="Watermark" control={<span>toggle</span>} open>
           <Setting label="Opacity" />
-        </SettingGroup>
+        </Setting>
       </LayoutProvider>,
     );
     expect(screen.getByText("Opacity")).toBeInTheDocument();
@@ -151,9 +124,9 @@ describe("Setting", () => {
 
   it("is one surface: the header and the revealed body share the group's background", () => {
     render(
-      <SettingGroup label="Watermark" control={<span>toggle</span>} open>
+      <Setting label="Watermark" control={<span>toggle</span>} open>
         <Setting label="Opacity" />
-      </SettingGroup>,
+      </Setting>,
       { wrapper: wrap },
     );
     const group = screen.getByText("Watermark").closest(".surface-background");
@@ -200,8 +173,8 @@ describe("Setting", () => {
     expect(screen.getByRole("switch", { name: "Camera" })).toBeInTheDocument();
   });
 
-  it("puts a SettingAxes label id on the label Text itself", () => {
-    render(<SettingAxes label="Tilt" axes={[{ label: "X", control: <Switch /> }]} />, {
+  it("puts an axes row's label id on the label Text itself", () => {
+    render(<Setting label="Tilt" axes={[{ label: "X", control: <Switch /> }]} />, {
       wrapper: wrap,
     });
     const label = screen.getByText("Tilt");
@@ -212,7 +185,7 @@ describe("Setting", () => {
 
   it("renders one row per axis", () => {
     render(
-      <SettingAxes
+      <Setting
         label="Tilt"
         axes={[
           { label: "X", control: <span>x-control</span> },

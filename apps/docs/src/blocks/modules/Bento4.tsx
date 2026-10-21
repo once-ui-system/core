@@ -2,8 +2,8 @@ import {
   Button,
   Column,
   Heading,
-  Hover,
-  MasonryGrid,
+  HoverCard,
+  Grid,
   Media,
   Row,
   SmartLink,
@@ -92,11 +92,11 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" gap="48" {...flex}>
       <Row fillWidth horizontal="between" vertical="end" wrap gap="24" paddingX="l">
-        <Column gap="12" maxWidth={56}>
-          <Heading as="h2" variant="display-strong-m">
+        <Column gap="12" maxWidth="56rem">
+          <Heading as="h2" textVariant="display-strong-m">
             Sites built with Once UI
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Products, portfolios, and community platforms from builders shipping with our design
             system.
           </Text>
@@ -106,13 +106,13 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
         </Button>
       </Row>
 
-      <MasonryGrid fillWidth columns={4} paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
+      <Grid masonry fillWidth columns={4} paddingX="l" l={{ columns: 2 }} s={{ columns: 1 }}>
         {columns.map((columnItems, columnIndex) => {
           const { aspectRatios, flex: flexValues } = COLUMN_LAYOUT[columnIndex];
           return (
             <Column key={columnIndex} fillWidth gap="8">
               {columnItems.map((item, rowIndex) => (
-                <Hover
+                <HoverCard placement="cover"
                   key={item.title}
                   interactive
                   fillWidth
@@ -137,11 +137,9 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
                         />
                       </Row>
                     </SmartLink>
-                  }
-                  overlay={
-                    <Column fill vertical="end" padding="l" gap="8" background="overlay">
-                      <Text variant="heading-strong-m">{item.title}</Text>
-                      <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                  }><Column fill vertical="end" padding="l" gap="8" background="overlay">
+                      <Text textVariant="heading-strong-m">{item.title}</Text>
+                      <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                         {item.description}
                       </Text>
                       <Row>
@@ -149,19 +147,17 @@ export const Bento4 = (flex: React.ComponentProps<typeof Column>) => {
                           {item.url.startsWith("http") ? formatUrl(item.url) : "Visit site"}
                         </Button>
                       </Row>
-                    </Column>
-                  }
-                />
+                    </Column></HoverCard>
               ))}
             </Column>
           );
         })}
-      </MasonryGrid>
+      </Grid>
 
       <Row as="nav" aria-label="Featured showcase sites" wrap gap="8" paddingX="l">
         {showcaseItems.slice(0, 8).map((item) => (
           <SmartLink key={item.title} href={item.url}>
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {item.title}
             </Text>
           </SmartLink>

@@ -6,7 +6,7 @@ import {
   retiredPageRedirects,
   retiredSectionRedirects,
 } from "./src/resources/redirects.js";
-import { currentVersion, versionRewrites } from "./src/resources/versions.data.js";
+import { basePath, versionRewrites } from "./src/resources/versions.data.js";
 
 const withMDXConfig = withMDX({
   extension: /\.mdx?$/,
@@ -18,10 +18,11 @@ const withMDXConfig = withMDX({
 
 const nextConfig = {
   // A version other than the stable one is served under its path on the
-  // stable site (docs.once-ui.com/beta), which mounts it with the rewrites
-  // below. See src/resources/versions.data.js.
-  basePath: currentVersion.path || undefined,
-  env: { NEXT_PUBLIC_DOCS_BASE_PATH: currentVersion.path },
+  // stable site (docs.once-ui.com/beta) once that site mounts it with the
+  // rewrites below; until then it is at the root of its own origin, with no
+  // basePath. See src/resources/versions.data.js.
+  basePath: basePath || undefined,
+  env: { NEXT_PUBLIC_DOCS_BASE_PATH: basePath },
   async rewrites() {
     return { beforeFiles: versionRewrites() };
   },
@@ -34,6 +35,10 @@ const nextConfig = {
       "../../packages/core/.next/**/*",
       "../../packages/core/scripts/**/*",
       "../../packages/core/tsconfig*.json",
+      "../../packages/fx/src/**/*",
+      "../../packages/fx/node_modules/**/*",
+      "../../packages/blocks/src/**/*",
+      "../../packages/blocks/node_modules/**/*",
       "../../packages/**/*.md",
     ],
   },
@@ -42,7 +47,12 @@ const nextConfig = {
     silenceDeprecations: ["legacy-js-api"],
   },
   pageExtensions: ["ts", "tsx", "md", "mdx"],
-  transpilePackages: ["next-mdx-remote", "@once-ui-system/core"],
+  transpilePackages: [
+    "next-mdx-remote",
+    "@once-ui-system/core",
+    "@once-ui-system/fx",
+    "@once-ui-system/blocks",
+  ],
   experimental: {
     serverMinification: true,
     serverActions: {
@@ -53,7 +63,7 @@ const nextConfig = {
   },
   // Configure image optimization
   images: {
-    ...(currentVersion.path && {
+    ...(basePath && {
       loader: "custom",
       loaderFile: "./src/resources/imageLoader.js",
     }),

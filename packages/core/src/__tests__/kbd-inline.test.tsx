@@ -28,6 +28,13 @@ describe("Kbd", () => {
     expect(el.className).toMatch(/\bfit\b/);
   });
 
+  it("takes the leaf props, not the layout ones (3.0)", () => {
+    const { container } = render(<Kbd marginLeft="8">Esc</Kbd>, { wrapper: wrap });
+    expect((container.querySelector("kbd") as HTMLElement).className).toContain("ml-8");
+    // @ts-expect-error — `inline` is a layout prop; a Kbd is always inline.
+    expect(<Kbd inline={false}>Esc</Kbd>).toBeDefined();
+  });
+
   // "Ctrl K" in an Input's suffix broke onto two lines: the cap stood 38px
   // tall and stretched a 32px xxs field to 40px (measured in Chromium).
   it("stays on one line and keeps its width in a tight row", () => {
@@ -48,10 +55,5 @@ describe("Kbd", () => {
     expect(el.style.whiteSpace).toBe("normal");
     expect(el.style.flexShrink).toBe("0");
     expect(el.style.color).toBe("red");
-  });
-
-  it("can still be overridden", () => {
-    const { container } = render(<Kbd inline={false}>Esc</Kbd>, { wrapper: wrap });
-    expect((container.querySelector("kbd") as HTMLElement).className).toContain("display-flex");
   });
 });

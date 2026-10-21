@@ -61,18 +61,10 @@ Once UI uses a custom PostCSS config with custom-media to define and use breakpo
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Breakpoint" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Breakpoint" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [<InlineCode>--s</InlineCode>, <InlineCode>@custom-media --s (max-width: 768px)</InlineCode>, <InlineCode>max-width: 768px</InlineCode>],
       [<InlineCode>--m</InlineCode>, <InlineCode>@custom-media --m (max-width: 1024px)</InlineCode>, <InlineCode>max-width: 1024px</InlineCode>]
-    ]
-  }}
+    ]}
 />
 
 <Feedback showIcon marginTop="24" description={<>We recommend setting paddings and margins with the <InlineCode>Flex</InlineCode> and <InlineCode>Grid</InlineCode> components. Flex props are exposed on most Once UI components to prevent unnecessary nesting.</>} />
@@ -85,14 +77,7 @@ You can set the static and responsive spacing tokens for different margin proper
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [<InlineCode>margin</InlineCode>, "", ""],
       [".m-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
       [".m-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
@@ -232,22 +217,14 @@ You can set the static and responsive spacing tokens for different margin proper
       [".ml-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
       [".ml-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
       [".ml-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
-    ]
-  }}
+    ]}
 />
 
 ### Responsive margin
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [<InlineCode>margin</InlineCode>, "", ""],
       [".m-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
       [".m-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
@@ -296,8 +273,7 @@ You can set the static and responsive spacing tokens for different margin proper
       [".ml-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
       [".ml-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
       [".ml-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
-    ]
-  }}
+    ]}
 />
 
 ### Auto margin
@@ -334,14 +310,7 @@ You can set the static and responsive spacing tokens for different padding prope
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [<InlineCode>padding</InlineCode>, "", ""],
       [".p-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
       [".p-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
@@ -481,22 +450,14 @@ You can set the static and responsive spacing tokens for different padding prope
       [".pl-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
       [".pl-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
       [".pl-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
-    ]
-  }}
+    ]}
 />
 
 ### Responsive padding
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [<InlineCode>padding</InlineCode>, "", ""],
       [".p-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
       [".p-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
@@ -545,8 +506,7 @@ You can set the static and responsive spacing tokens for different padding prope
       [".pl-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
       [".pl-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
       [".pl-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
-    ]
-  }}
+    ]}
 />
 
 ## Gap
@@ -557,14 +517,7 @@ You can set the static and responsive spacing tokens for different gap propertie
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [".g-0", <InlineCode>var(--static-space-0)</InlineCode>, <InlineCode>0</InlineCode>],
       [".g-1", <InlineCode>var(--static-space-1)</InlineCode>, <InlineCode>1px</InlineCode>],
       [".g-2", <InlineCode>var(--static-space-2)</InlineCode>, <InlineCode>0.125rem</InlineCode>],
@@ -583,27 +536,18 @@ You can set the static and responsive spacing tokens for different gap propertie
       [".g-104", <InlineCode>var(--static-space-104)</InlineCode>, <InlineCode>6.5rem</InlineCode>],
       [".g-128", <InlineCode>var(--static-space-128)</InlineCode>, <InlineCode>8rem</InlineCode>],
       [".g-160", <InlineCode>var(--static-space-160)</InlineCode>, <InlineCode>10rem</InlineCode>],
-    ]
-  }}
+    ]}
 />
 
 ### Responsive gap
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class" },
-      { content: "Variable" },
-      { content: "Value" },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class" }, { header: "Variable" }, { header: "Value" }]} rows={[
       [".g-xs", <InlineCode>var(--responsive-space-xs)</InlineCode>, <InlineCode>80 / 64 / 40</InlineCode>],
       [".g-s", <InlineCode>var(--responsive-space-s)</InlineCode>, <InlineCode>40 / 24 / 16</InlineCode>],
       [".g-m", <InlineCode>var(--responsive-space-m)</InlineCode>, <InlineCode>24 / 16 / 12</InlineCode>],
       [".g-l", <InlineCode>var(--responsive-space-l)</InlineCode>, <InlineCode>16 / 12 / 8</InlineCode>],
       [".g-xl", <InlineCode>var(--responsive-space-xl)</InlineCode>, <InlineCode>12 / 8 / 4</InlineCode>]
-    ]
-  }}
+    ]}
 />

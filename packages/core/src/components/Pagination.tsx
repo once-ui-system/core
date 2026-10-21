@@ -2,14 +2,15 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
-import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination";
-import { Button } from "./Button";
-import { IconButton } from "./IconButton";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { pageCount, paginationItems, withDefaultLabels } from "../internal/pagination.js";
+import type { TShirtSizes } from "../types.js";
+import { Button } from "./Button.js";
+import { IconButton } from "./IconButton.js";
 import styles from "./Pagination.module.scss";
-import { Row } from "./Row";
-import { Select } from "./Select";
-import { Text } from "./Text";
+import { Row } from "./Row.js";
+import { Select } from "./Select.js";
+import { Text } from "./Text.js";
 
 interface PaginationLabels {
   /** The previous-page button's accessible name. */
@@ -34,17 +35,18 @@ const DEFAULT_LABELS: PaginationLabels = {
 
 // Buttons and icon buttons share a height one size apart: an `s` page button
 // is 32px, as an `m` icon button is. The field is the closest height above.
-const ICON_BUTTON_SIZE = { s: "m", m: "l", l: "xl" } as const;
-const SELECT_SIZE = { s: "xs", m: "xs", l: "s" } as const;
+// xs and xl have no icon button a size apart, so they share s's and l's.
+const ICON_BUTTON_SIZE = { xs: "s", s: "m", m: "l", l: "xl", xl: "xl" } as const;
+const SELECT_SIZE = { xs: "xs", s: "xs", m: "xs", l: "s", xl: "m" } as const;
 
 interface PaginationProps
   extends Omit<React.ComponentProps<typeof Row>, "onChange" | "children" | "defaultValue"> {
-  /** The current page, from 1, when the host owns the state. Pair with `onChange`. */
+  /** The current page, from 1, when the host owns the state. Pair with `onPageChange`. */
   page?: number;
   /** The page shown first when Pagination manages its own state. */
   defaultPage?: number;
   /** Called with the new page. Not called for the page already shown. */
-  onChange?: (page: number) => void;
+  onPageChange?: (page: number) => void;
   /** How many pages there are. Or pass `count` and `perPage` and let Pagination work it out. */
   total?: number;
   /** How many items there are across all pages. With `perPage`, gives the page count. */
@@ -57,7 +59,7 @@ interface PaginationProps
   perPageOptions?: number[];
   /**
    * Called with the new page size. The page then moves so the first item on
-   * screen stays on screen, and `onChange` reports that move.
+   * screen stays on screen, and `onPageChange` reports that move.
    */
   onPerPageChange?: (perPage: number) => void;
   /** Pages drawn on each side of the current page. */
@@ -67,7 +69,7 @@ interface PaginationProps
   /** Add buttons that jump to the first and the last page. */
   showFirstLast?: boolean;
   /** The buttons' size. */
-  size?: "s" | "m" | "l";
+  size?: TShirtSizes;
   /** Disable every control, such as while the next page loads. */
   disabled?: boolean;
   /** The buttons' names and the per-page label, to translate them. */
@@ -85,187 +87,187 @@ interface PaginationProps
  * With `perPageOptions` it also offers a page-size select.
  *
  * Works on its own state (`defaultPage`) or the host's (`page` and
- * `onChange`), which is what server-side paging wants.
+ * `onPageChange`), which is what server-side paging wants.
  */
-const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
-  (
-    {
-      page,
-      defaultPage = 1,
-      onChange,
-      total,
-      count,
-      perPage,
-      defaultPerPage = 10,
-      perPageOptions,
-      onPerPageChange,
-      siblings = 1,
-      boundaries = 1,
-      showFirstLast = false,
-      size = "m",
-      disabled = false,
-      labels,
-      "aria-label": ariaLabel = "Pagination",
-      ...flex
+const Pagination = ({
+  ref,
+  page,
+  defaultPage = 1,
+  onPageChange,
+  total,
+  count,
+  perPage,
+  defaultPerPage = 10,
+  perPageOptions,
+  onPerPageChange,
+  siblings = 1,
+  boundaries = 1,
+  showFirstLast = false,
+  size = "m",
+  disabled = false,
+  labels,
+  "aria-label": ariaLabel = "Pagination",
+  ...flex
+}: PaginationProps) => {
+  const text = withDefaultLabels(DEFAULT_LABELS, labels);
+  const perPageId = useId();
+  const navRef = useRef<HTMLDivElement | null>(null);
+  const refocusCurrent = useRef(false);
+
+  const [uncontrolledPerPage, setUncontrolledPerPage] = useState(defaultPerPage);
+  const currentPerPage = Math.max(1, Math.floor(perPage ?? uncontrolledPerPage));
+
+  const pages =
+    total !== undefined
+      ? Math.max(1, Math.floor(total))
+      : count !== undefined
+        ? pageCount(count, currentPerPage)
+        : 1;
+
+  const controlled = page !== undefined;
+  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
+  const current = Math.min(
+    pages,
+    Math.max(1, Math.floor((controlled ? page : uncontrolledPage) || 1)),
+  );
+
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      navRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
     },
-    ref,
-  ) => {
-    const text = withDefaultLabels(DEFAULT_LABELS, labels);
-    const perPageId = useId();
-    const navRef = useRef<HTMLDivElement | null>(null);
-    const refocusCurrent = useRef(false);
+    [ref],
+  );
 
-    const [uncontrolledPerPage, setUncontrolledPerPage] = useState(defaultPerPage);
-    const currentPerPage = Math.max(1, Math.floor(perPage ?? uncontrolledPerPage));
+  const goTo = (target: number, fromArrow = false) => {
+    const next = Math.min(pages, Math.max(1, target));
+    if (next === current) return;
+    // The arrow that reaches either end disables itself; focus must not be
+    // left on it, where the browser drops it to the page.
+    if (fromArrow && (next === 1 || next === pages)) refocusCurrent.current = true;
+    if (!controlled) setUncontrolledPage(next);
+    onPageChange?.(next);
+  };
 
-    const pages =
-      total !== undefined
-        ? Math.max(1, Math.floor(total))
-        : count !== undefined
-          ? pageCount(count, currentPerPage)
-          : 1;
+  // Runs once the new page is drawn, controlled or not: `current` is the
+  // trigger, and the button to focus is found by its aria-current.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: re-run on every page change, by design
+  useEffect(() => {
+    if (!refocusCurrent.current) return;
+    refocusCurrent.current = false;
+    const nav = navRef.current;
+    const active = document.activeElement as HTMLButtonElement | null;
+    if (nav && active && nav.contains(active) && !active.disabled) return;
+    nav?.querySelector<HTMLElement>('[aria-current="page"]')?.focus();
+  }, [current]);
 
-    const controlled = page !== undefined;
-    const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
-    const current = Math.min(
-      pages,
-      Math.max(1, Math.floor((controlled ? page : uncontrolledPage) || 1)),
-    );
+  const changePerPage = (value: string | string[]) => {
+    const next = Number(Array.isArray(value) ? value[0] : value);
+    if (!Number.isFinite(next) || next <= 0 || next === currentPerPage) return;
+    if (perPage === undefined) setUncontrolledPerPage(next);
+    onPerPageChange?.(next);
+    // Keep the first item on screen in view at the new size.
+    const firstItem = (current - 1) * currentPerPage;
+    const target = Math.floor(firstItem / next) + 1;
+    const nextPages =
+      total !== undefined ? pages : count !== undefined ? pageCount(count, next) : 1;
+    const clamped = Math.min(nextPages, Math.max(1, target));
+    if (clamped !== current) {
+      if (!controlled) setUncontrolledPage(clamped);
+      onPageChange?.(clamped);
+    }
+  };
 
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        navRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
-    );
+  const iconSize = ICON_BUTTON_SIZE[size];
+  const atStart = disabled || current <= 1;
+  const atEnd = disabled || current >= pages;
 
-    const goTo = (target: number, fromArrow = false) => {
-      const next = Math.min(pages, Math.max(1, target));
-      if (next === current) return;
-      // The arrow that reaches either end disables itself; focus must not be
-      // left on it, where the browser drops it to the page.
-      if (fromArrow && (next === 1 || next === pages)) refocusCurrent.current = true;
-      if (!controlled) setUncontrolledPage(next);
-      onChange?.(next);
-    };
+  const arrow = (
+    key: string,
+    icon: "chevronDoubleLeft" | "chevronLeft" | "chevronRight" | "chevronDoubleRight",
+    label: string,
+    target: number,
+    off: boolean,
+  ) => (
+    <Row as="li" key={key} vertical="center">
+      <IconButton
+        type="button"
+        icon={icon}
+        size={iconSize}
+        variant="secondary"
+        aria-label={label}
+        disabled={off}
+        onClick={() => goTo(target, true)}
+      />
+    </Row>
+  );
 
-    // Runs once the new page is drawn, controlled or not: `current` is the
-    // trigger, and the button to focus is found by its aria-current.
-    // biome-ignore lint/correctness/useExhaustiveDependencies: re-run on every page change, by design
-    useEffect(() => {
-      if (!refocusCurrent.current) return;
-      refocusCurrent.current = false;
-      const nav = navRef.current;
-      const active = document.activeElement as HTMLButtonElement | null;
-      if (nav && active && nav.contains(active) && !active.disabled) return;
-      nav?.querySelector<HTMLElement>('[aria-current="page"]')?.focus();
-    }, [current]);
-
-    const changePerPage = (value: string | string[]) => {
-      const next = Number(Array.isArray(value) ? value[0] : value);
-      if (!Number.isFinite(next) || next <= 0 || next === currentPerPage) return;
-      if (perPage === undefined) setUncontrolledPerPage(next);
-      onPerPageChange?.(next);
-      // Keep the first item on screen in view at the new size.
-      const firstItem = (current - 1) * currentPerPage;
-      const target = Math.floor(firstItem / next) + 1;
-      const nextPages =
-        total !== undefined ? pages : count !== undefined ? pageCount(count, next) : 1;
-      const clamped = Math.min(nextPages, Math.max(1, target));
-      if (clamped !== current) {
-        if (!controlled) setUncontrolledPage(clamped);
-        onChange?.(clamped);
-      }
-    };
-
-    const iconSize = ICON_BUTTON_SIZE[size];
-    const atStart = disabled || current <= 1;
-    const atEnd = disabled || current >= pages;
-
-    const arrow = (
-      key: string,
-      icon: "chevronDoubleLeft" | "chevronLeft" | "chevronRight" | "chevronDoubleRight",
-      label: string,
-      target: number,
-      off: boolean,
-    ) => (
-      <Row as="li" key={key} vertical="center">
-        <IconButton
-          type="button"
-          icon={icon}
-          size={iconSize}
-          variant="secondary"
-          aria-label={label}
-          disabled={off}
-          onClick={() => goTo(target, true)}
-        />
-      </Row>
-    );
-
-    return (
-      <Row ref={setRefs} as="nav" aria-label={ariaLabel} gap="16" vertical="center" wrap {...flex}>
-        {perPageOptions && perPageOptions.length > 0 && (
-          <Row gap="8" vertical="center">
-            <Text id={`${perPageId}-label`} variant="label-default-s" onBackground="neutral-medium">
-              {text.perPage}
-            </Text>
-            <Row width={5}>
-              <Select
-                id={`${perPageId}-select`}
-                aria-labelledby={`${perPageId}-label`}
-                size={SELECT_SIZE[size]}
-                value={String(currentPerPage)}
-                disabled={disabled}
-                onSelect={changePerPage}
-                options={perPageOptions.map((option) => ({
-                  label: String(option),
-                  value: String(option),
-                }))}
-              />
-            </Row>
+  return (
+    <Row ref={setRefs} as="nav" aria-label={ariaLabel} gap="16" vertical="center" wrap {...flex}>
+      {perPageOptions && perPageOptions.length > 0 && (
+        <Row gap="8" vertical="center">
+          <Text
+            id={`${perPageId}-label`}
+            textVariant="label-default-s"
+            onBackground="neutral-medium"
+          >
+            {text.perPage}
+          </Text>
+          <Row width="5rem">
+            <Select
+              id={`${perPageId}-select`}
+              aria-labelledby={`${perPageId}-label`}
+              size={SELECT_SIZE[size]}
+              value={String(currentPerPage)}
+              disabled={disabled}
+              onValueChange={changePerPage}
+              options={perPageOptions.map((option) => ({
+                label: String(option),
+                value: String(option),
+              }))}
+            />
           </Row>
-        )}
-        <Row as="ul" margin="0" padding="0" gap="4" vertical="center" wrap>
-          {showFirstLast && arrow("first", "chevronDoubleLeft", text.first, 1, atStart)}
-          {arrow("previous", "chevronLeft", text.previous, current - 1, atStart)}
-          {paginationItems(current, pages, Math.max(0, siblings), Math.max(0, boundaries)).map(
-            (item) =>
-              typeof item === "number" ? (
-                <Row as="li" key={item} vertical="center">
-                  <Button
-                    type="button"
-                    size={size}
-                    variant={item === current ? "primary" : "tertiary"}
-                    className={classNames(styles.item, styles[size])}
-                    aria-current={item === current ? "page" : undefined}
-                    disabled={disabled}
-                    onClick={() => goTo(item)}
-                  >
-                    {item}
-                  </Button>
-                </Row>
-              ) : (
-                <Row
-                  as="li"
-                  key={item}
-                  center
-                  className={styles[size]}
-                  textVariant="label-default-s"
-                  onBackground="neutral-weak"
-                >
-                  …
-                </Row>
-              ),
-          )}
-          {arrow("next", "chevronRight", text.next, current + 1, atEnd)}
-          {showFirstLast && arrow("last", "chevronDoubleRight", text.last, pages, atEnd)}
         </Row>
+      )}
+      <Row as="ul" margin="0" padding="0" gap="4" vertical="center" wrap>
+        {showFirstLast && arrow("first", "chevronDoubleLeft", text.first, 1, atStart)}
+        {arrow("previous", "chevronLeft", text.previous, current - 1, atStart)}
+        {paginationItems(current, pages, Math.max(0, siblings), Math.max(0, boundaries)).map(
+          (item) =>
+            typeof item === "number" ? (
+              <Row as="li" key={item} vertical="center">
+                <Button
+                  type="button"
+                  size={size}
+                  variant={item === current ? "primary" : "tertiary"}
+                  className={classNames(styles.item, styles[size])}
+                  aria-current={item === current ? "page" : undefined}
+                  disabled={disabled}
+                  onClick={() => goTo(item)}
+                >
+                  {item}
+                </Button>
+              </Row>
+            ) : (
+              <Row
+                as="li"
+                key={item}
+                center
+                className={styles[size]}
+                textVariant="label-default-s"
+                onBackground="neutral-weak"
+              >
+                …
+              </Row>
+            ),
+        )}
+        {arrow("next", "chevronRight", text.next, current + 1, atEnd)}
+        {showFirstLast && arrow("last", "chevronDoubleRight", text.last, pages, atEnd)}
       </Row>
-    );
-  },
-);
+    </Row>
+  );
+};
 
 Pagination.displayName = "Pagination";
 

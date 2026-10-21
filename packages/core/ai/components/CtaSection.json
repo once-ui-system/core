@@ -1,0 +1,24 @@
+{
+ "name": "CtaSection",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "layout": "string",
+  "width": "string",
+  "eyebrow": "string",
+  "title": "string",
+  "description": "string",
+  "resolveHref": "(href: string) => string",
+  "primaryLabel": "string",
+  "primaryHref": "string",
+  "secondaryLabel": "string",
+  "secondaryHref": "string"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "Sections"
+ ],
+ "mixinsRef": []
+}

@@ -78,7 +78,7 @@ export function Thumbnail({ onOpen }: { onOpen: () => void }) {
       alt="Open the photo"
       aspectRatio="1"
       radius="m"
-      maxWidth={8}
+      maxWidth="8rem"
       onPress={onOpen}
     />
   );
@@ -100,7 +100,7 @@ codes={[
 
 export function Banner() {
   return (
-    <Column height={12} fillWidth radius="l" overflow="hidden">
+    <Column height="12rem" fillWidth radius="l" overflow="hidden">
       <Media src="https://example.com/banner.jpg" alt="" stretch objectFit="cover" />
     </Column>
   );
@@ -113,7 +113,7 @@ export function Banner() {
 ## Differences from the web
 
 - Images only. The web's `enlarge` overlay, video and YouTube embeds are not in the native package.
-- `aspectRatio` defaults to `"original"`, which takes the image's own ratio once it loads. Until then, the box is `height` rem tall, or the `80` spacing step when `height` is not set.
+- `aspectRatio` defaults to `"original"`, which takes the image's own ratio once it loads. Until then, the box is `height` tall, or the `80` spacing step when `height` is not set.
 - `objectFit` maps to React Native's `resizeMode`: `cover` and `contain` stay the same, `fill` becomes `stretch`, `none` becomes `center` and `scale-down` becomes `contain`.
 - An empty `alt` hides the image from screen readers, as on the web. With `alt`, the image is read out by it.
 - `fillWidth` is on by default.
@@ -127,7 +127,7 @@ Media extends Flex props, so spacing, radius, border, sizes and the rest apply.
 | `src` | `string` | | The image URL. Required. |
 | `alt` | `string` | `""` | Read out by screen readers. Empty marks the image decorative. |
 | `aspectRatio` | `string` | `"original"` | `"16 / 9"`, `"1"` and so on. `"original"` uses the image's own ratio once loaded. |
-| `height` | `number` | | Height in rem, used when there is no ratio yet. |
+| `height` | `number` | | Height (a number is points), used when there is no ratio yet. |
 | `loading` | `boolean` | `false` | Shows the skeleton instead of the image. |
 | `objectFit` | `"cover" \| "contain" \| "fill" \| "none" \| "scale-down"` | `"cover"` | How the image fits the box. |
 | `stretch` | `boolean` | `false` | Fills the parent box, ignoring `aspectRatio`. |

@@ -17,13 +17,15 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 | `center` | `horizontal="center" vertical="center"` |
 | `maxWidth="l"` | `fillWidth maxWidth="l"` |
 | `fillWidth` | `fillWidth minWidth={0}` |
-| `width="32" height="32"` (32 px, a spacing token); `height={20}` (320 px: past `"160"` there is no token, use rem) | `width={32} height={32}` (a number is rem: 512 px), `height="320"` (not a token) |
+| `width={32} height={32}` (a number is the token: `32` = `"32"` = 2rem), `maxWidth="40rem"` | `maxWidth={40}` for 40rem (that was 2.x: `40` is now `"40"`, 2.5rem) |
 | `border` | `border="neutral-alpha-weak"` |
-| `<Logo wordmark={{ light, dark }} />` | a `<Logo dark>` and a `<Logo light>` |
+| `<Logo wordmark={{ light, dark }} />` | a `<Logo showIn="dark">` and a `<Logo showIn="light">` |
 
+- Units: a number is on the **token scale** on every size, spacing and offset prop: `16` = `"16"` = 1rem, scaled by `data-scaling` (`width={320}`, `padding={24}`, `top={8}`), in breakpoint objects too; a digit string is the spacing token (`"16"`); any CSS length string passes through (`"320px"` never scales, `"50%"`, `"100dvh"`). `Mask`/`Background` percentages are strings (`x="50%"`)
+- Control size for a whole app: `density: "compact" | "normal" | "spacious"` in the config `style` (`data-density`), not `size="s"` on every Button; it also picks scaling 95/100/105 unless `scaling` is set. Give `size` only where one control differs
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -38,14 +40,14 @@ Static panel recipe (pricing tiers, stats, settings sections):
 
 - Bare `border` (and `borderTop`, `borderBottom`, …) = the default border. Name a colour only to deviate: `border="brand-alpha-medium"`.
 - `Card` = interactive only (`href` or `onClick`). Static panels = Column + surface recipe.
-- Colors: `{scheme}-{weight}` or `{scheme}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
+- Colors: `{tone}-{weight}` or `{tone}-alpha-{weight}`. Never hex/rgb — inline SVG `fill`/`stroke` included: `currentColor` or `var(--brand-solid-strong)`.
 - `background` also: `surface | overlay | page | transparent`
 
 ### Typography
 
 - Hero: `display-strong-l` or `display-strong-xl`
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
-- Eyebrow: `<Text variant="label-default-s" onBackground="brand-medium">`
+- Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
 
 ### Decoration
@@ -61,8 +63,9 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 
 ### Motion
 
-- `RevealFx delay` (and `ShineFx`/`CountFx`/`TypeFx speed`, `Animation`/`HoverCard`/`Hover`/`Skeleton` delays) in **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x. `speed` on `MatrixFx`, `WeatherFx`, `ParticleFx` is a multiplier
-- `RevealFx translateY`: number = rem; prefer `"8"`–`"16"` tokens
+- Every `duration`, `delay` and interval is **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x; `CelebrationFx`/`WeatherFx` `duration={5000}`, not `{5}`. `RevealFx`/`ShineFx`/`CountFx` take `duration`, `TypeFx` `charDuration` (`speed` there was 2.x)
+- `speed` is only a multiplier, `1` the default, or `"slow"`/`"medium"`/`"fast"` (0.5/1/2): `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx`, `LetterFx`
+- `RevealFx translateY`: a number is the token scale (`16` = 1rem); prefer `"8"`–`"16"` tokens
 - Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
 - Animate all siblings in a set or none — never one lone animated card
 
@@ -80,10 +83,11 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Tabs | `Tabs` > `TabList` > `Tab`, `TabPanel` (`orientation="vertical"` for a settings nav) |
 | Mobile nav, side sheet | `Drawer`, not a hand-made overlay |
 | Page trail | `Breadcrumbs items={[...]}` |
-| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `KeyTip keys="mod+k"`; a key cap is `Kbd` |
+| Keyboard shortcut | `useHotkeys("mod+k", fn)` + `Kbd keys="mod+k" label="Search"` |
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
+| Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
 
 ### Imports
 
@@ -96,9 +100,12 @@ comes from when it is not the root:
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
-| `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
+| `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` |
+| `EmojiPicker` | `@once-ui-system/core/emoji` |
 | `LayoutProvider` in a **Next.js** app; `createOgFetchRoute`, `createOgProxyRoute` | `@once-ui-system/core/next` |
 | `defineConfig`, `OnceUIConfig` in `once-ui.config` | `@once-ui-system/core/config` (also on the root) |
+| the effects: `RevealFx`, `CountFx`, `TypeFx`, `MatrixFx`, `Effect`, every `*Fx` | `@once-ui-system/fx` (a package: install it) |
+| `Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel`, `StyleOverlay` | `@once-ui-system/blocks` (a package: install it) |
 
 Naming one of these from the root does not resolve — except `defineConfig`,
 which is on both, and `LayoutProvider`, which resolves and then silently
@@ -110,13 +117,14 @@ are not in the set: an app registers them by augmenting `IconLibraryOverrides`.
 
 Every type a prop names is defined in the slice's (or bundle's) `types`.
 
-- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. `Text` and `Heading` take only `s={{ hide: true }}`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those.
+- Responsive `xl`/`l`/`m`/`s`/`xs` props exist only on `Flex`, `Row`, `Column` and `Grid`. To change a `Button`, `Text` or anything else at a breakpoint, wrap it in one of those; `Text` and `Heading` take only `s={{ hide: true }}`. Leaves (`Button`, the fields and controls, `Text`, `Heading`, `Icon`, `Avatar`, `Kbd`…) take only margins, `flex`, `fillWidth`, `position` and offsets, `className` and `style`: padding, background, border, radius, sizes and anything else at a breakpoint go on a wrapper too.
 - `vertical`/`horizontal` take `start | center | end | between | around | even | stretch` — no `baseline`; for baseline-aligned text write `style={{ alignItems: "baseline" }}`.
 - Spacing (`gap`, `padding`, …) takes the SpacingToken values below: `"4"`, `"8"`, `"12"`, `"16"`, `"20"`, `"24"`, `"32"`, `"40"`… — there is no `"6"` or `"10"`.
-- `Row`, `Column` and `Grid` have no `span` or `type`. A clickable row is a `Button` or a native `<button>`; a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
-- A form is a native `<form onSubmit={…}>` around a `Column`. `Column as="form"` types `onSubmit` for a `div`.
-- `Checkbox`, `Switch` and `RadioButton` take `checked` + `onToggle(checked)` — `isChecked` was 1.x.
-- Don't wrap primary content (headlines, prices, KPIs, CTAs) in `RevealFx`: it stays blurred until the reveal ends. Use it on secondary sections, with `speed="fast"`.
+- `as` on `Flex`/`Row`/`Column`/`Grid` types the element's attributes and ref: `<Column as="form" onSubmit={…}>`, `<Row as="button" type="submit">`. `as="ul"`/`"ol"` drops bullets and indent, `as="button"` the button chrome; other components take no `as`.
+- `Row`, `Column` and `Grid` have no `span`: a child spanning grid columns uses `style={{ gridColumn: "span 2" }}`.
+- `variant` is appearance (Button: `primary | secondary | tertiary | ghost | link`), `tone` the palette (`brand | accent | neutral | info | success | warning | danger`) on Button, IconButton, Tag, Feedback, Toast and `addToast`: `<Button tone="danger">`. Text/Heading take `textVariant`. Badge and Chip are `Tag` (`variant="announce"`; `selected`/`onRemove` make a toggle).
+- `Checkbox`, `Switch` and `RadioButton` take `checked` + `onCheckedChange(checked)` (`onToggle` was 2.x, `isChecked` 1.x); `onChange` is the native event of their input.
+- Don't wrap primary content (headlines, prices, KPIs, CTAs) in `RevealFx`: it stays blurred until the reveal ends. Use it on secondary sections, with `duration={1000}`.
 
 ### Defaults — omit these
 
@@ -131,89 +139,88 @@ If design intent unclear, ask: content style, layout width, color approach, deco
 Props marked `?` are optional; `= x` is the default; `- a, b?: T` is two props of type `T`. A component's mixins add the props listed under Mixins.
 
 ### Column
-Extends Flex with direction="column".
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Use instead of Flex with direction="column".
-- children?: React.ReactNode
 
 ### Row
-Extends Flex with direction="row".
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Use instead of Flex with direction="row".
-- children?: React.ReactNode
 
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
-- xl, l, m, s, xs?: GridBreakpointProps
+- as?: ElementType
 - position?: CSSProperties["position"] = relative
 - scrollbar?: "default" | "minimal" = minimal
+- masonry?: boolean
 
 ### Heading
-Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
+Mixins: CommonProps, LeafProps, TextProps.
 Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
 - wrap?: CSSProperties["textWrap"] = balance
+- opacity?: Opacity
 
 ### Text
-Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
+Mixins: CommonProps, LeafProps, TextProps.
 Avoid: Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd
+- opacity?: Opacity
 
 ### Button
-- variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
-- size?: TShirtSizes = m
+Mixins: LeafProps.
+- variant?: ButtonVariant = primary
+- tone?: Tone
+- size?: TShirtSizes
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- label, href, className, id?: string
+- label, href, id?: string
 - weight?: "default" | "strong" = strong
 - rounded?: boolean
 - prefixIcon, suffixIcon?: IconName
-- loading, disabled, fillWidth, arrowIcon?: boolean = false
+- loading, disabled, arrowIcon?: boolean = false
 - horizontal?: "start" | "center" | "end" | "between" = center
 - children?: ReactNode
-- style?: React.CSSProperties
-- color?: `${ColorScheme}-${ColorWeight}`
 
 ### Input
+Mixins: LeafProps.
 - id: string
-- label, placeholder, className?: string
+- label, placeholder?: string
 - size?: FieldSize
 - error, focusRing, loading?: boolean = false
 - errorMessage, description, prefix, suffix?: ReactNode
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
-- style?: React.CSSProperties
 - variant?: "default" | "ghost" = default
 - characterCount?: boolean
 - cursor?: undefined | "interactive"
+- onValueChange?: (value: string) => void
 - validate?: (value: ReactNode) => ReactNode | null
+- reveal, fillWidth?: boolean = true
 - span?: number
 
-### PasswordInput
-Extends Input.
-
 ### OTPInput
+Mixins: LeafProps.
 - length?: number = 4
-- onComplete?: (code: string) => void
+- value, defaultValue?: string
+- onValueChange, onComplete?: (code: string) => void
 - error, disabled, autoFocus?: boolean = false
 - errorMessage?: React.ReactNode
+- labels?: OTPInputLabels
 
 ### Dialog
-Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - open: boolean
 - onClose: () => void
 - title: ReactNode | string
-- description, children, footer?: ReactNode
+- description, children, footer, backdrop?: ReactNode
+- variant?: "center" | "sheet" = center
 - base, stack?: boolean
-- flush, hideClose?: boolean = false
-- showClose?: boolean = !hideClose
+- flush?: boolean = false
+- showClose, closeOnClickaway?: boolean = true
 - onHeightChange?: (height: number) => void
 - minHeight?: number
-- closeOnClickaway?: boolean = true
 
 ### Media
-Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 Avoid: Raw img elements
 - aspectRatio?: string = original
-- height?: number
+- height?: number | CSSUnit
 - alt?: string = ""
 - loading, enlarge, unoptimized, stretch, sound, controls?: boolean = false
 - objectFit?: CSSProperties["objectFit"] = cover
@@ -226,48 +233,45 @@ Avoid: Raw img elements
 - className?: string
 
 ### SmartLink
+Mixins: LeafProps.
 Avoid: Raw a elements
 - prefixIcon, suffixIcon?: IconName
-- fillWidth, unstyled?: boolean = false
 - iconSize?: TShirtSizes = xs
 - selected?: boolean
+- unstyled?: boolean = false
 - children: ReactNode
-- href, className?: string
-- style?: React.CSSProperties
+- href?: string
 
 ### Line
-Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - vert?: boolean
 - style?: React.CSSProperties
 
 ### IconButton
+Mixins: LeafProps.
 - icon?: IconName = refresh
-- id, className, href, ariaLabel?: string
-- size?: TShirtSizes = m
+- id, href?: string
+- size?: TShirtSizes
 - corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 - rounded, loading, disabled?: boolean = false
 - tooltip, children?: ReactNode
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
-- variant?: "primary" | "secondary" | "tertiary" | "quaternary" | "subtle" | "danger" | "success" | "warning" | "ghost" | "link" = primary
-- style?: React.CSSProperties
-- color?: `${ColorScheme}-${ColorWeight}`
+- variant?: ButtonVariant = primary
+- tone?: Tone
 
 ### Icon
-Extends Flex.
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+Mixins: LeafProps.
 - name: IconName
 - onBackground, onSolid?: `${ColorScheme}-${ColorWeight}`
 - size?: TShirtSizes = m
 - decorative?: boolean = true
 - tooltip?: ReactNode
 - tooltipPosition?: "top" | "bottom" | "left" | "right" = top
-- className?: string
-- style?: React.CSSProperties
 
 ### Textarea
+Mixins: LeafProps.
 - id: string
-- label, placeholder, className?: string
+- label, placeholder?: string
 - lines?: number | "auto" = auto
 - size?: FieldSize
 - error, focusRing, disabled?: boolean = false
@@ -276,42 +280,41 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - variant?: "default" | "ghost" = default
 - characterCount?: boolean
 - resize?: "horizontal" | "vertical" | "both" | "none" = vertical
+- onValueChange?: (value: string) => void
 - validate?: (value: ReactNode) => ReactNode | null
 - span?: number
+- fillWidth?: boolean = true
 
 ### Tag
-Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- scheme?: ColorScheme | "gradient" = neutral
-- size?: CondensedTShirtSizes = m
+Avoid: Passing the same text as label and children — the children are dropped
+- tone?: Tone
+- variant?: "default" | "gradient" | "announce" = default
+- size?: TShirtSizes
 - label?: string = ""
 - prefixIcon, suffixIcon?: IconName
+- href?: string
+- arrow, selected, interactive?: boolean
+- effect?: boolean = variant === "announce"
+- onClick?: MouseEventHandler<HTMLDivElement>
+- onRemove?: () => void
+- removeButtonProps?: Partial<IconButtonProps>
+- as?: "div" | "span"
 - children?: ReactNode
 
-### Badge
-Extends Flex.
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-Avoid: Passing the same text as title and children — both render
-- title, href, className, id?: string
-- icon?: IconName
-- arrow?: boolean = href ? true : false
-- children?: React.ReactNode
-- effect?: boolean = true
-- style?: React.CSSProperties
-
 ### Avatar
-Extends Flex.
-Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
-- size?: TShirtSizes | number = m
-- value, src, className?: string
+Mixins: LeafProps.
+- size?: TShirtSizes | number | CSSUnit = m
+- value, src?: string
 - unoptimized, loading, empty?: boolean
 - icon?: IconName
-- statusIndicator?: { color: "green" | "yellow" | "red" | "gray"; }
-- style?: React.CSSProperties = {}
+- statusIndicator?: { scheme: StatusIndicatorScheme; tone?: undefined } | { tone: Tone; scheme?: undefined }
+- style?: CSSProperties = {}
 
 ### Skeleton
-Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- width, height, minHeight, maxHeight?: number | StaticSpacingToken | CSSUnit
+- minWidth, maxWidth?: number | SpacingToken | CSSUnit
 - shape?: "line" | "circle" | "block" = line
 - size?: "xl" | "l" | "m" | "s" | "xs" = m
 - delay?: number
@@ -320,10 +323,10 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### VisuallyHidden
 - children?: ReactNode
-- as?: React.ElementType = span
 - focusable?: boolean = false
 - className?: string
 - style?: React.CSSProperties
+- as?: ElementType = span
 
 ## Hooks
 
@@ -334,10 +337,12 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### CommonProps
 - onBackground, onSolid?: Colors
 - align?: CSSProperties["textAlign"]
+- children?: ReactNode
+- className?: string
+- style?: React.CSSProperties
 
 ### DisplayProps
-- as?: ElementType
-- inline, hide, dark, light?: boolean
+- inline, hide?: boolean
 - pointerEvents?: "none" | "all" | "auto"
 - userSelect?: UserSelect
 - position?: CSSProperties["position"]
@@ -348,11 +353,14 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - transition?: "micro-short" | "micro-medium" | "micro-long" | "macro-short" | "macro-medium" | "macro-long"
 - opacity?: Opacity
 - zIndex?: -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | "-1" | "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10"
+- showIn?: "dark" | "light"
 
 ### FlexProps
-- direction?: "row" | "column" | "row-reverse" | "column-reverse"
-- horizontal, vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
 - center, wrap?: boolean
+- s, xl, l, m, xs?: FlexBreakpointProps
+- direction?: "row" | "column" | "row-reverse" | "column-reverse"
+- horizontal?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
+- vertical?: "start" | "center" | "end" | "between" | "around" | "even" | "stretch" | "baseline"
 - flex?: FlexValue
 
 ### SizeProps
@@ -364,15 +372,12 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - aspectRatio?: CSSProperties["aspectRatio"]
 
 ### SpacingProps
-- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number
-- gap?: SpacingToken | number | "-1"
-- top, right, bottom, left, translateX, translateY?: SpacingToken | number | CSSUnit
+- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, top, right, bottom, left, translateX, translateY?: SpacingToken | number | CSSUnit
+- margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number | CSSUnit | "auto"
+- gap?: SpacingToken | number | CSSUnit | "-1"
 
 ### StyleProps
 - textVariant?: TextVariant
-- textSize?: TextSize
-- textType?: TextType
-- textWeight?: TextWeight
 - background?: Colors | "surface" | "overlay" | "page" | "transparent"
 - solid?: Colors
 - borderTop, borderRight, borderBottom, borderLeft, borderX, borderY, border?: Colors | "surface" | "transparent" | boolean
@@ -380,9 +385,9 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
-- cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
+- cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
-- blur, backdropBlur?: BlurSize | number
+- blur, backdropBlur?: BlurSize | number | CSSUnit
 - theme?: "light" | "dark"
 - themeBorder?: BorderStyle
 - themeSolid?: SolidType
@@ -392,61 +397,78 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### GridProps
 - columns, rows?: GridSize
 - minColumnWidth?: number | SpacingToken | CSSUnit
+- xl, l, m, s, xs?: GridBreakpointProps
+
+### LeafProps
+- margin, marginTop, marginRight, marginBottom, marginLeft, marginX, marginY?: SpacingToken | number | CSSUnit | "auto"
+- flex?: FlexValue
+- fillWidth?: boolean
+- position?: CSSProperties["position"]
+- top, right, bottom, left?: SpacingToken | number | CSSUnit
+- className?: string
+- style?: CSSProperties
 
 ### TextProps
-- as?: T
-- variant?: TextVariant
+- as?: ElementType
+- textVariant?: TextVariant
 - wrap?: CSSProperties["textWrap"]
-- size?: TextSize
-- weight?: TextWeight
 - family?: TextType
+- weight?: TextWeight
 - truncate?: boolean
-- flex?: FlexValue | number
 - xl, l, m, s, xs?: TextBreakpointHide
 
 ## Types
 
 ```ts
-type BlendMode = "color" | "normal" | "screen" | "overlay" | "multiply" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
-type BlurSize = "xl" | "l" | "m" | "s" | "xs"
+type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
+type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
-type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
+// type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
+type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
-type ColorWeight = "weak" | "medium" | "strong"
-type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
-type CondensedTShirtSizes = "l" | "m" | "s"
-// type FieldSize is one of these strings: xl l m s xs xxs
-// type FlexValue is one of these strings: 0 1 2 3 4 5 6 7 8 9 10 11 12
+type ColorWeight = "strong" | "medium" | "weak"
+type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"strong" | "medium" | "weak"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"strong" | "medium" | "weak"}`
+type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
+// type FieldSize is one of these strings: s xl l m xs xxs
+// type FlexBreakpointProps: an object of these Flex props, all optional (padding* is padding, paddingX, paddingTop and the rest):
+// center style direction horizontal vertical wrap flex textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex
+// type FlexValue is one of these strings: 0 1 10 2 3 4 9 12 5 8 6 7 11
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
-// style textVariant textSize textType textWeight background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex dark light columns rows
-// type GridSize is one of these strings: 1 2 3 4 5 6 7 8 9 10 11 12
+// style textVariant background solid border* radius shadow padding* margin* gap top right bottom left width height maxWidth minWidth minHeight maxHeight fit* fill* aspectRatio onBackground onSolid align hide pointerEvents position overflow* scrollbar transition opacity zIndex columns rows
+// type GridSize is one of these strings: 1 10 2 3 4 9 12 5 8 6 7 11
+type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
-// symbol security opacity dark light copy help filter info danger warning code link menu search time video image enter send checkbox document grid adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer cube dislike download edit eye eyeDropper eyeOff file flag folder food forward gift globe grip heart home inbox like linearGauge lock logout mail maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove play plus radialGauge refresh return screen settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+// symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type OTPInputLabels = { group?: string; digit?: (position: number, length: number) => string }
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type RadiusNest = "4" | "8"
-// type RadiusSize is one of these strings: xl l m s xs none full
-type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
+// type RadiusSize is one of these strings: s xl l m xs none full
+type ShadowSize = "s" | "xl" | "l" | "m" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
-// type SpacingToken is one of these strings: xl l m s xs 0 1 2 4 8 12 32 64 160 16 20 24 40 48 56 72 80 104 128
+// type SpacingToken is one of these strings: s xl l m xs 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type StaticSpacingToken is one of these strings: 0 32 1 2 4 64 160 12 8 16 20 24 40 48 56 72 80 104 128
+// type StatusIndicatorScheme is one of these strings: blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
-type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
+type TShirtSizes = "s" | "xl" | "l" | "m" | "xs"
 type TextBreakpointHide = { hide?: boolean }
-type TextSize = "xl" | "l" | "m" | "s" | "xs"
-type TextType = "label" | "body" | "code" | "heading" | "display"
-type TextVariant = `${"label" | "body" | "code" | "heading" | "display"}-${"default" | "medium" | "strong" | "normal"}-${"xl" | "xs" | "l" | "m" | "s"}`
-type TextWeight = "default" | "medium" | "strong" | "normal"
+type TextType = "body" | "code" | "label" | "heading" | "display"
+type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"strong" | "default" | "normal" | "medium"}-${"xl" | "xs" | "s" | "l" | "m"}`
+type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id">) => string; removeToast: (id: string) => void }
-type UserSelect = "auto" | "none" | "text" | "all"
+// type Tone is one of these strings: neutral brand accent info danger warning success
+type UserSelect = "text" | "auto" | "none" | "all"
 ```
 
 ## Gotchas
 
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
-- Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
-- Do not pass the same text as both title prop and children — it renders twice.
-- Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
+- Pass a Tag's text once, as label or as children — with both, the children are dropped. Badge and Chip are Tag in 3.0.
+- Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onValueChange/defaultValue (not selected/onToggle/defaultSelected), Tag tone (not scheme or variant), Button tone="danger" (not variant="danger"), Text/Heading textVariant (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
+- Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
 
 ## Gold example (`examples/auth.tsx`)
 
@@ -465,7 +487,6 @@ import {
   Input,
   Line,
   Media,
-  PasswordInput,
   Row,
   SmartLink,
   Text,
@@ -483,7 +504,7 @@ export function AuthExample() {
         background="surface"
         s={{ columns: 1 }}
       >
-        <Column minHeight={40} s={{ hide: true }}>
+        <Column minHeight="40rem" s={{ hide: true }}>
           <Media
             stretch
             fillHeight
@@ -501,7 +522,7 @@ export function AuthExample() {
             gap="8"
             background="overlay"
           >
-            <Heading as="h2" variant="display-strong-xs" onBackground="neutral-strong">
+            <Heading as="h2" textVariant="display-strong-xs" onBackground="neutral-strong">
               Explore new dimensions. Code with curiosity.
             </Heading>
           </Column>
@@ -509,10 +530,10 @@ export function AuthExample() {
 
         <Column padding="48" gap="32" center>
           <Column fillWidth gap="8" horizontal="center">
-            <Heading as="h1" variant="display-strong-xs" align="center">
+            <Heading as="h1" textVariant="display-strong-xs" align="center">
               Create your account
             </Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak" align="center">
+            <Text textVariant="body-default-s" onBackground="neutral-weak" align="center">
               Already have an account? <SmartLink href="/login">Sign in</SmartLink>
             </Text>
           </Column>
@@ -526,7 +547,7 @@ export function AuthExample() {
 
           <Row fillWidth vertical="center" gap="16">
             <Line fill />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               or
             </Text>
             <Line fill />
@@ -534,7 +555,7 @@ export function AuthExample() {
 
           <Column fillWidth gap="16">
             <Input id="email" label="Email" placeholder="you@company.com" />
-            <PasswordInput id="password" label="Password" placeholder="••••••••" />
+            <Input id="password" label="Password" placeholder="••••••••" type="password" />
             <Row fillWidth horizontal="end">
               <SmartLink href="/forgot">Forgot password?</SmartLink>
             </Row>

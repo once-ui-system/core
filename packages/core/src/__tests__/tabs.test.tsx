@@ -140,7 +140,7 @@ describe("Tabs: selection", () => {
   it("selects on click and reports the value", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Settings defaultValue="general" onChange={onChange} />, { wrapper: wrap });
+    render(<Settings defaultValue="general" onValueChange={onChange} />, { wrapper: wrap });
 
     await user.click(tab("Security"));
 
@@ -152,7 +152,7 @@ describe("Tabs: selection", () => {
   it("does not report a click on the tab already selected", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Settings defaultValue="general" onChange={onChange} />, { wrapper: wrap });
+    render(<Settings defaultValue="general" onValueChange={onChange} />, { wrapper: wrap });
     await user.click(tab("General"));
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -160,7 +160,7 @@ describe("Tabs: selection", () => {
   it("follows `value` when controlled, and only `value`", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { rerender } = render(<Settings value="general" onChange={onChange} />, {
+    const { rerender } = render(<Settings value="general" onValueChange={onChange} />, {
       wrapper: wrap,
     });
 
@@ -168,7 +168,7 @@ describe("Tabs: selection", () => {
     expect(onChange).toHaveBeenCalledWith("style");
     expect(selectedTab()).toBe(tab("General"));
 
-    rerender(<Settings value="style" onChange={onChange} />);
+    rerender(<Settings value="style" onValueChange={onChange} />);
     expect(selectedTab()).toBe(tab("Style"));
     expect(screen.getByText("Style panel")).toBeVisible();
   });
@@ -179,7 +179,7 @@ describe("Tabs: selection", () => {
       const [value, setValue] = useState("general");
       return (
         <>
-          <Settings value={value} onChange={setValue} />
+          <Settings value={value} onValueChange={setValue} />
           <output>{value}</output>
         </>
       );
@@ -193,7 +193,7 @@ describe("Tabs: selection", () => {
   it("ignores a click on a disabled tab", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Settings defaultValue="general" disabled="style" onChange={onChange} />, {
+    render(<Settings defaultValue="general" disabled="style" onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.click(tab("Style"));
@@ -220,7 +220,7 @@ describe("Tabs: keyboard", () => {
   it("moves and selects with Left and Right, wrapping at both ends", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Settings defaultValue="general" onChange={onChange} />, { wrapper: wrap });
+    render(<Settings defaultValue="general" onValueChange={onChange} />, { wrapper: wrap });
 
     await user.tab();
     await user.keyboard("{ArrowRight}");
@@ -303,7 +303,7 @@ describe("Tabs: keyboard", () => {
   it("only moves focus in manual mode, and selects on Enter or Space", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Settings defaultValue="general" activation="manual" onChange={onChange} />, {
+    render(<Settings defaultValue="general" activation="manual" onValueChange={onChange} />, {
       wrapper: wrap,
     });
 

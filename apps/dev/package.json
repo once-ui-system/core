@@ -14,8 +14,10 @@
     "clean": "rimraf .next"
   },
   "dependencies": {
+    "@once-ui-system/blocks": "workspace:*",
     "@once-ui-system/core": "workspace:*",
     "@once-ui-system/foundations": "workspace:*",
+    "@once-ui-system/fx": "workspace:*",
     "clsx": "^2.1.1",
     "next": "16.2.12",
     "react": "^19.2.8",

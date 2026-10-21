@@ -14,7 +14,7 @@ The `DateInput` component provides an enhanced date picker that combines an inpu
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth height={24} horizontal="center" vertical="start">
+    <Row fillWidth height="24rem" horizontal="center" vertical="start">
       <DateInputExample />
     </Row>
   }
@@ -31,7 +31,7 @@ const handleDateChange = (newDate: Date) => {
     id="date-input-example"
     label="Select Date"
     value={date}
-    onChange={handleDateChange}
+    onValueChange={handleDateChange}
 />`,
       language: "tsx",
       label: "DateInput"
@@ -47,7 +47,7 @@ Enable time selection by setting the `timePicker` prop to `true`.
   marginTop="16"
   marginBottom="24"
   preview={
-    <Row fillWidth height={24} horizontal="center" vertical="start">
+    <Row fillWidth height="24rem" horizontal="center" vertical="start">
       <DateTimeInputExample />
     </Row>
   }
@@ -64,11 +64,39 @@ const handleDateTimeChange = (newDateTime: Date) => {
   id="date-time-input-example"
   label="Select Date & Time"
   value={dateTime}
-  onChange={handleDateTimeChange}
+  onValueChange={handleDateTimeChange}
   timePicker
 />`,
       language: "tsx",
       label: "TimePicker"
+    }
+  ]}
+/>
+
+## Range
+
+With `range`, the field becomes two, a start and an end, over one calendar that picks both (2.x's `DateRangeInput`). `value`, `defaultValue` and `onValueChange` then take a `DateRange`, `{ startDate, endDate }`; `startLabel` and `endLabel` name the fields, and `id` is the base of their ids, `{id}-start` and `{id}-end`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth height="24rem" horizontal="center" vertical="start">
+      <BasicDateRangeInputExample />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<DateInput range
+    id="trip"
+    startLabel="Start date"
+    endLabel="End date"
+    value={dateRange}
+    onValueChange={setDateRange}
+/>`,
+      language: "tsx",
+      label: "Range"
     }
   ]}
 />
@@ -98,10 +126,35 @@ const handleDateTimeChange = (newDateTime: Date) => {
     placeholder="Select date"
     size="xxs"
     value={date}
-    onChange={setDate}
+    onValueChange={setDate}
 />`,
       language: "tsx",
       label: "Toolbar size"
+    }
+  ]}
+/>
+
+With `range`, `size="xxs"` draws both halves at 32px, rounded at `radius-m` on their outer corners.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<BasicDateRangeInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [dateRange, setDateRange] = useState<DateRange>({ startDate: undefined, endDate: undefined });
+
+<DateInput range
+    id="range"
+    startLabel="Start"
+    endLabel="End"
+    size="xxs"
+    value={dateRange}
+    onValueChange={setDateRange}
+/>`,
+      language: "tsx",
+      label: "Toolbar range"
     }
   ]}
 />
@@ -111,6 +164,15 @@ const handleDateTimeChange = (newDateTime: Date) => {
 <PropsTable
   component="DateInput"
   describe={{
+    value: "The date, controlled. Leave it out and the field keeps its own.",
+    defaultValue: "The starting date when `value` is left out.",
+    onValueChange: "Called with the date picked, and each time edit with timePicker. Was onChange in 2.x.",
+    range: "Two fields, start and end, over one calendar. value, defaultValue and onValueChange then take a DateRange.",
+    startLabel: "With range, the label on the start field.",
+    endLabel: "With range, the label on the end field.",
+    open: "Whether the picker is open, controlled.",
+    defaultOpen: "Whether the picker starts open, when `open` is left out.",
+    onOpenChange: "Called with every open and close.",
     minDate: "Earliest date the calendar allows.",
     maxDate: "Latest date the calendar allows.",
     minHeight: "Minimum height of the calendar popover.",
@@ -119,6 +181,7 @@ const handleDateTimeChange = (newDateTime: Date) => {
   }}
   content={[
     ["className"],
-    ["style"]
+    ["style"],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the field, as on Input."]
   ]}
 />

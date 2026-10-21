@@ -9,10 +9,10 @@ import {
   Heading,
   IconButton,
   Mask,
-  MatrixFx,
   Row,
   Text,
 } from "@once-ui-system/core";
+import { MatrixFx } from "@once-ui-system/fx";
 import { useState } from "react";
 import { Testimonial2 } from "./Testimonial2";
 import styles from "./Testimonial10.module.scss";
@@ -140,7 +140,7 @@ function CaseStudySlideShow({
                       textOrientation: "mixed",
                     }}
                   >
-                    <Text variant="heading-strong-l">{slide.label}</Text>
+                    <Text textVariant="heading-strong-l">{slide.label}</Text>
                     <Mask
                       pointerEvents="none"
                       position="absolute"
@@ -200,8 +200,8 @@ function CaseStudySlideShow({
                         colorStart: "brand-solid-weak",
                         x: 0,
                         y: 0,
-                        width: 125,
-                        height: 125,
+                        width: "125%",
+                        height: "125%",
                       }}
                     />
                     <Testimonial2
@@ -222,9 +222,9 @@ function CaseStudySlideShow({
                         fill
                         left="0"
                         bottom="0"
-                        minHeight={32}
+                        minHeight="32rem"
                         x={0}
-                        y={100}
+                        y="100%"
                       >
                         <MatrixFx
                           flicker
@@ -253,10 +253,12 @@ export const Testimonial10 = (flex: React.ComponentProps<typeof Flex>) => {
   return (
     <Column fillWidth horizontal="center" padding="l" {...flex}>
       <Column maxWidth="l" gap="24">
-        <Heading paddingLeft="24" as="h2" variant="display-default-s">
-          Solo founders and small teams scale faster when their design system does not fight back.
-        </Heading>
-        <CaseStudySlideShow aspectRatio="8/3" minHeight={36} activeIndex={0} />
+        <Column paddingLeft="24">
+          <Heading as="h2" textVariant="display-default-s">
+            Solo founders and small teams scale faster when their design system does not fight back.
+          </Heading>
+        </Column>
+        <CaseStudySlideShow aspectRatio="8/3" minHeight="36rem" activeIndex={0} />
       </Column>
     </Column>
   );

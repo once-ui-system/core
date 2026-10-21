@@ -7,6 +7,7 @@ import { Flex } from "../components/Flex";
 import { Grid } from "../components/Grid";
 import { ServerFlex } from "../components/ServerFlex";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { tokenLength as t } from "../utils/layoutClasses";
 
 /**
  * `top`, `right`, `bottom` and `left` are in every Flex breakpoint object, and
@@ -91,12 +92,12 @@ describe("Flex breakpoint offsets", () => {
     expect(classes.some((cls) => /^m-(top|left|right)-/.test(cls))).toBe(false);
   });
 
-  it("moves a rem or CSS-unit offset to the client, as Grid does", () => {
+  it("moves a px or CSS-unit offset to the client, as Grid does", () => {
     const cases: [Record<string, unknown>, boolean][] = [
       [{ top: "16" }, true],
       [{ top: 2 }, false],
       [{ left: "50%" }, false],
-      [{ bottom: "calc(1rem + 2px)" }, false],
+      [{ bottom: "calc(1rem + 2rem)" }, false],
     ];
     for (const [bp, server] of cases) {
       const flex = onServer(<Flex s={bp as never}>x</Flex>);
@@ -106,7 +107,7 @@ describe("Flex breakpoint offsets", () => {
     }
   });
 
-  it("applies a rem or CSS-unit offset inline at the current breakpoint", () => {
+  it("applies a px or CSS-unit offset inline at the current breakpoint", () => {
     // jsdom is 1024 wide, which is the `m` step.
     const { container } = render(
       <LayoutProvider>
@@ -119,7 +120,7 @@ describe("Flex breakpoint offsets", () => {
       </LayoutProvider>,
     );
     const flex = container.querySelector(".display-flex") as HTMLElement;
-    expect(flex.style.top).toBe("2rem");
+    expect(flex.style.top).toBe(t(2));
     expect(flex.style.left).toBe("50%");
     // The token is a class, not a style.
     expect(flex.style.bottom).toBe("");
@@ -128,6 +129,6 @@ describe("Flex breakpoint offsets", () => {
 
     const grid = container.querySelector(".display-grid") as HTMLElement;
     expect(grid.style.right).toBe("calc(100% - 4rem)");
-    expect(grid.style.top).toBe("1.5rem");
+    expect(grid.style.top).toBe(t(1.5));
   });
 });

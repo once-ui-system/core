@@ -1,9 +1,9 @@
-import { forwardRef, type ReactNode, useContext, useState } from "react";
+import { forwardRef, type ReactNode, useState } from "react";
 import { TextInput, type TextInputProps, type TextStyle, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Column, Row } from "./Flex";
-import { FormCellContext, useFormFieldDefaults } from "./FormContext";
+import { IconButton } from "./IconButton";
 import type { RefComponent, TextInputRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
@@ -20,40 +20,38 @@ export interface InputProps extends Omit<TextInputProps, "style" | "editable"> {
   variant?: "default" | "ghost";
   loading?: boolean;
   disabled?: boolean;
-  /**
-   * Squares off the field's corners, as core's `corners`: `"top"` keeps the
-   * top two round, `"none"` squares all four. A stacked `Form` sets these
-   * for you.
-   */
-  corners?:
-    | "none"
-    | "top"
-    | "right"
-    | "bottom"
-    | "left"
-    | "top-left"
-    | "top-right"
-    | "bottom-right"
-    | "bottom-left";
-  /** How many columns to take inside a `Form`; `Form` reads it. */
-  span?: number;
   /** Shows how many characters are left; needs `maxLength`. */
   characterCount?: boolean;
+  /**
+   * Receives the field's text on every change, as core 3.0's `onValueChange`
+   * (React Native's own `onChangeText` still works). The field is controlled
+   * only when `value` is set.
+   */
+  onValueChange?: (value: string) => void;
+  /**
+   * Core's input `type`, mapped to the keyboard: `"password"` hides the text
+   * (with a show/hide button, see `reveal`), `"email"`, `"tel"`, `"url"`,
+   * `"number"` and `"search"` pick the matching keyboard.
+   */
+  type?: InputType;
+  /**
+   * With `type="password"`, an eye button after the field shows and hides
+   * the text (2.x's PasswordInput). On by default; `reveal={false}` leaves a
+   * plain password field, as in core 3.0.
+   */
+  reveal?: boolean;
   style?: ViewStyle;
   inputStyle?: TextStyle;
 }
 
-const ALL = { tl: true, tr: true, bl: true, br: true };
-const CORNERS = {
-  none: { tl: false, tr: false, bl: false, br: false },
-  top: { ...ALL, bl: false, br: false },
-  bottom: { ...ALL, tl: false, tr: false },
-  left: { ...ALL, tr: false, br: false },
-  right: { ...ALL, tl: false, bl: false },
-  "top-left": { tl: true, tr: false, bl: false, br: false },
-  "top-right": { tl: false, tr: true, bl: false, br: false },
-  "bottom-left": { tl: false, tr: false, bl: true, br: false },
-  "bottom-right": { tl: false, tr: false, bl: false, br: true },
+export type InputType = "text" | "password" | "email" | "tel" | "url" | "number" | "search";
+
+const INPUT_MODE = {
+  email: "email",
+  tel: "tel",
+  url: "url",
+  number: "decimal",
+  search: "search",
 } as const;
 
 // Input.module.scss field heights, in static spacing steps.
@@ -64,7 +62,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
   function Input(
     {
       label,
-      size: ownSize,
+      size = "m",
       error = false,
       errorMessage,
       description,
@@ -72,10 +70,11 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
       suffix,
       variant = "default",
       loading = false,
-      disabled: ownDisabled,
-      corners,
-      span: _span,
+      disabled = false,
       characterCount,
+      onValueChange,
+      type = "text",
+      reveal = true,
       style,
       inputStyle,
       onFocus,
@@ -87,63 +86,33 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
     ref,
   ) {
     const theme = useTheme();
-    const form = useFormFieldDefaults();
-    const cell = useContext(FormCellContext);
-    const size = ownSize ?? form.size ?? "m";
-    const disabled = ownDisabled ?? form.disabled ?? false;
     const [focused, setFocused] = useState(false);
+    const [shown, setShown] = useState(false);
+    const password = type === "password";
+    const keyboard =
+      type in INPUT_MODE ? { inputMode: INPUT_MODE[type as keyof typeof INPUT_MODE] } : {};
+    const plain =
+      password || type === "email" || type === "url"
+        ? { autoCapitalize: "none" as const, autoCorrect: false }
+        : {};
     // Tracked when uncontrolled too, so a typed value keeps the label floating after blur.
     const [typed, setTyped] = useState(rest.defaultValue ?? "");
     const value = rest.value ?? typed;
-    // A multiline label stays on top: lying in the value's place, it would
-    // take the control out of the flow and collapse the field to one line.
-    const floating = focused || value !== "" || !!rest.placeholder || !!multiline;
+    const floating = focused || value !== "" || !!rest.placeholder;
     const ghost = variant === "ghost";
-    // As core: on a light page a white field with a firmer edge, since a tinted
-    // fill there reads as disabled.
-    const light = theme.settings.theme === "light";
     const left = rest.maxLength !== undefined ? rest.maxLength - String(value).length : 0;
     const body = theme.text("body-default-m");
-    const round = theme.radius("l");
-    const keep = corners ? CORNERS[corners] : cell;
-    const radii = keep
-      ? {
-          borderTopLeftRadius: keep.tl ? round : 0,
-          borderTopRightRadius: keep.tr ? round : 0,
-          borderBottomLeftRadius: keep.bl ? round : 0,
-          borderBottomRightRadius: keep.br ? round : 0,
-        }
-      : {};
 
     return (
       <Column gap="8" fillWidth style={style}>
         <Row
           vertical={multiline ? "start" : "center"}
           radius="l"
-          border={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-strong"
-                  : "neutral-medium"
-          }
-          background={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-weak"
-                  : "neutral-alpha-weak"
-          }
+          border={ghost ? "transparent" : error ? "danger-medium" : "neutral-medium"}
+          background={ghost ? "transparent" : error ? "danger-medium" : "neutral-alpha-weak"}
           style={{
             minHeight: theme.space(HEIGHTS[size]),
             opacity: disabled ? 0.5 : 1,
-            ...radii,
-            // A focused field in a stacked group paints its border over its neighbours'.
-            ...(focused && cell ? { zIndex: 1 } : {}),
             ...(focused && !ghost ? { borderColor: theme.color("neutral-border-strong") } : {}),
           }}
         >
@@ -158,7 +127,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
           >
             {label && (
               <Text
-                variant={floating ? "label-default-s" : "label-default-m"}
+                textVariant={floating ? "label-default-s" : "label-default-m"}
                 onBackground={error ? "danger-weak" : "neutral-medium"}
               >
                 {label}
@@ -182,7 +151,11 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
               onChangeText={(text) => {
                 setTyped(text);
                 onChangeText?.(text);
+                onValueChange?.(text);
               }}
+              {...keyboard}
+              {...plain}
+              secureTextEntry={password && !shown}
               {...rest}
               style={[
                 {
@@ -210,7 +183,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
           {characterCount && rest.maxLength !== undefined && (
             <Row paddingRight="12">
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 onBackground={
                   left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
                 }
@@ -225,11 +198,23 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
             </Row>
           )}
           {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
+          {password && reveal && (
+            <Row paddingRight="12">
+              <IconButton
+                icon={shown ? "eyeOff" : "eye"}
+                variant="ghost"
+                size="s"
+                aria-label={shown ? "Hide password" : "Show password"}
+                disabled={disabled}
+                onPress={() => setShown((v) => !v)}
+              />
+            </Row>
+          )}
         </Row>
         {error && errorMessage && (
           <Text
             paddingX="16"
-            variant="body-default-s"
+            textVariant="body-default-s"
             onBackground="danger-weak"
             accessibilityLiveRegion="polite"
           >
@@ -237,7 +222,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
           </Text>
         )}
         {description && (
-          <Text paddingX="16" variant="body-default-s" onBackground="neutral-weak">
+          <Text paddingX="16" textVariant="body-default-s" onBackground="neutral-weak">
             {description}
           </Text>
         )}
@@ -246,7 +231,7 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
   },
 );
 
-export interface TextareaProps extends InputProps {
+export interface TextareaProps extends Omit<InputProps, "type" | "reveal"> {
   /**
    * How tall the field is, as on the web. `"auto"` (the default) grows with
    * the content; a number fixes that many lines and scrolls past them.

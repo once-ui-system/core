@@ -118,7 +118,7 @@ function setMetrics(el: HTMLElement, { scrollHeight = 1000, clientHeight = 200 }
 
 describe("ChatMessageList", () => {
   it("is a named log region", () => {
-    render(<ChatMessageList ariaLabel="Chat with Ana" />);
+    render(<ChatMessageList aria-label="Chat with Ana" />);
     const log = screen.getByRole("log", { name: "Chat with Ana" });
     expect(log.getAttribute("aria-live")).toBe("polite");
   });
@@ -348,7 +348,7 @@ describe("TypingIndicator", () => {
   });
 
   it("falls back to a screen-reader label", () => {
-    render(<TypingIndicator ariaLabel="Assistant is replying" />);
+    render(<TypingIndicator aria-label="Assistant is replying" />);
     expect(screen.getByRole("status").textContent).toBe("Assistant is replying");
   });
 });

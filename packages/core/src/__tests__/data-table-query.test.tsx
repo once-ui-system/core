@@ -4,14 +4,8 @@ import type React from "react";
 import { useState } from "react";
 import { renderToString } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  DataTable,
-  type DataTableColumn,
-  type DataTableFilters,
-  type DataTableQuery,
-} from "../components/DataTable";
 import { resetScrollLockState } from "../components/ScrollLock";
-import { Table } from "../components/Table";
+import { Table, type TableColumn, type TableFilters, type TableQuery } from "../components/Table";
 import tableStyles from "../components/Table.module.scss";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -46,7 +40,7 @@ const STATUS_OPTIONS = [
   { value: "refunded", label: "Refunded" },
 ];
 
-const columns: DataTableColumn<Order>[] = [
+const columns: TableColumn<Order>[] = [
   { key: "id", header: "Order", sortable: true },
   { key: "customer", header: "Customer", sortable: true },
   { key: "status", header: "Status", filter: { options: STATUS_OPTIONS } },
@@ -65,9 +59,9 @@ const pick = async (user: ReturnType<typeof userEvent.setup>, field: string, opt
   await user.click(await screen.findByRole("option", { name: option }));
 };
 
-describe("DataTable search and filters", () => {
+describe("Table search and filters", () => {
   it("draws no toolbar unless one is asked for", () => {
-    render(<DataTable aria-label="Orders" columns={columns.slice(0, 2)} rows={orders} />, {
+    render(<Table aria-label="Orders" columns={columns.slice(0, 2)} rows={orders} />, {
       wrapper,
     });
     expect(screen.queryByRole("textbox")).toBeNull();
@@ -79,7 +73,7 @@ describe("DataTable search and filters", () => {
     const user = userEvent.setup();
     const onSearchChange = vi.fn();
     const { container } = render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={orders}
@@ -106,7 +100,7 @@ describe("DataTable search and filters", () => {
     const user = userEvent.setup();
     const onFiltersChange = vi.fn();
     const { container } = render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={orders}
@@ -136,7 +130,7 @@ describe("DataTable search and filters", () => {
 
   it("takes multiple values, a custom match and controlled filters", async () => {
     const user = userEvent.setup();
-    const regionColumns: DataTableColumn<Order>[] = [
+    const regionColumns: TableColumn<Order>[] = [
       { key: "id", header: "Order" },
       {
         key: "status",
@@ -153,11 +147,11 @@ describe("DataTable search and filters", () => {
         },
       },
     ];
-    const seen: DataTableFilters[] = [];
+    const seen: TableFilters[] = [];
     function Host() {
-      const [filters, setFilters] = useState<DataTableFilters>({ status: ["paid", "pending"] });
+      const [filters, setFilters] = useState<TableFilters>({ status: ["paid", "pending"] });
       return (
-        <DataTable
+        <Table
           aria-label="Orders"
           columns={regionColumns}
           rows={orders}
@@ -185,13 +179,7 @@ describe("DataTable search and filters", () => {
   it("tells no results apart from no data, and clears the query from there", async () => {
     const user = userEvent.setup();
     const { container, rerender } = render(
-      <DataTable
-        aria-label="Orders"
-        columns={columns}
-        rows={orders}
-        searchable
-        defaultSearch="zzz"
-      />,
+      <Table aria-label="Orders" columns={columns} rows={orders} searchable defaultSearch="zzz" />,
       { wrapper },
     );
 
@@ -203,7 +191,7 @@ describe("DataTable search and filters", () => {
     expect(firstColumn()).toEqual(["o1", "o2", "o3", "o4"]);
 
     rerender(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={[]}
@@ -227,7 +215,7 @@ describe("DataTable search and filters", () => {
     }));
     const onPageChange = vi.fn();
     render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={many}
@@ -247,13 +235,13 @@ describe("DataTable search and filters", () => {
   });
 });
 
-describe("DataTable server mode queries", () => {
+describe("Table server mode queries", () => {
   it("reports the search and filters without filtering the server's rows", async () => {
     const user = userEvent.setup();
     const onQueryChange = vi.fn();
     const onSearchChange = vi.fn();
     render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={orders.slice(0, 2)}
@@ -276,7 +264,7 @@ describe("DataTable server mode queries", () => {
       sort: null,
       search: "a",
       filters: {},
-    } satisfies DataTableQuery);
+    } satisfies TableQuery);
 
     await pick(user, "Status", "Pending");
     expect(onQueryChange).toHaveBeenLastCalledWith({
@@ -296,7 +284,7 @@ describe("DataTable server mode queries", () => {
     function Host() {
       const [page, setPage] = useState(1);
       return (
-        <DataTable
+        <Table
           aria-label="Orders"
           columns={columns}
           rows={orders.slice(0, 2)}
@@ -355,7 +343,7 @@ describe("DataTable server mode queries", () => {
 
   it("keeps the last rows on screen, dimmed and busy, with keepRowsWhileLoading", async () => {
     const { container, rerender } = render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={orders}
@@ -381,7 +369,7 @@ describe("DataTable server mode queries", () => {
 
     // Without rows yet, skeletons stand in as before.
     rerender(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={[]}
@@ -398,10 +386,10 @@ describe("DataTable server mode queries", () => {
   });
 });
 
-describe("DataTable columns", () => {
+describe("Table columns", () => {
   it("hides a column per breakpoint with classes the server renders", () => {
     render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={[
           ...columns.slice(0, 3),
@@ -424,7 +412,7 @@ describe("DataTable columns", () => {
   it("puts the hide classes in the server render, before any script runs", () => {
     const html = renderToString(
       <LayoutProvider>
-        <DataTable aria-label="Orders" columns={columns} rows={orders} />
+        <Table aria-label="Orders" columns={columns} rows={orders} />
       </LayoutProvider>,
     );
     // The header and the four cells of the Region column.
@@ -435,7 +423,7 @@ describe("DataTable columns", () => {
     const user = userEvent.setup();
     const onColumnVisibilityChange = vi.fn();
     const { baseElement } = render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns.slice(0, 2)}
         rows={orders}
@@ -469,7 +457,7 @@ describe("DataTable columns", () => {
 
   it("follows controlled column visibility", () => {
     render(
-      <DataTable
+      <Table
         aria-label="Orders"
         columns={columns}
         rows={orders}
@@ -485,17 +473,15 @@ describe("DataTable columns", () => {
   });
 });
 
-describe("Table column hide", () => {
+describe("Table column hide with array rows", () => {
   it("hides a header and its cells per breakpoint", () => {
     render(
       <Table
-        data={{
-          headers: [
-            { key: "name", content: "Name" },
-            { key: "email", content: "Email", hide: { s: true } },
-          ],
-          rows: [["Bea", "bea@example.com"]],
-        }}
+        columns={[
+          { key: "name", header: "Name" },
+          { key: "email", header: "Email", hide: { s: true } },
+        ]}
+        rows={[["Bea", "bea@example.com"]]}
       />,
       { wrapper },
     );

@@ -1,11 +1,11 @@
 "use client";
 
 import React from "react";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import { ChartVariant } from "./interfaces";
-import { Swatch } from "./Swatch";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import { ChartVariant } from "./interfaces.js";
+import { Swatch } from "./Swatch.js";
 
 interface LegendProps {
   payload?: readonly Record<string, any>[];
@@ -23,7 +23,7 @@ interface LegendProps {
   variant?: ChartVariant;
 }
 
-const Legend: React.FC<LegendProps> = ({
+const Legend = ({
   payload,
   labels = "both",
   position = "top-left",
@@ -31,7 +31,7 @@ const Legend: React.FC<LegendProps> = ({
   direction,
   colors,
   variant,
-}) => {
+}: LegendProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
   const theme = useDataTheme();
@@ -117,7 +117,7 @@ const Legend: React.FC<LegendProps> = ({
         return (
           <Row key={index} vertical="center" gap="8">
             <Swatch color={color} size="m" variant={chartVariant} />
-            <Text variant="label-default-s" wrap="nowrap">
+            <Text textVariant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>
           </Row>

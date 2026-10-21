@@ -24,7 +24,7 @@ The Slider component provides an intuitive way to select a value from a range us
 return (
     <Slider
       value={value}
-      onChange={setValue}
+      onValueChange={setValue}
       min={0}
       max={100}
     />
@@ -38,7 +38,7 @@ return (
 ## Uncontrolled
 
 Without `value`, Slider keeps its own state and starts at `defaultValue`, or at
-`min` when there is none. `onChange` is optional then: give the slider a `name` and
+`min` when there is none. `onValueChange` is optional then: give the slider a `name` and
 a form submits its value, or read it from a ref.
 
 <CodeBlock
@@ -57,7 +57,7 @@ a form submits its value, or read it from a ref.
   ]}
 />
 
-For two thumbs that select a range, use [`RangeSlider`](/components/rangeSlider).
+For two thumbs that select a range, add [`range`](#range).
 
 ## Label
 
@@ -74,7 +74,7 @@ Add a descriptive label to the slider using the `label` prop.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   label="Volume"
@@ -100,7 +100,7 @@ Display the current value alongside the label using `showValue`.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   label="Brightness"
@@ -127,7 +127,7 @@ Control the granularity of value changes with the `step` prop.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={0}
   max={100}
   step={10}
@@ -155,7 +155,7 @@ Define custom minimum and maximum values for your use case.
       code:
 `<Slider
   value={value}
-  onChange={setValue}
+  onValueChange={setValue}
   min={10}
   max={30}
   step={1}
@@ -183,7 +183,7 @@ Disable the slider to prevent user interaction.
       code:
 `<Slider
   value={50}
-  onChange={() => {}}
+  onValueChange={() => {}}
   min={0}
   max={100}
   label="Locked Setting"
@@ -196,19 +196,193 @@ Disable the slider to prevent user interaction.
   ]}
 />
 
+## Error
+
+`error` paints the fill and thumb in the danger palette and marks the input invalid; `errorMessage` shows under the track and is tied to the thumb with `aria-describedby`, so a screen reader reads it on focus. Both work with `range` too.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Slider label="Volume" defaultValue={95} showValue error errorMessage="Above 90 can damage hearing." />
+  }
+  codes={[
+    {
+      code:
+`<Slider
+  label="Volume"
+  defaultValue={95}
+  showValue
+  error
+  errorMessage="Above 90 can damage hearing."
+/>`,
+      language: "tsx",
+      label: "Error"
+    }
+  ]}
+/>
+
+## Size
+
+`size` sets the thumb and track, from `"xs"` to `"xl"` (default `"m"`). Inside a [Form](/form-controls/form) the slider takes the form's `size` when it sets none.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column gap="24" fillWidth>
+      <Slider label="Small" size="s" defaultValue={30} />
+      <Slider label="Medium" defaultValue={50} />
+      <Slider label="Large" size="l" defaultValue={70} />
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Slider label="Small" size="s" defaultValue={30} />
+<Slider label="Medium" defaultValue={50} />
+<Slider label="Large" size="l" defaultValue={70} />`,
+      language: "tsx",
+      label: "Size"
+    }
+  ]}
+/>
+
+## Range
+
+With `range`, the slider selects a `[start, end]` pair with two thumbs on one track (2.x's `RangeSlider`). `min`, `max`, `step`, `label`, `showValue`, `disabled`, `error` and `size` work as above; the value is a pair, start first.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Slider range label="Duration (minutes)" defaultValue={[20, 70]} showValue />
+  }
+  codes={[
+    {
+      code:
+`<Slider range label="Duration (minutes)" defaultValue={[20, 70]} showValue />`,
+      language: "tsx",
+      label: "Range"
+    }
+  ]}
+/>
+
+Without `value` or `defaultValue`, the range starts as the whole track, `[min, max]`.
+
+### Controlled
+
+Pass `value` and `onValueChange` when something else owns the range, such as the filters
+of a product list. `onValueChange` gets the new pair, start never above end. `formatValue`
+sets how a value reads, in the readout and to a screen reader, and `minDistance`
+keeps the thumbs apart.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<RangeSliderPriceExample />}
+  codes={[
+    {
+      code:
+`const [range, setRange] = useState<[number, number]>([120, 480]);
+
+<Slider range
+  label="Price"
+  min={0}
+  max={600}
+  step={10}
+  minDistance={50}
+  value={range}
+  onValueChange={setRange}
+  formatValue={(value) => \`$\${value}\`}
+  showValue
+/>`,
+      language: "tsx",
+      label: "Controlled"
+    }
+  ]}
+/>
+
+### Disabled
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Slider range label="Locked range" defaultValue={[30, 60]} showValue disabled />
+  }
+  codes={[
+    {
+      code:
+`<Slider range label="Locked range" defaultValue={[30, 60]} showValue disabled />`,
+      language: "tsx",
+      label: "Disabled"
+    }
+  ]}
+/>
+
+### Forms
+
+Give the slider a `name` and a form submits both values under it, start first. Pass
+two names to submit each under its own, as a search form's query string wants:
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<form action="/search">
+  <Slider range label="Price" name={["minPrice", "maxPrice"]} defaultValue={[0, 500]} max={1000} />
+</form>
+// → /search?minPrice=0&maxPrice=500`,
+      language: "tsx",
+      label: "Forms"
+    }
+  ]}
+/>
+
+### Accessibility
+
+The two thumbs sit in a group named by `label` (or `aria-label`). Each thumb is a
+`slider` of its own, named "Minimum" and "Maximum": pass `thumbLabels` to name them
+otherwise, or in another language. A thumb's bounds are the other thumb, so a
+screen reader announces how far each one can go and the thumbs can never cross.
+
+| Key | Does |
+| --- | --- |
+| Right / Up | One `step` higher. Left and Right swap in a right-to-left layout. |
+| Left / Down | One `step` lower. |
+| Page Up / Page Down | A tenth of the range higher or lower. |
+| Home / End | The lowest or highest value the thumb can reach. |
+
+A press on the track moves the nearer thumb there, and either thumb can be dragged.
+When the two thumbs sit on the same value, the first move decides which one comes
+along, since only one of them can go each way.
+
 ## API reference
 
 <PropsTable
   component="Slider"
   describe={{
-    value: "The value, when the host owns the state. Pair with onChange.",
+    minDistance: "With range, the smallest gap the thumbs keep between them.",
+    formatValue: "With range, how a value reads, in the readout and to a screen reader.",
+    thumbLabels: "With range, the thumbs' accessible names, start first.",
+    range: "Two thumbs selecting a [start, end] pair. value, defaultValue and onValueChange then take the pair.",
+    error: "Paint the slider in its error state and mark it invalid.",
+    errorMessage: "Shown under the track and read with the thumb, when error is set.",
+    size: "Thumb and track size, xs to xl. Takes a Form's size when unset.",
+    value: "The value, when the host owns the state. Pair with onValueChange.",
     defaultValue: "Where the slider starts when it keeps its own state. Defaults to min.",
-    onChange: "Called with the new value, as a number.",
+    onValueChange: "Called with the new value, as a number, on every step of a drag.",
+    onValueCommit: "Called with the value once a change is done: on pointer release, and after each key that moves the thumb.",
     label: "Visible label that names the slider.",
   }}
   content={[
     ["className"],
     ["style"],
-    ["...InputHTMLAttributes", "input attributes"]
+    ["...InputHTMLAttributes", "input attributes"],
+    ["name", "string", "-", "The form field name. With range, one name for both values or one for each."],
+    ["onChange", "ChangeEventHandler", "-", "The native change event of the range input."]
   ]}
 />

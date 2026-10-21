@@ -1,14 +1,14 @@
 "use client";
 
 import { useMemo } from "react";
-import { useOgData } from "../hooks/useFetchOg";
-import { CondensedTShirtSizes } from "../types";
-import { Card } from "./Card";
-import { Column } from "./Column";
-import { Media } from "./Media";
-import { Row } from "./Row";
-import { Skeleton } from "./Skeleton";
-import { Text } from "./Text";
+import { useOgData } from "../hooks/useFetchOg.js";
+import { CondensedTShirtSizes } from "../types.js";
+import { Card } from "./Card.js";
+import { Column } from "./Column.js";
+import { Media } from "./Media.js";
+import { Row } from "./Row.js";
+import { Skeleton } from "./Skeleton.js";
+import { Text } from "./Text.js";
 
 export interface OgServiceConfig {
   proxyImageUrl?: (url: string) => string;
@@ -160,6 +160,9 @@ const OgCard = ({
       fillWidth
       vertical={isRow ? "center" : undefined}
       gap="4"
+      // A row card insets its image, so the image's corners sit inside the
+      // card's instead of running into its edge.
+      padding={isRow ? "8" : undefined}
       radius="l"
       background="surface"
       border="neutral-alpha-medium"
@@ -181,10 +184,10 @@ const OgCard = ({
     >
       {resolvedImage !== null && (proxiedImageUrl || loading) && (
         <Media
-          minWidth={isRow ? 16 : undefined}
-          maxWidth={isRow ? 24 : undefined}
+          minWidth={isRow ? "16rem" : undefined}
+          maxWidth={isRow ? "24rem" : undefined}
           loading={loading}
-          radius="l"
+          radius={isRow ? "m" : "l"}
           sizes={sizes}
           unoptimized={unoptimized}
           aspectRatio="16/9"
@@ -217,7 +220,7 @@ const OgCard = ({
               (loading ? (
                 <Skeleton shape="line" width="25%" size="xs" />
               ) : (
-                <Text variant="label-default-s" onBackground="neutral-weak" truncate>
+                <Text textVariant="label-default-s" onBackground="neutral-weak" truncate>
                   {formatDisplayUrl(resolvedUrl)}
                 </Text>
               ))}
@@ -230,7 +233,7 @@ const OgCard = ({
             ) : (
               resolvedTitle && (
                 <Text
-                  variant={
+                  textVariant={
                     size === "s"
                       ? "label-default-s"
                       : size === "m"
@@ -250,7 +253,7 @@ const OgCard = ({
               </Column>
             ) : resolvedDescription ? (
               <Text
-                variant={
+                textVariant={
                   size === "s"
                     ? "label-default-s"
                     : size === "m"
@@ -258,6 +261,14 @@ const OgCard = ({
                       : "label-default-l"
                 }
                 onBackground="neutral-weak"
+                // Clamped: a meta description runs to 200 characters, which
+                // would make the text taller than the image beside it.
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: size === "l" ? 3 : 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
               >
                 {resolvedDescription}
               </Text>

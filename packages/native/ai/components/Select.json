@@ -1,0 +1,34 @@
+{
+ "name": "Select",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An `Input`-styled field that opens its options in a bottom sheet.",
+ "mixins": [],
+ "props": {
+  "id": "string",
+  "options": "!Omit<OptionProps, \"selected\" | \"onPress\" | \"onClick\">[]",
+  "value": "string | string[]",
+  "defaultValue": "string | string[]",
+  "onValueChange": "(value: string | string[]) => void",
+  "open": "boolean",
+  "defaultOpen": "boolean = false",
+  "onOpenChange": "(open: boolean) => void",
+  "label": "string",
+  "placeholder": "string",
+  "multiple": "boolean = false",
+  "searchable": "boolean = false",
+  "emptyState": "ReactNode = \"No results\"",
+  "size": "TShirtSizes",
+  "error": "boolean",
+  "errorMessage": "ReactNode",
+  "description": "ReactNode",
+  "disabled": "boolean",
+  "labels": "{ search?: string }",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "OptionProps": "Option props",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

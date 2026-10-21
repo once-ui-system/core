@@ -178,14 +178,14 @@ export function HomeScreen() {
     <ScrollView>
       <Column fillWidth gap="24" padding="20" background="page" safeArea={["top", "bottom"]}>
         <Column gap="8">
-          <Heading variant="display-strong-s">Morning Coffee</Heading>
-          <Text variant="body-default-m" onBackground="neutral-weak">
+          <Heading textVariant="display-strong-s">Morning Coffee</Heading>
+          <Text textVariant="body-default-m" onBackground="neutral-weak">
             Collect a stamp with every coffee. The tenth one is on us.
           </Text>
         </Column>
         <Card padding="20" gap="12">
-          <Text variant="label-default-s" onBackground="neutral-weak">Stamps</Text>
-          <Heading variant="heading-strong-xl">7 / 10</Heading>
+          <Text textVariant="label-default-s" onBackground="neutral-weak">Stamps</Text>
+          <Heading textVariant="heading-strong-xl">7 / 10</Heading>
         </Card>
         <Input
           label="Email"
@@ -198,7 +198,7 @@ export function HomeScreen() {
           <Button
             label="Join"
             fillWidth
-            onPress={() => addToast({ variant: "success", message: "You are on the list." })}
+            onPress={() => addToast({ tone: "success", message: "You are on the list." })}
           />
           <Button label="Later" variant="secondary" />
         </Row>

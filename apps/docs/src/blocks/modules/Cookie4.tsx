@@ -18,7 +18,7 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
 
   return (
     <Column
-      maxWidth={32}
+      maxWidth="32rem"
       padding="24"
       gap="20"
       radius="l"
@@ -34,24 +34,19 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
         top="0"
         gradient={{
           display: true,
-          x: 100,
+          x: "100%",
           y: 0,
           colorStart: "brand-background-medium",
           colorEnd: "static-transparent",
         }}
       />
       <Row gap="12" vertical="center">
-        <Icon
-          name="security"
-          size="s"
-          padding="12"
-          radius="full"
-          background="brand-alpha-weak"
-          onBackground="brand-weak"
-        />
+        <Row fit padding="12" radius="full" background="brand-alpha-weak">
+          <Icon name="security" size="s" onBackground="brand-weak" />
+        </Row>
         <Column gap="4" fillWidth>
-          <Text variant="heading-strong-s">We value your privacy</Text>
-          <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="heading-strong-s">We value your privacy</Text>
+          <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
             Choose how we use cookies to improve your experience. Read our{" "}
             <SmartLink href="#">Privacy Policy</SmartLink>.
           </Text>
@@ -61,21 +56,21 @@ export const Cookie4: React.FC<React.ComponentProps<typeof Column>> = ({ ...flex
       <Column fillWidth gap="12" padding="16" radius="m" border>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
-            <Text variant="label-default-s">Analytics</Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-s">Analytics</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Help us understand usage patterns
             </Text>
           </Column>
-          <Switch checked={analytics} onToggle={() => setAnalytics(!analytics)} />
+          <Switch checked={analytics} onCheckedChange={() => setAnalytics(!analytics)} />
         </Row>
         <Row fillWidth horizontal="between" vertical="center">
           <Column gap="2">
-            <Text variant="label-default-s">Marketing</Text>
-            <Text variant="body-default-xs" onBackground="neutral-weak">
+            <Text textVariant="label-default-s">Marketing</Text>
+            <Text textVariant="body-default-xs" onBackground="neutral-weak">
               Personalized offers and updates
             </Text>
           </Column>
-          <Switch checked={marketing} onToggle={() => setMarketing(!marketing)} />
+          <Switch checked={marketing} onCheckedChange={() => setMarketing(!marketing)} />
         </Row>
       </Column>
 

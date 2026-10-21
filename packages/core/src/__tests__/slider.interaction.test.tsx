@@ -41,7 +41,7 @@ describe("Slider: interaction", () => {
 
   it("updates the readout and reports a number for each change", () => {
     const onChange = vi.fn();
-    render(<Slider label="Brightness" defaultValue={10} showValue onChange={onChange} />, {
+    render(<Slider label="Brightness" defaultValue={10} showValue onValueChange={onChange} />, {
       wrapper: wrap,
     });
     const slider = screen.getByRole("slider", { name: "Brightness" });
@@ -56,7 +56,7 @@ describe("Slider: interaction", () => {
       const [value, setValue] = useState(50);
       return (
         <>
-          <Slider label="Volume" value={value} onChange={setValue} />
+          <Slider label="Volume" value={value} onValueChange={setValue} />
           <output>{value}</output>
         </>
       );

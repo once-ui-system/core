@@ -31,7 +31,7 @@ export function People() {
 
 ## Sizes
 
-`size` takes a t-shirt size, from `xs` (20px) to `xl` (160px), or a number of rem.
+`size` takes a t-shirt size, from `xs` (20px) to `xl` (160px), or a number of points (`40`).
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -68,8 +68,8 @@ codes={[
 export function Presence() {
   return (
     <Row gap="12" vertical="center">
-      <Avatar size="l" value="AB" statusIndicator={{ color: "green" }} />
-      <Avatar size="l" value="CD" statusIndicator={{ color: "gray" }} />
+      <Avatar size="l" value="AB" statusIndicator={{ scheme: "green" }} />
+      <Avatar size="l" value="CD" statusIndicator={{ scheme: "gray" }} />
       <Avatar size="l" loading />
     </Row>
   );
@@ -89,7 +89,7 @@ export function Presence() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| number` | `"m"` | A t-shirt size, or a number of rem. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| number` | `"m"` | A t-shirt size, or a number of points (`40`). |
 | `src` | `string` | | The image URL. |
 | `value` | `string` | | Initials shown when there is no image. Also used in the screen reader label. |
 | `loading` | `boolean` | | Shows a circular skeleton instead. |

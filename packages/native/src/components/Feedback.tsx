@@ -1,46 +1,67 @@
 import type { ReactNode } from "react";
 import type { ViewStyle } from "react-native";
-import { Button } from "./Button";
+import { useTheme } from "../theme/ThemeProvider";
+import type { Tone } from "../types";
 import { Column, Row } from "./Flex";
+import { type IconName, type IconSlot, renderIcon } from "./Icon";
+import { IconButton } from "./IconButton";
 import { Text } from "./Text";
 
 export interface FeedbackProps {
-  variant?: "info" | "danger" | "warning" | "success";
+  /** The palette, and the icon that goes with it. Defaults to `info`. 2.x called it `variant`. */
+  tone?: Tone;
+  /** Shows the tone's icon (or `icon`) before the text. On by default, as in core. */
+  showIcon?: boolean;
+  /** Overrides the tone's icon: an icon name as in core, or any element. */
+  icon?: IconSlot;
   title?: string;
   description?: string;
-  /** An element before the text. Core takes an icon name; the preview has no icon set yet. */
-  icon?: ReactNode;
   showCloseButton?: boolean;
   onClose?: () => void;
   children?: ReactNode;
   style?: ViewStyle;
 }
 
-/** Core's `Feedback`: an inline alert tinted by its variant, announced when it appears. */
+const TONE_ICONS: Partial<Record<Tone, IconName>> = {
+  info: "info",
+  danger: "danger",
+  warning: "warning",
+  success: "check",
+};
+
+/** Core's `Feedback`: an inline alert tinted by its tone, announced when it appears. */
 export function Feedback({
-  variant = "info",
+  tone = "info",
+  showIcon = true,
+  icon,
   title,
   description,
-  icon,
   showCloseButton = false,
   onClose,
   children,
   style,
 }: FeedbackProps) {
+  const theme = useTheme();
   return (
     <Row
       fillWidth
       radius="l"
-      border={`${variant}-medium`}
-      background={`${variant}-medium`}
+      border={`${tone}-medium`}
+      background={`${tone}-medium`}
       vertical={title || children ? "start" : "center"}
       accessibilityRole="alert"
       accessibilityLiveRegion="assertive"
       style={style}
     >
-      {icon && (
+      {showIcon && (
         <Row paddingY="16" paddingLeft="16">
-          {icon}
+          <Row padding="2" importantForAccessibility="no-hide-descendants">
+            {renderIcon(
+              icon ?? TONE_ICONS[tone] ?? "info",
+              "m",
+              theme.onBackground(`${tone}-medium`),
+            )}
+          </Row>
         </Row>
       )}
       <Column flex={1} padding="16" gap="24" vertical="center">
@@ -51,25 +72,26 @@ export function Feedback({
                 <Text
                   paddingY="4"
                   style={{ flex: 1 }}
-                  variant="heading-strong-xs"
-                  onBackground={`${variant}-medium`}
+                  textVariant="heading-strong-xs"
+                  onBackground={`${tone}-medium`}
                   accessibilityRole="header"
                 >
                   {title}
                 </Text>
                 {showCloseButton && (
-                  <Button
+                  <IconButton
+                    icon="close"
+                    size="m"
                     variant="ghost"
-                    size="s"
-                    label="Hide"
+                    tooltip="Hide"
+                    aria-label="Close alert"
                     onPress={onClose}
-                    accessibilityLabel="Close alert"
                   />
                 )}
               </Row>
             )}
             {description && (
-              <Text marginBottom="2" variant="body-default-s" onBackground={`${variant}-strong`}>
+              <Text marginBottom="2" textVariant="body-default-s" onBackground={`${tone}-strong`}>
                 {description}
               </Text>
             )}

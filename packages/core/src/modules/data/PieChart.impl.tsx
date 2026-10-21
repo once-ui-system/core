@@ -1,23 +1,25 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import { cssColor } from "../../internal/cssColor";
-import { RadiusSize, schemes } from "../../types";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { RadialGradient } from "./Gradient";
-import { ChartProps, ChartVariant, DataPoint } from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
-import { getDistributedColor } from "./utils/colorDistribution";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize, schemes } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { RadialGradient } from "./Gradient.js";
+import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
 
-export interface PieChartProps extends ChartProps {
+import { getDistributedColor } from "./utils/colorDistribution.js";
+
+export interface PieChartProps<T extends object = DataPoint> extends ChartProps<T> {
   /**
    * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
    * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
@@ -25,12 +27,14 @@ export interface PieChartProps extends ChartProps {
    */
   "data-viz-style"?: DataStyle | (string & {});
   ring?: { inner: number; outer: number };
-  dataKey?: string;
-  nameKey?: string;
+  /** The row key that sizes each slice. */
+  dataKey?: SeriesKey<T>;
+  /** The row key that names each slice. */
+  nameKey?: SeriesKey<T>;
   origo?: { x: number; y: number };
 }
 
-const PieChart: React.FC<PieChartProps> = ({
+const PieChart = ({
   title,
   description,
   data: rows,
@@ -50,7 +54,7 @@ const PieChart: React.FC<PieChartProps> = ({
   nameKey = "name",
   "data-viz-style": dataViz,
   ...flex
-}) => {
+}: PieChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
   const { variant: themeVariant, mode, height } = useDataTheme();
@@ -127,7 +131,8 @@ const PieChart: React.FC<PieChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       data-viz-style={dataViz || mode}
       border={border}
       radius="l"

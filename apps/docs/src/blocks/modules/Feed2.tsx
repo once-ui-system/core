@@ -1,6 +1,6 @@
 "use client";
 
-import { Column, Icon, IconButton, MasonryGrid, Media, Row, Text } from "@once-ui-system/core";
+import { Column, Icon, IconButton, Grid, Media, Row, Text } from "@once-ui-system/core";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { MediaPost2 } from "./MediaPost2";
@@ -59,7 +59,7 @@ export const Feed2 = () => {
       <Row s={{ hide: true }} position="sticky" fitHeight zIndex={1} top="50%" translateY="-50%">
         <Sidebar3 />
       </Row>
-      <MasonryGrid columns={4} l={{ columns: 3 }} m={{ columns: 2 }} s={{ columns: 1 }}>
+      <Grid masonry columns={4} l={{ columns: 3 }} m={{ columns: 2 }} s={{ columns: 1 }}>
         {images.map((image, index) => (
           <Row
             key={index}
@@ -92,13 +92,13 @@ export const Feed2 = () => {
             >
               <Row gap="12" vertical="center">
                 <Icon onSolid="neutral-strong" name="heart" />
-                <Text onSolid="neutral-strong" variant="label-default-s">
+                <Text onSolid="neutral-strong" textVariant="label-default-s">
                   {image.likes}
                 </Text>
               </Row>
               <Row gap="12" vertical="center">
                 <Icon onSolid="neutral-strong" name="chat" />
-                <Text onSolid="neutral-strong" variant="label-default-s">
+                <Text onSolid="neutral-strong" textVariant="label-default-s">
                   {image.comments}
                 </Text>
               </Row>
@@ -149,7 +149,7 @@ export const Feed2 = () => {
             </Row>,
             document.body,
           )}
-      </MasonryGrid>
+      </Grid>
     </Row>
   );
 };

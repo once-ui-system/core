@@ -4,7 +4,6 @@ import type React from "react";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -49,7 +48,7 @@ const focusDay = async (date: Date) => {
 
 describe("DatePicker grid", () => {
   it("is a grid named after its month: a header row, then a row of seven cells per week", async () => {
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
 
     const grid = screen.getByRole("grid", { name: "January 2026" });
@@ -75,7 +74,9 @@ describe("DatePicker grid", () => {
   });
 
   it("has no axe violations", async () => {
-    const { container } = render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    const { container } = render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, {
+      wrapper,
+    });
     await day(jan(5));
     await settle();
     await expectNoAxeViolations(container);
@@ -83,7 +84,7 @@ describe("DatePicker grid", () => {
 
   it("has no axe violations with the year list open", async () => {
     const user = userEvent.setup();
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     await day(jan(5));
     await settle();
     await user.click(screen.getByText("2026"));
@@ -95,7 +96,7 @@ describe("DatePicker grid", () => {
   it("nests no button in another in the server markup", () => {
     const html = renderToString(
       <LayoutProvider>
-        <DatePicker value={jan(5)} onChange={() => {}} />
+        <DatePicker value={jan(5)} onValueChange={() => {}} />
       </LayoutProvider>,
     );
     expect(html).toContain("January");
@@ -104,7 +105,7 @@ describe("DatePicker grid", () => {
 
   it("is one tab stop, on the selected day, which follows the arrow keys", async () => {
     const user = userEvent.setup();
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });
     const grid = await waitFor(() => screen.getByRole("grid"));
 
     // The other months' days are disabled, so out of the tab order anyway.
@@ -129,7 +130,7 @@ describe("DatePicker grid", () => {
   it("moves by day and by week from the selected day, and picks with Enter", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<DatePicker value={jan(5)} onChange={onChange} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={onChange} />, { wrapper });
     await focusDay(jan(5));
 
     await user.keyboard("{ArrowDown}");
@@ -142,7 +143,7 @@ describe("DatePicker grid", () => {
 
   it("ends on the last day that can be picked", async () => {
     const user = userEvent.setup();
-    render(<DatePicker value={jan(5)} onChange={vi.fn()} maxDate={jan(25)} />, { wrapper });
+    render(<DatePicker value={jan(5)} onValueChange={vi.fn()} maxDate={jan(25)} />, { wrapper });
     await focusDay(jan(5));
 
     await user.keyboard("{End}");
@@ -153,10 +154,11 @@ describe("DatePicker grid", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <DateRangePicker
-        dual
+      <DatePicker
+        range
+        months={2}
         value={{ startDate: jan(28), endDate: undefined }}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper },
     );

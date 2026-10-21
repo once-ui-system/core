@@ -1,11 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, type ReactNode, useId } from "react";
-import { Column } from "./Column";
-import { type FieldControl, FieldControlContext } from "./FormContext";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import React, { type ReactNode, useId } from "react";
+import { Column } from "./Column.js";
+import { type FieldControl, FieldControlContext } from "./FormContext.js";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
 /**
  * Field — a label, a hint and an error around one control, wired together.
@@ -58,117 +58,114 @@ interface FieldProps extends Omit<React.HTMLAttributes<HTMLDivElement>, "childre
   children: ReactNode | ((control: FieldControlProps) => ReactNode);
   className?: string;
   style?: React.CSSProperties;
+  ref?: React.Ref<HTMLDivElement>;
 }
 
 /** Whether a node draws anything, so an empty hint gets no element and no reference. */
 const renders = (node: ReactNode) =>
   node !== undefined && node !== null && node !== false && node !== "";
 
-const Field = forwardRef<HTMLDivElement, FieldProps>(
-  (
-    {
-      label,
-      hint,
-      error,
-      required = false,
-      controlId,
-      // Consumed by `Form`, never rendered. See Input.tsx.
-      span,
-      children,
-      className,
-      style,
-      ...rest
-    },
-    ref,
-  ) => {
-    const generatedId = useId();
-    // The one element among the children, ignoring the whitespace text an MDX
-    // or template author leaves around it. Anything else — several elements,
-    // a fragment of text — is rendered as given, wired by context only.
-    const elements =
-      typeof children === "function"
-        ? []
-        : React.Children.toArray(children).filter(React.isValidElement);
-    const child = elements.length === 1 ? elements[0] : null;
-    const childProps = (child?.props ?? {}) as {
-      id?: string;
-      "aria-describedby"?: string;
-    };
+const Field = ({
+  ref,
+  label,
+  hint,
+  error,
+  required = false,
+  controlId,
+  // Consumed by `Form`, never rendered. See Input.tsx.
+  span,
+  children,
+  className,
+  style,
+  ...rest
+}: FieldProps) => {
+  const generatedId = useId();
+  // The one element among the children, ignoring the whitespace text an MDX
+  // or template author leaves around it. Anything else — several elements,
+  // a fragment of text — is rendered as given, wired by context only.
+  const elements =
+    typeof children === "function"
+      ? []
+      : React.Children.toArray(children).filter(React.isValidElement);
+  const child = elements.length === 1 ? elements[0] : null;
+  const childProps = (child?.props ?? {}) as {
+    id?: string;
+    "aria-describedby"?: string;
+  };
 
-    const id = controlId ?? childProps.id ?? `field-${generatedId.replace(/:/g, "")}`;
-    const hintId = `${id}-hint`;
-    const errorId = `${id}-field-error`;
-    const hasHint = renders(hint);
-    const invalid = renders(error);
+  const id = controlId ?? childProps.id ?? `field-${generatedId.replace(/:/g, "")}`;
+  const hintId = `${id}-hint`;
+  const errorId = `${id}-field-error`;
+  const hasHint = renders(hint);
+  const invalid = renders(error);
 
-    // The control's own description comes first, then the error — the newest
-    // and most urgent thing — and the hint last.
-    const describedBy =
-      [childProps["aria-describedby"], invalid ? errorId : undefined, hasHint ? hintId : undefined]
-        .filter(Boolean)
-        .join(" ") || undefined;
+  // The control's own description comes first, then the error — the newest
+  // and most urgent thing — and the hint last.
+  const describedBy =
+    [childProps["aria-describedby"], invalid ? errorId : undefined, hasHint ? hintId : undefined]
+      .filter(Boolean)
+      .join(" ") || undefined;
 
-    const controlProps: FieldControlProps = {
-      id,
-      "aria-describedby": describedBy,
-      ...(invalid ? { "aria-invalid": true as const } : {}),
-      ...(required ? { "aria-required": true as const } : {}),
-    };
+  const controlProps: FieldControlProps = {
+    id,
+    "aria-describedby": describedBy,
+    ...(invalid ? { "aria-invalid": true as const } : {}),
+    ...(required ? { "aria-required": true as const } : {}),
+  };
 
-    const context = React.useMemo<FieldControl>(
-      () => ({ id, invalid, required, describedBy }),
-      [id, invalid, required, describedBy],
-    );
+  const context = React.useMemo<FieldControl>(
+    () => ({ id, invalid, required, describedBy }),
+    [id, invalid, required, describedBy],
+  );
 
-    const control =
-      typeof children === "function"
-        ? children(controlProps)
-        : child
-          ? React.cloneElement(child as React.ReactElement<FieldControlProps>, controlProps)
-          : children;
+  const control =
+    typeof children === "function"
+      ? children(controlProps)
+      : child
+        ? React.cloneElement(child as React.ReactElement<FieldControlProps>, controlProps)
+        : children;
 
-    return (
-      <Column
-        ref={ref}
-        gap="8"
-        fillWidth
-        className={classNames(className)}
-        style={style}
-        data-invalid={invalid || undefined}
-        {...rest}
-      >
-        {renders(label) && (
-          <Row paddingX="4" gap="4" vertical="center">
-            <Text as="label" htmlFor={id} variant="label-strong-s" onBackground="neutral-strong">
-              {label}
+  return (
+    <Column
+      ref={ref}
+      gap="8"
+      fillWidth
+      className={classNames(className)}
+      style={style}
+      data-invalid={invalid || undefined}
+      {...rest}
+    >
+      {renders(label) && (
+        <Row paddingX="4" gap="4" vertical="center">
+          <Text as="label" htmlFor={id} textVariant="label-strong-s" onBackground="neutral-strong">
+            {label}
+          </Text>
+          {required && (
+            // The asterisk is decoration; `aria-required` is what a screen
+            // reader announces, so it is not read out twice.
+            <Text textVariant="label-strong-s" onBackground="danger-weak" aria-hidden="true">
+              *
             </Text>
-            {required && (
-              // The asterisk is decoration; `aria-required` is what a screen
-              // reader announces, so it is not read out twice.
-              <Text variant="label-strong-s" onBackground="danger-weak" aria-hidden="true">
-                *
-              </Text>
-            )}
-          </Row>
-        )}
-        <FieldControlContext.Provider value={context}>{control}</FieldControlContext.Provider>
-        {invalid && (
-          <Row paddingX="16" id={errorId} textVariant="body-default-s" onBackground="danger-weak">
-            {error}
-          </Row>
-        )}
-        {hasHint && (
-          <Row paddingX="16" id={hintId} textVariant="body-default-s" onBackground="neutral-weak">
-            {hint}
-          </Row>
-        )}
-      </Column>
-    );
-  },
-);
+          )}
+        </Row>
+      )}
+      <FieldControlContext.Provider value={context}>{control}</FieldControlContext.Provider>
+      {invalid && (
+        <Row paddingX="16" id={errorId} textVariant="body-default-s" onBackground="danger-weak">
+          {error}
+        </Row>
+      )}
+      {hasHint && (
+        <Row paddingX="16" id={hintId} textVariant="body-default-s" onBackground="neutral-weak">
+          {hint}
+        </Row>
+      )}
+    </Column>
+  );
+};
 
 Field.displayName = "Field";
 
-export { useField } from "./FormContext";
+export { useField } from "./FormContext.js";
 export type { FieldControlProps, FieldProps };
 export { Field };

@@ -41,7 +41,7 @@ describe("NumberInput: interaction", () => {
   it("reports typed numbers, and nothing for an entry that is not one yet", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<NumberInput id="qty" label="Quantity" onChange={onChange} />, { wrapper: wrap });
+    render(<NumberInput id="qty" label="Quantity" onValueChange={onChange} />, { wrapper: wrap });
     await user.click(field());
     await user.keyboard("42");
     expect(onChange.mock.calls).toEqual([[4], [42]]);
@@ -52,7 +52,7 @@ describe("NumberInput: interaction", () => {
   it("steps up and down by `step` with the buttons", () => {
     const onChange = vi.fn();
     render(
-      <NumberInput id="qty" label="Quantity" defaultValue={10} step={5} onChange={onChange} />,
+      <NumberInput id="qty" label="Quantity" defaultValue={10} step={5} onValueChange={onChange} />,
       {
         wrapper: wrap,
       },
@@ -67,7 +67,7 @@ describe("NumberInput: interaction", () => {
 
   it("starts stepping from zero when empty", () => {
     const onChange = vi.fn();
-    render(<NumberInput id="qty" label="Quantity" onChange={onChange} />, { wrapper: wrap });
+    render(<NumberInput id="qty" label="Quantity" onValueChange={onChange} />, { wrapper: wrap });
     fireEvent.click(up());
     expect(onChange).toHaveBeenCalledWith(1);
   });
@@ -81,7 +81,7 @@ describe("NumberInput: interaction", () => {
         defaultValue={2}
         min={1}
         max={3}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -107,7 +107,7 @@ describe("NumberInput: interaction", () => {
         min={1}
         max={10}
         step={5}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -123,7 +123,7 @@ describe("NumberInput: interaction", () => {
 
   it("starts stepping from min when empty and min is above zero", () => {
     const onChange = vi.fn();
-    render(<NumberInput id="qty" label="Quantity" min={5} max={9} onChange={onChange} />, {
+    render(<NumberInput id="qty" label="Quantity" min={5} max={9} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     fireEvent.click(up());
@@ -136,7 +136,13 @@ describe("NumberInput: interaction", () => {
   it("steps a decimal value without floating-point noise", () => {
     const onChange = vi.fn();
     render(
-      <NumberInput id="qty" label="Quantity" defaultValue={0.2} step={0.1} onChange={onChange} />,
+      <NumberInput
+        id="qty"
+        label="Quantity"
+        defaultValue={0.2}
+        step={0.1}
+        onValueChange={onChange}
+      />,
       { wrapper: wrap },
     );
     fireEvent.click(up());
@@ -164,7 +170,7 @@ describe("NumberInput: interaction", () => {
       const [value, setValue] = useState(1);
       return (
         <>
-          <NumberInput id="qty" label="Quantity" value={value} onChange={setValue} />
+          <NumberInput id="qty" label="Quantity" value={value} onValueChange={setValue} />
           <output>{value}</output>
         </>
       );

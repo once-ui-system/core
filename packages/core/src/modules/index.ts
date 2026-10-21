@@ -8,9 +8,9 @@
 // at runtime. Reaching them through their own subpath keeps the specifier out
 // of the graph of everyone who does not ask for it.
 
-export * from "./ai";
-export * from "./chat";
-
+export * from "./ai/index.js";
+export * from "./chat/index.js";
+export { HeadingLink } from "./navigation/HeadingLink.js";
 // The types these components take, so consumers can annotate their own nav
 // data instead of letting the literals widen to `string`.
 export type {
@@ -19,9 +19,7 @@ export type {
   MenuGroup,
   MenuLink,
   MenuSection,
-  MobileMegaMenuProps,
-} from "./navigation";
-export { HeadingNav, Kbar, MegaMenu, MobileMegaMenu } from "./navigation";
-export { HeadingLink } from "./navigation/HeadingLink";
-export * from "./seo";
-export * from "./social";
+} from "./navigation/index.js";
+export { HeadingNav, Kbar, MegaMenu } from "./navigation/index.js";
+export * from "./seo/index.js";
+export * from "./social/index.js";

@@ -1,0 +1,25 @@
+{
+ "name": "Avatar",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An image, or initials on a neutral circle.",
+ "mixins": [],
+ "props": {
+  "size": "TShirtSizes | number | Length = \"m\"",
+  "value": "string",
+  "src": "string",
+  "loading": "boolean",
+  "empty": "boolean",
+  "icon": "IconName",
+  "statusIndicator": "{ scheme: \"green\" | \"yellow\" | \"red\" | \"gray\" }",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "Length": "`${number}px` | `${number}rem`",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

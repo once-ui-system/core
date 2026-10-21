@@ -42,8 +42,10 @@ describe("Logo theme-aware sources", () => {
     expect(container.querySelectorAll("img.dark-flex")).toHaveLength(1);
   });
 
-  it("still honours the whole-element light/dark props", () => {
-    const { container } = render(<Logo icon="/mark.svg" href="/" dark />, { wrapper: wrap });
+  it("still shows a whole logo in one theme with showIn", () => {
+    const { container } = render(<Logo icon="/mark.svg" href="/" showIn="dark" />, {
+      wrapper: wrap,
+    });
     expect(container.querySelector("a")?.className).toMatch(/dark-flex/);
   });
 });

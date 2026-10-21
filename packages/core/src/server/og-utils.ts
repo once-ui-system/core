@@ -10,8 +10,8 @@
  * itself goes to an address checked at connect time (see og-transport.ts).
  * They need the Node.js runtime.
  */
-import { OGFetchError, OGUrlValidationError } from "./og-errors";
-import { fetchPublicUrl, type OGUrlValidationOptions } from "./og-url-validation";
+import { OGFetchError, OGUrlValidationError } from "./og-errors.js";
+import { fetchPublicUrl, type OGUrlValidationOptions } from "./og-url-validation.js";
 
 export interface OGData {
   url: string;
@@ -170,6 +170,28 @@ function resolveHttpUrl(value: string | undefined, base: URL): string {
   }
 }
 
+const isSvgIcon = (attributes: Record<string, string>, href: string) =>
+  (attributes.type ?? "").toLowerCase().includes("svg") || /\.svgz?$/i.test(new URL(href).pathname);
+
+/**
+ * The page's first raster icon. The proxy refuses SVG by default, so a page
+ * that declares only SVG icons gets its favicon from Google's favicon
+ * service, which serves a PNG for any site.
+ */
+function pickFavicon(links: Record<string, string>[], pageUrl: URL): string {
+  const icons = links
+    .filter((attributes) => (attributes.rel ?? "").toLowerCase().split(/\s+/).includes("icon"))
+    .map((attributes) => ({ attributes, href: resolveHttpUrl(attributes.href, pageUrl) }))
+    .filter(({ href }) => href);
+  const raster = icons.find(({ attributes, href }) => !isSvgIcon(attributes, href));
+  if (raster) {
+    return raster.href;
+  }
+  return icons.length > 0
+    ? `https://www.google.com/s2/favicons?domain=${pageUrl.hostname}&sz=64`
+    : "";
+}
+
 function extractOgData(
   html: string,
   requestedUrl: string,
@@ -202,12 +224,7 @@ function extractOgData(
     pageUrl,
   );
 
-  const icon = includeFavicon
-    ? collectTags(html, "link").find((attributes) =>
-        (attributes.rel ?? "").toLowerCase().split(/\s+/).includes("icon"),
-      )
-    : undefined;
-  const faviconUrl = resolveHttpUrl(icon?.href, pageUrl);
+  const faviconUrl = includeFavicon ? pickFavicon(collectTags(html, "link"), pageUrl) : "";
 
   const data: OGData = { url: requestedUrl, title, description, image };
   if (faviconUrl) {
@@ -536,5 +553,5 @@ export async function handleOGProxy(
   }
 }
 
-export type { OGUrlValidationOptions } from "./og-url-validation";
-export { OGUrlValidationError, validateOgUrl } from "./og-url-validation";
+export type { OGUrlValidationOptions } from "./og-url-validation.js";
+export { OGUrlValidationError, validateOgUrl } from "./og-url-validation.js";

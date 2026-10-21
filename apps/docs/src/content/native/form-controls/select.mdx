@@ -12,7 +12,7 @@ navIcon: "switch"
 
 ## Basic usage
 
-`Select` is controlled: keep the value in state and set it in `onSelect`. Picking an option closes the sheet.
+`Select` is controlled: keep the value in state and set it in `onValueChange`. Picking an option closes the sheet.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -28,7 +28,7 @@ export function CountrySelect() {
       label="Country"
       placeholder="Choose a country"
       value={country}
-      onSelect={(value) => setCountry(value as string)}
+      onValueChange={(value) => setCountry(value as string)}
       options={[
         { value: "de", label: "Germany" },
         { value: "hu", label: "Hungary" },
@@ -62,7 +62,7 @@ export function CitySelect() {
       labels={{ search: "Find a city" }}
       emptyState="No city by that name"
       value={city}
-      onSelect={(value) => setCity(value as string)}
+      onValueChange={(value) => setCity(value as string)}
       options={[
         { value: "berlin", label: "Berlin" },
         { value: "budapest", label: "Budapest" },
@@ -78,7 +78,7 @@ export function CitySelect() {
 
 ## Multiple selection
 
-With `multiple`, `onSelect` gets the new array of values and the sheet stays open between picks. The field lists the chosen labels.
+With `multiple`, `onValueChange` gets the new array of values and the sheet stays open between picks. The field lists the chosen labels.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -94,7 +94,7 @@ export function ToppingsSelect() {
       label="Toppings"
       multiple
       value={toppings}
-      onSelect={(value) => setToppings(value as string[])}
+      onValueChange={(value) => setToppings(value as string[])}
       description="Pick as many as you like."
       options={[
         { value: "cheese", label: "Cheese" },
@@ -113,7 +113,7 @@ export function ToppingsSelect() {
 
 - The options open in a bottom sheet, not a dropdown under the field. The back button or a tap outside closes it.
 - Screen readers read the field as a combo box with the chosen value, or the placeholder when nothing is chosen.
-- `Select` has no internal state: pass `value` and update it in `onSelect`.
+- `Select` has no internal state: pass `value` and update it in `onValueChange`.
 
 ## API reference
 
@@ -121,7 +121,7 @@ export function ToppingsSelect() {
 | --- | --- | --- | --- |
 | `options` | `OptionProps[]` | | The options, each with `value` and optional `label`, `description`, `prefix`, `suffix`, `disabled` and `danger`. Required. |
 | `value` | `string \| string[]` | | The chosen value, or values with `multiple`. |
-| `onSelect` | `(value: string \| string[]) => void` | | Called with the picked value, or the new array with `multiple`. |
+| `onValueChange` | `(value: string \| string[]) => void` | | Called with the picked value, or the new array with `multiple`. |
 | `label` | `string` | | The field's label and the sheet's title. |
 | `placeholder` | `string` | | Shown in the field while nothing is chosen. |
 | `multiple` | `boolean` | `false` | Lets several options be chosen. The sheet stays open. |

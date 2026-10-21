@@ -1,4 +1,5 @@
-# Quality gates for @once-ui-system/core: every pull request and every push to
+# Quality gates for @once-ui-system/core (with @once-ui-system/fx and
+# @once-ui-system/blocks): every pull request and every push to
 # main must build, typecheck, pass its tests, add no lint errors and keep the
 # docs app building, in step with the code and free of browser errors.
 name: CI
@@ -43,6 +44,10 @@ jobs:
       - name: Lint gate
         run: pnpm --filter @once-ui-system/core lint:gate
 
+      # fx and blocks left core with their old errors; each holds its own line.
+      - name: Lint gate (fx, blocks)
+        run: pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks lint:gate
+
   test:
     name: Build, typecheck and test
     runs-on: ubuntu-latest
@@ -61,21 +66,25 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # @once-ui-system/fx and @once-ui-system/blocks (3.0, F8 and F10) build
+      # against core's dist and test against it, so core goes first.
       - name: Build
-        run: pnpm --filter @once-ui-system/core build
+        run: |
+          pnpm --filter @once-ui-system/core build
+          pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks build
 
       - name: Typecheck
-        run: pnpm --filter @once-ui-system/core typecheck
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks typecheck
 
       - name: Test
-        run: pnpm --filter @once-ui-system/core test
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks test
 
-      # Advisory: publint and arethetypeswrong report known failures (the dist
-      # is bundler-only ESM, see AGENTS.md), so this step reports but never
+      # Advisory: publint and arethetypeswrong (esm-only profile). Both pass
+      # since the 3.0 real-ESM build (see AGENTS.md); the step still never
       # fails the run. Read its log for new failures.
       - name: Package checks (advisory, does not fail CI)
         continue-on-error: true
-        run: pnpm --filter @once-ui-system/core check:package
+        run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks check:package
 
   docs:
     name: Docs build
@@ -98,8 +107,10 @@ jobs:
       # The docs prerender every component page against the built package, so
       # a component that throws while rendering on the server fails here, as it
       # would on the docs deployment (apps/docs/vercel.json runs the same build).
-      - name: Build core
-        run: pnpm --filter @once-ui-system/core build
+      - name: Build core, fx and blocks
+        run: |
+          pnpm --filter @once-ui-system/core build
+          pnpm --filter @once-ui-system/fx --filter @once-ui-system/blocks build
 
       # Every example on the site and in the agent harness is typechecked
       # against the built package, and every props table against the spec,

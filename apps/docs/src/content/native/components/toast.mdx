@@ -8,7 +8,7 @@ navLabel: "Toast"
 navIcon: "components"
 ---
 
-A toast is a short message on a surface card that hides itself after six seconds. Wrap the app in `ToastProvider`, then call `addToast({ variant, message })` from `useToast` anywhere under it, as on the web. See the [web Toast](/components/toast) for the same component in the browser.
+A toast is a short message on a surface card that hides itself after six seconds. Wrap the app in `ToastProvider`, then call `addToast({ tone, message })` from `useToast` anywhere under it, as on the web. See the [web Toast](/components/toast) for the same component in the browser.
 
 ## Setup
 
@@ -51,7 +51,7 @@ export function SaveButton() {
   return (
     <Button
       label="Save"
-      onPress={() => addToast({ variant: "success", message: "Changes saved" })}
+      onPress={() => addToast({ tone: "success", message: "Changes saved" })}
     />
   );
 }`,
@@ -78,7 +78,7 @@ export function ArchiveButton() {
       variant="secondary"
       onPress={() =>
         addToast({
-          variant: "info",
+          tone: "info",
           message: "Conversation archived",
           action: <Button size="s" variant="tertiary" label="Undo" onPress={() => {}} />,
           duration: 10000,
@@ -104,7 +104,7 @@ codes={[
 
 export function OfflineNotice() {
   return (
-    <Toast variant="warning" duration={Infinity} showIcon>
+    <Toast tone="warning" duration={Infinity} showIcon>
       You are offline. Changes will sync later.
     </Toast>
   );
@@ -134,7 +134,7 @@ export function OfflineNotice() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
+| `tone` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
 | `message` | `ReactNode` | | The text. Required. |
 | `action` | `ReactNode` | | An element before the close button. |
 | `duration` | `number` | `6000` | Milliseconds before the toast hides itself. `Infinity` keeps it. |
@@ -143,7 +143,7 @@ export function OfflineNotice() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `variant` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
+| `tone` | `"success" \| "danger" \| "warning" \| "info"` | | Sets the icon and how it is announced. Required. |
 | `children` | `ReactNode` | | The text. Required. |
 | `showIcon` | `boolean` | `true` | Shows the variant's icon. |
 | `onClose` | `() => void` | | Shows a close button. Also called when the toast hides itself. |

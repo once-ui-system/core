@@ -1,43 +1,59 @@
 import type { ReactNode } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
-import { InteractiveDetails } from "./InteractiveDetails";
+import { type ControlChromeProps, controlChrome, InteractiveDetails } from "./InteractiveDetails";
 import { Spinner } from "./Spinner";
 import { touchSlop } from "./touch";
 import { useControllable } from "./useControllable";
 
-export interface SwitchProps {
+export interface SwitchProps extends ControlChromeProps {
+  /** On or off, controlled. Leave it out to let the switch keep its own state. */
   checked?: boolean;
+  /** The starting state of an uncontrolled switch (no `checked`). */
   defaultChecked?: boolean;
-  onToggle?: (checked: boolean) => void;
+  /** Called with the state the switch moves to, as core 3.0's (2.x's `onToggle`). */
+  onCheckedChange?: (checked: boolean) => void;
   label?: ReactNode;
   description?: ReactNode;
   loading?: boolean;
   disabled?: boolean;
   /** Puts the switch after the label. */
   reverse?: boolean;
-  ariaLabel?: string;
+  /** The name when there is no text `label`, as core's `aria-label` (2.x's `ariaLabel`). */
+  "aria-label"?: string;
   style?: ViewStyle;
 }
+
+// Switch.module.scss: track width and height and the knob, per size.
+const TRACK = {
+  s: { width: "32", height: "20", knob: "12" },
+  m: { width: "40", height: "24", knob: "16" },
+  l: { width: "48", height: "1.75rem", knob: "20" },
+} as const;
 
 /** Core's `Switch`: a 40×24 track with a sliding knob, and an optional label. */
 export function Switch({
   checked,
   defaultChecked = false,
-  onToggle,
+  onCheckedChange,
   label,
   description,
   loading = false,
   disabled = false,
   reverse = false,
-  ariaLabel = "Toggle switch",
+  "aria-label": ariaLabel = "Toggle switch",
+  size,
+  error,
+  errorMessage,
   style,
 }: SwitchProps) {
   const theme = useTheme();
-  const [on, toggle] = useControllable(checked, defaultChecked, onToggle);
-  const width = theme.space("40");
-  const height = theme.space("24");
-  const knob = theme.space("16");
+  const chrome = controlChrome({ size: size ?? theme.controlSize, error, errorMessage });
+  const [on, toggle] = useControllable(checked, defaultChecked, onCheckedChange);
+  const track = TRACK[chrome.size];
+  const width = theme.space(track.width);
+  const height = theme.space(track.height);
+  const knob = theme.space(track.knob);
   const inset = (height - knob) / 2;
 
   return (
@@ -73,9 +89,16 @@ export function Switch({
                   : `neutral-solid-${pressed ? "strong" : "medium"}`,
               ),
               borderColor: theme.color(
-                on ? "solid-border-color-brand" : "solid-border-color-neutral",
+                chrome.invalid
+                  ? "danger-border-medium"
+                  : on
+                    ? "solid-border-color-brand"
+                    : "solid-border-color-neutral",
               ),
-              borderWidth: theme.px("solid-border-width"),
+              // Themes whose solid border is 0 still show the danger border.
+              borderWidth: chrome.invalid
+                ? Math.max(1, theme.px("solid-border-width"))
+                : theme.px("solid-border-width"),
               justifyContent: "center",
             }}
           >
@@ -96,7 +119,13 @@ export function Switch({
               {loading && <Spinner size="xs" />}
             </View>
           </View>
-          <InteractiveDetails label={label} description={description} disabled={disabled} />
+          <InteractiveDetails
+            label={label}
+            description={description}
+            errorMessage={chrome.showsError ? errorMessage : undefined}
+            disabled={disabled}
+            size={chrome.size}
+          />
         </>
       )}
     </Pressable>

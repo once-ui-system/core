@@ -1,31 +1,12 @@
 ---
 title: "dropdownState"
-export: "getLastOpenedDropdown"
-summary: "A shared dropdown state module to manage the last opened dropdown across the app."
-updatedAt: "2026-06-30"
+summary: "Internal since 3.0: how open dropdowns close each other."
+updatedAt: "2026-10-17"
 docs: "once-ui/utils/dropdownState.mdx"
 github: "utils/dropdownState.ts"
 navLabel: "Dropdown State"
-navTag: "New"
-navTagVariant: "success"
 ---
 
-The `dropdownState` module provides typed getters and setters for the application-level "last opened dropdown" state. It replaces ad-hoc `(window as any).lastOpenedDropdown` references across components.
+`getLastOpenedDropdown`, `setLastOpenedDropdown` and `clearLastOpenedDropdown` are internal in Once UI 3.0 and no longer exported from `@once-ui-system/core`. They are how an opening dropdown closes the one open before it, which every Once UI dropdown does on its own; there is nothing to call.
 
-```ts
-import {
-  getLastOpenedDropdown,
-  setLastOpenedDropdown,
-  clearLastOpenedDropdown,
-} from "@once-ui-system/core";
-```
-
-## API reference
-
-<PropsTable
-  content={[
-    ["getLastOpenedDropdown", "() => string | null"],
-    ["setLastOpenedDropdown", "(id: string | null) => void"],
-    ["clearLastOpenedDropdown", "() => void"],
-  ]}
-/>
+See [Migrating from 2.x](https://github.com/once-ui-system/core/blob/main/MIGRATING.md) for the full list of exports that became internal.

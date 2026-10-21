@@ -2,24 +2,25 @@
 
 import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import { cssColor } from "../../internal/cssColor";
-import { RadiusSize, schemes } from "../../types";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { LinearGradient } from "./Gradient";
-import { ChartProps, ChartVariant, curveType, DataPoint, SeriesConfig } from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
-import { getDistributedColor } from "./utils/colorDistribution";
-import { formatDate } from "./utils/formatDate";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize, schemes } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { LinearGradient } from "./Gradient.js";
+import { ChartProps, ChartVariant, curveType, DataPoint, SeriesConfig } from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
+import { getDistributedColor } from "./utils/colorDistribution.js";
+import { formatDate } from "./utils/formatDate.js";
 
-export interface LineChartProps extends ChartProps {
+export interface LineChartProps<T extends object = DataPoint> extends ChartProps<T> {
   curve?: curveType;
   reverseY?: boolean;
   reverseX?: boolean;
@@ -37,7 +38,7 @@ export interface LineChartProps extends ChartProps {
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const LineChart: React.FC<LineChartProps> = ({
+const LineChart = ({
   title,
   description,
   data: rows,
@@ -64,7 +65,7 @@ const LineChart: React.FC<LineChartProps> = ({
   xDomain,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: LineChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
   const {
@@ -173,7 +174,7 @@ const LineChart: React.FC<LineChartProps> = ({
     (props: any) => {
       const customPayload = autoSeries.map(({ key, color }, index) => ({
         value: key,
-        color: cssColor(color || schemes[index % schemes.length], "data-"),
+        color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
       }));
 
       return (
@@ -232,7 +233,8 @@ const LineChart: React.FC<LineChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}

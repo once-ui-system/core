@@ -177,18 +177,14 @@ describe("safe areas", () => {
         <Dialog open onClose={() => {}} title="Redeem" />
       </ThemeProvider>,
     );
-    // react-native-web's Modal is a dialog too; the sheet is the inner one.
-    const sheet = screen.getAllByRole("dialog").at(-1) as HTMLElement;
-    expect(getComputedStyle(sheet).paddingBottom).toBe("34px");
+    expect(getComputedStyle(screen.getByRole("dialog")).paddingBottom).toBe("34px");
   });
 
   it("stacks toasts above the bottom inset", () => {
     vi.useFakeTimers();
     function Saver() {
       const { addToast } = useToast();
-      return (
-        <Button label="Save" onPress={() => addToast({ variant: "info", message: "Saved" })} />
-      );
+      return <Button label="Save" onPress={() => addToast({ tone: "info", message: "Saved" })} />;
     }
     render(
       <ThemeProvider theme="light" insets={notch}>

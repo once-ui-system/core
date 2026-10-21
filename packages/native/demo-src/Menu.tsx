@@ -41,10 +41,10 @@ export function Menu() {
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20" safeArea={["top"]}>
         <Row vertical="center" horizontal="between">
-          <Heading variant="heading-strong-l">Menu</Heading>
+          <Heading textVariant="heading-strong-l">Menu</Heading>
           <Row vertical="center" gap="8">
-            <StatusIndicator color="green" ariaLabel="Open now" />
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <StatusIndicator color="green" aria-label="Open now" />
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               Open until 18:00
             </Text>
           </Row>
@@ -75,8 +75,8 @@ export function Menu() {
                     s={{ direction: "column", vertical: "start" }}
                   >
                     <Column flex={1} gap="2">
-                      <Text variant="label-strong-m">{name}</Text>
-                      <Text variant="body-default-s" onBackground="neutral-weak">
+                      <Text textVariant="label-strong-m">{name}</Text>
+                      <Text textVariant="body-default-s" onBackground="neutral-weak">
                         {note}
                       </Text>
                     </Column>
@@ -107,7 +107,7 @@ export function Menu() {
               { value: "EV" },
             ]}
           />
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Five friends ordered here this week
           </Text>
         </Row>

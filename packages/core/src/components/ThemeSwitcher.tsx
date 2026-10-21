@@ -1,13 +1,13 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef } from "react";
-import { type Theme, useTheme } from "../contexts/ThemeProvider";
-import { mergeLabels } from "../internal/labels";
-import { radioGroupKeyDown } from "../internal/radioKeys";
-import { Column } from "./Column";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
+import React from "react";
+import { type Theme, useTheme } from "../contexts/ThemeProvider.js";
+import { mergeLabels } from "../internal/labels.js";
+import { radioGroupKeyDown } from "../internal/radioKeys.js";
+import { Column } from "./Column.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
 import styles from "./ThemeSwitcher.module.scss";
 
 const THEMES = [
@@ -35,12 +35,12 @@ const DEFAULT_LABELS: Required<ThemeSwitcherLabels> = {
 interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onChange"> {
   /**
    * The theme to show as active, when the host owns the state. Pair with
-   * `onChange`. The switcher then never sets the theme or stores it, which is
+   * `onValueChange`. The switcher then never sets the theme or stores it, which is
    * what an editor previewing someone else's theme needs.
    */
   value?: Theme;
   /** Called with the chosen theme. Without `value`, after it has been set. */
-  onChange?: (theme: Theme) => void;
+  onValueChange?: (theme: Theme) => void;
   /**
    * Show only the active theme, and reveal the rest on hover or focus.
    *
@@ -82,170 +82,166 @@ interface ThemeSwitcherProps extends Omit<React.ComponentProps<typeof Row>, "onC
   semantics?: "toggle" | "radio";
 }
 
-const ThemeSwitcher = forwardRef<HTMLDivElement, ThemeSwitcherProps>(
-  (
-    {
-      collapsed,
-      direction = "row",
-      labels,
-      value,
-      onChange,
-      semantics = "toggle",
-      className,
-      ...flex
-    },
-    ref,
-  ) => {
-    const { theme: providerTheme, setTheme } = useTheme();
-    const controlled = value !== undefined;
-    const theme = controlled ? value : providerTheme;
-    const names = mergeLabels(DEFAULT_LABELS, labels);
-    const [mounted, setMounted] = React.useState(false);
-    // Two frames after `mounted` has committed, so a collapsed group appears
-    // only once the browser has laid it out showing the right option (see
-    // `.pending`). One frame is not enough: its callback runs before that
-    // frame's style pass, which would see the new classes and the reveal
-    // together and animate the swap.
-    const [ready, setReady] = React.useState(false);
+const ThemeSwitcher = ({
+  ref,
+  collapsed,
+  direction = "row",
+  labels,
+  value,
+  onValueChange,
+  semantics = "toggle",
+  className,
+  ...flex
+}: ThemeSwitcherProps) => {
+  const { theme: providerTheme, setTheme } = useTheme();
+  const controlled = value !== undefined;
+  const theme = controlled ? value : providerTheme;
+  const names = mergeLabels(DEFAULT_LABELS, labels);
+  const [mounted, setMounted] = React.useState(false);
+  // Two frames after `mounted` has committed, so a collapsed group appears
+  // only once the browser has laid it out showing the right option (see
+  // `.pending`). One frame is not enough: its callback runs before that
+  // frame's style pass, which would see the new classes and the reveal
+  // together and animate the swap.
+  const [ready, setReady] = React.useState(false);
 
-    // The server does not know the visitor's theme, so nothing is marked active
-    // until the client says which one it is. A host's value is known on both.
-    React.useEffect(() => {
-      setMounted(true);
-    }, []);
-    const known = mounted || controlled;
+  // The server does not know the visitor's theme, so nothing is marked active
+  // until the client says which one it is. A host's value is known on both.
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+  const known = mounted || controlled;
 
-    React.useEffect(() => {
-      if (!mounted) return;
-      let frame = requestAnimationFrame(() => {
-        frame = requestAnimationFrame(() => setReady(true));
-      });
-      return () => cancelAnimationFrame(frame);
-    }, [mounted]);
-
-    const pending = collapsed && !ready;
-
-    /*
-     * Opening downwards, the active option leads.
-     *
-     * The shut control is the active option — that is what a collapsed group
-     * is. Open it in fixed order and the panel's first slot belongs to
-     * whichever theme happens to be listed first, so the icon the pointer is
-     * already resting on changes identity as the panel unrolls: you hover the
-     * moon and the computer arrives underneath your cursor. Click without
-     * looking and you have set the wrong theme.
-     *
-     * Leading with the active option keeps one invariant instead — the theme
-     * in force is always the one in the anchor slot, before opening and again
-     * after choosing. The other two keep their order relative to each other,
-     * so the list is still predictable.
-     *
-     * Reordered here rather than with CSS `order` so that the tab order and
-     * the visual order stay the same thing. Keys are stable, so React moves
-     * the existing nodes and a focused button keeps its focus.
-     */
-    const ordered =
-      collapsed && direction === "column" && known
-        ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
-        : THEMES;
-
-    const choose = (next: Theme) => {
-      if (!controlled) setTheme(next);
-      onChange?.(next);
-    };
-
-    const radio = semantics === "radio";
-    // A radio group's one tab stop: the active theme, or the first option
-    // until the active one is known.
-    const anyActive = known && THEMES.some(({ value: option }) => option === theme);
-    const group = radio ? { role: "radiogroup", onKeyDown: radioGroupKeyDown } : {};
-
-    const options = ordered.map(({ value: option, icon }, index) => {
-      const active = known && theme === option;
-      const state = radio
-        ? {
-            role: "radio",
-            "aria-checked": active,
-            tabIndex: (anyActive ? active : index === 0) ? 0 : -1,
-          }
-        : { "aria-pressed": active };
-      return (
-        <Row
-          key={option}
-          fit
-          // Before mount no option is known to be active, so a collapsed group
-          // keeps just its first slot open: the one-option footprint it will
-          // have, held invisible by `.pending` until the right option is in it.
-          className={classNames(styles.option, (known ? !active : index > 0) && styles.inactive)}
-          suppressHydrationWarning
-        >
-          <IconButton
-            icon={icon}
-            variant={active ? "primary" : "tertiary"}
-            onClick={() => choose(option)}
-            aria-label={names[option]}
-            {...state}
-            suppressHydrationWarning
-          />
-        </Row>
-      );
+  React.useEffect(() => {
+    if (!mounted) return;
+    let frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(() => setReady(true));
     });
+    return () => cancelAnimationFrame(frame);
+  }, [mounted]);
 
-    /*
-     * Opening downwards needs two elements, not one.
-     *
-     * The outer box is what the layout sees, and it stays the size of a single
-     * option however many are showing — that is the whole point of the
-     * collapsed control, and a group that grows in the flow would push its
-     * neighbours along every time it opened. The panel is taken out of the
-     * flow and hung from the outer box's top-left, so it grows over the page
-     * instead of through the header.
-     *
-     * The border and the radius move to the panel with the options, because
-     * they belong to the thing that is actually visible.
-     */
-    if (collapsed && direction === "column") {
-      return (
-        <Row
-          data-border="rounded"
-          ref={ref}
-          fit
-          className={classNames(styles.anchor, pending && styles.pending, className)}
+  const pending = collapsed && !ready;
+
+  /*
+   * Opening downwards, the active option leads.
+   *
+   * The shut control is the active option — that is what a collapsed group
+   * is. Open it in fixed order and the panel's first slot belongs to
+   * whichever theme happens to be listed first, so the icon the pointer is
+   * already resting on changes identity as the panel unrolls: you hover the
+   * moon and the computer arrives underneath your cursor. Click without
+   * looking and you have set the wrong theme.
+   *
+   * Leading with the active option keeps one invariant instead — the theme
+   * in force is always the one in the anchor slot, before opening and again
+   * after choosing. The other two keep their order relative to each other,
+   * so the list is still predictable.
+   *
+   * Reordered here rather than with CSS `order` so that the tab order and
+   * the visual order stay the same thing. Keys are stable, so React moves
+   * the existing nodes and a focused button keeps its focus.
+   */
+  const ordered =
+    collapsed && direction === "column" && known
+      ? [...THEMES].sort((a, b) => Number(theme === b.value) - Number(theme === a.value))
+      : THEMES;
+
+  const choose = (next: Theme) => {
+    if (!controlled) setTheme(next);
+    onValueChange?.(next);
+  };
+
+  const radio = semantics === "radio";
+  // A radio group's one tab stop: the active theme, or the first option
+  // until the active one is known.
+  const anyActive = known && THEMES.some(({ value: option }) => option === theme);
+  const group = radio ? { role: "radiogroup", onKeyDown: radioGroupKeyDown } : {};
+
+  const options = ordered.map(({ value: option, icon }, index) => {
+    const active = known && theme === option;
+    const state = radio
+      ? {
+          role: "radio",
+          "aria-checked": active,
+          tabIndex: (anyActive ? active : index === 0) ? 0 : -1,
+        }
+      : { "aria-pressed": active };
+    return (
+      <Row
+        key={option}
+        fit
+        // Before mount no option is known to be active, so a collapsed group
+        // keeps just its first slot open: the one-option footprint it will
+        // have, held invisible by `.pending` until the right option is in it.
+        className={classNames(styles.option, (known ? !active : index > 0) && styles.inactive)}
+        suppressHydrationWarning
+      >
+        <IconButton
+          icon={icon}
+          variant={active ? "primary" : "tertiary"}
+          onClick={() => choose(option)}
+          aria-label={names[option]}
+          {...state}
           suppressHydrationWarning
-          {...group}
-          {...flex}
-        >
-          <Column
-            gap="2"
-            border
-            radius="full"
-            background="page"
-            className={classNames(styles.collapsed, styles.panel)}
-            suppressHydrationWarning
-          >
-            {options}
-          </Column>
-        </Row>
-      );
-    }
+        />
+      </Row>
+    );
+  });
 
+  /*
+   * Opening downwards needs two elements, not one.
+   *
+   * The outer box is what the layout sees, and it stays the size of a single
+   * option however many are showing — that is the whole point of the
+   * collapsed control, and a group that grows in the flow would push its
+   * neighbours along every time it opened. The panel is taken out of the
+   * flow and hung from the outer box's top-left, so it grows over the page
+   * instead of through the header.
+   *
+   * The border and the radius move to the panel with the options, because
+   * they belong to the thing that is actually visible.
+   */
+  if (collapsed && direction === "column") {
     return (
       <Row
         data-border="rounded"
         ref={ref}
-        gap="2"
-        border
-        radius="full"
+        fit
+        className={classNames(styles.anchor, pending && styles.pending, className)}
         suppressHydrationWarning
-        className={classNames(collapsed && styles.collapsed, pending && styles.pending, className)}
         {...group}
         {...flex}
       >
-        {options}
+        <Column
+          gap="2"
+          border
+          radius="full"
+          background="page"
+          className={classNames(styles.collapsed, styles.panel)}
+          suppressHydrationWarning
+        >
+          {options}
+        </Column>
       </Row>
     );
-  },
-);
+  }
+
+  return (
+    <Row
+      data-border="rounded"
+      ref={ref}
+      gap="2"
+      border
+      radius="full"
+      suppressHydrationWarning
+      className={classNames(collapsed && styles.collapsed, pending && styles.pending, className)}
+      {...group}
+      {...flex}
+    >
+      {options}
+    </Row>
+  );
+};
 
 ThemeSwitcher.displayName = "ThemeSwitcher";
 

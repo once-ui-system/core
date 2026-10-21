@@ -56,6 +56,7 @@ Applies the following `data-*` attributes to the `<html>` element:
 - `data-theme`
 - `data-transition`
 - `data-scaling`
+- `data-density` (the Density row: compact, normal or spacious controls; a new density brings its scaling along until a scaling is chosen)
 - `data-surface`
 - `data-body-size`
 - `data-body-line-height`
@@ -64,19 +65,21 @@ Applies the following `data-*` attributes to the `<html>` element:
 
 `StylePanel` is a plain composition of its own parts. When you need a
 different arrangement, or only some of the sections, drop it and compose the
-pieces inside `StylePanel.Root`:
+pieces inside `StylePanelRoot`:
 
 ```tsx
-<StylePanel.Root>
-  <StylePanel.Group title="Brand">
-    <StylePanel.Brand />
-    <StylePanel.Accent />
-  </StylePanel.Group>
-</StylePanel.Root>
+<StylePanelRoot>
+  <StylePanelGroup title="Brand">
+    <StylePanelBrand />
+    <StylePanelAccent />
+  </StylePanelGroup>
+</StylePanelRoot>
 ```
 
+Each part is its own named export from `@once-ui-system/blocks`, named
+`StylePanel` plus the part (`StylePanelRoot`, `StylePanelGroup`, `StylePanelRow`).
 Rows: `Theme`, `Shape`, `Brand`, `Accent`, `Neutral`, `Solid`, `Effect`,
-`Surface`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
+`Surface`, `Density`, `Scaling`, `Transition`, `DataStyle`, `BodySize`, `BodyLineHeight`.
 Groups: `Page`, `Color`, `SolidStyle`, `BodyText`, `Advanced`.
 
 Only `DataStyle` needs a `DataThemeProvider` in the tree, so a panel without
@@ -86,8 +89,8 @@ Every row takes a `label`, and every group a `title` and `description`. Pass a
 node to replace the default, or `false` to drop it:
 
 ```tsx
-<StylePanel.Brand label="Primary" />
-<StylePanel.Color title={false} description={false} />
+<StylePanelBrand label="Primary" />
+<StylePanelColor title={false} description={false} />
 ```
 
 To translate the panel, pass `labels` to the root instead — see
@@ -113,14 +116,14 @@ after a few swatches. `stacked` puts every label above its control instead:
   marginTop="16"
   marginBottom="24"
   preview={
-    <Column maxWidth={20} fillWidth>
+    <Column maxWidth="20rem" fillWidth>
       <StylePanel stacked />
     </Column>
   }
   codes={[
     {
       code:
-`<Column maxWidth={20} fillWidth>
+`<Column maxWidth="20rem" fillWidth>
   <StylePanel stacked />
 </Column>`,
       language: "tsx",
@@ -141,14 +144,14 @@ option is scrolled into view.
 ## Owning the state
 
 By default the panel reads and writes `ThemeProvider`, which persists to
-`localStorage`. Pass `value` and `onChange` to take that over — the panel then
+`localStorage`. Pass `value` and `onValueChange` to take that over — the panel then
 writes nothing to the providers or to storage, and you decide what a change
 means:
 
 ```tsx
 <StylePanel
   value={draft}
-  onChange={(next, changed) => {
+  onValueChange={(next, changed) => {
     setDraft(next);
     saveToDatabase(changed);
   }}
@@ -169,7 +172,7 @@ stored, set `persistence` on the provider instead — see
 
 `labels` translates every string the panel shows or announces: the group
 headings, the row labels, the segmented options, the swatches' accessible
-names and the theme switcher's. Pass it to `StylePanel` or `StylePanel.Root`,
+names and the theme switcher's. Pass it to `StylePanel` or `StylePanelRoot`,
 and every group and row inside reads it, including the ones you compose
 yourself. Every field at every depth is optional, and whatever you leave out
 keeps its English default, so you can translate one section at a time.
@@ -177,7 +180,7 @@ keeps its English default, so you can translate one section at a time.
 ```tsx
 "use client";
 
-import { StylePanel, type StylePanelLabels, type StylePanelValue } from "@once-ui-system/core";
+import { StylePanel, type StylePanelLabels, type StylePanelValue } from "@once-ui-system/blocks";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -213,7 +216,7 @@ export function SiteStylePanel({ saved, save }: {
     <StylePanel
       labels={labels}
       value={draft}
-      onChange={(next, changed) => {
+      onValueChange={(next, changed) => {
         setDraft(next);
         save(changed);
       }}
@@ -225,8 +228,8 @@ export function SiteStylePanel({ saved, save }: {
 | Key | Covers |
 | --- | --- |
 | `groups` | Each group's `title` and `description`, keyed like `visibility`: `page`, `color`, `solidStyle`, `bodyText`, `advanced`. |
-| `rows` | Each row's label, keyed by its part name: `theme`, `shape`, `brand`, `accent`, `neutral`, `solid`, `effect`, `surface`, `scaling`, `transition`, `dataStyle`, `bodySize`, `bodyLineHeight`. |
-| `options` | The segmented options, by row and value (`solid.inverse`, `transition.micro`, `dataStyle.sequential`), and a formatter for each numeric row: `scaling`, `bodySize`, `bodyLineHeight`. |
+| `rows` | Each row's label, keyed by its part name: `theme`, `shape`, `brand`, `accent`, `neutral`, `solid`, `effect`, `surface`, `density`, `scaling`, `transition`, `dataStyle`, `bodySize`, `bodyLineHeight`. |
+| `options` | The segmented options, by row and value (`solid.inverse`, `transition.micro`, `dataStyle.sequential`, `density.compact`), and a formatter for each numeric row: `scaling`, `bodySize`, `bodyLineHeight`. |
 | `names` | Display names for `shapes`, `schemes` and `neutrals`. They default to the key (`"blue"`), and the swatches' names are built from them. |
 | `swatches` | The swatches' accessible names, as functions of that display name: `shape`, `scheme` (which also gets the row, `"brand"` or `"accent"`) and `neutral`. The defaults read `Corner style: sharp`, `Brand colour: blue` and `Neutral colour: gray`. |
 | `themeSwitcher` | "System theme", "Dark theme" and "Light theme". [ThemeSwitcher](/components/themeSwitcher) takes the same object as its own `labels`. |
@@ -235,7 +238,7 @@ export function SiteStylePanel({ saved, save }: {
 
 A row's `label` and a group's `title` and `description` still win over
 `labels`, so one composed row can say something else:
-`<StylePanel.Brand label={t("rows.siteColour")} />`.
+`<StylePanelBrand label={t("rows.siteColour")} />`.
 
 ## Custom colour
 
@@ -244,7 +247,7 @@ your own, such as a site's brand colour. It is painted with the current seed,
 and shows a plus while there is none. Choosing it reports
 `{ brand: "custom", brandSeed }` — the seed already in `value`, or `#5a93fc`
 if there is none — and while it is chosen a colour field under the swatches
-edits the seed. Every colour picked there comes through `onChange`, in both
+edits the seed. Every colour picked there comes through `onValueChange`, in both
 `next` and `changed`.
 
 ```tsx
@@ -256,7 +259,7 @@ const [draft, setDraft] = useState<StylePanelValue>({
 <StylePanel
   customColors
   value={draft}
-  onChange={(next, changed) => {
+  onValueChange={(next, changed) => {
     setDraft(next); // { ...draft, brand: "custom", brandSeed: "#c2410c" }
     saveSiteStyle(changed);
   }}
@@ -270,7 +273,7 @@ const [draft, setDraft] = useState<StylePanelValue>({
 ```
 
 For one row only, compose the panel and set `custom` on that row:
-`<StylePanel.Brand custom />`.
+`<StylePanelBrand custom />`.
 
 It is for the controlled mode. Bound to `ThemeProvider`, whose `setStyle`
 takes no seed, the panel would have nowhere to keep one, so the custom swatch
@@ -321,7 +324,7 @@ In the editor, where the colour changes as it is picked, write the same
 properties yourself with `customSchemeProperties`:
 
 ```tsx
-import { customSchemeProperties } from "@once-ui-system/core/utils";
+import { customSchemeProperties } from "@once-ui-system/core";
 
 useEffect(() => {
   const root = document.documentElement;
@@ -345,7 +348,7 @@ generated from one colour.
   describe={{
     visibility: "Which sections and rows to show.",
     value: "Take ownership of the state. The panel then writes nothing to the providers or to storage.",
-    onChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
+    onValueChange: "Called with the whole state and just the keys that changed — the latter being what you send to a server.",
     labels: "Every string the panel shows or announces, over the English defaults. Groups and rows read it; their own props still win.",
     customColors: "End the Brand and Accent swatches with a custom colour, reported as brandSeed and accentSeed. Controlled mode only.",
     stacked: "Put each row's label above its control, for a narrow sidebar.",

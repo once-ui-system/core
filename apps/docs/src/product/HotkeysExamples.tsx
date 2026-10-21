@@ -12,7 +12,7 @@ export function UseHotkeysExample() {
   useHotkeys("g i", () => setLast("g i"));
 
   return (
-    <Column gap="16" maxWidth={24}>
+    <Column gap="16" maxWidth="24rem">
       <Row gap="8" vertical="center" textVariant="body-default-s">
         <Text>Press</Text>
         <Kbd>C</Kbd>

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import type React from "react";
 import { createRef } from "react";
 import { describe, expect, it } from "vitest";
-import { KeyTip } from "../components/KeyTip";
+import { Kbd } from "../components/Kbd";
 import { Tooltip } from "../components/Tooltip";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -96,7 +96,7 @@ describe("Tooltip", () => {
     // Tooltip.module.scss gives the right side the vertical padding when the
     // label is only a KeyTip (it ends in keycaps). jsdom can't evaluate :has(),
     // so this pins the structure the rule matches; the browser applies it.
-    render(<Tooltip label={<KeyTip label="Redo" keys="mod+shift+z" />} />, { wrapper });
+    render(<Tooltip label={<Kbd label="Redo" keys="mod+shift+z" />} />, { wrapper });
     const tooltip = screen.getByRole("tooltip");
     const label = tooltip.lastElementChild as HTMLElement;
     expect(label.children).toHaveLength(1);

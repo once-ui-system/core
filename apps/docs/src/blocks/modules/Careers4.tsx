@@ -9,7 +9,7 @@ import {
   Heading,
   Icon,
   Media,
-  Pulse,
+  StatusIndicator,
   Row,
   Text,
 } from "@once-ui-system/core";
@@ -63,13 +63,13 @@ export const Careers4 = () => {
 
         <Column fillWidth padding="l" gap="16" borderBottom>
           <Row gap="8" vertical="center">
-            <Pulse />
+            <StatusIndicator pulse />
             <Text onBackground="brand-weak">Culture</Text>
           </Row>
-          <Heading as="h1" variant="display-strong-s">
+          <Heading as="h1" textVariant="display-strong-s">
             How we work before what we ship
           </Heading>
-          <Text variant="body-default-l" onBackground="neutral-weak" wrap="balance">
+          <Text textVariant="body-default-l" onBackground="neutral-weak" wrap="balance">
             Once UI is a small team of design engineers building tools for independent creators.
             These principles guide every hire, review, and release.
           </Text>
@@ -82,7 +82,7 @@ export const Careers4 = () => {
               fillWidth
               horizontal={index === 1 ? "center" : index === 2 ? "end" : "start"}
             >
-              <Column maxWidth={24} border radius="xl" padding="8" gap="8" background="page">
+              <Column maxWidth="24rem" border radius="xl" padding="8" gap="8" background="page">
                 <Animation
                   triggerType="hover"
                   easing="spring"
@@ -93,10 +93,10 @@ export const Careers4 = () => {
                   <Media src={pillar.image} alt={pillar.alt} aspectRatio="1" radius="l" />
                 </Animation>
                 <Column fillWidth padding="16" gap="12">
-                  <Heading as="h3" variant="heading-default-xs">
+                  <Heading as="h3" textVariant="heading-default-xs">
                     {pillar.title}
                   </Heading>
-                  <Text variant="body-default-s" onBackground="neutral-weak" wrap="balance">
+                  <Text textVariant="body-default-s" onBackground="neutral-weak" wrap="balance">
                     {pillar.description}
                   </Text>
                 </Column>
@@ -118,7 +118,7 @@ export const Careers4 = () => {
                 border="neutral-alpha-medium"
               >
                 <Icon name={perk.icon} size="xs" onBackground="neutral-weak" />
-                <Text variant="label-default-s">{perk.label}</Text>
+                <Text textVariant="label-default-s">{perk.label}</Text>
               </Row>
             ))}
           </Row>

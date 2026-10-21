@@ -44,13 +44,13 @@ describe("FileTree", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     const onItemClick = vi.fn();
-    const onExpandChange = vi.fn();
+    const onExpandedIdsChange = vi.fn();
     render(
       <FileTree
         items={items}
         onSelect={onSelect}
         onItemClick={onItemClick}
-        onExpandChange={onExpandChange}
+        onExpandedIdsChange={onExpandedIdsChange}
       />,
     );
 
@@ -59,7 +59,7 @@ describe("FileTree", () => {
     expect(screen.getByRole("treeitem", { name: "src" })).toHaveAttribute("aria-expanded", "true");
     expect(onSelect).toHaveBeenCalledWith(items[0]);
     expect(onItemClick).toHaveBeenCalledWith(items[0]);
-    expect(onExpandChange).toHaveBeenCalledWith(["src"], items[0]);
+    expect(onExpandedIdsChange).toHaveBeenCalledWith(["src"], items[0]);
   });
 
   it("selects a nested file on click without selecting or collapsing its folder", async () => {
@@ -79,14 +79,14 @@ describe("FileTree", () => {
   it("supports controlled selection and expansion", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    const onExpandChange = vi.fn();
+    const onExpandedIdsChange = vi.fn();
     const { rerender } = render(
       <FileTree
         items={items}
         selectedId="package"
         expandedIds={[]}
         onSelect={onSelect}
-        onExpandChange={onExpandChange}
+        onExpandedIdsChange={onExpandedIdsChange}
       />,
     );
 
@@ -97,7 +97,7 @@ describe("FileTree", () => {
     );
     expect(screen.getByRole("treeitem", { name: "src" })).toHaveAttribute("aria-expanded", "false");
     expect(onSelect).toHaveBeenCalledWith(items[0]);
-    expect(onExpandChange).toHaveBeenCalledWith(["src"], items[0]);
+    expect(onExpandedIdsChange).toHaveBeenCalledWith(["src"], items[0]);
 
     rerender(<FileTree items={items} selectedId="src" expandedIds={["src"]} />);
     expect(screen.getByRole("treeitem", { name: "src" })).toHaveAttribute("aria-selected", "true");
@@ -113,18 +113,18 @@ describe("FileTree", () => {
 
   it("does not expose an empty folder as expandable", async () => {
     const user = userEvent.setup();
-    const onExpandChange = vi.fn();
+    const onExpandedIdsChange = vi.fn();
     render(
       <FileTree
         items={[{ id: "empty", name: "empty", type: "folder", children: [] }]}
-        onExpandChange={onExpandChange}
+        onExpandedIdsChange={onExpandedIdsChange}
       />,
     );
     const emptyFolder = screen.getByRole("treeitem", { name: "empty" });
 
     expect(emptyFolder).not.toHaveAttribute("aria-expanded");
     await user.click(emptyFolder);
-    expect(onExpandChange).not.toHaveBeenCalled();
+    expect(onExpandedIdsChange).not.toHaveBeenCalled();
   });
 
   it("moves focus through visible rows and expands and collapses with arrow keys", () => {

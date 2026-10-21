@@ -43,11 +43,11 @@ export const Features4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
           borderBottom="neutral-medium"
           overflow="hidden"
         >
-          <Heading variant="display-strong-s" align="center">
+          <Heading textVariant="display-strong-s" align="center">
             A product workflow that compounds
           </Heading>
           <Text
-            variant="body-default-xl"
+            textVariant="body-default-xl"
             align="center"
             onBackground="neutral-medium"
             wrap="balance"
@@ -72,19 +72,19 @@ export const Features4: React.FC<React.ComponentProps<typeof Row>> = ({ ...flex 
                 horizontal={index % 2 === 0 ? "end" : "start"}
                 align={index % 2 === 0 ? "end" : "start"}
               >
-                <Icon
+                <Row
+                  fit
                   padding="12"
-                  name={feature.icon}
-                  onBackground="brand-weak"
-                  size="s"
                   radius="m"
                   border="brand-alpha-medium"
                   background="brand-alpha-weak"
-                />
-                <Heading variant="heading-strong-l" marginTop="12">
+                >
+                  <Icon name={feature.icon} onBackground="brand-weak" size="s" />
+                </Row>
+                <Heading textVariant="heading-strong-l" marginTop="12">
                   {feature.title}
                 </Heading>
-                <Text onBackground="neutral-weak" variant="body-default-s" wrap="balance">
+                <Text onBackground="neutral-weak" textVariant="body-default-s" wrap="balance">
                   {feature.description}
                 </Text>
               </Column>

@@ -104,10 +104,10 @@ describe("Mascot", () => {
     expect(Number(img.style.getPropertyValue("--mascot-look-x"))).toBeGreaterThan(0);
   });
 
-  it("takes a pixel size and eye styles", () => {
+  it("takes a token-scale size and eye styles", () => {
     const { container } = render(<Mascot eyes="wide" size={64} />);
     const img = screen.getByRole("img");
-    expect(img.style.width).toBe("64px");
+    expect(img.style.width).toBe("var(--static-space-64)");
     const eye = container.querySelector("g[clip-path*='-top-'] rect");
     expect(Number(eye?.getAttribute("width"))).toBeGreaterThan(Number(eye?.getAttribute("height")));
   });

@@ -1,9 +1,9 @@
 "use client";
 
+import type { DateRange } from "@once-ui-system/core";
+import { DatePicker } from "@once-ui-system/core";
 import React from "react";
 import { useNowState, useRangeFromToday } from "./useNow";
-import { DatePicker, DateRangePicker } from "@once-ui-system/core";
-import type { DateRange } from "@once-ui-system/core";
 
 // Basic DatePicker example with managed state
 export function BasicDatePickerExample() {
@@ -13,7 +13,7 @@ export function BasicDatePickerExample() {
     setSelectedDate(newDate);
   };
 
-  return <DatePicker value={selectedDate} onChange={handleDateChange} />;
+  return <DatePicker value={selectedDate} onValueChange={handleDateChange} />;
 }
 
 // DatePicker with time picker example
@@ -24,7 +24,7 @@ export function DateTimePickerExample() {
     setDateTime(newDateTime);
   };
 
-  return <DatePicker value={dateTime} onChange={handleDateTimeChange} timePicker />;
+  return <DatePicker value={dateTime} onValueChange={handleDateTimeChange} timePicker />;
 }
 
 // DatePicker in another locale, with its own words translated through labels
@@ -34,7 +34,7 @@ export function LocalizedDatePickerExample() {
   return (
     <DatePicker
       value={selectedDate}
-      onChange={setSelectedDate}
+      onValueChange={setSelectedDate}
       timePicker
       locale="de"
       labels={{
@@ -58,7 +58,7 @@ export function DateRangePickerExample() {
     setDateRange(range);
   };
 
-  return <DateRangePicker value={dateRange} onChange={handleRangeChange} />;
+  return <DatePicker range value={dateRange} onValueChange={handleRangeChange} />;
 }
 
 // DateRangePicker with custom styling example
@@ -70,9 +70,10 @@ export function DateRangePickerPresetsExample() {
   };
 
   return (
-    <DateRangePicker
+    <DatePicker
+      range
       value={dateRange}
-      onChange={handleRangeChange}
+      onValueChange={handleRangeChange}
       size="l"
       style={{ border: "1px solid #e0e0e0", borderRadius: "8px", padding: "16px" }}
     />

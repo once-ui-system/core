@@ -4,10 +4,10 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Dialog } from "./Dialog";
 import { Column, Row } from "./Flex";
-import { FormCellContext } from "./FormContext";
 import { Icon } from "./Icon";
 import { Input } from "./Input";
 import { Text } from "./Text";
+import { useControlledValue } from "./useControllable";
 
 export interface OptionProps {
   value: string;
@@ -64,14 +64,14 @@ export function Option({
       {prefix}
       <Column flex={1} gap="2">
         <Text
-          variant="label-default-m"
+          textVariant="label-default-m"
           onBackground={danger ? "danger-medium" : "neutral-strong"}
           truncate
         >
           {label ?? value}
         </Text>
         {description && (
-          <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+          <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
             {description}
           </Text>
         )}
@@ -83,9 +83,24 @@ export function Option({
 }
 
 export interface SelectProps {
+  /** Core's field id; accepted so the same JSX works, and passed on as the field's `id`. */
+  id?: string;
   options: Omit<OptionProps, "selected" | "onPress" | "onClick">[];
+  /** The picked option's value (an array with `multiple`), controlled. */
   value?: string | string[];
-  onSelect?: (value: string | string[]) => void;
+  /** The starting value of an uncontrolled Select (no `value`). */
+  defaultValue?: string | string[];
+  /**
+   * Receives the new value after each pick, the whole array with `multiple`,
+   * as core 3.0's (2.x's `onSelect`).
+   */
+  onValueChange?: (value: string | string[]) => void;
+  /** Whether the sheet of options is open, controlled. */
+  open?: boolean;
+  /** Whether it starts open, uncontrolled (no `open`). */
+  defaultOpen?: boolean;
+  /** Receives every open and close the Select makes. */
+  onOpenChange?: (open: boolean) => void;
   label?: string;
   placeholder?: string;
   multiple?: boolean;
@@ -98,17 +113,19 @@ export interface SelectProps {
   disabled?: boolean;
   /** The search field's words, as in core. */
   labels?: { search?: string };
-  /** The spoken name and the sheet's title without a `label`, as a `Field` passes it. */
-  accessibilityLabel?: string;
-  accessibilityHint?: string;
   style?: ViewStyle;
 }
 
 /** Core's `Select`: an `Input`-styled field that opens its options in a bottom sheet. */
 export function Select({
+  id,
   options,
   value,
-  onSelect,
+  defaultValue,
+  onValueChange,
+  open: openProp,
+  defaultOpen = false,
+  onOpenChange,
   label,
   placeholder,
   multiple = false,
@@ -120,13 +137,14 @@ export function Select({
   description,
   disabled,
   labels,
-  accessibilityLabel,
-  accessibilityHint,
   style,
 }: SelectProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useControlledValue(openProp, defaultOpen, onOpenChange);
+  const [current, setCurrent] = useControlledValue(value, defaultValue, (v) => {
+    if (v !== undefined) onValueChange?.(v);
+  });
   const [query, setQuery] = useState("");
-  const chosen = Array.isArray(value) ? value : value ? [value] : [];
+  const chosen = Array.isArray(current) ? current : current ? [current] : [];
   const shown = chosen
     .map((v) => options.find((o) => o.value === v))
     .map((o) => (typeof o?.label === "string" ? o.label : o?.value))
@@ -142,9 +160,9 @@ export function Select({
 
   const pick = (v: string) => {
     if (multiple) {
-      onSelect?.(chosen.includes(v) ? chosen.filter((c) => c !== v) : [...chosen, v]);
+      setCurrent(chosen.includes(v) ? chosen.filter((c) => c !== v) : [...chosen, v]);
     } else {
-      onSelect?.(v);
+      setCurrent(v);
       setOpen(false);
     }
   };
@@ -153,8 +171,7 @@ export function Select({
     <View style={style}>
       <Pressable
         accessibilityRole="combobox"
-        accessibilityLabel={label ?? accessibilityLabel}
-        accessibilityHint={accessibilityHint}
+        accessibilityLabel={label}
         // The field below is hidden from screen readers, so the choice is read from here.
         accessibilityValue={{ text: shown || placeholder }}
         aria-expanded={open}
@@ -164,6 +181,7 @@ export function Select({
       >
         <View pointerEvents="none">
           <Input
+            id={id}
             label={label}
             placeholder={placeholder}
             value={shown}
@@ -178,40 +196,42 @@ export function Select({
           />
         </View>
       </Pressable>
-      {/* The sheet's search box is not the form's field: it keeps its own corners. */}
-      <FormCellContext.Provider value={null}>
-        <Dialog
-          open={open}
-          onClose={() => {
-            setOpen(false);
-            setQuery("");
-          }}
-          title={label ?? accessibilityLabel}
-        >
-          <Column gap="4">
-            {searchable && (
-              <Row paddingBottom="8">
-                <Input
-                  label={labels?.search ?? "Search"}
-                  value={query}
-                  onChangeText={setQuery}
-                  size="s"
-                  prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
-                />
-              </Row>
-            )}
-            {visible.length === 0 ? (
-              <Text variant="body-default-s" onBackground="neutral-weak" paddingX="12" paddingY="8">
-                {emptyState}
-              </Text>
-            ) : (
-              visible.map((o) => (
-                <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
-              ))
-            )}
-          </Column>
-        </Dialog>
-      </FormCellContext.Provider>
+      <Dialog
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          setQuery("");
+        }}
+        title={label}
+      >
+        <Column gap="4">
+          {searchable && (
+            <Row paddingBottom="8">
+              <Input
+                label={labels?.search ?? "Search"}
+                value={query}
+                onChangeText={setQuery}
+                size="s"
+                prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+              />
+            </Row>
+          )}
+          {visible.length === 0 ? (
+            <Text
+              textVariant="body-default-s"
+              onBackground="neutral-weak"
+              paddingX="12"
+              paddingY="8"
+            >
+              {emptyState}
+            </Text>
+          ) : (
+            visible.map((o) => (
+              <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
+            ))
+          )}
+        </Column>
+      </Dialog>
     </View>
   );
 }

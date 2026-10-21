@@ -34,7 +34,7 @@ export function ProfileLoading() {
 
 ## Shape and size
 
-`line` fills the width and takes its height from `size`, from `xs` (the `8` step) to `xl` (the `24` step). `circle` takes its width and height from `size`, from `xs` (the `20` step) to `xl` (the `160` step). `block` fills the width at the `80` step tall. Skeleton takes the Flex props, as on the web, so `width` and `height` override the size in rem, a spacing token or a percentage, and `fillWidth` fills its parent.
+`line` fills the width and takes its height from `size`, from `xs` (the `8` step) to `xl` (the `24` step). `circle` takes its width and height from `size`, from `xs` (the `20` step) to `xl` (the `160` step). `block` fills the width at the `80` step tall. `width` and `height` override the size, in points or as a percentage.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -46,9 +46,9 @@ export function Shapes() {
   return (
     <Column gap="12">
       <Skeleton shape="line" size="xs" />
-      <Skeleton shape="line" size="xl" width={12} />
+      <Skeleton shape="line" size="xl" width={200} />
       <Skeleton shape="circle" size="m" />
-      <Skeleton shape="block" height={8} fillWidth />
+      <Skeleton shape="block" height={120} />
     </Column>
   );
 }`,
@@ -83,11 +83,13 @@ export function Staggered() {
 
 ## API reference
 
-Skeleton takes the Flex props, as on the web.
+Skeleton does not take Flex props. Use `style` for margins.
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `shape` | `"line" \| "circle" \| "block"` | `"line"` | The placeholder shape. |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The height of a line, or the diameter of a circle. |
+| `width` | `DimensionValue` | | Overrides the width, in points or a percentage. |
+| `height` | `DimensionValue` | | Overrides the height, in points or a percentage. |
 | `delay` | `number` | `0` | Milliseconds before the pulse starts. |
-| ...Flex props | | | `width`, `height`, `fillWidth`, margins and the rest, as on [Flex](/native/components/flex). Numbers are rem. |
+| `style` | `ViewStyle` | | Style for the skeleton. |

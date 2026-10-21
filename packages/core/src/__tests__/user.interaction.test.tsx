@@ -37,7 +37,7 @@ describe("User", () => {
   });
 
   it("shows a tag from tagProps beside the name", () => {
-    render(<User name="Lorant One" tagProps={{ label: "Admin", scheme: "brand" }} />, {
+    render(<User name="Lorant One" tagProps={{ label: "Admin", tone: "brand" }} />, {
       wrapper: wrap,
     });
     expect(screen.getByText("Admin")).toBeInTheDocument();
@@ -73,10 +73,10 @@ describe("User", () => {
       "aria-busy",
       "true",
     );
-    // The name and subline skeletons are named images (the avatar's is a
-    // named status): a bare aria-label on a role-less div is not announced.
-    expect(screen.getByRole("img", { name: "Loading name" })).toBeInTheDocument();
-    expect(screen.getByRole("img", { name: "Loading subline" })).toBeInTheDocument();
+    // Each labelled skeleton is a named status, as the avatar's: a bare
+    // aria-label on a role-less div is not announced.
+    expect(screen.getByRole("status", { name: "Loading name" })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: "Loading subline" })).toBeInTheDocument();
     await expectNoAxeViolations(container);
   });
 

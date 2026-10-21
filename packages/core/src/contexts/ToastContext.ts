@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, type ReactNode, useContext } from "react";
+import type { Tone } from "../types.js";
 
 // The context on its own, outside the public barrel, so a component can show a
 // toast when there is a ToastProvider and still work when there is none.
@@ -8,7 +9,8 @@ import { createContext, type ReactNode, useContext } from "react";
 
 export interface Toast {
   id: string;
-  variant: "success" | "danger" | "warning" | "info";
+  /** The palette and its icon; `danger` also interrupts the screen reader. */
+  tone: Tone;
   message: ReactNode;
   action?: ReactNode;
   /**

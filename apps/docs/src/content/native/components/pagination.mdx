@@ -22,7 +22,7 @@ codes={[
 `import { Pagination } from "@once-ui-system/native";
 
 export function Orders({ onPage }: { onPage: (page: number) => void }) {
-  return <Pagination total={12} onChange={onPage} />;
+  return <Pagination total={12} onPageChange={onPage} />;
 }`,
     language: "tsx",
     label: "Orders.tsx"
@@ -31,7 +31,7 @@ export function Orders({ onPage }: { onPage: (page: number) => void }) {
 
 ## Controlled with a page size
 
-Pass `page` and `onChange` to own the state, as server-side paging needs. `perPageOptions` adds a page-size select; when the size changes, the page moves so the first item on screen stays on screen.
+Pass `page` and `onPageChange` to own the state, as server-side paging needs. `perPageOptions` adds a page-size select; when the size changes, the page moves so the first item on screen stays on screen.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -47,7 +47,7 @@ export function Products({ count }: { count: number }) {
     <Pagination
       count={count}
       page={page}
-      onChange={setPage}
+      onPageChange={setPage}
       perPage={perPage}
       onPerPageChange={setPerPage}
       perPageOptions={[10, 25, 50]}
@@ -72,9 +72,9 @@ export function Products({ count }: { count: number }) {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `page` | `number` | | The current page, from 1, when the host owns the state. Pair with `onChange`. |
+| `page` | `number` | | The current page, from 1, when the host owns the state. Pair with `onPageChange`. |
 | `defaultPage` | `number` | `1` | The first page shown when Pagination keeps its own state. |
-| `onChange` | `(page: number) => void` | | Called with the new page. Not called for the page already shown. |
+| `onPageChange` | `(page: number) => void` | | Called with the new page. Not called for the page already shown. |
 | `total` | `number` | | How many pages there are. |
 | `count` | `number` | | How many items there are. With `perPage`, gives the page count. |
 | `perPage` | `number` | | Items per page, when the host owns it. Pair with `onPerPageChange`. |

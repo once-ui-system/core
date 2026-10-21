@@ -15,11 +15,22 @@ export interface SegmentedControlButton {
   disabled?: boolean;
 }
 
+/** Core 3.0's name for one segment's props. */
+export type ButtonOption = SegmentedControlButton;
+
 export interface SegmentedControlProps {
   buttons: SegmentedControlButton[];
-  onChange: (value: string) => void;
+  /** The selected button's `value`, controlled. Leave it out to let the control keep its own. */
   value?: string;
+  /** The button selected first when uncontrolled. Without it, the first one. */
   defaultValue?: string;
+  /**
+   * Called with the picked button's `value` on every pick, as core 3.0's
+   * (2.x's `onChange`). There is no click event to pass on a touch screen.
+   */
+  onValueChange?: (value: string) => void;
+  /** Disables every button. */
+  disabled?: boolean;
   fillWidth?: boolean;
   /** Outlined buttons without the frame around them, as in core. */
   compact?: boolean;
@@ -29,9 +40,10 @@ export interface SegmentedControlProps {
 /** Core's `SegmentedControl`: a row of toggle buttons where one is selected. */
 export function SegmentedControl({
   buttons,
-  onChange,
+  onValueChange,
   value,
   defaultValue,
+  disabled = false,
   fillWidth = true,
   compact = false,
   style,
@@ -40,7 +52,7 @@ export function SegmentedControl({
   const [selected, select] = useControlledValue<string>(
     value,
     defaultValue ?? buttons[0]?.value ?? "",
-    onChange,
+    onValueChange,
   );
   const height = theme.space("32");
 
@@ -55,16 +67,17 @@ export function SegmentedControl({
     >
       {buttons.map((b) => {
         const on = b.value === selected;
+        const off = disabled || b.disabled;
         const color = theme.color(
-          b.disabled ? "neutral-on-background-weak" : "neutral-on-background-strong",
+          off ? "neutral-on-background-weak" : "neutral-on-background-strong",
         );
         return (
           <Pressable
             key={b.value}
             accessibilityRole="tab"
             aria-selected={on}
-            aria-disabled={b.disabled}
-            disabled={b.disabled}
+            aria-disabled={off}
+            disabled={off}
             onPress={() => select(b.value)}
             hitSlop={touchSlop(theme, height, Number.POSITIVE_INFINITY)}
             style={({ pressed }) => ({
@@ -88,7 +101,7 @@ export function SegmentedControl({
           >
             {renderIcon(b.prefixIcon, "s", color)}
             {b.label !== undefined && (
-              <Text variant="label-strong-s" style={{ color }} numberOfLines={1}>
+              <Text textVariant="label-strong-s" style={{ color }} numberOfLines={1}>
                 {b.label}
               </Text>
             )}

@@ -9,7 +9,7 @@
   "useNavStyle": {
    "group": "components",
    "kind": "hook",
-   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: Nav...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
   "arrayMove": {
@@ -18,16 +18,35 @@
    "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
    "doc": "Moves one entry of a copy of `items` from `from` to `to`."
   },
-  "useStylePanel": {
-   "group": "components",
-   "kind": "hook",
-   "signature": "() => StylePanelContextValue"
-  },
   "useFormPending": {
    "group": "components",
    "kind": "hook",
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
+  },
+  "useAudioLevel": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(source: AudioLevelSource | null | undefined) => number",
+   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
+  },
+  "mascotLook": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotLook",
+   "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "workingVerbs": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "What `WorkingIndicator` cycles through by default."
+  },
+  "reactionMotion": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
+   "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
   },
   "useArrowNavigation": {
    "group": "hooks",
@@ -92,21 +111,10 @@
    "kind": "value",
    "type": "OnceUIAdapters"
   },
-  "resetAdapterWarning": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "() => void",
-   "doc": "Exported for tests; resets the once-per-session latch."
-  },
   "useAdapters": {
    "group": "contexts",
    "kind": "hook",
    "signature": "() => OnceUIAdapters"
-  },
-  "warnIfFrameworkUnadapted": {
-   "group": "contexts",
-   "kind": "function",
-   "signature": "(adapters: OnceUIAdapters) => void"
   },
   "useDataTheme": {
    "group": "contexts",
@@ -220,6 +228,104 @@
    "kind": "function",
    "signature": "<T extends OnceUIConfig>(config: T & CheckedConfig<T>) => T",
    "doc": "Type an app's `once-ui.config`."
+  },
+  "useStylePanel": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "hook",
+   "signature": "() => StylePanelContextValue"
+  },
+  "aboutLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"stacked\"]"
+  },
+  "contactLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"cards\", \"centered\"]"
+  },
+  "ctaLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"banner\", \"split\", \"minimal\"]"
+  },
+  "faqLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"stacked\", \"split\", \"grid\"]"
+  },
+  "featuresLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\", \"split\"]"
+  },
+  "heroLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\"]"
+  },
+  "logosLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"grid\"]"
+  },
+  "pricingLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\"]"
+  },
+  "statsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"cards\"]"
+  },
+  "teamLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"list\"]"
+  },
+  "testimonialsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"spotlight\", \"plain\"]"
+  },
+  "sectionComponents": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, AnySection>",
+   "doc": "The component for each section type."
+  },
+  "sectionSchemas": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, SectionSchema>"
+  },
+  "sectionTypes": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SectionType[]",
+   "doc": "Every section type, in the order an editor offers them."
+  },
+  "isSectionType": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(value: unknown) => value is SectionType"
   }
  },
  "types": {
@@ -236,6 +342,10 @@
    "href": "!string",
    "children": "React.ReactNode"
   },
+  "AnySection": [
+   "ComponentClass<any, any>",
+   "FunctionComponent<any>"
+  ],
   "ArrowNavigationOptions": {
    "layout": "!NavigationLayout",
    "itemCount": "!number",
@@ -250,18 +360,23 @@
    "disabled": "boolean",
    "disableHighlighting": "boolean"
   },
+  "AudioLevelSource": [
+   "HTMLMediaElement",
+   "MediaStream",
+   "AnalyserNode"
+  ],
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -270,13 +385,37 @@
    "sharp"
   ],
   "BreakpointKey": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ],
   "Breakpoints": "Record<BreakpointKey, number>",
+  "CSSUnit": [
+   "`${number}px`",
+   "`${number}rem`",
+   "`${number}em`",
+   "`${number}ch`",
+   "`${number}%`",
+   "`${number}vh`",
+   "`${number}vw`",
+   "`${number}dvh`",
+   "`${number}dvw`",
+   "`${number}svh`",
+   "`${number}svw`",
+   "`${number}lvh`",
+   "`${number}lvw`",
+   "`${number}vmin`",
+   "`${number}vmax`",
+   "`${number}cqw`",
+   "`${number}cqh`",
+   "`calc(${string})`",
+   "`min(${string})`",
+   "`max(${string})`",
+   "`clamp(${string})`",
+   "`var(${string})`"
+  ],
   "ChartMode": [
    "categorical",
    "divergent",
@@ -285,7 +424,7 @@
   "ChartOptions": {
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -294,14 +433,25 @@
    "outline",
    "gradient"
   ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
+  ],
   "DataThemeState": {
    "setChartOptions": "!(options: Partial<ChartOptions>) => void",
    "variant": "!ChartVariant",
    "mode": "!ChartMode",
-   "height": "!number",
+   "height": "!number | CSSUnit",
    "axis": "!{ stroke: string; }",
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "DeviceFontSize": [
    "15",
    "16",
@@ -323,28 +473,19 @@
   "IconLibrary": "Record<IconName, IconComponent>",
   "IconName": [
    "symbol",
-   "security",
-   "opacity",
-   "dark",
-   "light",
-   "copy",
-   "help",
-   "filter",
-   "info",
-   "danger",
-   "warning",
    "code",
    "link",
    "menu",
    "search",
    "time",
    "video",
+   "filter",
    "image",
-   "enter",
-   "send",
-   "checkbox",
-   "document",
-   "grid",
+   "security",
+   "opacity",
+   "info",
+   "danger",
+   "warning",
    "adjustments",
    "arrowDown",
    "arrowLeft",
@@ -362,6 +503,7 @@
    "cart",
    "chat",
    "check",
+   "checkbox",
    "chevronDoubleLeft",
    "chevronDoubleRight",
    "chevronDown",
@@ -372,10 +514,14 @@
    "clipboard",
    "close",
    "computer",
+   "copy",
    "cube",
+   "dark",
    "dislike",
+   "document",
    "download",
    "edit",
+   "enter",
    "eye",
    "eyeDropper",
    "eyeOff",
@@ -386,15 +532,19 @@
    "forward",
    "gift",
    "globe",
+   "grid",
    "grip",
    "heart",
+   "help",
    "home",
    "inbox",
+   "light",
    "like",
    "linearGauge",
    "lock",
    "logout",
    "mail",
+   "mapPin",
    "maximize",
    "minimize",
    "minus",
@@ -407,12 +557,14 @@
    "people",
    "person",
    "personRemove",
+   "phone",
    "play",
    "plus",
    "radialGauge",
    "refresh",
    "return",
    "screen",
+   "send",
    "settings",
    "smiley",
    "sparkle",
@@ -442,6 +594,24 @@
    "maxWidth": "!(key: BreakpointKey) => boolean",
    "minWidth": "!(key: BreakpointKey) => boolean"
   },
+  "MascotLook": {
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
+  },
   "MdxComponents": {
    "[key: string]": "ElementType"
   },
@@ -450,11 +620,6 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
-  "NavDensity": [
-   "normal",
-   "compact",
-   "spacious"
-  ],
   "NavigationLayout": [
    "grid",
    "row",
@@ -468,9 +633,7 @@
    "mint",
    "dusk"
   ],
-  "NumericKeys": {
-   "[key: number]": "Extract<keyof T, string>"
-  },
+  "NumericKeys": "Array<Extract<keyof T, string>>",
   "OgData": {
    "title": "!string",
    "description": "!string",
@@ -530,7 +693,7 @@
   "OnceUIDataStyleConfig": {
    "variant": "ChartVariant",
    "mode": "ChartMode",
-   "height": "number",
+   "height": "number | CSSUnit",
    "axis": "{ stroke: string; }",
    "tick": "{ fill: string; fontSize: number; line: boolean; }"
   },
@@ -558,25 +721,48 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
+  },
+  "ReactionMotion": [
+   "pop",
+   "none",
+   "beat",
+   "nod",
+   "shake",
+   "droop",
+   "flicker",
+   "spin",
+   "wave",
+   "bounce"
+  ],
+  "ReactionOption": {
+   "value": "!string",
+   "label": "string",
+   "emoji": "string",
+   "src": "string",
+   "motion": "ReactionMotion"
   },
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",
@@ -593,6 +779,10 @@
    "1200"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "Schemes": [
    "blue",
    "indigo",
@@ -607,6 +797,49 @@
    "emerald",
    "aqua",
    "cyan"
+  ],
+  "SectionField": {
+   "key": "!string",
+   "kind": "!SectionFieldKind",
+   "label": "!string",
+   "options": "readonly string[]",
+   "split": "\"lines\" | \"paragraphs\"",
+   "fields": "SectionField[]",
+   "max": "number",
+   "rowTitle": "string",
+   "when": "{ key: string; is: readonly string[] }",
+   "hint": "string"
+  },
+  "SectionFieldKind": [
+   "boolean",
+   "link",
+   "textarea",
+   "image",
+   "text",
+   "list",
+   "choice"
+  ],
+  "SectionSchema": {
+   "type": "!SectionType",
+   "component": "!string",
+   "label": "!string",
+   "description": "!string",
+   "layouts": "!readonly string[]",
+   "fields": "!SectionField[]",
+   "sample": "!Record<string, unknown>"
+  },
+  "SectionType": [
+   "about",
+   "hero",
+   "features",
+   "stats",
+   "testimonials",
+   "team",
+   "pricing",
+   "faq",
+   "logos",
+   "cta",
+   "contact"
   ],
   "SolidStyle": [
    "flat",
@@ -632,6 +865,7 @@
    "setRunning": "!React.Dispatch<React.SetStateAction<boolean>>",
    "reset": "!() => void"
   },
+  "StreamingTarget": "Partial<Record<Extract<keyof T, string>, number>>",
   "StreamingViewportOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -659,12 +893,14 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
-   "cursorInteractive": "InteractiveCursor"
+   "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue"
   },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
@@ -682,6 +918,7 @@
    "solidStyle": "SolidStyle",
    "surface": "SurfaceStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "transition": "TransitionStyle",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
@@ -700,12 +937,14 @@
    "surface": "!SurfaceStyle",
    "transition": "!TransitionStyle",
    "scaling": "!ScalingSize",
+   "density": "!Density",
    "bodySize": "!BodySize",
    "bodyLineHeight": "!BodyLineHeight",
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
   "SurfaceStyle": [
@@ -717,11 +956,19 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
   "ThemeProviderState": {
    "theme": "!Theme",
    "resolvedTheme": "!\"light\" | \"dark\"",
    "setTheme": "!(theme: Theme) => void"
   },
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
+  ],
   "ToastContextProps": {
    "toasts": "!Toast[]",
    "addToast": "!(toast: Omit<Toast, \"id\">) => string",

@@ -9,15 +9,8 @@
  * panels and not the SplitView, labels for the tabs it collapses into, the
  * timeline as a sibling of the split, playback paused while scrubbing.
  */
-import {
-  Column,
-  IconButton,
-  Row,
-  Scrubber,
-  SplitView,
-  Text,
-  ToggleButton,
-} from "@once-ui-system/core";
+import { Column, IconButton, Row, SplitView, Text, ToggleButton } from "@once-ui-system/core";
+import { Scrubber } from "@once-ui-system/core/media";
 import { useState } from "react";
 
 type Track = NonNullable<React.ComponentProps<typeof Scrubber>["tracks"]>[number];
@@ -27,7 +20,7 @@ const DURATION = 30;
 const initialTracks: Track[] = [
   {
     id: "video",
-    scheme: "brand",
+    tone: "brand",
     movable: true,
     resizable: true,
     blocks: [
@@ -38,7 +31,7 @@ const initialTracks: Track[] = [
   },
   {
     id: "audio",
-    scheme: "accent",
+    tone: "accent",
     blocks: [{ id: "music", start: 0, end: 30, label: "Music", locked: true }],
   },
 ];
@@ -70,7 +63,7 @@ export function EditorExample() {
             tooltip={playing ? "Pause" : "Play"}
             onClick={() => setPlaying(!playing)}
           />
-          <Text variant="label-default-s" onBackground="neutral-weak">
+          <Text textVariant="label-default-s" onBackground="neutral-weak">
             Untitled project
           </Text>
         </Row>
@@ -101,8 +94,8 @@ export function EditorExample() {
         }
         rightPanel={
           <Column fill overflowY="auto" padding="24" center background="surface">
-            <Column maxWidth={40} aspectRatio="16/9" radius="l" border background="page" center>
-              <Text variant="label-default-s" onBackground="neutral-weak">
+            <Column maxWidth="40rem" aspectRatio="16/9" radius="l" border background="page" center>
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 {current ? current.label : "Nothing selected"}
               </Text>
             </Column>
@@ -114,10 +107,10 @@ export function EditorExample() {
         <Scrubber
           duration={DURATION}
           value={time}
-          onChange={setTime}
+          onValueChange={setTime}
           tracks={tracks}
           selected={selected}
-          onSelect={setSelected}
+          onSelectedChange={setSelected}
           onGestureStart={() => setPlaying(false)}
           onBlockChange={(trackId, blockId, next) =>
             setTracks((all) =>

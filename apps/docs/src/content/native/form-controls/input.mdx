@@ -127,7 +127,7 @@ Takes every `TextInput` prop except `style` and `editable`.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `label` | `string` | | Floats above the value once the field is focused or filled. Also the accessibility label. |
-| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The field's height, from 40 to 72 spacing steps. Inside a [`Form`](/native/form-controls/form), the form's `size` is the default. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The field's height, from 40 to 72 spacing steps. |
 | `error` | `boolean` | `false` | Draws the field in the danger colour and shows `errorMessage`. |
 | `errorMessage` | `ReactNode` | | Shown under the field while `error` is true. |
 | `description` | `ReactNode` | | A hint under the field. |
@@ -135,8 +135,7 @@ Takes every `TextInput` prop except `style` and `editable`.
 | `suffix` | `ReactNode` | | An element after the text. Hidden while `loading`. |
 | `variant` | `"default" \| "ghost"` | `"default"` | `ghost` has no border or background. |
 | `loading` | `boolean` | `false` | Shows a spinner at the end. |
-| `disabled` | `boolean` | `false` | Dims the field and stops editing. A disabled [`Fieldset`](/native/form-controls/fieldset) disables it too. |
-| `corners` | `"none" \| "top" \| "right" \| "bottom" \| "left" \| "top-left" \| "top-right" \| "bottom-right" \| "bottom-left"` | | Which corners stay round. A stacked `Form` sets them. |
+| `disabled` | `boolean` | `false` | Dims the field and stops editing. |
 | `characterCount` | `boolean` | | Shows how many characters are left. Needs `maxLength`. |
 | `style` | `ViewStyle` | | Style for the outer column. |
 | `inputStyle` | `TextStyle` | | Style for the `TextInput`. |

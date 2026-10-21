@@ -26,7 +26,7 @@ export function Menu() {
     <Grid columns={2} gap="12" padding="16">
       {["Espresso", "Flat white", "Cortado", "Mocha"].map((drink) => (
         <Card key={drink} padding="16" flex={1}>
-          <Text variant="label-default-m">{drink}</Text>
+          <Text textVariant="label-default-m">{drink}</Text>
         </Card>
       ))}
     </Grid>
@@ -63,7 +63,7 @@ export function Gallery({ photos }: { photos: string[] }) {
 
 ## Minimum column width
 
-`minColumnWidth` fits as many columns as it can, each at least that wide, and reflows on its own. It takes a spacing token or a number of rem. A breakpoint's `columns` still overrides it at that width.
+`minColumnWidth` fits as many columns as it can, each at least that wide, and reflows on its own. It takes a spacing token, a number of points or a length such as `"10rem"`. A breakpoint's `columns` still overrides it at that width.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -73,7 +73,7 @@ codes={[
 
 export function Origins() {
   return (
-    <Grid minColumnWidth={8} gap="8" xs={{ columns: 2 }}>
+    <Grid minColumnWidth="8rem" gap="8" xs={{ columns: 2 }}>
       <Tag label="Ethiopia" />
       <Tag label="Colombia" />
       <Tag label="Kenya" />
@@ -91,7 +91,7 @@ export function Origins() {
 - React Native has no CSS grid. `Grid` wraps each child in a cell view, so a child's own width and `gridColumn` styles do not span cells.
 - `rows` is not supported: rows follow from the content.
 - `direction`, `horizontal`, `vertical`, `center` and `wrap` are left out, since the grid places its children itself.
-- `minColumnWidth` takes a spacing token or rem, not CSS units such as `%` or `calc()`. It measures the grid once laid out, and counts from the screen width until then.
+- `minColumnWidth` takes a spacing token, points or `"Nrem"`, not CSS units such as `%` or `calc()`. It measures the grid once laid out, and counts from the screen width until then.
 
 ## API reference
 

@@ -84,7 +84,7 @@ export function Stats() {
         <BarChart
           title="Cups sold"
           description="Tap a day for its numbers"
-          height={18}
+          height="18rem"
           data={WEEK}
           series={[
             { key: "latte", color: "orange" },
@@ -94,14 +94,14 @@ export function Stats() {
 
         <LineChart
           title="Visits by hour"
-          height={16}
+          height="16rem"
           data={MONTHS[range]}
           series={[{ key: "visits", color: "yellow" }]}
         />
 
         <Column gap="16">
           <Row vertical="center" gap="8">
-            <Heading variant="heading-strong-s">Today's goal</Heading>
+            <Heading textVariant="heading-strong-s">Today's goal</Heading>
             <InfoTip>Cups to sell before closing. Staff see it on the counter screen.</InfoTip>
           </Row>
           <Slider label="Cups" min={50} max={200} step={5} defaultValue={120} showValue />
@@ -109,7 +109,7 @@ export function Stats() {
         </Column>
 
         <Column gap="12">
-          <Heading variant="heading-strong-s">Order 0042</Heading>
+          <Heading textVariant="heading-strong-s">Order 0042</Heading>
           <ContextMenu
             dropdown={
               <>
@@ -128,12 +128,12 @@ export function Stats() {
               ]}
             />
           </ContextMenu>
-          <Text variant="body-default-xs" onBackground="neutral-weak">
+          <Text textVariant="body-default-xs" onBackground="neutral-weak">
             Long-press the order for actions.
           </Text>
         </Column>
 
-        <Pagination total={5} page={page} onChange={setPage} />
+        <Pagination total={5} page={page} onPageChange={setPage} />
       </Column>
     </ScrollView>
   );

@@ -153,7 +153,7 @@ export const Media: RefComponent<MediaProps, ViewRef> = forwardRef<ViewRef, Medi
       <View style={{ alignSelf: fillWidth ? "stretch" : "flex-start" }}>
         {media}
         <Text
-          variant="label-default-s"
+          textVariant="label-default-s"
           onBackground="neutral-weak"
           align="center"
           paddingY="12"

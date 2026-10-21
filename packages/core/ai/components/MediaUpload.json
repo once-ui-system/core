@@ -2,9 +2,6 @@
  "name": "MediaUpload",
  "group": "media",
  "importFrom": "@once-ui-system/core/media",
- "extends": [
-  "Flex"
- ],
  "mixins": [
   "CommonProps",
   "DisplayProps",
@@ -55,10 +52,12 @@
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",
-   "align": "CSSProperties[\"textAlign\"]"
+   "align": "CSSProperties[\"textAlign\"]",
+   "children": "ReactNode",
+   "className": "string",
+   "style": "React.CSSProperties"
   },
   "DisplayProps": {
-   "as": "ElementType",
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
@@ -71,16 +70,20 @@
    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
    "opacity": "Opacity",
    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
-   "dark": "boolean",
-   "light": "boolean"
+   "showIn": "\"dark\" | \"light\""
   },
   "FlexProps": {
+   "center": "boolean",
+   "s": "FlexBreakpointProps",
    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "center": "boolean",
+   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | \"baseline\"",
    "wrap": "boolean",
-   "flex": "FlexValue"
+   "flex": "FlexValue",
+   "xl": "FlexBreakpointProps",
+   "l": "FlexBreakpointProps",
+   "m": "FlexBreakpointProps",
+   "xs": "FlexBreakpointProps"
   },
   "SizeProps": {
    "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
@@ -98,21 +101,21 @@
    "aspectRatio": "CSSProperties[\"aspectRatio\"]"
   },
   "SpacingProps": {
-   "padding": "SpacingToken | number",
-   "paddingLeft": "SpacingToken | number",
-   "paddingRight": "SpacingToken | number",
-   "paddingTop": "SpacingToken | number",
-   "paddingBottom": "SpacingToken | number",
-   "paddingX": "SpacingToken | number",
-   "paddingY": "SpacingToken | number",
-   "margin": "SpacingToken | number",
-   "marginLeft": "SpacingToken | number",
-   "marginRight": "SpacingToken | number",
-   "marginTop": "SpacingToken | number",
-   "marginBottom": "SpacingToken | number",
-   "marginX": "SpacingToken | number",
-   "marginY": "SpacingToken | number",
-   "gap": "SpacingToken | number | \"-1\"",
+   "padding": "SpacingToken | number | CSSUnit",
+   "paddingLeft": "SpacingToken | number | CSSUnit",
+   "paddingRight": "SpacingToken | number | CSSUnit",
+   "paddingTop": "SpacingToken | number | CSSUnit",
+   "paddingBottom": "SpacingToken | number | CSSUnit",
+   "paddingX": "SpacingToken | number | CSSUnit",
+   "paddingY": "SpacingToken | number | CSSUnit",
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "gap": "SpacingToken | number | CSSUnit | \"-1\"",
    "top": "SpacingToken | number | CSSUnit",
    "right": "SpacingToken | number | CSSUnit",
    "bottom": "SpacingToken | number | CSSUnit",
@@ -122,9 +125,6 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "textSize": "TextSize",
-   "textType": "TextType",
-   "textWeight": "TextWeight",
    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
    "solid": "Colors",
    "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
@@ -145,10 +145,10 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
-   "blur": "BlurSize | number",
-   "backdropBlur": "BlurSize | number",
+   "blur": "BlurSize | number | CSSUnit",
+   "backdropBlur": "BlurSize | number | CSSUnit",
    "theme": "\"light\" | \"dark\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",

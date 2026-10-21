@@ -42,7 +42,7 @@ Components that take `prefixIcon` or `suffixIcon`, such as [Button](/native/comp
 
 ## Accessibility
 
-Icons are decorative by default and hidden from screen readers. When an icon carries meaning on its own, pass `decorative={false}` and an `ariaLabel`.
+Icons are decorative by default and hidden from screen readers. When an icon carries meaning on its own, pass `decorative={false}` and an `aria-label`.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -53,7 +53,7 @@ codes={[
 export function Status() {
   return (
     <Row gap="8" vertical="center">
-      <Icon name="check" size="s" onBackground="success-medium" decorative={false} ariaLabel="Paid" />
+      <Icon name="check" size="s" onBackground="success-medium" decorative={false} aria-label="Paid" />
       <Text>Invoice 1042</Text>
     </Row>
   );
@@ -105,7 +105,7 @@ export default function App() {
 
 ## Differences from the web
 
-- **No tooltip.** There is no hover on a touch screen, so `tooltip` and `tooltipPosition` are not supported. Use `ariaLabel` for the name.
+- **No tooltip.** There is no hover on a touch screen, so `tooltip` and `tooltipPosition` are not supported. Use `aria-label` for the name.
 - **`color`.** Native `Icon` also takes a plain colour string in `color`, which wins over `onBackground`. Components use it to colour icons inside their labels.
 - **Custom icons.** The web's `IconProvider` takes React components. The native one also takes core's SVG data, and its components receive `size` and `color` instead of styling through CSS.
 
@@ -119,7 +119,7 @@ export default function App() {
 | `onSolid` | `"<scheme>-<weight>"` | | Icon colour on a solid surface. Wins over `onBackground`. |
 | `color` | `string` | | A plain colour. Wins over `onBackground` and `onSolid`. |
 | `decorative` | `boolean` | `true` | Hidden from screen readers unless `false`. |
-| `ariaLabel` | `string` | the `name` | The accessible name when `decorative` is `false`. |
+| `aria-label` | `string` | the `name` | The accessible name when `decorative` is `false`. |
 | `style` | `ViewStyle` | | Applied to the view around the icon. |
 
 ### IconProvider

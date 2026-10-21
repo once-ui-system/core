@@ -35,13 +35,13 @@ export function User({
       {name && (
         <Column paddingLeft="4" paddingRight="12" style={{ flexShrink: 1 }}>
           {loading ? (
-            <Row minWidth={6} paddingY="4">
+            <Row minWidth="6rem" paddingY="4">
               <Skeleton width="100%" size="m" shape="line" />
             </Row>
           ) : (
             <Row gap="8" vertical="center">
               <Text
-                variant="label-default-m"
+                textVariant="label-default-m"
                 onBackground="neutral-strong"
                 truncate
                 style={{ flexShrink: 1 }}
@@ -57,7 +57,7 @@ export function User({
             </Row>
           ) : (
             subline && (
-              <Text variant="body-default-xs" onBackground="neutral-weak" truncate>
+              <Text textVariant="body-default-xs" onBackground="neutral-weak" truncate>
                 {subline}
               </Text>
             )

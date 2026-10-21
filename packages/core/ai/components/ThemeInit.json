@@ -15,17 +15,17 @@
  "mixinsRef": [],
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -37,6 +37,17 @@
    "categorical",
    "divergent",
    "sequential"
+  ],
+  "CursorPresetValue": [
+   "rounded",
+   "soft",
+   "dot",
+   "system"
+  ],
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
   ],
   "DeviceFontSize": [
    "15",
@@ -70,25 +81,29 @@
    "surface": "SurfaceStyle",
    "transition": "TransitionStyle",
    "scaling": "ScalingSize",
+   "density": "Density",
    "bodySize": "BodySize",
    "bodyLineHeight": "BodyLineHeight",
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
   },
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",
@@ -105,6 +120,10 @@
    "1200"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "Schemes": [
    "blue",
    "indigo",
@@ -138,6 +157,10 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
   "ThemeInitAttributeConfig": {
    "theme": "!string",
    "brand": "!string",
@@ -154,6 +177,10 @@
   "ThemeInitConfig": [
    "OnceUIStyleConfig",
    "ThemeInitAttributeConfig"
+  ],
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
   ],
   "TransitionStyle": [
    "none",

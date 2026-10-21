@@ -1,13 +1,20 @@
 {
  "name": "OTPInput",
  "group": "components",
+ "mixins": [
+  "LeafProps"
+ ],
  "props": {
   "length": "number = 4",
+  "value": "string",
+  "defaultValue": "string",
+  "onValueChange": "(code: string) => void",
   "onComplete": "(code: string) => void",
   "error": "boolean = false",
   "errorMessage": "React.ReactNode",
   "disabled": "boolean = false",
-  "autoFocus": "boolean = false"
+  "autoFocus": "boolean = false",
+  "labels": "OTPInputLabels"
  },
  "tags": [
   "form",
@@ -18,5 +25,34 @@
   "Column",
   "Button"
  ],
- "mixinsRef": []
+ "mixinsRef": [
+  "LeafProps"
+ ],
+ "tokensRef": "see tokens.json",
+ "resolvedMixins": {
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
+   "position": "CSSProperties[\"position\"]",
+   "top": "SpacingToken | number | CSSUnit",
+   "right": "SpacingToken | number | CSSUnit",
+   "bottom": "SpacingToken | number | CSSUnit",
+   "left": "SpacingToken | number | CSSUnit",
+   "className": "string",
+   "style": "CSSProperties"
+  }
+ },
+ "types": {
+  "OTPInputLabels": {
+   "group": "string",
+   "digit": "(position: number, length: number) => string"
+  }
+ }
 }

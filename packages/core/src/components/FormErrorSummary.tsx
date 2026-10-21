@@ -1,9 +1,9 @@
 "use client";
 
-import React, { forwardRef, type ReactNode, useEffect, useImperativeHandle, useRef } from "react";
-import { Column } from "./Column";
-import { Feedback } from "./Feedback";
-import { Text } from "./Text";
+import React, { type ReactNode, useEffect, useImperativeHandle, useRef } from "react";
+import { Column } from "./Column.js";
+import { Feedback } from "./Feedback.js";
+import { Text } from "./Text.js";
 
 /**
  * FormErrorSummary — every error in a form, in one place, after a failed submit.
@@ -25,7 +25,7 @@ interface FormErrorItem {
 }
 
 interface FormErrorSummaryProps
-  extends Omit<React.ComponentProps<typeof Feedback>, "variant" | "title" | "children"> {
+  extends Omit<React.ComponentProps<typeof Feedback>, "tone" | "title" | "children"> {
   /**
    * The errors: a list, or a map from control id to message — the shape most
    * validation libraries hand back. Empty messages are skipped.
@@ -58,76 +58,66 @@ const focusControl = (id: string) => {
   return true;
 };
 
-const FormErrorSummary = forwardRef<HTMLDivElement, FormErrorSummaryProps>(
-  (
-    {
-      errors,
-      title,
-      autoFocus = true,
-      // Consumed by `Form`, never rendered.
-      span,
-      ...rest
-    },
-    ref,
-  ) => {
-    const items = toItems(errors);
-    const innerRef = useRef<HTMLDivElement>(null);
-    useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
+const FormErrorSummary = ({
+  ref,
+  errors,
+  title,
+  autoFocus = true,
+  // Consumed by `Form`, never rendered.
+  span,
+  ...rest
+}: FormErrorSummaryProps) => {
+  const items = toItems(errors);
+  const innerRef = useRef<HTMLDivElement>(null);
+  useImperativeHandle(ref, () => innerRef.current as HTMLDivElement);
 
-    // A key that changes when the set of errors does, so focus moves again on
-    // a second failed submit with different problems — but not on every
-    // render of a parent.
-    const signature = `${items.map((item) => item.id ?? "").join("|")}#${items.length}`;
+  // A key that changes when the set of errors does, so focus moves again on
+  // a second failed submit with different problems — but not on every
+  // render of a parent.
+  const signature = `${items.map((item) => item.id ?? "").join("|")}#${items.length}`;
 
-    const count = items.length;
-    // biome-ignore lint/correctness/useExhaustiveDependencies: `signature` is the trigger, not a value read inside
-    useEffect(() => {
-      if (!autoFocus || count === 0) return;
-      innerRef.current?.focus();
-    }, [autoFocus, count, signature]);
+  const count = items.length;
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `signature` is the trigger, not a value read inside
+  useEffect(() => {
+    if (!autoFocus || count === 0) return;
+    innerRef.current?.focus();
+  }, [autoFocus, count, signature]);
 
-    if (items.length === 0) return null;
+  if (items.length === 0) return null;
 
-    return (
-      <Feedback
-        ref={innerRef}
-        variant="danger"
-        title={title ?? DEFAULT_TITLE}
-        tabIndex={-1}
-        {...rest}
-      >
-        <Column as="ul" gap="4" margin="0" paddingLeft="20">
-          {items.map((item, index) => (
-            <Text
-              as="li"
-              // The index too: a field with two errors appears twice.
-              // biome-ignore lint/suspicious/noArrayIndexKey: ids may repeat; the list is static per render
-              key={`${item.id ?? ""}#${index}`}
-              variant="body-default-s"
-              onBackground="danger-medium"
-            >
-              {item.id ? (
-                <a
-                  href={`#${item.id}`}
-                  style={{ color: "inherit" }}
-                  onClick={(event) => {
-                    // Follow the hash only if there is nothing to focus, so
-                    // the field is focused rather than merely scrolled to.
-                    if (focusControl(item.id as string)) event.preventDefault();
-                  }}
-                >
-                  {item.message}
-                </a>
-              ) : (
-                item.message
-              )}
-            </Text>
-          ))}
-        </Column>
-      </Feedback>
-    );
-  },
-);
+  return (
+    <Feedback ref={innerRef} tone="danger" title={title ?? DEFAULT_TITLE} tabIndex={-1} {...rest}>
+      <Column as="ul" gap="4" margin="0" paddingLeft="20">
+        {items.map((item, index) => (
+          <Text
+            as="li"
+            // The index too: a field with two errors appears twice.
+            // biome-ignore lint/suspicious/noArrayIndexKey: ids may repeat; the list is static per render
+            key={`${item.id ?? ""}#${index}`}
+            textVariant="body-default-s"
+            onBackground="danger-medium"
+          >
+            {item.id ? (
+              <a
+                href={`#${item.id}`}
+                style={{ color: "inherit" }}
+                onClick={(event) => {
+                  // Follow the hash only if there is nothing to focus, so
+                  // the field is focused rather than merely scrolled to.
+                  if (focusControl(item.id as string)) event.preventDefault();
+                }}
+              >
+                {item.message}
+              </a>
+            ) : (
+              item.message
+            )}
+          </Text>
+        ))}
+      </Column>
+    </Feedback>
+  );
+};
 
 FormErrorSummary.displayName = "FormErrorSummary";
 

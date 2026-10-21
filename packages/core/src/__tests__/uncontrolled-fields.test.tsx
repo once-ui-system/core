@@ -5,7 +5,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DateInput } from "../components/DateInput";
 import { DatePicker } from "../components/DatePicker";
-import { EmojiPickerDropdown } from "../components/EmojiPickerDropdown";
+import { EmojiPicker } from "../components/EmojiPicker";
 import { Flex } from "../components/Flex";
 import { Heading } from "../components/Heading";
 import { Input } from "../components/Input";
@@ -16,10 +16,11 @@ import { LayoutProvider } from "../contexts/LayoutProvider";
 
 /**
  * Fields that only worked controlled, found by the 3.0 audit: DatePicker
- * ignored `defaultDate`, NumberInput and DateInput passed the native
+ * ignored `defaultDate` (3.0's `defaultValue`), NumberInput and DateInput passed the native
  * `defaultValue` to an input that also had a `value`, DateInput could not be
  * cleared from outside, Input and Textarea validated only a controlled
- * `value`, and EmojiPickerDropdown closed after a pick only when controlled.
+ * `value`, and EmojiPickerDropdown (3.0: EmojiPicker with a `trigger`) closed after a
+ * pick only when controlled.
  */
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -42,9 +43,9 @@ afterEach(() => {
   vi.unstubAllEnvs();
 });
 
-describe("DatePicker defaultDate", () => {
-  it("starts on and selects defaultDate when there is no value", async () => {
-    render(<DatePicker defaultDate={jan(5)} />, { wrapper: wrap });
+describe("DatePicker defaultValue", () => {
+  it("starts on and selects defaultValue when there is no value", async () => {
+    render(<DatePicker defaultValue={jan(5)} />, { wrapper: wrap });
     expect(await screen.findByRole("grid", { name: "January 2026" })).toBeInTheDocument();
     expect((await day(jan(5))).closest('[role="gridcell"]')).toHaveAttribute(
       "aria-selected",
@@ -52,8 +53,8 @@ describe("DatePicker defaultDate", () => {
     );
   });
 
-  it("lets a value win over defaultDate", async () => {
-    render(<DatePicker value={jan(9)} defaultDate={jan(5)} />, { wrapper: wrap });
+  it("lets a value win over defaultValue", async () => {
+    render(<DatePicker value={jan(9)} defaultValue={jan(5)} />, { wrapper: wrap });
     expect((await day(jan(9))).closest('[role="gridcell"]')).toHaveAttribute(
       "aria-selected",
       "true",
@@ -108,11 +109,11 @@ describe("validate on an uncontrolled field", () => {
   });
 });
 
-describe("EmojiPickerDropdown uncontrolled", () => {
+describe("EmojiPicker with a trigger, uncontrolled", () => {
   it("closes after a pick without open or onOpenChange", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
-    render(<EmojiPickerDropdown trigger={<span>Pick an emoji</span>} onSelect={onSelect} />, {
+    render(<EmojiPicker trigger={<span>Pick an emoji</span>} onSelect={onSelect} />, {
       wrapper: wrap,
     });
 
@@ -130,15 +131,10 @@ describe("prop-misuse warnings", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     renderToStaticMarkup(
       <>
-        <Text
-          variant="body-default-m"
-          size="l"
-          onBackground="neutral-strong"
-          onSolid="neutral-strong"
-        >
+        <Text onBackground="neutral-strong" onSolid="neutral-strong">
           a
         </Text>
-        <Heading variant="display-default-m" weight="strong">
+        <Heading onBackground="neutral-strong" onSolid="neutral-strong">
           b
         </Heading>
         <Flex background="page" solid="brand-strong" />
@@ -151,7 +147,7 @@ describe("prop-misuse warnings", () => {
     vi.stubEnv("NODE_ENV", "development");
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     renderToStaticMarkup(
-      <Text variant="body-default-m" size="l">
+      <Text onBackground="neutral-strong" onSolid="neutral-strong">
         a
       </Text>,
     );

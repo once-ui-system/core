@@ -1,11 +1,12 @@
 "use client";
 
 import React, { Suspense } from "react";
-import { MissingDependency } from "../../utils/MissingDependency";
-import type { LineBarChartProps } from "./LineBarChart.impl";
+import { MissingDependency } from "../../utils/MissingDependency.js";
+import type { DataPoint } from "./interfaces.js";
+import type { LineBarChartProps } from "./LineBarChart.impl.js";
 
-const LineBarChartImpl = React.lazy(() =>
-  import("./LineBarChart.impl").catch(() => {
+const LineBarChartImpl = React.lazy<React.ComponentType<LineBarChartProps>>(() =>
+  import("./LineBarChart.impl.js").catch(() => {
     console.warn(
       '[@once-ui-system/core] <LineBarChart /> requires the "recharts" package. Install it with: npm install recharts',
     );
@@ -15,9 +16,13 @@ const LineBarChartImpl = React.lazy(() =>
   }),
 );
 
-const LineBarChart: React.FC<LineBarChartProps> = (props) => (
+/**
+ * Generic over the row type: `<LineBarChart data={rows} series={{ key: "revenue" }} />`
+ * takes your own `interface Row` as is, and checks `series` keys against it.
+ */
+const LineBarChart = <T extends object = DataPoint>(props: LineBarChartProps<T>) => (
   <Suspense fallback={null}>
-    <LineBarChartImpl {...props} />
+    <LineBarChartImpl {...(props as unknown as LineBarChartProps)} />
   </Suspense>
 );
 

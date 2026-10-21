@@ -1,10 +1,7 @@
 {
  "name": "StylePanel",
- "group": "components",
- "extends": [
-  "Column",
-  "Flex"
- ],
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
  "mixins": [
   "CommonProps",
   "DisplayProps",
@@ -16,7 +13,7 @@
  "props": {
   "visibility": "StylePanelVisibility",
   "value": "StylePanelRootProps[\"value\"]",
-  "onChange": "StylePanelRootProps[\"onChange\"]",
+  "onValueChange": "StylePanelRootProps[\"onValueChange\"]",
   "labels": "StylePanelLabels",
   "customColors": "boolean",
   "stacked": "boolean"
@@ -27,7 +24,8 @@
  ],
  "pairsWith": [
   "StyleOverlay",
-  "ThemeSwitcher"
+  "ThemeSwitcher",
+  "StylePanelRoot"
  ],
  "mixinsRef": [
   "CommonProps",
@@ -42,10 +40,12 @@
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",
-   "align": "CSSProperties[\"textAlign\"]"
+   "align": "CSSProperties[\"textAlign\"]",
+   "children": "ReactNode",
+   "className": "string",
+   "style": "React.CSSProperties"
   },
   "DisplayProps": {
-   "as": "ElementType",
    "inline": "boolean",
    "hide": "boolean",
    "pointerEvents": "\"none\" | \"all\" | \"auto\"",
@@ -58,16 +58,20 @@
    "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
    "opacity": "Opacity",
    "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
-   "dark": "boolean",
-   "light": "boolean"
+   "showIn": "\"dark\" | \"light\""
   },
   "FlexProps": {
+   "center": "boolean",
+   "s": "FlexBreakpointProps",
    "direction": "\"row\" | \"column\" | \"row-reverse\" | \"column-reverse\"",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\"",
-   "center": "boolean",
+   "vertical": "\"start\" | \"center\" | \"end\" | \"between\" | \"around\" | \"even\" | \"stretch\" | \"baseline\"",
    "wrap": "boolean",
-   "flex": "FlexValue"
+   "flex": "FlexValue",
+   "xl": "FlexBreakpointProps",
+   "l": "FlexBreakpointProps",
+   "m": "FlexBreakpointProps",
+   "xs": "FlexBreakpointProps"
   },
   "SizeProps": {
    "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
@@ -85,21 +89,21 @@
    "aspectRatio": "CSSProperties[\"aspectRatio\"]"
   },
   "SpacingProps": {
-   "padding": "SpacingToken | number",
-   "paddingLeft": "SpacingToken | number",
-   "paddingRight": "SpacingToken | number",
-   "paddingTop": "SpacingToken | number",
-   "paddingBottom": "SpacingToken | number",
-   "paddingX": "SpacingToken | number",
-   "paddingY": "SpacingToken | number",
-   "margin": "SpacingToken | number",
-   "marginLeft": "SpacingToken | number",
-   "marginRight": "SpacingToken | number",
-   "marginTop": "SpacingToken | number",
-   "marginBottom": "SpacingToken | number",
-   "marginX": "SpacingToken | number",
-   "marginY": "SpacingToken | number",
-   "gap": "SpacingToken | number | \"-1\"",
+   "padding": "SpacingToken | number | CSSUnit",
+   "paddingLeft": "SpacingToken | number | CSSUnit",
+   "paddingRight": "SpacingToken | number | CSSUnit",
+   "paddingTop": "SpacingToken | number | CSSUnit",
+   "paddingBottom": "SpacingToken | number | CSSUnit",
+   "paddingX": "SpacingToken | number | CSSUnit",
+   "paddingY": "SpacingToken | number | CSSUnit",
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "gap": "SpacingToken | number | CSSUnit | \"-1\"",
    "top": "SpacingToken | number | CSSUnit",
    "right": "SpacingToken | number | CSSUnit",
    "bottom": "SpacingToken | number | CSSUnit",
@@ -109,9 +113,6 @@
   },
   "StyleProps": {
    "textVariant": "TextVariant",
-   "textSize": "TextSize",
-   "textType": "TextType",
-   "textWeight": "TextWeight",
    "background": "Colors | \"surface\" | \"overlay\" | \"page\" | \"transparent\"",
    "solid": "Colors",
    "borderTop": "Colors | \"surface\" | \"transparent\" | boolean",
@@ -132,10 +133,10 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
-   "blur": "BlurSize | number",
-   "backdropBlur": "BlurSize | number",
+   "blur": "BlurSize | number | CSSUnit",
+   "backdropBlur": "BlurSize | number | CSSUnit",
    "theme": "\"light\" | \"dark\"",
    "themeBorder": "BorderStyle",
    "themeSolid": "SolidType",
@@ -145,17 +146,17 @@
  },
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -168,6 +169,11 @@
    "divergent",
    "sequential"
   ],
+  "Density": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NeutralColor": [
    "sand",
    "gray",
@@ -177,11 +183,11 @@
    "dusk"
   ],
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "Schemes": [
    "blue",
@@ -249,16 +255,12 @@
    "surface": "Partial<Record<SurfaceStyle, ReactNode>>",
    "transition": "Partial<Record<TransitionStyle, ReactNode>>",
    "dataStyle": "Partial<Record<ChartMode, ReactNode>>",
+   "density": "Partial<Record<Density, ReactNode>>",
    "scaling": "(value: ScalingSize) => ReactNode",
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
   },
-  "StylePanelRootProps": {
-   "value": "StylePanelValue",
-   "onChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
-   "labels": "StylePanelLabels",
-   "stacked": "boolean"
-  },
+  "StylePanelRootProps": "StylePanelRoot props",
   "StylePanelRowLabels": {
    "theme": "ReactNode",
    "shape": "ReactNode",
@@ -268,6 +270,7 @@
    "solid": "ReactNode",
    "effect": "ReactNode",
    "surface": "ReactNode",
+   "density": "ReactNode",
    "scaling": "ReactNode",
    "transition": "ReactNode",
    "dataStyle": "ReactNode",
@@ -283,38 +286,16 @@
    "scheme": "(name: string, row: StylePanelSchemeRow) => string",
    "neutral": "(name: string) => string"
   },
-  "StylePanelValue": {
-   "theme": "Theme",
-   "border": "BorderStyle",
-   "brand": "Schemes | \"custom\"",
-   "accent": "Schemes | \"custom\"",
-   "neutral": "NeutralColor | \"custom\"",
-   "solid": "SolidType",
-   "solidStyle": "SolidStyle",
-   "surface": "SurfaceStyle",
-   "scaling": "ScalingSize",
-   "transition": "TransitionStyle",
-   "bodySize": "BodySize",
-   "bodyLineHeight": "BodyLineHeight",
-   "chartMode": "ChartMode",
-   "brandSeed": "string",
-   "accentSeed": "string"
-  },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
    "color": "{ section?: boolean; brand?: boolean; accent?: boolean; neutral?: boolean }",
    "solidStyle": "{ section?: boolean; solid?: boolean; effect?: boolean }",
    "bodyText": "{ section?: boolean; size?: boolean; lineHeight?: boolean }",
-   "advanced": "{ section?: boolean; surface?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
+   "advanced": "{ section?: boolean; surface?: boolean; density?: boolean; scaling?: boolean; dataStyle?: boolean; transition?: boolean; }"
   },
   "SurfaceStyle": [
    "filled",
    "translucent"
-  ],
-  "Theme": [
-   "dark",
-   "light",
-   "system"
   ],
   "ThemeSwitcherLabels": {
    "system": "string",

@@ -1,0 +1,20 @@
+{
+ "name": "User",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An avatar with a name, an optional tag and a subline, as in a list of people.",
+ "mixins": [],
+ "props": {
+  "name": "string",
+  "children": "ReactNode",
+  "subline": "ReactNode",
+  "tagProps": "TagProps = {}",
+  "loading": "boolean = false",
+  "avatarProps": "AvatarProps = {}",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "AvatarProps": "Avatar props",
+  "TagProps": "Tag props"
+ }
+}

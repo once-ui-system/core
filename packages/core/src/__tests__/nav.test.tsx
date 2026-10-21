@@ -5,6 +5,7 @@ import { Nav, NavSection } from "../components/Nav";
 import { NavGroup } from "../components/NavGroup";
 import { NavItem } from "../components/NavItem";
 import { LayoutProvider } from "../contexts/LayoutProvider";
+import { ThemeProvider } from "../contexts/ThemeProvider";
 import { selectNavHref } from "../utils/navMatch";
 
 const wrap = ({ children }: { children: React.ReactNode }) => (
@@ -75,15 +76,15 @@ describe("NavGroup", () => {
   });
 
   it("hands the open state over when controlled", async () => {
-    const onToggle = vi.fn();
+    const onOpenChange = vi.fn();
     render(
-      <NavGroup label="Settings" open={false} onToggle={onToggle}>
+      <NavGroup label="Settings" open={false} onOpenChange={onOpenChange}>
         <NavItem href="/settings/billing" label="Billing" />
       </NavGroup>,
       { wrapper: wrap },
     );
     await userEvent.click(screen.getByText("Settings"));
-    expect(onToggle).toHaveBeenCalledOnce();
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(true);
   });
 });
 
@@ -113,6 +114,49 @@ describe("Nav", () => {
     expect(link("Alpha").className).toMatch(/_m_/);
     expect((screen.getByText("Alpha").parentElement as HTMLElement).className).toMatch(
       /font-default font-s/,
+    );
+  });
+
+  // One density scale: a Nav with no density of its own takes the theme's
+  // (ThemeProvider's `density`, the config's `style.density`), and one that
+  // sets it keeps its own.
+  it("follows the theme's density, and an explicit density wins", () => {
+    const themed = ({ children }: { children: React.ReactNode }) => (
+      <LayoutProvider>
+        <ThemeProvider density="compact">{children}</ThemeProvider>
+      </LayoutProvider>
+    );
+    const { unmount } = render(
+      <Nav aria-label="Follows">
+        <NavItem href="/a" label="Alpha" />
+      </Nav>,
+      { wrapper: themed },
+    );
+    expect(screen.getByRole("navigation", { name: "Follows" }).getAttribute("data-density")).toBe(
+      "compact",
+    );
+    expect(link("Alpha").className).toMatch(/_m_/);
+    unmount();
+    render(
+      <Nav aria-label="Own" density="spacious">
+        <NavItem href="/b" label="Beta" />
+      </Nav>,
+      { wrapper: themed },
+    );
+    expect(screen.getByRole("navigation", { name: "Own" }).getAttribute("data-density")).toBe(
+      "spacious",
+    );
+  });
+
+  it("is normal with no theme around it", () => {
+    render(
+      <Nav aria-label="Bare">
+        <NavItem href="/a" label="Alpha" />
+      </Nav>,
+      { wrapper: wrap },
+    );
+    expect(screen.getByRole("navigation", { name: "Bare" }).getAttribute("data-density")).toBe(
+      "normal",
     );
   });
 

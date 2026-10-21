@@ -85,7 +85,7 @@ describe("RadialGauge", () => {
   });
 
   it("colours lit ticks along the hue range", () => {
-    const { container } = render(<RadialGauge value={100} hue="danger" line={{ count: 2 }} />, {
+    const { container } = render(<RadialGauge value={100} tone="danger" line={{ count: 2 }} />, {
       wrapper,
     });
     const [first, last] = ticks(container);

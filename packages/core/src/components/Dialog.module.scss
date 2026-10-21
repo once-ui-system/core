@@ -35,6 +35,17 @@
     }
 }
 
+/* FocusTrap's box inside the panel: the column the header, the scrolling
+   section and the footer stack in, as the panel itself did before. */
+.trap {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    outline: none;
+}
+
 /* The overlay's `padding="l"`, pushed out to the safe areas where they are
    wider. Doubled to win over the padding utility on the same element. */
 .overlay.overlay {
@@ -43,4 +54,19 @@
         max(var(--responsive-space-l), var(--safe-area-right, 0px))
         max(var(--responsive-space-l), var(--safe-area-bottom, 0px))
         max(var(--responsive-space-l), var(--safe-area-left, 0px));
+}
+
+/* `variant="sheet"` (2.x Modal): the overlay's `paddingX="l"` and
+   `paddingTop="xl"`, kept clear of the notch and a landscape phone's side
+   insets. Doubled to win over the padding utilities on the same element. */
+.sheetOverlay.sheetOverlay {
+    padding-top: calc(var(--responsive-space-xl) + var(--safe-area-top, 0px));
+    padding-left: max(var(--responsive-space-l), var(--safe-area-left, 0px));
+    padding-right: max(var(--responsive-space-l), var(--safe-area-right, 0px));
+}
+
+/* The sheet runs to the bottom edge, so its last line scrolls clear of the
+   home indicator. */
+.sheetContent.sheetContent {
+    padding-bottom: calc(var(--responsive-space-l) + var(--safe-area-bottom, 0px));
 }

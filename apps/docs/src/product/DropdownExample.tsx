@@ -1,28 +1,17 @@
 "use client";
 
+import { Column, Icon, Line, Option } from "@once-ui-system/core";
 import React, { useState } from "react";
-import { 
-  Dropdown,
-  Option,
-  Icon,
-  Line,
-} from "@once-ui-system/core";
 
 export function BasicRawDropdown() {
   const [selected, setSelected] = useState("");
-  
+
   const handleSelect = (value: string) => {
     setSelected(value);
   };
-  
+
   return (
-    <Dropdown
-      aria-label="Options"
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="4"
-      radius="m-4"
-    >
+    <Column border="neutral-medium" background="surface" gap="2" padding="4" radius="m-4">
       <Option
         label="Option 1"
         value="option1"
@@ -41,25 +30,19 @@ export function BasicRawDropdown() {
         selected={selected === "option3"}
         onClick={handleSelect}
       />
-    </Dropdown>
+    </Column>
   );
 }
 
 export function IconsRawDropdown() {
   const [selected, setSelected] = useState("edit"); // Pre-select the Edit option
-  
+
   const handleSelect = (value: string) => {
     setSelected(value);
   };
-  
+
   return (
-    <Dropdown
-      aria-label="Options"
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="8"
-      radius="m-8"
-    >
+    <Column border="neutral-medium" background="surface" gap="2" padding="8" radius="m-8">
       <Option
         label="Edit"
         value="edit"
@@ -83,25 +66,19 @@ export function IconsRawDropdown() {
         selected={selected === "delete"}
         onClick={handleSelect}
       />
-    </Dropdown>
+    </Column>
   );
 }
 
 export function DescriptionRawDropdown() {
   const [selected, setSelected] = useState("apple"); // Pre-select Apple option
-  
+
   const handleSelect = (value: string) => {
     setSelected(value);
   };
-  
+
   return (
-    <Dropdown
-      aria-label="Options"
-      selectedOption={selected}
-      onSelect={handleSelect}
-      padding="8"
-      radius="m-8"
-    >
+    <Column border="neutral-medium" background="surface" gap="2" padding="8" radius="m-8">
       <Option
         label="Apple"
         value="apple"
@@ -123,46 +100,34 @@ export function DescriptionRawDropdown() {
         selected={selected === "carrot"}
         onClick={handleSelect}
       />
-    </Dropdown>
+    </Column>
   );
 }
 
 export function CustomStyledRawDropdown() {
   const [selected, setSelected] = useState("medium"); // Pre-select Medium option
-  
+
   const handleSelect = (value: string) => {
     setSelected(value);
   };
-  
+
   return (
-    <Dropdown
-      aria-label="Options"
-      selectedOption={selected}
-      onSelect={handleSelect}
+    <Column
+      gap="2"
       radius="m-8"
       border="brand-alpha-medium"
       background="brand-alpha-weak"
       shadow="xl"
       padding="8"
     >
-      <Option
-        label="Small"
-        value="small"
-        selected={selected === "small"}
-        onClick={handleSelect}
-      />
+      <Option label="Small" value="small" selected={selected === "small"} onClick={handleSelect} />
       <Option
         label="Medium"
         value="medium"
         selected={selected === "medium"}
         onClick={handleSelect}
       />
-      <Option
-        label="Large"
-        value="large"
-        selected={selected === "large"}
-        onClick={handleSelect}
-      />
-    </Dropdown>
+      <Option label="Large" value="large" selected={selected === "large"} onClick={handleSelect} />
+    </Column>
   );
 }

@@ -1,16 +1,18 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.5.0",
+  "version": "3.0.0-beta.0",
   "publishConfig": {
     "access": "public"
   },
   "files": [
     "dist",
     "ai",
+    "!ai/catalog.seed.json",
+    "!ai/eval-tasks.md",
     "agent",
     "AGENTS.md",
-    "scripts/init-agent.js",
-    "scripts/validate-ai-code.js"
+    "scripts/init-agent.cjs",
+    "scripts/validate-ai-code.cjs"
   ],
   "description": "The open-source, agentic design system for React",
   "keywords": [
@@ -43,87 +45,37 @@
       "./ai/catalog.json"
     ],
     "tasks": "./ai/tasks/index.json",
-    "validate": "./scripts/validate-ai-code.js",
-    "initAgent": "./scripts/init-agent.js",
+    "validate": "./scripts/validate-ai-code.cjs",
+    "initAgent": "./scripts/init-agent.cjs",
     "docs": "https://docs.once-ui.com/once-ui/ai-coding"
   },
+  "type": "module",
   "bin": {
-    "once-ui-init-agent": "scripts/init-agent.js",
-    "once-ui-validate-ai-code": "scripts/validate-ai-code.js"
+    "once-ui-init-agent": "scripts/init-agent.cjs",
+    "once-ui-validate-ai-code": "scripts/validate-ai-code.cjs"
   },
   "sideEffects": [
-    "*.css",
-    "*.scss"
+    "*.css"
   ],
-  "main": "dist/index.js",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "require": "./dist/index.js"
-    },
-    "./components": {
-      "types": "./dist/components/index.d.ts",
-      "import": "./dist/components/index.js",
-      "require": "./dist/components/index.js"
-    },
-    "./components/*": {
-      "types": "./dist/components/*.d.ts",
-      "import": "./dist/components/*.js",
-      "require": "./dist/components/*.js"
-    },
-    "./contexts": {
-      "types": "./dist/contexts/index.d.ts",
-      "import": "./dist/contexts/index.js",
-      "require": "./dist/contexts/index.js"
-    },
-    "./modules": {
-      "types": "./dist/modules/index.d.ts",
-      "import": "./dist/modules/index.js",
-      "require": "./dist/modules/index.js"
-    },
-    "./icons": {
-      "types": "./dist/icons.d.ts",
-      "import": "./dist/icons.js",
-      "require": "./dist/icons.js"
-    },
-    "./types": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/types.js",
-      "require": "./dist/types.js"
-    },
-    "./interfaces": {
-      "types": "./dist/interfaces.d.ts",
-      "import": "./dist/interfaces.js",
-      "require": "./dist/interfaces.js"
+      "default": "./dist/index.js"
     },
     "./css/styles.css": "./dist/css/styles.css",
     "./css/tokens.css": "./dist/css/tokens.css",
     "./tokens.json": "./dist/tokens.json",
-    "./utils": {
-      "types": "./dist/utils/index.d.ts",
-      "import": "./dist/utils/index.js",
-      "require": "./dist/utils/index.js"
-    },
     "./config": {
       "types": "./dist/config.d.ts",
-      "import": "./dist/config.js",
-      "require": "./dist/config.js"
-    },
-    "./hooks": {
-      "types": "./dist/hooks/index.d.ts",
-      "import": "./dist/hooks/index.js",
-      "require": "./dist/hooks/index.js"
+      "default": "./dist/config.js"
     },
     "./server": {
       "types": "./dist/server/index.d.ts",
-      "import": "./dist/server/index.js",
-      "require": "./dist/server/index.js"
+      "default": "./dist/server/index.js"
     },
     "./next": {
       "types": "./dist/next/index.d.ts",
-      "import": "./dist/next/index.js",
-      "require": "./dist/next/index.js"
+      "default": "./dist/next/index.js"
     },
     "./ai/manifest.json": "./ai/manifest.json",
     "./ai/spec.json": "./ai/spec.json",
@@ -143,32 +95,32 @@
     "./AGENTS.md": "./AGENTS.md",
     "./data": {
       "types": "./dist/modules/data/index.d.ts",
-      "import": "./dist/modules/data/index.js",
-      "require": "./dist/modules/data/index.js"
+      "default": "./dist/modules/data/index.js"
     },
     "./code": {
       "types": "./dist/modules/code/index.d.ts",
-      "import": "./dist/modules/code/index.js",
-      "require": "./dist/modules/code/index.js"
+      "default": "./dist/modules/code/index.js"
+    },
+    "./emoji": {
+      "types": "./dist/modules/emoji/index.d.ts",
+      "default": "./dist/modules/emoji/index.js"
     },
     "./media": {
       "types": "./dist/modules/media/index.d.ts",
-      "import": "./dist/modules/media/index.js",
-      "require": "./dist/modules/media/index.js"
+      "default": "./dist/modules/media/index.js"
     },
     "./mdx": {
       "types": "./dist/modules/mdx/index.d.ts",
-      "import": "./dist/modules/mdx/index.js",
-      "require": "./dist/modules/mdx/index.js"
+      "default": "./dist/modules/mdx/index.js"
     },
     "./package.json": "./package.json"
   },
   "scripts": {
     "build": "pnpm clean && pnpm sync-foundations && pnpm generate-emoji-data && pnpm generate-ai-spec && tsc --project tsconfig.build.json && pnpm copy-files && pnpm build:css && pnpm build:css-modules",
-    "sync-foundations": "node scripts/sync-foundations.js scss",
-    "build:css": "node scripts/sync-foundations.js css",
-    "build:css-modules": "node scripts/compile-css-modules.js",
-    "copy-files": "node scripts/copy-files.js",
+    "sync-foundations": "node scripts/sync-foundations.cjs scss",
+    "build:css": "node scripts/sync-foundations.cjs css",
+    "build:css-modules": "node scripts/compile-css-modules.cjs",
+    "copy-files": "node scripts/copy-files.cjs",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",
@@ -176,16 +128,16 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "test": "vitest run",
-    "check:package": "publint && attw --pack .",
+    "check:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./css/styles.css ./css/tokens.css ./AGENTS.md ./ai/rules.compact.md ./ai/rules.md ./ai/recipes.md ./ai/layouts.md",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit",
-    "dev": "tsc --watch --preserveWatchOutput",
+    "dev": "node scripts/dev.mjs",
     "prepack": "pnpm build",
-    "generate-emoji-data": "node scripts/generate-emoji-data.js",
-    "refresh-emoji-data": "node scripts/generate-emoji-data.js --refresh",
-    "generate-ai-spec": "node scripts/generate-ai-spec.js",
-    "init-agent": "node scripts/init-agent.js",
-    "validate-ai-code": "node scripts/validate-ai-code.js",
+    "generate-emoji-data": "node scripts/generate-emoji-data.cjs",
+    "refresh-emoji-data": "node scripts/generate-emoji-data.cjs --refresh",
+    "generate-ai-spec": "node scripts/generate-ai-spec.cjs",
+    "init-agent": "node scripts/init-agent.cjs",
+    "validate-ai-code": "node scripts/validate-ai-code.cjs",
     "generate-icons": "node scripts/generate-icons.mjs"
   },
   "dependencies": {
@@ -197,16 +149,12 @@
     "compressorjs": "^1.3.0",
     "next": ">=15.5",
     "prismjs": "^1.30.0",
-    "react": ">=18",
-    "react-dom": ">=18",
-    "recharts": "^3.10.1",
-    "sass": "^1.77.6"
+    "react": ">=19",
+    "react-dom": ">=19",
+    "recharts": "^3.10.1"
   },
   "peerDependenciesMeta": {
     "next": {
-      "optional": true
-    },
-    "sass": {
       "optional": true
     },
     "recharts": {
@@ -235,6 +183,7 @@
     "publint": "^0.3.23",
     "react-icons": "^5.7.0",
     "rimraf": "^6.1.3",
+    "sass": "^1.77.6",
     "typescript": "6.0.3",
     "vitest": "^4.1.10"
   },

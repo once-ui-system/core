@@ -22,13 +22,9 @@ import {
   useTheme,
   useToast,
 } from "../src";
-import { Assistant } from "./Assistant";
-import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
-import { Guests } from "./Guests";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
-import { Shell } from "./Shell";
 import { Stats } from "./Stats";
 
 /** A loyalty-card screen built only from the preview components. */
@@ -41,21 +37,21 @@ function Screen() {
     <ScrollView style={{ backgroundColor: theme.color("page-background") }}>
       <Column padding="20" gap="20">
         <Row vertical="center" gap="12">
-          <Avatar value="MC" size="l" statusIndicator={{ color: "green" }} />
+          <Avatar value="MC" size="l" statusIndicator={{ scheme: "green" }} />
           <Column flex={1} gap="2">
-            <Heading variant="heading-strong-m">Morning Coffee</Heading>
-            <Text variant="body-default-s" onBackground="neutral-weak">
+            <Heading textVariant="heading-strong-m">Morning Coffee</Heading>
+            <Text textVariant="body-default-s" onBackground="neutral-weak">
               Kazinczy utca 14
             </Text>
           </Column>
-          <Tag scheme="success" label="Open" prefixIcon="time" style={{ alignSelf: "center" }} />
-          <IconButton icon="heart" variant="tertiary" ariaLabel="Save to favourites" />
+          <Tag tone="success" label="Open" prefixIcon="time" style={{ alignSelf: "center" }} />
+          <IconButton icon="heart" variant="tertiary" aria-label="Save to favourites" />
         </Row>
 
         <Card padding="20" gap="16" shadow="m">
           <Row horizontal="between" vertical="center">
-            <Text variant="label-strong-m">Loyalty card</Text>
-            <Tag scheme="brand" size="s" label={`${stamps}/10`} />
+            <Text textVariant="label-strong-m">Loyalty card</Text>
+            <Tag tone="brand" size="s" label={`${stamps}/10`} />
           </Row>
           <Row gap="8" wrap>
             {Array.from({ length: 10 }, (_, i) => (
@@ -70,7 +66,7 @@ function Screen() {
                 border={i < stamps ? "brand-medium" : "neutral-alpha-medium"}
               >
                 <Text
-                  variant="label-strong-s"
+                  textVariant="label-strong-s"
                   onBackground={i < stamps ? "brand-strong" : "neutral-weak"}
                 >
                   {i + 1}
@@ -79,7 +75,7 @@ function Screen() {
             ))}
           </Row>
           <Line />
-          <Text variant="body-default-s" onBackground="neutral-medium">
+          <Text textVariant="body-default-s" onBackground="neutral-medium">
             Three more coffees and the next one is on us.
           </Text>
           <Row gap="8">
@@ -88,7 +84,7 @@ function Screen() {
               prefixIcon="plus"
               onPress={() => {
                 setStamps((s) => Math.min(10, s + 1));
-                addToast({ variant: "success", message: "Stamp added" });
+                addToast({ tone: "success", message: "Stamp added" });
               }}
             />
             <Button variant="secondary" label="History" suffixIcon="chevronRight" />
@@ -96,7 +92,7 @@ function Screen() {
         </Card>
 
         <Feedback
-          variant="success"
+          tone="success"
           title="Reward unlocked"
           description="Show this screen at the counter for a free pastry."
         />
@@ -116,7 +112,7 @@ function Screen() {
             label="Push notifications"
             description="When a reward is ready"
             checked={push}
-            onToggle={setPush}
+            onCheckedChange={setPush}
           />
           <Checkbox label="Email me new menu items" defaultChecked />
         </Column>
@@ -138,20 +134,7 @@ export function App({
   screen = "card",
 }: {
   theme: "light" | "dark";
-  screen?:
-    | "card"
-    | "order"
-    | "sheet"
-    | "menu"
-    | "stats"
-    | "code"
-    | "shell"
-    | "drawer"
-    | "form"
-    | "form-errors"
-    | "calendar"
-    | "table"
-    | "assistant";
+  screen?: "card" | "order" | "sheet" | "menu" | "stats" | "code";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -164,16 +147,6 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
-        ) : screen === "table" ? (
-          <Guests />
-        ) : screen === "calendar" ? (
-          <Calendar />
-        ) : screen === "form" || screen === "form-errors" ? (
-          <Booking errors={screen === "form-errors"} />
-        ) : screen === "shell" || screen === "drawer" ? (
-          <Shell drawer={screen === "drawer"} />
-        ) : screen === "assistant" ? (
-          <Assistant />
         ) : (
           <Order sheet={screen === "sheet"} />
         )}

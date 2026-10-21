@@ -96,9 +96,10 @@ function Header() {
   describe={{
     items: "The commands, each with a label, an action and optional keywords.",
     children: "The trigger that opens it. Leave it out when your own control opens the palette.",
-    inputSize: "Size of the search field.",
-    open: "Controlled open state, for opening the palette from a Button, a menu item or anywhere else.",
-    onOpenChange: "Called with the next open state when ⌘K, the trigger, Escape, an option or a route change opens or closes the palette.",
+    size: "Size of the search field.",
+    open: "Open or not, controlled, for opening the palette from a Button, a menu item or anywhere else. Leave it out and Kbar keeps its own state.",
+    defaultOpen: "The starting state when `open` is left out.",
+    onOpenChange: "Called with the state Kbar moves to: on ⌘K, the trigger, Escape, an option and a route change.",
   }}
   content={[
     ["children"]
@@ -130,19 +131,19 @@ function Header() {
     { id: 'home', name: 'Home', section: 'Navigation', keywords: 'home', href: '/' },
 ];
 
-<Kbar inputSize="m" items={items}>
+<Kbar size="m" items={items}>
     <Button>Open</Button>
 </Kbar>
 
-<Kbar inputSize="s" items={items}>
+<Kbar size="s" items={items}>
     <Button>Open (small)</Button>
 </Kbar>
 
-<Kbar inputSize="l" items={items}>
+<Kbar size="l" items={items}>
     <Button>Open (large)</Button>
 </Kbar>`,
       language: "tsx",
-      label: "inputSize"
+      label: "size"
     }
   ]}
 />

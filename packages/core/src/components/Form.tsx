@@ -1,11 +1,11 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef } from "react";
-import type { FieldSize, GridSize, SpacingToken } from "../types";
+import React from "react";
+import type { FieldSize, GridSize, SpacingToken } from "../types.js";
 import styles from "./Form.module.scss";
-import { FormFieldContext, FormStatusContext } from "./FormContext";
-import { Grid } from "./Grid";
+import { FormFieldContext, FormStatusContext } from "./FormContext.js";
+import { Grid } from "./Grid.js";
 
 /**
  * Form — spacing density and grouping for a set of fields.
@@ -207,186 +207,183 @@ function resolveColumns(columns: FormColumns | undefined): {
 /** `corner-tl` at the base, `m-corner-tl` inside the `m` media query. */
 const scoped = (bp: Breakpoint | undefined, name: string) => styles[bp ? `${bp}-${name}` : name];
 
-const Form = forwardRef<HTMLDivElement, FormProps>(
-  (
-    {
-      density = "tight",
-      columns,
-      size,
-      as = "div",
-      onSubmit,
-      pending,
-      className,
-      style,
-      children,
-      ...rest
-    },
-    ref,
-  ) => {
-    // A nested `Form` — the grid inside a `Fieldset` — inherits the outer
-    // form's size rather than resetting it to nothing.
-    const inheritedSize = React.useContext(FormFieldContext).size;
-    const resolvedSize = size ?? inheritedSize;
+const Form = ({
+  ref,
+  density = "tight",
+  columns,
+  size,
+  as = "div",
+  onSubmit,
+  pending,
+  className,
+  style,
+  children,
+  ...rest
+}: FormProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  // A nested `Form` (the grid inside a `Fieldset`) inherits the outer
+  // form's size rather than resetting it to nothing.
+  const inheritedSize = React.useContext(FormFieldContext).size;
+  const resolvedSize = size ?? inheritedSize;
 
-    // Counts submits in flight rather than holding a boolean, so a second
-    // submit that settles first does not clear the first one's pending state.
-    const [inFlight, setInFlight] = React.useState(0);
-    const mounted = React.useRef(true);
-    React.useEffect(() => {
-      mounted.current = true;
-      return () => {
-        mounted.current = false;
-      };
-    }, []);
-
-    const isPending = pending ?? inFlight > 0;
-    // Only a form that can submit, or one told it is pending, says anything
-    // about submitting. A layout-only `Form` inside a `Fieldset` must not
-    // provide `pending: false` over the real form around it.
-    const providesStatus = as === "form" || pending !== undefined;
-    const status = React.useMemo(() => ({ pending: isPending }), [isPending]);
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-      if (!onSubmit) return;
-      // A submit that started while one is still running — Enter in a field,
-      // a `requestSubmit()` — is dropped rather than sent twice.
-      if (isPending) {
-        event.preventDefault();
-        return;
-      }
-      const result = onSubmit(event);
-      if (!result || typeof (result as Promise<unknown>).then !== "function") return;
-      setInFlight((count) => count + 1);
-      const settle = () => {
-        if (mounted.current) setInFlight((count) => Math.max(0, count - 1));
-      };
-      // The caller's promise is theirs to handle; a rejection still ends the
-      // pending state, and is passed on rather than swallowed.
-      (result as Promise<unknown>).then(settle, (error: unknown) => {
-        settle();
-        throw error;
-      });
+  // Counts submits in flight rather than holding a boolean, so a second
+  // submit that settles first does not clear the first one's pending state.
+  const [inFlight, setInFlight] = React.useState(0);
+  const mounted = React.useRef(true);
+  React.useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
     };
-    // `toArray` drops the `null`, `undefined` and `false` a conditionally
-    // rendered field leaves behind, so everything below is computed over the
-    // fields that actually rendered — which is the whole point.
-    const items = React.Children.toArray(children).filter(React.isValidElement);
+  }, []);
 
-    const spans = items.map((child) => {
-      const span = (child.props as { span?: number }).span;
-      return typeof span === "number" && Number.isFinite(span) ? span : 1;
+  const isPending = pending ?? inFlight > 0;
+  // Only a form that can submit, or one told it is pending, says anything
+  // about submitting. A layout-only `Form` inside a `Fieldset` must not
+  // provide `pending: false` over the real form around it.
+  const providesStatus = as === "form" || pending !== undefined;
+  const status = React.useMemo(() => ({ pending: isPending }), [isPending]);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    if (!onSubmit) return;
+    // A submit that started while one is still running (Enter in a field,
+    // a `requestSubmit()`) is dropped rather than sent twice.
+    if (isPending) {
+      event.preventDefault();
+      return;
+    }
+    const result = onSubmit(event);
+    if (!result || typeof (result as Promise<unknown>).then !== "function") return;
+    setInFlight((count) => count + 1);
+    const settle = () => {
+      if (mounted.current) setInFlight((count) => Math.max(0, count - 1));
+    };
+    // The caller's promise is theirs to handle; a rejection still ends the
+    // pending state, and is passed on rather than swallowed.
+    (result as Promise<unknown>).then(settle, (error: unknown) => {
+      settle();
+      throw error;
     });
+  };
 
-    const fieldDefaults = React.useMemo(() => ({ size: resolvedSize }), [resolvedSize]);
+  // `toArray` drops the `null`, `undefined` and `false` a conditionally
+  // rendered field leaves behind, so everything below is computed over the
+  // fields that actually rendered — which is the whole point.
+  const items = React.Children.toArray(children).filter(React.isValidElement);
 
-    const { base, perBreakpoint } = resolveColumns(columns);
-    const stacked = density === "stacked";
-    const responsive = perBreakpoint !== undefined;
+  const spans = items.map((child) => {
+    const span = (child.props as { span?: number }).span;
+    return typeof span === "number" && Number.isFinite(span) ? span : 1;
+  });
 
-    const baseGeometry = geometry(place(spans, base), base);
+  const fieldDefaults = React.useMemo(() => ({ size: resolvedSize }), [resolvedSize]);
 
-    // Every breakpoint gets a full set of classes, not just the ones whose
-    // column count differs. A cell keeps its base classes at all widths, so a
-    // breakpoint that places it differently must be able to state the whole
-    // answer — reset included — rather than add to a stale one.
-    const breakpointGeometry: Partial<Record<Breakpoint, CellGeometry[]>> = {};
-    if (perBreakpoint) {
-      for (const bp of BREAKPOINTS) {
-        const count = perBreakpoint[bp];
-        if (count === undefined) continue;
-        breakpointGeometry[bp] = geometry(place(spans, count), count);
+  const { base, perBreakpoint } = resolveColumns(columns);
+  const stacked = density === "stacked";
+  const responsive = perBreakpoint !== undefined;
+
+  const baseGeometry = geometry(place(spans, base), base);
+
+  // Every breakpoint gets a full set of classes, not just the ones whose
+  // column count differs. A cell keeps its base classes at all widths, so a
+  // breakpoint that places it differently must be able to state the whole
+  // answer — reset included — rather than add to a stale one.
+  const breakpointGeometry: Partial<Record<Breakpoint, CellGeometry[]>> = {};
+  if (perBreakpoint) {
+    for (const bp of BREAKPOINTS) {
+      const count = perBreakpoint[bp];
+      if (count === undefined) continue;
+      breakpointGeometry[bp] = geometry(place(spans, count), count);
+    }
+  }
+
+  const cells = items.map((child, index) => {
+    const cellClasses: (string | undefined)[] = [styles.cell];
+
+    const apply = (bp: Breakpoint | undefined, geo: CellGeometry) => {
+      if (geo.span > 1) cellClasses.push(scoped(bp, `span-${geo.span}`));
+      if (!stacked) return;
+      if (geo.fuseTop) cellClasses.push(scoped(bp, "fuse-top"));
+      if (geo.fuseLeft) cellClasses.push(scoped(bp, "fuse-left"));
+      for (const corner of geo.corners) {
+        cellClasses.push(scoped(bp, `corner-${corner}`));
       }
+    };
+
+    // With a responsive column map, every viewport is already covered by one
+    // of the five breakpoint queries — `xl` is a min-width, `l` a max-width,
+    // and the two meet — so base classes would only be a wider answer left
+    // lying around for a narrower one to undo.
+    if (responsive) {
+      for (const bp of BREAKPOINTS) {
+        const geo = breakpointGeometry[bp];
+        if (!geo) continue;
+        cellClasses.push(scoped(bp, "reset"));
+        apply(bp, geo[index]);
+      }
+    } else {
+      apply(undefined, baseGeometry[index]);
     }
 
-    const cells = items.map((child, index) => {
-      const cellClasses: (string | undefined)[] = [styles.cell];
-
-      const apply = (bp: Breakpoint | undefined, geo: CellGeometry) => {
-        if (geo.span > 1) cellClasses.push(scoped(bp, `span-${geo.span}`));
-        if (!stacked) return;
-        if (geo.fuseTop) cellClasses.push(scoped(bp, "fuse-top"));
-        if (geo.fuseLeft) cellClasses.push(scoped(bp, "fuse-left"));
-        for (const corner of geo.corners) {
-          cellClasses.push(scoped(bp, `corner-${corner}`));
-        }
-      };
-
-      // With a responsive column map, every viewport is already covered by one
-      // of the five breakpoint queries — `xl` is a min-width, `l` a max-width,
-      // and the two meet — so base classes would only be a wider answer left
-      // lying around for a narrower one to undo.
-      if (responsive) {
-        for (const bp of BREAKPOINTS) {
-          const geo = breakpointGeometry[bp];
-          if (!geo) continue;
-          cellClasses.push(scoped(bp, "reset"));
-          apply(bp, geo[index]);
-        }
-      } else {
-        apply(undefined, baseGeometry[index]);
-      }
-
-      return (
-        <div
-          key={child.key ?? index}
-          className={classNames(cellClasses)}
-          data-testid={`form-cell-${index}`}
-        >
-          {/* `span` is a layout instruction addressed to Form, not a field
-              prop — strip it so it never reaches the DOM. */}
-          {React.cloneElement(child as React.ReactElement<{ span?: number }>, {
-            span: undefined,
-          })}
-        </div>
-      );
-    });
-
-    // `Grid`'s own `xl`/`l`/`m`/`s`/`xs` props would do this, but they switch it
-    // to `ClientGrid`, which reads `useLayout` and so requires a
-    // `LayoutProvider` above it. Nothing here is dynamic — foundations already
-    // ships `.m-columns-2` and friends — so the classes go on directly and
-    // Form keeps working anywhere.
-    const columnClasses = perBreakpoint
-      ? BREAKPOINTS.filter((bp) => perBreakpoint[bp] !== undefined).map(
-          (bp) => `${bp}-columns-${perBreakpoint[bp]}`,
-        )
-      : [];
-
     return (
-      <Grid
-        ref={ref}
-        as={as}
-        // Only a real `<form>` has a submit event; handing one to a `<div>`
-        // would just be a dead listener.
-        {...(as === "form" && onSubmit
-          ? { onSubmit: handleSubmit as unknown as React.FormEventHandler<HTMLDivElement> }
-          : {})}
-        aria-busy={providesStatus && isPending ? true : undefined}
-        fillWidth
-        columns={String(base) as GridSize}
-        gap={DENSITY_GAP[density]}
-        className={classNames(
-          styles.form,
-          stacked && styles.stacked,
-          resolvedSize === "xxs" && styles.xxs,
-          columnClasses,
-          className,
-        )}
-        style={style}
-        data-density={density}
-        {...rest}
+      <div
+        key={child.key ?? index}
+        className={classNames(cellClasses)}
+        data-testid={`form-cell-${index}`}
       >
-        <FormFieldContext.Provider value={fieldDefaults}>
-          {providesStatus ? (
-            <FormStatusContext.Provider value={status}>{cells}</FormStatusContext.Provider>
-          ) : (
-            cells
-          )}
-        </FormFieldContext.Provider>
-      </Grid>
+        {/* `span` is a layout instruction addressed to Form, not a field
+              prop — strip it so it never reaches the DOM. */}
+        {React.cloneElement(child as React.ReactElement<{ span?: number }>, {
+          span: undefined,
+        })}
+      </div>
     );
-  },
-);
+  });
+
+  // `Grid`'s own `xl`/`l`/`m`/`s`/`xs` props would do this, but they switch it
+  // to `ClientGrid`, which reads `useLayout` and so requires a
+  // `LayoutProvider` above it. Nothing here is dynamic — foundations already
+  // ships `.m-columns-2` and friends — so the classes go on directly and
+  // Form keeps working anywhere.
+  const columnClasses = perBreakpoint
+    ? BREAKPOINTS.filter((bp) => perBreakpoint[bp] !== undefined).map(
+        (bp) => `${bp}-columns-${perBreakpoint[bp]}`,
+      )
+    : [];
+
+  return (
+    <Grid
+      ref={ref}
+      as={as}
+      // Only a real `<form>` has a submit event; handing one to a `<div>`
+      // would just be a dead listener.
+      {...(as === "form" && onSubmit
+        ? { onSubmit: handleSubmit as unknown as React.FormEventHandler<HTMLDivElement> }
+        : {})}
+      aria-busy={providesStatus && isPending ? true : undefined}
+      fillWidth
+      columns={String(base) as GridSize}
+      gap={DENSITY_GAP[density]}
+      className={classNames(
+        styles.form,
+        stacked && styles.stacked,
+        resolvedSize === "xxs" && styles.xxs,
+        columnClasses,
+        className,
+      )}
+      style={style}
+      data-density={density}
+      {...rest}
+    >
+      <FormFieldContext.Provider value={fieldDefaults}>
+        {providesStatus ? (
+          <FormStatusContext.Provider value={status}>{cells}</FormStatusContext.Provider>
+        ) : (
+          cells
+        )}
+      </FormFieldContext.Provider>
+    </Grid>
+  );
+};
 
 Form.displayName = "Form";
 

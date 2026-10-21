@@ -46,7 +46,7 @@ describe("Avatar: accessible name", () => {
   });
 
   it("includes the status in the name of the avatar", async () => {
-    const { container } = render(<Avatar value="LT" statusIndicator={{ color: "green" }} />, {
+    const { container } = render(<Avatar value="LT" statusIndicator={{ scheme: "green" }} />, {
       wrapper,
     });
     expect(
@@ -57,8 +57,8 @@ describe("Avatar: accessible name", () => {
 
   // The status dot is a StatusIndicator; its colour type named only four of
   // the StatusIndicator's, so "orange" failed strict tsc (2.1.0 claim run).
-  it("takes any StatusIndicator colour, and draws that colour's dot", async () => {
-    const { container } = render(<Avatar value="LT" statusIndicator={{ color: "orange" }} />, {
+  it("takes any StatusIndicator hue, and draws that hue's dot", async () => {
+    const { container } = render(<Avatar value="LT" statusIndicator={{ scheme: "orange" }} />, {
       wrapper,
     });
     expect(
@@ -66,6 +66,13 @@ describe("Avatar: accessible name", () => {
     ).toBeInTheDocument();
     expect(container.querySelector('[class*="orange"]')).not.toBeNull();
     await expectNoAxeViolations(container);
+  });
+
+  it("takes a theme role as tone", () => {
+    render(<Avatar value="LT" statusIndicator={{ tone: "success" }} />, { wrapper });
+    expect(
+      screen.getByRole("img", { name: "Avatar with initials LT, status: success" }),
+    ).toBeInTheDocument();
   });
 });
 
@@ -80,14 +87,14 @@ describe("Avatar: states and sizes", () => {
   });
 
   it("sizes a numeric avatar in rem", () => {
-    render(<Avatar value="A" size={4} />, { wrapper });
+    render(<Avatar value="A" size="4rem" />, { wrapper });
     const img = screen.getByRole("img", { name: /A/ });
     expect(img.style.width).toBe("4rem");
     expect(img.style.minHeight).toBe("4rem");
   });
 
   it("keeps the caller's style next to a numeric size", () => {
-    render(<Avatar value="A" size={4} style={{ opacity: 0.5 }} />, { wrapper });
+    render(<Avatar value="A" size="4rem" style={{ opacity: 0.5 }} />, { wrapper });
     const img = screen.getByRole("img", { name: /A/ });
     expect(img.style.opacity).toBe("0.5");
     expect(img.style.width).toBe("4rem");

@@ -14,8 +14,9 @@ import {
   tokenizeLines,
 } from "./codeTokens";
 import { Flex, type FlexProps, flexStyle, Row } from "./Flex";
-import type { IconName } from "./Icon";
+import { Icon, type IconName } from "./Icon";
 import { IconButton } from "./IconButton";
+import type { Length } from "./spacing";
 import { Text } from "./Text";
 import { ToggleButton } from "./ToggleButton";
 
@@ -50,8 +51,8 @@ export interface CodeBlockProps extends FlexProps {
   /** No header: the copy button floats over the code. */
   compact?: boolean;
   lineNumbers?: boolean;
-  /** The code's maximum height, in rem as in core; it scrolls past it. */
-  codeHeight?: number;
+  /** The code's maximum height: a number is points, as core 3.0's px; it scrolls past it. */
+  codeHeight?: number | Length;
   /** With `isCollapsible`, the lines shown before "View code". */
   maxLines?: number;
   isCollapsible?: boolean;
@@ -222,11 +223,11 @@ export function CodeBlock({
     <IconButton
       size="m"
       variant="tertiary"
-      color="neutral-weak"
-      icon={copied ? "check" : "clipboard"}
-      ariaLabel={copied ? "Copied" : "Copy code"}
+      aria-label={copied ? "Copied" : "Copy code"}
       onPress={copy}
-    />
+    >
+      <Icon name={copied ? "check" : "clipboard"} size="s" onBackground="neutral-weak" />
+    </IconButton>
   );
 
   const header = !compact && codes.length > 0 && (
@@ -259,7 +260,7 @@ export function CodeBlock({
               }}
             >
               <Text
-                variant="label-default-s"
+                textVariant="label-default-s"
                 onBackground={selected === index ? "neutral-strong" : "neutral-weak"}
               >
                 {code.label}
@@ -269,7 +270,7 @@ export function CodeBlock({
         </ScrollView>
       ) : (
         <Text
-          variant="label-default-s"
+          textVariant="label-default-s"
           paddingY="12"
           paddingX="16"
           style={{ flexShrink: 1 }}
@@ -283,11 +284,11 @@ export function CodeBlock({
           <IconButton
             size="m"
             variant="tertiary"
-            color="neutral-weak"
-            icon="refresh"
-            ariaLabel="Reload"
+            aria-label="Reload"
             onPress={() => setRefreshKey((k) => k + 1)}
-          />
+          >
+            <Icon name="refresh" size="s" onBackground="neutral-weak" />
+          </IconButton>
         )}
         {copyButton && copyIcon}
       </Row>
@@ -346,7 +347,7 @@ function CodeLines({
   raw: string;
   highlight?: string;
   lineNumbers: boolean;
-  codeHeight?: number;
+  codeHeight?: number | Length;
   collapsedLines?: number;
   onExpand: () => void;
   divider: boolean;

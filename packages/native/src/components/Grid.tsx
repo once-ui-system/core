@@ -11,6 +11,7 @@ import {
   wrapText,
 } from "./Flex";
 import type { RefComponent, ViewRef } from "./refs";
+import type { Length } from "./spacing";
 
 /** Core's `GridSize`: one to twelve, as a number or a string. */
 export type GridSize =
@@ -45,17 +46,18 @@ type FlexOnly = "direction" | "horizontal" | "vertical" | "center" | "wrap";
 /** The breakpoint keys of core's `GridBreakpointProps` that have a native equivalent. */
 export interface GridBreakpointProps extends Omit<FlexBreakpointProps, FlexOnly> {
   columns?: GridSize;
-  minColumnWidth?: number | SpacingToken;
+  minColumnWidth?: number | SpacingToken | Length;
 }
 
 export interface GridProps extends Omit<FlexProps, FlexOnly | "xl" | "l" | "m" | "s" | "xs"> {
   /** How many equal columns. Set it per breakpoint to reflow. */
   columns?: GridSize;
   /**
-   * As many columns as fit, each at least this wide (a spacing token, or a
-   * number of rem). Takes precedence over `columns`, as in core.
+   * As many columns as fit, each at least this wide (a spacing token, a
+   * number of points as core 3.0's px, or a `Length`). Takes precedence over
+   * `columns`, as in core.
    */
-  minColumnWidth?: number | SpacingToken;
+  minColumnWidth?: number | SpacingToken | Length;
   xl?: GridBreakpointProps;
   l?: GridBreakpointProps;
   m?: GridBreakpointProps;

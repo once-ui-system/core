@@ -6,11 +6,11 @@ import { Input, type InputProps } from "./Input";
 import type { RefComponent, TextInputRef } from "./refs";
 
 export interface NumberInputProps
-  extends Omit<InputProps, "value" | "defaultValue" | "onChange" | "suffix"> {
+  extends Omit<InputProps, "value" | "defaultValue" | "onValueChange" | "suffix"> {
   value?: number;
   /** The starting number when there is no `value`. A string is parsed. */
   defaultValue?: number | string;
-  onChange?: (value: number) => void;
+  onValueChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -36,7 +36,18 @@ export const NumberInput: RefComponent<NumberInputProps, TextInputRef> = forward
   TextInputRef,
   NumberInputProps
 >(function NumberInput(
-  { value, defaultValue, onChange, min, max, step = 1, padStart, disabled, onChangeText, ...props },
+  {
+    value,
+    defaultValue,
+    onValueChange,
+    min,
+    max,
+    step = 1,
+    padStart,
+    disabled,
+    onChangeText,
+    ...props
+  },
   ref,
 ) {
   const [localValue, setLocalValue] = useState<string>(() => {
@@ -59,7 +70,7 @@ export const NumberInput: RefComponent<NumberInputProps, TextInputRef> = forward
     setLocalValue(text);
     onChangeText?.(text);
     const number = Number.parseFloat(text);
-    if (!Number.isNaN(number)) onChange?.(number);
+    if (!Number.isNaN(number)) onValueChange?.(number);
   };
 
   const current = Number.parseFloat(localValue) || 0;
@@ -73,7 +84,7 @@ export const NumberInput: RefComponent<NumberInputProps, TextInputRef> = forward
 
   const update = (next: number) => {
     setLocalValue(format(next, padStart));
-    onChange?.(next);
+    onValueChange?.(next);
   };
 
   const negative = min === undefined || min < 0;
@@ -94,7 +105,7 @@ export const NumberInput: RefComponent<NumberInputProps, TextInputRef> = forward
             icon="minus"
             variant="tertiary"
             size="l"
-            ariaLabel="Decrement value"
+            aria-label="Decrement value"
             disabled={disabled || !canDown}
             onPress={() => update(down)}
           />
@@ -102,7 +113,7 @@ export const NumberInput: RefComponent<NumberInputProps, TextInputRef> = forward
             icon="plus"
             variant="tertiary"
             size="l"
-            ariaLabel="Increment value"
+            aria-label="Increment value"
             disabled={disabled || !canUp}
             onPress={() => update(up)}
           />

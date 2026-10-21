@@ -11,7 +11,7 @@ export interface StatusIndicatorProps extends FlexProps {
   scheme?: Schemes | "gray";
   color?: Schemes | "gray";
   /** Read out by screen readers; defaults to `"<color> status indicator"`, as in core. */
-  ariaLabel?: string;
+  "aria-label"?: string;
 }
 
 // StatusIndicator.module.scss sizes, in static spacing steps.
@@ -21,7 +21,10 @@ const SIZES = { s: "4", m: "8", l: "16" } as const;
 export const StatusIndicator: RefComponent<StatusIndicatorProps, ViewRef> = forwardRef<
   ViewRef,
   StatusIndicatorProps
->(function StatusIndicator({ size = "m", scheme, color: colorProp, ariaLabel, ...props }, ref) {
+>(function StatusIndicator(
+  { size = "m", scheme, color: colorProp, "aria-label": ariaLabel, ...props },
+  ref,
+) {
   const color = scheme ?? colorProp ?? "blue";
   const theme = useTheme();
   const { style, rest, userStyle, hidden } = flexStyle(theme, { radius: "full", ...props });

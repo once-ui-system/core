@@ -1,0 +1,39 @@
+{
+ "name": "Textarea",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An `Input` that takes several lines.",
+ "mixins": [
+  "InputProps"
+ ],
+ "reactNative": [
+  "TextInputProps"
+ ],
+ "props": {
+  "lines": "number | \"auto\" = \"auto\""
+ },
+ "resolvedMixins": {
+  "InputProps": {
+   "style": "ViewStyle",
+   "disabled": "boolean",
+   "variant": "\"default\" | \"ghost\"",
+   "size": "TShirtSizes",
+   "label": "string",
+   "error": "boolean",
+   "errorMessage": "ReactNode",
+   "description": "ReactNode",
+   "prefix": "ReactNode",
+   "suffix": "ReactNode",
+   "loading": "boolean",
+   "characterCount": "boolean",
+   "onValueChange": "(value: string) => void",
+   "inputStyle": "TextStyle",
+   "type": "InputType",
+   "reveal": "boolean"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "InputType": "\"text\" | \"password\" | \"email\" | \"tel\" | \"url\" | \"number\" | \"search\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

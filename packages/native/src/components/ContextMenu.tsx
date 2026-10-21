@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import { chainPress, MenuLayer, type Placement } from "./DropdownWrapper";
 import type { ViewRef } from "./refs";
+import type { Length } from "./spacing";
 
 export interface ContextMenuProps {
   /** What a long press opens the menu on. A pressable child keeps its own `onPress` and `onLongPress`. */
@@ -21,9 +22,9 @@ export interface ContextMenuProps {
   placement?: Placement;
   /** The region around `children` fills its container's width. The menu keeps its own. */
   fillWidth?: boolean;
-  /** In rem, as core's. Defaults to 12. */
-  minWidth?: number;
-  maxWidth?: number;
+  /** A number is points, as core 3.0's px. Defaults to `"12rem"`. */
+  minWidth?: number | Length;
+  maxWidth?: number | Length;
   /** In points, as core's. */
   minHeight?: number;
   onSelect?: (value: string) => void;
@@ -47,7 +48,7 @@ export function ContextMenu({
   dropdown,
   placement = "bottom-start",
   fillWidth = false,
-  minWidth = 12,
+  minWidth = "12rem",
   maxWidth,
   minHeight,
   onSelect,

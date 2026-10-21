@@ -33,7 +33,7 @@ Override the default shape style with the `data-border` attribute on a native HT
         shadow="m"
         fillWidth
         radius="m"
-        height={4}
+        height="4rem"
         border="neutral-alpha-medium"
       />
       <Background
@@ -43,7 +43,7 @@ Override the default shape style with the `data-border` attribute on a native HT
         shadow="m"
         fillWidth
         radius="m"
-        height={4}
+        height="4rem"
         border="neutral-alpha-medium"
       />
       <Background
@@ -53,7 +53,7 @@ Override the default shape style with the `data-border` attribute on a native HT
         shadow="m"
         fillWidth
         radius="m"
-        height={4}
+        height="4rem"
         border="neutral-alpha-medium"
       />
     </Flex>
@@ -84,7 +84,7 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
     <Flex fillWidth s={{direction: "column"}} gap="m">
       <Background
         fillWidth
-        height={4}
+        height="4rem"
         background="neutral-alpha-weak"
         lines={{display: true, color: "neutral-alpha-weak"}}
         shadow="m"
@@ -93,7 +93,7 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
       />
       <Background
         fillWidth
-        height={4}
+        height="4rem"
         background="neutral-alpha-weak"
         lines={{display: true, color: "neutral-alpha-weak"}}
         shadow="m"
@@ -102,7 +102,7 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
       />
       <Background
         fillWidth
-        height={4}
+        height="4rem"
         background="neutral-alpha-weak"
         lines={{display: true, color: "neutral-alpha-weak"}}
         shadow="m"
@@ -111,7 +111,7 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
       />
       <Background
         fillWidth
-        height={4}
+        height="4rem"
         background="neutral-alpha-weak"
         lines={{display: true, color: "neutral-alpha-weak"}}
         shadow="m"
@@ -120,7 +120,7 @@ In Once UI, we adopt the T-shirt size model for managing border radius, with val
       />
       <Background
         fillWidth
-        height={4}
+        height="4rem"
         background="neutral-alpha-weak"
         lines={{display: true, color: "neutral-alpha-weak"}}
         shadow="m"
@@ -158,7 +158,7 @@ A common challenge in border-radius systems is nesting. For nested elements to m
         <Flex fillWidth padding="4" border="neutral-strong" radius="xs-4">
           <Background
             fillWidth
-            height={4}
+            height="4rem"
             background="neutral-alpha-weak"
             lines={{display: true, color: "neutral-alpha-weak"}}
             shadow="m"
@@ -171,7 +171,7 @@ A common challenge in border-radius systems is nesting. For nested elements to m
         <Flex fillWidth padding="4" border="neutral-strong" radius="s-4">
           <Background
             fillWidth
-            height={4}
+            height="4rem"
             background="neutral-alpha-weak"
             lines={{display: true, color: "neutral-alpha-weak"}}
             shadow="m"
@@ -184,7 +184,7 @@ A common challenge in border-radius systems is nesting. For nested elements to m
         <Flex fillWidth padding="4" border="neutral-strong" radius="m-4">
           <Background
             fillWidth
-            height={4}
+            height="4rem"
             background="neutral-alpha-weak"
             lines={{display: true, color: "neutral-alpha-weak"}}
             shadow="m"
@@ -197,7 +197,7 @@ A common challenge in border-radius systems is nesting. For nested elements to m
         <Flex fillWidth padding="4" border="neutral-strong" radius="l-4">
           <Background
             fillWidth
-            height={4}
+            height="4rem"
             background="neutral-alpha-weak"
             lines={{display: true, color: "neutral-alpha-weak"}}
             shadow="m"
@@ -210,7 +210,7 @@ A common challenge in border-radius systems is nesting. For nested elements to m
         <Flex fillWidth padding="4" border="neutral-strong" radius="xl-4">
           <Background
             fillWidth
-            height={4}
+            height="4rem"
             background="neutral-alpha-weak"
             lines={{display: true, color: "neutral-alpha-weak"}}
             shadow="m"
@@ -229,17 +229,10 @@ Sets the `border-width` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-1", sortable: false },
-      { content: "Preview", key: "preview-1", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-1", sortable: false }, { header: "Preview", key: "preview-1", sortable: false }]} rows={[
       [".border-1", <Flex width="64" height="20" border="neutral-strong" radius="xs"/>],
       [".border-2", <Flex width="64" height="20" border="neutral-strong" borderWidth="2" radius="xs"/>]
-    ]
-  }}
+    ]}
 />
 
 ## Border style
@@ -248,17 +241,10 @@ Sets the `border-style` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-2", sortable: false },
-      { content: "Preview", key: "preview-2", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-2", sortable: false }, { header: "Preview", key: "preview-2", sortable: false }]} rows={[
       [".border-solid", <Flex width="64" height="20" border="neutral-strong" radius="xs"/>],
       [".border-dashed", <Flex width="64" height="20" border="neutral-strong" borderStyle="dashed" radius="xs"/>]
-    ]
-  }}
+    ]}
 />
 
 ## Border color
@@ -267,14 +253,7 @@ Sets the `border-color` property.
 
 <Table
   marginTop="16"
-  marginBottom="24"
-  data={{
-    headers: [
-      { content: "Class", key: "class-3", sortable: false },
-      { content: "Value", key: "value", sortable: false },
-      { content: <Row gap="8" key="header-icons"><Icon padding="2" name="dark" size="xs"/><Icon padding="2" name="light" size="xs"/></Row>, key: "preview", sortable: false },
-    ],
-    rows: [
+  marginBottom="24" columns={[{ header: "Class", key: "class-3", sortable: false }, { header: "Value", key: "value", sortable: false }, { header: <Row gap="8" key="header-icons"><Row fit padding="2"><Icon name="dark" size="xs"/></Row><Row fit padding="2"><Icon name="light" size="xs"/></Row></Row>, key: "preview", sortable: false }]} rows={[
       // Generate rows for each color scheme and variant combination
       ...[
         "neutral",
@@ -311,6 +290,5 @@ Sets the `border-color` property.
           </Row>
         ])
       ])
-    ]
-  }}
+    ]}
 />

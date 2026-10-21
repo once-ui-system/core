@@ -40,7 +40,7 @@ export function PriceFilter() {
 
 ## Controlled with a gap
 
-Pass `value` and `onChange` to own the range. `onChange` always gets the start first. `minDistance` is the smallest gap the thumbs keep.
+Pass `value` and `onValueChange` to own the range. `onValueChange` always gets the start first. `minDistance` is the smallest gap the thumbs keep.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -58,7 +58,7 @@ export function Hours() {
       max={24}
       minDistance={2}
       value={hours}
-      onChange={setHours}
+      onValueChange={setHours}
       showValue
       formatValue={(h) => h + ":00"}
       thumbLabels={["Opens", "Closes"]}
@@ -73,7 +73,7 @@ export function Hours() {
 ## Differences from the web
 
 - Drags go through a `PanResponder` on the track. When both thumbs sit on the same value, the first move decides which one moves, as on the web.
-- There is no `name` prop and no hidden inputs, since React Native has no forms. Read the range from `onChange`.
+- There is no `name` prop and no hidden inputs, since React Native has no forms. Read the range from `onValueChange`.
 - Screen readers move a thumb with the increment and decrement actions instead of the arrow, Page and Home/End keys.
 - `RangeSlider` does not take Flex props. Use `style` for the outer view.
 
@@ -81,9 +81,9 @@ export function Hours() {
 
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
-| `value` | `[number, number]` | | The range, when the host owns the state. Pair with `onChange`. |
+| `value` | `[number, number]` | | The range, when the host owns the state. Pair with `onValueChange`. |
 | `defaultValue` | `[number, number]` | `[min, max]` | The starting range when the slider keeps its own state. |
-| `onChange` | `(value: [number, number]) => void` | | Called with the new range, start first. |
+| `onValueChange` | `(value: [number, number]) => void` | | Called with the new range, start first. |
 | `min` | `number` | `0` | The lowest value. |
 | `max` | `number` | `100` | The highest value. |
 | `step` | `number` | `1` | Values land on multiples of this from `min`. |

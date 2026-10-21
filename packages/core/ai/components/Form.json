@@ -25,17 +25,17 @@
  "mixinsRef": [],
  "types": {
   "Breakpoint": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs"
   ],
   "FieldSize": [
+   "s",
    "xl",
    "l",
    "m",
-   "s",
    "xs",
    "xxs"
   ],

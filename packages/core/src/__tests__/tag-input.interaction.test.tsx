@@ -23,7 +23,7 @@ describe("TagInput: interaction", () => {
   it("adds and removes tags from the keyboard alone", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<TagInput id="tags" label="Tags" onChange={onChange} />, { wrapper: wrap });
+    render(<TagInput id="tags" label="Tags" onValueChange={onChange} />, { wrapper: wrap });
     await user.tab();
     expect(field()).toHaveFocus();
     await user.keyboard("react{Enter}vue,svelte{Enter}");
@@ -44,9 +44,12 @@ describe("TagInput: interaction", () => {
   it("removes the right one of two identical tags", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<TagInput id="tags" label="Tags" defaultValue={["a", "b", "a"]} onChange={onChange} />, {
-      wrapper: wrap,
-    });
+    render(
+      <TagInput id="tags" label="Tags" defaultValue={["a", "b", "a"]} onValueChange={onChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
     const removes = screen.getAllByRole("button", { name: "Remove tag a" });
     await user.click(removes[1]);
     expect(onChange).toHaveBeenCalledWith(["a", "b"]);
@@ -58,7 +61,7 @@ describe("TagInput: interaction", () => {
       const [tags, setTags] = useState<string[]>(["one"]);
       return (
         <>
-          <TagInput id="tags" label="Tags" value={tags} onChange={setTags} />
+          <TagInput id="tags" label="Tags" value={tags} onValueChange={setTags} />
           <output>{tags.join("|")}</output>
         </>
       );
@@ -76,7 +79,7 @@ describe("TagInput: interaction", () => {
     const user = userEvent.setup();
     const onKeyDown = vi.fn();
     const onChange = vi.fn();
-    render(<TagInput id="tags" label="Tags" onKeyDown={onKeyDown} onChange={onChange} />, {
+    render(<TagInput id="tags" label="Tags" onKeyDown={onKeyDown} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.type(field(), "x{Enter}");
@@ -91,7 +94,7 @@ describe("TagInput: interaction", () => {
       <TagInput
         id="tags"
         label="Tags"
-        onChange={onChange}
+        onValueChange={onChange}
         onKeyDown={(event) => {
           if (event.key === ",") event.preventDefault();
         }}

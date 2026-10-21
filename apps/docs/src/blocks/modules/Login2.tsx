@@ -3,15 +3,13 @@ import {
   Button,
   Column,
   Heading,
-  HoloFx,
   Input,
   Line,
   Logo,
-  ParticleFx,
-  PasswordInput,
   Row,
   SmartLink,
 } from "@once-ui-system/core";
+import { HoloFx, ParticleFx } from "@once-ui-system/fx";
 
 export const Login2 = () => {
   return (
@@ -23,7 +21,7 @@ export const Login2 = () => {
           left="0"
           fill
           interactive
-          speed={4}
+          speed={13.33}
           size="1"
           density={200}
           intensity={40}
@@ -45,7 +43,7 @@ export const Login2 = () => {
             gradient={{
               display: true,
               x: 0,
-              y: 125,
+              y: "125%",
               colorStart: "accent-solid-strong",
               colorEnd: "static-transparent",
             }}
@@ -53,23 +51,23 @@ export const Login2 = () => {
           <Background
             gradient={{
               display: true,
-              x: 125,
-              y: 100,
-              width: 150,
-              height: 150,
+              x: "125%",
+              y: "100%",
+              width: "150%",
+              height: "150%",
               colorStart: "brand-background-strong",
               colorEnd: "static-transparent",
             }}
           />
         </HoloFx>
         <Column fill center padding="16">
-          <Column center gap="16" padding="40" maxWidth={32} radius="xl" background="surface">
+          <Column center gap="16" padding="40" maxWidth="32rem" radius="xl" background="surface">
             <Logo
               href="/"
               size="l"
               icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
             />
-            <Heading marginTop="24" variant="display-strong-xs" align="center">
+            <Heading marginTop="24" textVariant="display-strong-xs" align="center">
               Welcome to Once UI
             </Heading>
             <Row onBackground="neutral-medium" marginBottom="24" gap="4" align="center">
@@ -101,7 +99,7 @@ export const Login2 = () => {
             </Row>
             <Column gap="-1" fillWidth>
               <Input id="email" placeholder="Email" corners="top" />
-              <PasswordInput id="password" placeholder="Password" corners="bottom" />
+              <Input id="password" placeholder="Password" corners="bottom" type="password" />
             </Column>
             <Button type="button" id="login-2" label="Log in" arrowIcon fillWidth href="#" />
           </Column>

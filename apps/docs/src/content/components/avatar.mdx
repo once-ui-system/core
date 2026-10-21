@@ -80,7 +80,7 @@ Use the `icon` prop to render an icon in the avatar.
 
 ## Sizes
 
-Use the T-shirt size model or set sizes with numbers (REM).
+Use the T-shirt size model, a number on the token scale (`40` is the `"40"` step, 2.5rem), or a CSS length such as `"4rem"`.
 
 <CodeBlock
   marginTop="16"
@@ -88,11 +88,11 @@ Use the T-shirt size model or set sizes with numbers (REM).
   preview={
     <Column fillWidth gap="24" center>
       <Row gap="16" horizontal="center" vertical="center">
-        <Avatar size={1.5} value="A" />
-        <Avatar size={2.5} value="B" />
-        <Avatar size={3.5} value="C" />
-        <Avatar size={4.5} value="D" />
-        <Avatar size={5.5} value="E" />
+        <Avatar size="1.5rem" value="A" />
+        <Avatar size="2.5rem" value="B" />
+        <Avatar size="3.5rem" value="C" />
+        <Avatar size="4.5rem" value="D" />
+        <Avatar size="5.5rem" value="E" />
       </Row>
       <Row gap="16" horizontal="center" vertical="center">
         <Avatar size="xs" value="A" />
@@ -107,11 +107,11 @@ Use the T-shirt size model or set sizes with numbers (REM).
     {
       code:
 `<Row gap="16" center>
-    <Avatar size={1.5} value="A" />
-    <Avatar size={2.5} value="B" />
-    <Avatar size={3.5} value="C" />
-    <Avatar size={4.5} value="D" />
-    <Avatar size={5.5} value="E" />
+    <Avatar size="1.5rem" value="A" />
+    <Avatar size="2.5rem" value="B" />
+    <Avatar size="3.5rem" value="C" />
+    <Avatar size="4.5rem" value="D" />
+    <Avatar size="5.5rem" value="E" />
   </Row>
   <Row gap="16" center>
     <Avatar size="xs" value="A" />
@@ -133,22 +133,22 @@ Use the T-shirt size model or set sizes with numbers (REM).
   marginBottom="24"
   preview={
     <Row gap="16" horizontal="center">
-      <Avatar value="G" statusIndicator={{ color: "green" }} />
-      <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
-      <Avatar value="O" statusIndicator={{ color: "orange" }} />
-      <Avatar value="R" statusIndicator={{ color: "red" }} />
-      <Avatar value="G" statusIndicator={{ color: "gray" }} />
+      <Avatar value="G" statusIndicator={{ scheme: "green" }} />
+      <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+      <Avatar value="O" statusIndicator={{ scheme: "orange" }} />
+      <Avatar value="R" statusIndicator={{ scheme: "red" }} />
+      <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
     </Row>
   }
   codes={[
     {
       code:
 `<Row gap="16">
-    <Avatar value="G" statusIndicator={{ color: "green" }} />
-    <Avatar value="Y" statusIndicator={{ color: "yellow" }} />
-    <Avatar value="O" statusIndicator={{ color: "orange" }} />
-    <Avatar value="R" statusIndicator={{ color: "red" }} />
-    <Avatar value="G" statusIndicator={{ color: "gray" }} />
+    <Avatar value="G" statusIndicator={{ scheme: "green" }} />
+    <Avatar value="Y" statusIndicator={{ scheme: "yellow" }} />
+    <Avatar value="O" statusIndicator={{ scheme: "orange" }} />
+    <Avatar value="R" statusIndicator={{ scheme: "red" }} />
+    <Avatar value="G" statusIndicator={{ scheme: "gray" }} />
 </Row>`,
       language: "tsx",
       label: "Status indicator"

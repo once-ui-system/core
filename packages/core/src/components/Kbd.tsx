@@ -1,45 +1,51 @@
-import React, { forwardRef, ReactNode } from "react";
+import type React from "react";
+import { type ReactNode } from "react";
+import type { LeafPropsOf } from "../interfaces.js";
+import { KbdCap } from "../internal/KbdCap.js";
+import { KeyCombo } from "../internal/KeyCombo.js";
 
-import { Flex } from "./Flex";
-import { Text } from "./Text";
-
-interface KbdProps extends React.ComponentProps<typeof Flex> {
+/** One keycap, its text as `children` (or `label`). */
+interface KbdCapModeProps extends LeafPropsOf<"div"> {
+  keys?: undefined;
+  /** The cap's text, in place of `children`. */
   label?: string;
   children?: ReactNode;
-  className?: string;
-  style?: React.CSSProperties;
 }
 
-const Kbd = forwardRef<HTMLDivElement, KbdProps>(
-  ({ label, children, className, style, ...rest }, ref) => (
-    <Flex
-      as="kbd"
-      ref={ref}
-      // A <kbd> belongs in a sentence. Flex is display: flex, so without this
-      // one every Kbd in prose broke the line and filled the column.
-      inline
-      fit
-      horizontal="center"
-      minWidth="32"
-      background="neutral-strong"
-      radius="s"
-      paddingX="4"
-      paddingY="2"
-      onBackground="neutral-medium"
-      border="neutral-strong"
-      className={className}
-      // A key cap is one unit: "Ctrl K" broke onto two lines whenever its row
-      // got tight (in an Input's suffix it stood 38px tall and stretched a
-      // 32px field), so it neither wraps nor gives up width to its neighbours.
-      style={{ whiteSpace: "nowrap", flexShrink: 0, ...style }}
-      {...rest}
-    >
-      <Text as="span" variant="label-default-s">
-        {label || children}
-      </Text>
-    </Flex>
-  ),
-);
+/** A shortcut (2.x's KeyTip): platform-aware caps for `keys`, after the action `label`. */
+interface KbdKeysModeProps extends Omit<LeafPropsOf<"div">, "children"> {
+  /**
+   * The shortcut, in the syntax `useHotkeys` takes: `"mod+k"`, `"shift+?"`,
+   * `"g i"` for a sequence. An array lists alternatives. `mod` shows as ⌘ on
+   * Apple platforms and Ctrl elsewhere; screen readers hear the combination
+   * spelled out ("Command+Shift+Z"). Pass the same constant to `useHotkeys`
+   * and the hint cannot drift from the binding.
+   */
+  keys: string | readonly string[];
+  /** The action, shown before the keys: "Undo", "Search". */
+  label?: ReactNode;
+  children?: undefined;
+}
+
+type KbdProps = KbdCapModeProps | KbdKeysModeProps;
+
+/**
+ * A keycap, or with `keys` a whole shortcut drawn as caps beside the action it
+ * performs. The cap form renders on the server; `keys` reads the platform
+ * after hydration (Ctrl first, ⌘ on Apple right after).
+ */
+const Kbd = ({ ref, ...props }: KbdProps) => {
+  if (props.keys !== undefined) {
+    const { keys, label, ...rest } = props as KbdKeysModeProps;
+    return <KeyCombo ref={ref} keys={keys} label={label} {...rest} />;
+  }
+  const { label, children, keys: _keys, ...rest } = props as KbdCapModeProps;
+  return (
+    <KbdCap ref={ref} {...rest}>
+      {label || children}
+    </KbdCap>
+  );
+};
 
 Kbd.displayName = "Kbd";
 

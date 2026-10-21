@@ -9,7 +9,7 @@ import {
   SmartLink,
   Text,
   ToggleButton,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 
 interface HeaderProps extends React.ComponentProps<typeof Row> {
@@ -61,14 +61,14 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               minWidth="20"
               height="20"
               border="neutral-weak"
-              top={-0.125}
-              right={-0.5}
+              top="-0.125rem"
+              right="-0.5rem"
             >
               {cartCount}
             </Row>
           )}
         </Row>
-        <UserMenu
+        <User
           placement="bottom-end"
           avatarProps={{ src: "/images/creators/lorant.jpg" }}
           dropdown={[
@@ -108,7 +108,7 @@ export const Header4: React.FC<HeaderProps> = ({ cartCount = 0, ...flex }) => {
               <Line key="line-3" marginY="2" />
               <Row padding="4" fillWidth horizontal="center">
                 <SmartLink href="#">
-                  <Text onBackground="neutral-weak" variant="body-default-xs">
+                  <Text onBackground="neutral-weak" textVariant="body-default-xs">
                     Terms of Use
                   </Text>
                 </SmartLink>

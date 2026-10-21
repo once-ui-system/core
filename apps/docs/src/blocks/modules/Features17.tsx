@@ -5,34 +5,34 @@ import {
   Heading,
   Line,
   Row,
-  StylePanel,
   Text,
 } from "@once-ui-system/core";
+import { StylePanel } from "@once-ui-system/blocks";
 
 export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
   return (
     <Column fillWidth horizontal="center" {...flex}>
       <Column fillWidth horizontal="center" borderBottom paddingX="l">
-        <Column maxWidth={120}>
+        <Column maxWidth="120rem">
           <Background
             position="absolute"
             top="0"
             left="0"
             dots={{ display: true, size: "4", color: "brand-background-strong" }}
-            mask={{ x: 60, y: 70, radius: 50 }}
+            mask={{ x: "60%", y: "70%", radius: "50vh" }}
           />
           <Row fill vertical="end" l={{ direction: "column" }}>
             <Row flex={1} l={{ hide: true }} />
             <Column fillWidth flex={5} l={{ style: { flex: 0 } }}>
-              <Column maxWidth={64} gap="16" paddingX="24" paddingY="80">
-                <Text variant="heading-default-xl" onBackground="brand-weak">
+              <Column maxWidth="64rem" gap="16" paddingX="24" paddingY="80">
+                <Text textVariant="heading-default-xl" onBackground="brand-weak">
                   Theme once, ship everywhere
                 </Text>
-                <Heading as="h2" variant="display-default-m" marginBottom="16">
+                <Heading as="h2" textVariant="display-default-m" marginBottom="16">
                   Manage colors, typography, and surfaces from a single semantic config.
                 </Heading>
                 <Text
-                  variant="body-default-l"
+                  textVariant="body-default-l"
                   onBackground="neutral-weak"
                   wrap="balance"
                   marginBottom="24"
@@ -55,9 +55,9 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
                 m={{ style: { aspectRatio: "3 / 4" } }}
               >
                 <Row fillWidth padding="24" gap="16">
-                  <Background background="brand-strong" border width={4} height={4} radius="s" />
-                  <Background background="brand-medium" border width={4} height={4} radius="s" />
-                  <Background background="brand-weak" border width={4} height={4} radius="s" />
+                  <Background background="brand-strong" border width="4rem" height="4rem" radius="s" />
+                  <Background background="brand-medium" border width="4rem" height="4rem" radius="s" />
+                  <Background background="brand-weak" border width="4rem" height="4rem" radius="s" />
                 </Row>
               </Row>
             </Column>
@@ -65,7 +65,7 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
             <Row flex={3} fillWidth background="page">
               <Row fill padding="4" borderX borderTop>
                 <Row fill padding="4" radius="m" border background="page">
-                  <StylePanel fillWidth maxHeight={36} padding="8" overflowY="auto" />
+                  <StylePanel fillWidth maxHeight="36rem" padding="8" overflowY="auto" />
                 </Row>
               </Row>
             </Row>
@@ -85,9 +85,9 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
         <Row maxWidth="xl" vertical="center" gap="8" wrap>
           <Background
             lines={{ display: true, size: "2", color: "neutral-alpha-weak" }}
-            height={1}
-            minWidth={2}
-            maxWidth={8}
+            height="1rem"
+            minWidth="2rem"
+            maxWidth="8rem"
             border
             radius="xs"
             fillHeight
@@ -97,9 +97,9 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
           <Background
             lines={{ display: true, size: "2", color: "neutral-alpha-weak" }}
-            height={1}
-            minWidth={2}
-            maxWidth={24}
+            height="1rem"
+            minWidth="2rem"
+            maxWidth="24rem"
             fillHeight
           />
           <Row opacity={50}>
@@ -107,9 +107,9 @@ export const Features17 = (flex: React.ComponentProps<typeof Column>) => {
           </Row>
           <Background
             lines={{ display: true, size: "2", angle: 45, color: "neutral-alpha-weak" }}
-            height={1}
-            minWidth={1}
-            maxWidth={4}
+            height="1rem"
+            minWidth="1rem"
+            maxWidth="4rem"
             border
             radius="xs"
             fillHeight

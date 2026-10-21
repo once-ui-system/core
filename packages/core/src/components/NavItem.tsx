@@ -2,14 +2,14 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, type ReactNode } from "react";
-import type { IconName } from "../icons";
-import { Icon } from "./Icon";
-import { useNavStyle } from "./Nav";
+import type { ReactNode } from "react";
+import type { IconName } from "../icons.js";
+import { Icon } from "./Icon.js";
+import { useNavStyle } from "./Nav.js";
 import styles from "./Nav.module.scss";
-import { Row } from "./Row";
-import { Text } from "./Text";
-import { ToggleButton } from "./ToggleButton";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
+import { ToggleButton } from "./ToggleButton.js";
 
 interface NavItemProps
   extends Omit<React.ComponentProps<typeof ToggleButton>, "label" | "prefixIcon" | "prefix"> {
@@ -41,82 +41,90 @@ interface NavItemProps
  * Nav (`density`, `variant`). Outside one it is a 40px row with `radius="m"`
  * corners and a filled current row. An explicit `size` still wins.
  */
-const NavItem = forwardRef<HTMLElement, NavItemProps>(
-  ({ label, icon, prefix, badge, indicator, size, className, ...toggle }, ref) => {
-    const { variant, density, sizes } = useNavStyle();
-    const count = typeof badge === "number" ? badge : undefined;
-    // A number shows above 0, as it always did; any other badge shows unless empty.
-    const showBadge =
-      count !== undefined
-        ? count > 0
-        : badge !== undefined && badge !== null && badge !== false && badge !== "";
-    const trailing = indicator || showBadge;
-    const selected = Boolean(toggle.selected);
-    // `solid` keeps today's look: every row at full contrast, the current one
-    // filled. The other two dim the rest and set the current row in strong.
-    const emphasis = variant !== "solid";
-    return (
-      <ToggleButton
-        ref={ref}
+const NavItem = ({
+  ref,
+  label,
+  icon,
+  prefix,
+  badge,
+  indicator,
+  size,
+  className,
+  ...toggle
+}: NavItemProps) => {
+  const { variant, density, sizes } = useNavStyle();
+  const count = typeof badge === "number" ? badge : undefined;
+  // A number shows above 0, as it always did; any other badge shows unless empty.
+  const showBadge =
+    count !== undefined
+      ? count > 0
+      : badge !== undefined && badge !== null && badge !== false && badge !== "";
+  const trailing = indicator || showBadge;
+  const selected = Boolean(toggle.selected);
+  // `solid` keeps today's look: every row at full contrast, the current one
+  // filled. The other two dim the rest and set the current row in strong.
+  const emphasis = variant !== "solid";
+  return (
+    <ToggleButton
+      ref={ref}
+      fillWidth
+      horizontal="start"
+      size={size ?? sizes.toggle}
+      radius="m"
+      aria-current={toggle.href && selected ? "page" : undefined}
+      className={classNames(
+        variant === "minimal" && styles.quiet,
+        !size && density === "spacious" && styles.spacious,
+        className,
+      )}
+      {...toggle}
+    >
+      <Row
         fillWidth
-        horizontal="start"
-        size={size ?? sizes.toggle}
-        radius="m"
-        aria-current={toggle.href && selected ? "page" : undefined}
-        className={classNames(
-          variant === "minimal" && styles.quiet,
-          !size && density === "spacious" && styles.spacious,
-          className,
-        )}
-        {...toggle}
+        gap={sizes.iconGap}
+        vertical="center"
+        horizontal={trailing ? "between" : "start"}
+        textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
+        onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
       >
-        <Row
-          fillWidth
-          gap={sizes.iconGap}
-          vertical="center"
-          horizontal={trailing ? "between" : "start"}
-          textVariant={`label-${emphasis && selected ? "strong" : "default"}-${sizes.text}`}
-          onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
-        >
-          <Row gap={sizes.iconGap} vertical="center">
-            {icon && (
-              <Icon
-                name={icon}
-                onBackground={emphasis && selected ? "neutral-strong" : "neutral-weak"}
-                size="xs"
-              />
-            )}
-            {prefix !== undefined && prefix !== null && prefix !== false && (
-              <Row vertical="center" aria-hidden="true">
-                {prefix}
-              </Row>
-            )}
-            {label}
-          </Row>
-          {showBadge && (
-            <Row
-              minWidth="16"
-              height="16"
-              paddingX="4"
-              radius="full"
-              solid="brand-strong"
-              horizontal="center"
-              vertical="center"
-              aria-label={count !== undefined ? `${count} unread` : undefined}
-            >
-              <Text variant="label-default-xs" onSolid="brand-strong">
-                {count !== undefined ? (count > 9 ? "9+" : count) : badge}
-              </Text>
+        <Row gap={sizes.iconGap} vertical="center">
+          {icon && (
+            <Icon
+              name={icon}
+              onBackground={emphasis && selected ? "neutral-strong" : "neutral-weak"}
+              size="xs"
+            />
+          )}
+          {prefix !== undefined && prefix !== null && prefix !== false && (
+            <Row vertical="center" aria-hidden="true">
+              {prefix}
             </Row>
           )}
-          {indicator && badge === undefined && (
-            <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
-          )}
+          {label}
         </Row>
-      </ToggleButton>
-    );
-  },
-);
+        {showBadge && (
+          <Row
+            minWidth="16"
+            height="16"
+            paddingX="4"
+            radius="full"
+            solid="brand-strong"
+            horizontal="center"
+            vertical="center"
+            aria-label={count !== undefined ? `${count} unread` : undefined}
+          >
+            <Text textVariant="label-default-xs" onSolid="brand-strong">
+              {count !== undefined ? (count > 9 ? "9+" : count) : badge}
+            </Text>
+          </Row>
+        )}
+        {indicator && badge === undefined && (
+          <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
+        )}
+      </Row>
+    </ToggleButton>
+  );
+};
 
 NavItem.displayName = "NavItem";
 

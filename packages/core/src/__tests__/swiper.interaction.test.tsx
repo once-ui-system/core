@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
 import type React from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { Swiper } from "../components/Swiper";
+import { Carousel } from "../components/Carousel";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -69,7 +69,7 @@ const settle = () =>
 describe("Swiper: rendering", () => {
   it("renders every slide with its alt text and passes axe", async () => {
     vi.useRealTimers();
-    const { container } = render(<Swiper items={items} />, { wrapper });
+    const { container } = render(<Carousel mode="snap" items={items} />, { wrapper });
     expect(screen.getAllByRole("img").map((img) => img.getAttribute("alt"))).toEqual([
       "First",
       "Second",
@@ -81,24 +81,26 @@ describe("Swiper: rendering", () => {
   });
 
   it("renders node slides", () => {
-    render(<Swiper items={[{ slide: <p>Hello</p> }, { slide: <p>World</p> }]} />, { wrapper });
+    render(<Carousel mode="snap" items={[{ slide: <p>Hello</p> }, { slide: <p>World</p> }]} />, {
+      wrapper,
+    });
     expect(screen.getByText("World")).toBeInTheDocument();
   });
 
   it("renders nothing for no items", () => {
-    const { container } = render(<Swiper items={[]} />, { wrapper });
+    const { container } = render(<Carousel mode="snap" items={[]} />, { wrapper });
     expect(container).toBeEmptyDOMElement();
   });
 
   it("drops controls and dots for a single slide or when turned off", () => {
-    const { rerender } = render(<Swiper items={items.slice(0, 1)} />, { wrapper });
+    const { rerender } = render(<Carousel mode="snap" items={items.slice(0, 1)} />, { wrapper });
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
-    rerender(<Swiper items={items} controls={false} indicator={false} />);
+    rerender(<Carousel mode="snap" items={items} controls={false} indicator={false} />);
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
   });
 
   it("marks the dot of the slide in front", () => {
-    render(<Swiper items={items} />, { wrapper });
+    render(<Carousel mode="snap" items={items} />, { wrapper });
     expect(dot(1)).toHaveAttribute("aria-current", "true");
     expect(dot(2)).not.toHaveAttribute("aria-current");
   });
@@ -106,7 +108,7 @@ describe("Swiper: rendering", () => {
 
 describe("Swiper: navigation", () => {
   it("scrolls one slide per Next, then shows Previous", () => {
-    render(<Swiper items={items} />, { wrapper });
+    render(<Carousel mode="snap" items={items} />, { wrapper });
     press(screen.getByRole("button", { name: "Next slide" }));
     expect(scrollTo).toHaveBeenLastCalledWith({ left: 400, behavior: "smooth" });
     settle();
@@ -122,7 +124,7 @@ describe("Swiper: navigation", () => {
   });
 
   it("jumps to a slide from its dot with a click, Enter or Space", () => {
-    render(<Swiper items={items} />, { wrapper });
+    render(<Carousel mode="snap" items={items} />, { wrapper });
     press(dot(3));
     expect(scrollTo).toHaveBeenLastCalledWith({ left: 800, behavior: "smooth" });
     settle();
@@ -136,7 +138,7 @@ describe("Swiper: navigation", () => {
   });
 
   it("follows a scroll of its own to the nearest slide", () => {
-    render(<Swiper items={items} />, { wrapper });
+    render(<Carousel mode="snap" items={items} />, { wrapper });
     act(() => {
       scroller().scrollLeft = 790;
       fireEvent.scroll(scroller());
@@ -145,7 +147,7 @@ describe("Swiper: navigation", () => {
   });
 
   it("snaps a mouse drag to the nearest slide", () => {
-    render(<Swiper items={items} />, { wrapper });
+    render(<Carousel mode="snap" items={items} />, { wrapper });
     const el = scroller();
     fireEvent.mouseDown(el, { clientX: 500 });
     expect(el.style.scrollSnapType).toBe("none");
@@ -190,7 +192,7 @@ describe("Swiper: visibility", () => {
   it("ignores a neighbour that only touches the edge of the view", () => {
     const { seen, restore } = observe();
     try {
-      render(<Swiper items={items} />, { wrapper });
+      render(<Carousel mode="snap" items={items} />, { wrapper });
       const slides = [...scroller().children];
       // What the browser reports first: the slide in view, and the next one touching its edge.
       act(() => {
@@ -205,7 +207,7 @@ describe("Swiper: visibility", () => {
   it("ignores slides that have no width yet", () => {
     const { seen, restore } = observe();
     try {
-      render(<Swiper items={items} />, { wrapper });
+      render(<Carousel mode="snap" items={items} />, { wrapper });
       const slides = [...scroller().children];
       // Before the images load every slide is zero wide, and a zero-area
       // target that intersects reports a ratio of 1.

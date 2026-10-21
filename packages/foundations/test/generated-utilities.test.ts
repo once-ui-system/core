@@ -217,7 +217,34 @@ describe("generated utilities", () => {
       // Still valid on justify-content, where they mean what they say.
       expect(css, `.justify-${suffix}`).toContain(`.justify-${suffix} {`);
     }
-    expect(ALIGN_ALIGNMENTS.map((a) => a.suffix)).toEqual(["start", "center", "end", "stretch"]);
+    expect(ALIGN_ALIGNMENTS.map((a) => a.suffix)).toEqual([
+      "start",
+      "center",
+      "end",
+      "stretch",
+      "baseline",
+    ]);
+  });
+
+  it("emits align-items: baseline at the base and at every breakpoint", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/flex.generated.scss"), "utf8");
+    expect(css).toMatch(/\.align-baseline \{\s*align-items: baseline;/);
+    for (const key of ["xl", "l", "m", "s", "xs"]) expect(css).toContain(`.${key}-align-baseline {`);
+  });
+
+  it("emits auto margins, and no auto padding or gap", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/spacing.generated.scss"), "utf8");
+    expect(css).toMatch(/\.ml-auto \{\s*margin-left: auto;/);
+    expect(css).toMatch(/\.mx-auto \{\s*margin-left: auto;\s*margin-right: auto;/);
+    expect(css).toContain(".s-mt-auto {");
+    expect(css).not.toMatch(/\.(\w+-)?(p|px|py|pt|pr|pb|pl|g)-auto \{/);
+  });
+
+  it("resets lists and buttons at zero specificity", () => {
+    const css = readFileSync(join(ROOT, "scss/styles/display.generated.scss"), "utf8");
+    expect(css).toMatch(/:where\(\.reset-list\) \{\s*list-style: none;\s*margin: 0;\s*padding: 0;/);
+    expect(css).toMatch(/:where\(\.reset-button\) \{[^}]*background: none;[^}]*font: inherit;/);
+    expect(css).toContain(".list-disc {");
   });
 
   /**

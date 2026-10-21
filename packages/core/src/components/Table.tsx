@@ -1,223 +1,796 @@
 "use client";
 
 import classNames from "clsx";
-import { ReactNode, useId, useMemo, useState } from "react";
-import { type ColumnHide, columnHideClasses } from "../internal/columnHide";
-import { useScrollableTabStop } from "../internal/scrollableTabStop";
-import { Column } from "./Column";
-import { Flex } from "./Flex";
-import { Icon } from "./Icon";
-import { IconButton } from "./IconButton";
-import { Input } from "./Input";
-import { Pagination } from "./Pagination";
-import { Row } from "./Row";
-import { Select } from "./Select";
-import { ShineFx } from "./ShineFx";
-import { Spinner } from "./Spinner";
-import styles from "./Table.module.scss";
-import { Text } from "./Text";
+import type React from "react";
+import { isValidElement, type ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";
+import { type ColumnHide, columnHideClasses } from "../internal/columnHide.js";
+import { pageCount, withDefaultLabels } from "../internal/pagination.js";
+import { useScrollableTabStop } from "../internal/scrollableTabStop.js";
+import type { Tone } from "../types.js";
+import { dev } from "../utils/devLogger.js";
+import { tokenLength, withTokenLengths } from "../utils/layoutClasses.js";
+import { Button } from "./Button.js";
+import { Checkbox } from "./Checkbox.js";
+import { Column } from "./Column.js";
+import { Dropdown } from "./Dropdown.js";
+import { Flex } from "./Flex.js";
+import { Icon } from "./Icon.js";
+import { IconButton } from "./IconButton.js";
+import { Input } from "./Input.js";
+import { Pagination, type PaginationLabels } from "./Pagination.js";
+import { Row } from "./Row.js";
+import { Select } from "./Select.js";
+import { Skeleton } from "./Skeleton.js";
+import tableStyles from "./Table.module.scss";
+import { Text } from "./Text.js";
+import { VisuallyHidden } from "./VisuallyHidden.js";
 
-type TableHeader = {
-  content: ReactNode;
+const styles = tableStyles;
+
+/** A filter's value: one option's value, or several for a `multiple` filter. */
+type TableFilterValue = string | string[];
+
+/** The active filters, by column `key`. A column without an entry is unfiltered. */
+type TableFilters = Record<string, TableFilterValue>;
+
+interface TableColumnFilter<T> {
+  /** The values to filter by, offered in a select in the toolbar. */
+  options: { value: string; label: ReactNode }[];
+  /** Let the reader pick several values; a row then matches any of them. */
+  multiple?: boolean;
+  /**
+   * Whether a row passes the filter. Without it a row passes when `row[key]`
+   * is the value (or one of them), or, for an array field, contains it.
+   */
+  match?: (row: T, value: TableFilterValue) => boolean;
+}
+
+interface TableColumn<T> {
+  /**
+   * Names the column: its React key, the `key` a sort reports and, when the
+   * column has no `cell`, the field of the row it shows and sorts by. A row
+   * that is an array is read by position instead: column n shows `row[n]`
+   * (2.x Table's `rows: ReactNode[][]`).
+   */
   key: string;
+  /** The header cell's content. */
+  header: ReactNode;
+  /** Renders this column's cell for a row. Without it the cell shows `row[key]`. */
+  cell?: (row: T, index: number) => ReactNode;
+  /** Let the reader sort by this column from its header. */
   sortable?: boolean;
-  width?: string;
+  /**
+   * Orders two rows, ascending; the table reverses it for descending. Without
+   * it rows compare by `row[key]`: numbers, dates and text in natural order
+   * ("Item 2" before "Item 10"), elements by their text, empty values last
+   * either way.
+   */
+  sort?: (a: T, b: T) => number;
+  /** Aligns the header and the cells. */
   align?: "left" | "center" | "right";
+  /** A CSS width for the column, such as `"12rem"` or `"20%"`. */
+  width?: string;
+  /**
+   * The column's name in plain text, for its filter and the columns menu.
+   * Defaults to `header` when that is text, and to `key` otherwise.
+   */
+  label?: string;
+  /** Add a select to the toolbar that filters the rows by this column. */
+  filter?: TableColumnFilter<T>;
   /**
    * Hide the column, header and cells, at a breakpoint and below, such as
-   * `{ s: true }`. CSS only, so it holds in the server render.
+   * `{ s: true }`. CSS only, so it holds in the server render; `false` shows
+   * it again under a wider breakpoint's hide.
    */
   hide?: ColumnHide;
-};
+}
 
-type TableAction = {
+/** A button in the actions column at the end of every row. */
+interface TableAction<T = unknown> {
   icon: string;
   label?: string;
   tooltip?: string;
-  variant?: "primary" | "secondary" | "tertiary" | "danger";
-  onClick: (rowIndex: number) => void;
-  disabled?: (rowIndex: number) => boolean;
+  variant?: "primary" | "secondary" | "tertiary" | "ghost";
+  /** The action's palette. 2.x's `variant: "danger"` is `variant: "primary", tone: "danger"`. */
+  tone?: Tone;
+  /** Called with the row and its index in `rows`. 2.x passed the index alone. */
+  onClick: (row: T, index: number) => void;
+  disabled?: (row: T, index: number) => boolean;
+}
+
+interface TableSort {
+  /** The `key` of the sorted column. */
+  key: string;
+  direction: "asc" | "desc";
+}
+
+/** Everything a server needs to fetch the rows on screen, as `onQueryChange` reports it. */
+interface TableQuery {
+  page: number;
+  perPage: number;
+  sort: TableSort | null;
+  /** The search text as typed; trim it before querying. */
+  search: string;
+  filters: TableFilters;
+}
+
+interface TableLabels extends PaginationLabels {
+  /**
+   * The select-all checkbox's accessible name. Defaults to "Select all rows",
+   * or "Select all rows on this page" when paginated, which is what it does.
+   */
+  selectAll: string;
+  /** Each row checkbox's accessible name, unless `getRowLabel` names it. */
+  selectRow: string;
+  /** The pagination landmark's name. */
+  pagination: string;
+  /** The search field's accessible name. Default "Search". */
+  search: string;
+  /** The actions column's header. Default "Actions". */
+  actions: string;
+  /** The filter option that clears a filter. Default "All". */
+  filterAll: string;
+  /** The columns menu's button. Default "Columns". */
+  columns: string;
+  /** The heading of the empty state when a search or filter matches nothing. */
+  noResults: string;
+  /** The line under that heading. */
+  noResultsHint: string;
+  /** The button in that state which clears the search and the filters. */
+  clearFilters: string;
+  /** What a screen reader hears after the search or a filter changes. */
+  results: (count: number) => string;
+}
+
+const DEFAULT_LABELS: Pick<
+  TableLabels,
+  | "selectRow"
+  | "pagination"
+  | "perPage"
+  | "search"
+  | "actions"
+  | "filterAll"
+  | "columns"
+  | "noResults"
+  | "noResultsHint"
+  | "clearFilters"
+  | "results"
+> = {
+  selectRow: "Select row",
+  pagination: "Pagination",
+  perPage: "Rows per page",
+  search: "Search",
+  actions: "Actions",
+  filterAll: "All",
+  columns: "Columns",
+  noResults: "No results",
+  noResultsHint: "Try a different search or filter",
+  clearFilters: "Clear filters",
+  results: (count) => (count === 1 ? "1 result" : `${count} results`),
 };
 
-type TableProps = React.ComponentProps<typeof Flex> & {
-  data: {
-    headers: TableHeader[];
-    rows: ReactNode[][];
-  };
-  onRowClick?: (rowIndex: number) => void;
+interface TableProps<T>
+  extends Omit<React.ComponentProps<typeof Column>, "children" | "onChange" | "defaultValue"> {
+  /** The columns, in order. */
+  columns: TableColumn<T>[];
+  /** The rows: every row, or with `count` or `total` only the current page's. */
+  rows: T[];
+  /** Called with the row the reader clicks, and its index in `rows`. */
+  onRowClick?: (row: T, index: number) => void;
+  /**
+   * Add a search field to the toolbar above the table: rows whose cells'
+   * text holds the query stay, or with `count` or `total` Table reports it
+   * for the server.
+   */
   searchable?: boolean;
+  /** The search field's placeholder. Default "Search...". */
   searchPlaceholder?: string;
-  striped?: boolean;
-  hoverable?: boolean;
-  compact?: boolean;
-  loading?: boolean;
-  emptyState?: ReactNode;
-  actions?: TableAction[];
-  stickyHeader?: boolean;
-  maxHeight?: string;
-  rowClassName?: (rowIndex: number) => string;
-  cellClassName?: (rowIndex: number, cellIndex: number) => string;
-  paginated?: boolean;
-  defaultPageSize?: number;
-  pageSizeOptions?: number[];
+  /** The search text, when the host owns it. */
+  search?: string;
+  /** The search text to start with when Table owns it. */
+  defaultSearch?: string;
+  /** Called with the search text on each change. */
+  onSearchChange?: (search: string) => void;
+  /**
+   * Whether a row matches the search, given the trimmed, lowercased query.
+   * Without it a row matches when any column's cell reads as holding it.
+   */
+  matchSearch?: (row: T, query: string) => boolean;
+
+  /** The active filters by column key, when the host owns them. */
+  filters?: TableFilters;
+  /** The filters to start with when Table owns them. */
+  defaultFilters?: TableFilters;
+  /** Called with every active filter after each change. */
+  onFiltersChange?: (filters: TableFilters) => void;
+
+  /**
+   * Which columns show, by key, when the host owns it: `false` hides that
+   * column. A column not listed shows.
+   */
+  columnVisibility?: Record<string, boolean>;
+  /** The column visibility to start with when Table owns it. */
+  defaultColumnVisibility?: Record<string, boolean>;
+  /** Called with the new column visibility. */
+  onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
+  /** Add a menu to the toolbar that shows and hides columns. */
+  columnsMenu?: boolean;
+  /** Your own controls, at the end of the toolbar: an export button, say. */
+  toolbar?: ReactNode;
+  /**
+   * Called once for each change of the page, page size, sort, search or
+   * filters, with all five: the one handler a server-side table needs.
+   */
+  onQueryChange?: (query: TableQuery) => void;
+  /** Icon buttons in a last column, for each row. */
+  actions?: TableAction<T>[];
+  /** A class for a row, given the row and its index in `rows`. */
+  rowClassName?: (row: T, index: number) => string | undefined;
+  /** A class for a cell, given the row, its index and the column's index. */
+  cellClassName?: (row: T, index: number, columnIndex: number) => string | undefined;
+  /** What shows in place of the skeleton rows while `loading`. */
   loadingState?: ReactNode;
+  /**
+   * A stable id for a row, which selection reports. Without it a row's `id`
+   * field is used when it is a string or a number, and its index otherwise.
+   */
+  getRowId?: (row: T, index: number) => string;
+
+  /** The sorted column and direction, when the host owns it; `null` for unsorted. */
+  sort?: TableSort | null;
+  /** The sort to start with when Table owns it. */
+  defaultSort?: TableSort | null;
+  /** Called with the new sort, or `null` when the reader clears it. */
+  onSortChange?: (sort: TableSort | null) => void;
+
+  /** Add a checkbox column, with a select-all checkbox for the rows on screen. */
+  selectable?: boolean;
+  /** The selected rows' ids, when the host owns them. */
+  selected?: string[];
+  /** The ids selected to start with when Table owns the selection. */
+  defaultSelected?: string[];
+  /** Called with every selected id after each change. */
+  onSelectionChange?: (selected: string[]) => void;
+  /** The accessible name of a row's checkbox, such as `row => \`Select ${row.name}\``. */
+  getRowLabel?: (row: T) => string;
+
+  /** Show the rows a page at a time, with Pagination below. */
+  paginated?: boolean;
+  /** The current page, from 1, when the host owns it. */
+  page?: number;
+  /** The page to start on when Table owns it. */
+  defaultPage?: number;
+  /** Called with the new page. */
+  onPageChange?: (page: number) => void;
+  /** Rows per page, when the host owns it. */
+  perPage?: number;
+  /** Rows per page when Table owns it. */
+  defaultPerPage?: number;
+  /** Page sizes to offer in a select beside the pages. */
+  perPageOptions?: number[];
+  /** First- and last-page buttons beside the pages, as 2.x Table drew them. */
+  showFirstLast?: boolean;
+  /** Called with the new page size. */
+  onPerPageChange?: (perPage: number) => void;
+  /**
+   * The number of rows on the server. Set it (or `total`) when `rows` holds
+   * only the current page: Table then neither sorts, filters nor slices the
+   * rows itself, and reports page, sort, search and filter changes for the
+   * host to fetch.
+   */
+  count?: number;
+  /** The number of pages on the server, when it reports pages rather than rows. As `count`. */
+  total?: number;
+
+  /** Swap the rows for skeleton rows, and disable the controls, while data loads. */
+  loading?: boolean;
+  /**
+   * While `loading`, keep the rows on screen, dimmed, instead of skeleton
+   * rows, so a server table does not jump on each page or search. Skeleton
+   * rows still stand in while there are no rows yet.
+   */
+  keepRowsWhileLoading?: boolean;
+  /** What to show when there are no rows. */
+  emptyState?: ReactNode;
+  /**
+   * What to show when the search or the filters match no rows. By default a
+   * "No results" state with a button that clears them.
+   */
+  noResultsState?: ReactNode;
+
+  /**
+   * Keep the header row in view while the rows scroll. Pair with `maxHeight`,
+   * which on Table caps the table's scroll area rather than the whole
+   * component.
+   */
+  stickyHeader?: boolean;
+  /** Alternate row backgrounds. */
+  striped?: boolean;
+  /** Highlight the row under the pointer. */
+  hoverable?: boolean;
+  /** Tighter rows, for dense data. */
+  compact?: boolean;
+  /** The names of the controls and the states, to translate them. */
+  labels?: Partial<TableLabels>;
+  /** The table's accessible name. */
+  "aria-label"?: string;
+  /** The id of the element that names the table, such as a heading above it. */
+  "aria-labelledby"?: string;
+}
+
+type Entry<T> = { row: T; index: number; id: string };
+
+const fieldOf = (row: unknown, key: string, position = -1): unknown => {
+  if (Array.isArray(row)) return position >= 0 ? row[position] : undefined;
+  return row !== null && typeof row === "object"
+    ? (row as Record<string, unknown>)[key]
+    : undefined;
 };
 
-function extractText(node: ReactNode): string {
-  if (node == null) return "";
-  if (typeof node === "string" || typeof node === "number") return String(node);
-  if (Array.isArray(node)) return node.map(extractText).join(" ");
-  if (typeof node === "object" && "props" in node) {
-    return extractText((node as any).props?.children);
-  }
+/** The text a cell reads as, for sorting and search: an element's text, an array's joined. */
+function textOf(node: unknown): string {
+  if (node === null || node === undefined || typeof node === "boolean") return "";
+  if (typeof node === "string" || typeof node === "number" || typeof node === "bigint")
+    return String(node);
+  if (node instanceof Date) return Number.isNaN(node.getTime()) ? "" : node.toISOString();
+  if (Array.isArray(node)) return node.map(textOf).join(" ");
+  if (isValidElement<{ children?: ReactNode }>(node)) return textOf(node.props.children);
+  // A lazy reference from a server component has no text to read here: give
+  // such a column its own `sort`, or pass its rows from a client component.
   return "";
 }
 
-function Table({
-  data,
+const defaultRowId = (row: unknown, index: number): string => {
+  const id = fieldOf(row, "id");
+  return typeof id === "string" || typeof id === "number" ? String(id) : String(index);
+};
+
+const isEmpty = (value: unknown) =>
+  value === null ||
+  value === undefined ||
+  value === "" ||
+  (typeof value === "number" && Number.isNaN(value)) ||
+  (value instanceof Date && Number.isNaN(value.getTime()));
+
+function compareValues(a: unknown, b: unknown): number {
+  if (isNode(a) || isNode(b) || Array.isArray(a) || Array.isArray(b))
+    return textOf(a).localeCompare(textOf(b), undefined, { numeric: true, sensitivity: "base" });
+  if (typeof a === "number" && typeof b === "number") return a - b;
+  if (typeof a === "bigint" && typeof b === "bigint") return a < b ? -1 : a > b ? 1 : 0;
+  if (a instanceof Date && b instanceof Date) return a.getTime() - b.getTime();
+  if (typeof a === "boolean" && typeof b === "boolean") return Number(a) - Number(b);
+  return String(a).localeCompare(String(b), undefined, { numeric: true, sensitivity: "base" });
+}
+
+/** A field as cell content. Dates print as YYYY-MM-DD, the same on the server and in every locale. */
+function renderField(value: unknown): ReactNode {
+  if (value === null || value === undefined) return null;
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? null : value.toISOString().slice(0, 10);
+  }
+  if (Array.isArray(value))
+    return value.some(isNode) ? (value as ReactNode[]) : value.map(String).join(", ");
+  // Any other object is React's to render: an element, or one a server
+  // component sent as a lazy reference, which isValidElement does not know.
+  return isNode(value) ? (value as ReactNode) : String(value);
+}
+
+/** An element, or another object React renders (a lazy reference from the server). */
+const isNode = (value: unknown) =>
+  isValidElement(value) || (typeof value === "object" && value !== null && "$$typeof" in value);
+
+/** A field as text to filter by: "" for what has none to read, such as a React element. */
+function fieldText(value: unknown): string {
+  if (value === null || value === undefined || isNode(value)) return "";
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value.toISOString().slice(0, 10);
+  }
+  if (Array.isArray(value)) return value.map(fieldText).join(" ");
+  if (typeof value === "object") return "";
+  return String(value);
+}
+
+/** A filter's values as a list, leaving out empty ones. */
+const filterValues = (value: TableFilterValue | undefined): string[] =>
+  (Array.isArray(value) ? value : value === undefined ? [] : [value]).filter(
+    (candidate) => candidate !== "",
+  );
+
+/** Whether `row[key]` is one of `values`, or for an array field holds one. */
+function fieldMatches(field: unknown, values: string[]): boolean {
+  const candidates = Array.isArray(field) ? field : [field];
+  return candidates.some((candidate) => values.includes(fieldText(candidate)));
+}
+
+const columnName = <T,>(column: TableColumn<T>) =>
+  column.label ??
+  (typeof column.header === "string" || typeof column.header === "number"
+    ? String(column.header)
+    : column.key);
+
+/** The option a filter select clears itself with; never a value of its own. */
+const CLEAR_FILTER = "__once-ui-filter-all__";
+
+const ALIGN = {
+  left: { th: tableStyles.thAlignLeft, td: tableStyles.tdAlignLeft, row: "start" },
+  center: { th: tableStyles.thAlignCenter, td: tableStyles.tdAlignCenter, row: "center" },
+  right: { th: tableStyles.thAlignRight, td: tableStyles.tdAlignRight, row: "end" },
+} as const;
+
+const SKELETON_WIDTHS = ["8rem", "6rem", "10rem", "5rem", "7rem"] as const;
+
+/**
+ * A table of typed rows: column definitions instead of pre-rendered cells,
+ * sorting, search and filters, row selection, pagination, column visibility,
+ * row actions, and empty and loading states. 2.x's DataTable, under the short
+ * name; 2.x Table's `data={{ headers, rows }}` is `columns` (each header's
+ * `content` as `header`) and `rows`, its array rows read by position.
+ *
+ * Sorting, search, filters, selection and the page each work on Table's own
+ * state or the host's (`sort`, `search`, `filters`, `selected`, `page` with
+ * their change handlers). With `count` or `total` the rows are one server
+ * page, and Table leaves sorting, filtering and slicing to the host, which
+ * `onQueryChange` tells everything at once. Sortable headers are buttons,
+ * with `aria-sort` on the sorted one.
+ */
+function Table<T>({
+  columns,
+  rows,
   onRowClick,
   searchable = false,
   searchPlaceholder = "Search...",
+  search,
+  defaultSearch = "",
+  onSearchChange,
+  matchSearch,
+  filters,
+  defaultFilters,
+  onFiltersChange,
+  columnVisibility,
+  defaultColumnVisibility,
+  onColumnVisibilityChange,
+  columnsMenu = false,
+  toolbar,
+  onQueryChange,
+  actions,
+  rowClassName,
+  cellClassName,
+  loadingState,
+  getRowId,
+  sort,
+  defaultSort = null,
+  onSortChange,
+  selectable = false,
+  selected,
+  defaultSelected,
+  onSelectionChange,
+  getRowLabel,
+  paginated = false,
+  page,
+  defaultPage = 1,
+  onPageChange,
+  perPage,
+  defaultPerPage = 10,
+  perPageOptions,
+  showFirstLast = false,
+  onPerPageChange,
+  count,
+  total,
+  loading = false,
+  keepRowsWhileLoading = false,
+  emptyState,
+  noResultsState,
+  stickyHeader = false,
+  maxHeight,
   striped = false,
   hoverable = true,
   compact = false,
-  loading = false,
-  emptyState,
-  actions,
-  stickyHeader = false,
-  maxHeight,
-  rowClassName,
-  cellClassName,
-  paginated = false,
-  defaultPageSize = 10,
-  pageSizeOptions = [5, 10, 20, 50],
-  loadingState,
+  labels,
+  "aria-label": ariaLabel,
+  "aria-labelledby": ariaLabelledBy,
   ...flex
-}: TableProps) {
+}: TableProps<T>) {
+  const text = withDefaultLabels<Partial<TableLabels>>(DEFAULT_LABELS, labels);
+  const server = count !== undefined || total !== undefined;
+  const controlsId = useId();
+  const paged = paginated || server;
+
+  const [uncontrolledSort, setUncontrolledSort] = useState<TableSort | null>(defaultSort);
+  const sortControlled = sort !== undefined;
+  const currentSort = (sortControlled ? sort : uncontrolledSort) ?? null;
+
+  const [uncontrolledSearch, setUncontrolledSearch] = useState(defaultSearch);
+  const currentSearch = search ?? uncontrolledSearch;
+  const query = currentSearch.trim().toLowerCase();
+
+  const [uncontrolledFilters, setUncontrolledFilters] = useState<TableFilters>(
+    () => defaultFilters ?? {},
+  );
+  const currentFilters = filters ?? uncontrolledFilters;
+  const filterColumns = useMemo(
+    () => columns.filter((column) => column.filter && column.key),
+    [columns],
+  );
+  const activeFilters = useMemo(
+    () =>
+      filterColumns
+        .map((column) => ({ column, values: filterValues(currentFilters[column.key]) }))
+        .filter(({ values }) => values.length > 0),
+    [filterColumns, currentFilters],
+  );
+  const filtering = query !== "" || activeFilters.length > 0;
+
+  const [uncontrolledVisibility, setUncontrolledVisibility] = useState<Record<string, boolean>>(
+    () => defaultColumnVisibility ?? {},
+  );
+  const currentVisibility = columnVisibility ?? uncontrolledVisibility;
+  // Each shown column keeps its position in `columns`, which an array row is read by.
+  const shownColumns = columns
+    .map((column, position) => ({ column, position }))
+    .filter(({ column }) => currentVisibility[column.key] !== false);
+
+  const [uncontrolledSelected, setUncontrolledSelected] = useState<string[]>(
+    () => defaultSelected ?? [],
+  );
+  const selectionControlled = selected !== undefined;
+  const currentSelected = selectionControlled ? selected : uncontrolledSelected;
   const scrollRef = useScrollableTabStop<HTMLDivElement>();
-  const [sortConfig, setSortConfig] = useState<{
-    key: string;
-    direction: "asc" | "desc";
-  } | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(defaultPageSize);
+  const selectedSet = useMemo(() => new Set(currentSelected), [currentSelected]);
 
-  const handleSort = (key: string, sortable?: boolean) => {
-    if (!sortable) return;
+  const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
+  const [uncontrolledPerPage, setUncontrolledPerPage] = useState(defaultPerPage);
+  const pageControlled = page !== undefined;
+  const currentPerPage = Math.max(1, Math.floor(perPage ?? uncontrolledPerPage));
 
-    let direction: "asc" | "desc" = "asc";
-    if (sortConfig && sortConfig.key === key) {
-      direction = sortConfig.direction === "asc" ? "desc" : "asc";
-    }
-    setSortConfig({ key, direction });
-  };
-
-  const filteredRows = useMemo(() => {
-    if (!searchable || !searchQuery.trim()) return data.rows;
-
-    const query = searchQuery.toLowerCase();
-    return data.rows.filter((row) =>
-      row.some((cell) => extractText(cell).toLowerCase().includes(query)),
-    );
-  }, [data.rows, searchQuery, searchable]);
-
-  const sortedRows = useMemo(() => {
-    if (!sortConfig) return filteredRows;
-
-    const headerIndex = data.headers.findIndex((h) => h.key === sortConfig.key);
-    if (headerIndex === -1) return filteredRows;
-
-    return [...filteredRows].sort((a, b) => {
-      const aValue = extractText(a[headerIndex]);
-      const bValue = extractText(b[headerIndex]);
-
-      const comparison = aValue.localeCompare(bValue, undefined, {
-        numeric: true,
-        sensitivity: "base",
-      });
-
-      return sortConfig.direction === "asc" ? comparison : -comparison;
+  // An id that is missing would be shared by every row missing one, and
+  // selecting one of them would select them all: those rows fall back to
+  // their index instead.
+  const { entries, missingIds, duplicateIds } = useMemo(() => {
+    const seen = new Set<string>();
+    let missing = 0;
+    let duplicates = 0;
+    const list = rows.map((row, index): Entry<T> => {
+      const raw: unknown = (getRowId ?? defaultRowId)(row, index);
+      const valid = (typeof raw === "string" && raw !== "") || typeof raw === "number";
+      if (!valid) missing++;
+      const id = valid ? String(raw) : String(index);
+      if (seen.has(id)) duplicates++;
+      seen.add(id);
+      return { row, index, id };
     });
-  }, [filteredRows, sortConfig, data.headers]);
+    return { entries: list, missingIds: missing, duplicateIds: duplicates };
+  }, [rows, getRowId]);
 
-  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
+  useEffect(() => {
+    if (missingIds > 0) {
+      dev.warn(
+        `Table: getRowId returned no id for ${missingIds} row(s); they fall back to their index.`,
+      );
+    }
+    if (duplicateIds > 0) {
+      dev.warn(
+        `Table: ${duplicateIds} row id(s) repeat; selecting one of those rows selects all of them.`,
+      );
+    }
+  }, [missingIds, duplicateIds]);
 
-  // Sliced at the clamped page: when the rows shrink under the last page,
-  // slicing at `page` showed an empty body while the label read "2 / 2".
-  const paginatedRows = useMemo(() => {
-    if (!paginated) return sortedRows;
+  // Search keeps the rows any of whose cells reads as holding the query, and
+  // each active filter the rows it matches. A server page is the server's.
+  const filtered = useMemo(() => {
+    if (server || !filtering) return entries;
+    const matches = (entry: Entry<T>) =>
+      matchSearch
+        ? matchSearch(entry.row, query)
+        : columns.some((column, position) =>
+            textOf(
+              column.cell
+                ? column.cell(entry.row, entry.index)
+                : fieldOf(entry.row, column.key, position),
+            )
+              .toLowerCase()
+              .includes(query),
+          );
+    return entries.filter(
+      (entry) =>
+        (query === "" || matches(entry)) &&
+        activeFilters.every(({ column, values }) => {
+          const value: TableFilterValue = column.filter?.multiple ? values : values[0];
+          return column.filter?.match
+            ? column.filter.match(entry.row, value)
+            : fieldMatches(fieldOf(entry.row, column.key, columns.indexOf(column)), values);
+        }),
+    );
+  }, [entries, columns, query, matchSearch, activeFilters, filtering, server]);
 
-    const start = (currentPage - 1) * pageSize;
-    const end = start + pageSize;
-    return sortedRows.slice(start, end);
-  }, [sortedRows, paginated, currentPage, pageSize]);
+  const sortedEntries = useMemo(() => {
+    if (server || currentSort === null) return filtered;
+    const position = columns.findIndex(
+      (candidate) => Boolean(candidate.key) && candidate.key === currentSort.key,
+    );
+    const column = columns[position];
+    if (!column) return filtered;
+    const direction = currentSort.direction === "desc" ? -1 : 1;
+    const { sort: compareRows, key } = column;
+    const compare = compareRows
+      ? (a: Entry<T>, b: Entry<T>) => direction * compareRows(a.row, b.row)
+      : (a: Entry<T>, b: Entry<T>) => {
+          const left = fieldOf(a.row, key, position);
+          const right = fieldOf(b.row, key, position);
+          const leftEmpty = isEmpty(left);
+          const rightEmpty = isEmpty(right);
+          if (leftEmpty || rightEmpty) return leftEmpty === rightEmpty ? 0 : leftEmpty ? 1 : -1;
+          return direction * compareValues(left, right);
+        };
+    return [...filtered].sort(compare);
+  }, [filtered, columns, currentSort, server]);
 
-  useMemo(() => {
-    setPage(1);
-  }, [searchQuery, sortConfig]);
+  const pages =
+    total !== undefined
+      ? Math.max(1, Math.floor(total))
+      : pageCount(count ?? sortedEntries.length, currentPerPage);
+  const currentPage = Math.min(
+    pages,
+    Math.max(1, Math.floor((pageControlled ? page : uncontrolledPage) || 1)),
+  );
 
-  const tableClasses = classNames(styles.table, {
-    [styles.striped]: striped,
-    [styles.hoverable]: hoverable,
-    [styles.compact]: compact,
-    [styles.clickable]: !!onRowClick,
-    [styles.stickyHeader]: stickyHeader,
-  });
+  const visible =
+    paged && !server
+      ? sortedEntries.slice((currentPage - 1) * currentPerPage, currentPage * currentPerPage)
+      : sortedEntries;
 
-  const getAlignClass = (align: TableHeader["align"], prefix: "th" | "td") => {
-    const key = align || "left";
-    const map = {
-      left: styles[`${prefix}AlignLeft`],
-      center: styles[`${prefix}AlignCenter`],
-      right: styles[`${prefix}AlignRight`],
-    } as const;
-    return map[key];
+  const currentQuery: TableQuery = {
+    page: currentPage,
+    perPage: currentPerPage,
+    sort: currentSort,
+    search: currentSearch,
+    filters: currentFilters,
+  };
+  const reportQuery = (change: Partial<TableQuery>) =>
+    onQueryChange?.({ ...currentQuery, ...change });
+
+  // Pagination follows a new page size with the page that keeps the first
+  // row in view; that page belongs to the same change, reported once.
+  const pageFromPerPage = useRef<number | null>(null);
+
+  const setPage = (next: number, report = true) => {
+    if (next === currentPage) return;
+    if (!pageControlled) setUncontrolledPage(next);
+    onPageChange?.(next);
+    if (pageFromPerPage.current === next) pageFromPerPage.current = null;
+    else if (report) reportQuery({ page: next });
   };
 
-  const renderHeader = (header: TableHeader, index: number) => {
-    // A header without a key (untyped MDX tables omit it) is never the
-    // sorted one, even before anything is sorted.
-    const isActive = sortConfig !== null && sortConfig.key === header.key;
-    const thClasses = classNames(
-      styles.th,
-      getAlignClass(header.align, "th"),
-      {
-        [styles.thSortable]: header.sortable,
-        [styles.thActive]: isActive,
-      },
-      columnHideClasses(header.hide),
+  const setPerPage = (next: number) => {
+    if (perPage === undefined) setUncontrolledPerPage(next);
+    onPerPageChange?.(next);
+    const firstRow = (currentPage - 1) * currentPerPage;
+    const nextPages = total !== undefined ? pages : pageCount(count ?? sortedEntries.length, next);
+    const nextPage = Math.min(nextPages, Math.max(1, Math.floor(firstRow / next) + 1));
+    pageFromPerPage.current = nextPage !== currentPage ? nextPage : null;
+    reportQuery({ perPage: next, page: nextPage });
+  };
+
+  // Ascending, then descending, then back to the rows' own order. A new
+  // order starts again from the first page.
+  const cycleSort = (key: string) => {
+    const next: TableSort | null =
+      currentSort === null || currentSort.key !== key
+        ? { key, direction: "asc" }
+        : currentSort.direction === "asc"
+          ? { key, direction: "desc" }
+          : null;
+    if (!sortControlled) setUncontrolledSort(next);
+    onSortChange?.(next);
+    if (paged) setPage(1, false);
+    reportQuery({ sort: next, page: paged ? 1 : currentPage });
+  };
+
+  // A new search or filter also starts from the first page.
+  const commitSearch = (next: string) => {
+    if (search === undefined) setUncontrolledSearch(next);
+    onSearchChange?.(next);
+    if (paged) setPage(1, false);
+    reportQuery({ search: next, page: paged ? 1 : currentPage });
+  };
+
+  const commitFilters = (next: TableFilters) => {
+    if (filters === undefined) setUncontrolledFilters(next);
+    onFiltersChange?.(next);
+    if (paged) setPage(1, false);
+    reportQuery({ filters: next, page: paged ? 1 : currentPage });
+  };
+
+  const setFilter = (column: TableColumn<T>, picked: string | string[]) => {
+    const values = (Array.isArray(picked) ? picked : [picked]).filter(
+      (value) => value !== "" && value !== CLEAR_FILTER,
     );
+    const cleared = !Array.isArray(picked)
+      ? picked === CLEAR_FILTER
+      : picked.includes(CLEAR_FILTER);
+    const next = { ...currentFilters };
+    if (cleared || values.length === 0) delete next[column.key];
+    else next[column.key] = column.filter?.multiple ? values : values[0];
+    commitFilters(next);
+  };
+
+  const clearQuery = () => {
+    const nextFilters = { ...currentFilters };
+    for (const { column } of activeFilters) delete nextFilters[column.key];
+    if (search === undefined) setUncontrolledSearch("");
+    if (filters === undefined) setUncontrolledFilters(nextFilters);
+    if (currentSearch !== "") onSearchChange?.("");
+    if (activeFilters.length > 0) onFiltersChange?.(nextFilters);
+    if (paged) setPage(1, false);
+    reportQuery({ search: "", filters: nextFilters, page: paged ? 1 : currentPage });
+  };
+
+  const setColumnShown = (key: string, shown: boolean) => {
+    const next = { ...currentVisibility, [key]: shown };
+    if (columnVisibility === undefined) setUncontrolledVisibility(next);
+    onColumnVisibilityChange?.(next);
+  };
+
+  const commitSelection = (next: string[]) => {
+    if (!selectionControlled) setUncontrolledSelected(next);
+    onSelectionChange?.(next);
+  };
+
+  const toggleRow = (id: string) =>
+    commitSelection(
+      selectedSet.has(id)
+        ? currentSelected.filter((candidate) => candidate !== id)
+        : [...currentSelected, id],
+    );
+
+  // Select-all covers the rows on screen: the current page, or every row
+  // when the table is not paginated.
+  const visibleIds = loading ? [] : visible.map((entry) => entry.id);
+  const selectedOnScreen = visibleIds.filter((id) => selectedSet.has(id)).length;
+  const allSelected = visibleIds.length > 0 && selectedOnScreen === visibleIds.length;
+  const someSelected = selectedOnScreen > 0 && !allSelected;
+
+  const toggleAll = () => {
+    if (allSelected) {
+      const onScreen = new Set(visibleIds);
+      commitSelection(currentSelected.filter((id) => !onScreen.has(id)));
+    } else {
+      commitSelection([...currentSelected, ...visibleIds.filter((id) => !selectedSet.has(id))]);
+    }
+  };
+
+  const hasActions = Boolean(actions?.length);
+  const columnCount = shownColumns.length + (selectable ? 1 : 0) + (hasActions ? 1 : 0);
+  const rowTotal = server ? (count ?? (total ?? 0) * currentPerPage) : sortedEntries.length;
+  const showPagination = paged && rowTotal > 0 && (pages > 1 || (perPageOptions?.length ?? 0) > 0);
+  // Rows kept on screen while the next ones load; without rows yet, skeletons.
+  const dimmed = loading && keepRowsWhileLoading && visible.length > 0;
+  // "No results" is for rows the search or filters left out. On a server
+  // page there is no telling, so an empty page under a query counts as one.
+  const noResults = filtering && visible.length === 0 && (server || entries.length > 0);
+  const hasOwnControls = toolbar !== undefined && toolbar !== null && toolbar !== false;
+  const hasToolbar = searchable || filterColumns.length > 0 || columnsMenu || hasOwnControls;
+
+  const renderHeader = ({ column }: { column: TableColumn<T> }, index: number) => {
+    const sortable = Boolean(column.sortable && column.key);
+    // A column without a key is never the sorted one, even before anything is sorted.
+    const active = currentSort !== null && Boolean(column.key) && currentSort.key === column.key;
+    const direction = active ? currentSort?.direction : undefined;
+    const align = ALIGN[column.align ?? "left"];
 
     const content = (
-      <Row
-        gap="8"
-        vertical="center"
-        horizontal={
-          header.align === "center" ? "center" : header.align === "right" ? "end" : "start"
-        }
-      >
+      <Row gap="8" vertical="center" horizontal={align.row}>
         <Text
-          variant="label-strong-s"
-          onBackground={isActive ? "neutral-strong" : "neutral-medium"}
+          textVariant="label-strong-s"
+          onBackground={active ? "neutral-strong" : "neutral-medium"}
         >
-          {header.content}
+          {column.header}
         </Text>
-        {header.sortable && (
+        {sortable && (
           <Icon
-            name={
-              isActive
-                ? sortConfig.direction === "asc"
-                  ? "chevronUp"
-                  : "chevronDown"
-                : "chevronUp"
-            }
+            name={direction === "desc" ? "chevronDown" : "chevronUp"}
             size="xs"
-            onBackground={isActive ? "neutral-strong" : "neutral-weak"}
-            style={{
-              transform: !isActive ? "rotate(90deg)" : undefined,
-            }}
+            onBackground={active ? "neutral-strong" : "neutral-weak"}
+            style={{ transform: active ? undefined : "rotate(90deg)" }}
           />
         )}
       </Row>
@@ -225,23 +798,32 @@ function Table({
 
     return (
       <th
-        key={header.key}
-        className={thClasses}
-        style={{ width: header.width }}
-        // Only the sorted column says so: ARIA wants aria-sort on one header
-        // at a time, and an unsorted column is the default.
-        aria-sort={
-          isActive ? (sortConfig.direction === "asc" ? "ascending" : "descending") : undefined
-        }
-        onClick={() => handleSort(header.key, header.sortable)}
+        key={column.key || index}
+        scope="col"
+        className={classNames(
+          tableStyles.th,
+          align.th,
+          {
+            [tableStyles.thSortable]: sortable,
+            [tableStyles.thActive]: active,
+            [styles.sortableTh]: sortable,
+          },
+          columnHideClasses(column.hide),
+        )}
+        style={{ width: column.width }}
+        aria-sort={active ? (direction === "asc" ? "ascending" : "descending") : undefined}
       >
-        {header.sortable ? (
-          // A real button gives the column a tab stop, a role and Enter/Space.
-          // Its click bubbles to the cell, so the whole cell, padding
-          // included, stays the pointer target it always was.
+        {sortable ? (
           <button
             type="button"
-            className={classNames("reset-button-styles", "focus-ring", styles.thButton)}
+            className={classNames(
+              "reset-button-styles",
+              "focus-ring",
+              tableStyles.thButton,
+              styles.sortButton,
+            )}
+            disabled={loading}
+            onClick={() => cycleSort(column.key)}
           >
             {content}
           </button>
@@ -252,48 +834,72 @@ function Table({
     );
   };
 
-  const renderRow = (row: ReactNode[], originalIndex: number, displayIndex: number) => {
-    const rowClasses = classNames(styles.row, rowClassName?.(originalIndex));
+  const cellClass = (column: TableColumn<T>) =>
+    classNames(tableStyles.td, ALIGN[column.align ?? "left"].td, columnHideClasses(column.hide));
 
+  const renderRow = (entry: Entry<T>) => {
+    const isSelected = selectable && selectedSet.has(entry.id);
     return (
       <tr
-        key={displayIndex}
-        className={rowClasses}
-        onClick={onRowClick ? () => onRowClick(originalIndex) : undefined}
+        key={entry.id}
+        className={classNames(
+          tableStyles.row,
+          { [styles.selectedRow]: isSelected },
+          rowClassName?.(entry.row, entry.index),
+        )}
+        data-selected={isSelected ? "true" : undefined}
+        onClick={onRowClick ? () => onRowClick(entry.row, entry.index) : undefined}
       >
-        {row.map((cell, cellIndex) => {
-          const header = data.headers[cellIndex];
-          const tdClasses = classNames(
-            styles.td,
-            getAlignClass(header?.align, "td"),
-            columnHideClasses(header?.hide),
-            cellClassName?.(originalIndex, cellIndex),
-          );
-
-          return (
-            <td key={cellIndex} className={tdClasses}>
-              {cell}
-            </td>
-          );
-        })}
-        {actions && actions.length > 0 && (
+        {selectable && (
+          <td className={classNames(tableStyles.td, styles.selectCell)}>
+            <Checkbox
+              aria-label={getRowLabel ? getRowLabel(entry.row) : text.selectRow}
+              checked={isSelected}
+              disabled={dimmed || undefined}
+              onCheckedChange={() => toggleRow(entry.id)}
+            />
+          </td>
+        )}
+        {shownColumns.map(({ column, position }) => (
           <td
-            className={classNames(styles.td, styles.tdActions)}
-            style={{ width: `${actions.length * 32}px`, minWidth: `${actions.length * 32}px` }}
+            key={column.key || position}
+            className={classNames(
+              cellClass(column),
+              cellClassName?.(entry.row, entry.index, position),
+            )}
           >
+            {column.cell
+              ? column.cell(entry.row, entry.index)
+              : renderField(fieldOf(entry.row, column.key, position))}
+          </td>
+        ))}
+        {hasActions && (
+          <td
+            className={classNames(tableStyles.td, tableStyles.tdActions)}
+            // 32 per action on the token scale, so the column scales with
+            // the buttons in it.
+            style={withTokenLengths({
+              width: tokenLength((actions?.length ?? 0) * 32),
+              minWidth: tokenLength((actions?.length ?? 0) * 32),
+            })}
+          >
+            {/* biome-ignore lint/a11y/noStaticElementInteractions: stops a row click, it handles none itself */}
+            {/* biome-ignore lint/a11y/useKeyWithClickEvents: as above */}
             <Row gap="8" horizontal="start" vertical="center" onClick={(e) => e.stopPropagation()}>
-              {actions.map((action, actionIndex) => (
+              {actions?.map((action, actionIndex) => (
                 <IconButton
                   key={actionIndex}
-                  icon={action.icon as any}
+                  icon={action.icon as React.ComponentProps<typeof IconButton>["icon"]}
                   size="l"
                   variant={action.variant || "tertiary"}
+                  tone={action.tone}
                   tooltip={action.tooltip || action.label}
+                  aria-label={action.label || action.tooltip}
                   onClick={(e: React.MouseEvent) => {
                     e.stopPropagation();
-                    action.onClick(originalIndex);
+                    action.onClick(entry.row, entry.index);
                   }}
-                  disabled={action.disabled?.(originalIndex)}
+                  disabled={action.disabled?.(entry.row, entry.index)}
                 />
               ))}
             </Row>
@@ -303,150 +909,248 @@ function Table({
     );
   };
 
-  const renderEmptyState = () => (
+  // Placeholders with nothing to read: the table says it is busy, and the
+  // rows stay out of the accessibility tree rather than reading as empty.
+  const skeletonRows = Array.from({ length: paged ? currentPerPage : 5 }, (_, n) => n).map(
+    (rowNumber) => (
+      // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and these hold no controls
+      <tr key={`skeleton-${rowNumber}`} className={tableStyles.row} aria-hidden="true">
+        {selectable && <td className={classNames(tableStyles.td, styles.selectCell)} />}
+        {shownColumns.map(({ column, position }, columnIndex) => (
+          <td key={column.key || position} className={cellClass(column)}>
+            <Skeleton
+              shape="line"
+              size="s"
+              width={SKELETON_WIDTHS[(rowNumber + columnIndex) % SKELETON_WIDTHS.length]}
+              maxWidth="100%"
+              delay={rowNumber * 80}
+            />
+          </td>
+        ))}
+        {hasActions && <td className={classNames(tableStyles.td, tableStyles.tdActions)} />}
+      </tr>
+    ),
+  );
+
+  const emptyRow = (
     <tr>
-      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.empty}>
-        {emptyState || (
-          <Column center padding="xl" gap="m">
-            <Icon name="inbox" size="l" onBackground="neutral-weak" />
-            <Column center gap="4">
-              <Text variant="heading-strong-s">No data available</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
-                {searchQuery ? "Try adjusting your search" : "There are no items to display"}
-              </Text>
-            </Column>
-          </Column>
-        )}
+      <td colSpan={columnCount} className={tableStyles.empty}>
+        {noResults
+          ? (noResultsState ?? (
+              <Column center padding="xl" gap="m">
+                <Icon name="search" size="l" onBackground="neutral-weak" />
+                <Column center gap="4">
+                  <Text textVariant="heading-strong-s">{text.noResults}</Text>
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
+                    {text.noResultsHint}
+                  </Text>
+                </Column>
+                <Button size="s" variant="secondary" onClick={clearQuery}>
+                  {text.clearFilters}
+                </Button>
+              </Column>
+            ))
+          : (emptyState ?? (
+              <Column center padding="xl" gap="m">
+                <Icon name="inbox" size="l" onBackground="neutral-weak" />
+                <Column center gap="4">
+                  <Text textVariant="heading-strong-s">No data available</Text>
+                  <Text textVariant="body-default-s" onBackground="neutral-weak">
+                    There are no items to display
+                  </Text>
+                </Column>
+              </Column>
+            ))}
       </td>
     </tr>
   );
 
-  const renderLoadingState = () => (
+  const loadingRow = (
     <tr>
-      <td colSpan={data.headers.length + (actions?.length ? 1 : 0)} className={styles.loading}>
-        {loadingState || (
-          <Column center padding="xl" gap="m">
-            <ShineFx variant="label-default-s">Loading data...</ShineFx>
-          </Column>
-        )}
+      <td colSpan={columnCount} className={tableStyles.loading}>
+        {loadingState}
       </td>
     </tr>
   );
 
-  // Two tables on a page used to share the ids "table-search" and "page-size".
-  const controlsId = useId();
+  const renderFilter = (column: TableColumn<T>) => {
+    const filter = column.filter as TableColumnFilter<T>;
+    const values = filterValues(currentFilters[column.key]);
+    return (
+      <Row key={column.key} minWidth="8rem" maxWidth="12rem">
+        <Select
+          id={`${controlsId}-filter-${column.key}`}
+          size="xxs"
+          label={columnName(column)}
+          multiple={filter.multiple}
+          // Unfiltered, the select is empty and shows its label: "Status"
+          // reads better than a row of selects that each say "All".
+          value={filter.multiple ? values : (values[0] ?? "")}
+          onValueChange={(picked) => setFilter(column, picked)}
+          options={[{ value: CLEAR_FILTER, label: text.filterAll }, ...filter.options]}
+        />
+      </Row>
+    );
+  };
+
+  const columnsDropdown = columnsMenu && (
+    <Dropdown
+      placement="bottom-end"
+      closeAfterClick={false}
+      handleArrowNavigation={false}
+      trigger={
+        <Button size="s" variant="secondary" suffixIcon="chevronDown">
+          {text.columns}
+        </Button>
+      }
+    >
+      <Column padding="8" gap="4" minWidth="10rem">
+        {columns.map((column, index) => {
+          const shown = currentVisibility[column.key] !== false;
+          return (
+            <Checkbox
+              key={column.key || index}
+              label={columnName(column)}
+              checked={shown}
+              // The last column on screen stays: a table of no columns is no table.
+              disabled={shown && shownColumns.length === 1}
+              onCheckedChange={() => setColumnShown(column.key, !shown)}
+            />
+          );
+        })}
+      </Column>
+    </Dropdown>
+  );
 
   return (
     <Column fillWidth gap="m" {...flex}>
-      {/* Search Bar */}
-      {searchable && (
-        <Row horizontal="between" vertical="center" gap="m" maxWidth={12}>
-          <Input
-            id={`${controlsId}-search`}
-            placeholder={searchPlaceholder}
-            value={searchQuery}
-            size="xs"
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
-          />
-          {sortedRows.length !== data.rows.length && (
+      {hasToolbar && (
+        <Row fillWidth gap="8" vertical="center" wrap>
+          {searchable && (
+            <Row flex={1} minWidth="10rem" maxWidth="16rem">
+              <Input
+                id={`${controlsId}-search`}
+                placeholder={searchPlaceholder}
+                aria-label={text.search}
+                value={currentSearch}
+                size="xxs"
+                onValueChange={commitSearch}
+                prefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
+              />
+            </Row>
+          )}
+          {filterColumns.map(renderFilter)}
+          {!server && filtering && sortedEntries.length !== entries.length && (
             <Text onBackground="neutral-weak">
-              {sortedRows.length} of {data.rows.length}
+              {sortedEntries.length} of {entries.length}
             </Text>
           )}
+          {(hasOwnControls || columnsMenu) && (
+            <Row gap="8" vertical="center" style={{ marginLeft: "auto" }}>
+              {toolbar}
+              {columnsDropdown}
+            </Row>
+          )}
+          {/* What the search or filters left, for a screen reader to hear. */}
+          <VisuallyHidden role="status">
+            {filtering && !loading && text.results ? text.results(rowTotal) : ""}
+          </VisuallyHidden>
         </Row>
       )}
-
-      {/* Table Container */}
       <Flex
+        // A table wider than its box scrolls, and a keyboard can only scroll
+        // what it can focus: a tab stop while it overflows.
         ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
         background="surface"
         overflowX="auto"
-        overflowY={maxHeight ? "auto" : "visible"}
-        style={{ maxHeight }}
-        className={classNames(styles.container, "focus-ring")}
+        overflowY={maxHeight !== undefined ? "auto" : "visible"}
+        maxHeight={maxHeight}
+        className={classNames(tableStyles.container, "focus-ring")}
       >
-        <table className={tableClasses}>
-          <thead className={styles.thead}>
+        <table
+          className={classNames(tableStyles.table, {
+            [tableStyles.striped]: striped,
+            [tableStyles.hoverable]: hoverable,
+            [tableStyles.compact]: compact,
+            [tableStyles.stickyHeader]: stickyHeader,
+            [tableStyles.clickable]: Boolean(onRowClick),
+          })}
+          aria-label={ariaLabel}
+          aria-labelledby={ariaLabelledBy}
+          aria-busy={loading || undefined}
+        >
+          <thead className={tableStyles.thead}>
             <tr>
-              {data.headers.map((header, index) => renderHeader(header, index))}
-              {actions && actions.length > 0 && (
-                <th className={classNames(styles.th, styles.thActions)}>
-                  <Text variant="label-strong-s" onBackground="neutral-medium">
-                    Actions
+              {selectable && (
+                <th scope="col" className={classNames(tableStyles.th, styles.selectCell)}>
+                  <Checkbox
+                    aria-label={
+                      text.selectAll ?? (paged ? "Select all rows on this page" : "Select all rows")
+                    }
+                    checked={allSelected}
+                    indeterminate={someSelected}
+                    disabled={visibleIds.length === 0}
+                    onCheckedChange={toggleAll}
+                  />
+                </th>
+              )}
+              {shownColumns.map(renderHeader)}
+              {hasActions && (
+                <th scope="col" className={classNames(tableStyles.th, tableStyles.thActions)}>
+                  <Text textVariant="label-strong-s" onBackground="neutral-medium">
+                    {text.actions}
                   </Text>
                 </th>
               )}
             </tr>
           </thead>
-          <tbody className={styles.tbody}>
-            {loading
-              ? renderLoadingState()
-              : sortedRows.length === 0
-                ? renderEmptyState()
-                : paginatedRows.map((row, index) => {
-                    const originalIndex = data.rows.indexOf(row);
-                    return renderRow(row, originalIndex, index);
-                  })}
+          <tbody className={classNames(tableStyles.tbody, { [styles.dimmedBody]: dimmed })}>
+            {dimmed
+              ? visible.map(renderRow)
+              : loading
+                ? loadingState !== undefined
+                  ? loadingRow
+                  : skeletonRows
+                : visible.length === 0
+                  ? emptyRow
+                  : visible.map(renderRow)}
           </tbody>
         </table>
       </Flex>
 
-      {/* Pagination */}
-      {paginated && !loading && sortedRows.length > 0 && (
-        <Row horizontal="between" vertical="center" paddingX="s" gap="m" wrap>
-          <Row gap="8" vertical="center">
-            <Row maxWidth={5}>
-              <Select
-                id={`${controlsId}-page-size`}
-                placeholder="Select page size"
-                value={String(pageSize)}
-                size="xs"
-                onSelect={(value) => {
-                  setPageSize(Number(value));
-                  setPage(1);
-                }}
-                options={pageSizeOptions.map((size) => ({
-                  label: String(size),
-                  value: String(size),
-                }))}
-              />
-            </Row>
-            <Text variant="label-default-s" onBackground="neutral-medium">
-              {currentPage} / {totalPages}
-            </Text>
-          </Row>
-
-          {totalPages > 1 && (
-            <Pagination
-              page={currentPage}
-              total={totalPages}
-              onChange={setPage}
-              size="s"
-              showFirstLast
-            />
-          )}
-        </Row>
-      )}
-
-      {/* Footer Info */}
-      {!paginated && !loading && sortedRows.length > 0 && sortConfig && (
-        <Row horizontal="end" vertical="center" paddingX="s">
-          <Row gap="4" vertical="center">
-            <Text variant="body-default-s" onBackground="neutral-weak">
-              Sorted by {data.headers.find((h) => h.key === sortConfig.key)?.content}
-            </Text>
-            <IconButton
-              icon="close"
-              size="s"
-              variant="tertiary"
-              onClick={() => setSortConfig(null)}
-              tooltip="Clear sort"
-            />
-          </Row>
-        </Row>
+      {showPagination && (
+        <Pagination
+          fillWidth
+          paddingX="s"
+          horizontal={perPageOptions?.length ? "between" : "end"}
+          size="s"
+          // Named after the table it pages, so two tables on one page do not
+          // give two landmarks the same name (axe: landmark-unique).
+          aria-label={
+            ariaLabel && text.pagination
+              ? `${ariaLabel} ${text.pagination.toLowerCase()}`
+              : text.pagination
+          }
+          labels={{
+            previous: text.previous,
+            next: text.next,
+            first: text.first,
+            last: text.last,
+            perPage: text.perPage,
+          }}
+          page={currentPage}
+          onPageChange={setPage}
+          count={server ? count : sortedEntries.length}
+          total={server ? total : undefined}
+          perPage={currentPerPage}
+          perPageOptions={perPageOptions}
+          showFirstLast={showFirstLast}
+          onPerPageChange={setPerPage}
+          disabled={loading}
+        />
       )}
     </Column>
   );
@@ -454,5 +1158,15 @@ function Table({
 
 Table.displayName = "Table";
 
-export type { TableAction, TableHeader, TableProps };
+export type {
+  TableAction,
+  TableColumn,
+  TableColumnFilter,
+  TableFilters,
+  TableFilterValue,
+  TableLabels,
+  TableProps,
+  TableQuery,
+  TableSort,
+};
 export { Table };

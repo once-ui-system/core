@@ -1,14 +1,15 @@
 import type React from "react";
-import type { OnceUIStyleConfig } from "../contexts/ThemeProvider";
-import type { ChartMode } from "../modules/data/interfaces";
+import type { OnceUIStyleConfig } from "../contexts/ThemeProvider.js";
+import type { ChartMode } from "../modules/data/interfaces.js";
 import type {
   CustomScheme,
   CustomSchemeSeeds,
   CustomSchemeThemedScales,
   ThemedSchemeScale,
-} from "../utils/colorScheme";
-import { safeScriptJson } from "../utils/safe-html";
-import { type ThemeColor, themeCssValue, themeStyle } from "../utils/themeCss";
+} from "../utils/colorScheme.js";
+import { DENSITIES, densityScaling } from "../utils/density.js";
+import { safeScriptJson } from "../utils/safe-html.js";
+import { type ThemeColor, themeCssValue, themeStyle } from "../utils/themeCss.js";
 
 /**
  * The shape `ThemeInit` took in 2.0: attribute names rather than the config's
@@ -90,7 +91,18 @@ function themeInitAttributes(
   return attributes;
 }
 
-export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
+/**
+ * The scaling each density picks, for the script, when the config sets a
+ * density but no scaling of its own: then the density chosen on the page
+ * (stored) brings its scaling too. `null` when the config sets a scaling,
+ * which always wins, or no density.
+ */
+function derivedScaling(attributes: Record<string, string>): Record<string, string> | null {
+  if (attributes.scaling || !densityScaling(attributes.density)) return null;
+  return Object.fromEntries(Object.entries(DENSITIES).map(([name, d]) => [name, d.scaling]));
+}
+
+export const ThemeInit = ({ config, dataStyle }: ThemeInitProps) => {
   const seeds: CustomSchemeSeeds = {};
   for (const [key, scheme] of Object.entries(SEED_KEYS)) {
     const seed = (config as Record<string, unknown>)[key];
@@ -111,6 +123,9 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
   // `data-theme`, which the script below sets before anything paints.
   const { root, css, schemes } = themeStyle({ seeds, scales, pageBackground, surfaceBackground });
   const defaultTheme = (config as Record<string, unknown>).defaultTheme;
+  const attributes = themeInitAttributes(config, dataStyle, schemes);
+  const densityScales = derivedScaling(attributes);
+  if (densityScales) attributes.scaling = densityScales[attributes.density];
   const rootCss = Object.entries(root)
     .map(([property, value]) => (themeCssValue(value) ? `${property}:${value.trim()};` : ""))
     .join("");
@@ -125,7 +140,8 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
           (function() {
             try {
               const root = document.documentElement;
-              const config = ${safeScriptJson(themeInitAttributes(config, dataStyle, schemes))};
+              const config = ${safeScriptJson(attributes)};
+              const densityScaling = ${safeScriptJson(densityScales)};
               const defaultTheme = ${safeScriptJson(typeof defaultTheme === "string" ? defaultTheme : null)};
 
               // Apply config defaults FIRST (prevents FOUC)
@@ -158,6 +174,13 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
                   root.setAttribute('data-' + key, value);
                 }
               });
+
+              // A density with no scaling set brings its own scaling, also
+              // when the density was chosen on the page and stored.
+              if (densityScaling && !localStorage.getItem('data-scaling')) {
+                const density = localStorage.getItem('data-density') || config.density;
+                if (densityScaling[density]) root.setAttribute('data-scaling', densityScaling[density]);
+              }
 
             } catch (e) {
               console.error('Failed to initialize theme:', e);

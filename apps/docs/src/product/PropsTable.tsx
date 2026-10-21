@@ -58,6 +58,7 @@ const MIXIN_SPREAD: Record<string, string> = {
   GridProps: "grid",
   TextProps: "text",
   ChartProps: "chart",
+  LeafProps: "leaf",
 };
 
 const EXTENDS_SPREAD: Record<string, string> = {
@@ -67,7 +68,7 @@ const EXTENDS_SPREAD: Record<string, string> = {
   Card: "card",
   Scroller: "scroller",
   Input: "input",
-  DropdownWrapper: "dropdownWrapper",
+  Dropdown: "dropdown",
   User: "user",
 };
 

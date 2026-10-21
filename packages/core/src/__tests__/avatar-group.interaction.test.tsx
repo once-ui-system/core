@@ -46,12 +46,12 @@ describe("AvatarGroup", () => {
   });
 
   it("passes the group size to every avatar and lets one override it", () => {
-    render(<AvatarGroup avatars={[{ value: "AB" }, { value: "CD", size: 3 }]} size="l" />, {
+    render(<AvatarGroup avatars={[{ value: "AB" }, { value: "CD", size: 48 }]} size="l" />, {
       wrapper,
     });
     const [first, second] = avatars();
     expect(first.className).toMatch(/_l_/);
-    expect(second.style.width).toBe("3rem");
+    expect(second.style.width).toBe("var(--static-space-48)");
   });
 
   it("keeps the group's own style on the group, not on the +N avatar", () => {

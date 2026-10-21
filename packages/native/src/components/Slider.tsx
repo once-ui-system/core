@@ -15,12 +15,12 @@ import { touchSlop } from "./touch";
 import { useControlledValue } from "./useControllable";
 
 export interface SliderProps {
-  /** The value, when the host owns the state. Pair with `onChange`. */
+  /** The value, when the host owns the state. Pair with `onValueChange`. */
   value?: number;
   /** Where the slider starts when it manages its own state. Defaults to `min`. */
   defaultValue?: number;
   /** Called with the new value, as a number. */
-  onChange?: (value: number) => void;
+  onValueChange?: (value: number) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -28,7 +28,7 @@ export interface SliderProps {
   showValue?: boolean;
   disabled?: boolean;
   /** The accessible name, when there is no visible `label`. */
-  ariaLabel?: string;
+  "aria-label"?: string;
   style?: ViewStyle;
 }
 
@@ -180,18 +180,18 @@ export function SliderTrack({ from, to }: { from: number; to: number }) {
 export function Slider({
   value,
   defaultValue,
-  onChange,
+  onValueChange,
   min = 0,
   max = 100,
   step = 1,
   label,
   showValue = false,
   disabled = false,
-  ariaLabel,
+  "aria-label": ariaLabel,
   style,
 }: SliderProps) {
   const theme = useTheme();
-  const [raw, setValue] = useControlledValue(value, defaultValue ?? min, onChange);
+  const [raw, setValue] = useControlledValue(value, defaultValue ?? min, onValueChange);
   const current = Math.min(max, Math.max(min, raw));
   const [dragging, setDragging] = useState(false);
   // What was last reported, so moves that land before the next render compare against it.
@@ -221,12 +221,12 @@ export function Slider({
       {(label || showValue) && (
         <Row fillWidth horizontal="between" vertical="center">
           {label && (
-            <Text variant="label-default-s" onBackground="neutral-weak">
+            <Text textVariant="label-default-s" onBackground="neutral-weak">
               {label}
             </Text>
           )}
           {showValue && (
-            <Text variant="label-default-s" onBackground="neutral-medium">
+            <Text textVariant="label-default-s" onBackground="neutral-medium">
               {current}
             </Text>
           )}

@@ -4,17 +4,17 @@ export const Newsletter2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
   return (
     <Row fillWidth fitHeight borderTop="neutral-medium" borderBottom="neutral-medium" {...flex}>
       <Row borderRight="neutral-medium" flex={1} />
-      <Column maxWidth="s" minWidth={24} flex={3} horizontal="center">
+      <Column maxWidth="s" minWidth="24rem" flex={3} horizontal="center">
         <Column padding="32" fillWidth horizontal="center" gap="12">
           <Logo
             size="l"
             icon={{ light: "/trademarks/icon-light.svg", dark: "/trademarks/icon-dark.svg" }}
           />
-          <Heading marginTop="12" align="center" variant="heading-strong-l">
+          <Heading marginTop="12" align="center" textVariant="heading-strong-l">
             The product brief, once a month
           </Heading>
           <Text
-            variant="body-default-m"
+            textVariant="body-default-m"
             align="center"
             wrap="balance"
             marginBottom="20"
@@ -23,7 +23,7 @@ export const Newsletter2: React.FC<React.ComponentProps<typeof Row>> = ({ ...fle
             Practical notes on product craft, interface systems, and the decisions behind each
             release
           </Text>
-          <Row maxWidth={20}>
+          <Row maxWidth="20rem">
             <Input
               label="Work email"
               placeholder="you@company.com"

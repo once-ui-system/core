@@ -1,0 +1,31 @@
+{
+ "name": "Switch",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A 40×24 track with a sliding knob, and an optional label.",
+ "mixins": [
+  "ControlChromeProps"
+ ],
+ "props": {
+  "checked": "boolean",
+  "defaultChecked": "boolean = false",
+  "onCheckedChange": "(checked: boolean) => void",
+  "label": "ReactNode",
+  "description": "ReactNode",
+  "loading": "boolean = false",
+  "disabled": "boolean = false",
+  "reverse": "boolean = false",
+  "aria-label": "string",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {
+  "ControlChromeProps": {
+   "size": "TShirtSizes",
+   "error": "boolean",
+   "errorMessage": "ReactNode"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

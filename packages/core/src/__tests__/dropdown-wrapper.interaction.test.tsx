@@ -5,7 +5,7 @@ import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Button } from "../components/Button";
 import { Column } from "../components/Column";
-import { DropdownWrapper } from "../components/DropdownWrapper";
+import { Dropdown } from "../components/Dropdown";
 import { Input } from "../components/Input";
 import { Option } from "../components/Option";
 import { resetScrollLockState } from "../components/ScrollLock";
@@ -53,11 +53,9 @@ describe("DropdownWrapper open state", () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
     render(
-      <DropdownWrapper
-        trigger={<Button>Actions</Button>}
-        dropdown={list}
-        onOpenChange={onOpenChange}
-      />,
+      <Dropdown trigger={<Button>Actions</Button>} onOpenChange={onOpenChange}>
+        {list}
+      </Dropdown>,
       { wrapper: wrap },
     );
 
@@ -77,12 +75,9 @@ describe("DropdownWrapper open state", () => {
     const user = userEvent.setup();
     const onOpenChange = vi.fn();
     const { rerender } = render(
-      <DropdownWrapper
-        open={false}
-        onOpenChange={onOpenChange}
-        trigger={<Button>Actions</Button>}
-        dropdown={list}
-      />,
+      <Dropdown open={false} onOpenChange={onOpenChange} trigger={<Button>Actions</Button>}>
+        {list}
+      </Dropdown>,
       { wrapper: wrap },
     );
 
@@ -91,12 +86,9 @@ describe("DropdownWrapper open state", () => {
     expect(options()).toHaveLength(0);
 
     rerender(
-      <DropdownWrapper
-        open
-        onOpenChange={onOpenChange}
-        trigger={<Button>Actions</Button>}
-        dropdown={list}
-      />,
+      <Dropdown open onOpenChange={onOpenChange} trigger={<Button>Actions</Button>}>
+        {list}
+      </Dropdown>,
     );
     await waitForOpen();
     expect(trigger()).toHaveAttribute("aria-expanded", "true");
@@ -106,7 +98,7 @@ describe("DropdownWrapper open state", () => {
     const user = userEvent.setup();
     render(
       <>
-        <DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} />
+        <Dropdown trigger={<Button>Actions</Button>}>{list}</Dropdown>
         <p>Outside</p>
       </>,
       { wrapper: wrap },
@@ -119,7 +111,7 @@ describe("DropdownWrapper open state", () => {
 
   it("closes on Escape and hands focus back to the trigger", async () => {
     const user = userEvent.setup();
-    render(<DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} />, {
+    render(<Dropdown trigger={<Button>Actions</Button>}>{list}</Dropdown>, {
       wrapper: wrap,
     });
     await user.tab();
@@ -134,15 +126,12 @@ describe("DropdownWrapper open state", () => {
     const user = userEvent.setup();
     render(
       <>
-        <DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} />
-        <DropdownWrapper
-          trigger={<Button>Sort</Button>}
-          dropdown={
-            <Column>
-              <Option value="name" label="Name" />
-            </Column>
-          }
-        />
+        <Dropdown trigger={<Button>Actions</Button>}>{list}</Dropdown>
+        <Dropdown trigger={<Button>Sort</Button>}>
+          <Column>
+            <Option value="name" label="Name" />
+          </Column>
+        </Dropdown>
       </>,
       { wrapper: wrap },
     );
@@ -159,7 +148,9 @@ describe("DropdownWrapper open state", () => {
   it("does not open from a click with disableTriggerClick", async () => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper disableTriggerClick trigger={<Button>Actions</Button>} dropdown={list} />,
+      <Dropdown disableTriggerClick trigger={<Button>Actions</Button>}>
+        {list}
+      </Dropdown>,
       {
         wrapper: wrap,
       },
@@ -174,7 +165,9 @@ describe("DropdownWrapper picking", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(
-      <DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} onSelect={onSelect} />,
+      <Dropdown trigger={<Button>Actions</Button>} onSelect={onSelect}>
+        {list}
+      </Dropdown>,
       { wrapper: wrap },
     );
     await user.click(trigger());
@@ -197,7 +190,9 @@ describe("DropdownWrapper picking", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(
-      <DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} onSelect={onSelect} />,
+      <Dropdown trigger={<Button>Actions</Button>} onSelect={onSelect}>
+        {list}
+      </Dropdown>,
       { wrapper: wrap },
     );
     await user.click(trigger());
@@ -218,15 +213,12 @@ describe("DropdownWrapper picking", () => {
     const onOpenChange = vi.fn();
     const onRename = vi.fn();
     render(
-      <DropdownWrapper
-        trigger={<Button>Actions</Button>}
-        onSelect={onSelect}
-        onOpenChange={onOpenChange}
-        dropdown={[
+      <Dropdown trigger={<Button>Actions</Button>} onSelect={onSelect} onOpenChange={onOpenChange}>
+        {[
           <Option key="rename" value="rename" label="Rename" onClick={onRename} />,
           <Option key="delete" value="delete" label="Delete" />,
         ]}
-      />,
+      </Dropdown>,
       { wrapper: wrap },
     );
     await user.click(trigger());
@@ -243,12 +235,9 @@ describe("DropdownWrapper picking", () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();
     render(
-      <DropdownWrapper
-        closeAfterClick={false}
-        trigger={<Button>Actions</Button>}
-        dropdown={list}
-        onSelect={onSelect}
-      />,
+      <Dropdown closeAfterClick={false} trigger={<Button>Actions</Button>} onSelect={onSelect}>
+        {list}
+      </Dropdown>,
       { wrapper: wrap },
     );
     await user.click(trigger());
@@ -262,15 +251,12 @@ describe("DropdownWrapper picking", () => {
   it("opens on the selected option", async () => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper
-        trigger={<Button>Actions</Button>}
-        dropdown={
-          <Column>
-            <Option value="a" label="Alpha" />
-            <Option value="b" label="Bravo" selected />
-          </Column>
-        }
-      />,
+      <Dropdown trigger={<Button>Actions</Button>}>
+        <Column>
+          <Option value="a" label="Alpha" />
+          <Option value="b" label="Bravo" selected />
+        </Column>
+      </Dropdown>,
       { wrapper: wrap },
     );
     await user.click(trigger());
@@ -280,7 +266,7 @@ describe("DropdownWrapper picking", () => {
 
   it("is one listbox named by its trigger, with no axe violations, while open", async () => {
     const user = userEvent.setup();
-    render(<DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} />, {
+    render(<Dropdown trigger={<Button>Actions</Button>}>{list}</Dropdown>, {
       wrapper: wrap,
     });
     await user.click(trigger());
@@ -302,11 +288,9 @@ describe("DropdownWrapper with free content", () => {
   it("says it opens a dialog, and moves focus to the panel's first field", async () => {
     const user = userEvent.setup();
     render(
-      <DropdownWrapper
-        handleArrowNavigation={false}
-        trigger={<Button>Rename</Button>}
-        dropdown={<Form />}
-      />,
+      <Dropdown handleArrowNavigation={false} trigger={<Button>Rename</Button>}>
+        <Form />
+      </Dropdown>,
       { wrapper: wrap },
     );
     expect(trigger("Rename")).toHaveAttribute("aria-haspopup", "dialog");
@@ -320,11 +304,9 @@ describe("DropdownWrapper with free content", () => {
     const user = userEvent.setup();
     render(
       <>
-        <DropdownWrapper
-          handleArrowNavigation={false}
-          trigger={<Button>Rename</Button>}
-          dropdown={<Form />}
-        />
+        <Dropdown handleArrowNavigation={false} trigger={<Button>Rename</Button>}>
+          <Form />
+        </Dropdown>
         <button type="button">After</button>
       </>,
       { wrapper: wrap },
@@ -346,13 +328,14 @@ describe("DropdownWrapper with free content", () => {
     const Harness = () => {
       const [open, setOpen] = useState(false);
       return (
-        <DropdownWrapper
+        <Dropdown
           open={open}
           onOpenChange={setOpen}
           handleArrowNavigation={false}
           trigger={<Button>Rename</Button>}
-          dropdown={<Form />}
-        />
+        >
+          <Form />
+        </Dropdown>
       );
     };
     render(<Harness />, { wrapper: wrap });
@@ -373,7 +356,7 @@ describe("DropdownWrapper with free content", () => {
 describe("DropdownWrapper around a plain trigger", () => {
   it("puts the popup semantics on the wrapper", async () => {
     const user = userEvent.setup();
-    render(<DropdownWrapper trigger={<span>More</span>} dropdown={list} />, { wrapper: wrap });
+    render(<Dropdown trigger={<span>More</span>}>{list}</Dropdown>, { wrapper: wrap });
     const buttons = screen.getAllByRole("button", { name: "More" });
     expect(buttons[0]).toHaveAttribute("aria-expanded", "false");
     await user.click(screen.getByText("More"));

@@ -5,13 +5,13 @@ import { Text } from "../components/Text";
 
 /**
  * `<Text flex={1}>` was the most common typecheck slip in the token dry run:
- * a label that takes the free space in a Row. It is a real prop now, on Text
- * and Heading, and lands as inline flex instead of a DOM attribute.
+ * a label that takes the free space in a Row. It is a real prop, on Text and
+ * Heading, and lands as Flex's `flex-n` class instead of a DOM attribute.
  */
 describe("Text and Heading flex", () => {
   it("sets flex from a number or a FlexValue string", () => {
-    expect(renderToStaticMarkup(<Text flex={1}>a</Text>)).toContain('style="flex:1"');
-    expect(renderToStaticMarkup(<Heading flex="2">a</Heading>)).toContain("flex:2");
+    expect(renderToStaticMarkup(<Text flex={1}>a</Text>)).toMatch(/class="[^"]*\bflex-1\b/);
+    expect(renderToStaticMarkup(<Heading flex="2">a</Heading>)).toMatch(/class="[^"]*\bflex-2\b/);
     expect(renderToStaticMarkup(<Text flex={1}>a</Text>)).not.toContain(' flex="');
   });
 });

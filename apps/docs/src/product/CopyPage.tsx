@@ -4,7 +4,7 @@ import { useCallback, useState } from "react";
 import {
   Button,
   Column,
-  DropdownWrapper,
+  Dropdown,
   Icon,
   IconButton,
   Option,
@@ -41,7 +41,7 @@ function CopyPage({ path }: CopyPageProps) {
       setTimeout(() => setCopied(false), 2000);
     } catch {
       addToast({
-        variant: "danger",
+        tone: "danger",
         message: "Could not copy this page. Open it as Markdown instead.",
       });
     }
@@ -66,7 +66,7 @@ function CopyPage({ path }: CopyPageProps) {
       >
         {copied ? "Copied" : "Copy for LLM"}
       </Button>
-      <DropdownWrapper
+      <Dropdown
         open={open}
         onOpenChange={setOpen}
         placement="bottom-end"
@@ -82,9 +82,7 @@ function CopyPage({ path }: CopyPageProps) {
             aria-expanded={open}
             onClick={() => setOpen((value) => !value)}
           />
-        }
-        dropdown={
-          <Column maxWidth={12} padding="4" gap="2">
+        }><Column maxWidth="12rem" padding="4" gap="2">
             <Option
               value="markdown"
               prefix={<Icon name="document" size="xs" onBackground="neutral-weak" />}
@@ -110,9 +108,7 @@ function CopyPage({ path }: CopyPageProps) {
                 openWith("https://claude.ai/new?q=");
               }}
             />
-          </Column>
-        }
-      />
+          </Column></Dropdown>
     </Row>
   );
 }

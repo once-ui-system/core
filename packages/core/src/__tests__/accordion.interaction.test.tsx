@@ -109,7 +109,7 @@ describe("Accordion: state", () => {
   it("starts open with `open` and no onToggle, then toggles itself", async () => {
     const user = userEvent.setup();
     render(
-      <Accordion title="Shipping" open>
+      <Accordion title="Shipping" defaultOpen>
         Ships in 2 days
       </Accordion>,
       { wrapper },
@@ -123,7 +123,7 @@ describe("Accordion: state", () => {
     const user = userEvent.setup();
     const onToggle = vi.fn();
     const { rerender } = render(
-      <Accordion title="Shipping" open={false} onToggle={onToggle}>
+      <Accordion title="Shipping" open={false} onOpenChange={onToggle}>
         Ships in 2 days
       </Accordion>,
       { wrapper },
@@ -132,7 +132,7 @@ describe("Accordion: state", () => {
     expect(onToggle).toHaveBeenCalledTimes(1);
     expect(header("Shipping")).toHaveAttribute("aria-expanded", "false");
     rerender(
-      <Accordion title="Shipping" open onToggle={onToggle}>
+      <Accordion title="Shipping" open onOpenChange={onToggle}>
         Ships in 2 days
       </Accordion>,
     );
@@ -144,7 +144,7 @@ describe("Accordion: state", () => {
     const Host = () => {
       const [open, setOpen] = useState(false);
       return (
-        <Accordion title="Shipping" open={open} onToggle={() => setOpen((o) => !o)}>
+        <Accordion title="Shipping" open={open} onOpenChange={() => setOpen((o) => !o)}>
           Ships in 2 days
         </Accordion>
       );

@@ -1,24 +1,25 @@
 {
  "name": "CountFx",
- "group": "components",
+ "group": "fx",
+ "importFrom": "@once-ui-system/fx",
  "extends": [
   "Text"
  ],
  "mixins": [
   "CommonProps",
-  "DisplayProps",
-  "SpacingProps",
+  "LeafProps",
   "TextProps"
  ],
  "props": {
   "value": "!number",
-  "speed": "number = 1000",
+  "duration": "number = 1000",
   "easing": "\"linear\" | \"ease-out\" | \"ease-in-out\" = ease-out",
   "format": "(value: number) => string",
   "separator": "string",
   "decimals": "number",
   "effect": "\"simple\" | \"wheel\" | \"smooth\" = simple",
-  "children": "React.ReactNode"
+  "children": "React.ReactNode",
+  "opacity": "Opacity"
  },
  "tags": [
   "effect",
@@ -31,8 +32,7 @@
  ],
  "mixinsRef": [
   "CommonProps",
-  "DisplayProps",
-  "SpacingProps",
+  "LeafProps",
   "TextProps"
  ],
  "tokensRef": "see tokens.json",
@@ -40,62 +40,56 @@
   "CommonProps": {
    "onBackground": "Colors",
    "onSolid": "Colors",
-   "align": "CSSProperties[\"textAlign\"]"
+   "align": "CSSProperties[\"textAlign\"]",
+   "children": "ReactNode",
+   "className": "string",
+   "style": "React.CSSProperties"
   },
-  "DisplayProps": {
-   "as": "ElementType",
-   "inline": "boolean",
-   "hide": "boolean",
-   "pointerEvents": "\"none\" | \"all\" | \"auto\"",
-   "userSelect": "UserSelect",
+  "LeafProps": {
+   "margin": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginTop": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginRight": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginBottom": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginLeft": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginX": "SpacingToken | number | CSSUnit | \"auto\"",
+   "marginY": "SpacingToken | number | CSSUnit | \"auto\"",
+   "flex": "FlexValue",
+   "fillWidth": "boolean",
    "position": "CSSProperties[\"position\"]",
-   "overflow": "CSSProperties[\"overflow\"]",
-   "overflowX": "CSSProperties[\"overflowX\"]",
-   "overflowY": "CSSProperties[\"overflowY\"]",
-   "scrollbar": "\"default\" | \"minimal\"",
-   "transition": "\"micro-short\" | \"micro-medium\" | \"micro-long\" | \"macro-short\" | \"macro-medium\" | \"macro-long\"",
-   "opacity": "Opacity",
-   "zIndex": "-1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | \"-1\" | \"0\" | \"1\" | \"2\" | \"3\" | \"4\" | \"5\" | \"6\" | \"7\" | \"8\" | \"9\" | \"10\"",
-   "dark": "boolean",
-   "light": "boolean"
-  },
-  "SpacingProps": {
-   "padding": "SpacingToken | number",
-   "paddingLeft": "SpacingToken | number",
-   "paddingRight": "SpacingToken | number",
-   "paddingTop": "SpacingToken | number",
-   "paddingBottom": "SpacingToken | number",
-   "paddingX": "SpacingToken | number",
-   "paddingY": "SpacingToken | number",
-   "margin": "SpacingToken | number",
-   "marginLeft": "SpacingToken | number",
-   "marginRight": "SpacingToken | number",
-   "marginTop": "SpacingToken | number",
-   "marginBottom": "SpacingToken | number",
-   "marginX": "SpacingToken | number",
-   "marginY": "SpacingToken | number",
-   "gap": "SpacingToken | number | \"-1\"",
    "top": "SpacingToken | number | CSSUnit",
    "right": "SpacingToken | number | CSSUnit",
    "bottom": "SpacingToken | number | CSSUnit",
    "left": "SpacingToken | number | CSSUnit",
-   "translateX": "SpacingToken | number | CSSUnit",
-   "translateY": "SpacingToken | number | CSSUnit"
+   "className": "string",
+   "style": "CSSProperties"
   },
   "TextProps": {
-   "as": "T",
-   "variant": "TextVariant",
+   "as": "ElementType",
+   "textVariant": "TextVariant",
    "wrap": "CSSProperties[\"textWrap\"]",
-   "size": "TextSize",
-   "weight": "TextWeight",
    "family": "TextType",
+   "weight": "TextWeight",
    "truncate": "boolean",
-   "flex": "FlexValue | number",
    "xl": "TextBreakpointHide",
    "l": "TextBreakpointHide",
    "m": "TextBreakpointHide",
    "s": "TextBreakpointHide",
    "xs": "TextBreakpointHide"
   }
+ },
+ "types": {
+  "Opacity": [
+   "0",
+   "10",
+   "20",
+   "30",
+   "40",
+   "50",
+   "60",
+   "70",
+   "80",
+   "90",
+   "100"
+  ]
  }
 }

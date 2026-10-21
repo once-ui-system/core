@@ -80,16 +80,16 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
         <Grid fillWidth columns={5} m={{ columns: 3 }} s={{ columns: 2 }} gap="32">
           {navigation.map((section) => (
             <Column key={section.title} gap="24" paddingY="8">
-              <Text variant="label-default-s">{section.title}</Text>
+              <Text textVariant="label-default-s">{section.title}</Text>
               <Row fillWidth s={{ direction: "column" }} gap="24">
                 <Column fillWidth key={`${section.title}-${section.title}`} gap="16">
                   {section.items.map((item) => (
                     <SmartLink key={`${item.label}-${item.href}`} href={item.href} unstyled>
-                      <Text variant="body-default-s" onBackground="neutral-weak">
+                      <Text textVariant="body-default-s" onBackground="neutral-weak">
                         {item.label}
                       </Text>
                       {item.tag && (
-                        <Tag style={{ transform: "scale(0.9)" }} scheme="brand" size="s">
+                        <Tag style={{ transform: "scale(0.9)" }} tone="brand" size="s">
                           {item.tag}
                         </Tag>
                       )}
@@ -135,7 +135,7 @@ export const Footer3 = (flex: React.ComponentProps<typeof Column>) => {
                 size="l"
                 key={item.label}
                 href={item.href}
-                ariaLabel={item.label}
+                aria-label={item.label}
               />
             ))}
           </Row>

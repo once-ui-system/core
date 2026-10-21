@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .container {
@@ -109,6 +110,83 @@
     background: var(--brand-on-solid-strong);
     width: var(--static-space-12);
     height: var(--static-space-2);
+}
+/* Sizes: m is the 20px box above; a Form's size reaches it through
+   useFieldSize, as it reaches Input. */
+@mixin box($space) {
+    width: var(--static-space-#{$space});
+    height: var(--static-space-#{$space});
+    min-width: var(--static-space-#{$space});
+    min-height: var(--static-space-#{$space});
+}
+
+.s .element {
+    @include box(16);
+}
+
+.l .element {
+    @include box(24);
+}
+
+/* No `size` (here or on a Form): m, or the theme density's s or l
+   (density.scss). A radio's dot is sized here then rather than inline. */
+.dot {
+    width: var(--static-space-12);
+    height: var(--static-space-12);
+}
+
+.auto {
+    @include density.size(s) {
+        .element {
+            @include box(16);
+        }
+
+        .dot {
+            width: var(--static-space-8);
+            height: var(--static-space-8);
+        }
+    }
+
+    @include density.size(l) {
+        .element {
+            @include box(24);
+        }
+
+        .dot {
+            width: var(--static-space-16);
+            height: var(--static-space-16);
+        }
+    }
+}
+
+/* The label, description and error beside a checkbox, radio or switch with
+   no size: InteractiveDetails' text presets per size (CONTROL_TEXT). */
+.autoText {
+    @include density.parts(s) {
+        .detailLabel {
+            @include density.text(label, s);
+        }
+
+        .detailBody {
+            @include density.text(body, xs);
+        }
+    }
+
+    @include density.parts(l) {
+        .detailLabel {
+            @include density.text(label, l);
+        }
+
+        .detailBody {
+            @include density.text(body, m);
+        }
+    }
+}
+
+/* `error` / `errorMessage`: the danger border Input draws. */
+.error .element:not(.checked) {
+    border-color: var(--danger-border-medium);
+    background-color: var(--danger-background-medium);
 }
 
 // A 20px box is a small target for a finger: it takes taps from 44px around it.

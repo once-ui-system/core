@@ -94,7 +94,7 @@ export const Modal = ({ children, backdrop, title, isOpen, onClose }: ModalProps
         {backdrop}
         <Column
           ref={dialogRef}
-          maxWidth={52}
+          maxWidth="52rem"
           fillHeight
           background="page"
           topRadius="xl"
@@ -110,7 +110,7 @@ export const Modal = ({ children, backdrop, title, isOpen, onClose }: ModalProps
             <Row position="absolute" right="0" top="0" paddingTop="l" paddingRight="l" zIndex={2}>
               <IconButton icon="close" onClick={onClose} tooltip="Close" tooltipPosition="left" variant="secondary" />
             </Row>
-            <Heading as="h2" variant="display-default-xs">
+            <Heading as="h2" textVariant="display-default-xs">
               {title}
             </Heading>
             {children}

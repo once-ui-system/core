@@ -1,3 +1,4 @@
+@use "../styles/density.scss" as density;
 @use "../styles/touch.scss" as touch;
 
 .container {
@@ -112,6 +113,66 @@
     to {
         transform: translate(-50%, -50%) scale(1);
     }
+}
+/* Sizes: m is the 40 × 24 track above. */
+@mixin s {
+    .switch {
+        width: var(--static-space-32);
+        min-width: var(--static-space-32);
+        height: var(--static-space-20);
+
+        &.checked .element {
+            left: calc(100% - var(--static-space-16));
+        }
+    }
+
+    .element {
+        width: var(--static-space-12);
+        height: var(--static-space-12);
+    }
+}
+
+@mixin l {
+    .switch {
+        width: var(--static-space-48);
+        min-width: var(--static-space-48);
+        height: 1.75rem;
+
+        &.checked .element {
+            left: calc(100% - var(--static-space-24));
+        }
+    }
+
+    .element {
+        width: var(--static-space-20);
+        height: var(--static-space-20);
+    }
+}
+
+.s {
+    @include s;
+}
+
+.l {
+    @include l;
+}
+
+/* No `size` (here or on a Form): m, or the theme density's s or l (density.scss). */
+.auto {
+    @include density.size(s) {
+        @include s;
+    }
+
+    @include density.size(l) {
+        @include l;
+    }
+}
+
+/* `error` / `errorMessage`: the danger border Input draws. */
+.error .switch:not(.checked) {
+    border-color: var(--danger-border-medium);
+    // Themes whose solid border width is 0 draw no border: a ring shows it there too.
+    box-shadow: 0 0 0 1px var(--danger-border-medium);
 }
 
 // A 24px-high switch is a small target for a finger: it takes taps from 44px

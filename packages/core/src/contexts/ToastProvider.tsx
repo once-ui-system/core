@@ -1,9 +1,9 @@
 "use client";
 
 import React, { ReactNode, useCallback, useContext, useId, useMemo, useRef, useState } from "react";
-import { Toaster } from "../components/Toaster";
-import { ToastPosition } from "../types";
-import { type Toast, ToastContext } from "./ToastContext";
+import { Toaster } from "../components/Toaster.js";
+import { ToastPosition } from "../types.js";
+import { type Toast, ToastContext } from "./ToastContext.js";
 
 export const useToast = () => {
   const context = useContext(ToastContext);
@@ -13,14 +13,21 @@ export const useToast = () => {
   return context;
 };
 
-const ToastProvider: React.FC<{
+const ToastProvider = ({
+  children,
+  xl,
+  l,
+  m,
+  s,
+  xs,
+}: {
   children: ReactNode;
   xl?: ToastPosition;
   l?: ToastPosition;
   m?: ToastPosition;
   s?: ToastPosition;
   xs?: ToastPosition;
-}> = ({ children, xl, l, m, s, xs }) => {
+}) => {
   // Use the same Toast interface type for the state
   const [toasts, setToasts] = useState<Toast[]>([]);
   // Ids are unique per provider by construction: a random suffix could repeat,

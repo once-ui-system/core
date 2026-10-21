@@ -19,6 +19,7 @@
 .accent-solid-medium
 .accent-solid-strong
 .accent-solid-weak
+.align-baseline
 .align-center
 .align-end
 .align-start
@@ -265,6 +266,7 @@
 .justify-even
 .justify-start
 .justify-stretch
+.l-align-baseline
 .l-align-center
 .l-align-end
 .l-align-start
@@ -840,6 +842,8 @@
 .left-72
 .left-8
 .left-80
+.list-decimal
+.list-disc
 .m-0
 .m-1
 .m-104
@@ -859,6 +863,7 @@
 .m-72
 .m-8
 .m-80
+.m-align-baseline
 .m-align-center
 .m-align-end
 .m-align-start
@@ -1870,7 +1875,9 @@
 .radius-xs-top
 .radius-xs-top-left
 .radius-xs-top-right
+.reset-button
 .reset-button-styles
+.reset-list
 .right-0
 .right-1
 .right-104
@@ -1902,6 +1909,7 @@
 .rows-7
 .rows-8
 .rows-9
+.s-align-baseline
 .s-align-center
 .s-align-end
 .s-align-start
@@ -2542,6 +2550,7 @@
 .warning-solid-medium
 .warning-solid-strong
 .warning-solid-weak
+.xl-align-baseline
 .xl-align-center
 .xl-align-end
 .xl-align-start
@@ -3098,6 +3107,7 @@
 .xl-z-index-7
 .xl-z-index-8
 .xl-z-index-9
+.xs-align-baseline
 .xs-align-center
 .xs-align-end
 .xs-align-start

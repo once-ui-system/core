@@ -1,6 +1,6 @@
-import type { DateRange } from "../../components/DateRangePicker";
-import type { Flex } from "../../components/Flex";
-import type { ColorValue, TShirtSizes } from "../../types";
+import type { DateRange } from "../../components/DatePicker.js";
+import type { FlexElementProps } from "../../interfaces.js";
+import type { ColorValue, TShirtSizes } from "../../types.js";
 
 /**
  * Recharts' own CurveType, inlined.
@@ -33,13 +33,22 @@ type ChartMode = "categorical" | "divergent" | "sequential";
 type BarWidth = TShirtSizes | "fill" | number;
 type curveType = CurveType;
 
+/**
+ * A row of chart data when no row type is given: a label on the x axis and a
+ * value per series. Charts take your own row type too — `data: T[]` — so an
+ * `interface RevenueRow { month: string; revenue: number }` needs no cast.
+ */
 interface DataPoint {
   [key: string]: string | number | Date | undefined;
   label?: string;
 }
 
-interface SeriesConfig {
-  key: string;
+/** The string keys of a row type: what a series can plot. */
+type SeriesKey<T> = Extract<keyof T, string>;
+
+/** One series: the row key it plots (`"revenue"`), and an optional colour. */
+interface SeriesConfig<T = DataPoint> {
+  key: SeriesKey<T>;
   color?: ColorValue;
 }
 
@@ -72,17 +81,21 @@ interface LegendConfig {
     | "bottom-center";
 }
 
-interface ChartProps extends Omit<React.ComponentProps<typeof Flex>, "title" | "description"> {
+/**
+ * What every chart takes. `T` is the row type, inferred from `data`: `series`
+ * keys are checked against it, so a typo in a key is a type error.
+ */
+interface ChartProps<T extends object = DataPoint>
+  extends Omit<FlexElementProps, "title" | "description"> {
   title?: React.ReactNode;
   description?: React.ReactNode;
-  series: SeriesConfig | SeriesConfig[];
+  series: SeriesConfig<T> | SeriesConfig<T>[];
   /**
-   * One object per point: the x-axis value and a number per series key, as
-   * `DataPoint`. Rows typed with an `interface` (`RevenuePoint[]`) and
-   * `readonly` arrays are taken as they are; an interface has no index
-   * signature, so `DataPoint[]` alone rejected them.
+   * One object per point: the x-axis value and a number per series key.
+   * Rows typed with an `interface` (`RevenuePoint[]`) and `readonly` arrays
+   * are taken as they are.
    */
-  data: readonly DataPoint[] | readonly object[];
+  data: readonly T[];
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
@@ -105,4 +118,5 @@ export type {
   DateConfig,
   PresetsConfig,
   SeriesConfig,
+  SeriesKey,
 };

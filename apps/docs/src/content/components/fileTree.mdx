@@ -81,15 +81,15 @@ type FileTreeItem =
 
 ## Controlled selection and expansion
 
-Use `selectedId` with `onSelect` to control selection, and `expandedIds` with `onExpandChange` to control open folders. Omit those state props to let the component manage the state internally; use `defaultSelectedId` and `defaultExpandedIds` for initial state.
+Use `selectedId` with `onSelectedIdChange` to control selection (`onSelect` fires on every choice, also of the selected item), and `expandedIds` with `onExpandedIdsChange` to control open folders. Omit those state props to let the component manage the state internally; use `defaultSelectedId` and `defaultExpandedIds` for initial state.
 
 ```tsx
 <FileTree
   items={items}
   selectedId={selectedId}
-  onSelect={(item) => setSelectedId(item.id)}
+  onSelectedIdChange={setSelectedId}
   expandedIds={expandedIds}
-  onExpandChange={(ids) => setExpandedIds(ids)}
+  onExpandedIdsChange={(ids) => setExpandedIds(ids)}
 />
 ```
 

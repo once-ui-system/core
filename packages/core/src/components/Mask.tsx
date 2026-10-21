@@ -1,166 +1,174 @@
 "use client";
 
 import classNames from "clsx";
-import React, { CSSProperties, forwardRef, useCallback, useEffect, useRef } from "react";
-import { useInViewport } from "../hooks/useInViewport";
-import { useReducedMotion } from "../hooks/useReducedMotion";
-import { Flex } from "./Flex";
+import React, { CSSProperties, useCallback, useEffect, useRef } from "react";
+import { useInViewport } from "../hooks/useInViewport.js";
+import { useReducedMotion } from "../hooks/useReducedMotion.js";
+import type { CSSUnit } from "../types.js";
+import { cssLength as length } from "../utils/layoutClasses.js";
+import { Flex } from "./Flex.js";
 import styles from "./Mask.module.scss";
 
 export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radius" | "cursor"> {
   cursor?: boolean;
-  x?: number;
-  y?: number;
-  radius?: number;
+  /**
+   * Where the mask's centre sits: a number is a length on the token
+   * scale from the left edge (`16` is 1rem), a string a CSS length (`"50%"` is the middle). Set with `y`. Was a bare percentage
+   * until 3.0 (`x={50}` is `x="50%"` now).
+   */
+  x?: number | CSSUnit;
+  /** As `x`, from the top edge. */
+  y?: number | CSSUnit;
+  /**
+   * The mask's radius: a number is on the token scale, a string a CSS length. Default
+   * `"50svh"`: `svh`, the viewport with a phone's toolbars shown, holds still
+   * as they slide away, where `vh` would make the mask jump; on a desktop the
+   * two are the same. Was a bare `vh` count until 3.0: write a 2.x
+   * `radius={50}` as a string, `"50"` followed by the unit.
+   */
+  radius?: number | CSSUnit;
   reducedMotion?: boolean | "auto";
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }
 
-const Mask = forwardRef<HTMLDivElement, MaskProps>(
-  (
-    {
-      cursor = false,
-      x,
-      y,
-      radius = 50,
-      reducedMotion = "auto",
-      children,
-      className,
-      style,
-      ...rest
-    },
-    forwardedRef,
-  ) => {
-    const maskRef = useRef<HTMLDivElement>(null);
-    const cursorPosRef = useRef({ x: 0, y: 0 });
-    const smoothPosRef = useRef({ x: 0, y: 0 });
-    const rafIdRef = useRef<number | null>(null);
+const Mask = ({
+  ref: forwardedRef,
+  cursor = false,
+  x,
+  y,
+  radius = "50svh",
+  reducedMotion = "auto",
+  children,
+  className,
+  style,
+  ...rest
+}: MaskProps) => {
+  const maskRef = useRef<HTMLDivElement>(null);
+  const cursorPosRef = useRef({ x: 0, y: 0 });
+  const smoothPosRef = useRef({ x: 0, y: 0 });
+  const rafIdRef = useRef<number | null>(null);
 
-    const isInViewport = useInViewport(maskRef);
-    const { shouldAnimate } = useReducedMotion(reducedMotion);
-    const isActive = cursor && isInViewport && shouldAnimate;
+  const isInViewport = useInViewport(maskRef);
+  const { shouldAnimate } = useReducedMotion(reducedMotion);
+  const isActive = cursor && isInViewport && shouldAnimate;
 
-    useEffect(() => {
-      if (forwardedRef) {
-        if (typeof forwardedRef === "function") {
-          forwardedRef(maskRef.current);
-        } else if (forwardedRef && "current" in forwardedRef) {
-          (forwardedRef as React.RefObject<HTMLDivElement | null>).current = maskRef.current;
-        }
+  useEffect(() => {
+    if (forwardedRef) {
+      if (typeof forwardedRef === "function") {
+        forwardedRef(maskRef.current);
+      } else if (forwardedRef && "current" in forwardedRef) {
+        (forwardedRef as React.RefObject<HTMLDivElement | null>).current = maskRef.current;
       }
-    }, [forwardedRef]);
+    }
+  }, [forwardedRef]);
 
-    const writeCssVars = useCallback((px: number, py: number) => {
+  const writeCssVars = useCallback((px: number, py: number) => {
+    const el = maskRef.current;
+    if (!el) return;
+    el.style.setProperty("--mask-position-x", `${px}px`);
+    el.style.setProperty("--mask-position-y", `${py}px`);
+  }, []);
+
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleMouseMove = (event: MouseEvent) => {
       const el = maskRef.current;
       if (!el) return;
-      el.style.setProperty("--mask-position-x", `${px}px`);
-      el.style.setProperty("--mask-position-y", `${py}px`);
-    }, []);
-
-    useEffect(() => {
-      if (!isActive) return;
-
-      const handleMouseMove = (event: MouseEvent) => {
-        const el = maskRef.current;
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        cursorPosRef.current = {
-          x: event.clientX - rect.left,
-          y: event.clientY - rect.top,
-        };
+      const rect = el.getBoundingClientRect();
+      cursorPosRef.current = {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
       };
-
-      document.addEventListener("mousemove", handleMouseMove, { passive: true });
-
-      return () => {
-        document.removeEventListener("mousemove", handleMouseMove);
-      };
-    }, [isActive]);
-
-    useEffect(() => {
-      if (!isActive) {
-        if (rafIdRef.current != null) {
-          cancelAnimationFrame(rafIdRef.current);
-          rafIdRef.current = null;
-        }
-        return;
-      }
-
-      const easingFactor = 0.05;
-      const convergenceThreshold = 0.5;
-
-      const tick = () => {
-        const target = cursorPosRef.current;
-        const prev = smoothPosRef.current;
-
-        const dx = target.x - prev.x;
-        const dy = target.y - prev.y;
-
-        if (Math.abs(dx) > convergenceThreshold || Math.abs(dy) > convergenceThreshold) {
-          const nx = prev.x + dx * easingFactor;
-          const ny = prev.y + dy * easingFactor;
-          smoothPosRef.current = { x: nx, y: ny };
-          writeCssVars(nx, ny);
-        }
-
-        rafIdRef.current = requestAnimationFrame(tick);
-      };
-
-      rafIdRef.current = requestAnimationFrame(tick);
-
-      return () => {
-        if (rafIdRef.current != null) {
-          cancelAnimationFrame(rafIdRef.current);
-          rafIdRef.current = null;
-        }
-      };
-    }, [isActive, writeCssVars]);
-
-    const maskStyle = (): CSSProperties => {
-      if (cursor) {
-        return {
-          "--mask-position-x": `${smoothPosRef.current.x}px`,
-          "--mask-position-y": `${smoothPosRef.current.y}px`,
-          // `svh`, the viewport with a phone's toolbars shown: it holds still
-          // as they slide away, where `vh` would make the mask jump. On a
-          // desktop the two are the same.
-          "--mask-radius": `${radius}svh`,
-        } as CSSProperties;
-      }
-
-      if (x != null && y != null) {
-        return {
-          "--mask-position-x": `${x}%`,
-          "--mask-position-y": `${y}%`,
-          "--mask-radius": `${radius}svh`,
-        } as CSSProperties;
-      }
-
-      return {};
     };
 
-    return (
-      <Flex
-        ref={maskRef}
-        fill
-        className={classNames(styles.mask, className)}
-        top="0"
-        left="0"
-        zIndex={0}
-        overflow="hidden"
-        style={{
-          ...maskStyle(),
-          ...style,
-        }}
-        {...rest}
-      >
-        {children}
-      </Flex>
-    );
-  },
-);
+    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [isActive]);
+
+  useEffect(() => {
+    if (!isActive) {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+      return;
+    }
+
+    const easingFactor = 0.05;
+    const convergenceThreshold = 0.5;
+
+    const tick = () => {
+      const target = cursorPosRef.current;
+      const prev = smoothPosRef.current;
+
+      const dx = target.x - prev.x;
+      const dy = target.y - prev.y;
+
+      if (Math.abs(dx) > convergenceThreshold || Math.abs(dy) > convergenceThreshold) {
+        const nx = prev.x + dx * easingFactor;
+        const ny = prev.y + dy * easingFactor;
+        smoothPosRef.current = { x: nx, y: ny };
+        writeCssVars(nx, ny);
+      }
+
+      rafIdRef.current = requestAnimationFrame(tick);
+    };
+
+    rafIdRef.current = requestAnimationFrame(tick);
+
+    return () => {
+      if (rafIdRef.current != null) {
+        cancelAnimationFrame(rafIdRef.current);
+        rafIdRef.current = null;
+      }
+    };
+  }, [isActive, writeCssVars]);
+
+  const maskStyle = (): CSSProperties => {
+    if (cursor) {
+      return {
+        "--mask-position-x": `${smoothPosRef.current.x}px`,
+        "--mask-position-y": `${smoothPosRef.current.y}px`,
+        "--mask-radius": length(radius),
+      } as CSSProperties;
+    }
+
+    if (x != null && y != null) {
+      return {
+        "--mask-position-x": length(x),
+        "--mask-position-y": length(y),
+        "--mask-radius": length(radius),
+      } as CSSProperties;
+    }
+
+    return {};
+  };
+
+  return (
+    <Flex
+      ref={maskRef}
+      fill
+      className={classNames(styles.mask, className)}
+      top="0"
+      left="0"
+      zIndex={0}
+      overflow="hidden"
+      style={{
+        ...maskStyle(),
+        ...style,
+      }}
+      {...rest}
+    >
+      {children}
+    </Flex>
+  );
+};
 
 Mask.displayName = "Mask";
 

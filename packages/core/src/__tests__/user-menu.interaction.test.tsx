@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Column } from "../components/Column";
 import { Option } from "../components/Option";
 import { resetScrollLockState } from "../components/ScrollLock";
-import { UserMenu } from "../components/UserMenu";
+import { User } from "../components/User";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { failOnConsoleError } from "../test/failOnConsoleError";
@@ -23,9 +23,9 @@ beforeEach(() => {
 const Menu = ({
   onSettings,
   ...props
-}: Partial<React.ComponentProps<typeof UserMenu>> & { onSettings?: (value: string) => void }) => (
+}: Partial<React.ComponentProps<typeof User>> & { onSettings?: (value: string) => void }) => (
   <>
-    <UserMenu
+    <User
       name="Lorant One"
       subline="Design Engineer"
       avatarProps={{ value: "LO" }}

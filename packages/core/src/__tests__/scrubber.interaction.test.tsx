@@ -27,7 +27,7 @@ function stubWidth(el: Element, width = 1000) {
 
 const Player = (props: Partial<React.ComponentProps<typeof Scrubber>>) => {
   const [time, setTime] = useState(30000);
-  return <Scrubber duration={60000} value={time} onChange={setTime} {...props} />;
+  return <Scrubber duration={60000} value={time} onValueChange={setTime} {...props} />;
 };
 
 /**
@@ -86,7 +86,7 @@ describe("Scrubber: interaction", () => {
 
   it("leaves other keys alone", () => {
     const onChange = vi.fn();
-    render(<Scrubber duration={1000} value={0} onChange={onChange} />, { wrapper: wrap });
+    render(<Scrubber duration={1000} value={0} onValueChange={onChange} />, { wrapper: wrap });
     const event = new KeyboardEvent("keydown", { key: "Tab", bubbles: true, cancelable: true });
     screen.getByRole("slider").dispatchEvent(event);
     expect(event.defaultPrevented).toBe(false);
@@ -95,7 +95,7 @@ describe("Scrubber: interaction", () => {
 
   it("seeks along a drag on the bar until the pointer is released", () => {
     const onChange = vi.fn();
-    render(<Scrubber duration={10000} value={0} onChange={onChange} />, { wrapper: wrap });
+    render(<Scrubber duration={10000} value={0} onValueChange={onChange} />, { wrapper: wrap });
     const slider = screen.getByRole("slider");
     stubWidth(slider);
     const bar = slider.firstElementChild as HTMLElement;
@@ -107,10 +107,8 @@ describe("Scrubber: interaction", () => {
     expect(onChange.mock.calls).toEqual([[2500], [5000], [10000]]);
   });
 
-  it("takes its name from aria-label or ariaLabel", () => {
-    const { rerender } = render(<Player ariaLabel="Playhead" />, { wrapper: wrap });
-    expect(screen.getByRole("slider", { name: "Playhead" })).toBeInTheDocument();
-    rerender(<Player ariaLabel="Playhead" aria-label="Video position" />);
+  it("takes its name from aria-label", () => {
+    render(<Player aria-label="Video position" />, { wrapper: wrap });
     expect(screen.getByRole("slider", { name: "Video position" })).toBeInTheDocument();
   });
 

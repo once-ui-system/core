@@ -3,6 +3,9 @@
 #
 #   v2.2.0, v2.2.0-rc.0   ->  @once-ui-system/core  (packages/core)
 #   cli-v0.2.0            ->  @once-ui-system/cli   (packages/cli)
+#   fx-v3.0.0             ->  @once-ui-system/fx     (packages/fx)
+#   blocks-v3.0.0         ->  @once-ui-system/blocks (packages/blocks)
+#   foundations-v3.0.0    ->  @once-ui-system/foundations (packages/foundations)
 #   native-v0.1.0-preview.1 -> @once-ui-system/native (packages/native),
 #                            prereleases only: it is a preview, never `latest`
 #
@@ -18,6 +21,9 @@ on:
     tags:
       - "v*"
       - "cli-v*"
+      - "fx-v*"
+      - "blocks-v*"
+      - "foundations-v*"
       - "native-v*"
 
 permissions:
@@ -48,6 +54,9 @@ jobs:
         run: |
           case "$TAG" in
             cli-v*) dir=packages/cli;  version="${TAG#cli-v}" ;;
+            fx-v*)  dir=packages/fx;   version="${TAG#fx-v}" ;;
+            blocks-v*) dir=packages/blocks; version="${TAG#blocks-v}" ;;
+            foundations-v*) dir=packages/foundations; version="${TAG#foundations-v}" ;;
             native-v*) dir=packages/native; version="${TAG#native-v}" ;;
             v*)     dir=packages/core; version="${TAG#v}" ;;
             *) echo "::error::Unrecognised release tag $TAG"; exit 1 ;;
@@ -105,11 +114,16 @@ jobs:
       - name: Install
         run: pnpm install --frozen-lockfile
 
+      # fx and blocks build against core's dist.
+      - name: Build core
+        if: needs.resolve.outputs.dir == 'packages/fx' || needs.resolve.outputs.dir == 'packages/blocks'
+        run: pnpm --filter @once-ui-system/core build
+
       - name: Build, typecheck and test
         working-directory: ${{ needs.resolve.outputs.dir }}
         run: |
           pnpm build
-          pnpm typecheck
+          pnpm run --if-present typecheck
           pnpm test
 
       - name: Pack (dry run)

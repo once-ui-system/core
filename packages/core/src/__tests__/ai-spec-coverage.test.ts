@@ -6,9 +6,10 @@ import spec from "../../ai/spec.json";
 /**
  * Public, documented API the harness used to leave out. `ThemeInit`, `Meta`,
  * `FocusTrap` and `ScrollLock` were on the generator's exclude list, and the
- * two media players live on the `./components/*` subpath that no barrel
- * re-exports — so an agent reading the harness never learned any of them
- * existed, though each has a docs page.
+ * two media players lived on a `./components/*` subpath that no barrel
+ * re-exported — so an agent reading the harness never learned any of them
+ * existed, though each has a docs page. In 3.0 the players, Scrubber and
+ * CompareImage are on `./media` and EmojiPicker on `./emoji` (F9).
  */
 type Entry = {
   group: string;
@@ -30,14 +31,18 @@ describe("harness coverage", () => {
     },
   );
 
-  it.each(["MediaAudioPlayer", "MediaVideoPlayer"])(
-    "%s names the subpath it is imported from",
-    (name) => {
-      expect(components[name].importFrom).toBe(`@once-ui-system/core/components/${name}`);
-      const fromSlice = JSON.parse(readFileSync(slice(name), "utf8"));
-      expect(fromSlice.importFrom).toBe(components[name].importFrom);
-    },
-  );
+  it.each([
+    ["MediaAudioPlayer", "@once-ui-system/core/media"],
+    ["MediaVideoPlayer", "@once-ui-system/core/media"],
+    ["Scrubber", "@once-ui-system/core/media"],
+    ["CompareImage", "@once-ui-system/core/media"],
+    ["MediaUpload", "@once-ui-system/core/media"],
+    ["EmojiPicker", "@once-ui-system/core/emoji"],
+  ])("%s names the subpath it is imported from", (name, subpath) => {
+    expect(components[name].importFrom).toBe(subpath);
+    const fromSlice = JSON.parse(readFileSync(slice(name), "utf8"));
+    expect(fromSlice.importFrom).toBe(components[name].importFrom);
+  });
 
   it("documents Meta as the call it is, with its argument as props", () => {
     expect(components.Meta.call).toBe("Meta.generate(props)");

@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/native",
-  "version": "0.1.0-preview.2",
+  "version": "0.1.0-preview.1",
   "description": "Once UI for React Native (preview): core components with the same props and design tokens as @once-ui-system/core.",
   "keywords": [
     "once-ui",
@@ -35,7 +35,10 @@
     "./package.json": "./package.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "ai",
+    "!ai/catalog.seed.json",
+    "AGENTS.md"
   ],
   "publishConfig": {
     "access": "public",
@@ -53,7 +56,9 @@
     "sync:icons": "node scripts/sync-icons.mjs",
     "check:icons": "node scripts/sync-icons.mjs --check",
     "test:native": "jest",
-    "bundle:native": "node scripts/bundle-native.mjs"
+    "bundle:native": "node scripts/bundle-native.mjs",
+    "generate:ai": "node scripts/generate-ai.cjs",
+    "check:ai": "node scripts/generate-ai.cjs --check"
   },
   "peerDependencies": {
     "react": ">=19",

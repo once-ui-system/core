@@ -57,8 +57,12 @@ describe("HeadingNav: rendering", () => {
 
   it("indents a deeper heading", () => {
     render(<Page />, { wrapper });
-    expect(link("With pnpm").style.paddingLeft).toBe("calc(1 * var(--static-space-8))");
-    expect(link("Install").style.paddingLeft).toBe("calc(0 * var(--static-space-8))");
+    // The math lives in a custom property the padding reads (jsdom cannot
+    // compute a length of math holding a var()).
+    const indent = (name: string) => link(name).style.getPropertyValue("--ou-heading-nav-indent");
+    expect(link("With pnpm").style.paddingLeft).toBe("var(--ou-heading-nav-indent)");
+    expect(indent("With pnpm")).toBe("calc(1 * var(--static-space-8))");
+    expect(indent("Install")).toBe("calc(0 * var(--static-space-8))");
   });
 
   it("drops the header with header={false}", () => {

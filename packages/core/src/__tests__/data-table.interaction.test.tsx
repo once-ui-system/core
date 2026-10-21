@@ -2,7 +2,7 @@ import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { DataTable, type DataTableColumn } from "../components/DataTable";
+import { Table, type TableColumn } from "../components/Table";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 
@@ -18,7 +18,7 @@ const rows: Row[] = [
   { id: 3, name: "Cy", joined: null, tags: ["c"], active: true },
 ];
 
-const columns: DataTableColumn<Row>[] = [
+const columns: TableColumn<Row>[] = [
   { key: "name", header: "Name", sortable: true },
   { key: "joined", header: "Joined", sortable: true },
   { key: "tags", header: "Tags" },
@@ -37,7 +37,7 @@ const column = (index: number) =>
  */
 describe("DataTable interaction", () => {
   it("prints dates, arrays and booleans as text", () => {
-    render(<DataTable columns={columns} rows={rows} aria-label="Members" />, { wrapper });
+    render(<Table columns={columns} rows={rows} aria-label="Members" />, { wrapper });
     expect(screen.getByRole("table", { name: "Members" })).toBeInTheDocument();
     expect(column(1)).toEqual(["2024-05-01", "2023-01-15", ""]);
     expect(column(2)).toEqual(["a, b", "", "c"]);
@@ -46,7 +46,7 @@ describe("DataTable interaction", () => {
 
   it("sorts dates in time order with empty dates last, both ways", async () => {
     const user = userEvent.setup();
-    render(<DataTable columns={columns} rows={rows} />, { wrapper });
+    render(<Table columns={columns} rows={rows} />, { wrapper });
     const sortJoined = screen.getByRole("button", { name: "Joined" });
     await user.click(sortJoined);
     expect(column(0)).toEqual(["Ada", "Bea", "Cy"]);
@@ -59,7 +59,7 @@ describe("DataTable interaction", () => {
 
   it("sorts booleans false first", async () => {
     const user = userEvent.setup();
-    render(<DataTable columns={columns} rows={rows} />, { wrapper });
+    render(<Table columns={columns} rows={rows} />, { wrapper });
     await user.click(screen.getByRole("button", { name: "Active" }));
     expect(column(0)[0]).toBe("Ada");
   });
@@ -68,7 +68,7 @@ describe("DataTable interaction", () => {
     const user = userEvent.setup();
     const onSelectionChange = vi.fn();
     render(
-      <DataTable
+      <Table
         columns={columns}
         rows={rows}
         selectable
@@ -91,7 +91,7 @@ describe("DataTable interaction", () => {
 
   it("starts from defaultSelected and defaultSort", () => {
     render(
-      <DataTable
+      <Table
         columns={columns}
         rows={rows}
         selectable
@@ -117,7 +117,7 @@ describe("DataTable interaction", () => {
     const many = Array.from({ length: 12 }, (_, i) => ({ id: `r${i}`, name: `Item ${i + 1}` }));
     const onPerPageChange = vi.fn();
     const { container } = render(
-      <DataTable
+      <Table
         columns={[{ key: "name", header: "Name" }]}
         rows={many}
         paginated
@@ -144,7 +144,7 @@ describe("DataTable interaction", () => {
     const many = Array.from({ length: 12 }, (_, i) => ({ id: `r${i}`, name: `Item ${i + 1}` }));
     const onPageChange = vi.fn();
     render(
-      <DataTable
+      <Table
         columns={[{ key: "name", header: "Name" }]}
         rows={many}
         paginated
@@ -170,7 +170,7 @@ describe("DataTable interaction", () => {
 
   it("marks the table busy while loading and hides the skeleton rows", async () => {
     const { container } = render(
-      <DataTable columns={columns} rows={rows} loading aria-label="Members" />,
+      <Table columns={columns} rows={rows} loading aria-label="Members" />,
       { wrapper },
     );
     expect(screen.getByRole("table", { name: "Members" })).toHaveAttribute("aria-busy", "true");

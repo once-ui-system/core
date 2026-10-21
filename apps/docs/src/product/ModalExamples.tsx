@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Modal, Button, Column, Text, Input, BlobFx } from "@once-ui-system/core";
+import { Dialog, Button, Column, Text, Input } from "@once-ui-system/core";
+import { BlobFx } from "@once-ui-system/fx";
 
 export function ModalExample() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,7 +12,7 @@ export function ModalExample() {
       <Button onClick={() => setIsOpen(true)}>
         Open Modal
       </Button>
-      <Modal
+      <Dialog variant="sheet"
         open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Modal Title"
@@ -22,7 +23,7 @@ export function ModalExample() {
           </Text>
           <Input id="example" label="Example input" />
         </Column>
-      </Modal>
+      </Dialog>
     </>
   );
 }
@@ -35,7 +36,7 @@ export function ModalWithBackdrop() {
       <Button variant="secondary" onClick={() => setIsOpen(true)}>
         Modal with Backdrop
       </Button>
-      <Modal
+      <Dialog variant="sheet"
         open={isOpen}
         onClose={() => setIsOpen(false)}
         title="Modal with Backdrop"
@@ -48,7 +49,7 @@ export function ModalWithBackdrop() {
             The backdrop appears behind the modal content.
           </Text>
         </Column>
-      </Modal>
+      </Dialog>
     </>
   );
 }

@@ -34,8 +34,8 @@ export function Code() {
             { label: "API" },
           ]}
         />
-        <Heading variant="heading-strong-l">Connect your till</Heading>
-        <Text variant="body-default-s" onBackground="neutral-weak">
+        <Heading textVariant="heading-strong-l">Connect your till</Heading>
+        <Text textVariant="body-default-s" onBackground="neutral-weak">
           Install <InlineCode>@once-ui-system/native</InlineCode> and paste the key below.
         </Text>
         <CodeBlock
@@ -47,11 +47,11 @@ export function Code() {
         />
         <PasswordInput label="API key" defaultValue="sk_test_51Morning" />
         <Column gap="8">
-          <Text variant="label-default-s">Code from your phone</Text>
+          <Text textVariant="label-default-s">Code from your phone</Text>
           <OTPInput length={6} />
         </Column>
         <Row gap="8" vertical="center">
-          <Text variant="body-default-s" onBackground="neutral-weak">
+          <Text textVariant="body-default-s" onBackground="neutral-weak">
             Search with
           </Text>
           <Kbd>⌘</Kbd>

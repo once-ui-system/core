@@ -150,16 +150,16 @@ something of your own, `useAudioLevel(source)` returns the same loudness from 0 
   preview={
     <Row gap="32" center>
       <VoiceVisualizer size="s" state="speaking" />
-      <VoiceVisualizer size="m" state="speaking" color="accent" />
-      <VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />
+      <VoiceVisualizer size="m" state="speaking" tone="accent" />
+      <VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" tone="neutral" />
     </Row>
   }
   codes={[
     {
       code:
 `<VoiceVisualizer size="s" state="speaking" />
-<VoiceVisualizer size="m" state="speaking" color="accent" />
-<VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" color="neutral" />`,
+<VoiceVisualizer size="m" state="speaking" tone="accent" />
+<VoiceVisualizer size="m" variant="bars" bars={9} state="speaking" tone="neutral" />`,
       language: "tsx",
       label: "Sizes and colors"
     }
@@ -230,6 +230,38 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
   ]}
 />
 
+### Cube
+
+`working="cube"` gives the mascot something to do while it works. At rest it is the same soft
+blob with its face. When it starts thinking, the face fades, the blob firms up into a 2 × 2 cube
+and it turns its layers like a puzzle. When the work is done it solves the cube, turns it 45° into
+the Once UI mark for a beat, and softens back into the blob with its face, a little happier.
+
+`sides` colors the cube: `classic` keeps the puzzle colors with the front in the mascot's color,
+`tints` uses shades of it, `mono` paints every side the same, or pass a color per side.
+`face="flat"` draws the eyes, brows and mouth flat on the body; `surface="flat"` turns the light
+off, so the shape is one solid color. Everything else from the flat mascot carries over.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<MascotCubeExample />}
+  codes={[
+    {
+      code:
+`<Mascot working="cube" state={busy ? "thinking" : "idle"} />
+<Mascot working="cube" sides="tints" face="flat" eyes="tile" />
+<Mascot working="cube" sides="mono" surface="flat" eyes="pill" color="accent" />
+<Mascot working="cube" sides={{ top: "#ffc53d", right: "#3fb6ff" }} />`,
+      language: "tsx",
+      label: "Cube"
+    }
+  ]}
+/>
+
+The cube draws with WebGL and no extra dependency. It only animates while it is on screen, and
+where WebGL is missing it renders the flat mascot instead.
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
@@ -243,8 +275,8 @@ where the product's own loader belongs.
     <Row gap="32" center>
       <LogoSpinner size="xl" />
       <LogoSpinner size="xl" variant="wave" />
-      <LogoSpinner size="xl" color="accent" />
-      <LogoSpinner size="xl" color="neutral" speed={2.4} />
+      <LogoSpinner size="xl" tone="accent" />
+      <LogoSpinner size="xl" tone="neutral" speed={2.4} />
     </Row>
   }
   codes={[
@@ -252,8 +284,8 @@ where the product's own loader belongs.
       code:
 `<LogoSpinner size="xl" />
 <LogoSpinner size="xl" variant="wave" />
-<LogoSpinner size="xl" color="accent" />
-<LogoSpinner size="xl" color="neutral" speed={2.4} />`,
+<LogoSpinner size="xl" tone="accent" />
+<LogoSpinner size="xl" tone="neutral" speed={2.4} />`,
       language: "tsx",
       label: "Variants"
     }
@@ -262,7 +294,7 @@ where the product's own loader belongs.
 
 ## Accessibility
 
-`WorkingIndicator` is one `status` region with a fixed name, "Working" unless you pass `ariaLabel`,
+`WorkingIndicator` is one `status` region with a fixed name, "Working" unless you pass `aria-label`,
 so a screen reader announces it once instead of reading every new verb. With reduced motion the
 tiles stop moving and fade in turn, the verbs swap without sliding and the shimmer is off.
 
@@ -271,7 +303,8 @@ reduced motion its stand-in animations stop; real audio still shows, as glow on 
 height, because that is feedback the person needs while they talk.
 
 `Mascot` is one image named for what it is doing ("Assistant, thinking"). With reduced motion it
-holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own.
+holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own, and
+the cube shows while it thinks but does not turn.
 
 ## API reference
 
@@ -288,7 +321,7 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     detail: "Quiet text after the verb.",
     loader: "The loader before the words; false for none.",
     size: "Text and loader size.",
-    ariaLabel: "What screen readers announce once.",
+    "aria-label": "What screen readers announce once.",
   }}
 />
 
@@ -300,9 +333,9 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     level: "Loudness from 0 to 1; takes precedence over source.",
     source: "A MediaStream, an audio or video element, or an AnalyserNode.",
     size: "s, m, l or xl.",
-    color: "brand, accent or neutral.",
+    tone: "brand, accent or neutral.",
     bars: "Number of bars in the bars variant.",
-    ariaLabel: "What screen readers announce; defaults to the state.",
+    "aria-label": "What screen readers announce; defaults to the state.",
   }}
 />
 
@@ -330,8 +363,8 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
     lookAt: "pointer, center, or a direction from -1 to 1.",
     level: "Loudness from 0 to 1 that makes the body pulse while speaking.",
     source: "Audio to pulse with: an element, a stream or an AnalyserNode.",
-    size: "s, m, l, xl or a number of pixels.",
-    ariaLabel: "What screen readers hear.",
+    size: "s, m, l, xl, a number on the spacing scale, or a CSS length.",
+    "aria-label": "What screen readers hear.",
   }}
 />
 
@@ -340,8 +373,8 @@ holds still and keeps its poses and expressions; it does not blink, bob or pulse
   describe={{
     size: "Loader size, the same footprint as Spinner.",
     variant: "twist or wave.",
-    color: "brand, accent, neutral, or inherit for the text color.",
+    tone: "brand, accent, neutral, or inherit for the text color.",
     speed: "Seconds per cycle.",
-    ariaLabel: "What assistive tech announces.",
+    "aria-label": "What assistive tech announces.",
   }}
 />

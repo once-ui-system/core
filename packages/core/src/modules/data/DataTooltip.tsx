@@ -1,13 +1,13 @@
 "use client";
 
 import React from "react";
-import { Column } from "../../components/Column";
-import { CountFx } from "../../components/CountFx";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { ChartVariant, DateConfig } from "./interfaces";
-import { Swatch } from "./Swatch";
-import { formatDate } from "./utils/formatDate";
+import { Column } from "../../components/Column.js";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { CountUp } from "../../internal/CountUp.js";
+import { ChartVariant, DateConfig } from "./interfaces.js";
+import { Swatch } from "./Swatch.js";
+import { formatDate } from "./utils/formatDate.js";
 
 interface DataTooltipProps {
   active?: boolean;
@@ -20,7 +20,7 @@ interface DataTooltipProps {
   variant?: ChartVariant;
 }
 
-const DataTooltip: React.FC<DataTooltipProps> = ({
+const DataTooltip = ({
   active,
   payload,
   label,
@@ -29,7 +29,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
   date = { format: "MMM d" },
   showSwatches = true,
   variant = "gradient",
-}) => {
+}: DataTooltipProps) => {
   if (!active || !payload || !payload.length) {
     return null;
   }
@@ -45,7 +45,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
 
   return (
     <Column
-      minWidth={8}
+      minWidth="8rem"
       gap="8"
       paddingY="8"
       background="surface"
@@ -54,7 +54,7 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
     >
       {hasLabel && (
         <Row fillWidth paddingX="12">
-          <Text variant="label-default-s" onBackground="neutral-strong">
+          <Text textVariant="label-default-s" onBackground="neutral-strong">
             {formattedLabel}
           </Text>
         </Row>
@@ -66,13 +66,13 @@ const DataTooltip: React.FC<DataTooltipProps> = ({
               {showSwatches && (
                 <Swatch color={entry.stroke || entry.color} size="s" variant={variant} />
               )}
-              <Text onBackground="neutral-weak" variant="label-default-s">
+              <Text onBackground="neutral-weak" textVariant="label-default-s">
                 {DataTooltip && index === 0 ? DataTooltip : entry.name}
               </Text>
             </Row>
-            <Text onBackground="neutral-strong" variant="label-default-s">
+            <Text onBackground="neutral-strong" textVariant="label-default-s">
               {typeof entry.value === "number" ? (
-                <CountFx value={entry.value} separator="," speed={500} easing="ease-in-out" />
+                <CountUp value={entry.value} separator="," duration={500} easing="ease-in-out" />
               ) : (
                 entry.value
               )}

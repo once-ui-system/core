@@ -49,7 +49,7 @@ export const BlockQuote: RefComponent<BlockQuoteProps, ViewRef> = forwardRef<
           </Text>
         )}
         {typeof children === "string" || typeof children === "number" ? (
-          <Text variant="heading-strong-xl" align={align}>
+          <Text textVariant="heading-strong-xl" align={align}>
             {children}
           </Text>
         ) : (
@@ -64,14 +64,14 @@ export const BlockQuote: RefComponent<BlockQuoteProps, ViewRef> = forwardRef<
           <Row gap="12" center marginTop="32" wrap>
             <Text>—</Text>
             {author?.avatar && <Avatar size="s" src={author.avatar} />}
-            {author?.name && <Text variant="label-default-s">{author.name}</Text>}
+            {author?.name && <Text textVariant="label-default-s">{author.name}</Text>}
             {href && (
               <Pressable
                 accessibilityRole="link"
                 onPress={() => Linking.openURL(href)}
                 hitSlop={theme.space("12")}
               >
-                <Text variant="label-default-s">{link?.label || link?.href}</Text>
+                <Text textVariant="label-default-s">{link?.label || link?.href}</Text>
               </Pressable>
             )}
           </Row>

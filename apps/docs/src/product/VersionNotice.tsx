@@ -21,11 +21,11 @@ export function VersionNotice({ path }: { path: string }) {
       border="warning-alpha-weak"
       background="warning-alpha-weak"
     >
-      <Tag scheme="warning" size="s">
+      <Tag tone="warning" size="s">
         {currentVersion.label}
       </Tag>
       <Text
-        variant="label-default-s"
+        textVariant="label-default-s"
         onBackground="neutral-strong"
         style={{ flex: 1, minWidth: "12rem" }}
       >

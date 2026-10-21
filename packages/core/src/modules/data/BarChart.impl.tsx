@@ -1,24 +1,25 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { RadiusSize } from "@/types";
-import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import { cssColor } from "../../internal/cssColor";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { LinearGradient } from "./Gradient";
-import { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
-import { getDistributedColor } from "./utils/colorDistribution";
-import { formatDate } from "./utils/formatDate";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { LinearGradient } from "./Gradient.js";
+import { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
+import { getDistributedColor } from "./utils/colorDistribution.js";
+import { formatDate } from "./utils/formatDate.js";
 
-export interface BarChartProps extends ChartProps {
+export interface BarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
   hover?: boolean;
   reverseY?: boolean;
@@ -31,7 +32,7 @@ export interface BarChartProps extends ChartProps {
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const BarChart: React.FC<BarChartProps> = ({
+const BarChart = ({
   title,
   description,
   data: rows,
@@ -53,7 +54,7 @@ const BarChart: React.FC<BarChartProps> = ({
   reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: BarChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
   const {
@@ -215,7 +216,8 @@ const BarChart: React.FC<BarChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}

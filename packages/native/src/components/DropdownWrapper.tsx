@@ -24,6 +24,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import { type FlexProps, flexStyle } from "./Flex";
 import type { RefComponent, ViewRef } from "./refs";
 import { Option, type OptionProps } from "./Select";
+import type { Length } from "./spacing";
 
 /** Core's `Placement`: a side of the trigger, and which edge of it the menu lines up with. */
 export type Placement =
@@ -167,9 +168,9 @@ export interface MenuLayerProps {
   placement: Placement;
   /** Points between the anchor and the menu. */
   gap: number;
-  /** In rem, as core's. */
-  minWidth?: number;
-  maxWidth?: number;
+  /** A number is points, as core 3.0's px; `"12rem"` keeps a 2.x size. */
+  minWidth?: number | Length;
+  maxWidth?: number | Length;
   /** In points, as core's. */
   minHeight?: number;
   /** Exactly the anchor's width, as core's `fillWidth`. */
@@ -292,9 +293,9 @@ export interface DropdownWrapperProps {
   selectedOption?: string;
   /** The trigger fills its container's width and the menu matches it. */
   fillWidth?: boolean;
-  /** In rem, as core's. */
-  minWidth?: number;
-  maxWidth?: number;
+  /** A number is points, as core 3.0's px; `"12rem"` keeps a 2.x size. */
+  minWidth?: number | Length;
+  maxWidth?: number | Length;
   /** In points, as core's. */
   minHeight?: number;
   /** Makes the trigger ignore presses, as core's `disableTriggerClick`; `open` still works. */

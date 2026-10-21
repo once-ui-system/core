@@ -1,8 +1,7 @@
-import { forwardRef, type ReactNode, useContext } from "react";
+import { forwardRef, type ReactNode } from "react";
 import { Pressable, type PressableProps, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { RadiusSize, TShirtSizes } from "../types";
-import { FlexDirectionContext } from "./Flex";
 import { type IconSlot, renderIcon } from "./Icon";
 import type { RefComponent, ViewRef } from "./refs";
 import { Text } from "./Text";
@@ -74,7 +73,6 @@ export const ToggleButton: RefComponent<ToggleButtonProps, ViewRef> = forwardRef
   ref,
 ) {
   const theme = useTheme();
-  const row = useContext(FlexDirectionContext) === "row";
   const dims = SIZES[size];
   const height = theme.space(dims.height);
   const iconSize = size === "xl" ? "m" : size === "l" ? "s" : "xs";
@@ -111,12 +109,7 @@ export const ToggleButton: RefComponent<ToggleButtonProps, ViewRef> = forwardRef
             flexDirection: "row",
             alignItems: "center",
             justifyContent: JUSTIFY[horizontal],
-            // As Button: an equal share of a row, the full width of a column.
-            ...(fillWidth
-              ? { width: "100%", flexShrink: 1, alignSelf: "stretch" }
-              : row
-                ? {}
-                : { alignSelf: "flex-start" }),
+            alignSelf: fillWidth ? "stretch" : "flex-start",
             gap: theme.space("8"),
             height,
             minHeight: height,
@@ -134,7 +127,7 @@ export const ToggleButton: RefComponent<ToggleButtonProps, ViewRef> = forwardRef
       {renderIcon(prefixIcon, iconSize, color)}
       {(label || children) && (
         <Text
-          variant={`label-${weight}-${textSize}`}
+          textVariant={`label-${weight}-${textSize}`}
           paddingX={labelX}
           // One line, as core's `white-space: nowrap`; `truncate` only adds the ellipsis there.
           numberOfLines={1}

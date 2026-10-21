@@ -1,12 +1,12 @@
-import React, { forwardRef } from "react";
-import { Flex } from "./Flex";
+import React from "react";
+import { Flex } from "./Flex.js";
 
 interface LineProps extends React.ComponentProps<typeof Flex> {
   vert?: boolean;
   style?: React.CSSProperties;
 }
 
-const Line = forwardRef<HTMLDivElement, LineProps>(({ vert, className, style, ...rest }, ref) => {
+const Line = ({ ref, vert, className, style, ...rest }: LineProps) => {
   return (
     <Flex
       ref={ref}
@@ -23,7 +23,7 @@ const Line = forwardRef<HTMLDivElement, LineProps>(({ vert, className, style, ..
       {...rest}
     />
   );
-});
+};
 
 Line.displayName = "Line";
 

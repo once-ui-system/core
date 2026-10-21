@@ -4,10 +4,10 @@ import {
   ChatComposer,
   ChatMessage,
   ChatMessageList,
-  Chip,
   Column,
   ConversationItem,
   Kbd,
+  Tag,
   TypingIndicator,
 } from "@once-ui-system/core";
 import { useEffect, useRef, useState } from "react";
@@ -51,8 +51,8 @@ export function ChatConversationExample() {
   };
 
   return (
-    <Column fillWidth height={28} border="neutral-alpha-weak" radius="l" overflow="hidden">
-      <ChatMessageList ariaLabel="Chat with Lorant">
+    <Column fillWidth height="448px" border="neutral-alpha-weak" radius="l" overflow="hidden">
+      <ChatMessageList aria-label="Chat with Lorant">
         {messages.map((message, index) => {
           const grouped = index > 0 && messages[index - 1].from === message.from;
           return (
@@ -69,7 +69,7 @@ export function ChatConversationExample() {
             </ChatMessage>
           );
         })}
-        {typing && <TypingIndicator ariaLabel="Lorant is typing" marginLeft="48" />}
+        {typing && <TypingIndicator aria-label="Lorant is typing" marginLeft="48" />}
       </ChatMessageList>
       <Column paddingX="12" paddingBottom="12">
         <ChatComposer onSend={send} attach />
@@ -112,13 +112,13 @@ export function ChatComposerToolbarExample() {
         }
         toolbar={
           <>
-            <Chip
+            <Tag
               label="Your library"
               prefixIcon="document"
               selected={scope === "library"}
               onClick={() => setScope("library")}
             />
-            <Chip
+            <Tag
               label="Q4 pricing"
               suffixIcon="chevronDown"
               selected={scope === "q4"}
@@ -143,7 +143,7 @@ const conversations = [
 export function ConversationListExample() {
   const [open, setOpen] = useState("design");
   return (
-    <Column fillWidth maxWidth={24} gap="2">
+    <Column fillWidth maxWidth="384px" gap="2">
       {conversations.map((conversation) => (
         <ConversationItem
           key={conversation.id}

@@ -1,3 +1,5 @@
+@use "../styles/density.scss" as density;
+
 .container {
   user-select: none;
   isolation: isolate;
@@ -18,7 +20,7 @@
   transform: translateY(-50%);
   left: 0;
   right: 0;
-  height: var(--static-space-4);
+  height: var(--slider-track, var(--static-space-4));
   background-color: var(--neutral-alpha-medium);
   border-radius: var(--radius-full);
   overflow: hidden;
@@ -53,8 +55,8 @@
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: var(--static-space-16);
-  height: var(--static-space-16);
+  width: var(--slider-thumb, var(--static-space-16));
+  height: var(--slider-thumb, var(--static-space-16));
   background-color: var(--brand-on-solid-strong);
   border: var(--static-space-2) solid var(--brand-solid-medium);
   border-radius: var(--radius-full);
@@ -78,4 +80,60 @@
 .input:focus-visible ~ .thumb {
   outline: var(--static-space-2) solid var(--brand-alpha-medium);
   outline-offset: var(--static-space-2);
+}
+
+// The error state (`error`, or an `errorMessage`): the fill and the thumbs' ring turn danger.
+.error {
+  .fill {
+    background-color: var(--danger-solid-medium);
+  }
+
+  .thumb {
+    border-color: var(--danger-solid-medium);
+  }
+}
+
+// Sizes, from `size` or the surrounding Form. `m` is the 2.x look; the hit
+// area stays 40px high at every size. The range mode reads the same properties.
+.xs {
+  --slider-thumb: var(--static-space-12);
+  --slider-track: var(--static-space-2);
+}
+
+@mixin s {
+  --slider-thumb: 14px;
+  --slider-track: 3px;
+}
+
+@mixin l {
+  --slider-thumb: var(--static-space-20);
+  --slider-track: 6px;
+}
+
+.s {
+  @include s;
+}
+
+.l {
+  @include l;
+}
+
+/* No `size` here or on a Form: m, or the theme density's s or l (density.scss). */
+.auto {
+  @include density.size(s) {
+    @include s;
+  }
+
+  @include density.size(l) {
+    @include l;
+  }
+}
+
+.xl {
+  --slider-thumb: var(--static-space-24);
+  --slider-track: var(--static-space-8);
+}
+
+.message {
+  padding-inline: var(--static-space-4);
 }

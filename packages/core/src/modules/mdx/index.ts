@@ -20,7 +20,7 @@ export type {
   MdxSpacingProps,
   MdxTableProps,
   MdxTag,
-} from "./MdxElements";
+} from "./MdxElements.js";
 export {
   MdxBlockQuote,
   MdxCodeBlock,
@@ -33,9 +33,9 @@ export {
   MdxListItem,
   MdxParagraph,
   MdxTable,
-} from "./MdxElements";
-export type { MdxHeadingAnchorProps } from "./MdxHeadingAnchor";
-export { MdxHeadingAnchor } from "./MdxHeadingAnchor";
-export type { MdxComponents } from "./mdxComponents";
-export { createMdxComponents, mdxComponents } from "./mdxComponents";
-export { slugify, textOf } from "./text";
+} from "./MdxElements.js";
+export type { MdxHeadingAnchorProps } from "./MdxHeadingAnchor.js";
+export { MdxHeadingAnchor } from "./MdxHeadingAnchor.js";
+export type { MdxComponents } from "./mdxComponents.js";
+export { createMdxComponents, mdxComponents } from "./mdxComponents.js";
+export { slugify, textOf } from "./text.js";

@@ -3,12 +3,10 @@
 import {
   Button,
   Column,
-  CountFx,
   Grid,
   Heading,
   Icon,
   Line,
-  RevealFx,
   Row,
   SegmentedControl,
   StatusIndicator,
@@ -17,6 +15,7 @@ import {
   Text,
   useInViewport,
 } from "@once-ui-system/core";
+import { CountFx, RevealFx } from "@once-ui-system/fx";
 /**
  * Gold example: dashboard
  * Target: KPI stat row, chart placeholders, recent activity table
@@ -30,18 +29,19 @@ const stats = [
   { label: "Support tickets", value: 34, change: "+4", up: false },
 ];
 
+// Rows as arrays of cells: each column shows the cell at its position.
 const activity = {
-  headers: [
-    { content: "Event", key: "event" },
-    { content: "User", key: "user" },
-    { content: "Status", key: "status" },
-    { content: "Time", key: "time" },
+  columns: [
+    { header: "Event", key: "event" },
+    { header: "User", key: "user" },
+    { header: "Status", key: "status" },
+    { header: "Time", key: "time" },
   ],
   rows: [
     [
       "Plan upgraded to Pro",
       "jane@acme.co",
-      <Tag size="s" scheme="success">
+      <Tag size="s" tone="success">
         Completed
       </Tag>,
       "2m ago",
@@ -49,7 +49,7 @@ const activity = {
     [
       "New signup",
       "alex@studio.io",
-      <Tag size="s" scheme="brand">
+      <Tag size="s" tone="brand">
         New
       </Tag>,
       "14m ago",
@@ -57,7 +57,7 @@ const activity = {
     [
       "Payment failed",
       "ops@build.dev",
-      <Tag size="s" scheme="danger">
+      <Tag size="s" tone="danger">
         Action
       </Tag>,
       "1h ago",
@@ -85,16 +85,16 @@ export function DashboardExample() {
           s={{ direction: "column", horizontal: "start" }}
         >
           <Column gap="8">
-            <Text variant="label-default-s" onBackground="brand-medium">
+            <Text textVariant="label-default-s" onBackground="brand-medium">
               Analytics
             </Text>
-            <Heading as="h1" variant="display-strong-s">
+            <Heading as="h1" textVariant="display-strong-s">
               Overview
             </Heading>
           </Column>
           <SegmentedControl
             value={range}
-            onChange={setRange}
+            onValueChange={setRange}
             buttons={[
               { value: "7d", label: "7 days" },
               { value: "30d", label: "30 days" },
@@ -108,23 +108,23 @@ export function DashboardExample() {
             <RevealFx key={stat.label} fill revealed={seen} translateY="8" delay={index * 100}>
               <Column background="surface" border radius="l" padding="24" gap="16">
                 <Row fillWidth horizontal="between" vertical="center">
-                  <Text variant="label-default-s" onBackground="neutral-weak">
+                  <Text textVariant="label-default-s" onBackground="neutral-weak">
                     {stat.label}
                   </Text>
-                  <StatusIndicator color={stat.up ? "green" : "orange"} />
+                  <StatusIndicator scheme={stat.up ? "green" : "orange"} />
                 </Row>
                 <Row vertical="end" gap="4">
-                  {stat.prefix && <Text variant="display-strong-xs">{stat.prefix}</Text>}
+                  {stat.prefix && <Text textVariant="display-strong-xs">{stat.prefix}</Text>}
                   <CountFx
-                    variant="display-strong-xs"
+                    textVariant="display-strong-xs"
                     value={seen ? stat.value : 0}
-                    speed={1200}
+                    duration={1200}
                     separator=","
                   />
-                  {stat.suffix && <Text variant="display-strong-xs">{stat.suffix}</Text>}
+                  {stat.suffix && <Text textVariant="display-strong-xs">{stat.suffix}</Text>}
                 </Row>
                 <Text
-                  variant="label-default-s"
+                  textVariant="label-default-s"
                   onBackground={stat.up ? "success-medium" : "warning-medium"}
                 >
                   {stat.change}
@@ -135,24 +135,24 @@ export function DashboardExample() {
         </Grid>
 
         <Grid columns="2" gap="24" s={{ columns: 1 }}>
-          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
-            <Heading as="h2" variant="heading-strong-s">
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight="32rem">
+            <Heading as="h2" textVariant="heading-strong-s">
               Revenue trend
             </Heading>
             <Column flex={1} center background="neutral-alpha-weak" radius="m" padding="48">
               <Icon name="linearGauge" size="l" onBackground="neutral-weak" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 Chart area — use recharts or your data viz module
               </Text>
             </Column>
           </Column>
-          <Column background="surface" border radius="l" padding="24" gap="16" minHeight={32}>
-            <Heading as="h2" variant="heading-strong-s">
+          <Column background="surface" border radius="l" padding="24" gap="16" minHeight="32rem">
+            <Heading as="h2" textVariant="heading-strong-s">
               Signups by channel
             </Heading>
             <Column flex={1} center background="neutral-alpha-weak" radius="m" padding="48">
               <Icon name="radialGauge" size="l" onBackground="neutral-weak" />
-              <Text variant="label-default-s" onBackground="neutral-weak">
+              <Text textVariant="label-default-s" onBackground="neutral-weak">
                 Chart area
               </Text>
             </Column>
@@ -161,13 +161,18 @@ export function DashboardExample() {
 
         <Column background="surface" border radius="l" padding="24" gap="24">
           <Row fillWidth horizontal="between" vertical="center">
-            <Heading as="h2" variant="heading-strong-s">
+            <Heading as="h2" textVariant="heading-strong-s">
               Recent activity
             </Heading>
             <Button variant="tertiary" size="s" label="View all" />
           </Row>
           <Line />
-          <Table fillWidth data={activity} />
+          <Table
+            fillWidth
+            aria-label="Recent activity"
+            columns={activity.columns}
+            rows={activity.rows}
+          />
         </Column>
       </Column>
     </Column>

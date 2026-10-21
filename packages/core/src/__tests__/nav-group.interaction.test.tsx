@@ -45,13 +45,13 @@ describe("NavGroup", () => {
 
   it("opens with Enter, then Tab reaches the rows", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    render(<Settings onToggle={onToggle} />, { wrapper });
+    const onOpenChange = vi.fn();
+    render(<Settings onOpenChange={onOpenChange} />, { wrapper });
     await user.tab();
     expect(header()).toHaveFocus();
     await user.keyboard("{Enter}");
     expect(header()).toHaveAttribute("aria-expanded", "true");
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
     await user.tab();
     expect(screen.getByRole("link", { name: "Profile" })).toHaveFocus();
   });
@@ -66,12 +66,12 @@ describe("NavGroup", () => {
 
   it("follows `open` when controlled and reports toggles", async () => {
     const user = userEvent.setup();
-    const onToggle = vi.fn();
-    const { rerender } = render(<Settings open={false} onToggle={onToggle} />, { wrapper });
+    const onOpenChange = vi.fn();
+    const { rerender } = render(<Settings open={false} onOpenChange={onOpenChange} />, { wrapper });
     await user.click(header());
-    expect(onToggle).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledWith(true);
     expect(header()).toHaveAttribute("aria-expanded", "false");
-    rerender(<Settings open onToggle={onToggle} />);
+    rerender(<Settings open onOpenChange={onOpenChange} />);
     expect(header()).toHaveAttribute("aria-expanded", "true");
   });
 
@@ -82,10 +82,10 @@ describe("NavGroup", () => {
       const toggle = (id: string) => () => setOpen((o) => (o === id ? null : id));
       return (
         <>
-          <NavGroup label="One" open={open === "one"} onToggle={toggle("one")}>
+          <NavGroup label="One" open={open === "one"} onOpenChange={toggle("one")}>
             <NavItem href="/1" label="Row 1" />
           </NavGroup>
-          <NavGroup label="Two" open={open === "two"} onToggle={toggle("two")}>
+          <NavGroup label="Two" open={open === "two"} onOpenChange={toggle("two")}>
             <NavItem href="/2" label="Row 2" />
           </NavGroup>
         </>

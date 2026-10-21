@@ -2,15 +2,16 @@
 
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Row } from "../../components/Row";
-import { Text } from "../../components/Text";
-import { ToggleButton } from "../../components/ToggleButton";
-import { useAdapters } from "../../contexts/AdapterProvider";
-import type { IconName } from "../../icons";
+import { Column } from "../../components/Column.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Row } from "../../components/Row.js";
+import { Text } from "../../components/Text.js";
+import { ToggleButton } from "../../components/ToggleButton.js";
+import { useAdapters } from "../../contexts/AdapterProvider.js";
+import type { IconName } from "../../icons.js";
 import styles from "./MegaMenu.module.scss";
+import { MegaMenuAccordion } from "./MegaMenuAccordion.js";
 
 export interface MenuLink {
   label: ReactNode;
@@ -35,9 +36,20 @@ export interface MenuGroup {
   content?: ReactNode;
 }
 
+type Breakpoint = "xl" | "l" | "m" | "s" | "xs";
+
 export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
   menuGroups: MenuGroup[];
   className?: string;
+  /**
+   * Where the bar of dropdown panels gives way to accordions (2.x's
+   * MobileMegaMenu): at the breakpoint and below, the same groups render as
+   * one accordion each. `"always"` renders the accordions at every width, for
+   * a menu inside a mobile drawer. Left out, the bar shows at every width.
+   */
+  collapseBelow?: Breakpoint | "always";
+  /** Called when a link in the accordions is followed, to close the drawer they sit in. */
+  onClose?: () => void;
 }
 
 /**
@@ -52,7 +64,34 @@ const DROPDOWN_CHROME = 26;
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...rest }) => {
+/**
+ * A navigation bar whose groups open panels of links, collapsing into
+ * accordions at `collapseBelow`.
+ */
+export const MegaMenu = ({ collapseBelow, onClose, ...props }: MegaMenuProps) => {
+  if (collapseBelow === undefined) return <MegaMenuBar {...props} />;
+  if (collapseBelow === "always") return <MegaMenuAccordion onClose={onClose} {...props} />;
+  const own = props[collapseBelow];
+  return (
+    <>
+      <MegaMenuBar {...props} {...{ [collapseBelow]: { ...own, hide: true } }} />
+      <MegaMenuAccordion
+        menuGroups={props.menuGroups}
+        onClose={onClose}
+        hide
+        {...{ [collapseBelow]: { hide: false } }}
+      />
+    </>
+  );
+};
+
+MegaMenu.displayName = "MegaMenu";
+
+const MegaMenuBar = ({
+  menuGroups,
+  className,
+  ...rest
+}: Omit<MegaMenuProps, "collapseBelow" | "onClose">) => {
   const { usePathname } = useAdapters();
   const pathname = usePathname();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -554,14 +593,14 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                   {group.content
                     ? group.content
                     : group.sections?.map((section, sectionIndex) => (
-                        <Column key={`section-${sectionIndex}`} minWidth={12} gap="4">
+                        <Column key={`section-${sectionIndex}`} minWidth="12rem" gap="4">
                           {section.title && (
                             <Text
                               marginLeft="8"
                               marginBottom="12"
                               marginTop="12"
                               onBackground="neutral-weak"
-                              variant="label-default-s"
+                              textVariant="label-default-s"
                             >
                               {section.title}
                             </Text>
@@ -584,11 +623,16 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                             >
                               <Row gap="12">
                                 {link.icon && (
-                                  <Icon name={link.icon} size="s" padding="8" radius="s" border />
+                                  <Row fit padding="8" radius="s" border>
+                                    <Icon name={link.icon} size="s" />
+                                  </Row>
                                 )}
                                 <Column gap="4">
                                   {link.label && (
-                                    <Text onBackground="neutral-strong" variant="label-strong-s">
+                                    <Text
+                                      onBackground="neutral-strong"
+                                      textVariant="label-strong-s"
+                                    >
                                       {link.label}
                                     </Text>
                                   )}
@@ -613,4 +657,4 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
   );
 };
 
-MegaMenu.displayName = "MegaMenu";
+MegaMenuBar.displayName = "MegaMenuBar";

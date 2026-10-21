@@ -1,0 +1,17 @@
+{
+ "name": "Line",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A 1px divider in `neutral-alpha-medium`.",
+ "mixins": [],
+ "props": {
+  "vert": "boolean",
+  "background": "Colors = \"neutral-alpha-medium\"",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "Colors": "`${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "ColorWeight": "\"weak\" | \"medium\" | \"strong\""
+ }
+}

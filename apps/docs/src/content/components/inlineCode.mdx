@@ -56,28 +56,27 @@ InlineCode can be used within text elements to highlight code snippets.
 
 ## Custom styling
 
-InlineCode inherits Flex props, allowing for customization of its appearance.
+InlineCode keeps its look and takes the leaf props (margins, `flex`,
+`position` and the offsets). For a tinted span, set `style` (or `className`),
+which wins over its own classes.
 
 <CodeBlock
   marginTop="16"
   marginBottom="24"
   preview={
     <Row gap="16" wrap>
-      <InlineCode background="brand-alpha-weak" border="brand-alpha-medium">Custom background</InlineCode>
-      <InlineCode background="accent-alpha-weak" border="accent-alpha-medium">Accent style</InlineCode>
-      <InlineCode background="success-alpha-weak" border="success-alpha-medium">Success style</InlineCode>
+      <InlineCode style={{ background: "var(--brand-alpha-weak)", borderColor: "var(--brand-alpha-medium)" }}>Custom background</InlineCode>
+      <InlineCode style={{ background: "var(--accent-alpha-weak)", borderColor: "var(--accent-alpha-medium)" }}>Accent style</InlineCode>
+      <InlineCode style={{ background: "var(--success-alpha-weak)", borderColor: "var(--success-alpha-medium)" }}>Success style</InlineCode>
     </Row>
   }
   codes={[
     {
       code:
-`<InlineCode background="brand-alpha-weak" border="brand-alpha-medium">
+`<InlineCode style={{ background: "var(--brand-alpha-weak)", borderColor: "var(--brand-alpha-medium)" }}>
     Custom background
 </InlineCode>
-<InlineCode background="accent-alpha-weak" border="accent-alpha-medium">
-    Accent style
-</InlineCode>
-<InlineCode background="success-alpha-weak" border="success-alpha-medium">
+<InlineCode style={{ background: "var(--success-alpha-weak)", borderColor: "var(--success-alpha-medium)" }}>
     Success style
 </InlineCode>`,
       language: "tsx",

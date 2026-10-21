@@ -99,9 +99,12 @@ describe("Pagination", () => {
   it("moves through its own pages, from the buttons and the arrows", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { container } = render(<Pagination total={20} defaultPage={1} onChange={onChange} />, {
-      wrapper: wrap,
-    });
+    const { container } = render(
+      <Pagination total={20} defaultPage={1} onPageChange={onChange} />,
+      {
+        wrapper: wrap,
+      },
+    );
 
     expect(shown()).toEqual(["1", "2", "3", "4", "5", "…", "20"]);
 
@@ -124,7 +127,7 @@ describe("Pagination", () => {
   it("does not report the page already shown", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<Pagination total={3} onChange={onChange} />, { wrapper: wrap });
+    render(<Pagination total={3} onPageChange={onChange} />, { wrapper: wrap });
     await user.click(screen.getByRole("button", { name: "1" }));
     expect(onChange).not.toHaveBeenCalled();
   });
@@ -132,7 +135,7 @@ describe("Pagination", () => {
   it("follows the host's page when controlled", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    const { rerender } = render(<Pagination total={10} page={3} onChange={onChange} />, {
+    const { rerender } = render(<Pagination total={10} page={3} onPageChange={onChange} />, {
       wrapper: wrap,
     });
 
@@ -141,7 +144,7 @@ describe("Pagination", () => {
     // Nothing moves until the host says so.
     expect(currentPage()).toHaveTextContent("3");
 
-    rerender(<Pagination total={10} page={7} onChange={onChange} />);
+    rerender(<Pagination total={10} page={7} onPageChange={onChange} />);
     expect(currentPage()).toHaveTextContent("7");
   });
 
@@ -240,7 +243,7 @@ describe("Pagination", () => {
         <Pagination
           count={200}
           page={page}
-          onChange={setPage}
+          onPageChange={setPage}
           perPage={perPage}
           perPageOptions={[10, 20, 50]}
           onPerPageChange={(next) => {
@@ -278,19 +281,32 @@ describe("Pagination", () => {
 
 describe("Table pagination", () => {
   const rows = Array.from({ length: 23 }, (_, index) => [`Item ${index + 1}`]);
-  const data = { headers: [{ content: "Name", key: "name" }], rows };
+  const data = { columns: [{ header: "Name", key: "name" }], rows };
   const firstCell = () => screen.getAllByRole("row")[1]?.querySelector("td")?.textContent ?? null;
 
   it("pages its rows through Pagination", async () => {
     const user = userEvent.setup();
-    render(<Table paginated defaultPageSize={5} data={data} />, { wrapper: wrap });
+    render(
+      <Table
+        paginated
+        defaultPerPage={5}
+        perPageOptions={[5, 10, 20, 50]}
+        showFirstLast
+        {...data}
+      />,
+      { wrapper: wrap },
+    );
 
     expect(shown()).toEqual(["1", "2", "3", "4", "5"]);
     expect(firstCell()).toBe("Item 1");
 
     await user.click(within(nav()).getByRole("button", { name: "3" }));
     expect(firstCell()).toBe("Item 11");
-    expect(screen.getByText("3 / 5")).toBeInTheDocument();
+    // 2.x's "3 / 5" beside the page-size select is gone: the page buttons say it.
+    expect(within(nav()).getByRole("button", { name: "3" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
 
     await user.click(within(nav()).getByRole("button", { name: "Last page" }));
     expect(firstCell()).toBe("Item 21");
@@ -301,7 +317,7 @@ describe("Table pagination", () => {
   });
 
   it("draws no page buttons for a single page", () => {
-    render(<Table paginated defaultPageSize={50} data={data} />, { wrapper: wrap });
+    render(<Table paginated defaultPerPage={50} {...data} />, { wrapper: wrap });
     expect(screen.queryByRole("navigation")).toBeNull();
   });
 });

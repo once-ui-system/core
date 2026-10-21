@@ -2,28 +2,19 @@
 
 import classNames from "clsx";
 import type React from "react";
-import {
-  forwardRef,
-  type ReactNode,
-  type RefObject,
-  useCallback,
-  useEffect,
-  useId,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import { type ReactNode, type RefObject, useCallback, useId, useRef } from "react";
 import { createPortal } from "react-dom";
-import { Column } from "./Column";
+import { useOverlay } from "../internal/useOverlay.js";
+import { Column } from "./Column.js";
 import styles from "./Drawer.module.scss";
-import { Flex } from "./Flex";
-import { FocusTrap } from "./FocusTrap";
-import { Heading } from "./Heading";
-import { IconButton } from "./IconButton";
-import { Row } from "./Row";
-import { ScrollLock } from "./ScrollLock";
-import { Text } from "./Text";
-import { VisuallyHidden } from "./VisuallyHidden";
+import { Flex } from "./Flex.js";
+import { FocusTrap } from "./FocusTrap.js";
+import { Heading } from "./Heading.js";
+import { IconButton } from "./IconButton.js";
+import { Row } from "./Row.js";
+import { ScrollLock } from "./ScrollLock.js";
+import { Text } from "./Text.js";
+import { VisuallyHidden } from "./VisuallyHidden.js";
 
 // Written out on the props rather than as aliases, so the generated spec, the
 // docs' props table and an agent all see the values.
@@ -32,9 +23,6 @@ type DrawerSize = NonNullable<DrawerProps["size"]>;
 
 /** How long the panel takes to slide out, matching the `macro-medium` transition. */
 const EXIT_MS = 300;
-
-// Layout effects warn during a server render; these only matter in the browser.
-const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title"> {
   /** Whether the drawer is open. The drawer never closes itself: `onClose` asks. */
@@ -79,286 +67,196 @@ interface DrawerProps extends Omit<React.ComponentProps<typeof Column>, "title">
  * A panel that slides in from an edge of the viewport over an overlay: a
  * mobile navigation, a filter panel, a detail view beside a list.
  *
- * It is a modal dialog, built on the same pieces as Dialog: rendered into a
+ * It is a modal dialog on the same overlay core as Dialog: rendered into a
  * portal, the rest of the page made inert, page scroll locked, Tab kept inside
- * by FocusTrap, and focus returned to where it came from on close.
+ * by FocusTrap, Escape answered by the innermost overlay only, and focus
+ * returned to where it came from on close.
  */
-const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
-  (
-    {
-      open,
-      onClose,
-      side = "right",
-      size = "m",
-      title,
-      description,
-      footer,
-      showClose = true,
-      closeOnClickaway = true,
-      flush = false,
-      initialFocusRef,
-      returnFocusRef,
-      children,
-      className,
-      onKeyDown,
-      ...rest
+const Drawer = ({
+  ref,
+  open,
+  onClose,
+  side = "right",
+  size = "m",
+  title,
+  description,
+  footer,
+  showClose = true,
+  closeOnClickaway = true,
+  flush = false,
+  initialFocusRef,
+  returnFocusRef,
+  children,
+  className,
+  onKeyDown,
+  ...rest
+}: DrawerProps) => {
+  const id = useId();
+  const titleId = `${id}-title`;
+  const descriptionId = `${id}-description`;
+  const overlayRef = useRef<HTMLDivElement | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  const { mounted, visible, entered } = useOverlay({
+    open,
+    onClose,
+    overlayRef,
+    returnFocusRef,
+    exitMs: EXIT_MS,
+  });
+
+  const setPanelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      panelRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref) ref.current = node;
     },
-    ref,
-  ) => {
-    const id = useId();
-    const titleId = `${id}-title`;
-    const descriptionId = `${id}-description`;
-    const overlayRef = useRef<HTMLDivElement | null>(null);
-    const panelRef = useRef<HTMLDivElement | null>(null);
-    const returnFocusTo = useRef<HTMLElement | null>(null);
-    const wasOpen = useRef(false);
-    const [mounted, setMounted] = useState(false);
-    const [visible, setVisible] = useState(open);
-    const [entered, setEntered] = useState(false);
+    [ref],
+  );
 
-    // `document` exists only after mount; a drawer rendered open on the server
-    // appears on the first client pass instead of throwing.
-    useEffect(() => setMounted(true), []);
+  if (!mounted || !visible) return null;
 
-    const setPanelRef = useCallback(
-      (node: HTMLDivElement | null) => {
-        panelRef.current = node;
-        if (typeof ref === "function") ref(node);
-        else if (ref) ref.current = node;
-      },
-      [ref],
+  const titleNode =
+    title === undefined ? null : typeof title === "string" ? (
+      <Heading id={titleId} textVariant="heading-strong-l">
+        {title}
+      </Heading>
+    ) : (
+      <Flex id={titleId}>{title}</Flex>
     );
 
-    // Mount, then slide in on the next tick; slide out, then unmount.
-    useEffect(() => {
-      if (open) {
-        setVisible(true);
-        const timer = setTimeout(() => setEntered(true), 0);
-        return () => clearTimeout(timer);
-      }
-      setEntered(false);
-      const timer = setTimeout(() => setVisible(false), EXIT_MS);
-      return () => clearTimeout(timer);
-    }, [open]);
+  const closeButton = showClose && (
+    <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" onClick={onClose} />
+  );
 
-    // Everything outside the drawer is inert while it is open, and the drawer
-    // itself is inert while it slides out. Only nodes this drawer made inert are
-    // restored, so a drawer over another overlay leaves that one as it found it.
-    // A layout effect, so the page is interactive again before focus returns to it.
-    useIsomorphicLayoutEffect(() => {
-      const overlay = overlayRef.current;
-      if (!overlay || !visible) return;
-      overlay.inert = !open;
-      if (!open) return;
-      const madeInert: HTMLElement[] = [];
-      for (const node of Array.from(document.body.children)) {
-        if (node instanceof HTMLElement && node !== overlay && !node.inert) {
-          node.inert = true;
-          madeInert.push(node);
-        }
-      }
-      return () => {
-        for (const node of madeInert) node.inert = false;
-      };
-    }, [open, visible, mounted]);
+  const showHeader = !flush && (title !== undefined || description !== undefined || showClose);
 
-    // Remember where focus was on open and give it back on close, after the
-    // page is interactive again (the effect above) and before the exit finishes.
-    useIsomorphicLayoutEffect(() => {
-      if (open) {
-        wasOpen.current = true;
-        const active = document.activeElement;
-        if (active instanceof HTMLElement && !overlayRef.current?.contains(active)) {
-          returnFocusTo.current = active;
-        }
-        return;
-      }
-      if (!wasOpen.current) return;
-      wasOpen.current = false;
-      const target = returnFocusRef?.current ?? returnFocusTo.current;
-      returnFocusTo.current = null;
-      target?.focus({ preventScroll: true });
-    }, [open, returnFocusRef]);
-
-    // Unmounted while open: still give focus back.
-    const latestReturnFocusRef = useRef(returnFocusRef);
-    latestReturnFocusRef.current = returnFocusRef;
-    useEffect(
-      () => () => {
-        if (!wasOpen.current) return;
-        (latestReturnFocusRef.current?.current ?? returnFocusTo.current)?.focus({
-          preventScroll: true,
-        });
-      },
-      [],
-    );
-
-    // Escape normally lands on the panel (below). If focus fell back to the
-    // body, from a removed element or a click on a non-focusable spot, it
-    // should still close.
-    useEffect(() => {
-      if (!open) return;
-      const onDocumentKeyDown = (event: KeyboardEvent) => {
-        if (event.key === "Escape" && event.target === document.body && !event.defaultPrevented) {
-          onClose();
-        }
-      };
-      document.addEventListener("keydown", onDocumentKeyDown);
-      return () => document.removeEventListener("keydown", onDocumentKeyDown);
-    }, [open, onClose]);
-
-    const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-      onKeyDown?.(event);
-      // A dropdown or picker inside the drawer handles its own Escape first.
-      if (event.key !== "Escape" || event.defaultPrevented || !open) return;
-      event.preventDefault();
-      event.stopPropagation();
-      onClose();
-    };
-
-    if (!mounted || !visible) return null;
-
-    const titleNode =
-      title === undefined ? null : typeof title === "string" ? (
-        <Heading id={titleId} variant="heading-strong-l">
-          {title}
-        </Heading>
-      ) : (
-        <Flex id={titleId}>{title}</Flex>
-      );
-
-    const closeButton = showClose && (
-      <IconButton icon="close" size="m" variant="tertiary" tooltip="Close" onClick={onClose} />
-    );
-
-    const showHeader = !flush && (title !== undefined || description !== undefined || showClose);
-
-    return createPortal(
-      <>
-        <ScrollLock enabled={open} allowScrollInElement={panelRef} />
+  return createPortal(
+    <>
+      <ScrollLock enabled={open} allowScrollInElement={panelRef} />
+      <Flex
+        ref={overlayRef}
+        position="fixed"
+        top="0"
+        left="0"
+        right="0"
+        bottom="0"
+        zIndex={9}
+        transition="macro-medium"
+        className={classNames(styles.overlay, entered && styles.open)}
+      >
         <Flex
-          ref={overlayRef}
-          position="fixed"
+          position="absolute"
           top="0"
           left="0"
-          right="0"
-          bottom="0"
-          zIndex={9}
+          fill
+          background="overlay"
+          aria-hidden="true"
+          data-drawer-overlay=""
+          // Keep focus in the drawer when the overlay is clicked but stays open.
+          onMouseDown={(event) => event.preventDefault()}
+          onClick={closeOnClickaway ? onClose : undefined}
+        />
+        <Column
+          aria-labelledby={title !== undefined ? titleId : undefined}
+          aria-describedby={description !== undefined ? descriptionId : undefined}
+          position="fixed"
+          background="neutral-weak"
+          border="neutral-medium"
+          radius="xl"
+          shadow="xl"
           transition="macro-medium"
-          className={classNames(styles.overlay, entered && styles.open)}
+          overflow="hidden"
+          {...rest}
+          ref={setPanelRef}
+          role="dialog"
+          aria-modal="true"
+          data-side={side}
+          className={classNames(
+            styles.panel,
+            styles[side],
+            styles[size],
+            entered && styles.open,
+            className,
+          )}
+          onKeyDown={onKeyDown}
         >
-          <Flex
-            position="absolute"
-            top="0"
-            left="0"
-            fill
-            background="overlay"
-            aria-hidden="true"
-            data-drawer-overlay=""
-            // Keep focus in the drawer when the overlay is clicked but stays open.
-            onMouseDown={(event) => event.preventDefault()}
-            onClick={closeOnClickaway ? onClose : undefined}
-          />
-          <Column
-            aria-labelledby={title !== undefined ? titleId : undefined}
-            aria-describedby={description !== undefined ? descriptionId : undefined}
-            position="fixed"
-            background="neutral-weak"
-            border="neutral-medium"
-            radius="xl"
-            shadow="xl"
-            transition="macro-medium"
-            overflow="hidden"
-            {...rest}
-            ref={setPanelRef}
-            role="dialog"
-            aria-modal="true"
-            data-side={side}
-            className={classNames(
-              styles.panel,
-              styles[side],
-              styles[size],
-              entered && styles.open,
-              className,
-            )}
-            onKeyDown={handleKeyDown}
+          <FocusTrap
+            active={open}
+            initialFocusRef={initialFocusRef}
+            restoreFocus={false}
+            className={styles.trap}
           >
-            <FocusTrap
-              active={open}
-              initialFocusRef={initialFocusRef}
-              restoreFocus={false}
-              className={styles.trap}
-            >
-              {showHeader && (
-                <Row
-                  as="header"
-                  fillWidth
-                  paddingX="24"
-                  paddingTop="20"
-                  paddingBottom="12"
-                  gap="8"
-                  horizontal="between"
-                  vertical="start"
-                >
-                  <Column gap="4" minWidth={0}>
-                    {titleNode}
-                    {description !== undefined && (
-                      <Text id={descriptionId} variant="body-default-s" onBackground="neutral-weak">
-                        {description}
-                      </Text>
-                    )}
-                  </Column>
-                  {closeButton}
-                </Row>
-              )}
-              {flush && title !== undefined && (
-                <VisuallyHidden id={titleId}>{title}</VisuallyHidden>
-              )}
-              {flush && description !== undefined && (
-                <VisuallyHidden id={descriptionId}>{description}</VisuallyHidden>
-              )}
-              {flush && closeButton && (
-                <Flex
-                  position="absolute"
-                  top="12"
-                  right="12"
-                  zIndex={1}
-                  radius="m"
-                  background="overlay"
-                >
-                  {closeButton}
-                </Flex>
-              )}
-              <Column
+            {showHeader && (
+              <Row
+                as="header"
                 fillWidth
-                flex={1}
-                overflowY="auto"
-                paddingX={flush ? undefined : "24"}
-                paddingTop={flush || showHeader ? undefined : "24"}
-                paddingBottom={flush ? undefined : "24"}
+                paddingX="24"
+                paddingTop="20"
+                paddingBottom="12"
+                gap="8"
+                horizontal="between"
+                vertical="start"
               >
-                {children}
-              </Column>
-              {footer && (
-                <Row
-                  as="footer"
-                  fillWidth
-                  borderTop="neutral-medium"
-                  horizontal="end"
-                  padding="12"
-                  gap="8"
-                >
-                  {footer}
-                </Row>
-              )}
-            </FocusTrap>
-          </Column>
-        </Flex>
-      </>,
-      document.body,
-    );
-  },
-);
+                <Column gap="4" minWidth={0}>
+                  {titleNode}
+                  {description !== undefined && (
+                    <Text
+                      id={descriptionId}
+                      textVariant="body-default-s"
+                      onBackground="neutral-weak"
+                    >
+                      {description}
+                    </Text>
+                  )}
+                </Column>
+                {closeButton}
+              </Row>
+            )}
+            {flush && title !== undefined && <VisuallyHidden id={titleId}>{title}</VisuallyHidden>}
+            {flush && description !== undefined && (
+              <VisuallyHidden id={descriptionId}>{description}</VisuallyHidden>
+            )}
+            {flush && closeButton && (
+              <Flex
+                position="absolute"
+                top="12"
+                right="12"
+                zIndex={1}
+                radius="m"
+                background="overlay"
+              >
+                {closeButton}
+              </Flex>
+            )}
+            <Column
+              fillWidth
+              flex={1}
+              overflowY="auto"
+              paddingX={flush ? undefined : "24"}
+              paddingTop={flush || showHeader ? undefined : "24"}
+              paddingBottom={flush ? undefined : "24"}
+            >
+              {children}
+            </Column>
+            {footer && (
+              <Row
+                as="footer"
+                fillWidth
+                borderTop="neutral-medium"
+                horizontal="end"
+                padding="12"
+                gap="8"
+              >
+                {footer}
+              </Row>
+            )}
+          </FocusTrap>
+        </Column>
+      </Flex>
+    </>,
+    document.body,
+  );
+};
 
 Drawer.displayName = "Drawer";
 

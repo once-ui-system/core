@@ -160,9 +160,11 @@ export const JUSTIFY_ALIGNMENTS = [
  * column it is `align-items` — so the same value is meaningful on one axis and
  * meaningless on the other.
  */
-export const ALIGN_ALIGNMENTS = JUSTIFY_ALIGNMENTS.filter(
-  ({ suffix }) => !["between", "around", "even"].includes(suffix),
-);
+export const ALIGN_ALIGNMENTS = [
+  ...JUSTIFY_ALIGNMENTS.filter(({ suffix }) => !["between", "around", "even"].includes(suffix)),
+  // `vertical="baseline"`: children line up on their first line of text.
+  { suffix: "baseline", value: "baseline" },
+];
 
 /* -------------------------------------------------------------- border --- */
 
@@ -507,4 +509,34 @@ export const FONT_SCALING = [
   { key: "m", value: "var(--font-scaling-tablet)" },
   { key: "s", value: "var(--font-scaling-mobile)" },
   { key: "xs", value: "var(--font-scaling-mobile)" },
+];
+
+/* ------------------------------------------------------------- resets --- */
+
+/**
+ * Element resets a layout primitive adds for the element `as` names: a list's
+ * bullets and indent, a button's chrome. In `:where()`, at zero specificity,
+ * so any utility class on the same element (padding, background, border,
+ * font) wins over them, and so does a component's own stylesheet.
+ */
+export const ELEMENT_RESETS = [
+  { selector: ":where(.reset-list)", decls: ["list-style: none;", "margin: 0;", "padding: 0;"] },
+  {
+    selector: ":where(.reset-button)",
+    decls: [
+      "appearance: none;",
+      "background: none;",
+      "border: 0;",
+      "margin: 0;",
+      "padding: 0;",
+      "font: inherit;",
+      "color: inherit;",
+      "text-align: inherit;",
+      "cursor: pointer;",
+    ],
+  },
+  { selector: ":where(.reset-button:disabled)", decls: ["cursor: default;"] },
+  // A list that wants its markers back over the reset (`List`).
+  { selector: ".list-disc", decls: ["list-style-type: disc;"] },
+  { selector: ".list-decimal", decls: ["list-style-type: decimal;"] },
 ];

@@ -13,7 +13,7 @@ export interface ChartStatusProps {
 
 const message = (node: ReactNode, onBackground: "neutral-weak" | "danger-weak") =>
   typeof node === "string" || typeof node === "number" ? (
-    <Text align="center" variant="label-default-s" onBackground={onBackground}>
+    <Text align="center" textVariant="label-default-s" onBackground={onBackground}>
       {node}
     </Text>
   ) : (

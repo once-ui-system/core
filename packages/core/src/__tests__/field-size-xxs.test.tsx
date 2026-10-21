@@ -6,12 +6,10 @@ import type React from "react";
 import { describe, expect, it } from "vitest";
 import { ColorInput } from "../components/ColorInput";
 import { DateInput } from "../components/DateInput";
-import { DateRangeInput } from "../components/DateRangeInput";
 import { Form } from "../components/Form";
 import { Icon } from "../components/Icon";
 import { Input } from "../components/Input";
 import { NumberInput } from "../components/NumberInput";
-import { PasswordInput } from "../components/PasswordInput";
 import { Select } from "../components/Select";
 import { TagInput } from "../components/TagInput";
 import { Textarea } from "../components/Textarea";
@@ -52,7 +50,10 @@ describe("Input size xxs", () => {
     const input = readFileSync(join(SRC, "Input.module.scss"), "utf8");
     const button = readFileSync(join(SRC, "Button.module.scss"), "utf8");
     expect(rule(input, ".xxs")).toMatch(/--fld-h-base:\s*var\(--static-space-32\)/);
-    expect(rule(button, ".s")).toMatch(/\bheight:\s*var\(--static-space-32\)/);
+    // 3.0's `.s` includes the `s` mixin, which the density's `auto` class
+    // reuses, so the height is declared there.
+    expect(rule(button, ".s")).toMatch(/@include s;/);
+    expect(rule(button, "@mixin s")).toMatch(/\bheight:\s*var\(--static-space-32\)/);
     // No touch floor: a floor would make it the same field as xs on a phone.
     expect(rule(input, ".xxs")).toMatch(/--fld-h-touch:\s*0px/);
   });
@@ -182,7 +183,10 @@ describe("Select size xxs", () => {
 
 describe("fields built on Input, at xxs", () => {
   it.each([
-    ["PasswordInput", <PasswordInput key="p" id="p" placeholder="Password" size="xxs" />],
+    [
+      "Input type=password",
+      <Input key="p" id="p" type="password" placeholder="Password" size="xxs" />,
+    ],
     [
       "NumberInput",
       <NumberInput key="n" id="n" placeholder="Qty" size="xxs" aria-label="Quantity" />,
@@ -190,7 +194,14 @@ describe("fields built on Input, at xxs", () => {
     ["DateInput", <DateInput key="d" id="d" placeholder="Date" size="xxs" />],
     [
       "ColorInput",
-      <ColorInput key="c" id="c" placeholder="Colour" size="xxs" value="" onChange={() => {}} />,
+      <ColorInput
+        key="c"
+        id="c"
+        placeholder="Colour"
+        size="xxs"
+        value=""
+        onValueChange={() => {}}
+      />,
     ],
     ["TagInput", <TagInput key="g" id="g" placeholder="Tags" size="xxs" />],
   ])("%s takes the size", (_name, element) => {
@@ -200,7 +211,7 @@ describe("fields built on Input, at xxs", () => {
 
   it("ColorInput shows its label where a colour input draws no placeholder", () => {
     const { container } = render(
-      <ColorInput id="c" label="Brand colour" size="xxs" value="" onChange={() => {}} />,
+      <ColorInput id="c" label="Brand colour" size="xxs" value="" onValueChange={() => {}} />,
       { wrapper: wrap },
     );
     expect(screen.getByLabelText("Brand colour")).toBeInTheDocument();
@@ -210,9 +221,9 @@ describe("fields built on Input, at xxs", () => {
     expect(shown).toBeDefined();
   });
 
-  it("DateRangeInput takes it on both halves, rounded at radius-m", () => {
+  it("DateInput range takes it on both halves, rounded at radius-m", () => {
     const { container } = render(
-      <DateRangeInput id="r" size="xxs" startLabel="From" endLabel="To" />,
+      <DateInput range id="r" size="xxs" startLabel="From" endLabel="To" />,
       { wrapper: wrap },
     );
     const halves = container.querySelectorAll("[data-surface='field']");

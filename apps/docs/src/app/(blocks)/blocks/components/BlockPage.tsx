@@ -1,6 +1,7 @@
 "use client";
 
-import { Column, Row } from "@once-ui-system/core";
+import { StyleOverlay } from "@once-ui-system/blocks";
+import { Column, IconButton, Row } from "@once-ui-system/core";
 import { CodeBlock } from "@once-ui-system/core/code";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { blocks } from "@/resources";
@@ -183,7 +184,7 @@ function BlockExample({
         horizontal="center"
         vertical="start"
         center={false}
-        minHeight={24}
+        minHeight="24rem"
         padding="l"
       >
         {rendered}
@@ -195,7 +196,7 @@ function BlockExample({
     selectedTab !== 0 ? undefined : inView ? (
       renderPreview()
     ) : (
-      <Row fillWidth minHeight={24} />
+      <Row fillWidth minHeight="24rem" />
     );
 
   // Content-sized on the preview tab (capped at 80vh); the code view and
@@ -215,7 +216,18 @@ function BlockExample({
       </Row>
       <CodeBlock
         lineNumbers
-        styleButton
+        actions={
+          <StyleOverlay>
+            <IconButton
+              size="m"
+              variant="tertiary"
+              icon="sparkle"
+              tooltip="Style"
+              tooltipPosition="bottom"
+              aria-label="Open the style panel"
+            />
+          </StyleOverlay>
+        }
         reloadButton={reloadButton}
         fullscreenButton
         copyButton

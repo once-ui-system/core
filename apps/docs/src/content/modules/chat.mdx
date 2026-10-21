@@ -28,8 +28,8 @@ Five components cover the parts every chat has: `ChatMessage`, `ChatMessageList`
   TypingIndicator,
 } from "@once-ui-system/core";
 
-<Column fillWidth height={28}>
-  <ChatMessageList ariaLabel="Chat with Lorant">
+<Column fillWidth height="448px">
+  <ChatMessageList aria-label="Chat with Lorant">
     {messages.map((message, index) => (
       <ChatMessage
         key={message.id}
@@ -43,7 +43,7 @@ Five components cover the parts every chat has: `ChatMessage`, `ChatMessageList`
         {message.text}
       </ChatMessage>
     ))}
-    {typing && <TypingIndicator ariaLabel="Lorant is typing" marginLeft="48" />}
+    {typing && <TypingIndicator aria-label="Lorant is typing" marginLeft="48" />}
   </ChatMessageList>
   <ChatComposer onSend={({ text, files }) => send(text, files)} attach />
 </Column>`,
@@ -171,7 +171,7 @@ Give it a parent with a fixed or flexible height; it fills the space and scrolls
   describe={{
     stickToBottom: "Start at the newest message and follow new ones while the reader is at the bottom.",
     onReachStart: "Called when the reader scrolls to the top.",
-    ariaLabel: "The list's accessible name, such as who the chat is with.",
+    "aria-label": "The list's accessible name, such as who the chat is with.",
   }}
 />
 
@@ -241,7 +241,7 @@ The input bar. The field grows with the draft up to about eight lines, Enter sen
     sendOnEnter: "Enter sends. Off, Enter starts a new line.",
     loading: "Show the send button loading and block another send.",
     disabled: "Disable the field and buttons.",
-    ariaLabel: "The field's accessible name.",
+    "aria-label": "The field's accessible name.",
     sendLabel: "The send button's label.",
     attachLabel: "The attach button's label.",
     removeLabel: "The label of an attachment's remove button, from its file name.",
@@ -264,14 +264,14 @@ Three pulsing dots for someone typing or a reply being generated. It is a `statu
   marginBottom="24"
   preview={
     <Column gap="16">
-      <TypingIndicator ariaLabel="Lorant is typing" />
+      <TypingIndicator aria-label="Lorant is typing" />
       <TypingIndicator bubble={false} label="Lorant is typing" />
     </Column>
   }
   codes={[
     {
       code:
-`<TypingIndicator ariaLabel="Lorant is typing" />
+`<TypingIndicator aria-label="Lorant is typing" />
 <TypingIndicator bubble={false} label="Lorant is typing" />`,
       language: "tsx",
       label: "TypingIndicator"
@@ -283,7 +283,7 @@ Three pulsing dots for someone typing or a reply being generated. It is a `statu
   component="TypingIndicator"
   describe={{
     label: "Visible text next to the dots.",
-    ariaLabel: "What a screen reader announces when there is no label.",
+    "aria-label": "What a screen reader announces when there is no label.",
     bubble: "Draw the dots in a bubble, to stand in for a reply.",
   }}
 />
@@ -299,7 +299,7 @@ One row of an inbox: the avatar, the name, the last message and its time, and an
   codes={[
     {
       code:
-`<Column maxWidth={24} gap="2">
+`<Column maxWidth="384px" gap="2">
   {conversations.map((conversation) => (
     <ConversationItem
       key={conversation.id}
@@ -309,7 +309,7 @@ One row of an inbox: the avatar, the name, the last message and its time, and an
       unread={conversation.unread}
       avatarProps={{ src: conversation.avatar }}
       selected={conversation.id === openId}
-      href={\`/chat/\${conversation.id}\`}
+      href={"/chat/" + conversation.id}
     />
   ))}
 </Column>`,

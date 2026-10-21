@@ -1,0 +1,30 @@
+{
+ "name": "Checkbox",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Checkbox with label and description, including an indeterminate state",
+ "mixins": [
+  "ControlChromeProps"
+ ],
+ "props": {
+  "checked": "boolean",
+  "defaultChecked": "boolean = false",
+  "indeterminate": "boolean = false",
+  "onCheckedChange": "(checked: boolean) => void",
+  "label": "ReactNode",
+  "description": "ReactNode",
+  "disabled": "boolean = false",
+  "aria-label": "string",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {
+  "ControlChromeProps": {
+   "size": "TShirtSizes",
+   "error": "boolean",
+   "errorMessage": "ReactNode"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

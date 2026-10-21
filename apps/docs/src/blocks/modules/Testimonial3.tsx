@@ -39,7 +39,7 @@ export const Testimonial3: React.FC<Props> = ({ testimonials, avatars, avatarTex
             gap="20"
             {...rest}
           >
-            <Text wrap="balance" variant="body-default-s">
+            <Text wrap="balance" textVariant="body-default-s">
               {testimonial.content}
             </Text>
             <Row fillWidth>
@@ -52,8 +52,8 @@ export const Testimonial3: React.FC<Props> = ({ testimonials, avatars, avatarTex
                     src={testimonial.avatar}
                   />
                   <Column>
-                    <Text variant="label-default-s">{testimonial.name}</Text>
-                    <Text onBackground="neutral-weak" variant="body-default-xs">
+                    <Text textVariant="label-default-s">{testimonial.name}</Text>
+                    <Text onBackground="neutral-weak" textVariant="body-default-xs">
                       {testimonial.role}{" "}
                       {testimonial.link && testimonial.company && (
                         <SmartLink unstyled href={testimonial.link}>

@@ -1,16 +1,17 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, ReactNode } from "react";
-import { useIcons } from "../contexts/IconProvider";
-import { type IconComponent, IconName } from "../icons";
-import { ColorScheme, ColorWeight, TShirtSizes } from "../types";
-import { Flex } from "./Flex";
-import { HoverCard } from "./HoverCard";
+import React, { ReactNode } from "react";
+import { useIcons } from "../contexts/IconProvider.js";
+import { type IconComponent, IconName } from "../icons.js";
+import type { LeafPropsOf } from "../interfaces.js";
+import { ColorScheme, ColorWeight, TShirtSizes } from "../types.js";
+import { Flex } from "./Flex.js";
+import { HoverCard } from "./HoverCard.js";
 import styles from "./Icon.module.scss";
-import { Tooltip } from "./Tooltip";
+import { Tooltip } from "./Tooltip.js";
 
-interface IconProps extends React.ComponentProps<typeof Flex> {
+interface IconProps extends LeafPropsOf<"div"> {
   name: IconName;
   onBackground?: `${ColorScheme}-${ColorWeight}`;
   onSolid?: `${ColorScheme}-${ColorWeight}`;
@@ -18,81 +19,75 @@ interface IconProps extends React.ComponentProps<typeof Flex> {
   decorative?: boolean;
   tooltip?: ReactNode;
   tooltipPosition?: "top" | "bottom" | "left" | "right";
-  className?: string;
-  style?: React.CSSProperties;
 }
 
-const Icon = forwardRef<HTMLDivElement, IconProps>(
-  (
-    {
-      name,
-      onBackground,
-      onSolid,
-      size = "m",
-      decorative = true,
-      tooltip,
-      tooltipPosition = "top",
-      className,
-      style,
-      ...rest
-    },
-    ref,
-  ) => {
-    const { icons } = useIcons();
-    const IconComponent: IconComponent | undefined = icons[name];
+const Icon = ({
+  ref,
+  name,
+  onBackground,
+  onSolid,
+  size = "m",
+  decorative = true,
+  tooltip,
+  tooltipPosition = "top",
+  className,
+  style,
+  ...rest
+}: IconProps) => {
+  const { icons } = useIcons();
+  const IconComponent: IconComponent | undefined = icons[name];
 
-    if (!IconComponent) {
-      console.warn(`Icon "${name}" does not exist in the library.`);
-      return null;
-    }
+  if (!IconComponent) {
+    console.warn(`Icon "${name}" does not exist in the library.`);
+    return null;
+  }
 
-    if (onBackground && onSolid) {
-      console.warn(
-        "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
-      );
-    }
-
-    let colorClass = "color-inherit";
-    if (onBackground) {
-      const [scheme, weight] = onBackground.split("-") as [ColorScheme, ColorWeight];
-      colorClass = `${scheme}-on-background-${weight}`;
-    } else if (onSolid) {
-      const [scheme, weight] = onSolid.split("-") as [ColorScheme, ColorWeight];
-      colorClass = `${scheme}-on-solid-${weight}`;
-    }
-
-    // An explicit aria-label means the icon carries meaning. A label is only
-    // exposed on an element with a role, so a labelled icon is an image.
-    const label = rest["aria-label"] ?? (decorative ? undefined : name);
-
-    const icon = (
-      <Flex
-        inline
-        fit
-        as="span"
-        ref={ref}
-        className={classNames(colorClass, styles.icon, styles[size], className)}
-        aria-hidden={label ? undefined : "true"}
-        aria-label={label}
-        role={label ? "img" : undefined}
-        style={style}
-        {...rest}
-      >
-        <IconComponent />
-      </Flex>
+  if (onBackground && onSolid) {
+    console.warn(
+      "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
     );
+  }
 
-    if (tooltip) {
-      return (
-        <HoverCard trigger={icon} placement={tooltipPosition} offsetDistance="4">
-          <Tooltip label={tooltip} />
-        </HoverCard>
-      );
-    }
+  let colorClass = "color-inherit";
+  if (onBackground) {
+    const [scheme, weight] = onBackground.split("-") as [ColorScheme, ColorWeight];
+    colorClass = `${scheme}-on-background-${weight}`;
+  } else if (onSolid) {
+    const [scheme, weight] = onSolid.split("-") as [ColorScheme, ColorWeight];
+    colorClass = `${scheme}-on-solid-${weight}`;
+  }
 
-    return icon;
-  },
-);
+  // An explicit aria-label means the icon carries meaning. A label is only
+  // exposed on an element with a role, so a labelled icon is an image.
+  const label = rest["aria-label"] ?? (decorative ? undefined : name);
+
+  const icon = (
+    <Flex
+      inline
+      fit
+      as="span"
+      ref={ref}
+      className={classNames(colorClass, styles.icon, styles[size], className)}
+      aria-hidden={label ? undefined : "true"}
+      aria-label={label}
+      role={label ? "img" : undefined}
+      style={style}
+      {...rest}
+    >
+      <IconComponent />
+    </Flex>
+  );
+
+  if (tooltip) {
+    return (
+      <HoverCard trigger={icon} placement={tooltipPosition} offsetDistance="4">
+        <Tooltip label={tooltip} />
+      </HoverCard>
+    );
+  }
+
+  return icon;
+};
 
 Icon.displayName = "Icon";
 

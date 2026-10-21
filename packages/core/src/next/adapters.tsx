@@ -1,17 +1,17 @@
 "use client";
 
-import NextImage from "next/image";
-import NextLink from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import NextImageModule from "next/image.js";
+import NextLinkModule from "next/link.js";
+import { usePathname, useRouter } from "next/navigation.js";
 import type React from "react";
-import { forwardRef, useCallback } from "react";
+import { useCallback } from "react";
 import {
   type AdapterImageProps,
   type AdapterLinkProps,
   AdapterProvider,
   type OnceUIAdapters,
-} from "../contexts/AdapterProvider";
-import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider";
+} from "../contexts/AdapterProvider.js";
+import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider.js";
 
 /**
  * Next.js adapter bindings — the ONLY runtime `next/*` imports in core
@@ -24,16 +24,31 @@ import { LayoutProvider as BaseLayoutProvider } from "../contexts/LayoutProvider
  * index, so the same entry can also export server route handlers.
  */
 
-const NextAdapterLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(
-  ({ href, children, ...props }, ref) => (
-    <NextLink href={href} ref={ref} {...props}>
-      {children}
-    </NextLink>
-  ),
+// `next` ships CommonJS with no exports map, so the specifiers name the file
+// (`next/link.js`), and the default import is whatever the loader makes of
+// `exports.default`: a bundler hands back the component, Node's ESM loader
+// the module object. Take `.default` when it is there.
+// Typed for both resolutions: NodeNext (the build) types the import as the
+// module, bundler resolution (tests, apps) as the component.
+type Interop<M> = M extends { default: infer D } ? D : M;
+const interopDefault = <M,>(mod: M): Interop<M> =>
+  ((mod as { default?: unknown }).default ?? mod) as Interop<M>;
+const NextLink = interopDefault(NextLinkModule);
+const NextImage = interopDefault(NextImageModule);
+
+const NextAdapterLink = ({
+  ref,
+  href,
+  children,
+  ...props
+}: AdapterLinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => (
+  <NextLink href={href} ref={ref} {...props}>
+    {children}
+  </NextLink>
 );
 NextAdapterLink.displayName = "NextAdapterLink";
 
-const NextAdapterImage: React.FC<AdapterImageProps> = ({ width, height, ...props }) => (
+const NextAdapterImage = ({ width, height, ...props }: AdapterImageProps) => (
   <NextImage width={width} height={height} {...props} />
 );
 
@@ -53,7 +68,7 @@ export interface NextAdapterProviderProps {
   children: React.ReactNode;
 }
 
-export const NextAdapterProvider: React.FC<NextAdapterProviderProps> = ({ children }) => (
+export const NextAdapterProvider = ({ children }: NextAdapterProviderProps) => (
   <AdapterProvider adapters={nextAdapters}>{children}</AdapterProvider>
 );
 
@@ -82,10 +97,10 @@ export const NextAdapterProvider: React.FC<NextAdapterProviderProps> = ({ childr
  * `NextAdapterProvider` directly; this only removes the boilerplate for the
  * common case.
  */
-export const LayoutProvider: React.FC<React.ComponentProps<typeof BaseLayoutProvider>> = ({
+export const LayoutProvider = ({
   children,
   ...props
-}) => (
+}: React.ComponentProps<typeof BaseLayoutProvider>) => (
   <NextAdapterProvider>
     <BaseLayoutProvider {...props}>{children}</BaseLayoutProvider>
   </NextAdapterProvider>

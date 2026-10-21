@@ -21,7 +21,7 @@ const buttons = [
 /** No `aria-controls` pointing at panels that do not exist (ROADMAP W3). */
 describe("SegmentedControl accessibility", () => {
   it("sets no aria-controls when no panel id is given", async () => {
-    const { container } = render(<SegmentedControl buttons={buttons} onChange={() => {}} />, {
+    const { container } = render(<SegmentedControl buttons={buttons} onValueChange={() => {}} />, {
       wrapper: wrap,
     });
 
@@ -39,7 +39,7 @@ describe("SegmentedControl accessibility", () => {
             { value: "monthly", label: "Monthly", "aria-controls": "monthly-panel" },
             { value: "yearly", label: "Yearly", "aria-controls": "yearly-panel" },
           ]}
-          onChange={() => {}}
+          onValueChange={() => {}}
         />
         <div id="monthly-panel" role="tabpanel" aria-label="Monthly prices" />
         <div id="yearly-panel" role="tabpanel" aria-label="Yearly prices" hidden />
@@ -57,7 +57,7 @@ describe("SegmentedControl accessibility", () => {
   it("moves between segments with the arrow keys and selects with Enter", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<SegmentedControl buttons={buttons} onChange={onChange} />, { wrapper: wrap });
+    render(<SegmentedControl buttons={buttons} onValueChange={onChange} />, { wrapper: wrap });
 
     await user.tab();
     expect(screen.getByRole("tab", { name: "Monthly" })).toHaveFocus();
@@ -100,7 +100,7 @@ describe("SegmentedControl keeps the selected option in view", () => {
       .mock.calls.map(([options]) => (options as ScrollToOptions).left);
 
   it("scrolls the strip, not the page, to a selected option out of view", () => {
-    render(<SegmentedControl buttons={six} value="e" onChange={vi.fn()} />, { wrapper: wrap });
+    render(<SegmentedControl buttons={six} value="e" onValueChange={vi.fn()} />, { wrapper: wrap });
     // "e" spans 400–500px; its right edge lands 40px short of the strip's 200px.
     expect(scrolledBy()).toEqual([500 - 160]);
     // The strip that moved is the Scroller's scrolling row, around the options' row.
@@ -109,9 +109,12 @@ describe("SegmentedControl keeps the selected option in view", () => {
   });
 
   it("has no axe violations once it overflows and shows a scroll button", async () => {
-    const { container } = render(<SegmentedControl buttons={six} value="a" onChange={vi.fn()} />, {
-      wrapper: wrap,
-    });
+    const { container } = render(
+      <SegmentedControl buttons={six} value="a" onValueChange={vi.fn()} />,
+      {
+        wrapper: wrap,
+      },
+    );
     expect(await screen.findByRole("button", { name: "Scroll Next" })).toBeInTheDocument();
     // The button sits beside the tablist, not inside it: a tablist owns only tabs.
     expect(screen.getByRole("tablist")).not.toContainElement(
@@ -121,7 +124,7 @@ describe("SegmentedControl keeps the selected option in view", () => {
   });
 
   it("leaves a strip alone when the selected option is in view", () => {
-    render(<SegmentedControl buttons={six} value="a" onChange={vi.fn()} />, { wrapper: wrap });
+    render(<SegmentedControl buttons={six} value="a" onValueChange={vi.fn()} />, { wrapper: wrap });
     // "a" spans 0–100px at the start of the strip, where there is no
     // Previous button to clear.
     expect(scrolledBy()).toEqual([]);
@@ -131,7 +134,7 @@ describe("SegmentedControl keeps the selected option in view", () => {
 describe("SegmentedControl's name", () => {
   it("goes to the tablist", async () => {
     const { container } = render(
-      <SegmentedControl aria-label="Billing period" buttons={buttons} onChange={vi.fn()} />,
+      <SegmentedControl aria-label="Billing period" buttons={buttons} onValueChange={vi.fn()} />,
       { wrapper: wrap },
     );
     expect(screen.getByRole("tablist", { name: "Billing period" })).toContainElement(
@@ -144,7 +147,9 @@ describe("SegmentedControl's name", () => {
 describe("Scroller", () => {
   it("forwards its ref, as SegmentedControl's does", () => {
     const ref = createRef<HTMLDivElement>();
-    render(<SegmentedControl ref={ref} buttons={buttons} onChange={vi.fn()} />, { wrapper: wrap });
+    render(<SegmentedControl ref={ref} buttons={buttons} onValueChange={vi.fn()} />, {
+      wrapper: wrap,
+    });
     expect(ref.current).toContainElement(screen.getByRole("tab", { name: "Monthly" }));
   });
 });
@@ -157,7 +162,7 @@ describe("Scroller", () => {
 describe("SegmentedControl without scrolling", () => {
   it("renders no Scroller, and its options share the row and may shrink", () => {
     const { container } = render(
-      <SegmentedControl scroll={false} buttons={buttons} onChange={vi.fn()} />,
+      <SegmentedControl scroll={false} buttons={buttons} onValueChange={vi.fn()} />,
       { wrapper: wrap },
     );
     expect(container.querySelector(`.${scrollerStyles.scroller}`)).toBeNull();
@@ -170,7 +175,7 @@ describe("SegmentedControl without scrolling", () => {
   });
 
   it("keeps the scroll strip by default", () => {
-    const { container } = render(<SegmentedControl buttons={buttons} onChange={vi.fn()} />, {
+    const { container } = render(<SegmentedControl buttons={buttons} onValueChange={vi.fn()} />, {
       wrapper: wrap,
     });
     expect(container.querySelector(`.${scrollerStyles.scroller}`)).not.toBeNull();
@@ -180,7 +185,12 @@ describe("SegmentedControl without scrolling", () => {
 
   it("does not share the row when fillWidth is off", () => {
     render(
-      <SegmentedControl scroll={false} fillWidth={false} buttons={buttons} onChange={vi.fn()} />,
+      <SegmentedControl
+        scroll={false}
+        fillWidth={false}
+        buttons={buttons}
+        onValueChange={vi.fn()}
+      />,
       { wrapper: wrap },
     );
     const tab = screen.getByRole("tab", { name: "Monthly" });
@@ -198,7 +208,7 @@ describe("SegmentedControl without scrolling", () => {
         scroll={false}
         aria-label="Billing period"
         buttons={buttons}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -208,7 +218,7 @@ describe("SegmentedControl without scrolling", () => {
     expect(screen.getByRole("tab", { name: "Yearly" })).toHaveAttribute("aria-selected", "true");
   });
 
-  it("is uncontrolled without onChange, starting from defaultValue", async () => {
+  it("is uncontrolled without onValueChange, starting from defaultValue", async () => {
     const user = userEvent.setup();
     render(<SegmentedControl scroll={false} buttons={buttons} defaultValue="yearly" />, {
       wrapper: wrap,

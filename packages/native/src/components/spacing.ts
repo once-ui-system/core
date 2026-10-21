@@ -3,23 +3,37 @@ import type { OnceTheme } from "../theme/theme";
 import type { SpacingToken } from "../types";
 import type { Writable } from "./refs";
 
-/** Core's `SpacingProps`, without the web-only offsets. Numbers are rem, as on the web. */
+/**
+ * A length written as a string, the part of core's `CSSUnit` that means the
+ * same on a phone: `"24px"` (points) or `"1.5rem"` (the device's root size,
+ * 15pt on phones and 16pt on tablets). The 3.0 codemod writes a 2.x number
+ * as `"Nrem"`, so migrated code keeps its size here too.
+ */
+export type Length = `${number}px` | `${number}rem`;
+
+/** A spacing prop's value: a token, a number of points (px, as in core 3.0) or a `Length`. */
+export type SpacingValue = SpacingToken | number | Length;
+
+/**
+ * Core's `SpacingProps`, without the web-only offsets. As in core 3.0, a
+ * number is px: density-independent points here, never rem.
+ */
 export interface SpacingProps {
-  padding?: SpacingToken | number;
-  paddingLeft?: SpacingToken | number;
-  paddingRight?: SpacingToken | number;
-  paddingTop?: SpacingToken | number;
-  paddingBottom?: SpacingToken | number;
-  paddingX?: SpacingToken | number;
-  paddingY?: SpacingToken | number;
-  margin?: SpacingToken | number;
-  marginLeft?: SpacingToken | number;
-  marginRight?: SpacingToken | number;
-  marginTop?: SpacingToken | number;
-  marginBottom?: SpacingToken | number;
-  marginX?: SpacingToken | number;
-  marginY?: SpacingToken | number;
-  gap?: SpacingToken | number;
+  padding?: SpacingValue;
+  paddingLeft?: SpacingValue;
+  paddingRight?: SpacingValue;
+  paddingTop?: SpacingValue;
+  paddingBottom?: SpacingValue;
+  paddingX?: SpacingValue;
+  paddingY?: SpacingValue;
+  margin?: SpacingValue;
+  marginLeft?: SpacingValue;
+  marginRight?: SpacingValue;
+  marginTop?: SpacingValue;
+  marginBottom?: SpacingValue;
+  marginX?: SpacingValue;
+  marginY?: SpacingValue;
+  gap?: SpacingValue;
 }
 
 const SPACING_KEYS = [
@@ -57,8 +71,7 @@ export function splitSpacing<T extends SpacingProps>(
 
 /** Spacing props as a style; shared by every component that takes them. */
 export function spacingStyle(theme: OnceTheme, p: SpacingProps): ViewStyle {
-  const s = (v: SpacingToken | number | undefined) =>
-    v === undefined ? undefined : theme.space(v);
+  const s = (v: SpacingValue | undefined) => (v === undefined ? undefined : theme.space(v));
   const style: Writable<ViewStyle> = {
     padding: s(p.padding),
     paddingHorizontal: s(p.paddingX),

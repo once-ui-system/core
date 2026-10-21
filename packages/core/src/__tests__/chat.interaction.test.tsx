@@ -4,14 +4,12 @@ import type { ReactNode } from "react";
 import { createRef } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import {
-  ChatComposer,
-  ChatMessage,
-  ChatMessageList,
-  ConversationItem,
-  TypingIndicator,
-} from "../modules/chat";
+import { ChatComposer } from "../modules/chat/ChatComposer";
+import { ChatMessage } from "../modules/chat/ChatMessage";
+import { ChatMessageList } from "../modules/chat/ChatMessageList";
+import { ConversationItem } from "../modules/chat/ConversationItem";
 import { formatChatTime, renderChatTime } from "../modules/chat/chatTime";
+import { TypingIndicator } from "../modules/chat/TypingIndicator";
 import { expectNoAxeViolations } from "../test/axe";
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -115,7 +113,7 @@ describe("ChatComposer interaction", () => {
     render(
       <ChatComposer
         onSend={vi.fn()}
-        ariaLabel="Reply to Ana"
+        aria-label="Reply to Ana"
         sendLabel="Post"
         attachLabel="Add"
         placeholder="Say something"
@@ -257,7 +255,7 @@ describe("ChatMessageList interaction", () => {
   it("takes focus with Tab so the keyboard can scroll it", async () => {
     const user = userEvent.setup();
     const { container } = render(
-      <ChatMessageList ariaLabel="Chat with Ana">
+      <ChatMessageList aria-label="Chat with Ana">
         <ChatMessage>Hi</ChatMessage>
       </ChatMessageList>,
       { wrapper },
@@ -269,10 +267,10 @@ describe("ChatMessageList interaction", () => {
     await expectNoAxeViolations(container);
   });
 
-  it("prefers a native aria-label and still calls onScroll", () => {
+  it("takes its name from aria-label and still calls onScroll", () => {
     const onScroll = vi.fn();
     render(
-      <ChatMessageList aria-label="Native" ariaLabel="Prop" onScroll={onScroll}>
+      <ChatMessageList aria-label="Native" onScroll={onScroll}>
         <ChatMessage>Hi</ChatMessage>
       </ChatMessageList>,
       { wrapper },

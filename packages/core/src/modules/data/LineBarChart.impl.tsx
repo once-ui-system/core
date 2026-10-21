@@ -2,17 +2,18 @@
 
 import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { RadiusSize } from "@/types";
-import { Column } from "../../components/Column";
-import { DateRange } from "../../components/DateRangePicker";
-import { Row } from "../../components/Row";
-import { useDataTheme } from "../../contexts/DataThemeProvider";
-import type { DataStyle } from "../../contexts/ThemeProvider";
-import { cssColor } from "../../internal/cssColor";
-import { ChartHeader } from "./ChartHeader";
-import { ChartStatus } from "./ChartStatus";
-import { DataTooltip } from "./DataTooltip";
-import { LinearGradient } from "./Gradient";
+import { Column } from "../../components/Column.js";
+import type { DateRange } from "../../components/DatePicker.js";
+import { Row } from "../../components/Row.js";
+import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import type { DataStyle } from "../../contexts/ThemeProvider.js";
+import type { SizeProps } from "../../interfaces.js";
+import { cssColor } from "../../internal/cssColor.js";
+import { RadiusSize } from "../../types.js";
+import { ChartHeader } from "./ChartHeader.js";
+import { ChartStatus } from "./ChartStatus.js";
+import { DataTooltip } from "./DataTooltip.js";
+import { LinearGradient } from "./Gradient.js";
 import {
   BarWidth,
   ChartProps,
@@ -20,12 +21,12 @@ import {
   curveType,
   DataPoint,
   SeriesConfig,
-} from "./interfaces";
-import { Legend } from "./Legend";
-import { getRechartsComponents } from "./rechartsLoader";
-import { formatDate } from "./utils/formatDate";
+} from "./interfaces.js";
+import { Legend } from "./Legend.js";
+import { getRechartsComponents } from "./rechartsLoader.js";
+import { formatDate } from "./utils/formatDate.js";
 
-export interface LineBarChartProps extends ChartProps {
+export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
   curve?: curveType;
   reverseY?: boolean;
@@ -38,7 +39,7 @@ export interface LineBarChartProps extends ChartProps {
   "data-viz-style"?: DataStyle | (string & {});
 }
 
-const LineBarChart: React.FC<LineBarChartProps> = ({
+const LineBarChart = ({
   title,
   description,
   data: rows,
@@ -60,7 +61,7 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   reverseX = false,
   "data-viz-style": dataVizStyle,
   ...flex
-}) => {
+}: LineBarChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
   const {
@@ -215,7 +216,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   return (
     <Column
       fillWidth
-      height={height}
+      // The theme height is any CSS length; Flex types its lengths narrower.
+      height={height as SizeProps["height"]}
       border={border}
       radius="l"
       data-viz-style={dataVizStyle || mode}

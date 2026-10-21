@@ -35,12 +35,12 @@ const SELECT_SIZE = { s: "xs", m: "xs", l: "s" } as const;
 const MIN_WIDTH = { s: "32", m: "40", l: "48" } as const;
 
 export interface PaginationProps extends Omit<FlexProps, "children"> {
-  /** The current page, from 1, when the host owns the state. Pair with `onChange`. */
+  /** The current page, from 1, when the host owns the state. Pair with `onPageChange`. */
   page?: number;
   /** The page shown first when Pagination manages its own state. */
   defaultPage?: number;
   /** Called with the new page. Not called for the page already shown. */
-  onChange?: (page: number) => void;
+  onPageChange?: (page: number) => void;
   /** How many pages there are. Or pass `count` and `perPage` and let Pagination work it out. */
   total?: number;
   /** How many items there are across all pages. With `perPage`, gives the page count. */
@@ -53,7 +53,7 @@ export interface PaginationProps extends Omit<FlexProps, "children"> {
   perPageOptions?: number[];
   /**
    * Called with the new page size. The page then moves so the first item on
-   * screen stays on screen, and `onChange` reports that move.
+   * screen stays on screen, and `onPageChange` reports that move.
    */
   onPerPageChange?: (perPage: number) => void;
   /** Pages drawn on each side of the current page. */
@@ -113,12 +113,12 @@ const pageCount = (count: number, perPage: number) =>
 /**
  * Core's `Pagination`: previous and next, the first and last pages, the
  * pages around the current one, and an ellipsis for the rest. Works on its
- * own state (`defaultPage`) or the host's (`page` and `onChange`).
+ * own state (`defaultPage`) or the host's (`page` and `onPageChange`).
  */
 export function Pagination({
   page,
   defaultPage = 1,
-  onChange,
+  onPageChange,
   total,
   count,
   perPage,
@@ -160,7 +160,7 @@ export function Pagination({
     const next = Math.min(pages, Math.max(1, target));
     if (next === current) return;
     if (!controlled) setUncontrolledPage(next);
-    onChange?.(next);
+    onPageChange?.(next);
   };
 
   const changePerPage = (value: string | string[]) => {
@@ -175,7 +175,7 @@ export function Pagination({
     const clamped = Math.min(nextPages, Math.max(1, target));
     if (clamped !== current) {
       if (!controlled) setUncontrolledPage(clamped);
-      onChange?.(clamped);
+      onPageChange?.(clamped);
     }
   };
 
@@ -193,7 +193,7 @@ export function Pagination({
       icon={icon}
       size={ICON_BUTTON_SIZE[size]}
       variant="secondary"
-      ariaLabel={label}
+      aria-label={label}
       disabled={off}
       onPress={() => goTo(target)}
     />
@@ -202,16 +202,13 @@ export function Pagination({
   return (
     <Row gap="16" vertical="center" wrap {...flex}>
       {perPageOptions && perPageOptions.length > 0 && (
-        // The select's field is `fillWidth`: it needs a parent with a width of its own,
-        // or it stretches across the whole row, under the page buttons.
-        <Row width={8}>
+        <Row width="8rem">
           <Select
-            style={{ width: "100%" }}
             label={text.perPage}
             size={SELECT_SIZE[size]}
             value={String(currentPerPage)}
             disabled={disabled}
-            onSelect={changePerPage}
+            onValueChange={changePerPage}
             options={perPageOptions.map((option) => ({
               label: String(option),
               value: String(option),
@@ -240,7 +237,7 @@ export function Pagination({
               />
             ) : (
               <Row key={item} center minWidth={MIN_WIDTH[size]}>
-                <Text variant="label-default-s" onBackground="neutral-weak">
+                <Text textVariant="label-default-s" onBackground="neutral-weak">
                   …
                 </Text>
               </Row>

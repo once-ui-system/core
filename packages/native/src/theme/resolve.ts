@@ -3,6 +3,7 @@ import type {
   BodyLineHeight,
   BodySize,
   BorderStyle,
+  Density,
   DeviceFontSize,
   NeutralColor,
   ScalingSize,
@@ -40,14 +41,16 @@ export interface TokenFile {
 /** The style options of core's `ThemeProvider`, with `theme` already resolved. */
 export interface StyleSettings {
   theme: "light" | "dark";
-  brand: Schemes | "custom";
-  accent: Schemes | "custom";
-  neutral: NeutralColor | "custom";
+  brand: Schemes;
+  accent: Schemes;
+  neutral: NeutralColor;
   solid: SolidType;
   solidStyle: SolidStyle;
   border: BorderStyle;
   surface: SurfaceStyle;
   scaling: ScalingSize;
+  /** The controls' default size: compact s, normal m, spacious l. */
+  density: Density;
   bodySize: BodySize;
   bodyLineHeight: BodyLineHeight;
   desktopSize?: DeviceFontSize;
@@ -65,24 +68,30 @@ export const defaultSettings: Omit<StyleSettings, "theme"> = {
   border: "playful",
   surface: "filled",
   scaling: "100",
+  density: "normal",
   bodySize: "100",
   bodyLineHeight: "100",
 };
 
 export const tokens = tokenFile as unknown as TokenFile;
 
+/** What each density sets, as core's `DENSITIES`: a control's default size, and the scaling a theme with none takes. */
+export const DENSITIES: Record<Density, { size: "s" | "m" | "l"; scaling: ScalingSize }> = {
+  compact: { size: "s", scaling: "95" },
+  normal: { size: "m", scaling: "100" },
+  spacious: { size: "l", scaling: "105" },
+};
+
 /**
  * Every token for these settings on a screen `width` points wide, with
  * references followed: what `getComputedStyle` would report for each custom
  * property on the web. Layers apply in CSS cascade order (fewest conditions
- * first, then file order), so the result matches the browser. `extra` goes
- * on top, as an app's own custom properties do.
+ * first, then file order), so the result matches the browser.
  */
 export function resolveTokens(
   settings: StyleSettings,
   width: number,
   file: TokenFile = tokens,
-  extra: Record<string, TokenValue> = {},
 ): Record<string, TokenValue> {
   const options = settings as unknown as Record<string, string | undefined>;
   const matching = file.layers
@@ -100,8 +109,6 @@ export function resolveTokens(
 
   const raw: Record<string, TokenValue> = {};
   for (const { layer } of matching) Object.assign(raw, layer.tokens);
-  // The custom properties an app sets on the web, such as `--scheme-brand-600`.
-  Object.assign(raw, extra);
 
   const resolved: Record<string, TokenValue> = {};
   const follow = (name: string, seen: string[]): TokenValue | undefined => {

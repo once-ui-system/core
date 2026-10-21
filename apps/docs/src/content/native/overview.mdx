@@ -12,12 +12,14 @@ navIcon: "components"
 
 It is a preview. Most apps should keep shipping Once UI on phones as the web build wrapped in a native shell (the Stack mobile target); use this package when the app itself has to be native.
 
+**Props follow core 3.0.** The components take the 3.0 props of `@once-ui-system/core`, not the 2.x ones: state is `checked` / `defaultChecked` / `onCheckedChange`, `value` / `defaultValue` / `onValueChange` and `open` / `defaultOpen` / `onOpenChange`; accessible names are `aria-label`; colour is `tone` and look is `variant`; Text and Heading take `textVariant`; Badge and Chip are `Tag`; and a number on a spacing or size prop is points (the web reads it on the token scale, which is the same at the default root size). The renames are listed under "Coming from the 2.x props" below.
+
 <Row fillWidth horizontal="center" marginY="24">
   <Media
     src="/images/native/loyalty-card.png"
     alt="A loyalty-card screen built with @once-ui-system/native"
     aspectRatio="390 / 740"
-    maxWidth={20}
+    maxWidth="20rem"
     radius="l"
     border="neutral-alpha-weak"
   />
@@ -68,17 +70,15 @@ Each component has its own page with examples, a props table and what differs fr
 
 | Group | Components |
 | --- | --- |
-| Layout | [`Flex`](/native/components/flex), [`Card`](/native/components/card), [`Line`](/native/components/line), [`Grid`](/native/components/grid), [`Scroller`](/native/components/scroller) |
+| Layout | [`Flex`](/native/components/flex), [`Card`](/native/components/card), [`Line`](/native/components/line), [`Grid`](/native/components/grid) |
 | Type | [`Text`](/native/components/text), [`Heading`](/native/components/heading) |
 | Actions | [`Button`](/native/components/button), [`IconButton`](/native/components/iconButton), [`ToggleButton`](/native/components/toggleButton), [`SegmentedControl`](/native/components/segmentedControl) |
-| Form controls | [`Input`](/native/form-controls/input), [`Textarea`](/native/form-controls/textarea), [`Select`](/native/form-controls/select), [`Checkbox`](/native/form-controls/checkbox), [`Switch`](/native/form-controls/switch), [`RadioGroup`](/native/form-controls/radioGroup), [`Chip`](/native/form-controls/chip), [`Slider`](/native/form-controls/slider), [`RangeSlider`](/native/form-controls/rangeSlider), [`NumberInput`](/native/form-controls/numberInput), [`PasswordInput`](/native/form-controls/passwordInput), [`OTPInput`](/native/form-controls/otpInput), [`Form`](/native/form-controls/form), [`Field`](/native/form-controls/field), [`Fieldset`](/native/form-controls/fieldset), [`SubmitButton`](/native/form-controls/submitButton), [`FormErrorSummary`](/native/form-controls/formErrorSummary), [`DatePicker`](/native/form-controls/datePicker), [`DateInput`](/native/form-controls/dateInput) |
-| Content | [`Icon`](/native/components/icon), [`Media`](/native/components/media), [`Avatar`](/native/components/avatar), [`AvatarGroup`](/native/components/avatarGroup), [`Badge`](/native/components/badge), [`Tag`](/native/components/tag), [`List`](/native/components/List), [`StatusIndicator`](/native/components/statusIndicator), [`User`](/native/components/user), [`BlockQuote`](/native/components/blockquote), [`Timeline`](/native/components/timeline), [`Kbd`](/native/components/kbd), [`InlineCode`](/native/components/inlineCode), [`CodeBlock`](/native/components/codeBlock) |
+| Form controls | [`Input`](/native/form-controls/input), [`Textarea`](/native/form-controls/textarea), [`Select`](/native/form-controls/select), [`Checkbox`](/native/form-controls/checkbox), [`Switch`](/native/form-controls/switch), [`RadioGroup`](/native/form-controls/radioGroup), [`Slider`](/native/form-controls/slider), [`RangeSlider`](/native/form-controls/rangeSlider), [`NumberInput`](/native/form-controls/numberInput), [`PasswordInput`](/native/form-controls/passwordInput), [`OTPInput`](/native/form-controls/otpInput) |
+| Content | [`Icon`](/native/components/icon), [`Media`](/native/components/media), [`Avatar`](/native/components/avatar), [`AvatarGroup`](/native/components/avatarGroup), [`Tag`](/native/components/tag), [`List`](/native/components/List), [`StatusIndicator`](/native/components/statusIndicator), [`User`](/native/components/user), [`BlockQuote`](/native/components/blockquote), [`Timeline`](/native/components/timeline), [`Kbd`](/native/components/kbd), [`InlineCode`](/native/components/inlineCode), [`CodeBlock`](/native/components/codeBlock) |
 | Feedback | [`Feedback`](/native/components/feedback), [`ProgressBar`](/native/components/progressBar), [`Spinner`](/native/components/spinner), [`Skeleton`](/native/components/skeleton), [`Toast`](/native/components/toast), [`Banner`](/native/components/banner) |
-| Overlays and disclosure | [`Dialog`](/native/components/dialog), [`Drawer`](/native/components/drawer), [`Tabs`](/native/components/tabs), [`Accordion`](/native/components/accordion), [`DropdownWrapper`](/native/components/dropdownWrapper), [`ContextMenu`](/native/components/contextMenu), [`Tooltip`](/native/components/tooltip), [`InfoTip`](/native/components/infoTip) |
-| Navigation | [`Nav`](/native/components/nav), [`Breadcrumbs`](/native/components/breadcrumbs), [`Pagination`](/native/components/pagination) |
-| Data | [`Table`](/native/components/table), [`BarChart`](/native/data/barChart), [`LineChart`](/native/data/lineChart) |
-| Assistant | [`Mascot`](/native/components/mascot), [`WorkingIndicator`](/native/components/workingIndicator), [`LogoSpinner`](/native/components/logoSpinner) |
-| Social | [`Reactions`](/native/components/reactions) |
+| Overlays and disclosure | [`Dialog`](/native/components/dialog), [`Tabs`](/native/components/tabs), [`Accordion`](/native/components/accordion), [`DropdownWrapper`](/native/components/dropdownWrapper), [`ContextMenu`](/native/components/contextMenu), [`Tooltip`](/native/components/tooltip), [`InfoTip`](/native/components/infoTip) |
+| Navigation | [`Breadcrumbs`](/native/components/breadcrumbs), [`Pagination`](/native/components/pagination) |
+| Data | [`BarChart`](/native/data/barChart), [`LineChart`](/native/data/lineChart) |
 
 `Dialog` opens as a bottom sheet, and so do `Select`'s options. `ThemeProvider`, `useTheme()`, `IconProvider` and fonts are on the [config page](/native/config).
 
@@ -88,13 +88,34 @@ Each component has its own page with examples, a props table and what differs fr
 
 ## Differences from the web
 
-- **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
+- **Units.** A number on a spacing or size prop is density-independent points. On the web 3.0 reads it on the token scale (16 = 1rem, following `data-scaling`), which is the same number of px at the default root size; here it does not follow the screen's rem or `scaling`. Tokens work as on the web, and so do `"24px"` and `"1.5rem"` strings; rem follows the screen size, 15pt on phones and 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
+- **Dialog** opens as a bottom sheet unless `variant="center"`; the web's default is the centred card.
+- **Tag** `variant="gradient"` is a flat brand tint, and `effect` draws no shine.
 - **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
 - **Tabs** have no arrow-key navigation, so `activation` has no effect.
 - **Core 3.0 names.** `Accordion` also takes `defaultOpen` and `onOpenChange`, `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code written for 3.0 works here too.
 - **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them (see the [quick start](/native/quick-start)).
+
+## Coming from the 2.x props
+
+The first preview took the 2.x props. Rename them as core's 3.0 codemod does on the web:
+
+| 2.x | 3.0 |
+| --- | --- |
+| `onToggle` on Checkbox, RadioButton and Switch | `onCheckedChange` |
+| `onChange` on RadioGroup and SegmentedControl, `onSelect` on Select | `onValueChange` |
+| `aria-label` | `aria-label` |
+| Button and IconButton `variant="danger"`, `"success"`, `"warning"` | `tone="danger"`, and so on |
+| `variant="quaternary"` | `variant="ghost"` |
+| Tag `scheme`; Feedback, Toast and `addToast` `variant` | `tone` |
+| Text and Heading `variant` | `textVariant` |
+| `Badge` | `Tag variant="announce"`, with `label` for `title` and `prefixIcon` for `icon` |
+| `Chip` | `Tag selected`; `selected` now defaults to false |
+| Dialog `hideClose` | `showClose={false}` |
+| Avatar `statusIndicator={{ color }}` | `statusIndicator={{ scheme }}` |
+| A number on spacing or sizes: rem | px; write `"20rem"` to keep the old size |
 
 ## Design tokens
 

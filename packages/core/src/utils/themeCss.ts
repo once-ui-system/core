@@ -1,10 +1,10 @@
-import { cssColor } from "../internal/cssColor";
+import { cssColor } from "../internal/cssColor.js";
 import {
   type CustomScheme,
   type CustomSchemeSeeds,
   type CustomSchemeThemedScales,
   customSchemeThemeProperties,
-} from "./colorScheme";
+} from "./colorScheme.js";
 
 /**
  * A colour for both themes, or one per theme: a token name

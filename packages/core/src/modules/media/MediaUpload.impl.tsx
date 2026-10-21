@@ -1,12 +1,11 @@
 "use client";
 
-import type React from "react";
-import { forwardRef, useEffect, useRef, useState } from "react";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Media } from "../../components/Media";
-import { Spinner } from "../../components/Spinner";
-import { Text } from "../../components/Text";
+import React, { useEffect, useRef, useState } from "react";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Media } from "../../components/Media.js";
+import { Spinner } from "../../components/Spinner.js";
+import { Text } from "../../components/Text.js";
 import styles from "./MediaUpload.module.scss";
 
 let Compressor: any;
@@ -25,7 +24,8 @@ async function getCompressor() {
   return Compressor;
 }
 
-export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
+export interface MediaUploadProps extends Omit<React.ComponentProps<typeof Flex>, "ref"> {
+  ref?: React.Ref<HTMLInputElement>;
   onFileUpload?: (file: File) => Promise<void>;
   compress?: boolean;
   aspectRatio?: string;
@@ -45,7 +45,6 @@ export interface MediaUploadProps extends React.ComponentProps<typeof Flex> {
   loading?: boolean;
   accept?: string;
 }
-
 /** Release the object URL held in `ref`, if any. */
 const revokeObjectUrl = (ref: { current: string | null }) => {
   if (ref.current) {
@@ -54,219 +53,215 @@ const revokeObjectUrl = (ref: { current: string | null }) => {
   }
 };
 
-const MediaUpload = forwardRef<HTMLInputElement, MediaUploadProps>(
-  (
-    {
-      onFileUpload,
-      compress = true,
-      aspectRatio = "16 / 9",
-      quality = 0.8,
-      convertTypes = ["image/png", "image/webp", "image/jpg"],
-      emptyState = "Drag and drop or click to browse",
-      resizeMaxWidth = 1920,
-      resizeMaxHeight = 1920,
-      resizeWidth = 1200,
-      resizeHeight = 1200,
-      loading = false,
-      sizes,
-      children,
-      initialPreviewImage = null,
-      accept = "image/*",
-      ...rest
-    },
-    ref,
-  ) => {
-    const [dragActive, setDragActive] = useState(false);
-    const [previewImage, setPreviewImage] = useState<string | null>(initialPreviewImage); // Use prop as initial state
-    const [uploading, setUploading] = useState(false);
-    const inputRef = useRef<HTMLInputElement>(null);
-    // The object URL this component made for the current preview. Each one
-    // holds its file in memory until revoked, and none ever was.
-    const objectUrlRef = useRef<string | null>(null);
+const MediaUpload = ({
+  ref,
+  onFileUpload,
+  compress = true,
+  aspectRatio = "16 / 9",
+  quality = 0.8,
+  convertTypes = ["image/png", "image/webp", "image/jpg"],
+  emptyState = "Drag and drop or click to browse",
+  resizeMaxWidth = 1920,
+  resizeMaxHeight = 1920,
+  resizeWidth = 1200,
+  resizeHeight = 1200,
+  loading = false,
+  sizes,
+  children,
+  initialPreviewImage = null,
+  accept = "image/*",
+  ...rest
+}: MediaUploadProps) => {
+  const [dragActive, setDragActive] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(initialPreviewImage); // Use prop as initial state
+  const [uploading, setUploading] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  // The object URL this component made for the current preview. Each one
+  // holds its file in memory until revoked, and none ever was.
+  const objectUrlRef = useRef<string | null>(null);
 
-    useEffect(() => {
-      if (initialPreviewImage) {
-        revokeObjectUrl(objectUrlRef);
-        setPreviewImage(initialPreviewImage);
-      }
-    }, [initialPreviewImage]);
+  useEffect(() => {
+    if (initialPreviewImage) {
+      revokeObjectUrl(objectUrlRef);
+      setPreviewImage(initialPreviewImage);
+    }
+  }, [initialPreviewImage]);
 
-    useEffect(() => () => revokeObjectUrl(objectUrlRef), []);
+  useEffect(() => () => revokeObjectUrl(objectUrlRef), []);
 
-    const handleDragOver = (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragActive(true);
-    };
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(true);
+  };
 
-    const handleDragLeave = (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragActive(false);
-    };
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+  };
 
-    const handleDrop = (e: React.DragEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      setDragActive(false);
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
 
-      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-        handleFiles(e.dataTransfer.files);
-      }
-    };
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFiles(e.dataTransfer.files);
+    }
+  };
 
-    const handleFileSelection = () => {
-      if (inputRef.current) {
-        inputRef.current.click();
-      }
-    };
+  const handleFileSelection = () => {
+    if (inputRef.current) {
+      inputRef.current.click();
+    }
+  };
 
-    const handleFiles = (files: FileList) => {
-      const file = files[0];
-      if (!file) return;
+  const handleFiles = (files: FileList) => {
+    const file = files[0];
+    if (!file) return;
 
-      if (file.type.startsWith("image/")) {
-        revokeObjectUrl(objectUrlRef);
-        const url = URL.createObjectURL(file);
-        objectUrlRef.current = url;
-        setPreviewImage(url);
+    if (file.type.startsWith("image/")) {
+      revokeObjectUrl(objectUrlRef);
+      const url = URL.createObjectURL(file);
+      objectUrlRef.current = url;
+      setPreviewImage(url);
 
-        if (compress && file.type.startsWith("image/")) {
-          compressImage(file);
-        } else {
-          uploadFile(file);
-        }
+      if (compress && file.type.startsWith("image/")) {
+        compressImage(file);
       } else {
-        console.warn("Unsupported file type:", file.type);
+        uploadFile(file);
       }
-    };
+    } else {
+      console.warn("Unsupported file type:", file.type);
+    }
+  };
 
-    const compressImage = async (file: File) => {
-      const Compressor = (await getCompressor()).default ?? (await getCompressor());
+  const compressImage = async (file: File) => {
+    const Compressor = (await getCompressor()).default ?? (await getCompressor());
 
-      new Compressor(file, {
-        convertTypes,
-        quality,
-        maxWidth: resizeMaxWidth,
-        maxHeight: resizeMaxHeight,
-        convertSize: 400 * 1024,
-        width: resizeWidth,
-        height: resizeHeight,
-        success(compressedFile: File) {
-          uploadFile(compressedFile);
-        },
-        error(err: unknown) {
-          console.error("Compression error:", err);
-          uploadFile(file);
-        },
-      });
-    };
+    new Compressor(file, {
+      convertTypes,
+      quality,
+      maxWidth: resizeMaxWidth,
+      maxHeight: resizeMaxHeight,
+      convertSize: 400 * 1024,
+      width: resizeWidth,
+      height: resizeHeight,
+      success(compressedFile: File) {
+        uploadFile(compressedFile);
+      },
+      error(err: unknown) {
+        console.error("Compression error:", err);
+        uploadFile(file);
+      },
+    });
+  };
 
-    const uploadFile = async (file: File) => {
-      setUploading(true);
-      try {
-        if (onFileUpload) {
-          await onFileUpload(file);
-        }
-      } catch (err) {
-        // Nothing awaits this call, so a rejection would go unhandled.
-        console.error("Upload error:", err);
-      } finally {
-        // A rejected upload used to leave the spinner up for good.
-        setUploading(false);
+  const uploadFile = async (file: File) => {
+    setUploading(true);
+    try {
+      if (onFileUpload) {
+        await onFileUpload(file);
       }
-    };
+    } catch (err) {
+      // Nothing awaits this call, so a rejection would go unhandled.
+      console.error("Upload error:", err);
+    } finally {
+      // A rejected upload used to leave the spinner up for good.
+      setUploading(false);
+    }
+  };
 
-    // The zone is the control that opens the picker, so the keyboard can
-    // reach it: it was a bare div with a click handler, out of the Tab order.
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-      if (e.target !== e.currentTarget) return;
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
+  // The zone is the control that opens the picker, so the keyboard can
+  // reach it: it was a bare div with a click handler, out of the Tab order.
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      handleFileSelection();
+    }
+  };
+
+  return (
+    <Flex
+      style={{ isolation: "isolate", cursor: "pointer" }}
+      transition="micro-medium"
+      overflow="hidden"
+      className={styles.container}
+      aspectRatio={aspectRatio}
+      fillWidth
+      center
+      border="neutral-medium"
+      radius="l"
+      role="button"
+      tabIndex={0}
+      onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+        // The picker's own click bubbles up here; it must not open it again.
+        if (e.target === inputRef.current) return;
         handleFileSelection();
-      }
-    };
-
-    return (
-      <Flex
-        style={{ isolation: "isolate", cursor: "pointer" }}
-        transition="micro-medium"
-        overflow="hidden"
-        className={styles.container}
-        aspectRatio={aspectRatio}
-        fillWidth
-        center
-        border="neutral-medium"
-        radius="l"
-        role="button"
-        tabIndex={0}
-        onClick={(e: React.MouseEvent<HTMLDivElement>) => {
-          // The picker's own click bubbles up here; it must not open it again.
-          if (e.target === inputRef.current) return;
-          handleFileSelection();
-        }}
-        onKeyDown={handleKeyDown}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        {...rest}
-      >
-        {!loading && (
-          <>
-            {previewImage ? (
-              <Media
-                height={undefined}
-                style={{
-                  filter: uploading ? "grayscale(1)" : "",
-                }}
-                sizes={sizes}
-                src={previewImage ? previewImage : ""}
-                alt="Preview of uploaded image"
-              />
-            ) : (
-              <Flex fill center>
-                <Icon name="plus" size="l" />
-              </Flex>
-            )}
-          </>
-        )}
-        {children}
-        <Flex
-          className={styles.upload}
-          zIndex={1}
-          transition="micro-medium"
-          position="absolute"
-          fill
-          padding="m"
-          horizontal="center"
-          vertical="center"
-        >
-          {uploading || loading ? (
-            <Spinner size="l" />
+      }}
+      onKeyDown={handleKeyDown}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+      {...rest}
+    >
+      {!loading && (
+        <>
+          {previewImage ? (
+            <Media
+              height={undefined}
+              style={{
+                filter: uploading ? "grayscale(1)" : "",
+              }}
+              sizes={sizes}
+              src={previewImage ? previewImage : ""}
+              alt="Preview of uploaded image"
+            />
           ) : (
-            <Text className={styles.text} align="center">
-              {emptyState}
-            </Text>
+            <Flex fill center>
+              <Icon name="plus" size="l" />
+            </Flex>
           )}
-        </Flex>
-        <input
-          type="file"
-          ref={inputRef}
-          accept={accept}
-          style={{ display: "none" }}
-          onChange={(e) => {
-            if (e.target.files) {
-              handleFiles(e.target.files);
-            }
-            // Clear the selection, or picking the same file again fires no
-            // change event and nothing happens.
-            e.target.value = "";
-          }}
-        />
+        </>
+      )}
+      {children}
+      <Flex
+        className={styles.upload}
+        zIndex={1}
+        transition="micro-medium"
+        position="absolute"
+        fill
+        padding="m"
+        horizontal="center"
+        vertical="center"
+      >
+        {uploading || loading ? (
+          <Spinner size="l" />
+        ) : (
+          <Text className={styles.text} align="center">
+            {emptyState}
+          </Text>
+        )}
       </Flex>
-    );
-  },
-);
+      <input
+        type="file"
+        ref={inputRef}
+        accept={accept}
+        style={{ display: "none" }}
+        onChange={(e) => {
+          if (e.target.files) {
+            handleFiles(e.target.files);
+          }
+          // Clear the selection, or picking the same file again fires no
+          // change event and nothing happens.
+          e.target.value = "";
+        }}
+      />
+    </Flex>
+  );
+};
 
 MediaUpload.displayName = "MediaUpload";
 

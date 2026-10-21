@@ -1,0 +1,59 @@
+{
+ "name": "InlineCode",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Code in a sentence, in the code font on a weak tint with a hairline border.",
+ "mixins": [
+  "SpacingProps",
+  "TextProps"
+ ],
+ "reactNative": [
+  "TextProps"
+ ],
+ "props": {
+  "children": "!ReactNode"
+ },
+ "resolvedMixins": {
+  "SpacingProps": {
+   "padding": "SpacingValue",
+   "paddingLeft": "SpacingValue",
+   "paddingRight": "SpacingValue",
+   "paddingTop": "SpacingValue",
+   "paddingBottom": "SpacingValue",
+   "paddingX": "SpacingValue",
+   "paddingY": "SpacingValue",
+   "margin": "SpacingValue",
+   "marginLeft": "SpacingValue",
+   "marginRight": "SpacingValue",
+   "marginTop": "SpacingValue",
+   "marginBottom": "SpacingValue",
+   "marginX": "SpacingValue",
+   "marginY": "SpacingValue",
+   "gap": "SpacingValue"
+  },
+  "TextProps": {
+   "style": "TextStyle | TextStyle[]",
+   "textVariant": "TextVariant",
+   "onBackground": "`${ColorScheme}-${ColorWeight}`",
+   "onSolid": "`${ColorScheme}-${ColorWeight}`",
+   "align": "\"left\" | \"center\" | \"right\" | \"justify\"",
+   "truncate": "boolean",
+   "family": "TextType",
+   "weight": "TextWeight"
+  }
+ },
+ "types": {
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "ColorWeight": "\"weak\" | \"medium\" | \"strong\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "Length": "`${number}px` | `${number}rem`",
+  "ResponsiveSpacingToken": "TShirtSizes",
+  "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
+  "SpacingValue": "SpacingToken | number | Length",
+  "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
+  "TextSize": "TShirtSizes",
+  "TextType": "\"body\" | \"heading\" | \"display\" | \"label\" | \"code\"",
+  "TextVariant": "`${TextType}-${TextWeight}-${TextSize}`",
+  "TextWeight": "\"default\" | \"normal\" | \"medium\" | \"strong\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

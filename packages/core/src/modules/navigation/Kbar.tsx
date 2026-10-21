@@ -11,18 +11,19 @@ import React, {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import { Column } from "../../components/Column";
-import { Flex } from "../../components/Flex";
-import { Icon } from "../../components/Icon";
-import { Input } from "../../components/Input";
-import { Kbd } from "../../components/Kbd";
-import { Option } from "../../components/Option";
-import { Row } from "../../components/Row";
-import { ScrollLock } from "../../components/ScrollLock";
-import { Text } from "../../components/Text";
-import { useAdapters } from "../../contexts/AdapterProvider";
-import type { IconName } from "../../icons";
-import type { TShirtSizes } from "../../types";
+import { Column } from "../../components/Column.js";
+import { Flex } from "../../components/Flex.js";
+import { Icon } from "../../components/Icon.js";
+import { Input } from "../../components/Input.js";
+import { Option } from "../../components/Option.js";
+import { Row } from "../../components/Row.js";
+import { ScrollLock } from "../../components/ScrollLock.js";
+import { Text } from "../../components/Text.js";
+import { useAdapters } from "../../contexts/AdapterProvider.js";
+import type { IconName } from "../../icons.js";
+import { KbdCap } from "../../internal/KbdCap.js";
+import { useControllableState } from "../../internal/useControllableState.js";
+import type { TShirtSizes } from "../../types.js";
 import styles from "./Kbar.module.scss";
 
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
@@ -50,7 +51,7 @@ interface KbarOption {
   onClick?: () => void;
 }
 
-const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) => (
+const SectionHeader = ({ id, label }: { id: string; label: string }) => (
   <Row
     id={id}
     paddingX="12"
@@ -68,27 +69,27 @@ const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) =
  * move the active option, which `aria-activedescendant` points at, so typing
  * and choosing never fight over focus.
  */
-const KbarSearchInput: React.FC<{
-  id: string;
-  placeholder: string;
-  searchQuery: string;
-  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  inputRef: React.RefObject<HTMLInputElement | null>;
-  inputSize?: TShirtSizes;
-  /** Set while there are results to show; the popup is collapsed otherwise. */
-  listboxId?: string;
-  activeOptionId?: string;
-}> = ({
+const KbarSearchInput = ({
   id,
   placeholder,
   searchQuery,
   onSearchChange,
   onKeyDown,
   inputRef,
-  inputSize = "m",
+  size = "m",
   listboxId,
   activeOptionId,
+}: {
+  id: string;
+  placeholder: string;
+  searchQuery: string;
+  onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  inputRef: React.RefObject<HTMLInputElement | null>;
+  size?: TShirtSizes;
+  /** Set while there are results to show; the popup is collapsed otherwise. */
+  listboxId?: string;
+  activeOptionId?: string;
 }) => (
   <Input
     id={id}
@@ -103,7 +104,7 @@ const KbarSearchInput: React.FC<{
     onChange={onSearchChange}
     onKeyDown={onKeyDown}
     ref={inputRef}
-    height={inputSize}
+    height={size}
     prefix={<Icon marginLeft="4" onBackground="neutral-weak" name="search" size="xs" />}
     autoComplete="off"
   />
@@ -113,7 +114,7 @@ export interface KbarTriggerProps extends Omit<React.ComponentProps<typeof Row>,
   onClick?: () => void;
 }
 
-export const KbarTrigger: React.FC<KbarTriggerProps> = ({ onClick, children, ...rest }) => {
+export const KbarTrigger = ({ onClick, children, ...rest }: KbarTriggerProps) => {
   return (
     <Row onClick={onClick} {...rest}>
       {children}
@@ -126,16 +127,17 @@ export interface KbarContentProps {
   onClose: () => void;
   items: KbarItem[];
   placeholder?: string;
-  inputSize?: TShirtSizes;
+  /** The search field's height. */
+  size?: TShirtSizes;
 }
 
-export const KbarContent: React.FC<KbarContentProps> = ({
+export const KbarContent = ({
   open,
   onClose,
   items,
   placeholder = "Search",
-  inputSize = "m",
-}) => {
+  size = "m",
+}: KbarContentProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -191,9 +193,9 @@ export const KbarContent: React.FC<KbarContentProps> = ({
                 <Row gap="2" style={{ transform: "scale(0.9)", transformOrigin: "right" }}>
                   {item.shortcut.map((key, i, keys) => (
                     <Row gap="2" key={i}>
-                      <Kbd minWidth="24" style={{ transform: "scale(0.8)" }}>
+                      <KbdCap minWidth="24" style={{ transform: "scale(0.8)" }}>
                         {key}
-                      </Kbd>
+                      </KbdCap>
                       {i < keys.length - 1 && <Text onBackground="neutral-weak">+</Text>}
                     </Row>
                   ))}
@@ -384,13 +386,13 @@ export const KbarContent: React.FC<KbarContentProps> = ({
               onSearchChange={handleSearchChange}
               onKeyDown={handleInputKeyDown}
               inputRef={inputRef}
-              inputSize={inputSize}
+              size={size}
               listboxId={hasResults ? listboxId : undefined}
               activeOptionId={hasResults ? optionId(active) : undefined}
             />
           </Row>
           <Column
-            maxHeight={32}
+            maxHeight="32rem"
             fillWidth
             padding="4"
             gap="2"
@@ -463,24 +465,24 @@ export const KbarContent: React.FC<KbarContentProps> = ({
               textVariant="label-default-m"
               vertical="center"
             >
-              <Kbd minWidth="20">
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="chevronUp" size="xs" />
                 </Row>
-              </Kbd>
-              <Kbd minWidth="20">
+              </KbdCap>
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="chevronDown" size="xs" />
                 </Row>
-              </Kbd>
+              </KbdCap>
               <Text marginLeft="8" marginRight="24">
                 Navigate
               </Text>
-              <Kbd minWidth="20">
+              <KbdCap minWidth="20">
                 <Row>
                   <Icon name="enter" size="xs" />
                 </Row>
-              </Kbd>
+              </KbdCap>
               <Text marginLeft="8">Go to</Text>
             </Row>
           </Row>
@@ -497,52 +499,52 @@ export interface KbarProps {
    * out to open the palette from your own Button or menu item with `open`.
    */
   children?: React.ReactNode;
-  inputSize?: TShirtSizes;
-  /**
-   * Controlled open state. Pair it with `onOpenChange`:
-   * `<Button onClick={() => setOpen(true)} />` and
-   * `<Kbar items={items} open={open} onOpenChange={setOpen} />`.
-   */
+  /** The search field's height. */
+  size?: TShirtSizes;
+  /** Open or not, controlled. Leave it out to let Kbar keep its own state,
+   *  starting from `defaultOpen`. */
   open?: boolean;
-  /** The next open state, whenever ⌘K, the trigger, Escape, an option or a route change asks for one. */
+  /** The starting state of an uncontrolled Kbar (no `open`). */
+  defaultOpen?: boolean;
+  /** Called with the state Kbar moves to: on the trigger, ⌘K/Ctrl+K, a
+   *  dismissal, and a route change. */
   onOpenChange?: (open: boolean) => void;
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({
+export const Kbar = ({
   items,
   children,
-  inputSize,
+  size,
   open: openProp,
+  defaultOpen = false,
   onOpenChange,
   ...rest
-}) => {
-  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
-  const controlled = openProp !== undefined;
-  const open = controlled ? openProp : uncontrolledOpen;
+}: KbarProps) => {
+  const [open, setOpen] = useControllableState({
+    value: openProp,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
   const { usePathname } = useAdapters();
   const pathname = usePathname();
 
-  // The ⌘K listener is bound once, so it reads the latest state and setter
-  // through refs rather than re-binding on every render.
-  const openRef = useRef(open);
-  openRef.current = open;
-  const setOpenRef = useRef<(next: boolean) => void>(() => {});
-  setOpenRef.current = (next: boolean) => {
-    if (!controlled) setUncontrolledOpen(next);
-    onOpenChange?.(next);
+  const handleOpen = () => {
+    setOpen(true);
   };
 
-  const handleOpen = () => setOpenRef.current(true);
-  const handleClose = () => setOpenRef.current(false);
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  // Close Kbar when pathname changes, not on mount: a controlled palette may
-  // start open.
-  const pathnameRef = useRef(pathname);
+  // Close Kbar when pathname changes (not on mount, so defaultOpen holds).
+  const lastPathname = useRef(pathname);
   useEffect(() => {
-    if (pathnameRef.current === pathname) return;
-    pathnameRef.current = pathname;
-    if (openRef.current) setOpenRef.current(false);
+    if (lastPathname.current === pathname) return;
+    lastPathname.current = pathname;
+    if (open) {
+      handleClose();
+    }
   }, [pathname]);
 
   // Add keyboard shortcut listener
@@ -551,7 +553,7 @@ export const Kbar: React.FC<KbarProps> = ({
       // Check for Command+K (Mac) or Control+K (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault(); // Prevent default browser behavior
-        setOpenRef.current(!openRef.current); // Toggle Kbar open/close
+        setOpen((prev) => !prev); // Toggle Kbar open/close
       }
     };
 
@@ -589,7 +591,7 @@ export const Kbar: React.FC<KbarProps> = ({
       )}
       {open &&
         createPortal(
-          <KbarContent open={open} onClose={handleClose} items={items} inputSize={inputSize} />,
+          <KbarContent open={open} onClose={handleClose} items={items} size={size} />,
           document.body,
         )}
     </>

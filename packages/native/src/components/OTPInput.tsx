@@ -101,7 +101,7 @@ export function OTPInput({
       {error && errorMessage && (
         <Text
           paddingX="8"
-          variant="body-default-s"
+          textVariant="body-default-s"
           onBackground="danger-weak"
           accessibilityLiveRegion="polite"
         >

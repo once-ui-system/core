@@ -17,7 +17,7 @@ import {
   selectNavHref,
   Text,
   ThemeSwitcher,
-  UserMenu,
+  User,
 } from "@once-ui-system/core";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -62,10 +62,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const avatar = { value: initials(user.name), src: user.avatar || undefined };
   const account = (
-    <Column padding="4" gap="2" minWidth={12}>
+    <Column padding="4" gap="2" minWidth="12rem">
       <Column paddingX="12" paddingY="8">
-        <Text variant="label-strong-s">{user.name}</Text>
-        <Text variant="body-default-xs" onBackground="neutral-weak">
+        <Text textVariant="label-strong-s">{user.name}</Text>
+        <Text textVariant="body-default-xs" onBackground="neutral-weak">
           {user.email}
         </Text>
       </Column>
@@ -121,8 +121,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             onClick={() => setMenuPath(pathname)}
           />
         </Row>
-        <Row minWidth={16} s={{ minWidth: 0 }}>
-          <Text variant="heading-strong-s">{app.name}</Text>
+        <Row minWidth="16rem" s={{ minWidth: 0 }}>
+          <Text textVariant="heading-strong-s">{app.name}</Text>
         </Row>
         <Row flex={1} s={{ hide: true }}>
           <Breadcrumbs items={crumbs} />
@@ -138,7 +138,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <ThemeSwitcher collapsed direction="column" />
         {/* Name and email beside the avatar on desktop; the avatar alone on phones. */}
         <Row s={{ hide: true }}>
-          <UserMenu
+          <User
             name={user.name}
             subline={user.email}
             placement="bottom-end"
@@ -147,12 +147,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           />
         </Row>
         <Row hide s={{ hide: false }}>
-          <UserMenu placement="bottom-end" avatarProps={avatar} dropdown={account} />
+          <User placement="bottom-end" avatarProps={avatar} dropdown={account} />
         </Row>
       </Row>
 
       <Row fill paddingX="8">
-        <Column s={{ hide: true }} maxWidth={16} fitHeight position="sticky" top="56">
+        <Column s={{ hide: true }} maxWidth="16rem" fitHeight position="sticky" top="56">
           {sideNav}
         </Column>
         <Row fill horizontal="center" topRadius="l" overflow="hidden">

@@ -41,15 +41,9 @@ describe("demo screens on React Native", () => {
   });
 
   it("opens and closes the redeem sheet", async () => {
-    jest.useFakeTimers();
     await render(<App theme="light" screen="sheet" />);
     expect(screen.getByText("MC-4821")).toBeTruthy();
     await fireEvent.press(screen.getByRole("button", { name: "Later" }));
-    // The sheet slides down, then unmounts.
-    await act(async () => {
-      jest.advanceTimersByTime(500);
-    });
     expect(screen.queryByText("MC-4821")).toBeNull();
-    jest.useRealTimers();
   });
 });

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { Modal } from "../components/Modal";
+import { Dialog } from "../components/Dialog";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
@@ -28,7 +28,8 @@ const Harness = ({ onClose, backdrop }: { onClose?: () => void; backdrop?: React
       <button type="button" onClick={() => setOpen(true)}>
         Open
       </button>
-      <Modal
+      <Dialog
+        variant="sheet"
         open={open}
         backdrop={backdrop}
         title={
@@ -43,7 +44,7 @@ const Harness = ({ onClose, backdrop }: { onClose?: () => void; backdrop?: React
       >
         <p>What changed in 2.1.</p>
         <input aria-label="Search notes" />
-      </Modal>
+      </Dialog>
     </>
   );
 };
@@ -69,9 +70,9 @@ const open = async (props: React.ComponentProps<typeof Harness> = {}) => {
 describe("Modal", () => {
   it("renders nothing while closed", () => {
     render(
-      <Modal open={false} onClose={() => {}} title="Hidden">
+      <Dialog variant="sheet" open={false} onClose={() => {}} title="Hidden">
         <p>Body</p>
-      </Modal>,
+      </Dialog>,
       { wrapper: wrap },
     );
     expect(dialog()).toBeNull();
@@ -131,9 +132,9 @@ describe("Modal", () => {
     const user = userEvent.setup();
     const onClose = vi.fn();
     render(
-      <Modal open={false} onClose={onClose} title="Closed">
+      <Dialog variant="sheet" open={false} onClose={onClose} title="Closed">
         <p>Body</p>
-      </Modal>,
+      </Dialog>,
       { wrapper: wrap },
     );
     await user.keyboard("{Escape}");

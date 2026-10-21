@@ -44,7 +44,7 @@ Put several sections in one `Form`. Each one fuses its own group of corners, and
 <Form as="form" density="spacious" onSubmit={save}>
   <Fieldset legend="Account" density="stacked">
     <Input id="email" placeholder="Email" />
-    <PasswordInput id="password" placeholder="Password" />
+    <Input id="password" placeholder="Password" type="password" />
   </Fieldset>
   <Fieldset legend="Profile" columns={{ xs: 1, m: 2 }}>
     <Field label="First name"><Input id="first" /></Field>

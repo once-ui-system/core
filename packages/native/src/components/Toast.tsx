@@ -10,15 +10,15 @@ import {
 } from "react";
 import { View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
+import type { Tone } from "../types";
 import { Row } from "./Flex";
 import { Icon, type IconName } from "./Icon";
 import { IconButton } from "./IconButton";
 import { Text } from "./Text";
 
-export type ToastVariant = "success" | "danger" | "warning" | "info";
-
 export interface ToastProps {
-  variant: ToastVariant;
+  /** The palette and its icon; `danger` also interrupts the screen reader. 2.x called it `variant`. */
+  tone: Tone;
   children: ReactNode;
   showIcon?: boolean;
   /** Shows a close button, called when the toast hides itself or is closed. */
@@ -29,7 +29,7 @@ export interface ToastProps {
   style?: ViewStyle;
 }
 
-const ICONS: Record<ToastVariant, IconName> = {
+const ICONS: Partial<Record<Tone, IconName>> = {
   success: "check",
   danger: "danger",
   warning: "warning",
@@ -38,7 +38,7 @@ const ICONS: Record<ToastVariant, IconName> = {
 
 /** Core's `Toast`: a short message on a surface card that hides itself. */
 export function Toast({
-  variant,
+  tone,
   children,
   showIcon = true,
   onClose,
@@ -73,22 +73,25 @@ export function Toast({
       paddingY="12"
       paddingX="20"
       // Only a danger toast interrupts, as in core.
-      accessibilityRole={variant === "danger" ? "alert" : "summary"}
-      accessibilityLiveRegion={variant === "danger" ? "assertive" : "polite"}
+      accessibilityRole={tone === "danger" ? "alert" : "summary"}
+      accessibilityLiveRegion={tone === "danger" ? "assertive" : "polite"}
       style={style}
     >
-      {showIcon && <Icon size="s" onBackground={`${variant}-medium`} name={ICONS[variant]} />}
+      {showIcon && <Icon size="s" onBackground={`${tone}-medium`} name={ICONS[tone] ?? "info"} />}
       <View style={{ flex: 1 }}>
-        <Text variant="body-default-s">{children}</Text>
+        <Text textVariant="body-default-s">{children}</Text>
       </View>
       {action}
-      {onClose && <IconButton variant="ghost" icon="close" ariaLabel="Hide" onPress={onClose} />}
+      {onClose && (
+        <IconButton variant="ghost" icon="close" size="m" tooltip="Hide" onPress={onClose} />
+      )}
     </Row>
   );
 }
 
 export interface ToastOptions {
-  variant: ToastVariant;
+  /** The palette and its icon, as core 3.0's `addToast({ tone, message })`. */
+  tone: Tone;
   message: ReactNode;
   action?: ReactNode;
   duration?: number;
@@ -102,7 +105,7 @@ interface ToastContextValue {
 
 const ToastContext = createContext<ToastContextValue | null>(null);
 
-/** Core's `useToast`: `addToast({ variant, message })` from anywhere under `ToastProvider`. */
+/** Core's `useToast`: `addToast({ tone, message })` from anywhere under `ToastProvider`. */
 export function useToast() {
   const context = useContext(ToastContext);
   if (!context) throw new Error("useToast must be used within a ToastProvider");
@@ -141,7 +144,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((t) => (
           <Toast
             key={t.id}
-            variant={t.variant}
+            tone={t.tone}
             action={t.action}
             duration={t.duration}
             onClose={() => removeToast(t.id)}

@@ -4,8 +4,6 @@ import type React from "react";
 import { describe, expect, it } from "vitest";
 import { DateInput } from "../components/DateInput";
 import { DatePicker } from "../components/DatePicker";
-import { DateRangeInput } from "../components/DateRangeInput";
-import { DateRangePicker } from "../components/DateRangePicker";
 import { Select } from "../components/Select";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { getCalendarNames } from "../utils/calendarLocale";
@@ -15,7 +13,7 @@ import { getCalendarNames } from "../utils/calendarLocale";
  * Select's "Search" and "Clear" were English only. `labels` translates them,
  * and `locale` now puts the time picker's time and AM/PM in the locale too.
  * The month and year buttons were named by their value alone ("March",
- * "2026"), which says nothing of what they do; DateRangeInput gave both its
+ * "2026"), which says nothing of what they do; DateInput range gave both its
  * fields the same `id`.
  */
 
@@ -93,9 +91,14 @@ describe("DatePicker labels", () => {
     expect(screen.getByRole("button", { name: "Previous month" })).toBeInTheDocument();
   });
 
-  it("passes labels to both of DateRangePicker's calendars", async () => {
+  it("passes labels to both of DatePicker range's calendars", async () => {
     render(
-      <DateRangePicker dual value={{ startDate: oct(13), endDate: undefined }} labels={german} />,
+      <DatePicker
+        range
+        months={2}
+        value={{ startDate: oct(13), endDate: undefined }}
+        labels={german}
+      />,
       {
         wrapper,
       },
@@ -158,10 +161,11 @@ describe("date fields pass labels on", () => {
     expect(await screen.findByRole("button", { name: "Weiter" })).toBeInTheDocument();
   });
 
-  it("DateRangeInput's calendar takes its labels", async () => {
+  it("DateInput range's calendar takes its labels", async () => {
     const user = userEvent.setup();
     render(
-      <DateRangeInput
+      <DateInput
+        range
         id="stay"
         startLabel="Start"
         endLabel="End"
@@ -175,9 +179,9 @@ describe("date fields pass labels on", () => {
   });
 });
 
-describe("DateRangeInput ids", () => {
+describe("DateInput range ids", () => {
   it("gives each field an id of its own, derived from `id`", () => {
-    render(<DateRangeInput id="stay" startLabel="Start" endLabel="End" />, { wrapper });
+    render(<DateInput range id="stay" startLabel="Start" endLabel="End" />, { wrapper });
     const start = screen.getByRole("combobox", { name: "Start" });
     const end = screen.getByRole("combobox", { name: "End" });
     expect(start).toHaveAttribute("id", "stay-start");

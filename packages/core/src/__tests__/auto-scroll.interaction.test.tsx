@@ -2,7 +2,7 @@ import { act, fireEvent, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import type React from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { AutoScroll } from "../components/AutoScroll";
+import { Scroller } from "../components/Scroller";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { mockReducedMotion } from "../test/fxTestUtils";
@@ -65,11 +65,13 @@ const start = () => {
   return animations.at(-1) as FakeAnimation;
 };
 
-const Logos = (props: Partial<React.ComponentProps<typeof AutoScroll>>) => (
-  <AutoScroll {...props}>
+type Auto = Exclude<NonNullable<React.ComponentProps<typeof Scroller>["auto"]>, boolean>;
+
+const Logos = (props: Auto) => (
+  <Scroller auto={props}>
     <a href="/a">Acme</a>
     <a href="/b">Globex</a>
-  </AutoScroll>
+  </Scroller>
 );
 
 /**
@@ -101,10 +103,13 @@ describe("AutoScroll: content", () => {
     expect(screen.getByRole("link", { name: "Acme" })).toHaveFocus();
   });
 
-  it("puts scrollGap after each copy", () => {
-    render(<Logos scrollGap={24} />, { wrapper });
+  it("puts gap after each copy", () => {
+    render(<Logos gap={24} />, { wrapper });
     const copies = screen.getAllByText("Acme").map((a) => a.parentElement as HTMLElement);
-    expect(copies.map((c) => c.style.marginRight)).toEqual(["24px", "24px"]);
+    expect(copies.map((c) => c.style.marginRight)).toEqual([
+      "var(--static-space-24)",
+      "var(--static-space-24)",
+    ]);
   });
 });
 

@@ -2,23 +2,26 @@
 
 import classNames from "clsx";
 import React, {
-  forwardRef,
-  type ReactNode,
-  type TextareaHTMLAttributes,
+  ReactNode,
+  TextareaHTMLAttributes,
   useCallback,
   useEffect,
   useId,
   useState,
 } from "react";
-import { useDebounce } from "../hooks/useDebounce";
-import type { FieldSize } from "../types";
-import { Column } from "./Column";
-import { useFieldInvalid, useFieldSize } from "./FormContext";
+import { useDebounce } from "../hooks/useDebounce.js";
+import type { LeafProps } from "../interfaces.js";
+import type { FieldSize } from "../types.js";
+import { takeLeafProps } from "../utils/leafLayout.js";
+import { Column } from "./Column.js";
+import { useFieldInvalid, useFieldSize } from "./FormContext.js";
 import styles from "./Input.module.scss";
-import { Row } from "./Row";
-import { Text } from "./Text";
+import { Row } from "./Row.js";
+import { Text } from "./Text.js";
 
-interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix"> {
+interface TextareaProps
+  extends LeafProps,
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "prefix" | keyof LeafProps> {
   id: string;
   label?: string;
   placeholder?: string;
@@ -47,7 +50,6 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
     | "top-right"
     | "bottom-right"
     | "bottom-left";
-  className?: string;
   prefix?: ReactNode;
   suffix?: ReactNode;
   variant?: "default" | "ghost";
@@ -59,6 +61,10 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   focusRing?: boolean;
   characterCount?: boolean;
   resize?: "horizontal" | "vertical" | "both" | "none";
+  /** Receives the field's text on every change, after the native `onChange`.
+   *  The field is controlled only when `value` is set. */
+  onValueChange?: (value: string) => void;
+  /** Checks the field's text, controlled or not, a second after it last changed. */
   validate?: (value: ReactNode) => ReactNode | null;
   disabled?: boolean;
   /** How many columns to occupy inside a `Form` grid. `Form` reads this off
@@ -66,309 +72,312 @@ interface TextareaProps extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>
   span?: number;
 }
 
-const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
-  (
-    {
-      id: idProp,
-      label,
-      placeholder,
-      lines = "auto",
-      size,
-      error = false,
-      errorMessage,
-      description,
-      corners,
-      className,
-      prefix,
-      suffix,
-      variant = "default",
-      focusRing = false,
-      characterCount,
-      resize = "vertical",
-      validate,
-      disabled = false,
-      // Consumed by `Form`, never rendered. See Input.tsx.
-      span,
-      children,
-      onFocus,
-      onBlur,
-      onChange,
-      onAnimationStart,
-      style,
-      ...props
-    },
-    ref,
-  ) => {
-    // \`id\` ties the label, error and description to the field. A field
-    // rendered without one (MDX does not typecheck) still gets them.
-    const generatedId = useId();
-    const id = idProp || `textarea-${generatedId}`;
-    // A `Form` can set the size for every field in it; the field's own
-    // prop still wins, and `"m"` is still the default on its own.
-    const resolvedSize = useFieldSize(size);
-    // As in Input: an xxs field has no room for a floating label.
-    const compact = resolvedSize === "xxs";
-    const shownPlaceholder = compact ? (placeholder ?? label) : placeholder;
-    const inset = compact ? "8" : "12";
-    // `error` used to be accepted and ignored here. It now marks the field
-    // invalid the way it does on `Input`, and so does an enclosing `Field`.
-    const fieldInvalid = useFieldInvalid(id);
-    const invalid = error || fieldInvalid;
-    const [isFocused, setIsFocused] = useState(false);
-    // Seeded from `defaultValue` too: an uncontrolled field — how a settings
-    // form normally renders saved data — has no `value`, so the label never
-    // floated and sat on top of the text until the first focus and blur.
-    const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
-    const [validationError, setValidationError] = useState<ReactNode | null>(null);
-    const textareaRef = React.useRef<HTMLTextAreaElement>(null);
-    // `validate` reads the field's text. Uncontrolled there is no `value`, so
-    // the field tracks what was typed itself; it used to validate nothing.
-    const [uncontrolledValue, setUncontrolledValue] = useState(props.defaultValue);
-    const fieldValue = props.value !== undefined ? props.value : uncontrolledValue;
-    const debouncedValue = useDebounce(fieldValue, 1000);
+const Textarea = ({
+  ref,
+  id: idProp,
+  label,
+  placeholder,
+  lines = "auto",
+  size,
+  error = false,
+  errorMessage,
+  description,
+  corners,
+  className,
+  prefix,
+  suffix,
+  variant = "default",
+  focusRing = false,
+  characterCount,
+  resize = "vertical",
+  validate,
+  disabled = false,
+  // Consumed by `Form`, never rendered. See Input.tsx.
+  span,
+  children,
+  onFocus,
+  onBlur,
+  onChange,
+  onValueChange,
+  onAnimationStart,
+  style,
+  fillWidth = true,
+  ...rest
+}: TextareaProps & { ref?: React.Ref<HTMLTextAreaElement> }) => {
+  const [leaf, props] = takeLeafProps(rest);
+  // `id` ties the label, error and description to the field. A field
+  // rendered without one (MDX does not typecheck) still gets them.
+  const generatedId = useId();
+  const id = idProp || `textarea-${generatedId}`;
+  // A `Form` can set the size for every field in it; the field's own
+  // prop still wins, and `"m"` is still the default on its own.
+  const resolvedSize = useFieldSize(size);
+  // As in Input: an xxs field has no room for a floating label.
+  const compact = resolvedSize === "xxs";
+  const shownPlaceholder = compact ? (placeholder ?? label) : placeholder;
+  const inset = compact ? "8" : "12";
+  // `error` used to be accepted and ignored here. It now marks the field
+  // invalid the way it does on `Input`, and so does an enclosing `Field`.
+  const fieldInvalid = useFieldInvalid(id);
+  const invalid = error || fieldInvalid;
+  const [isFocused, setIsFocused] = useState(false);
+  // Seeded from `defaultValue` too: an uncontrolled field — how a settings
+  // form normally renders saved data — has no `value`, so the label never
+  // floated and sat on top of the text until the first focus and blur.
+  const [isFilled, setIsFilled] = useState(!!props.value || !!props.defaultValue);
+  const [validationError, setValidationError] = useState<ReactNode | null>(null);
+  const textareaRef = React.useRef<HTMLTextAreaElement>(null);
+  /** The text the field holds, controlled or not: see Input. */
+  const controlled = props.value !== undefined;
+  const [ownText, setOwnText] = useState(() =>
+    props.defaultValue === undefined ? "" : String(props.defaultValue),
+  );
+  const text = controlled ? String(props.value) : ownText;
+  const debouncedValue = useDebounce(text, 1000);
+  // What the error styling compares against, as before: the debounced
+  // `value` when controlled, nothing when not.
+  const styledValue = controlled ? debouncedValue : undefined;
 
-    const adjustHeight = () => {
-      if (textareaRef.current) {
-        const scrollY = window.scrollY;
-        textareaRef.current.style.height = "auto";
-        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
-        window.scrollTo({ top: scrollY });
-      }
-    };
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      const scrollY = window.scrollY;
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+      window.scrollTo({ top: scrollY });
+    }
+  };
 
-    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-      if (props.value === undefined) setUncontrolledValue(event.target.value);
-      if (lines === "auto") {
-        adjustHeight();
-      }
-      if (onChange) onChange(event);
-    };
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    if (lines === "auto") {
+      adjustHeight();
+    }
+    if (!controlled) setOwnText(event.target.value);
+    if (onChange) onChange(event);
+    onValueChange?.(event.target.value);
+  };
 
-    const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-      setIsFocused(true);
-      if (onFocus) onFocus(event);
-    };
+  const handleFocus = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(true);
+    if (onFocus) onFocus(event);
+  };
 
-    /**
-     * Autofill fires no focus, blur or change event — Chrome does fill a
-     * street-address textarea — so the label would sit on top of the filled
-     * text. An animation start is the one thing the browser does emit; see
-     * Input.module.scss, which hangs it off `:-webkit-autofill`.
-     */
-    const handleAnimationStart = (event: React.AnimationEvent<HTMLTextAreaElement>) => {
-      // `styles.onAutoFill` is the exported hashed name; the substring check is
-      // the fallback for bundlers that scope keyframes without exporting them.
-      const name = event.animationName ?? "";
-      if (name === styles.onAutoFill || name.includes("onAutoFill")) {
-        setIsFilled(true);
-      }
-      if (onAnimationStart) onAnimationStart(event);
-    };
+  /**
+   * Autofill fires no focus, blur or change event — Chrome does fill a
+   * street-address textarea — so the label would sit on top of the filled
+   * text. An animation start is the one thing the browser does emit; see
+   * Input.module.scss, which hangs it off `:-webkit-autofill`.
+   */
+  const handleAnimationStart = (event: React.AnimationEvent<HTMLTextAreaElement>) => {
+    // `styles.onAutoFill` is the exported hashed name; the substring check is
+    // the fallback for bundlers that scope keyframes without exporting them.
+    const name = event.animationName ?? "";
+    if (name === styles.onAutoFill || name.includes("onAutoFill")) {
+      setIsFilled(true);
+    }
+    if (onAnimationStart) onAnimationStart(event);
+  };
 
-    const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
-      setIsFocused(false);
-      setIsFilled(!!event.target.value);
-      if (onBlur) onBlur(event);
-    };
+  const handleBlur = (event: React.FocusEvent<HTMLTextAreaElement>) => {
+    setIsFocused(false);
+    setIsFilled(!!event.target.value);
+    if (onBlur) onBlur(event);
+  };
 
-    const validateInput = useCallback(() => {
-      if (!debouncedValue) {
-        setValidationError(null);
-        return;
-      }
+  const validateInput = useCallback(() => {
+    if (!debouncedValue) {
+      setValidationError(null);
+      return;
+    }
 
-      if (validate) {
-        const error = validate(debouncedValue);
-        if (error) {
-          setValidationError(error);
-        } else {
-          setValidationError(errorMessage || null);
-        }
+    if (validate) {
+      const error = validate(debouncedValue);
+      if (error) {
+        setValidationError(error);
       } else {
-        setValidationError(null);
+        setValidationError(errorMessage || null);
       }
-    }, [debouncedValue, validate, errorMessage]);
+    } else {
+      setValidationError(null);
+    }
+  }, [debouncedValue, validate, errorMessage]);
 
-    useEffect(() => {
-      validateInput();
-    }, [debouncedValue, validateInput]);
+  useEffect(() => {
+    validateInput();
+  }, [debouncedValue, validateInput]);
 
-    useEffect(() => {
-      // Only a controlled field's `value` is authoritative. Uncontrolled it is
-      // `undefined` forever, and syncing to it clobbered the seed back to false.
-      if (props.value === undefined) return;
-      setIsFilled(!!props.value);
-    }, [props.value]);
+  useEffect(() => {
+    // Only a controlled field's `value` is authoritative. Uncontrolled it is
+    // `undefined` forever, and syncing to it clobbered the seed back to false.
+    if (props.value === undefined) return;
+    setIsFilled(!!props.value);
+  }, [props.value]);
 
-    useEffect(() => {
-      if (lines === "auto") {
-        adjustHeight();
-      }
-    }, [props.value, lines]);
+  useEffect(() => {
+    if (lines === "auto") {
+      adjustHeight();
+    }
+  }, [props.value, lines]);
 
-    const displayError = validationError || errorMessage;
-    const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
-    // Counted from what the field shows: an uncontrolled field has no `value`,
-    // and the count used to stay at `maxLength`.
-    const remaining = props.maxLength ? props.maxLength - String(fieldValue ?? "").length : 0;
+  const displayError = validationError || errorMessage;
+  const showsErrorMessage = Boolean(displayError) && errorMessage !== false;
 
-    const textareaClassNames = classNames(
-      styles.input,
-      styles.textarea,
-      "font-body",
-      "font-default",
-      {
-        [styles.withPrefix]: prefix,
-        [styles.withSuffix]: suffix,
-        [styles.hasChildren]: children,
-      },
-    );
+  const textareaClassNames = classNames(
+    styles.input,
+    styles.textarea,
+    "font-body",
+    "font-default",
+    {
+      [styles.withPrefix]: prefix,
+      [styles.withSuffix]: suffix,
+      [styles.hasChildren]: children,
+    },
+  );
 
-    return (
-      <Column
-        gap="8"
-        fillWidth
-        fitHeight
-        className={classNames(className, {
-          [styles.error]: invalid || (displayError && debouncedValue !== ""),
-        })}
+  return (
+    <Column
+      {...leaf}
+      gap="8"
+      fillWidth={fillWidth}
+      fitHeight
+      className={classNames(className, {
+        [styles.error]: invalid || (displayError && styledValue !== ""),
+      })}
+    >
+      <Row
+        // See Input.tsx: the surface `Form` fuses, two levels down.
+        data-surface="field"
+        // Height comes from the size token via `.base`, the same as an
+        // input's. This used to be a hardcoded 48 or 56, which ignored
+        // `size` entirely and left a placeholder-only textarea 8px shorter
+        // than the input beside it.
+        transition="micro-medium"
+        border={variant === "ghost" ? "transparent" : "neutral-medium"}
+        background={variant === "ghost" ? "transparent" : "neutral-alpha-weak"}
+        overflow="hidden"
+        vertical="stretch"
+        className={classNames(
+          styles.base,
+          focusRing && styles.focusRing,
+          styles[resolvedSize],
+          lines !== "auto" && resize !== "none" && styles.resizeHandle,
+          corners === "none"
+            ? "radius-none"
+            : corners
+              ? `radius-${compact ? "m" : "l"}-${corners}`
+              : `radius-${compact ? "m" : "l"}`,
+          lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
+        )}
       >
-        <Row
-          // See Input.tsx: the surface `Form` fuses, two levels down.
-          data-surface="field"
-          // Height comes from the size token via `.base`, the same as an
-          // input's. This used to be a hardcoded 48 or 56, which ignored
-          // `size` entirely and left a placeholder-only textarea 8px shorter
-          // than the input beside it.
-          transition="micro-medium"
-          border={variant === "ghost" ? "transparent" : "neutral-medium"}
-          background={variant === "ghost" ? "transparent" : "neutral-alpha-weak"}
-          overflow="hidden"
-          vertical="stretch"
-          className={classNames(
-            styles.base,
-            focusRing && styles.focusRing,
-            styles[resolvedSize],
-            lines !== "auto" && resize !== "none" && styles.resizeHandle,
-            corners === "none"
-              ? "radius-none"
-              : corners
-                ? `radius-${compact ? "m" : "l"}-${corners}`
-                : `radius-${compact ? "m" : "l"}`,
-            lines !== "auto" && resize !== "none" && "radius-s-bottom-right",
-          )}
-        >
-          {prefix && (
-            <Row paddingLeft={inset} className={styles.prefix}>
-              {prefix}
-            </Row>
-          )}
-          <Column fillWidth padding="4">
-            <textarea
-              {...props}
-              ref={(node) => {
-                if (typeof ref === "function") {
-                  ref(node);
-                } else if (ref) {
-                  ref.current = node;
-                }
-                textareaRef.current = node as HTMLTextAreaElement | null;
-              }}
-              id={id}
-              rows={typeof lines === "number" ? lines : 1}
-              placeholder={shownPlaceholder}
-              disabled={disabled}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-              onAnimationStart={handleAnimationStart}
-              className={`${textareaClassNames} scrollbar-minimal`}
-              // The caller's own description comes first; it used to be
-              // overwritten, the same bug Input had.
-              aria-describedby={
-                [
-                  props["aria-describedby"],
-                  showsErrorMessage ? `${id}-error` : undefined,
-                  // Rendered below with this id, which nothing pointed at.
-                  description ? `${id}-description` : undefined,
-                ]
-                  .filter(Boolean)
-                  .join(" ") || undefined
+        {prefix && (
+          <Row paddingLeft={inset} className={styles.prefix}>
+            {prefix}
+          </Row>
+        )}
+        <Column fillWidth padding="4">
+          <textarea
+            {...props}
+            ref={(node) => {
+              if (typeof ref === "function") {
+                ref(node);
+              } else if (ref) {
+                ref.current = node;
               }
-              aria-invalid={invalid || !!displayError}
-              style={{
-                ...style,
-                resize: lines === "auto" ? "none" : resize,
-              }}
-              onChange={handleChange}
-            />
-            {label && (
+              textareaRef.current = node as HTMLTextAreaElement | null;
+            }}
+            id={id}
+            rows={typeof lines === "number" ? lines : 1}
+            placeholder={shownPlaceholder}
+            disabled={disabled}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onAnimationStart={handleAnimationStart}
+            className={`${textareaClassNames} scrollbar-minimal`}
+            // The caller's own description comes first; it used to be
+            // overwritten, the same bug Input had.
+            aria-describedby={
+              [
+                props["aria-describedby"],
+                showsErrorMessage ? `${id}-error` : undefined,
+                // Rendered below with this id, which nothing pointed at.
+                description ? `${id}-description` : undefined,
+              ]
+                .filter(Boolean)
+                .join(" ") || undefined
+            }
+            aria-invalid={invalid || !!displayError}
+            style={{
+              ...style,
+              resize: lines === "auto" ? "none" : resize,
+            }}
+            onChange={handleChange}
+          />
+          {label && (
+            <Text
+              as="label"
+              textVariant="label-default-m"
+              htmlFor={id}
+              className={
+                compact
+                  ? styles.labelHidden
+                  : classNames(styles.label, styles.textareaLabel, {
+                      // `|| placeholder` is the whole point of the pairing: a
+                      // placeholder is visible immediately, so the label has
+                      // to be out of its way from the first paint rather
+                      // than waiting for focus. Identical to `Input`.
+                      [styles.floating]: isFocused || isFilled || placeholder,
+                    })
+              }
+            >
+              {label}
+            </Text>
+          )}
+          {children}
+          {characterCount && props.maxLength && (
+            <Row fillWidth paddingLeft="12" paddingY="4" className={styles.suffix}>
               <Text
-                as="label"
-                variant="label-default-m"
-                htmlFor={id}
-                className={
-                  compact
-                    ? styles.labelHidden
-                    : classNames(styles.label, styles.textareaLabel, {
-                        // `|| placeholder` is the whole point of the pairing: a
-                        // placeholder is visible immediately, so the label has
-                        // to be out of its way from the first paint rather
-                        // than waiting for focus. Identical to `Input`.
-                        [styles.floating]: isFocused || isFilled || placeholder,
-                      })
+                textVariant="label-default-s"
+                onBackground={
+                  props.maxLength - text.length <= 5
+                    ? "danger-weak"
+                    : props.maxLength - text.length <= 10
+                      ? "warning-weak"
+                      : "neutral-weak"
                 }
               >
-                {label}
+                {props.maxLength - text.length}
               </Text>
-            )}
-            {children}
-            {characterCount && props.maxLength && (
-              <Row fillWidth paddingLeft="12" paddingY="4" className={styles.suffix}>
-                <Text
-                  variant="label-default-s"
-                  onBackground={
-                    remaining <= 5
-                      ? "danger-weak"
-                      : remaining <= 10
-                        ? "warning-weak"
-                        : "neutral-weak"
-                  }
-                >
-                  {remaining}
-                </Text>
-              </Row>
-            )}
-          </Column>
-          {suffix && (
-            <Row paddingRight={inset} className={styles.suffix}>
-              {suffix}
             </Row>
           )}
+        </Column>
+        {suffix && (
+          <Row paddingRight={inset} className={styles.suffix}>
+            {suffix}
+          </Row>
+        )}
+      </Row>
+      {showsErrorMessage && (
+        <Row
+          paddingX={compact ? "12" : "16"}
+          id={`${id}-error`}
+          textVariant="body-default-s"
+          onBackground="danger-weak"
+        >
+          {displayError}
         </Row>
-        {showsErrorMessage && (
-          <Row
-            paddingX={compact ? "12" : "16"}
-            id={`${id}-error`}
-            textVariant="body-default-s"
-            onBackground="danger-weak"
-          >
-            {displayError}
-          </Row>
-        )}
-        {description && (
-          <Row
-            paddingX={compact ? "12" : "16"}
-            id={`${id}-description`}
-            textVariant="body-default-s"
-            onBackground="neutral-weak"
-          >
-            {description}
-          </Row>
-        )}
-      </Column>
-    );
-  },
-);
+      )}
+      {description && (
+        <Row
+          paddingX={compact ? "12" : "16"}
+          id={`${id}-description`}
+          textVariant="body-default-s"
+          onBackground="neutral-weak"
+        >
+          {description}
+        </Row>
+      )}
+    </Column>
+  );
+};
 
 Textarea.displayName = "Textarea";
 

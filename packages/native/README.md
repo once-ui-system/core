@@ -28,6 +28,15 @@ export default function App() {
 
 Needs React 19, React Native 0.79 or later (Expo SDK 53+) and `react-native-svg` 15 (included in Expo).
 
+**Props follow core 3.0.** The components take the props of
+`@once-ui-system/core` 3.0 (the `feat/3-0-breaking-cleanup` line), not 2.x:
+state is `X` / `defaultX` / `onXChange` (`onCheckedChange`, `onValueChange`,
+`onOpenChange`), names are `aria-label`, colour is `tone` and look is
+`variant`, Text takes `textVariant`, Badge and Chip are `Tag`, and a number
+is px. Code written for the first preview (2.x names) needs the renames in
+"Coming from the 2.x props" below; core's `scripts/codemod-3.0.mjs` does the
+same renames on web code.
+
 Docs: the "React Native" section of the Once UI docs
 (`apps/docs/src/content/native/`). This README stays the quick start.
 
@@ -41,30 +50,25 @@ the safe areas. `theme="system"` follows the device.
 
 | Component | Notes |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border` and single sides (`borderTop`…`borderY`), `radius`, `shadow`, sizes, `position` and offsets, `opacity`, `zIndex`, `hide`, the breakpoint props `xl`…`xs`, and `safeArea`. `Flex` is a row by default, as on the web. |
-| `Text`, `Heading` | `variant` (`body-default-m`, …), `onBackground`, `onSolid`, `truncate`. |
-| `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`; pressed replaces hover. |
-| `Card` | Pressable when given `onPress` (or core's `onClick`), `selected`. |
-| `Input`, `Textarea` | Floating label, `error` + `errorMessage`, `description`, `prefix`/`suffix`, `characterCount`. |
-| `Switch`, `Checkbox` | Controlled (`checked`) or not (`defaultChecked`), `onToggle`, label and description. |
-| `Icon`, `IconButton`, `IconProvider` | Core's built-in icons, drawn with `react-native-svg`. `prefixIcon`/`suffixIcon` on `Button` and `Tag` take a name as in core, or any element. `IconProvider` adds icons: core's SVG data or a component taking `size` and `color` (for example from `@expo/vector-icons`). |
-| `Dialog` | A bottom sheet with core's props (`open`, `onClose`, `title`, `description`, `footer`); the back button and a tap on the backdrop close it. |
-| `Drawer` | Core's props (`side`, `size`, `title`, `footer`, `showClose`, `flush`): a panel that slides in from one edge, clear of the notch and home indicator. |
-| `Nav`, `NavItem`, `NavSection`, `NavGroup` | As a column, a drawer's or sidebar's rows with core's `density` and `variant`; with `direction="row"`, the phone's bottom tab bar. |
-| `ToastProvider`, `useToast`, `Toast` | `addToast({ variant, message })` as in core; toasts stack at the bottom and hide after 6 s. |
-| `Form`, `Field`, `Fieldset`, `SubmitButton`, `FormErrorSummary` | Core's form layout: `density` (`stacked` fuses the fields), `columns` and `span`, one `size`; `Field` wires label, hint and error onto its control; `SubmitButton` calls `onSubmit` and shows a spinner while its promise runs. |
-| `DatePicker`, `DateInput` | A month grid with core's `value`, `minDate`, `maxDate`, `range` and `locale` (names and first weekday from `Intl`); `DateInput` opens it in a bottom sheet. |
-| `Table` | Core's `data` (headers and rows), `searchable`, sortable columns (numbers sort as numbers), `onRowClick`, row `actions`, `loading`, `emptyState`, `paginated`; a column's `hide` drops it on small screens. |
-| `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `multiple`, `searchable`. |
-| `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value`/`defaultValue` and `onChange` as in core. |
-| `Chip`, `Badge`, `ProgressBar` | As in core; a `Chip` with `onRemove` gets a remove button. |
-| `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As in core. |
+| `Flex`, `Row`, `Column` | Spacing, alignment (`horizontal`/`vertical` as on the web), `background`, `border`, `radius`, `shadow`, sizes, `position` and offsets, `opacity`, `zIndex`, `hide`, the breakpoint props `xl`…`xs`, and `safeArea`. `Flex` is a row by default, as on the web. |
+| `Text`, `Heading` | `textVariant` (`body-default-m`, …), with `weight` and `family` swapping the preset's; `onBackground`, `onSolid`, `truncate`. |
+| `Button` | Six variants (`primary`, `secondary`, `tertiary`, `ghost`, `link`, `subtle`) in any `tone`, five sizes, `corners`, `loading`, `disabled`, `fillWidth`; `onPress` or core's `onClick`, `href` opens a URL; pressed replaces hover. |
+| `Card` | Pressable when given `onPress` (or core's `onClick`), `href`, `selected`. |
+| `Input`, `Textarea` | Floating label, `error` + `errorMessage`, `description`, `prefix`/`suffix`, `characterCount`, `onValueChange`; `type="password"` with a show/hide button (`reveal={false}` drops it), `type="email"` and friends pick the keyboard; Textarea `lines` (a number or `"auto"`). |
+| `Switch`, `Checkbox` | `checked` / `defaultChecked` / `onCheckedChange`, label and description, `size`, `error` / `errorMessage`. |
+| `Icon`, `IconButton`, `IconProvider` | Core's built-in icons, drawn with `react-native-svg`. `IconButton` takes `tone`, `variant` and `aria-label` (or a plain-text `tooltip`). `prefixIcon`/`suffixIcon` on `Button` and `Tag` take a name as in core, or any element. `IconProvider` adds icons: core's SVG data or a component taking `size` and `color` (for example from `@expo/vector-icons`). |
+| `Dialog` | A bottom sheet with core's props (`open`, `onClose`, `title`, `description`, `footer`, `showClose`, `backdrop`); `variant="center"` for a card in the middle. The back button and a tap on the backdrop close it. |
+| `ToastProvider`, `useToast`, `Toast` | `addToast({ tone, message })` as in core; toasts stack at the bottom and hide after 6 s. |
+| `Select`, `Option` | An `Input`-styled field that opens its options in a bottom sheet; `value` / `defaultValue` / `onValueChange`, `open` / `defaultOpen` / `onOpenChange`, `multiple`, `searchable`. |
+| `RadioGroup`, `RadioButton`, `SegmentedControl` | One choice out of several; `value` / `defaultValue` / `onValueChange` as in core (RadioButton `onCheckedChange`), SegmentedControl `disabled`. |
+| `Tag` | A label in its `tone`; `variant="announce"` is the pill 2.x called Badge (`href`, `arrow`); `selected`, `onClick` and `onRemove` make the toggle 2.x called Chip. |
+| `Avatar`, `Feedback`, `ProgressBar`, `Line`, `Spinner`, `Skeleton` | As in core (`Feedback tone`, Avatar `statusIndicator={{ scheme }}`, `empty` and `icon`). |
 | `Media` | An image at `aspectRatio` (`"16 / 9"`, or `"original"` for the image's own) with `radius`, `border` and the other `Flex` props, a `Skeleton` until it loads, `objectFit`, `caption`, `onPress`. |
 | `List`, `ListItem` | Bullets, or numbers with `as="ol"` and `start`, drawn in core's indent in `neutral-on-background-weak`. |
-| `Tabs`, `TabList`, `Tab`, `TabPanel` | As in core: `value`/`defaultValue` and `onChange`, `orientation`, `keepMounted`; without a value the first enabled tab is selected. |
+| `Tabs`, `TabList`, `Tab`, `TabPanel` | As in core: `value` / `defaultValue` / `onValueChange`, `orientation`, `keepMounted`; without a value the first enabled tab is selected. |
 | `ToggleButton` | Core's `ghost`, `outline` and `subtle` variants, five sizes, `selected`; `Tab` is built on it. |
-| `Accordion` | `title`, `open` with `onToggle` (or its own state), `icon`, `iconRotation`, `size`; eases open and shut with `LayoutAnimation`. A ref gives `toggle()`, `open()`, `close()`. |
-| `AvatarGroup`, `StatusIndicator` | As in core. |
+| `Accordion` | `title`, `open` / `defaultOpen` / `onOpenChange` (or its own state), `icon`, `iconRotation`, `size`; eases open and shut with `LayoutAnimation`. A ref gives `toggle()`, `open()`, `close()`. |
+| `AvatarGroup`, `StatusIndicator` | As in core (StatusIndicator `scheme`). |
 
 `useTheme()` gives the resolved theme to your own components:
 `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`,
@@ -127,15 +131,24 @@ that view's padding: the native side of core's `--safe-area-*` tokens. Without
 
 ## Differences from core
 
-- **Units:** numbers on spacing and size props are rem, as on the web, and rem
-  follows the device size Once UI uses (15pt on phones, 16pt on tablets).
+- **Units:** as in core 3.0, a number on a spacing or size prop is px, which
+  here is density-independent points (`maxWidth={320}`). Tokens are unchanged
+  (`padding="16"`), and `"24px"` and `"1.5rem"` strings work too, a rem being
+  the device size Once UI uses (15pt on phones, 16pt on tablets). Other CSS
+  lengths (`vh`, `calc()`) are web-only.
 - **Touch:** small controls (`Button`, `Switch`, `Checkbox`) take taps from
   core's `--touch-target` (2.75rem) around them without being drawn larger.
 - **Clipping:** `radius` does not clip children, as on the web; pass
   `overflow="hidden"` when it should (on iOS that also hides the view's shadow).
+- **Dialog** opens as a bottom sheet unless `variant="center"` (core's default
+  is the centred card). **Tag** `variant="gradient"` is a flat brand tint and
+  `effect` draws no shine: React Native has no CSS gradients.
+- **Handlers:** `onPress` is React Native's name; `Button`, `IconButton`,
+  `Card`, `Tag` and `Option` also take core's `onClick`, so the same JSX works
+  on both.
 - **Media** draws images only: core's enlarge-on-click overlay, video files
   and YouTube embeds are left out, as are the web-only `sizes`, `priority` and
-  `unoptimized`. Without an `aspectRatio` the box is `height` rem tall (or the
+  `unoptimized`. Without an `aspectRatio` the box is `height` points tall (or the
   `80` step) until React Native reports the image's size.
 - **Tabs** have no arrow-key focus, so `activation` is accepted and ignored.
 - **Core 3.0 names:** `Accordion` also takes `defaultOpen` and `onOpenChange`,
@@ -144,6 +157,26 @@ that view's padding: the native side of core's `--safe-area-*` tokens. Without
 - **List** draws its own bullets and numbers, since React Native has no list markers.
 - **Safe areas:** read from `ThemeProvider`'s `insets` rather than CSS `env()`;
   see [Safe areas](#safe-areas).
+
+## Coming from the 2.x props
+
+| 2.x / first preview | Now (core 3.0) |
+| --- | --- |
+| Checkbox, RadioButton, Switch `onToggle` | `onCheckedChange` |
+| RadioGroup, SegmentedControl `onChange` | `onValueChange` |
+| Select `onSelect` | `onValueChange` (plus `defaultValue`, `open` / `defaultOpen` / `onOpenChange`) |
+| `ariaLabel` on IconButton, Spinner, Switch, Checkbox, RadioButton, Icon | `aria-label` |
+| Button, IconButton `variant="danger"` / `"success"` / `"warning"` | `tone="danger"` (any variant takes any tone) |
+| Button, IconButton `variant="quaternary"` | `variant="ghost"` |
+| IconButton `color` | an `<Icon onBackground="…">` as its children |
+| Tag `scheme` | `tone` |
+| Feedback, Toast, `addToast({ variant })` | `tone`; the `ToastVariant` type is gone (use `Tone`) |
+| Text, Heading `variant` | `textVariant`; Text `size` is gone (pick the preset) |
+| `<Badge title icon arrow onPress>` | `<Tag variant="announce" label prefixIcon arrow onPress>` |
+| `<Chip label onRemove>` (selected by default) | `<Tag selected label onRemove>`; `selected` defaults to false |
+| Dialog `hideClose` | `showClose={false}` |
+| Avatar `statusIndicator={{ color }}` | `statusIndicator={{ scheme }}` |
+| A number on spacing, sizes or Avatar `size`: rem | px; write `"Nrem"` to keep the 2.x size |
 
 ## Tokens
 

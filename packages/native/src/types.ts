@@ -42,6 +42,12 @@ export type ColorScheme =
   | "danger"
   | "warning"
   | "success";
+/**
+ * Which semantic palette a component draws in, as core 3.0's `tone` on Button,
+ * IconButton, Tag, Feedback and Toast. `variant` says how it looks.
+ */
+export type Tone = ColorScheme;
+
 export type ColorWeight = "weak" | "medium" | "strong";
 export type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWeight}`;
 
@@ -74,6 +80,8 @@ export type SolidStyle = "flat" | "plastic";
 export type BorderStyle = "rounded" | "playful" | "conservative" | "sharp";
 export type SurfaceStyle = "filled" | "translucent";
 export type ScalingSize = "90" | "95" | "100" | "105" | "110";
+/** As core's: how roomy the controls are. */
+export type Density = "compact" | "normal" | "spacious";
 export type BodySize = "90" | "95" | "100" | "105" | "110";
 export type BodyLineHeight = "90" | "100" | "110" | "120";
 export type DeviceFontSize = "13" | "14" | "15" | "16" | "17" | "18";

@@ -69,7 +69,7 @@ describe("Tabs: handlers on the parts", () => {
     const onChange = vi.fn();
     const onClick = vi.fn((e: React.MouseEvent) => e.preventDefault());
     render(
-      <Tabs defaultValue="a" onChange={onChange}>
+      <Tabs defaultValue="a" onValueChange={onChange}>
         <TabList aria-label="List">
           <Tab value="a">A</Tab>
           <Tab value="b" onClick={onClick}>

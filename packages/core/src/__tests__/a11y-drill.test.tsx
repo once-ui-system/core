@@ -16,21 +16,16 @@ import { NumberInput } from "../components/NumberInput";
 import { OTPInput } from "../components/OTPInput";
 import { ProgressBar } from "../components/ProgressBar";
 import { RadioGroup } from "../components/RadioGroup";
-import { Setting, SettingAxes } from "../components/Setting";
+import { Setting } from "../components/Setting";
 import { Skeleton } from "../components/Skeleton";
 import { Slider } from "../components/Slider";
-import { StyleOverlay } from "../components/StyleOverlay";
-import { StylePanel } from "../components/StylePanel";
 import { Switch } from "../components/Switch";
 import { Table } from "../components/Table";
 import { TagInput } from "../components/TagInput";
 import { Textarea } from "../components/Textarea";
 import { Timeline } from "../components/Timeline";
 import { ToggleButton } from "../components/ToggleButton";
-import { TypeFx } from "../components/TypeFx";
-import { DataThemeProvider } from "../contexts/DataThemeProvider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { ThemeProvider } from "../contexts/ThemeProvider";
 import { LinearGauge } from "../modules/data/LinearGauge";
 import { RadialGauge } from "../modules/data/RadialGauge";
 import { expectNoAxeViolations } from "../test/axe";
@@ -74,7 +69,7 @@ describe("accessibility drill", () => {
       <>
         <Avatar value="AB" />
         <Avatar empty />
-        <Avatar value="CD" statusIndicator={{ color: "green" }} />
+        <Avatar value="CD" statusIndicator={{ scheme: "green" }} />
         <Avatar loading />
       </>,
       { wrapper: wrap },
@@ -127,7 +122,7 @@ describe("accessibility drill", () => {
         <Setting label="Autoplay">
           <Switch />
         </Setting>
-        <SettingAxes
+        <Setting
           label="Tilt"
           axes={[
             { label: "X", control: <Slider min={-45} max={45} defaultValue={0} /> },
@@ -178,8 +173,8 @@ describe("accessibility drill", () => {
   it("interrupts only for problems: danger is an alert, info a polite status", () => {
     render(
       <>
-        <Feedback variant="danger" title="Payment failed" />
-        <Feedback variant="info" title="Heads up" />
+        <Feedback tone="danger" title="Payment failed" />
+        <Feedback tone="info" title="Heads up" />
       </>,
       { wrapper: wrap },
     );
@@ -257,11 +252,12 @@ describe("accessibility drill", () => {
   });
 
   it("gives two searchable Tables their own control ids", () => {
-    const data = { headers: [{ content: "Name", key: "name" }], rows: [["Ada"]] };
+    const columns = [{ key: "name" as const, header: "Name" }];
+    const rows = [{ name: "Ada" }];
     const { container } = render(
       <>
-        <Table data={data} searchable />
-        <Table data={data} searchable />
+        <Table aria-label="First" columns={columns} rows={rows} searchable />
+        <Table aria-label="Second" columns={columns} rows={rows} searchable />
       </>,
       { wrapper: wrap },
     );
@@ -273,8 +269,8 @@ describe("accessibility drill", () => {
     render(
       <Timeline
         items={[
-          { label: "Ordered", state: "success" },
-          { label: "Shipped", state: "active" },
+          { label: "Ordered", tone: "success" },
+          { label: "Shipped", tone: "brand" },
           { label: "Delivered" },
         ]}
       />,
@@ -283,64 +279,6 @@ describe("accessibility drill", () => {
     const items = screen.getAllByRole("listitem");
     expect(items).toHaveLength(3);
     expect(items[1]).toHaveAttribute("aria-current", "step");
-  });
-
-  it("opens the StyleOverlay from the keyboard and closes it with Escape", async () => {
-    render(
-      <ThemeProvider>
-        <DataThemeProvider>
-          <StyleOverlay>
-            <IconButton icon="sparkle" aria-label="Open style panel" />
-          </StyleOverlay>
-        </DataThemeProvider>
-      </ThemeProvider>,
-      { wrapper: wrap },
-    );
-    // Role queries trip on a jsdom computed-style bug inside StylePanel.
-    const trigger = document.querySelector<HTMLElement>('[aria-label="Open style panel"]');
-    expect(trigger?.tagName).toBe("BUTTON");
-    fireEvent.click(trigger as HTMLElement);
-    await waitFor(() =>
-      expect(document.querySelector('[aria-label="Close style panel"]')).toHaveFocus(),
-    );
-    fireEvent.keyDown(document, { key: "Escape" });
-    await waitFor(() =>
-      expect(document.querySelector('[aria-label="Open style panel"]')).toHaveFocus(),
-    );
-  });
-
-  it("reads TypeFx's words whole, not letter by letter", () => {
-    const { container } = render(<TypeFx words={["websites", "apps"]} trigger="custom" />, {
-      wrapper: wrap,
-    });
-    expect(container).toHaveTextContent("websites, apps");
-    expect(container.querySelector('[aria-hidden="true"]')).not.toBeNull();
-  });
-
-  it("exposes each StylePanel option set as a named radio group with one tab stop", async () => {
-    const { container } = render(
-      <ThemeProvider>
-        <DataThemeProvider>
-          <StylePanel value={{ border: "playful", surface: "translucent" }} onChange={() => {}} />
-        </DataThemeProvider>
-      </ThemeProvider>,
-      { wrapper: wrap },
-    );
-    // Before: swatches were toggle buttons, one tab stop each (over forty in
-    // the colour rows alone); option rows were unnamed tab lists without panels.
-    expect(screen.queryAllByRole("tablist")).toHaveLength(0);
-    for (const name of ["Theme", "Shape", "Brand", "Neutral", "Surface", "Transition"]) {
-      const group = screen.getByRole("radiogroup", { name });
-      const stops = within(group)
-        .getAllByRole("radio")
-        .filter((radio) => radio.getAttribute("tabindex") === "0");
-      expect(stops).toHaveLength(1);
-    }
-    expect(screen.getByRole("radio", { name: "Corner style: playful" })).toHaveAttribute(
-      "aria-checked",
-      "true",
-    );
-    await expectNoAxeViolations(container);
   });
 
   it("reads OTPInput as one labelled code with a one-time-code field first", async () => {
@@ -390,7 +328,7 @@ describe("accessibility drill", () => {
         label="Skills"
         description="Press Enter to add a skill"
         defaultValue={["React", "Sass"]}
-        onChange={onChange}
+        onValueChange={onChange}
       />,
       { wrapper: wrap },
     );
@@ -421,7 +359,7 @@ describe("accessibility drill", () => {
   it("keeps Backspace editing the text while TagInput's field has some", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
-    render(<TagInput id="t" label="Tags" defaultValue={["a"]} onChange={onChange} />, {
+    render(<TagInput id="t" label="Tags" defaultValue={["a"]} onValueChange={onChange} />, {
       wrapper: wrap,
     });
     await user.type(screen.getByRole("textbox", { name: "Tags" }), "bc{Backspace}");

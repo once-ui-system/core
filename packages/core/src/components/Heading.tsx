@@ -1,22 +1,26 @@
 import classNames from "clsx";
-import {
-  type ComponentPropsWithoutRef,
-  type ComponentPropsWithRef,
-  type ElementType,
-  type ForwardedRef,
-  forwardRef,
-  type ReactNode,
+import type {
+  ComponentPropsWithoutRef,
+  ComponentPropsWithRef,
+  ElementType,
+  ReactNode,
 } from "react";
 
-import type { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
-import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
-import { textLayout } from "../utils/layoutClasses";
-import { numericSpacingStyle } from "../utils/spacingStyle";
+import type {
+  CommonProps,
+  DisplayProps,
+  LeafProps,
+  TextElement,
+  TextProps,
+} from "../interfaces.js";
+import type { ColorScheme, ColorWeight, TextVariant } from "../types.js";
+import { withWeight } from "../utils/layoutClasses.js";
+import { leafLayout } from "../utils/leafLayout.js";
 
-type HeadingProps<T extends ElementType> = TextProps<T> &
+type HeadingProps<T extends ElementType = "h1"> = TextProps<T> &
   CommonProps &
-  SpacingProps &
-  Omit<DisplayProps, "as"> &
+  LeafProps &
+  Pick<DisplayProps, "opacity"> &
   ComponentPropsWithoutRef<T>;
 
 /**
@@ -27,84 +31,58 @@ type HeadingRef<T extends ElementType> = ComponentPropsWithRef<T>["ref"];
 
 /**
  * `Heading`'s public signature: generic over `as`, as it was before it took a
- * ref, and with a ref typed to the element `as` names. `forwardRef`'s own
- * return type is not generic, so it would pin `as` to one element.
+ * ref, and with a ref typed to the element `as` names. The function below is
+ * already generic; the interface adds the non-generic signature that
+ * `React.ComponentProps<typeof Heading>` reads.
  */
 interface HeadingComponent {
   <T extends ElementType = "h1">(props: HeadingProps<T> & { ref?: HeadingRef<T> }): ReactNode;
+  /** What `React.ComponentProps<typeof Heading>` reads: the default element's props. */
+  // No ref here: with `as` loosened to the text elements, a span ref would
+  // also type-check on an `li`. A ref goes through the generic signature.
+  (props: Omit<HeadingProps<"h1">, "as"> & { as?: TextElement; ref?: never }): ReactNode;
   displayName?: string;
 }
 
-const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementType = "h1">(
-  {
-    as,
-    variant,
-    size,
-    weight,
-    family,
-    onBackground,
-    onSolid,
-    align,
-    wrap = "balance",
-    padding,
-    paddingLeft,
-    paddingRight,
-    paddingTop,
-    paddingBottom,
-    paddingX,
-    paddingY,
-    margin,
-    marginLeft,
-    marginRight,
-    marginTop,
-    marginBottom,
-    marginX,
-    marginY,
-    children,
-    style,
-    truncate,
-    flex,
-    xl,
-    l,
-    m,
-    s,
-    xs,
-    opacity,
-    className,
-    userSelect,
-    gap,
-    top,
-    right,
-    bottom,
-    left,
-    translateX,
-    translateY,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-    scrollbar,
-    pointerEvents,
-    transition,
-    zIndex,
-    // Typed through `DisplayProps`, with no class that fits text: `inline`,
-    // `hide`, `dark` and `light` are display modes of Flex and Grid. Taken out
-    // so they stop reaching the DOM as attributes.
-    inline: _inline,
-    hide: _hide,
-    dark: _dark,
-    light: _light,
-    ...props
-  }: HeadingProps<T>,
-  ref: ForwardedRef<HTMLHeadingElement>,
-) {
+const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">({
+  ref,
+  as,
+  textVariant,
+  weight,
+  family,
+  onBackground,
+  onSolid,
+  align,
+  wrap = "balance",
+  margin,
+  marginLeft,
+  marginRight,
+  marginTop,
+  marginBottom,
+  marginX,
+  marginY,
+  flex,
+  fillWidth,
+  position,
+  top,
+  right,
+  bottom,
+  left,
+  children,
+  style,
+  truncate,
+  opacity,
+  className,
+  xl,
+  l,
+  m,
+  s,
+  xs,
+  ...props
+}: HeadingProps<T> & { ref?: HeadingRef<T> }) {
   const Component = as || "h1";
 
   // Prop-misuse hints are for development; production logged them on every render.
-  if (process.env.NODE_ENV !== "production" && variant && (size || weight)) {
-    console.warn("When 'variant' is set, 'size' and 'weight' are ignored.");
-  }
-
   if (process.env.NODE_ENV !== "production" && onBackground && onSolid) {
     console.warn(
       "You cannot use both 'onBackground' and 'onSolid' props simultaneously. Only one will be applied.",
@@ -119,10 +97,11 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     return [`font-${fontType}`, `font-${weight}`, `font-${size}`];
   };
 
-  const sizeClass = size ? `font-${size}` : "font-m";
-  const weightClass = weight ? `font-${weight}` : "font-strong";
-
-  const classes = variant ? getVariantClasses(variant) : [sizeClass, weightClass];
+  // With no preset a heading is medium and strong in the family around it.
+  // `weight` swaps the weight in either case.
+  const classes = textVariant
+    ? getVariantClasses(withWeight(textVariant, weight))
+    : ["font-m", `font-${weight ?? "strong"}`];
 
   let colorClass = "neutral-on-background-strong";
   if (onBackground) {
@@ -133,52 +112,31 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, value: SpacingToken | number | "auto" | undefined) => {
-    return typeof value === "string" ? `${prefix}-${value}` : undefined;
-  };
-
-  const layout = textLayout({
-    gap,
+  const layout = leafLayout({
+    margin,
+    marginLeft,
+    marginRight,
+    marginTop,
+    marginBottom,
+    marginX,
+    marginY,
+    flex,
+    position,
     top,
     right,
     bottom,
     left,
-    translateX,
-    translateY,
-    position,
-    overflow,
-    overflowX,
-    overflowY,
-    scrollbar,
-    pointerEvents,
-    transition,
-    zIndex,
   });
 
   const combinedClasses = classNames(
     ...classes,
     colorClass,
     className,
-    generateClassName("p", padding),
-    generateClassName("pl", paddingLeft),
-    generateClassName("pr", paddingRight),
-    generateClassName("pt", paddingTop),
-    generateClassName("pb", paddingBottom),
-    generateClassName("px", paddingX),
-    generateClassName("py", paddingY),
-    generateClassName("m", margin),
-    generateClassName("ml", marginLeft),
-    generateClassName("mr", marginRight),
-    generateClassName("mt", marginTop),
-    generateClassName("mb", marginBottom),
-    generateClassName("mx", marginX),
-    generateClassName("my", marginY),
     truncate && "truncate",
     opacity !== undefined && `opacity-${opacity}`,
-    userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
+    fillWidth && "fill-width",
     ...layout.classes,
-    // Below xl each query is max-width, so a hide at s also covers xs.
     xl?.hide && "xl-flex-hide",
     l?.hide && "l-flex-hide",
     m?.hide && "m-flex-hide",
@@ -189,23 +147,6 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
   const combinedStyle = {
     textAlign: align,
     textWrap: wrap,
-    flex: flex === undefined ? undefined : Number(flex),
-    ...numericSpacingStyle({
-      padding,
-      paddingX,
-      paddingY,
-      paddingTop,
-      paddingRight,
-      paddingBottom,
-      paddingLeft,
-      margin,
-      marginX,
-      marginY,
-      marginTop,
-      marginRight,
-      marginBottom,
-      marginLeft,
-    }),
     ...layout.style,
     ...style,
   };
@@ -215,8 +156,9 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
       {children}
     </Component>
   );
-});
+};
 
 Heading.displayName = "Heading";
 
+export type { HeadingProps };
 export { Heading };

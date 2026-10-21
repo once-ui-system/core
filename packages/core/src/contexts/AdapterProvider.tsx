@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { createContext, forwardRef, useContext, useMemo, useSyncExternalStore } from "react";
+import { createContext, useContext, useMemo, useSyncExternalStore } from "react";
 
 /**
  * Framework adapter layer (rfcs/2026-08-once-ui-2-architecture.md §4).
@@ -44,12 +44,15 @@ export interface OnceUIAdapters {
   useNavigate: () => (href: string) => void;
 }
 
-const DefaultLink = forwardRef<HTMLAnchorElement, AdapterLinkProps>(
-  ({ href, children, ...props }, ref) => (
-    <a href={href} ref={ref} {...props}>
-      {children}
-    </a>
-  ),
+const DefaultLink = ({
+  ref,
+  href,
+  children,
+  ...props
+}: AdapterLinkProps & { ref?: React.Ref<HTMLAnchorElement> }) => (
+  <a href={href} ref={ref} {...props}>
+    {children}
+  </a>
 );
 DefaultLink.displayName = "AdapterDefaultLink";
 
@@ -60,7 +63,7 @@ const fillStyle: React.CSSProperties = {
   height: "100%",
 };
 
-const DefaultImage: React.FC<AdapterImageProps> = ({
+const DefaultImage = ({
   src,
   alt,
   fill,
@@ -70,7 +73,7 @@ const DefaultImage: React.FC<AdapterImageProps> = ({
   height,
   style,
   ...props
-}) => (
+}: AdapterImageProps) => (
   // biome-ignore lint/performance/noImgElement: this IS the framework-free fallback
   <img
     src={src}
@@ -174,7 +177,7 @@ export interface AdapterProviderProps {
   children: React.ReactNode;
 }
 
-const AdapterProvider: React.FC<AdapterProviderProps> = ({ adapters, children }) => {
+const AdapterProvider = ({ adapters, children }: AdapterProviderProps) => {
   const parent = useContext(AdapterContext);
   const value = useMemo(() => ({ ...parent, ...adapters }), [parent, adapters]);
   return <AdapterContext.Provider value={value}>{children}</AdapterContext.Provider>;

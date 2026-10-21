@@ -2,10 +2,10 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { Heading } from "../../components/Heading";
-import { Row } from "../../components/Row";
-import { textOf } from "../mdx/text";
-import { HeadingAnchor, useCopySectionLink } from "./HeadingAnchor";
+import { Heading } from "../../components/Heading.js";
+import { Row } from "../../components/Row.js";
+import { textOf } from "../mdx/text.js";
+import { HeadingAnchor, useCopySectionLink } from "./HeadingAnchor.js";
 import styles from "./HeadingLink.module.scss";
 
 export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
@@ -35,14 +35,7 @@ const variantMap = {
  * but always reachable, that copies with a toast when there is a provider
  * and without one when there is not.
  */
-export const HeadingLink: React.FC<HeadingLinkProps> = ({
-  id,
-  as,
-  children,
-  style,
-  className,
-  ...flex
-}) => {
+export const HeadingLink = ({ id, as, children, style, className, ...flex }: HeadingLinkProps) => {
   const copy = useCopySectionLink(id);
 
   return (
@@ -58,7 +51,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
       <Heading
         className={classNames(styles.text, "cursor-interactive")}
         id={id}
-        variant={variantMap[as]}
+        textVariant={variantMap[as]}
         as={as}
         onClick={copy}
       >

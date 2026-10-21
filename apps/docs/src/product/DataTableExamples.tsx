@@ -3,11 +3,11 @@
 import {
   Button,
   Column,
-  DataTable,
-  type DataTableColumn,
-  type DataTableQuery,
-  type DataTableSort,
   Row,
+  Table,
+  type TableColumn,
+  type TableQuery,
+  type TableSort,
   Tag,
   Text,
 } from "@once-ui-system/core";
@@ -36,14 +36,14 @@ const INVOICES: Invoice[] = Array.from({ length: 48 }, (_, index) => ({
 
 const money = (amount: number) => `$${amount.toLocaleString("en-US")}`;
 
-const columns: DataTableColumn<Invoice>[] = [
+const columns: TableColumn<Invoice>[] = [
   { key: "id", header: "Invoice", sortable: true },
   { key: "customer", header: "Customer", sortable: true },
   {
     key: "status",
     header: "Status",
     cell: (invoice) => (
-      <Tag size="s" scheme={STATUS_SCHEME[invoice.status]}>
+      <Tag size="s" tone={STATUS_SCHEME[invoice.status]}>
         {invoice.status}
       </Tag>
     ),
@@ -59,7 +59,7 @@ const columns: DataTableColumn<Invoice>[] = [
 ];
 
 export function DataTableExample() {
-  return <DataTable aria-label="Invoices" columns={columns} rows={INVOICES.slice(0, 6)} />;
+  return <Table aria-label="Invoices" columns={columns} rows={INVOICES.slice(0, 6)} />;
 }
 
 export function DataTableSelectionExample() {
@@ -68,7 +68,7 @@ export function DataTableSelectionExample() {
   return (
     <Column fillWidth gap="12">
       <Row fillWidth horizontal="between" vertical="center" paddingX="4">
-        <Text variant="label-default-m">
+        <Text textVariant="label-default-m">
           {selected.length > 0 ? `${selected.length} selected` : "Invoices"}
         </Text>
         <Button
@@ -80,7 +80,7 @@ export function DataTableSelectionExample() {
           Clear selection
         </Button>
       </Row>
-      <DataTable
+      <Table
         aria-label="Selectable invoices"
         columns={columns}
         rows={INVOICES}
@@ -101,7 +101,7 @@ export function DataTableSelectionExample() {
 function fetchInvoices(
   page: number,
   perPage: number,
-  sort: DataTableSort | null,
+  sort: TableSort | null,
   source: Invoice[] = INVOICES,
 ) {
   const sorted = [...source];
@@ -123,7 +123,7 @@ function fetchInvoices(
 
 export function DataTableServerExample() {
   const [page, setPage] = useState(1);
-  const [sort, setSort] = useState<DataTableSort | null>(null);
+  const [sort, setSort] = useState<TableSort | null>(null);
   const [data, setData] = useState<{ rows: Invoice[]; count: number }>({ rows: [], count: 0 });
   const [loading, setLoading] = useState(true);
   const perPage = 5;
@@ -142,7 +142,7 @@ export function DataTableServerExample() {
   }, [page, sort]);
 
   return (
-    <DataTable
+    <Table
       aria-label="Server-paginated invoices"
       columns={columns}
       rows={data.rows}
@@ -165,7 +165,7 @@ const STATUS_OPTIONS = [
 
 // The same columns, with a status filter, and the less important columns
 // dropping out on narrow screens.
-const toolbarColumns: DataTableColumn<Invoice>[] = columns.map((column) =>
+const toolbarColumns: TableColumn<Invoice>[] = columns.map((column) =>
   column.key === "status"
     ? { ...column, filter: { options: STATUS_OPTIONS } }
     : column.key === "issued"
@@ -177,7 +177,7 @@ const toolbarColumns: DataTableColumn<Invoice>[] = columns.map((column) =>
 
 export function DataTableToolbarExample() {
   return (
-    <DataTable
+    <Table
       aria-label="Filterable invoices"
       columns={toolbarColumns}
       rows={INVOICES}
@@ -195,7 +195,7 @@ export function DataTableToolbarExample() {
 }
 
 /** Stands in for an API that searches and filters as well. */
-function queryInvoices({ page, perPage, sort, search, filters }: DataTableQuery) {
+function queryInvoices({ page, perPage, sort, search, filters }: TableQuery) {
   const query = search.trim().toLowerCase();
   const status = filters.status;
   const matching = INVOICES.filter(
@@ -207,7 +207,7 @@ function queryInvoices({ page, perPage, sort, search, filters }: DataTableQuery)
 }
 
 export function DataTableServerQueryExample() {
-  const [query, setQuery] = useState<DataTableQuery>({
+  const [query, setQuery] = useState<TableQuery>({
     page: 1,
     perPage: 5,
     sort: null,
@@ -231,7 +231,7 @@ export function DataTableServerQueryExample() {
   }, [query]);
 
   return (
-    <DataTable
+    <Table
       aria-label="Server-searched invoices"
       columns={toolbarColumns}
       rows={data.rows}

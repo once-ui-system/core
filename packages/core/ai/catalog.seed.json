@@ -1,4 +1,9 @@
 {
+  "AboutSection": {
+    "purpose": "Site section: story beside a picture",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "Accordion": {
     "purpose": "One collapsible section: a clickable title row that shows and hides its content",
     "tags": ["content", "disclosure"],
@@ -20,14 +25,9 @@
     "pairsWith": ["HoverCard", "Column"]
   },
   "Arrow": {
-    "purpose": "Small animated arrow that slides when the element its trigger selector names is hovered — the arrow on a CTA",
+    "purpose": "Small arrow that slides in while the element its trigger selector names is hovered — the arrow on a card or link",
     "tags": ["decoration", "action"],
-    "pairsWith": ["Button", "SmartLink"]
-  },
-  "AutoScroll": {
-    "purpose": "Endless auto-scrolling marquee of its children that slows or pauses on hover",
-    "tags": ["layout", "marketing", "motion"],
-    "pairsWith": ["Logo", "Media", "Row"]
+    "pairsWith": ["Card", "SmartLink"]
   },
   "Avatar": {
     "purpose": "Round profile picture with initials or icon fallback and an optional status dot",
@@ -43,12 +43,6 @@
     "purpose": "Absolute decorative layer: gradients, dots, grid, lines and masks behind a section's content",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Column", "Row", "MatrixFx", "BlobFx"]
-  },
-  "Badge": {
-    "purpose": "Pill that highlights a short announcement, with optional icon, arrow and link — the 'New: …' above a hero",
-    "tags": ["typography", "marketing"],
-    "avoid": "Passing the same text as title and children — both render",
-    "pairsWith": ["Heading", "RevealFx"]
   },
   "Banner": {
     "purpose": "Full-width brand-coloured strip across the top of a page for an announcement",
@@ -93,7 +87,7 @@
     "pairsWith": ["Background", "Media", "Heading", "SmartLink"]
   },
   "Carousel": {
-    "purpose": "Image slideshow with arrows, dot or thumbnail indicators and optional autoplay",
+    "purpose": "Image slideshow with arrows, dot or thumbnail indicators and autoplay; mode=\"snap\" is a touch snapping track (2.x Swiper)",
     "tags": ["media", "marketing"],
     "pairsWith": ["Media", "Column"]
   },
@@ -105,7 +99,7 @@
   "ChartHeader": {
     "purpose": "Title, description and date-range picker with presets above a chart",
     "tags": ["data", "chart", "dashboard"],
-    "pairsWith": ["LineChart", "BarChart", "DateRangePicker"]
+    "pairsWith": ["LineChart", "BarChart", "DatePicker"]
   },
   "ChartStatus": {
     "purpose": "Loading, empty and error placeholder a chart shows in place of its plot",
@@ -132,11 +126,6 @@
     "tags": ["form", "settings"],
     "pairsWith": ["Column", "Row", "Form"]
   },
-  "Chip": {
-    "purpose": "Compact selectable or removable token for filters, choices and applied tags",
-    "tags": ["form", "feedback"],
-    "pairsWith": ["Row", "Scroller", "TagInput"]
-  },
   "CodeBlock": {
     "purpose": "Syntax-highlighted code with tabs, copy button and optional live preview (needs prismjs)",
     "tags": ["docs", "content"],
@@ -158,10 +147,10 @@
     "tags": ["media", "marketing"],
     "pairsWith": ["Column", "Media"]
   },
-  "ContextMenu": {
-    "purpose": "Menu opened by right-click on its children, with selectable options",
-    "tags": ["overlay", "action"],
-    "pairsWith": ["Option", "Column"]
+  "ContactSection": {
+    "purpose": "Site section: contact details as links",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "ConversationItem": {
     "purpose": "Inbox row: avatar, name, last message, time and unread count; a link with href, a button with onClick",
@@ -178,20 +167,10 @@
     "tags": ["effect", "data", "marketing"],
     "pairsWith": ["Text", "Row"]
   },
-  "Cursor": {
-    "purpose": "Custom cursor element that follows the pointer while it is over a referenced element",
-    "tags": ["effect"],
-    "pairsWith": ["CursorCard"]
-  },
-  "CursorCard": {
-    "purpose": "Floating card that follows the pointer while it hovers a trigger — rich previews on hover",
-    "tags": ["effect", "overlay", "marketing"],
-    "pairsWith": ["Media", "Column"]
-  },
-  "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
-    "tags": ["data", "dashboard"],
-    "pairsWith": ["Pagination", "Tag", "Button"]
+  "CtaSection": {
+    "purpose": "Site section: the closing call to action",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "DataThemeProvider": {
     "purpose": "App-wide defaults for the data-viz components: chart variant, mode, height, axis and ticks; read with useDataTheme",
@@ -204,48 +183,28 @@
     "pairsWith": ["LineChart", "BarChart", "Swatch"]
   },
   "DateInput": {
-    "purpose": "Input field that opens a calendar to pick a date, optionally with time",
+    "purpose": "Input field that opens a calendar to pick a date, optionally with time; `range` gives start and end fields for a date range",
     "tags": ["form"],
     "pairsWith": ["DatePicker", "Form"]
   },
   "DatePicker": {
-    "purpose": "Inline calendar for picking a date and optional time, with min/max bounds",
+    "purpose": "Inline calendar to pick a date and optional time, with min/max bounds; `range` picks a range over one or two months",
     "tags": ["form"],
-    "pairsWith": ["DateInput", "Column"]
-  },
-  "DateRangeInput": {
-    "purpose": "Start and end fields that open a calendar to pick a date range",
-    "tags": ["form", "dashboard"],
-    "pairsWith": ["DateRangePicker", "Form"]
-  },
-  "DateRangePicker": {
-    "purpose": "Inline calendar for picking a date range, single or dual month",
-    "tags": ["form", "dashboard"],
-    "pairsWith": ["DateRangeInput", "ChartHeader", "Table"]
+    "pairsWith": ["DateInput", "ChartHeader", "Column"]
   },
   "Dialog": {
-    "purpose": "Modal dialog with title, description, footer and focus handling; stackable over a base dialog",
+    "purpose": "Modal dialog with title, description, footer and focus handling, stackable; variant=\"sheet\" is a bottom sheet (2.x Modal)",
     "tags": ["overlay", "auth"],
-    "pairsWith": ["DialogProvider", "Button", "Column", "OTPInput"]
-  },
-  "DialogProvider": {
-    "purpose": "Context that lets a stacked Dialog dim and disable the base Dialog beneath it",
-    "tags": ["overlay", "provider"],
-    "pairsWith": ["Dialog"]
+    "pairsWith": ["Button", "Column", "OTPInput"]
   },
   "Drawer": {
-    "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock — mobile navigation, filters and side panels",
+    "purpose": "Modal sheet that slides in from any edge, with focus trap and scroll lock: mobile nav, filters, side panels",
     "tags": ["overlay", "navigation"],
     "pairsWith": ["NavItem", "Column", "Button"]
   },
   "Dropdown": {
-    "purpose": "The panel inside a dropdown: a list of options with selection and Escape handling",
-    "tags": ["overlay", "navigation"],
-    "pairsWith": ["DropdownWrapper", "Option"]
-  },
-  "DropdownWrapper": {
-    "purpose": "Floating panel anchored to a trigger, with placement, arrow-key navigation and controlled open state",
-    "tags": ["overlay"],
+    "purpose": "A trigger and the floating menu it opens, with arrow keys and open state; openOn=\"contextmenu\" for right-click (2.x ContextMenu)",
+    "tags": ["overlay", "navigation", "action"],
     "pairsWith": ["Option", "Button", "Column"]
   },
   "Effect": {
@@ -254,13 +213,8 @@
     "pairsWith": ["BlobFx", "MatrixFx", "WeatherFx", "ParticleFx"]
   },
   "EmojiPicker": {
-    "purpose": "Searchable emoji grid by category",
-    "tags": ["form", "chat"],
-    "pairsWith": ["EmojiPickerDropdown"]
-  },
-  "EmojiPickerDropdown": {
-    "purpose": "Emoji picker in a dropdown, opened from a trigger such as a message input's button",
-    "tags": ["overlay", "chat"],
+    "purpose": "Searchable emoji grid by category; with trigger it opens in a Dropdown (2.x EmojiPickerDropdown)",
+    "tags": ["form", "chat", "overlay"],
     "pairsWith": ["Input", "IconButton", "Row"]
   },
   "Fade": {
@@ -269,10 +223,15 @@
     "avoid": "Wrapping content — it is an absolute edge overlay, not a container",
     "pairsWith": ["Column", "Row"]
   },
-  "FadingLettersFx": {
-    "purpose": "Text that fades in and out letter by letter with a stagger",
-    "tags": ["effect", "motion"],
-    "pairsWith": ["Heading", "Text"]
+  "FaqSection": {
+    "purpose": "Site section: questions and answers",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
+  "FeaturesSection": {
+    "purpose": "Site section: features with icons",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "Feedback": {
     "purpose": "Inline alert with variant colour, icon, title, description and optional close",
@@ -310,7 +269,7 @@
     "pairsWith": ["ScrollLock"]
   },
   "Form": {
-    "purpose": "Grid of form fields with one density setting for their gap and grouping, and an onSubmit whose promise drives a pending state",
+    "purpose": "Grid of form fields with one density for their gap and grouping, and an onSubmit whose promise drives a pending state",
     "tags": ["form", "layout"],
     "pairsWith": ["Input", "Select", "Textarea", "Button"]
   },
@@ -325,7 +284,7 @@
     "pairsWith": ["Heading", "Media"]
   },
   "Grid": {
-    "purpose": "CSS grid with a column count per breakpoint and every Flex spacing/surface prop",
+    "purpose": "CSS grid with a column count per breakpoint and every Flex spacing/surface prop; `masonry` flows uneven items down columns",
     "tags": ["layout", "basics"],
     "pairsWith": ["Column", "Row", "Card"]
   },
@@ -345,20 +304,20 @@
     "tags": ["navigation", "docs"],
     "pairsWith": ["HeadingLink", "Column"]
   },
+  "HeroSection": {
+    "purpose": "Site section: h1, lead, buttons, picture",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "HoloFx": {
     "purpose": "Holographic sheen and texture over an image or card, following the pointer",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Card", "Media"]
   },
-  "Hover": {
-    "purpose": "Shows an overlay on top of its trigger while hovered or focused, with delays",
-    "tags": ["effect", "overlay"],
-    "pairsWith": ["Card", "Media"]
-  },
   "HoverCard": {
-    "purpose": "Popover card shown in a portal next to a trigger on hover — profile and link previews",
+    "purpose": "Rich card on hover or focus of a trigger: beside it, following the pointer (\"cursor\", 2.x CursorCard) or over it (\"cover\")",
     "tags": ["overlay", "profile"],
-    "pairsWith": ["Avatar", "User", "Column"]
+    "pairsWith": ["Avatar", "User", "Column", "Media"]
   },
   "Icon": {
     "purpose": "Icon by IconName from spec.json iconNames — never invent names",
@@ -380,25 +339,15 @@
     "tags": ["layout", "chat"],
     "pairsWith": ["Column", "Spinner"]
   },
-  "InfoTip": {
-    "purpose": "Info icon that reveals a sentence of explanation on hover",
-    "tags": ["feedback", "settings"],
-    "pairsWith": ["Setting", "Text"]
-  },
   "InlineCode": {
     "purpose": "Inline code span inside running text",
     "tags": ["typography", "docs"],
     "pairsWith": ["Text", "CodeBlock"]
   },
   "Input": {
-    "purpose": "Text field with label, description, error, prefix/suffix and validation",
+    "purpose": "Text field with label, description, error, prefix/suffix and validation; `type=\"password\"` adds a show/hide toggle",
     "tags": ["form"],
-    "pairsWith": ["PasswordInput", "Select", "Switch", "Form"]
-  },
-  "InteractiveDetails": {
-    "purpose": "Label and description block that Checkbox, RadioButton and Switch render beside their control",
-    "tags": ["form"],
-    "pairsWith": ["Checkbox", "RadioButton", "Switch"]
+    "pairsWith": ["Select", "Switch", "Form"]
   },
   "Kbar": {
     "purpose": "Command palette opened with ⌘K: searchable sections of links and actions",
@@ -406,14 +355,9 @@
     "pairsWith": ["Kbd", "Dialog"]
   },
   "Kbd": {
-    "purpose": "Keyboard key or shortcut rendered as a key cap",
+    "purpose": "Keyboard key as a key cap; with `keys` a whole shortcut (⌘ on Apple platforms, Ctrl elsewhere) beside its action",
     "tags": ["typography"],
-    "pairsWith": ["Row", "Text", "Kbar"]
-  },
-  "KeyTip": {
-    "purpose": "A keyboard shortcut drawn as keycaps, with ⌘ on Apple platforms and Ctrl elsewhere — hints next to actions and in menus",
-    "tags": ["content", "keyboard"],
-    "pairsWith": ["Kbd", "Button", "Tooltip"]
+    "pairsWith": ["Row", "Text", "Tooltip"]
   },
   "LayoutProvider": {
     "purpose": "Root provider for breakpoints, with next/link and next/image installed — the one a Next.js app imports, from core/next",
@@ -480,6 +424,11 @@
     "tags": ["feedback", "chat", "ai"],
     "pairsWith": ["WorkingIndicator", "Text"]
   },
+  "LogosSection": {
+    "purpose": "Site section: client or press logos",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "Mascot": {
     "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
     "tags": ["ai", "chat", "decoration"],
@@ -489,11 +438,6 @@
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "MatrixFx"]
-  },
-  "MasonryGrid": {
-    "purpose": "Masonry layout of uneven-height items with responsive column counts",
-    "tags": ["layout", "media"],
-    "pairsWith": ["Media", "Card"]
   },
   "MatrixFx": {
     "purpose": "Canvas dot-matrix field with reveal, flicker and an optional bulge wave",
@@ -582,25 +526,14 @@
     "pairsWith": ["Media", "Column"]
   },
   "MegaMenu": {
-    "purpose": "Desktop top navigation with dropdown panels of grouped links",
+    "purpose": "Top navigation with dropdown panels of grouped links; `collapseBelow` turns it into stacked accordions on small screens",
     "tags": ["navigation", "marketing"],
-    "pairsWith": ["MobileMegaMenu", "SmartLink", "Row"]
+    "pairsWith": ["SmartLink", "Row"]
   },
   "Meta": {
-    "purpose": "Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards",
+    "purpose": "Meta.generate: Next.js metadata with Open Graph and Twitter cards",
     "tags": ["seo", "next"],
     "pairsWith": ["Schema"]
-  },
-  "MobileMegaMenu": {
-    "purpose": "Mobile counterpart of MegaMenu: the same groups as stacked, expandable sections",
-    "tags": ["navigation", "marketing"],
-    "pairsWith": ["MegaMenu", "NavIcon"]
-  },
-  "Modal": {
-    "purpose": "Full-screen modal with a title and an optional backdrop",
-    "tags": ["overlay"],
-    "avoid": "Ordinary dialogs and confirmations — use Dialog",
-    "pairsWith": ["Column"]
   },
   "Nav": {
     "purpose": "Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside",
@@ -615,7 +548,7 @@
   "NavIcon": {
     "purpose": "Hamburger button that toggles to a close icon, for opening mobile navigation",
     "tags": ["navigation", "action"],
-    "pairsWith": ["MobileMegaMenu", "Row"]
+    "pairsWith": ["MegaMenu", "Row"]
   },
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
@@ -650,7 +583,7 @@
   "Option": {
     "purpose": "Selectable row in a menu, dropdown or select: label, description, prefix/suffix, link or click",
     "tags": ["overlay", "form"],
-    "pairsWith": ["DropdownWrapper", "ContextMenu", "Select"]
+    "pairsWith": ["Dropdown", "Select", "Column"]
   },
   "OTPInput": {
     "purpose": "One box per digit for a verification code, with paste and a completion callback",
@@ -660,32 +593,27 @@
   "Pagination": {
     "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select — paged lists and tables",
     "tags": ["navigation", "data"],
-    "pairsWith": ["Table", "DataTable", "Row"]
+    "pairsWith": ["Table", "Row"]
   },
   "ParticleFx": {
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
   },
-  "PasswordInput": {
-    "purpose": "Input with a show/hide toggle for passwords",
-    "tags": ["form", "auth"],
-    "pairsWith": ["Input", "Dialog", "Column"]
-  },
   "PieChart": {
     "purpose": "Pie or donut chart of parts of a whole, with legend and tooltip",
     "tags": ["data", "chart", "dashboard"],
     "pairsWith": ["ChartHeader", "Legend"]
   },
+  "PricingSection": {
+    "purpose": "Site section: plans side by side, one highlighted",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "ProgressBar": {
     "purpose": "Linear progress bar for a value between min and max, with optional label",
     "tags": ["data", "feedback", "onboarding"],
     "pairsWith": ["StatusIndicator", "Column", "Text"]
-  },
-  "Pulse": {
-    "purpose": "Coloured dot with a pulsing ring — live or attention state",
-    "tags": ["feedback", "decoration"],
-    "pairsWith": ["Row", "Text", "StatusIndicator"]
   },
   "RadialGauge": {
     "purpose": "Circular or arc tick gauge for a single metric with a centre readout",
@@ -706,11 +634,6 @@
     "purpose": "One choice from a set of radios as a single form field: a labelled radiogroup with arrow keys, from options or RadioButtons",
     "tags": ["form", "settings"],
     "pairsWith": ["RadioButton", "Form", "Setting"]
-  },
-  "RangeSlider": {
-    "purpose": "Two-thumb slider selecting a [start, end] range, such as a price filter; the thumbs never cross",
-    "tags": ["form", "settings"],
-    "pairsWith": ["Slider", "Setting", "Form"]
   },
   "Reaction": {
     "purpose": "One emoji or image reaction with its own gesture (beat, nod…)",
@@ -738,15 +661,10 @@
     "tags": ["seo"],
     "pairsWith": ["Meta"]
   },
-  "ScrollContainer": {
-    "purpose": "Horizontal track of items with arrow controls, drag, wrap-around, markers and proximity scaling",
-    "tags": ["layout", "media", "marketing"],
-    "pairsWith": ["Media", "Card"]
-  },
   "Scroller": {
-    "purpose": "Horizontally or vertically scrolling row with arrow buttons and edge fades — chips, tabs, cards",
+    "purpose": "Scrolling row with arrows and fades; track props (infinite, markers, drag) make a carousel track, auto a marquee (2.x AutoScroll)",
     "tags": ["layout"],
-    "pairsWith": ["Row", "Chip"]
+    "pairsWith": ["Row", "Tag", "Logo", "Card"]
   },
   "ScrollLock": {
     "purpose": "Freezes page scroll while enabled, keeping one referenced region scrollable",
@@ -763,6 +681,11 @@
     "tags": ["media", "control"],
     "pairsWith": ["MediaVideoPlayer", "MediaAudioPlayer"]
   },
+  "Sections": {
+    "purpose": "Renders stored sections [{ type, props }]; fields in sectionSchemas",
+    "tags": ["marketing"],
+    "pairsWith": ["HeroSection"]
+  },
   "SegmentedControl": {
     "purpose": "Pick one of 2–5 options from a row of buttons (billing period, view mode)",
     "tags": ["control", "dashboard"],
@@ -774,19 +697,9 @@
     "pairsWith": ["Input", "Form", "Column"]
   },
   "Setting": {
-    "purpose": "Settings row: label and description on the left, one control on the right",
+    "purpose": "Settings row: label and description left, one control right; `axes` for X/Y pairs, `control` and `open` for a group",
     "tags": ["settings", "form"],
-    "pairsWith": ["SettingGroup", "Switch", "Select", "InfoTip"]
-  },
-  "SettingAxes": {
-    "purpose": "Settings row holding the axes of one property side by side (X and Y), wrapping when narrow",
-    "tags": ["settings", "form"],
-    "pairsWith": ["Setting", "NumberInput", "Slider"]
-  },
-  "SettingGroup": {
-    "purpose": "Setting with a header control whose sub-settings sit inside its own box when open",
-    "tags": ["settings", "form"],
-    "pairsWith": ["Setting", "Switch"]
+    "pairsWith": ["Switch", "Select", "Slider", "Tooltip"]
   },
   "ShineFx": {
     "purpose": "Shine sweeping across text; speed in ms",
@@ -799,9 +712,9 @@
     "pairsWith": ["Grid", "Media", "Column"]
   },
   "Slider": {
-    "purpose": "Range slider for a numeric value, with label and value readout",
+    "purpose": "Slider for a numeric value, or with `range` a [start, end] pair whose thumbs never cross; label, readout, error and size",
     "tags": ["form", "settings"],
-    "pairsWith": ["Row", "Setting"]
+    "pairsWith": ["Row", "Setting", "Form"]
   },
   "SmartLink": {
     "purpose": "Styled link with prefix/suffix icons and a selected state; routes through the framework adapter",
@@ -821,7 +734,7 @@
     "pairsWith": ["Sortable", "SortableItem"]
   },
   "SortableItem": {
-    "purpose": "One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged",
+    "purpose": "One row of a Sortable, wrapping a NavItem, Card or any row unchanged",
     "tags": ["data"],
     "pairsWith": ["Sortable", "NavItem", "Card"]
   },
@@ -835,20 +748,162 @@
     "tags": ["layout", "chat", "settings"],
     "pairsWith": ["Column", "Row"]
   },
+  "StatsSection": {
+    "purpose": "Site section: a few large figures",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
   "StatusIndicator": {
-    "purpose": "Small coloured status dot (online, error, warning) — colour by name, not variant",
+    "purpose": "Small coloured status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring in a `tone` for a live state",
     "tags": ["data", "feedback"],
     "pairsWith": ["Row", "Text", "Avatar"]
   },
   "StyleOverlay": {
-    "purpose": "Icon button that opens a floating side panel, usually holding StylePanel",
+    "purpose": "Wraps a trigger (an IconButton) that opens StylePanel in a floating side panel; fits CodeBlock's actions",
     "tags": ["overlay", "settings", "theme"],
-    "pairsWith": ["StylePanel"]
+    "pairsWith": ["StylePanel", "IconButton", "CodeBlock"]
   },
   "StylePanel": {
-    "purpose": "Live theming controls for theme, brand and accent colours, shape and density",
+    "purpose": "Live theming controls for theme, colours, shape and density; compose your own from StylePanelRoot and its StylePanel* parts",
     "tags": ["settings", "theme"],
-    "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
+    "pairsWith": ["StyleOverlay", "ThemeSwitcher", "StylePanelRoot"]
+  },
+  "StylePanelAccent": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: accent colour swatches (custom adds one of the host's own); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelAdvanced": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Surface, Density, Scaling, DataStyle and Transition rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelBodyLineHeight": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: body text line height; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelBodySize": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: body text size; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelBodyText": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the BodySize and BodyLineHeight rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelBrand": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: brand colour swatches (custom adds one of the host's own); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelColor": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Brand, Accent and Neutral rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelDataStyle": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: chart colour mode; needs a DataThemeProvider; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelDensity": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: spacing density (compact, normal, spacious); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelEffect": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: solid effect (flat, plastic); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelGroup": {
+    "partOf": "StylePanel",
+    "purpose": "Titled group of StylePanel rows inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelRow"]
+  },
+  "StylePanelNeutral": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: neutral colour swatches; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelPage": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Theme and Shape rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelRoot": {
+    "partOf": "StylePanel",
+    "purpose": "Holds a composed StylePanel's state (bound to ThemeProvider, or controlled by value); wraps StylePanel sections",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelGroup", "StylePanelBrand"]
+  },
+  "StylePanelRow": {
+    "partOf": "StylePanel",
+    "purpose": "Labelled StylePanel row for a control of the host's own",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelGroup"]
+  },
+  "StylePanelScaling": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: interface scaling; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelShape": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: corner shape (sharp to rounded); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelSolid": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: solid fill (color, inverse, contrast); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelSolidStyle": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Solid and Effect rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelSurface": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: surface style (filled, translucent); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelTheme": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: light, dark or system theme; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelTransition": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: transition style; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StyleScope": {
+    "purpose": "Site colours, theme and fonts on one subtree",
+    "tags": ["theme", "layout"],
+    "pairsWith": ["ThemeProvider", "Column"]
   },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
@@ -859,11 +914,6 @@
     "purpose": "Small colour chip marking a chart series",
     "tags": ["data", "chart"],
     "pairsWith": ["Legend", "DataTooltip"]
-  },
-  "Swiper": {
-    "purpose": "Snap-scrolling image gallery with controls and indicators, touch-first",
-    "tags": ["media", "marketing"],
-    "pairsWith": ["Media", "Row"]
   },
   "Switch": {
     "purpose": "On/off toggle with label, description and loading state",
@@ -876,9 +926,9 @@
     "pairsWith": ["Tabs", "TabList", "TabPanel"]
   },
   "Table": {
-    "purpose": "Data table with sortable headers, search, pagination, row actions and empty/loading states",
+    "purpose": "Table from column definitions: sorting, search, selection, pagination, row actions, empty and loading states",
     "tags": ["data", "dashboard"],
-    "pairsWith": ["Column", "Tag", "Icon"]
+    "pairsWith": ["Pagination", "Tag", "Button"]
   },
   "TabList": {
     "purpose": "The row or column of Tabs inside Tabs, with arrow-key focus",
@@ -896,14 +946,25 @@
     "pairsWith": ["TabList", "Tab", "TabPanel"]
   },
   "Tag": {
-    "purpose": "Compact label for status, category or metadata, with scheme colour and icons",
-    "tags": ["typography", "data"],
-    "pairsWith": ["Row", "Badge", "Table"]
+    "purpose": "Compact status or category label with a tone; variant=\"announce\" + href for a 'New' pill; selected/onRemove for a filter token",
+    "tags": ["typography", "data", "form", "marketing"],
+    "avoid": "Passing the same text as label and children — the children are dropped",
+    "pairsWith": ["Row", "Table", "Heading", "TagInput"]
   },
   "TagInput": {
     "purpose": "Field that collects a list of values as removable chips",
     "tags": ["form"],
-    "pairsWith": ["Input", "Chip"]
+    "pairsWith": ["Input", "Tag"]
+  },
+  "TeamSection": {
+    "purpose": "Site section: people with photo, role and bio",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
+  },
+  "TestimonialsSection": {
+    "purpose": "Site section: customer quotes",
+    "tags": ["marketing"],
+    "pairsWith": ["Sections"]
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",
@@ -914,10 +975,10 @@
   "Textarea": {
     "purpose": "Multi-line text field that grows with its content by default",
     "tags": ["form", "feedback"],
-    "pairsWith": ["Dialog", "Column", "Chip"]
+    "pairsWith": ["Dialog", "Column", "Tag"]
   },
   "ThemeInit": {
-    "purpose": "Inline script for the document head that applies the theme config before first paint, preventing a flash",
+    "purpose": "Head script that applies the theme before first paint, so it never flashes",
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },
@@ -946,17 +1007,12 @@
     "purpose": "One notification message with variant, icon, action and close; shown through useToast",
     "tags": ["feedback"],
     "avoid": "Rendering it directly — call addToast from useToast",
-    "pairsWith": ["Toaster", "useToast"]
+    "pairsWith": ["ToastProvider", "useToast"]
   },
   "ToastProvider": {
-    "purpose": "Root provider for toast notifications: renders the Toaster and gives useToast its addToast",
+    "purpose": "Root provider for toast notifications: renders the toast stack and gives useToast its addToast",
     "tags": ["provider", "feedback"],
     "pairsWith": ["Toast", "LayoutProvider"]
-  },
-  "Toaster": {
-    "purpose": "The stack ToastProvider renders its toasts into, positioned per breakpoint",
-    "tags": ["feedback", "provider"],
-    "pairsWith": ["Toast", "useToast"]
   },
   "ToggleButton": {
     "purpose": "Button with a selected state, for toolbars, segmented choices and nav rows",
@@ -964,12 +1020,12 @@
     "pairsWith": ["Row", "SegmentedControl"]
   },
   "Tooltip": {
-    "purpose": "The label shown on hover or focus — usually through a component's tooltip prop",
+    "purpose": "Short non-interactive hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)",
     "tags": ["overlay", "basics"],
-    "pairsWith": ["IconButton", "Text"]
+    "pairsWith": ["IconButton", "Text", "Setting"]
   },
   "TypeFx": {
-    "purpose": "Typewriter effect that types and deletes a list of words; speed and delay in ms",
+    "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in one by one instead; timings in ms",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
   },
@@ -979,14 +1035,9 @@
     "pairsWith": ["ChatMessageList", "ChatMessage"]
   },
   "User": {
-    "purpose": "Avatar with name, subline and optional tag — an identity row",
-    "tags": ["profile", "chat"],
-    "pairsWith": ["Avatar", "Row", "Text"]
-  },
-  "UserMenu": {
-    "purpose": "User identity that opens an account dropdown",
-    "tags": ["overlay", "navigation", "profile"],
-    "pairsWith": ["Avatar", "Option", "Column"]
+    "purpose": "Avatar with name, subline and optional tag, an identity row; with dropdown it opens an account menu (2.x UserMenu)",
+    "tags": ["profile", "chat", "navigation"],
+    "pairsWith": ["Avatar", "Option", "Row", "Text"]
   },
   "VisuallyHidden": {
     "purpose": "Content for screen readers only; focusable makes it a skip link that shows on focus",

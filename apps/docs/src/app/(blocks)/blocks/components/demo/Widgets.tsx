@@ -143,13 +143,13 @@ const examples: BlockExampleDef[] = [
         <Book
           src="/images/og/home.jpg"
           alt="Once UI Principles book"
-          maxWidth={20}
+          maxWidth="20rem"
           aspectRatio={16 / 9}
         />
         <Book
           src="/images/fashion/cover-01.jpg"
           alt="Once UI Principles book"
-          maxWidth={20}
+          maxWidth="20rem"
           aspectRatio={1}
         />
       </Column>
