@@ -120,7 +120,13 @@ vi.mock("maplibre-gl", () => {
   };
 });
 
-const { Map: MapView, MapMarker, MapMarkers, MapPin, MapPopup } = await import("../modules/map/index.js");
+const {
+  Map: MapView,
+  MapMarker,
+  MapMarkers,
+  MapPin,
+  MapPopup,
+} = await import("../modules/map/index.js");
 
 // The map loads its implementation lazily: wait until it has started.
 const settle = async () => {
