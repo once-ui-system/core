@@ -54,6 +54,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
   },
   KeyTip: { keys: ["Meta", "K"], children: "Search" },
   LogoCloud: { logos: [{ wordmark: "/logo.svg" }] },
+  Reaction: { value: "❤️" },
+  Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
   ScrollContainer: { items: ["One", "Two"] },
   SegmentedControl: {
     value: "a",

@@ -1,0 +1,459 @@
+@use "../../styles/touch.scss" as touch;
+
+/* Reaction: one glyph and its gesture */
+.glyph {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--reaction-size);
+  height: var(--reaction-size);
+  font-size: calc(var(--reaction-size) * 0.9);
+  line-height: 1;
+  user-select: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    -webkit-user-drag: none;
+  }
+}
+
+.s {
+  --reaction-size: 1rem;
+}
+.m {
+  --reaction-size: 1.25rem;
+}
+.l {
+  --reaction-size: 1.5rem;
+}
+.xl {
+  --reaction-size: 2rem;
+}
+
+/* The moving copy inside a glyph. A replay remounts it, so it never takes the
+   pointer: a press that began on it would lose its click. */
+.motion {
+  pointer-events: none;
+}
+
+/* The gestures. Each ends where it began, so replaying one is seamless. */
+.play {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.3, 0.7, 0.4, 1);
+  animation-fill-mode: both;
+
+  &.beat {
+    animation-name: reaction-beat;
+  }
+  &.nod {
+    animation-name: reaction-nod;
+    transform-origin: 30% 85%;
+  }
+  &.shake {
+    animation-name: reaction-shake;
+  }
+  &.pop {
+    animation-name: reaction-pop;
+  }
+  &.droop {
+    animation-name: reaction-droop;
+    animation-duration: 0.9s;
+  }
+  &.flicker {
+    animation-name: reaction-flicker;
+    transform-origin: 50% 100%;
+  }
+  &.spin {
+    animation-name: reaction-spin;
+    animation-duration: 0.8s;
+  }
+  &.wave {
+    animation-name: reaction-wave;
+    transform-origin: 70% 90%;
+    animation-duration: 0.9s;
+  }
+  &.bounce {
+    animation-name: reaction-bounce;
+  }
+}
+
+/* `trigger="loop"`: the gesture again every few seconds, with rest between. */
+.loop.play {
+  animation-duration: 2.6s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+}
+
+@keyframes reaction-beat {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  18% {
+    transform: scale(1.32);
+  }
+  34% {
+    transform: scale(0.94);
+  }
+  52% {
+    transform: scale(1.16);
+  }
+  72% {
+    transform: scale(1);
+  }
+}
+
+@keyframes reaction-nod {
+  0%,
+  100% {
+    transform: rotate(0) translateY(0);
+  }
+  25% {
+    transform: rotate(-18deg) translateY(-12%);
+  }
+  50% {
+    transform: rotate(6deg) translateY(0);
+  }
+  72% {
+    transform: rotate(-8deg) translateY(-4%);
+  }
+}
+
+@keyframes reaction-shake {
+  0%,
+  100% {
+    transform: rotate(0) translateY(0);
+  }
+  15% {
+    transform: rotate(-14deg) translateY(-8%);
+  }
+  32% {
+    transform: rotate(12deg) translateY(-8%);
+  }
+  49% {
+    transform: rotate(-10deg) translateY(-4%);
+  }
+  66% {
+    transform: rotate(8deg) translateY(-2%);
+  }
+  83% {
+    transform: rotate(-3deg);
+  }
+}
+
+@keyframes reaction-pop {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  22% {
+    transform: scale(1.45) translateY(-10%);
+  }
+  46% {
+    transform: scale(0.9);
+  }
+  68% {
+    transform: scale(1.06);
+  }
+}
+
+@keyframes reaction-droop {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0) scale(1);
+  }
+  30% {
+    transform: translateY(14%) rotate(-6deg) scale(1.04, 0.92);
+  }
+  60% {
+    transform: translateY(10%) rotate(5deg) scale(1.02, 0.95);
+  }
+}
+
+@keyframes reaction-flicker {
+  0%,
+  100% {
+    transform: scale(1) skewX(0);
+  }
+  16% {
+    transform: scale(1.08, 1.24) skewX(-5deg);
+  }
+  34% {
+    transform: scale(0.96, 0.94) skewX(4deg);
+  }
+  52% {
+    transform: scale(1.04, 1.16) skewX(-3deg);
+  }
+  70% {
+    transform: scale(1, 0.98) skewX(2deg);
+  }
+}
+
+@keyframes reaction-spin {
+  0% {
+    transform: rotate(0) scale(1);
+  }
+  45% {
+    transform: rotate(200deg) scale(1.3);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes reaction-wave {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  14% {
+    transform: rotate(22deg);
+  }
+  28% {
+    transform: rotate(-10deg);
+  }
+  42% {
+    transform: rotate(20deg);
+  }
+  56% {
+    transform: rotate(-6deg);
+  }
+  70% {
+    transform: rotate(8deg);
+  }
+}
+
+@keyframes reaction-bounce {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  28% {
+    transform: translateY(-28%) scale(1.08);
+  }
+  52% {
+    transform: translateY(0) scale(1.06, 0.9);
+  }
+  72% {
+    transform: translateY(-10%) scale(1);
+  }
+}
+
+/* Reactions: the row of chips */
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--static-space-4);
+  height: var(--reaction-chip-height);
+  padding: 0 var(--reaction-chip-padding);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--neutral-alpha-weak);
+  background: var(--neutral-alpha-weak);
+  color: var(--neutral-on-background-medium);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background var(--transition-micro-medium),
+    border-color var(--transition-micro-medium),
+    transform var(--transition-micro-medium);
+  @include touch.target;
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--neutral-alpha-medium);
+    }
+  }
+
+  &:active {
+    transform: scale(0.94);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-border-strong);
+    outline-offset: 2px;
+  }
+
+  &[aria-pressed="true"] {
+    background: var(--brand-alpha-weak);
+    border-color: var(--brand-border-medium);
+    color: var(--brand-on-background-strong);
+
+    @media (hover: hover) {
+      &:hover {
+        background: var(--brand-alpha-medium);
+      }
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    transform: none;
+  }
+}
+
+.chips-s {
+  --reaction-chip-height: 1.5rem;
+  --reaction-chip-padding: calc(var(--static-space-4) + var(--static-space-2));
+}
+.chips-m {
+  --reaction-chip-height: 2rem;
+  --reaction-chip-padding: var(--static-space-8);
+}
+.chips-l {
+  --reaction-chip-height: 2.5rem;
+  --reaction-chip-padding: var(--static-space-12);
+}
+
+/* The add button is a chip without a count. */
+.add {
+  color: var(--neutral-on-background-weak);
+}
+
+.count {
+  font-variant-numeric: tabular-nums;
+  min-width: 0.6em;
+}
+
+/* Effects: copies of the glyph that fly out from the chip and fade */
+.effect {
+  position: absolute;
+  left: calc(var(--reaction-chip-padding) + var(--reaction-size) / 2);
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.particle {
+  position: absolute;
+  left: 0;
+  top: 0;
+  translate: -50% -50%;
+  font-size: calc(var(--reaction-size) * 0.8);
+  width: var(--reaction-size);
+  height: var(--reaction-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
+.burst .particle {
+  animation: reaction-burst 0.75s cubic-bezier(0.15, 0.8, 0.3, 1) both;
+}
+
+@keyframes reaction-burst {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(0) rotate(calc(-1 * var(--angle))) scale(0.3);
+  }
+  12% {
+    opacity: 1;
+  }
+  65% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--angle)) translateY(calc(var(--reaction-size) * -2.4))
+      rotate(calc(-1 * var(--angle))) scale(0.8);
+  }
+}
+
+.float .particle {
+  width: calc(var(--reaction-size) * 1.4);
+  height: calc(var(--reaction-size) * 1.4);
+  font-size: calc(var(--reaction-size) * 1.25);
+  animation: reaction-float 1.1s cubic-bezier(0.2, 0.7, 0.3, 1) both;
+}
+
+@keyframes reaction-float {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  15% {
+    opacity: 1;
+    transform: translateY(-30%) scale(1.1);
+  }
+  50% {
+    transform: translate(-12%, -160%) rotate(-8deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(10%, -320%) rotate(6deg) scale(0.9);
+  }
+}
+
+/* Picker: a row of every reaction, each a little larger */
+.picker {
+  display: flex;
+  gap: var(--static-space-2);
+  padding: var(--static-space-4);
+}
+
+.option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: transparent;
+  cursor: pointer;
+  transition:
+    transform var(--transition-micro-medium),
+    background var(--transition-micro-medium);
+
+  @media (hover: hover) {
+    &:hover {
+      transform: translateY(-0.25rem) scale(1.15);
+      background: var(--neutral-alpha-weak);
+    }
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--brand-border-strong);
+    outline-offset: 0;
+    transform: translateY(-0.25rem) scale(1.15);
+  }
+
+  &[aria-pressed="true"] {
+    background: var(--brand-alpha-weak);
+  }
+}
+
+/* The global rule stops these mid-move; with nothing moving, drop them. */
+@media (prefers-reduced-motion: reduce) {
+  .play {
+    animation: none;
+  }
+  .effect {
+    display: none;
+  }
+  .option:focus-visible,
+  .chip:active {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) and (hover: hover) {
+  .option:hover {
+    transform: none;
+  }
+}

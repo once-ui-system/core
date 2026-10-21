@@ -1,0 +1,101 @@
+---
+title: "Reactions"
+summary: "Animated reactions for posts, comments and chat: each reaction has its own gesture, a pick bursts and rolls the count, and an app can bring its own images."
+updatedAt: "2026-10-21"
+docs: "once-ui/native/components/reactions.mdx"
+github: "packages/native/src/components/Reactions.tsx"
+navLabel: "Reactions"
+navIcon: "components"
+---
+
+`Reactions` is the row under a post, a comment or a message: a chip per reaction in use with how many people left it, and an add button that opens every option above it. Pressing a chip adds the viewer's reaction or takes it back. Each reaction moves in its own way (a heart beats, a thumbs-up nods, a laugh shakes, fire flickers), and a pick sends a few copies flying out of the chip. It takes the same props as the [web Reactions](/modules/social), so the two apps can share their reaction code.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Reactions, type ReactionOption } from "@once-ui-system/native";
+
+const options: ReactionOption[] = [
+  { value: "❤️", label: "Love" },
+  { value: "👍", label: "Like" },
+  { value: "😂", label: "Haha" },
+  { value: "😮", label: "Wow" },
+  { value: "😢", label: "Sad" },
+];
+
+export function PostReactions({ post }: { post: Post }) {
+  return (
+    <Reactions
+      options={options}
+      counts={post.reactionCounts}
+      value={post.myReaction}
+      onValueChange={(value, { option, selected }) => react(post.id, option.value, selected)}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Reactions"
+  }
+]} />
+
+## Counts that keep up
+
+`counts` includes the viewer's own reaction, as `value` has it. A pick moves the numbers at once, before the server answers; when new `counts` arrive they take over, and the viewer is never counted twice.
+
+## Several per person
+
+`multiple` lets a person leave several reactions, as in chat; `value` is then a list. `size="s"` fits under a message bubble, and `effect="float"` lifts one larger copy away instead of the burst.
+
+## Your own reactions
+
+Give an option `src` to use an image instead of an emoji, such as an uploaded animated WebP or GIF, and `motion` to choose its gesture (`"none"` when the image already moves). Store the `value`, not the image, so a reaction's picture can change later. A counted value that `options` no longer lists still shows. To draw a reaction any other way, such as with Lottie or `expo-image`, pass `renderGlyph`.
+
+Animated GIF and WebP play in React Native's `Image` on iOS. On Android, Expo builds play animated GIF; animated WebP needs `expo.webp.animated=true` in `android/gradle.properties`, or `expo-image` through `renderGlyph`.
+
+## Reaction
+
+One reaction on its own, with its gesture. It plays each time it is pressed (`trigger="hover"`, core's name for it), every few seconds (`loop`), or when `playKey` changes (`manual`).
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`<Row gap="16">
+  <Reaction value="❤️" size="xl" trigger="loop" />
+  <Reaction value="🔥" size="xl" trigger="loop" />
+  <Reaction value="party" label="Party" src="https://example.com/party.webp" size="xl" />
+</Row>`,
+    language: "tsx",
+    label: "Reaction"
+  }
+]} />
+
+The gestures are `beat`, `nod`, `shake`, `pop`, `droop`, `flicker`, `spin`, `wave` and `bounce`, the same keyframes as on the web, played with the native driver. With reduce motion turned on in the device settings nothing moves, and the reactions still change at once.
+
+## Differences from the web
+
+- There is no hover: a `Reaction` with `trigger="hover"` plays when pressed, and a chip plays when tapped.
+- The picker opens in a `Modal` above the add button, like `DropdownWrapper`.
+- The count rises into place instead of rolling digit by digit.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `ReactionOption[]` | | The reactions people can pick: `value`, `label`, `emoji` or `src`, `motion`. |
+| `counts` | `Record<string, number>` | | People per reaction, by value, including the viewer's own. Leave it out for no numbers. |
+| `value` | `string \| string[] \| null` | | The viewer's reaction; a list with `multiple`. |
+| `defaultValue` | `string \| string[] \| null` | | The starting value when uncontrolled. |
+| `onValueChange` | `(value, { option, selected }) => void` | | Called with the next value and which reaction changed. |
+| `multiple` | `boolean` | `false` | Several reactions per person. |
+| `showAll` | `boolean` | `false` | A chip for every option, even at zero. |
+| `picker` | `boolean` | `true` | The add button that opens every option. |
+| `open` / `defaultOpen` / `onOpenChange` | | | The picker's open state. |
+| `effect` | `"burst" \| "float" \| "none"` | `"burst"` | What flies out of a chip when someone picks it. |
+| `size` | `"s" \| "m" \| "l"` | `"m"` | Chip and reaction size. |
+| `disabled` | `boolean` | `false` | |
+| `renderGlyph` | `(option) => ReactNode` | | Draw a reaction yourself. |
+| `addLabel` | `string` | `"Add reaction"` | The add button's name. |
+| `ariaLabel` | `string` | `"Reactions"` | The group's name. |
+| `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |

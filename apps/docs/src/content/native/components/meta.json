@@ -48,6 +48,7 @@
     "table": 44,
     "mascot": 45,
     "workingIndicator": 46,
-    "logoSpinner": 47
+    "logoSpinner": 47,
+    "reactions": 48
   }
 }
