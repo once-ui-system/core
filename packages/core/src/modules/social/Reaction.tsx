@@ -11,9 +11,19 @@ import {
 } from "./reactionMotion";
 import styles from "./Social.module.scss";
 
-export interface ReactionProps
-  extends ReactionOption,
-    Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+// The ReactionOption fields are repeated here so the props table and the AI
+// spec list them; ReactionOption stays the shape `Reactions` takes.
+export interface ReactionProps extends Omit<React.HTMLAttributes<HTMLSpanElement>, "children"> {
+  /** What the reaction is stored as, such as "❤️" or "party-parrot". */
+  value: string;
+  /** Read out by screen readers. Defaults to the emoji. */
+  label?: string;
+  /** The emoji to draw. Defaults to `value` when there is no `src`. */
+  emoji?: string;
+  /** An image instead of an emoji, such as an animated WebP, GIF or SVG. */
+  src?: string;
+  /** Its gesture. Known emoji get a fitting one; anything else bounces. */
+  motion?: ReactionMotion;
   size?: "s" | "m" | "l" | "xl";
   /**
    * When the gesture plays: `hover` once per pointer visit, `loop` every few
