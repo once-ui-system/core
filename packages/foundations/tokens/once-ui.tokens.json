@@ -1997,18 +1997,6 @@
         "theme": "dark"
       },
       "tokens": {
-        "page-background": "{neutral-background-weak}",
-        "backdrop": "{static-black-medium}",
-        "solid-border-color-brand": "{brand-alpha-strong}",
-        "solid-border-color-neutral": "{neutral-alpha-strong}",
-        "solid-border-color-danger": "{danger-alpha-strong}",
-        "code-moss": "{scheme-moss-800}",
-        "code-gray": "{scheme-gray-800}",
-        "code-aqua": "{scheme-aqua-800}",
-        "code-green": "{scheme-green-800}",
-        "code-blue": "{scheme-blue-800}",
-        "code-violet": "{scheme-violet-800}",
-        "code-orange": "{scheme-orange-800}",
         "brand-background-strong": "{function-brand-300}",
         "brand-background-medium": "{function-brand-200}",
         "brand-background-weak": "{function-brand-100}",
@@ -2041,7 +2029,26 @@
         "accent-border-weak": "{function-accent-200}",
         "accent-alpha-strong": "{function-accent-600-50}",
         "accent-alpha-medium": "{function-accent-600-30}",
-        "accent-alpha-weak": "{function-accent-600-15}",
+        "accent-alpha-weak": "{function-accent-600-15}"
+      }
+    },
+    {
+      "when": {
+        "theme": "dark"
+      },
+      "tokens": {
+        "page-background": "{neutral-background-weak}",
+        "backdrop": "{static-black-medium}",
+        "solid-border-color-brand": "{brand-alpha-strong}",
+        "solid-border-color-neutral": "{neutral-alpha-strong}",
+        "solid-border-color-danger": "{danger-alpha-strong}",
+        "code-moss": "{scheme-moss-800}",
+        "code-gray": "{scheme-gray-800}",
+        "code-aqua": "{scheme-aqua-800}",
+        "code-green": "{scheme-green-800}",
+        "code-blue": "{scheme-blue-800}",
+        "code-violet": "{scheme-violet-800}",
+        "code-orange": "{scheme-orange-800}",
         "neutral-background-strong": "{function-neutral-300}",
         "neutral-background-medium": "{function-neutral-200}",
         "neutral-background-weak": "{function-neutral-100}",
@@ -2139,18 +2146,6 @@
         "theme": "light"
       },
       "tokens": {
-        "page-background": "{function-neutral-1200}",
-        "backdrop": "{static-white-medium}",
-        "solid-border-color-brand": "{brand-alpha-strong}",
-        "solid-border-color-neutral": "{neutral-alpha-strong}",
-        "solid-border-color-danger": "{danger-alpha-strong}",
-        "code-moss": "{scheme-moss-500}",
-        "code-gray": "{scheme-gray-500}",
-        "code-aqua": "{scheme-aqua-500}",
-        "code-green": "{scheme-green-500}",
-        "code-blue": "{scheme-blue-500}",
-        "code-violet": "{scheme-violet-500}",
-        "code-orange": "{scheme-orange-500}",
         "brand-background-strong": "{function-brand-800}",
         "brand-background-medium": "{function-brand-1000}",
         "brand-background-weak": "{static-white}",
@@ -2183,7 +2178,26 @@
         "accent-border-weak": "{function-accent-1000}",
         "accent-alpha-strong": "{function-accent-600-50}",
         "accent-alpha-medium": "{function-accent-600-30}",
-        "accent-alpha-weak": "{function-accent-600-15}",
+        "accent-alpha-weak": "{function-accent-600-15}"
+      }
+    },
+    {
+      "when": {
+        "theme": "light"
+      },
+      "tokens": {
+        "page-background": "{function-neutral-1200}",
+        "backdrop": "{static-white-medium}",
+        "solid-border-color-brand": "{brand-alpha-strong}",
+        "solid-border-color-neutral": "{neutral-alpha-strong}",
+        "solid-border-color-danger": "{danger-alpha-strong}",
+        "code-moss": "{scheme-moss-500}",
+        "code-gray": "{scheme-gray-500}",
+        "code-aqua": "{scheme-aqua-500}",
+        "code-green": "{scheme-green-500}",
+        "code-blue": "{scheme-blue-500}",
+        "code-violet": "{scheme-violet-500}",
+        "code-orange": "{scheme-orange-500}",
         "neutral-background-strong": "{function-neutral-800}",
         "neutral-background-medium": "{function-neutral-1000}",
         "neutral-background-weak": "{static-white}",
@@ -2579,6 +2593,7 @@
         "solid": "color"
       },
       "tokens": {
+        "solid-border-color-brand": "{brand-alpha-strong}",
         "solid-inset-color-brand": "{brand-alpha-strong}",
         "solid-inset-color-neutral": "{static-transparent}",
         "solid-inset-color-danger": "{danger-alpha-strong}"

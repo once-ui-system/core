@@ -42,3 +42,28 @@ describe("--brand-color-*", () => {
     }
   });
 });
+
+/**
+ * A custom property that reads another resolves where it is declared: set on
+ * `<html>`, `--brand-solid-strong: var(--function-brand-500)` keeps `<html>`'s
+ * brand in every descendant, so a section with only `data-brand="red"` changed
+ * `--function-brand-*` and recoloured nothing. Every rule that derives a brand
+ * or accent token from the palette must also match a nested `data-brand`.
+ */
+describe("nested data-brand", () => {
+  it("re-derives every brand and accent token", () => {
+    const rules = [...THEME.matchAll(/(?:^|\n)([^{}\n/][^{}]*)\{([^{}]*)\}/g)];
+    const deriving = rules.filter(
+      ([, , body]) =>
+        /--(?:brand|accent)-[\w-]+:\s*var\(--(?:function-(?:brand|accent)|brand-|accent-)/.test(
+          body,
+        ) || /--solid-[\w-]+-color-brand:\s*var\(--brand-/.test(body),
+    );
+    expect(deriving.length).toBeGreaterThan(0);
+    for (const [, selector] of deriving) {
+      // The theme rules that only set neutral or danger solid borders keep a bare selector.
+      if (!/\[data-(?:theme|solid)/.test(selector)) continue;
+      expect(selector, selector.trim()).toContain("[data-brand]");
+    }
+  });
+});

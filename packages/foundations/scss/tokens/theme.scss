@@ -156,23 +156,16 @@
     --line-height-body-multiplier: 1.2;
 }
 
-[data-theme="dark"] {
-    --page-background:              var(--neutral-background-weak);
-    --backdrop:                     var(--static-black-medium);
-
-    --solid-border-color-brand:     var(--brand-alpha-strong);
-    --solid-border-color-neutral:   var(--neutral-alpha-strong);
-    --solid-border-color-danger:    var(--danger-alpha-strong);
-
-    /* code */
-    --code-moss:                    var(--scheme-moss-800);
-    --code-gray:                    var(--scheme-gray-800);
-    --code-aqua:                    var(--scheme-aqua-800);
-    --code-green:                   var(--scheme-green-800);
-    --code-blue:                    var(--scheme-blue-800);
-    --code-violet:                  var(--scheme-violet-800);
-    --code-orange:                  var(--scheme-orange-800);
-
+/* Brand and accent tokens, declared again on every nested data-brand or
+   data-accent. A custom property that reads another resolves where it is
+   declared, so --brand-solid-strong set on <html> keeps <html>'s brand
+   however a section below sets --function-brand-*: data-brand alone
+   recoloured nothing. The last two selectors keep a data-brand inside a
+   nested data-theme, or on the same element as one, on that theme. */
+[data-theme="dark"],
+[data-theme="dark"] :is([data-brand], [data-accent]),
+[data-theme="light"] [data-theme="dark"]:is([data-brand], [data-accent]),
+[data-theme="light"] [data-theme="dark"] :is([data-brand], [data-accent]) {
     /* brand */
     --brand-background-strong:      var(--function-brand-300);
     --brand-background-medium:      var(--function-brand-200);
@@ -222,6 +215,24 @@
     --accent-alpha-strong:          var(--function-accent-600-50);
     --accent-alpha-medium:          var(--function-accent-600-30);
     --accent-alpha-weak:            var(--function-accent-600-15);
+}
+
+[data-theme="dark"] {
+    --page-background:              var(--neutral-background-weak);
+    --backdrop:                     var(--static-black-medium);
+
+    --solid-border-color-brand:     var(--brand-alpha-strong);
+    --solid-border-color-neutral:   var(--neutral-alpha-strong);
+    --solid-border-color-danger:    var(--danger-alpha-strong);
+
+    /* code */
+    --code-moss:                    var(--scheme-moss-800);
+    --code-gray:                    var(--scheme-gray-800);
+    --code-aqua:                    var(--scheme-aqua-800);
+    --code-green:                   var(--scheme-green-800);
+    --code-blue:                    var(--scheme-blue-800);
+    --code-violet:                  var(--scheme-violet-800);
+    --code-orange:                  var(--scheme-orange-800);
 
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-300);
@@ -365,27 +376,11 @@
     }
 }
 
-[data-theme="light"] {
-    /* The page sits a step below its surfaces, as dark mode's does: an
-       off-white canvas with white cards on it, so layers read by elevation
-       rather than by borders alone. */
-    --page-background:              var(--function-neutral-1200);
-    --backdrop:                     var(--static-white-medium);
-
-    --solid-border-color-brand:     var(--brand-alpha-strong);
-    --solid-border-color-neutral:   var(--neutral-alpha-strong);
-    --solid-border-color-danger:    var(--danger-alpha-strong);
-
-    /* code: step 500, the lightest that reads at 4.5:1 on white (600 was
-       3:1, below WCAG AA for 14px code) */
-    --code-moss:                    var(--scheme-moss-500);
-    --code-gray:                    var(--scheme-gray-500);
-    --code-aqua:                    var(--scheme-aqua-500);
-    --code-green:                   var(--scheme-green-500);
-    --code-blue:                    var(--scheme-blue-500);
-    --code-violet:                  var(--scheme-violet-500);
-    --code-orange:                  var(--scheme-orange-500);
-    
+/* See the dark rule: brand and accent again on a nested data-brand. */
+[data-theme="light"],
+[data-theme="light"] :is([data-brand], [data-accent]),
+[data-theme="dark"] [data-theme="light"]:is([data-brand], [data-accent]),
+[data-theme="dark"] [data-theme="light"] :is([data-brand], [data-accent]) {
     /* brand */  
     --brand-background-strong:      var(--function-brand-800);
     --brand-background-medium:      var(--function-brand-1000);
@@ -435,7 +430,29 @@
     --accent-alpha-strong:          var(--function-accent-600-50);
     --accent-alpha-medium:          var(--function-accent-600-30);
     --accent-alpha-weak:            var(--function-accent-600-15);
+}
 
+[data-theme="light"] {
+    /* The page sits a step below its surfaces, as dark mode's does: an
+       off-white canvas with white cards on it, so layers read by elevation
+       rather than by borders alone. */
+    --page-background:              var(--function-neutral-1200);
+    --backdrop:                     var(--static-white-medium);
+
+    --solid-border-color-brand:     var(--brand-alpha-strong);
+    --solid-border-color-neutral:   var(--neutral-alpha-strong);
+    --solid-border-color-danger:    var(--danger-alpha-strong);
+
+    /* code: step 500, the lightest that reads at 4.5:1 on white (600 was
+       3:1, below WCAG AA for 14px code) */
+    --code-moss:                    var(--scheme-moss-500);
+    --code-gray:                    var(--scheme-gray-500);
+    --code-aqua:                    var(--scheme-aqua-500);
+    --code-green:                   var(--scheme-green-500);
+    --code-blue:                    var(--scheme-blue-500);
+    --code-violet:                  var(--scheme-violet-500);
+    --code-orange:                  var(--scheme-orange-500);
+    
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-800);
     --neutral-background-medium:    var(--function-neutral-1000);
@@ -635,7 +652,9 @@
 }
 
 [data-theme="dark"][data-solid="color"],
-[data-theme="dark"] [data-solid="color"] {
+[data-theme="dark"] [data-solid="color"],
+[data-theme="dark"][data-solid="color"] [data-brand],
+[data-theme="dark"] [data-solid="color"] [data-brand] {
     --brand-solid-strong:         var(--function-brand-500);
     --brand-solid-medium:         var(--function-brand-400);
     --brand-solid-weak:           var(--function-brand-300);
@@ -646,7 +665,9 @@
 }
 
 [data-theme="dark"][data-solid="contrast"],
-[data-theme="dark"] [data-solid="contrast"] {
+[data-theme="dark"] [data-solid="contrast"],
+[data-theme="dark"][data-solid="contrast"] [data-brand],
+[data-theme="dark"] [data-solid="contrast"] [data-brand] {
     --brand-solid-strong:         var(--function-neutral-1000);
     --brand-solid-medium:         var(--static-white);
     --brand-solid-weak:           var(--function-neutral-900);
@@ -657,7 +678,9 @@
 }
 
 [data-theme="dark"][data-solid="inverse"],
-[data-theme="dark"] [data-solid="inverse"] {
+[data-theme="dark"] [data-solid="inverse"],
+[data-theme="dark"][data-solid="inverse"] [data-brand],
+[data-theme="dark"] [data-solid="inverse"] [data-brand] {
     --brand-solid-strong:         var(--function-brand-800);
     --brand-solid-medium:         var(--function-brand-700);
     --brand-solid-weak:           var(--function-brand-600);
@@ -668,7 +691,9 @@
 }
 
 [data-theme="light"][data-solid="color"],
-[data-theme="light"] [data-solid="color"] {
+[data-theme="light"] [data-solid="color"],
+[data-theme="light"][data-solid="color"] [data-brand],
+[data-theme="light"] [data-solid="color"] [data-brand] {
     /* Step 500, the same as dark: white text on step 600 measures 3:1,
        below WCAG AA for button labels. */
     --brand-solid-strong:         var(--function-brand-500);
@@ -681,7 +706,9 @@
 }
 
 [data-theme="light"][data-solid="contrast"],
-[data-theme="light"] [data-solid="contrast"] {
+[data-theme="light"] [data-solid="contrast"],
+[data-theme="light"][data-solid="contrast"] [data-brand],
+[data-theme="light"] [data-solid="contrast"] [data-brand] {
     --brand-solid-strong:         var(--function-neutral-300);
     --brand-solid-medium:         var(--static-black);
     --brand-solid-weak:           var(--function-neutral-400);
@@ -692,13 +719,17 @@
 }
 
 
-[data-solid="color"] {
+[data-solid="color"],
+[data-solid="color"] [data-brand] {
+    --solid-border-color-brand:   var(--brand-alpha-strong);
+
     --solid-inset-color-brand:    var(--brand-alpha-strong);
     --solid-inset-color-neutral:  var(--static-transparent);
     --solid-inset-color-danger:   var(--danger-alpha-strong);
 }
 
-[data-solid="contrast"] {
+[data-solid="contrast"],
+[data-solid="contrast"] [data-brand] {
     --solid-border-color-brand:   var(--neutral-alpha-strong);
 
     --solid-inset-color-brand:    var(--static-transparent);
@@ -706,7 +737,8 @@
     --solid-inset-color-danger:   var(--danger-alpha-strong);
 }
 
-[data-solid="inverse"] {
+[data-solid="inverse"],
+[data-solid="inverse"] [data-brand] {
     --solid-border-color-brand:   var(--brand-alpha-strong);
 
     --solid-inset-color-brand:    var(--brand-alpha-strong);
@@ -715,7 +747,9 @@
 }
 
 [data-theme="light"][data-solid="inverse"],
-[data-theme="light"] [data-solid="inverse"] {
+[data-theme="light"] [data-solid="inverse"],
+[data-theme="light"][data-solid="inverse"] [data-brand],
+[data-theme="light"] [data-solid="inverse"] [data-brand] {
     --brand-solid-strong:         var(--function-brand-900);
     --brand-solid-medium:         var(--function-brand-800);
     --brand-solid-weak:           var(--function-brand-700);
