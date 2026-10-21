@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Button, Column, Heading, Row, Tag, Text } from "@once-ui-system/core";
+import { Avatar, Button, Column, Row, Tag, Text } from "@once-ui-system/core";
 import {
   type LngLat,
   // biome-ignore lint/suspicious/noShadowRestrictedNames: the docs show the component under its own name
@@ -157,10 +157,10 @@ export function MapControlledExample() {
           </MapMarker>
         ))}
       </Map>
-      <Heading as="h4" variant="label-default-s" onBackground="neutral-weak">
+      <Text variant="label-default-s" onBackground="neutral-weak">
         {viewport.center.map((value) => value.toFixed(4)).join(", ")} · zoom{" "}
         {viewport.zoom.toFixed(1)}
-      </Heading>
+      </Text>
     </Column>
   );
 }
