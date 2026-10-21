@@ -14,6 +14,7 @@ import {
   SCHEMES,
   WEIGHTS,
   JUSTIFY_ALIGNMENTS,
+  MARGIN_AUTO_PREFIXES,
   FLEX_DIRECTIONS,
   OFFSET_SIDES,
   OFFSET_TOKENS,
@@ -58,6 +59,19 @@ describe("generated utilities", () => {
     expect(SPACING_FAMILIES.length).toBe(15);
     expect(SPACING_TOKENS.length).toBe(24);
     expect(SPACING_FAMILIES.length * SPACING_TOKENS.length).toBe(360);
+  });
+
+  it("gives the margin families, and only them, an auto value at every breakpoint", () => {
+    const css = readFileSync(GENERATED, "utf8");
+    for (const { prefix } of MARGIN_AUTO_PREFIXES) {
+      expect(css).toContain(`.${prefix}-auto {`);
+      for (const { key } of BREAKPOINTS_CASCADE) expect(css).toContain(`.${key}-${prefix}-auto {`);
+    }
+    expect(MARGIN_AUTO_PREFIXES.map((f) => f.prefix)).toEqual(["m", "mx", "my", "mt", "mr", "mb", "ml"]);
+    expect(css).toMatch(/\.ml-auto \{\n {2}margin-left: auto;\n\}/);
+    expect(css).not.toMatch(/\.(p[xytrbl]?|g)-auto \{/);
+    // A side still follows the shorthand, so `margin="16" marginLeft="auto"` keeps the auto.
+    expect(css.indexOf(".m-auto {")).toBeLessThan(css.indexOf(".ml-16 {"));
   });
 
   it("carries every token the layout layer defines", () => {

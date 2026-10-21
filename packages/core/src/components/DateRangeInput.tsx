@@ -16,7 +16,12 @@ interface DateRangeInputProps
   id: string;
   startLabel: string;
   endLabel: string;
-  value?: DateRange;
+  /**
+   * The selected range. Either end may be left out, so a range typed
+   * `{ startDate?: Date; endDate?: Date }` and an empty `{}` are taken as
+   * they are; `onChange` always hands back both keys.
+   */
+  value?: Partial<DateRange>;
   onChange?: (range: DateRange) => void;
   minHeight?: number;
   className?: string;
@@ -36,7 +41,7 @@ interface LocalizedDateRange {
   endDate: string | null;
 }
 
-const formatDateRange = (range: DateRange, locale?: string): LocalizedDateRange => {
+const formatDateRange = (range: Partial<DateRange>, locale?: string): LocalizedDateRange => {
   const options: Intl.DateTimeFormatOptions = {
     year: "numeric",
     month: "short",

@@ -27,6 +27,7 @@ export function ChipWithIconsExample() {
       <Chip label="Discord" prefixIcon="discord" />
       <Chip label="Style" prefixIcon="style" />
       <Chip label="Favorite" prefixIcon="like" />
+      <Chip label="Sort" suffixIcon="chevronDown" selected={false} />
     </Row>
   );
 }
@@ -87,6 +88,23 @@ export function CustomRemovableChipExample() {
           tooltip: "Delete",
         }}
       />
+    </Row>
+  );
+}
+
+export function PlainLabelChipExample() {
+  const [cities, setCities] = useState(["Berlin"]);
+
+  return (
+    <Row gap="8" wrap>
+      {cities.map((city) => (
+        <Chip
+          key={city}
+          label={city}
+          interactive={false}
+          onRemove={() => setCities(cities.filter((item) => item !== city))}
+        />
+      ))}
     </Row>
   );
 }

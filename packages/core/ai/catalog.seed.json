@@ -189,7 +189,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },
@@ -474,6 +474,16 @@
     "purpose": "Grid of partner or customer logos with optional rotation — always set columns",
     "tags": ["marketing", "social-proof"],
     "pairsWith": ["Grid", "Logo"]
+  },
+  "LogoSpinner": {
+    "purpose": "Once UI mark loader, for AI and brand loading states",
+    "tags": ["feedback", "chat", "ai"],
+    "pairsWith": ["WorkingIndicator", "Text"]
+  },
+  "Mascot": {
+    "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
+    "tags": ["ai", "chat", "decoration"],
+    "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
@@ -973,9 +983,19 @@
     "tags": ["accessibility"],
     "pairsWith": ["Button", "SmartLink"]
   },
+  "VoiceVisualizer": {
+    "purpose": "Voice chat orb or bars for idle, listening, thinking, speaking; follows audio level",
+    "tags": ["chat", "ai", "media"],
+    "pairsWith": ["WorkingIndicator", "ChatComposer"]
+  },
   "WeatherFx": {
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "WorkingIndicator": {
+    "purpose": "AI working line: mark loader plus cycling verbs (Imagining…)",
+    "tags": ["chat", "feedback", "ai"],
+    "pairsWith": ["ChatMessageList", "LogoSpinner"]
   }
 }

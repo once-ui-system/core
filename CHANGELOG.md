@@ -13,6 +13,178 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-10-20
+
+### Added
+
+- **`"auto"` on every margin prop.** `marginLeft="auto"` pushes an item to the end of its
+  row and `marginX="auto"` centres a block, on Flex, Row, Column, Grid, Text and Heading
+  and in breakpoint objects (`s={{ marginLeft: "0" }}` undoes it). Margins took tokens
+  and numbers only, so this was a type error agents hit in 3 benchmark first attempts,
+  one of them in the 2.1.0 claim run. Foundations adds the `.m-auto`…`.ml-auto` classes
+  and their breakpoint variants; padding and gap have no `auto`.
+
+- **`onSelect` on `UserMenu`.** Called with the `value` of the Option picked from
+  `dropdown`, by click or keyboard: DropdownWrapper's `onSelect`, passed through, so a
+  menu of actions needs no `onClick` on every Option.
+
+- **Validator rules for the type errors agents still make.** `validate-ai-code` now
+  names the fix where tsc only names the rejected prop: CSS alignment names
+  (`horizontal="space-between"`, `"flex-start"`) and a bare `between` on Row or Column
+  (`--fix` rewrites both), `vertical="baseline"`; `href`, `type` and `span` on a layout
+  primitive and `as="form"` with a form-typed handler (use `Card href`, `Card onClick`,
+  `gridColumn`, a native `<form>`); `mobileDirection`-style names and a breakpoint
+  object on a component that takes none (`Button s={{ fillWidth }}`). Over the
+  benchmark transcripts it flags 25 of the 76 Once UI attempts that failed typecheck,
+  and 1 of 185 that passed.
+- **`semantics="radio"` on `SegmentedControl` and `ThemeSwitcher`.** For a choice
+  among settings rather than a view switch: a `radiogroup` of `radio`s with one tab
+  stop, where the arrow keys move and choose. The defaults (`"tabs"`, `"toggle"`)
+  are unchanged.
+- **`labels` on `OTPInput` and `TagInput`, `interactive` on `Chip`, `pauseLabel` and
+  `playLabel` on `Carousel`'s `play`.** The new names and announcements below can be
+  translated. `<Chip interactive={false} onRemove>` makes the label plain text, for a
+  chip whose one action is its removal.
+- **Search, filters and a toolbar on `DataTable`.** `searchable` adds a 32px search
+  field, and a column's `filter: { options }` adds a select beside it; `toolbar` takes
+  your own controls. Both work on DataTable's state or yours (`search`, `filters` and
+  their change handlers). On the client DataTable filters the rows itself; with `count`
+  or `total` it only reports, and `onQueryChange` hands a server table its page, page
+  size, sort, search and filters in one call per change. A query that matches nothing
+  now shows "No results" with a clear button, not "No data available".
+- **Responsive and user-picked columns on `DataTable`, and `hide` on `Table` headers.**
+  `hide: { s: true }` drops a column at a breakpoint and below with CSS, so the server
+  render is already right; tables no longer have to overflow sideways on a phone or
+  wait for JavaScript to hide a column. `columnsMenu` lets readers show and hide
+  columns, and `columnVisibility` lets the app save that choice.
+- **`keepRowsWhileLoading` on `DataTable`.** While a server table loads the next page
+  or search, the last rows stay on screen, dimmed, instead of flashing skeleton rows on
+  every keystroke.
+
+- **Scales per theme: `brandScale={{ light: { … }, dark: { … } }}`.** One ramp served
+  both themes, so an accent tuned for dark (a lime that glows on near-black) read wrong
+  on light, and fixing it took CSS. The flat shape still applies to both; a theme left
+  out uses the other's. `ThemeInit` renders both on the server, keyed off `data-theme`,
+  and a `theme="dark"` subtree gets the dark ramp. Same for `accentScale` and
+  `neutralScale`.
+- **`pageBackground` and `surfaceBackground` in `once-ui.config` `style`.** The light
+  page (off-white) and the filled surface (white) could only change through selector
+  overrides. Each takes a token or any CSS colour, once or `{ light, dark }`, and
+  `ThemeInit` renders it before the first paint.
+- **A weight per font family: `--font-body-weight-strong` and friends.** `.font-strong`
+  and the other weight classes read `--font-weight-display-*` on every family, so bolder
+  body text also changed headlines and labels. `--font-<family>-weight-<weight>` (for
+  `heading`, `body`, `label`, `code`) now changes only that family; unset, each still
+  falls back to the display weight, so nothing renders differently.
+
+- **`Tag` and `Badge` inside a sentence: `as="span"`.** Both rendered divs, which are not
+  allowed in a `<p>`, so a status tag in body copy was invalid HTML and hydration
+  warnings. With `as="span"` every element in them (the Badge arrow included) is a span
+  and they flow inline. The default is still the div, unchanged.
+- **`StatusIndicator` takes theme roles and every palette.** `color` adds `brand`,
+  `accent`, `neutral`, `info`, `danger`, `warning` and `success`, which follow the theme's
+  scheme for that role, plus `rose`, `mint`, `dusk`, `sand` and `slate`. The existing
+  names paint as before.
+- **`NavItem` `badge` takes text.** `badge="New"` prints as given and is read as its text;
+  a number is still a count that hides at 0, prints `9+` above 9 and reads "12 unread".
+- **`titleVariant` on `Accordion` and `AccordionGroup`, and `radius="none"` on
+  `Accordion`.** The title was fixed in `heading-strong-s`, so a FAQ in body type needed a
+  wrapper per title; the default is unchanged.
+- **`text` on `Logo`: a text wordmark.** For a brand with no wordmark file, the name is set
+  in the heading font at the logo's size, after the icon, and names the link. `wordmark`
+  stays an image source.
+- **`toolbar`, `hint` and `sendIcon` on `ChatComposer`: a row of controls under the
+  field.** Chips, a model picker or attachments go on the left after the attach button,
+  a hint such as "Enter to send" and the send button on the right, and `sendIcon` swaps
+  the paper plane. Two agents rebuilding the same assistant app both hand-built this
+  around the composer. Without the new props the composer renders exactly as before.
+- **`scroll={false}` and option `description` on `SegmentedControl`.** In a narrow
+  sidebar the scroll strip clipped the last option behind its Next button; without it the
+  options share the row equally and truncate a label that does not fit. `description`
+  adds a second, dimmer line under an option's label.
+- **`suffixIcon` on `Chip`**, the counterpart of `prefixIcon`, for a chevron on a chip
+  that opens a menu.
+- **AI working states: `WorkingIndicator` and `LogoSpinner`.** `LogoSpinner` is a loader
+  drawn from the Once UI mark: the four tiles part, turn a quarter and click back
+  (`variant="wave"` lifts them one at a time). `WorkingIndicator` puts it next to a verb
+  that changes every few seconds ("Imagining…", "Noodling…", "Kerning…"), with an
+  optional elapsed count and hint. The words are yours to replace through `verbs`, or
+  extend from the exported `workingVerbs`. Both take the brand color, so they follow a
+  chat theme, and both keep signalling under reduced motion without moving.
+- **Voice chat animation: `VoiceVisualizer` and `useAudioLevel`.** An orb (or a compact
+  bar meter) with its own motion for idle, listening, thinking and speaking. Hand it a
+  microphone `MediaStream`, the reply's `<audio>` element or an `AnalyserNode` and it
+  follows the real sound, written to CSS variables each frame so React never re-renders;
+  or pass a `level` your voice SDK already gives you. `useAudioLevel(source)` returns the
+  same 0–1 loudness for your own visuals. Under reduced motion the stand-in animations
+  stop and live audio shows as glow and bar height.
+- **A mascot for assistants: `Mascot` and `mascotLook`.** One soft, single-color shape with
+  eyes that idles, listens, thinks, speaks and sleeps, with eight moods on top (happy,
+  surprised, sad, skeptical, wink, focused, determined). By default the eyes are tiles of
+  the Once UI mark, and while it thinks they turn like `LogoSpinner`. Eyes follow the
+  pointer across a body that reads as round, lids shape each expression, and speaking
+  moves the body (and mouth) with a `level` or the reply's audio `source`. Every part of
+  the look is a prop: color, outline (`roundness`, `aspect`, `bodyPath`), `surface`, eye
+  shape, size and placement, `mouth`, `brows`, `cheeks`, an SVG `accessory` and a
+  `personality`; `seed` (or `mascotLook(seed)`) picks a whole look so each product gets
+  its own character. Under reduced motion it holds still and keeps its expressions.
+
+### Fixed
+
+- **A labelled `TagInput` with tags no longer draws its label over the first tag.** The
+  resting label sat at half the field's height, and the tags make the field taller; the
+  label now floats above while there are tags, as it does once there is text.
+- **Chart `data` takes rows typed with an `interface`, and `readonly` arrays.**
+  `DataPoint[]` has an index signature, which an interface never satisfies, so
+  `data={revenue}` with `revenue: RevenuePoint[]` failed to compile (2 of the 7
+  first-attempt type errors in the 2.1.0 claim run). Every chart reads the rows by key
+  as before.
+
+- **Avatar's `statusIndicator` takes every StatusIndicator colour.** The dot is a
+  StatusIndicator, but `color` named only green, yellow, red and gray, so
+  `{ color: "orange" }` for "away" failed to compile and would have rendered fine.
+
+- **DateRangeInput and DateRangePicker take a `value` with either end left out.**
+  `{}` is no range and `{ startDate }` a range still being picked, so the
+  `{ startDate?: Date; endDate?: Date }` state apps write type-checks. `onChange` still
+  hands back both keys.
+- **`StylePanel`'s rows are radio groups.** Each row of swatches or segments is a
+  `radiogroup` named by the row's label, its options `radio`s: one Tab stop per row
+  instead of one per swatch (over forty in the colour rows), and the arrow keys move
+  and choose. The segmented rows were tab lists with no panels. Looks and `labels`
+  are unchanged.
+- **`OTPInput` reads as one code.** The boxes are a `group` named "One-time code"
+  (or by `aria-label`); the first asks for `autocomplete="one-time-code"`, and a whole
+  code set by autofill fills every box instead of being refused.
+- **`TagInput`'s tags are a list, and Backspace removes the last one.** In an empty
+  field Backspace takes the last tag, and a polite live region says which tag went.
+  A tag's label is no longer a focusable "pressed" toggle that did nothing, and
+  removing a tag puts focus back in the field rather than on the page.
+- **`HoverCard`'s links and buttons can be reached from the keyboard.** The card is
+  in a portal at the end of the page, so Tab from its trigger skipped it, and blurring
+  the trigger closed it. While it is open, Tab now goes from the trigger into the card
+  and on to what follows the trigger; focus moving between the two keeps it open, and
+  Escape from inside the card returns focus to the trigger. The trigger is marked
+  `aria-expanded`/`aria-controls` (or `aria-describedby` for a card of text). Only
+  keyboard focus opens it; the pointer behaves as before.
+- **`Carousel` autoplay can always be stopped (WCAG 2.2.2).** `play={{ auto: true }}`
+  had no pause button and an interval of 0: each `play` field now has its own default
+  (`interval` 3000, `controls` on unless `false`). Autoplay holds while the pointer is
+  over the carousel, stops when keyboard focus comes in (the button then offers Play),
+  and does not start under reduced motion. The
+  carousel is a named group with `aria-roledescription="carousel"`, each slide a
+  "slide" ("2 of 5"), and slide changes are announced politely only while it is not
+  moving on its own.
+- **Text in a `theme="dark"` (or `data-theme`) subtree follows the subtree's theme.**
+  The default text colour was resolved once on `<html>` and inherited, so a dark hero on
+  a light page kept dark text unless every `Text` set `onBackground`. An element with
+  `data-theme` now reads `--neutral-on-background-strong` again, at zero specificity, so
+  colour classes still win. Pages without a themed subtree are unchanged.
+
+- **`Kbd` no longer wraps.** "Ctrl K" in an `Input` suffix broke onto two lines, stood
+  38px tall and stretched a 32px field to 40px. A key cap now stays on one line and keeps
+  its width in a tight row.
+
 ## [2.3.0] — 2026-10-19
 
 ### Added

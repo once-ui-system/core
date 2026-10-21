@@ -50,7 +50,7 @@ function Host({
   );
 }
 
-const customBrand = () => screen.getByRole("button", { name: "Brand colour: custom" });
+const customBrand = () => screen.getByRole("radio", { name: "Brand colour: custom" });
 const brandField = () => screen.getByLabelText("Custom brand colour") as HTMLInputElement;
 /** The decorative face inside a swatch. */
 const face = (swatch: HTMLElement) => swatch.querySelector('[class*="swatch"]') as HTMLElement;
@@ -58,14 +58,14 @@ const face = (swatch: HTMLElement) => swatch.querySelector('[class*="swatch"]') 
 describe("StylePanel custom colour", () => {
   it("is not offered unless the host opts in", () => {
     render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
-    expect(screen.queryByRole("button", { name: "Brand colour: custom" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Accent colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Accent colour: custom" })).toBeNull();
   });
 
   it("is not offered when bound to ThemeProvider, which takes no seed", () => {
     render(<StylePanel customColors />, { wrapper });
-    expect(screen.queryByRole("button", { name: "Brand colour: custom" })).toBeNull();
-    expect(screen.queryByRole("button", { name: "Accent colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Accent colour: custom" })).toBeNull();
 
     render(
       <StylePanel.Root>
@@ -73,12 +73,12 @@ describe("StylePanel custom colour", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    expect(screen.queryByRole("button", { name: "Brand colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
   });
 
   it("ends the Brand and Accent swatches, and only those", () => {
     render(<Host />, { wrapper });
-    const names = screen.getAllByRole("button").map((b) => b.getAttribute("aria-label"));
+    const names = screen.getAllByRole("radio").map((b) => b.getAttribute("aria-label"));
     expect(names[names.indexOf("Brand colour: cyan") + 1]).toBe("Brand colour: custom");
     expect(names[names.indexOf("Accent colour: cyan") + 1]).toBe("Accent colour: custom");
     expect(names.filter((name) => name?.endsWith(": custom"))).toHaveLength(2);
@@ -100,15 +100,15 @@ describe("StylePanel custom colour", () => {
     const onChange = vi.fn();
     render(<Host initial={{ brand: "blue" }} onChange={onChange} />, { wrapper });
 
-    expect(customBrand()).toHaveAttribute("aria-pressed", "false");
+    expect(customBrand()).toHaveAttribute("aria-checked", "false");
     await user.click(customBrand());
     expect(onChange).toHaveBeenLastCalledWith(
       { brand: "custom", brandSeed: "#5a93fc" },
       { brand: "custom", brandSeed: "#5a93fc" },
     );
-    expect(customBrand()).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("button", { name: "Brand colour: blue" })).toHaveAttribute(
-      "aria-pressed",
+    expect(customBrand()).toHaveAttribute("aria-checked", "true");
+    expect(screen.getByRole("radio", { name: "Brand colour: blue" })).toHaveAttribute(
+      "aria-checked",
       "false",
     );
   });
@@ -119,7 +119,7 @@ describe("StylePanel custom colour", () => {
     render(<Host initial={{ brand: "red", accentSeed: "#00aa55" }} onChange={onChange} />, {
       wrapper,
     });
-    await user.click(screen.getByRole("button", { name: "Accent colour: custom" }));
+    await user.click(screen.getByRole("radio", { name: "Accent colour: custom" }));
     expect(onChange).toHaveBeenLastCalledWith(
       { brand: "red", accent: "custom", accentSeed: "#00aa55" },
       { accent: "custom", accentSeed: "#00aa55" },
@@ -131,7 +131,7 @@ describe("StylePanel custom colour", () => {
     const onChange = vi.fn();
     render(<Host onChange={onChange} />, { wrapper });
 
-    screen.getByRole("button", { name: "Brand colour: red" }).focus();
+    screen.getByRole("radio", { name: "Brand colour: red" }).focus();
     await user.keyboard("{Enter}");
     expect(onChange).toHaveBeenLastCalledWith({ brand: "red" }, { brand: "red" });
 
@@ -169,7 +169,7 @@ describe("StylePanel custom colour", () => {
     render(<Host initial={{ brand: "custom", brandSeed: "#336699" }} onChange={onChange} />, {
       wrapper,
     });
-    await user.click(screen.getByRole("button", { name: "Brand colour: green" }));
+    await user.click(screen.getByRole("radio", { name: "Brand colour: green" }));
     expect(onChange).toHaveBeenLastCalledWith(
       { brand: "green", brandSeed: "#336699" },
       { brand: "green" },
@@ -214,11 +214,11 @@ describe("StylePanel custom colour", () => {
       wrapper,
     });
 
-    expect(screen.getByRole("button", { name: "Eigene Markenfarbe" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "Eigene Markenfarbe" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
-    expect(screen.getByRole("button", { name: "Eigene Akzentfarbe" })).toBeInTheDocument();
+    expect(screen.getByRole("radio", { name: "Eigene Akzentfarbe" })).toBeInTheDocument();
     const field = screen.getByLabelText("Markenfarbe wählen");
     const hint = screen.getByText("#eeeeee ist zu hell für weißen Text (brand)");
     expect(field.getAttribute("aria-describedby")).toContain(hint.id);
@@ -237,9 +237,9 @@ describe("StylePanel custom colour", () => {
       </StylePanel.Root>,
       { wrapper },
     );
-    expect(screen.queryByRole("button", { name: "Brand colour: custom" })).toBeNull();
+    expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
     expect(screen.getByText("Highlight")).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "Accent colour: custom" }));
+    await user.click(screen.getByRole("radio", { name: "Accent colour: custom" }));
     expect(onChange).toHaveBeenLastCalledWith(
       { accent: "custom", accentSeed: "#5a93fc" },
       { accent: "custom", accentSeed: "#5a93fc" },
@@ -263,8 +263,8 @@ describe("StylePanel custom colour", () => {
     );
     expect(screen.getByLabelText("Eigene Farbe wählen (brand)")).toBeInTheDocument();
     expect(screen.getByText("Zu hell: #eeeeee")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Eigene Farbe (brand)" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "Eigene Farbe (brand)" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
     await expectNoAxeViolations(container);
@@ -279,16 +279,16 @@ describe("StylePanel controlled Theme row", () => {
     document.documentElement.setAttribute("data-theme", "light");
     render(<Host initial={{ theme: "dark" }} onChange={onChange} />, { wrapper });
 
-    const dark = screen.getByRole("button", { name: "Dark theme" });
-    const light = screen.getByRole("button", { name: "Light theme" });
-    expect(dark).toHaveAttribute("aria-pressed", "true");
+    const dark = screen.getByRole("radio", { name: "Dark theme" });
+    const light = screen.getByRole("radio", { name: "Light theme" });
+    expect(dark).toHaveAttribute("aria-checked", "true");
 
     await user.click(light);
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ theme: "light" }), {
       theme: "light",
     });
-    expect(light).toHaveAttribute("aria-pressed", "true");
-    expect(dark).toHaveAttribute("aria-pressed", "false");
+    expect(light).toHaveAttribute("aria-checked", "true");
+    expect(dark).toHaveAttribute("aria-checked", "false");
 
     await user.click(dark);
     expect(onChange).toHaveBeenLastCalledWith(expect.objectContaining({ theme: "dark" }), {
@@ -300,8 +300,8 @@ describe("StylePanel controlled Theme row", () => {
 
   it("treats an unset theme as the system one", () => {
     render(<StylePanel value={{}} onChange={vi.fn()} />, { wrapper });
-    expect(screen.getByRole("button", { name: "System theme" })).toHaveAttribute(
-      "aria-pressed",
+    expect(screen.getByRole("radio", { name: "System theme" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
   });

@@ -5,6 +5,7 @@ import {
   Column,
   DataTable,
   type DataTableColumn,
+  type DataTableQuery,
   type DataTableSort,
   Row,
   Tag,
@@ -97,8 +98,13 @@ export function DataTableSelectionExample() {
 }
 
 /** Stands in for an API: sorts and slices on the "server", after a delay. */
-function fetchInvoices(page: number, perPage: number, sort: DataTableSort | null) {
-  const sorted = [...INVOICES];
+function fetchInvoices(
+  page: number,
+  perPage: number,
+  sort: DataTableSort | null,
+  source: Invoice[] = INVOICES,
+) {
+  const sorted = [...source];
   if (sort) {
     const key = sort.key as keyof Invoice;
     sorted.sort((a, b) => {
@@ -147,6 +153,98 @@ export function DataTableServerExample() {
       sort={sort}
       onSortChange={setSort}
       loading={loading}
+    />
+  );
+}
+
+const STATUS_OPTIONS = [
+  { value: "paid", label: "Paid" },
+  { value: "pending", label: "Pending" },
+  { value: "overdue", label: "Overdue" },
+];
+
+// The same columns, with a status filter, and the less important columns
+// dropping out on narrow screens.
+const toolbarColumns: DataTableColumn<Invoice>[] = columns.map((column) =>
+  column.key === "status"
+    ? { ...column, filter: { options: STATUS_OPTIONS } }
+    : column.key === "issued"
+      ? { ...column, hide: { s: true } }
+      : column.key === "customer"
+        ? { ...column, hide: { xs: true } }
+        : column,
+);
+
+export function DataTableToolbarExample() {
+  return (
+    <DataTable
+      aria-label="Filterable invoices"
+      columns={toolbarColumns}
+      rows={INVOICES}
+      searchable
+      columnsMenu
+      toolbar={
+        <Button size="s" variant="secondary" prefixIcon="download">
+          Export
+        </Button>
+      }
+      paginated
+      defaultPerPage={5}
+    />
+  );
+}
+
+/** Stands in for an API that searches and filters as well. */
+function queryInvoices({ page, perPage, sort, search, filters }: DataTableQuery) {
+  const query = search.trim().toLowerCase();
+  const status = filters.status;
+  const matching = INVOICES.filter(
+    (invoice) =>
+      (!query || `${invoice.id} ${invoice.customer}`.toLowerCase().includes(query)) &&
+      (!status || invoice.status === status),
+  );
+  return fetchInvoices(page, perPage, sort, matching);
+}
+
+export function DataTableServerQueryExample() {
+  const [query, setQuery] = useState<DataTableQuery>({
+    page: 1,
+    perPage: 5,
+    sort: null,
+    search: "",
+    filters: {},
+  });
+  const [data, setData] = useState<{ rows: Invoice[]; count: number }>({ rows: [], count: 0 });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let current = true;
+    setLoading(true);
+    queryInvoices(query).then((result) => {
+      if (!current) return;
+      setData(result);
+      setLoading(false);
+    });
+    return () => {
+      current = false;
+    };
+  }, [query]);
+
+  return (
+    <DataTable
+      aria-label="Server-searched invoices"
+      columns={toolbarColumns}
+      rows={data.rows}
+      count={data.count}
+      page={query.page}
+      perPage={query.perPage}
+      sort={query.sort}
+      search={query.search}
+      filters={query.filters}
+      onQueryChange={setQuery}
+      searchable
+      loading={loading}
+      keepRowsWhileLoading
     />
   );
 }

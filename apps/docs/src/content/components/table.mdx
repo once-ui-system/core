@@ -94,6 +94,10 @@ Enable sorting per column by setting `sortable: true` on the corresponding heade
   ]}
 />
 
+A header's `hide` drops its column, header and cells, at a breakpoint and below,
+such as `{ key: "email", content: "Email", hide: { s: true } }`. It is CSS, so it
+is right in the server render too.
+
 ## Row actions
 
 Add `onRowClick` to make rows interactive. A hover state is applied automatically.
@@ -275,6 +279,20 @@ Use `loading` to show a spinner while data is fetched. Provide `emptyState` or `
     ["maxHeight", "string"],
     ["className"],
     ["style"]
+  ]}
+/>
+
+### TableHeader
+
+<PropsTable
+  label="Field"
+  content={[
+    ["key", "string", "-", "The column's id, and what a sort is by.", true],
+    ["content", "React.ReactNode", "-", "The header cell's content.", true],
+    ["sortable", "boolean", "false", "Let the reader sort by this column."],
+    ["width", "string", "-", "A CSS width for the column."],
+    ["align", ["left", "center", "right"], "left", "Aligns the header and the cells."],
+    ["hide", "Partial<Record<\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\", boolean>>", "-", "Hide the column at a breakpoint and below."],
   ]}
 />
 

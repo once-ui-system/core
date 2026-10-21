@@ -13,6 +13,11 @@ import styles from "./UserMenu.module.scss";
 interface UserMenuProps
   extends UserProps,
     Pick<DropdownWrapperProps, "minHeight" | "minWidth" | "maxWidth"> {
+  /**
+   * Called with an Option's `value` when it is picked from `dropdown`, as on
+   * DropdownWrapper, which this forwards it to.
+   */
+  onSelect?: (value: string) => void;
   selected?: boolean;
   placement?: Placement;
   dropdown?: React.ReactNode;
@@ -50,6 +55,7 @@ const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
       maxWidth,
       minHeight,
       placement,
+      onSelect,
       className,
       style,
       loading,
@@ -65,6 +71,7 @@ const UserMenu = forwardRef<HTMLDivElement, UserMenuProps>(
         maxWidth={maxWidth}
         minHeight={minHeight}
         placement={placement}
+        onSelect={onSelect}
         disableTriggerClick={loading}
         style={{
           borderRadius: "var(--radius-full)",

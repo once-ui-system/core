@@ -133,7 +133,7 @@ const Heading: HeadingComponent = forwardRef(function Heading<T extends ElementT
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, value: SpacingToken | number | undefined) => {
+  const generateClassName = (prefix: string, value: SpacingToken | number | "auto" | undefined) => {
     return typeof value === "string" ? `${prefix}-${value}` : undefined;
   };
 
