@@ -16,6 +16,12 @@
   }
 }
 
+/* A follow-up in a stack sits 4px under the message above it, not a full gap. */
+.list > [data-stack="middle"],
+.list > [data-stack="end"] {
+  margin-top: calc(var(--static-space-4) - var(--chat-gap, var(--static-space-16)));
+}
+
 /* ChatMessage */
 .message {
   position: relative;
@@ -50,6 +56,39 @@
 
 .hidden {
   visibility: hidden;
+}
+
+/* A stack: the corners on the author's side round less where two bubbles
+ * meet, so a quick run of messages reads as one block. Only a bubble has
+ * corners; a plain row has none to change. */
+.message[data-from="other"] {
+  &[data-stack="start"] .bubble {
+    border-bottom-left-radius: var(--radius-xs);
+  }
+
+  &[data-stack="middle"] .bubble {
+    border-top-left-radius: var(--radius-xs);
+    border-bottom-left-radius: var(--radius-xs);
+  }
+
+  &[data-stack="end"] .bubble {
+    border-top-left-radius: var(--radius-xs);
+  }
+}
+
+.message[data-from="self"] {
+  &[data-stack="start"] .bubble {
+    border-bottom-right-radius: var(--radius-xs);
+  }
+
+  &[data-stack="middle"] .bubble {
+    border-top-right-radius: var(--radius-xs);
+    border-bottom-right-radius: var(--radius-xs);
+  }
+
+  &[data-stack="end"] .bubble {
+    border-top-right-radius: var(--radius-xs);
+  }
 }
 
 .actions {
@@ -127,6 +166,25 @@
 .attachment {
   max-width: 16rem;
   min-width: 0;
+}
+
+.imagePreview {
+  position: relative;
+  width: 4rem;
+  height: 4rem;
+  flex-shrink: 0;
+}
+
+.imagePreviewImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.imagePreviewRemove {
+  position: absolute;
+  top: var(--static-space-4);
+  right: var(--static-space-4);
 }
 
 /* ConversationItem */

@@ -52,23 +52,19 @@ export function ChatConversationExample() {
 
   return (
     <Column fillWidth height={28} border="neutral-alpha-weak" radius="l" overflow="hidden">
-      <ChatMessageList ariaLabel="Chat with Lorant">
-        {messages.map((message, index) => {
-          const grouped = index > 0 && messages[index - 1].from === message.from;
-          return (
-            <ChatMessage
-              key={message.id}
-              from={message.from}
-              name={message.from === "other" ? "Lorant" : undefined}
-              avatarProps={message.from === "other" ? { src: "/images/avatar.jpg" } : undefined}
-              grouped={grouped}
-              time={message.time}
-              status={message.from === "self" ? "read" : undefined}
-            >
-              {message.text}
-            </ChatMessage>
-          );
-        })}
+      <ChatMessageList ariaLabel="Chat with Lorant" stack>
+        {messages.map((message) => (
+          <ChatMessage
+            key={message.id}
+            from={message.from}
+            name={message.from === "other" ? "Lorant" : undefined}
+            avatarProps={message.from === "other" ? { src: "/images/avatar.jpg" } : undefined}
+            time={message.time}
+            status={message.from === "self" ? "read" : undefined}
+          >
+            {message.text}
+          </ChatMessage>
+        ))}
         {typing && <TypingIndicator ariaLabel="Lorant is typing" marginLeft="48" />}
       </ChatMessageList>
       <Column paddingX="12" paddingBottom="12">

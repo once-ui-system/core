@@ -10,7 +10,7 @@ import { Icon } from "../../components/Icon";
 import { Row } from "../../components/Row";
 import { Text } from "../../components/Text";
 import styles from "./Chat.module.scss";
-import { type ChatTime, renderChatTime } from "./chatTime";
+import { type ChatTime, type ChatTimeFormat, renderChatTime } from "./chatTime";
 
 export type ChatMessageStatus = "sending" | "sent" | "delivered" | "read" | "failed";
 
@@ -33,6 +33,9 @@ export interface ChatMessageProps extends Omit<React.ComponentProps<typeof Row>,
   avatarProps?: AvatarProps;
   /** When it was sent. A `Date` is formatted and rendered as `<time>`. */
   time?: ChatTime;
+  /** How a `Date` in `time` reads: `"clock"` ("8:51 AM", the default) or
+   *  `"relative"` ("now", "2m", "1h", then the date), kept current. */
+  timeFormat?: ChatTimeFormat;
   /** Delivery state, shown next to the time. */
   status?: ChatMessageStatus;
   /** Replaces the status words, for another language. */
@@ -46,6 +49,14 @@ export interface ChatMessageProps extends Omit<React.ComponentProps<typeof Row>,
    * keeps its space but is not drawn, so the bubbles line up.
    */
   grouped?: boolean;
+  /**
+   * Where the message sits in a stack: a quick run of messages from one
+   * author drawn as one block. `"middle"` and `"end"` are follow-ups, as
+   * `grouped`; the bubbles close up and round less where they meet, and only
+   * `"end"` shows the time and status. `ChatMessageList` sets it for you
+   * with `stack`.
+   */
+  stack?: "start" | "middle" | "end";
   /** `"bubble"` draws a tinted bubble; `"plain"` is a flat row, like a team chat. */
   variant?: "bubble" | "plain";
   /** Content under the bubble: images, files, link previews. */
@@ -68,11 +79,13 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
       name,
       avatarProps,
       time,
+      timeFormat = "clock",
       status,
       statusLabels,
       onRetry,
       retryLabel = "Retry",
-      grouped = false,
+      grouped: groupedProp = false,
+      stack,
       variant = "bubble",
       attachments,
       footer,
@@ -86,17 +99,21 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
     const bubble = variant === "bubble";
     const labels = { ...STATUS_LABELS, ...statusLabels };
     const failed = status === "failed";
+    const grouped = groupedProp || stack === "middle" || stack === "end";
+    // Inside a stack the time and status show once, under its last message.
+    // A failed send still shows, on whichever message failed.
+    const showMeta = !stack || stack === "end" || failed;
 
     // A plain row reads like a team chat: the time sits next to the name.
     const timeInHeader = !bubble && name != null && !grouped;
     const timeText = time != null && (
       <Text variant="body-default-xs" onBackground="neutral-weak">
-        {renderChatTime(time)}
+        {renderChatTime(time, false, timeFormat)}
       </Text>
     );
     const showTime = time != null && !timeInHeader;
 
-    const meta = (showTime || status) && (
+    const meta = showMeta && (showTime || status) && (
       <Row gap="4" vertical="center" wrap>
         {showTime && timeText}
         {status && (
@@ -134,6 +151,7 @@ const ChatMessage = forwardRef<HTMLDivElement, ChatMessageProps>(
         vertical="start"
         direction={self && bubble ? "row-reverse" : "row"}
         data-from={from}
+        data-stack={stack}
         className={classNames(styles.message, className)}
         {...flex}
       >

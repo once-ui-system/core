@@ -23,6 +23,19 @@ item (see `ROADMAP.md`, Week 4).
   rendered `<style>`, so two scopes with different brands sit side by side and the first
   paint is right. Recolouring a nested brand, accent, neutral or solid relies on the
   nested-token fix (#282).
+- **Stacked chat messages.** `stack` on `ChatMessageList` draws a quick run of messages
+  from one author as one block: the bubbles close up and round less where they meet, the
+  name and avatar show once, and the time and status show under the last one. Messages
+  stack when they are next to each other with the same `from`, `name` and `variant`, sent
+  within `stackWithin` minutes (5 by default). `ChatMessage` takes the position as `stack`.
+- **`formatRelativeTime` and relative chat times.** `formatRelativeTime(date, { style,
+  locale, now })` words a time as a distance from now in the reader's language through
+  `Intl`: `"narrow"` (the default) is "now", "2m", "1h", "3d", "2w", then the date;
+  `"short"` and `"long"` add "ago". `relativeTimeRefresh` says when the wording next
+  changes. `timeFormat="relative"` on `ChatMessage` uses it and keeps itself current,
+  with the full time on hover.
+- **Image thumbnails in `ChatComposer`.** A picked or pasted image shows as a thumbnail
+  with a remove button; other files keep their chip.
 - **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
   every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
   fields and the blocked sign over disabled controls. The browser draws them from the

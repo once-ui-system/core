@@ -2,9 +2,22 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
+import {
+  Children,
+  cloneElement,
+  forwardRef,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import { Column } from "../../components/Column";
 import styles from "./Chat.module.scss";
+import { ChatMessage, type ChatMessageProps } from "./ChatMessage";
 
 export interface ChatMessageListProps extends React.ComponentProps<typeof Column> {
   /**
@@ -17,6 +30,42 @@ export interface ChatMessageListProps extends React.ComponentProps<typeof Column
   onReachStart?: () => void;
   /** The list's accessible name. */
   ariaLabel?: string;
+  /**
+   * Stack a quick run of messages from one author: the bubbles close up, the
+   * name and avatar show once, and the time and status show under the last
+   * one. Applies to `ChatMessage` children that are next to each other, have
+   * the same `from`, `name` and `variant`, and were sent within `stackWithin`.
+   */
+  stack?: boolean;
+  /** The longest gap, in minutes, between two messages that still stack.
+   *  Only `Date` times are compared; any other time stacks. */
+  stackWithin?: number;
+}
+
+const isMessage = (node: ReactNode): node is ReactElement<ChatMessageProps> =>
+  isValidElement(node) && node.type === ChatMessage;
+
+const joins = (a: ChatMessageProps, b: ChatMessageProps, within: number) =>
+  a.from === b.from &&
+  a.name === b.name &&
+  a.variant === b.variant &&
+  (!(a.time instanceof Date) ||
+    !(b.time instanceof Date) ||
+    Math.abs(b.time.getTime() - a.time.getTime()) <= within * 60_000);
+
+/** Marks each message with its place in a stack, leaving everything else as is. */
+function stackMessages(children: ReactNode, within: number): ReactNode[] {
+  const items = Children.toArray(children);
+  return items.map((item, index) => {
+    if (!isMessage(item) || item.props.stack) return item;
+    const prev = items[index - 1];
+    const next = items[index + 1];
+    const withPrev = isMessage(prev) && joins(prev.props, item.props, within);
+    const withNext = isMessage(next) && joins(item.props, next.props, within);
+    if (!withPrev && !withNext) return item;
+    const stack = withPrev && withNext ? "middle" : withPrev ? "end" : "start";
+    return cloneElement(item, { stack });
+  });
 }
 
 /** How close to an edge, in pixels, still counts as being at it. */
@@ -32,6 +81,8 @@ const ChatMessageList = forwardRef<HTMLDivElement, ChatMessageListProps>(
       stickToBottom = true,
       onReachStart,
       ariaLabel = "Messages",
+      stack = false,
+      stackWithin = 5,
       "aria-label": nativeAriaLabel,
       children,
       className,
@@ -64,6 +115,14 @@ const ChatMessageList = forwardRef<HTMLDivElement, ChatMessageListProps>(
       return () => observer.disconnect();
     }, [stickToBottom, scrollToBottom]);
 
+    // A stacked message closes up to the one above it by pulling back across
+    // the list's gap, whatever `gap` resolved to (a token, a number, a
+    // breakpoint), so the stylesheet reads it from here.
+    useLayoutEffect(() => {
+      const list = listRef.current;
+      if (stack && list) list.style.setProperty("--chat-gap", getComputedStyle(list).rowGap);
+    });
+
     const handleScroll = (event: React.UIEvent<HTMLDivElement>) => {
       const list = event.currentTarget;
       pinned.current = list.scrollHeight - list.scrollTop - list.clientHeight <= EDGE;
@@ -89,7 +148,7 @@ const ChatMessageList = forwardRef<HTMLDivElement, ChatMessageListProps>(
         onScroll={handleScroll}
         {...flex}
       >
-        {children}
+        {stack ? stackMessages(children, stackWithin) : children}
       </Column>
     );
   },
