@@ -127,6 +127,7 @@ export * from "./Tag";
 export * from "./TagInput";
 export * from "./Text";
 export * from "./Textarea";
+export * from "./StyleScope";
 export * from "./ThemeInit";
 export * from "./ThemeSwitcher";
 export * from "./TiltFx";

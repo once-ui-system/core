@@ -850,6 +850,11 @@
     "tags": ["settings", "theme"],
     "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
   },
+  "StyleScope": {
+    "purpose": "One site's or tenant's look inside another page: brand, accent, neutral, seed colour or exact scales, theme, border and fonts for its subtree only",
+    "tags": ["theme", "layout"],
+    "pairsWith": ["ThemeProvider", "Column"]
+  },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
     "tags": ["form", "action"],
