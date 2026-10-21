@@ -31,7 +31,7 @@ export function Avatar({ size = "m", value, src, loading, statusIndicator, style
   const px = typeof size === "number" ? size * theme.rem : (SIZES[size] / 16) * theme.rem;
   const textSize = typeof size === "number" ? "m" : TEXT[size];
 
-  if (loading) return <Skeleton shape="circle" width={px} height={px} style={style} />;
+  if (loading) return <Skeleton shape="circle" style={[{ width: px, height: px }, style]} />;
 
   return (
     <View

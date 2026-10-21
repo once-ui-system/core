@@ -74,7 +74,7 @@
 
 .progressTrack {
   height: 0.1875rem;
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   transition: height var(--transition-micro-short);
 
   @media (hover: hover) {

@@ -336,7 +336,7 @@
 
   &:disabled {
     color: var(--neutral-on-background-weak);
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
   }
 
   &:autofill,

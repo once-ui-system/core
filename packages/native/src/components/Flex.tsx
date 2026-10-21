@@ -1,4 +1,4 @@
-import { Children, forwardRef, type ReactNode } from "react";
+import { Children, createContext, forwardRef, type ReactNode } from "react";
 import {
   type DimensionValue,
   type StyleProp,
@@ -23,6 +23,8 @@ type ZIndex = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
 export const BREAKPOINTS = ["xl", "l", "m", "s", "xs"] as const;
 export type Breakpoint = (typeof BREAKPOINTS)[number];
 
+type BorderValue = Colors | "surface" | "transparent" | boolean;
+
 export type SafeAreaEdge = "top" | "right" | "bottom" | "left";
 
 /**
@@ -37,10 +39,32 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "poin
   wrap?: boolean;
   flex?: number;
   background?: Colors | "surface" | "page" | "overlay" | "transparent";
-  border?: Colors | "surface" | "transparent";
+  /** `true` draws core's default border, `neutral-alpha-weak`. */
+  border?: BorderValue;
+  /**
+   * One side (or `X` = left and right, `Y` = top and bottom), as in core: a
+   * bottom tab bar's `borderTop`, a sticky header's `borderBottom`. With any
+   * of these set, only those sides are drawn, in their own colour, falling
+   * back to `border`'s.
+   */
+  borderTop?: BorderValue;
+  borderRight?: BorderValue;
+  borderBottom?: BorderValue;
+  borderLeft?: BorderValue;
+  borderX?: BorderValue;
+  borderY?: BorderValue;
   borderStyle?: "solid" | "dashed";
   borderWidth?: 1 | 2 | 4 | 8;
   radius?: RadiusSize;
+  /** One side's or one corner's radius, as core's; wins over `radius` there. */
+  topRadius?: RadiusSize;
+  rightRadius?: RadiusSize;
+  bottomRadius?: RadiusSize;
+  leftRadius?: RadiusSize;
+  topLeftRadius?: RadiusSize;
+  topRightRadius?: RadiusSize;
+  bottomLeftRadius?: RadiusSize;
+  bottomRightRadius?: RadiusSize;
   shadow?: ShadowSize;
   /** As on the web, `radius` alone does not clip children: pass `overflow="hidden"`. */
   overflow?: "visible" | "hidden" | "scroll";
@@ -94,7 +118,7 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "poin
 
 /**
  * The keys of core's `FlexBreakpointProps` that have a native equivalent.
- * Core's `solid`, `borderTop`…`borderY`, `onBackground`, `onSolid`, `align`,
+ * Core's `solid`, `onBackground`, `onSolid`, `align`,
  * the `text*` props, `transition`, `scrollbar`, `overflowX` and `overflowY`
  * are left out, as they are on the base props.
  */
@@ -126,9 +150,23 @@ export type FlexBreakpointProps = Pick<
   | "aspectRatio"
   | "background"
   | "border"
+  | "borderTop"
+  | "borderRight"
+  | "borderBottom"
+  | "borderLeft"
+  | "borderX"
+  | "borderY"
   | "borderStyle"
   | "borderWidth"
   | "radius"
+  | "topRadius"
+  | "rightRadius"
+  | "bottomRadius"
+  | "leftRadius"
+  | "topLeftRadius"
+  | "topRightRadius"
+  | "bottomLeftRadius"
+  | "bottomRightRadius"
   | "shadow"
   | "opacity"
   | "zIndex"
@@ -160,6 +198,12 @@ const ALIGN: Record<Alignment, ViewStyle["alignItems"]> = {
   even: "stretch",
   stretch: "stretch",
 };
+
+export function borderColor(theme: OnceTheme, value: BorderValue): string {
+  return theme.border(
+    value === true ? "neutral-alpha-weak" : (value as Colors | "surface" | "transparent"),
+  );
+}
 
 function size(theme: OnceTheme, value: Size | undefined): DimensionValue | undefined {
   if (value === undefined) return undefined;
@@ -207,9 +251,23 @@ export function flexStyle(
     flex,
     background,
     border,
+    borderTop,
+    borderRight,
+    borderBottom,
+    borderLeft,
+    borderX,
+    borderY,
     borderStyle,
     borderWidth,
     radius,
+    topRadius,
+    rightRadius,
+    bottomRadius,
+    leftRadius,
+    topLeftRadius,
+    topRightRadius,
+    bottomLeftRadius,
+    bottomRightRadius,
     shadow,
     overflow,
     width,
@@ -261,13 +319,42 @@ export function flexStyle(
   if (wrap) style.flexWrap = "wrap";
   if (flex !== undefined) style.flex = flex;
   if (background) style.backgroundColor = theme.background(background);
-  if (border) {
-    style.borderColor = theme.border(border);
+  const sides = {
+    Top: borderTop ?? borderY,
+    Right: borderRight ?? borderX,
+    Bottom: borderBottom ?? borderY,
+    Left: borderLeft ?? borderX,
+  };
+  const anySide = Object.values(sides).some(Boolean);
+  if (border) style.borderColor = borderColor(theme, border);
+  if (anySide) {
+    // As core's `border-reset`: only the named sides are drawn, one pixel wide.
+    for (const [edge, value] of Object.entries(sides)) {
+      const key = edge as keyof typeof sides;
+      style[`border${key}Width`] = value ? 1 : 0;
+      if (typeof value === "string") style[`border${key}Color`] = theme.border(value);
+      else if (value && !border) style[`border${key}Color`] = borderColor(theme, true);
+    }
+    style.borderStyle = borderStyle ?? "solid";
+  } else if (border) {
     style.borderWidth = borderWidth ?? 1;
     style.borderStyle = borderStyle ?? "solid";
   }
   // Clipping only on request: on iOS `overflow: hidden` also hides the view's own shadow.
   if (radius) style.borderRadius = theme.radius(radius);
+  // A corner takes its own prop, then its side's (top/bottom before left/right), as core's classes.
+  const corner = (own?: RadiusSize, vertical?: RadiusSize, horizontal?: RadiusSize) => {
+    const size = own ?? vertical ?? horizontal;
+    return size ? theme.radius(size) : undefined;
+  };
+  const tl = corner(topLeftRadius, topRadius, leftRadius);
+  const tr = corner(topRightRadius, topRadius, rightRadius);
+  const bl = corner(bottomLeftRadius, bottomRadius, leftRadius);
+  const br = corner(bottomRightRadius, bottomRadius, rightRadius);
+  if (tl !== undefined) style.borderTopLeftRadius = tl;
+  if (tr !== undefined) style.borderTopRightRadius = tr;
+  if (bl !== undefined) style.borderBottomLeftRadius = bl;
+  if (br !== undefined) style.borderBottomRightRadius = br;
   if (overflow) style.overflow = overflow;
   if (shadow) Object.assign(style, theme.shadow(shadow));
   if (fill || fillWidth || maxWidth !== undefined) style.width = "100%";
@@ -321,6 +408,16 @@ export function wrapText(children: ReactNode): ReactNode {
   );
 }
 
+/**
+ * The main axis of the nearest Flex or Card, so a child can align itself the
+ * way core's CSS would: a `Button` keeps its own width in a column but follows
+ * the row's `vertical` alignment in a row. `null` outside any Flex.
+ */
+export const FlexDirectionContext = createContext<"row" | "column" | null>(null);
+
+export const axisOf = (style: ViewStyle) =>
+  String(style.flexDirection ?? "column").startsWith("row") ? "row" : "column";
+
 /** Core's `Flex`: a row by default, as on the web (React Native's `View` is a column). */
 export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexProps>(
   function Flex(props, ref) {
@@ -329,7 +426,9 @@ export const Flex: RefComponent<FlexProps, ViewRef> = forwardRef<ViewRef, FlexPr
     if (hidden) return null;
     return (
       <View ref={ref} {...rest} style={[style, userStyle]}>
-        {wrapText(props.children)}
+        <FlexDirectionContext.Provider value={axisOf(style)}>
+          {wrapText(props.children)}
+        </FlexDirectionContext.Provider>
       </View>
     );
   },

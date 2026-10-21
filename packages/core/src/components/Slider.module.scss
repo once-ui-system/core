@@ -8,7 +8,7 @@
 
   &.disabled {
     opacity: 0.4;
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
   }
 }
 
@@ -45,7 +45,7 @@
   margin: 0;
 
   &:disabled {
-    cursor: not-allowed;
+    cursor: var(--cursor-disabled, not-allowed);
   }
 }
 

@@ -11,6 +11,7 @@ import type {
   StyleProps,
 } from "../interfaces";
 import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { cursorProps } from "../utils/cursor";
 import {
   BELOW_HEADER,
   hiddenAboveBreakpoints,
@@ -218,6 +219,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       return `${scheme}-${type}-${weight}`;
     };
 
+    const cursorProp = cursorProps(cursor);
+
     let classes = classNames(
       inline ? "display-inline-flex" : "display-flex",
       position && `position-${position}`,
@@ -329,7 +332,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === "string" && `cursor-${cursor}`,
+      cursorProp.className,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
       typeof blur === "string" && `blur-${blur}`,
@@ -505,7 +508,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
-      cursor: typeof cursor === "string" ? cursor : undefined,
+      cursor: cursorProp.style,
       ...numericSpacingStyle({
         padding,
         paddingX,
@@ -542,6 +545,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ref={ref}
         className={classes}
         style={combinedStyle}
+        {...cursorProp.attributes}
         {...rest}
         {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
       >

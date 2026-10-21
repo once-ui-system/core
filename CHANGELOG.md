@@ -13,6 +13,87 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
+  every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
+  fields and the blocked sign over disabled controls. The browser draws them from the
+  stylesheet (`data-cursor`), so they never lag and touch never sees them. `rounded` and
+  `dot` turn light in dark mode. For the whole app, `cursor` in the config's `style` (or on
+  `ThemeProvider`); `ThemeInit` writes it before the first paint. `"system"` turns a preset
+  off below it. Components that point or block (`.cursor-pointer`, `.cursor-not-allowed`,
+  Table rows, Accordion, sliders) read the new `--cursor-pointer` / `--cursor-default` /
+  `--cursor-text` / `--cursor-disabled` properties, so they follow a preset; unset, they are
+  the browser's cursors as before.
+
+### Fixed
+
+- **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
+  of buttons, links and inputs: the native pointer showed beside it, and an input lost its
+  I-beam. It now steps aside wherever the native cursor is back, and over a nested element
+  with a follower of its own. It moves without a React render (it re-rendered on every
+  pointer move), no longer flashes in the top-left corner on entry, sits above dialogs and
+  menus, ignores touch input on hybrid devices, and fades in and out (instantly under
+  reduced motion).
+- **A cursor keyword survives a `style` object.** `Flex`/`Grid` with `style` (or a responsive
+  value that needs the client) dropped `cursor="interactive"` and every other keyword, and a
+  keyword with a class was also written inline, where nothing could restyle it.
+
+## [2.5.0] — 2026-10-21
+
+### Added
+
+- **Animated reactions: `Reactions` and `Reaction`** (Social module). `Reactions` is the
+  row under a post, comment or message: a chip per reaction in use with its count, and an
+  add button that opens every option. Each reaction has its own gesture (a heart beats, a
+  thumbs-up nods, a laugh shakes, fire flickers); a pick plays it, bursts a few copies out
+  of the chip (`effect="float"` lifts one away instead) and rolls the count. One reaction
+  per person by default, several with `multiple`; `value` / `defaultValue` /
+  `onValueChange`. The counts follow the viewer's pick at once and settle on the next
+  `counts` without counting them twice. A reaction can be an app's own image (`src`, such
+  as an animated WebP) with a `motion` of its choice, or drawn by `renderGlyph`. Nothing
+  moves under reduced motion. `Reaction` is one glyph with its gesture, on hover, on a
+  loop or on demand.
+
+- **Apply button in DatePicker's time panel.** "Back to calendar" was the only way out of
+  the time panel and read as going back, not as confirming. Apply calls the new `onApply`
+  with the picked date and time and closes the `DateInput` or `DropdownWrapper` the picker
+  is in; a standalone picker returns to the calendar. Its text is `labels.apply`.
+
+### Fixed
+
+- **DatePicker time panel in a `DropdownWrapper` closed on the stepper chevrons.**
+  DropdownWrapper read any child with a `value` prop as an option and gave it a "pick and
+  close" click handler, which replaced DatePicker's own. Day clicks survived, but the hour
+  and minute chevrons, AM/PM and "Back to calendar" closed the dropdown. Options are now
+  matched by type (`Option`, `data-value`, `role="option"`, a native button). DatePicker
+  also runs a caller's `onClick` next to its own instead of losing its handler to it.
+
+## [2.4.0] — 2026-10-20
+
+### Added
+
+- **`prefix` on `NavItem`.** Any node before the label, such as an `Avatar` on a link to
+  a person or a team. NavItem left out ToggleButton's `prefixIcon` and had only `icon`, an
+  icon name, so a sidebar of people had to pass a hand-built Row as `label`. The prefix
+  sits where the icon would and is hidden from assistive tech, so the link is still named
+  by its label alone.
+
+- **`optimizePackageImports` in the Next.js setup.** The installation page and the agent
+  app starter (`ai/starters/app/next.config.ts`) now set
+  `experimental.optimizePackageImports: ["@once-ui-system/core"]`. Without it, a server
+  component importing from the package root shipped about 110 kB of extra JavaScript on
+  every route of an app migrated to Once UI.
+
+### Fixed
+
+- **The 2.0 codemod no longer hangs on `https://` in JSX text.** In
+  `<Input prefix={<Text>https://</Text>} />` the scanner read `//` as a line comment and
+  swallowed the closing brace, so the Input was skipped; with a second such element later
+  in the file, attribute scanning stopped advancing and the codemod never finished. The
+  shared scanner helpers now skip JSX children as text (so `//`, `/*` and apostrophes in
+  them open nothing) and stop on a value they cannot read instead of looping on it.
+
 ## [2.4.0] — 2026-10-20
 
 ### Added

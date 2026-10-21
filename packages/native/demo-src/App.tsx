@@ -22,9 +22,13 @@ import {
   useTheme,
   useToast,
 } from "../src";
+import { Assistant } from "./Assistant";
+import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
+import { Guests } from "./Guests";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
+import { Shell } from "./Shell";
 import { Stats } from "./Stats";
 
 /** A loyalty-card screen built only from the preview components. */
@@ -134,7 +138,20 @@ export function App({
   screen = "card",
 }: {
   theme: "light" | "dark";
-  screen?: "card" | "order" | "sheet" | "menu" | "stats" | "code";
+  screen?:
+    | "card"
+    | "order"
+    | "sheet"
+    | "menu"
+    | "stats"
+    | "code"
+    | "shell"
+    | "drawer"
+    | "form"
+    | "form-errors"
+    | "calendar"
+    | "table"
+    | "assistant";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -147,6 +164,16 @@ export function App({
           <Stats />
         ) : screen === "code" ? (
           <Code />
+        ) : screen === "table" ? (
+          <Guests />
+        ) : screen === "calendar" ? (
+          <Calendar />
+        ) : screen === "form" || screen === "form-errors" ? (
+          <Booking errors={screen === "form-errors"} />
+        ) : screen === "shell" || screen === "drawer" ? (
+          <Shell drawer={screen === "drawer"} />
+        ) : screen === "assistant" ? (
+          <Assistant />
         ) : (
           <Order sheet={screen === "sheet"} />
         )}

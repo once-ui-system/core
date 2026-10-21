@@ -51,11 +51,13 @@ The DatePicker component provides an interactive calendar interface for selectin
   ]}
 />
 
+With `timePicker`, picking a day opens the time panel. Every change reaches `onChange` as it happens; the panel's **Apply** button confirms the date and time, calls `onApply`, and closes the dropdown the picker is in (a `DateInput`, or your own `DropdownWrapper`).
+
 ## Localization
 
 Pass `locale`, a BCP 47 tag such as `"de"` or `"pt-BR"`, to show month and weekday names, and the time picker's time and AM/PM, in that language. The week starts on the locale's first day, Monday in `"de"`. The names and the week start come from the browser's `Intl` API, so no locale data is bundled. Without `locale` they are in English and the week starts on Sunday.
 
-The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backToCalendar`, `hours`, `minutes`, `am` and `pm` are strings, and `month` and `year` are functions that name the month and year buttons from the value they show (`"Month: March, change month"` by default; keep the value in the name, as it is the button's text). Any label left out stays English, and `am` and `pm` default to the locale's words. `DateInput`, `DateRangePicker` and `DateRangeInput` take the same `labels` and pass them to their calendars.
+The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backToCalendar`, `apply`, `hours`, `minutes`, `am` and `pm` are strings, and `month` and `year` are functions that name the month and year buttons from the value they show (`"Month: March, change month"` by default; keep the value in the name, as it is the button's text). Any label left out stays English, and `am` and `pm` default to the locale's words. `DateInput`, `DateRangePicker` and `DateRangeInput` take the same `labels` and pass them to their calendars.
 
 <CodeBlock
   marginTop="16"
@@ -77,6 +79,7 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
         month: (month) => \`Monat: \${month}, Monat ändern\`,
         year: (year) => \`Jahr: \${year}, Jahr ändern\`,
         backToCalendar: "Zurück zum Kalender",
+        apply: "Übernehmen",
         hours: "Stunden",
         minutes: "Minuten",
     }}
@@ -95,7 +98,8 @@ The picker's own words come from `labels`: `previousMonth`, `nextMonth`, `backTo
     currentMonth: "Current month",
     currentYear: "Current year",
     locale: "Locale for month and weekday names and the time picker's time, such as \"de\". English when left out.",
-    labels: "The picker's own words, for a translated interface: { previousMonth, nextMonth, month, year, backToCalendar, hours, minutes, am, pm }. month and year are functions of the value shown. Omitted fields stay English.",
+    onApply: "Called with the picked date and time when the time panel's Apply button is pressed. Inside a DropdownWrapper or DateInput, Apply also closes the panel; on its own the picker returns to the calendar.",
+    labels: "The picker's own words, for a translated interface: { previousMonth, nextMonth, month, year, backToCalendar, apply, hours, minutes, am, pm }. month and year are functions of the value shown. Omitted fields stay English.",
   }}
   content={[
     ["className"],

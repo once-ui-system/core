@@ -3,7 +3,7 @@ title: "Installation"
 docs: "once-ui/quick-start.mdx"
 github: "packages/core/src/quick-start.mdx"
 navLabel: "Quick start"
-updatedAt: "2026-10-10"
+updatedAt: "2026-10-20"
 summary: "Once UI is the open-source design system for the AI-native era. Deploy fully functional apps in minutes or build custom solutions with less code and token usage."
 navIcon: "rocket"
 ---
@@ -33,6 +33,23 @@ Or add Once UI to an existing project:
   {
     code: "npm install @once-ui-system/core",
     language: "bash"
+  }
+]} />
+
+In a Next.js app, add Once UI to `optimizePackageImports` in `next.config`. Without it, a server component that imports from the package root ships about 110 kB of extra JavaScript on every route:
+
+<CodeBlock compact marginBottom="32" marginTop="8"
+ codes={[
+  {
+    code: `// next.config.ts
+const nextConfig = {
+  experimental: {
+    optimizePackageImports: ["@once-ui-system/core"],
+  },
+};
+
+export default nextConfig;`,
+    language: "ts"
   }
 ]} />
 

@@ -11,6 +11,7 @@ import type {
   StyleProps,
 } from "../interfaces";
 import type { ColorScheme, ColorWeight } from "../types";
+import { cursorProps } from "../utils/cursor";
 import {
   BELOW_HEADER,
   hiddenAboveBreakpoints,
@@ -214,6 +215,8 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
     // a server component.
     const minColumnWidthValue = sizeValue(minColumnWidth, "width");
 
+    const cursorProp = cursorProps(cursor);
+
     let classes = classNames(
       position && `position-${position}`,
       inline ? "display-inline-grid" : "display-grid",
@@ -304,7 +307,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       shadow && `shadow-${shadow}`,
       zIndex && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === "string" && `cursor-${cursor}`,
+      cursorProp.className,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
       typeof blur === "string" && `blur-${blur}`,
@@ -349,8 +352,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
       height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
-      // Hide default cursor when using custom cursor
-      cursor: typeof cursor === "string" ? cursor : undefined,
+      cursor: cursorProp.style,
       ...numericSpacingStyle({
         padding,
         paddingX,
@@ -388,6 +390,7 @@ const ServerGrid = forwardRef<HTMLDivElement, ServerGridProps>(
         ref={ref}
         className={classes}
         style={combinedStyle}
+        {...cursorProp.attributes}
         {...rest}
         {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
       >

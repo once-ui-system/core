@@ -1,0 +1,27 @@
+// The node a Flex or Grid draws at the pointer (`cursor={<… />}`). It sits
+// above dialogs and menus, and never takes the pointer itself.
+.follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2147483000;
+  display: flex;
+  pointer-events: none;
+  will-change: transform;
+  opacity: 0;
+  scale: 0.6;
+  transition:
+    opacity 120ms ease-out,
+    scale 160ms ease-out;
+
+  &[data-visible] {
+    opacity: 1;
+    scale: 1;
+  }
+
+  // Appears and steps aside at once; it never moved with easing.
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    scale: 1;
+  }
+}

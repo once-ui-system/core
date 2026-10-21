@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { forwardRef, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
 import type { CondensedTShirtSizes } from "../types";
 import { getCalendarNames } from "../utils/calendarLocale";
@@ -15,6 +15,7 @@ import { ArrowNavigation, useArrowNavigationContext } from "./ArrowNavigationCon
 import { Button } from "./Button";
 import { Column } from "./Column";
 import styles from "./DatePicker.module.scss";
+import { DropdownCloseContext } from "./DropdownTriggerContext";
 import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -48,6 +49,8 @@ export interface DatePickerLabels {
   year?: (year: number) => string;
   /** The time panel's way back to the days. Defaults to `"Back to calendar"`. */
   backToCalendar?: string;
+  /** The time panel's button that confirms the date and time. Defaults to `"Apply"`. */
+  apply?: string;
   /** The hour field's name and placeholder. Defaults to `"Hours"`. */
   hours?: string;
   /** The minute field's name and placeholder. Defaults to `"Minutes"`. */
@@ -65,6 +68,7 @@ const DEFAULT_LABELS: Required<Omit<DatePickerLabels, "am" | "pm">> &
   month: (month) => `Month: ${month}, change month`,
   year: (year) => `Year: ${year}, change year`,
   backToCalendar: "Back to calendar",
+  apply: "Apply",
   hours: "Hours",
   minutes: "Minutes",
   am: undefined,
@@ -79,6 +83,12 @@ export interface DatePickerProps extends Omit<React.ComponentProps<typeof Flex>,
   previousMonth?: boolean;
   nextMonth?: boolean;
   timePicker?: boolean;
+  /**
+   * Called with the picked date and time when the time panel's Apply button is
+   * pressed. Inside a DropdownWrapper (or a DateInput) Apply also closes the
+   * panel; on its own the picker goes back to the calendar.
+   */
+  onApply?: (date: Date) => void;
   defaultDate?: Date;
   defaultTime?: {
     hours: number;
@@ -151,6 +161,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       value,
       onChange,
       timePicker = false,
+      onApply,
       previousMonth = true,
       nextMonth = true,
       minDate,
@@ -170,6 +181,7 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
       open,
       locale,
       labels,
+      onClick,
       ...rest
     },
     ref,
@@ -395,6 +407,26 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
         setIsTimeSelector(show);
         setIsTransitioning(true);
       }, 400);
+    };
+
+    const closeDropdown = useContext(DropdownCloseContext);
+
+    /**
+     * Confirms the picked date and time. Every change already reaches
+     * `onChange`; this is the explicit "done" the time panel lacked, where the
+     * only way out was "Back to calendar", which read as going back rather
+     * than applying.
+     */
+    const handleApply = () => {
+      if (!selectedDate) return;
+      const date = new Date(selectedDate);
+      if (selectedTime) {
+        date.setHours(selectedTime.hours);
+        date.setMinutes(selectedTime.minutes);
+      }
+      onApply?.(date);
+      if (closeDropdown) closeDropdown();
+      else handleTimeToggle(false);
     };
 
     const handleDateSelect = (date: Date) => {
@@ -820,6 +852,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
           if (isYearOpen) {
             setIsYearOpen(false);
           }
+          // A caller's onClick runs as well. It used to arrive in `rest`,
+          // spread after this handler, and replace it.
+          onClick?.(event as React.MouseEvent<HTMLDivElement>);
         }}
         ref={setRootRef}
         className={classNames(styles.calendar, className)}
@@ -1108,6 +1143,9 @@ const DatePicker = forwardRef<HTMLDivElement, DatePickerProps>(
                   aria-label={names.minutes}
                 />
               </Flex>
+              <Button fillWidth variant="primary" size={size} onClick={handleApply}>
+                {names.apply}
+              </Button>
             </Column>
           ) : isMonthOpen || isYearOpen ? (
             // While a month or year list is open the arrow keys are that

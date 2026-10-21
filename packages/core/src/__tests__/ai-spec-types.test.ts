@@ -75,6 +75,8 @@ const NOT_A_TYPE = new Set([
   "Typing",
   "Working",
   "Write",
+  // Reactions' default label
+  "Add",
   // a generic parameter, not a nameable type: `items: T[]` on InfiniteScroll
   "T",
 ]);

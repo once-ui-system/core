@@ -182,6 +182,40 @@ describe("polish", () => {
     expect(flexStyle(light, { radius: "l", overflow: "hidden" }).style.overflow).toBe("hidden");
   });
 
+  it("rounds one side or one corner, as core's topRadius…bottomRightRadius", () => {
+    const panel = flexStyle(light, { topRadius: "l" }).style;
+    expect(panel).toMatchObject({
+      borderTopLeftRadius: light.radius("l"),
+      borderTopRightRadius: light.radius("l"),
+    });
+    expect(panel.borderBottomLeftRadius).toBeUndefined();
+    const mixed = flexStyle(light, { radius: "s", leftRadius: "m", topLeftRadius: "xl" }).style;
+    expect(mixed).toMatchObject({
+      borderRadius: light.radius("s"),
+      borderTopLeftRadius: light.radius("xl"),
+      borderBottomLeftRadius: light.radius("m"),
+    });
+  });
+
+  it("draws only the sides named, as core's borderTop…borderY", () => {
+    const tabBar = flexStyle(light, { borderTop: "neutral-alpha-weak" }).style;
+    expect(tabBar).toMatchObject({
+      borderTopWidth: 1,
+      borderRightWidth: 0,
+      borderBottomWidth: 0,
+      borderLeftWidth: 0,
+      borderTopColor: light.border("neutral-alpha-weak"),
+    });
+    expect(tabBar.borderWidth).toBeUndefined();
+    const sides = flexStyle(light, { borderX: true, border: "brand-medium" }).style;
+    expect(sides).toMatchObject({ borderLeftWidth: 1, borderRightWidth: 1, borderTopWidth: 0 });
+    expect(sides.borderColor).toBe(light.border("brand-medium"));
+    expect(flexStyle(light, { border: true }).style).toMatchObject({
+      borderWidth: 1,
+      borderColor: light.border("neutral-alpha-weak"),
+    });
+  });
+
   it("keeps the label floating after an uncontrolled Input loses focus", () => {
     render(
       <ThemeProvider theme="light">

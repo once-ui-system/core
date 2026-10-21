@@ -15,6 +15,7 @@ import {
   TextVariant,
   TextWeight,
 } from "../types";
+import { isCursorNode } from "../utils/cursor";
 import { applyBreakpointStyle, BreakpointOverride, breakpointStyle } from "../utils/layoutClasses";
 import { Cursor } from "./Cursor";
 import { ServerFlex } from "./ServerFlex";
@@ -142,8 +143,10 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
       };
     }, []);
 
-    // Determine if we should hide the default cursor
-    const shouldHideCursor = typeof cursor === "object" && cursor && !isTouchDevice;
+    // A node as `cursor` follows the pointer and hides the native cursor
+    // over this element's own surface (`data-cursor-follow` in the
+    // stylesheet); a keyword or a preset goes through to ServerFlex.
+    const follow = isCursorNode(cursor) && !isTouchDevice;
 
     // Pass hide prop directly to ServerFlex - it will handle responsive hiding via CSS classes
     // No need for client-side logic that causes re-renders on every resize
@@ -151,6 +154,7 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
       <>
         <ServerFlex
           {...props}
+          cursor={isCursorNode(cursor) ? undefined : cursor}
           xl={xl}
           l={l}
           m={m}
@@ -158,14 +162,9 @@ const ClientFlex = forwardRef<HTMLDivElement, ClientFlexProps>(
           xs={xs}
           hide={hide}
           ref={combinedRef}
-          style={{
-            ...props.style,
-            cursor: shouldHideCursor ? "none" : props.style?.cursor,
-          }}
+          {...(follow && { "data-cursor-follow": "" })}
         />
-        {typeof cursor === "object" && cursor && !isTouchDevice && (
-          <Cursor cursor={cursor} elementRef={elementRef} />
-        )}
+        {follow && <Cursor cursor={cursor} elementRef={elementRef} />}
       </>
     );
   },

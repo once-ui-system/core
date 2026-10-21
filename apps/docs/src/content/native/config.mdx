@@ -60,9 +60,11 @@ Every prop is optional. Without any, you get the web defaults below, following t
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `theme` | `"light" \| "dark" \| "system"` | `"system"` | `"system"` follows the device's appearance and updates when it changes. |
-| `brand` | `Schemes` | `"blue"` | The brand colour scheme: `blue`, `indigo`, `violet`, `magenta`, `pink`, `red`, `orange`, `yellow`, `moss`, `green`, `emerald`, `aqua` or `cyan`. |
-| `accent` | `Schemes` | `"indigo"` | The accent colour scheme. Same values as `brand`. |
-| `neutral` | `"sand" \| "gray" \| "slate" \| "rose" \| "mint" \| "dusk"` | `"gray"` | The neutral scheme for text, borders and surfaces. |
+| `brand` | `Schemes \| "custom"` | `"blue"` | The brand colour scheme: `blue`, `indigo`, `violet`, `magenta`, `pink`, `red`, `orange`, `yellow`, `moss`, `green`, `emerald`, `aqua` or `cyan`, or `"custom"` for your own (see [custom schemes](#custom-schemes)). |
+| `accent` | `Schemes \| "custom"` | `"indigo"` | The accent colour scheme. Same values as `brand`. |
+| `neutral` | `"sand" \| "gray" \| "slate" \| "rose" \| "mint" \| "dusk" \| "custom"` | `"gray"` | The neutral scheme for text, borders and surfaces. |
+| `brandSeed`, `accentSeed`, `neutralSeed` | `string` | - | A colour (hex, `rgb()` or `oklch()`) to generate that scheme from, as core's seeds. Implies `"custom"` for its scheme. |
+| `brandScale`, `accentScale`, `neutralScale` | `SchemeScale` | - | That scheme step by step, `{ 100: "#…", …, 1200: "#…" }`. Wins over the seed and implies `"custom"`. |
 | `solid` | `"color" \| "contrast" \| "inverse"` | `"contrast"` | How solid fills, such as the primary `Button`, are coloured. |
 | `solidStyle` | `"flat" \| "plastic"` | `"flat"` | Flat fills, or fills with a highlight and a shade. |
 | `border` | `"rounded" \| "playful" \| "conservative" \| "sharp"` | `"playful"` | The radius scale. |
@@ -78,6 +80,38 @@ Every prop is optional. Without any, you get the web defaults below, following t
 | `children` | `ReactNode` | - | The app. |
 
 When `mobileSize`, `tabletSize` and `desktopSize` are left out, rem comes from the tokens: 15 points on phones and 16 on tablets, as on the web.
+
+### Custom schemes
+
+On the web, `brand="custom"` reads the `--scheme-brand-100` to `--scheme-brand-1200` properties an app sets in its own CSS, or `brandSeed` generates them. React Native has no CSS, so the same scale goes to `ThemeProvider`: `brandScale` with each step, or `brandSeed` with one colour. Either one sets `brand` to `"custom"`. `accent` and `neutral` work the same way.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { ThemeProvider } from "@once-ui-system/native";
+
+// The same steps as the web app's custom.css.
+const copper = {
+  100: "#140b06", 200: "#26150c", 300: "#4a2816", 400: "#6b3a1f",
+  500: "#8f4f2a", 600: "#b87333", 700: "#cf8c4f", 800: "#e0a874",
+  900: "#ebc29d", 1000: "#f4dbc3", 1100: "#f9ece0", 1200: "#fdf7f1",
+};
+
+export function App({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider brandScale={copper}>{children}</ThemeProvider>;
+}
+
+// Or generate the scale from one colour, as core's brandSeed.
+export function Seeded({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider brandSeed="#b87333">{children}</ThemeProvider>;
+}`,
+    language: "tsx",
+    label: "Custom brand"
+  }
+]} />
+
+Steps can be hex, `rgb()` or `oklch()`; they are turned into hex, because React Native can't draw `oklch()`. The three `600` alphas are made from step `600` unless you give `"600-15"`, `"600-30"` and `"600-50"` yourself. `generateColorScheme(seed)` returns the generated scale if you want to see or store it.
 
 ### Fonts
 
