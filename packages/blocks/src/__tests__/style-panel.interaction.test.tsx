@@ -4,7 +4,15 @@ import { userEvent } from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { StylePanel } from "../StylePanel.js";
+import {
+  StylePanel,
+  StylePanelBrand,
+  StylePanelColor,
+  StylePanelPage,
+  StylePanelRoot,
+  StylePanelShape,
+  StylePanelSurface,
+} from "../StylePanel.js";
 import { type StylePanelValue } from "../StylePanelSections.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 
@@ -168,11 +176,11 @@ describe("StylePanel interaction", () => {
 
   it("names a group by the default row label when the row hides its label", () => {
     render(
-      <StylePanel.Root value={{}} onValueChange={vi.fn()}>
-        <StylePanel.Shape label={false} />
-        <StylePanel.Surface label={false} />
-        <StylePanel.Brand label="Marke" />
-      </StylePanel.Root>,
+      <StylePanelRoot value={{}} onValueChange={vi.fn()}>
+        <StylePanelShape label={false} />
+        <StylePanelSurface label={false} />
+        <StylePanelBrand label="Marke" />
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(screen.getByRole("radiogroup", { name: "Shape" })).toBeInTheDocument();
@@ -241,9 +249,9 @@ describe("StylePanel interaction", () => {
     const onChange = vi.fn();
     const user = userEvent.setup();
     const { container } = render(
-      <StylePanel.Root value={{}} onValueChange={onChange}>
-        <StylePanel.Page />
-      </StylePanel.Root>,
+      <StylePanelRoot value={{}} onValueChange={onChange}>
+        <StylePanelPage />
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(screen.queryByRole("radio", { name: /Brand colour/ })).toBeNull();
@@ -255,6 +263,6 @@ describe("StylePanel interaction", () => {
 
   it("refuses a section outside a Root", () => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    expect(() => render(<StylePanel.Color />, { wrapper })).toThrow(/inside a <StylePanel>/);
+    expect(() => render(<StylePanelColor />, { wrapper })).toThrow(/inside a <StylePanel>/);
   });
 });

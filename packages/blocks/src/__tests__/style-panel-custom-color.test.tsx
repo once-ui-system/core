@@ -4,11 +4,19 @@ import { userEvent } from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { describe, expect, it, vi } from "vitest";
-import { StylePanel, type StylePanelLabels, type StylePanelValue } from "../StylePanel.js";
+import {
+  StylePanel,
+  StylePanelAccent,
+  StylePanelBrand,
+  StylePanelGroup,
+  type StylePanelLabels,
+  StylePanelRoot,
+  type StylePanelValue,
+} from "../StylePanel.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 /**
- * `customColors` (or `custom` on `StylePanel.Brand`/`StylePanel.Accent`) ends
+ * `customColors` (or `custom` on `StylePanelBrand`/`StylePanelAccent`) ends
  * the row's swatches with one for a colour of the host's own. Choosing it
  * reports `brand: "custom"` with a seed; while it is chosen a colour field
  * edits the seed. It is a controlled-mode feature: bound to ThemeProvider,
@@ -66,9 +74,9 @@ describe("StylePanel custom colour", () => {
     expect(screen.queryByRole("radio", { name: "Accent colour: custom" })).toBeNull();
 
     render(
-      <StylePanel.Root>
-        <StylePanel.Brand custom />
-      </StylePanel.Root>,
+      <StylePanelRoot>
+        <StylePanelBrand custom />
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();
@@ -227,12 +235,12 @@ describe("StylePanel custom colour", () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <StylePanel.Root value={{}} onValueChange={onChange}>
-        <StylePanel.Group>
-          <StylePanel.Brand />
-          <StylePanel.Accent custom label="Highlight" />
-        </StylePanel.Group>
-      </StylePanel.Root>,
+      <StylePanelRoot value={{}} onValueChange={onChange}>
+        <StylePanelGroup>
+          <StylePanelBrand />
+          <StylePanelAccent custom label="Highlight" />
+        </StylePanelGroup>
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(screen.queryByRole("radio", { name: "Brand colour: custom" })).toBeNull();

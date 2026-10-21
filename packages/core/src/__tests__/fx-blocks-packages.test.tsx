@@ -38,9 +38,34 @@ const FX = [
   "WeatherFx",
 ];
 const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
+/** 3.0, F11: StylePanel's sections, plain named exports of blocks. */
+const SECTIONS = [
+  "Root",
+  "Group",
+  "Row",
+  "Theme",
+  "Shape",
+  "Brand",
+  "Accent",
+  "Neutral",
+  "Solid",
+  "Effect",
+  "Surface",
+  "Density",
+  "Scaling",
+  "Transition",
+  "DataStyle",
+  "BodySize",
+  "BodyLineHeight",
+  "Page",
+  "Color",
+  "SolidStyle",
+  "BodyText",
+  "Advanced",
+].map((part) => `StylePanel${part}`);
 const PACKAGES = [
-  ["@once-ui-system/fx", FX],
-  ["@once-ui-system/blocks", BLOCKS],
+  ["@once-ui-system/fx", FX, []],
+  ["@once-ui-system/blocks", BLOCKS, SECTIONS],
 ] as const;
 
 type Entry = { group: string; importFrom?: string };
@@ -54,7 +79,7 @@ const slice = (name: string) =>
   );
 
 describe("core's root", () => {
-  it.each([...FX, ...BLOCKS, "useStylePanel"])("no longer exports %s", (name) => {
+  it.each([...FX, ...BLOCKS, ...SECTIONS, "useStylePanel"])("no longer exports %s", (name) => {
     expect(name in core).toBe(false);
   });
 
@@ -74,7 +99,7 @@ describe("core's root", () => {
   });
 });
 
-describe.each(PACKAGES)("the harness documents %s", (pkg, names) => {
+describe.each(PACKAGES)("the harness documents %s", (pkg, names, parts) => {
   it.each(names)("%s, with the package as importFrom in the spec, slice and catalog", (name) => {
     expect(components[name]?.importFrom).toBe(pkg);
     expect(components[name]?.group).toBe(pkg.split("/")[1]);
@@ -82,10 +107,17 @@ describe.each(PACKAGES)("the harness documents %s", (pkg, names) => {
     expect(catalogEntries[name]?.importFrom).toBe(pkg);
   });
 
+  // A part is reached through its component, so it has a slice but no catalog entry.
+  it.each([...parts])("%s, with the package as importFrom in the spec and slice", (name) => {
+    expect(components[name]?.importFrom).toBe(pkg);
+    expect(slice(name).importFrom).toBe(pkg);
+    expect(catalogEntries[name]).toBeUndefined();
+  });
+
   it("lists the package in the manifest's imports, to install", () => {
     expect(imports[pkg]?.install).toBe(pkg);
     expect([...(imports[pkg]?.exports ?? [])].filter((n) => /^[A-Z]/.test(n)).sort()).toEqual(
-      [...names].sort(),
+      [...names, ...parts].sort(),
     );
   });
 });

@@ -51,7 +51,7 @@ const SortableContext = createContext<SortableContextValue | null>(null);
 
 interface SortableProps
   extends Omit<React.ComponentProps<typeof Column>, "direction" | "onDrop" | "label"> {
-  /** The rows' ids in their current order, the same ids the Sortable.Items carry. */
+  /** The rows' ids in their current order, the same ids the SortableItems carry. */
   items: readonly string[];
   /**
    * Called when a row is dropped somewhere new in this list, with the new
@@ -74,7 +74,7 @@ interface SortableProps
   /** `row` for a horizontal list, such as a board's columns or a strip of media. */
   direction?: SortableDirection;
   /**
-   * Drag only from a `Sortable.Handle` in each row. Use it when the rows hold
+   * Drag only from a `SortableHandle` in each row. Use it when the rows hold
    * buttons or text people select, or need a quick touch drag.
    */
   handle?: boolean;
@@ -95,7 +95,7 @@ interface SortableProps
  * Sortable keeps no order of its own: it reports moves through `onReorder`
  * and `onMove`, and shows whatever order `items` holds.
  */
-const SortableRoot = ({
+const Sortable = ({
   ref,
   items,
   onReorder,
@@ -202,7 +202,7 @@ const SortableRoot = ({
   );
 };
 
-SortableRoot.displayName = "Sortable";
+Sortable.displayName = "Sortable";
 
 const useSortable = (part: string) => {
   const context = useContext(SortableContext);
@@ -243,7 +243,7 @@ const SortableItem = ({
   onKeyDown,
   ...flex
 }: SortableItemProps) => {
-  const { handle, direction, instructionsId } = useSortable("Sortable.Item");
+  const { handle, direction, instructionsId } = useSortable("SortableItem");
   const elementRef = useRef<HTMLDivElement>(null);
   useImperativeHandle(ref, () => elementRef.current as HTMLDivElement);
   const [ownFocus, setOwnFocus] = useState(false);
@@ -309,7 +309,7 @@ const SortableItem = ({
   );
 };
 
-SortableItem.displayName = "Sortable.Item";
+SortableItem.displayName = "SortableItem";
 
 type SortableHandleProps = Partial<Omit<IconButtonProps, "href">> & {
   ref?: React.Ref<HTMLButtonElement>;
@@ -321,7 +321,7 @@ type SortableHandleProps = Partial<Omit<IconButtonProps, "href">> & {
  * drags at once with no press and hold.
  */
 const SortableHandle = ({ ref, className, ...button }: SortableHandleProps) => {
-  const { instructionsId, labels } = useSortable("Sortable.Handle");
+  const { instructionsId, labels } = useSortable("SortableHandle");
   const { label } = useContext(ItemContext);
   return (
     <IconButton
@@ -339,9 +339,7 @@ const SortableHandle = ({ ref, className, ...button }: SortableHandleProps) => {
   );
 };
 
-SortableHandle.displayName = "Sortable.Handle";
-
-const Sortable = Object.assign(SortableRoot, { Item: SortableItem, Handle: SortableHandle });
+SortableHandle.displayName = "SortableHandle";
 
 export type {
   SortableAnnouncement,

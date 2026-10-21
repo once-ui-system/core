@@ -87,6 +87,7 @@ Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents
 | Screen-reader text, skip link | `VisuallyHidden` (skip link: `<VisuallyHidden as="a" href="#main" focusable>`) |
 | Native attributes | Every component also takes its element's own: `aria-*`, `id`, `role`, `onClick`; `type` on `Button`; `value`, `onChange`, `type` on `Input` |
 | MDX content | `mdxComponents` / `createMdxComponents` from `/mdx` |
+| Multi-part component | List prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`SortableItem`, `StylePanelBrand`); never `Sortable.Item` |
 
 ### Imports
 
@@ -504,7 +505,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ```ts
 type AccordionItem = { title: React.ReactNode; content: React.ReactNode; defaultOpen?: boolean }
-type BaseColor = Exclude<ColorValue, string & {}> | "page" | "overlay" | "surface" | "transparent"
+type BaseColor = Exclude<ColorValue, string & {}> | "page" | "surface" | "overlay" | "transparent"
 type BlendMode = "color" | "screen" | "normal" | "multiply" | "overlay" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "s" | "xl" | "l" | "m" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
@@ -514,7 +515,7 @@ type ButtonOption = LeafProps & { value: string; description?: ReactNode; label?
 // type ButtonVariant is one of these strings: link ghost subtle primary secondary tertiary
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}ch` | `${number}%` | `${number}vh` | `${number}vw` | `${number}dvh` | `${number}dvw` | `${number}svh` | `${number}svw` | `${number}lvh` | `${number}lvw` | `${number}vmin` | `${number}vmax` | `${number}cqw` | `${number}cqh` | `calc(${string})` | `min(${string})` | `max(${string})` | `clamp(${string})` | `var(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
-type ColorValue = Exclude<BaseColor, "page" | "overlay" | "surface" | "transparent"> | string & {}
+type ColorValue = Exclude<BaseColor, "page" | "surface" | "overlay" | "transparent"> | string & {}
 type ColorWeight = "strong" | "medium" | "weak"
 type Colors = Exclude<ColorValue, string & {}>
 type ColumnHide = Partial<Record<BreakpointKey, boolean>>

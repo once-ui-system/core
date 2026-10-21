@@ -60,10 +60,10 @@ describe("onChange → onValueChange on value controls", () => {
     );
   });
 
-  it("renames it on StylePanel.Root, keeping both arguments", () => {
+  it("renames it on StylePanel.Root (now StylePanelRoot), keeping both arguments", () => {
     assert.equal(
       body(`${core("StylePanel")}<StylePanel.Root value={v} onChange={(next, changed) => save(next, changed)}>`),
-      "<StylePanel.Root value={v} onValueChange={(next, changed) => save(next, changed)}>",
+      "<StylePanelRoot value={v} onValueChange={(next, changed) => save(next, changed)}>",
     );
   });
 
