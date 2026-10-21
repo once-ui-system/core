@@ -1,8 +1,7 @@
 {
   "name": "@once-ui-system/foundations",
-  "version": "2.0.0-alpha.0",
-  "private": true,
-  "description": "Once UI design foundations \u2014 design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
+  "version": "3.0.0-beta.0",
+  "description": "Once UI design foundations — design tokens and utility styles. Framework-agnostic: no React, no JS runtime.",
   "keywords": [
     "once-ui",
     "design-tokens",
@@ -33,6 +32,9 @@
     "scss",
     "tokens"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "prebuild": "node ../../scripts/check-node.mjs",
     "generate:utilities": "node scripts/generate-utilities.mjs",

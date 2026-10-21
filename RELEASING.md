@@ -134,9 +134,11 @@ ships nothing until it is named there. Check it before a release:
 npm pack --dry-run
 ```
 
-`@once-ui-system/foundations` is `private` and must stay that way while core
-inlines its SCSS and CSS at build time. Publishing core with a dependency on an
-unpublished package is the one failure that breaks every consumer at once.
+`@once-ui-system/foundations` is published on its own (`foundations-v*` tags)
+for stacks that want the tokens and utility CSS without React. Core still
+inlines its SCSS and CSS at build time and lists foundations only as a
+devDependency, so core never depends on a foundations release: keep it that
+way, since a dependency on an unpublished version breaks every consumer at once.
 
 ## Out of scope for this document
 

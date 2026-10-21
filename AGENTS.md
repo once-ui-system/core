@@ -8,7 +8,7 @@ auth, backend, or secrets** — nothing external needs to be provisioned.
 
 Workspaces:
 - `packages/core` (`@once-ui-system/core`) — the design system library (the product). Built with `tsc` + `sass` to `dist/`.
-- `packages/foundations` (`@once-ui-system/foundations`) — tokens and utility styles; **private**, inlined into core at build time.
+- `packages/foundations` (`@once-ui-system/foundations`) — tokens and utility styles; published on its own for non-React stacks, and inlined into core at build time (core doesn't depend on it).
 - `packages/fx` (`@once-ui-system/fx`) and `packages/blocks` (`@once-ui-system/blocks`) — 3.0: the effects, and Banner, Book, LogoCloud, ScrollToTop, StylePanel and StyleOverlay, on top of core (a peer); built and tested against core's `dist` (build core first). **Private** until their npm names exist. Core must not import either.
 - `apps/dev` — Next.js 16 sandbox for developing/testing components (primary contributor playground; see `CONTRIBUTING.md`).
 - `apps/docs` — Next.js 16 documentation site.
