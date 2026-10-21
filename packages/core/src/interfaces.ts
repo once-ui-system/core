@@ -18,6 +18,7 @@ import type {
   TextWeight,
   UserSelect,
 } from "./types";
+import type { CursorPresetValue } from "./utils/cursor";
 
 export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
   top?: SpacingToken;
@@ -200,7 +201,14 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   bottomRightRadius?: RadiusSize;
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
-  cursor?: CSSProperties["cursor"] | "interactive" | ReactNode;
+  /**
+   * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
+   * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that
+   * restyles every cursor inside; or a node that follows the pointer over
+   * this element (it steps aside over the controls inside, which keep their
+   * own cursor).
+   */
+  cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode;
   /**
    * `mix-blend-mode`, as a class: how the element composites with what is
    * behind it. `color-dodge` and `plus-lighter` are the ones a glow wants.

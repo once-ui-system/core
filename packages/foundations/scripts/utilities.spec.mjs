@@ -335,8 +335,20 @@ export const CURSORS = [
   "wait", "help", "grab", "grabbing", "zoom-in", "zoom-out",
 ];
 
-export const cursorValue = (name) =>
-  name === "interactive" ? "var(--cursor-interactive)" : name;
+/**
+ * The four states a cursor preset draws (`cursor.generated.scss`) are custom
+ * properties, so the utility classes follow a preset; with none set they are
+ * the browser's own cursors.
+ */
+const CURSOR_PROPERTIES = {
+  interactive: "var(--cursor-interactive)",
+  pointer: "var(--cursor-pointer, pointer)",
+  default: "var(--cursor-default, default)",
+  text: "var(--cursor-text, text)",
+  "not-allowed": "var(--cursor-disabled, not-allowed)",
+};
+
+export const cursorValue = (name) => CURSOR_PROPERTIES[name] ?? name;
 
 /**
  * Enumerable effect properties, as classes, so a layout primitive can take

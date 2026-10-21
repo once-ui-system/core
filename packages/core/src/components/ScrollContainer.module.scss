@@ -94,7 +94,7 @@
   height: var(--static-space-8);
   border-radius: var(--radius-full);
   background: var(--neutral-alpha-medium);
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   transition:
     background var(--transition-duration-micro-medium) var(--transition-eased),
     width var(--transition-duration-micro-medium) var(--transition-eased);
