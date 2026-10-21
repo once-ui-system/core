@@ -1,107 +1,119 @@
 "use client";
 
-import React, { forwardRef, useEffect, useState } from "react";
+import type React from "react";
+import { forwardRef, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Flex } from "./Flex";
+import styles from "./Cursor.module.scss";
 
 interface CursorProps {
   cursor: React.ReactNode;
   elementRef: React.RefObject<HTMLElement | null>;
 }
 
+/**
+ * Draws `cursor` at the pointer while it is over `elementRef`, which hides
+ * the native cursor (`data-cursor-follow`). It steps aside wherever the
+ * native cursor is back: over a button, a link, a text field or anything
+ * else inside that sets its own cursor, and over a nested element with a
+ * follower of its own. Touch input never shows it.
+ *
+ * It moves by writing `transform` once per frame, without a React render,
+ * so it keeps up with the pointer however heavy the subtree is.
+ */
 export const Cursor = forwardRef<HTMLDivElement, CursorProps>(({ cursor, elementRef }, ref) => {
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isHovering, setIsHovering] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const followerRef = useRef<HTMLDivElement | null>(null);
+  const [mounted, setMounted] = useState(false);
 
-  // Detect touch device
+  useEffect(() => setMounted(true), []);
+
   useEffect(() => {
-    const checkTouchDevice = () => {
-      // Check for touch capability
-      const hasTouch = "ontouchstart" in window || navigator.maxTouchPoints > 0;
-      // Check for pointer capability (some devices have both mouse and touch)
-      const hasPointer = window.matchMedia("(pointer: fine)").matches;
+    const element = elementRef?.current;
+    const follower = followerRef.current;
+    if (!mounted || !element || !follower) return;
 
-      // Consider it a touch device if it has touch but no fine pointer (mouse)
-      setIsTouchDevice(hasTouch && !hasPointer);
+    let frame = 0;
+    let x = 0;
+    let y = 0;
+    let target: Element | null = null;
+    let shown = false;
+
+    const show = (next: boolean) => {
+      if (next === shown) return;
+      shown = next;
+      follower.toggleAttribute("data-visible", next);
     };
 
-    checkTouchDevice();
+    // The follower belongs on this element's own surface: not over a control
+    // that shows its own cursor, and not inside a nested follower.
+    const ownsTarget = (node: Element | null) => {
+      if (!node || !element.contains(node)) return false;
+      if (node.closest("[data-cursor-follow]") !== element) return false;
+      return getComputedStyle(node).cursor === "none";
+    };
 
-    // Listen for changes in pointer capability (e.g., when external mouse is connected)
-    const mediaQuery = window.matchMedia("(pointer: fine)");
-    const handlePointerChange = () => checkTouchDevice();
+    const place = () => {
+      frame = 0;
+      follower.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%)`;
+    };
 
-    mediaQuery.addEventListener("change", handlePointerChange);
+    const handleMove = (event: PointerEvent) => {
+      if (event.pointerType === "touch") {
+        show(false);
+        return;
+      }
+      x = event.clientX;
+      y = event.clientY;
+      if (event.target !== target) {
+        target = event.target as Element | null;
+        show(ownsTarget(target));
+      }
+      if (!frame) frame = requestAnimationFrame(place);
+    };
+
+    const handleEnter = (event: PointerEvent) => {
+      if (event.pointerType === "touch") return;
+      x = event.clientX;
+      y = event.clientY;
+      place();
+      target = event.target as Element | null;
+      show(ownsTarget(target));
+    };
+
+    const handleLeave = () => {
+      target = null;
+      show(false);
+    };
+
+    element.addEventListener("pointerenter", handleEnter);
+    element.addEventListener("pointermove", handleMove);
+    element.addEventListener("pointerleave", handleLeave);
+    element.addEventListener("pointercancel", handleLeave);
+    window.addEventListener("blur", handleLeave);
 
     return () => {
-      mediaQuery.removeEventListener("change", handlePointerChange);
+      if (frame) cancelAnimationFrame(frame);
+      element.removeEventListener("pointerenter", handleEnter);
+      element.removeEventListener("pointermove", handleMove);
+      element.removeEventListener("pointerleave", handleLeave);
+      element.removeEventListener("pointercancel", handleLeave);
+      window.removeEventListener("blur", handleLeave);
     };
-  }, []);
+  }, [mounted, elementRef]);
 
-  // Mouse tracking for custom cursor (only on non-touch devices)
-  useEffect(() => {
-    if (!cursor || !elementRef.current || isTouchDevice) return;
-
-    let animationFrameId: number;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      // Cancel previous animation frame to prevent multiple updates
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-
-      // Schedule the update for the next animation frame
-      animationFrameId = requestAnimationFrame(() => {
-        setMousePosition({ x: e.clientX, y: e.clientY });
-      });
-    };
-
-    const handleMouseEnter = () => {
-      setIsHovering(true);
-    };
-
-    const handleMouseLeave = () => {
-      setIsHovering(false);
-    };
-
-    const element = elementRef.current;
-    if (element) {
-      element.addEventListener("mouseenter", handleMouseEnter);
-      element.addEventListener("mouseleave", handleMouseLeave);
-      document.addEventListener("mousemove", handleMouseMove);
-    }
-
-    return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
-      if (element) {
-        element.removeEventListener("mouseenter", handleMouseEnter);
-        element.removeEventListener("mouseleave", handleMouseLeave);
-      }
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [cursor, elementRef, isTouchDevice]);
-
-  // Don't render custom cursor on touch devices or during SSR
-  if (isTouchDevice || !isHovering || typeof document === "undefined") return null;
+  if (!mounted) return null;
 
   return createPortal(
-    <Flex
-      ref={ref}
-      position="fixed"
-      pointerEvents="none"
-      zIndex={10}
-      style={{
-        left: mousePosition.x,
-        top: mousePosition.y,
-        transform: "translate(-50%, -50%)",
-        transition: "none",
+    <div
+      ref={(node) => {
+        followerRef.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
       }}
+      className={styles.follower}
+      aria-hidden="true"
     >
       {cursor}
-    </Flex>,
+    </div>,
     document.body,
   );
 });

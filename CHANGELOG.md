@@ -13,6 +13,32 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
+  every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
+  fields and the blocked sign over disabled controls. The browser draws them from the
+  stylesheet (`data-cursor`), so they never lag and touch never sees them. `rounded` and
+  `dot` turn light in dark mode. For the whole app, `cursor` in the config's `style` (or on
+  `ThemeProvider`); `ThemeInit` writes it before the first paint. `"system"` turns a preset
+  off below it. Components that point or block (`.cursor-pointer`, `.cursor-not-allowed`,
+  Table rows, Accordion, sliders) read the new `--cursor-pointer` / `--cursor-default` /
+  `--cursor-text` / `--cursor-disabled` properties, so they follow a preset; unset, they are
+  the browser's cursors as before.
+
+### Fixed
+
+- **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
+  of buttons, links and inputs: the native pointer showed beside it, and an input lost its
+  I-beam. It now steps aside wherever the native cursor is back, and over a nested element
+  with a follower of its own. It moves without a React render (it re-rendered on every
+  pointer move), no longer flashes in the top-left corner on entry, sits above dialogs and
+  menus, ignores touch input on hybrid devices, and fades in and out (instantly under
+  reduced motion).
+- **A cursor keyword survives a `style` object.** `Flex`/`Grid` with `style` (or a responsive
+  value that needs the client) dropped `cursor="interactive"` and every other keyword, and a
+  keyword with a class was also written inline, where nothing could restyle it.
+
 ## [2.5.0] — 2026-10-21
 
 ### Added

@@ -97,7 +97,7 @@
   color: var(--neutral-on-background-medium);
   padding: 4px 8px;
   font-size: 11px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
   text-align: center;
 }
 

@@ -344,6 +344,12 @@ On `Flex`, `Row`, `Column` and `Grid`, the four you reach for most are typed pro
 
 They belong in the `style` section of the config like any other key, so `ThemeInit` applies them before the first paint.
 
+`cursor` sets a cursor preset for the whole app: `"soft"`, `"rounded"` or `"dot"`, each with its own pointer, text and disabled states over the controls. Unset or `"system"`, the browser's own cursors. A `Flex` or `Grid` can set another one for its subtree: see [Flex](/components/flex#cursor).
+
+```tsx
+<ThemeProvider cursor="soft">
+```
+
 ## Persistence
 
 Style choices are mirrored into `localStorage` under `data-<kebab-key>`. Set
@@ -392,6 +398,7 @@ and `remove` may return a promise; nothing waits on them.
     ["tabletSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px from 769px to 1024px. Unset, the stylesheet's 16px applies."],
     ["mobileSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px at 768px and below. Unset, the stylesheet's 15px applies."],
     ["cursorInteractive", ["pointer", "default"], "-", "The cursor over interactive elements. Unset, the stylesheet's pointer applies."],
+    ["cursor", ["soft", "rounded", "dot", "system"], "-", "A cursor preset for the whole app. Unset, the browser's own cursors."],
     ["brandSeed", "string", "-", "A colour to generate the brand scheme from. Implies brand=\"custom\" when brand is not set."],
     ["accentSeed", "string", "-", "As brandSeed, for the accent scheme."],
     ["neutralSeed", "string", "-", "As brandSeed, for the neutral scheme."],
@@ -438,6 +445,7 @@ Returns all style options plus `setStyle`.
     ["tabletSize", "DeviceFontSize | undefined"],
     ["mobileSize", "DeviceFontSize | undefined"],
     ["cursorInteractive", "InteractiveCursor | undefined"],
+    ["cursor", "CursorPresetValue | undefined"],
     ["setStyle", "(style: Partial<StyleOptions>) => void"],
   ]}
 />
