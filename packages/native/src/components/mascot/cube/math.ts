@@ -120,14 +120,15 @@ export function normalMatrix(m: Mat4, out: Float32Array = new Float32Array(9)): 
   const C = d * h - e * g;
   const det = a * A + b * B + c * C || 1;
   const inv = 1 / det;
+  // The inverse's transpose, so normals turn with the model rather than against it.
   out[0] = A * inv;
-  out[1] = (-(b * i) + c * h) * inv;
-  out[2] = (b * f - c * e) * inv;
-  out[3] = B * inv;
+  out[1] = B * inv;
+  out[2] = C * inv;
+  out[3] = (-(b * i) + c * h) * inv;
   out[4] = (a * i - c * g) * inv;
-  out[5] = (-(a * f) + c * d) * inv;
-  out[6] = C * inv;
-  out[7] = (-(a * h) + b * g) * inv;
+  out[5] = (-(a * h) + b * g) * inv;
+  out[6] = (b * f - c * e) * inv;
+  out[7] = (-(a * f) + c * d) * inv;
   out[8] = (a * e - b * d) * inv;
   return out;
 }
