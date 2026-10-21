@@ -98,6 +98,9 @@ export interface SelectProps {
   disabled?: boolean;
   /** The search field's words, as in core. */
   labels?: { search?: string };
+  /** The spoken name and the sheet's title without a `label`, as a `Field` passes it. */
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
   style?: ViewStyle;
 }
 
@@ -117,6 +120,8 @@ export function Select({
   description,
   disabled,
   labels,
+  accessibilityLabel,
+  accessibilityHint,
   style,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
@@ -148,7 +153,8 @@ export function Select({
     <View style={style}>
       <Pressable
         accessibilityRole="combobox"
-        accessibilityLabel={label}
+        accessibilityLabel={label ?? accessibilityLabel}
+        accessibilityHint={accessibilityHint}
         // The field below is hidden from screen readers, so the choice is read from here.
         accessibilityValue={{ text: shown || placeholder }}
         aria-expanded={open}
@@ -180,7 +186,7 @@ export function Select({
             setOpen(false);
             setQuery("");
           }}
-          title={label}
+          title={label ?? accessibilityLabel}
         >
           <Column gap="4">
             {searchable && (

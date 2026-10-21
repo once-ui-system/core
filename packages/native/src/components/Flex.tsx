@@ -56,6 +56,15 @@ export interface FlexProps extends SpacingProps, Omit<ViewProps, "style" | "poin
   borderStyle?: "solid" | "dashed";
   borderWidth?: 1 | 2 | 4 | 8;
   radius?: RadiusSize;
+  /** One side's or one corner's radius, as core's; wins over `radius` there. */
+  topRadius?: RadiusSize;
+  rightRadius?: RadiusSize;
+  bottomRadius?: RadiusSize;
+  leftRadius?: RadiusSize;
+  topLeftRadius?: RadiusSize;
+  topRightRadius?: RadiusSize;
+  bottomLeftRadius?: RadiusSize;
+  bottomRightRadius?: RadiusSize;
   shadow?: ShadowSize;
   /** As on the web, `radius` alone does not clip children: pass `overflow="hidden"`. */
   overflow?: "visible" | "hidden" | "scroll";
@@ -150,6 +159,14 @@ export type FlexBreakpointProps = Pick<
   | "borderStyle"
   | "borderWidth"
   | "radius"
+  | "topRadius"
+  | "rightRadius"
+  | "bottomRadius"
+  | "leftRadius"
+  | "topLeftRadius"
+  | "topRightRadius"
+  | "bottomLeftRadius"
+  | "bottomRightRadius"
   | "shadow"
   | "opacity"
   | "zIndex"
@@ -243,6 +260,14 @@ export function flexStyle(
     borderStyle,
     borderWidth,
     radius,
+    topRadius,
+    rightRadius,
+    bottomRadius,
+    leftRadius,
+    topLeftRadius,
+    topRightRadius,
+    bottomLeftRadius,
+    bottomRightRadius,
     shadow,
     overflow,
     width,
@@ -317,6 +342,19 @@ export function flexStyle(
   }
   // Clipping only on request: on iOS `overflow: hidden` also hides the view's own shadow.
   if (radius) style.borderRadius = theme.radius(radius);
+  // A corner takes its own prop, then its side's (top/bottom before left/right), as core's classes.
+  const corner = (own?: RadiusSize, vertical?: RadiusSize, horizontal?: RadiusSize) => {
+    const size = own ?? vertical ?? horizontal;
+    return size ? theme.radius(size) : undefined;
+  };
+  const tl = corner(topLeftRadius, topRadius, leftRadius);
+  const tr = corner(topRightRadius, topRadius, rightRadius);
+  const bl = corner(bottomLeftRadius, bottomRadius, leftRadius);
+  const br = corner(bottomRightRadius, bottomRadius, rightRadius);
+  if (tl !== undefined) style.borderTopLeftRadius = tl;
+  if (tr !== undefined) style.borderTopRightRadius = tr;
+  if (bl !== undefined) style.borderBottomLeftRadius = bl;
+  if (br !== undefined) style.borderBottomRightRadius = br;
   if (overflow) style.overflow = overflow;
   if (shadow) Object.assign(style, theme.shadow(shadow));
   if (fill || fillWidth || maxWidth !== undefined) style.width = "100%";

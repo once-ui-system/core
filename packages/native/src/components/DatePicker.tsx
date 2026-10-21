@@ -253,6 +253,8 @@ export function DateInput({
   placeholder,
   disabled,
   style,
+  accessibilityLabel,
+  accessibilityHint,
   ...input
 }: DateInputProps) {
   const [own, setOwn] = useState(defaultValue);
@@ -274,7 +276,8 @@ export function DateInput({
     <View style={style}>
       <Pressable
         accessibilityRole="button"
-        accessibilityLabel={label}
+        accessibilityLabel={label ?? accessibilityLabel}
+        accessibilityHint={accessibilityHint}
         accessibilityValue={{ text: shown || placeholder }}
         aria-expanded={isOpen}
         aria-disabled={disabled}
@@ -296,7 +299,7 @@ export function DateInput({
       </Pressable>
       {/* The sheet is not the form's field: nothing in it takes the stacked corners. */}
       <FormCellContext.Provider value={null}>
-        <Dialog open={isOpen} onClose={() => setOpen(false)} title={label}>
+        <Dialog open={isOpen} onClose={() => setOpen(false)} title={label ?? accessibilityLabel}>
           <DatePicker
             value={date}
             minDate={minDate}
