@@ -43,7 +43,7 @@ export async function generateMetadata({
     path: `/${doc.slug}`,
     type: "article",
     publishedTime: doc.metadata.updatedAt,
-    image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}&description=${encodeURIComponent(doc.metadata.summary)}`,
+    image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}${slug.length > 1 ? `&section=${encodeURIComponent(slug[0])}` : ""}`,
   });
 }
 
