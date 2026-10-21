@@ -1,0 +1,23 @@
+{
+ "name": "Drawer",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A panel that slides in from one edge and floats a step in from it, clear of the notch and the home indicator.",
+ "mixins": [],
+ "props": {
+  "open": "!boolean",
+  "onClose": "!() => void",
+  "side": "\"left\" | \"right\" | \"top\" | \"bottom\" = \"right\"",
+  "size": "\"s\" | \"m\" | \"l\" | \"full\" = \"m\"",
+  "title": "ReactNode",
+  "description": "ReactNode",
+  "footer": "ReactNode",
+  "showClose": "boolean = true",
+  "closeOnClickaway": "boolean = true",
+  "flush": "boolean = false",
+  "aria-label": "string",
+  "children": "ReactNode",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {}
+}

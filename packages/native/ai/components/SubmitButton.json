@@ -1,0 +1,48 @@
+{
+ "name": "SubmitButton",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "A `Button` that submits the `Form` around it (React Native has no form element) and shows a spinner, ignoring taps, while the submit runs, so a double tap sends one request.",
+ "mixins": [
+  "ButtonProps"
+ ],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "pendingLabel": "string",
+  "pending": "boolean",
+  "onClick": "() => void"
+ },
+ "resolvedMixins": {
+  "ButtonProps": {
+   "variant": "ButtonVariant",
+   "tone": "Tone",
+   "size": "TShirtSizes",
+   "corners": "ButtonCorners",
+   "label": "string",
+   "children": "ReactNode",
+   "weight": "\"default\" | \"strong\"",
+   "rounded": "boolean",
+   "prefixIcon": "IconSlot",
+   "suffixIcon": "IconSlot",
+   "loading": "boolean",
+   "disabled": "boolean",
+   "fillWidth": "boolean",
+   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
+   "href": "string",
+   "style": "ViewStyle"
+  }
+ },
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ButtonCorners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "ButtonVariant": "\"primary\" | \"secondary\" | \"tertiary\" | \"ghost\" | \"link\" | \"subtle\"",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "Tone": "ColorScheme",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

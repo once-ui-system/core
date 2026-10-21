@@ -186,16 +186,17 @@ Also takes React Native's ViewProps.
 
 ### Skeleton
 A pulsing placeholder while content loads.
+Mixins: FlexProps, SpacingProps.
+Also takes React Native's ViewProps.
 - shape?: "line" | "circle" | "block" = "line"
 - size?: TShirtSizes = "m"
-- width?: number | SpacingToken | Length | `${number}%` — Overrides: a number of points (px, as in core 3.0), a token, `"320px"`, `"20rem"` or `"50%"`.
-- height?: number | SpacingToken | Length | `${number}%`
 - delay?: number = 0 — Milliseconds before the pulse starts, to stagger several skeletons.
-- style?: ViewStyle
 
 ## Hooks
 
+- `useFormPending`: `(): boolean`
 - `useIcons`: `(): Record<string, NativeIcon>`
+- `useNavStyle`: `(): { inNav: boolean; sizes: { readonly height: "32"; readonly x: "8"; readonly gap: "2"; readonly iconGap: "8"; readonly text: "s"; readonly section: "xs"; readonly inset: "12"; } | { readonly height: "40"; readonly x: "16"; readonly gap: "4"; readonly iconGap: "12"; readonly text: "m"; readonly section: "s"; readonly inset: "24"; } | { readonly height: "48"; readonly x: "16"; readonly gap: "4"; readonly iconGap: "12"; readonly text: "m"; readonly section: "s"; readonly inset: "24"; }; density: NavDensity; variant: NavVariant; rail: boolean; tabs: boolean; }`
 - `useToast`: `(): ToastContextValue`
 - `useTheme`: `(): OnceTheme`
 
@@ -208,9 +209,13 @@ A pulsing placeholder while content loads.
 - center?, wrap?: boolean
 - flex?: number
 - background?: Colors | "surface" | "page" | "overlay" | "transparent"
-- border?: Colors | "surface" | "transparent"
+- border?: BorderValue — `true` draws core's default border, `neutral-alpha-weak`.
+- borderTop?: BorderValue — One side (or `X` = left and right, `Y` = top and bottom), as in core: a bottom tab bar's `borderTop`, a sticky header's `borderBottom`.
+- borderRight?, borderBottom?, borderLeft?, borderX?, borderY?: BorderValue
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8
+- topRadius?: RadiusSize — One side's or one corner's radius, as core's; wins over `radius` there.
+- rightRadius?, bottomRadius?, leftRadius?, topLeftRadius?, topRightRadius?, bottomLeftRadius?, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
 - overflow?: "visible" | "hidden" | "scroll" — As on the web, `radius` alone does not clip children: pass `overflow="hidden"`.
 - width?, height?, minWidth?, maxWidth?, minHeight?, maxHeight?: Size
@@ -246,6 +251,7 @@ A pulsing placeholder while content loads.
 
 ```ts
 type Alignment = "start" | "center" | "end" | "between" | "around" | "even" | "stretch"
+type BorderValue = Colors | "surface" | "transparent" | boolean
 type BuiltInIconName = one of the names listed under Icons
 type ButtonCorners = "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"
 type ButtonVariant = "primary" | "secondary" | "tertiary" | "ghost" | "link" | "subtle"
@@ -253,7 +259,7 @@ type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWei
 type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
 type ColorWeight = "weak" | "medium" | "strong"
 type CondensedTShirtSizes = "s" | "m" | "l"
-type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
+type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "borderStyle" | "borderWidth" | "radius" | "topRadius" | "rightRadius" | "bottomRadius" | "leftRadius" | "topLeftRadius" | "topRightRadius" | "bottomLeftRadius" | "bottomRightRadius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
 type FlexProps = Flex props
 type IconLibraryOverrides = {} (an app augments it to register its own icon names)
 type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>

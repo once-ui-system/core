@@ -1,0 +1,49 @@
+---
+title: "DateInput"
+summary: "A date field that opens a calendar in a bottom sheet, for React Native."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/form-controls/dateInput.mdx"
+github: "packages/native/src/components/DatePicker.tsx"
+navLabel: "DateInput"
+navIcon: "components"
+---
+
+`DateInput` takes the same main props as on the web (`label`, `value`, `defaultValue`, `onValueChange`, `minDate`, `maxDate`, `locale`). It looks like an [`Input`](/native/form-controls/input) showing the date, and a tap opens a [`DatePicker`](/native/form-controls/datePicker) in a bottom sheet; picking a day closes it. See the [web DateInput](/form-controls/dateInput) for the same component in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { DateInput } from "@once-ui-system/native";
+
+export function VisitDate() {
+  const [date, setDate] = useState<Date>();
+  return <DateInput label="Date" value={date} onValueChange={setDate} minDate={new Date()} />;
+}`,
+    language: "tsx",
+    label: "VisitDate.tsx"
+  }
+]} />
+
+Inside a [`Form`](/native/form-controls/form) it takes the form's size and a stacked group's corners, and a `Field` can wrap it like any input.
+
+## Differences from the web
+
+- The value can't be typed: the field opens the calendar instead of a keyboard.
+- No time picker yet.
+- `id` is accepted and ignored.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `label` | `string` | | The field's label and the sheet's title. |
+| `value` | `Date` | | The date, when you own it. |
+| `defaultValue` | `Date` | | The first date when the field owns it. |
+| `onValueChange` | `(date: Date) => void` | | Called with the picked day. |
+| `minDate`, `maxDate` | `Date` | | The days that can be picked. |
+| `locale` | `string` | `"en-US"` | The field's date format and the calendar's names. |
+| `open`, `defaultOpen`, `onOpenChange` | | | The sheet's state, when you own it. |
+
+Every other prop is `Input`'s (`size`, `error`, `errorMessage`, `description`, `disabled`…).

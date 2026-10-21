@@ -14,15 +14,36 @@ import type {
   SurfaceStyle,
   Theme,
 } from "../types";
+import { customSchemeTokens, type SchemeScale } from "./colorScheme";
 import { DENSITIES, defaultSettings } from "./resolve";
 import { createTheme, type FontFamilies, type Insets, NO_INSETS, type OnceTheme } from "./theme";
 
 export interface ThemeProviderProps {
   /** `"system"` follows the device's appearance. */
   theme?: Theme;
-  brand?: Schemes;
-  accent?: Schemes;
-  neutral?: NeutralColor;
+  /** `"custom"` reads `brandSeed` or `brandScale`, as `data-brand="custom"` does on the web. */
+  brand?: Schemes | "custom";
+  accent?: Schemes | "custom";
+  neutral?: NeutralColor | "custom";
+  /**
+   * A colour to generate the brand scheme from (hex, `rgb()` or `oklch()`), for
+   * `brand: "custom"`, which it implies when `brand` is not set. As core's `brandSeed`.
+   */
+  brandSeed?: string;
+  /** As `brandSeed`, for `accent: "custom"`. */
+  accentSeed?: string;
+  /** As `brandSeed`, for `neutral: "custom"`. */
+  neutralSeed?: string;
+  /**
+   * The brand scheme step by step (`100`…`1200`), the native side of the
+   * `--scheme-brand-*` properties a web app sets in its own CSS. Wins over
+   * `brandSeed`, and also implies `brand: "custom"`.
+   */
+  brandScale?: SchemeScale;
+  /** As `brandScale`, for `accent: "custom"`. */
+  accentScale?: SchemeScale;
+  /** As `brandScale`, for `neutral: "custom"`. */
+  neutralScale?: SchemeScale;
   solid?: SolidType;
   solidStyle?: SolidStyle;
   border?: BorderStyle;
@@ -63,6 +84,12 @@ export function ThemeProvider({
   theme = "system",
   fonts,
   insets = NO_INSETS,
+  brandSeed,
+  accentSeed,
+  neutralSeed,
+  brandScale,
+  accentScale,
+  neutralScale,
   children,
   ...options
 }: ThemeProviderProps) {
@@ -70,17 +97,26 @@ export function ThemeProvider({
   const { width } = useWindowDimensions();
   const resolvedTheme = theme === "system" ? (scheme === "light" ? "light" : "dark") : theme;
   // Insets by value too: `useSafeAreaInsets()` returns a new object on every render.
-  const key = JSON.stringify([resolvedTheme, options, fonts, insets]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries options, fonts and insets by value.
+  const seeds = { brand: brandSeed, accent: accentSeed, neutral: neutralSeed };
+  const scales = { brand: brandScale, accent: accentScale, neutral: neutralScale };
+  const key = JSON.stringify([resolvedTheme, options, fonts, insets, seeds, scales]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries everything else by value.
   const value = useMemo(() => {
     const density = options.density ?? defaultSettings.density;
     // A scaling of its own wins; without one the density picks it.
     const scaling = options.scaling ?? DENSITIES[density].scaling;
+    // A seed or scale picks "custom" for its scheme unless the scheme is set, as in core.
+    const custom = {
+      ...((brandSeed || brandScale) && { brand: "custom" as const }),
+      ...((accentSeed || accentScale) && { accent: "custom" as const }),
+      ...((neutralSeed || neutralScale) && { neutral: "custom" as const }),
+    };
     return createTheme(
-      { ...defaultSettings, ...options, density, scaling, theme: resolvedTheme },
+      { ...defaultSettings, ...custom, ...options, density, scaling, theme: resolvedTheme },
       width,
       fonts,
       insets,
+      customSchemeTokens(seeds, scales),
     );
   }, [key, width]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;

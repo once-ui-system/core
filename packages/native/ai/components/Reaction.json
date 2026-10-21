@@ -1,0 +1,29 @@
+{
+ "name": "Reaction",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One reaction at a fixed size with its own gesture.",
+ "mixins": [
+  "ReactionOption"
+ ],
+ "props": {
+  "size": "GlyphSize = \"m\"",
+  "trigger": "\"hover\" | \"loop\" | \"manual\" = \"hover\"",
+  "playKey": "number | string",
+  "decorative": "boolean = false",
+  "children": "ReactNode",
+  "style": "StyleProp<ViewStyle>"
+ },
+ "resolvedMixins": {
+  "ReactionOption": {
+   "value": "!string",
+   "label": "string",
+   "emoji": "string",
+   "src": "string",
+   "motion": "ReactionMotion"
+  }
+ },
+ "types": {
+  "GlyphSize": "\"s\" | \"m\" | \"l\" | \"xl\"",
+  "ReactionMotion": "\"beat\" | \"nod\" | \"shake\" | \"pop\" | \"droop\" | \"flicker\" | \"spin\" | \"wave\" | \"bounce\" | \"none\""
+ }
+}

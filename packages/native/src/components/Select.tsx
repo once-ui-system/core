@@ -4,6 +4,7 @@ import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Dialog } from "./Dialog";
 import { Column, Row } from "./Flex";
+import { FormCellContext } from "./FormContext";
 import { Icon } from "./Icon";
 import { Input } from "./Input";
 import { Text } from "./Text";
@@ -113,6 +114,9 @@ export interface SelectProps {
   disabled?: boolean;
   /** The search field's words, as in core. */
   labels?: { search?: string };
+  /** The spoken name and the sheet's title without a `label`, as a `Field` passes it. */
+  accessibilityLabel?: string;
+  accessibilityHint?: string;
   style?: ViewStyle;
 }
 
@@ -137,6 +141,8 @@ export function Select({
   description,
   disabled,
   labels,
+  accessibilityLabel,
+  accessibilityHint,
   style,
 }: SelectProps) {
   const [open, setOpen] = useControlledValue(openProp, defaultOpen, onOpenChange);
@@ -171,7 +177,8 @@ export function Select({
     <View style={style}>
       <Pressable
         accessibilityRole="combobox"
-        accessibilityLabel={label}
+        accessibilityLabel={label ?? accessibilityLabel}
+        accessibilityHint={accessibilityHint}
         // The field below is hidden from screen readers, so the choice is read from here.
         accessibilityValue={{ text: shown || placeholder }}
         aria-expanded={open}
@@ -196,42 +203,45 @@ export function Select({
           />
         </View>
       </Pressable>
-      <Dialog
-        open={open}
-        onClose={() => {
-          setOpen(false);
-          setQuery("");
-        }}
-        title={label}
-      >
-        <Column gap="4">
-          {searchable && (
-            <Row paddingBottom="8">
-              <Input
-                label={labels?.search ?? "Search"}
-                value={query}
-                onChangeText={setQuery}
-                size="s"
-                prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
-              />
-            </Row>
-          )}
-          {visible.length === 0 ? (
-            <Text
-              textVariant="body-default-s"
-              onBackground="neutral-weak"
-              paddingX="12"
-              paddingY="8"
-            >
-              {emptyState}
-            </Text>
-          ) : (
-            visible.map((o) => (
-              <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
-            ))
-          )}
-        </Column>
-      </Dialog>
+      {/* The sheet's search box is not the form's field: it keeps its own corners. */}
+      <FormCellContext.Provider value={null}>
+        <Dialog
+          open={open}
+          onClose={() => {
+            setOpen(false);
+            setQuery("");
+          }}
+          title={label ?? accessibilityLabel}
+        >
+          <Column gap="4">
+            {searchable && (
+              <Row paddingBottom="8">
+                <Input
+                  label={labels?.search ?? "Search"}
+                  value={query}
+                  onChangeText={setQuery}
+                  size="s"
+                  prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+                />
+              </Row>
+            )}
+            {visible.length === 0 ? (
+              <Text
+                textVariant="body-default-s"
+                onBackground="neutral-weak"
+                paddingX="12"
+                paddingY="8"
+              >
+                {emptyState}
+              </Text>
+            ) : (
+              visible.map((o) => (
+                <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
+              ))
+            )}
+          </Column>
+        </Dialog>
+      </FormCellContext.Provider>
     </View>
   );
 }

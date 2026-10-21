@@ -244,8 +244,8 @@ describe("content", () => {
   it("StatusIndicator is an image named after its colour", () => {
     wrap(
       <>
-        <StatusIndicator color="green" />
-        <StatusIndicator color="red" aria-label="Closed" size="l" />
+        <StatusIndicator scheme="green" />
+        <StatusIndicator scheme="red" aria-label="Closed" size="l" />
         <StatusIndicator scheme="yellow" />
       </>,
     );
@@ -260,7 +260,7 @@ describe("Flex props on Media and StatusIndicator", () => {
     const { container } = render(
       <ThemeProvider theme="dark">
         <Media src="https://example.com/a.jpg" alt="Latte" hide />
-        <StatusIndicator color="green" xl={{ style: { marginTop: 7 } }} aria-label="Open" />
+        <StatusIndicator scheme="green" xl={{ style: { marginTop: 7 } }} aria-label="Open" />
       </ThemeProvider>,
     );
     expect(container.querySelector("img")).toBeNull();

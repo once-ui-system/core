@@ -41,6 +41,14 @@
     "blockquote": 37,
     "breadcrumbs": 38,
     "pagination": 39,
-    "timeline": 40
+    "timeline": 40,
+    "scroller": 41,
+    "drawer": 42,
+    "nav": 43,
+    "table": 44,
+    "mascot": 45,
+    "workingIndicator": 46,
+    "logoSpinner": 47,
+    "reactions": 48
   }
 }

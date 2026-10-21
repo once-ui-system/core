@@ -1,0 +1,53 @@
+---
+title: "LogoSpinner"
+summary: "A loader drawn from the four tiles of the Once UI mark, for places where a product's own loader belongs."
+updatedAt: "2026-10-20"
+docs: "once-ui/native/components/logoSpinner.mdx"
+github: "packages/native/src/components/LogoSpinner.tsx"
+navLabel: "LogoSpinner"
+navIcon: "components"
+---
+
+`LogoSpinner` moves the four tiles of the Once UI mark. Use it where a product's own loader belongs, such as an assistant working on a reply. [Spinner](/native/components/spinner) stays the neutral one for buttons and fields. See the [web LogoSpinner](/modules/ai#logospinner) for the browser version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { LogoSpinner, Row } from "@once-ui-system/native";
+
+export function Loaders() {
+  return (
+    <Row gap="16" vertical="center">
+      <LogoSpinner />
+      <LogoSpinner variant="wave" tone="accent" size="l" />
+      <LogoSpinner tone="neutral" size="xl" speed={2.4} />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "LogoSpinner"
+  }
+]} />
+
+## Variants
+
+`twist`, the default, parts the tiles, turns the mark a quarter and clicks them back together. `wave` lifts one tile at a time, clockwise from the top. `speed` sets the seconds per cycle, 1.6 by default.
+
+With reduce motion turned on in the device settings, the tiles stop moving and fade in turn instead, so the loader still shows that something is happening.
+
+## Differences from the web
+
+- React Native has no inherited text color, so `tone="inherit"` uses the strongest neutral text color, like `neutral`.
+- It is announced as a progress bar named by `aria-label`.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The same footprint as Spinner, from the `16` step to the `40` step. |
+| `variant` | `"twist" \| "wave"` | `"twist"` | How the tiles move. |
+| `tone` | `"brand" \| "accent" \| "neutral" \| "inherit"` | `"brand"` | The color of the mark. |
+| `speed` | `number` | `1.6` | Seconds per cycle. |
+| `aria-label` | `string` | `"Loading"` | Read out by screen readers. |
+| `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |

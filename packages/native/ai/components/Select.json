@@ -23,6 +23,8 @@
   "description": "ReactNode",
   "disabled": "boolean",
   "labels": "{ search?: string }",
+  "accessibilityLabel": "string",
+  "accessibilityHint": "string",
   "style": "ViewStyle"
  },
  "resolvedMixins": {},

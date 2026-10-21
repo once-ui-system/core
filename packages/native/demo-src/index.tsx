@@ -8,7 +8,14 @@ const screen =
   param === "sheet" ||
   param === "menu" ||
   param === "stats" ||
-  param === "code"
+  param === "code" ||
+  param === "shell" ||
+  param === "drawer" ||
+  param === "form" ||
+  param === "form-errors" ||
+  param === "calendar" ||
+  param === "table" ||
+  param === "assistant"
     ? param
     : "card";
 const root = document.getElementById("root");

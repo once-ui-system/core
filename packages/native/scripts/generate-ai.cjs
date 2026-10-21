@@ -209,7 +209,8 @@ function extract() {
 
   function propEntry(prop, node, defaults) {
     const typeText = node.type
-      ? collapse(node.type.getText())
+      ? // A union the formatter broke over lines starts with its first "|".
+        collapse(node.type.getText()).replace(/^\|\s*/, "")
       : collapse(
           checker.typeToString(
             checker.getTypeOfSymbol(prop),

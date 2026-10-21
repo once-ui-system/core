@@ -1,0 +1,35 @@
+{
+ "name": "FormErrorSummary",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "Every error in a form in one alert, after a failed submit.",
+ "mixins": [
+  "FeedbackProps"
+ ],
+ "props": {
+  "errors": "!FormErrorItem[] | Record<string, ReactNode>",
+  "title": "string = \"Check the highlighted fields\"",
+  "autoFocus": "boolean = true",
+  "span": "number"
+ },
+ "resolvedMixins": {
+  "FeedbackProps": {
+   "style": "ViewStyle",
+   "children": "ReactNode",
+   "description": "string",
+   "tone": "Tone",
+   "showIcon": "boolean",
+   "icon": "IconSlot",
+   "showCloseButton": "boolean",
+   "onClose": "() => void"
+  }
+ },
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
+  "FormErrorItem": "{ id?: string; message: ReactNode }",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",
+  "IconSlot": "IconName | ReactNode",
+  "Tone": "ColorScheme"
+ }
+}

@@ -1,0 +1,25 @@
+{
+ "name": "NavItem",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "One row of navigation that knows whether it is the current page.",
+ "mixins": [],
+ "reactNative": [
+  "PressableProps"
+ ],
+ "props": {
+  "label": "!ReactNode",
+  "icon": "IconName",
+  "selected": "boolean = false",
+  "badge": "number | ReactNode",
+  "indicator": "boolean",
+  "disabled": "boolean = false",
+  "onClick": "() => void",
+  "style": "ViewStyle"
+ },
+ "resolvedMixins": {},
+ "types": {
+  "BuiltInIconName": "one of the names listed under Icons",
+  "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
+  "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>"
+ }
+}

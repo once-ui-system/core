@@ -99,6 +99,10 @@ describe("3.0 tone and variant", () => {
     expect(buttonColors(light, "ghost", true, "danger").label).toBe(
       light.color("danger-on-background-strong"),
     );
+    // A secondary danger button keeps the neutral border but draws its label in danger.
+    expect(buttonColors(light, "secondary", false, "danger").label).toBe(
+      light.color("danger-on-background-strong"),
+    );
   });
 
   it("takes core's onClick on Button and IconButton", () => {

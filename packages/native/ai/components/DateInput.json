@@ -1,0 +1,52 @@
+{
+ "name": "DateInput",
+ "importFrom": "@once-ui-system/native",
+ "purpose": "An `Input`-styled field showing the date, that opens a `DatePicker` in a bottom sheet.",
+ "mixins": [
+  "InputProps"
+ ],
+ "reactNative": [
+  "TextInputProps"
+ ],
+ "props": {
+  "id": "string",
+  "value": "Date",
+  "defaultValue": "Date",
+  "onValueChange": "(date: Date) => void",
+  "minDate": "Date",
+  "maxDate": "Date",
+  "locale": "string",
+  "labels": "DatePickerLabels",
+  "open": "boolean",
+  "defaultOpen": "boolean = false",
+  "onOpenChange": "(open: boolean) => void"
+ },
+ "resolvedMixins": {
+  "InputProps": {
+   "style": "ViewStyle",
+   "disabled": "boolean",
+   "label": "string",
+   "size": "TShirtSizes",
+   "error": "boolean",
+   "errorMessage": "ReactNode",
+   "description": "ReactNode",
+   "prefix": "ReactNode",
+   "suffix": "ReactNode",
+   "variant": "\"default\" | \"ghost\"",
+   "loading": "boolean",
+   "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+   "span": "number",
+   "characterCount": "boolean",
+   "type": "InputType",
+   "reveal": "boolean",
+   "inputStyle": "TextStyle",
+   "onValueChange": "(value: string) => void"
+  }
+ },
+ "types": {
+  "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
+  "DatePickerLabels": "{ previousMonth?: string; nextMonth?: string }",
+  "InputType": "\"text\" | \"password\" | \"email\" | \"tel\" | \"url\" | \"number\" | \"search\"",
+  "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\""
+ }
+}

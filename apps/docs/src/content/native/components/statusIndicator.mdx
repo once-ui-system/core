@@ -19,7 +19,7 @@ codes={[
 export function Online() {
   return (
     <Row gap="8" vertical="center">
-      <StatusIndicator color="green" aria-label="Online" />
+      <StatusIndicator scheme="green" aria-label="Online" />
       <Text>Online</Text>
     </Row>
   );
@@ -42,9 +42,9 @@ codes={[
 export function Sizes() {
   return (
     <Row gap="12" vertical="center">
-      <StatusIndicator size="s" color="blue" />
-      <StatusIndicator size="m" color="blue" />
-      <StatusIndicator size="l" color="blue" />
+      <StatusIndicator size="s" scheme="blue" />
+      <StatusIndicator size="m" scheme="blue" />
+      <StatusIndicator size="l" scheme="blue" />
     </Row>
   );
 }`,
@@ -55,7 +55,7 @@ export function Sizes() {
 
 ## Colors
 
-`color` takes any of the color schemes, from `blue` to `cyan`, or `gray`. `scheme` is core 3.0's name for the same prop; it works too and wins when both are set.
+`scheme` takes any of the color schemes, from `blue` to `cyan`, or `gray`. `tone` takes a theme role such as `danger` or `success` instead, so the dot follows the theme's color for it; it wins over `scheme`.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -66,9 +66,9 @@ codes={[
 export function Colors() {
   return (
     <Row gap="12" vertical="center">
-      <StatusIndicator color="green" />
-      <StatusIndicator color="yellow" />
-      <StatusIndicator color="red" />
+      <StatusIndicator scheme="green" />
+      <StatusIndicator scheme="yellow" />
+      <StatusIndicator scheme="red" />
       <StatusIndicator scheme="violet" />
       <StatusIndicator scheme="gray" />
     </Row>
@@ -81,7 +81,6 @@ export function Colors() {
 
 ## Differences from the web
 
-- Takes `scheme` as well as `color`, ahead of core 3.0.
 - Screen readers read it as an image labelled `aria-label`, or "green status indicator" and so on by default. Give it a label that says what the status means.
 
 ## API reference
@@ -91,6 +90,6 @@ StatusIndicator extends Flex props, so margin, position and the rest apply.
 | Prop | Type | Default | Description |
 | --- | --- | --- | --- |
 | `size` | `"s" \| "m" \| "l"` | `"m"` | The dot size. |
-| `color` | `Schemes \| "gray"` | `"blue"` | The color scheme. |
-| `scheme` | `Schemes \| "gray"` | | Core 3.0's name for `color`. Wins when both are set. |
+| `scheme` | `Schemes \| "gray"` | `"blue"` | The color scheme. 2.x called it `color`. |
+| `tone` | `Tone` | | A theme role, such as `"danger"`. Wins over `scheme`. |
 | `aria-label` | `string` | `"<color> status indicator"` | Read out by screen readers. |

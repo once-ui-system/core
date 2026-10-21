@@ -92,8 +92,10 @@ export function createTheme(
   width: number,
   fonts: FontFamilies = {},
   insets: Insets = NO_INSETS,
+  /** Extra tokens, such as `customSchemeTokens()` for a `"custom"` scheme. */
+  extra: Record<string, TokenValue> = {},
 ): OnceTheme {
-  const tokens = resolveTokens(settings, width);
+  const tokens = resolveTokens(settings, width, tokenFile, extra);
   const rem = remFor(tokens, width);
   const px = (name: string, fallback = 0) => toPx(tokens[name], rem) ?? fallback;
 

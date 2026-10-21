@@ -20,11 +20,11 @@
    "children": "ReactNode",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
    "fillWidth": "boolean",
-   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
+   "label": "ReactNode",
    "size": "TShirtSizes",
+   "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "label": "ReactNode",
    "rounded": "boolean",
    "prefixIcon": "IconSlot",
    "suffixIcon": "IconSlot"
