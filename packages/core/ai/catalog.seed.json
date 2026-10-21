@@ -587,7 +587,7 @@
     "pairsWith": ["MobileMegaMenu", "SmartLink", "Row"]
   },
   "Meta": {
-    "purpose": "Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards",
+    "purpose": "Meta.generate: Next.js metadata with Open Graph and Twitter cards",
     "tags": ["seo", "next"],
     "pairsWith": ["Schema"]
   },
@@ -851,7 +851,7 @@
     "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
   },
   "StyleScope": {
-    "purpose": "One site's or tenant's look inside another page: brand, accent, neutral, seed colour or exact scales, theme, border and fonts for its subtree only",
+    "purpose": "Site colours, theme and fonts on one subtree",
     "tags": ["theme", "layout"],
     "pairsWith": ["ThemeProvider", "Column"]
   },
@@ -922,7 +922,7 @@
     "pairsWith": ["Dialog", "Column", "Chip"]
   },
   "ThemeInit": {
-    "purpose": "Inline script for the document head that applies the theme config before first paint, preventing a flash",
+    "purpose": "Head script that applies the theme before first paint, so it never flashes",
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },
