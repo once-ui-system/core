@@ -20,8 +20,8 @@ export function Loaders() {
   return (
     <Row gap="16" vertical="center">
       <LogoSpinner />
-      <LogoSpinner variant="wave" color="accent" size="l" />
-      <LogoSpinner color="neutral" size="xl" speed={2.4} />
+      <LogoSpinner variant="wave" tone="accent" size="l" />
+      <LogoSpinner tone="neutral" size="xl" speed={2.4} />
     </Row>
   );
 }`,
@@ -38,7 +38,7 @@ With reduce motion turned on in the device settings, the tiles stop moving and f
 
 ## Differences from the web
 
-- React Native has no inherited text color, so `color="inherit"` uses the strongest neutral text color, like `neutral`.
+- React Native has no inherited text color, so `tone="inherit"` uses the strongest neutral text color, like `neutral`.
 - It is announced as a progress bar named by `aria-label`.
 
 ## API reference
@@ -47,7 +47,7 @@ With reduce motion turned on in the device settings, the tiles stop moving and f
 | --- | --- | --- | --- |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The same footprint as Spinner, from the `16` step to the `40` step. |
 | `variant` | `"twist" \| "wave"` | `"twist"` | How the tiles move. |
-| `color` | `"brand" \| "accent" \| "neutral" \| "inherit"` | `"brand"` | The color of the mark. |
+| `tone` | `"brand" \| "accent" \| "neutral" \| "inherit"` | `"brand"` | The color of the mark. |
 | `speed` | `number` | `1.6` | Seconds per cycle. |
 | `aria-label` | `string` | `"Loading"` | Read out by screen readers. |
 | `...FlexProps` | `FlexProps` | | Spacing, position and the other Flex props. |

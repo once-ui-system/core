@@ -103,8 +103,8 @@ export { Line, type LineProps } from "./components/Line";
 export { List, ListItem, type ListItemProps, type ListProps } from "./components/List";
 export {
   LogoSpinner,
-  type LogoSpinnerColor,
   type LogoSpinnerProps,
+  type LogoSpinnerTone,
 } from "./components/LogoSpinner";
 export {
   Mascot,

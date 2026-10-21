@@ -90,8 +90,8 @@ export function Assistant() {
         <Text textVariant="label-strong-m">Loaders</Text>
         <Row gap="16" vertical="center">
           <LogoSpinner size="xl" />
-          <LogoSpinner size="xl" variant="wave" color="accent" />
-          <LogoSpinner size="l" color="neutral" />
+          <LogoSpinner size="xl" variant="wave" tone="accent" />
+          <LogoSpinner size="l" tone="neutral" />
           <WorkingIndicator size="l" />
         </Row>
       </Column>

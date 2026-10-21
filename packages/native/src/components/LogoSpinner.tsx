@@ -5,8 +5,8 @@ import type { TShirtSizes } from "../types";
 import { type FlexProps, flexStyle } from "./Flex";
 import { cubicBezier, easeInOut, keyframes, useFrameTime, useReduceMotion } from "./motion";
 
-/** The colors the mark takes: the brand or accent hue, or the strongest neutral text. */
-export type LogoSpinnerColor = "brand" | "accent" | "neutral" | "inherit";
+/** The tones the mark takes: the brand or accent hue, or the strongest neutral text. */
+export type LogoSpinnerTone = "brand" | "accent" | "neutral" | "inherit";
 
 export interface LogoSpinnerProps extends Omit<FlexProps, "children"> {
   size?: TShirtSizes;
@@ -16,13 +16,13 @@ export interface LogoSpinnerProps extends Omit<FlexProps, "children"> {
    */
   variant?: "twist" | "wave";
   /** `brand` by default. React Native has no inherited color, so `inherit` is the strongest neutral text. */
-  color?: LogoSpinnerColor;
+  tone?: LogoSpinnerTone;
   /** Seconds per cycle. */
   speed?: number;
   "aria-label"?: string;
 }
 
-const COLOR: Record<LogoSpinnerColor, string> = {
+const TONE: Record<LogoSpinnerTone, string> = {
   brand: "brand-color-strong",
   accent: "function-accent-500",
   neutral: "neutral-on-background-strong",
@@ -145,7 +145,7 @@ export function logoSpinnerPose(
 export function LogoSpinner({
   size = "m",
   variant = "twist",
-  color = "brand",
+  tone = "brand",
   speed,
   "aria-label": ariaLabel = "Loading",
   ...flex
@@ -159,7 +159,7 @@ export function LogoSpinner({
   const { box, inset } = SIZES[size];
   const px = theme.space(box);
   const pose = logoSpinnerPose(variant, time, speed ?? 1.6, reduceMotion);
-  const fill = theme.color(COLOR[color]);
+  const fill = theme.color(TONE[tone]);
 
   return (
     <View

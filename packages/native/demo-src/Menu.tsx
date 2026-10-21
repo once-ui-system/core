@@ -43,7 +43,7 @@ export function Menu() {
         <Row vertical="center" horizontal="between">
           <Heading textVariant="heading-strong-l">Menu</Heading>
           <Row vertical="center" gap="8">
-            <StatusIndicator color="green" aria-label="Open now" />
+            <StatusIndicator scheme="green" aria-label="Open now" />
             <Text textVariant="label-default-s" onBackground="neutral-weak">
               Open until 18:00
             </Text>
