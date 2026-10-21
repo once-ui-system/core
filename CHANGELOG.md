@@ -29,6 +29,11 @@ item (see `ROADMAP.md`, Week 4).
   moves under reduced motion. `Reaction` is one glyph with its gesture, on hover, on a
   loop or on demand.
 
+- **Apply button in DatePicker's time panel.** "Back to calendar" was the only way out of
+  the time panel and read as going back, not as confirming. Apply calls the new `onApply`
+  with the picked date and time and closes the `DateInput` or `DropdownWrapper` the picker
+  is in; a standalone picker returns to the calendar. Its text is `labels.apply`.
+
 ### Fixed
 
 - **DatePicker time panel in a `DropdownWrapper` closed on the stepper chevrons.**
