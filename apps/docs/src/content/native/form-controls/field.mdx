@@ -44,6 +44,7 @@ codes={[
 
 ## Differences from the web
 
+- **One label.** When the control's own `label` repeats the Field's, the control drops it, so `<Field label="Space"><Select label="Space" /></Field>` shows "Space" once. A `Select` or `DateInput` then uses the Field's label as its sheet title.
 - `controlId` is accepted and ignored: React Native links the label to the control through props, not ids.
 - The error is announced when it appears (a polite live region).
 

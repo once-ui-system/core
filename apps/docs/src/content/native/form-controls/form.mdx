@@ -23,7 +23,7 @@ navIcon: "components"
 
 ## Submitting
 
-React Native has no form element, so the `SubmitButton` inside a `Form` with `as="form"` calls `onSubmit`. Return a promise and the form stays pending until it settles: the button shows its spinner, swaps to `pendingLabel` and ignores taps, so a double tap sends one request.
+React Native has no form element, so the `SubmitButton` inside a `Form` with `onSubmit` calls it; `as="form"` is accepted and changes nothing more. Return a promise and the form stays pending until it settles: the button shows its spinner, swaps to `pendingLabel` and ignores taps, so a double tap sends one request.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -95,7 +95,7 @@ codes={[
 | `density` | `"stacked" \| "tight" \| "spacious"` | `"tight"` | Gap and grouping. |
 | `columns` | `number \| { xl?, l?, m?, s?, xs? }` | `1` | Columns, flat or per breakpoint. |
 | `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | | Size for every field that sets none. |
-| `as` | `"div" \| "form"` | `"div"` | `"form"` lets a `SubmitButton` inside submit. |
+| `as` | `"div" \| "form"` | `"div"` | Accepted for the web's sake; `onSubmit` alone lets a `SubmitButton` inside submit. |
 | `onSubmit` | `() => unknown` | | Called by the `SubmitButton`. A returned promise keeps the form pending. |
 | `pending` | `boolean` | | Marks the form as submitting from outside. |
 

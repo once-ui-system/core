@@ -94,7 +94,7 @@ export function Surface() {
   }
 ]} />
 
-`radius` does not clip children. Add `overflow="hidden"` when it should; on iOS that also hides the view's own shadow.
+`topRadius`, `rightRadius`, `bottomRadius` and `leftRadius` round one side, and `topLeftRadius`…`bottomRightRadius` one corner, as on the web: `background="surface" topRadius="l"` is a raised panel with a square bottom. `radius` does not clip children. Add `overflow="hidden"` when it should; on iOS that also hides the view's own shadow.
 
 ## Responsive and safe areas
 
@@ -148,6 +148,8 @@ export function Screen() {
 | `borderStyle` | `"solid" \| "dashed"` | `"solid"` | Border style. |
 | `borderWidth` | `1 \| 2 \| 4 \| 8` | `1` | Border width in points. |
 | `radius` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| "full" \| "none"` | | Corner radius token. |
+| `topRadius`, `rightRadius`, `bottomRadius`, `leftRadius` | radius token | | One side's radius; wins over `radius` there. |
+| `topLeftRadius`, `topRightRadius`, `bottomLeftRadius`, `bottomRightRadius` | radius token | | One corner's radius; wins over its side. |
 | `shadow` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | | Shadow token. |
 | `overflow` | `"visible" \| "hidden" \| "scroll"` | | Pass `"hidden"` to clip children to `radius`. |
 | `width`, `height` | `SpacingToken \| number \| "<n>%"` | | Size as a token, rem or a percentage. |
