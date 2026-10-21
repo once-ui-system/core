@@ -45,11 +45,14 @@ const nodes = (type: string) => {
 const faces = () =>
   nodes("RNSVGPath").filter((p) => p.stroke && JSON.stringify(p.fill) === JSON.stringify(p.stroke));
 
-/** Steps the frame clock by `ms`, rendering every frame as a device does. */
+/**
+ * Steps the frame clock by `ms` in 48 ms frames: under the cube's 0.05 s step
+ * cap, so the motion matches a device's, at a third of the renders.
+ */
 const advance = async (ms: number) => {
-  for (let t = 0; t < ms; t += 16) {
+  for (let t = 0; t < ms; t += 48) {
     await act(async () => {
-      jest.advanceTimersByTime(16);
+      jest.advanceTimersByTime(48);
     });
   }
 };

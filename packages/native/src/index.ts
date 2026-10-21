@@ -107,6 +107,15 @@ export {
   type LogoSpinnerTone,
 } from "./components/LogoSpinner";
 export {
+  Markdown,
+  type MarkdownAlign,
+  type MarkdownBlock,
+  type MarkdownInline,
+  type MarkdownProps,
+  parseInline,
+  parseMarkdown,
+} from "./components/Markdown";
+export {
   Mascot,
   type MascotLook,
   type MascotMood,

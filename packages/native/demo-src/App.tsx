@@ -28,6 +28,7 @@ import { Code } from "./Code";
 import { Guests } from "./Guests";
 import { Menu } from "./Menu";
 import { Order } from "./Order";
+import { Post } from "./Post";
 import { Shell } from "./Shell";
 import { Stats } from "./Stats";
 
@@ -151,7 +152,8 @@ export function App({
     | "form-errors"
     | "calendar"
     | "table"
-    | "assistant";
+    | "assistant"
+    | "post";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
@@ -174,6 +176,8 @@ export function App({
           <Shell drawer={screen === "drawer"} />
         ) : screen === "assistant" ? (
           <Assistant />
+        ) : screen === "post" ? (
+          <Post />
         ) : (
           <Order sheet={screen === "sheet"} />
         )}
