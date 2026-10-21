@@ -632,40 +632,43 @@
 
 [data-surface="translucent"][data-theme="light"],
 [data-surface="translucent"] [data-theme="light"],
-[data-surface="translucent"][data-theme="light"] [data-neutral],
-[data-surface="translucent"] [data-theme="light"] [data-neutral] {
+[data-surface="translucent"][data-theme="light"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="translucent"] [data-theme="light"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--static-white-medium);
     --surface-border:        var(--neutral-alpha-medium);
 }
 
 [data-surface="translucent"][data-theme="dark"],
 [data-surface="translucent"] [data-theme="dark"],
-[data-surface="translucent"][data-theme="dark"] [data-neutral],
-[data-surface="translucent"] [data-theme="dark"] [data-neutral] {
+[data-surface="translucent"][data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="translucent"] [data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--static-black-medium);
     --surface-border:        var(--neutral-alpha-medium);
 }
 
 [data-surface="filled"][data-theme="light"],
 [data-surface="filled"] [data-theme="light"],
-[data-surface="filled"][data-theme="light"] [data-neutral],
-[data-surface="filled"] [data-theme="light"] [data-neutral] {
+[data-surface="filled"][data-theme="light"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="filled"] [data-theme="light"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--neutral-background-weak);
     --surface-border:        var(--neutral-border-medium);
 }
 
 [data-surface="filled"][data-theme="dark"],
 [data-surface="filled"] [data-theme="dark"],
-[data-surface="filled"][data-theme="dark"] [data-neutral],
-[data-surface="filled"] [data-theme="dark"] [data-neutral] {
+[data-surface="filled"][data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="filled"] [data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--neutral-background-medium);
     --surface-border:        var(--static-transparent);
 }
 
+/* The solids again on a nested data-brand or data-neutral, from its nearest
+   data-solid: one on <html> is outweighed by one on a section between them,
+   and an element with its own data-solid keeps the rule that names it. */
 [data-theme="dark"][data-solid="color"],
 [data-theme="dark"] [data-solid="color"],
-[data-theme="dark"][data-solid="color"] :is([data-brand], [data-neutral]),
-[data-theme="dark"] [data-solid="color"] :is([data-brand], [data-neutral]) {
+[data-theme="dark"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-500);
     --brand-solid-medium:         var(--function-brand-400);
     --brand-solid-weak:           var(--function-brand-300);
@@ -677,8 +680,8 @@
 
 [data-theme="dark"][data-solid="contrast"],
 [data-theme="dark"] [data-solid="contrast"],
-[data-theme="dark"][data-solid="contrast"] :is([data-brand], [data-neutral]),
-[data-theme="dark"] [data-solid="contrast"] :is([data-brand], [data-neutral]) {
+[data-theme="dark"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-neutral-1000);
     --brand-solid-medium:         var(--static-white);
     --brand-solid-weak:           var(--function-neutral-900);
@@ -690,8 +693,8 @@
 
 [data-theme="dark"][data-solid="inverse"],
 [data-theme="dark"] [data-solid="inverse"],
-[data-theme="dark"][data-solid="inverse"] :is([data-brand], [data-neutral]),
-[data-theme="dark"] [data-solid="inverse"] :is([data-brand], [data-neutral]) {
+[data-theme="dark"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-800);
     --brand-solid-medium:         var(--function-brand-700);
     --brand-solid-weak:           var(--function-brand-600);
@@ -703,8 +706,8 @@
 
 [data-theme="light"][data-solid="color"],
 [data-theme="light"] [data-solid="color"],
-[data-theme="light"][data-solid="color"] :is([data-brand], [data-neutral]),
-[data-theme="light"] [data-solid="color"] :is([data-brand], [data-neutral]) {
+[data-theme="light"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
     /* Step 500, the same as dark: white text on step 600 measures 3:1,
        below WCAG AA for button labels. */
     --brand-solid-strong:         var(--function-brand-500);
@@ -718,8 +721,8 @@
 
 [data-theme="light"][data-solid="contrast"],
 [data-theme="light"] [data-solid="contrast"],
-[data-theme="light"][data-solid="contrast"] :is([data-brand], [data-neutral]),
-[data-theme="light"] [data-solid="contrast"] :is([data-brand], [data-neutral]) {
+[data-theme="light"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-neutral-300);
     --brand-solid-medium:         var(--static-black);
     --brand-solid-weak:           var(--function-neutral-400);
@@ -731,7 +734,8 @@
 
 
 [data-solid="color"],
-[data-solid="color"] :is([data-brand], [data-neutral]) {
+:where(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --solid-border-color-brand:   var(--brand-alpha-strong);
 
     --solid-inset-color-brand:    var(--brand-alpha-strong);
@@ -740,7 +744,8 @@
 }
 
 [data-solid="contrast"],
-[data-solid="contrast"] :is([data-brand], [data-neutral]) {
+:where(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --solid-border-color-brand:   var(--neutral-alpha-strong);
 
     --solid-inset-color-brand:    var(--static-transparent);
@@ -749,7 +754,8 @@
 }
 
 [data-solid="inverse"],
-[data-solid="inverse"] :is([data-brand], [data-neutral]) {
+:where(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --solid-border-color-brand:   var(--brand-alpha-strong);
 
     --solid-inset-color-brand:    var(--brand-alpha-strong);
@@ -759,8 +765,8 @@
 
 [data-theme="light"][data-solid="inverse"],
 [data-theme="light"] [data-solid="inverse"],
-[data-theme="light"][data-solid="inverse"] :is([data-brand], [data-neutral]),
-[data-theme="light"] [data-solid="inverse"] :is([data-brand], [data-neutral]) {
+[data-theme="light"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-900);
     --brand-solid-medium:         var(--function-brand-800);
     --brand-solid-weak:           var(--function-brand-700);
