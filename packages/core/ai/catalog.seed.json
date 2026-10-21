@@ -20,12 +20,12 @@
     "pairsWith": ["LayoutProvider"]
   },
   "Animation": {
-    "purpose": "Preset enter/exit animation (fade, scale, slide, blur) on hover, click or controlled trigger; delay and duration in ms",
+    "purpose": "Preset enter/exit animation (fade, scale, slide, blur) on hover, click or a controlled trigger",
     "tags": ["effect", "motion", "overlay"],
     "pairsWith": ["HoverCard", "Column"]
   },
   "Arrow": {
-    "purpose": "Small arrow that slides in while the element its trigger selector names is hovered — the arrow on a card or link",
+    "purpose": "Small arrow that slides in while its trigger element is hovered, on a card or link",
     "tags": ["decoration", "action"],
     "pairsWith": ["Card", "SmartLink"]
   },
@@ -71,7 +71,7 @@
     "pairsWith": ["Grid", "Text"]
   },
   "Breadcrumbs": {
-    "purpose": "Trail of links to the current page, in a nav landmark, with the last item marked current and long trails collapsed",
+    "purpose": "Trail of links to the current page, with the last marked current and long trails collapsed",
     "tags": ["navigation"],
     "pairsWith": ["Heading", "Column", "SmartLink"]
   },
@@ -87,7 +87,7 @@
     "pairsWith": ["Background", "Media", "Heading", "SmartLink"]
   },
   "Carousel": {
-    "purpose": "Image slideshow with arrows, dot or thumbnail indicators and autoplay; mode=\"snap\" is a touch snapping track (2.x Swiper)",
+    "purpose": "Image slideshow with arrows, dots or thumbnails and autoplay; mode=\"snap\" is a touch track (2.x Swiper)",
     "tags": ["media", "marketing"],
     "pairsWith": ["Media", "Column"]
   },
@@ -173,7 +173,7 @@
     "pairsWith": ["Sections"]
   },
   "DataThemeProvider": {
-    "purpose": "App-wide defaults for the data-viz components: chart variant, mode, height, axis and ticks; read with useDataTheme",
+    "purpose": "App-wide chart defaults (variant, mode, height, axis, ticks); read with useDataTheme",
     "tags": ["provider", "data"],
     "pairsWith": ["ThemeProvider", "LineChart", "BarChart"]
   },
@@ -183,17 +183,17 @@
     "pairsWith": ["LineChart", "BarChart", "Swatch"]
   },
   "DateInput": {
-    "purpose": "Input field that opens a calendar to pick a date, optionally with time; `range` gives start and end fields for a date range",
+    "purpose": "Field that opens a calendar for a date, optionally with time; `range` gives start and end fields",
     "tags": ["form"],
     "pairsWith": ["DatePicker", "Form"]
   },
   "DatePicker": {
-    "purpose": "Inline calendar to pick a date and optional time, with min/max bounds; `range` picks a range over one or two months",
+    "purpose": "Inline calendar for a date and optional time, with min/max; `range` picks a range",
     "tags": ["form"],
     "pairsWith": ["DateInput", "ChartHeader", "Column"]
   },
   "Dialog": {
-    "purpose": "Modal dialog with title, description, footer and focus handling, stackable; variant=\"sheet\" is a bottom sheet (2.x Modal)",
+    "purpose": "Modal dialog with title, description, footer and focus handling; variant=\"sheet\" is a bottom sheet (2.x Modal)",
     "tags": ["overlay", "auth"],
     "pairsWith": ["Button", "Column", "OTPInput"]
   },
@@ -203,7 +203,7 @@
     "pairsWith": ["NavItem", "Column", "Button"]
   },
   "Dropdown": {
-    "purpose": "A trigger and the floating menu it opens, with arrow keys and open state; openOn=\"contextmenu\" for right-click (2.x ContextMenu)",
+    "purpose": "Trigger and the floating menu it opens, with arrow keys; openOn=\"contextmenu\" for right-click (2.x ContextMenu)",
     "tags": ["overlay", "navigation", "action"],
     "pairsWith": ["Option", "Button", "Column"]
   },
@@ -254,7 +254,7 @@
     "pairsWith": ["Column", "Media"]
   },
   "Field": {
-    "purpose": "Label, hint and error around one control, with the id, aria-describedby, aria-invalid and aria-required wired for you",
+    "purpose": "Label, hint and error around one control, with the id and aria attributes wired for you",
     "tags": ["form", "a11y"],
     "pairsWith": ["Input", "Select", "Textarea", "Form"]
   },
@@ -269,7 +269,7 @@
     "pairsWith": ["ScrollLock"]
   },
   "Form": {
-    "purpose": "Grid of form fields with one density for their gap and grouping, and an onSubmit whose promise drives a pending state",
+    "purpose": "Grid of form fields with one density, and an onSubmit whose promise drives a pending state",
     "tags": ["form", "layout"],
     "pairsWith": ["Input", "Select", "Textarea", "Button"]
   },
@@ -284,7 +284,7 @@
     "pairsWith": ["Heading", "Media"]
   },
   "Grid": {
-    "purpose": "CSS grid with a column count per breakpoint and every Flex spacing/surface prop; `masonry` flows uneven items down columns",
+    "purpose": "CSS grid with columns per breakpoint and every Flex prop; `masonry` flows uneven items down columns",
     "tags": ["layout", "basics"],
     "pairsWith": ["Column", "Row", "Card"]
   },
@@ -360,7 +360,7 @@
     "pairsWith": ["Row", "Text", "Tooltip"]
   },
   "LayoutProvider": {
-    "purpose": "Root provider for breakpoints, with next/link and next/image installed — the one a Next.js app imports, from core/next",
+    "purpose": "Root provider for breakpoints with next/link and next/image, for Next.js apps, from core/next",
     "tags": ["provider", "next"],
     "pairsWith": ["ThemeProvider", "ToastProvider", "ThemeInit"]
   },
@@ -433,6 +433,36 @@
     "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
+  },
+  "Map": {
+    "purpose": "Themed map on free tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
+  },
+  "MapCircle": {
+    "purpose": "Area in metres, e.g. an approximate address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapMarker": {
+    "purpose": "React content at a map position",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapPin", "Avatar"]
+  },
+  "MapMarkers": {
+    "purpose": "Markers from data, clustered, one active",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["Map", "MapPin", "MapPopup"]
+  },
+  "MapPin": {
+    "purpose": "Marker look: label pill or dot",
+    "tags": ["map", "location"],
+    "pairsWith": ["MapMarker", "MapMarkers"]
+  },
+  "MapPopup": {
+    "purpose": "Card above a map position; Escape closes",
+    "tags": ["map", "location", "overlay"],
+    "pairsWith": ["Map", "MapMarkers", "Button"]
   },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
@@ -526,7 +556,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "MegaMenu": {
-    "purpose": "Top navigation with dropdown panels of grouped links; `collapseBelow` turns it into stacked accordions on small screens",
+    "purpose": "Top navigation with dropdown panels of grouped links; `collapseBelow` stacks them as accordions",
     "tags": ["navigation", "marketing"],
     "pairsWith": ["SmartLink", "Row"]
   },
@@ -536,7 +566,7 @@
     "pairsWith": ["Schema"]
   },
   "Nav": {
-    "purpose": "Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside",
+    "purpose": "Sidebar navigation that sets density, variant and rail once for every NavItem, NavGroup and NavSection",
     "tags": ["navigation", "layout"],
     "pairsWith": ["NavItem", "NavGroup", "NavSection"]
   },
@@ -591,7 +621,7 @@
     "pairsWith": ["Dialog", "Column", "Button"]
   },
   "Pagination": {
-    "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select — paged lists and tables",
+    "purpose": "Page buttons in a nav landmark with previous/next, ellipses and an optional per-page select",
     "tags": ["navigation", "data"],
     "pairsWith": ["Table", "Row"]
   },
@@ -631,7 +661,7 @@
     "pairsWith": ["Column", "Form"]
   },
   "RadioGroup": {
-    "purpose": "One choice from a set of radios as a single form field: a labelled radiogroup with arrow keys, from options or RadioButtons",
+    "purpose": "One choice from a set of radios as one form field, with arrow keys, from options or RadioButtons",
     "tags": ["form", "settings"],
     "pairsWith": ["RadioButton", "Form", "Setting"]
   },
@@ -662,7 +692,7 @@
     "pairsWith": ["Meta"]
   },
   "Scroller": {
-    "purpose": "Scrolling row with arrows and fades; track props (infinite, markers, drag) make a carousel track, auto a marquee (2.x AutoScroll)",
+    "purpose": "Scrolling row with arrows and fades; track props make a carousel track, auto a marquee (2.x AutoScroll)",
     "tags": ["layout"],
     "pairsWith": ["Row", "Tag", "Logo", "Card"]
   },
@@ -712,7 +742,7 @@
     "pairsWith": ["Grid", "Media", "Column"]
   },
   "Slider": {
-    "purpose": "Slider for a numeric value, or with `range` a [start, end] pair whose thumbs never cross; label, readout, error and size",
+    "purpose": "Slider for a number, or with `range` a [start, end] pair; label, readout, error and size",
     "tags": ["form", "settings"],
     "pairsWith": ["Row", "Setting", "Form"]
   },
@@ -723,7 +753,7 @@
     "pairsWith": ["Text", "Row"]
   },
   "Sortable": {
-    "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)",
+    "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows",
     "tags": ["data", "navigation", "chat"],
     "avoid": "Native HTML5 draggable, which does nothing on touch and has no keyboard path",
     "pairsWith": ["SortableItem", "Nav", "NavItem"]
@@ -754,7 +784,7 @@
     "pairsWith": ["Sections"]
   },
   "StatusIndicator": {
-    "purpose": "Small coloured status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring in a `tone` for a live state",
+    "purpose": "Small status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring for a live state",
     "tags": ["data", "feedback"],
     "pairsWith": ["Row", "Text", "Avatar"]
   },
@@ -764,7 +794,7 @@
     "pairsWith": ["StylePanel", "IconButton", "CodeBlock"]
   },
   "StylePanel": {
-    "purpose": "Live theming controls for theme, colours, shape and density; compose your own from StylePanelRoot and its StylePanel* parts",
+    "purpose": "Live theming controls for theme, colours, shape and density; or compose StylePanelRoot and its parts",
     "tags": ["settings", "theme"],
     "pairsWith": ["StyleOverlay", "ThemeSwitcher", "StylePanelRoot"]
   },
@@ -946,7 +976,7 @@
     "pairsWith": ["TabList", "Tab", "TabPanel"]
   },
   "Tag": {
-    "purpose": "Compact status or category label with a tone; variant=\"announce\" + href for a 'New' pill; selected/onRemove for a filter token",
+    "purpose": "Status or category label with a tone; variant=\"announce\" + href for a 'New' pill; selected/onRemove for a filter token",
     "tags": ["typography", "data", "form", "marketing"],
     "avoid": "Passing the same text as label and children — the children are dropped",
     "pairsWith": ["Row", "Table", "Heading", "TagInput"]
@@ -983,7 +1013,7 @@
     "pairsWith": ["ThemeSwitcher"]
   },
   "ThemeProvider": {
-    "purpose": "Root provider for theme and style (mode, colours, solid, shape), with persistence; read and set with useTheme and useStyle",
+    "purpose": "Root provider for theme and style, persisted; read and set with useTheme and useStyle",
     "tags": ["provider", "theme"],
     "pairsWith": ["ThemeInit", "LayoutProvider", "StylePanel"]
   },
@@ -1020,12 +1050,12 @@
     "pairsWith": ["Row", "SegmentedControl"]
   },
   "Tooltip": {
-    "purpose": "Short non-interactive hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)",
+    "purpose": "Short hint on hover or focus of its children; with content and no children, an info icon (2.x InfoTip)",
     "tags": ["overlay", "basics"],
     "pairsWith": ["IconButton", "Text", "Setting"]
   },
   "TypeFx": {
-    "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in one by one instead; timings in ms",
+    "purpose": "Typewriter that types and deletes a list of words; `mode=\"fade\"` fades letters in instead",
     "tags": ["effect", "marketing"],
     "pairsWith": ["Heading", "Text"]
   },

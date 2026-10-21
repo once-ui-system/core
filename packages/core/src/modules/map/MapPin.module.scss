@@ -1,0 +1,77 @@
+.pin {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--static-space-4);
+  box-sizing: border-box;
+  font-family: var(--font-label);
+  font-size: var(--font-size-label-s);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+  color: var(--neutral-on-background-strong);
+  background: var(--surface-background);
+  border: 1px solid var(--neutral-alpha-medium);
+  box-shadow: var(--shadow-m);
+  transition: var(--transition-micro-medium);
+
+  // A button or link resets.
+  margin: 0;
+  appearance: none;
+}
+
+.pill {
+  min-height: var(--static-space-24);
+  padding: var(--static-space-4) var(--static-space-8);
+  border-radius: var(--radius-full);
+}
+
+.dot {
+  width: var(--static-space-16);
+  height: var(--static-space-16);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--surface-background);
+  background: var(--map-pin-solid);
+}
+
+.interactive {
+  cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid var(--map-pin-solid);
+    outline-offset: 2px;
+  }
+}
+
+.pill.active {
+  color: var(--map-pin-on-solid);
+  background: var(--map-pin-solid);
+  border-color: var(--map-pin-solid);
+}
+
+.active {
+  transform: scale(1.08);
+}
+
+@media (hover: hover) {
+  .interactive:hover {
+    transform: scale(1.06);
+  }
+
+  .pill.interactive:hover {
+    color: var(--map-pin-on-solid);
+    background: var(--map-pin-solid);
+    border-color: var(--map-pin-solid);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pin {
+    transition: none;
+  }
+
+  .interactive,
+  .active {
+    transform: none !important;
+  }
+}

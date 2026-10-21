@@ -292,6 +292,7 @@ because they are packages of their own (the effects and the blocks):
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
 | `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` | none |
 | `EmojiPicker` | `@once-ui-system/core/emoji` | none |
+| `Map`, `MapMarker`, `MapMarkers`, `MapPin`, `MapPopup`, `MapCircle`, `useMap` | `@once-ui-system/core/map` | `maplibre-gl` |
 | `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 | the effects: `RevealFx`, `CountFx`, `TypeFx`, `MatrixFx`, `Effect` and every other `*Fx` | `@once-ui-system/fx` | `@once-ui-system/fx` itself |
 | `Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel`, `StyleOverlay` | `@once-ui-system/blocks` | `@once-ui-system/blocks` itself |
