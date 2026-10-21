@@ -485,6 +485,36 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "Map": {
+    "purpose": "Themed map on free OpenStreetMap tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
+  },
+  "MapCircle": {
+    "purpose": "Area in metres in a token colour, e.g. an approximate address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapMarker": {
+    "purpose": "Any React content pinned to a map position",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapPin", "Avatar"]
+  },
+  "MapMarkers": {
+    "purpose": "Markers from data, with clustering and one active item",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["Map", "MapPin", "MapPopup"]
+  },
+  "MapPin": {
+    "purpose": "Map marker look: label pill (price, count) or dot",
+    "tags": ["map", "location"],
+    "pairsWith": ["MapMarker", "MapMarkers"]
+  },
+  "MapPopup": {
+    "purpose": "Surface card above a map position; Escape closes it",
+    "tags": ["map", "location", "overlay"],
+    "pairsWith": ["Map", "MapMarkers", "Button"]
+  },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],
@@ -587,7 +617,7 @@
     "pairsWith": ["MobileMegaMenu", "SmartLink", "Row"]
   },
   "Meta": {
-    "purpose": "Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards",
+    "purpose": "Meta.generate: Next.js metadata with Open Graph and Twitter cards",
     "tags": ["seo", "next"],
     "pairsWith": ["Schema"]
   },
@@ -850,6 +880,11 @@
     "tags": ["settings", "theme"],
     "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
   },
+  "StyleScope": {
+    "purpose": "Site colours, theme and fonts on one subtree",
+    "tags": ["theme", "layout"],
+    "pairsWith": ["ThemeProvider", "Column"]
+  },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
     "tags": ["form", "action"],
@@ -917,7 +952,7 @@
     "pairsWith": ["Dialog", "Column", "Chip"]
   },
   "ThemeInit": {
-    "purpose": "Inline script for the document head that applies the theme config before first paint, preventing a flash",
+    "purpose": "Head script that applies the theme before first paint, so it never flashes",
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },

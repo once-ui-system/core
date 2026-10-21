@@ -285,6 +285,7 @@ specifier into every consumer's module graph:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+| `Map`, `MapMarker`, `MapMarkers`, `MapPin`, `MapPopup`, `MapCircle`, `useMap` | `@once-ui-system/core/map` | `maplibre-gl` |
 | `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 
 Naming one of these from the root does not resolve. `MediaAudioPlayer` and

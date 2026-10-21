@@ -32,6 +32,7 @@
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",
+    "maplibre-gl": "^6.15.0",
     "next": "^16.2.12",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",

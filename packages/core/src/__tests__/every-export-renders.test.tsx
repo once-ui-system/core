@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import * as Core from "../index";
 import * as Code from "../modules/code";
 import * as Data from "../modules/data";
+import * as MapModule from "../modules/map";
 import * as MediaModule from "../modules/media";
 
 /**
@@ -24,6 +25,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...Data,
   ...Code,
   ...MediaModule,
+  ...MapModule,
 };
 
 const noop = () => {};
@@ -130,6 +132,13 @@ const notRendered = new Set([
   "DataThemeProvider",
   "ToastProvider",
   "IconProvider",
+  // The map components need WebGL and a MapLibre instance; map.test.tsx
+  // renders them against a stand-in maplibre-gl, on the client and server.
+  "Map",
+  "MapCircle",
+  "MapMarker",
+  "MapMarkers",
+  "MapPopup",
 ]);
 
 const isComponent = (value: unknown) => {

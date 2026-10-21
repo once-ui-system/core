@@ -43,6 +43,11 @@ const BARRELS = [
     group: "media",
     importFrom: "@once-ui-system/core/media",
   },
+  {
+    file: path.join(SRC, "modules", "map", "index.ts"),
+    group: "map",
+    importFrom: "@once-ui-system/core/map",
+  },
   // Public components that live on the `./components/*` subpath only, kept
   // out of the root barrel so every bundle does not carry them. No barrel
   // re-exports them, so without an entry of their own the walk above never
@@ -104,6 +109,11 @@ const ENTRY_POINTS = [
   },
   { specifier: "@once-ui-system/core/code", use: "CodeBlock", peer: "prismjs" },
   { specifier: "@once-ui-system/core/media", use: "MediaUpload", peer: "compressorjs" },
+  {
+    specifier: "@once-ui-system/core/map",
+    use: "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
+    peer: "maplibre-gl",
+  },
   {
     specifier: "@once-ui-system/core/mdx",
     use: "MDX content through Once UI: mdxComponents for next-mdx-remote or @next/mdx, createMdxComponents(overrides) to replace elements or register tags, and the Mdx* elements to wrap",

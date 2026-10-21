@@ -15,6 +15,24 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
+  OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
+  theme and takes the page background token. Markers are React content (`MapMarker`, or
+  `MapPin` for price pills and dots), `MapMarkers` renders items from data with optional
+  clustering and an active item, `MapPopup` is a surface card above a point, and
+  `MapCircle` marks an area in metres. `bounds` frames positions; `viewport` /
+  `defaultViewport` / `onViewportChange` control the camera. Keyboard panning and zoom,
+  reduced motion and a fallback without WebGL are built in. `maplibre-gl` (5 or 6) is an
+  optional peer, loaded only when a map renders; `mapStyle` and `transformRequest` plug in
+  a keyed tile provider.
+- **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
+  preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
+  takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
+  border, surface, theme, seeds, scales, page and surface backgrounds) and `fonts` a family
+  per role. A seed or scale becomes a custom scheme for that subtree only, in a server-
+  rendered `<style>`, so two scopes with different brands sit side by side and the first
+  paint is right. Recolouring a nested brand, accent, neutral or solid relies on the
+  nested-token fix (#282).
 - **Cursor presets.** `cursor="soft" | "rounded" | "dot"` on `Flex` and `Grid` restyles
   every cursor in the subtree: the arrow, the pointer over controls, the I-beam over text
   fields and the blocked sign over disabled controls. The browser draws them from the
@@ -35,6 +53,13 @@ item (see `ROADMAP.md`, Week 4).
   pointer move), no longer flashes in the top-left corner on entry, sits above dialogs and
   menus, ignores touch input on hybrid devices, and fades in and out (instantly under
   reduced motion).
+- **`data-brand` on a nested element recolours it on its own.** The brand tokens
+  (`--brand-solid-*`, `--brand-background-*`, `--brand-alpha-*`, the solid border and inset)
+  were resolved on `<html>`, so a section with only `data-brand="red"` kept the page's brand
+  unless it also set `data-theme`. They now resolve again on every nested `data-brand`, in
+  dark and light and under every `data-solid` style. `data-accent` and `data-neutral`
+  get the same (the neutral ramp, `--page-background`, surfaces and contrast solids).
+  The solids follow the nearest `data-solid`, and an element with its own `data-solid` keeps it.
 - **A cursor keyword survives a `style` object.** `Flex`/`Grid` with `style` (or a responsive
   value that needs the client) dropped `cursor="interactive"` and every other keyword, and a
   keyword with a class was also written inline, where nothing could restyle it.

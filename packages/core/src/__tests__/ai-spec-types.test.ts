@@ -77,6 +77,12 @@ const NOT_A_TYPE = new Set([
   "Write",
   // Reactions' default label
   "Add",
+  // MapPopup's default close label
+  "Close",
+  // maplibre-gl's own types, behind Map's escape hatches (onMapLoad,
+  // transformRequest); MapLibre documents them
+  "MapLibreMap",
+  "MapOptions",
   // a generic parameter, not a nameable type: `items: T[]` on InfiniteScroll
   "T",
 ]);
