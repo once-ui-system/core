@@ -38,9 +38,24 @@ const FX = [
   "WeatherFx",
 ];
 const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
+/** The page sections, new in blocks with 3.0 (never in core). */
+const SECTIONS = [
+  "AboutSection",
+  "ContactSection",
+  "CtaSection",
+  "FaqSection",
+  "FeaturesSection",
+  "HeroSection",
+  "LogosSection",
+  "PricingSection",
+  "Sections",
+  "StatsSection",
+  "TeamSection",
+  "TestimonialsSection",
+];
 const PACKAGES = [
   ["@once-ui-system/fx", FX],
-  ["@once-ui-system/blocks", BLOCKS],
+  ["@once-ui-system/blocks", [...BLOCKS, ...SECTIONS]],
 ] as const;
 
 type Entry = { group: string; importFrom?: string };

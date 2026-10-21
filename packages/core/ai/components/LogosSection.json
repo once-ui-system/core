@@ -1,0 +1,21 @@
+{
+ "name": "LogosSection",
+ "group": "blocks",
+ "importFrom": "@once-ui-system/blocks",
+ "props": {
+  "layout": "string",
+  "width": "string",
+  "eyebrow": "string",
+  "title": "string",
+  "description": "string",
+  "resolveHref": "(href: string) => string",
+  "items": "{ src?: string; srcDark?: string; href?: string }[]"
+ },
+ "tags": [
+  "marketing"
+ ],
+ "pairsWith": [
+  "Sections"
+ ],
+ "mixinsRef": []
+}

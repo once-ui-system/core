@@ -5,9 +5,40 @@ import * as blocks from "../index.js";
 /** 3.0, F10: the six compositions are this package's, and core's root no longer has them. */
 const BLOCKS = ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"];
 
+/** The page sections and what describes them (`sections/`). */
+const SECTIONS = [
+  "AboutSection",
+  "ContactSection",
+  "CtaSection",
+  "FaqSection",
+  "FeaturesSection",
+  "HeroSection",
+  "LogosSection",
+  "PricingSection",
+  "Sections",
+  "StatsSection",
+  "TeamSection",
+  "TestimonialsSection",
+  "aboutLayouts",
+  "contactLayouts",
+  "ctaLayouts",
+  "faqLayouts",
+  "featuresLayouts",
+  "heroLayouts",
+  "isSectionType",
+  "logosLayouts",
+  "pricingLayouts",
+  "sectionComponents",
+  "sectionSchemas",
+  "sectionTypes",
+  "statsLayouts",
+  "teamLayouts",
+  "testimonialsLayouts",
+];
+
 describe("@once-ui-system/blocks", () => {
-  it("exports the six blocks and StylePanel's hook", () => {
-    expect(Object.keys(blocks).sort()).toEqual([...BLOCKS, "useStylePanel"].sort());
+  it("exports the six blocks, StylePanel's hook and the page sections", () => {
+    expect(Object.keys(blocks).sort()).toEqual([...BLOCKS, "useStylePanel", ...SECTIONS].sort());
   });
 
   it.each([...BLOCKS, "useStylePanel"])("%s is not on @once-ui-system/core", (name) => {

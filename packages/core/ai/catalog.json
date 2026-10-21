@@ -1,7 +1,7 @@
 {
  "version": "3.0.0-beta.0",
  "generated": "2026-10-21",
- "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
+ "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","mapPin","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","phone","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "ScrollLock": {"purpose":"Freezes page scroll while enabled, keeping one referenced region scrollable"},
   "Accordion": {"purpose":"One collapsible section: a clickable title row that shows and hides its content"},
@@ -172,6 +172,18 @@
   "LogoCloud": {"purpose":"Grid of partner or customer logos with optional rotation — always set columns","importFrom":"@once-ui-system/blocks"},
   "ScrollToTop": {"purpose":"Floating button that appears after a scroll offset and returns to the top","importFrom":"@once-ui-system/blocks"},
   "StyleOverlay": {"purpose":"Wraps a trigger (an IconButton) that opens StylePanel in a floating side panel; fits CodeBlock's actions","importFrom":"@once-ui-system/blocks"},
-  "StylePanel": {"purpose":"Live theming controls for theme, brand and accent colours, shape and density","importFrom":"@once-ui-system/blocks"}
+  "StylePanel": {"purpose":"Live theming controls for theme, brand and accent colours, shape and density","importFrom":"@once-ui-system/blocks"},
+  "AboutSection": {"purpose":"Site section: story beside a picture","importFrom":"@once-ui-system/blocks"},
+  "ContactSection": {"purpose":"Site section: contact details as links","importFrom":"@once-ui-system/blocks"},
+  "CtaSection": {"purpose":"Site section: the closing call to action","importFrom":"@once-ui-system/blocks"},
+  "FaqSection": {"purpose":"Site section: questions and answers","importFrom":"@once-ui-system/blocks"},
+  "FeaturesSection": {"purpose":"Site section: features with icons","importFrom":"@once-ui-system/blocks"},
+  "HeroSection": {"purpose":"Site section: the opening h1, lead, buttons and picture","importFrom":"@once-ui-system/blocks"},
+  "LogosSection": {"purpose":"Site section: client or press logos","importFrom":"@once-ui-system/blocks"},
+  "PricingSection": {"purpose":"Site section: plans side by side, one highlighted","importFrom":"@once-ui-system/blocks"},
+  "Sections": {"purpose":"Renders a page from stored sections [{ type, props }]; fields per type in sectionSchemas","importFrom":"@once-ui-system/blocks"},
+  "StatsSection": {"purpose":"Site section: a few large figures","importFrom":"@once-ui-system/blocks"},
+  "TeamSection": {"purpose":"Site section: people with photo, role and bio","importFrom":"@once-ui-system/blocks"},
+  "TestimonialsSection": {"purpose":"Site section: customer quotes","importFrom":"@once-ui-system/blocks"}
  }
 }

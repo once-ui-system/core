@@ -234,6 +234,98 @@
    "importFrom": "@once-ui-system/blocks",
    "kind": "hook",
    "signature": "() => StylePanelContextValue"
+  },
+  "aboutLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"stacked\"]"
+  },
+  "contactLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"cards\", \"centered\"]"
+  },
+  "ctaLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"banner\", \"split\", \"minimal\"]"
+  },
+  "faqLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"stacked\", \"split\", \"grid\"]"
+  },
+  "featuresLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\", \"split\"]"
+  },
+  "heroLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"split\", \"centered\", \"cover\", \"boxed\"]"
+  },
+  "logosLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"grid\"]"
+  },
+  "pricingLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"list\"]"
+  },
+  "statsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"row\", \"cards\"]"
+  },
+  "teamLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"grid\", \"list\"]"
+  },
+  "testimonialsLayouts": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "readonly [\"cards\", \"spotlight\", \"plain\"]"
+  },
+  "sectionComponents": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, AnySection>",
+   "doc": "The component for each section type."
+  },
+  "sectionSchemas": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "Record<SectionType, SectionSchema>"
+  },
+  "sectionTypes": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "value",
+   "type": "SectionType[]",
+   "doc": "Every section type, in the order an editor offers them."
+  },
+  "isSectionType": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "kind": "function",
+   "signature": "(value: unknown) => value is SectionType"
   }
  },
  "types": {
@@ -250,6 +342,10 @@
    "href": "!string",
    "children": "React.ReactNode"
   },
+  "AnySection": [
+   "ComponentClass<any, any>",
+   "FunctionComponent<any>"
+  ],
   "ArrowNavigationOptions": {
    "layout": "!NavigationLayout",
    "itemCount": "!number",
@@ -442,6 +538,7 @@
    "lock",
    "logout",
    "mail",
+   "mapPin",
    "maximize",
    "minimize",
    "minus",
@@ -454,6 +551,7 @@
    "people",
    "person",
    "personRemove",
+   "phone",
    "play",
    "plus",
    "radialGauge",
@@ -690,6 +788,49 @@
    "emerald",
    "aqua",
    "cyan"
+  ],
+  "SectionField": {
+   "key": "!string",
+   "kind": "!SectionFieldKind",
+   "label": "!string",
+   "options": "readonly string[]",
+   "split": "\"lines\" | \"paragraphs\"",
+   "fields": "SectionField[]",
+   "max": "number",
+   "rowTitle": "string",
+   "when": "{ key: string; is: readonly string[] }",
+   "hint": "string"
+  },
+  "SectionFieldKind": [
+   "boolean",
+   "link",
+   "textarea",
+   "image",
+   "text",
+   "list",
+   "choice"
+  ],
+  "SectionSchema": {
+   "type": "!SectionType",
+   "component": "!string",
+   "label": "!string",
+   "description": "!string",
+   "layouts": "!readonly string[]",
+   "fields": "!SectionField[]",
+   "sample": "!Record<string, unknown>"
+  },
+  "SectionType": [
+   "about",
+   "hero",
+   "features",
+   "stats",
+   "testimonials",
+   "team",
+   "pricing",
+   "faq",
+   "logos",
+   "cta",
+   "contact"
   ],
   "SolidStyle": [
    "flat",

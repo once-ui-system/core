@@ -40,6 +40,17 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`@once-ui-system/fx` and `@once-ui-system/blocks`** (F8, F10), packages of their
   own with core as a peer: the sixteen effects, and Banner, Book, LogoCloud,
   ScrollToTop, StylePanel and StyleOverlay. See Changed.
+- **Page sections in `@once-ui-system/blocks`**: `HeroSection`, `FeaturesSection`,
+  `AboutSection`, `StatsSection`, `TestimonialsSection`, `TeamSection`, `PricingSection`,
+  `FaqSection`, `LogosSection`, `CtaSection` and `ContactSection`, each with two to four
+  `layout`s and a content `width`, reading their props defensively (stored content from
+  an editor or a model never throws, and never shows sample copy). `Sections` renders a
+  stored list (`items={[{ type, props }]}`), passing unknown types to `renderCustom`;
+  `resolveHref` rewrites every link for a base path or language prefix.
+  `sectionSchemas` describes each one as plain JSON (fields, layouts, a sample) for an
+  editor panel or an agent. Ported from Aveiro's sections, which Tavilio and the housing
+  marketplace duplicate.
+- **`phone` and `mapPin` icons** in the built-in set.
 - **CodeBlock `actions`**: controls of your own in the header, before copy.
 - **`density`** in the theme (`once-ui.config` `style`, ThemeProvider, ThemeInit),
   written as `data-density` on `<html>`: `"compact"`, `"normal"` (the default) or

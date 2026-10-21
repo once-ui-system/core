@@ -6,3 +6,4 @@ export * from "./LogoCloud.js";
 export * from "./ScrollToTop.js";
 export * from "./StyleOverlay.js";
 export * from "./StylePanel.js";
+export * from "./sections/index.js";
