@@ -17,7 +17,7 @@
   "variant": "\"default\" | \"ghost\" = \"default\"",
   "loading": "boolean = false",
   "disabled": "boolean",
-  "corners": "| \"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
+  "corners": "\"none\" | \"top\" | \"right\" | \"bottom\" | \"left\" | \"top-left\" | \"top-right\" | \"bottom-right\" | \"bottom-left\"",
   "span": "number",
   "characterCount": "boolean",
   "onValueChange": "(value: string) => void",

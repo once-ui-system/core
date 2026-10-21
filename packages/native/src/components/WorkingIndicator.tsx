@@ -180,6 +180,7 @@ export function WorkingIndicator({
       {...flex}
     >
       {loader === undefined ? (
+        // biome-ignore lint/a11y/useValidAriaValues: an empty label keeps the loader out of the row's announcement
         <LogoSpinner size={LOADER_SIZE[size]} aria-label="" />
       ) : (
         loader || null

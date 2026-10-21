@@ -196,7 +196,7 @@ Also takes React Native's TextInputProps.
 - variant?: "default" | "ghost" = "default"
 - loading?: boolean = false
 - disabled?: boolean
-- corners?: | "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left" — Squares off the field's corners, as core's `corners`: `"top"` keeps the top two round, `"none"` squares all four.
+- corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left" — Squares off the field's corners, as core's `corners`: `"top"` keeps the top two round, `"none"` squares all four.
 - span?: number — How many columns to take inside a `Form`; `Form` reads it.
 - characterCount?: boolean — Shows how many characters are left; needs `maxLength`.
 - onValueChange?: (value: string) => void — Receives the field's text on every change, as core 3.0's `onValueChange` (React Native's own `onChangeText` still works).
