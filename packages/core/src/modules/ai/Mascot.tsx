@@ -9,6 +9,7 @@ import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
 import styles from "./Mascot.module.scss";
+import { MascotCube } from "./MascotCube.js";
 
 export type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
 export type MascotMood =
@@ -53,9 +54,27 @@ export interface MascotLook {
   cheeks?: boolean;
   /** How it moves: `calm` is slow and small, `bouncy` is quick and springy. */
   personality?: "calm" | "default" | "bouncy";
+  /**
+   * With `working="cube"`: the cube's sides. `classic` (default), `tints` of the color, `mono`,
+   * or a color per side. The front follows `color` unless you set it.
+   */
+  sides?:
+    | "classic"
+    | "tints"
+    | "mono"
+    | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>;
+  /** With `working="cube"`: `flat` paints the eyes, brows and mouth on without light. */
+  face?: "3d" | "flat";
 }
 
 export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "children" | "color"> {
+  /**
+   * `cube`: the mascot is drawn in 3D, and while it thinks it turns into a 2 × 2 cube, the Once UI
+   * mark, and solves it with no face showing. When it stops thinking the cube clicks into place,
+   * shows the logo for a beat and softens back into the mascot. Needs WebGL; without it the
+   * flat mascot shows instead.
+   */
+  working?: "cube";
   /** What the assistant is doing. Each state has its own pose and motion. */
   state?: MascotState;
   /** The expression on top of the state. */
@@ -79,7 +98,7 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
 const SCHEMES = new Set(["brand", "accent", "neutral"]);
 
-const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor">> = {
+const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> = {
   color: "brand",
   roundness: 0.7,
   aspect: 1,
@@ -317,9 +336,31 @@ function Mouth({
  * Every part of the look is a prop (`MascotLook`), or comes from a `seed`, so
  * two products never have to share a character. With reduced motion it holds
  * still and keeps its expressions.
+ *
+ * `working="cube"` draws it in 3D: while it thinks it becomes the Once UI cube
+ * and solves it, then shows the logo and softens back with its face.
  */
-const Mascot = ({
+const Mascot = (props: MascotProps) => {
+  const {
+    working,
+    state = "idle",
+    mood = "neutral",
+    lookAt = "pointer",
+    size = "l",
+    ...rest
+  } = props;
+  const full = { ...rest, state, mood, lookAt, size };
+  return working === "cube" ? (
+    <MascotCube props={full} fallback={<FlatMascot {...full} />} />
+  ) : (
+    <FlatMascot {...full} />
+  );
+};
+
+const FlatMascot = ({
   ref: forwardedRef,
+  sides: _sides,
+  face: _face,
   state = "idle",
   mood = "neutral",
   seed,
