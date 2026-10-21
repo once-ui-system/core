@@ -22,8 +22,8 @@ import {
   useTheme,
   useToast,
 } from "../src";
-import { Booking, Calendar } from "./Booking";
 import { Assistant } from "./Assistant";
+import { Booking, Calendar } from "./Booking";
 import { Code } from "./Code";
 import { Guests } from "./Guests";
 import { Menu } from "./Menu";

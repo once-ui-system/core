@@ -42,6 +42,8 @@
   "LineChart": {"purpose":"A line per series over the rows of `data`, with the area under it filled by `variant`, on a card with a header, a legend and tick labels."},
   "List": {"purpose":"A column of `ListItem`s with bullets, or numbers when `as=\"ol\"`."},
   "ListItem": {"purpose":"One line of a `List`, its marker in `neutral-on-background-weak`."},
+  "LogoSpinner": {"purpose":"The four tiles of the Once UI mark, moving."},
+  "Mascot": {"purpose":"An animated companion for an assistant, one soft, single-color shape with eyes."},
   "Media": {"purpose":"A clipped box at `aspectRatio` with a skeleton until the image loads."},
   "Nav": {"purpose":"Core's `Nav`."},
   "NavGroup": {"purpose":"A collapsible set of NavItems, indented behind a rail."},
@@ -80,6 +82,7 @@
   "ToastProvider": {"purpose":"Shows toasts stacked at the bottom of the screen, newest last."},
   "ToggleButton": {"purpose":"A quiet button that stays highlighted while `selected`."},
   "Tooltip": {"purpose":"The small surface bubble a hint is drawn in; it shows nothing on its own (InfoTip shows a tip on press)"},
-  "User": {"purpose":"An avatar with a name, an optional tag and a subline, as in a list of people."}
+  "User": {"purpose":"An avatar with a name, an optional tag and a subline, as in a list of people."},
+  "WorkingIndicator": {"purpose":"Says an assistant is working, with the moving mark and a playful verb that changes every few seconds: \"Imagining…\", \"Noodling…\", \"Kerning…\"."}
  }
 }
