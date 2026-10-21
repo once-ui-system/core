@@ -135,7 +135,7 @@ describe("Mascot working=cube", () => {
     const s = [1.2, 0.8, 1];
     const expected = rotate(q, [0, 1 / s[1], 0]);
     const el = Math.hypot(...expected);
-    up.forEach((v, i) => expect(v / len).toBeCloseTo(expected[i] / el, 5));
+    for (const [i, v] of up.entries()) expect(v / len).toBeCloseTo(expected[i] / el, 5);
   });
 
   it("builds sides from a preset or a color per side, the front following the body", () => {
