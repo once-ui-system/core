@@ -29,6 +29,15 @@ item (see `ROADMAP.md`, Week 4).
   moves under reduced motion. `Reaction` is one glyph with its gesture, on hover, on a
   loop or on demand.
 
+### Fixed
+
+- **DatePicker time panel in a `DropdownWrapper` closed on the stepper chevrons.**
+  DropdownWrapper read any child with a `value` prop as an option and gave it a "pick and
+  close" click handler, which replaced DatePicker's own. Day clicks survived, but the hour
+  and minute chevrons, AM/PM and "Back to calendar" closed the dropdown. Options are now
+  matched by type (`Option`, `data-value`, `role="option"`, a native button). DatePicker
+  also runs a caller's `onClick` next to its own instead of losing its handler to it.
+
 ## [2.4.0] — 2026-10-20
 
 ### Added
