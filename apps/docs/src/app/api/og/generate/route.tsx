@@ -2,24 +2,13 @@ import { ImageResponse } from "next/og";
 
 export const runtime = "edge";
 
-// Brand tokens (scheme-gray-100/300/600/1100, scheme-emerald-900, emerald-600-30).
+// A link preview is read at thumbnail size, so it carries only the section
+// and the title. Brand tokens (scheme-gray-100/300/1100, scheme-emerald-900, emerald-600-30).
 const page = "#0a0a0a";
 const line = "#3f3f3f";
-const quiet = "#959595";
 const text = "#f3f3f3";
 const brandSoft = "#84f6c3";
 const glow = "rgba(8, 169, 124, 0.3)";
-
-// A link preview is read at thumbnail size, so it carries the title and at
-// most a short tagline: the first clause of the summary, when it is short.
-function tagline(description: string | null) {
-  if (!description) return null;
-  const clause = description
-    .split(/[:.;]\s|\s[–—]\s/)[0]
-    .trim()
-    .replace(/[:.;]$/, "");
-  return clause.length <= 52 ? clause : null;
-}
 
 function section(slug: string | null) {
   if (!slug) return "Docs";
@@ -49,12 +38,10 @@ async function loadGoogleFont(family: string) {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const title = url.searchParams.get("title") || "Documentation";
-  const line2 = tagline(url.searchParams.get("description"));
   const eyebrow = section(url.searchParams.get("section"));
   const size = titleSize(title);
 
-  const [regular, semibold, mono] = await Promise.all([
-    loadGoogleFont("Geist:wght@400"),
+  const [semibold, mono] = await Promise.all([
     loadGoogleFont("Geist:wght@600"),
     loadGoogleFont("Geist+Mono:wght@500"),
   ]);
@@ -132,7 +119,7 @@ export async function GET(request: Request) {
         }}
       />
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <div style={{ display: "flex", alignItems: "center" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
           <img alt="" src={`${url.origin}/trademarks/icon-dark.svg`} width={52} height={52} />
           <img
@@ -142,10 +129,13 @@ export async function GET(request: Request) {
             height={52}
           />
         </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
         <span
           style={{
             fontFamily: "Geist Mono",
-            fontSize: 22,
+            fontSize: 26,
             letterSpacing: "0.12em",
             textTransform: "uppercase",
             color: brandSoft,
@@ -153,9 +143,6 @@ export async function GET(request: Request) {
         >
           {eyebrow}
         </span>
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <span
           style={{
             fontSize: size,
@@ -167,14 +154,12 @@ export async function GET(request: Request) {
         >
           {title}
         </span>
-        {line2 && <span style={{ fontSize: 40, lineHeight: 1.2, color: quiet }}>{line2}</span>}
       </div>
     </div>,
     {
       width: 1200,
       height: 630,
       fonts: [
-        { name: "Geist", data: regular, weight: 400, style: "normal" },
         { name: "Geist", data: semibold, weight: 600, style: "normal" },
         { name: "Geist Mono", data: mono, weight: 500, style: "normal" },
       ],
