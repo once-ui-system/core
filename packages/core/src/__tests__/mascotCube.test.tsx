@@ -2,7 +2,15 @@ import { render as baseRender, screen, waitFor } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { describe, expect, it } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { quatAxisAngle, quatMultiply, rotate, snapQuarterTurns } from "../modules/ai/cube/math";
+import {
+  compose,
+  normalMatrix,
+  quatAxisAngle,
+  quatEuler,
+  quatMultiply,
+  rotate,
+  snapQuarterTurns,
+} from "../modules/ai/cube/math";
 import { type CubeInput, CubeMotion, poseFor } from "../modules/ai/cube/state";
 import { Mascot } from "../modules/ai/Mascot";
 import { cubeSides } from "../modules/ai/MascotCube";
@@ -116,6 +124,18 @@ describe("Mascot working=cube", () => {
     ] as [number, number, number][]) {
       for (const v of rotate(snapped, axis)) expect(Math.abs(v - Math.round(v))).toBeLessThan(1e-9);
     }
+  });
+
+  it("turns normals with the model", () => {
+    const q = quatEuler(0.3, 0.9, 0.2);
+    const n = normalMatrix(compose([0, 0, 0], q, [1.2, 0.8, 1]));
+    const up = [n[3], n[4], n[5]];
+    const len = Math.hypot(up[0], up[1], up[2]);
+    // with scale, only the direction matters: the top face's normal follows the rotated y axis
+    const s = [1.2, 0.8, 1];
+    const expected = rotate(q, [0, 1 / s[1], 0]);
+    const el = Math.hypot(...expected);
+    up.forEach((v, i) => expect(v / len).toBeCloseTo(expected[i] / el, 5));
   });
 
   it("builds sides from a preset or a color per side, the front following the body", () => {
