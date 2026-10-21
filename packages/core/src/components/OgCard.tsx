@@ -160,6 +160,9 @@ const OgCard = ({
       fillWidth
       vertical={isRow ? "center" : undefined}
       gap="4"
+      // A row card insets its image, so the image's corners sit inside the
+      // card's instead of running into its edge.
+      padding={isRow ? "8" : undefined}
       radius="l"
       background="surface"
       border="neutral-alpha-medium"
@@ -184,7 +187,7 @@ const OgCard = ({
           minWidth={isRow ? "16rem" : undefined}
           maxWidth={isRow ? "24rem" : undefined}
           loading={loading}
-          radius="l"
+          radius={isRow ? "m" : "l"}
           sizes={sizes}
           unoptimized={unoptimized}
           aspectRatio="16/9"
@@ -258,6 +261,14 @@ const OgCard = ({
                       : "label-default-l"
                 }
                 onBackground="neutral-weak"
+                // Clamped: a meta description runs to 200 characters, which
+                // would make the text taller than the image beside it.
+                style={{
+                  display: "-webkit-box",
+                  WebkitLineClamp: size === "l" ? 3 : 2,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                }}
               >
                 {resolvedDescription}
               </Text>
