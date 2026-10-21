@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.4.0] — 2026-10-20
+
 ### Added
 
 - **`prefix` on `NavItem`.** Any node before the label, such as an `Avatar` on a link to
