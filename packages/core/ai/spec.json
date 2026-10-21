@@ -405,8 +405,8 @@
    "success-alpha-strong",
    "success-alpha-medium",
    "success-alpha-weak",
-   "overlay",
    "surface",
+   "overlay",
    "transparent"
   ],
   "BlendMode": [
@@ -436,17 +436,17 @@
    "xs"
   ],
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -1548,11 +1548,11 @@
    "string[]"
   ],
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",
@@ -1856,12 +1856,7 @@
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
   },
-  "StylePanelRootProps": {
-   "value": "StylePanelValue",
-   "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
-   "labels": "StylePanelLabels",
-   "stacked": "boolean"
-  },
+  "StylePanelRootProps": "StylePanelRoot props",
   "StylePanelRowLabels": {
    "theme": "ReactNode",
    "shape": "ReactNode",
@@ -3657,9 +3652,9 @@
     "group": "string",
     "name": "string",
     "onMove": "(id: string, to: SortablePosition, from: SortablePosition) => void",
-    "direction": "SortableDirection",
-    "handle": "boolean",
-    "disabled": "boolean",
+    "direction": "SortableDirection = column",
+    "handle": "boolean = false",
+    "disabled": "boolean = false",
     "label": "string",
     "labels": "Partial<SortableLabels>"
    }
@@ -5515,6 +5510,353 @@
     "iconButtonProps": "Partial<React.ComponentProps<typeof IconButton>>",
     "children": "!React.ReactNode",
     "zIndex": "DisplayProps[\"zIndex\"] = 2"
+   }
+  },
+  "StylePanelAccent": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "custom": "boolean",
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelAdvanced": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "StylePanelVisibility[\"advanced\"]"
+   }
+  },
+  "StylePanelBodyLineHeight": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelBodySize": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelBodyText": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "StylePanelVisibility[\"bodyText\"]"
+   }
+  },
+  "StylePanelBrand": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "custom": "boolean",
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelColor": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "StylePanelVisibility[\"color\"]",
+    "customColors": "boolean"
+   }
+  },
+  "StylePanelDataStyle": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelDensity": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelEffect": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelGroup": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false"
+   }
+  },
+  "StylePanelNeutral": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelPage": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "StylePanelVisibility[\"page\"]"
+   }
+  },
+  "StylePanelRoot": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "value": "StylePanelValue",
+    "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
+    "labels": "StylePanelLabels",
+    "stacked": "boolean = false"
+   }
+  },
+  "StylePanelRow": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelScaling": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelShape": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelSolid": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelSolidStyle": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "title": "ReactNode | false",
+    "description": "ReactNode | false",
+    "rows": "StylePanelVisibility[\"solidStyle\"]"
+   }
+  },
+  "StylePanelSurface": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelTheme": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
+   }
+  },
+  "StylePanelTransition": {
+   "group": "blocks",
+   "importFrom": "@once-ui-system/blocks",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode | false"
    }
   },
   "StylePanel": {

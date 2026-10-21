@@ -24,7 +24,8 @@
  ],
  "pairsWith": [
   "StyleOverlay",
-  "ThemeSwitcher"
+  "ThemeSwitcher",
+  "StylePanelRoot"
  ],
  "mixinsRef": [
   "CommonProps",
@@ -145,17 +146,17 @@
  },
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -182,11 +183,11 @@
    "dusk"
   ],
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "Schemes": [
    "blue",
@@ -259,12 +260,7 @@
    "bodySize": "(value: BodySize) => ReactNode",
    "bodyLineHeight": "(value: BodyLineHeight) => ReactNode"
   },
-  "StylePanelRootProps": {
-   "value": "StylePanelValue",
-   "onValueChange": "(next: StylePanelValue, changed: Partial<StylePanelValue>) => void",
-   "labels": "StylePanelLabels",
-   "stacked": "boolean"
-  },
+  "StylePanelRootProps": "StylePanelRoot props",
   "StylePanelRowLabels": {
    "theme": "ReactNode",
    "shape": "ReactNode",
@@ -290,24 +286,6 @@
    "scheme": "(name: string, row: StylePanelSchemeRow) => string",
    "neutral": "(name: string) => string"
   },
-  "StylePanelValue": {
-   "theme": "Theme",
-   "border": "BorderStyle",
-   "brand": "Schemes | \"custom\"",
-   "accent": "Schemes | \"custom\"",
-   "neutral": "NeutralColor | \"custom\"",
-   "solid": "SolidType",
-   "solidStyle": "SolidStyle",
-   "surface": "SurfaceStyle",
-   "scaling": "ScalingSize",
-   "density": "Density",
-   "transition": "TransitionStyle",
-   "bodySize": "BodySize",
-   "bodyLineHeight": "BodyLineHeight",
-   "chartMode": "ChartMode",
-   "brandSeed": "string",
-   "accentSeed": "string"
-  },
   "StylePanelVisibility": {
    "page": "{ section?: boolean; theme?: boolean; shape?: boolean }",
    "color": "{ section?: boolean; brand?: boolean; accent?: boolean; neutral?: boolean }",
@@ -318,11 +296,6 @@
   "SurfaceStyle": [
    "filled",
    "translucent"
-  ],
-  "Theme": [
-   "dark",
-   "light",
-   "system"
   ],
   "ThemeSwitcherLabels": {
    "system": "string",

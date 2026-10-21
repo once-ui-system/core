@@ -1,7 +1,8 @@
 # @once-ui-system/blocks
 
 Compositions built from Once UI's primitives: `Banner`, `Book`, `LogoCloud`,
-`ScrollToTop`, `StylePanel` (with `useStylePanel`) and `StyleOverlay`. Until 3.0
+`ScrollToTop`, `StylePanel` (with `useStylePanel`, and its sections as named
+exports: `StylePanelRoot`, `StylePanelBrand` and the rest) and `StyleOverlay`. Until 3.0
 they were part of `@once-ui-system/core`; they are built on it and take it as a
 peer.
 

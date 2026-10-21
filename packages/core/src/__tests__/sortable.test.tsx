@@ -3,7 +3,7 @@ import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Nav, NavSection } from "../components/Nav.js";
 import { NavItem } from "../components/NavItem.js";
-import { arrayMove, Sortable } from "../components/Sortable.js";
+import { arrayMove, Sortable, SortableHandle, SortableItem } from "../components/Sortable.js";
 import { LayoutProvider } from "../contexts/LayoutProvider.js";
 import { axeViolations } from "../test/axe.js";
 
@@ -54,9 +54,9 @@ function List({ onReorder }: { onReorder?: (ids: string[]) => void }) {
       }}
     >
       {ids.map((id) => (
-        <Sortable.Item key={id} id={id}>
+        <SortableItem key={id} id={id}>
           <button type="button">{names[id]}</button>
-        </Sortable.Item>
+        </SortableItem>
       ))}
     </Sortable>
   );
@@ -157,12 +157,12 @@ describe("Sortable with the keyboard", () => {
           lifted: ({ item, position, total }) => `${item} angehoben, ${position} von ${total}.`,
         }}
       >
-        <Sortable.Item id="a">
+        <SortableItem id="a">
           <button type="button">Eins</button>
-        </Sortable.Item>
-        <Sortable.Item id="b">
+        </SortableItem>
+        <SortableItem id="b">
           <button type="button">Zwei</button>
-        </Sortable.Item>
+        </SortableItem>
       </Sortable>,
     );
     const eins = screen.getByRole("button", { name: "Eins" });
@@ -197,18 +197,18 @@ describe("Sortable groups", () => {
           <NavSection label="Pinned">
             <Sortable group="chats" name="pinned" label="Pinned" items={pinned} onMove={move}>
               {pinned.map((id) => (
-                <Sortable.Item key={id} id={id}>
+                <SortableItem key={id} id={id}>
                   <NavItem href={`#${id}`} label={id} />
-                </Sortable.Item>
+                </SortableItem>
               ))}
             </Sortable>
           </NavSection>
           <NavSection label="Projects">
             <Sortable group="chats" name="projects" label="Projects" items={projects} onMove={move}>
               {projects.map((id) => (
-                <Sortable.Item key={id} id={id}>
+                <SortableItem key={id} id={id}>
                   <NavItem href={`#${id}`} label={id} />
-                </Sortable.Item>
+                </SortableItem>
               ))}
             </Sortable>
           </NavSection>
@@ -258,14 +258,14 @@ describe("Sortable handles and disabled rows", () => {
     const onReorder = vi.fn();
     render(
       <Sortable items={["a", "b"]} handle onReorder={onReorder}>
-        <Sortable.Item id="a" label="First">
-          <Sortable.Handle />
+        <SortableItem id="a" label="First">
+          <SortableHandle />
           <button type="button">Open first</button>
-        </Sortable.Item>
-        <Sortable.Item id="b" label="Second">
-          <Sortable.Handle />
+        </SortableItem>
+        <SortableItem id="b" label="Second">
+          <SortableHandle />
           <button type="button">Open second</button>
-        </Sortable.Item>
+        </SortableItem>
       </Sortable>,
     );
     fireEvent.keyDown(screen.getByRole("button", { name: "Open first" }), { key: " " });
@@ -281,7 +281,7 @@ describe("Sortable handles and disabled rows", () => {
   it("makes a row with nothing focusable a tab stop", () => {
     const { container } = render(
       <Sortable items={["a"]}>
-        <Sortable.Item id="a">Plain text row</Sortable.Item>
+        <SortableItem id="a">Plain text row</SortableItem>
       </Sortable>,
     );
     expect(container.querySelector("[data-sortable-id='a']")).toHaveAttribute("tabindex", "0");
@@ -290,12 +290,12 @@ describe("Sortable handles and disabled rows", () => {
   it("leaves a disabled row where it is", () => {
     render(
       <Sortable items={["a", "b"]}>
-        <Sortable.Item id="a" disabled>
+        <SortableItem id="a" disabled>
           <button type="button">Locked</button>
-        </Sortable.Item>
-        <Sortable.Item id="b">
+        </SortableItem>
+        <SortableItem id="b">
           <button type="button">Free</button>
-        </Sortable.Item>
+        </SortableItem>
       </Sortable>,
     );
     fireEvent.keyDown(screen.getByRole("button", { name: "Locked" }), { key: " " });

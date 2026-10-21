@@ -83,6 +83,7 @@ and `ComponentRef`/`ElementRef<typeof X>` give the same element types as in
 | CodeBlock `styleButton` | `actions={<StyleOverlay>…</StyleOverlay>}`, StyleOverlay from `@once-ui-system/blocks` (§ 12) | reports |
 | `ariaLabel` on IconButton, Spinner, Switch, Scrubber, StatusIndicator | `aria-label` | renames |
 | `BaseBreakpointProps` | `FlexBreakpointProps` or `GridBreakpointProps` | reports |
+| `Sortable.Item`, `Sortable.Handle`; `StylePanel.Root`, `StylePanel.Brand` and every other section (F11) | `SortableItem`, `SortableHandle`; `StylePanelRoot`, `StylePanelBrand`…, named exports. A list prop (`items`, `columns`, `options`) for same-shaped data, a named part otherwise, never a dotted name: it fails from a server component | renames every reference and adds the names to the import; `scripts/codemod-3.0-part-names.mjs` runs this step alone |
 | `TextBreakpointProps`, `ButtonBreakpointProps`, `InputBreakpointProps` | none: leaves take `LeafProps` and no breakpoints (§ 13) | not rewritten; `tsc` names them |
 | `resetScrollLockState`, `resetAdapterWarning`, `warnIfFrameworkUnadapted` | none: they were test-only or internal | reports |
 
@@ -125,7 +126,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | --- | --- | --- |
 | Checkbox, RadioButton, Switch `onToggle(checked)` | `onCheckedChange(checked)`; `onChange` is now the input's native event | renames |
 | RadioGroup, SegmentedControl, Tabs, Slider, RangeSlider, ThemeSwitcher `onChange(value)` | `onValueChange(value)` (SegmentedControl keeps its `(value, event?)`) | renames |
-| StylePanel and `StylePanel.Root` `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
+| StylePanel and `StylePanel.Root` (`StylePanelRoot`) `onChange(next, changed)` | `onValueChange(next, changed)`; `value` alone now makes the panel controlled | renames |
 | Pagination `onChange(page)` | `onPageChange(page)`, as on Table | renames |
 | FileTree `onExpandChange(ids, item)` | `onExpandedIdsChange(ids, item)`; `onSelectedIdChange(id, item)` is new, `onSelect` stays | renames |
 | Scrubber `onChange(time)`, `onSelect(blockId)` | `onValueChange(time)`, `onSelectedChange(blockId)` | renames |

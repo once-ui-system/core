@@ -2,7 +2,12 @@ import { LayoutProvider, ThemeProvider } from "@once-ui-system/core";
 import { act, render, screen } from "@testing-library/react";
 import type React from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { StylePanel } from "../StylePanel.js";
+import {
+  StylePanelAdvanced,
+  StylePanelDensity,
+  StylePanelRoot,
+  StylePanelScaling,
+} from "../StylePanel.js";
 
 /**
  * The Density row, beside Scaling: bound to ThemeProvider it writes
@@ -28,9 +33,9 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 describe("StylePanel Density", () => {
   it("sits next to Scaling", () => {
     render(
-      <StylePanel.Root>
-        <StylePanel.Advanced />
-      </StylePanel.Root>,
+      <StylePanelRoot>
+        <StylePanelAdvanced />
+      </StylePanelRoot>,
       { wrapper },
     );
     const density = screen.getByText("Density", { exact: true });
@@ -42,10 +47,10 @@ describe("StylePanel Density", () => {
 
   it("writes data-density and brings the density's scaling along", () => {
     render(
-      <StylePanel.Root>
-        <StylePanel.Density />
-        <StylePanel.Scaling />
-      </StylePanel.Root>,
+      <StylePanelRoot>
+        <StylePanelDensity />
+        <StylePanelScaling />
+      </StylePanelRoot>,
       { wrapper },
     );
     act(() => screen.getByRole("radio", { name: "Compact" }).click());
@@ -62,9 +67,9 @@ describe("StylePanel Density", () => {
   it("reports the density when a host owns the state", () => {
     const onValueChange = vi.fn();
     render(
-      <StylePanel.Root value={{ density: "normal" }} onValueChange={onValueChange}>
-        <StylePanel.Density />
-      </StylePanel.Root>,
+      <StylePanelRoot value={{ density: "normal" }} onValueChange={onValueChange}>
+        <StylePanelDensity />
+      </StylePanelRoot>,
       { wrapper },
     );
     act(() => screen.getByRole("radio", { name: "Spacious" }).click());

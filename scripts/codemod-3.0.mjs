@@ -16,6 +16,7 @@
  * Usage:  node scripts/codemod-3.0.mjs <dir> [--dry]
  *         node scripts/codemod-3.0-imports.mjs <dir> [--dry]   (import sources only)
  *         node scripts/codemod-3.0-leaf.mjs <dir> [--dry]      (G2 leaf props only)
+ *         node scripts/codemod-3.0-part-names.mjs <dir> [--dry] (F11 part names only)
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -40,6 +41,7 @@ import { transformMerges } from "./codemod-3.0-merges.mjs";
 import { transformTypes } from "./codemod-3.0-types.mjs";
 import { ONE_X_MESSAGE, detectOneX } from "./codemod-3.0-detect.mjs";
 import { transformJsonStrings } from "./codemod-3.0-json.mjs";
+import { transformPartNames } from "./codemod-3.0-part-names.mjs";
 
 /** component → { oldProp: newProp } */
 const TRANSFORMS = {
@@ -97,6 +99,8 @@ const VALUE_CONTRACT_CONTROLS = {
   ThemeSwitcher: { onChange: "onValueChange" },
   StylePanel: { onChange: "onValueChange" },
   "StylePanel.Root": { onChange: "onValueChange" },
+  // F11: the same part under its 3.0 name (the part-names pass runs first).
+  StylePanelRoot: { onChange: "onValueChange" },
   Pagination: { onChange: "onPageChange" },
   Scrubber: { onChange: "onValueChange", onSelect: "onSelectedChange" },
   // Same `(expandedIds, item)` signature; `onSelect` stays the action.
@@ -2325,6 +2329,9 @@ function transformFile(src, { file = null, devLogger = null, strings = true } = 
   run(transformElementType(out), out);
   run(rewriteDevImport(out, file, devLogger), out);
   run(rewriteExports(out), out);
+  // F11: `Sortable.Item` → `SortableItem`, `StylePanel.Root` → `StylePanelRoot`
+  // (./codemod-3.0-part-names.mjs). Before the renames, so they read the plain names.
+  run(transformPartNames(out, { file }), out);
   run(transformRenames(out), out);
   // D2–D5, after the renames above (it reads the 3.0 prop names).
   run(transformUnits(out, { file }), out);

@@ -72,7 +72,7 @@
   "SmartLink": {"purpose":"Styled link with prefix/suffix icons and a selected state; routes through the framework adapter","avoid":"Raw a elements"},
   "Sortable": {"purpose":"List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)","avoid":"Native HTML5 draggable, which does nothing on touch and has no keyboard path"},
   "SortableHandle": {"purpose":"Grip button a Sortable row drags by when the list has handle; drags at once on touch"},
-  "SortableItem": {"purpose":"One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged"},
+  "SortableItem": {"purpose":"One row of a Sortable, wrapping a NavItem, Card or any row unchanged"},
   "Spinner": {"purpose":"Rotating loader for async and streaming states"},
   "SplitView": {"purpose":"Two panes with a draggable divider, collapsing to one below a breakpoint"},
   "StatusIndicator": {"purpose":"Small coloured status dot (online, error, warning) by palette hue; `pulse` adds a pulsing ring in a `tone` for a live state"},
@@ -172,6 +172,6 @@
   "LogoCloud": {"purpose":"Grid of partner or customer logos with optional rotation — always set columns","importFrom":"@once-ui-system/blocks"},
   "ScrollToTop": {"purpose":"Floating button that appears after a scroll offset and returns to the top","importFrom":"@once-ui-system/blocks"},
   "StyleOverlay": {"purpose":"Wraps a trigger (an IconButton) that opens StylePanel in a floating side panel; fits CodeBlock's actions","importFrom":"@once-ui-system/blocks"},
-  "StylePanel": {"purpose":"Live theming controls for theme, brand and accent colours, shape and density","importFrom":"@once-ui-system/blocks"}
+  "StylePanel": {"purpose":"Live theming controls for theme, colours, shape and density; compose your own from StylePanelRoot and its StylePanel* parts","importFrom":"@once-ui-system/blocks"}
  }
 }

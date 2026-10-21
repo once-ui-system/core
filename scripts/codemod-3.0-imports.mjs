@@ -34,6 +34,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { specifiersOf } from "./codemod-2.0.mjs";
 import { braceList, codeOnly } from "./codemod-3.0-format.mjs";
+import { PART_EXPORTS } from "./codemod-3.0-part-names.mjs";
 
 const ROOT = "@once-ui-system/core";
 
@@ -105,6 +106,9 @@ export const MOVED_IMPORTS = {
 		"StylePanelVisibility",
 		"StyleRowProps",
 		"StyleSchemeRowProps",
+		// F11: the sections, as plain names (the part-names pass adds them to
+		// the import that held StylePanel, which is core's in 2.x code).
+		...PART_EXPORTS.filter((name) => name.startsWith("StylePanel")),
 	],
 };
 

@@ -1,10 +1,15 @@
 "use client";
 
 import {
+  StylePanelAdvanced,
+  StylePanelBodyText,
+  StylePanelColor,
   type StylePanelLabels,
+  StylePanelPage,
+  StylePanelRoot,
   type StylePanelRootProps,
+  StylePanelSolidStyle,
   type StylePanelVisibility,
-  sections,
 } from "./StylePanelSections.js";
 
 export type {
@@ -24,7 +29,31 @@ export type {
   StyleRowProps,
   StyleSchemeRowProps,
 } from "./StylePanelSections.js";
-export { useStylePanel } from "./StylePanelSections.js";
+export {
+  StylePanelAccent,
+  StylePanelAdvanced,
+  StylePanelBodyLineHeight,
+  StylePanelBodySize,
+  StylePanelBodyText,
+  StylePanelBrand,
+  StylePanelColor,
+  StylePanelDataStyle,
+  StylePanelDensity,
+  StylePanelEffect,
+  StylePanelGroup,
+  StylePanelNeutral,
+  StylePanelPage,
+  StylePanelRoot,
+  StylePanelRow,
+  StylePanelScaling,
+  StylePanelShape,
+  StylePanelSolid,
+  StylePanelSolidStyle,
+  StylePanelSurface,
+  StylePanelTheme,
+  StylePanelTransition,
+  useStylePanel,
+} from "./StylePanelSections.js";
 
 export interface StylePanelProps extends StylePanelRootProps {
   /** Hide whole sections or individual rows. Omitted keys stay visible. */
@@ -61,25 +90,23 @@ const visible = (section: { section?: boolean } | undefined) => section?.section
  *
  * It is a plain composition of its own parts, so a host that needs a different
  * arrangement — or only two of the sections — can drop this and compose
- * `StylePanel.Page`, `StylePanel.Brand` and the rest directly inside
- * `StylePanel.Root`. Pass `value` and `onValueChange` to take over the state, in
+ * `StylePanelPage`, `StylePanelBrand` and the rest directly inside
+ * `StylePanelRoot`. Pass `value` and `onValueChange` to take over the state, in
  * which case nothing is written to ThemeProvider or storage, and `labels` to
  * translate it.
  */
 const StylePanel = ({ ref, visibility, customColors, ...rest }: StylePanelProps) => (
-  <sections.Root ref={ref} {...rest}>
-    {visible(visibility?.page) && <sections.Page rows={visibility?.page} />}
+  <StylePanelRoot ref={ref} {...rest}>
+    {visible(visibility?.page) && <StylePanelPage rows={visibility?.page} />}
     {visible(visibility?.color) && (
-      <sections.Color rows={visibility?.color} customColors={customColors} />
+      <StylePanelColor rows={visibility?.color} customColors={customColors} />
     )}
-    {visible(visibility?.solidStyle) && <sections.SolidStyle rows={visibility?.solidStyle} />}
-    {visibility?.bodyText?.section === true && <sections.BodyText rows={visibility?.bodyText} />}
-    {visible(visibility?.advanced) && <sections.Advanced rows={visibility?.advanced} />}
-  </sections.Root>
+    {visible(visibility?.solidStyle) && <StylePanelSolidStyle rows={visibility?.solidStyle} />}
+    {visibility?.bodyText?.section === true && <StylePanelBodyText rows={visibility?.bodyText} />}
+    {visible(visibility?.advanced) && <StylePanelAdvanced rows={visibility?.advanced} />}
+  </StylePanelRoot>
 );
 
 StylePanel.displayName = "StylePanel";
 
-const StylePanelWithSections = Object.assign(StylePanel, sections);
-
-export { StylePanelWithSections as StylePanel };
+export { StylePanel };

@@ -7,7 +7,19 @@ import {
 import { render, screen, within } from "@testing-library/react";
 import type React from "react";
 import { describe, expect, it, vi } from "vitest";
-import { StylePanel, type StylePanelLabels } from "../StylePanel.js";
+import {
+  StylePanel,
+  StylePanelAccent,
+  StylePanelBrand,
+  StylePanelColor,
+  StylePanelDataStyle,
+  StylePanelGroup,
+  type StylePanelLabels,
+  StylePanelPage,
+  StylePanelRoot,
+  StylePanelScaling,
+  StylePanelSolid,
+} from "../StylePanel.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 /**
@@ -263,15 +275,15 @@ describe("StylePanel labels", () => {
 
   it("reach the rows and groups of a composed panel", () => {
     render(
-      <StylePanel.Root labels={de} value={{ brand: "blue" }} onValueChange={vi.fn()}>
-        <StylePanel.Group title="Meine Auswahl">
-          <StylePanel.Brand />
-          <StylePanel.Solid />
-          <StylePanel.Scaling />
-          <StylePanel.DataStyle />
-        </StylePanel.Group>
-        <StylePanel.Page />
-      </StylePanel.Root>,
+      <StylePanelRoot labels={de} value={{ brand: "blue" }} onValueChange={vi.fn()}>
+        <StylePanelGroup title="Meine Auswahl">
+          <StylePanelBrand />
+          <StylePanelSolid />
+          <StylePanelScaling />
+          <StylePanelDataStyle />
+        </StylePanelGroup>
+        <StylePanelPage />
+      </StylePanelRoot>,
       { wrapper },
     );
 
@@ -295,14 +307,14 @@ describe("StylePanel labels", () => {
 
   it("lose to a row's or group's own props", () => {
     render(
-      <StylePanel.Root labels={de}>
-        <StylePanel.Page title="Mein Titel" description={false} />
-        <StylePanel.Color title={false} description="Eigene Beschreibung" rows={{ brand: false }} />
-        <StylePanel.Group title={false} description={false}>
-          <StylePanel.Brand label="Hausfarbe" />
-          <StylePanel.Accent label={false} />
-        </StylePanel.Group>
-      </StylePanel.Root>,
+      <StylePanelRoot labels={de}>
+        <StylePanelPage title="Mein Titel" description={false} />
+        <StylePanelColor title={false} description="Eigene Beschreibung" rows={{ brand: false }} />
+        <StylePanelGroup title={false} description={false}>
+          <StylePanelBrand label="Hausfarbe" />
+          <StylePanelAccent label={false} />
+        </StylePanelGroup>
+      </StylePanelRoot>,
       { wrapper },
     );
 

@@ -10,6 +10,8 @@ import {
   NavSection,
   Row,
   Sortable,
+  SortableHandle,
+  SortableItem,
   type SortablePosition,
   Tag,
   Text,
@@ -22,9 +24,9 @@ export function SortableListExample() {
     <Column maxWidth="20rem" padding="8" radius="l" border="neutral-alpha-medium">
       <Sortable items={rows} onReorder={setRows} gap="4">
         {rows.map((row) => (
-          <Sortable.Item key={row} id={row}>
+          <SortableItem key={row} id={row}>
             <NavItem href={`#${row.toLowerCase()}`} label={row} />
-          </Sortable.Item>
+          </SortableItem>
         ))}
       </Sortable>
     </Column>
@@ -71,13 +73,13 @@ export function SortableSidebarExample() {
       onMove={move}
     >
       {chats[name].map((chat) => (
-        <Sortable.Item key={chat} id={chat}>
+        <SortableItem key={chat} id={chat}>
           <NavItem
             href={`#${chat}`}
             icon={name === "archive" ? undefined : CHAT_ICONS[name]}
             label={chat}
           />
-        </Sortable.Item>
+        </SortableItem>
       ))}
     </Sortable>
   );
@@ -111,8 +113,8 @@ export function SortableHandleExample() {
         onReorder={(_, { from, to }) => setTasks((current) => arrayMove(current, from, to))}
       >
         {tasks.map((task) => (
-          <Sortable.Item key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
-            <Sortable.Handle />
+          <SortableItem key={task.id} id={task.id} label={task.label} vertical="center" gap="8">
+            <SortableHandle />
             <Checkbox
               label={task.label}
               checked={task.done}
@@ -122,7 +124,7 @@ export function SortableHandleExample() {
                 )
               }
             />
-          </Sortable.Item>
+          </SortableItem>
         ))}
       </Sortable>
     </Column>
@@ -161,7 +163,7 @@ export function SortableBoardExample() {
             onMove={(id, to, from) => setBoard((current) => moveBetween(current, id, to, from))}
           >
             {board[name].map((card) => (
-              <Sortable.Item
+              <SortableItem
                 key={card}
                 id={card}
                 padding="12"
@@ -170,7 +172,7 @@ export function SortableBoardExample() {
                 border="neutral-alpha-medium"
               >
                 <Text textVariant="body-default-s">{card}</Text>
-              </Sortable.Item>
+              </SortableItem>
             ))}
           </Sortable>
         </Column>

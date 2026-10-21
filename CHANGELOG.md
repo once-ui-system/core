@@ -69,6 +69,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`ariaLabel`** on `IconButton`, `Spinner`, `Switch`, `Scrubber` and `StatusIndicator`.
   The native `aria-label` names the same element, with the same defaults.
 - **`BaseBreakpointProps`**, unused since 2.0.
+- **Dotted parts** (F11): `Sortable.Item` and `Sortable.Handle` are `SortableItem` and
+  `SortableHandle`, and StylePanel's sections are `StylePanelRoot`, `StylePanelBrand`
+  and so on, plain named exports. A dotted part fails from a server component; the
+  codemod renames every use.
 - **Internal exports** that reached the root barrel: `resetScrollLockState`,
   `resetAdapterWarning`, `warnIfFrameworkUnadapted`.
 - **Exports that were parts of other components** (F7): `ServerFlex`, `ClientFlex`,

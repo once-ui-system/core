@@ -1116,6 +1116,15 @@ function validate(source, spec, iconNames, options = {}) {
       renamed.add(t.name);
       add("api.renamed", `${t.name} is ${PRE_3_COMPONENTS[t.name]} in 3.0`);
     }
+    // 3.0, F11: no dotted parts (`Sortable.Item`); each is a plain named export.
+    const dotted = /^([A-Z]\w*)\.([A-Z]\w*)$/.exec(t.name);
+    if (dotted && spec.components?.[dotted[1] + dotted[2]] && !renamed.has(t.name)) {
+      renamed.add(t.name);
+      add(
+        "api.renamed",
+        `${t.name} is ${dotted[1] + dotted[2]} in 3.0: a part is a plain named export, never a dotted name`,
+      );
+    }
     if (t.name === "Table" && hasProp(t.attrs, "data") && !renamed.has("Table.data")) {
       renamed.add("Table.data");
       add(
