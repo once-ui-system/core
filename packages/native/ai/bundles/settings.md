@@ -182,6 +182,8 @@ An `Input`-styled field that opens its options in a bottom sheet.
 - errorMessage?, description?: ReactNode
 - disabled?: boolean
 - labels?: { search?: string } — The search field's words, as in core.
+- accessibilityLabel?: string — The spoken name and the sheet's title without a `label`, as a `Field` passes it.
+- accessibilityHint?: string
 - style?: ViewStyle
 
 ### Input
@@ -308,6 +310,8 @@ Also takes React Native's ViewProps.
 - borderRight?, borderBottom?, borderLeft?, borderX?, borderY?: BorderValue
 - borderStyle?: "solid" | "dashed"
 - borderWidth?: 1 | 2 | 4 | 8
+- topRadius?: RadiusSize — One side's or one corner's radius, as core's; wins over `radius` there.
+- rightRadius?, bottomRadius?, leftRadius?, topLeftRadius?, topRightRadius?, bottomLeftRadius?, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
 - overflow?: "visible" | "hidden" | "scroll" — As on the web, `radius` alone does not clip children: pass `overflow="hidden"`.
 - width?, height?, minWidth?, maxWidth?, minHeight?, maxHeight?: Size
@@ -351,7 +355,7 @@ type Colors = `${ColorScheme}-${ColorWeight}` | `${ColorScheme}-alpha-${ColorWei
 type ColorScheme = "neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"
 type ColorWeight = "weak" | "medium" | "strong"
 type CondensedTShirtSizes = "s" | "m" | "l"
-type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "borderStyle" | "borderWidth" | "radius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
+type FlexBreakpointProps = Pick< FlexProps, | "direction" | "horizontal" | "vertical" | "center" | "wrap" | "flex" | keyof SpacingProps | "top" | "right" | "bottom" | "left" | "width" | "height" | "maxWidth" | "minWidth" | "minHeight" | "maxHeight" | "fit" | "fitWidth" | "fitHeight" | "fill" | "fillWidth" | "fillHeight" | "aspectRatio" | "background" | "border" | "borderTop" | "borderRight" | "borderBottom" | "borderLeft" | "borderX" | "borderY" | "borderStyle" | "borderWidth" | "radius" | "topRadius" | "rightRadius" | "bottomRadius" | "leftRadius" | "topLeftRadius" | "topRightRadius" | "bottomLeftRadius" | "bottomRightRadius" | "shadow" | "opacity" | "zIndex" | "pointerEvents" | "dark" | "light" | "position" | "hide" | "overflow" | "style" >
 type FlexProps = Flex props
 type IconLibraryOverrides = {} (an app augments it to register its own icon names)
 type IconName = BuiltInIconName | Extract<keyof IconLibraryOverrides, string>

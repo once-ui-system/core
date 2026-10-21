@@ -141,6 +141,18 @@ export {
   type RadioGroupProps,
 } from "./components/RadioGroup";
 export { RangeSlider, type RangeSliderProps } from "./components/RangeSlider";
+export {
+  Reaction,
+  type ReactionChange,
+  type ReactionProps,
+  Reactions,
+  type ReactionsProps,
+} from "./components/Reactions";
+export {
+  type ReactionMotion,
+  type ReactionOption,
+  reactionMotion,
+} from "./components/reactionMotion";
 export { Scroller, type ScrollerProps, type ScrollerRef } from "./components/Scroller";
 export {
   type ButtonOption,

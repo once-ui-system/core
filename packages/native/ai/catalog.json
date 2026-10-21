@@ -58,6 +58,8 @@
   "RadioButton": {"purpose":"A 20pt circle, brand-filled with a dot when checked."},
   "RadioGroup": {"purpose":"One choice out of `options`, with an optional group label."},
   "RangeSlider": {"purpose":"Two thumbs on one track, selecting a `[start, end]` range, such as a price filter."},
+  "Reaction": {"purpose":"One reaction at a fixed size with its own gesture."},
+  "Reactions": {"purpose":"The row under a post, a comment or a message."},
   "Row": {"purpose":"Horizontal flex layout — default direction row"},
   "Scroller": {"purpose":"Flex props lay out the content (`gap`, `padding`, `safeArea` for the home indicator), size props size the view."},
   "SegmentedControl": {"purpose":"A row of toggle buttons where one is selected."},
