@@ -94,9 +94,12 @@ const slice = (name: string) =>
   );
 
 describe("core's root", () => {
-  it.each([...FX, ...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])("no longer exports %s", (name) => {
-    expect(name in core).toBe(false);
-  });
+  it.each([...FX, ...BLOCKS, ...SECTIONS, ...PAGE_SECTIONS, "useStylePanel"])(
+    "no longer exports %s",
+    (name) => {
+      expect(name in core).toBe(false);
+    },
+  );
 
   it("renders CodeBlock actions in its header, where styleButton was", async () => {
     const wrap = ({ children }: { children: React.ReactNode }) => (
