@@ -286,7 +286,13 @@ const MapImpl: React.FC<MapProps> = ({
     const next = pickStyle(mapStyle, resolvedTheme);
     if (next !== appliedStyle.current) {
       appliedStyle.current = next;
-      map.setStyle(next, { diff: false });
+      // A diffed swap (both styles on one schema) keeps the map drawn but
+      // fires no style.load: re-tint and re-add shapes once it settles.
+      map.setStyle(next);
+      map.once("idle", () => {
+        if (latest.current.tint) tintStyle(map);
+        setStyleVersion((version) => version + 1);
+      });
     } else if (tint && map.isStyleLoaded()) {
       tintStyle(map);
       setStyleVersion((version) => version + 1);
