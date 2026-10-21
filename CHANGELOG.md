@@ -15,6 +15,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
+  OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
+  theme and takes the page background token. Markers are React content (`MapMarker`, or
+  `MapPin` for price pills and dots), `MapMarkers` renders items from data with optional
+  clustering and an active item, `MapPopup` is a surface card above a point, and
+  `MapCircle` marks an area in metres. `bounds` frames positions; `viewport` /
+  `defaultViewport` / `onViewportChange` control the camera. Keyboard panning and zoom,
+  reduced motion and a fallback without WebGL are built in. `maplibre-gl` (5 or 6) is an
+  optional peer, loaded only when a map renders; `mapStyle` and `transformRequest` plug in
+  a keyed tile provider.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,

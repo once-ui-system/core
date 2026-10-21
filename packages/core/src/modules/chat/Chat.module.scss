@@ -152,10 +152,19 @@
   }
 }
 
-/* ChatComposer */
+/* ChatComposer: attach and send centre on the field's last line, so they line
+ * up with a one-line draft and stay at the bottom as it grows. The edge is as
+ * tall as a one-line field (the Textarea's well, inset and line, all set on its
+ * `.base`) and pinned to the bottom. It used to take an 8px bottom padding
+ * inside a slot the Textarea centres, which put the buttons 4px above the text
+ * and in the middle of a multi-line draft. */
+.composer :has(> .composerEdge) {
+  align-self: stretch;
+}
+
 .composerEdge {
   align-self: flex-end;
-  padding-bottom: var(--static-space-8);
+  height: calc(2 * var(--fld-well) + 2 * var(--fld-textarea-inset) + var(--fld-lh));
 }
 
 /* The hint and send button keep their width; the chips beside them wrap. */
