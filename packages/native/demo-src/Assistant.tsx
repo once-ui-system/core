@@ -58,6 +58,7 @@ export function Assistant() {
               value={state}
               onChange={(value) => setState(value as MascotState)}
               compact
+              fillWidth={false}
             />
           </Scroller>
           <WorkingIndicator showElapsed detail="tap to stop" />
