@@ -816,6 +816,18 @@ describe("api.renamed: 1.x prop names", () => {
     ]);
   });
 
+  it("names the plain part for a dotted one", () => {
+    const found = issues(
+      `<Sortable items={a}><Sortable.Item id="x"><Sortable.Handle /></Sortable.Item></Sortable>\n<StylePanel.Root><StylePanel.Brand /></StylePanel.Root>\n<Once.Button>a</Once.Button>`,
+    ).filter((issue) => issue.rule === "api.renamed");
+    expect(found.map((issue) => issue.message)).toEqual([
+      "Sortable.Item is SortableItem in 3.0: a part is a plain named export, never a dotted name",
+      "Sortable.Handle is SortableHandle in 3.0: a part is a plain named export, never a dotted name",
+      "StylePanel.Root is StylePanelRoot in 3.0: a part is a plain named export, never a dotted name",
+      "StylePanel.Brand is StylePanelBrand in 3.0: a part is a plain named export, never a dotted name",
+    ]);
+  });
+
   it("names the 3.0 prop for a 2.x one", () => {
     const found = issues(
       `<Switch checked={on} onToggle={set} />\n<Tabs value={tab} onChange={pick} />`,

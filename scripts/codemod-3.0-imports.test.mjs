@@ -8,6 +8,7 @@ import assert from "node:assert/strict";
 import { describe, it } from "node:test";
 import { addToCoreImport, removeFromCoreImport } from "./codemod-3.0-format.mjs";
 import { MOVED_IMPORTS, packagesAdded, transformImports } from "./codemod-3.0-imports.mjs";
+import { PART_EXPORTS } from "./codemod-3.0-part-names.mjs";
 import { transform } from "./codemod-3.0.mjs";
 
 const run = (src) => transformImports(src);
@@ -253,7 +254,10 @@ describe("F8, F10: the effects and the blocks are packages of their own", () => 
 
 	it("moves every one of the sixteen effects and the six blocks", () => {
 		const effects = MOVED_IMPORTS["@once-ui-system/fx"].filter((n) => !/Props$|Type$|Config$/.test(n));
-		const blocks = MOVED_IMPORTS["@once-ui-system/blocks"].filter((n) => /^[A-Z]/.test(n) && !/Props$|Labels$|Heading$|Value$|Visibility$|Row$/.test(n));
+		// StylePanel's sections (F11) are parts of one block, not blocks.
+		const blocks = MOVED_IMPORTS["@once-ui-system/blocks"].filter(
+			(n) => /^[A-Z]/.test(n) && !/Props$|Labels$|Heading$|Value$|Visibility$|Row$/.test(n) && !PART_EXPORTS.includes(n),
+		);
 		assert.equal(effects.length, 16);
 		assert.deepEqual(blocks.sort(), ["Banner", "Book", "LogoCloud", "ScrollToTop", "StyleOverlay", "StylePanel"]);
 		const { out } = run(`import { ${[...effects, ...blocks].join(", ")} } from "@once-ui-system/core";\n`);

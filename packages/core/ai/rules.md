@@ -154,6 +154,8 @@ Breakpoints, padding, background, border, radius, sizes and `hide` exist only on
 <Fade to="top" fill><Column overflowY="auto">...</Column></Fade>
 ```
 
+14e. Multi-part components: a list prop (`items`, `columns`, `options`) for same-shaped data, else plain named parts (`<SortableItem>`, `<StylePanelBrand>`). Never a dotted name (`Sortable.Item`, `StylePanel.Brand`): 3.0 has none, and one fails from a server component.
+
 ## Composition rhythm
 
 15. Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth={...}` → sections. Gaps between siblings, padding inside surfaces; avoid margins for layout when a parent `gap` can do it.

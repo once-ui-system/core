@@ -15,17 +15,17 @@
  "mixinsRef": [],
  "types": {
   "BodyLineHeight": [
-   "90",
    "100",
+   "90",
    "110",
    "120"
   ],
   "BodySize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "BorderStyle": [
    "rounded",
@@ -92,11 +92,11 @@
    "surfaceBackground": "ThemeColor"
   },
   "ScalingSize": [
-   "90",
-   "95",
    "100",
-   "105",
-   "110"
+   "90",
+   "110",
+   "95",
+   "105"
   ],
   "SchemeRampWeight": [
    "100",

@@ -664,8 +664,8 @@ async function main() {
         return checker.getTypeFromTypeNode(call.typeArguments[1]);
       }
     }
-    // Object.assign(Component, parts) — a compound component such as
-    // StylePanel, whose props are the props of the component it wraps. Without
+    // Object.assign(Component, parts) — a compound component, as StylePanel
+    // was before 3.0, whose props are the props of the component it wraps. Without
     // this the export resolves to an intersection with no call signature the
     // branches above recognise, and the component drops out of the spec
     // silently: the docs still build, and only an agent reading the spec
@@ -700,6 +700,23 @@ async function main() {
     const fn = getComponentFunction(decl);
     if (fn && fn.parameters.length && fn.parameters[0].type) {
       return checker.getTypeFromTypeNode(fn.parameters[0].type);
+    }
+    // const BrandRow = schemeRow("brand") — a component a factory returns,
+    // such as StylePanel's rows: the props are its call signature's first parameter.
+    // Only the packages' own factories: a library call such as createContext
+    // also returns something callable, and it is not a component.
+    const factory =
+      ts.isVariableDeclaration(decl) &&
+      decl.initializer &&
+      ts.isCallExpression(decl.initializer) &&
+      checker.getResolvedSignature(decl.initializer)?.getDeclaration();
+    if (factory && !factory.getSourceFile().isDeclarationFile) {
+      const [signature] = checker.getTypeAtLocation(decl.name).getCallSignatures();
+      const param = signature?.getParameters()[0];
+      const paramDecl = param?.valueDeclaration;
+      if (paramDecl && ts.isParameter(paramDecl) && paramDecl.type) {
+        return checker.getTypeFromTypeNode(paramDecl.type);
+      }
     }
     return undefined;
   }
@@ -1180,6 +1197,10 @@ function emitArtifacts(spec, version, entryTypes) {
   const catalog = { version, generated: spec.generated, components: {} };
   for (const [name, entry] of Object.entries(spec.components)) {
     const meta = seed[name] || {};
+    // A part of one composed component (StylePanel's sections) is reached
+    // through that component, so it stays out of the every-task catalog; its
+    // purpose rides in its slice instead.
+    if (meta.partOf) continue;
     catalog.components[name] = {
       purpose: meta.purpose || `${name} component`,
       // A component that does not come from the package root says where it
@@ -1230,6 +1251,7 @@ function emitArtifacts(spec, version, entryTypes) {
     const meta = seed[name] || {};
     const slice = {
       name,
+      ...(meta.partOf ? { partOf: meta.partOf, purpose: meta.purpose } : {}),
       ...entry,
       ...(meta.tags ? { tags: meta.tags } : {}),
       ...(meta.pairsWith ? { pairsWith: meta.pairsWith } : {}),

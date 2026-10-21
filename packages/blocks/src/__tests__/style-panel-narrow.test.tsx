@@ -11,7 +11,18 @@ import { userEvent } from "@testing-library/user-event";
 import type React from "react";
 import { useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { StylePanel, type StylePanelValue } from "../StylePanel.js";
+import {
+  StylePanel,
+  StylePanelBrand,
+  StylePanelGroup,
+  StylePanelNeutral,
+  StylePanelRoot,
+  StylePanelScaling,
+  StylePanelShape,
+  StylePanelSolid,
+  StylePanelTheme,
+  type StylePanelValue,
+} from "../StylePanel.js";
 import { expectNoAxeViolations } from "../test/axe.js";
 
 /** The second swatch, in view from the start, and the eleventh, out of it. */
@@ -53,12 +64,12 @@ describe("StylePanel stacked", () => {
 
   it("loses to a row's own layout props", () => {
     render(
-      <StylePanel.Root stacked>
-        <StylePanel.Group title="Page">
-          <StylePanel.Theme direction="row" />
-          <StylePanel.Shape />
-        </StylePanel.Group>
-      </StylePanel.Root>,
+      <StylePanelRoot stacked>
+        <StylePanelGroup title="Page">
+          <StylePanelTheme direction="row" />
+          <StylePanelShape />
+        </StylePanelGroup>
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(lineOf("Theme")).not.toHaveClass("flex-column");
@@ -95,11 +106,11 @@ describe("StylePanel's option rows", () => {
 describe("a custom-colour row", () => {
   it("lays out its label and swatches by the props every row takes", () => {
     const { container } = render(
-      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
-        <StylePanel.Group title="Color">
-          <StylePanel.Brand custom direction="column" gap="12" paddingX="16" />
-        </StylePanel.Group>
-      </StylePanel.Root>,
+      <StylePanelRoot value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
+        <StylePanelGroup title="Color">
+          <StylePanelBrand custom direction="column" gap="12" paddingX="16" />
+        </StylePanelGroup>
+      </StylePanelRoot>,
       { wrapper },
     );
     const line = lineOf("Brand");
@@ -113,11 +124,11 @@ describe("a custom-colour row", () => {
 
   it("keeps a host's className beside the row's own", () => {
     render(
-      <StylePanel.Root>
-        <StylePanel.Group title="Page">
-          <StylePanel.Theme className="mine" />
-        </StylePanel.Group>
-      </StylePanel.Root>,
+      <StylePanelRoot>
+        <StylePanelGroup title="Page">
+          <StylePanelTheme className="mine" />
+        </StylePanelGroup>
+      </StylePanelRoot>,
       { wrapper },
     );
     const row = lineOf("Theme");
@@ -164,9 +175,9 @@ describe("the chosen swatch", () => {
 
   it("is scrolled into view, clear of the Next button, when the panel mounts", () => {
     render(
-      <StylePanel.Root value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
-        <StylePanel.Brand custom />
-      </StylePanel.Root>,
+      <StylePanelRoot value={{ brand: "custom", brandSeed: "#c2410c" }} onValueChange={vi.fn()}>
+        <StylePanelBrand custom />
+      </StylePanelRoot>,
       { wrapper },
     );
     // The custom swatch is the last one in the strip.
@@ -176,9 +187,9 @@ describe("the chosen swatch", () => {
 
   it("stays put when it is already in view", () => {
     render(
-      <StylePanel.Root value={{ brand: near }} onValueChange={vi.fn()}>
-        <StylePanel.Brand />
-      </StylePanel.Root>,
+      <StylePanelRoot value={{ brand: near }} onValueChange={vi.fn()}>
+        <StylePanelBrand />
+      </StylePanelRoot>,
       { wrapper },
     );
     expect(screen.getByRole("radio", { name: `Brand colour: ${near}` })).toHaveAttribute(
@@ -197,9 +208,9 @@ describe("the chosen swatch", () => {
           <button type="button" onClick={() => setValue({ brand: far })}>
             Pick from outside
           </button>
-          <StylePanel.Root value={value} onValueChange={setValue}>
-            <StylePanel.Brand />
-          </StylePanel.Root>
+          <StylePanelRoot value={value} onValueChange={setValue}>
+            <StylePanelBrand />
+          </StylePanelRoot>
         </>
       );
     }
@@ -241,12 +252,12 @@ describe("the scroll buttons", () => {
     scroller.unmount();
 
     const { container } = render(
-      <StylePanel.Root labels={{ scroller: { previous: "Előző", next: "Következő" } }}>
-        <StylePanel.Brand />
-        <StylePanel.Neutral />
-        <StylePanel.Solid />
-        <StylePanel.Scaling />
-      </StylePanel.Root>,
+      <StylePanelRoot labels={{ scroller: { previous: "Előző", next: "Következő" } }}>
+        <StylePanelBrand />
+        <StylePanelNeutral />
+        <StylePanelSolid />
+        <StylePanelScaling />
+      </StylePanelRoot>,
       { wrapper },
     );
     // Two swatch strips and two option rows.

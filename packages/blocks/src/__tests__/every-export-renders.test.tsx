@@ -51,8 +51,16 @@ function Providers({ children }: { children: React.ReactNode }) {
   );
 }
 
+/** StylePanel's sections read the state StylePanelRoot holds, so they render inside one. */
+const needsRoot = (name: string) => /^StylePanel(?!Root$)./.test(name);
+
 function element(name: string, Component: AnyComponent) {
-  return <Providers>{createElement(Component, fixtures[name] ?? {})}</Providers>;
+  const child = createElement(Component, fixtures[name] ?? {});
+  return (
+    <Providers>
+      {needsRoot(name) ? <Blocks.StylePanelRoot>{child}</Blocks.StylePanelRoot> : child}
+    </Providers>
+  );
 }
 
 /** React reports bad markup through console.error/warn; a log here is a failure. */

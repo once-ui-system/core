@@ -15,9 +15,9 @@
   "group": "string",
   "name": "string",
   "onMove": "(id: string, to: SortablePosition, from: SortablePosition) => void",
-  "direction": "SortableDirection",
-  "handle": "boolean",
-  "disabled": "boolean",
+  "direction": "SortableDirection = column",
+  "handle": "boolean = false",
+  "disabled": "boolean = false",
   "label": "string",
   "labels": "Partial<SortableLabels>"
  },

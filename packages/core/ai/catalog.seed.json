@@ -305,7 +305,7 @@
     "pairsWith": ["HeadingLink", "Column"]
   },
   "HeroSection": {
-    "purpose": "Site section: the opening h1, lead, buttons and picture",
+    "purpose": "Site section: h1, lead, buttons, picture",
     "tags": ["marketing"],
     "pairsWith": ["Sections"]
   },
@@ -682,7 +682,7 @@
     "pairsWith": ["MediaVideoPlayer", "MediaAudioPlayer"]
   },
   "Sections": {
-    "purpose": "Renders a page from stored sections [{ type, props }]; fields per type in sectionSchemas",
+    "purpose": "Renders stored sections [{ type, props }]; fields in sectionSchemas",
     "tags": ["marketing"],
     "pairsWith": ["HeroSection"]
   },
@@ -734,7 +734,7 @@
     "pairsWith": ["Sortable", "SortableItem"]
   },
   "SortableItem": {
-    "purpose": "One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged",
+    "purpose": "One row of a Sortable, wrapping a NavItem, Card or any row unchanged",
     "tags": ["data"],
     "pairsWith": ["Sortable", "NavItem", "Card"]
   },
@@ -764,9 +764,141 @@
     "pairsWith": ["StylePanel", "IconButton", "CodeBlock"]
   },
   "StylePanel": {
-    "purpose": "Live theming controls for theme, brand and accent colours, shape and density",
+    "purpose": "Live theming controls for theme, colours, shape and density; compose your own from StylePanelRoot and its StylePanel* parts",
     "tags": ["settings", "theme"],
-    "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
+    "pairsWith": ["StyleOverlay", "ThemeSwitcher", "StylePanelRoot"]
+  },
+  "StylePanelAccent": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: accent colour swatches (custom adds one of the host's own); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelAdvanced": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Surface, Density, Scaling, DataStyle and Transition rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelBodyLineHeight": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: body text line height; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelBodySize": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: body text size; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelBodyText": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the BodySize and BodyLineHeight rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelBrand": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: brand colour swatches (custom adds one of the host's own); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelColor": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Brand, Accent and Neutral rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelDataStyle": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: chart colour mode; needs a DataThemeProvider; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelDensity": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: spacing density (compact, normal, spacious); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelEffect": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: solid effect (flat, plastic); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelGroup": {
+    "partOf": "StylePanel",
+    "purpose": "Titled group of StylePanel rows inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelRow"]
+  },
+  "StylePanelNeutral": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: neutral colour swatches; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelPage": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Theme and Shape rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelRoot": {
+    "partOf": "StylePanel",
+    "purpose": "Holds a composed StylePanel's state (bound to ThemeProvider, or controlled by value); wraps StylePanel sections",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelGroup", "StylePanelBrand"]
+  },
+  "StylePanelRow": {
+    "partOf": "StylePanel",
+    "purpose": "Labelled StylePanel row for a control of the host's own",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelGroup"]
+  },
+  "StylePanelScaling": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: interface scaling; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelShape": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: corner shape (sharp to rounded); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelSolid": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: solid fill (color, inverse, contrast); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelSolidStyle": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel group with the Solid and Effect rows; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot"]
+  },
+  "StylePanelSurface": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: surface style (filled, translucent); inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelTheme": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: light, dark or system theme; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
+  },
+  "StylePanelTransition": {
+    "partOf": "StylePanel",
+    "purpose": "StylePanel row: transition style; inside a StylePanelRoot",
+    "tags": ["settings", "theme"],
+    "pairsWith": ["StylePanelRoot", "StylePanelGroup"]
   },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",

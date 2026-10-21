@@ -189,8 +189,8 @@
    "success-alpha-strong",
    "success-alpha-medium",
    "success-alpha-weak",
-   "overlay",
    "surface",
+   "overlay",
    "transparent"
   ],
   "CSSUnit": [

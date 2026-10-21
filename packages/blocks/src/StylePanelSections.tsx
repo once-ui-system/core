@@ -148,7 +148,7 @@ export interface StylePanelGroupLabels {
   advanced?: StylePanelHeading;
 }
 
-/** Each row's label, keyed by the row's part name (`StylePanel.BodySize` → `bodySize`). */
+/** Each row's label, keyed by the row's part name (`StylePanelBodySize` → `bodySize`). */
 export interface StylePanelRowLabels {
   /** Defaults to `"Theme"`. */
   theme?: ReactNode;
@@ -346,7 +346,7 @@ const DEFAULT_LABELS: ResolvedLabels = {
 
 /**
  * The merged labels. Its default is the English set rather than nothing, so
- * a row rendered outside a Root — `StylePanel.Theme` needs no state — still
+ * a row rendered outside a Root — `StylePanelTheme` needs no state — still
  * has its text.
  */
 const StylePanelLabelsContext = createContext<ResolvedLabels>(DEFAULT_LABELS);
@@ -399,7 +399,7 @@ function useStylePanel(): StylePanelContextValue {
   const context = useContext(StylePanelContext);
   if (!context) {
     throw new Error(
-      "StylePanel sections must be rendered inside a <StylePanel> or <StylePanel.Root>",
+      "StylePanel sections must be rendered inside a <StylePanel> or <StylePanelRoot>",
     );
   }
   return context;
@@ -1076,8 +1076,6 @@ function DataStyleRow({ label, ...rest }: StyleRowProps) {
 
 /* ---- groups -------------------------------------------------------------- */
 
-type GroupProps<Rows extends string> = StyleGroupProps & { rows?: Partial<Record<Rows, boolean>> };
-
 const show = (rows: Record<string, boolean | undefined> | undefined, key: string) =>
   rows?.[key] !== false;
 
@@ -1093,7 +1091,12 @@ function useGroupHeading(
   };
 }
 
-function PageGroup({ title, description, rows, ...rest }: GroupProps<"theme" | "shape">) {
+function PageGroup({
+  title,
+  description,
+  rows,
+  ...rest
+}: StyleGroupProps & { rows?: StylePanelVisibility["page"] }) {
   return (
     <Group {...useGroupHeading("page", { title, description })} {...rest}>
       {show(rows, "theme") && <ThemeRow />}
@@ -1108,7 +1111,7 @@ function ColorGroup({
   rows,
   customColors,
   ...rest
-}: GroupProps<"brand" | "accent" | "neutral"> & {
+}: StyleGroupProps & { rows?: StylePanelVisibility["color"] } & {
   /** Offer a custom colour on Brand and Accent: their `custom`. Controlled mode only. */
   customColors?: boolean;
 }) {
@@ -1121,7 +1124,12 @@ function ColorGroup({
   );
 }
 
-function SolidStyleGroup({ title, description, rows, ...rest }: GroupProps<"solid" | "effect">) {
+function SolidStyleGroup({
+  title,
+  description,
+  rows,
+  ...rest
+}: StyleGroupProps & { rows?: StylePanelVisibility["solidStyle"] }) {
   return (
     <Group {...useGroupHeading("solidStyle", { title, description })} {...rest}>
       {show(rows, "solid") && <SolidRow />}
@@ -1130,7 +1138,12 @@ function SolidStyleGroup({ title, description, rows, ...rest }: GroupProps<"soli
   );
 }
 
-function BodyTextGroup({ title, description, rows, ...rest }: GroupProps<"size" | "lineHeight">) {
+function BodyTextGroup({
+  title,
+  description,
+  rows,
+  ...rest
+}: StyleGroupProps & { rows?: StylePanelVisibility["bodyText"] }) {
   return (
     <Group {...useGroupHeading("bodyText", { title, description })} {...rest}>
       {show(rows, "size") && <BodySizeRow />}
@@ -1144,7 +1157,7 @@ function AdvancedGroup({
   description,
   rows,
   ...rest
-}: GroupProps<"surface" | "density" | "scaling" | "dataStyle" | "transition">) {
+}: StyleGroupProps & { rows?: StylePanelVisibility["advanced"] }) {
   return (
     <Group {...useGroupHeading("advanced", { title, description })} {...rest}>
       {show(rows, "surface") && <SurfaceRow />}
@@ -1156,29 +1169,33 @@ function AdvancedGroup({
   );
 }
 
-export const sections = {
-  Root,
-  Group,
-  Row,
-  Theme: ThemeRow,
-  Shape: ShapeRow,
-  Brand: BrandRow,
-  Accent: AccentRow,
-  Neutral: NeutralRow,
-  Solid: SolidRow,
-  Effect: EffectRow,
-  Surface: SurfaceRow,
-  Density: DensityRow,
-  Scaling: ScalingRow,
-  Transition: TransitionRow,
-  DataStyle: DataStyleRow,
-  BodySize: BodySizeRow,
-  BodyLineHeight: BodyLineHeightRow,
-  Page: PageGroup,
-  Color: ColorGroup,
-  SolidStyle: SolidStyleGroup,
-  BodyText: BodyTextGroup,
-  Advanced: AdvancedGroup,
+/*
+ * Each section is its own named export: `StylePanelRoot`, `StylePanelBrand`
+ * and the rest. 3.0 drops the `StylePanel.Brand` statics, which a server
+ * component cannot reach through a client module.
+ */
+export {
+  AccentRow as StylePanelAccent,
+  AdvancedGroup as StylePanelAdvanced,
+  BodyLineHeightRow as StylePanelBodyLineHeight,
+  BodySizeRow as StylePanelBodySize,
+  BodyTextGroup as StylePanelBodyText,
+  BrandRow as StylePanelBrand,
+  ColorGroup as StylePanelColor,
+  DataStyleRow as StylePanelDataStyle,
+  DensityRow as StylePanelDensity,
+  EffectRow as StylePanelEffect,
+  Group as StylePanelGroup,
+  NeutralRow as StylePanelNeutral,
+  PageGroup as StylePanelPage,
+  Root as StylePanelRoot,
+  Row as StylePanelRow,
+  ScalingRow as StylePanelScaling,
+  ShapeRow as StylePanelShape,
+  SolidRow as StylePanelSolid,
+  SolidStyleGroup as StylePanelSolidStyle,
+  SurfaceRow as StylePanelSurface,
+  ThemeRow as StylePanelTheme,
+  TransitionRow as StylePanelTransition,
+  useStylePanel,
 };
-
-export { useStylePanel };
