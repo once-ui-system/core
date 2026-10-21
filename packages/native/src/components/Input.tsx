@@ -135,8 +135,13 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
     // Tracked when uncontrolled too, so a typed value keeps the label floating after blur.
     const [typed, setTyped] = useState(rest.defaultValue ?? "");
     const value = rest.value ?? typed;
-    const floating = focused || value !== "" || !!rest.placeholder;
+    // A multiline label stays on top: lying in the value's place, it would
+    // take the control out of the flow and collapse the field to one line.
+    const floating = focused || value !== "" || !!rest.placeholder || !!multiline;
     const ghost = variant === "ghost";
+    // As core: on a light page a white field with a firmer edge, since a tinted
+    // fill there reads as disabled.
+    const light = theme.settings.theme === "light";
     const left = rest.maxLength !== undefined ? rest.maxLength - String(value).length : 0;
     const body = theme.text("body-default-m");
     const round = theme.radius("l");
@@ -155,8 +160,24 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
         <Row
           vertical={multiline ? "start" : "center"}
           radius="l"
-          border={ghost ? "transparent" : error ? "danger-medium" : "neutral-medium"}
-          background={ghost ? "transparent" : error ? "danger-medium" : "neutral-alpha-weak"}
+          border={
+            ghost
+              ? "transparent"
+              : error
+                ? "danger-medium"
+                : light
+                  ? "neutral-strong"
+                  : "neutral-medium"
+          }
+          background={
+            ghost
+              ? "transparent"
+              : error
+                ? "danger-medium"
+                : light
+                  ? "neutral-weak"
+                  : "neutral-alpha-weak"
+          }
           style={{
             minHeight: theme.space(HEIGHTS[size]),
             opacity: disabled ? 0.5 : 1,

@@ -6,8 +6,9 @@ import { DateInput, DatePicker, monthGrid } from "../src/components/DatePicker";
 import { Drawer } from "../src/components/Drawer";
 import { Field, Fieldset, FormErrorSummary, SubmitButton } from "../src/components/Field";
 import { corners, Form, place } from "../src/components/Form";
-import { Input } from "../src/components/Input";
+import { Input, Textarea } from "../src/components/Input";
 import { Nav, NavGroup, NavItem, NavSection } from "../src/components/Nav";
+import { Select } from "../src/components/Select";
 import { Table } from "../src/components/Table";
 import { Text } from "../src/components/Text";
 import { ThemeProvider } from "../src/theme";
@@ -129,6 +130,35 @@ describe("Form", () => {
     expect(onSubmit).toHaveBeenCalledTimes(1);
     await act(async () => finish());
     expect(await screen.findByText("Send")).toBeTruthy();
+  });
+
+  it("submits from a SubmitButton with onSubmit alone, since a phone has no <form>", async () => {
+    const onSubmit = jest.fn();
+    await wrap(
+      <Form onSubmit={onSubmit}>
+        <SubmitButton label="Save" />
+      </Form>,
+    );
+    await fireEvent.press(screen.getByText("Save"));
+    expect(onSubmit).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows a Field's label once when its control repeats it", async () => {
+    await wrap(
+      <Field label="Space">
+        <Select label="Space" options={[{ value: "a", label: "A" }]} />
+      </Field>,
+    );
+    expect(screen.getAllByText("Space")).toHaveLength(1);
+    expect(screen.getByRole("combobox", { name: "Space" })).toBeTruthy();
+  });
+
+  it("keeps a labelled Textarea at its lines before it is focused", async () => {
+    await wrap(<Textarea label="Post" lines={8} />);
+    const field = screen.getByLabelText("Post");
+    const flat = Object.assign({}, ...[field.props.style].flat(3).filter(Boolean));
+    expect(flat.position).toBeUndefined();
+    expect(flat.height).toBeGreaterThan(100);
   });
 
   it("wires a Field's label, error and hint onto its control", async () => {

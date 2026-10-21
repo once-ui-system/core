@@ -80,8 +80,15 @@ export function Field({
     typeof children === "function"
       ? children(control)
       : child
-        ? // The control's own props win over the Field's.
-          cloneElement(child, { ...control, ...child.props })
+        ? // The control's own props win over the Field's, except a floating
+          // label repeating the Field's own, which would show it twice.
+          cloneElement(child, {
+            ...control,
+            ...child.props,
+            ...((child.props as { label?: unknown }).label === plain(label) && plain(label)
+              ? { label: undefined }
+              : {}),
+          })
         : children;
 
   return (

@@ -175,7 +175,8 @@ export function Form({
   }, [onSubmit, isPending]);
 
   // A layout-only Form inside a Fieldset passes the outer form's state through.
-  const providesStatus = as === "form" || pending !== undefined;
+  // React Native has no <form>, so `onSubmit` alone makes this the form a SubmitButton calls.
+  const providesStatus = as === "form" || pending !== undefined || onSubmit !== undefined;
   const status = useMemo<FormStatus>(
     () => (providesStatus ? { pending: isPending, submit } : outerStatus),
     [providesStatus, isPending, submit, outerStatus],
