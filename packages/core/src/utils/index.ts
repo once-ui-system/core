@@ -5,4 +5,5 @@ export * from "./dropdownState";
 export * from "./MissingDependency";
 export * from "./navMatch";
 export * from "./ogRoutes";
+export * from "./relativeTime";
 export * from "./safe-html";
