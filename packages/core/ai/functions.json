@@ -504,7 +504,9 @@
    "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
    "brows": "boolean",
    "cheeks": "boolean",
-   "personality": "\"calm\" | \"default\" | \"bouncy\""
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
   },
   "MdxComponents": {
    "[key: string]": "ElementType"

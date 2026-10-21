@@ -30,6 +30,16 @@
   overflow: visible;
 }
 
+/* The 3D mascot (working="cube") draws a little past its box, as the SVG does, so a turning
+   cube and the floor shadow are never cut off. */
+.canvas {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  pointer-events: none;
+}
+
 /* Surfaces. */
 .fill {
   fill: var(--mascot-color);

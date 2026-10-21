@@ -230,6 +230,38 @@ id) and `mascotLook(seed)` picks a whole look; props you pass still win.
   ]}
 />
 
+### Cube
+
+`working="cube"` gives the mascot something to do while it works. At rest it is the same soft
+blob with its face. When it starts thinking, the face fades, the blob firms up into a 2 × 2 cube
+and it turns its layers like a puzzle. When the work is done it solves the cube, turns it 45° into
+the Once UI mark for a beat, and softens back into the blob with its face, a little happier.
+
+`sides` colors the cube: `classic` keeps the puzzle colors with the front in the mascot's color,
+`tints` uses shades of it, `mono` paints every side the same, or pass a color per side.
+`face="flat"` draws the eyes, brows and mouth flat on the body; `surface="flat"` turns the light
+off, so the shape is one solid color. Everything else from the flat mascot carries over.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<MascotCubeExample />}
+  codes={[
+    {
+      code:
+`<Mascot working="cube" state={busy ? "thinking" : "idle"} />
+<Mascot working="cube" sides="tints" face="flat" eyes="tile" />
+<Mascot working="cube" sides="mono" surface="flat" eyes="pill" color="accent" />
+<Mascot working="cube" sides={{ top: "#ffc53d", right: "#3fb6ff" }} />`,
+      language: "tsx",
+      label: "Cube"
+    }
+  ]}
+/>
+
+The cube draws with WebGL and no extra dependency. It only animates while it is on screen, and
+where WebGL is missing it renders the flat mascot instead.
+
 ## LogoSpinner
 
 The four tiles of the Once UI mark, moving. `twist` parts the tiles, turns a quarter and clicks
@@ -271,7 +303,8 @@ reduced motion its stand-in animations stop; real audio still shows, as glow on 
 height, because that is feedback the person needs while they talk.
 
 `Mascot` is one image named for what it is doing ("Assistant, thinking"). With reduced motion it
-holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own.
+holds still and keeps its poses and expressions; it does not blink, bob or pulse on its own, and
+the cube shows while it thinks but does not turn.
 
 ## API reference
 
