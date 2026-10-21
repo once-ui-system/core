@@ -434,6 +434,36 @@
     "tags": ["ai", "chat", "decoration"],
     "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
   },
+  "Map": {
+    "purpose": "Themed map on free OpenStreetMap tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
+  },
+  "MapCircle": {
+    "purpose": "Area in metres in a token colour, e.g. an approximate address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapMarker": {
+    "purpose": "Any React content pinned to a map position",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapPin", "Avatar"]
+  },
+  "MapMarkers": {
+    "purpose": "Markers from data, with clustering and one active item",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["Map", "MapPin", "MapPopup"]
+  },
+  "MapPin": {
+    "purpose": "Map marker look: label pill (price, count) or dot",
+    "tags": ["map", "location"],
+    "pairsWith": ["MapMarker", "MapMarkers"]
+  },
+  "MapPopup": {
+    "purpose": "Surface card above a map position; Escape closes it",
+    "tags": ["map", "location", "overlay"],
+    "pairsWith": ["Map", "MapMarkers", "Button"]
+  },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],

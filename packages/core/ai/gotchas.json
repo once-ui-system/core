@@ -241,5 +241,9 @@
   "Chart.xAxis": {
     "rule": "The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: \"visitors\" }]} with data={[{ date: \"Oct 1\", visitors: 1840 }]}.",
     "components": ["LineChart", "BarChart", "LineBarChart"]
+  },
+  "Map.positions": {
+    "rule": "Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().",
+    "components": ["Map", "MapMarker", "MapMarkers", "MapPopup", "MapCircle"]
   }
 }

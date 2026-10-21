@@ -7,6 +7,7 @@ import * as Core from "../index";
 import * as Code from "../modules/code/index";
 import * as Data from "../modules/data/index";
 import * as Emoji from "../modules/emoji/index";
+import * as MapModule from "../modules/map/index";
 import * as MediaModule from "../modules/media/index";
 
 /**
@@ -27,6 +28,7 @@ const exportsUnderTest: Record<string, unknown> = {
   ...Code,
   ...MediaModule,
   ...Emoji,
+  ...MapModule,
 };
 
 const noop = () => {};
@@ -121,6 +123,13 @@ const notRendered = new Set([
   "DataThemeProvider",
   "ToastProvider",
   "IconProvider",
+  // The map components need WebGL and a MapLibre instance; map.test.tsx
+  // renders them against a stand-in maplibre-gl, on the client and server.
+  "Map",
+  "MapCircle",
+  "MapMarker",
+  "MapMarkers",
+  "MapPopup",
 ]);
 
 const isComponent = (value: unknown) => {

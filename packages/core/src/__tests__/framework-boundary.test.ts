@@ -68,6 +68,17 @@ describe("framework coupling boundary", () => {
     expect(filesImporting("next")).toEqual(NEXT_IMPORT_ALLOWLIST);
   });
 
+  it("loads maplibre-gl only from Map.impl, behind the lazy /map entry", () => {
+    // Type imports are erased; anything else puts maplibre-gl in the graph of
+    // every app that imports the file, map or no map.
+    const runtime =
+      /(?:import\s+(?!type\b)[^;]*?from\s*["']maplibre-gl["']|(?<!typeof\s)import\s*\(\s*["']maplibre-gl["']|require\s*\(\s*["']maplibre-gl["'])/;
+    const offenders = collectSourceFiles(SRC_ROOT)
+      .filter((file) => runtime.test(readFileSync(file, "utf8")))
+      .map((file) => relative(SRC_ROOT, file).split(sep).join("/"));
+    expect(offenders).toEqual(["modules/map/Map.impl.tsx"]);
+  });
+
   it("imports recharts only from modules/data", () => {
     const offenders = filesImporting("recharts").filter(
       (file) => !file.startsWith(`${RECHARTS_ALLOWED_DIR}/`),

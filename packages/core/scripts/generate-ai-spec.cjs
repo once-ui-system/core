@@ -58,6 +58,11 @@ const BARRELS = [
     group: "emoji",
     importFrom: "@once-ui-system/core/emoji",
   },
+  {
+    file: path.join(SRC, "modules", "map", "index.ts"),
+    group: "map",
+    importFrom: "@once-ui-system/core/map",
+  },
   // The hooks are root exports, but no barrel above reaches them, so an
   // agent never learned `useHotkeys` or `useInViewport` existed except from
   // prose in the rules.
@@ -123,6 +128,11 @@ const ENTRY_POINTS = [
   {
     specifier: "@once-ui-system/core/emoji",
     use: "EmojiPicker, with its emoji dataset off the root",
+  },
+  {
+    specifier: "@once-ui-system/core/map",
+    use: "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
+    peer: "maplibre-gl",
   },
   {
     specifier: "@once-ui-system/core/mdx",
