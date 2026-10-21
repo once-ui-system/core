@@ -13,6 +13,20 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Animated reactions: `Reactions` and `Reaction`** (Social module). `Reactions` is the
+  row under a post, comment or message: a chip per reaction in use with its count, and an
+  add button that opens every option. Each reaction has its own gesture (a heart beats, a
+  thumbs-up nods, a laugh shakes, fire flickers); a pick plays it, bursts a few copies out
+  of the chip (`effect="float"` lifts one away instead) and rolls the count. One reaction
+  per person by default, several with `multiple`; `value` / `defaultValue` /
+  `onValueChange`. The counts follow the viewer's pick at once and settle on the next
+  `counts` without counting them twice. A reaction can be an app's own image (`src`, such
+  as an animated WebP) with a `motion` of its choice, or drawn by `renderGlyph`. Nothing
+  moves under reduced motion. `Reaction` is one glyph with its gesture, on hover, on a
+  loop or on demand.
+
 ## [2.4.0] — 2026-10-20
 
 ### Added

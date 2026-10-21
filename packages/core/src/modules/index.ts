@@ -24,3 +24,4 @@ export type {
 export { HeadingNav, Kbar, MegaMenu, MobileMegaMenu } from "./navigation";
 export { HeadingLink } from "./navigation/HeadingLink";
 export * from "./seo";
+export * from "./social";

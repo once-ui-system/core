@@ -712,6 +712,16 @@
     "tags": ["form", "settings"],
     "pairsWith": ["Slider", "Setting", "Form"]
   },
+  "Reaction": {
+    "purpose": "One emoji or image reaction with its own gesture (beat, nod…)",
+    "tags": ["social", "effect"],
+    "pairsWith": ["Reactions"]
+  },
+  "Reactions": {
+    "purpose": "Reaction chips with counts, picker and burst, for posts and chat",
+    "tags": ["social", "chat"],
+    "pairsWith": ["ChatMessage", "Reaction"]
+  },
   "RevealFx": {
     "purpose": "Slide-and-fade entrance for a block; delay and speed in ms — one coherent set per page",
     "tags": ["effect", "motion"],
