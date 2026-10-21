@@ -623,7 +623,7 @@ export function MarketingHeroExample() {
                 v1.7 — Discover what's new
               </Text>
               <Heading as="h1" textVariant="display-strong-l" align="center">
-                Write 70% less code with human-readable, machine-writable syntax
+                Write less code with human-readable, machine-writable syntax
               </Heading>
             </Column>
           </RevealFx>
