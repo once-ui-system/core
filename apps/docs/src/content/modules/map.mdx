@@ -1,0 +1,174 @@
+---
+title: "Map"
+summary: "An interactive map on free OpenStreetMap tiles that follows the theme, with React markers, clustering, popups and a controlled viewport."
+updatedAt: "2026-10-21"
+github: "modules/map/Map.tsx"
+docs: "once-ui/modules/map.mdx"
+navLabel: "Map"
+navIcon: "world"
+navTag: "New"
+navTagVariant: "cyan"
+---
+
+`Map` draws an interactive map with [MapLibre GL](https://maplibre.org/) on [OpenFreeMap](https://openfreemap.org/) tiles: OpenStreetMap data, no API key, no account and no view limit. The basemap switches between light and dark with the theme, and its background takes the page background token, so a map sits on the page instead of on top of it. Markers are React content, so prices, avatars and buttons on the map are ordinary Once UI components.
+
+<MapBasicExample />
+
+## Installation
+
+`maplibre-gl` is an optional peer dependency, like `recharts` for the charts. Install it next to Once UI and import the map from its own entry point, so an app without a map never loads it:
+
+```bash
+npm install maplibre-gl
+```
+
+```tsx
+import { Map, MapMarker } from "@once-ui-system/core/map";
+
+<Map height={24} defaultViewport={{ center: [19.0402, 47.4979], zoom: 12 }}>
+  <MapMarker position={[19.0402, 47.4979]} />
+</Map>
+```
+
+Positions are `[longitude, latitude]`, the order MapLibre and GeoJSON use. The map renders on the client only; on the server and until MapLibre loads it draws an empty frame of the same size, so the page does not shift.
+
+## Listings, clustering and popups
+
+`MapMarkers` takes your items (each with an `id` and a `position`) and renders one marker per item. `cluster` merges markers that overlap into a count that zooms in when pressed. `activeId` lifts one marker above the rest, for the item hovered in a result list. `bounds` frames a list of positions and frames it again whenever the list changes, so a new search is always in view.
+
+<MapListingsExample />
+
+```tsx
+const [hovered, setHovered] = useState<string>();
+const [open, setOpen] = useState<Listing>();
+
+<Map height={32} bounds={listings.map((listing) => listing.position)}>
+  <MapMarkers
+    items={listings}
+    cluster
+    activeId={hovered ?? open?.id}
+    renderItem={(listing) => (
+      <MapPin
+        active={listing.id === (hovered ?? open?.id)}
+        onClick={() => setOpen(listing)}
+        onMouseEnter={() => setHovered(listing.id)}
+        onMouseLeave={() => setHovered(undefined)}
+      >
+        {formatPrice(listing.price)}
+      </MapPin>
+    )}
+  />
+  {open && (
+    <MapPopup position={open.position} onClose={() => setOpen(undefined)}>
+      <Text variant="label-strong-m">{open.title}</Text>
+      <Button size="s" variant="secondary" href={`/listings/${open.id}`}>View listing</Button>
+    </MapPopup>
+  )}
+</Map>
+```
+
+`MapPin` is the marker Once UI draws: a pill with a label, or a dot without one. With `href` it is a link and with `onClick` a button, so it is reachable by Tab; tabbing onto a pin outside the view pans it in. `MapPopup` is a surface card above a point; render it while it is open, and Escape or its close button call `onClose`.
+
+## Any content as a marker
+
+`MapMarker` pins whatever you give it. `anchor` says which part of the content touches the point: `bottom` (the default) for a pin, `center` for an avatar.
+
+<MapAvatarExample />
+
+```tsx
+<Map height={24} bounds={venues.map((venue) => venue.position)} controls={false}>
+  {venues.map((venue) => (
+    <MapMarker key={venue.id} position={venue.position} anchor="center">
+      <Avatar size="m" value={venue.name[0]} />
+    </MapMarker>
+  ))}
+</Map>
+```
+
+## Areas
+
+`MapCircle` marks an area on the ground, sized in metres, in a token colour. It scales with the map, which makes it the honest way to show an approximate address.
+
+<MapAreaExample />
+
+```tsx
+<Map height={24} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
+  <MapCircle position={[19.0545, 47.5065]} radius={400} />
+</Map>
+```
+
+## Controlled viewport
+
+`viewport`, `defaultViewport` and `onViewportChange` follow the same contract as every other controlled prop in Once UI. `onViewportChange` fires when a pan or zoom ends, which is also the moment to search the visible area.
+
+<MapControlledExample />
+
+```tsx
+const [viewport, setViewport] = useState<MapViewport>({ center: [19.0402, 47.4979], zoom: 11 });
+
+<Button onClick={() => setViewport({ center: [19.0457, 47.507], zoom: 15 })}>Parliament</Button>
+<Map viewport={viewport} onViewportChange={setViewport} />
+```
+
+## Tiles from another provider
+
+The default style is free, but you can point `mapStyle` at any MapLibre style: a URL or a style object, or a `{ light, dark }` pair that follows the theme. A provider that needs a key usually takes it in the style URL; one that wants a header gets it through `transformRequest`.
+
+```tsx
+import { DEFAULT_MAP_STYLE, Map } from "@once-ui-system/core/map";
+
+// MapTiler, Stadia, Protomaps or your own tile server: any MapLibre style.
+<Map
+  mapStyle={{
+    light: `https://api.maptiler.com/maps/streets-v2/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`,
+    dark: `https://api.maptiler.com/maps/streets-v2-dark/style.json?key=${process.env.NEXT_PUBLIC_MAPTILER_KEY}`,
+  }}
+/>
+
+// A header instead of a query parameter.
+<Map
+  mapStyle="https://tiles.example.com/style.json"
+  transformRequest={(url) => ({ url, headers: { Authorization: `Bearer ${token}` } })}
+/>
+```
+
+Keep the attribution the provider asks for: the map shows the attribution each style declares in its bottom corner. Pass `tint={false}` to keep a style's own background colour.
+
+## Keyboard and motion
+
+The map is a focusable region: arrow keys pan, `+` and `-` zoom, and the frame shows a focus ring. Pins with `href` or `onClick` are links and buttons in the tab order. With reduced motion on, fitting, zooming and following a controlled viewport jump instead of animating, and pins do not scale on hover. When WebGL is off, the frame says the map could not load instead of staying blank; set the text with `labels`.
+
+## Escape hatch
+
+`useMap()` inside a `Map` returns the MapLibre instance and the loaded module, and `onMapLoad` hands you the instance once the first style has loaded, for layers the components do not cover (routes, heatmaps, GeoJSON).
+
+<PropsTable
+  component="Map"
+  describe={{
+    viewport: "Controlled camera: `{ center, zoom, bearing?, pitch? }`. Pair with `onViewportChange`.",
+    defaultViewport: "Where the camera starts when `viewport` is not controlled.",
+    onViewportChange: "Fires when a pan, zoom or rotation ends.",
+    bounds: "Positions to frame, on first render and whenever the list changes.",
+    boundsPadding: "Space around framed positions, in pixels. Default 56.",
+    boundsMaxZoom: "The closest a fit zooms in. Default 15.",
+    mapStyle: "Any MapLibre style URL or object, or a `{ light, dark }` pair. Default OpenFreeMap.",
+    tint: "Paint the basemap background with the page background token. Default true.",
+    controls: "Show the zoom buttons. Default true.",
+    interactive: "False draws a static map. Default true.",
+    cooperativeGestures: "Scroll zooms only with Ctrl/⌘ and touch pans with two fingers.",
+    onMapClick: "Fires on a click on the map itself, with the position.",
+    onMapLoad: "The MapLibre instance once the first style has loaded.",
+    transformRequest: "Adds a key or header to tile requests.",
+    labels: "Accessible names and the fallback text: `map`, `zoomIn`, `zoomOut`, `unavailable`.",
+  }}
+/>
+
+<PropsTable component="MapMarkers" />
+
+<PropsTable component="MapMarker" />
+
+<PropsTable component="MapPin" />
+
+<PropsTable component="MapPopup" />
+
+<PropsTable component="MapCircle" />
