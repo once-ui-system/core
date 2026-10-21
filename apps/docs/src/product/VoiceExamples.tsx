@@ -118,3 +118,58 @@ export function MascotStatesExample() {
     </Column>
   );
 }
+
+const CUBE_STATES: { label: string; value: MascotState }[] = [
+  { label: "Idle", value: "idle" },
+  { label: "Thinking", value: "thinking" },
+  { label: "Speaking", value: "speaking" },
+  { label: "Sleeping", value: "sleeping" },
+];
+
+// Set it thinking: the blob becomes the cube and turns its layers. Back to idle, it solves the
+// cube, shows the logo and softens into the blob with its face.
+export function MascotCubeExample() {
+  const [state, setState] = useState<MascotState>("thinking");
+  const [mood, setMood] = useState<MascotMood>("happy");
+
+  return (
+    <Column fillWidth gap="24" horizontal="center" paddingY="24">
+      <Row gap="24" vertical="center" wrap horizontal="center">
+        <Mascot working="cube" size="xl" state={state} mood={mood} />
+        <Mascot
+          working="cube"
+          size="xl"
+          state={state}
+          mood={mood}
+          sides="tints"
+          face="flat"
+          eyes="tile"
+        />
+        <Mascot
+          working="cube"
+          size="xl"
+          state={state}
+          mood={mood}
+          sides="mono"
+          surface="flat"
+          eyes="pill"
+          color="accent"
+        />
+      </Row>
+      <Column gap="12" horizontal="center" fillWidth maxWidth="36rem">
+        <SegmentedControl
+          aria-label="Cube mascot state"
+          buttons={CUBE_STATES}
+          value={state}
+          onValueChange={(value) => setState(value as MascotState)}
+        />
+        <SegmentedControl
+          aria-label="Cube mascot mood"
+          buttons={MASCOT_MOODS}
+          value={mood}
+          onValueChange={(value) => setMood(value as MascotMood)}
+        />
+      </Column>
+    </Column>
+  );
+}
