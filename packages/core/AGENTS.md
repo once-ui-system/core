@@ -12,7 +12,7 @@ cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/ && rm -f src/
 
 No `src/` folder? Copy into the project root instead.
 
-Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports in your reply, taking their content from `ai/starters/app/src/`, and import only files you write or have opened in the project.
+Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports (`components/AppShell.tsx`, `resources/app.ts`) in your reply, taking their content from `ai/starters/app/src/`, keep the project's own `app/layout.tsx`, and import only files you write or have opened in the project.
 
 The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript.
 
