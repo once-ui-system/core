@@ -62,7 +62,6 @@
   "TextProps": {
    "as": "ElementType",
    "textVariant": "TextVariant",
-   "variant": "TextVariant",
    "wrap": "CSSProperties[\"textWrap\"]",
    "family": "TextType",
    "weight": "TextWeight",

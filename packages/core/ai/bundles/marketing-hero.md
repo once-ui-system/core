@@ -411,7 +411,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 
 ### TextProps
 - as?: ElementType
-- textVariant, variant?: TextVariant
+- textVariant?: TextVariant
 - wrap?: CSSProperties["textWrap"]
 - family?: TextType
 - weight?: TextWeight

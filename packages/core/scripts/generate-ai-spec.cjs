@@ -909,6 +909,9 @@ async function main() {
       const pDecl = propSym.valueDeclaration ?? (propSym.declarations && propSym.declarations[0]);
       if (!pDecl) continue;
       if (isInNodeModules(pDecl)) continue; // React/DOM inherited noise
+      // A deprecated prop is an alias kept for code written from memory (2.x's
+      // `variant` on Text); listing it would teach the old name again.
+      if (propSym.getJsDocTags(checker).some((tag) => tag.name === "deprecated")) continue;
 
       const declFile = normalize(pDecl.getSourceFile().fileName);
 
