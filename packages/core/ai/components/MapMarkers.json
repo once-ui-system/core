@@ -1,0 +1,34 @@
+{
+ "name": "MapMarkers",
+ "group": "map",
+ "importFrom": "@once-ui-system/core/map",
+ "props": {
+  "items": "!readonly T[]",
+  "renderItem": "(item: T) => React.ReactNode",
+  "activeId": "string",
+  "cluster": "boolean | MapClusterOptions = false",
+  "renderCluster": "(cluster: { items: T[]; position: LngLat; zoomIn: () => void; }) => React.ReactNode",
+  "clusterLabel": "(count: number) => string = (count) => `${count} places, zoom in`"
+ },
+ "tags": [
+  "map",
+  "location",
+  "list"
+ ],
+ "pairsWith": [
+  "Map",
+  "MapPin",
+  "MapPopup"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "MapClusterOptions": {
+   "radius": "number",
+   "maxZoom": "number",
+   "minPoints": "number"
+  }
+ }
+}

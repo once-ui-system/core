@@ -99,6 +99,7 @@ comes from when it is not the root:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
 | `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` |
 | `EmojiPicker` | `@once-ui-system/core/emoji` |

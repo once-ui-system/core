@@ -99,6 +99,7 @@ comes from when it is not the root:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
 | `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` |
 | `EmojiPicker` | `@once-ui-system/core/emoji` |
@@ -318,6 +319,45 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - onClick?: (value: string) => void
 - onLinkClick?: () => void
 
+### Map (from `@once-ui-system/core/map`)
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- viewport, defaultViewport?: MapViewport
+- onViewportChange?: (viewport: MapViewport) => void
+- bounds?: readonly LngLat[]
+- boundsPadding, boundsMaxZoom, minZoom, maxZoom?: number
+- mapStyle?: MapStyle
+- tint, controls, interactive, cooperativeGestures?: boolean
+- onMapClick?: (position: LngLat) => void
+- onMapLoad?: (map: MapLibreMap) => void
+- workerUrl?: string
+- transformRequest?: MapOptions["transformRequest"]
+- labels?: Partial<MapLabels>
+- children?: React.ReactNode
+
+### MapMarkers (from `@once-ui-system/core/map`)
+- items: readonly T[]
+- renderItem?: (item: T) => React.ReactNode
+- activeId?: string
+- cluster?: boolean | MapClusterOptions = false
+- renderCluster?: (cluster: { items: T[]; position: LngLat; zoomIn: () => void; }) => React.ReactNode
+- clusterLabel?: (count: number) => string = (count) => `${count} places, zoom in`
+
+### MapPin (from `@once-ui-system/core/map`)
+- children, prefix?: React.ReactNode
+- variant?: "pill" | "dot"
+- active?: boolean = false
+- color?: MapColor = brand
+- href?: string
+- onClick?: (event: React.MouseEvent<HTMLElement>) => void
+
+### MapPopup (from `@once-ui-system/core/map`)
+Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
+- position: LngLat
+- children: React.ReactNode
+- onClose?: () => void
+- gap?: number = 40
+- closeLabel?: string = Close
+
 ### Grid
 Mixins: CommonProps, DisplayProps, GridProps, SizeProps, SpacingProps, StyleProps.
 - as?: ElementType
@@ -507,6 +547,13 @@ type CursorPresetValue = "rounded" | "soft" | "dot" | "system"
 type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
 // symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type LngLat = { [key: number]?: number }
+type MapClusterOptions = { radius?: number; maxZoom?: number; minPoints?: number }
+// type MapColor is one of these strings: neutral brand accent info danger warning success
+type MapLabels = { map: string; zoomIn: string; zoomOut: string; unavailable: string }
+type MapStyle = "string" | "StyleSpecification" | { light: MapStyleSource; dark: MapStyleSource; }
+type MapStyleSource = "string" | "StyleSpecification"
+type MapViewport = { center: LngLat; zoom: number; bearing?: number; pitch?: number }
 type NavigationLayout = "grid" | "row" | "column"
 // type Opacity is one of these strings: 0 10 20 30 40 50 60 70 80 90 100
 type OptionProps = Option props
@@ -546,6 +593,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 ## Gotchas
 
 - Fixed in 2.1: Select closes on pick and stays closed — focus returning to the field no longer reopens it — and a multiple Select stays open while picking. Use Select with value and onValueChange; do not build a local picker from Dropdown and Options to get this.
+- Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a Dropdown trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
@@ -563,6 +611,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Tag with a tone and a text label, never colour alone
 - Offer the way back (clear the filter), not only 'No results'
 - Icon actions with tooltips; destructive ones take tone="danger"
+- Records with a location: a Map beside the list (MapMarkers with cluster, activeId = the hovered row, bounds = the results' positions); it stacks under the list at s
 
 ## Gold example (`examples/list-page.tsx`)
 

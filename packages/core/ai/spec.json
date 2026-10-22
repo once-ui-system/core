@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "3.0.0-beta.0",
- "generated": "2026-10-21",
+ "generated": "2026-10-22",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root; '@once-ui-system/fx' and '@once-ui-system/blocks' are packages of their own, installed beside core.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -578,6 +578,10 @@
    "ReactPortal",
    "Promise<AwaitedReactNode>",
    "Date"
+  ],
+  "ClusterGroup": [
+   "{ type: \"item\"; item: T; position: LngLat; }",
+   "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
   ],
   "CodeInstance": {
    "code": "!string | { content: string; error: string | null }",
@@ -1254,6 +1258,9 @@
    "angle": "number",
    "color": "ColorValue"
   },
+  "LngLat": {
+   "[key: number]": "number"
+  },
   "LogoProps": "Logo props",
   "LogoSource": [
    "string",
@@ -1265,6 +1272,50 @@
    "accent",
    "inherit"
   ],
+  "MapClusterOptions": {
+   "radius": "number",
+   "maxZoom": "number",
+   "minPoints": "number"
+  },
+  "MapColor": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ],
+  "MapContextValue": {
+   "map": "!MapLibreMap",
+   "lib": "!MapLibre",
+   "reducedMotion": "!boolean",
+   "theme": "!\"light\" | \"dark\"",
+   "styleVersion": "!number",
+   "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
+  },
+  "MapLabels": {
+   "map": "!string",
+   "zoomIn": "!string",
+   "zoomOut": "!string",
+   "unavailable": "!string"
+  },
+  "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MapStyle": [
+   "string",
+   "StyleSpecification",
+   "{ light: MapStyleSource; dark: MapStyleSource; }"
+  ],
+  "MapStyleSource": [
+   "string",
+   "StyleSpecification"
+  ],
+  "MapViewport": {
+   "center": "!LngLat",
+   "zoom": "!number",
+   "bearing": "number",
+   "pitch": "number"
+  },
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",
@@ -1512,6 +1563,17 @@
    "bottom-start",
    "left-end",
    "left-start"
+  ],
+  "PositionAnchor": [
+   "center",
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
   ],
   "PresetsConfig": {
    "display": "!boolean",
@@ -4967,6 +5029,106 @@
     "style": "React.CSSProperties"
    }
   },
+  "Map": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "viewport": "MapViewport",
+    "defaultViewport": "MapViewport",
+    "onViewportChange": "(viewport: MapViewport) => void",
+    "bounds": "readonly LngLat[]",
+    "boundsPadding": "number",
+    "boundsMaxZoom": "number",
+    "mapStyle": "MapStyle",
+    "tint": "boolean",
+    "controls": "boolean",
+    "interactive": "boolean",
+    "cooperativeGestures": "boolean",
+    "minZoom": "number",
+    "maxZoom": "number",
+    "onMapClick": "(position: LngLat) => void",
+    "onMapLoad": "(map: MapLibreMap) => void",
+    "workerUrl": "string",
+    "transformRequest": "MapOptions[\"transformRequest\"]",
+    "labels": "Partial<MapLabels>",
+    "children": "React.ReactNode"
+   }
+  },
+  "MapCircle": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "position": "!LngLat",
+    "radius": "!number",
+    "color": "MapColor = brand",
+    "opacity": "number = 0.2"
+   }
+  },
+  "MapMarker": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "position": "!LngLat",
+    "children": "React.ReactNode",
+    "anchor": "PositionAnchor = bottom",
+    "offset": "[number, number]",
+    "active": "boolean = false",
+    "draggable": "boolean = false",
+    "onDragEnd": "(position: LngLat) => void"
+   }
+  },
+  "MapMarkers": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "items": "!readonly T[]",
+    "renderItem": "(item: T) => React.ReactNode",
+    "activeId": "string",
+    "cluster": "boolean | MapClusterOptions = false",
+    "renderCluster": "(cluster: { items: T[]; position: LngLat; zoomIn: () => void; }) => React.ReactNode",
+    "clusterLabel": "(count: number) => string = (count) => `${count} places, zoom in`"
+   }
+  },
+  "MapPin": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "children": "React.ReactNode",
+    "prefix": "React.ReactNode",
+    "variant": "\"pill\" | \"dot\"",
+    "active": "boolean = false",
+    "color": "MapColor = brand",
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
+   }
+  },
+  "MapPopup": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "position": "!LngLat",
+    "children": "!React.ReactNode",
+    "onClose": "() => void",
+    "gap": "number = 40",
+    "closeLabel": "string = Close"
+   }
+  },
   "AdapterProvider": {
    "group": "contexts",
    "props": {
@@ -6220,6 +6382,27 @@
    "kind": "function",
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "clusterPoints": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], getPosition: (item: T) => LngLat, zoom: number, options?: MapClusterOptions) => ClusterGroup<T>[]",
+   "doc": "Greedy distance clustering, the way supercluster does it, at one integer zoom."
+  },
+  "useMap": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "hook",
+   "signature": "() => MapContextValue",
+   "doc": "The map these components sit in."
+  },
+  "DEFAULT_MAP_STYLE": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "value",
+   "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
+   "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
   "useArrowNavigation": {
    "group": "hooks",

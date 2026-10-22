@@ -48,6 +48,27 @@
    "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
    "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
   },
+  "clusterPoints": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], getPosition: (item: T) => LngLat, zoom: number, options?: MapClusterOptions) => ClusterGroup<T>[]",
+   "doc": "Greedy distance clustering, the way supercluster does it, at one integer zoom."
+  },
+  "useMap": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "hook",
+   "signature": "() => MapContextValue",
+   "doc": "The map these components sit in."
+  },
+  "DEFAULT_MAP_STYLE": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "value",
+   "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
+   "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
@@ -433,6 +454,10 @@
    "outline",
    "gradient"
   ],
+  "ClusterGroup": [
+   "{ type: \"item\"; item: T; position: LngLat; }",
+   "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
+  ],
   "CursorPresetValue": [
    "rounded",
    "soft",
@@ -594,6 +619,23 @@
    "maxWidth": "!(key: BreakpointKey) => boolean",
    "minWidth": "!(key: BreakpointKey) => boolean"
   },
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "MapClusterOptions": {
+   "radius": "number",
+   "maxZoom": "number",
+   "minPoints": "number"
+  },
+  "MapContextValue": {
+   "map": "!MapLibreMap",
+   "lib": "!MapLibre",
+   "reducedMotion": "!boolean",
+   "theme": "!\"light\" | \"dark\"",
+   "styleVersion": "!number",
+   "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
+  },
+  "MapLibre": "typeof import(\"maplibre-gl\")",
   "MascotLook": {
    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
    "roundness": "number",

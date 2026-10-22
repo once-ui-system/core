@@ -1,6 +1,6 @@
 {
  "version": "3.0.0-beta.0",
- "generated": "2026-10-21",
+ "generated": "2026-10-22",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"
@@ -82,6 +82,39 @@
    ],
    "types": [
     "EmojiPickerProps"
+   ]
+  },
+  "@once-ui-system/core/map": {
+   "use": "Map with React markers, clustering, popups and areas on free OpenStreetMap tiles",
+   "peer": "maplibre-gl",
+   "exports": [
+    "Map",
+    "MapCircle",
+    "MapMarker",
+    "MapMarkers",
+    "MapPin",
+    "MapPopup",
+    "clusterPoints",
+    "useMap",
+    "DEFAULT_MAP_STYLE"
+   ],
+   "types": [
+    "ClusterGroup",
+    "LngLat",
+    "MapCircleProps",
+    "MapClusterOptions",
+    "MapColor",
+    "MapContextValue",
+    "MapLabels",
+    "MapMarkerItem",
+    "MapMarkerProps",
+    "MapMarkersProps",
+    "MapPinProps",
+    "MapPopupProps",
+    "MapProps",
+    "MapStyle",
+    "MapStyleSource",
+    "MapViewport"
    ]
   },
   "@once-ui-system/core/mdx": {
