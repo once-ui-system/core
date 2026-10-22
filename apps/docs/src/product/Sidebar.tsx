@@ -60,8 +60,19 @@ const NAV_RHYTHM = {
   railGap: "8",
   /** Space between sibling items. */
   itemGap: "4",
-  /** Height of a leaf item. `m` is the component default and reads roomier. */
+  /** Height of a leaf item inside a group. */
   itemSize: "m",
+  /**
+   * Height of a top-level item (About, Installation, the resource links). One
+   * step up from a nested item, so it matches the group headers beside it:
+   * 40px tall, 16px text inset and the m label, one rhythm down the column.
+   */
+  topItemSize: "l",
+  /**
+   * `l` pads 16px and its label another 8, which puts the text right of the
+   * group titles. Half the outer padding lines the two up.
+   */
+  topItemInset: { paddingLeft: "var(--static-space-8)" },
 } as const;
 
 interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
@@ -210,7 +221,8 @@ const NavigationItemComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
-      size={NAV_RHYTHM.itemSize}
+      size={depth === 0 ? NAV_RHYTHM.topItemSize : NAV_RHYTHM.itemSize}
+      style={depth === 0 ? NAV_RHYTHM.topItemInset : undefined}
       horizontal="between"
       selected={isSelected}
       className={depth === 0 ? styles.navigation : undefined}
@@ -221,7 +233,7 @@ const NavigationItemComponent: React.FC<{
           overflow="hidden"
           gap="8"
           onBackground="neutral-strong"
-          textVariant={isSelected ? "label-strong-s" : "label-default-s"}
+          textVariant={`label-${isSelected ? "strong" : "default"}-${depth === 0 ? "m" : "s"}`}
           style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
         >
           {item.label || item.title}
@@ -301,7 +313,8 @@ const ResourceLinkComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
-      size="m"
+      size={NAV_RHYTHM.topItemSize}
+      style={NAV_RHYTHM.topItemInset}
       horizontal="between"
       selected={isSelected}
       className={styles.navigation}
@@ -378,8 +391,13 @@ const SidebarContent: React.FC<{
 
     // Release history lives on GitHub, generated from CHANGELOG.md.
     const resourcesSection = (
-      <Column gap="4" marginTop="32" paddingLeft="4">
-        <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
+      <Column gap="4" marginTop="32">
+        <Row
+          textVariant="label-strong-s"
+          onBackground="brand-strong"
+          paddingLeft="16"
+          paddingY="12"
+        >
           Resources
         </Row>
         {/* The blocks surface has its own catalogue and hides this sidebar,
