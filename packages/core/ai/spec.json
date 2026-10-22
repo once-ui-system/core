@@ -1245,6 +1245,14 @@
    "maxWidth": "!(key: BreakpointKey) => boolean",
    "minWidth": "!(key: BreakpointKey) => boolean"
   },
+  "LegacyToast": {
+   "variant": "Tone",
+   "tone": "Tone",
+   "children": "ReactNode",
+   "message": "ReactNode",
+   "action": "ReactNode",
+   "duration": "number"
+  },
   "LegendConfig": {
    "display": "boolean",
    "direction": "\"row\" | \"column\"",
@@ -2369,7 +2377,7 @@
   },
   "ToastContextProps": {
    "toasts": "!Toast[]",
-   "addToast": "!(toast: Omit<Toast, \"id\">) => string",
+   "addToast": "!(toast: Omit<Toast, \"id\"> | LegacyToast) => string",
    "removeToast": "!(id: string) => void"
   },
   "ToastPosition": [

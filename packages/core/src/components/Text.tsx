@@ -47,7 +47,8 @@ interface TextComponent {
 const Text: TextComponent = function Text<T extends ElementType = "span">({
   ref,
   as,
-  textVariant,
+  textVariant: preset,
+  variant,
   weight,
   family,
   onBackground,
@@ -98,6 +99,7 @@ const Text: TextComponent = function Text<T extends ElementType = "span">({
   };
 
   // `weight` swaps the preset's weight, or alone sets only the weight.
+  const textVariant = preset ?? variant;
   const classes = textVariant
     ? getVariantClasses(withWeight(textVariant, weight))
     : [weight && `font-${weight}`];

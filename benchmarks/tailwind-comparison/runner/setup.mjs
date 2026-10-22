@@ -70,7 +70,7 @@ if (!args["skip-install"]) {
     // A different Once UI tarball changes the lockfile's integrity entry for the
     // file: dependency, so that scaffold is re-resolved with `npm install` (commit
     // the updated arms/once/package-lock.json with the results).
-    const cmd = scaffold === "once" && onceVersion ? "install" : "ci";
+    const cmd = scaffold === "once" && (onceVersion || args["once-tarball"]) ? "install" : "ci";
     if (cmd === "install") {
       // `npm install` still enforces the lockfile's old integrity for a file:
       // tarball (EINTEGRITY), so drop that one entry and let npm re-record it.

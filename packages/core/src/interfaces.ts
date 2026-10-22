@@ -121,6 +121,11 @@ export interface TextProps<T extends ElementType = "span">
    * it `variant` on Text and Heading, and also took `size` apart.
    */
   textVariant?: TextVariant;
+  /**
+   * @deprecated Use `textVariant`. The 2.x name, still read because agents
+   * write it from memory; `textVariant` wins when both are set.
+   */
+  variant?: TextVariant;
   wrap?: CSSProperties["textWrap"];
   /**
    * Swap the font family and keep the preset's size and weight:

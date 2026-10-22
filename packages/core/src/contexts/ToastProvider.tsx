@@ -3,7 +3,7 @@
 import React, { ReactNode, useCallback, useContext, useId, useMemo, useRef, useState } from "react";
 import { Toaster } from "../components/Toaster.js";
 import { ToastPosition } from "../types.js";
-import { type Toast, ToastContext } from "./ToastContext.js";
+import { type LegacyToast, normalizeToast, type Toast, ToastContext } from "./ToastContext.js";
 
 export const useToast = () => {
   const context = useContext(ToastContext);
@@ -42,10 +42,10 @@ const ToastProvider = ({
   // a toast appeared: in Kinetic a "saved" toast re-ran the effect that loads
   // the document and put the server's copy over the user's edits.
   const addToast = useCallback(
-    (toast: Omit<Toast, "id">) => {
+    (toast: Omit<Toast, "id"> | LegacyToast) => {
       count.current += 1;
       const id = `${idPrefix}toast-${count.current}`;
-      setToasts((prev) => [...prev, { ...toast, id }]);
+      setToasts((prev) => [...prev, { ...normalizeToast(toast), id }]);
       return id;
     },
     [idPrefix],
