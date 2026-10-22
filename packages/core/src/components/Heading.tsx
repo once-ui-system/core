@@ -47,7 +47,8 @@ interface HeadingComponent {
 const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">({
   ref,
   as,
-  textVariant,
+  textVariant: preset,
+  variant,
   weight,
   family,
   onBackground,
@@ -99,6 +100,7 @@ const Heading: HeadingComponent = function Heading<T extends ElementType = "h1">
 
   // With no preset a heading is medium and strong in the family around it.
   // `weight` swaps the weight in either case.
+  const textVariant = preset ?? variant;
   const classes = textVariant
     ? getVariantClasses(withWeight(textVariant, weight))
     : ["font-m", `font-${weight ?? "strong"}`];
