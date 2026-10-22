@@ -45,7 +45,7 @@ import {
 } from "react";
 import { mergeLabels } from "./internal/labels.js";
 import { radioGroupKeyDown } from "./internal/radioKeys.js";
-import { revealInStrip } from "./internal/reveal.js";
+import { revealInStrip } from "./internal/revealInStrip.js";
 import styles from "./StylePanel.module.scss";
 
 /** Every style choice the panel can edit, including the chart mode, which is

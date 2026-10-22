@@ -17,7 +17,7 @@ const body = (file: string) =>
     .trim();
 
 describe("copies of core's internal helpers", () => {
-  it.each(["labels.ts", "radioKeys.ts", "reveal.ts"])("%s is core's, word for word", (file) => {
+  it.each(["labels.ts", "radioKeys.ts", "revealInStrip.ts"])("%s is core's, word for word", (file) => {
     expect(body(path.join(OWN, file))).toBe(body(path.join(CORE, file)));
   });
 });

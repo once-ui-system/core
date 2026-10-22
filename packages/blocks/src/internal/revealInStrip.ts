@@ -1,4 +1,4 @@
-// A copy of core's internal `src/internal/reveal.ts` (SegmentedControl uses the
+// A copy of core's internal `src/internal/revealInStrip.ts` (SegmentedControl uses the
 // original). `__tests__/internal-parity.test.ts` holds the two to the same answers.
 
 /**
