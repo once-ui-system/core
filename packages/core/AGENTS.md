@@ -12,6 +12,8 @@ cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/ && rm -f src/
 
 No `src/` folder? Copy into the project root instead.
 
+Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports in your reply, taking their content from `ai/starters/app/src/`, and import only files you write or have opened in the project.
+
 The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript.
 
 - `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette all read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
@@ -24,7 +26,7 @@ Then build each page from the bundle below that fits it.
 
 Every file you read is sent again on every later turn, so read what you need in one step, then write.
 
-1. Pick the bundle below closest to what you are building and read it, together with any project files you need (in a Next.js app at least `app/layout.tsx`, which mounts the providers), in a single step. Open those project files by path: listing their folder first costs a turn, and every turn re-sends the bundle. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Then write the code.
+1. Pick the bundle below closest to what you are building and read it, together with any project files you need (in a Next.js app at least `app/layout.tsx`, which mounts the providers), in a single step. Open those project files by path: listing their folder first costs a turn, and every turn re-sends the bundle. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Read one bundle, not two: a second one doubles what every later turn re-sends, and a component it adds is cheaper as its `ai/components/<Name>.json` slice. Then write the code.
 2. Need a component the bundle does not list? Every bundle has the components in the `page.md` row; the Adds column names what each one carries on top. Read the `ai/components/<Name>.json` of anything else your page needs in that same step, not after the bundle.
 3. Nothing fits? Read `ai/bundles/page.md` (the rules and the common components) with the `ai/components/<Name>.json` slices your page needs, in one step. `ai/catalog.json` names every component with its purpose.
 

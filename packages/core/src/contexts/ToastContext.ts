@@ -21,10 +21,32 @@ export interface Toast {
   duration?: number;
 }
 
+/**
+ * The 2.x `addToast` shape: `variant` for the palette, `children` for the
+ * text. Still accepted because agents keep writing it from memory, and a
+ * typecheck failure costs them a whole repair turn. `addToast` normalises it.
+ */
+export interface LegacyToast {
+  /** @deprecated Use `tone`. */
+  variant?: Tone;
+  tone?: Tone;
+  /** @deprecated Use `message`. */
+  children?: ReactNode;
+  message?: ReactNode;
+  action?: ReactNode;
+  duration?: number;
+}
+
+/** A toast in its 3.0 shape, from either shape `addToast` takes. */
+export const normalizeToast = (toast: Omit<Toast, "id"> | LegacyToast): Omit<Toast, "id"> => {
+  const { variant, children, tone, message, ...rest } = toast as LegacyToast;
+  return { ...rest, tone: tone ?? variant ?? "neutral", message: message ?? children };
+};
+
 export interface ToastContextProps {
   toasts: Toast[];
   /** Shows a toast and returns its id, which `removeToast` takes. */
-  addToast: (toast: Omit<Toast, "id">) => string;
+  addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string;
   removeToast: (id: string) => void;
 }
 
