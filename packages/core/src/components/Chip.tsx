@@ -1,19 +1,29 @@
 "use client";
 
 import classNames from "clsx";
-import React, { forwardRef, MouseEventHandler, ReactNode } from "react";
-import { IconName } from "../icons";
+import type React from "react";
+import { forwardRef, type MouseEventHandler, type ReactNode } from "react";
+import type { IconName } from "../icons";
 import styles from "./Chip.module.scss";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
-import { IconButton, IconButtonProps } from "./IconButton";
+import { IconButton, type IconButtonProps } from "./IconButton";
 import { Text } from "./Text";
 
 interface ChipProps extends React.ComponentProps<typeof Flex> {
   label: string;
   selected?: boolean;
   prefixIcon?: IconName;
+  /** An icon after the label, such as `chevronDown` on a chip that opens a menu. */
+  suffixIcon?: IconName;
   onRemove?: () => void;
+  /**
+   * With `onRemove`, whether the label is a control of its own, a toggle
+   * beside the remove button. Defaults to `true`. `false` makes it plain
+   * text, for a chip whose one action is its removal (TagInput's tags): no
+   * extra tab stop that does nothing, and no "pressed" on every tag.
+   */
+  interactive?: boolean;
   onClick?: MouseEventHandler<HTMLDivElement>;
   children?: ReactNode;
   iconButtonProps?: Partial<IconButtonProps>;
@@ -26,7 +36,9 @@ type RestProps = Omit<
   | "label"
   | "selected"
   | "prefixIcon"
+  | "suffixIcon"
   | "onRemove"
+  | "interactive"
   | "onClick"
   | "children"
   | "iconButtonProps"
@@ -54,11 +66,14 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
       label,
       selected = true,
       prefixIcon,
+      suffixIcon,
       onRemove,
+      interactive = true,
       onClick,
       children,
       iconButtonProps = {},
       className,
+      onKeyDown,
       ...rest
     },
     ref,
@@ -84,6 +99,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
     };
 
     const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+      if (e.defaultPrevented) return;
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         if (onClick) onClick(e as unknown as React.MouseEvent<HTMLDivElement>);
@@ -105,6 +121,7 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         <Flex paddingX="8" paddingY="2">
           <Text variant="body-default-s">{label || children}</Text>
         </Flex>
+        {suffixIcon && <Icon name={suffixIcon} size="s" />}
       </>
     );
 
@@ -120,7 +137,12 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
           role="button"
           tabIndex={0}
           onClick={onClick}
-          onKeyDown={handleKeyDown}
+          // The caller's handler runs first and can cancel the activation; it
+          // used to be spread over this one, and Enter and Space did nothing.
+          onKeyDown={(e: React.KeyboardEvent<HTMLDivElement>) => {
+            onKeyDown?.(e);
+            handleKeyDown(e);
+          }}
           aria-pressed={selected}
           cursor="interactive"
           transition="micro-medium"
@@ -155,13 +177,13 @@ const Chip = forwardRef<HTMLDivElement, ChipProps>(
         cursor="interactive"
         transition="micro-medium"
         className={chipClassName}
+        onKeyDown={onKeyDown}
         {...box}
       >
         <Flex
-          role="button"
-          tabIndex={0}
-          onKeyDown={handleKeyDown}
-          aria-pressed={selected}
+          {...(interactive
+            ? { role: "button", tabIndex: 0, onKeyDown: handleKeyDown, "aria-pressed": selected }
+            : {})}
           vertical="center"
           className={styles.action}
           {...control}

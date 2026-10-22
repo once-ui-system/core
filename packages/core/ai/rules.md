@@ -285,6 +285,7 @@ specifier into every consumer's module graph:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
+| `Map`, `MapMarker`, `MapMarkers`, `MapPin`, `MapPopup`, `MapCircle`, `useMap` | `@once-ui-system/core/map` | `maplibre-gl` |
 | `mdxComponents`, `createMdxComponents`, the `Mdx*` elements | `@once-ui-system/core/mdx` | `prismjs` (for fenced code) |
 
 Naming one of these from the root does not resolve. `MediaAudioPlayer` and
@@ -352,6 +353,18 @@ export const { style, dataStyle } = defineConfig({ style: { brand: "cyan", theme
 <ThemeInit config={style} dataStyle={dataStyle} />
 <ThemeProvider {...style}><DataThemeProvider {...dataStyle}>...</DataThemeProvider></ThemeProvider>
 ```
+
+30d. The theme a visitor starts on is `defaultTheme` in `style`; `ThemeInit`
+paints it and `ThemeProvider` lets the visitor change it. `theme: "light"` or
+`"dark"` *forces* the theme on `ThemeProvider` — `setTheme` then does nothing —
+so leave `theme` out (or `"system"`) for a switchable site. Exact brand colours
+go in `brandScale`, `accentScale` or `neutralScale`, one colour per step
+(`{ 100: "#…", …, 1200: "#…" }`); a seed fills the steps a scale leaves out.
+A ramp per theme is `{ light: { … }, dark: { … } }`. The page and filled-surface
+colours are `pageBackground` and `surfaceBackground` (a token or CSS colour, or
+`{ light, dark }`). All render on the server through `ThemeInit`. Do not
+override the semantic variables (`--page-background`, `--brand-solid-strong`…)
+in CSS instead.
 
 31. `IconName` is a real union, not `string`. An unregistered name is a type
 error now, where it used to render a blank space with a console warning — so

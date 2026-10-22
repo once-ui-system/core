@@ -22,7 +22,15 @@ import {
   useTheme,
   useToast,
 } from "../src";
+import { Assistant } from "./Assistant";
+import { Booking, Calendar } from "./Booking";
+import { Code } from "./Code";
+import { Guests } from "./Guests";
+import { Menu } from "./Menu";
 import { Order } from "./Order";
+import { Post } from "./Post";
+import { Shell } from "./Shell";
+import { Stats } from "./Stats";
 
 /** A loyalty-card screen built only from the preview components. */
 function Screen() {
@@ -131,12 +139,48 @@ export function App({
   screen = "card",
 }: {
   theme: "light" | "dark";
-  screen?: "card" | "order" | "sheet";
+  screen?:
+    | "card"
+    | "order"
+    | "sheet"
+    | "menu"
+    | "stats"
+    | "code"
+    | "shell"
+    | "drawer"
+    | "form"
+    | "form-errors"
+    | "calendar"
+    | "table"
+    | "assistant"
+    | "post";
 }) {
   return (
     <ThemeProvider theme={theme} brand="orange" accent="yellow" neutral="sand" solid="color">
       <ToastProvider>
-        {screen === "card" ? <Screen /> : <Order sheet={screen === "sheet"} />}
+        {screen === "card" ? (
+          <Screen />
+        ) : screen === "menu" ? (
+          <Menu />
+        ) : screen === "stats" ? (
+          <Stats />
+        ) : screen === "code" ? (
+          <Code />
+        ) : screen === "table" ? (
+          <Guests />
+        ) : screen === "calendar" ? (
+          <Calendar />
+        ) : screen === "form" || screen === "form-errors" ? (
+          <Booking errors={screen === "form-errors"} />
+        ) : screen === "shell" || screen === "drawer" ? (
+          <Shell drawer={screen === "drawer"} />
+        ) : screen === "assistant" ? (
+          <Assistant />
+        ) : screen === "post" ? (
+          <Post />
+        ) : (
+          <Order sheet={screen === "sheet"} />
+        )}
       </ToastProvider>
     </ThemeProvider>
   );

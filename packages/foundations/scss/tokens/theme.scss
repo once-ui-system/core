@@ -1,9 +1,15 @@
-:root {
+:where(:root) {
+    /* The app sets these (next/font's variable classes, or its own CSS).
+       Declared at zero specificity so any rule of the app's wins: at :root
+       this self-reference won over a next/font class on <html> whenever
+       tokens.css loaded later, and the cycle left the font invalid. */
     --font-heading: var(--font-heading);
     --font-body:    var(--font-body);
     --font-label:   var(--font-label);
     --font-code:    var(--font-code);
+}
 
+:root {
     --font-size-display-multiplier:   1;
     --font-size-heading-multiplier:   1;
     --font-size-body-multiplier:      1;
@@ -150,23 +156,16 @@
     --line-height-body-multiplier: 1.2;
 }
 
-[data-theme="dark"] {
-    --page-background:              var(--neutral-background-weak);
-    --backdrop:                     var(--static-black-medium);
-
-    --solid-border-color-brand:     var(--brand-alpha-strong);
-    --solid-border-color-neutral:   var(--neutral-alpha-strong);
-    --solid-border-color-danger:    var(--danger-alpha-strong);
-
-    /* code */
-    --code-moss:                    var(--scheme-moss-800);
-    --code-gray:                    var(--scheme-gray-800);
-    --code-aqua:                    var(--scheme-aqua-800);
-    --code-green:                   var(--scheme-green-800);
-    --code-blue:                    var(--scheme-blue-800);
-    --code-violet:                  var(--scheme-violet-800);
-    --code-orange:                  var(--scheme-orange-800);
-
+/* Brand, accent and neutral tokens, declared again on every nested
+   data-brand, data-accent or data-neutral. A custom property that reads another resolves where it is
+   declared, so --brand-solid-strong set on <html> keeps <html>'s brand
+   however a section below sets --function-brand-*: data-brand alone
+   recoloured nothing. The last two selectors keep a data-brand inside a
+   nested data-theme, or on the same element as one, on that theme. */
+[data-theme="dark"],
+[data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]),
+[data-theme="light"] [data-theme="dark"]:is([data-brand], [data-accent], [data-neutral]),
+[data-theme="light"] [data-theme="dark"] :is([data-brand], [data-accent], [data-neutral]) {
     /* brand */
     --brand-background-strong:      var(--function-brand-300);
     --brand-background-medium:      var(--function-brand-200);
@@ -217,6 +216,9 @@
     --accent-alpha-medium:          var(--function-accent-600-30);
     --accent-alpha-weak:            var(--function-accent-600-15);
 
+    --page-background:              var(--neutral-background-weak);
+    --solid-border-color-neutral:   var(--neutral-alpha-strong);
+
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-300);
     --neutral-background-medium:    var(--function-neutral-200);
@@ -241,6 +243,22 @@
     --neutral-alpha-strong:         var(--function-neutral-600-50);
     --neutral-alpha-medium:         var(--function-neutral-600-30);
     --neutral-alpha-weak:           var(--function-neutral-600-15);
+}
+
+[data-theme="dark"] {
+    --backdrop:                     var(--static-black-medium);
+
+    --solid-border-color-brand:     var(--brand-alpha-strong);
+    --solid-border-color-danger:    var(--danger-alpha-strong);
+
+    /* code */
+    --code-moss:                    var(--scheme-moss-800);
+    --code-gray:                    var(--scheme-gray-800);
+    --code-aqua:                    var(--scheme-aqua-800);
+    --code-green:                   var(--scheme-green-800);
+    --code-blue:                    var(--scheme-blue-800);
+    --code-violet:                  var(--scheme-violet-800);
+    --code-orange:                  var(--scheme-orange-800);
 
     /* info */
     --info-background-strong:       var(--function-info-300);
@@ -359,32 +377,23 @@
     }
 }
 
-[data-theme="light"] {
-    --page-background:              var(--neutral-background-weak);
-    --backdrop:                     var(--static-white-medium);
-
-    --solid-border-color-brand:     var(--brand-alpha-strong);
-    --solid-border-color-neutral:   var(--neutral-alpha-strong);
-    --solid-border-color-danger:    var(--danger-alpha-strong);
-
-    /* code: step 500, the lightest that reads at 4.5:1 on white (600 was
-       3:1, below WCAG AA for 14px code) */
-    --code-moss:                    var(--scheme-moss-500);
-    --code-gray:                    var(--scheme-gray-500);
-    --code-aqua:                    var(--scheme-aqua-500);
-    --code-green:                   var(--scheme-green-500);
-    --code-blue:                    var(--scheme-blue-500);
-    --code-violet:                  var(--scheme-violet-500);
-    --code-orange:                  var(--scheme-orange-500);
-    
+/* See the dark rule: brand, accent and neutral again on a nested data-brand,
+   data-accent or data-neutral. */
+[data-theme="light"],
+[data-theme="light"] :is([data-brand], [data-accent], [data-neutral]),
+[data-theme="dark"] [data-theme="light"]:is([data-brand], [data-accent], [data-neutral]),
+[data-theme="dark"] [data-theme="light"] :is([data-brand], [data-accent], [data-neutral]) {
     /* brand */  
     --brand-background-strong:      var(--function-brand-800);
     --brand-background-medium:      var(--function-brand-1000);
     --brand-background-weak:        var(--static-white);
 
+    /* Text: step 400 for weak as well as medium. The palettes tune step 500
+       to just clear 4.5:1 on white, so on the off-white page it would drop
+       below WCAG AA. Neutral text moves a step darker on both rungs. */
     --brand-on-background-strong:   var(--function-brand-100);
     --brand-on-background-medium:   var(--function-brand-400);
-    --brand-on-background-weak:     var(--function-brand-500);
+    --brand-on-background-weak:     var(--function-brand-400);
 
     --brand-border-strong:          var(--function-brand-800);
     --brand-border-medium:          var(--function-brand-900);
@@ -395,9 +404,9 @@
     --brand-alpha-weak:             var(--function-brand-600-15);
 
     /* See the dark block: the brand solids as data-solid="color" has them. */
-    --brand-color-strong:           var(--function-brand-600);
-    --brand-color-medium:           var(--function-brand-500);
-    --brand-color-weak:             var(--function-brand-400);
+    --brand-color-strong:           var(--function-brand-500);
+    --brand-color-medium:           var(--function-brand-400);
+    --brand-color-weak:             var(--function-brand-300);
 
     /* accent */
     --accent-background-strong:     var(--function-accent-800);
@@ -406,11 +415,11 @@
 
     --accent-on-background-strong:  var(--function-accent-100);
     --accent-on-background-medium:  var(--function-accent-400);
-    --accent-on-background-weak:    var(--function-accent-500);
+    --accent-on-background-weak:    var(--function-accent-400);
   
-    --accent-solid-strong:          var(--function-accent-600);
-    --accent-solid-medium:          var(--function-accent-500);
-    --accent-solid-weak:            var(--function-accent-400);
+    --accent-solid-strong:          var(--function-accent-500);
+    --accent-solid-medium:          var(--function-accent-400);
+    --accent-solid-weak:            var(--function-accent-300);
   
     --accent-on-solid-strong:       var(--static-white);      
     --accent-on-solid-medium:       var(--function-accent-1100);
@@ -424,18 +433,24 @@
     --accent-alpha-medium:          var(--function-accent-600-30);
     --accent-alpha-weak:            var(--function-accent-600-15);
 
+    /* The page sits a step below its surfaces, as dark mode's does: an
+       off-white canvas with white cards on it, so layers read by elevation
+       rather than by borders alone. */
+    --page-background:              var(--function-neutral-1200);
+    --solid-border-color-neutral:   var(--neutral-alpha-strong);
+
     /* neutral */
     --neutral-background-strong:    var(--function-neutral-800);
     --neutral-background-medium:    var(--function-neutral-1000);
     --neutral-background-weak:      var(--static-white);
 
     --neutral-on-background-strong: var(--function-neutral-100);
-    --neutral-on-background-medium: var(--function-neutral-400);
-    --neutral-on-background-weak:   var(--function-neutral-500);
+    --neutral-on-background-medium: var(--function-neutral-300);
+    --neutral-on-background-weak:   var(--function-neutral-400);
   
-    --neutral-solid-strong:         var(--function-neutral-600);
-    --neutral-solid-medium:         var(--function-neutral-500);
-    --neutral-solid-weak:           var(--function-neutral-400);
+    --neutral-solid-strong:         var(--function-neutral-500);
+    --neutral-solid-medium:         var(--function-neutral-400);
+    --neutral-solid-weak:           var(--function-neutral-300);
   
     --neutral-on-solid-strong:      var(--static-white);      
     --neutral-on-solid-medium:      var(--function-neutral-1100);
@@ -448,7 +463,24 @@
     --neutral-alpha-strong:         var(--function-neutral-600-50);
     --neutral-alpha-medium:         var(--function-neutral-600-30);
     --neutral-alpha-weak:           var(--function-neutral-600-15);
+}
 
+[data-theme="light"] {
+    --backdrop:                     var(--static-white-medium);
+
+    --solid-border-color-brand:     var(--brand-alpha-strong);
+    --solid-border-color-danger:    var(--danger-alpha-strong);
+
+    /* code: step 500, the lightest that reads at 4.5:1 on white (600 was
+       3:1, below WCAG AA for 14px code) */
+    --code-moss:                    var(--scheme-moss-500);
+    --code-gray:                    var(--scheme-gray-500);
+    --code-aqua:                    var(--scheme-aqua-500);
+    --code-green:                   var(--scheme-green-500);
+    --code-blue:                    var(--scheme-blue-500);
+    --code-violet:                  var(--scheme-violet-500);
+    --code-orange:                  var(--scheme-orange-500);
+    
     /* info */
     --info-background-strong:       var(--function-info-800);
     --info-background-medium:       var(--function-info-1000);
@@ -456,11 +488,11 @@
 
     --info-on-background-strong:    var(--function-info-100);
     --info-on-background-medium:    var(--function-info-400);
-    --info-on-background-weak:      var(--function-info-500);
+    --info-on-background-weak:      var(--function-info-400);
   
-    --info-solid-strong:            var(--function-info-600);
-    --info-solid-medium:            var(--function-info-500);
-    --info-solid-weak:              var(--function-info-400);
+    --info-solid-strong:            var(--function-info-500);
+    --info-solid-medium:            var(--function-info-400);
+    --info-solid-weak:              var(--function-info-300);
   
     --info-on-solid-strong:         var(--static-white);      
     --info-on-solid-medium:         var(--function-info-1100);
@@ -481,11 +513,11 @@
 
     --warning-on-background-strong: var(--function-warning-100);
     --warning-on-background-medium: var(--function-warning-400);
-    --warning-on-background-weak:   var(--function-warning-500);
+    --warning-on-background-weak:   var(--function-warning-400);
   
-    --warning-solid-strong:         var(--function-warning-600);
-    --warning-solid-medium:         var(--function-warning-500);
-    --warning-solid-weak:           var(--function-warning-400);
+    --warning-solid-strong:         var(--function-warning-500);
+    --warning-solid-medium:         var(--function-warning-400);
+    --warning-solid-weak:           var(--function-warning-300);
   
     --warning-on-solid-strong:      var(--static-white);      
     --warning-on-solid-medium:      var(--function-warning-1100);
@@ -506,11 +538,11 @@
 
     --danger-on-background-strong:  var(--function-danger-100);
     --danger-on-background-medium:  var(--function-danger-400);
-    --danger-on-background-weak:    var(--function-danger-500);
+    --danger-on-background-weak:    var(--function-danger-400);
   
-    --danger-solid-strong:          var(--function-danger-600);
-    --danger-solid-medium:          var(--function-danger-500);
-    --danger-solid-weak:            var(--function-danger-400);
+    --danger-solid-strong:          var(--function-danger-500);
+    --danger-solid-medium:          var(--function-danger-400);
+    --danger-solid-weak:            var(--function-danger-300);
   
     --danger-on-solid-strong:       var(--static-white);      
     --danger-on-solid-medium:       var(--function-danger-1100);
@@ -531,11 +563,11 @@
 
     --success-on-background-strong: var(--function-success-100);
     --success-on-background-medium: var(--function-success-400);
-    --success-on-background-weak:   var(--function-success-500);
+    --success-on-background-weak:   var(--function-success-400);
   
-    --success-solid-strong:         var(--function-success-600);
-    --success-solid-medium:         var(--function-success-500);
-    --success-solid-weak:           var(--function-success-400);
+    --success-solid-strong:         var(--function-success-500);
+    --success-solid-medium:         var(--function-success-400);
+    --success-solid-weak:           var(--function-success-300);
   
     --success-on-solid-strong:      var(--static-white);      
     --success-on-solid-medium:      var(--function-success-1100);
@@ -599,31 +631,44 @@
 }
 
 [data-surface="translucent"][data-theme="light"],
-[data-surface="translucent"] [data-theme="light"] {
+[data-surface="translucent"] [data-theme="light"],
+[data-surface="translucent"][data-theme="light"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="translucent"] [data-theme="light"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--static-white-medium);
     --surface-border:        var(--neutral-alpha-medium);
 }
 
 [data-surface="translucent"][data-theme="dark"],
-[data-surface="translucent"] [data-theme="dark"] {
+[data-surface="translucent"] [data-theme="dark"],
+[data-surface="translucent"][data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="translucent"] [data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--static-black-medium);
     --surface-border:        var(--neutral-alpha-medium);
 }
 
 [data-surface="filled"][data-theme="light"],
-[data-surface="filled"] [data-theme="light"] {
+[data-surface="filled"] [data-theme="light"],
+[data-surface="filled"][data-theme="light"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="filled"] [data-theme="light"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--neutral-background-weak);
     --surface-border:        var(--neutral-border-medium);
 }
 
 [data-surface="filled"][data-theme="dark"],
-[data-surface="filled"] [data-theme="dark"] {
+[data-surface="filled"] [data-theme="dark"],
+[data-surface="filled"][data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]),
+[data-surface="filled"] [data-theme="dark"] [data-neutral]:not([data-theme], [data-surface]) {
     --surface-background:    var(--neutral-background-medium);
     --surface-border:        var(--static-transparent);
 }
 
+/* The solids again on a nested data-brand or data-neutral, from its nearest
+   data-solid: one on <html> is outweighed by one on a section between them,
+   and an element with its own data-solid keeps the rule that names it. */
 [data-theme="dark"][data-solid="color"],
-[data-theme="dark"] [data-solid="color"] {
+[data-theme="dark"] [data-solid="color"],
+[data-theme="dark"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-500);
     --brand-solid-medium:         var(--function-brand-400);
     --brand-solid-weak:           var(--function-brand-300);
@@ -634,7 +679,9 @@
 }
 
 [data-theme="dark"][data-solid="contrast"],
-[data-theme="dark"] [data-solid="contrast"] {
+[data-theme="dark"] [data-solid="contrast"],
+[data-theme="dark"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-neutral-1000);
     --brand-solid-medium:         var(--static-white);
     --brand-solid-weak:           var(--function-neutral-900);
@@ -645,7 +692,9 @@
 }
 
 [data-theme="dark"][data-solid="inverse"],
-[data-theme="dark"] [data-solid="inverse"] {
+[data-theme="dark"] [data-solid="inverse"],
+[data-theme="dark"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="dark"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-800);
     --brand-solid-medium:         var(--function-brand-700);
     --brand-solid-weak:           var(--function-brand-600);
@@ -656,10 +705,14 @@
 }
 
 [data-theme="light"][data-solid="color"],
-[data-theme="light"] [data-solid="color"] {
-    --brand-solid-strong:         var(--function-brand-600);
-    --brand-solid-medium:         var(--function-brand-500);
-    --brand-solid-weak:           var(--function-brand-400);
+[data-theme="light"] [data-solid="color"],
+[data-theme="light"][data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
+    /* Step 500, the same as dark: white text on step 600 measures 3:1,
+       below WCAG AA for button labels. */
+    --brand-solid-strong:         var(--function-brand-500);
+    --brand-solid-medium:         var(--function-brand-400);
+    --brand-solid-weak:           var(--function-brand-300);
   
     --brand-on-solid-strong:      var(--static-white);      
     --brand-on-solid-medium:      var(--function-brand-1100);
@@ -667,7 +720,9 @@
 }
 
 [data-theme="light"][data-solid="contrast"],
-[data-theme="light"] [data-solid="contrast"] {
+[data-theme="light"] [data-solid="contrast"],
+[data-theme="light"][data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-neutral-300);
     --brand-solid-medium:         var(--static-black);
     --brand-solid-weak:           var(--function-neutral-400);
@@ -678,13 +733,19 @@
 }
 
 
-[data-solid="color"] {
+[data-solid="color"],
+:where(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="color"] :is([data-brand], [data-neutral]):not([data-solid]) {
+    --solid-border-color-brand:   var(--brand-alpha-strong);
+
     --solid-inset-color-brand:    var(--brand-alpha-strong);
     --solid-inset-color-neutral:  var(--static-transparent);
     --solid-inset-color-danger:   var(--danger-alpha-strong);
 }
 
-[data-solid="contrast"] {
+[data-solid="contrast"],
+:where(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="contrast"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --solid-border-color-brand:   var(--neutral-alpha-strong);
 
     --solid-inset-color-brand:    var(--static-transparent);
@@ -692,7 +753,9 @@
     --solid-inset-color-danger:   var(--danger-alpha-strong);
 }
 
-[data-solid="inverse"] {
+[data-solid="inverse"],
+:where(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+:not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --solid-border-color-brand:   var(--brand-alpha-strong);
 
     --solid-inset-color-brand:    var(--brand-alpha-strong);
@@ -701,7 +764,9 @@
 }
 
 [data-theme="light"][data-solid="inverse"],
-[data-theme="light"] [data-solid="inverse"] {
+[data-theme="light"] [data-solid="inverse"],
+[data-theme="light"][data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]),
+[data-theme="light"] :not(:root)[data-solid="inverse"] :is([data-brand], [data-neutral]):not([data-solid]) {
     --brand-solid-strong:         var(--function-brand-900);
     --brand-solid-medium:         var(--function-brand-800);
     --brand-solid-weak:           var(--function-brand-700);

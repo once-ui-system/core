@@ -13,15 +13,36 @@ import type {
   SurfaceStyle,
   Theme,
 } from "../types";
+import { customSchemeTokens, type SchemeScale } from "./colorScheme";
 import { defaultSettings } from "./resolve";
-import { createTheme, type FontFamilies, type OnceTheme } from "./theme";
+import { createTheme, type FontFamilies, type Insets, NO_INSETS, type OnceTheme } from "./theme";
 
 export interface ThemeProviderProps {
   /** `"system"` follows the device's appearance. */
   theme?: Theme;
-  brand?: Schemes;
-  accent?: Schemes;
-  neutral?: NeutralColor;
+  /** `"custom"` reads `brandSeed` or `brandScale`, as `data-brand="custom"` does on the web. */
+  brand?: Schemes | "custom";
+  accent?: Schemes | "custom";
+  neutral?: NeutralColor | "custom";
+  /**
+   * A colour to generate the brand scheme from (hex, `rgb()` or `oklch()`), for
+   * `brand: "custom"`, which it implies when `brand` is not set. As core's `brandSeed`.
+   */
+  brandSeed?: string;
+  /** As `brandSeed`, for `accent: "custom"`. */
+  accentSeed?: string;
+  /** As `brandSeed`, for `neutral: "custom"`. */
+  neutralSeed?: string;
+  /**
+   * The brand scheme step by step (`100`…`1200`), the native side of the
+   * `--scheme-brand-*` properties a web app sets in its own CSS. Wins over
+   * `brandSeed`, and also implies `brand: "custom"`.
+   */
+  brandScale?: SchemeScale;
+  /** As `brandScale`, for `accent: "custom"`. */
+  accentScale?: SchemeScale;
+  /** As `brandScale`, for `neutral: "custom"`. */
+  neutralScale?: SchemeScale;
   solid?: SolidType;
   solidStyle?: SolidStyle;
   border?: BorderStyle;
@@ -34,6 +55,12 @@ export interface ThemeProviderProps {
   mobileSize?: DeviceFontSize;
   /** Font families the app has loaded; the platform font is used for any left out. */
   fonts?: FontFamilies;
+  /**
+   * Safe-area insets in points, for `Dialog`, toasts and `Flex`'s `safeArea`.
+   * React Native has no cross-platform API for them, so pass
+   * `useSafeAreaInsets()` from react-native-safe-area-context.
+   */
+  insets?: Insets;
   children: ReactNode;
 }
 
@@ -48,18 +75,39 @@ const ThemeContext = createContext<OnceTheme | null>(null);
 export function ThemeProvider({
   theme = "system",
   fonts,
+  insets = NO_INSETS,
+  brandSeed,
+  accentSeed,
+  neutralSeed,
+  brandScale,
+  accentScale,
+  neutralScale,
   children,
   ...options
 }: ThemeProviderProps) {
   const scheme = useColorScheme();
   const { width } = useWindowDimensions();
   const resolvedTheme = theme === "system" ? (scheme === "light" ? "light" : "dark") : theme;
-  const key = JSON.stringify([resolvedTheme, options, fonts]);
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries options and fonts by value.
-  const value = useMemo(
-    () => createTheme({ ...defaultSettings, ...options, theme: resolvedTheme }, width, fonts),
-    [key, width],
-  );
+  // Insets by value too: `useSafeAreaInsets()` returns a new object on every render.
+  const seeds = { brand: brandSeed, accent: accentSeed, neutral: neutralSeed };
+  const scales = { brand: brandScale, accent: accentScale, neutral: neutralScale };
+  const key = JSON.stringify([resolvedTheme, options, fonts, insets, seeds, scales]);
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `key` carries everything else by value.
+  const value = useMemo(() => {
+    // A seed or scale picks "custom" for its scheme unless the scheme is set, as in core.
+    const custom = {
+      ...((brandSeed || brandScale) && { brand: "custom" as const }),
+      ...((accentSeed || accentScale) && { accent: "custom" as const }),
+      ...((neutralSeed || neutralScale) && { neutral: "custom" as const }),
+    };
+    return createTheme(
+      { ...defaultSettings, ...custom, ...options, theme: resolvedTheme },
+      width,
+      fonts,
+      insets,
+      customSchemeTokens(seeds, scales),
+    );
+  }, [key, width]);
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }
 

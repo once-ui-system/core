@@ -15,7 +15,7 @@
  "props": {
   "trigger": "ReactNode",
   "overlay": "ReactNode",
-  "placement": "Placement = bottom-left",
+  "placement": "CursorPlacement = bottom-left",
   "className": "string",
   "style": "React.CSSProperties"
  },
@@ -69,8 +69,8 @@
    "flex": "FlexValue"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
    "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
@@ -143,19 +143,15 @@
   }
  },
  "types": {
-  "Placement": [
+  "CursorPlacement": [
    "top",
    "right",
    "bottom",
    "left",
-   "top-start",
-   "top-end",
-   "right-start",
-   "right-end",
-   "bottom-start",
-   "bottom-end",
-   "left-start",
-   "left-end"
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
   ]
  }
 }

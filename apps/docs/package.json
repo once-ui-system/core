@@ -19,6 +19,7 @@
     "check:urls": "node scripts/check-urls.mjs",
     "check:examples": "node scripts/check-examples.mjs",
     "check:props": "node scripts/check-props.mjs",
+    "check:render": "node scripts/check-render.mjs",
     "check:docs": "node scripts/check-examples.mjs && node scripts/check-props.mjs",
     "clean": "rimraf .next",
     "copy:blocks": "node scripts/copy-blocks.mjs"
@@ -31,6 +32,7 @@
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",
+    "maplibre-gl": "^6.15.0",
     "next": "^16.2.12",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
@@ -47,6 +49,7 @@
     "@types/node": "^26.1.2",
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
+    "playwright-core": "1.56.1",
     "typescript": "^6.0.3"
   },
   "overrides": {

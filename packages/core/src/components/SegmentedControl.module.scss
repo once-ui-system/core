@@ -1,0 +1,35 @@
+// `scroll={false}`: the options may shrink below their content, and with
+// `fillWidth` share the row equally whatever their labels.
+.shrink {
+    min-width: 0;
+
+    > :has(> .text) {
+        min-width: 0;
+    }
+}
+
+.share {
+    flex: 1 1 0;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    max-width: 100%;
+}
+
+.label {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+// Two lines do not fit the button's fixed height; it grows to fit them and
+// keeps its size's height as the minimum. Doubled to win over the size class.
+.twoLine.twoLine {
+    height: auto;
+    padding-block: var(--static-space-8);
+    line-height: 1.3;
+}

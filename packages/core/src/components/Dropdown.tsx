@@ -13,7 +13,20 @@ interface DropdownProps extends Omit<React.ComponentProps<typeof Row>, "onSelect
 }
 
 const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
-  ({ selectedOption, className, children, onEscape, onSelect, disabled = false, ...flex }, ref) => {
+  (
+    {
+      selectedOption,
+      className,
+      children,
+      onEscape,
+      onSelect,
+      disabled = false,
+      onKeyDown,
+      onClickCapture,
+      ...flex
+    },
+    ref,
+  ) => {
     const handleSelect = (event: SyntheticEvent<HTMLDivElement>) => {
       if (disabled) return;
 
@@ -33,6 +46,22 @@ const Dropdown = forwardRef<HTMLDivElement, DropdownProps>(
         ref={ref}
         role="listbox"
         onClick={handleSelect}
+        // A disabled dropdown prevents interaction, the options' own onClick
+        // included: only `onSelect` was held back, so an Option given an
+        // onClick (the documented pattern) still picked.
+        onClickCapture={(event: React.MouseEvent<HTMLDivElement>) => {
+          if (disabled) {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+          }
+          onClickCapture?.(event);
+        }}
+        // `onEscape` was accepted and never called.
+        onKeyDown={(event: React.KeyboardEvent<HTMLDivElement>) => {
+          onKeyDown?.(event);
+          if (event.key === "Escape" && onEscape && !event.defaultPrevented) onEscape();
+        }}
         border="neutral-medium"
         background="surface"
         className={disabled ? "cursor-not-allowed" : undefined}

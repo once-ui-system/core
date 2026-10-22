@@ -1,11 +1,12 @@
 {
  "name": "@once-ui-system/core",
- "version": "2.2.0",
- "generated": "2026-10-17",
+ "version": "2.5.0",
+ "generated": "2026-10-19",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
   "TShirtSizes": "CondensedTShirtSizes | \"xs\" | \"xl\"",
+  "FieldSize": "TShirtSizes | \"xxs\"",
   "ResponsiveSpacingToken": "TShirtSizes",
   "ShadowSize": "TShirtSizes",
   "SpacingToken": "StaticSpacingToken | ResponsiveSpacingToken",
@@ -72,8 +73,8 @@
    "rows": "GridSize"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
    "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",
@@ -144,6 +145,9 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   },
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextProps": {
    "as": "T",
    "variant": "TextVariant",
@@ -151,13 +155,21 @@
    "size": "TextSize",
    "weight": "TextWeight",
    "family": "TextType",
-   "truncate": "boolean"
+   "truncate": "boolean",
+   "flex": "FlexValue | number",
+   "xl": "TextBreakpointHide",
+   "l": "TextBreakpointHide",
+   "m": "TextBreakpointHide",
+   "s": "TextBreakpointHide",
+   "xs": "TextBreakpointHide"
   }
  },
  "iconNames": [
   "adjustments",
+  "arrowDown",
   "arrowLeft",
   "arrowRight",
+  "arrowUp",
   "arrowUpRight",
   "ball",
   "banknotes",
@@ -183,6 +195,7 @@
   "code",
   "computer",
   "copy",
+  "cube",
   "danger",
   "dark",
   "dislike",
@@ -201,6 +214,8 @@
   "forward",
   "gift",
   "globe",
+  "grid",
+  "grip",
   "heart",
   "help",
   "home",
@@ -215,14 +230,17 @@
   "logout",
   "mail",
   "maximize",
+  "menu",
   "minimize",
   "minus",
   "moreHorizontal",
+  "newspaper",
   "opacity",
   "organization",
   "pause",
   "paw",
   "payment",
+  "people",
   "person",
   "personRemove",
   "play",
@@ -640,6 +658,16 @@
    "`${number}vw`",
    "`calc(${string})`"
   ],
+  "CursorPlacement": [
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ],
   "curveType": [
    "step",
    "linear",
@@ -724,10 +752,10 @@
    "endDate": "!Date | undefined"
   },
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -783,6 +811,31 @@
    "aria-invalid": "true",
    "aria-required": "true"
   },
+  "FieldSize": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs",
+   "xxs"
+  ],
+  "FileTreeFile": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"file\"",
+   "icon": "IconName"
+  },
+  "FileTreeFolder": {
+   "id": "!string",
+   "name": "!string",
+   "type": "!\"folder\"",
+   "icon": "IconName",
+   "children": "!FileTreeItem[]"
+  },
+  "FileTreeItem": [
+   "FileTreeFolder",
+   "FileTreeFile"
+  ],
   "FlexBreakpointProps": [
    "style",
    "direction",
@@ -859,17 +912,17 @@
   "FlexValue": [
    "0",
    "1",
-   "8",
-   "10",
    "2",
    "3",
    "4",
-   "12",
    "5",
    "6",
    "7",
+   "8",
    "9",
-   "11"
+   "10",
+   "11",
+   "12"
   ],
   "FormColumns": [
    "number",
@@ -977,17 +1030,17 @@
   "GridProps": "Grid props",
   "GridSize": [
    "1",
-   "8",
-   "10",
    "2",
    "3",
    "4",
-   "12",
    "5",
    "6",
    "7",
+   "8",
    "9",
-   "11"
+   "10",
+   "11",
+   "12"
   ],
   "IconButtonProps": "IconButton props",
   "IconComponent": [
@@ -1009,6 +1062,7 @@
    "warning",
    "code",
    "link",
+   "menu",
    "search",
    "time",
    "video",
@@ -1017,9 +1071,12 @@
    "send",
    "checkbox",
    "document",
+   "grid",
    "adjustments",
+   "arrowDown",
    "arrowLeft",
    "arrowRight",
+   "arrowUp",
    "arrowUpRight",
    "ball",
    "banknotes",
@@ -1042,6 +1099,7 @@
    "clipboard",
    "close",
    "computer",
+   "cube",
    "dislike",
    "download",
    "edit",
@@ -1055,6 +1113,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "home",
    "inbox",
@@ -1067,10 +1126,12 @@
    "minimize",
    "minus",
    "moreHorizontal",
+   "newspaper",
    "organization",
    "pause",
    "paw",
    "payment",
+   "people",
    "person",
    "personRemove",
    "play",
@@ -1104,8 +1165,8 @@
    "id": "!string",
    "name": "!string",
    "section": "!string",
-   "shortcut": "!string[]",
-   "keywords": "!string",
+   "shortcut": "string[]",
+   "keywords": "string",
    "href": "string",
    "perform": "() => void",
    "icon": "IconName",
@@ -1182,10 +1243,20 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
+  "NavDensity": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NavigationLayout": [
    "grid",
    "row",
    "column"
+  ],
+  "NavVariant": [
+   "solid",
+   "subtle",
+   "minimal"
   ],
   "NeutralColor": [
    "sand",
@@ -1281,6 +1352,7 @@
   },
   "OnceUIStyleConfig": {
    "theme": "Theme",
+   "defaultTheme": "Theme",
    "neutral": "NeutralColor | \"custom\"",
    "brand": "Schemes | \"custom\"",
    "accent": "Schemes | \"custom\"",
@@ -1298,7 +1370,10 @@
    "cursorInteractive": "InteractiveCursor",
    "brandSeed": "string",
    "accentSeed": "string",
-   "neutralSeed": "string"
+   "neutralSeed": "string",
+   "brandScale": "SchemeScale",
+   "accentScale": "SchemeScale",
+   "neutralScale": "SchemeScale"
   },
   "Opacity": [
    "0",
@@ -1366,6 +1441,20 @@
    "105",
    "110"
   ],
+  "SchemeRampWeight": [
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "1000",
+   "1100",
+   "1200"
+  ],
   "Schemes": [
    "blue",
    "indigo",
@@ -1381,6 +1470,7 @@
    "aqua",
    "cyan"
   ],
+  "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "ScrollContainerControlPlacement": [
    "top-start",
    "top-end",
@@ -1441,6 +1531,33 @@
    "contrast",
    "inverse"
   ],
+  "SortableAnnouncement": {
+   "item": "!string",
+   "position": "!number",
+   "total": "!number",
+   "list": "string"
+  },
+  "SortableDirection": [
+   "row",
+   "column"
+  ],
+  "SortableLabels": {
+   "instructions": "!string",
+   "handle": "!(item?: string) => string",
+   "lifted": "!(a: SortableAnnouncement) => string",
+   "moved": "!(a: SortableAnnouncement) => string",
+   "dropped": "!(a: SortableAnnouncement) => string",
+   "cancelled": "!(a: SortableAnnouncement) => string"
+  },
+  "SortablePosition": {
+   "list": "!string",
+   "index": "!number"
+  },
+  "SortableReorder": {
+   "id": "!string",
+   "from": "!number",
+   "to": "!number"
+  },
   "SpacingToken": [
    "xl",
    "l",
@@ -1448,14 +1565,14 @@
    "s",
    "xs",
    "0",
-   "32",
    "1",
    "2",
    "4",
-   "64",
-   "160",
    "8",
    "12",
+   "32",
+   "64",
+   "160",
    "16",
    "20",
    "24",
@@ -1706,6 +1823,9 @@
    "align": "\"left\" | \"center\" | \"right\""
   },
   "TagProps": "Tag props",
+  "TextBreakpointHide": {
+   "hide": "boolean"
+  },
   "TextSize": [
    "xl",
    "l",
@@ -2515,7 +2635,7 @@
    "props": {
     "trigger": "ReactNode",
     "overlay": "ReactNode",
-    "placement": "Placement = bottom-left",
+    "placement": "CursorPlacement = bottom-left",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -2933,6 +3053,35 @@
     "span": "number"
    }
   },
+  "FileTree": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!FileTreeItem[]",
+    "selectedId": "string | null",
+    "defaultSelectedId": "string",
+    "expandedIds": "string[]",
+    "defaultExpandedIds": "string[] = []",
+    "onSelect": "(item: FileTreeItem) => void",
+    "onExpandChange": "(expandedIds: string[], item: FileTreeFolder) => void",
+    "onItemClick": "(item: FileTreeItem) => void",
+    "renderItem": "( item: FileTreeItem, state: { selected: boolean; expanded: boolean; depth: number }, ) => React.ReactNode",
+    "emptyState": "React.ReactNode",
+    "loading": "boolean = false",
+    "loadingState": "React.ReactNode",
+    "aria-label": "string"
+   }
+  },
   "Flex": {
    "group": "components",
    "mixins": [
@@ -2948,7 +3097,9 @@
     "l": "FlexBreakpointProps",
     "m": "FlexBreakpointProps",
     "s": "FlexBreakpointProps",
-    "xs": "FlexBreakpointProps"
+    "xs": "FlexBreakpointProps",
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
   },
   "FlipFx": {
@@ -2997,7 +3148,7 @@
    "props": {
     "density": "\"stacked\" | \"tight\" | \"spacious\" = tight",
     "columns": "FormColumns",
-    "size": "TShirtSizes",
+    "size": "FieldSize",
     "as": "\"div\" | \"form\" = div",
     "onSubmit": "(event: React.FormEvent<HTMLFormElement>) => unknown",
     "pending": "boolean",
@@ -3063,7 +3214,9 @@
     "l": "GridBreakpointProps",
     "m": "GridBreakpointProps",
     "s": "GridBreakpointProps",
-    "xs": "GridBreakpointProps"
+    "xs": "GridBreakpointProps",
+    "position": "CSSProperties[\"position\"] = relative",
+    "scrollbar": "\"default\" | \"minimal\" = minimal"
    }
   },
   "Heading": {
@@ -3249,7 +3402,7 @@
     "id": "!string",
     "label": "string",
     "placeholder": "string",
-    "size": "TShirtSizes",
+    "size": "FieldSize",
     "error": "boolean = false",
     "errorMessage": "ReactNode",
     "description": "ReactNode",
@@ -3274,7 +3427,7 @@
     "description": "React.ReactNode",
     "disabled": "boolean",
     "iconButtonProps": "IconButtonProps",
-    "onClick": "!() => void",
+    "onClick": "() => void",
     "className": "string",
     "id": "string",
     "labelId": "string",
@@ -3325,7 +3478,7 @@
     "children": "!ReactNode",
     "trigger": "\"hover\" | \"instant\" | \"custom\" = hover",
     "speed": "\"fast\" | \"medium\" | \"slow\" = medium",
-    "charset": "string[] = defaultCharset",
+    "charset": "string | string[] = defaultCharset",
     "onTrigger": "(triggerFn: () => void) => void",
     "className": "string",
     "style": "React.CSSProperties"
@@ -3542,6 +3695,45 @@
     "title": "!React.ReactNode",
     "open": "!boolean",
     "onClose": "!() => void"
+   }
+  },
+  "Nav": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "density": "NavDensity = normal",
+    "variant": "NavVariant = solid",
+    "rail": "boolean = true"
+   }
+  },
+  "NavSection": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "label": "ReactNode",
+    "action": "ReactNode"
    }
   },
   "NavGroup": {
@@ -4031,7 +4223,7 @@
    ],
    "props": {
     "buttons": "!ButtonOption[]",
-    "onChange": "!(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
+    "onChange": "(value: string, event?: React.MouseEvent<HTMLButtonElement>) => void",
     "defaultValue": "string",
     "fillWidth": "boolean = true",
     "value": "string",
@@ -4048,7 +4240,7 @@
    ],
    "props": {
     "options": "!SelectOptionType[]",
-    "value": "string | string[] = \"\"",
+    "value": "string | string[]",
     "emptyState": "ReactNode = No results",
     "onSelect": "(value: string | string[]) => void",
     "placement": "Placement",
@@ -4157,7 +4349,7 @@
     "StyleProps"
    ],
    "props": {
-    "shape": "!\"line\" | \"circle\" | \"block\" = line",
+    "shape": "\"line\" | \"circle\" | \"block\" = line",
     "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
     "delay": "number",
     "style": "React.CSSProperties",
@@ -4193,6 +4385,58 @@
     "href": "string",
     "style": "React.CSSProperties",
     "className": "string"
+   }
+  },
+  "Sortable": {
+   "group": "components",
+   "extends": [
+    "Column",
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "items": "!readonly string[]",
+    "onReorder": "(items: string[], move: SortableReorder) => void",
+    "group": "string",
+    "name": "string",
+    "onMove": "(id: string, to: SortablePosition, from: SortablePosition) => void",
+    "direction": "SortableDirection",
+    "handle": "boolean",
+    "disabled": "boolean",
+    "label": "string",
+    "labels": "Partial<SortableLabels>"
+   }
+  },
+  "SortableHandle": {
+   "group": "components",
+   "extends": [
+    "IconButton"
+   ]
+  },
+  "SortableItem": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "id": "!string",
+    "label": "string",
+    "disabled": "boolean = false"
    }
   },
   "Spinner": {
@@ -4254,7 +4498,7 @@
    ],
    "props": {
     "size": "CondensedTShirtSizes = m",
-    "color": "!\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+    "color": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
     "ariaLabel": "string = `${color} status indicator`",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4506,7 +4750,7 @@
     "label": "string",
     "placeholder": "string",
     "lines": "number | \"auto\" = auto",
-    "size": "TShirtSizes",
+    "size": "FieldSize",
     "error": "boolean = false",
     "errorMessage": "ReactNode",
     "description": "ReactNode",
@@ -4599,7 +4843,8 @@
     "onClose": "() => void",
     "action": "React.ReactNode",
     "children": "!React.ReactNode",
-    "duration": "number = 6000"
+    "duration": "number = 6000",
+    "announce": "boolean = true"
    }
   },
   "Toaster": {
@@ -4756,8 +5001,10 @@
    "group": "modules",
    "props": {
     "items": "!KbarItem[]",
-    "children": "!React.ReactNode",
-    "inputSize": "TShirtSizes"
+    "children": "React.ReactNode",
+    "inputSize": "TShirtSizes",
+    "open": "boolean",
+    "onOpenChange": "(open: boolean) => void"
    }
   },
   "MegaMenu": {
@@ -5406,6 +5653,7 @@
    "group": "contexts",
    "props": {
     "theme": "Theme = system",
+    "defaultTheme": "Theme = system",
     "neutral": "NeutralColor | \"custom\"",
     "brand": "Schemes | \"custom\"",
     "accent": "Schemes | \"custom\"",
@@ -5424,6 +5672,9 @@
     "brandSeed": "string",
     "accentSeed": "string",
     "neutralSeed": "string",
+    "brandScale": "SchemeScale",
+    "accentScale": "SchemeScale",
+    "neutralScale": "SchemeScale",
     "children": "!React.ReactNode",
     "persistence": "StylePersistence = local"
    }
@@ -5597,6 +5848,18 @@
    "signature": "() => FieldControl | null",
    "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
   },
+  "useNavStyle": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
+   "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
+  },
   "useStylePanel": {
    "group": "components",
    "kind": "hook",
@@ -5659,6 +5922,12 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "selectNavHref": {
+   "group": "utils",
+   "kind": "function",
+   "signature": "(pathname: string, hrefs: string[]) => string | null",
+   "doc": "Which of a set of hrefs a pathname is currently on."
   },
   "defaultAdapters": {
    "group": "contexts",

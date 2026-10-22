@@ -1,0 +1,101 @@
+---
+title: "Textarea"
+summary: "An Input that takes several lines of text, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/textarea.mdx"
+github: "packages/native/src/components/Input.tsx"
+navLabel: "Textarea"
+navIcon: "switch"
+---
+
+`Textarea` is an [Input](/native/form-controls/input) that takes several lines. It takes every Input prop, with `multiline` set and the text aligned to the top. By default it grows with its text; a number in `lines` fixes its height to that many lines, and the text scrolls past them, as on the web. See the [web Textarea](/form-controls/textarea) for the same component in the browser.
+
+## Controlled
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Textarea } from "@once-ui-system/native";
+
+export function Feedback() {
+  const [text, setText] = useState("");
+  return (
+    <Textarea
+      label="What could be better?"
+      value={text}
+      onChangeText={setText}
+      lines={5}
+      description="We read every message."
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Feedback.tsx"
+  }
+]} />
+
+## Uncontrolled
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Textarea } from "@once-ui-system/native";
+
+export function Notes() {
+  return <Textarea label="Notes" defaultValue="Leave at the door." />;
+}`,
+    language: "tsx",
+    label: "Notes.tsx"
+  }
+]} />
+
+## Error and character count
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Textarea } from "@once-ui-system/native";
+
+export function Review() {
+  const [review, setReview] = useState("");
+  return (
+    <Textarea
+      label="Review"
+      value={review}
+      onChangeText={setReview}
+      maxLength={280}
+      characterCount
+      error={review.length > 0 && review.length < 20}
+      errorMessage="Write at least 20 characters."
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Review.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- There is no `resize` prop or handle.
+- Use `onChangeText` for the value, as with `Input`.
+
+## API reference
+
+Takes every [Input](/native/form-controls/input) prop.
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `lines` | `number \| "auto"` | `"auto"` | `"auto"` grows with the text; a number fixes the height to that many lines of `body-default-m`. |
+| `label` | `string` | | Floats above the text once the field is focused or filled. |
+| `error` | `boolean` | `false` | Draws the field in the danger colour and shows `errorMessage`. |
+| `errorMessage` | `ReactNode` | | Shown under the field while `error` is true. |
+| `description` | `ReactNode` | | A hint under the field. |
+| `characterCount` | `boolean` | | Shows how many characters are left. Needs `maxLength`. |
+| `disabled` | `boolean` | `false` | Dims the field and stops editing. |
+| `inputStyle` | `TextStyle` | | Style for the `TextInput`, merged after the line height. |

@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useId,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -23,6 +24,8 @@ import { useAdapters } from "../../contexts/AdapterProvider";
 import type { IconName } from "../../icons";
 import type { TShirtSizes } from "../../types";
 import styles from "./Kbar.module.scss";
+
+const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 export interface KbarItem {
   id: string;
@@ -66,6 +69,7 @@ const SectionHeader: React.FC<{ id: string; label: string }> = ({ id, label }) =
  * and choosing never fight over focus.
  */
 const KbarSearchInput: React.FC<{
+  id: string;
   placeholder: string;
   searchQuery: string;
   onSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -76,6 +80,7 @@ const KbarSearchInput: React.FC<{
   listboxId?: string;
   activeOptionId?: string;
 }> = ({
+  id,
   placeholder,
   searchQuery,
   onSearchChange,
@@ -86,7 +91,7 @@ const KbarSearchInput: React.FC<{
   activeOptionId,
 }) => (
   <Input
-    id="kbar-search"
+    id={id}
     placeholder={placeholder}
     aria-label={placeholder}
     role="combobox"
@@ -313,8 +318,10 @@ export const KbarContent: React.FC<KbarContentProps> = ({
   }, [open]);
 
   // Hand focus back to whatever had it before the palette opened — usually
-  // its trigger — when it closes or unmounts.
-  useEffect(() => {
+  // its trigger — when it closes or unmounts. A layout effect runs before the
+  // palette leaves the DOM; a passive one ran after, so focus sat on <body> in
+  // between and a slow machine could see it there.
+  useIsomorphicLayoutEffect(() => {
     if (!open) return;
     const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     return () => {
@@ -371,6 +378,7 @@ export const KbarContent: React.FC<KbarContentProps> = ({
         >
           <Row fillWidth padding="8">
             <KbarSearchInput
+              id={`${baseId}-search`}
               placeholder={placeholder}
               searchQuery={searchQuery}
               onSearchChange={handleSearchChange}
@@ -484,29 +492,57 @@ export const KbarContent: React.FC<KbarContentProps> = ({
 
 export interface KbarProps {
   items: KbarItem[];
-  children: React.ReactNode;
+  /**
+   * The trigger, wrapped in a focusable row that opens the palette. Leave it
+   * out to open the palette from your own Button or menu item with `open`.
+   */
+  children?: React.ReactNode;
   inputSize?: TShirtSizes;
+  /**
+   * Controlled open state. Pair it with `onOpenChange`:
+   * `<Button onClick={() => setOpen(true)} />` and
+   * `<Kbar items={items} open={open} onOpenChange={setOpen} />`.
+   */
+  open?: boolean;
+  /** The next open state, whenever ⌘K, the trigger, Escape, an option or a route change asks for one. */
+  onOpenChange?: (open: boolean) => void;
   [key: string]: any; // Allow any additional props
 }
 
-export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest }) => {
-  const [open, setOpen] = useState(false);
+export const Kbar: React.FC<KbarProps> = ({
+  items,
+  children,
+  inputSize,
+  open: openProp,
+  onOpenChange,
+  ...rest
+}) => {
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const controlled = openProp !== undefined;
+  const open = controlled ? openProp : uncontrolledOpen;
   const { usePathname } = useAdapters();
   const pathname = usePathname();
 
-  const handleOpen = () => {
-    setOpen(true);
+  // The ⌘K listener is bound once, so it reads the latest state and setter
+  // through refs rather than re-binding on every render.
+  const openRef = useRef(open);
+  openRef.current = open;
+  const setOpenRef = useRef<(next: boolean) => void>(() => {});
+  setOpenRef.current = (next: boolean) => {
+    if (!controlled) setUncontrolledOpen(next);
+    onOpenChange?.(next);
   };
 
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const handleOpen = () => setOpenRef.current(true);
+  const handleClose = () => setOpenRef.current(false);
 
-  // Close Kbar when pathname changes
+  // Close Kbar when pathname changes, not on mount: a controlled palette may
+  // start open.
+  const pathnameRef = useRef(pathname);
   useEffect(() => {
-    if (open) {
-      handleClose();
-    }
+    if (pathnameRef.current === pathname) return;
+    pathnameRef.current = pathname;
+    if (openRef.current) setOpenRef.current(false);
   }, [pathname]);
 
   // Add keyboard shortcut listener
@@ -515,7 +551,7 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
       // Check for Command+K (Mac) or Control+K (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === "k") {
         e.preventDefault(); // Prevent default browser behavior
-        setOpen((prev) => !prev); // Toggle Kbar open/close
+        setOpenRef.current(!openRef.current); // Toggle Kbar open/close
       }
     };
 
@@ -530,19 +566,27 @@ export const Kbar: React.FC<KbarProps> = ({ items, children, inputSize, ...rest 
 
   return (
     <>
-      <KbarTrigger
-        tabIndex={0}
-        onClick={handleOpen}
-        onKeyDown={(e: React.KeyboardEvent) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            handleOpen();
-          }
-        }}
-        {...rest}
-      >
-        {children}
-      </KbarTrigger>
+      {children != null && (
+        <KbarTrigger
+          tabIndex={0}
+          // It is the element Tab lands on (its Button child stays a plain
+          // div), so it is the button: it had no role, and said nothing about
+          // the palette it opens.
+          role="button"
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          onClick={handleOpen}
+          onKeyDown={(e: React.KeyboardEvent) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault();
+              handleOpen();
+            }
+          }}
+          {...rest}
+        >
+          {children}
+        </KbarTrigger>
+      )}
       {open &&
         createPortal(
           <KbarContent open={open} onClose={handleClose} items={items} inputSize={inputSize} />,

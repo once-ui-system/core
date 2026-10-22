@@ -14,7 +14,7 @@ navIcon: "components"
   marginTop="16"
   marginBottom="24"
   title="Badge, Tag or Chip"
-  description={<><SmartLink href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
+  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink style={{ textDecoration: "underline" }} href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink style={{ textDecoration: "underline" }} href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
 />
 
 <CodeBlock
@@ -97,6 +97,31 @@ Supports all Once UI design tokens including brand, neutral, danger, success, an
 <Tag scheme="gradient">Gradient</Tag>`,
       language: "tsx",
       label: "Variants"
+    }
+  ]}
+/>
+
+## Inside text
+
+A Tag is a div by default, which is not allowed inside a paragraph. With `as="span"` every
+element in it is a span and it flows inline, so it can sit in a sentence. It looks the same.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Text as="p" variant="body-default-m">
+      Exports are <Tag as="span" scheme="brand" label="Beta" /> while we finish the API.
+    </Text>
+  }
+  codes={[
+    {
+      code:
+`<Text as="p" variant="body-default-m">
+  Exports are <Tag as="span" scheme="brand" label="Beta" /> while we finish the API.
+</Text>`,
+      language: "tsx",
+      label: "Inside text"
     }
   ]}
 />

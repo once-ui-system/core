@@ -17,7 +17,7 @@
   }
 
   &.clickable .row {
-    cursor: pointer;
+    cursor: var(--cursor-pointer, pointer);
 
     @media (hover: hover) {
       &:hover {
@@ -99,7 +99,7 @@
 }
 
 .thSortable {
-  cursor: pointer;
+  cursor: var(--cursor-pointer, pointer);
 
   @media (hover: hover) {
     &:hover {
@@ -184,5 +184,54 @@
     position: sticky;
     right: 0;
     background: var(--surface-background);
+  }
+}
+
+// A column's `hide`, per breakpoint: each one hides at and below its width
+// (xl: above l), and a show class undoes a wider breakpoint's hide. Widest
+// first, so where two apply the narrower one wins.
+@include breakpoints.xl {
+  .hideXl {
+    display: none;
+  }
+}
+
+@include breakpoints.l {
+  .hideL {
+    display: none;
+  }
+
+  .showL {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.m {
+  .hideM {
+    display: none;
+  }
+
+  .showM {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.s {
+  .hideS {
+    display: none;
+  }
+
+  .showS {
+    display: table-cell;
+  }
+}
+
+@include breakpoints.xs {
+  .hideXs {
+    display: none;
+  }
+
+  .showXs {
+    display: table-cell;
   }
 }

@@ -1,6 +1,6 @@
-import { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
+import type { CSSProperties, ElementType, HTMLAttributes, ReactNode } from "react";
 import type { BorderStyle, SolidType, SurfaceStyle } from "./contexts/ThemeProvider";
-import {
+import type {
   BlendMode,
   BlurSize,
   Colors,
@@ -18,6 +18,7 @@ import {
   TextWeight,
   UserSelect,
 } from "./types";
+import type { CursorPresetValue } from "./utils/cursor";
 
 export interface ResponsiveProps extends HTMLAttributes<HTMLDivElement> {
   top?: SpacingToken;
@@ -94,16 +95,30 @@ export interface TextProps<T extends ElementType = "span"> extends HTMLAttribute
   weight?: TextWeight;
   family?: TextType;
   truncate?: boolean;
+  /** Flex grow inside a Row or Column, e.g. a label that takes the free space: `<Text flex={1}>`. */
+  flex?: FlexValue | number;
+  /** Hide from this breakpoint down: `s={{ hide: true }}`. Text takes only `hide` here; anything else that changes at a breakpoint goes on a Row or Column wrapper. */
+  xl?: TextBreakpointHide;
+  l?: TextBreakpointHide;
+  m?: TextBreakpointHide;
+  s?: TextBreakpointHide;
+  xs?: TextBreakpointHide;
+}
+
+export interface TextBreakpointHide {
+  hide?: boolean;
 }
 
 export interface SizeProps extends HTMLAttributes<HTMLDivElement> {
-  width?: number | SpacingToken | CSSUnit;
+  /** A number is rem; a string is a spacing token or a CSS unit. `"auto"` undoes a width, e.g. `width={20} s={{ width: "auto" }}`; `"fit"` is fit-content, like `fitWidth`. */
+  width?: number | SpacingToken | CSSUnit | "auto" | "fit";
   /**
    * A number is rem; a string is a spacing token or a CSS unit.
    * `"below-header"` is the viewport below the app header,
    * `calc(100dvh - var(--header-height))`, for an app shell's scrolling pane.
+   * `"fit"` is fit-content, like `fitHeight`.
    */
-  height?: number | SpacingToken | CSSUnit | "below-header";
+  height?: number | SpacingToken | CSSUnit | "below-header" | "fit";
   maxWidth?: number | SpacingToken | CSSUnit;
   minWidth?: number | SpacingToken | CSSUnit;
   /** As `height`, including `"below-header"`. */
@@ -130,13 +145,18 @@ export interface SpacingProps extends HTMLAttributes<HTMLDivElement> {
   paddingBottom?: SpacingToken | number;
   paddingX?: SpacingToken | number;
   paddingY?: SpacingToken | number;
-  margin?: SpacingToken | number;
-  marginLeft?: SpacingToken | number;
-  marginRight?: SpacingToken | number;
-  marginTop?: SpacingToken | number;
-  marginBottom?: SpacingToken | number;
-  marginX?: SpacingToken | number;
-  marginY?: SpacingToken | number;
+  /**
+   * A spacing token, a number (rem), or `"auto"`: `marginLeft="auto"` pushes
+   * an item to the end of its row, `marginX="auto"` centres a block. Every
+   * margin prop takes it, at breakpoints too (`s={{ marginLeft: "0" }}`).
+   */
+  margin?: SpacingToken | number | "auto";
+  marginLeft?: SpacingToken | number | "auto";
+  marginRight?: SpacingToken | number | "auto";
+  marginTop?: SpacingToken | number | "auto";
+  marginBottom?: SpacingToken | number | "auto";
+  marginX?: SpacingToken | number | "auto";
+  marginY?: SpacingToken | number | "auto";
   gap?: SpacingToken | number | "-1";
   top?: SpacingToken | number | CSSUnit;
   right?: SpacingToken | number | CSSUnit;
@@ -181,7 +201,14 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   bottomRightRadius?: RadiusSize;
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
-  cursor?: CSSProperties["cursor"] | "interactive" | ReactNode;
+  /**
+   * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
+   * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that
+   * restyles every cursor inside; or a node that follows the pointer over
+   * this element (it steps aside over the controls inside, which keep their
+   * own cursor).
+   */
+  cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode;
   /**
    * `mix-blend-mode`, as a class: how the element composites with what is
    * behind it. `color-dodge` and `plus-lighter` are the ones a glow wants.

@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
+import React, { useId } from "react";
 import { Column } from "./Column";
+import { ControlLabelContext } from "./ControlLabelContext";
 import { Flex } from "./Flex";
 import { InfoTip } from "./InfoTip";
 import { Row } from "./Row";
@@ -17,12 +18,25 @@ import { Text } from "./Text";
  * not exist yet.
  */
 
-/** Renders a label that may be a plain string or arbitrary nodes. */
-function renderLabel(label: React.ReactNode) {
-  return typeof label === "string" || typeof label === "number" ? (
-    <Text wrap="nowrap" variant="label-default-s">
+/**
+ * Renders a label that may be a plain string or arbitrary nodes. With an `id`
+ * (the target of the control's `aria-labelledby`), a string label carries it
+ * on its own Text, so the label adds no box of its own; a node label is
+ * wrapped in a `display: contents` span, which names it without taking part
+ * in the row's layout.
+ */
+function renderLabel(label: React.ReactNode, id?: string) {
+  if (typeof label === "string" || typeof label === "number") {
+    return (
+      <Text id={id} wrap="nowrap" variant="label-default-s">
+        {label}
+      </Text>
+    );
+  }
+  return id ? (
+    <span id={id} style={{ display: "contents" }}>
       {label}
-    </Text>
+    </span>
   ) : (
     label
   );
@@ -48,6 +62,7 @@ const Setting: React.FC<SettingProps> = ({
   ...flex
 }) => {
   const hasLabel = Boolean(label || description);
+  const labelId = useId();
   return (
     <Row
       fillWidth
@@ -63,7 +78,7 @@ const Setting: React.FC<SettingProps> = ({
       {hasLabel && (
         <Column gap="4" paddingLeft="8" paddingRight="4" paddingY="4">
           <Row vertical="center" gap="8">
-            {renderLabel(label)}
+            {label && renderLabel(label, labelId)}
             {info && <InfoTip>{info}</InfoTip>}
           </Row>
           {description && (
@@ -82,7 +97,9 @@ const Setting: React.FC<SettingProps> = ({
         vertical="center"
         gap="8"
       >
-        {children}
+        <ControlLabelContext.Provider value={label ? labelId : undefined}>
+          {children}
+        </ControlLabelContext.Provider>
       </Row>
     </Row>
   );
@@ -176,24 +193,36 @@ const SettingAxes: React.FC<SettingAxesProps> = ({
   axes,
   axisWidth = 13,
   ...flex
-}) => (
-  <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
-    <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
-      {renderLabel(label)}
-      {info && <InfoTip>{info}</InfoTip>}
-    </Row>
-    <Row fillWidth gap="12" wrap>
-      {axes.map((axis, index) => (
-        <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
-          <Text wrap="nowrap" variant="label-default-xs" onBackground="neutral-weak">
-            {axis.label}
-          </Text>
-          {axis.control}
-        </Row>
-      ))}
-    </Row>
-  </Column>
-);
+}) => {
+  const labelId = useId();
+  return (
+    <Column fillWidth padding="8" gap="8" radius="l" border {...flex}>
+      <Row vertical="center" gap="8" paddingLeft="8" paddingTop="4">
+        {label && renderLabel(label, labelId)}
+        {info && <InfoTip>{info}</InfoTip>}
+      </Row>
+      <Row fillWidth gap="12" wrap>
+        {axes.map((axis, index) => (
+          <Row key={index} flex={1} minWidth={axisWidth} vertical="center" gap="8" paddingLeft="8">
+            <Text
+              id={`${labelId}-${index}`}
+              wrap="nowrap"
+              variant="label-default-xs"
+              onBackground="neutral-weak"
+            >
+              {axis.label}
+            </Text>
+            <ControlLabelContext.Provider
+              value={label ? `${labelId} ${labelId}-${index}` : `${labelId}-${index}`}
+            >
+              {axis.control}
+            </ControlLabelContext.Provider>
+          </Row>
+        ))}
+      </Row>
+    </Column>
+  );
+};
 
 SettingAxes.displayName = "SettingAxes";
 

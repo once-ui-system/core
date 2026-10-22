@@ -6,6 +6,18 @@
    "signature": "() => FieldControl | null",
    "doc": "The enclosing `Field`'s state, for a custom control that wants to wire itself up."
   },
+  "useNavStyle": {
+   "group": "components",
+   "kind": "hook",
+   "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: NavDensity; variant: ...",
+   "doc": "The look the nearest Nav set, or the defaults outside one."
+  },
+  "arrayMove": {
+   "group": "components",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], from: number, to: number) => T[]",
+   "doc": "Moves one entry of a copy of `items` from `from` to `to`."
+  },
   "useStylePanel": {
    "group": "components",
    "kind": "hook",
@@ -68,6 +80,12 @@
    "group": "hooks",
    "kind": "hook",
    "signature": "<T extends Record<string, any>>(options: StreamingViewportOptions<T>) => StreamingViewportResult<T>"
+  },
+  "selectNavHref": {
+   "group": "utils",
+   "kind": "function",
+   "signature": "(pathname: string, hrefs: string[]) => string | null",
+   "doc": "Which of a set of hrefs a pathname is currently on."
   },
   "defaultAdapters": {
    "group": "contexts",
@@ -285,10 +303,10 @@
    "tick": "!{ fill: string; fontSize: number; line: boolean; }"
   },
   "DeviceFontSize": [
+   "15",
    "16",
    "13",
    "14",
-   "15",
    "17",
    "18"
   ],
@@ -317,6 +335,7 @@
    "warning",
    "code",
    "link",
+   "menu",
    "search",
    "time",
    "video",
@@ -325,9 +344,12 @@
    "send",
    "checkbox",
    "document",
+   "grid",
    "adjustments",
+   "arrowDown",
    "arrowLeft",
    "arrowRight",
+   "arrowUp",
    "arrowUpRight",
    "ball",
    "banknotes",
@@ -350,6 +372,7 @@
    "clipboard",
    "close",
    "computer",
+   "cube",
    "dislike",
    "download",
    "edit",
@@ -363,6 +386,7 @@
    "forward",
    "gift",
    "globe",
+   "grip",
    "heart",
    "home",
    "inbox",
@@ -375,10 +399,12 @@
    "minimize",
    "minus",
    "moreHorizontal",
+   "newspaper",
    "organization",
    "pause",
    "paw",
    "payment",
+   "people",
    "person",
    "personRemove",
    "play",
@@ -424,6 +450,11 @@
    "isLowEnd": "!boolean",
    "shouldAnimate": "!boolean"
   },
+  "NavDensity": [
+   "normal",
+   "compact",
+   "spacious"
+  ],
   "NavigationLayout": [
    "grid",
    "row",
@@ -517,6 +548,7 @@
   },
   "OnceUIStyleConfig": {
    "theme": "Theme",
+   "defaultTheme": "Theme",
    "neutral": "NeutralColor | \"custom\"",
    "brand": "Schemes | \"custom\"",
    "accent": "Schemes | \"custom\"",
@@ -534,7 +566,10 @@
    "cursorInteractive": "InteractiveCursor",
    "brandSeed": "string",
    "accentSeed": "string",
-   "neutralSeed": "string"
+   "neutralSeed": "string",
+   "brandScale": "SchemeScale",
+   "accentScale": "SchemeScale",
+   "neutralScale": "SchemeScale"
   },
   "ScalingSize": [
    "90",
@@ -543,6 +578,21 @@
    "105",
    "110"
   ],
+  "SchemeRampWeight": [
+   "100",
+   "200",
+   "300",
+   "400",
+   "500",
+   "600",
+   "700",
+   "800",
+   "900",
+   "1000",
+   "1100",
+   "1200"
+  ],
+  "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
   "Schemes": [
    "blue",
    "indigo",

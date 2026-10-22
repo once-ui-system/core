@@ -1,0 +1,97 @@
+---
+title: "Avatar"
+summary: "A circular profile picture, or initials when there is no image."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/avatar.mdx"
+github: "packages/native/src/components/Avatar.tsx"
+navLabel: "Avatar"
+navIcon: "components"
+---
+
+`Avatar` shows a person's picture in a circle. Without `src`, it shows the initials from `value` on a neutral background. Screen readers read it as one image, labelled by `value`. See the [web Avatar page](/components/avatar) for the web version.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Avatar, Row } from "@once-ui-system/native";
+
+export function People() {
+  return (
+    <Row gap="12" vertical="center">
+      <Avatar src="https://example.com/ada.jpg" value="Ada" />
+      <Avatar value="LT" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Avatar"
+  }
+]} />
+
+## Sizes
+
+`size` takes a t-shirt size, from `xs` (20px) to `xl` (160px), or a number of rem.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Avatar, Row } from "@once-ui-system/native";
+
+export function Sizes() {
+  return (
+    <Row gap="12" vertical="center">
+      <Avatar size="xs" value="XS" />
+      <Avatar size="s" value="S" />
+      <Avatar size="m" value="M" />
+      <Avatar size="l" value="L" />
+      <Avatar size={4} value="4" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Sizes"
+  }
+]} />
+
+## Status indicator and loading
+
+`statusIndicator` adds a dot in the bottom right corner. `loading` shows a circular skeleton of the same size.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Avatar, Row } from "@once-ui-system/native";
+
+export function Presence() {
+  return (
+    <Row gap="12" vertical="center">
+      <Avatar size="l" value="AB" statusIndicator={{ color: "green" }} />
+      <Avatar size="l" value="CD" statusIndicator={{ color: "gray" }} />
+      <Avatar size="l" loading />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Status and loading"
+  }
+]} />
+
+## Differences from the web
+
+- No `empty` or `icon` props. An avatar with neither `src` nor `value` is an empty circle.
+- No `unoptimized`: images load through React Native's `Image`.
+- Avatar does not take Flex props. Use `style` for margins or positioning.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl" \| number` | `"m"` | A t-shirt size, or a number of rem. |
+| `src` | `string` | | The image URL. |
+| `value` | `string` | | Initials shown when there is no image. Also used in the screen reader label. |
+| `loading` | `boolean` | | Shows a circular skeleton instead. |
+| `statusIndicator` | `{ color: "green" \| "yellow" \| "red" \| "gray" }` | | A status dot in the corner. |
+| `style` | `ViewStyle` | | Style for the outer view. |

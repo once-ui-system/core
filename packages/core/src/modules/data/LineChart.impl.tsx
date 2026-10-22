@@ -13,7 +13,7 @@ import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { LinearGradient } from "./Gradient";
-import { ChartProps, ChartVariant, curveType, SeriesConfig } from "./interfaces";
+import { ChartProps, ChartVariant, curveType, DataPoint, SeriesConfig } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { getDistributedColor } from "./utils/colorDistribution";
@@ -40,7 +40,7 @@ export interface LineChartProps extends ChartProps {
 const LineChart: React.FC<LineChartProps> = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -65,6 +65,8 @@ const LineChart: React.FC<LineChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,
@@ -106,7 +108,9 @@ const LineChart: React.FC<LineChartProps> = ({
   const seriesKeys = seriesArray.map((s: SeriesConfig) => s.key);
 
   // Generate a unique ID for this chart instance
-  const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
+  // useId, not Math.random: the server and the client must agree on the
+  // gradient ids or hydration reports an attribute mismatch.
+  const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   const coloredSeriesArray = useMemo(
     () =>

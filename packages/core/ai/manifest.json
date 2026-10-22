@@ -1,6 +1,6 @@
 {
- "version": "2.2.0",
- "generated": "2026-10-17",
+ "version": "2.5.0",
+ "generated": "2026-10-19",
  "imports": {
   "@once-ui-system/core": {
    "use": "Components, hooks, providers, defineConfig and types: everything not listed below"

@@ -155,3 +155,18 @@ describe("TagInput", () => {
     expect(field()).not.toHaveAttribute("aria-expanded");
   });
 });
+
+describe("TagInput label", () => {
+  // The resting label sits at 50% of the field, and tags make the field taller,
+  // so with tags and no text it was drawn over the first tag.
+  it("floats while there are tags, and rests when there are none", () => {
+    const { rerender } = render(
+      <TagInput id="t" label="Topics" value={["Design"]} onChange={() => {}} />,
+      { wrapper },
+    );
+    const label = () => document.querySelector('label[for="t"]') as HTMLElement;
+    expect(label().className).toMatch(/floating/);
+    rerender(<TagInput id="t" label="Topics" value={[]} onChange={() => {}} />);
+    expect(label().className).not.toMatch(/floating/);
+  });
+});

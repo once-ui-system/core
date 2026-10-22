@@ -8,8 +8,8 @@ import {
   type ReactNode,
 } from "react";
 
-import { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { CommonProps, DisplayProps, SpacingProps, TextProps } from "../interfaces";
+import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
 import { textLayout } from "../utils/layoutClasses";
 import { numericSpacingStyle } from "../utils/spacingStyle";
 
@@ -64,6 +64,12 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     style,
     className,
     truncate,
+    flex,
+    xl,
+    l,
+    m,
+    s,
+    xs,
     opacity,
     userSelect,
     gap,
@@ -127,7 +133,7 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     colorClass = `${scheme}-on-solid-${weight}`;
   }
 
-  const generateClassName = (prefix: string, value: SpacingToken | number | undefined) => {
+  const generateClassName = (prefix: string, value: SpacingToken | number | "auto" | undefined) => {
     return typeof value === "string" ? `${prefix}-${value}` : undefined;
   };
 
@@ -172,11 +178,18 @@ const Text: TextComponent = forwardRef(function Text<T extends ElementType = "sp
     userSelect && `user-select-${userSelect}`,
     family && `font-family-${family}`,
     ...layout.classes,
+    // Below xl each query is max-width, so a hide at s also covers xs.
+    xl?.hide && "xl-flex-hide",
+    l?.hide && "l-flex-hide",
+    m?.hide && "m-flex-hide",
+    s?.hide && "s-flex-hide",
+    xs?.hide && "xs-flex-hide",
   );
 
   const combinedStyle = {
     textAlign: align,
     textWrap: wrap,
+    flex: flex === undefined ? undefined : Number(flex),
     ...numericSpacingStyle({
       padding,
       paddingX,

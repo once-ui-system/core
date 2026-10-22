@@ -55,6 +55,58 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
   ]}
 />
 
+## Toolbar size
+
+`size="xxs"` starts the field at 32px, the height of a `size="s"` Button. It grows as chips are added, like every size.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [tags, setTags] = useState<string[]>(["React", "Next.js"]);
+
+<TagInput
+    id="interests"
+    placeholder="Add interest"
+    size="xxs"
+    value={tags}
+    onChange={setTags}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
+## Keyboard and screen readers
+
+The tags are a list, each with a remove button named after its tag. Backspace in an empty field removes the last tag, and a polite live region says which; after a remove button is used, focus goes back to the field. `labels` translates the button names and the announcement.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<TagInputLabelsExample />}
+  codes={[
+    {
+      code:
+`<TagInput
+    id="themen"
+    label="Themen"
+    defaultValue={["Design", "Code"]}
+    labels={{
+      remove: (tag) => \`\${tag} entfernen\`,
+      removed: (tag) => \`\${tag} entfernt\`,
+    }}
+/>`,
+      language: "tsx",
+      label: "Translated"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -63,6 +115,7 @@ Leave out `value` and the input keeps its own list, starting from `defaultValue`
     value: "The tags, as an array of strings, controlled. Leave it out and the input keeps its own list.",
     defaultValue: "The starting tags when `value` is left out.",
     onChange: "Receives the whole new array, after an add or a remove.",
+    labels: "The remove buttons' names and the removal announcement, to translate them.",
   }}
 />
 

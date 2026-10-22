@@ -91,7 +91,10 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
     const markerWidth = isHorizontal ? undefined : dotSize;
 
     return (
-      <Column {...flex}>
+      // A list of steps: a screen reader says how many there are and which
+      // one the reader is on. The active step is the current one. (The ref
+      // was taken but never attached.)
+      <Column ref={ref} role="list" {...flex}>
         {items.map((item, index) => {
           const state = item.state || "default";
           const nextState = index < items.length - 1 ? items[index + 1].state || "default" : state;
@@ -105,7 +108,13 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
 
           if (isHorizontal) {
             return (
-              <Flex key={index} direction="column" fillWidth>
+              <Flex
+                key={index}
+                direction="column"
+                fillWidth
+                role="listitem"
+                aria-current={state === "active" ? "step" : undefined}
+              >
                 <Column fillWidth horizontal="center" vertical="center" direction="row">
                   {index !== 0 && (
                     <Line
@@ -161,7 +170,13 @@ const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
           const hasContent = item.description || item.children;
 
           return (
-            <Flex key={index} fillWidth direction={rowDirection}>
+            <Flex
+              key={index}
+              fillWidth
+              direction={rowDirection}
+              role="listitem"
+              aria-current={state === "active" ? "step" : undefined}
+            >
               <Column horizontal="center" minWidth={markerWidth} maxWidth={markerWidth}>
                 {index !== 0 && (
                   <Line

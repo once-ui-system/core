@@ -34,6 +34,58 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
   ]}
 />
 
+## Toolbar size
+
+`size="xxs"` draws both halves at 32px, the height of a `size="s"` Button, rounded at `radius-m` on their outer corners.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<BasicDateRangeInputExample size="xxs" />}
+  codes={[
+    {
+      code:
+`const [dateRange, setDateRange] = useState<DateRange>({ startDate: undefined, endDate: undefined });
+
+<DateRangeInput
+    id="range"
+    startLabel="Start"
+    endLabel="End"
+    size="xxs"
+    value={dateRange}
+    onChange={setDateRange}
+/>`,
+      language: "tsx",
+      label: "Toolbar size"
+    }
+  ]}
+/>
+
+## An empty range
+
+`value` may leave out either end, so `{}` is no range and `{ startDate }` is a range still being picked. `onChange` always hands back both keys, `undefined` where nothing is picked yet.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [range, setRange] = useState<{ startDate?: Date; endDate?: Date }>({});
+
+<DateRangeInput
+    id="stay"
+    startLabel="Check-in"
+    endLabel="Check-out"
+    value={range}
+    onChange={setRange}
+/>`,
+      language: "tsx",
+      label: "Empty range"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -42,7 +94,7 @@ The `DateRangeInput` component provides a user-friendly interface for selecting 
     id: "Base of the two fields' ids: the start field is {id}-start and the end field {id}-end.",
     startLabel: "Label on the start field.",
     endLabel: "Label on the end field.",
-    value: "The range, as start and end.",
+    value: "The range, as start and end. Either may be left out: {} is no range.",
     onChange: "Called with the new range.",
     minHeight: "Lower bound on the picker's height, in rem.",
     locale: "Locale for the fields' dates and the calendar's names, such as \"de\". US English when left out.",

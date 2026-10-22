@@ -14,7 +14,7 @@ A versatile component for displaying highlighted information, labels, or interac
   marginTop="16"
   marginBottom="24"
   title="Badge, Tag or Chip"
-  description={<><SmartLink href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
+  description={<><SmartLink style={{ textDecoration: "underline" }} href="/components/badge">Badge</SmartLink> announces something, usually as a link: the "New" line above a hero. <SmartLink style={{ textDecoration: "underline" }} href="/components/tag">Tag</SmartLink> is a static label for a status, category or piece of metadata. <SmartLink style={{ textDecoration: "underline" }} href="/form-controls/chip">Chip</SmartLink> is interactive: a choice that can be selected or removed, in filters and in <InlineCode>TagInput</InlineCode>. 3.0 plans to consolidate them.</>}
 />
 
 <CodeBlock
@@ -157,6 +157,31 @@ Badges can contain custom content using children instead of the `title` prop.
 </Badge>`,
       language: "tsx",
       label: "Custom content"
+    }
+  ]}
+/>
+
+## Inside text
+
+`as="span"` renders the badge, and its arrow, as spans that flow inline, so it can sit inside a
+paragraph without breaking the HTML.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Text as="p" variant="body-default-m">
+      Read the <Badge as="span" id="badge-inline" title="Changelog" href="#" /> for what moved.
+    </Text>
+  }
+  codes={[
+    {
+      code:
+`<Text as="p" variant="body-default-m">
+  Read the <Badge as="span" title="Changelog" href="/changelog" /> for what moved.
+</Text>`,
+      language: "tsx",
+      label: "Inside text"
     }
   ]}
 />

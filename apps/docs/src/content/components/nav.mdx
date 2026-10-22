@@ -1,7 +1,8 @@
 ---
-title: "NavItem and NavGroup"
-summary: "The two rows a product sidebar is made of, plus the route matcher that decides which one is current."
-updatedAt: "2026-09-14"
+title: "Nav, NavItem and NavGroup"
+export: "Nav"
+summary: "The rows a product sidebar is made of, one setting for their look, and the route matcher that decides which one is current."
+updatedAt: "2026-10-20"
 docs: "once-ui/components/nav.mdx"
 github: "components/NavItem.tsx"
 navLabel: "Nav"
@@ -26,6 +27,7 @@ differ per product and stay yours to compose.
       <NavItem href="#" icon="sparkle" label="Presets" />
       <NavItem href="#" icon="inbox" label="Inbox" badge={42} />
       <NavItem href="#" icon="bell" label="Activity" indicator />
+      <NavItem href="#" icon="barChart" label="Reports" badge="New" />
     </Column>
   }
   codes={[
@@ -34,22 +36,50 @@ differ per product and stay yours to compose.
 `<NavItem href="/projects" icon="home" label="Projects" selected />
 <NavItem href="/presets" icon="sparkle" label="Presets" />
 <NavItem href="/inbox" icon="inbox" label="Inbox" badge={42} />
-<NavItem href="/activity" icon="bell" label="Activity" indicator />`,
+<NavItem href="/activity" icon="bell" label="Activity" indicator />
+<NavItem href="/reports" icon="barChart" label="Reports" badge="New" />`,
       language: "tsx",
       label: "NavItem"
     }
   ]}
 />
 
-`badge` prints a count and caps it at `9+`; `indicator` is the dot for unread
-with no number worth showing.
+`badge` prints a count and caps it at `9+`; text such as `"New"` prints as given.
+`indicator` is the dot for unread with no number worth showing.
+
+## With an avatar
+
+A link to a person, a team or a workspace can lead with its avatar. Pass it, or
+any other node, as `prefix`: it sits where the icon would, and stays out of the
+row's accessible name so the link reads as the label alone.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NavItemAvatarExample />}
+  codes={[
+    {
+      code:
+`<NavItem
+  href="/people/ada"
+  label="Ada Lovelace"
+  prefix={<Avatar size="xs" src="/avatars/ada.png" />}
+  badge={3}
+  selected
+/>`,
+      language: "tsx",
+      label: "NavItem"
+    }
+  ]}
+/>
 
 <PropsTable
   component="NavItem"
   describe={{
     label: "The text.",
     icon: "Leading icon. Leave it off inside a NavGroup, where the rail carries the hierarchy instead.",
-    badge: "A count in a pill at the end of the row. Above 9 it prints 9+, with the real number on the label for assistive tech.",
+    prefix: "Any node before the label, such as an Avatar. Decorative: hidden from assistive tech, so the row is named by its label.",
+    badge: "A pill at the end of the row. A number is a count: above 9 it prints 9+, with the real number on the label for assistive tech. Text such as \"New\" prints as given.",
     indicator: "A dot at the end of the row, when there is no number worth showing.",
   }}
 />
@@ -98,6 +128,137 @@ the current route.
     onToggle: "Called on the header. Only needed alongside open.",
     defaultOpen: "Starting state when the group manages its own.",
     selected: "Mark the header itself as current, for a group that is also a link.",
+  }}
+/>
+
+## One look for the whole sidebar
+
+Wrap the rows in `Nav` and set the look once. Three props cover the sidebars
+Once UI apps actually ship: how tight the rows are, how the current page stands
+out, and whether groups draw their rail. Every row inside follows, and `NavSection`
+gives each block its heading.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row fillWidth gap="16" s={{ direction: "column" }}>
+      <Column flex={1} padding="8" radius="l" border background="surface">
+        <Nav density="compact" aria-label="Dashboard">
+          <NavSection label="Home">
+            <NavItem href="#" icon="home" label="Dashboard" selected />
+            <NavItem href="#" icon="analytics" label="Analytics" />
+            <NavItem href="#" icon="pages" label="Reports" indicator />
+          </NavSection>
+          <Line marginY="8" />
+          <NavSection label="Projects" action={<IconButton icon="plus" size="s" variant="ghost" tooltip="Create" />}>
+            <NavItem href="#" label="Overview" />
+            <NavItem href="#" label="My projects" badge={3} />
+          </NavSection>
+        </Nav>
+      </Column>
+      <Column flex={1} padding="8" radius="l" border background="surface">
+        <Nav variant="subtle" aria-label="Docs">
+          <NavItem href="#" icon="rocket" label="Get started" />
+          <NavGroup label="Components" icon="grid" defaultOpen>
+            <NavItem href="#" label="Button" selected />
+            <NavItem href="#" label="Input" />
+            <NavItem href="#" label="Select" />
+          </NavGroup>
+          <NavItem href="#" icon="changelog" label="Changelog" />
+        </Nav>
+      </Column>
+      <Column flex={1} padding="8" radius="l" border background="surface">
+        <Nav density="compact" variant="minimal" rail={false} aria-label="Chats">
+          <NavSection label="Pinned">
+            <NavItem href="#" icon="sparkle" label="Launch plan" selected />
+          </NavSection>
+          <NavSection label="Projects">
+            <NavGroup label="Website" icon="project" defaultOpen>
+              <NavItem href="#" label="Hero copy" />
+              <NavItem href="#" label="Pricing ideas" />
+            </NavGroup>
+          </NavSection>
+          <NavSection label="Today">
+            <NavItem href="#" label="Weekly report" />
+          </NavSection>
+        </Nav>
+      </Column>
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Nav density="compact">
+    <NavSection label="Home">
+        <NavItem href="/" icon="home" label="Dashboard" selected />
+        <NavItem href="/analytics" icon="analytics" label="Analytics" />
+    </NavSection>
+    <Line marginY="8" />
+    <NavSection label="Projects" action={<IconButton icon="plus" size="s" variant="ghost" tooltip="Create" />}>
+        <NavItem href="/projects" label="Overview" />
+    </NavSection>
+</Nav>`,
+      language: "tsx",
+      label: "Dashboard"
+    },
+    {
+      code:
+`<Nav variant="subtle">
+    <NavItem href="/start" icon="rocket" label="Get started" />
+    <NavGroup label="Components" icon="grid" defaultOpen>
+        <NavItem href="/button" label="Button" selected />
+        <NavItem href="/input" label="Input" />
+    </NavGroup>
+</Nav>`,
+      language: "tsx",
+      label: "Docs"
+    },
+    {
+      code:
+`<Nav density="compact" variant="minimal" rail={false}>
+    <NavSection label="Pinned">
+        <NavItem href="/c/1" icon="sparkle" label="Launch plan" selected />
+    </NavSection>
+    <NavSection label="Projects">
+        <NavGroup label="Website" icon="project" defaultOpen>
+            <NavItem href="/c/2" label="Hero copy" />
+        </NavGroup>
+    </NavSection>
+</Nav>`,
+      language: "tsx",
+      label: "Chat"
+    }
+  ]}
+/>
+
+- **`density`**: `compact` rows are 32px with the small label, the size for
+  dashboards. `normal` is 40px, `spacious` 48px. The names match the theme's
+  density setting, so a compact app and a compact sidebar mean the same thing.
+- **`variant`**: `solid` fills the current row. `subtle` fills it and dims the
+  others, the docs look. `minimal` drops fills and marks the current row by
+  weight and contrast; hover still tints.
+- **`rail`**: the line down an open group. Off, the children keep the indent,
+  so nothing shifts.
+
+The rows work without a `Nav` too, at `normal`, `solid`, with the rail. An
+explicit `size` on a NavItem still beats the nav's density. A line between
+sections is just a `Line`.
+
+<PropsTable
+  component="Nav"
+  describe={{
+    density: "Row height and text size: compact (32px, small label), normal (40px) or spacious (48px).",
+    variant: "How the current page stands out: solid fills it, subtle fills it and dims the rest, minimal uses weight and contrast only.",
+    rail: "The vertical line down an open NavGroup. Off, the indent stays.",
+  }}
+/>
+
+<PropsTable
+  component="NavSection"
+  describe={{
+    label: "The heading over the rows. Leave it off for an untitled block.",
+    action: "A control at the end of the heading, such as an add button.",
   }}
 />
 

@@ -108,11 +108,11 @@ export const { style, dataStyle } = defineConfig({
 
 A 2.0 `Providers` that casts each value (`brand={style.brand as Schemes}`) still compiles; `defineConfig` is what makes the casts unnecessary.
 
-If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`.
+If you don't pass any props to the `ThemeProvider`, it will fall back to defaults. If the visitor has theme preferences (saved in localStorage), the `ThemeProvider` will use those. To force a theme, set `theme` on the `ThemeProvider` as `light` or `dark`. A forced theme ignores `setTheme`, so a theme switch stops working. To start visitors on light or dark and still let them switch, leave `theme` as `system` and set `defaultTheme` instead; `ThemeInit` reads it too, so the first paint is right.
 
 ## Custom color
 
-The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself.
+The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSeed` or `neutralSeed` a hex, `rgb()` or `oklch()` value and the whole 12-step scheme is [generated from it](/basics/color#custom-schemes). A seed implies `"custom"` when you have not named the scheme yourself. For exact colours from a brand book, give `brandScale`, `accentScale` or `neutralScale` the steps themselves, `{ 100: "#…", …, 1200: "#…" }`; a seed fills any step the scale leaves out.
 
 <CodeBlock
   marginTop="16"
@@ -142,6 +142,34 @@ The quickest way to a custom palette is one colour. Give `brandSeed`, `accentSee
 />
 
 `ThemeInit` generates the scheme on the server and renders it into a `<style>` next to its script, so the page paints with the custom brand colour from the first frame. `ThemeProvider` applies the same values on the client, which is what lets a seed change at runtime, for example in an editor previewing a colour. A seed that cannot be parsed is ignored, and the scheme keeps its default rather than pointing at nothing.
+
+A ramp tuned for a light page often reads wrong on a dark one. Give a scale per theme as `{ light: { … }, dark: { … } }`; a theme you leave out uses the other's, and a seed still fills missing steps. `ThemeInit` renders both, keyed off `data-theme`, so the first paint is right in either theme and a `theme="dark"` section on a light page gets the dark ramp.
+
+The page background and the filled surface (cards, menus, dialogs) take a token or any CSS colour through `pageBackground` and `surfaceBackground`, once for both themes or `{ light, dark }`. A theme you leave out keeps the default: in light mode an off-white page under white surfaces.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  isCollapsible={false}
+  lineNumbers
+  codes={[
+    {
+      code:
+`export const { style } = defineConfig({
+  style: {
+    accentScale: {
+      light: { 100: "#0B1A00", 600: "#4E7A00", 1200: "#F6FBEA" },
+      dark: { 100: "#101A04", 600: "#B8F23A", 1200: "#F4FFE0" },
+    },
+    pageBackground: { light: "#F7F5EF" },
+    surfaceBackground: { light: "#FFFDF8", dark: "neutral-background-strong" },
+  },
+});`,
+      language: "tsx",
+      label: "once-ui.config.ts"
+    }
+  ]}
+/>
 
 To hand-pick every step instead, set the scheme to `custom` and supply the `--scheme-*` variables yourself. You can generate palettes using the [Once UI customize page](https://once-ui.com/customize).
 
@@ -316,6 +344,12 @@ On `Flex`, `Row`, `Column` and `Grid`, the four you reach for most are typed pro
 
 They belong in the `style` section of the config like any other key, so `ThemeInit` applies them before the first paint.
 
+`cursor` sets a cursor preset for the whole app: `"soft"`, `"rounded"` or `"dot"`, each with its own pointer, text and disabled states over the controls. Unset or `"system"`, the browser's own cursors. A `Flex` or `Grid` can set another one for its subtree: see [Flex](/components/flex#cursor).
+
+```tsx
+<ThemeProvider cursor="soft">
+```
+
 ## Persistence
 
 Style choices are mirrored into `localStorage` under `data-<kebab-key>`. Set
@@ -364,9 +398,15 @@ and `remove` may return a promise; nothing waits on them.
     ["tabletSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px from 769px to 1024px. Unset, the stylesheet's 16px applies."],
     ["mobileSize", ["13", "14", "15", "16", "17", "18"], "-", "Root font size in px at 768px and below. Unset, the stylesheet's 15px applies."],
     ["cursorInteractive", ["pointer", "default"], "-", "The cursor over interactive elements. Unset, the stylesheet's pointer applies."],
+    ["cursor", ["soft", "rounded", "dot", "system"], "-", "A cursor preset for the whole app. Unset, the browser's own cursors."],
     ["brandSeed", "string", "-", "A colour to generate the brand scheme from. Implies brand=\"custom\" when brand is not set."],
     ["accentSeed", "string", "-", "As brandSeed, for the accent scheme."],
     ["neutralSeed", "string", "-", "As brandSeed, for the neutral scheme."],
+    ["brandScale", "ThemedSchemeScale", "-", "The brand scheme's steps, once or { light, dark }. Implies brand=\"custom\" when brand is not set."],
+    ["accentScale", "ThemedSchemeScale", "-", "As brandScale, for the accent scheme."],
+    ["neutralScale", "ThemedSchemeScale", "-", "As brandScale, for the neutral scheme."],
+    ["pageBackground", "ThemeColor", "-", "The page background: a token or CSS colour, once or { light, dark }."],
+    ["surfaceBackground", "ThemeColor", "-", "The filled surface's background, as pageBackground."],
     ["persistence", "\"local\" | \"none\" | StylePersistenceAdapter", "\"local\""],
   ]}
 />
@@ -405,6 +445,7 @@ Returns all style options plus `setStyle`.
     ["tabletSize", "DeviceFontSize | undefined"],
     ["mobileSize", "DeviceFontSize | undefined"],
     ["cursorInteractive", "InteractiveCursor | undefined"],
+    ["cursor", "CursorPresetValue | undefined"],
     ["setStyle", "(style: Partial<StyleOptions>) => void"],
   ]}
 />

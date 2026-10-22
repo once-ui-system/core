@@ -8,7 +8,6 @@ navLabel: "Breadcrumbs"
 navIcon: "components"
 navTag: "New"
 navTagVariant: "success"
-status: "unreleased"
 ---
 
 `Breadcrumbs` renders the trail from the site's root to the current page as a `nav`
@@ -61,6 +60,7 @@ the first crumb it revealed. The minimum is 2: the root and the current page.
   marginBottom="24"
   preview={
     <Breadcrumbs
+      aria-label="Collapsed breadcrumb"
       maxItems={3}
       items={[
         { label: "Home", href: "/" },
@@ -102,6 +102,7 @@ from screen readers wherever it is drawn.
   marginBottom="24"
   preview={
     <Breadcrumbs
+      aria-label="Breadcrumb with slashes"
       separator="/"
       items={[
         { label: "once-ui-system", href: "/" },

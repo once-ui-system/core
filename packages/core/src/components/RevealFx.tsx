@@ -58,7 +58,12 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
       return `${ms / 1000}s`;
     };
 
+    const controlled = revealed !== undefined;
+
     useEffect(() => {
+      // Controlled: `revealed` alone decides, so the delay timer must not
+      // reveal content the caller is still holding back.
+      if (controlled) return;
       const timer = setTimeout(() => {
         setIsRevealed(true);
 
@@ -74,7 +79,7 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
           clearTimeout(transitionTimeoutRef.current);
         }
       };
-    }, [delay]);
+    }, [delay, controlled]);
 
     useEffect(() => {
       if (revealed !== undefined) {
@@ -94,6 +99,10 @@ const RevealFx = forwardRef<HTMLDivElement, RevealFxProps>(
           }, getSpeedDurationMs());
         }
       }
+      // An unmount mid-transition left this timer to set state afterwards.
+      return () => {
+        if (transitionTimeoutRef.current) clearTimeout(transitionTimeoutRef.current);
+      };
     }, [revealed]);
 
     const getTranslateYValue = () => {

@@ -2,19 +2,44 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { isValidElement, type ReactNode, useEffect, useMemo, useState } from "react";
+import { isValidElement, type ReactNode, useEffect, useId, useMemo, useRef, useState } from "react";
+import { type ColumnHide, columnHideClasses } from "../internal/columnHide";
 import { pageCount, withDefaultLabels } from "../internal/pagination";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { dev } from "../utils/devLogger";
+import { Button } from "./Button";
 import { Checkbox } from "./Checkbox";
 import { Column } from "./Column";
 import styles from "./DataTable.module.scss";
+import { DropdownWrapper } from "./DropdownWrapper";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
+import { Input } from "./Input";
 import { Pagination, type PaginationLabels } from "./Pagination";
 import { Row } from "./Row";
+import { Select } from "./Select";
 import { Skeleton } from "./Skeleton";
 import tableStyles from "./Table.module.scss";
 import { Text } from "./Text";
+import { VisuallyHidden } from "./VisuallyHidden";
+
+/** A filter's value: one option's value, or several for a `multiple` filter. */
+type DataTableFilterValue = string | string[];
+
+/** The active filters, by column `key`. A column without an entry is unfiltered. */
+type DataTableFilters = Record<string, DataTableFilterValue>;
+
+interface DataTableColumnFilter<T> {
+  /** The values to filter by, offered in a select in the toolbar. */
+  options: { value: string; label: ReactNode }[];
+  /** Let the reader pick several values; a row then matches any of them. */
+  multiple?: boolean;
+  /**
+   * Whether a row passes the filter. Without it a row passes when `row[key]`
+   * is the value (or one of them), or, for an array field, contains it.
+   */
+  match?: (row: T, value: DataTableFilterValue) => boolean;
+}
 
 interface DataTableColumn<T> {
   /**
@@ -38,12 +63,35 @@ interface DataTableColumn<T> {
   align?: "left" | "center" | "right";
   /** A CSS width for the column, such as `"12rem"` or `"20%"`. */
   width?: string;
+  /**
+   * The column's name in plain text, for its filter and the columns menu.
+   * Defaults to `header` when that is text, and to `key` otherwise.
+   */
+  label?: string;
+  /** Add a select to the toolbar that filters the rows by this column. */
+  filter?: DataTableColumnFilter<T>;
+  /**
+   * Hide the column at a breakpoint and below, such as `{ s: true }`. CSS
+   * only, so it holds in the server render; `false` shows it again under a
+   * wider breakpoint's hide.
+   */
+  hide?: ColumnHide;
 }
 
 interface DataTableSort {
   /** The `key` of the sorted column. */
   key: string;
   direction: "asc" | "desc";
+}
+
+/** Everything a server needs to fetch the rows on screen, as `onQueryChange` reports it. */
+interface DataTableQuery {
+  page: number;
+  perPage: number;
+  sort: DataTableSort | null;
+  /** The search text as typed; trim it before querying. */
+  search: string;
+  filters: DataTableFilters;
 }
 
 interface DataTableLabels extends PaginationLabels {
@@ -56,12 +104,45 @@ interface DataTableLabels extends PaginationLabels {
   selectRow: string;
   /** The pagination landmark's name. */
   pagination: string;
+  /** The search field's name and placeholder. Defaults to "Search". */
+  search?: string;
+  /** The filter option that clears a filter. Defaults to "All". */
+  filterAll?: string;
+  /** The columns menu's button. Defaults to "Columns". */
+  columns?: string;
+  /** The heading of the empty state when a search or filter matches nothing. */
+  noResults?: string;
+  /** The line under that heading. */
+  noResultsHint?: string;
+  /** The button in that state which clears the search and the filters. */
+  clearFilters?: string;
+  /** What a screen reader hears after the search or a filter changes. */
+  results?: (count: number) => string;
 }
 
-const DEFAULT_LABELS: Pick<DataTableLabels, "selectRow" | "pagination" | "perPage"> = {
+const DEFAULT_LABELS: Pick<
+  DataTableLabels,
+  | "selectRow"
+  | "pagination"
+  | "perPage"
+  | "search"
+  | "filterAll"
+  | "columns"
+  | "noResults"
+  | "noResultsHint"
+  | "clearFilters"
+  | "results"
+> = {
   selectRow: "Select row",
   pagination: "Pagination",
   perPage: "Rows per page",
+  search: "Search",
+  filterAll: "All",
+  columns: "Columns",
+  noResults: "No results",
+  noResultsHint: "Try a different search or filter",
+  clearFilters: "Clear filters",
+  results: (count) => (count === 1 ? "1 result" : `${count} results`),
 };
 
 interface DataTableProps<T>
@@ -112,17 +193,73 @@ interface DataTableProps<T>
   onPerPageChange?: (perPage: number) => void;
   /**
    * The number of rows on the server. Set it (or `total`) when `rows` holds
-   * only the current page: DataTable then neither sorts nor slices the rows
-   * itself, and reports page and sort changes for the host to fetch.
+   * only the current page: DataTable then neither sorts, filters nor slices
+   * the rows itself, and reports page, sort, search and filter changes for
+   * the host to fetch.
    */
   count?: number;
   /** The number of pages on the server, when it reports pages rather than rows. As `count`. */
   total?: number;
 
+  /**
+   * Add a search field to the toolbar above the table. DataTable filters the
+   * rows by it, or with `count` or `total` reports it for the server.
+   */
+  searchable?: boolean;
+  /** The search text, when the host owns it. */
+  search?: string;
+  /** The search text to start with when DataTable owns it. */
+  defaultSearch?: string;
+  /** Called with the search text on each change. */
+  onSearchChange?: (search: string) => void;
+  /**
+   * Whether a row matches the search, given the trimmed, lowercased query.
+   * Without it a row matches when any column's `row[key]` contains the query.
+   */
+  matchSearch?: (row: T, query: string) => boolean;
+
+  /** The active filters by column key, when the host owns them. */
+  filters?: DataTableFilters;
+  /** The filters to start with when DataTable owns them. */
+  defaultFilters?: DataTableFilters;
+  /** Called with every active filter after each change. */
+  onFiltersChange?: (filters: DataTableFilters) => void;
+
+  /**
+   * Which columns show, by key, when the host owns it: `false` hides that
+   * column. A column not listed shows.
+   */
+  columnVisibility?: Record<string, boolean>;
+  /** The column visibility to start with when DataTable owns it. */
+  defaultColumnVisibility?: Record<string, boolean>;
+  /** Called with the new column visibility. */
+  onColumnVisibilityChange?: (visibility: Record<string, boolean>) => void;
+  /** Add a menu to the toolbar that shows and hides columns. */
+  columnsMenu?: boolean;
+  /** Your own controls, at the end of the toolbar: an export button, say. */
+  toolbar?: ReactNode;
+
+  /**
+   * Called once for each change of the page, page size, sort, search or
+   * filters, with all five: the one handler a server-side table needs.
+   */
+  onQueryChange?: (query: DataTableQuery) => void;
+
   /** Swap the rows for skeleton rows, and disable the controls, while data loads. */
   loading?: boolean;
+  /**
+   * While `loading`, keep the rows on screen, dimmed, instead of skeleton
+   * rows, so a server table does not jump on each page or search. Skeleton
+   * rows still stand in while there are no rows yet.
+   */
+  keepRowsWhileLoading?: boolean;
   /** What to show when there are no rows. */
   emptyState?: ReactNode;
+  /**
+   * What to show when the search or the filters match no rows. By default a
+   * "No results" state with a button that clears them.
+   */
+  noResultsState?: ReactNode;
 
   /**
    * Keep the header row in view while the rows scroll. Pair with `maxHeight`,
@@ -136,7 +273,7 @@ interface DataTableProps<T>
   hoverable?: boolean;
   /** Tighter rows, for dense data. */
   compact?: boolean;
-  /** The checkbox, pagination and per-page names, to translate them. */
+  /** The names of the controls and the states, to translate them. */
   labels?: Partial<DataTableLabels>;
   /** The table's accessible name. */
   "aria-label"?: string;
@@ -180,6 +317,38 @@ function renderField(value: unknown): ReactNode {
   return String(value);
 }
 
+/** A field as text to search: "" for what has none to read, such as a React element. */
+function fieldText(value: unknown): string {
+  if (value === null || value === undefined || isValidElement(value)) return "";
+  if (value instanceof Date) {
+    return Number.isNaN(value.getTime()) ? "" : value.toISOString().slice(0, 10);
+  }
+  if (Array.isArray(value)) return value.map(fieldText).join(" ");
+  if (typeof value === "object") return "";
+  return String(value);
+}
+
+/** A filter's values as a list, leaving out empty ones. */
+const filterValues = (value: DataTableFilterValue | undefined): string[] =>
+  (Array.isArray(value) ? value : value === undefined ? [] : [value]).filter(
+    (candidate) => candidate !== "",
+  );
+
+/** Whether `row[key]` is one of `values`, or for an array field holds one. */
+function fieldMatches(field: unknown, values: string[]): boolean {
+  const candidates = Array.isArray(field) ? field : [field];
+  return candidates.some((candidate) => values.includes(fieldText(candidate)));
+}
+
+const columnName = <T,>(column: DataTableColumn<T>) =>
+  column.label ??
+  (typeof column.header === "string" || typeof column.header === "number"
+    ? String(column.header)
+    : column.key);
+
+/** The option a filter select clears itself with; never a value of its own. */
+const CLEAR_FILTER = "__once-ui-filter-all__";
+
 const ALIGN = {
   left: { th: tableStyles.thAlignLeft, td: tableStyles.tdAlignLeft, row: "start" },
   center: { th: tableStyles.thAlignCenter, td: tableStyles.tdAlignCenter, row: "center" },
@@ -190,13 +359,15 @@ const SKELETON_WIDTHS = [8, 6, 10, 5, 7];
 
 /**
  * A table of typed rows: column definitions instead of pre-rendered cells,
- * sorting, row selection, pagination, and empty and loading states.
+ * sorting, search and filters, row selection, pagination, column visibility,
+ * and empty and loading states.
  *
- * Sorting, selection and the page each work on DataTable's own state or the
- * host's (`sort`, `selected`, `page` with their change handlers). With `count`
- * or `total` the rows are one server page, and DataTable leaves sorting and
- * slicing to the host. It draws the same table as `Table`, with sortable
- * headers as buttons and `aria-sort` on the sorted one.
+ * Sorting, search, filters, selection and the page each work on DataTable's
+ * own state or the host's (`sort`, `search`, `filters`, `selected`, `page`
+ * with their change handlers). With `count` or `total` the rows are one
+ * server page, and DataTable leaves sorting, filtering and slicing to the
+ * host. It draws the same table as `Table`, with sortable headers as buttons
+ * and `aria-sort` on the sorted one.
  */
 function DataTable<T>({
   columns,
@@ -220,8 +391,24 @@ function DataTable<T>({
   onPerPageChange,
   count,
   total,
+  searchable = false,
+  search,
+  defaultSearch = "",
+  onSearchChange,
+  matchSearch,
+  filters,
+  defaultFilters,
+  onFiltersChange,
+  columnVisibility,
+  defaultColumnVisibility,
+  onColumnVisibilityChange,
+  columnsMenu = false,
+  toolbar,
+  onQueryChange,
   loading = false,
+  keepRowsWhileLoading = false,
   emptyState,
+  noResultsState,
   stickyHeader = false,
   maxHeight,
   striped = false,
@@ -235,16 +422,45 @@ function DataTable<T>({
   const text = withDefaultLabels<Partial<DataTableLabels>>(DEFAULT_LABELS, labels);
   const server = count !== undefined || total !== undefined;
   const paged = paginated || server;
+  const controlsId = useId();
 
   const [uncontrolledSort, setUncontrolledSort] = useState<DataTableSort | null>(defaultSort);
   const sortControlled = sort !== undefined;
   const currentSort = (sortControlled ? sort : uncontrolledSort) ?? null;
+
+  const [uncontrolledSearch, setUncontrolledSearch] = useState(defaultSearch);
+  const currentSearch = search ?? uncontrolledSearch;
+  const query = currentSearch.trim().toLowerCase();
+
+  const [uncontrolledFilters, setUncontrolledFilters] = useState<DataTableFilters>(
+    () => defaultFilters ?? {},
+  );
+  const currentFilters = filters ?? uncontrolledFilters;
+  const filterColumns = useMemo(
+    () => columns.filter((column) => column.filter && column.key),
+    [columns],
+  );
+  const activeFilters = useMemo(
+    () =>
+      filterColumns
+        .map((column) => ({ column, values: filterValues(currentFilters[column.key]) }))
+        .filter(({ values }) => values.length > 0),
+    [filterColumns, currentFilters],
+  );
+  const filtering = query !== "" || activeFilters.length > 0;
+
+  const [uncontrolledVisibility, setUncontrolledVisibility] = useState<Record<string, boolean>>(
+    () => defaultColumnVisibility ?? {},
+  );
+  const currentVisibility = columnVisibility ?? uncontrolledVisibility;
+  const shownColumns = columns.filter((column) => currentVisibility[column.key] !== false);
 
   const [uncontrolledSelected, setUncontrolledSelected] = useState<string[]>(
     () => defaultSelected ?? [],
   );
   const selectionControlled = selected !== undefined;
   const currentSelected = selectionControlled ? selected : uncontrolledSelected;
+  const scrollRef = useScrollableTabStop<HTMLDivElement>();
   const selectedSet = useMemo(() => new Set(currentSelected), [currentSelected]);
 
   const [uncontrolledPage, setUncontrolledPage] = useState(defaultPage);
@@ -284,12 +500,33 @@ function DataTable<T>({
     }
   }, [missingIds, duplicateIds]);
 
+  // A server page arrives filtered; on the client the search and every
+  // active filter must all pass.
+  const filteredEntries = useMemo(() => {
+    if (server || (query === "" && activeFilters.length === 0)) return entries;
+    return entries.filter(({ row }) => {
+      if (query !== "") {
+        const found = matchSearch
+          ? matchSearch(row, query)
+          : columns.some((column) =>
+              fieldText(fieldOf(row, column.key)).toLowerCase().includes(query),
+            );
+        if (!found) return false;
+      }
+      return activeFilters.every(({ column, values }) => {
+        const match = column.filter?.match;
+        const value = column.filter?.multiple ? values : values[0];
+        return match ? match(row, value) : fieldMatches(fieldOf(row, column.key), values);
+      });
+    });
+  }, [entries, server, query, activeFilters, columns, matchSearch]);
+
   const sortedEntries = useMemo(() => {
-    if (server || currentSort === null) return entries;
+    if (server || currentSort === null) return filteredEntries;
     const column = columns.find(
       (candidate) => Boolean(candidate.key) && candidate.key === currentSort.key,
     );
-    if (!column) return entries;
+    if (!column) return filteredEntries;
     const direction = currentSort.direction === "desc" ? -1 : 1;
     const { sort: compareRows, key } = column;
     const compare = compareRows
@@ -302,8 +539,8 @@ function DataTable<T>({
           if (leftEmpty || rightEmpty) return leftEmpty === rightEmpty ? 0 : leftEmpty ? 1 : -1;
           return direction * compareValues(left, right);
         };
-    return [...entries].sort(compare);
-  }, [entries, columns, currentSort, server]);
+    return [...filteredEntries].sort(compare);
+  }, [filteredEntries, columns, currentSort, server]);
 
   const pages =
     total !== undefined
@@ -319,15 +556,36 @@ function DataTable<T>({
       ? sortedEntries.slice((currentPage - 1) * currentPerPage, currentPage * currentPerPage)
       : sortedEntries;
 
-  const setPage = (next: number) => {
+  const currentQuery: DataTableQuery = {
+    page: currentPage,
+    perPage: currentPerPage,
+    sort: currentSort,
+    search: currentSearch,
+    filters: currentFilters,
+  };
+  const reportQuery = (change: Partial<DataTableQuery>) =>
+    onQueryChange?.({ ...currentQuery, ...change });
+
+  // Pagination follows a new page size with the page that keeps the first
+  // row in view; that page belongs to the same change, reported once.
+  const pageFromPerPage = useRef<number | null>(null);
+
+  const setPage = (next: number, report = true) => {
     if (next === currentPage) return;
     if (!pageControlled) setUncontrolledPage(next);
     onPageChange?.(next);
+    if (pageFromPerPage.current === next) pageFromPerPage.current = null;
+    else if (report) reportQuery({ page: next });
   };
 
   const setPerPage = (next: number) => {
     if (perPage === undefined) setUncontrolledPerPage(next);
     onPerPageChange?.(next);
+    const firstRow = (currentPage - 1) * currentPerPage;
+    const nextPages = total !== undefined ? pages : pageCount(count ?? sortedEntries.length, next);
+    const nextPage = Math.min(nextPages, Math.max(1, Math.floor(firstRow / next) + 1));
+    pageFromPerPage.current = nextPage !== currentPage ? nextPage : null;
+    reportQuery({ perPage: next, page: nextPage });
   };
 
   // Ascending, then descending, then back to the rows' own order. A new
@@ -341,7 +599,53 @@ function DataTable<T>({
           : null;
     if (!sortControlled) setUncontrolledSort(next);
     onSortChange?.(next);
-    if (paged) setPage(1);
+    if (paged) setPage(1, false);
+    reportQuery({ sort: next, page: paged ? 1 : currentPage });
+  };
+
+  // A new search or filter also starts from the first page.
+  const commitSearch = (next: string) => {
+    if (search === undefined) setUncontrolledSearch(next);
+    onSearchChange?.(next);
+    if (paged) setPage(1, false);
+    reportQuery({ search: next, page: paged ? 1 : currentPage });
+  };
+
+  const commitFilters = (next: DataTableFilters) => {
+    if (filters === undefined) setUncontrolledFilters(next);
+    onFiltersChange?.(next);
+    if (paged) setPage(1, false);
+    reportQuery({ filters: next, page: paged ? 1 : currentPage });
+  };
+
+  const setFilter = (column: DataTableColumn<T>, picked: string | string[]) => {
+    const values = (Array.isArray(picked) ? picked : [picked]).filter(
+      (value) => value !== "" && value !== CLEAR_FILTER,
+    );
+    const cleared = !Array.isArray(picked)
+      ? picked === CLEAR_FILTER
+      : picked.includes(CLEAR_FILTER);
+    const next = { ...currentFilters };
+    if (cleared || values.length === 0) delete next[column.key];
+    else next[column.key] = column.filter?.multiple ? values : values[0];
+    commitFilters(next);
+  };
+
+  const clearQuery = () => {
+    const nextFilters = { ...currentFilters };
+    for (const { column } of activeFilters) delete nextFilters[column.key];
+    if (search === undefined) setUncontrolledSearch("");
+    if (filters === undefined) setUncontrolledFilters(nextFilters);
+    if (currentSearch !== "") onSearchChange?.("");
+    if (activeFilters.length > 0) onFiltersChange?.(nextFilters);
+    if (paged) setPage(1, false);
+    reportQuery({ search: "", filters: nextFilters, page: paged ? 1 : currentPage });
+  };
+
+  const setColumnShown = (key: string, shown: boolean) => {
+    const next = { ...currentVisibility, [key]: shown };
+    if (columnVisibility === undefined) setUncontrolledVisibility(next);
+    onColumnVisibilityChange?.(next);
   };
 
   const commitSelection = (next: string[]) => {
@@ -372,9 +676,16 @@ function DataTable<T>({
     }
   };
 
-  const columnCount = columns.length + (selectable ? 1 : 0);
+  const columnCount = shownColumns.length + (selectable ? 1 : 0);
   const rowTotal = server ? (count ?? (total ?? 0) * currentPerPage) : sortedEntries.length;
   const showPagination = paged && rowTotal > 0 && (pages > 1 || (perPageOptions?.length ?? 0) > 0);
+  // Rows kept on screen while the next ones load; without rows yet, skeletons.
+  const dimmed = loading && keepRowsWhileLoading && visible.length > 0;
+  // "No results" is for rows the search or filters left out. On a server
+  // page there is no telling, so an empty page under a query counts as one.
+  const noResults = filtering && visible.length === 0 && (server || entries.length > 0);
+  const hasOwnControls = toolbar !== undefined && toolbar !== null && toolbar !== false;
+  const hasToolbar = searchable || filterColumns.length > 0 || columnsMenu || hasOwnControls;
 
   const renderHeader = (column: DataTableColumn<T>, index: number) => {
     const sortable = Boolean(column.sortable && column.key);
@@ -403,11 +714,16 @@ function DataTable<T>({
       <th
         key={column.key || index}
         scope="col"
-        className={classNames(tableStyles.th, align.th, {
-          [tableStyles.thSortable]: sortable,
-          [tableStyles.thActive]: active,
-          [styles.sortableTh]: sortable,
-        })}
+        className={classNames(
+          tableStyles.th,
+          align.th,
+          {
+            [tableStyles.thSortable]: sortable,
+            [tableStyles.thActive]: active,
+            [styles.sortableTh]: sortable,
+          },
+          columnHideClasses(column.hide),
+        )}
         style={{ width: column.width }}
         aria-sort={active ? (direction === "asc" ? "ascending" : "descending") : undefined}
       >
@@ -432,6 +748,9 @@ function DataTable<T>({
     );
   };
 
+  const cellClass = (column: DataTableColumn<T>) =>
+    classNames(tableStyles.td, ALIGN[column.align ?? "left"].td, columnHideClasses(column.hide));
+
   const renderRow = (entry: Entry<T>) => {
     const isSelected = selectable && selectedSet.has(entry.id);
     return (
@@ -445,15 +764,13 @@ function DataTable<T>({
             <Checkbox
               aria-label={getRowLabel ? getRowLabel(entry.row) : text.selectRow}
               checked={isSelected}
+              disabled={dimmed || undefined}
               onToggle={() => toggleRow(entry.id)}
             />
           </td>
         )}
-        {columns.map((column, columnIndex) => (
-          <td
-            key={column.key || columnIndex}
-            className={classNames(tableStyles.td, ALIGN[column.align ?? "left"].td)}
-          >
+        {shownColumns.map((column, columnIndex) => (
+          <td key={column.key || columnIndex} className={cellClass(column)}>
             {column.cell
               ? column.cell(entry.row, entry.index)
               : renderField(fieldOf(entry.row, column.key))}
@@ -470,11 +787,8 @@ function DataTable<T>({
       // biome-ignore lint/a11y/noAriaHiddenOnFocusable: a table row is not focusable, and these hold no controls
       <tr key={`skeleton-${rowNumber}`} className={tableStyles.row} aria-hidden="true">
         {selectable && <td className={classNames(tableStyles.td, styles.selectCell)} />}
-        {columns.map((column, columnIndex) => (
-          <td
-            key={column.key || columnIndex}
-            className={classNames(tableStyles.td, ALIGN[column.align ?? "left"].td)}
-          >
+        {shownColumns.map((column, columnIndex) => (
+          <td key={column.key || columnIndex} className={cellClass(column)}>
             <Skeleton
               shape="line"
               size="s"
@@ -491,24 +805,122 @@ function DataTable<T>({
   const emptyRow = (
     <tr>
       <td colSpan={columnCount} className={tableStyles.empty}>
-        {emptyState ?? (
-          <Column center padding="xl" gap="m">
-            <Icon name="inbox" size="l" onBackground="neutral-weak" />
-            <Column center gap="4">
-              <Text variant="heading-strong-s">No data available</Text>
-              <Text variant="body-default-s" onBackground="neutral-weak">
-                There are no items to display
-              </Text>
-            </Column>
-          </Column>
-        )}
+        {noResults
+          ? (noResultsState ?? (
+              <Column center padding="xl" gap="m">
+                <Icon name="search" size="l" onBackground="neutral-weak" />
+                <Column center gap="4">
+                  <Text variant="heading-strong-s">{text.noResults}</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    {text.noResultsHint}
+                  </Text>
+                </Column>
+                <Button size="s" variant="secondary" onClick={clearQuery}>
+                  {text.clearFilters}
+                </Button>
+              </Column>
+            ))
+          : (emptyState ?? (
+              <Column center padding="xl" gap="m">
+                <Icon name="inbox" size="l" onBackground="neutral-weak" />
+                <Column center gap="4">
+                  <Text variant="heading-strong-s">No data available</Text>
+                  <Text variant="body-default-s" onBackground="neutral-weak">
+                    There are no items to display
+                  </Text>
+                </Column>
+              </Column>
+            ))}
       </td>
     </tr>
   );
 
+  const renderFilter = (column: DataTableColumn<T>) => {
+    const filter = column.filter as DataTableColumnFilter<T>;
+    const values = filterValues(currentFilters[column.key]);
+    return (
+      <Row key={column.key} minWidth={8} maxWidth={12}>
+        <Select
+          id={`${controlsId}-filter-${column.key}`}
+          size="xxs"
+          label={columnName(column)}
+          multiple={filter.multiple}
+          // Unfiltered, the select is empty and shows its label: "Status"
+          // reads better than a row of selects that each say "All".
+          value={filter.multiple ? values : (values[0] ?? "")}
+          onSelect={(picked) => setFilter(column, picked)}
+          options={[{ value: CLEAR_FILTER, label: text.filterAll }, ...filter.options]}
+        />
+      </Row>
+    );
+  };
+
+  const columnsDropdown = columnsMenu && (
+    <DropdownWrapper
+      placement="bottom-end"
+      closeAfterClick={false}
+      handleArrowNavigation={false}
+      trigger={
+        <Button size="s" variant="secondary" suffixIcon="chevronDown">
+          {text.columns}
+        </Button>
+      }
+      dropdown={
+        <Column padding="8" gap="4" minWidth={10}>
+          {columns.map((column, index) => {
+            const shown = currentVisibility[column.key] !== false;
+            return (
+              <Checkbox
+                key={column.key || index}
+                label={columnName(column)}
+                checked={shown}
+                // The last column on screen stays: a table of no columns is no table.
+                disabled={shown && shownColumns.length === 1}
+                onToggle={() => setColumnShown(column.key, !shown)}
+              />
+            );
+          })}
+        </Column>
+      }
+    />
+  );
+
   return (
     <Column fillWidth gap="m" {...flex}>
+      {hasToolbar && (
+        <Row fillWidth gap="8" vertical="center" wrap>
+          {searchable && (
+            <Row flex={1} minWidth={10} maxWidth={16}>
+              <Input
+                id={`${controlsId}-search`}
+                size="xxs"
+                label={text.search}
+                value={currentSearch}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
+                  commitSearch(event.target.value)
+                }
+                prefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
+              />
+            </Row>
+          )}
+          {filterColumns.map(renderFilter)}
+          {(hasOwnControls || columnsMenu) && (
+            <Row gap="8" vertical="center" style={{ marginLeft: "auto" }}>
+              {toolbar}
+              {columnsDropdown}
+            </Row>
+          )}
+          {/* What the search or filters left, for a screen reader to hear. */}
+          <VisuallyHidden role="status">
+            {filtering && !loading && text.results ? text.results(rowTotal) : ""}
+          </VisuallyHidden>
+        </Row>
+      )}
+
       <Flex
+        // A table wider than its box scrolls, and a keyboard can only scroll
+        // what it can focus: a tab stop while it overflows, as Table has.
+        ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -516,7 +928,7 @@ function DataTable<T>({
         overflowX="auto"
         overflowY={maxHeight !== undefined ? "auto" : "visible"}
         maxHeight={maxHeight}
-        className={tableStyles.container}
+        className={classNames(tableStyles.container, "focus-ring")}
       >
         <table
           className={classNames(tableStyles.table, {
@@ -544,11 +956,17 @@ function DataTable<T>({
                   />
                 </th>
               )}
-              {columns.map(renderHeader)}
+              {shownColumns.map(renderHeader)}
             </tr>
           </thead>
-          <tbody className={tableStyles.tbody}>
-            {loading ? skeletonRows : visible.length === 0 ? emptyRow : visible.map(renderRow)}
+          <tbody className={classNames(tableStyles.tbody, { [styles.dimmedBody]: dimmed })}>
+            {dimmed
+              ? visible.map(renderRow)
+              : loading
+                ? skeletonRows
+                : visible.length === 0
+                  ? emptyRow
+                  : visible.map(renderRow)}
           </tbody>
         </table>
       </Flex>
@@ -559,7 +977,13 @@ function DataTable<T>({
           paddingX="s"
           horizontal={perPageOptions?.length ? "between" : "end"}
           size="s"
-          aria-label={text.pagination}
+          // Named after the table it pages, so two tables on one page do not
+          // give two landmarks the same name (axe: landmark-unique).
+          aria-label={
+            ariaLabel && text.pagination
+              ? `${ariaLabel} ${text.pagination.toLowerCase()}`
+              : text.pagination
+          }
           labels={{
             previous: text.previous,
             next: text.next,
@@ -583,5 +1007,14 @@ function DataTable<T>({
 
 DataTable.displayName = "DataTable";
 
-export type { DataTableColumn, DataTableLabels, DataTableProps, DataTableSort };
+export type {
+  DataTableColumn,
+  DataTableColumnFilter,
+  DataTableFilters,
+  DataTableFilterValue,
+  DataTableLabels,
+  DataTableProps,
+  DataTableQuery,
+  DataTableSort,
+};
 export { DataTable };

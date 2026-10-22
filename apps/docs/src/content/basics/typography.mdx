@@ -71,18 +71,27 @@ Add `font-weight` classes to elements. The value adjusts to the adjacent or clos
     ],
     rows: [
       [".font-weight-inherit", "—"],
-      [".font-default", "dynamic"],
-      [".font-bold", "dynamic"],
-      [".font-bolder", "dynamic"],
-      [".font-strong", "dynamic"]
+      [".font-default", "--font-weight-display-default"],
+      [".font-normal", "--font-weight-display-normal"],
+      [".font-medium", "--font-weight-display-medium"],
+      [".font-strong", "--font-weight-display-strong"]
     ]
   }}
 />
 
+Every family reads the display weights unless you give it its own: `--font-<family>-weight-<weight>`, for `heading`, `body`, `label` and `code`. Setting one changes only that family, so bolder body text leaves headlines and labels alone.
+
+```css
+:root {
+  --font-body-weight-strong: 700;  /* body-strong-* */
+  --font-label-weight-strong: 500; /* label-strong-* */
+}
+```
+
 ## Color
 
 Learn about setting `color` properties in the
-<SmartLink href="/basics/color#applying-colour">color documentation</SmartLink>.
+<SmartLink style={{ textDecoration: "underline" }} href="/basics/color#applying-colour">color documentation</SmartLink>.
         
 ## Font scaling
 

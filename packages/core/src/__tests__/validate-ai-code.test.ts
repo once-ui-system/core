@@ -820,3 +820,136 @@ describe("size.rem", () => {
     expect(rules(`<Background width={40} height={40} />`)).not.toContain("size.rem");
   });
 });
+
+// The rules below each name the fix for a strict-tsc error agents made on a
+// first attempt in the benchmark transcripts (2.1.0 claim run, rc.0, pilot,
+// and the October stand-in runs). tsc reports the prop it rejects; these say
+// what to write instead.
+describe("layout.alignValues", () => {
+  it("names the short value for CSS's spelling, as a prop and in a breakpoint", () => {
+    const found = issues(
+      `<Row horizontal="space-between" vertical={"flex-start"}><Column s={{ vertical: "space-evenly" }} /></Row>`,
+    ).filter((i) => i.rule === "layout.alignValues");
+    expect(found.map((i) => i.message)).toEqual([
+      `"space-between" is CSS's name — horizontal and vertical take "between"`,
+      `"flex-start" is CSS's name — horizontal and vertical take "start"`,
+      `"space-evenly" is CSS's name — horizontal and vertical take "even"`,
+    ]);
+  });
+
+  it("rewrites them under --fix", () => {
+    expect(
+      fixed(
+        `<Row horizontal="space-between" vertical={"flex-end"} s={{ horizontal: "space-around" }}>x</Row>`,
+      ),
+    ).toBe(`<Row horizontal="between" vertical={"end"} s={{ horizontal: "around" }}>x</Row>`);
+  });
+
+  it("points baseline at the style it takes, without a fix", () => {
+    const issue = issues(`<Row vertical="baseline" gap="8">x</Row>`).find(
+      (i) => i.rule === "layout.alignValues",
+    );
+    expect(issue?.message).toMatch(/no "baseline".*alignItems: "baseline"/);
+    expect(issue?.fix).toBeUndefined();
+  });
+
+  it("turns a bare between into the main axis: horizontal on a Row, vertical on a Column", () => {
+    expect(fixed(`<Row gap="16" vertical="center" between wrap>x</Row>`)).toBe(
+      `<Row gap="16" vertical="center" horizontal="between" wrap>x</Row>`,
+    );
+    expect(fixed(`<Column fill around>x</Column>`)).toBe(
+      `<Column fill vertical="around">x</Column>`,
+    );
+  });
+
+  it("names a bare value on Flex but leaves it, since the axis depends on direction", () => {
+    const src = `<Flex s={{ direction: "column" }} between>x</Flex>`;
+    expect(issues(src).find((i) => i.rule === "layout.alignValues")?.fix).toBeUndefined();
+    expect(fixed(src)).toBe(src);
+  });
+
+  it("does not guess when the main axis is already set", () => {
+    const src = `<Row horizontal="start" between>x</Row>`;
+    expect(rules(src)).toContain("layout.alignValues");
+    expect(fixed(src)).toBe(src);
+  });
+
+  it("leaves the real values, and a between that is someone else's prop, alone", () => {
+    expect(
+      rules(`<Row horizontal="between" vertical="center" s={{ horizontal: "start" }}>x</Row>`),
+    ).not.toContain("layout.alignValues");
+    expect(rules(`<Timeline between items={items} />`)).not.toContain("layout.alignValues");
+    expect(rules(`<Text>space-between</Text>`)).not.toContain("layout.alignValues");
+  });
+});
+
+describe("layout.primitiveProps", () => {
+  const messages = (src: string) =>
+    issues(src)
+      .filter((i) => i.rule === "layout.primitiveProps")
+      .map((i) => i.message);
+
+  it("sends href on a layout primitive to Card href", () => {
+    expect(messages(`<Row as="a" href="/members/1" padding="16">x</Row>`)).toEqual([
+      expect.stringMatching(/^<Row as="a" href> — .*link adapter.*<Card href>/),
+    ]);
+  });
+
+  it("sends type on a layout primitive to Card onClick, Button or ToggleButton", () => {
+    expect(messages(`<Row as="button" type="button" onClick={go}>x</Row>`)).toEqual([
+      expect.stringMatching(/^<Row as="button" type> — .*<Card onClick>.*ToggleButton/),
+    ]);
+  });
+
+  it("sends a typed form handler or noValidate to a native form", () => {
+    const handler = `const submit = (e: FormEvent<HTMLFormElement>) => e.preventDefault();\n<Column as="form" onSubmit={submit}>x</Column>`;
+    expect(messages(handler)).toEqual([expect.stringMatching(/native <form onSubmit/)]);
+    expect(messages(`<Column as="form" noValidate>x</Column>`)).toHaveLength(1);
+  });
+
+  it("sends span to gridColumn", () => {
+    expect(messages(`<Row gap="12" wrap span={2}>x</Row>`)).toEqual([
+      `span on <Row> is not a prop — a Grid child spanning columns writes style={{ gridColumn: "span 2" }}`,
+    ]);
+  });
+
+  it("leaves what type-checks alone", () => {
+    expect(messages(`<Column as="form" onSubmit={(e) => e.preventDefault()}>x</Column>`)).toEqual(
+      [],
+    );
+    expect(messages(`<Row as="li" gap="8">x</Row>`)).toEqual([]);
+    expect(messages(`<Card href="/a">x</Card>\n<Button type="submit">Save</Button>`)).toEqual([]);
+    expect(messages(`<Input id="bio" span={2} />`)).toEqual([]);
+  });
+});
+
+describe("responsive.props", () => {
+  it("names the breakpoint object for another library's responsive prop names", () => {
+    const found = issues(
+      `<Flex mobileDirection="column" gap="16">x</Flex>\n<Grid columns="3" tabletColumns="2">x</Grid>`,
+    ).filter((i) => i.rule === "responsive.props");
+    expect(found.map((i) => i.message)).toEqual([
+      "mobileDirection is not a prop — write s={{ direction: … }}",
+      "tabletColumns is not a prop — write m={{ columns: … }}",
+    ]);
+  });
+
+  it("flags a breakpoint object on a component that takes none, per the spec", () => {
+    const found = issues(
+      `<Button href="#start" size="l" s={{ fillWidth: true }}>Start</Button>`,
+    ).filter((i) => i.rule === "responsive.props");
+    expect(found.map((i) => i.message)).toEqual([
+      expect.stringMatching(/^<Button> takes no s=\{\{…\}\}: .*Row or Column around it$/),
+    ]);
+  });
+
+  it("leaves breakpoint objects where they exist", () => {
+    expect(
+      rules(
+        `<Row s={{ direction: "column" }}><Text s={{ hide: true }}>a</Text><Heading m={{ hide: true }}>b</Heading><Card s={{ padding: "8" }}>c</Card></Row>`,
+      ),
+    ).not.toContain("responsive.props");
+    // A local component the spec does not know is not checked.
+    expect(rules(`<PricingCard s={{ wide: true }} />`)).not.toContain("responsive.props");
+  });
+});

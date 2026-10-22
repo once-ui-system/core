@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 import { Pressable, View, type ViewStyle } from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import { Column, Row } from "./Flex";
@@ -7,9 +7,17 @@ import { Text } from "./Text";
 import { touchSlop } from "./touch";
 import { useControllable, useControlledValue } from "./useControllable";
 
+/** What a RadioGroup tells the RadioButtons inside it, as on the web. */
+const RadioGroupContext = createContext<{
+  value: string | undefined;
+  disabled: boolean;
+  select: (value: string) => void;
+} | null>(null);
+
 export interface RadioButtonProps {
   checked?: boolean;
   defaultChecked?: boolean;
+  /** Inside a RadioGroup, the group checks the button whose `value` it holds. */
   value?: string;
   onToggle?: (checked: boolean) => void;
   label?: ReactNode;
@@ -23,15 +31,28 @@ export interface RadioButtonProps {
 export function RadioButton({
   checked,
   defaultChecked = false,
+  value,
   onToggle,
   label,
   description,
-  disabled = false,
+  disabled: disabledProp = false,
   ariaLabel = "Radio button",
   style,
 }: RadioButtonProps) {
   const theme = useTheme();
-  const [on, toggle] = useControllable(checked, defaultChecked, onToggle);
+  // A RadioGroup around this button owns its checked state; outside one, or
+  // with no `value` to match, the button's own props stand.
+  const group = useContext(RadioGroupContext);
+  const inGroup = group !== null && value !== undefined;
+  const disabled = disabledProp || (inGroup && group.disabled);
+  const [on, toggle] = useControllable(
+    inGroup ? group.value === value : checked,
+    defaultChecked,
+    (next) => {
+      if (inGroup) group.select(value);
+      onToggle?.(next);
+    },
+  );
   const size = theme.space("20");
   return (
     <Pressable
@@ -97,6 +118,11 @@ export interface RadioGroupProps {
   description?: ReactNode;
   disabled?: boolean;
   orientation?: "horizontal" | "vertical";
+  /**
+   * RadioButtons with a `value`, in any layout, for radios `options` cannot
+   * describe. They render after the options.
+   */
+  children?: ReactNode;
   style?: ViewStyle;
 }
 
@@ -110,6 +136,7 @@ export function RadioGroup({
   description,
   disabled = false,
   orientation = "vertical",
+  children,
   style,
 }: RadioGroupProps) {
   const [selected, select] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
@@ -117,30 +144,31 @@ export function RadioGroup({
   });
   const List = orientation === "horizontal" ? Row : Column;
   return (
-    <Column gap="12" accessibilityRole="radiogroup" style={style}>
-      {(label || description) && (
-        <Column gap="4">
-          {label && <Text variant="label-default-m">{label}</Text>}
-          {description && (
-            <Text variant="body-default-s" onBackground="neutral-weak">
-              {description}
-            </Text>
-          )}
-        </Column>
-      )}
-      <List gap="16" wrap={orientation === "horizontal"}>
-        {options.map((o) => (
-          <RadioButton
-            key={o.value}
-            value={o.value}
-            label={o.label}
-            description={o.description}
-            disabled={disabled || o.disabled}
-            checked={selected === o.value}
-            onToggle={() => select(o.value)}
-          />
-        ))}
-      </List>
-    </Column>
+    <RadioGroupContext.Provider value={{ value: selected, disabled, select }}>
+      <Column gap="12" accessibilityRole="radiogroup" style={style}>
+        {(label || description) && (
+          <Column gap="4">
+            {label && <Text variant="label-default-m">{label}</Text>}
+            {description && (
+              <Text variant="body-default-s" onBackground="neutral-weak">
+                {description}
+              </Text>
+            )}
+          </Column>
+        )}
+        <List gap="16" wrap={orientation === "horizontal"}>
+          {options.map((o) => (
+            <RadioButton
+              key={o.value}
+              value={o.value}
+              label={o.label}
+              description={o.description}
+              disabled={o.disabled}
+            />
+          ))}
+          {children}
+        </List>
+      </Column>
+    </RadioGroupContext.Provider>
   );
 }

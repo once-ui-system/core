@@ -8,7 +8,6 @@ navLabel: "Pagination"
 navIcon: "components"
 navTag: "New"
 navTagVariant: "success"
-status: "unreleased"
 ---
 
 `Pagination` draws the controls for a list split into pages: previous and next
@@ -19,7 +18,7 @@ list of buttons, and the current page carries `aria-current="page"`.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={<Pagination total={12} defaultPage={5} />}
+  preview={<Pagination total={12} defaultPage={5} aria-label="Basic pagination" />}
   codes={[
     {
       code:
@@ -69,7 +68,7 @@ boundary pages are not enough.
 <CodeBlock
   marginTop="16"
   marginBottom="24"
-  preview={<Pagination total={120} defaultPage={60} showFirstLast size="s" />}
+  preview={<Pagination total={120} defaultPage={60} showFirstLast size="s" aria-label="First and last pagination" />}
   codes={[
     {
       code:

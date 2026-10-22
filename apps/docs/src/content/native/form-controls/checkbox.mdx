@@ -1,0 +1,130 @@
+---
+title: "Checkbox"
+summary: "A box that is checked, unchecked or indeterminate, with a label and description, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/checkbox.mdx"
+github: "packages/native/src/components/Checkbox.tsx"
+navLabel: "Checkbox"
+navIcon: "switch"
+---
+
+`Checkbox` is a 20pt box, filled with the brand colour and a check when checked, or a dash when indeterminate. A tap anywhere on the row, label included, toggles it. See the [web Checkbox](/form-controls/checkbox) for the same component in the browser.
+
+## Controlled
+
+Pass `checked` and update it in `onToggle`, which gets the next state.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Checkbox } from "@once-ui-system/native";
+
+export function Terms() {
+  const [accepted, setAccepted] = useState(false);
+  return (
+    <Checkbox
+      label="I accept the terms"
+      description="You can read them in Settings."
+      checked={accepted}
+      onToggle={setAccepted}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Terms.tsx"
+  }
+]} />
+
+## Uncontrolled
+
+Leave out `checked` and the checkbox keeps its own state, starting from `defaultChecked`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Checkbox } from "@once-ui-system/native";
+
+export function Newsletter() {
+  return <Checkbox label="Send me the newsletter" defaultChecked />;
+}`,
+    language: "tsx",
+    label: "Newsletter.tsx"
+  }
+]} />
+
+## Indeterminate
+
+`indeterminate` shows a dash, for a "select all" box when only some items are checked. Screen readers read it as mixed.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Checkbox, Column } from "@once-ui-system/native";
+
+export function SelectAll() {
+  const [items, setItems] = useState([true, false]);
+  const all = items.every(Boolean);
+  const some = items.some(Boolean);
+  return (
+    <Column gap="12">
+      <Checkbox
+        label="All items"
+        checked={all}
+        indeterminate={some && !all}
+        onToggle={() => setItems(items.map(() => !all))}
+      />
+      {items.map((on, i) => (
+        <Checkbox
+          key={i}
+          label={"Item " + (i + 1)}
+          checked={on}
+          onToggle={(next) => setItems(items.map((v, j) => (j === i ? next : v)))}
+        />
+      ))}
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "SelectAll.tsx"
+  }
+]} />
+
+## Disabled
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Checkbox } from "@once-ui-system/native";
+
+export function Locked() {
+  return <Checkbox label="Required for your plan" checked disabled />;
+}`,
+    language: "tsx",
+    label: "Locked.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- The handler is `onToggle(checked)`. There is no `name`, `value` or form submission.
+- A checkbox without a label takes taps from 44pt around it. Give it `ariaLabel` so screen readers can name it.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `checked` | `boolean` | | The state, when the screen owns it. |
+| `defaultChecked` | `boolean` | `false` | The first state when the checkbox keeps its own. |
+| `indeterminate` | `boolean` | `false` | Shows a dash and reads as mixed. |
+| `onToggle` | `(checked: boolean) => void` | | Called with the next state. |
+| `label` | `ReactNode` | | Text beside the box. A string is also the accessibility label. |
+| `description` | `ReactNode` | | A line under the label. |
+| `disabled` | `boolean` | `false` | Dims the checkbox and ignores taps. |
+| `ariaLabel` | `string` | `"Checkbox"` | The accessibility label when `label` is not a string. |
+| `style` | `ViewStyle` | | Style for the row. |

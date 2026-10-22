@@ -1,6 +1,6 @@
 {
   "name": "@once-ui-system/core",
-  "version": "2.2.0",
+  "version": "2.5.0",
   "publishConfig": {
     "access": "public"
   },
@@ -48,8 +48,8 @@
     "docs": "https://docs.once-ui.com/once-ui/ai-coding"
   },
   "bin": {
-    "once-ui-init-agent": "./scripts/init-agent.js",
-    "once-ui-validate-ai-code": "./scripts/validate-ai-code.js"
+    "once-ui-init-agent": "scripts/init-agent.js",
+    "once-ui-validate-ai-code": "scripts/validate-ai-code.js"
   },
   "sideEffects": [
     "*.css",
@@ -156,6 +156,11 @@
       "import": "./dist/modules/media/index.js",
       "require": "./dist/modules/media/index.js"
     },
+    "./map": {
+      "types": "./dist/modules/map/index.d.ts",
+      "import": "./dist/modules/map/index.js",
+      "require": "./dist/modules/map/index.js"
+    },
     "./mdx": {
       "types": "./dist/modules/mdx/index.d.ts",
       "import": "./dist/modules/mdx/index.js",
@@ -199,6 +204,7 @@
     "prismjs": "^1.30.0",
     "react": ">=18",
     "react-dom": ">=18",
+    "maplibre-gl": "^5.0.0 || ^6.0.0",
     "recharts": "^3.10.1",
     "sass": "^1.77.6"
   },
@@ -210,6 +216,9 @@
       "optional": true
     },
     "recharts": {
+      "optional": true
+    },
+    "maplibre-gl": {
       "optional": true
     },
     "prismjs": {
@@ -232,6 +241,7 @@
     "@vitest/ui": "^4.1.10",
     "axe-core": "^4.10.3",
     "jsdom": "^30.0.0",
+    "maplibre-gl": "^6.15.0",
     "publint": "^0.3.23",
     "react-icons": "^5.7.0",
     "rimraf": "^6.1.3",

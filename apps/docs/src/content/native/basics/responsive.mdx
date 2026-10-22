@@ -1,0 +1,201 @@
+---
+title: "Responsive"
+summary: "Change layout by screen width with the xl, l, m, s and xs props, show views by theme with dark and light, and keep clear of the notch with safeArea."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/basics/responsive.mdx"
+github: "packages/native/src/components/Flex.tsx"
+navLabel: "Responsive"
+navIcon: "basics"
+---
+
+`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web: `xl`, `l`, `m`, `s` and `xs`. Each one is an object of props that applies on screens up to its width. For the web version, see [Breakpoints](/basics/responsive).
+
+## Breakpoint values
+
+| Breakpoint | Applies at | Typical device |
+| --- | --- | --- |
+| `xs` | 480 points and narrower | Phones in portrait |
+| `s` | 768 points and narrower | Small tablets in portrait |
+| `m` | 1024 points and narrower | Phones in landscape, tablets in portrait |
+| `l` | 1440 points and narrower | Tablets in landscape |
+| `xl` | Every width | The base, under the others |
+
+The width is the window's, in points, read by `ThemeProvider` with `useWindowDimensions`. It updates when the device rotates, and when an iPad app runs in Split View or Slide Over. `useTheme().width` and `useTheme().breakpoints` give the same values to your own components.
+
+## Cascade order
+
+The objects apply from the largest to the smallest: the base props, then `xl`, `l`, `m`, `s` and `xs`. Each one the width falls within is merged over the ones before it, so a smaller breakpoint wins. This is the order the media queries apply in the browser.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Text } from "@once-ui-system/native";
+
+export function Panel() {
+  return (
+    <Column
+      padding="32"
+      gap="16"
+      background="surface"
+      radius="l"
+      m={{ padding: "24" }}
+      s={{ padding: "16", gap: "8" }}
+    >
+      <Text>Padding is 32 on wide screens, 24 on tablets and 16 on phones.</Text>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Panel.tsx"
+  }
+]} />
+
+On a 390 point wide phone, `m` and `s` both apply, and `s` is merged last, so the padding is 16. A `style` set in a breakpoint goes after the base `style` instead of replacing it.
+
+## Direction change
+
+A common use is laying items out in a row on tablets and stacking them on phones:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Card, Heading, Row, Text } from "@once-ui-system/native";
+
+export function Plans() {
+  return (
+    <Row fillWidth gap="16" s={{ direction: "column" }}>
+      <Card flex={1} padding="20" gap="8" s={{ flex: 0 }}>
+        <Heading variant="heading-strong-m">Free</Heading>
+        <Text onBackground="neutral-weak">One loyalty card.</Text>
+      </Card>
+      <Card flex={1} padding="20" gap="8" s={{ flex: 0 }}>
+        <Heading variant="heading-strong-m">Pro</Heading>
+        <Text onBackground="neutral-weak">Cards for every location.</Text>
+      </Card>
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Plans.tsx"
+  }
+]} />
+
+## Hide
+
+`hide` renders nothing, as `display: none` does on the web. Combine it with a breakpoint to show a view only on some screens:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Column, Row, Text } from "@once-ui-system/native";
+
+export function Header() {
+  return (
+    <Column gap="8">
+      <Row s={{ hide: true }}>
+        <Text>Shown on tablets, hidden on phones</Text>
+      </Row>
+      <Row hide s={{ hide: false }}>
+        <Text>Shown on phones only</Text>
+      </Row>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Header.tsx"
+  }
+]} />
+
+A hidden view is not mounted at all, so its state resets when it shows again.
+
+## Dark and light
+
+`dark` renders a view only while the theme is dark, and `light` only while it is light. They do not change any colours: use them to swap content, such as a logo drawn for each theme. They also work inside a breakpoint object.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Image } from "react-native";
+import { Column } from "@once-ui-system/native";
+
+export function Logo() {
+  return (
+    <Column>
+      <Column dark>
+        <Image source={require("./logo-light.png")} style={{ width: 120, height: 32 }} />
+      </Column>
+      <Column light>
+        <Image source={require("./logo-dark.png")} style={{ width: 120, height: 32 }} />
+      </Column>
+    </Column>
+  );
+}`,
+    language: "tsx",
+    label: "Logo.tsx"
+  }
+]} />
+
+## Supported breakpoint props
+
+| Category | Props |
+| --- | --- |
+| Layout | `direction`, `horizontal`, `vertical`, `center`, `wrap`, `flex` |
+| Spacing | `padding`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`, `paddingX`, `paddingY`, `margin`, `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `marginX`, `marginY`, `gap` |
+| Position | `position`, `top`, `right`, `bottom`, `left`, `hide` |
+| Sizing | `width`, `height`, `minWidth`, `maxWidth`, `minHeight`, `maxHeight`, `fill`, `fillWidth`, `fillHeight`, `fit`, `fitWidth`, `fitHeight`, `aspectRatio` |
+| Colours | `background`, `border`, `borderStyle`, `borderWidth`, `radius`, `shadow` |
+| Effects | `opacity`, `zIndex`, `pointerEvents`, `dark`, `light` |
+| Display | `overflow` |
+| Escape hatch | `style` |
+
+The type is exported as `FlexBreakpointProps`. `Card` extends `Flex`, so it takes the same objects.
+
+## Safe areas
+
+Phones keep parts of the screen for the notch, the status bar and the home indicator. Pass the insets to `ThemeProvider` (see [Quick start](/native/quick-start#wrap-the-app)), then add `safeArea` to a `Flex`, `Row` or `Column` to pad it by them:
+
+- `safeArea` pads every edge.
+- `safeArea={["top", "bottom"]}` pads only the edges you list.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import { Column, Heading, Text, ThemeProvider } from "@once-ui-system/native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+
+function Themed({ children }: { children: ReactNode }) {
+  return <ThemeProvider insets={useSafeAreaInsets()}>{children}</ThemeProvider>;
+}
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <Themed>
+        <Column fill background="page" padding="20" gap="8" safeArea={["top", "bottom"]}>
+          <Heading>Morning Coffee</Heading>
+          <Text onBackground="neutral-weak">The padding grows by the notch and the home indicator.</Text>
+        </Column>
+      </Themed>
+    </SafeAreaProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+The insets are added on top of the padding the edge already has, like `calc(space + safe-area)` on the web, so `padding="20"` with `safeArea` stays 20 points clear of the notch. Without `insets` on `ThemeProvider` they are all 0 and `safeArea` adds nothing. `safeArea` is not a breakpoint prop.
+
+## Differences from the web
+
+- **Points, not pixels.** Breakpoints compare the window width in points, which is what `useWindowDimensions` reports.
+- **Computed at render.** The web renders breakpoint values as classes inside media queries. Native merges the objects in JavaScript for the current width, so every prop works in a breakpoint, including sizes, `aspectRatio` and `style`, and nothing waits for hydration.
+- **Fewer props.** `solid`, `borderTop` to `borderY`, `onBackground`, `onSolid`, `align`, `textVariant`, `textSize`, `textWeight`, `textType`, `transition`, `scrollbar`, `overflowX` and `overflowY` have no native equivalent and are not supported, in breakpoints or on the base props.
+- **No fixed or sticky.** `position` takes `relative`, `absolute` or `static`.
+- **Only layout components.** The breakpoint props are on `Flex`, `Row`, `Column` and `Card`. There is no `Grid` yet: use a `Row` with `wrap`, or change `direction` at a breakpoint.

@@ -55,8 +55,10 @@ const EmojiPickerDropdown = forwardRef<HTMLDivElement, EmojiPickerDropdownProps>
           <EmojiPicker
             columns={columns}
             padding="8"
+            // No `onClose`: the picker calls it right after `onSelect`, and
+            // handleEmojiSelect already closes, so every pick reported the
+            // close to onOpenChange twice.
             onSelect={handleEmojiSelect}
-            onClose={closeAfterClick ? () => setOpen(false) : undefined}
             background={background}
           />
         }

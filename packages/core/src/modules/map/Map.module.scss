@@ -1,0 +1,176 @@
+// MapLibre's own stylesheet is 70 kB, mostly controls Once UI draws itself.
+// These are the rules the map needs to lay out, in Once UI tokens.
+
+.map {
+  min-height: 16rem;
+  isolation: isolate;
+}
+
+.canvas {
+  // MapLibre adds .maplibregl-map to this element; nothing here restyles it.
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+
+  :global(.maplibregl-canvas) {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  :global(.maplibregl-canvas):focus-visible {
+    outline: none;
+  }
+
+  :global(.maplibregl-canvas-container):global(.maplibregl-interactive) {
+    cursor: grab;
+    user-select: none;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-zoom-rotate),
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-zoom-rotate) :global(.maplibregl-canvas) {
+    touch-action: pan-x pan-y;
+  }
+
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-drag-pan),
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-drag-pan) :global(.maplibregl-canvas) {
+    touch-action: pinch-zoom;
+  }
+
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-zoom-rotate):global(.maplibregl-touch-drag-pan),
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-zoom-rotate):global(.maplibregl-touch-drag-pan) :global(.maplibregl-canvas) {
+    touch-action: none;
+  }
+
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-drag-pan):global(.maplibregl-cooperative-gestures),
+  :global(.maplibregl-canvas-container):global(.maplibregl-touch-drag-pan):global(.maplibregl-cooperative-gestures) :global(.maplibregl-canvas) {
+    touch-action: pan-x pan-y;
+  }
+
+  :global(.maplibregl-marker),
+  :global(.maplibregl-popup) {
+    position: absolute;
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+
+  :global(.maplibregl-ctrl-top-left),
+  :global(.maplibregl-ctrl-top-right),
+  :global(.maplibregl-ctrl-bottom-left),
+  :global(.maplibregl-ctrl-bottom-right) {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  :global(.maplibregl-ctrl-bottom-right) {
+    right: 0;
+    bottom: 0;
+  }
+
+  :global(.maplibregl-ctrl-bottom-left) {
+    left: 0;
+    bottom: 0;
+  }
+
+  :global(.maplibregl-ctrl) {
+    pointer-events: auto;
+  }
+
+  :global(.maplibregl-ctrl-attrib) {
+    margin: 0 var(--static-space-8) var(--static-space-8) 0;
+    padding: var(--static-space-2) var(--static-space-8);
+    border-radius: var(--radius-s);
+    background: var(--surface-background);
+    color: var(--neutral-on-background-weak);
+    font-family: var(--font-label);
+    font-size: 10px;
+    line-height: 1.4;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      @media (hover: hover) {
+        &:hover {
+          color: var(--neutral-on-background-strong);
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+
+  // The compact toggle needs MapLibre's icon sprite; attribution stays open.
+  :global(.maplibregl-ctrl-attrib-button) {
+    display: none;
+  }
+
+  :global(.maplibregl-cooperative-gesture-screen) {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--static-space-16);
+    background: var(--neutral-alpha-strong);
+    color: var(--neutral-on-solid-strong);
+    font-family: var(--font-body);
+    font-size: var(--font-size-body-m);
+    text-align: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s 1s;
+
+    &:global(.maplibregl-show) {
+      opacity: 1;
+      transition: opacity 0.05s;
+    }
+
+    :global(.maplibregl-mobile-message) {
+      display: none;
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      :global(.maplibregl-desktop-message) {
+        display: none;
+      }
+
+      :global(.maplibregl-mobile-message) {
+        display: block;
+      }
+    }
+  }
+}
+
+// The canvas takes focus for the keyboard (arrows pan, +/- zoom); the ring
+// goes on the frame, since the canvas clips its own outline.
+.map:has(:global(.maplibregl-canvas):focus-visible) {
+  outline: 2px solid var(--brand-solid-strong);
+  outline-offset: 2px;
+}
+
+.controls {
+  position: absolute;
+  top: var(--static-space-12);
+  right: var(--static-space-12);
+  z-index: 2;
+}
+
+.fallback {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas :global(.maplibregl-cooperative-gesture-screen) {
+    transition: none;
+  }
+}

@@ -1,0 +1,136 @@
+---
+title: "Select"
+summary: "An Input-styled field that opens its options in a bottom sheet, with search and multiple selection, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/form-controls/select.mdx"
+github: "packages/native/src/components/Select.tsx"
+navLabel: "Select"
+navIcon: "switch"
+---
+
+`Select` looks like an [Input](/native/form-controls/input) and opens its options in a bottom sheet, a [Dialog](/native/components/dialog) titled with the field's label. Each option is drawn with [Option](/native/components/option). The field shows the chosen option's label. See the [web Select](/form-controls/select) for the same component in the browser.
+
+## Basic usage
+
+`Select` is controlled: keep the value in state and set it in `onSelect`. Picking an option closes the sheet.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Select } from "@once-ui-system/native";
+
+export function CountrySelect() {
+  const [country, setCountry] = useState("");
+  return (
+    <Select
+      label="Country"
+      placeholder="Choose a country"
+      value={country}
+      onSelect={(value) => setCountry(value as string)}
+      options={[
+        { value: "de", label: "Germany" },
+        { value: "hu", label: "Hungary" },
+        { value: "jp", label: "Japan", description: "Ships in 2 weeks" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "CountrySelect.tsx"
+  }
+]} />
+
+## Searchable
+
+`searchable` adds a search field at the top of the sheet. It matches the label and the value. `emptyState` shows when nothing matches, and `labels.search` renames the field.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Select } from "@once-ui-system/native";
+
+export function CitySelect() {
+  const [city, setCity] = useState("");
+  return (
+    <Select
+      label="City"
+      searchable
+      labels={{ search: "Find a city" }}
+      emptyState="No city by that name"
+      value={city}
+      onSelect={(value) => setCity(value as string)}
+      options={[
+        { value: "berlin", label: "Berlin" },
+        { value: "budapest", label: "Budapest" },
+        { value: "tokyo", label: "Tokyo" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "CitySelect.tsx"
+  }
+]} />
+
+## Multiple selection
+
+With `multiple`, `onSelect` gets the new array of values and the sheet stays open between picks. The field lists the chosen labels.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Select } from "@once-ui-system/native";
+
+export function ToppingsSelect() {
+  const [toppings, setToppings] = useState<string[]>([]);
+  return (
+    <Select
+      label="Toppings"
+      multiple
+      value={toppings}
+      onSelect={(value) => setToppings(value as string[])}
+      description="Pick as many as you like."
+      options={[
+        { value: "cheese", label: "Cheese" },
+        { value: "olives", label: "Olives" },
+        { value: "basil", label: "Basil" },
+      ]}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "ToppingsSelect.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- The options open in a bottom sheet, not a dropdown under the field. The back button or a tap outside closes it.
+- Screen readers read the field as a combo box with the chosen value, or the placeholder when nothing is chosen.
+- `Select` has no internal state: pass `value` and update it in `onSelect`.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `options` | `OptionProps[]` | | The options, each with `value` and optional `label`, `description`, `prefix`, `suffix`, `disabled` and `danger`. Required. |
+| `value` | `string \| string[]` | | The chosen value, or values with `multiple`. |
+| `onSelect` | `(value: string \| string[]) => void` | | Called with the picked value, or the new array with `multiple`. |
+| `label` | `string` | | The field's label and the sheet's title. |
+| `placeholder` | `string` | | Shown in the field while nothing is chosen. |
+| `multiple` | `boolean` | `false` | Lets several options be chosen. The sheet stays open. |
+| `searchable` | `boolean` | `false` | Adds a search field to the sheet. |
+| `emptyState` | `ReactNode` | `"No results"` | Shown when the search matches nothing. |
+| `size` | `"xs" \| "s" \| "m" \| "l" \| "xl"` | `"m"` | The field's height, as on `Input`. |
+| `error` | `boolean` | | Draws the field in the danger colour and shows `errorMessage`. |
+| `errorMessage` | `ReactNode` | | Shown under the field while `error` is true. |
+| `description` | `ReactNode` | | A hint under the field. |
+| `disabled` | `boolean` | | Dims the field. It does not open. |
+| `labels` | `{ search?: string }` | `{ search: "Search" }` | The search field's label. |
+| `style` | `ViewStyle` | | Style for the field's container. |

@@ -21,7 +21,7 @@ const DocsLayout: React.FC<DocsLayoutProps> = ({
 }) => {
   return (
     <Row fillWidth horizontal="center">
-      <Column as="main" gap="48" maxWidth={maxWidth} padding="l">
+      <Column as="main" id="main-content" gap="48" maxWidth={maxWidth} padding="l">
         {(title || description) && (
           <Column fillWidth gap="8" paddingX="s">
             <Heading align={align} variant="display-strong-xs">

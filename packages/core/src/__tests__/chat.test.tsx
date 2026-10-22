@@ -167,6 +167,72 @@ describe("ChatMessageList", () => {
   });
 });
 
+describe("ChatMessageList stack", () => {
+  const at = (minute: number) => new Date(2026, 9, 21, 9, minute);
+
+  it("stacks one author's quick run and shows the time once, under the last", () => {
+    const { container } = render(
+      <ChatMessageList stack>
+        <ChatMessage name="Ana" time="t1">
+          One
+        </ChatMessage>
+        <ChatMessage name="Ana" time="t2">
+          Two
+        </ChatMessage>
+        <ChatMessage name="Ana" time="t3">
+          Three
+        </ChatMessage>
+        <ChatMessage from="self" time="t4">
+          Mine
+        </ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    const stacks = Array.from(container.querySelectorAll("[data-from]"), (node) =>
+      node.getAttribute("data-stack"),
+    );
+    expect(stacks).toEqual(["start", "middle", "end", null]);
+    expect(screen.getAllByText("Ana")).toHaveLength(1);
+    expect(screen.queryByText("t1")).toBeNull();
+    expect(screen.queryByText("t2")).toBeNull();
+    expect(screen.getByText("t3")).toBeTruthy();
+    expect(screen.getByText("t4")).toBeTruthy();
+  });
+
+  it("breaks a stack when the gap is longer than stackWithin", () => {
+    const { container } = render(
+      <ChatMessageList stack stackWithin={5}>
+        <ChatMessage name="Ana" time={at(0)}>
+          One
+        </ChatMessage>
+        <ChatMessage name="Ana" time={at(4)}>
+          Two
+        </ChatMessage>
+        <ChatMessage name="Ana" time={at(30)}>
+          Later
+        </ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    const stacks = Array.from(container.querySelectorAll("[data-from]"), (node) =>
+      node.getAttribute("data-stack"),
+    );
+    expect(stacks).toEqual(["start", "end", null]);
+    expect(screen.getAllByText("Ana")).toHaveLength(2);
+  });
+
+  it("leaves messages alone without stack", () => {
+    const { container } = render(
+      <ChatMessageList>
+        <ChatMessage name="Ana">One</ChatMessage>
+        <ChatMessage name="Ana">Two</ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    expect(container.querySelector("[data-stack]")).toBeNull();
+  });
+});
+
 describe("ChatComposer", () => {
   it("sends the trimmed draft on Enter and clears it", async () => {
     const onSend = vi.fn();
@@ -225,12 +291,29 @@ describe("ChatComposer", () => {
     const a = new File(["a"], "a.png", { type: "image/png" });
     const b = new File(["b"], "b.pdf", { type: "application/pdf" });
     await userEvent.upload(input, [a, b]);
-    expect(screen.getByText("a.png")).toBeTruthy();
+    // The image is a thumbnail, the PDF a chip with its name.
+    expect(screen.getByText("b.pdf")).toBeTruthy();
     await userEvent.click(screen.getByRole("button", { name: "Remove a.png" }));
-    expect(screen.queryByText("a.png")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Remove a.png" })).toBeNull();
     await userEvent.click(screen.getByRole("button", { name: "Send" }));
     expect(onSend).toHaveBeenCalledWith({ text: "", files: [b] });
     expect(screen.queryByText("b.pdf")).toBeNull();
+  });
+
+  it("shows a picked image as a thumbnail and releases its URL on remove", async () => {
+    const create = vi.fn(() => "blob:a");
+    const revoke = vi.fn();
+    const original = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
+    URL.createObjectURL = create;
+    URL.revokeObjectURL = revoke;
+    const { container } = render(<ChatComposer onSend={() => {}} attach />, { wrapper });
+    const input = container.querySelector("input[type='file']") as HTMLInputElement;
+    await userEvent.upload(input, new File(["a"], "a.png", { type: "image/png" }));
+    expect(screen.getByRole("img", { name: "a.png" }).getAttribute("src")).toBe("blob:a");
+    await userEvent.click(screen.getByRole("button", { name: "Remove a.png" }));
+    expect(revoke).toHaveBeenCalledWith("blob:a");
+    URL.createObjectURL = original.create;
+    URL.revokeObjectURL = original.revoke;
   });
 
   it("has no attach button unless asked", () => {
@@ -253,6 +336,90 @@ describe("ChatComposer", () => {
 
   it("has no axe violations", async () => {
     const { container } = render(<ChatComposer onSend={() => {}} attach />, { wrapper });
+    await expectNoAxeViolations(container);
+  });
+});
+
+/**
+ * The row under the field: `toolbar` on the left after attach, `hint`,
+ * `actions` and send on the right. Without either prop the composer stays
+ * one row, with send beside the field.
+ */
+describe("ChatComposer toolbar", () => {
+  const row = () => screen.getByTestId("chips").parentElement as HTMLElement;
+
+  it("puts attach and the toolbar on the left of a row under the field, send on the right", () => {
+    render(
+      <ChatComposer
+        onSend={() => {}}
+        attach
+        actions={<button type="button">Model</button>}
+        hint="Enter to send"
+        toolbar={<span data-testid="chips">Your library</span>}
+      />,
+      { wrapper },
+    );
+    const toolbarRow = row().parentElement as HTMLElement;
+    const [start, end] = Array.from(toolbarRow.children) as HTMLElement[];
+    expect(start).toContainElement(screen.getByRole("button", { name: "Attach files" }));
+    expect(start).toContainElement(screen.getByTestId("chips"));
+    expect(end.textContent).toBe("Enter to sendModel");
+    expect(end).toContainElement(screen.getByRole("button", { name: "Send" }));
+    // The row comes after the field, inside the same surface.
+    const field = screen.getByRole("textbox");
+    expect(
+      field.compareDocumentPosition(toolbarRow) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(field.closest("[data-surface='field']")).toContainElement(toolbarRow);
+  });
+
+  it("turns on with only a hint, and sends from the row", async () => {
+    const onSend = vi.fn();
+    render(<ChatComposer onSend={onSend} hint="Enter to send" />, { wrapper });
+    const send = screen.getByRole("button", { name: "Send" });
+    expect(send.closest("[data-surface='field']")).toBeTruthy();
+    expect(screen.getByText("Enter to send").parentElement).toContainElement(send);
+    await userEvent.type(screen.getByRole("textbox"), "hi");
+    await userEvent.click(send);
+    expect(onSend).toHaveBeenCalledWith({ text: "hi", files: [] });
+  });
+
+  it("keeps send beside the field without toolbar or hint", () => {
+    render(<ChatComposer onSend={() => {}} attach />, { wrapper });
+    const send = screen.getByRole("button", { name: "Send" });
+    // Before: attach, the field's column, send; nothing under the field.
+    const surface = screen.getByRole("textbox").closest("[data-surface='field']") as HTMLElement;
+    const [, middle, last] = Array.from(surface.children) as HTMLElement[];
+    expect(last).toContainElement(send);
+    expect(middle.children).toHaveLength(1);
+  });
+
+  it("takes a custom send icon", () => {
+    const { container } = render(
+      <ChatComposer onSend={() => {}} sendIcon="arrowUp" hint="Enter to send" />,
+      { wrapper },
+    );
+    const plain = render(<ChatComposer onSend={() => {}} />, { wrapper }).container;
+    const iconOf = (root: HTMLElement) =>
+      root.querySelector("button[aria-label='Send'] svg")?.innerHTML;
+    expect(iconOf(container)).toBeTruthy();
+    expect(iconOf(container)).not.toBe(iconOf(plain));
+  });
+
+  it("has no axe violations with a toolbar", async () => {
+    const { container } = render(
+      <ChatComposer
+        onSend={() => {}}
+        attach
+        hint="Enter to send"
+        toolbar={
+          <button type="button" aria-pressed="false">
+            Your library
+          </button>
+        }
+      />,
+      { wrapper },
+    );
     await expectNoAxeViolations(container);
   });
 });

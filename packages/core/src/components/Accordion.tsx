@@ -5,12 +5,13 @@ import React, {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
   useRef,
   useState,
 } from "react";
 import type { IconName } from "../icons";
-import { CondensedTShirtSizes } from "../types";
+import type { CondensedTShirtSizes, RadiusSize, TextVariant } from "../types";
 import styles from "./Accordion.module.scss";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -30,7 +31,10 @@ interface AccordionProps extends Omit<React.ComponentProps<typeof Flex>, "title"
   icon?: IconName;
   iconRotation?: number;
   size?: CondensedTShirtSizes;
-  radius?: "xs" | "s" | "m" | "l" | "xl" | "full";
+  /** Corner radius of the header. `none` for square corners, e.g. flush in a card. */
+  radius?: RadiusSize;
+  /** Text style of the title. Defaults to `heading-strong-s`; `body-default-m` for a FAQ in body copy. */
+  titleVariant?: TextVariant;
   open?: boolean;
   onToggle?: () => void;
   className?: string;
@@ -49,6 +53,7 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
       onToggle,
       iconRotation = 180,
       radius = "m",
+      titleVariant = "heading-strong-s",
       icon = "chevronDown",
       size = "m",
       className,
@@ -61,6 +66,8 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     ref,
   ) => {
     const headerRef = useRef<HTMLDivElement>(null);
+    const contentRef = useRef<HTMLDivElement>(null);
+    const contentId = `accordion-content-${useId()}`;
     const [isOpen, setIsOpen] = useState(open);
 
     useEffect(() => {
@@ -68,6 +75,13 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
     }, [open]);
 
     const isAccordionOpen = onToggle ? open : isOpen;
+
+    // aria-hidden alone leaves the links and buttons of a closed panel in the
+    // tab order (axe: aria-hidden-focus). `inert` takes them out; it is set on
+    // the node because React 18 and 19 disagree on how to pass it as a prop.
+    useEffect(() => {
+      if (contentRef.current) contentRef.current.inert = !isAccordionOpen;
+    }, [isAccordionOpen]);
 
     const toggleAccordion = useCallback(() => {
       if (onToggle) {
@@ -149,12 +163,12 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           onClick={handleHeaderClick}
           onKeyDown={handleHeaderKeyDown}
           aria-expanded={isAccordionOpen}
-          aria-controls="accordion-content"
+          aria-controls={contentId}
           radius={radius}
           role="button"
           {...headerRest}
         >
-          <Row fillWidth textVariant="heading-strong-s">
+          <Row fillWidth textVariant={titleVariant}>
             {title}
           </Row>
           <Icon
@@ -169,7 +183,8 @@ const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
           />
         </Row>
         <Grid
-          id="accordion-content"
+          ref={contentRef}
+          id={contentId}
           fillWidth
           transition="macro-medium"
           style={{

@@ -14,6 +14,7 @@ import {
   type ShadowLayer,
   type StyleSettings,
   type TokenValue,
+  tokens as tokenFile,
   toPx,
 } from "./resolve";
 
@@ -25,11 +26,39 @@ export interface FontFamilies {
   code?: string;
 }
 
+/** Safe-area insets in points, as `useSafeAreaInsets()` returns them. */
+export interface Insets {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+}
+
+export const NO_INSETS: Insets = { top: 0, right: 0, bottom: 0, left: 0 };
+
+/** Max-widths of core's breakpoints, as `LayoutProvider`'s `DEFAULT_BREAKPOINTS`. */
+export interface Breakpoints {
+  xs: number;
+  s: number;
+  m: number;
+  l: number;
+  xl: number;
+}
+
 const LETTER_SPACING: Record<string, number> = { xl: -0.05, l: -0.04, m: -0.03, s: -0.02 };
 
 /** Everything a component reads from the theme, in React Native units. */
 export interface OnceTheme {
   settings: StyleSettings;
+  /** The screen width in points this theme was resolved for. */
+  width: number;
+  /**
+   * Max-width of each breakpoint, from the token export. `xl` is `Infinity`:
+   * core's `xl` object applies at every width, under the smaller ones.
+   */
+  breakpoints: Breakpoints;
+  /** Safe-area insets passed to `ThemeProvider`; zeros when none were. */
+  insets: Insets;
   /** px per rem for this screen: 15 on phones, 16 on tablets, as on the web. */
   rem: number;
   /** Every resolved token, by its CSS name without `--`. */
@@ -55,8 +84,11 @@ export function createTheme(
   settings: StyleSettings,
   width: number,
   fonts: FontFamilies = {},
+  insets: Insets = NO_INSETS,
+  /** Extra tokens, such as `customSchemeTokens()` for a `"custom"` scheme. */
+  extra: Record<string, TokenValue> = {},
 ): OnceTheme {
-  const tokens = resolveTokens(settings, width);
+  const tokens = resolveTokens(settings, width, tokenFile, extra);
   const rem = remFor(tokens, width);
   const px = (name: string, fallback = 0) => toPx(tokens[name], rem) ?? fallback;
 
@@ -128,8 +160,13 @@ export function createTheme(
     };
   };
 
+  const { xs, s, m, l } = tokenFile.breakpoints;
+
   return {
     settings,
+    width,
+    breakpoints: { xs, s, m, l, xl: Number.POSITIVE_INFINITY },
+    insets,
     rem,
     tokens,
     px: (name) => px(name),

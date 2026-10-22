@@ -189,7 +189,7 @@
     "pairsWith": ["Media", "Column"]
   },
   "DataTable": {
-    "purpose": "Table of typed rows from column definitions: sorting, row selection, pagination, empty and loading states",
+    "purpose": "Table of typed rows from column definitions: sorting, search and filters, selection, pagination, responsive columns",
     "tags": ["data", "dashboard"],
     "pairsWith": ["Pagination", "Tag", "Button"]
   },
@@ -279,6 +279,11 @@
     "tags": ["feedback"],
     "pairsWith": ["Form", "Dialog"]
   },
+  "FileTree": {
+    "purpose": "Accessible hierarchical file and folder explorer with selection and expandable folders",
+    "tags": ["navigation", "data", "a11y"],
+    "pairsWith": ["Icon", "Column", "Text"]
+  },
   "Flex": {
     "purpose": "Layout primitive every component builds on — use directly only when direction changes at breakpoints",
     "tags": ["layout", "basics"],
@@ -326,6 +331,7 @@
   },
   "Heading": {
     "purpose": "Semantic h1–h6 with display and heading variants",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Text", "Column", "RevealFx"]
   },
@@ -469,6 +475,46 @@
     "tags": ["marketing", "social-proof"],
     "pairsWith": ["Grid", "Logo"]
   },
+  "LogoSpinner": {
+    "purpose": "Once UI mark loader, for AI and brand loading states",
+    "tags": ["feedback", "chat", "ai"],
+    "pairsWith": ["WorkingIndicator", "Text"]
+  },
+  "Mascot": {
+    "purpose": "Animated assistant character: one-color shape with eyes; states, moods, pulses with audio",
+    "tags": ["ai", "chat", "decoration"],
+    "pairsWith": ["VoiceVisualizer", "WorkingIndicator"]
+  },
+  "Map": {
+    "purpose": "Themed map on free OpenStreetMap tiles with React markers and a controlled viewport (needs maplibre-gl)",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["MapMarkers", "MapPin", "MapPopup"]
+  },
+  "MapCircle": {
+    "purpose": "Area in metres in a token colour, e.g. an approximate address",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapMarker"]
+  },
+  "MapMarker": {
+    "purpose": "Any React content pinned to a map position",
+    "tags": ["map", "location"],
+    "pairsWith": ["Map", "MapPin", "Avatar"]
+  },
+  "MapMarkers": {
+    "purpose": "Markers from data, with clustering and one active item",
+    "tags": ["map", "location", "list"],
+    "pairsWith": ["Map", "MapPin", "MapPopup"]
+  },
+  "MapPin": {
+    "purpose": "Map marker look: label pill (price, count) or dot",
+    "tags": ["map", "location"],
+    "pairsWith": ["MapMarker", "MapMarkers"]
+  },
+  "MapPopup": {
+    "purpose": "Surface card above a map position; Escape closes it",
+    "tags": ["map", "location", "overlay"],
+    "pairsWith": ["Map", "MapMarkers", "Button"]
+  },
   "Mask": {
     "purpose": "Radial mask over its content, fixed or following the cursor",
     "tags": ["decoration", "effect"],
@@ -571,7 +617,7 @@
     "pairsWith": ["MobileMegaMenu", "SmartLink", "Row"]
   },
   "Meta": {
-    "purpose": "Meta.generate builds a Next.js metadata object with Open Graph and Twitter cards",
+    "purpose": "Meta.generate: Next.js metadata with Open Graph and Twitter cards",
     "tags": ["seo", "next"],
     "pairsWith": ["Schema"]
   },
@@ -586,10 +632,15 @@
     "avoid": "Ordinary dialogs and confirmations — use Dialog",
     "pairsWith": ["Column"]
   },
+  "Nav": {
+    "purpose": "Sidebar navigation wrapper that sets density, variant and rail once for every NavItem, NavGroup and NavSection inside",
+    "tags": ["navigation", "layout"],
+    "pairsWith": ["NavItem", "NavGroup", "NavSection"]
+  },
   "NavGroup": {
     "purpose": "Collapsible group of NavItems in a sidebar, indented behind a rail",
     "tags": ["navigation"],
-    "pairsWith": ["NavItem", "Column"]
+    "pairsWith": ["NavItem", "Nav"]
   },
   "NavIcon": {
     "purpose": "Hamburger button that toggles to a close icon, for opening mobile navigation",
@@ -599,7 +650,12 @@
   "NavItem": {
     "purpose": "One sidebar navigation row: label, icon, selected state, count badge or unread dot",
     "tags": ["navigation"],
-    "pairsWith": ["NavGroup", "Column"]
+    "pairsWith": ["Nav", "NavGroup"]
+  },
+  "NavSection": {
+    "purpose": "Titled block of sidebar rows with an optional heading action, such as Projects with an add button",
+    "tags": ["navigation"],
+    "pairsWith": ["Nav", "NavItem"]
   },
   "NextAdapterProvider": {
     "purpose": "Installs the next/link and next/image adapters alone, for an app that composes its own LayoutProvider",
@@ -685,6 +741,16 @@
     "purpose": "Two-thumb slider selecting a [start, end] range, such as a price filter; the thumbs never cross",
     "tags": ["form", "settings"],
     "pairsWith": ["Slider", "Setting", "Form"]
+  },
+  "Reaction": {
+    "purpose": "One emoji or image reaction with its own gesture (beat, nod…)",
+    "tags": ["social", "effect"],
+    "pairsWith": ["Reactions"]
+  },
+  "Reactions": {
+    "purpose": "Reaction chips with counts, picker and burst, for posts and chat",
+    "tags": ["social", "chat"],
+    "pairsWith": ["ChatMessage", "Reaction"]
   },
   "RevealFx": {
     "purpose": "Slide-and-fade entrance for a block; delay and speed in ms — one coherent set per page",
@@ -773,6 +839,22 @@
     "avoid": "Raw a elements",
     "pairsWith": ["Text", "Row"]
   },
+  "Sortable": {
+    "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows (sidebar sections, board columns)",
+    "tags": ["data", "navigation", "chat"],
+    "avoid": "Native HTML5 draggable, which does nothing on touch and has no keyboard path",
+    "pairsWith": ["SortableItem", "Nav", "NavItem"]
+  },
+  "SortableHandle": {
+    "purpose": "Grip button a Sortable row drags by when the list has handle; drags at once on touch",
+    "tags": ["action"],
+    "pairsWith": ["Sortable", "SortableItem"]
+  },
+  "SortableItem": {
+    "purpose": "One row of a Sortable (Sortable.Item), wrapping a NavItem, Card or any row unchanged",
+    "tags": ["data"],
+    "pairsWith": ["Sortable", "NavItem", "Card"]
+  },
   "Spinner": {
     "purpose": "Rotating loader for async and streaming states",
     "tags": ["feedback", "chat"],
@@ -797,6 +879,11 @@
     "purpose": "Live theming controls for theme, brand and accent colours, shape and density",
     "tags": ["settings", "theme"],
     "pairsWith": ["StyleOverlay", "ThemeSwitcher"]
+  },
+  "StyleScope": {
+    "purpose": "Site colours, theme and fonts on one subtree",
+    "tags": ["theme", "layout"],
+    "pairsWith": ["ThemeProvider", "Column"]
   },
   "SubmitButton": {
     "purpose": "Submit Button that shows a spinner and ignores repeat presses while its Form's async onSubmit runs",
@@ -855,6 +942,7 @@
   },
   "Text": {
     "purpose": "Body, label and display text with variant, weight and colour tokens",
+    "avoid": "Layout props: it takes padding, margin, flex and s={{ hide }} but no other breakpoint props, border, radius or background; wrap it in a Row for those. A key cap is Kbd",
     "tags": ["typography", "basics"],
     "pairsWith": ["Heading", "Column", "Row"]
   },
@@ -864,7 +952,7 @@
     "pairsWith": ["Dialog", "Column", "Chip"]
   },
   "ThemeInit": {
-    "purpose": "Inline script for the document head that applies the theme config before first paint, preventing a flash",
+    "purpose": "Head script that applies the theme before first paint, so it never flashes",
     "tags": ["theme", "provider"],
     "pairsWith": ["ThemeSwitcher"]
   },
@@ -940,9 +1028,19 @@
     "tags": ["accessibility"],
     "pairsWith": ["Button", "SmartLink"]
   },
+  "VoiceVisualizer": {
+    "purpose": "Voice chat orb or bars for idle, listening, thinking, speaking; follows audio level",
+    "tags": ["chat", "ai", "media"],
+    "pairsWith": ["WorkingIndicator", "ChatComposer"]
+  },
   "WeatherFx": {
     "purpose": "Canvas rain, snow, leaves or lightning as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "WorkingIndicator": {
+    "purpose": "AI working line: mark loader plus cycling verbs (Imagining…)",
+    "tags": ["chat", "feedback", "ai"],
+    "pairsWith": ["ChatMessageList", "LogoSpinner"]
   }
 }

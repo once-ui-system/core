@@ -46,12 +46,39 @@ A collapsible container that allows users to expand and collapse sections of con
   ]}
 />
 
+## Title style
+
+The title is set in `heading-strong-s` by default. `titleVariant` takes any text variant, for a
+FAQ that reads as body copy; `radius="none"` squares the header for a flush layout.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Accordion title="How long does shipping take?" titleVariant="body-default-m" radius="none">
+      <Text onBackground="neutral-weak">Two working days in the EU.</Text>
+    </Accordion>
+  }
+  codes={[
+    {
+      code:
+`<Accordion title="How long does shipping take?" titleVariant="body-default-m" radius="none">
+  <Text onBackground="neutral-weak">Two working days in the EU.</Text>
+</Accordion>`,
+      language: "tsx",
+      label: "Title style"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
   component="Accordion"
   describe={{
     toggleOnHeaderClick: "Whether clicking anywhere in the header toggles the panel.",
+    titleVariant: "Text style of the title.",
+    radius: "Corner radius of the header; none for square corners.",
     headerProps: "Props forwarded to the header row.",
     contentProps: "Props forwarded to the content column.",
   }}

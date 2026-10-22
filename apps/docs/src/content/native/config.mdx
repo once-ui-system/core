@@ -1,0 +1,322 @@
+---
+title: "Configuration"
+summary: "Set the theme, colours, borders, scaling, fonts and safe areas of a native app with ThemeProvider, and read the resolved tokens with useTheme."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/config.mdx"
+github: "packages/native/src/theme/ThemeProvider.tsx"
+navLabel: "Configuration"
+navIcon: "settings"
+---
+
+A native app is configured through one provider, `ThemeProvider`. It takes the style options of the web `ThemeProvider`, with the same names and the same defaults, and resolves them against the same design tokens. A native screen and a web page with the same options get the same colours, spacing, radii and type. For the web setup, see the [web configuration](/config) and the web [ThemeProvider](/contexts/themeProvider).
+
+## ThemeProvider
+
+Wrap the app once, at the root:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import { ThemeProvider } from "@once-ui-system/native";
+import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
+
+function Themed({ children }: { children: ReactNode }) {
+  return (
+    <ThemeProvider
+      theme="system"
+      brand="blue"
+      accent="indigo"
+      neutral="gray"
+      solid="contrast"
+      solidStyle="flat"
+      border="playful"
+      surface="filled"
+      scaling="100"
+      insets={useSafeAreaInsets()}
+    >
+      {children}
+    </ThemeProvider>
+  );
+}
+
+export function Providers({ children }: { children: ReactNode }) {
+  return (
+    <SafeAreaProvider>
+      <Themed>{children}</Themed>
+    </SafeAreaProvider>
+  );
+}`,
+    language: "tsx",
+    label: "Providers.tsx"
+  }
+]} />
+
+Every prop is optional. Without any, you get the web defaults below, following the device's light or dark setting.
+
+### Props
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `theme` | `"light" \| "dark" \| "system"` | `"system"` | `"system"` follows the device's appearance and updates when it changes. |
+| `brand` | `Schemes \| "custom"` | `"blue"` | The brand colour scheme: `blue`, `indigo`, `violet`, `magenta`, `pink`, `red`, `orange`, `yellow`, `moss`, `green`, `emerald`, `aqua` or `cyan`, or `"custom"` for your own (see [custom schemes](#custom-schemes)). |
+| `accent` | `Schemes \| "custom"` | `"indigo"` | The accent colour scheme. Same values as `brand`. |
+| `neutral` | `"sand" \| "gray" \| "slate" \| "rose" \| "mint" \| "dusk" \| "custom"` | `"gray"` | The neutral scheme for text, borders and surfaces. |
+| `brandSeed`, `accentSeed`, `neutralSeed` | `string` | - | A colour (hex, `rgb()` or `oklch()`) to generate that scheme from, as core's seeds. Implies `"custom"` for its scheme. |
+| `brandScale`, `accentScale`, `neutralScale` | `SchemeScale` | - | That scheme step by step, `{ 100: "#…", …, 1200: "#…" }`. Wins over the seed and implies `"custom"`. |
+| `solid` | `"color" \| "contrast" \| "inverse"` | `"contrast"` | How solid fills, such as the primary `Button`, are coloured. |
+| `solidStyle` | `"flat" \| "plastic"` | `"flat"` | Flat fills, or fills with a highlight and a shade. |
+| `border` | `"rounded" \| "playful" \| "conservative" \| "sharp"` | `"playful"` | The radius scale. |
+| `surface` | `"filled" \| "translucent"` | `"filled"` | Opaque surfaces, or surfaces in the alpha colours. |
+| `scaling` | `"90" \| "95" \| "100" \| "105" \| "110"` | `"100"` | Scales spacing, sizes and type, in percent. |
+| `bodySize` | `"90" \| "95" \| "100" \| "105" \| "110"` | `"100"` | Scales the body text sizes, in percent. |
+| `bodyLineHeight` | `"90" \| "100" \| "110" \| "120"` | `"100"` | Scales the body line heights, in percent. |
+| `mobileSize` | `"13"` to `"18"` | - | Points per rem on screens 768 points wide and narrower. |
+| `tabletSize` | `"13"` to `"18"` | - | Points per rem on screens from 769 to 1024 points wide. |
+| `desktopSize` | `"13"` to `"18"` | - | Points per rem on screens wider than 1024 points. |
+| `fonts` | `FontFamilies` | - | `{ heading, body, label, code }`: font families the app has loaded. Any left out use the platform font. `heading` also covers the display variants. |
+| `insets` | `Insets` | all `0` | `{ top, right, bottom, left }` safe-area insets in points, as `useSafeAreaInsets()` returns them. Used by `Dialog`, toasts and `safeArea`. |
+| `children` | `ReactNode` | - | The app. |
+
+When `mobileSize`, `tabletSize` and `desktopSize` are left out, rem comes from the tokens: 15 points on phones and 16 on tablets, as on the web.
+
+### Custom schemes
+
+On the web, `brand="custom"` reads the `--scheme-brand-100` to `--scheme-brand-1200` properties an app sets in its own CSS, or `brandSeed` generates them. React Native has no CSS, so the same scale goes to `ThemeProvider`: `brandScale` with each step, or `brandSeed` with one colour. Either one sets `brand` to `"custom"`. `accent` and `neutral` work the same way.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { ThemeProvider } from "@once-ui-system/native";
+
+// The same steps as the web app's custom.css.
+const copper = {
+  100: "#140b06", 200: "#26150c", 300: "#4a2816", 400: "#6b3a1f",
+  500: "#8f4f2a", 600: "#b87333", 700: "#cf8c4f", 800: "#e0a874",
+  900: "#ebc29d", 1000: "#f4dbc3", 1100: "#f9ece0", 1200: "#fdf7f1",
+};
+
+export function App({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider brandScale={copper}>{children}</ThemeProvider>;
+}
+
+// Or generate the scale from one colour, as core's brandSeed.
+export function Seeded({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider brandSeed="#b87333">{children}</ThemeProvider>;
+}`,
+    language: "tsx",
+    label: "Custom brand"
+  }
+]} />
+
+Steps can be hex, `rgb()` or `oklch()`; they are turned into hex, because React Native can't draw `oklch()`. The three `600` alphas are made from step `600` unless you give `"600-15"`, `"600-30"` and `"600-50"` yourself. `generateColorScheme(seed)` returns the generated scale if you want to see or store it.
+
+### Fonts
+
+Pass the family names the app registered, for example with `expo-font`:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import { useFonts } from "expo-font";
+import { Inter_400Regular, Inter_600SemiBold } from "@expo-google-fonts/inter";
+import { ThemeProvider } from "@once-ui-system/native";
+
+export function Themed({ children }: { children: ReactNode }) {
+  const [loaded] = useFonts({ Inter_400Regular, Inter_600SemiBold });
+  if (!loaded) return null;
+
+  return (
+    <ThemeProvider fonts={{ heading: "Inter_600SemiBold", body: "Inter_400Regular", label: "Inter_400Regular" }}>
+      {children}
+    </ThemeProvider>
+  );
+}`,
+    language: "tsx",
+    label: "Themed.tsx"
+  }
+]} />
+
+The [quick start](/native/quick-start#fonts) covers loading fonts step by step.
+
+### Switching the theme at runtime
+
+`ThemeProvider` is controlled by its props. It does not store a choice or offer a `setTheme`. To let people pick light or dark, keep the choice in your own state (and storage, if it should survive a restart) and pass it in:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Column, SegmentedControl, ThemeProvider } from "@once-ui-system/native";
+
+type Mode = "system" | "light" | "dark";
+
+export default function App() {
+  const [mode, setMode] = useState<Mode>("system");
+
+  return (
+    <ThemeProvider theme={mode}>
+      <Column fill padding="20" background="page">
+        <SegmentedControl
+          value={mode}
+          onChange={(value) => setMode(value as Mode)}
+          buttons={[
+            { value: "system", label: "System" },
+            { value: "light", label: "Light" },
+            { value: "dark", label: "Dark" },
+          ]}
+        />
+      </Column>
+    </ThemeProvider>
+  );
+}`,
+    language: "tsx",
+    label: "App.tsx"
+  }
+]} />
+
+## useTheme
+
+`useTheme()` returns the resolved theme, so your own components can use the same tokens as Once UI's. Outside a `ThemeProvider` it returns the web defaults in dark.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Text, View } from "react-native";
+import { useTheme } from "@once-ui-system/native";
+
+export function Stamp({ count }: { count: number }) {
+  const theme = useTheme();
+
+  return (
+    <View
+      style={{
+        padding: theme.space("12"),
+        borderRadius: theme.radius("full"),
+        backgroundColor: theme.color("brand-solid-strong"),
+        ...theme.shadow("m"),
+      }}
+    >
+      <Text style={[theme.text("label-strong-m"), { color: theme.onSolid("brand-strong") }]}>
+        {count}
+      </Text>
+    </View>
+  );
+}`,
+    language: "tsx",
+    label: "Stamp.tsx"
+  }
+]} />
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `settings` | `StyleSettings` | The options in force, with `theme` resolved to `"light"` or `"dark"`. |
+| `width` | `number` | The window width in points the theme was resolved for. |
+| `breakpoints` | `Breakpoints` | Max-width of each breakpoint: `xs` 480, `s` 768, `m` 1024, `l` 1440, `xl` `Infinity`. |
+| `insets` | `Insets` | The safe-area insets passed to `ThemeProvider`, or zeros. |
+| `rem` | `number` | Points per rem on this screen. |
+| `tokens` | `Record<string, TokenValue>` | Every resolved token, by its CSS name without `--`, such as `"brand-solid-strong"`. |
+| `px(name)` | `(name: string) => number` | A length token in points, such as `"radius-l-nest-4"`. |
+| `color(name)` | `(name: string) => string` | A colour token as a hex string, such as `"neutral-alpha-weak"` or `"page-background"`. `"transparent"` for an unknown name. |
+| `background(value)` | `(value) => string` | A `background` prop value (`"neutral-medium"`, `"surface"`, `"page"`, `"overlay"`) as a colour. |
+| `border(value)` | `(value) => string` | A `border` prop value (`"neutral-alpha-weak"`, `"surface"`) as a colour. |
+| `onBackground(value)` | `(value) => string` | Text colour for an `onBackground` value, such as `"neutral-weak"`. |
+| `onSolid(value)` | `(value) => string` | Text colour for an `onSolid` value, such as `"brand-strong"`. |
+| `space(value)` | `(value: SpacingToken \| number) => number` | A spacing token (`"16"`, `"l"`) or a number of rem, in points. |
+| `radius(size)` | `(size: RadiusSize) => number` | A radius in points. `"full"` is 9999, `"none"` is 0. |
+| `shadow(size)` | `(size: ShadowSize) => ViewStyle` | A shadow style: `boxShadow` with every layer, plus `shadow*` and `elevation` fallbacks. |
+| `text(variant)` | `(variant: TextVariant) => TextStyle` | `fontSize`, `lineHeight`, `fontWeight`, the family from `fonts`, and letter spacing for display sizes. |
+
+The theme follows the window width, so it changes when the device rotates or an iPad app is resized.
+
+## createTheme
+
+`createTheme` builds the same object without a provider, for code that runs outside React or for tests. It takes full settings, a width in points, and optionally fonts and insets. `defaultSettings` holds the web defaults:
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { createTheme, defaultSettings } from "@once-ui-system/native";
+
+const theme = createTheme({ ...defaultSettings, brand: "orange", theme: "light" }, 390);
+
+export const brandColor = theme.color("brand-solid-strong");
+export const cardRadius = theme.radius("l");`,
+    language: "tsx",
+    label: "theme.ts"
+  }
+]} />
+
+## Tokens
+
+`tokens` is the token export both packages read: the web package's SCSS tokens as JSON, in layers that each apply to a set of options and a width. `resolveTokens(settings, width)` applies the layers in CSS cascade order and follows references, so it returns what the browser would compute for each custom property.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { defaultSettings, resolveTokens, tokens } from "@once-ui-system/native";
+
+const resolved = resolveTokens({ ...defaultSettings, theme: "dark" }, 390);
+
+export const pageBackground = resolved["page-background"];
+export const breakpoints = tokens.breakpoints;`,
+    language: "tsx",
+    label: "tokens.ts"
+  }
+]} />
+
+The same file ships as `@once-ui-system/native/tokens.json` and `@once-ui-system/core/tokens.json`, for other tools such as Figma or Swift and Kotlin code generators.
+
+## IconProvider
+
+`Icon`, `IconButton` and the `prefixIcon` and `suffixIcon` props draw the web package's built-in icons. `IconProvider` adds icons of your own, or replaces built-in ones, by name. An icon is either core's SVG data (`{ tag, attr, child }`) or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import type { ReactNode } from "react";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { Button, IconProvider } from "@once-ui-system/native";
+
+declare module "@once-ui-system/native" {
+  interface IconLibraryOverrides {
+    coffee: true;
+  }
+}
+
+function Coffee({ size, color }: { size: number; color: string }) {
+  return <Ionicons name="cafe-outline" size={size} color={color} />;
+}
+
+export function Icons({ children }: { children: ReactNode }) {
+  return <IconProvider icons={{ coffee: Coffee }}>{children}</IconProvider>;
+}
+
+export function OrderButton() {
+  return <Button label="Order" prefixIcon="coffee" />;
+}`,
+    language: "tsx",
+    label: "Icons.tsx"
+  }
+]} />
+
+Declaring the name in `IconLibraryOverrides` makes it valid wherever an icon name is typed. Put `IconProvider` inside `ThemeProvider`, around the screens that use the icons.
+
+## Differences from the web
+
+- **No config file.** There is no `defineConfig`, `ThemeInit` or `LayoutProvider`. Pass the options to `ThemeProvider` directly, or spread an object of them.
+- **No stored theme.** The web `ThemeProvider` saves the choice in localStorage and its `useTheme` has `setTheme`. On native the app keeps the choice and passes `theme`.
+- **`useTheme` returns tokens.** It returns the resolved theme described above, not the web hook's theme state.
+- **Not supported:** `transition`, the custom colour seeds (`brandSeed`, `accentSeed`, `neutralSeed`) and the `"custom"` scheme, `cursorInteractive`, and `DataThemeProvider`, as there are no charts.
+- **Translucent surfaces** use the alpha colours without a backdrop blur.
+- **Fonts** are family names the app has loaded, not `next/font` results.
+- **Safe areas** come from `insets` instead of CSS `env()`.

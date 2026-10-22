@@ -29,6 +29,8 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
       barBackground = "brand-strong",
       className,
       style,
+      "aria-label": ariaLabel,
+      "aria-labelledby": ariaLabelledBy,
       ...rest
     },
     ref,
@@ -45,6 +47,10 @@ const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         overflow="hidden"
         height="8"
         role="progressbar"
+        // A progressbar needs a name (axe: aria-progressbar-name). The label
+        // props land here rather than on the wrapper that has no role.
+        aria-label={ariaLabelledBy ? undefined : (ariaLabel ?? "Progress")}
+        aria-labelledby={ariaLabelledBy}
         aria-valuenow={value}
         aria-valuemin={min}
         aria-valuemax={max}

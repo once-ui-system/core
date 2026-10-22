@@ -9,6 +9,10 @@ html {
   color: var(--neutral-on-background-strong);
 }
 
+:where([data-theme]) {
+  color: var(--neutral-on-background-strong);
+}
+
 h1, h2, h3, h4, h5, h6, p {
   margin: 0;
 }
@@ -35,6 +39,86 @@ h1, h2, h3, h4, h5, h6, p {
 
 .font-strong {
   font-weight: var(--font-weight-display-strong);
+}
+
+:where(.font-heading).font-default,
+:where(.font-heading) > .font-default {
+  font-weight: var(--font-heading-weight-default, var(--font-weight-display-default));
+}
+
+:where(.font-heading).font-normal,
+:where(.font-heading) > .font-normal {
+  font-weight: var(--font-heading-weight-normal, var(--font-weight-display-normal));
+}
+
+:where(.font-heading).font-medium,
+:where(.font-heading) > .font-medium {
+  font-weight: var(--font-heading-weight-medium, var(--font-weight-display-medium));
+}
+
+:where(.font-heading).font-strong,
+:where(.font-heading) > .font-strong {
+  font-weight: var(--font-heading-weight-strong, var(--font-weight-display-strong));
+}
+
+:where(.font-body).font-default,
+:where(.font-body) > .font-default {
+  font-weight: var(--font-body-weight-default, var(--font-weight-display-default));
+}
+
+:where(.font-body).font-normal,
+:where(.font-body) > .font-normal {
+  font-weight: var(--font-body-weight-normal, var(--font-weight-display-normal));
+}
+
+:where(.font-body).font-medium,
+:where(.font-body) > .font-medium {
+  font-weight: var(--font-body-weight-medium, var(--font-weight-display-medium));
+}
+
+:where(.font-body).font-strong,
+:where(.font-body) > .font-strong {
+  font-weight: var(--font-body-weight-strong, var(--font-weight-display-strong));
+}
+
+:where(.font-label).font-default,
+:where(.font-label) > .font-default {
+  font-weight: var(--font-label-weight-default, var(--font-weight-display-default));
+}
+
+:where(.font-label).font-normal,
+:where(.font-label) > .font-normal {
+  font-weight: var(--font-label-weight-normal, var(--font-weight-display-normal));
+}
+
+:where(.font-label).font-medium,
+:where(.font-label) > .font-medium {
+  font-weight: var(--font-label-weight-medium, var(--font-weight-display-medium));
+}
+
+:where(.font-label).font-strong,
+:where(.font-label) > .font-strong {
+  font-weight: var(--font-label-weight-strong, var(--font-weight-display-strong));
+}
+
+:where(.font-code).font-default,
+:where(.font-code) > .font-default {
+  font-weight: var(--font-code-weight-default, var(--font-weight-display-default));
+}
+
+:where(.font-code).font-normal,
+:where(.font-code) > .font-normal {
+  font-weight: var(--font-code-weight-normal, var(--font-weight-display-normal));
+}
+
+:where(.font-code).font-medium,
+:where(.font-code) > .font-medium {
+  font-weight: var(--font-code-weight-medium, var(--font-weight-display-medium));
+}
+
+:where(.font-code).font-strong,
+:where(.font-code) > .font-strong {
+  font-weight: var(--font-code-weight-strong, var(--font-weight-display-strong));
 }
 
 .font-display {

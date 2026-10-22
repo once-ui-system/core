@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useId, useRef, useState } from "react";
 import { Column } from "./Column";
+import { useControlLabel } from "./ControlLabelContext";
 import { Row } from "./Row";
 import styles from "./Slider.module.scss";
 import { Text } from "./Text";
@@ -46,11 +47,13 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
     const sliderRef = useRef<HTMLInputElement>(null);
     const [isDragging, setIsDragging] = useState(false);
     const labelId = useId();
+    const outerLabelId = useControlLabel();
     const controlled = value !== undefined;
     const [uncontrolled, setUncontrolled] = useState(defaultValue ?? min);
     const current = controlled ? value : uncontrolled;
 
-    const percentage = ((current - min) / (max - min)) * 100;
+    // With min === max there is no range to fill: 0 / 0 made the width NaN%.
+    const percentage = max > min ? ((current - min) / (max - min)) * 100 : 0;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const newValue = parseFloat(e.target.value);
@@ -106,7 +109,8 @@ const Slider = forwardRef<HTMLInputElement, SliderProps>(
             className={styles.input}
             // The visible label names the input, unless the caller named it
             // another way: aria-labelledby would override an aria-label.
-            aria-labelledby={label && !props["aria-label"] ? labelId : undefined}
+            // Inside a Setting row with no label of its own, the row's label.
+            aria-labelledby={props["aria-label"] ? undefined : label ? labelId : outerLabelId}
             {...props}
           />
           <div className={styles.thumb} style={{ left: `${percentage}%` }} />

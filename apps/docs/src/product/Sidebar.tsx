@@ -21,10 +21,10 @@ import React, { useEffect, useState } from "react";
 import { layout } from "@/resources";
 import { isPlatformRoot, platformOfPath } from "@/resources/platforms";
 import { AVAILABILITY, type Availability } from "./availability";
-import { PlatformSwitcher, flattenSlugs } from "./PlatformSwitcher";
-import { VersionPicker } from "./VersionPicker";
+import { DocsContextSwitcher, flattenSlugs } from "./DocsContextSwitcher";
 
 import styles from "./Sidebar.module.scss";
+import { basePath } from "@/resources/versions";
 
 // Global navigation cache to prevent refetching
 let globalNavigationCache: any = null;
@@ -60,15 +60,23 @@ const NAV_RHYTHM = {
   railGap: "8",
   /** Space between sibling items. */
   itemGap: "4",
-  /** Height of a leaf item. `m` is the component default and reads roomier. */
+  /** Height of a leaf item inside a group. */
   itemSize: "m",
+  /**
+   * Height of a top-level item (About, Installation, the resource links). One
+   * step up from a nested item, so it matches the group headers beside it:
+   * 40px tall, 16px text inset and the m label, one rhythm down the column.
+   */
+  topItemSize: "l",
+  /**
+   * `l` pads 16px and its label another 8, which puts the text right of the
+   * group titles. Half the outer padding lines the two up.
+   */
+  topItemInset: { paddingLeft: "var(--static-space-8)" },
 } as const;
 
 interface SidebarProps extends Omit<React.ComponentProps<typeof Flex>, "children"> {
   initialNavigation?: NavigationItem[];
-  /** Adds the version picker above the platform switcher, for the phone menu,
-      where the header has no room for it. */
-  showVersion?: boolean;
 }
 
 // Memoized navigation item component to prevent re-renders
@@ -204,7 +212,8 @@ const NavigationItemComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
-      size={NAV_RHYTHM.itemSize}
+      size={depth === 0 ? NAV_RHYTHM.topItemSize : NAV_RHYTHM.itemSize}
+      style={depth === 0 ? NAV_RHYTHM.topItemInset : undefined}
       horizontal="between"
       selected={isSelected}
       className={depth === 0 ? styles.navigation : undefined}
@@ -215,7 +224,7 @@ const NavigationItemComponent: React.FC<{
           overflow="hidden"
           gap="8"
           onBackground="neutral-strong"
-          textVariant={isSelected ? "label-strong-s" : "label-default-s"}
+          textVariant={`label-${isSelected ? "strong" : "default"}-${depth === 0 ? "m" : "s"}`}
           style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
         >
           {item.label || item.title}
@@ -295,7 +304,8 @@ const ResourceLinkComponent: React.FC<{
   return (
     <ToggleButton
       fillWidth
-      size="m"
+      size={NAV_RHYTHM.topItemSize}
+      style={NAV_RHYTHM.topItemInset}
       horizontal="between"
       selected={isSelected}
       className={styles.navigation}
@@ -372,8 +382,13 @@ const SidebarContent: React.FC<{
 
     // Release history lives on GitHub, generated from CHANGELOG.md.
     const resourcesSection = (
-      <Column gap="4" marginTop="32" paddingLeft="4">
-        <Row textVariant="label-strong-s" onBackground="brand-strong" paddingLeft="8" paddingY="12">
+      <Column gap="4" marginTop="32">
+        <Row
+          textVariant="label-strong-s"
+          onBackground="brand-strong"
+          paddingLeft="16"
+          paddingY="12"
+        >
           Resources
         </Row>
         {/* The blocks surface has its own catalogue and hides this sidebar,
@@ -416,7 +431,7 @@ const SidebarContent: React.FC<{
 
 SidebarContent.displayName = "SidebarContent";
 
-const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...rest }) => {
+const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, ...rest }) => {
   const [navigation, setNavigation] = useState<NavigationItem[]>(initialNavigation || []);
   const [hasLoaded, setHasLoaded] = useState(false);
   const pathname = usePathname();
@@ -451,7 +466,7 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...re
 
     // Fetch only if not loaded and no global cache
     if (!hasLoaded) {
-      fetch("/api/navigation")
+      fetch(`${basePath}/api/navigation`)
         .then((res) => res.json())
         .then((data) => {
           setNavigation(data);
@@ -480,17 +495,13 @@ const Sidebar: React.FC<SidebarProps> = ({ initialNavigation, showVersion, ...re
         fillHeight
         gap="4"
         as="nav"
+        aria-label="Documentation"
         overflowY="auto"
         padding="12"
         style={{ maxHeight: "calc(100vh - 4rem)", top: "3.875rem" }}
       >
-        {showVersion && (
-          <Row fillWidth paddingBottom="8" s={{ hide: false }} hide>
-            <VersionPicker />
-          </Row>
-        )}
         <Row fillWidth paddingBottom="12">
-          <PlatformSwitcher slugs={flattenSlugs(navigation)} />
+          <DocsContextSwitcher slugs={flattenSlugs(navigation)} />
         </Row>
         {hasLoaded ? (
           <SidebarContent key={pathname} navigation={navigation} pathname={pathname} />

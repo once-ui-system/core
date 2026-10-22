@@ -1,7 +1,7 @@
 import classNames from "clsx";
-import { CSSProperties, forwardRef } from "react";
+import { type CSSProperties, forwardRef } from "react";
 
-import {
+import type {
   CommonProps,
   DisplayProps,
   FlexBreakpointProps,
@@ -10,9 +10,11 @@ import {
   SpacingProps,
   StyleProps,
 } from "../interfaces";
-import { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import type { ColorScheme, ColorWeight, SpacingToken, TextVariant } from "../types";
+import { cursorProps } from "../utils/cursor";
 import {
   BELOW_HEADER,
+  hiddenAboveBreakpoints,
   isCSSUnit,
   offsetClasses,
   scrollsOn,
@@ -166,6 +168,10 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
     const cascadedM = m ? { ...cascadedL, ...m } : cascadedL;
     const cascadedS = s ? { ...cascadedM, ...s } : cascadedM;
     const cascadedXs = xs ? { ...cascadedS, ...xs } : cascadedS;
+    // A show class only undoes a wider hide, so it is emitted only under one.
+    // When it carried a base display: none, `s={{ hide: open }}` with `open`
+    // false hid the element on desktop.
+    const hiddenAbove = hiddenAboveBreakpoints(hide, [cascadedXl, cascadedL, cascadedM, cascadedS]);
 
     const getVariantClasses = (variant: TextVariant) => {
       const parts = variant.split("-");
@@ -212,6 +218,8 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       const [scheme, weight] = value.split("-") as [ColorScheme, ColorWeight];
       return `${scheme}-${type}-${weight}`;
     };
+
+    const cursorProp = cursorProps(cursor);
 
     let classes = classNames(
       inline ? "display-inline-flex" : "display-flex",
@@ -324,7 +332,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       shadow && `shadow-${shadow}`,
       zIndex !== undefined && `z-index-${zIndex}`,
       textType && `font-${textType}`,
-      typeof cursor === "string" && `cursor-${cursor}`,
+      cursorProp.className,
       userSelect && `user-select-${userSelect}`,
       blendMode && `blend-mode-${blendMode}`,
       typeof blur === "string" && `blur-${blur}`,
@@ -357,15 +365,15 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         cascadedS?.position && `s-position-${cascadedS.position}`,
         cascadedXs?.position && `xs-position-${cascadedXs.position}`,
         cascadedXl?.hide === true && "xl-flex-hide",
-        cascadedXl?.hide === false && "xl-flex-show",
+        cascadedXl?.hide === false && hiddenAbove.xl && "xl-flex-show",
         cascadedL?.hide === true && "l-flex-hide",
-        cascadedL?.hide === false && "l-flex-show",
+        cascadedL?.hide === false && hiddenAbove.l && "l-flex-show",
         cascadedM?.hide === true && "m-flex-hide",
-        cascadedM?.hide === false && "m-flex-show",
+        cascadedM?.hide === false && hiddenAbove.m && "m-flex-show",
         cascadedS?.hide === true && "s-flex-hide",
-        cascadedS?.hide === false && "s-flex-show",
+        cascadedS?.hide === false && hiddenAbove.s && "s-flex-show",
         cascadedXs?.hide === true && "xs-flex-hide",
-        cascadedXs?.hide === false && "xs-flex-show",
+        cascadedXs?.hide === false && hiddenAbove.xs && "xs-flex-show",
         xl?.direction && `xl-flex-${xl.direction}`,
         l?.direction && `l-flex-${l.direction}`,
         m?.direction && `m-flex-${m.direction}`,
@@ -500,7 +508,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
       height: sizeValue(height, "height"),
       aspectRatio: aspectRatio,
       textAlign: align,
-      cursor: typeof cursor === "string" ? cursor : undefined,
+      cursor: cursorProp.style,
       ...numericSpacingStyle({
         padding,
         paddingX,
@@ -537,6 +545,7 @@ const ServerFlex = forwardRef<HTMLDivElement, ServerFlexProps>(
         ref={ref}
         className={classes}
         style={combinedStyle}
+        {...cursorProp.attributes}
         {...rest}
         {...themeAttributes({ theme, themeBorder, themeSolid, themeSurface })}
       >

@@ -1,7 +1,8 @@
 ---
 title: "Chat"
+export: "ChatMessage"
 summary: "Building blocks for chat interfaces: message bubbles, a message list that follows the conversation, a composer with send and attach, a typing indicator and inbox rows."
-updatedAt: "2026-10-17"
+updatedAt: "2026-10-21"
 docs: "once-ui/modules/chat.mdx"
 github: "modules/chat/ChatMessage.tsx"
 navLabel: "Chat"
@@ -28,14 +29,13 @@ Five components cover the parts every chat has: `ChatMessage`, `ChatMessageList`
 } from "@once-ui-system/core";
 
 <Column fillWidth height={28}>
-  <ChatMessageList ariaLabel="Chat with Lorant">
-    {messages.map((message, index) => (
+  <ChatMessageList ariaLabel="Chat with Lorant" stack>
+    {messages.map((message) => (
       <ChatMessage
         key={message.id}
         from={message.from}
         name={message.from === "other" ? "Lorant" : undefined}
         avatarProps={message.from === "other" ? { src: "/images/avatar.jpg" } : undefined}
-        grouped={index > 0 && messages[index - 1].from === message.from}
         time={message.time}
         status={message.from === "self" ? "read" : undefined}
       >
@@ -54,7 +54,7 @@ Five components cover the parts every chat has: `ChatMessage`, `ChatMessageList`
 
 ## ChatMessage
 
-One message: the bubble, its author, the time and the delivery state. `from="self"` puts it on the right with the brand tint. Set `grouped` on a follow-up from the same author: the name is dropped and the avatar keeps its space, so the bubbles line up. A `Date` in `time` is formatted for the reader and rendered as a `<time>` element.
+One message: the bubble, its author, the time and the delivery state. `from="self"` puts it on the right with the brand tint. Set `grouped` on a follow-up from the same author: the name is dropped and the avatar keeps its space, so the bubbles line up. A `Date` in `time` is formatted for the reader and rendered as a `<time>` element: the time of day by default, or with `timeFormat="relative"` a short distance from now ("now", "2m", "1h", then the date) in the reader's language that keeps itself current, with the full time on hover.
 
 <CodeBlock
   marginTop="16"
@@ -95,6 +95,30 @@ One message: the bubble, its author, the time and the delivery state. `from="sel
     }
   ]}
 />
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="16">
+      <ChatMessage from="self" time={new Date()} timeFormat="relative" status="delivered">
+        On my way.
+      </ChatMessage>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<ChatMessage from="self" time={sentAt} timeFormat="relative" status="delivered">
+  On my way.
+</ChatMessage>`,
+      language: "tsx",
+      label: "Relative time"
+    }
+  ]}
+/>
+
+The same wording is exported as `formatRelativeTime(date, { style, locale })` for anything else that labels a time: `"narrow"` (the default) gives "now", "2m", "1h", "3d", "2w" and then the date; `"short"` and `"long"` give "5 min. ago" and "5 minutes ago". It uses the platform's `Intl`, so every locale reads in its own words with nothing to translate.
 
 `variant="plain"` drops the bubble for a flat, team-chat layout where every message reads left to right. `attachments` takes media or link previews under the text, `footer` takes reactions, and `actions` takes controls that show while the message is hovered or focused (they are always shown on touch screens).
 
@@ -147,11 +171,13 @@ One message: the bubble, its author, the time and the delivery state. `from="sel
     name: "The author's name, shown above the first message of a group.",
     avatarProps: "The author's avatar. Leave it out for no avatar column.",
     time: "When it was sent. A `Date` is formatted; anything else renders as given.",
+    timeFormat: "How a `Date` reads: the time of day, or relative (\"2m\", \"1h\"), kept current.",
     status: "Delivery state, shown next to the time.",
     statusLabels: "Replaces the status words, for another language.",
     onRetry: "Adds a retry button to a failed message.",
     retryLabel: "The retry button's label.",
     grouped: "A follow-up from the same author.",
+    stack: "Its place in a stack of quick messages from one author. `ChatMessageList` sets it with `stack`.",
     variant: "A tinted bubble, or a flat row.",
     attachments: "Content under the bubble.",
     footer: "A row under the attachments, such as reactions.",
@@ -165,12 +191,16 @@ The scrolling column a conversation lives in. It starts at the newest message an
 
 Give it a parent with a fixed or flexible height; it fills the space and scrolls inside it.
 
+`stack` draws a quick run of messages from one author as one block: the bubbles close up and round less where they meet, the name and avatar show once, and the time and delivery state show under the last message. Messages stack when they sit next to each other with the same `from`, `name` and `variant`, sent within `stackWithin` minutes (5 by default) of each other. There is nothing to compute per message; the conversation at the top of this page uses it.
+
 <PropsTable
   component="ChatMessageList"
   describe={{
     stickToBottom: "Start at the newest message and follow new ones while the reader is at the bottom.",
     onReachStart: "Called when the reader scrolls to the top.",
     ariaLabel: "The list's accessible name, such as who the chat is with.",
+    stack: "Draw a quick run of messages from one author as one block.",
+    stackWithin: "The longest gap, in minutes, between two messages that still stack.",
   }}
 />
 
@@ -178,7 +208,7 @@ Give it a parent with a fixed or flexible height; it fills the space and scrolls
 
 The input bar. The field grows with the draft up to about eight lines, Enter sends and Shift+Enter starts a new line (an Enter that confirms an IME composition never sends). `onSend` gets the trimmed text and the attached files. If it returns a promise the send button shows loading; the field clears when the promise resolves and keeps the draft when it rejects, so showing the error is up to you.
 
-`attach` adds a button that opens the file picker. Pasted images are attached too. Pass `{ accept, multiple }` to limit what can be picked.
+`attach` adds a button that opens the file picker. Pasted images are attached too. Picked images show as thumbnails, other files as chips with their name; each has a remove button. Pass `{ accept, multiple }` to limit what can be picked.
 
 <CodeBlock
   marginTop="16"
@@ -195,6 +225,35 @@ The input bar. The field grows with the draft up to about eight lines, Enter sen
 />`,
       language: "tsx",
       label: "ChatComposer"
+    }
+  ]}
+/>
+
+### Toolbar
+
+`toolbar` adds a row under the field for chips, a model picker or other controls, and `hint` puts quiet text such as "Enter to send" before the send button. With either one, the attach button moves to the start of that row, and `actions` and send to its end. `sendIcon` swaps the send button's icon. Without them the composer stays one row.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<ChatComposerToolbarExample />}
+  codes={[
+    {
+      code:
+`<ChatComposer
+  attach
+  sendIcon="arrowUp"
+  hint={<><Kbd>Enter</Kbd> to send</>}
+  toolbar={
+    <>
+      <Chip label="Your library" prefixIcon="document" />
+      <Chip label="Q4 pricing" suffixIcon="chevronDown" selected={false} />
+    </>
+  }
+  onSend={({ text }) => ask(text)}
+/>`,
+      language: "tsx",
+      label: "Toolbar"
     }
   ]}
 />
@@ -217,6 +276,9 @@ The input bar. The field grows with the draft up to about eight lines, Enter sen
     removeLabel: "The label of an attachment's remove button, from its file name.",
     prefix: "Content before the field, such as an emoji picker.",
     actions: "More controls before the send button.",
+    toolbar: "Controls in a row under the field, after the attach button.",
+    hint: "Quiet text before the send button, such as \"Enter to send\". Turns on the row under the field.",
+    sendIcon: "The send button's icon.",
     maxLength: "The longest draft allowed.",
     id: "The field's id. One is generated when it is left out.",
   }}

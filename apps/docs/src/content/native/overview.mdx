@@ -6,7 +6,6 @@ docs: "once-ui/native/overview.mdx"
 github: "packages/native/README.md"
 navLabel: "Overview"
 navIcon: "components"
-status: "unreleased"
 ---
 
 `@once-ui-system/native` brings Once UI's basic components to iOS and Android apps built with React Native. They take the same props as the web components and read the same design tokens, so a screen written with Once UI looks and reads the same on a phone.
@@ -26,7 +25,7 @@ It is a preview. Most apps should keep shipping Once UI on phones as the web bui
 
 ## Install
 
-Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag.
+Needs React 19, React Native 0.79 or later (Expo SDK 53 and up) and `react-native-svg` 15, which Expo includes. Preview versions are published to the `next` tag. The [quick start](/native/quick-start) covers Expo and bare React Native apps, safe areas and fonts.
 
 <CodeBlock marginTop="8" marginBottom="24"
 codes={[
@@ -65,32 +64,37 @@ export default function App() {
 
 ## Components
 
-| Component | Notes |
+Each component has its own page with examples, a props table and what differs from the web.
+
+| Group | Components |
 | --- | --- |
-| `Flex`, `Row`, `Column` | Spacing, alignment, background, border, radius, shadow and sizes. `Flex` is a row, as on the web. |
-| `Text`, `Heading` | `variant`, `onBackground`, `onSolid`, `truncate`. |
-| `Button` | All ten variants, five sizes, `loading`, `disabled`, `fillWidth`. |
-| `Card` | Pressable with `onPress` (or `onClick`), `selected`. |
-| `Input`, `Textarea` | Floating label, error message, description, prefix and suffix, character count. |
-| `Switch`, `Checkbox` | Controlled or not, with a label and description. |
-| `Icon`, `IconButton` | The same built-in icons as the web. `prefixIcon` and `suffixIcon` on `Button` and `Tag` take an icon name, as on the web. |
-| `Dialog` | Opens as a bottom sheet. The back button and a tap outside close it. |
-| `ToastProvider`, `useToast` | `addToast({ variant, message })`, as on the web. Toasts stack at the bottom of the screen. |
-| `Select` | Opens its options in a bottom sheet, with `multiple` and `searchable`. |
-| `RadioGroup`, `SegmentedControl` | One choice out of several, as on the web. |
-| `Chip`, `Badge`, `ProgressBar` | As on the web. |
-| `Tag`, `Avatar`, `Feedback`, `Line`, `Spinner`, `Skeleton` | As on the web. |
+| Layout | [`Flex`](/native/components/flex), [`Card`](/native/components/card), [`Line`](/native/components/line), [`Grid`](/native/components/grid), [`Scroller`](/native/components/scroller) |
+| Type | [`Text`](/native/components/text), [`Heading`](/native/components/heading) |
+| Actions | [`Button`](/native/components/button), [`IconButton`](/native/components/iconButton), [`ToggleButton`](/native/components/toggleButton), [`SegmentedControl`](/native/components/segmentedControl) |
+| Form controls | [`Input`](/native/form-controls/input), [`Textarea`](/native/form-controls/textarea), [`Select`](/native/form-controls/select), [`Checkbox`](/native/form-controls/checkbox), [`Switch`](/native/form-controls/switch), [`RadioGroup`](/native/form-controls/radioGroup), [`Chip`](/native/form-controls/chip), [`Slider`](/native/form-controls/slider), [`RangeSlider`](/native/form-controls/rangeSlider), [`NumberInput`](/native/form-controls/numberInput), [`PasswordInput`](/native/form-controls/passwordInput), [`OTPInput`](/native/form-controls/otpInput), [`Form`](/native/form-controls/form), [`Field`](/native/form-controls/field), [`Fieldset`](/native/form-controls/fieldset), [`SubmitButton`](/native/form-controls/submitButton), [`FormErrorSummary`](/native/form-controls/formErrorSummary), [`DatePicker`](/native/form-controls/datePicker), [`DateInput`](/native/form-controls/dateInput) |
+| Content | [`Icon`](/native/components/icon), [`Media`](/native/components/media), [`Avatar`](/native/components/avatar), [`AvatarGroup`](/native/components/avatarGroup), [`Badge`](/native/components/badge), [`Tag`](/native/components/tag), [`List`](/native/components/List), [`StatusIndicator`](/native/components/statusIndicator), [`User`](/native/components/user), [`BlockQuote`](/native/components/blockquote), [`Timeline`](/native/components/timeline), [`Kbd`](/native/components/kbd), [`InlineCode`](/native/components/inlineCode), [`CodeBlock`](/native/components/codeBlock), [`Markdown`](/native/components/markdown) |
+| Feedback | [`Feedback`](/native/components/feedback), [`ProgressBar`](/native/components/progressBar), [`Spinner`](/native/components/spinner), [`Skeleton`](/native/components/skeleton), [`Toast`](/native/components/toast), [`Banner`](/native/components/banner) |
+| Overlays and disclosure | [`Dialog`](/native/components/dialog), [`Drawer`](/native/components/drawer), [`Tabs`](/native/components/tabs), [`Accordion`](/native/components/accordion), [`DropdownWrapper`](/native/components/dropdownWrapper), [`ContextMenu`](/native/components/contextMenu), [`Tooltip`](/native/components/tooltip), [`InfoTip`](/native/components/infoTip) |
+| Navigation | [`Nav`](/native/components/nav), [`Breadcrumbs`](/native/components/breadcrumbs), [`Pagination`](/native/components/pagination) |
+| Data | [`Table`](/native/components/table), [`BarChart`](/native/data/barChart), [`LineChart`](/native/data/lineChart) |
+| Assistant | [`Mascot`](/native/components/mascot), [`WorkingIndicator`](/native/components/workingIndicator), [`LogoSpinner`](/native/components/logoSpinner) |
+| Social | [`Reactions`](/native/components/reactions) |
 
-`IconProvider` adds icons of your own, by name: core's SVG data, or a component that takes `size` and `color`, such as one from `@expo/vector-icons`.
+`Dialog` opens as a bottom sheet, and so do `Select`'s options. `ThemeProvider`, `useTheme()`, `IconProvider` and fonts are on the [config page](/native/config).
 
-`useTheme()` gives your own components the resolved tokens: `theme.color("brand-solid-strong")`, `theme.space("16")`, `theme.radius("l")`, `theme.text("heading-strong-m")`, `theme.shadow("m")`.
+## Responsive props and safe areas
+
+`Flex`, `Row`, `Column` and `Card` take the same breakpoint props as on the web (`xl`, `l`, `m`, `s`, `xs`), and `safeArea` pads a view clear of the notch and home indicator once the app passes the screen's insets to `ThemeProvider`. See [responsive layouts](/native/basics/responsive) and the [quick start](/native/quick-start).
 
 ## Differences from the web
 
 - **Units.** Numbers on spacing and size props are rem, as on the web. Rem follows the screen size: 15pt on phones, 16pt on tablets.
 - **Touch.** Pressed states replace hover, and small controls take taps from at least 44pt around them without being drawn larger.
 - **Clipping.** `radius` does not clip children. Pass `overflow="hidden"` when it should; on iOS that also hides the view's shadow.
-- **Responsive props** (`s`, `m`, `l`) are not supported yet. The phone breakpoint's token values apply on phones on their own.
+- **Media** shows images only. Enlarging on tap, videos and YouTube embeds are not supported.
+- **Tabs** have no arrow-key navigation, so `activation` has no effect.
+- **Core 3.0 names.** `Accordion` also takes `defaultOpen` and `onOpenChange`, `Tabs` takes `onValueChange`, and `StatusIndicator` takes `scheme`, so code written for 3.0 works here too.
+- **Safe areas.** The app passes the screen's safe areas to `ThemeProvider`, as shown below, instead of the browser providing them (see the [quick start](/native/quick-start)).
 
 ## Design tokens
 

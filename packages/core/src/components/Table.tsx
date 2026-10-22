@@ -1,7 +1,9 @@
 "use client";
 
 import classNames from "clsx";
-import { ReactNode, useMemo, useState } from "react";
+import { ReactNode, useId, useMemo, useState } from "react";
+import { type ColumnHide, columnHideClasses } from "../internal/columnHide";
+import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
 import { Icon } from "./Icon";
@@ -21,6 +23,11 @@ type TableHeader = {
   sortable?: boolean;
   width?: string;
   align?: "left" | "center" | "right";
+  /**
+   * Hide the column, header and cells, at a breakpoint and below, such as
+   * `{ s: true }`. CSS only, so it holds in the server render.
+   */
+  hide?: ColumnHide;
 };
 
 type TableAction = {
@@ -87,6 +94,7 @@ function Table({
   loadingState,
   ...flex
 }: TableProps) {
+  const scrollRef = useScrollableTabStop<HTMLDivElement>();
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc";
@@ -133,16 +141,18 @@ function Table({
     });
   }, [filteredRows, sortConfig, data.headers]);
 
+  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+
+  // Sliced at the clamped page: when the rows shrink under the last page,
+  // slicing at `page` showed an empty body while the label read "2 / 2".
   const paginatedRows = useMemo(() => {
     if (!paginated) return sortedRows;
 
-    const start = (page - 1) * pageSize;
+    const start = (currentPage - 1) * pageSize;
     const end = start + pageSize;
     return sortedRows.slice(start, end);
-  }, [sortedRows, paginated, page, pageSize]);
-
-  const totalPages = Math.max(1, Math.ceil(sortedRows.length / pageSize));
-  const currentPage = Math.min(page, totalPages);
+  }, [sortedRows, paginated, currentPage, pageSize]);
 
   useMemo(() => {
     setPage(1);
@@ -170,10 +180,15 @@ function Table({
     // A header without a key (untyped MDX tables omit it) is never the
     // sorted one, even before anything is sorted.
     const isActive = sortConfig !== null && sortConfig.key === header.key;
-    const thClasses = classNames(styles.th, getAlignClass(header.align, "th"), {
-      [styles.thSortable]: header.sortable,
-      [styles.thActive]: isActive,
-    });
+    const thClasses = classNames(
+      styles.th,
+      getAlignClass(header.align, "th"),
+      {
+        [styles.thSortable]: header.sortable,
+        [styles.thActive]: isActive,
+      },
+      columnHideClasses(header.hide),
+    );
 
     const content = (
       <Row
@@ -251,6 +266,7 @@ function Table({
           const tdClasses = classNames(
             styles.td,
             getAlignClass(header?.align, "td"),
+            columnHideClasses(header?.hide),
             cellClassName?.(originalIndex, cellIndex),
           );
 
@@ -317,13 +333,16 @@ function Table({
     </tr>
   );
 
+  // Two tables on a page used to share the ids "table-search" and "page-size".
+  const controlsId = useId();
+
   return (
     <Column fillWidth gap="m" {...flex}>
       {/* Search Bar */}
       {searchable && (
         <Row horizontal="between" vertical="center" gap="m" maxWidth={12}>
           <Input
-            id="table-search"
+            id={`${controlsId}-search`}
             placeholder={searchPlaceholder}
             value={searchQuery}
             size="xs"
@@ -339,6 +358,7 @@ function Table({
 
       {/* Table Container */}
       <Flex
+        ref={scrollRef}
         fillWidth
         radius="l"
         border="neutral-alpha-medium"
@@ -346,7 +366,7 @@ function Table({
         overflowX="auto"
         overflowY={maxHeight ? "auto" : "visible"}
         style={{ maxHeight }}
-        className={styles.container}
+        className={classNames(styles.container, "focus-ring")}
       >
         <table className={tableClasses}>
           <thead className={styles.thead}>
@@ -380,7 +400,7 @@ function Table({
           <Row gap="8" vertical="center">
             <Row maxWidth={5}>
               <Select
-                id="page-size"
+                id={`${controlsId}-page-size`}
                 placeholder="Select page size"
                 value={String(pageSize)}
                 size="xs"

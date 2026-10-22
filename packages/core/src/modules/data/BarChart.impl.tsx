@@ -12,7 +12,7 @@ import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { LinearGradient } from "./Gradient";
-import { BarWidth, ChartProps, ChartVariant } from "./interfaces";
+import { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { getDistributedColor } from "./utils/colorDistribution";
@@ -34,7 +34,7 @@ export interface BarChartProps extends ChartProps {
 const BarChart: React.FC<BarChartProps> = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -54,6 +54,8 @@ const BarChart: React.FC<BarChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,
@@ -103,7 +105,9 @@ const BarChart: React.FC<BarChartProps> = ({
 
   const seriesArray = Array.isArray(series) ? series : series ? [series] : [];
   const seriesKeys = seriesArray.map((s) => s.key);
-  const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
+  // useId, not Math.random: the server and the client must agree on the
+  // gradient ids or hydration reports an attribute mismatch.
+  const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
   const coloredSeriesArray = useMemo(
     () =>
       seriesArray.map((s, index) => ({

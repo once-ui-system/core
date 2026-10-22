@@ -12,7 +12,13 @@
     "Select",
     "Table",
     "Tag",
-    "Skeleton"
+    "Skeleton",
+    "DropdownWrapper",
+    "Option",
+    "Map",
+    "MapMarkers",
+    "MapPin",
+    "MapPopup"
   ],
   "recipes": [],
   "example": "examples/list-page.tsx",
@@ -32,13 +38,15 @@
     "size.rem",
     "spacing.tokens",
     "layout.noSpanOrType",
-    "Checkbox.checked"
+    "Checkbox.checked",
+    "Map.positions"
   ],
   "quality": {
     "pageHeader": "Title and one primary Button in a Row that stacks at s; per-record actions belong in the Table's actions, not the header",
     "cellText": "A component cell (name with email, a status Tag) carries its text as children — Table searches and sorts by the text inside each cell",
     "status": "Tag with a scheme and a text label, never colour alone",
     "emptyState": "Offer the way back (clear the filter), not only 'No results'",
-    "rowActions": "Icon actions with tooltips; destructive ones take variant=\"danger\""
+    "rowActions": "Icon actions with tooltips; destructive ones take variant=\"danger\"",
+    "map": "Records with a location: a Map beside the list (MapMarkers with cluster, activeId = the hovered row, bounds = the results' positions); it stacks under the list at s"
   }
 }

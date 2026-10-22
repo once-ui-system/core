@@ -115,6 +115,19 @@ const routes: Record<string, Route> = {
     };
     pump();
   },
+  "/svg-and-png-icons": (_, res) => {
+    res.writeHead(200, { "content-type": "text/html" });
+    res.end(
+      PAGE.replace(
+        '<link rel="shortcut icon" href="/favicon.ico">',
+        '<link rel="icon" href="/icon.svg" type="image/svg+xml"><link rel="icon" href="/icon.png">',
+      ),
+    );
+  },
+  "/svg-icon-only": (_, res) => {
+    res.writeHead(200, { "content-type": "text/html" });
+    res.end(PAGE.replace('href="/favicon.ico"', 'href="/trademarks/favicon.svg"'));
+  },
   "/not-html": (_, res) => {
     res.writeHead(200, { "content-type": "application/json" });
     res.end("{}");
@@ -247,6 +260,16 @@ describe("handleOGFetch", () => {
     expect(lookup).toHaveBeenCalledWith("og.test", expect.objectContaining({ all: true }));
     expect(seen.map((entry) => entry.path)).toEqual(["/page"]);
     expect(seen[0].headers["user-agent"]).toBe("Mozilla/5.0 (compatible; OG-Fetcher/1.0)");
+  });
+
+  it("skips SVG icons, which the proxy refuses, for a raster one", async () => {
+    const data = await (await call(route, `${origin}/svg-and-png-icons`)).json();
+    expect(data.faviconUrl).toBe(`${origin}/icon.png`);
+  });
+
+  it("falls back to Google's favicon service when every icon is SVG", async () => {
+    const data = await (await call(route, `${origin}/svg-icon-only`)).json();
+    expect(data.faviconUrl).toBe("https://www.google.com/s2/favicons?domain=og.test&sz=64");
   });
 
   it("leaves faviconUrl out with favicon: false", async () => {

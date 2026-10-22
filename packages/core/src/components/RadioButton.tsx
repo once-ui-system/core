@@ -2,6 +2,7 @@
 
 import classNames from "clsx";
 import React, { forwardRef, useCallback, useEffect, useId, useRef, useState } from "react";
+import { useFieldsetDisabled } from "../internal/fieldsetDisabled";
 import { assignRefs, retarget } from "../internal/toggleInput";
 import { Flex } from "./Flex";
 import { InteractiveDetails, InteractiveDetailsProps } from "./InteractiveDetails";
@@ -53,6 +54,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
     },
     ref,
   ) => {
+    const inFieldsetDisabled = useFieldsetDisabled(disabledProp);
     // A RadioGroup around this button owns these; outside one, the props do.
     const {
       checked: controlledIsChecked,
@@ -64,7 +66,7 @@ const RadioButton = forwardRef<HTMLInputElement, RadioButtonProps>(
       value,
       checked: checkedProp,
       name: nameProp,
-      disabled: disabledProp,
+      disabled: inFieldsetDisabled,
       onToggle: onToggleProp,
     });
 

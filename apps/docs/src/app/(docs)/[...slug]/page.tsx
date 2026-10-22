@@ -6,10 +6,14 @@ import { baseURL, layout, schema } from "@/resources";
 import { CustomMDX } from "@/product/mdx";
 import { CopyPage } from "@/product/CopyPage";
 import { AvailabilityNotice } from "@/product/AvailabilityNotice";
+import { availabilityOf } from "@/product/published";
 import { VersionNotice } from "@/product/VersionNotice";
 import { platformOfSlug } from "@/resources/platforms";
 import { currentVersion } from "@/resources/versions";
 import { Metadata } from "next";
+
+// Release marks come from npm; see product/published.ts.
+export const revalidate = 3600;
 
 export async function generateStaticParams() {
   const docs = await getPages();
@@ -39,7 +43,7 @@ export async function generateMetadata({
     path: `/${doc.slug}`,
     type: "article",
     publishedTime: doc.metadata.updatedAt,
-    image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}&description=${encodeURIComponent(doc.metadata.summary)}`,
+    image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}${slug.length > 1 ? `&section=${encodeURIComponent(slug[0])}` : ""}`,
   });
 }
 
@@ -55,6 +59,12 @@ export default async function Docs({
     notFound();
   }
   
+  const status = await availabilityOf({
+    slug: doc.slug,
+    title: doc.metadata.title,
+    exportName: doc.metadata.exportName,
+  });
+
   const { prevPage, nextPage } = getAdjacentPages(slugPath, 'section');
   
   const titleCase = (segment: string) =>
@@ -76,7 +86,7 @@ export default async function Docs({
   return (
     <>
       <Row fillWidth horizontal="center" padding="l">
-        <Column as="main" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
+        <Column as="main" id="main-content" maxWidth={60} horizontal="center" gap="l" paddingBottom="xl" paddingTop="12">
           <Schema
             as="techArticle"
             title={doc.metadata.title + " – " + schema.name}
@@ -105,9 +115,7 @@ export default async function Docs({
               <CopyPage path={`/${doc.slug}`} />
             </Row>
             <VersionNotice path={`/${doc.slug}`} />
-            {doc.metadata.status && (
-              <AvailabilityNotice status={doc.metadata.status} />
-            )}
+            {status && <AvailabilityNotice status={status} />}
           </Column>
           {doc.metadata.image && (
             <Media marginY="24" border enlarge src={doc.metadata.image} alt={"Thumbnail of " + doc.metadata.title} aspectRatio="16 / 9" radius="m" sizes={768} priority />
@@ -180,7 +188,7 @@ export default async function Docs({
           )}
         </Column>
       </Row>
-      <Row fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
+      <Row as="aside" aria-label="On this page" fillHeight maxWidth={layout.sideNav.width} s={{hide: true}} padding="20">
         <HeadingNav fillWidth top="80" />
       </Row>
     </>

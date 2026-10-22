@@ -67,7 +67,9 @@ const MediaAudioPlayer = forwardRef<HTMLDivElement, MediaAudioPlayerProps>(
       const audio = audioRef.current;
       if (!audio) return;
       if (audio.paused) {
-        void audio.play();
+        // A refused play() (autoplay policy, no source) leaves the player paused;
+        // without a handler the rejection surfaces as an unhandled error.
+        audio.play().catch(() => {});
       } else {
         audio.pause();
       }

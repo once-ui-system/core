@@ -1,0 +1,15 @@
+{
+  "name": "once-ui-visual-check",
+  "private": true,
+  "type": "module",
+  "description": "Screenshots every live demo on the docs site and compares two captures. CI runs it on pull requests (.github/workflows/visual.yml).",
+  "scripts": {
+    "capture": "node capture.mjs",
+    "compare": "node compare.mjs"
+  },
+  "dependencies": {
+    "pixelmatch": "7.1.0",
+    "playwright": "1.56.1",
+    "pngjs": "7.0.0"
+  }
+}

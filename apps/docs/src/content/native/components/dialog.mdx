@@ -1,0 +1,130 @@
+---
+title: "Dialog"
+summary: "A modal task shown as a bottom sheet, with a title, description and footer, for React Native."
+updatedAt: "2026-10-18"
+docs: "once-ui/native/components/dialog.mdx"
+github: "packages/native/src/components/Dialog.tsx"
+navLabel: "Dialog"
+navIcon: "components"
+---
+
+`Dialog` takes the same main props as on the web (`open`, `onClose`, `title`, `description`, `footer`) and opens as a bottom sheet, the shape phones use for a modal task. It slides up from the bottom edge, shows a grabber, and scrolls its content when it is taller than the screen allows. See the [web Dialog](/components/dialog) for the same component in the browser.
+
+## Basic usage
+
+The dialog is always controlled: keep `open` in state and close it in `onClose`. The close button, the Android back button and a tap on the backdrop all call `onClose`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Button, Dialog, Text } from "@once-ui-system/native";
+
+export function ShareSheet() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button label="Share" onPress={() => setOpen(true)} />
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Share list"
+        description="People you invite can edit this list."
+      >
+        <Text>Invite someone by email.</Text>
+      </Dialog>
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "ShareSheet.tsx"
+  }
+]} />
+
+## Footer
+
+`footer` sits under the content, behind a top border, with its items at the end of the row.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Button, Dialog, Text } from "@once-ui-system/native";
+
+export function DeleteSheet() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button label="Delete" variant="danger" onPress={() => setOpen(true)} />
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        title="Delete list?"
+        footer={
+          <>
+            <Button label="Cancel" variant="secondary" onPress={() => setOpen(false)} />
+            <Button label="Delete" variant="danger" onPress={() => setOpen(false)} />
+          </>
+        }
+      >
+        <Text>This removes the list for everyone.</Text>
+      </Dialog>
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "DeleteSheet.tsx"
+  }
+]} />
+
+## Flush and clickaway
+
+`flush` drops the sheet's padding around the content, for a list that runs edge to edge. `closeOnClickaway={false}` keeps the sheet open when the backdrop is tapped; the back button and the close button still close it. `hideClose` hides the close button.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { Button, Dialog, Option } from "@once-ui-system/native";
+
+export function SortSheet() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button label="Sort" variant="tertiary" onPress={() => setOpen(true)} />
+      <Dialog open={open} onClose={() => setOpen(false)} title="Sort by" flush closeOnClickaway={false}>
+        <Option value="newest" label="Newest first" onPress={() => setOpen(false)} />
+        <Option value="oldest" label="Oldest first" onPress={() => setOpen(false)} />
+      </Dialog>
+    </>
+  );
+}`,
+    language: "tsx",
+    label: "SortSheet.tsx"
+  }
+]} />
+
+## Differences from the web
+
+- It is a bottom sheet, at most 90% of the screen's height, not a centred window.
+- It pads its bottom by the safe-area inset, so it clears the home indicator. Pass the insets to `ThemeProvider`, as shown on the [overview](/native/overview).
+- The Android back button closes it.
+- There is no `DialogProvider`, no stacked dialogs and no `base` or `stack` props.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `open` | `boolean` | | Shows the sheet. Required. |
+| `onClose` | `() => void` | | Called by the close button, the back button and a tap on the backdrop. Required. |
+| `title` | `ReactNode` | | The heading, drawn as `heading-strong-l`. |
+| `description` | `ReactNode` | | A line under the title. |
+| `children` | `ReactNode` | | The content. It scrolls when the sheet is full. |
+| `footer` | `ReactNode` | | A row under the content, aligned to the end. |
+| `hideClose` | `boolean` | `false` | Hides the close button. The back button and the backdrop still close the sheet. |
+| `closeOnClickaway` | `boolean` | `true` | A tap on the backdrop closes the sheet. |
+| `flush` | `boolean` | `false` | Removes the padding around the content. |
+| `style` | `ViewStyle` | | Style for the sheet. |

@@ -13,7 +13,14 @@ import { ChartHeader } from "./ChartHeader";
 import { ChartStatus } from "./ChartStatus";
 import { DataTooltip } from "./DataTooltip";
 import { LinearGradient } from "./Gradient";
-import { BarWidth, ChartProps, ChartVariant, curveType, SeriesConfig } from "./interfaces";
+import {
+  BarWidth,
+  ChartProps,
+  ChartVariant,
+  curveType,
+  DataPoint,
+  SeriesConfig,
+} from "./interfaces";
 import { Legend } from "./Legend";
 import { getRechartsComponents } from "./rechartsLoader";
 import { formatDate } from "./utils/formatDate";
@@ -34,7 +41,7 @@ export interface LineBarChartProps extends ChartProps {
 const LineBarChart: React.FC<LineBarChartProps> = ({
   title,
   description,
-  data,
+  data: rows,
   series,
   date,
   emptyState,
@@ -54,6 +61,8 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
   "data-viz-style": dataVizStyle,
   ...flex
 }) => {
+  // `data` takes interface-typed rows too; each row is read by key all the same.
+  const data = rows as readonly DataPoint[];
   const {
     variant: themeVariant,
     mode,
@@ -199,7 +208,9 @@ const LineBarChart: React.FC<LineBarChartProps> = ({
     [legend.position, reverseX, axis],
   );
 
-  const chartId = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
+  // useId, not Math.random: the server and the client must agree on the
+  // gradient ids or hydration reports an attribute mismatch.
+  const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
   return (
     <Column

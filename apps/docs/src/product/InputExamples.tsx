@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useNowState } from "./useNow";
 import {
   Input,
   Icon,
@@ -14,11 +15,15 @@ import {
   Text,
   Kbd,
   useToast,
-  Column
+  Column,
+  Row,
+  Button,
+  Select,
+  type FieldSize,
 } from "@once-ui-system/core";
 
 // Search input with managed state and conditional clear button
-export function SearchInput() {
+export function SearchInput({ size }: { size?: FieldSize } = {}) {
   const [searchValue, setSearchValue] = useState<string>("");
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +36,8 @@ export function SearchInput() {
   
   return (
     <Input
-      id="search-input"
+      id={size ? `search-input-${size}` : "search-input"}
+      size={size}
       placeholder="Search"
       value={searchValue}
       onChange={handleChange}
@@ -98,7 +104,7 @@ export function CharacterCountExample() {
 }
 
 // Color input example with managed state
-export function ColorInputExample() {
+export function ColorInputExample({ size }: { size?: FieldSize } = {}) {
   const [colorValue, setColorValue] = useState("#4287f5");
   
   const handleColorChange = (value: string) => {
@@ -107,7 +113,8 @@ export function ColorInputExample() {
   
   return (
     <ColorInput
-      id="color-input-example"
+      id={size ? `color-input-example-${size}` : "color-input-example"}
+      size={size}
       label="Brand Color"
       value={colorValue}
       onChange={handleColorChange}
@@ -135,8 +142,8 @@ export function ColorInputAlphaExample() {
 }
 
 // Date input example with managed state
-export function DateInputExample() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+export function DateInputExample({ size }: { size?: FieldSize } = {}) {
+  const [date, setDate] = useNowState();
   
   const handleDateChange = (newDate: Date) => {
     setDate(newDate);
@@ -145,7 +152,8 @@ export function DateInputExample() {
   return (
     <DateInput
       prefix={<Icon marginLeft="4" name="calendar" size="xs" />}
-      id="date-input-example"
+      id={size ? `date-input-example-${size}` : "date-input-example"}
+      size={size}
       placeholder="Select date"
       value={date}
       onChange={handleDateChange}
@@ -155,7 +163,7 @@ export function DateInputExample() {
 
 // Date and time input example
 export function DateTimeInputExample() {
-  const [dateTime, setDateTime] = useState<Date | undefined>(new Date());
+  const [dateTime, setDateTime] = useNowState();
   
   const handleDateTimeChange = (newDateTime: Date) => {
     setDateTime(newDateTime);
@@ -173,7 +181,7 @@ export function DateTimeInputExample() {
 }
 
 // NumberInput example with min, max, and step
-export function NumberInputExample() {
+export function NumberInputExample({ size = "xl" }: { size?: FieldSize } = {}) {
   const [value, setValue] = useState<number>(0);
   
   const handleChange = (newValue: number) => {
@@ -182,9 +190,9 @@ export function NumberInputExample() {
   
   return (
     <NumberInput
-      id="number-input-example"
+      id={size === "xl" ? "number-input-example" : `number-input-example-${size}`}
       label="Quantity"
-      size="xl"
+      size={size}
       value={value}
       onChange={handleChange}
       min={0}
@@ -220,7 +228,7 @@ export function OTPInputExample({ autoFocus = true }: { autoFocus?: boolean }) {
 }
 
 // Password Input example with toggle visibility
-export function PasswordInputExample() {
+export function PasswordInputExample({ size }: { size?: FieldSize } = {}) {
   const [password, setPassword] = useState<string>("");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -229,7 +237,8 @@ export function PasswordInputExample() {
   
   return (
     <PasswordInput
-      id="password-input-example"
+      id={size ? `password-input-example-${size}` : "password-input-example"}
+      size={size}
       value={password}
       onChange={handleChange}
       placeholder="Password"
@@ -238,7 +247,7 @@ export function PasswordInputExample() {
 }
 
 // Tag Input example for adding multiple tags
-export function TagInputExample() {
+export function TagInputExample({ size }: { size?: FieldSize } = {}) {
   const [tags, setTags] = useState<string[]>(["React", "Next.js"]);
 
   const handleChange = (newTags: string[]) => {
@@ -247,11 +256,75 @@ export function TagInputExample() {
   
   return (
     <TagInput
-      id="tag-input-example"
+      id={size ? `tag-input-example-${size}` : "tag-input-example"}
+      size={size}
       value={tags}
       onChange={handleChange}
       placeholder="Add interest"
-      suffix={<Kbd position="absolute" top="16" right="12">Enter</Kbd>}
+      suffix={
+        // The hint does not fit a 32px field beside the chips.
+        size === "xxs" ? undefined : (
+          <Kbd position="absolute" top="16" right="12">
+            Enter
+          </Kbd>
+        )
+      }
+    />
+  );
+}
+
+// A dashboard toolbar: every control 32px tall. Fields take size="xxs", the
+// height of a size="s" Button.
+export function ToolbarFieldsExample() {
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("all");
+
+  return (
+    <Row fillWidth gap="8" vertical="center" s={{ direction: "column" }}>
+      <Input
+        id="toolbar-search"
+        size="xxs"
+        label="Search orders"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        prefix={<Icon name="search" size="xs" onBackground="neutral-weak" />}
+      />
+      <Select
+        id="toolbar-status"
+        size="xxs"
+        label="Status"
+        value={status}
+        onSelect={(next) => setStatus(next as string)}
+        options={[
+          { label: "All statuses", value: "all" },
+          { label: "Paid", value: "paid" },
+          { label: "Pending", value: "pending" },
+          { label: "Refunded", value: "refunded" },
+        ]}
+      />
+      <Button size="s" variant="secondary" prefixIcon="download">
+        Export
+      </Button>
+    </Row>
+  );
+}
+
+export function OTPInputLabelsExample() {
+  return (
+    <OTPInput
+      length={6}
+      labels={{ group: "Code de vérification", digit: (n, of) => `Chiffre ${n} sur ${of}` }}
+    />
+  );
+}
+
+export function TagInputLabelsExample() {
+  return (
+    <TagInput
+      id="themen"
+      label="Themen"
+      defaultValue={["Design", "Code"]}
+      labels={{ remove: (tag) => `${tag} entfernen`, removed: (tag) => `${tag} entfernt` }}
     />
   );
 }

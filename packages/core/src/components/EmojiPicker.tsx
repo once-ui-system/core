@@ -126,7 +126,6 @@ const EmojiButton = memo(({ emoji, index, isFocused, onSelect, onFocus }: EmojiB
       title={emoji.description}
       className={styles.emojiButton}
       onFocus={() => onFocus(index)}
-      role="gridcell"
       ref={isFocused ? (el) => el?.focus() : undefined}
     >
       <Text variant="heading-default-xl">{emoji.char}</Text>
@@ -178,6 +177,7 @@ const EmojiPicker = ({
   const categoryButtons: ButtonOption[] = Object.keys(emojiData).map((category) => ({
     value: category,
     children: <Icon name={getCategoryIcon(category)} size="s" />,
+    "aria-label": `${category.charAt(0).toUpperCase()}${category.slice(1)}`,
   }));
 
   const handleEmojiSelect = useCallback(
@@ -300,7 +300,9 @@ const EmojiPicker = ({
             ref={gridRef}
             onKeyDown={handleKeyDown}
             tabIndex={-1}
-            role="grid"
+            // A flat run of buttons with roving focus. role="grid" promised
+            // rows and cells it never had (axe: aria-required-children).
+            role="group"
           >
             {filteredEmojis.map((emoji: EmojiItem, index: number) => (
               <EmojiButton

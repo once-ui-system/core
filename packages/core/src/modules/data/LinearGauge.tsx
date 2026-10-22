@@ -82,7 +82,8 @@ export const LinearGauge = ({
 
   const renderLines = () => {
     const lines = [];
-    const spacing = (width - pad * 2) / (lineCount - 1);
+    // One tick has no gap to divide; dividing by zero put NaN in its x.
+    const spacing = lineCount > 1 ? (width - pad * 2) / (lineCount - 1) : 0;
 
     for (let j = 0; j < lineCount; j++) {
       const x = pad + j * spacing;
@@ -137,10 +138,23 @@ export const LinearGauge = ({
   };
 
   return (
-    <Column fillWidth gap="8" textVariant="label-default-s" onBackground="neutral-weak" {...flex}>
+    <Column
+      fillWidth
+      gap="8"
+      textVariant="label-default-s"
+      onBackground="neutral-weak"
+      // A gauge is a meter: without the role its value was only lit ticks.
+      role="meter"
+      aria-label="Gauge"
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-valuenow={value}
+      {...flex}
+    >
       {renderLabels()}
       <Column fillWidth fill>
         <svg
+          aria-hidden="true"
           width="100%"
           height="100%"
           viewBox={`0 0 ${width} ${lineLength}`}

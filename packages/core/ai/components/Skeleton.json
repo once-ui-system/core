@@ -13,7 +13,7 @@
   "StyleProps"
  ],
  "props": {
-  "shape": "!\"line\" | \"circle\" | \"block\" = line",
+  "shape": "\"line\" | \"circle\" | \"block\" = line",
   "size": "\"xl\" | \"l\" | \"m\" | \"s\" | \"xs\" = m",
   "delay": "number",
   "style": "React.CSSProperties",
@@ -69,8 +69,8 @@
    "flex": "FlexValue"
   },
   "SizeProps": {
-   "width": "number | SpacingToken | CSSUnit",
-   "height": "number | SpacingToken | CSSUnit | \"below-header\"",
+   "width": "number | SpacingToken | CSSUnit | \"auto\" | \"fit\"",
+   "height": "number | SpacingToken | CSSUnit | \"below-header\" | \"fit\"",
    "maxWidth": "number | SpacingToken | CSSUnit",
    "minWidth": "number | SpacingToken | CSSUnit",
    "minHeight": "number | SpacingToken | CSSUnit | \"below-header\"",

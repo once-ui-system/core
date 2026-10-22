@@ -54,7 +54,7 @@ export const Hero14 = (flex: React.ComponentProps<typeof Column>) => {
             </Row>
           </Badge>
           <Heading variant="display-default-xl" marginTop="8">
-            Write 70% less code with human-readable, machine-writable syntax
+            Write less code with human-readable, machine-writable syntax
             <Text onBackground="brand-medium">.</Text>
           </Heading>
           <Text wrap="balance" variant="heading-default-l" onBackground="neutral-weak">

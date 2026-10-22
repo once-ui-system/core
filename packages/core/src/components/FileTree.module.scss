@@ -1,0 +1,87 @@
+.tree {
+  min-width: 0;
+  gap: 2px;
+}
+
+.item {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  border-radius: var(--radius-s);
+  color: var(--neutral-on-background-medium);
+  cursor: var(--cursor-pointer, pointer);
+  outline: none;
+  transition: background var(--transition-micro-medium), color var(--transition-micro-medium);
+}
+
+/* Indent with a margin so the highlight starts at the row's own depth and
+   every row stretches to the same right edge. Files have no disclosure
+   chevron, so their indent also covers its width and gap, keeping their icon
+   aligned with sibling folders' icons and the padding equal on both sides. */
+.item > .itemContent {
+  min-height: var(--static-space-32);
+  margin-inline-start: calc(
+    (var(--tree-depth) - 1) * var(--static-space-20) + var(--tree-leaf, 0) *
+      (var(--static-space-12) + var(--static-space-8))
+  );
+  padding-inline: var(--static-space-8);
+}
+
+.itemContent {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--static-space-8);
+  border-radius: var(--radius-s);
+}
+
+@media (hover: hover) {
+  /* Rows nest inside their folder's row, so hover the content, not the item,
+     or every ancestor folder lights up too. */
+  .itemContent:hover {
+    background: var(--neutral-alpha-weak);
+    color: var(--neutral-on-background-strong);
+  }
+
+  .item.selected > .itemContent:hover {
+    background: var(--brand-alpha-weak);
+  }
+}
+
+.item:focus-visible > .itemContent {
+  outline: 2px solid var(--brand-border-medium);
+  outline-offset: 1px;
+}
+
+.selected > .itemContent {
+  background: var(--brand-alpha-weak);
+  color: var(--brand-on-background-strong);
+}
+
+.disclosure {
+  flex: 0 0 auto;
+  transition: transform var(--transition-micro-medium);
+}
+
+.disclosureOpen {
+  transform: rotate(90deg);
+}
+
+.label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.group {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.empty {
+  padding: var(--static-space-8);
+  color: var(--neutral-on-background-weak);
+}
