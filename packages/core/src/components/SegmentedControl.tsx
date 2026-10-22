@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import { type ReactNode, useEffect, useRef } from "react";
-import { revealInStrip } from "../internal/reveal.js";
+import { revealInStrip } from "../internal/revealInStrip.js";
 import { useControllableState } from "../internal/useControllableState.js";
 import { Flex } from "./Flex.js";
 import { Scroller } from "./Scroller.js";
