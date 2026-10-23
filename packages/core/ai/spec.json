@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.5.0",
- "generated": "2026-10-19",
+ "generated": "2026-10-23",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -25,7 +25,7 @@
    "title": "React.ReactNode",
    "description": "React.ReactNode",
    "series": "!SeriesConfig | SeriesConfig[]",
-   "data": "!DataPoint[]",
+   "data": "!readonly DataPoint[] | readonly object[]",
    "legend": "LegendConfig",
    "date": "DateConfig",
    "emptyState": "React.ReactNode",
@@ -95,13 +95,13 @@
    "paddingBottom": "SpacingToken | number",
    "paddingX": "SpacingToken | number",
    "paddingY": "SpacingToken | number",
-   "margin": "SpacingToken | number",
-   "marginLeft": "SpacingToken | number",
-   "marginRight": "SpacingToken | number",
-   "marginTop": "SpacingToken | number",
-   "marginBottom": "SpacingToken | number",
-   "marginX": "SpacingToken | number",
-   "marginY": "SpacingToken | number",
+   "margin": "SpacingToken | number | \"auto\"",
+   "marginLeft": "SpacingToken | number | \"auto\"",
+   "marginRight": "SpacingToken | number | \"auto\"",
+   "marginTop": "SpacingToken | number | \"auto\"",
+   "marginBottom": "SpacingToken | number | \"auto\"",
+   "marginX": "SpacingToken | number | \"auto\"",
+   "marginY": "SpacingToken | number | \"auto\"",
    "gap": "SpacingToken | number | \"-1\"",
    "top": "SpacingToken | number | CSSUnit",
    "right": "SpacingToken | number | CSSUnit",
@@ -135,7 +135,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number",
    "backdropBlur": "BlurSize | number",
@@ -314,6 +314,11 @@
    "disabled": "boolean",
    "disableHighlighting": "boolean"
   },
+  "AudioLevelSource": [
+   "HTMLMediaElement",
+   "MediaStream",
+   "AnalyserNode"
+  ],
   "AvatarProps": "Avatar props",
   "AwaitedReactNode": [
    "undefined",
@@ -458,12 +463,14 @@
   },
   "ButtonOption": {
    "value": "!string",
+   "description": "ReactNode",
    "style": "React.CSSProperties",
    "className": "string",
    "children": "ReactNode",
    "horizontal": "\"start\" | \"center\" | \"end\" | \"between\"",
    "radius": "RadiusSize",
    "fillWidth": "boolean",
+   "rounded": "boolean",
    "label": "ReactNode",
    "disabled": "boolean",
    "size": "TShirtSizes",
@@ -471,7 +478,6 @@
    "variant": "\"ghost\" | \"outline\" | \"subtle\"",
    "weight": "\"default\" | \"strong\"",
    "truncate": "boolean",
-   "rounded": "boolean",
    "prefixIcon": "IconName",
    "suffixIcon": "IconName",
    "href": "string"
@@ -525,6 +531,14 @@
    "ReactPortal",
    "Promise<AwaitedReactNode>",
    "Date"
+  ],
+  "ChatTimeFormat": [
+   "clock",
+   "relative"
+  ],
+  "ClusterGroup": [
+   "{ type: \"item\"; item: T; position: LngLat; }",
+   "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
   ],
   "CodeInstance": {
    "code": "!string | { content: string; error: string | null }",
@@ -642,6 +656,7 @@
    "medium",
    "strong"
   ],
+  "ColumnHide": "Partial<Record<BreakpointKey, boolean>>",
   "CondensedTShirtSizes": [
    "l",
    "m",
@@ -667,6 +682,12 @@
    "top-right",
    "bottom-right",
    "bottom-left"
+  ],
+  "CursorPresetValue": [
+   "soft",
+   "rounded",
+   "dot",
+   "system"
   ],
   "curveType": [
    "step",
@@ -701,17 +722,46 @@
    "sortable": "boolean",
    "sort": "(a: T, b: T) => number",
    "align": "\"left\" | \"center\" | \"right\"",
-   "width": "string"
+   "width": "string",
+   "label": "string",
+   "filter": "DataTableColumnFilter<T>",
+   "hide": "ColumnHide"
   },
+  "DataTableColumnFilter": {
+   "options": "!{ value: string; label: ReactNode }[]",
+   "multiple": "boolean",
+   "match": "(row: T, value: DataTableFilterValue) => boolean"
+  },
+  "DataTableFilters": {
+   "[key: string]": "DataTableFilterValue"
+  },
+  "DataTableFilterValue": [
+   "string",
+   "string[]"
+  ],
   "DataTableLabels": {
    "selectAll": "!string",
    "selectRow": "!string",
    "pagination": "!string",
+   "search": "string",
+   "filterAll": "string",
+   "columns": "string",
+   "noResults": "string",
+   "noResultsHint": "string",
+   "clearFilters": "string",
+   "results": "(count: number) => string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",
    "last": "!string",
    "perPage": "!string"
+  },
+  "DataTableQuery": {
+   "page": "!number",
+   "perPage": "!number",
+   "sort": "!DataTableSort | null",
+   "search": "!string",
+   "filters": "!DataTableFilters"
   },
   "DataTableSort": {
    "key": "!string",
@@ -742,6 +792,7 @@
    "month": "(month: string) => string",
    "year": "(year: number) => string",
    "backToCalendar": "string",
+   "apply": "string",
    "hours": "string",
    "minutes": "string",
    "am": "string",
@@ -783,13 +834,13 @@
    "size": "SpacingToken"
   },
   "EasingCurve": [
+   "bounce",
    "linear",
    "ease",
    "ease-in",
    "ease-out",
    "ease-in-out",
-   "spring",
-   "bounce"
+   "spring"
   ],
   "EffectType": [
    "none",
@@ -1194,10 +1245,96 @@
    "angle": "number",
    "color": "ColorValue"
   },
+  "LngLat": {
+   "[key: number]": "number"
+  },
   "LogoProps": "Logo props",
   "LogoSource": [
    "string",
    "{ light: string; dark: string; }"
+  ],
+  "LogoSpinnerColor": [
+   "inherit",
+   "neutral",
+   "brand",
+   "accent"
+  ],
+  "MapClusterOptions": {
+   "radius": "number",
+   "maxZoom": "number",
+   "minPoints": "number"
+  },
+  "MapColor": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ],
+  "MapContextValue": {
+   "map": "!MapLibreMap",
+   "lib": "!MapLibre",
+   "reducedMotion": "!boolean",
+   "theme": "!\"light\" | \"dark\"",
+   "styleVersion": "!number",
+   "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
+  },
+  "MapLabels": {
+   "map": "!string",
+   "zoomIn": "!string",
+   "zoomOut": "!string",
+   "unavailable": "!string"
+  },
+  "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MapStyle": [
+   "string",
+   "StyleSpecification",
+   "{ light: MapStyleSource; dark: MapStyleSource; }"
+  ],
+  "MapStyleSource": [
+   "string",
+   "StyleSpecification"
+  ],
+  "MapViewport": {
+   "center": "!LngLat",
+   "zoom": "!number",
+   "bearing": "number",
+   "pitch": "number"
+  },
+  "MascotLook": {
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\""
+  },
+  "MascotMood": [
+   "neutral",
+   "happy",
+   "surprised",
+   "sad",
+   "skeptical",
+   "wink",
+   "focused",
+   "determined"
+  ],
+  "MascotState": [
+   "idle",
+   "listening",
+   "thinking",
+   "speaking",
+   "sleeping"
   ],
   "MaskOptions": {
    "maskPosition": "string"
@@ -1368,12 +1505,15 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
   },
   "Opacity": [
    "0",
@@ -1389,6 +1529,10 @@
    "100"
   ],
   "OptionProps": "Option props",
+  "OTPInputLabels": {
+   "group": "string",
+   "digit": "(position: number, length: number) => string"
+  },
   "PaginationLabels": {
    "previous": "!string",
    "next": "!string",
@@ -1409,6 +1553,17 @@
    "bottom-end",
    "left-start",
    "left-end"
+  ],
+  "PositionAnchor": [
+   "center",
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
   ],
   "PresetsConfig": {
    "display": "!boolean",
@@ -1433,6 +1588,34 @@
    "xs",
    "none",
    "full"
+  ],
+  "ReactionChange": {
+   "option": "!ReactionOption",
+   "selected": "!boolean"
+  },
+  "ReactionMotion": [
+   "none",
+   "pop",
+   "beat",
+   "nod",
+   "shake",
+   "droop",
+   "flicker",
+   "spin",
+   "wave",
+   "bounce"
+  ],
+  "ReactionOption": {
+   "value": "!string",
+   "label": "string",
+   "emoji": "string",
+   "src": "string",
+   "motion": "ReactionMotion"
+  },
+  "ReactionValue": [
+   "null",
+   "string",
+   "string[]"
   ],
   "ScalingSize": [
    "90",
@@ -1471,6 +1654,10 @@
    "cyan"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "ScrollContainerControlPlacement": [
    "top-start",
    "top-end",
@@ -1584,6 +1771,34 @@
    "104",
    "128"
   ],
+  "StatusIndicatorColor": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success",
+   "blue",
+   "indigo",
+   "violet",
+   "magenta",
+   "pink",
+   "red",
+   "orange",
+   "yellow",
+   "moss",
+   "green",
+   "emerald",
+   "aqua",
+   "cyan",
+   "sand",
+   "gray",
+   "slate",
+   "rose",
+   "mint",
+   "dusk"
+  ],
   "StreamingOptions": {
    "initialData": "!T[]",
    "windowSize": "!number",
@@ -1631,7 +1846,8 @@
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
-   "cursorInteractive": "InteractiveCursor"
+   "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue"
   },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
@@ -1771,7 +1987,7 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number",
    "backdropBlur": "BlurSize | number",
@@ -1797,8 +2013,28 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
+  "StyleScopeConfig": {
+   "solid": "SolidType",
+   "border": "BorderStyle",
+   "neutral": "NeutralColor | \"custom\"",
+   "brand": "Schemes | \"custom\"",
+   "accent": "Schemes | \"custom\"",
+   "surface": "SurfaceStyle",
+   "solidStyle": "SolidStyle",
+   "brandSeed": "string",
+   "accentSeed": "string",
+   "neutralSeed": "string",
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor",
+   "theme": "\"light\" | \"dark\" | \"system\""
+  },
+  "StyleScopeFonts": "Partial<Record<\"heading\" | \"body\" | \"label\" | \"code\", string>>",
   "SurfaceStyle": [
    "filled",
    "translucent"
@@ -1820,7 +2056,12 @@
    "key": "!string",
    "sortable": "boolean",
    "width": "string",
-   "align": "\"left\" | \"center\" | \"right\""
+   "align": "\"left\" | \"center\" | \"right\"",
+   "hide": "ColumnHide"
+  },
+  "TagInputLabels": {
+   "remove": "(tag: string) => string",
+   "removed": "(tag: string) => string"
   },
   "TagProps": "Tag props",
   "TextBreakpointHide": {
@@ -1953,6 +2194,14 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
+  ],
   "ThemeInitAttributeConfig": {
    "theme": "!string",
    "brand": "!string",
@@ -2032,6 +2281,12 @@
    "text",
    "all"
   ],
+  "VoiceState": [
+   "idle",
+   "listening",
+   "thinking",
+   "speaking"
+  ],
   "WeatherType": [
    "rain",
    "snow",
@@ -2059,7 +2314,8 @@
     "icon": "IconName = chevronDown",
     "iconRotation": "number = 180",
     "size": "CondensedTShirtSizes = m",
-    "radius": "\"xs\" | \"s\" | \"m\" | \"l\" | \"xl\" | \"full\" = m",
+    "radius": "RadiusSize = m",
+    "titleVariant": "TextVariant = heading-strong-s",
     "open": "boolean = false",
     "onToggle": "() => void",
     "className": "string",
@@ -2086,6 +2342,7 @@
     "items": "!AccordionItem[]",
     "size": "CondensedTShirtSizes = m",
     "autoCollapse": "boolean = true",
+    "titleVariant": "TextVariant",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -2194,7 +2451,7 @@
     "loading": "boolean",
     "empty": "boolean",
     "icon": "IconName",
-    "statusIndicator": "{ color: \"green\" | \"yellow\" | \"red\" | \"gray\"; }",
+    "statusIndicator": "{ color: StatusIndicatorColor; }",
     "style": "React.CSSProperties = {}",
     "className": "string"
    }
@@ -2441,7 +2698,7 @@
     "unoptimized": "boolean = false",
     "revealedByDefault": "boolean = false",
     "thumbnail": "ThumbnailItem = { scaling: 1, height: \"80\", sizes: \"120px\" }",
-    "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; } = { auto: false, interval: 3000, controls: true }"
+    "play": "{ auto?: boolean; interval?: number; controls?: boolean; progress?: boolean; pauseLabel?: string; playLabel?: string; } = { auto: false, interval: 3000, controls: true }"
    }
   },
   "CelebrationFx": {
@@ -2499,7 +2756,9 @@
     "label": "!string",
     "selected": "boolean = true",
     "prefixIcon": "IconName",
+    "suffixIcon": "IconName",
     "onRemove": "() => void",
+    "interactive": "boolean = true",
     "onClick": "MouseEventHandler<HTMLDivElement>",
     "children": "ReactNode",
     "iconButtonProps": "Partial<IconButtonProps> = {}",
@@ -2675,8 +2934,24 @@
     "onPerPageChange": "(perPage: number) => void",
     "count": "number",
     "total": "number",
+    "searchable": "boolean = false",
+    "search": "string",
+    "defaultSearch": "string = \"\"",
+    "onSearchChange": "(search: string) => void",
+    "matchSearch": "(row: T, query: string) => boolean",
+    "filters": "DataTableFilters",
+    "defaultFilters": "DataTableFilters",
+    "onFiltersChange": "(filters: DataTableFilters) => void",
+    "columnVisibility": "Record<string, boolean>",
+    "defaultColumnVisibility": "Record<string, boolean>",
+    "onColumnVisibilityChange": "(visibility: Record<string, boolean>) => void",
+    "columnsMenu": "boolean = false",
+    "toolbar": "ReactNode",
+    "onQueryChange": "(query: DataTableQuery) => void",
     "loading": "boolean = false",
+    "keepRowsWhileLoading": "boolean = false",
     "emptyState": "ReactNode",
+    "noResultsState": "ReactNode",
     "stickyHeader": "boolean = false",
     "striped": "boolean = false",
     "hoverable": "boolean = true",
@@ -2729,6 +3004,7 @@
     "previousMonth": "boolean = true",
     "nextMonth": "boolean = true",
     "timePicker": "boolean = false",
+    "onApply": "(date: Date) => void",
     "defaultDate": "Date",
     "defaultTime": "{ hours: number; minutes: number; }",
     "size": "CondensedTShirtSizes = m",
@@ -2755,7 +3031,7 @@
     "id": "!string",
     "startLabel": "!string = Start",
     "endLabel": "!string = End",
-    "value": "DateRange",
+    "value": "Partial<DateRange>",
     "onChange": "(range: DateRange) => void",
     "minHeight": "number",
     "className": "string",
@@ -2778,7 +3054,7 @@
     "StyleProps"
    ],
    "props": {
-    "value": "DateRange",
+    "value": "Partial<DateRange>",
     "onChange": "(range: DateRange) => void",
     "minDate": "Date",
     "maxDate": "Date",
@@ -3548,10 +3824,32 @@
     "style": "React.CSSProperties",
     "icon": "LogoSource",
     "wordmark": "LogoSource",
+    "text": "string",
     "href": "string",
     "dark": "boolean",
     "light": "boolean",
     "brand": "{ copy?: boolean; url?: string }"
+   }
+  },
+  "LogoSpinner": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "size": "TShirtSizes = m",
+    "variant": "\"twist\" | \"wave\" = twist",
+    "color": "LogoSpinnerColor = brand",
+    "speed": "number",
+    "ariaLabel": "string = Loading"
    }
   },
   "LogoCloud": {
@@ -3787,7 +4085,8 @@
    "props": {
     "label": "!ReactNode",
     "icon": "IconName",
-    "badge": "number",
+    "prefix": "ReactNode",
+    "badge": "number | ReactNode",
     "indicator": "boolean"
    }
   },
@@ -3873,7 +4172,8 @@
     "error": "boolean = false",
     "errorMessage": "React.ReactNode",
     "disabled": "boolean = false",
-    "autoFocus": "boolean = false"
+    "autoFocus": "boolean = false",
+    "labels": "OTPInputLabels"
    }
   },
   "Pagination": {
@@ -4228,6 +4528,8 @@
     "fillWidth": "boolean = true",
     "value": "string",
     "compact": "boolean = false",
+    "semantics": "\"tabs\" | \"radio\" = tabs",
+    "scroll": "boolean = true",
     "className": "string",
     "style": "React.CSSProperties"
    }
@@ -4498,7 +4800,7 @@
    ],
    "props": {
     "size": "CondensedTShirtSizes = m",
-    "color": "\"blue\" | \"indigo\" | \"violet\" | \"magenta\" | \"pink\" | \"red\" | \"orange\" | \"yellow\" | \"moss\" | \"green\" | \"emerald\" | \"aqua\" | \"cyan\" | \"gray\" = blue",
+    "color": "StatusIndicatorColor = blue",
     "ariaLabel": "string = `${color} status indicator`",
     "className": "string",
     "style": "React.CSSProperties"
@@ -4731,7 +5033,8 @@
    "props": {
     "value": "string[]",
     "defaultValue": "readonly string[]",
-    "onChange": "(value: string[]) => void"
+    "onChange": "(value: string[]) => void",
+    "labels": "TagInputLabels"
    }
   },
   "Text": {
@@ -4767,6 +5070,26 @@
     "span": "number"
    }
   },
+  "StyleScope": {
+   "group": "components",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "config": "StyleScopeConfig = {}",
+    "fonts": "StyleScopeFonts",
+    "style": "React.CSSProperties",
+    "children": "React.ReactNode"
+   }
+  },
   "ThemeInit": {
    "group": "components",
    "props": {
@@ -4793,7 +5116,8 @@
     "onChange": "(theme: Theme) => void",
     "collapsed": "boolean",
     "direction": "\"row\" | \"column\" = row",
-    "labels": "ThemeSwitcherLabels"
+    "labels": "ThemeSwitcherLabels",
+    "semantics": "\"toggle\" | \"radio\" = toggle"
    }
   },
   "TiltFx": {
@@ -4937,6 +5261,7 @@
     "DropdownWrapper"
    ],
    "props": {
+    "onSelect": "(value: string) => void",
     "selected": "boolean = false",
     "placement": "Placement",
     "dropdown": "React.ReactNode",
@@ -5063,6 +5388,96 @@
     "style": "React.CSSProperties"
    }
   },
+  "Mascot": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "state": "MascotState = idle",
+    "mood": "MascotMood = neutral",
+    "seed": "string | number",
+    "accessory": "React.ReactNode",
+    "lookAt": "\"pointer\" | \"center\" | { x: number; y: number } = pointer",
+    "level": "number",
+    "source": "AudioLevelSource | null",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" | number = l",
+    "ariaLabel": "string",
+    "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+    "roundness": "number",
+    "aspect": "number",
+    "bodyPath": "string",
+    "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+    "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+    "eyeSize": "number",
+    "eyeSpacing": "number",
+    "eyeHeight": "number",
+    "eyeColor": "string",
+    "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+    "brows": "boolean",
+    "cheeks": "boolean",
+    "personality": "\"calm\" | \"default\" | \"bouncy\""
+   }
+  },
+  "VoiceVisualizer": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "state": "VoiceState = idle",
+    "variant": "\"orb\" | \"bars\" = orb",
+    "level": "number",
+    "source": "AudioLevelSource | null",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "color": "\"brand\" | \"accent\" | \"neutral\" = brand",
+    "bars": "number = 5",
+    "ariaLabel": "string"
+   }
+  },
+  "WorkingIndicator": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "verbs": "readonly string[] = workingVerbs",
+    "label": "ReactNode",
+    "interval": "number = 2800",
+    "shuffle": "boolean = true",
+    "shimmer": "boolean = true",
+    "showElapsed": "boolean = false",
+    "startedAt": "Date | number",
+    "detail": "ReactNode",
+    "loader": "ReactNode | false",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "ariaLabel": "string = Working"
+   }
+  },
   "ChatComposer": {
    "group": "modules",
    "extends": [
@@ -5093,6 +5508,9 @@
     "removeLabel": "(fileName: string) => string = (fileName) => `Remove ${fileName}`",
     "prefix": "ReactNode",
     "actions": "ReactNode",
+    "toolbar": "ReactNode",
+    "hint": "ReactNode",
+    "sendIcon": "IconName = send",
     "maxLength": "number",
     "id": "string"
    }
@@ -5116,11 +5534,13 @@
     "name": "ReactNode",
     "avatarProps": "AvatarProps",
     "time": "ChatTime",
+    "timeFormat": "ChatTimeFormat = clock",
     "status": "ChatMessageStatus",
     "statusLabels": "Partial<Record<ChatMessageStatus, string>>",
     "onRetry": "() => void",
     "retryLabel": "string = Retry",
     "grouped": "boolean = false",
+    "stack": "\"start\" | \"middle\" | \"end\"",
     "variant": "\"bubble\" | \"plain\" = bubble",
     "attachments": "ReactNode",
     "footer": "ReactNode",
@@ -5144,7 +5564,9 @@
    "props": {
     "stickToBottom": "boolean = true",
     "onReachStart": "() => void",
-    "ariaLabel": "string = Messages"
+    "ariaLabel": "string = Messages",
+    "stack": "boolean = false",
+    "stackWithin": "number = 5"
    }
   },
   "ConversationItem": {
@@ -5227,6 +5649,54 @@
     "image": "string",
     "sameAs": "string[] = []",
     "author": "{ name: string; url?: string; image?: string; }"
+   }
+  },
+  "Reaction": {
+   "group": "modules",
+   "props": {
+    "value": "!string",
+    "label": "string",
+    "emoji": "string",
+    "src": "string",
+    "motion": "ReactionMotion",
+    "size": "\"s\" | \"m\" | \"l\" | \"xl\" = m",
+    "trigger": "\"hover\" | \"loop\" | \"manual\" = hover",
+    "playKey": "number | string",
+    "decorative": "boolean = false",
+    "children": "React.ReactNode"
+   }
+  },
+  "Reactions": {
+   "group": "modules",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "options": "!ReactionOption[]",
+    "counts": "Record<string, number>",
+    "value": "ReactionValue",
+    "defaultValue": "ReactionValue",
+    "onValueChange": "(value: ReactionValue, change: ReactionChange) => void",
+    "multiple": "boolean = false",
+    "showAll": "boolean = false",
+    "picker": "boolean = true",
+    "open": "boolean",
+    "defaultOpen": "boolean = false",
+    "onOpenChange": "(open: boolean) => void",
+    "effect": "\"burst\" | \"float\" | \"none\" = burst",
+    "size": "\"s\" | \"m\" | \"l\" = m",
+    "disabled": "boolean = false",
+    "renderGlyph": "(option: ReactionOption) => ReactNode",
+    "addLabel": "string = Add reaction",
+    "ariaLabel": "string = Reactions"
    }
   },
   "BarChart": {
@@ -5574,6 +6044,112 @@
     "accept": "string = image/*"
    }
   },
+  "Map": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "viewport": "MapViewport",
+    "defaultViewport": "MapViewport",
+    "onViewportChange": "(viewport: MapViewport) => void",
+    "bounds": "readonly LngLat[]",
+    "boundsPadding": "number",
+    "boundsMaxZoom": "number",
+    "mapStyle": "MapStyle",
+    "tint": "boolean",
+    "controls": "boolean",
+    "interactive": "boolean",
+    "cooperativeGestures": "boolean",
+    "minZoom": "number",
+    "maxZoom": "number",
+    "onMapClick": "(position: LngLat) => void",
+    "onMapLoad": "(map: MapLibreMap) => void",
+    "workerUrl": "string",
+    "transformRequest": "MapOptions[\"transformRequest\"]",
+    "labels": "Partial<MapLabels>",
+    "children": "React.ReactNode"
+   }
+  },
+  "MapCircle": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "position": "!LngLat",
+    "radius": "!number",
+    "color": "MapColor = brand",
+    "opacity": "number = 0.2"
+   }
+  },
+  "MapMarker": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "position": "!LngLat",
+    "children": "React.ReactNode",
+    "anchor": "PositionAnchor = bottom",
+    "offset": "[number, number]",
+    "active": "boolean = false",
+    "draggable": "boolean = false",
+    "onDragEnd": "(position: LngLat) => void"
+   }
+  },
+  "MapMarkers": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "items": "!readonly T[]",
+    "renderItem": "(item: T) => React.ReactNode",
+    "activeId": "string",
+    "cluster": "boolean | MapClusterOptions = false",
+    "renderCluster": "(cluster: { items: T[]; position: LngLat; zoomIn: () => void; }) => React.ReactNode",
+    "clusterLabel": "(count: number) => string = (count) => `${count} places, zoom in`"
+   }
+  },
+  "MapPin": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "props": {
+    "children": "React.ReactNode",
+    "prefix": "React.ReactNode",
+    "variant": "\"pill\" | \"dot\"",
+    "active": "boolean = false",
+    "color": "MapColor = brand",
+    "href": "string",
+    "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
+   }
+  },
+  "MapPopup": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "extends": [
+    "Flex"
+   ],
+   "mixins": [
+    "CommonProps",
+    "DisplayProps",
+    "FlexProps",
+    "SizeProps",
+    "SpacingProps",
+    "StyleProps"
+   ],
+   "props": {
+    "position": "!LngLat",
+    "children": "!React.ReactNode",
+    "onClose": "() => void",
+    "gap": "number = 40",
+    "closeLabel": "string = Close"
+   }
+  },
   "MediaAudioPlayer": {
    "group": "components",
    "importFrom": "@once-ui-system/core/components/MediaAudioPlayer",
@@ -5669,12 +6245,15 @@
     "tabletSize": "DeviceFontSize",
     "mobileSize": "DeviceFontSize",
     "cursorInteractive": "InteractiveCursor",
+    "cursor": "CursorPresetValue",
     "brandSeed": "string",
     "accentSeed": "string",
     "neutralSeed": "string",
-    "brandScale": "SchemeScale",
-    "accentScale": "SchemeScale",
-    "neutralScale": "SchemeScale",
+    "brandScale": "ThemedSchemeScale",
+    "accentScale": "ThemedSchemeScale",
+    "neutralScale": "ThemedSchemeScale",
+    "pageBackground": "ThemeColor",
+    "surfaceBackground": "ThemeColor",
     "children": "!React.ReactNode",
     "persistence": "StylePersistence = local"
    }
@@ -5694,26 +6273,26 @@
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxCodeBlock": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxHeading": {
@@ -5721,52 +6300,52 @@
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
     "as": "!MdxHeadingTag",
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxHr": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxImage": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxInlineCode": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxLink": {
@@ -5778,52 +6357,52 @@
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
     "as": "\"ul\" | \"ol\"",
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxListItem": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxParagraph": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxTable": {
    "group": "mdx",
    "importFrom": "@once-ui-system/core/mdx",
    "props": {
-    "margin": "SpacingToken | number",
-    "marginLeft": "SpacingToken | number",
-    "marginRight": "SpacingToken | number",
-    "marginTop": "SpacingToken | number",
-    "marginBottom": "SpacingToken | number",
-    "marginX": "SpacingToken | number",
-    "marginY": "SpacingToken | number"
+    "margin": "SpacingToken | number | \"auto\"",
+    "marginLeft": "SpacingToken | number | \"auto\"",
+    "marginRight": "SpacingToken | number | \"auto\"",
+    "marginTop": "SpacingToken | number | \"auto\"",
+    "marginBottom": "SpacingToken | number | \"auto\"",
+    "marginX": "SpacingToken | number | \"auto\"",
+    "marginY": "SpacingToken | number | \"auto\""
    }
   },
   "MdxHeadingAnchor": {
@@ -5870,6 +6449,51 @@
    "kind": "hook",
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
+  },
+  "useAudioLevel": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(source: AudioLevelSource | null | undefined) => number",
+   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
+  },
+  "mascotLook": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotLook",
+   "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "workingVerbs": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "What `WorkingIndicator` cycles through by default."
+  },
+  "reactionMotion": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
+   "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "clusterPoints": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], getPosition: (item: T) => LngLat, zoom: number, options?: MapClusterOptions) => ClusterGroup<T>[]",
+   "doc": "Greedy distance clustering, the way supercluster does it, at one integer zoom."
+  },
+  "useMap": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "hook",
+   "signature": "() => MapContextValue",
+   "doc": "The map these components sit in."
+  },
+  "DEFAULT_MAP_STYLE": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "value",
+   "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
+   "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
   },
   "useArrowNavigation": {
    "group": "hooks",

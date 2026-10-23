@@ -96,6 +96,12 @@
    "success-alpha-medium",
    "success-alpha-strong"
   ],
+  "CursorPresetValue": [
+   "soft",
+   "rounded",
+   "dot",
+   "system"
+  ],
   "GridSize": [
    "1",
    "2",
@@ -161,7 +167,7 @@
    "bottomRightRadius": "RadiusSize",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number",
    "backdropBlur": "BlurSize | number",

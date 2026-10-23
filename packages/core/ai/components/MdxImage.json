@@ -3,13 +3,13 @@
  "group": "mdx",
  "importFrom": "@once-ui-system/core/mdx",
  "props": {
-  "margin": "SpacingToken | number",
-  "marginLeft": "SpacingToken | number",
-  "marginRight": "SpacingToken | number",
-  "marginTop": "SpacingToken | number",
-  "marginBottom": "SpacingToken | number",
-  "marginX": "SpacingToken | number",
-  "marginY": "SpacingToken | number"
+  "margin": "SpacingToken | number | \"auto\"",
+  "marginLeft": "SpacingToken | number | \"auto\"",
+  "marginRight": "SpacingToken | number | \"auto\"",
+  "marginTop": "SpacingToken | number | \"auto\"",
+  "marginBottom": "SpacingToken | number | \"auto\"",
+  "marginX": "SpacingToken | number | \"auto\"",
+  "marginY": "SpacingToken | number | \"auto\""
  },
  "tags": [
   "mdx",
