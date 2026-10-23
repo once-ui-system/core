@@ -12,6 +12,11 @@ export interface MaskProps extends Omit<React.ComponentProps<typeof Flex>, "radi
   x?: number;
   y?: number;
   radius?: number;
+  /**
+   * How much of the radius the edge fades over, from `0` (a sharp circle) to
+   * `100` (soft all the way from the centre, the default).
+   */
+  feather?: number;
   reducedMotion?: boolean | "auto";
   className?: string;
   style?: React.CSSProperties;
@@ -25,6 +30,7 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
       x,
       y,
       radius = 50,
+      feather = 100,
       reducedMotion = "auto",
       children,
       className,
@@ -118,6 +124,11 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
       };
     }, [isActive, writeCssVars]);
 
+    // Where the solid centre stops and the fade begins, as a share of the radius.
+    const featherStyle = {
+      "--mask-feather": `${Math.min(100, Math.max(0, feather))}%`,
+    } as CSSProperties;
+
     const maskStyle = (): CSSProperties => {
       if (cursor) {
         return {
@@ -151,6 +162,7 @@ const Mask = forwardRef<HTMLDivElement, MaskProps>(
         zIndex={0}
         overflow="hidden"
         style={{
+          ...featherStyle,
           ...maskStyle(),
           ...style,
         }}
