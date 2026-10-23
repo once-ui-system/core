@@ -33,6 +33,13 @@ export const routesOf = (task) => task?.routes ?? ["/"];
 export const routeSlug = (route) => route.replace(/^\/+|\/+$/g, "").replace(/[^\w-]+/g, "-");
 export const shotName = (route, vp) => `screenshot-${routeSlug(route) ? `${routeSlug(route)}-` : ""}${vp}.jpg`;
 const stacks = JSON.parse(fs.readFileSync(path.join(ROOT, "prompts/stacks.json"), "utf8"));
+// The Once UI arms' sentence names the installed version: a prompt that said
+// 2.1 over a 3.0 install sent the model to its 2.x memory (2026-10-23).
+function onceVersion() {
+  const pkg = path.join(ROOT, "arms/once/node_modules/@once-ui-system/core/package.json");
+  if (!fs.existsSync(pkg)) throw new Error("arms/once has no @once-ui-system/core: run runner/setup.mjs first");
+  return JSON.parse(fs.readFileSync(pkg, "utf8")).version.split(".").slice(0, 2).join(".");
+}
 
 export function listFiles(dir, base = dir) {
   if (!fs.existsSync(dir)) return [];
@@ -63,7 +70,7 @@ export function buildPrompt(armLetter, taskId) {
   const task = taskById(taskId);
   const user = fs
     .readFileSync(path.join(ROOT, isMulti(task) ? "prompts/user-multi.md" : "prompts/user.md"), "utf8")
-    .replace("{{STACK}}", stacks[armLetter])
+    .replace("{{STACK}}", stacks[armLetter].replace("{{ONCE_VERSION}}", () => onceVersion()))
     .replace("{{TASK}}", task.prompt)
     .replace("{{ROUTES}}", routesOf(task).map((r) => `\`${r}\``).join(", "));
   const system = fs.readFileSync(path.join(ROOT, "prompts/system.md"), "utf8").trim();

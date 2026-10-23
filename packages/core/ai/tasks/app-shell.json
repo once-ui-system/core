@@ -24,7 +24,7 @@
   ],
   "functions": ["selectNavHref", "useTheme"],
   "recipes": [],
-  "layout": ["layouts.md#1-app-shell-with-a-sidebar", "layouts.md#2-data-driven-navigation"],
+  "starter": "ai/starters/app/src/components/AppShell.tsx",
   "blocks": {
     "manifest": "examples/blocks/manifest.json",
     "primary": ["Sidebar1", "Header1"],

@@ -4,33 +4,29 @@ This package ships an agent-first codegen harness under `ai/`, next to this file
 
 ## Starting an app
 
-A new signed-in app (sidebar, top bar, content panel) starts from `ai/starters/app/`: a working Next.js App Router setup with Once UI's CSS, fonts, providers and theme in `src/app/layout.tsx`, the shell mounted once in `src/app/(app)/layout.tsx`, and two pages. Copy it over the create-next-app files, then edit it rather than rewriting it:
+A new signed-in app (sidebar, top bar, content panel) starts from `ai/starters/app/`: Once UI's CSS, fonts, providers and theme in `src/app/layout.tsx`, the shell mounted once in `src/app/(app)/layout.tsx`, and two pages. With a shell, copy it over the create-next-app files, then edit it rather than rewriting it:
 
 ```bash
 cp -r node_modules/@once-ui-system/core/ai/starters/app/src/. src/ && rm -f src/app/page.module.css src/app/globals.css
 ```
 
-No `src/` folder? Copy into the project root instead.
+No `src/` folder? Copy into the project root. Also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript.
 
-Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports (`components/AppShell.tsx`, `resources/app.ts`) in your reply, taking their content from `ai/starters/app/src/`, keep the project's own `app/layout.tsx`, and import only files you write or have opened in the project.
-
-The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript.
-
-- `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette all read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
-- `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme` (`theme` itself stays `"system"`, or the theme switch stops working).
+- `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
+- `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme` (`theme` stays `"system"`, or the theme switch stops working).
 - `src/components/AppShell.tsx`: the frame. Change it only to change the frame; it already covers the app-shell bundle's quality bar.
 
-Then build each page from the bundle below that fits it.
+Can't run shell commands (you only read files and reply with code)? Nothing was copied. Read these three with your bundle, in that same step, and write them in your reply (keep the project's own `app/layout.tsx`): `ai/starters/app/src/components/AppShell.tsx` (the frame), `ai/starters/app/src/resources/app.ts` (what it reads) and `ai/starters/app/src/app/(app)/layout.tsx` (mounts it once). Import only files you write or the project already has.
 
 ## Writing a page or feature
 
-Every file you read is sent again on every later turn, so read what you need in one step, then write.
+Every file you read is sent again on every later turn, so plan the reads, make them in one step, then write.
 
-1. Pick the bundle below closest to what you are building and read it, together with any project files you need (in a Next.js app at least `app/layout.tsx`, which mounts the providers), in a single step. Open those project files by path: listing their folder first costs a turn, and every turn re-sends the bundle. A bundle is complete: the rules, every component's props, types, gotchas, the quality bar and a gold example. Read one bundle, not two: a second one doubles what every later turn re-sends, and a component it adds is cheaper as its `ai/components/<Name>.json` slice. Then write the code.
-2. Need a component the bundle does not list? Every bundle has the components in the `page.md` row; the Adds column names what each one carries on top. Read the `ai/components/<Name>.json` of anything else your page needs in that same step, not after the bundle.
-3. Nothing fits? Read `ai/bundles/page.md` (the rules and the common components) with the `ai/components/<Name>.json` slices your page needs, in one step. `ai/catalog.json` names every component with its purpose.
+1. Pick the bundle below closest to what you are building and read it in a single step with the project files you need, by path (in a Next.js app at least `app/layout.tsx`, which mounts the providers) and, for an app, the starter files above. Every path you need is named here, in the bundle or in the task: listing folders to find them costs turns, and each turn re-sends the bundle. A bundle is complete: the rules, every component's props, types, hooks, gotchas (including how components such as Kbar behave), the quality bar and a gold example. Read one bundle, not two: a component another one adds is cheaper as its `ai/components/<Name>.json` slice.
+2. Need a component the bundle does not list? Every bundle has the components in the `page.md` row; the Adds column names what each one carries on top. Read the `ai/components/<Name>.json` of anything else your page needs in that same step. A component the bundle lists has nothing more in its slice.
+3. Nothing fits? Read `ai/bundles/page.md` (the rules and the common components) with the slices your page needs, in one step. `ai/catalog.json` names every component with its purpose.
 
-Never open `ai/spec.json`: it is the full machine spec, for tooling.
+With a bundle, reading `catalog.json`, `gotchas.json`, `functions.json`, other examples or `node_modules` only adds cost: what a page needs from them is in the bundle. Never open `ai/spec.json`: it is the full machine spec, for tooling.
 
 <!-- tasks:start -->
 | Bundle | For | Adds |
