@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "name": "Acme Notes",
+  "surfaces": [
+    "landing",
+    "dashboard"
+  ],
+  "slices": [
+    "billing"
+  ]
+}

@@ -1,0 +1,108 @@
+name: Live benchmark gate
+# Benchmark branches only: runs SPEC section 8's live checks on each build named
+# in benchmarks/live-supabase/queue.txt against a real local Supabase and stripe-mock.
+on:
+  push:
+    branches: ["bench/live-*"]
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      builds: ${{ steps.q.outputs.builds }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: benchmarks/live-supabase/queue.txt
+      - id: q
+        run: echo "builds=$(grep -v '^\s*$' benchmarks/live-supabase/queue.txt | jq -R . | jq -sc .)" >> "$GITHUB_OUTPUT"
+
+  gate:
+    needs: plan
+    if: ${{ needs.plan.outputs.builds != '[]' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        build: ${{ fromJson(needs.plan.outputs.builds) }}
+    env:
+      APP: benchmarks/live-supabase/builds/${{ matrix.build }}
+      DB_URL: postgresql://postgres:postgres@127.0.0.1:54322/postgres
+      WHSEC: whsec_benchlivesecret0123456789
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            benchmarks/live-supabase/gate
+            benchmarks/live-supabase/builds/${{ matrix.build }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.121.0
+      - name: Start Supabase and stripe-mock
+        run: |
+          set -e
+          docker run -d --name stripe -p 12111:12111 stripe/stripe-mock:latest
+          mkdir -p /tmp/sb && cd /tmp/sb
+          supabase init --force > /dev/null
+          supabase start -x studio,imgproxy,vector,logflare,edge-runtime,realtime,supavisor
+          supabase status -o env > /tmp/sb/env
+          (docker logs -f stripe > /tmp/stripe.log 2>&1 &)
+      - name: Apply the build's migrations
+        id: sql
+        run: |
+          mkdir -p /tmp/out
+          ok=1
+          ls "$APP"/supabase/migrations/*.sql > /tmp/out/sql-files.txt 2>&1 || ok=0
+          if [ "$ok" = 1 ]; then
+            for f in $(ls "$APP"/supabase/migrations/*.sql | sort); do
+              psql -X -v ON_ERROR_STOP=1 -q "$DB_URL" -f "$f" >> /tmp/out/sql.log 2>&1 || { ok=0; echo "failed in $f" >> /tmp/out/sql.log; break; }
+            done
+          fi
+          echo "ok=$ok" >> "$GITHUB_OUTPUT"
+          cat /tmp/out/sql.log 2>/dev/null | tail -30
+      - name: Install, build and start with live variables
+        id: app
+        run: |
+          set -e
+          . /tmp/sb/env
+          cd "$APP"
+          npm ci --no-audit --no-fund > /tmp/out/install.log 2>&1 || npm install --no-audit --no-fund > /tmp/out/install.log 2>&1
+          cat > .env.local <<ENV
+          NEXT_PUBLIC_SUPABASE_URL=$API_URL
+          NEXT_PUBLIC_SUPABASE_ANON_KEY=$ANON_KEY
+          SUPABASE_SERVICE_ROLE_KEY=$SERVICE_ROLE_KEY
+          STRIPE_SECRET_KEY=sk_test_benchlive
+          STRIPE_WEBHOOK_SECRET=$WHSEC
+          STRIPE_PRICE_TEAM=price_benchteam
+          STRIPE_API_BASE=http://localhost:12111
+          NEXT_PUBLIC_SITE_URL=http://localhost:3400
+          ENV
+          NEXT_TELEMETRY_DISABLED=1 npx next build > /tmp/out/build.log 2>&1 || { tail -60 /tmp/out/build.log; exit 1; }
+          (npx next start -p 3400 > /tmp/out/start.log 2>&1 &)
+          for i in $(seq 1 60); do curl -s -o /dev/null http://localhost:3400/ && break; sleep 1; done
+      - name: Live checks
+        if: ${{ always() && steps.sql.outputs.ok == '1' && steps.app.outcome == 'success' }}
+        run: |
+          . /tmp/sb/env
+          BASE=http://localhost:3400 SB_URL=$API_URL ANON=$ANON_KEY SERVICE=$SERVICE_ROLE_KEY STRIPE_LOG=/tmp/stripe.log \
+            node benchmarks/live-supabase/gate/live-gate.mjs /tmp/out/live.json | tee /tmp/out/live.txt
+          tail -40 /tmp/out/start.log
+      - name: Record a run that never reached the checks
+        if: ${{ always() && !(steps.sql.outputs.ok == '1' && steps.app.outcome == 'success') }}
+        run: |
+          echo "{\"pass\":0,\"total\":20,\"results\":[{\"label\":\"setup\",\"ok\":false,\"detail\":\"sql=${{ steps.sql.outputs.ok }} app=${{ steps.app.outcome }}\"}]}" > /tmp/out/live.json
+      - if: always()
+        run: cp /tmp/stripe.log /tmp/out/ 2>/dev/null || true
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-${{ matrix.build }}
+          path: /tmp/out
+          retention-days: 14

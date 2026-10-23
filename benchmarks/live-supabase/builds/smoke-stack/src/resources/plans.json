@@ -1,0 +1,33 @@
+{
+  "$comment": "The billing catalog: what an organization can be on and what each plan unlocks. The app reads it at runtime (src/lib/billing/catalog.ts) and `npm run stripe:sync` creates the Stripe products and prices from it, so this file is the one place a plan is defined. Amounts are in the currency's minor unit (1900 = 19.00). `features` are the strings requireOrgFeature() checks; `free` is what an organization without a subscription gets.",
+  "provider": "stripe",
+  "currency": "usd",
+  "free": {
+    "key": "free",
+    "name": "Free",
+    "description": "For trying things out on your own.",
+    "features": ["members"]
+  },
+  "products": [
+    {
+      "key": "pro",
+      "name": "Pro",
+      "description": "For small teams shipping every week.",
+      "features": ["members", "invitations", "analytics"],
+      "prices": [
+        { "key": "pro-monthly", "amount": 1900, "interval": "month" },
+        { "key": "pro-yearly", "amount": 19000, "interval": "year" }
+      ]
+    },
+    {
+      "key": "team",
+      "name": "Team",
+      "description": "For organizations with more people and an API to call.",
+      "features": ["members", "invitations", "analytics", "api", "priority-support"],
+      "prices": [
+        { "key": "team-monthly", "amount": 4900, "interval": "month" },
+        { "key": "team-yearly", "amount": 49000, "interval": "year" }
+      ]
+    }
+  ]
+}
