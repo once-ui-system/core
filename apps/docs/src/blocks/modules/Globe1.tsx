@@ -1,7 +1,6 @@
 "use client";
 
-import { Row } from "@once-ui-system/core";
-import type { Feature } from "geojson";
+import { dev, Row } from "@once-ui-system/core";
 import {
   forwardRef,
   type ReactNode,
@@ -12,8 +11,10 @@ import {
   useState,
 } from "react";
 import { createPortal } from "react-dom";
-import Globe, { type GlobeMethods } from "react-globe.gl";
-import { dev } from "@/utils/dev-logger";
+import type { default as GlobeComponent, GlobeMethods } from "react-globe.gl";
+
+/** A GeoJSON feature, as far as this block reads one. */
+type Feature = { type: "Feature"; geometry: unknown; properties: Record<string, unknown> | null };
 
 declare global {
   interface Window {
@@ -102,6 +103,16 @@ const locations = [
 export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
   ({ height = "100%", width = "100%", activePointId = null }, ref) => {
     const globeEl = useRef<GlobeMethods | undefined>(undefined);
+    // react-globe.gl reaches for `window` as soon as it is imported, so it
+    // loads in the browser only: importing it at the top breaks server rendering.
+    const [Globe, setGlobe] = useState<typeof GlobeComponent | null>(null);
+    useEffect(() => {
+      let live = true;
+      import("react-globe.gl").then((mod) => live && setGlobe(() => mod.default));
+      return () => {
+        live = false;
+      };
+    }, []);
     const [landPolygons, setLandPolygons] = useState<Feature[]>([]);
     const [mountPoints, setMountPoints] = useState<Map<string, HTMLElement>>(new Map());
 
@@ -248,26 +259,28 @@ export const Globe1 = forwardRef<Globe1Handle, WorldMapProps>(
 
     return (
       <Row fill style={{ width, height }}>
-        <Globe
-          ref={globeEl}
-          htmlElementsData={points}
-          htmlElement={htmlElementRenderer}
-          htmlTransitionDuration={200}
-          onGlobeReady={() => {
-            if (globeEl.current && points.length > 0) {
-              globeEl.current.pointOfView(
-                { lat: points[0].lat, lng: points[0].lng, altitude: 2.5 },
-                1000,
-              );
-            }
-          }}
-          polygonsData={landPolygons}
-          polygonCapColor={() => "rgba(127, 116, 201, 0.1)"} // fill
-          polygonSideColor={() => "rgba(127, 116, 201, 0)"} // sides
-          polygonStrokeColor={() => "rgb(128, 140, 194)"} // outlines
-          polygonAltitude={0.008} // elevation
-          atmosphereColor="#000000" // atmosphere (alpha not supported by THREE.Color)
-        />
+        {Globe && (
+          <Globe
+            ref={globeEl}
+            htmlElementsData={points}
+            htmlElement={htmlElementRenderer}
+            htmlTransitionDuration={200}
+            onGlobeReady={() => {
+              if (globeEl.current && points.length > 0) {
+                globeEl.current.pointOfView(
+                  { lat: points[0].lat, lng: points[0].lng, altitude: 2.5 },
+                  1000,
+                );
+              }
+            }}
+            polygonsData={landPolygons}
+            polygonCapColor={() => "rgba(127, 116, 201, 0.1)"} // fill
+            polygonSideColor={() => "rgba(127, 116, 201, 0)"} // sides
+            polygonStrokeColor={() => "rgb(128, 140, 194)"} // outlines
+            polygonAltitude={0.008} // elevation
+            atmosphereColor="#000000" // atmosphere (alpha not supported by THREE.Color)
+          />
+        )}
 
         {useMemo(() => {
           const portals = points.map((point, index) => {

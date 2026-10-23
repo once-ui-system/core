@@ -167,6 +167,72 @@ describe("ChatMessageList", () => {
   });
 });
 
+describe("ChatMessageList stack", () => {
+  const at = (minute: number) => new Date(2026, 9, 21, 9, minute);
+
+  it("stacks one author's quick run and shows the time once, under the last", () => {
+    const { container } = render(
+      <ChatMessageList stack>
+        <ChatMessage name="Ana" time="t1">
+          One
+        </ChatMessage>
+        <ChatMessage name="Ana" time="t2">
+          Two
+        </ChatMessage>
+        <ChatMessage name="Ana" time="t3">
+          Three
+        </ChatMessage>
+        <ChatMessage from="self" time="t4">
+          Mine
+        </ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    const stacks = Array.from(container.querySelectorAll("[data-from]"), (node) =>
+      node.getAttribute("data-stack"),
+    );
+    expect(stacks).toEqual(["start", "middle", "end", null]);
+    expect(screen.getAllByText("Ana")).toHaveLength(1);
+    expect(screen.queryByText("t1")).toBeNull();
+    expect(screen.queryByText("t2")).toBeNull();
+    expect(screen.getByText("t3")).toBeTruthy();
+    expect(screen.getByText("t4")).toBeTruthy();
+  });
+
+  it("breaks a stack when the gap is longer than stackWithin", () => {
+    const { container } = render(
+      <ChatMessageList stack stackWithin={5}>
+        <ChatMessage name="Ana" time={at(0)}>
+          One
+        </ChatMessage>
+        <ChatMessage name="Ana" time={at(4)}>
+          Two
+        </ChatMessage>
+        <ChatMessage name="Ana" time={at(30)}>
+          Later
+        </ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    const stacks = Array.from(container.querySelectorAll("[data-from]"), (node) =>
+      node.getAttribute("data-stack"),
+    );
+    expect(stacks).toEqual(["start", "end", null]);
+    expect(screen.getAllByText("Ana")).toHaveLength(2);
+  });
+
+  it("leaves messages alone without stack", () => {
+    const { container } = render(
+      <ChatMessageList>
+        <ChatMessage name="Ana">One</ChatMessage>
+        <ChatMessage name="Ana">Two</ChatMessage>
+      </ChatMessageList>,
+      { wrapper },
+    );
+    expect(container.querySelector("[data-stack]")).toBeNull();
+  });
+});
+
 describe("ChatComposer", () => {
   it("sends the trimmed draft on Enter and clears it", async () => {
     const onSend = vi.fn();
@@ -225,12 +291,29 @@ describe("ChatComposer", () => {
     const a = new File(["a"], "a.png", { type: "image/png" });
     const b = new File(["b"], "b.pdf", { type: "application/pdf" });
     await userEvent.upload(input, [a, b]);
-    expect(screen.getByText("a.png")).toBeTruthy();
+    // The image is a thumbnail, the PDF a chip with its name.
+    expect(screen.getByText("b.pdf")).toBeTruthy();
     await userEvent.click(screen.getByRole("button", { name: "Remove a.png" }));
-    expect(screen.queryByText("a.png")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Remove a.png" })).toBeNull();
     await userEvent.click(screen.getByRole("button", { name: "Send" }));
     expect(onSend).toHaveBeenCalledWith({ text: "", files: [b] });
     expect(screen.queryByText("b.pdf")).toBeNull();
+  });
+
+  it("shows a picked image as a thumbnail and releases its URL on remove", async () => {
+    const create = vi.fn(() => "blob:a");
+    const revoke = vi.fn();
+    const original = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
+    URL.createObjectURL = create;
+    URL.revokeObjectURL = revoke;
+    const { container } = render(<ChatComposer onSend={() => {}} attach />, { wrapper });
+    const input = container.querySelector("input[type='file']") as HTMLInputElement;
+    await userEvent.upload(input, new File(["a"], "a.png", { type: "image/png" }));
+    expect(screen.getByRole("img", { name: "a.png" }).getAttribute("src")).toBe("blob:a");
+    await userEvent.click(screen.getByRole("button", { name: "Remove a.png" }));
+    expect(revoke).toHaveBeenCalledWith("blob:a");
+    URL.createObjectURL = original.create;
+    URL.revokeObjectURL = original.revoke;
   });
 
   it("has no attach button unless asked", () => {
