@@ -126,12 +126,16 @@ try {
   const sloc = signedIn.headers.get("location") ?? "";
   check(signedIn.status === 200 || ([307, 302, 303, 308].includes(signedIn.status) && !/\/auth/.test(sloc)), "signed in /app is not sent to /auth", `${signedIn.status} ${sloc}`);
 
+
   // 3. Organizations.
   const created = await api(owner, "POST", "/api/orgs", { name: "Bench Team A" });
   const org = unwrap(created.json, isOrg) ?? {};
   check(created.status === 201 && org.slug && org.id, "POST /api/orgs 201 {id, slug}", `${created.status} ${created.text}`);
   if (!org.slug) throw new Error("no org to continue with");
   const s = encodeURIComponent(org.slug);
+  const shell = await fetch(`${BASE}/app`, { headers: { cookie: owner.cookie } });
+  const shellHtml = (await shell.text()).replace(/<!-- -->/g, "");
+  check(shell.status === 200 && !/\/auth(\?|$)/.test(new URL(shell.url).pathname) && /Members/.test(shellHtml) && /Settings/.test(shellHtml), "signed in, /app renders the org layout (200, Members, Settings)", `${shell.status} ${shell.url}`);
 
   const got = await api(owner, "GET", `/api/orgs/${s}`);
   const g = unwrap(got.json, isOrg) ?? {};
@@ -199,7 +203,7 @@ try {
 }
 
 // A run that stops early counts every check it never reached as failed.
-const TOTAL = 20;
+const TOTAL = 21;
 const pass = results.filter((r) => r.ok && r.label !== "gate ran to the end").length;
 console.log(`pass=${pass} fail=${TOTAL - pass}`);
 if (out) writeFileSync(out, JSON.stringify({ pass, total: TOTAL, results }, null, 2));

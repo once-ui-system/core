@@ -93,6 +93,7 @@ jobs:
           . /tmp/sb/env
           BASE=http://localhost:3400 SB_URL=$API_URL ANON=$ANON_KEY SERVICE=$SERVICE_ROLE_KEY STRIPE_LOG=/tmp/stripe.log \
             node benchmarks/live-supabase/gate/live-gate.mjs /tmp/out/live.json | tee /tmp/out/live.txt
+          echo "server-errors=$(grep -cE '^Error|⨯' /tmp/out/start.log)" | tee -a /tmp/out/live.txt
           tail -40 /tmp/out/start.log
       - name: Record a run that never reached the checks
         if: ${{ always() && !(steps.sql.outputs.ok == '1' && steps.app.outcome == 'success') }}
