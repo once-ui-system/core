@@ -1,0 +1,40 @@
+{
+ "name": "MapMarker",
+ "group": "map",
+ "importFrom": "@once-ui-system/core/map",
+ "props": {
+  "position": "!LngLat",
+  "children": "React.ReactNode",
+  "anchor": "PositionAnchor = bottom",
+  "offset": "[number, number]",
+  "active": "boolean = false",
+  "draggable": "boolean = false",
+  "onDragEnd": "(position: LngLat) => void"
+ },
+ "tags": [
+  "map",
+  "location"
+ ],
+ "pairsWith": [
+  "Map",
+  "MapPin",
+  "Avatar"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "PositionAnchor": [
+   "center",
+   "top",
+   "right",
+   "bottom",
+   "left",
+   "top-left",
+   "top-right",
+   "bottom-right",
+   "bottom-left"
+  ]
+ }
+}

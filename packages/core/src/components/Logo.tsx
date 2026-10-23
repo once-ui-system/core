@@ -31,6 +31,37 @@ const sizeMap: Record<string, SpacingToken> = {
  */
 type LogoSource = string | { light: string; dark: string };
 
+/**
+ * The marks a boolean `monogram` draws from, on a 24-unit grid. Solid shapes
+ * that read at favicon size: a bare first letter before the name reads as a
+ * typo ("AAcme"), a shape reads as a mark. Every one stays inside 2–22, so
+ * they share one optical size.
+ */
+const monogramShapes = [
+  // orbit: a disc with an off-centre hole
+  "M12 2a10 10 0 1 1 0 20a10 10 0 0 1 0-20Zm2.5 4.5a4.5 4.5 0 1 0 0 9a4.5 4.5 0 0 0 0-9Z",
+  // drop: a disc with one square corner
+  "M2 2H12A10 10 0 1 1 2 12Z",
+  // clover: four overlapping lobes
+  "M12 2a5 5 0 0 1 5 5a5 5 0 0 1 0 10a5 5 0 0 1-10 0a5 5 0 0 1 0-10a5 5 0 0 1 5-5Z",
+  // halves: a disc split down the middle
+  "M11 2v20A10 10 0 0 1 11 2ZM13 2a10 10 0 0 1 0 20Z",
+  // arch
+  "M2 22V12a10 10 0 0 1 20 0v10h-6V12a4 4 0 0 0-8 0v10Z",
+];
+
+/**
+ * Which shape a name gets: a hash of the name, so one product always draws
+ * the same mark and two products in the same family rarely share one.
+ */
+const monogramShape = (text: string | undefined) => {
+  let hash = 0;
+  for (const char of (text ?? "").trim().toLowerCase()) {
+    hash = (hash * 31 + (char.codePointAt(0) ?? 0)) >>> 0;
+  }
+  return monogramShapes[hash % monogramShapes.length];
+};
+
 interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   className?: string;
   size?: TShirtSizes;
@@ -43,6 +74,20 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
    * `wordmark` stays an image source.
    */
   text?: string;
+  /**
+   * A built-in mark for a brand with no designed icon yet, favicon style: a
+   * bare solid shape at the icon's height, in the strongest neutral text
+   * colour (black in light mode, white in dark), with no tile behind it.
+   * `true` picks one of a few geometric shapes from a hash of `text`, so a
+   * name always gets the same mark. A string draws those characters instead,
+   * as a heavy glyph in the heading font (one or two read best). Brand colour
+   * and solid settings play no part. `icon` wins: with an icon set,
+   * `monogram` is ignored. Beside `text` the mark is decorative
+   * (`aria-hidden`), since the text names the logo.
+   *
+   * @example <Logo text="Acme" monogram href="/" />
+   */
+  monogram?: boolean | string;
   href?: string;
   dark?: boolean;
   light?: boolean;
@@ -51,16 +96,34 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   (
-    { size = "m", href, icon, wordmark, text, className, style, dark, light, brand, ...props },
+    {
+      size = "m",
+      href,
+      icon,
+      wordmark,
+      text,
+      monogram,
+      className,
+      style,
+      dark,
+      light,
+      brand,
+      ...props
+    },
     ref,
   ) => {
+    // An icon is the brand's real mark, so it replaces the monogram.
+    const mark = icon || !monogram ? undefined : monogram;
+    const letters = typeof mark === "string" ? mark.trim() : "";
+    const hasMark = mark === true || letters !== "";
+
     useEffect(() => {
-      if (!icon && !wordmark && !text) {
+      if (!icon && !wordmark && !text && !hasMark) {
         console.warn(
           "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
         );
       }
-    }, [icon, wordmark, text]);
+    }, [icon, wordmark, text, hasMark]);
 
     /**
      * One <img> for a plain source; for a per-theme source, both, each gated by
@@ -97,6 +160,69 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
       );
     };
 
+    /**
+     * Drawn inline (an SVG path, or text) in currentColor, so it follows the
+     * theme with no asset and renders on the server.
+     */
+    const renderMonogram = () => {
+      if (!hasMark) return null;
+      const height = `var(--static-space-${sizeMap[size]})`;
+      // Beside text the mark is decoration; alone it is the logo, named like
+      // an image-only one.
+      const a11y = text
+        ? { "aria-hidden": true as const }
+        : { role: "img", "aria-label": "Trademark" };
+      const box: React.CSSProperties = {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        height,
+        minWidth: height,
+        color: "var(--neutral-on-background-strong)",
+      };
+      if (!letters) {
+        return (
+          <span {...a11y} data-monogram="shape" style={box}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              focusable="false"
+              aria-hidden="true"
+              style={{ width: height, height }}
+            >
+              <path fillRule="evenodd" d={monogramShape(text)} />
+            </svg>
+          </span>
+        );
+      }
+      const count = Array.from(letters).length;
+      // Cap height fills about three quarters of the slot for one character,
+      // so the glyph reads as a mark set larger than the name beside it.
+      const fontScale = count === 1 ? 1 : count === 2 ? 0.72 : 0.52;
+      return (
+        <span
+          {...a11y}
+          data-monogram="letters"
+          className="font-heading"
+          style={{
+            ...box,
+            fontSize: `calc(${height} * ${fontScale})`,
+            fontWeight: 800,
+            lineHeight: 1,
+            letterSpacing: "-0.04em",
+            whiteSpace: "nowrap",
+            userSelect: "none",
+            // Centre on the cap height, not the line box: a line box carries
+            // descender room, which sits capitals visibly low.
+            ...({ textBox: "trim-both cap alphabetic" } as React.CSSProperties),
+          }}
+        >
+          {letters}
+        </span>
+      );
+    };
+
     const renderText = () => {
       if (!text) return null;
       const height = `var(--static-space-${sizeMap[size]})`;
@@ -109,7 +235,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             fontWeight: "var(--font-weight-heading-strong)",
             letterSpacing: "-0.02em",
             whiteSpace: "nowrap",
-            marginLeft: icon ? `calc(${height} / 4)` : undefined,
+            marginLeft: icon || hasMark ? `calc(${height} / 4)` : undefined,
           }}
         >
           {text}
@@ -120,6 +246,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     const content = (
       <>
         {renderSource(icon)}
+        {renderMonogram()}
         {renderSource(wordmark)}
         {renderText()}
       </>
