@@ -9,6 +9,7 @@ import {
   IconButton,
   Kbar,
   type KbarItem,
+  Logo,
   Nav,
   NavGroup,
   NavItem,
@@ -122,7 +123,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           />
         </Row>
         <Row minWidth={16} s={{ minWidth: 0 }}>
-          <Text variant="heading-strong-s">{app.name}</Text>
+          {/* A brand-coloured letter tile until the product has a logo: then pass
+              its SVG as `icon` (and drop `monogram`). Never draw one by hand. */}
+          <Logo text={app.name} monogram size="s" href={navLinks[0].href} />
         </Row>
         <Row flex={1} s={{ hide: true }}>
           <Breadcrumbs items={crumbs} />

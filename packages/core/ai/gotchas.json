@@ -157,7 +157,7 @@
     "components": ["Logo"]
   },
   "Logo.text": {
-    "rule": "wordmark is an image source. For a name set in type, use <Logo icon=\"/mark.svg\" text=\"Acme\" />.",
+    "rule": "No designed logo yet: <Logo text=\"Acme\" monogram /> sets the name in type beside a brand-coloured letter tile drawn from the theme. Never draw an icon or wordmark SVG yourself; a hand-made mark looks worse than the monogram. When the owner's SVGs exist, pass them as icon (it replaces the monogram) and wordmark (an image source, not text).",
     "components": ["Logo"]
   },
   "Tag.inline": {

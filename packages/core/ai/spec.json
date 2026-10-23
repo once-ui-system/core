@@ -3825,6 +3825,7 @@
     "icon": "LogoSource",
     "wordmark": "LogoSource",
     "text": "string",
+    "monogram": "boolean | string",
     "href": "string",
     "dark": "boolean",
     "light": "boolean",

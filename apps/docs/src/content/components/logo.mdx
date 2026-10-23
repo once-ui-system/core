@@ -163,6 +163,36 @@ after the icon if there is one. A link is then named by the text.
   ]}
 />
 
+## Monogram
+
+For a brand with no designed icon yet, `monogram` draws one from the theme: a square tile at the
+logo's height in the brand's solid colour, holding the first letter of `text` in the heading font.
+It follows the brand colour, radius, solid style and light or dark mode, so no placeholder SVG is
+needed. Pass a string to choose the letters. Beside `text` the tile is decorative. When the real
+mark exists, pass it as `icon`: an icon always replaces the monogram.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Row gap="24" center>
+      <Logo text="Acme" monogram size="s" />
+      <Logo text="Acme" monogram size="l" />
+      <Logo monogram="Ac" size="l" />
+    </Row>
+  }
+  codes={[
+    {
+      code:
+`<Logo text="Acme" monogram size="s" />
+<Logo text="Acme" monogram size="l" />
+<Logo monogram="Ac" size="l" />`,
+      language: "tsx",
+      label: "Monogram"
+    }
+  ]}
+/>
+
 ## As link
 
 The Logo component can function as a link when provided with an `href` property.
