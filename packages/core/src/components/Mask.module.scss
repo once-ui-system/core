@@ -2,7 +2,9 @@
   mask-size: 100% 100%;
   mask-image: radial-gradient(
     var(--mask-radius) at var(--mask-position-x) var(--mask-position-y),
-    black 0%,
+    // The centre is solid up to the feather; the last pixel is a fade even at
+    // `feather={0}`, so a sharp edge stays smooth instead of stair-stepped.
+    black clamp(0%, calc(100% - var(--mask-feather, 100%) - 1px), 100%),
     transparent 100%
   );
 }
