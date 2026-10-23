@@ -49,6 +49,16 @@ describe("Mask", () => {
     expect(el.style.getPropertyValue("--mask-radius")).toBe("40svh");
   });
 
+  it("fades over the whole radius by default, and over the feather when set", () => {
+    const { container, rerender } = render(<Mask x={50} y={50} />, { wrapper });
+    const el = container.firstElementChild as HTMLElement;
+    expect(el.style.getPropertyValue("--mask-feather")).toBe("100%");
+    rerender(<Mask x={50} y={50} feather={0} />);
+    expect(el.style.getPropertyValue("--mask-feather")).toBe("0%");
+    rerender(<Mask x={50} y={50} feather={140} />);
+    expect(el.style.getPropertyValue("--mask-feather")).toBe("100%");
+  });
+
   it("sets no window without x and y or cursor", () => {
     const { container } = render(<Mask x={25} />, { wrapper });
     const el = container.firstElementChild as HTMLElement;

@@ -114,6 +114,44 @@ Use the `radius` prop to set the radius of the mask (defined in `vh` - viewport 
   ]}
 />
 
+## Feather
+
+Use the `feather` prop to set how much of the radius the edge fades over, from `0` (a sharp circle) to `100` (a soft fade from the centre, the default).
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  previewPadding="0"
+  preview={
+    <Mask
+      fill
+      height={24}
+      x={35}
+      y={40}
+      radius={16}
+      feather={0}
+    >
+      <Media sizes="(max-width: 768px) 90vw, 768px" fill src="/images/docs/vibe-coding-dark.jpg" />
+    </Mask>
+  }
+  codes={[
+    {
+      code:
+`<Mask
+    fill
+    height={24}
+    x={35}
+    y={40}
+    radius={16}
+    feather={0}>
+    <Media fill src="/image.jpg" />
+</Mask>`,
+      language: "tsx",
+      label: "Feather"
+    }
+  ]}
+/>
+
 ## Cursor
 
 Use the `cursor` prop to enable cursor tracking reveal.
@@ -211,6 +249,7 @@ See [useReducedMotion](/hooks/useReducedMotion) for details.
 <PropsTable
   component="Mask"
   describe={{
+    feather: "How much of the radius the edge fades over, from 0 (a sharp circle) to 100 (soft from the centre).",
     reducedMotion: "Controls motion reduction for cursor tracking. Auto detects device capability and prefers-reduced-motion.",
   }}
   content={[
