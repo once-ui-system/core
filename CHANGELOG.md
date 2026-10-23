@@ -15,6 +15,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`feather` on `Mask`.** How much of the radius the edge fades over, from `0`, a sharp
+  circle, to `100`, the soft fade from the centre the mask has always had and still
+  defaults to. With `cursor`, `feather={0}` reads as a lens or a torch carried over the
+  page rather than a glow.
 - **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
   OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
   theme and takes the page background token. Markers are React content (`MapMarker`, or
