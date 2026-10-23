@@ -24,8 +24,8 @@ describe("Logo monogram", () => {
     expect(tile).toHaveClass("font-heading");
     expect(tile.style.width).toBe("var(--static-space-40)");
     expect(tile.style.height).toBe("var(--static-space-40)");
-    expect(tile.style.backgroundColor).toBe("var(--brand-solid-strong)");
-    expect(tile.style.color).toBe("var(--brand-on-solid-strong)");
+    expect(tile.style.backgroundColor).toBe("var(--brand-color-strong)");
+    expect(tile.style.color).toBe("var(--static-white)");
     expect(tile.style.borderRadius).toContain("var(--radius-m)");
     // The text names the link; the tile adds nothing to the name.
     expect(screen.getByRole("link")).toHaveAccessibleName("acme");

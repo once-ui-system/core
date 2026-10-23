@@ -153,8 +153,8 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
 
     /**
      * The tile is drawn in CSS rather than as an SVG so it takes the theme's
-     * tokens: --brand-solid-strong flips with light/dark and the brand
-     * colour, the radius with the border style, the border and inset with
+     * tokens: --brand-color-strong is the brand colour whatever data-solid
+     * says (a logo stays branded under "contrast"), the radius with the border style, the border and inset with
      * solidStyle (flat or plastic) exactly as a primary Button does. On top
      * sit a faint top sheen and a 1px inner highlight, so a flat brand colour
      * still reads as a made mark rather than a placeholder.
@@ -183,7 +183,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             height,
             borderRadius: `min(var(--radius-${monogramRadius[size]}), calc(${height} * 0.3))`,
             border: "var(--solid-border-width) solid var(--solid-border-color-brand)",
-            backgroundColor: "var(--brand-solid-strong)",
+            backgroundColor: "var(--brand-color-strong)",
             backgroundImage:
               "linear-gradient(180deg, rgb(255 255 255 / 0.16) 0%, rgb(255 255 255 / 0) 60%)",
             boxShadow: [
@@ -191,7 +191,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
               "inset 0 1px 0 0 rgb(255 255 255 / 0.22)",
               "inset 0 0 0 1px rgb(0 0 0 / 0.06)",
             ].join(", "),
-            color: "var(--brand-on-solid-strong)",
+            color: "var(--static-white)",
             fontSize: `calc(${height} * ${fontScale})`,
             fontWeight: "var(--font-weight-heading-strong)",
             lineHeight: 1,
