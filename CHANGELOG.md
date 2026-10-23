@@ -15,6 +15,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
+  badges and section headings fade out but stay each row's accessible name, and
+  `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
+  mouse rests on it (after a short hover-intent delay) or the keyboard is in it,
+  instead of a tooltip per icon; it keeps its collapsed width in the layout, so the
+  content beside it never moves. Touch never opens it, Escape closes it, reduced
+  motion drops the animation. `expandedWidth` sets how wide it opens (16rem by
+  default).
 - **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
   OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
   theme and takes the page background token. Markers are React content (`MapMarker`, or

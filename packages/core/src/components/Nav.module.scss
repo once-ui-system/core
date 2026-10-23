@@ -17,3 +17,50 @@
     height: var(--static-space-48);
     min-height: var(--static-space-48);
 }
+
+// A collapsed nav is one icon column wide. Its width is the row's and its
+// padding sits outside it (content-box), so a host's `padding` never eats
+// into the icon column. A NavItem's icon starts at the ToggleButton padding
+// plus its label's inset: 16 + 8 in an `l` row, 8 + 2 in a compact `m` row.
+.collapsed {
+    --nav-collapsed-width: calc(var(--static-space-24) * 2 + var(--static-space-16));
+    box-sizing: content-box;
+    width: var(--nav-collapsed-width);
+    min-width: var(--nav-collapsed-width);
+    overflow-x: hidden;
+
+    &[data-density="compact"] {
+        --nav-collapsed-width: calc(
+            (var(--static-space-8) + var(--static-space-2)) * 2 + var(--static-space-16)
+        );
+    }
+}
+
+// Opening over the page: the nav widens and a negative margin of the same
+// amount keeps its footprint in the layout at the collapsed width, so the
+// content beside it never moves. It lifts above that content, which follows
+// it in the DOM and would otherwise paint over it.
+.expandable {
+    position: relative;
+    z-index: 2;
+    margin-right: 0;
+    transition:
+        width var(--transition-duration-macro-medium) var(--transition-eased),
+        min-width var(--transition-duration-macro-medium) var(--transition-eased),
+        margin-right var(--transition-duration-macro-medium) var(--transition-eased),
+        background-color var(--transition-duration-macro-medium) var(--transition-eased),
+        box-shadow var(--transition-duration-macro-medium) var(--transition-eased);
+
+    @media (prefers-reduced-motion: reduce) {
+        transition: none;
+    }
+}
+
+.expanded.expanded {
+    width: var(--nav-expanded-width);
+    min-width: var(--nav-expanded-width);
+    margin-right: calc(var(--nav-collapsed-width) - var(--nav-expanded-width));
+    background-color: var(--surface-background);
+    backdrop-filter: var(--backdrop-filter);
+    box-shadow: var(--shadow-l);
+}
