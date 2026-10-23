@@ -32,29 +32,34 @@ const sizeMap: Record<string, SpacingToken> = {
 type LogoSource = string | { light: string; dark: string };
 
 /**
- * The theme radius each logo size's monogram tile takes. Capped at 30% of the
- * tile in `monogramStyle`, so a `rounded` theme gives a soft square rather than
- * a circle (a circle reads as an avatar), and `sharp` gives a square.
+ * The marks a boolean `monogram` draws from, on a 24-unit grid. Solid shapes
+ * that read at favicon size: a bare first letter before the name reads as a
+ * typo ("AAcme"), a shape reads as a mark. Every one stays inside 2–22, so
+ * they share one optical size.
  */
-const monogramRadius: Record<string, string> = {
-  xs: "s",
-  s: "s",
-  m: "m",
-  l: "m",
-  xl: "l",
-};
+const monogramShapes = [
+  // orbit: a disc with an off-centre hole
+  "M12 2a10 10 0 1 1 0 20a10 10 0 0 1 0-20Zm2.5 4.5a4.5 4.5 0 1 0 0 9a4.5 4.5 0 0 0 0-9Z",
+  // drop: a disc with one square corner
+  "M2 2H12A10 10 0 1 1 2 12Z",
+  // clover: four overlapping lobes
+  "M12 2a5 5 0 0 1 5 5a5 5 0 0 1 0 10a5 5 0 0 1-10 0a5 5 0 0 1 0-10a5 5 0 0 1 5-5Z",
+  // halves: a disc split down the middle
+  "M11 2v20A10 10 0 0 1 11 2ZM13 2a10 10 0 0 1 0 20Z",
+  // arch
+  "M2 22V12a10 10 0 0 1 20 0v10h-6V12a4 4 0 0 0-8 0v10Z",
+];
 
 /**
- * The letters a `monogram` shows: the string when one is given (as written),
- * otherwise the first letter or digit of `text`, upper-cased. One letter, not
- * the initials of the first two words: a single letter reads as a mark, two
- * read as a user's avatar.
+ * Which shape a name gets: a hash of the name, so one product always draws
+ * the same mark and two products in the same family rarely share one.
  */
-const monogramLetters = (monogram: boolean | string | undefined, text: string | undefined) => {
-  if (typeof monogram === "string") return monogram.trim();
-  if (!monogram || !text) return "";
-  const first = text.match(/[\p{L}\p{N}]/u)?.[0] ?? Array.from(text.trim())[0] ?? "";
-  return first.toLocaleUpperCase();
+const monogramShape = (text: string | undefined) => {
+  let hash = 0;
+  for (const char of (text ?? "").trim().toLowerCase()) {
+    hash = (hash * 31 + (char.codePointAt(0) ?? 0)) >>> 0;
+  }
+  return monogramShapes[hash % monogramShapes.length];
 };
 
 interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -70,13 +75,15 @@ interface LogoProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
    */
   text?: string;
   /**
-   * A built-in mark for a brand with no designed icon yet: a square tile at
-   * the logo's height in the brand's solid colour, with the first letter of
-   * `text` in the heading font. Pass a string to choose the letters instead
-   * (one or two characters read best). The tile follows the theme's radius,
-   * brand colour, solid style and light/dark mode, so it needs no asset.
-   * `icon` wins: with an icon set, `monogram` is ignored. Beside `text` the
-   * tile is decorative (`aria-hidden`), since the text names the logo.
+   * A built-in mark for a brand with no designed icon yet, favicon style: a
+   * bare solid shape at the icon's height, in the strongest neutral text
+   * colour (black in light mode, white in dark), with no tile behind it.
+   * `true` picks one of a few geometric shapes from a hash of `text`, so a
+   * name always gets the same mark. A string draws those characters instead,
+   * as a heavy glyph in the heading font (one or two read best). Brand colour
+   * and solid settings play no part. `icon` wins: with an icon set,
+   * `monogram` is ignored. Beside `text` the mark is decorative
+   * (`aria-hidden`), since the text names the logo.
    *
    * @example <Logo text="Acme" monogram href="/" />
    */
@@ -106,15 +113,17 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     ref,
   ) => {
     // An icon is the brand's real mark, so it replaces the monogram.
-    const letters = icon ? "" : monogramLetters(monogram, text);
+    const mark = icon || !monogram ? undefined : monogram;
+    const letters = typeof mark === "string" ? mark.trim() : "";
+    const hasMark = mark === true || letters !== "";
 
     useEffect(() => {
-      if (!icon && !wordmark && !text && !letters) {
+      if (!icon && !wordmark && !text && !hasMark) {
         console.warn(
           "Both 'icon' and 'wordmark' props are set to false. The logo will not render any content.",
         );
       }
-    }, [icon, wordmark, text, letters]);
+    }, [icon, wordmark, text, hasMark]);
 
     /**
      * One <img> for a plain source; for a per-theme source, both, each gated by
@@ -152,54 +161,60 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     };
 
     /**
-     * The tile is drawn in CSS rather than as an SVG so it takes the theme's
-     * tokens: --brand-color-strong is the brand colour whatever data-solid
-     * says (a logo stays branded under "contrast"), the radius with the border style, the border and inset with
-     * solidStyle (flat or plastic) exactly as a primary Button does. On top
-     * sit a faint top sheen and a 1px inner highlight, so a flat brand colour
-     * still reads as a made mark rather than a placeholder.
+     * Drawn inline (an SVG path, or text) in currentColor, so it follows the
+     * theme with no asset and renders on the server.
      */
     const renderMonogram = () => {
-      if (!letters) return null;
+      if (!hasMark) return null;
       const height = `var(--static-space-${sizeMap[size]})`;
-      const count = Array.from(letters).length;
-      const fontScale = count === 1 ? 0.58 : count === 2 ? 0.44 : 0.34;
-      // Beside text the tile is decoration; alone it is the logo, named like
+      // Beside text the mark is decoration; alone it is the logo, named like
       // an image-only one.
       const a11y = text
         ? { "aria-hidden": true as const }
         : { role: "img", "aria-label": "Trademark" };
+      const box: React.CSSProperties = {
+        display: "inline-flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexShrink: 0,
+        height,
+        minWidth: height,
+        color: "var(--neutral-on-background-strong)",
+      };
+      if (!letters) {
+        return (
+          <span {...a11y} data-monogram="shape" style={box}>
+            <svg
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              focusable="false"
+              aria-hidden="true"
+              style={{ width: height, height }}
+            >
+              <path fillRule="evenodd" d={monogramShape(text)} />
+            </svg>
+          </span>
+        );
+      }
+      const count = Array.from(letters).length;
+      // Cap height fills about three quarters of the slot for one character,
+      // so the glyph reads as a mark set larger than the name beside it.
+      const fontScale = count === 1 ? 1 : count === 2 ? 0.72 : 0.52;
       return (
         <span
           {...a11y}
+          data-monogram="letters"
           className="font-heading"
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            boxSizing: "border-box",
-            width: height,
-            height,
-            borderRadius: `min(var(--radius-${monogramRadius[size]}), calc(${height} * 0.3))`,
-            border: "var(--solid-border-width) solid var(--solid-border-color-brand)",
-            backgroundColor: "var(--brand-color-strong)",
-            backgroundImage:
-              "linear-gradient(180deg, rgb(255 255 255 / 0.16) 0%, rgb(255 255 255 / 0) 60%)",
-            boxShadow: [
-              "inset 0 var(--solid-inset-distance) var(--solid-inset-size) var(--solid-inset-color-brand)",
-              "inset 0 1px 0 0 rgb(255 255 255 / 0.22)",
-              "inset 0 0 0 1px rgb(0 0 0 / 0.06)",
-            ].join(", "),
-            color: "var(--static-white)",
+            ...box,
             fontSize: `calc(${height} * ${fontScale})`,
-            fontWeight: "var(--font-weight-heading-strong)",
+            fontWeight: 800,
             lineHeight: 1,
-            letterSpacing: count === 1 ? "-0.02em" : "-0.04em",
+            letterSpacing: "-0.04em",
             whiteSpace: "nowrap",
             userSelect: "none",
             // Centre on the cap height, not the line box: a line box carries
-            // descender room, which sits capitals visibly low in a tile.
+            // descender room, which sits capitals visibly low.
             ...({ textBox: "trim-both cap alphabetic" } as React.CSSProperties),
           }}
         >
@@ -220,7 +235,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
             fontWeight: "var(--font-weight-heading-strong)",
             letterSpacing: "-0.02em",
             whiteSpace: "nowrap",
-            marginLeft: icon || letters ? `calc(${height} / 4)` : undefined,
+            marginLeft: icon || hasMark ? `calc(${height} / 4)` : undefined,
           }}
         >
           {text}

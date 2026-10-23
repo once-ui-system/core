@@ -123,7 +123,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           />
         </Row>
         <Row minWidth={16} s={{ minWidth: 0 }}>
-          {/* A brand-coloured letter tile until the product has a logo: then pass
+          {/* A built-in mark until the product has a logo: then pass
               its SVG as `icon` (and drop `monogram`). Never draw one by hand. */}
           <Logo text={app.name} monogram size="s" href={navLinks[0].href} />
         </Row>
