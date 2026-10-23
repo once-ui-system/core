@@ -294,6 +294,36 @@ const DropdownWrapper = forwardRef<HTMLDivElement, DropdownWrapperProps>(
       return `${x} ${y}`;
     })();
 
+    /**
+     * Puts the caret in a leading field once the panel can actually take it.
+     * The open effect's own `focus()` runs while the panel is still
+     * `visibility: hidden`, and in a browser the field stays hidden for one
+     * more frame after `isPositioned`: Input transitions `all`, visibility
+     * included, so at the start of that transition it still computes as
+     * hidden and the FocusTrap's attempt in the same commit lands nowhere.
+     * jsdom has no transitions, which is why the interaction test passed
+     * without this. Retries for a few frames, and never moves focus that is
+     * already inside the panel — the user may have arrowed into the list.
+     */
+    useEffect(() => {
+      if (!isOpen || !isPositioned || opensOn !== "field") return;
+      let frame = 0;
+      let tries = 0;
+      const focusField = () => {
+        const panel = dropdownRef.current;
+        if (!panel || panel.contains(document.activeElement)) return;
+        const field = panel.querySelector<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+        );
+        field?.focus({ preventScroll: true });
+        if (field && document.activeElement !== field && ++tries < 10) {
+          frame = requestAnimationFrame(focusField);
+        }
+      };
+      frame = requestAnimationFrame(focusField);
+      return () => cancelAnimationFrame(frame);
+    }, [isOpen, isPositioned, opensOn]);
+
     useImperativeHandle(ref, () => wrapperRef.current as HTMLDivElement);
 
     useEffect(() => {
