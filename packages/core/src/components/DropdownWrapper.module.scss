@@ -1,7 +1,10 @@
+/* A short grow from the trigger's corner, not a pop: at 0.9 the far edge of a
+   tall panel travelled ~40px, which read as a bounce on a 24rem switcher.
+   0.96 keeps the sense of where the panel came from at a third of the travel. */
 @keyframes fadeIn {
   from {
       opacity: 0;
-      transform: scale(0.9);
+      transform: scale(0.96);
   }
   to {
       opacity: 1;
