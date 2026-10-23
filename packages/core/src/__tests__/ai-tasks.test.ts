@@ -18,6 +18,7 @@ type Task = {
   example?: string;
   gotchas?: string[];
   layout?: string | string[];
+  starter?: string;
   blocks?: { manifest?: string; primary?: string[]; compose?: string[]; patterns?: string[] };
 };
 
@@ -68,6 +69,8 @@ describe("ai task bundles", () => {
         );
         expect(slugs).toContain(anchor);
       }
+      // A starter path is relative to the package root, as AGENTS.md names it.
+      if (task.starter) expect(existsSync(path.join(AI, "..", task.starter))).toBe(true);
     },
   );
 });

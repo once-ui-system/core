@@ -245,5 +245,9 @@
   "Map.positions": {
     "rule": "Positions are [longitude, latitude], not [lat, lng]. Map needs a height (or fill inside a sized parent); it shadows the global Map, so import it as another name in a file that also uses new Map().",
     "components": ["Map", "MapMarker", "MapMarkers", "MapPopup", "MapCircle"]
+  },
+  "Kbar.behaviour": {
+    "rule": "Kbar brings its own behaviour, so don't rebuild it from Dialog and Input: ⌘K/Ctrl+K toggles it with no useHotkeys, a route change closes it, typing filters items by name, keywords and section, results are grouped under their section in the order of items (list a \"Recent\" section's items first to show it first), arrow keys and Enter choose, and \"No results found\" shows by itself. An item with href navigates; one with perform runs it and closes the palette. shortcut only displays keys: bind them with useHotkeys.",
+    "components": ["Kbar"]
   }
 }

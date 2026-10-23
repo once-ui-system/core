@@ -1599,8 +1599,9 @@ const typeLine = (name, type, context = {}) => {
 // re-sent 20k–60k tokens of docs to fetch one or two more files; that tail,
 // not any one file, was most of the 3.7x total over shadcn/ui. JSON keys and
 // escaped quotes cost tokens too, and tags or pairings help no one writing.
-function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = {}) {
+function bundleMarkdown(task, slices, gotchas, typesFor, allRules, functions = {}) {
   const names = withParents([...new Set([...task.components, ...COMMON_COMPONENTS])], slices);
+  const rulesBody = rulesFor(allRules, names, task === BASE_BUNDLE);
   const mixins = {};
   const types = {};
   const sections = [];
@@ -1627,7 +1628,10 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     Object.assign(mixins, slice.resolvedMixins);
     Object.assign(types, slice.types);
   }
-  const hooks = [...new Set([...(task.functions ?? []), ...COMMON_HOOKS])].filter(
+  // A hook the rules tell the reader to call is listed with its signature,
+  // or the reader opens functions.json (27k tokens) to find it.
+  const ruleHooks = [...rulesBody.matchAll(/\buse[A-Z]\w*/g)].map(([name]) => name);
+  const hooks = [...new Set([...(task.functions ?? []), ...COMMON_HOOKS, ...ruleHooks])].filter(
     (name) => functions[name],
   );
   Object.assign(types, typesFor(mixins), typesFor(hooks.map((name) => functions[name])));
@@ -1653,7 +1657,7 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     "",
     task.description,
     "",
-    "This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
+    "This file is complete for this task: the rules from `rules.compact.md` this page needs, the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.",
     "",
     "## Rules",
     "",
@@ -1706,7 +1710,17 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     .map((id) => markdownSection("recipes.md", id))
     .filter(Boolean);
   if (recipes.length) out.push("", "## Recipes", "", ...recipes);
-  const layouts = [task.layout ?? []]
+  // A task with a starter has its frame as a working file: the recipes that
+  // describe one would be a second copy the reader pays for on every turn.
+  if (task.starter) {
+    out.push(
+      "",
+      "## Frame",
+      "",
+      `The frame is the app starter's \`${task.starter}\` (AGENTS.md, "Starting an app"): copy it, or with no shell read it with this bundle and write it in your reply. It already meets the frame items of the quality bar; build the pages inside it and change it only to change the frame.`,
+    );
+  }
+  const layouts = [task.starter ? [] : (task.layout ?? [])]
     .flat()
     .map((ref) => markdownSection(...ref.split("#")))
     .filter(Boolean);
@@ -1715,6 +1729,25 @@ function bundleMarkdown(task, slices, gotchas, typesFor, rulesBody, functions = 
     out.push("", `## Gold example (\`${task.example}\`)`, "", "```tsx", example, "```");
   }
   return selfContained(`${out.join("\n")}\n`);
+}
+
+// The rules a bundle carries. Every rule re-sends on each later turn, so a
+// task bundle without an effect or a Background leaves out the decoration and
+// motion rules, and no bundle carries "Before building", which tells the
+// reader to ask the user about design intent: a reader with a bundle is
+// already building. The page bundle is the fallback for any page and keeps
+// decoration and motion.
+function rulesFor(rulesBody, names, isBase) {
+  const decorated = isBase || names.some((name) => /Fx$|^(Background|Mask|Effect)$/.test(name));
+  return rulesBody
+    .split(/\n(?=## )/)
+    .filter((section) => {
+      const heading = section.slice(3, section.indexOf("\n"));
+      if (heading.startsWith("Before building")) return false;
+      if (/^(Decoration|Motion)\b/.test(heading)) return decorated;
+      return true;
+    })
+    .join("\n");
 }
 
 // One `## ` section of a hand-written Markdown file, demoted to `### `, found
