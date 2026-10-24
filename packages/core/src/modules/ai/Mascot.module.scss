@@ -336,6 +336,75 @@
   }
 }
 
+/* Kawaii effects. Glyphs are drawn one eye-unit wide, so strokes are in those units. */
+.heart {
+  fill: #ff5c8a;
+}
+
+.sparkle {
+  fill: #ffd75e;
+}
+
+.glyphLine,
+.blushLine {
+  fill: none;
+  stroke: var(--mascot-eye);
+  stroke-width: 0.17;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.blush {
+  fill: #ff6b8a;
+  opacity: 0.45;
+}
+
+.blushLine {
+  stroke: #ff6b8a;
+  stroke-width: 0.07;
+  opacity: 0.8;
+}
+
+.water,
+.tear {
+  fill: #8fd3ff;
+}
+
+.sweat {
+  animation: mascot-sweat calc(2.4s * var(--tempo)) ease-in-out infinite;
+}
+
+.tear {
+  animation: mascot-tear 1.3s cubic-bezier(0.5, 0, 0.9, 0.6) infinite;
+}
+
+.anger {
+  animation: mascot-throb 0.7s ease-in-out infinite;
+
+  path {
+    fill: none;
+    stroke: #ff4d4f;
+    stroke-width: 0.13;
+    stroke-linecap: round;
+  }
+}
+
+.floater {
+  opacity: 0;
+  animation: mascot-floater 2.1s ease-out infinite;
+}
+
+.question {
+  fill: color-mix(in srgb, var(--mascot-color) 55%, white);
+  font-size: 1.3px;
+  font-weight: 800;
+}
+
+.kawaii * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 /* Moods. */
 .mascot[data-mood="happy"] {
   .eye {
@@ -507,6 +576,55 @@
   }
   100% {
     transform: scale(1, 1);
+  }
+}
+
+@keyframes mascot-sweat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.08px) scale(0.94, 1.06);
+  }
+}
+
+@keyframes mascot-tear {
+  0% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0.1px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1.4px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes mascot-throb {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes mascot-floater {
+  0% {
+    transform: translateY(0.4px) scale(0.4);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-1.6px) scale(1);
+    opacity: 0;
   }
 }
 
