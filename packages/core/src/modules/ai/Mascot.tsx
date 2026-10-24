@@ -6,6 +6,7 @@ import { forwardRef, useCallback, useEffect, useId, useRef } from "react";
 import { Flex } from "../../components/Flex";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel";
 import styles from "./Mascot.module.scss";
+import { MascotCube } from "./MascotCube";
 
 export type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
 export type MascotMood =
@@ -50,11 +51,29 @@ export interface MascotLook {
   cheeks?: boolean;
   /** How it moves: `calm` is slow and small, `bouncy` is quick and springy. */
   personality?: "calm" | "default" | "bouncy";
+  /**
+   * With `working="cube"`: the cube's sides. `classic` (default), `tints` of the color, `mono`,
+   * or a color per side. The front follows `color` unless you set it.
+   */
+  sides?:
+    | "classic"
+    | "tints"
+    | "mono"
+    | Partial<Record<"top" | "front" | "right" | "bottom" | "back" | "left", string>>;
+  /** With `working="cube"`: `flat` paints the eyes, brows and mouth on without light. */
+  face?: "3d" | "flat";
 }
 
 export interface MascotProps
   extends MascotLook,
     Omit<React.ComponentProps<typeof Flex>, "children" | "color"> {
+  /**
+   * `cube`: the mascot is drawn in 3D, and while it thinks it turns into a 2 × 2 cube, the Once UI
+   * mark, and solves it with no face showing. When it stops thinking the cube clicks into place,
+   * shows the logo for a beat and softens back into the mascot. Needs WebGL; without it the
+   * flat mascot shows instead.
+   */
+  working?: "cube";
   /** What the assistant is doing. Each state has its own pose and motion. */
   state?: MascotState;
   /** The expression on top of the state. */
@@ -77,7 +96,7 @@ export interface MascotProps
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
 const SCHEMES = new Set(["brand", "accent", "neutral"]);
 
-const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor">> = {
+const DEFAULT_LOOK: Required<Omit<MascotLook, "bodyPath" | "eyeColor" | "sides" | "face">> = {
   color: "brand",
   roundness: 0.7,
   aspect: 1,
@@ -188,7 +207,14 @@ function EyeShape({ kind, w, h }: { kind: MascotLook["eyes"]; w: number; h: numb
   }
   return (
     <>
-      <rect x={-w / 2} y={-h / 2} width={w} height={h} rx={Math.min(w, h) / 2} className={styles.ink} />
+      <rect
+        x={-w / 2}
+        y={-h / 2}
+        width={w}
+        height={h}
+        rx={Math.min(w, h) / 2}
+        className={styles.ink}
+      />
       <ellipse
         cx={-w * 0.16}
         cy={-h * 0.24}
@@ -258,7 +284,15 @@ function Eye({
   );
 }
 
-function Mouth({ kind, mood, state }: { kind: MascotLook["mouth"]; mood: MascotMood; state: MascotState }) {
+function Mouth({
+  kind,
+  mood,
+  state,
+}: {
+  kind: MascotLook["mouth"];
+  mood: MascotMood;
+  state: MascotState;
+}) {
   if (kind === "none") return null;
   if (state === "speaking") {
     return (
@@ -301,9 +335,11 @@ function Mouth({ kind, mood, state }: { kind: MascotLook["mouth"]; mood: MascotM
  * two products never have to share a character. With reduced motion it holds
  * still and keeps its expressions.
  */
-const Mascot = forwardRef<HTMLDivElement, MascotProps>(
+const FlatMascot = forwardRef<HTMLDivElement, MascotProps>(
   (
     {
+      sides: _sides,
+      face: _face,
       state = "idle",
       mood = "neutral",
       seed,
@@ -548,6 +584,29 @@ const Mascot = forwardRef<HTMLDivElement, MascotProps>(
     );
   },
 );
+
+FlatMascot.displayName = "FlatMascot";
+
+/**
+ * `working="cube"` draws it in 3D: while it thinks it becomes the Once UI cube
+ * and solves it, then shows the logo and softens back with its face.
+ */
+const Mascot = forwardRef<HTMLDivElement, MascotProps>((props, ref) => {
+  const {
+    working,
+    state = "idle",
+    mood = "neutral",
+    lookAt = "pointer",
+    size = "l",
+    ...rest
+  } = props;
+  const full = { ...rest, state, mood, lookAt, size };
+  return working === "cube" ? (
+    <MascotCube props={{ ...full, ref }} fallback={<FlatMascot ref={ref} {...full} />} />
+  ) : (
+    <FlatMascot ref={ref} {...full} />
+  );
+});
 
 Mascot.displayName = "Mascot";
 
