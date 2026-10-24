@@ -57,8 +57,8 @@ export interface CubeLook {
 
 /* BoxGeometry face order +x, -x, +y, -y, +z, -z. */
 const FACE_SIDE: CubeSide[] = ["right", "left", "top", "bottom", "front", "back"];
-const BEVEL = 0.2;
-const GAP = 0.04;
+const BEVEL = 0.1;
+const GAP = 0.006;
 const BLOB_R = 1.12;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
