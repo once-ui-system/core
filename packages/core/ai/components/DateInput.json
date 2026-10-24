@@ -35,6 +35,7 @@
    "month": "(month: string) => string",
    "year": "(year: number) => string",
    "backToCalendar": "string",
+   "apply": "string",
    "hours": "string",
    "minutes": "string",
    "am": "string",

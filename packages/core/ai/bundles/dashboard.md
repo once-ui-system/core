@@ -23,7 +23,7 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -95,6 +95,7 @@ comes from when it is not the root:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
 | `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
 | `LayoutProvider` in a **Next.js** app; `createOgFetchRoute`, `createOgProxyRoute` | `@once-ui-system/core/next` |
@@ -185,7 +186,7 @@ Mixins: CommonProps, DisplayProps, SpacingProps, TextProps.
 Extends Flex.
 Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProps.
 - size?: CondensedTShirtSizes = m
-- color?: "blue" | "indigo" | "violet" | "magenta" | "pink" | "red" | "orange" | "yellow" | "moss" | "green" | "emerald" | "aqua" | "cyan" | "gray" = blue
+- color?: StatusIndicatorColor = blue
 - ariaLabel?: string = `${color} status indicator`
 - className?: string
 - style?: React.CSSProperties
@@ -211,8 +212,9 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - buttons: ButtonOption[]
 - onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - defaultValue, value, className?: string
-- fillWidth?: boolean = true
+- fillWidth, scroll?: boolean = true
 - compact?: boolean = false
+- semantics?: "tabs" | "radio" = tabs
 - style?: React.CSSProperties
 
 ### Scroller
@@ -316,7 +318,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 Extends ToggleButton.
 - label: ReactNode
 - icon?: IconName
-- badge?: number
+- prefix?: ReactNode
+- badge?: number | ReactNode
 - indicator?: boolean
 
 ### ToggleButton
@@ -404,7 +407,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - value, src, className?: string
 - unoptimized, loading, empty?: boolean
 - icon?: IconName
-- statusIndicator?: { color: "green" | "yellow" | "red" | "gray"; }
+- statusIndicator?: { color: StatusIndicatorColor; }
 - style?: React.CSSProperties = {}
 
 ### Dialog
@@ -476,7 +479,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - aspectRatio?: CSSProperties["aspectRatio"]
 
 ### SpacingProps
-- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number
+- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY?: SpacingToken | number
+- margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number | "auto"
 - gap?: SpacingToken | number | "-1"
 - top, right, bottom, left, translateX, translateY?: SpacingToken | number | CSSUnit
 
@@ -492,7 +496,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
-- cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
+- cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number
 - theme?: "light" | "dark"
@@ -519,7 +523,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ### ChartProps
 - title, description, emptyState, errorState?: React.ReactNode
 - series: SeriesConfig | SeriesConfig[]
-- data: DataPoint[]
+- data: readonly DataPoint[] | readonly object[]
 - legend?: LegendConfig
 - date?: DateConfig
 - error, tooltip, loading?: boolean
@@ -534,14 +538,17 @@ type BaseColor = "page" | "surface" | "overlay" | "transparent" | `${"neutral" |
 type BlendMode = "color" | "normal" | "screen" | "overlay" | "multiply" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "xl" | "l" | "m" | "s" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
-type ButtonOption = { value: string; style?: React.CSSProperties; className?: string; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; fillWidth?: boolean; label?: ReactNode; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; href?: string }
+type BreakpointKey = "xl" | "l" | "m" | "s" | "xs"
+type ButtonOption = { value: string; description?: ReactNode; style?: React.CSSProperties; className?: string; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; fillWidth?: boolean; rounded?: boolean; label?: ReactNode; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; href?: string }
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
 type ChartVariant = "flat" | "outline" | "gradient"
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorValue = string & {} | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
+type ColumnHide = Partial<Record<BreakpointKey, boolean>>
 type CondensedTShirtSizes = "l" | "m" | "s"
+type CursorPresetValue = "soft" | "rounded" | "dot" | "system"
 type DataPoint = { [key: string]?: string | number | Date | undefined; label?: string }
 type DataStyle = "categorical" | "divergent" | "sequential"
 type DateConfig = { start?: Date; end?: Date; max?: Date; min?: Date; dual?: boolean; format?: string; presets?: PresetsConfig; selector?: boolean; onChange?: (range: DateRange) => void }
@@ -567,10 +574,11 @@ type SeriesConfig = { key: string; color?: ColorValue }
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: xl l m s xs 0 1 2 4 8 12 32 64 160 16 20 24 40 48 56 72 80 104 128
+// type StatusIndicatorColor is one of these strings: neutral brand accent info danger warning success blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
 type TableAction = { icon: string; label?: string; tooltip?: string; variant?: "primary" | "secondary" | "tertiary" | "danger"; onClick: (rowIndex: number) => void; disabled?: (rowIndex: number) => boolean }
-type TableHeader = { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right" }
+type TableHeader = { content: ReactNode; key: string; sortable?: boolean; width?: string; align?: "left" | "center" | "right"; hide?: ColumnHide }
 type TextBreakpointHide = { hide?: boolean }
 type TextSize = "xl" | "l" | "m" | "s" | "xs"
 type TextType = "label" | "body" | "code" | "heading" | "display"
@@ -585,12 +593,13 @@ type UserSelect = "auto" | "none" | "text" | "all"
 
 - The x axis reads the first key of data[0] that is not a series key (date, label, month). Put that key first in every point and list only the plotted keys in series: series={[{ key: "visitors" }]} with data={[{ date: "Oct 1", visitors: 1840 }]}.
 - x/y are percent positions of the container (50/50 = center).
-- StatusIndicator uses color="green" | "red" | "orange" | "gray" etc. — not variant or semantic scheme names.
+- StatusIndicator takes color, not variant: a palette name ("green", "red", "gray") or a theme role ("success", "danger", "brand").
 - Never cast an icon name with `as IconName`: the cast compiles a name the registry does not have, and it renders nothing. Use a name from iconNames; in data, type the field as IconName ({ icon: IconName }[]) or write the literal `as const`, so the type check still runs.
 - Field heights run a step above Button's: Input size xs is 40px, s 48px, m 56px (the default). A field beside a size="s" Button (32px), as in a toolbar or filter row, takes size="xxs", which is 32px too; Form size="xxs" sets it for every field inside. An xxs field has no floating label: label shows as the placeholder, so keep label for the accessible name.
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
 - Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Tag and Badge are divs by default; inside a sentence (<Text as="p">, <p>) give them as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 
 ## Quality bar

@@ -23,7 +23,7 @@ This file is complete for this task: the rules (all of `rules.compact.md`), the 
 
 - `Flex` only when direction changes at breakpoints: `<Row s={{ direction: "column" }}>`
 - Subtree theme: `theme`, `themeBorder`, `themeSolid`, `themeSurface` on Flex/Row/Column/Grid and components built on them (`Background`, `Tag`, effects) — not raw `data-theme`/`data-border`/`data-solid`. `Button`/`IconButton` have no typed prop: keep `data-border="rounded"`
-- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed), not overrides of semantic CSS variables
+- App theme in `once-ui.config` `style`: `defaultTheme: "light"` = starts light, visitor can switch (`theme: "light"` forces it and `setTheme` does nothing). Exact brand colours: `brandScale`/`neutralScale` `{ 100: "#…", …, 1200: "#…" }` (with or without a seed; per theme `{ light: {…}, dark: {…} }`), page/card colour: `pageBackground`/`surfaceBackground` (token or colour, or `{ light, dark }`), not overrides of semantic CSS variables
 - Page skeleton: `Column as="main" fillWidth horizontal="center"` → content `Column maxWidth="l"` → sections
 - Section gaps: `"104"` between sections, `"24"`–`"40"` inside. Never `"48"` between major sections.
 - Responsive: breakpoint props `xl l m s xs` — never media queries for layout
@@ -95,6 +95,7 @@ comes from when it is not the root:
 | charts, gauges, chart chrome | `@once-ui-system/core/data` (needs `recharts`) |
 | `CodeBlock` | `@once-ui-system/core/code` (needs `prismjs`) |
 | `MediaUpload` | `@once-ui-system/core/media` (needs `compressorjs`) |
+| `Map`, `MapMarker(s)`, `MapPin`, `MapPopup`, `MapCircle` | `@once-ui-system/core/map` (needs `maplibre-gl`) |
 | `mdxComponents`, `createMdxComponents`, `Mdx*` elements | `@once-ui-system/core/mdx` (needs `prismjs`) |
 | `MediaAudioPlayer`, `MediaVideoPlayer` | `@once-ui-system/core/components/<Name>` |
 | `LayoutProvider` in a **Next.js** app; `createOgFetchRoute`, `createOgProxyRoute` | `@once-ui-system/core/next` |
@@ -152,8 +153,9 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - buttons: ButtonOption[]
 - onChange?: (value: string, event?: React.MouseEvent<HTMLButtonElement>) => void
 - defaultValue, value, className?: string
-- fillWidth?: boolean = true
+- fillWidth, scroll?: boolean = true
 - compact?: boolean = false
+- semantics?: "tabs" | "radio" = tabs
 - style?: React.CSSProperties
 
 ### Scroller
@@ -331,7 +333,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - value, src, className?: string
 - unoptimized, loading, empty?: boolean
 - icon?: IconName
-- statusIndicator?: { color: "green" | "yellow" | "red" | "gray"; }
+- statusIndicator?: { color: StatusIndicatorColor; }
 - style?: React.CSSProperties = {}
 
 ### Dialog
@@ -403,7 +405,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - aspectRatio?: CSSProperties["aspectRatio"]
 
 ### SpacingProps
-- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY, margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number
+- padding, paddingLeft, paddingRight, paddingTop, paddingBottom, paddingX, paddingY?: SpacingToken | number
+- margin, marginLeft, marginRight, marginTop, marginBottom, marginX, marginY?: SpacingToken | number | "auto"
 - gap?: SpacingToken | number | "-1"
 - top, right, bottom, left, translateX, translateY?: SpacingToken | number | CSSUnit
 
@@ -419,7 +422,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - borderWidth?: 1 | 2 | 4 | 8 | "1" | "2" | "4" | "8"
 - topRadius, rightRadius, bottomRadius, leftRadius, topLeftRadius, topRightRadius, bottomLeftRadius, bottomRightRadius?: RadiusSize
 - shadow?: ShadowSize
-- cursor?: CSSProperties["cursor"] | "interactive" | ReactNode
+- cursor?: CSSProperties["cursor"] | "interactive" | CursorPresetValue | ReactNode
 - blendMode?: BlendMode
 - blur, backdropBlur?: BlurSize | number
 - theme?: "light" | "dark"
@@ -450,12 +453,13 @@ type BaseColor = "page" | "surface" | "overlay" | "transparent" | `${"neutral" |
 type BlendMode = "color" | "normal" | "screen" | "overlay" | "multiply" | "darken" | "lighten" | "difference" | "exclusion" | "hue" | "saturation" | "luminosity" | `color-${"dodge" | "burn"}` | "hard-light" | "soft-light" | "plus-lighter"
 type BlurSize = "xl" | "l" | "m" | "s" | "xs"
 type BorderStyle = "rounded" | "playful" | "conservative" | "sharp"
-type ButtonOption = { value: string; style?: React.CSSProperties; className?: string; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; fillWidth?: boolean; label?: ReactNode; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; rounded?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; href?: string }
+type ButtonOption = { value: string; description?: ReactNode; style?: React.CSSProperties; className?: string; children?: ReactNode; horizontal?: "start" | "center" | "end" | "between"; radius?: RadiusSize; fillWidth?: boolean; rounded?: boolean; label?: ReactNode; disabled?: boolean; size?: TShirtSizes; corners?: "none" | "top" | "right" | "bottom" | "left" | "top-left" | "top-right" | "bottom-right" | "bottom-left"; variant?: "ghost" | "outline" | "subtle"; weight?: "default" | "strong"; truncate?: boolean; prefixIcon?: IconName; suffixIcon?: IconName; href?: string }
 type CSSUnit = `${number}px` | `${number}rem` | `${number}em` | `${number}%` | `${number}vh` | `${number}dvh` | `${number}vw` | `calc(${string})`
 // type ColorScheme is one of these strings: neutral brand accent info danger warning success
 type ColorWeight = "weak" | "medium" | "strong"
 type Colors = `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-${"weak" | "medium" | "strong"}` | `${"neutral" | "brand" | "accent" | "info" | "danger" | "warning" | "success"}-alpha-${"weak" | "medium" | "strong"}`
 type CondensedTShirtSizes = "l" | "m" | "s"
+type CursorPresetValue = "soft" | "rounded" | "dot" | "system"
 // type FieldSize is one of these strings: xl l m s xs xxs
 // type FlexValue is one of these strings: 0 1 2 3 4 5 6 7 8 9 10 11 12
 // type GridBreakpointProps: an object of these Grid props, all optional (padding* is padding, paddingX, paddingTop and the rest):
@@ -476,6 +480,7 @@ type SelectOptionType = Omit<OptionProps, "selected">
 type ShadowSize = "xl" | "l" | "m" | "s" | "xs"
 type SolidType = "color" | "contrast" | "inverse"
 // type SpacingToken is one of these strings: xl l m s xs 0 1 2 4 8 12 32 64 160 16 20 24 40 48 56 72 80 104 128
+// type StatusIndicatorColor is one of these strings: neutral brand accent info danger warning success blue indigo violet magenta pink red orange yellow moss green emerald aqua cyan sand gray slate rose mint dusk
 type SurfaceStyle = "filled" | "translucent"
 type TShirtSizes = "xl" | "l" | "m" | "s" | "xs"
 type TextBreakpointHide = { hide?: boolean }
@@ -495,4 +500,5 @@ type UserSelect = "auto" | "none" | "text" | "all"
 - Fixed in 2.1: a Button or IconButton that is a DropdownWrapper trigger renders a real <button type="button"> with aria-haspopup and aria-expanded, so it is reachable by keyboard. Pass it as trigger as is; do not add type="button" or a no-op onClick, or wrap it in a focusable Row, to make it one.
 - Do not pass the same text as both title prop and children — it renders twice.
 - Write 2.x prop names, not 1.x ones from memory: open (not isOpen), checked (not isChecked), SegmentedControl value/onChange/defaultValue (not selected/onToggle/defaultSelected), Tag scheme (not variant), field size/prefix/suffix/corners (not height/hasPrefix/hasSuffix/radius). The validator names the 2.x prop.
+- Tag and Badge are divs by default; inside a sentence (<Text as="p">, <p>) give them as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
