@@ -23,6 +23,10 @@ item (see `ROADMAP.md`, Week 4).
   content beside it never moves. Touch never opens it, Escape closes it, reduced
   motion drops the animation. `expandedWidth` sets how wide it opens (16rem by
   default).
+- **`feather` on `Mask`.** How much of the radius the edge fades over, from `0`, a sharp
+  circle, to `100`, the soft fade from the centre the mask has always had and still
+  defaults to. With `cursor`, `feather={0}` reads as a lens or a torch carried over the
+  page rather than a glow.
 - **Map.** `@once-ui-system/core/map` draws an interactive map on MapLibre GL with free
   OpenFreeMap tiles (OpenStreetMap data, no key, no view limit). The basemap follows the
   theme and takes the page background token. Markers are React content (`MapMarker`, or
@@ -67,6 +71,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A `DropdownWrapper` that leads with a search field keeps the caret in it.** With arrow
+  navigation on, the field took focus as the panel opened and lost it a frame later to the
+  selected option, so a site switcher or command menu opened with nothing to type into.
+  The field now keeps focus (taken once it is actually visible: Input's transition keeps it
+  hidden for a frame after the panel is placed), and ArrowDown moves from it into the list.
+- **`DropdownWrapper` opens with a softer grow.** The panel scales from 0.96 rather than
+  0.9 as it fades in, still from the corner anchored to its trigger: a tall panel's far
+  edge travelled about 40px, which read as a pop rather than an opening.
 - **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
   of buttons, links and inputs: the native pointer showed beside it, and an input lost its
   I-beam. It now steps aside wherever the native cursor is back, and over a nested element
