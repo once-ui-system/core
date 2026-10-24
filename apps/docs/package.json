@@ -26,14 +26,14 @@
   },
   "dependencies": {
     "@mdx-js/loader": "^3.1.1",
-    "@next/mdx": "^16.2.12",
+    "@next/mdx": "^16.4.3",
     "@once-ui-system/core": "workspace:*",
     "@once-ui-system/foundations": "workspace:*",
     "@vercel/analytics": "^2.0.1",
     "clsx": "^2.1.1",
     "front-matter": "^4.0.2",
     "maplibre-gl": "^6.15.0",
-    "next": "^16.2.12",
+    "next": "^16.4.3",
     "next-mdx-remote": "^6.0.0",
     "react": "19.2.8",
     "react-dom": "19.2.8",
@@ -41,7 +41,7 @@
     "react-icons": "^5.7.0",
     "remark-gfm": "^4.0.1",
     "sass": "^1.102.0",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.6",
