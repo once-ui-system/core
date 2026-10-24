@@ -1,0 +1,95 @@
+// The one place for the brand name, theme settings and SEO defaults.
+// Pages read from here; nothing else hard-codes the product name or URL.
+
+const palette = {
+  emerald500: "#10b981",
+  emerald600: "#059669",
+  emerald950: "#022c22",
+  cyan500: "#06b6d4",
+  cyan600: "#0891b2",
+  cyan950: "#083344",
+};
+
+export const site = {
+  name: "Acme Notes",
+  tagline: "Notes your whole team can find.",
+  description:
+    "Acme Notes is a notes app for teams: shared notebooks, instant search, and roles and permissions for every organization.",
+  url: "https://acme-notes.example",
+  locale: "en_US",
+  language: "en",
+
+  seo: {
+    titleTemplate: "%s | Acme Notes",
+    defaultTitle: "Acme Notes: Notes your whole team can find.",
+    keywords: ["team notes", "shared notebooks", "team search", "notes app"],
+  },
+
+  theme: {
+    // Dark mode is the default. The light palette is kept for completeness.
+    defaultMode: "dark" as "dark" | "light",
+    brand: "emerald",
+    accent: "cyan",
+    neutral: "gray",
+    dark: {
+      background: "#0a0a0a",
+      foreground: "#fafafa",
+      card: "#141414",
+      "card-foreground": "#fafafa",
+      popover: "#141414",
+      "popover-foreground": "#fafafa",
+      primary: palette.emerald500,
+      "primary-foreground": palette.emerald950,
+      secondary: "#1f1f1f",
+      "secondary-foreground": "#fafafa",
+      muted: "#1f1f1f",
+      "muted-foreground": "#a3a3a3",
+      accent: "#262626",
+      "accent-foreground": "#fafafa",
+      border: "rgb(255 255 255 / 10%)",
+      input: "rgb(255 255 255 / 14%)",
+      ring: palette.emerald500,
+      "brand-accent": palette.cyan500,
+      "brand-accent-foreground": palette.cyan950,
+      sidebar: "#0f0f0f",
+      "sidebar-foreground": "#fafafa",
+      "sidebar-primary": palette.emerald500,
+      "sidebar-primary-foreground": palette.emerald950,
+      "sidebar-accent": "#1f1f1f",
+      "sidebar-accent-foreground": "#fafafa",
+      "sidebar-border": "rgb(255 255 255 / 10%)",
+      "sidebar-ring": palette.emerald500,
+    },
+    light: {
+      background: "#ffffff",
+      foreground: "#0a0a0a",
+      card: "#ffffff",
+      "card-foreground": "#0a0a0a",
+      popover: "#ffffff",
+      "popover-foreground": "#0a0a0a",
+      primary: palette.emerald600,
+      "primary-foreground": "#ffffff",
+      secondary: "#f5f5f5",
+      "secondary-foreground": "#0a0a0a",
+      muted: "#f5f5f5",
+      "muted-foreground": "#525252",
+      accent: "#ededed",
+      "accent-foreground": "#0a0a0a",
+      border: "#e5e5e5",
+      input: "#e5e5e5",
+      ring: palette.emerald600,
+      "brand-accent": palette.cyan600,
+      "brand-accent-foreground": "#ffffff",
+      sidebar: "#fafafa",
+      "sidebar-foreground": "#0a0a0a",
+      "sidebar-primary": palette.emerald600,
+      "sidebar-primary-foreground": "#ffffff",
+      "sidebar-accent": "#f0f0f0",
+      "sidebar-accent-foreground": "#0a0a0a",
+      "sidebar-border": "#e5e5e5",
+      "sidebar-ring": palette.emerald600,
+    },
+  },
+} as const;
+
+export type Site = typeof site;

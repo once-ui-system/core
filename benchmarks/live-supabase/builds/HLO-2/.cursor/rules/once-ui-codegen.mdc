@@ -1,0 +1,30 @@
+---
+description: Load Once UI agent harness before generating UI code
+globs: "**/*.{tsx,jsx}"
+alwaysApply: false
+---
+
+# Once UI codegen harness
+
+Before generating or editing Once UI UI code in this project:
+
+1. Read `node_modules/@once-ui-system/core/AGENTS.md`: it lists the task bundles
+2. Read the closest bundle, `ai/bundles/{id}.md`, with any project files you need, in one step. It is complete (rules, component props, types, gotchas and a gold example), so write from it
+3. Open `ai/components/<Name>.json` only for a component the bundle does not list, all in one step. Never open `ai/spec.json`
+4. Validate output: `npx once-ui-validate-ai-code path/to/file.tsx`
+
+## Next.js apps
+
+Import `LayoutProvider` from `@once-ui-system/core/next`, not the package root. The root export
+renders `SmartLink`, `Button href`, `Media` and the rest as plain `<a>` and `<img>`, with no error.
+
+## Do not
+
+- Use full documentation MDX pages for codegen (too large; use the harness)
+- Use `Flex direction="column"` when `Column` works; same for `Row`
+- Use `fillWidth fillHeight` when `fill` works
+- Use `Card` for static panels (use the surface recipe on `Column`)
+
+## Remote fallback
+
+https://docs.once-ui.com/ai/manifest.json

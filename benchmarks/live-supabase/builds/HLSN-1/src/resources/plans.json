@@ -1,0 +1,18 @@
+{
+  "$comment": "The plans shown on the landing page. Team's Stripe price id comes from STRIPE_PRICE_TEAM (test mode) and must match this amount: $8 per member per month.",
+  "currency": "usd",
+  "free": {
+    "key": "free",
+    "name": "Free",
+    "amount": 0,
+    "members": 3,
+    "description": "For a small group trying Acme Notes."
+  },
+  "team": {
+    "key": "team",
+    "name": "Team",
+    "amount": 800,
+    "interval": "month",
+    "description": "For teams with more people who need shared notebooks and roles."
+  }
+}

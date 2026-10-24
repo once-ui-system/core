@@ -1,0 +1,66 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "./types",
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/app/(landing)/blog/client.tsx",
+    "src/app/(landing)/blog/components",
+    "src/app/(landing)/components/Banner.tsx",
+    "src/app/(landing)/components/Blog.tsx",
+    "src/app/(landing)/components/Cta.tsx",
+    "src/app/(landing)/components/Faq.tsx",
+    "src/app/(landing)/components/Newsletter.tsx",
+    "src/app/(landing)/components/SectionHeader.tsx",
+    "src/app/(landing)/components/Steps.tsx",
+    "src/app/(landing)/components/Testimonial.tsx",
+    "src/app/(landing)/components/Testimonials.tsx",
+    "src/app/(landing)/pricing/components",
+    "src/app/(product)/app/[org]/billing/client.tsx",
+    "src/app/(product)/app/[org]/components",
+    "src/app/(product)/app/[org]/settings/client.tsx",
+    "src/app/(product)/app/[org]/settings/components",
+    "src/app/(product)/app/[org]/users/components",
+    "src/app/(product)/components/Table.tsx",
+    "src/components/UserProvider.tsx",
+    "src/lib/billing/status.ts",
+    "src/lib/billing/catalog.ts"
+  ]
+}
