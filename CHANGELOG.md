@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-10-24
+
 ### Added
 
 - **`Mascot` turns into a cube while it works.** `working="cube"` swaps the mascot for a
