@@ -36,6 +36,8 @@ export interface CubeInput {
   level: number;
   reduced: boolean;
   personality: "calm" | "default" | "bouncy";
+  /** How many times it has been poked; each new one squashes it. */
+  pokes?: number;
 }
 
 /** A quarter turn of one layer: `axis` x, y or z, the layer on the `side` (+1 or -1), and the direction. */
@@ -165,6 +167,7 @@ const MOODS: Record<CubeMood | "sleepy", Partial<Pose>> = {
 
 const SPEED = { calm: 0.7, default: 1, bouncy: 1.25 } as const;
 const HOP = { calm: 0.12, default: 0.3, bouncy: 0.45 } as const;
+const SQUASH = { calm: 0.6, default: 1, bouncy: 1.4 } as const;
 
 export interface Cubie {
   home: Vec3;
@@ -182,6 +185,10 @@ export class CubeMotion {
   hold = 0;
   hop = 0;
   celebrate = 0;
+  /** Seconds since the last poke. */
+  pokeT = 9;
+  /** How far a poke presses it in now: positive is squashed, negative stretched. */
+  squash = 0;
   rot = { x: 0.12, y: 0, spin: 0 };
   pose: Pose = { ...BASE };
   /** 0 open, 1 shut. */
@@ -205,6 +212,7 @@ export class CubeMotion {
   private time = 0;
   private nextBlink = 2;
   private blinkT = 1;
+  private pokesSeen = 0;
 
   constructor(private random: () => number = Math.random) {
     for (const x of [-1, 1]) {
@@ -339,6 +347,19 @@ export class CubeMotion {
     this.rot.y += (ty - this.rot.y) * k;
     this.rot.spin += (tz - this.rot.spin) * k;
 
+    // A poke presses it in, then it wobbles back like a spring, and blinks.
+    const pokes = input.pokes ?? 0;
+    if (pokes !== this.pokesSeen) {
+      this.pokesSeen = pokes;
+      this.pokeT = 0;
+      if (!input.reduced) this.blinkT = 0;
+    }
+    this.pokeT += dt;
+    this.squash =
+      input.reduced || this.pokeT > 1.2
+        ? 0
+        : Math.exp(-this.pokeT * 6) * Math.sin(this.pokeT * 22) * 0.16 * SQUASH[input.personality];
+
     this.hop = Math.max(0, this.hop - dt * 1.6);
     const breatheRate = input.state === "sleeping" ? 1.1 : 2.2;
     this.breathe = Math.sin(this.time * breatheRate) * 0.02 * (1 - this.morph) * still;
@@ -354,7 +375,10 @@ export class CubeMotion {
     const b = this.blinkT / 0.26;
     this.blink = b < 1 ? Math.sin(Math.PI * b) ** 1.4 : 0;
 
-    const target = poseFor(this.celebrate > 0 ? "happy" : input.mood, input);
+    const target = poseFor(
+      this.pokeT < 0.6 ? "surprised" : this.celebrate > 0 ? "happy" : input.mood,
+      input,
+    );
     const ease = input.reduced ? 1 : 1 - Math.exp(-dt * 11);
     for (const key of Object.keys(this.pose) as (keyof Pose)[]) {
       this.pose[key] += (target[key] - this.pose[key]) * ease;

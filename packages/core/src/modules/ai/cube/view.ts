@@ -304,10 +304,12 @@ export class CubeView {
     // Body.
     const fit = mix(1, 0.8, m) * (input.state === "speaking" ? 1 + input.level * 0.04 : 1);
     const rootQ = quatEuler(motion.rot.x, motion.rot.y, 0);
-    const root = compose([0, lift, 0], rootQ, [
-      fit * (1 + motion.breathe * 0.6),
-      fit * (1 - motion.breathe * 0.4),
-      fit * (1 + motion.breathe * 0.6),
+    const wide = 1 + motion.breathe * 0.6 + motion.squash * 0.6;
+    const tall = 1 - motion.breathe * 0.4 - motion.squash;
+    const root = compose([0, lift - motion.squash * 0.9, 0], rootQ, [
+      fit * wide,
+      fit * tall,
+      fit * wide,
     ]);
     const spin = multiply(
       root,

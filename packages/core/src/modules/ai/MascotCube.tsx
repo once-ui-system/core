@@ -9,7 +9,13 @@ import { clamp } from "./cube/math";
 import type { RGB } from "./cube/renderer";
 import { type CubeInput, CubeMotion } from "./cube/state";
 import { type CubeEyes, type CubeLook, type CubeSide, CubeView } from "./cube/view";
-import { type MascotLook, type MascotProps, type MascotState, mascotLook } from "./Mascot";
+import {
+  type MascotLook,
+  type MascotProps,
+  type MascotState,
+  mascotLook,
+  useMascotPoke,
+} from "./Mascot";
 import styles from "./Mascot.module.scss";
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
@@ -145,7 +151,9 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     level,
     source,
     size = "l",
-    "aria-label": ariaLabel,
+    ariaLabel,
+    poke = true,
+    onPointerDown,
     className,
     style,
     ...flex
@@ -194,8 +202,10 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     reduced: false,
     personality: look.personality,
   });
+  const prod = useMascotPoke(poke, onPointerDown);
   input.current.state = state;
   input.current.mood = mood;
+  input.current.pokes = prod.pokes;
   input.current.personality = look.personality;
   const cubeLook = useRef<CubeLook | null>(null);
   const lookKey = JSON.stringify([look, eyeColor]);
@@ -362,6 +372,7 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       className={classNames(styles.mascot, className)}
       style={{ width: length, height: length, ...style } as React.CSSProperties}
       {...flex}
+      onPointerDown={prod.onPointerDown}
     >
       <canvas ref={canvas} className={styles.canvas} />
     </Flex>
