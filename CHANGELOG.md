@@ -15,6 +15,13 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Announcement banners.** `Banner variant="mesh"` draws a soft, slowly drifting
+  gradient wash from the theme's brand and accent scales (`meshColors` picks others) under
+  a scrim that keeps the text readable in dark and light. `link` adds an inline,
+  underlined call to action; `dismissible` adds a close button, and `dismissKey` remembers
+  the dismissal in the browser. `ThemeInit` reads remembered dismissals before the first
+  paint, so a dismissed banner never flashes in. Banner stays a server component, and a
+  caller's own `background` now replaces the default brand strip instead of clashing with it.
 - **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
   badges and section headings fade out but stay each row's accessible name, and
   `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
