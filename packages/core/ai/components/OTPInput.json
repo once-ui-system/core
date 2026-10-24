@@ -7,7 +7,8 @@
   "error": "boolean = false",
   "errorMessage": "React.ReactNode",
   "disabled": "boolean = false",
-  "autoFocus": "boolean = false"
+  "autoFocus": "boolean = false",
+  "labels": "OTPInputLabels"
  },
  "tags": [
   "form",
@@ -18,5 +19,11 @@
   "Column",
   "Button"
  ],
- "mixinsRef": []
+ "mixinsRef": [],
+ "types": {
+  "OTPInputLabels": {
+   "group": "string",
+   "digit": "(position: number, length: number) => string"
+  }
+ }
 }

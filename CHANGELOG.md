@@ -13,6 +13,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.6.0-rc.0] — 2026-10-24
+
 ### Added
 
 - **`Mascot` turns into a cube while it works.** `working="cube"` swaps the mascot for a
@@ -279,6 +281,13 @@ item (see `ROADMAP.md`, Week 4).
   shape, size and placement, `mouth`, `brows`, `cheeks`, an SVG `accessory` and a
   `personality`; `seed` (or `mascotLook(seed)`) picks a whole look so each product gets
   its own character. Under reduced motion it holds still and keeps its expressions.
+- **A 3D cube mascot: `Mascot working="cube"`.** The mascot drawn in 3D with a small
+  built-in WebGL renderer. While it thinks it turns into a 2 × 2 cube, the Once UI mark,
+  and solves it with no face showing; when it stops, the cube clicks into place, shows the
+  logo for a beat and softens back into the mascot. `sides` colors the cube (`classic`
+  Rubik's colors by default, `tints` of the body color, `mono`, or a color per side) and
+  `face="flat"` paints the face on without light. A click or tap pokes it (`poke`, on by
+  default). Without WebGL the flat mascot shows instead.
 
 ### Fixed
 

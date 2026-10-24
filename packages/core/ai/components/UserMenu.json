@@ -6,6 +6,7 @@
   "DropdownWrapper"
  ],
  "props": {
+  "onSelect": "(value: string) => void",
   "selected": "boolean = false",
   "placement": "Placement",
   "dropdown": "React.ReactNode",

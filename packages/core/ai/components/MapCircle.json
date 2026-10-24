@@ -1,0 +1,34 @@
+{
+ "name": "MapCircle",
+ "group": "map",
+ "importFrom": "@once-ui-system/core/map",
+ "props": {
+  "position": "!LngLat",
+  "radius": "!number",
+  "color": "MapColor = brand",
+  "opacity": "number = 0.2"
+ },
+ "tags": [
+  "map",
+  "location"
+ ],
+ "pairsWith": [
+  "Map",
+  "MapMarker"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "MapColor": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
+}
