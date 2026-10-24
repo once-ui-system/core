@@ -13,8 +13,22 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-10-24
+
 ### Added
 
+- **`Mascot` turns into a cube while it works.** `working="cube"` swaps the mascot for a
+  WebGL cube that scrambles and solves while `state` is `thinking`, then turns into the
+  Once UI logo and morphs back. `sides` colors the faces (`"tints"` derives them from
+  `color`), the gaps between pieces are hairline thin, and without WebGL or with
+  reduced motion the flat mascot stays.
+- **Poke the `Mascot`.** A click or tap squashes it with a surprised face; `poke={false}`
+  turns it off.
+- **Kawaii moods for `Mascot`.** `love`, `excited`, `laughing`, `embarrassed`, `crying`,
+  `angry` and `confused` draw an everyday mood plus effects: heart, star or laughing
+  eyes, blush, sweat, tears, an anger mark, and hearts, sparkles or a question mark
+  floating up. `effects` adds any of them to any mood (`effects={["blush"]}`) or turns
+  them off (`effects={false}`). Flat and cube draw the same glyphs.
 - **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
   badges and section headings fade out but stay each row's accessible name, and
   `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
