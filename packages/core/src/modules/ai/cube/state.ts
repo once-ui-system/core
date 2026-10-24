@@ -38,6 +38,10 @@ export interface CubeInput {
   personality: "calm" | "default" | "bouncy";
   /** How many times it has been poked; each new one squashes it. */
   pokes?: number;
+  /** Glyph eyes are drawn over the canvas, so the 3D eyes step aside. */
+  hideEyes?: boolean;
+  /** A wide open laughing grin. */
+  laugh?: boolean;
 }
 
 /** A quarter turn of one layer: `axis` x, y or z, the layer on the `side` (+1 or -1), and the direction. */
@@ -391,7 +395,7 @@ export class CubeMotion {
   }
 }
 
-export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level">): Pose {
+export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level" | "laugh">): Pose {
   const pose: Pose = { ...BASE, ...MOODS[mood] };
   if (input.state === "sleeping") Object.assign(pose, MOODS.sleepy);
   if (input.state === "listening") {
@@ -404,6 +408,8 @@ export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level"
   }
   if (input.state === "speaking") {
     pose.open = clamp(0.25 + input.level * 0.75, 0, 1);
+  } else if (input.laugh) {
+    pose.open = 0.8;
   }
   return pose;
 }

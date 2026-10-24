@@ -70,6 +70,22 @@ const mixRGB = (a: RGB, b: RGB, t: number): RGB => [
   mix(a[2], b[2], t),
 ];
 
+/**
+ * The face's layout in eye units (one eye wide), for drawing over the canvas: half the distance
+ * between the eyes, and how far above them the head ends and how wide it is.
+ */
+export function faceUnits(look: Pick<CubeLook, "eyeSize" | "eyeSpacing" | "eyeHeight" | "aspect">) {
+  const size = 0.4 * look.eyeSize;
+  const spread =
+    0.28 * clamp(look.eyeSpacing, 0.6, 1.5) * mix(1, clamp(look.aspect, 0.6, 1.6), 0.6);
+  const eyeY = 0.02 - clamp(look.eyeHeight, -1, 1) * 0.25;
+  return {
+    half: spread / size,
+    top: (BLOB_R * 0.9 - eyeY) / size,
+    halfWidth: (BLOB_R * clamp(look.aspect, 0.6, 1.6)) / size,
+  };
+}
+
 /** A point on a rounded box of half-size 1 with corner radius r, and its normal, for a point p on the box. */
 function rounded(px: number, py: number, pz: number, r: number, out: Float32Array) {
   const lim = 1 - r;
@@ -147,12 +163,19 @@ export class CubeView {
   private quad: GpuMesh;
   private disc: GpuMesh;
   private mouth: { mesh: GpuMesh; data: MeshData };
+  private vp: Mat4 = new Float32Array(16);
+  /**
+   * Where the face is on the canvas after a render, from 0 to 1 across it: each eye's center and
+   * one eye's width. `null` while the face is hidden.
+   */
+  face: { eyes: [[number, number], [number, number]]; unit: number; opacity: number } | null = null;
   private shapes = new Map<string, GpuMesh>();
   private deformed = { morph: -1, key: "" };
   private t = new Float32Array(6);
   private u = new Float32Array(6);
   private m1 = new Float32Array(16);
   private m2 = new Float32Array(16);
+  private m3 = new Float32Array(16);
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new Renderer(canvas);
@@ -295,6 +318,8 @@ export class CubeView {
       lookAtOrigin(eye),
     );
     r.begin(width, height, viewProjection, eye);
+    this.vp = viewProjection;
+    this.face = null;
 
     const solid = look.surface === "solid";
     const gloss = look.surface === "glossy" ? 0.6 : 0.05;
@@ -425,6 +450,16 @@ export class CubeView {
           [size * sx, size * sy * blinkY, size],
         ),
       );
+      const at = this.project(eyeModel, 0, 0);
+      const edge = this.project(eyeModel, 0.5 / sx, 0);
+      if (left) this.leftEye = at;
+      else
+        this.face = {
+          eyes: [this.leftEye, at],
+          unit: Math.hypot(edge[0] - at[0], edge[1] - at[1]) * 2,
+          opacity: amt,
+        };
+      if (input.hideEyes) continue;
       r.draw(this.shape(look.eyes, !flat), eyeModel, ink);
       if (!flat && sy * blinkY > 0.4) {
         const glint: Material = { color: WHITE, mode: "unlit", opacity: amt };
@@ -501,6 +536,18 @@ export class CubeView {
         ink,
       );
     }
+  }
+
+  private leftEye: [number, number] = [0, 0];
+
+  /** A point in a model's space on the canvas, from 0 to 1 across it, y down. */
+  private project(model: Mat4, x: number, y: number): [number, number] {
+    const m = multiply(this.vp, model, this.m3);
+    const w = m[3] * x + m[7] * y + m[15];
+    return [
+      ((m[0] * x + m[4] * y + m[12]) / w + 1) / 2,
+      (1 - (m[1] * x + m[5] * y + m[13]) / w) / 2,
+    ];
   }
 
   dispose() {

@@ -8,19 +8,23 @@ import type { LeafPropsOf } from "../../interfaces.js";
 import type { CSSUnit } from "../../types.js";
 import { tokenLength } from "../../utils/layoutClasses.js";
 import { type AudioLevelSource, createAudioMeter } from "./audioLevel.js";
+import {
+  baseMood,
+  EyeGlyph,
+  effectsFor,
+  eyeGlyph,
+  KawaiiLayer,
+  type MascotBaseMood,
+  type MascotEffect,
+  type MascotKawaiiMood,
+} from "./kawaii.js";
 import styles from "./Mascot.module.scss";
 import { MascotCube } from "./MascotCube.js";
 
 export type MascotState = "idle" | "listening" | "thinking" | "speaking" | "sleeping";
-export type MascotMood =
-  | "neutral"
-  | "happy"
-  | "surprised"
-  | "sad"
-  | "skeptical"
-  | "wink"
-  | "focused"
-  | "determined";
+/** Everyday moods, and kawaii ones (`love`, `excited`, `laughing`, `embarrassed`, `crying`, `angry`, `confused`) that add effects. */
+export type MascotMood = MascotBaseMood | MascotKawaiiMood;
+export type { MascotEffect };
 
 /** Everything that makes one character look different from another. */
 export interface MascotLook {
@@ -75,6 +79,12 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
    * flat mascot shows instead.
    */
   working?: "cube";
+  /**
+   * Kawaii effects: heart, star or laughing eyes, blush, tears, a sweat drop, an anger mark and
+   * symbols rising off the head. `true` (default) draws the ones a mood brings, `false` none, and a
+   * list adds those to any mood.
+   */
+  effects?: boolean | MascotEffect[];
   /** A click or tap pokes it: it squashes, blinks and looks surprised for a moment. On by default. */
   poke?: boolean;
   /** What the assistant is doing. Each state has its own pose and motion. */
@@ -292,12 +302,18 @@ function Mouth({
   kind,
   mood,
   state,
+  laugh = false,
 }: {
   kind: MascotLook["mouth"];
-  mood: MascotMood;
+  mood: MascotBaseMood;
   state: MascotState;
+  /** A wide open grin, for laughing eyes. */
+  laugh?: boolean;
 }) {
   if (kind === "none") return null;
+  if (laugh && state !== "speaking") {
+    return <path d="M-12 -3Q0 -5 12 -3Q10 13 0 13Q-10 13-12 -3Z" className={styles.ink} />;
+  }
   if (state === "speaking") {
     return (
       <g className={styles.talk}>
@@ -391,6 +407,7 @@ const FlatMascot = ({
   face: _face,
   poke = true,
   onPointerDown,
+  effects,
   state = "idle",
   mood = "neutral",
   seed,
@@ -468,6 +485,11 @@ const FlatMascot = ({
   // A quick squash whenever the expression changes, never on the first render.
   const prod = useMascotPoke(poke, onPointerDown);
   const shownMood = prod.poked ? "surprised" : mood;
+  const fx = effectsFor(shownMood, effects);
+  const base = baseMood(shownMood);
+  const glyph = eyeGlyph(fx);
+  // Kawaii glyphs scale with the eyes, whatever their shape.
+  const unit = 30 * look.eyeSize;
 
   const changes = useRef({ key: `${state}-${mood}`, count: 0 });
   if (changes.current.key !== `${state}-${mood}`) {
@@ -540,7 +562,7 @@ const FlatMascot = ({
       role="img"
       aria-label={ariaLabel ?? STATE_LABEL[state]}
       data-state={state}
-      data-mood={shownMood}
+      data-mood={base}
       data-surface={look.surface}
       data-personality={look.personality}
       data-eyes={tile ? "tile" : "shape"}
@@ -607,8 +629,22 @@ const FlatMascot = ({
                       className={classNames(styles.brow, side < 0 ? styles.left : styles.right)}
                     />
                   ))}
-                <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
-                <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
+                {glyph ? (
+                  ([-1, 1] as const).map((side) => (
+                    <g
+                      key={side}
+                      transform={`translate(${100 + side * spread} ${eyeY}) scale(${unit})`}
+                      className={styles.kawaii}
+                    >
+                      <EyeGlyph kind={glyph} side={side} />
+                    </g>
+                  ))
+                ) : (
+                  <>
+                    <Eye id={id} side={-1} x={100 - spread} y={eyeY} look={look} />
+                    <Eye id={id} side={1} x={100 + spread} y={eyeY} look={look} />
+                  </>
+                )}
                 {look.cheeks &&
                   ([-1, 1] as const).map((side) => (
                     <ellipse
@@ -624,9 +660,21 @@ const FlatMascot = ({
                   className={styles.mouth}
                   transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
                 >
-                  <Mouth kind={look.mouth} mood={shownMood} state={state} />
+                  <Mouth kind={look.mouth} mood={base} state={state} laugh={glyph === "laugh"} />
                 </g>
               </g>
+              <KawaiiLayer
+                effects={fx}
+                at={{
+                  eyes: [
+                    [100 - spread, eyeY],
+                    [100 + spread, eyeY],
+                  ],
+                  unit,
+                  top: body.top,
+                  halfWidth: body.halfWidth,
+                }}
+              />
             </g>
           </g>
         </g>
