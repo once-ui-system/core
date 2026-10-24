@@ -161,6 +161,11 @@
   animation: mascot-pop calc(0.45s * var(--tempo)) cubic-bezier(0.3, 0, 0.3, 1);
 }
 
+/* A poke: pressed in hard, then a springy wobble back. */
+.poke {
+  animation: mascot-poke calc(0.6s * var(--tempo)) cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
 /* Gaze: the face slides toward where it looks, and the eye nearer the edge
    narrows as if it were turning away on a round surface. */
 .face {
@@ -481,6 +486,24 @@
   }
   65% {
     transform: scale(calc(1 - 0.03 * var(--bounce)), calc(1 + 0.05 * var(--bounce)));
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes mascot-poke {
+  0% {
+    transform: scale(1, 1);
+  }
+  18% {
+    transform: scale(calc(1 + 0.12 * var(--bounce)), calc(1 - 0.16 * var(--bounce)));
+  }
+  42% {
+    transform: scale(calc(1 - 0.05 * var(--bounce)), calc(1 + 0.08 * var(--bounce)));
+  }
+  64% {
+    transform: scale(calc(1 + 0.02 * var(--bounce)), calc(1 - 0.03 * var(--bounce)));
   }
   100% {
     transform: scale(1, 1);

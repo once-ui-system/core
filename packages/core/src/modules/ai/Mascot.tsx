@@ -2,7 +2,7 @@
 
 import classNames from "clsx";
 import type React from "react";
-import { useCallback, useEffect, useId, useRef } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { Flex } from "../../components/Flex.js";
 import type { LeafPropsOf } from "../../interfaces.js";
 import type { CSSUnit } from "../../types.js";
@@ -75,6 +75,8 @@ export interface MascotProps extends MascotLook, Omit<LeafPropsOf<"div">, "child
    * flat mascot shows instead.
    */
   working?: "cube";
+  /** A click or tap pokes it: it squashes, blinks and looks surprised for a moment. On by default. */
+  poke?: boolean;
   /** What the assistant is doing. Each state has its own pose and motion. */
   state?: MascotState;
   /** The expression on top of the state. */
@@ -357,10 +359,38 @@ const Mascot = (props: MascotProps) => {
   );
 };
 
+/** How long a poke keeps its surprised face, in milliseconds. */
+const POKE_MS = 600;
+
+/**
+ * A poke on pointer down: `pokes` counts them, so an animation can restart on each one, and
+ * `poked` stays true for a moment after the last.
+ */
+export function useMascotPoke(
+  enabled: boolean,
+  onPointerDown?: React.PointerEventHandler<HTMLDivElement>,
+) {
+  const [pokes, setPokes] = useState(0);
+  const [poked, setPoked] = useState(false);
+  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  useEffect(() => () => clearTimeout(timer.current), []);
+  const handler = (event: React.PointerEvent<HTMLDivElement>) => {
+    onPointerDown?.(event);
+    if (!enabled || event.defaultPrevented) return;
+    setPokes((n) => n + 1);
+    setPoked(true);
+    clearTimeout(timer.current);
+    timer.current = setTimeout(() => setPoked(false), POKE_MS);
+  };
+  return { pokes, poked, onPointerDown: handler };
+}
+
 const FlatMascot = ({
   ref: forwardedRef,
   sides: _sides,
   face: _face,
+  poke = true,
+  onPointerDown,
   state = "idle",
   mood = "neutral",
   seed,
@@ -436,6 +466,9 @@ const FlatMascot = ({
   const tile = look.eyes === "tile";
 
   // A quick squash whenever the expression changes, never on the first render.
+  const prod = useMascotPoke(poke, onPointerDown);
+  const shownMood = prod.poked ? "surprised" : mood;
+
   const changes = useRef({ key: `${state}-${mood}`, count: 0 });
   if (changes.current.key !== `${state}-${mood}`) {
     changes.current = { key: `${state}-${mood}`, count: changes.current.count + 1 };
@@ -507,7 +540,7 @@ const FlatMascot = ({
       role="img"
       aria-label={ariaLabel ?? STATE_LABEL[state]}
       data-state={state}
-      data-mood={mood}
+      data-mood={shownMood}
       data-surface={look.surface}
       data-personality={look.personality}
       data-eyes={tile ? "tile" : "shape"}
@@ -523,6 +556,7 @@ const FlatMascot = ({
         } as React.CSSProperties
       }
       {...flex}
+      onPointerDown={prod.onPointerDown}
     >
       <svg viewBox="0 0 200 200" className={styles.svg} aria-hidden="true" focusable="false">
         <defs>
@@ -545,8 +579,11 @@ const FlatMascot = ({
         <ellipse cx={100} cy={196} rx={56} ry={5} className={styles.shadow} />
         <g className={styles.float}>
           <g
-            key={changes.current.count}
-            className={classNames(styles.body, changes.current.count > 0 && styles.pop)}
+            key={`${changes.current.count}-${prod.pokes}`}
+            className={classNames(
+              styles.body,
+              prod.poked ? styles.poke : changes.current.count > 0 && styles.pop,
+            )}
             style={{ transformOrigin: `100px ${body.bottom}px` }}
           >
             <path d={body.d} className={styles.fill} />
@@ -587,7 +624,7 @@ const FlatMascot = ({
                   className={styles.mouth}
                   transform={`translate(100 ${eyeY + 34 * Math.max(0.8, look.eyeSize)})`}
                 >
-                  <Mouth kind={look.mouth} mood={mood} state={state} />
+                  <Mouth kind={look.mouth} mood={shownMood} state={state} />
                 </g>
               </g>
             </g>

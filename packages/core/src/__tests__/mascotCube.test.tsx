@@ -111,6 +111,22 @@ describe("Mascot working=cube", () => {
     expect(motion.pose.open).toBeGreaterThan(0.95);
   });
 
+  it("squashes when poked, wobbles back and looks surprised for a moment", () => {
+    const motion = new CubeMotion(seeded());
+    run(motion, 1, input("idle"));
+    expect(motion.squash).toBe(0);
+    motion.update(1 / 60, input("idle", { pokes: 1 }));
+    run(motion, 0.05, input("idle", { pokes: 1 }));
+    expect(motion.squash).toBeGreaterThan(0.05);
+    const surprised = poseFor("surprised", input("idle")).esxL;
+    expect(Math.abs(motion.pose.esxL - surprised)).toBeLessThan(Math.abs(1 - surprised));
+    run(motion, 1.5, input("idle", { pokes: 1 }));
+    expect(Math.abs(motion.squash)).toBeLessThan(0.001);
+    const reduced = new CubeMotion(seeded());
+    run(reduced, 0.1, input("idle", { pokes: 1, reduced: true }));
+    expect(reduced.squash).toBe(0);
+  });
+
   it("snaps turns to exact quarter turns", () => {
     const q = quatMultiply(
       quatAxisAngle(1, Math.PI / 2 + 0.01),
