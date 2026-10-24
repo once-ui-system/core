@@ -1,6 +1,6 @@
 "use client";
 
-import { Avatar, Column, NavItem } from "@once-ui-system/core";
+import { Avatar, Column, Nav, NavItem, Row, Text } from "@once-ui-system/core";
 import { useState } from "react";
 
 const people = [
@@ -25,5 +25,46 @@ export function NavItemAvatarExample() {
         />
       ))}
     </Column>
+  );
+}
+
+const railTabs = [
+  { id: "pages", icon: "pages", label: "Pages" },
+  { id: "layouts", icon: "grid", label: "Layouts" },
+  { id: "components", icon: "sparkle", label: "Components" },
+  { id: "settings", icon: "settings", label: "Settings" },
+] as const;
+
+/** An editor's icon rail that opens over the panel beside it on hover. */
+export function NavRailExample() {
+  const [current, setCurrent] = useState("layouts");
+  return (
+    <Row fillWidth height={24} radius="l" border overflow="hidden">
+      <Nav
+        aria-label="Editor"
+        collapsed
+        expandOnHover
+        expandedWidth={12}
+        padding="8"
+        radius="l"
+        borderRight
+      >
+        {railTabs.map((tab) => (
+          <NavItem
+            key={tab.id}
+            icon={tab.icon}
+            label={tab.label}
+            selected={tab.id === current}
+            onClick={() => setCurrent(tab.id)}
+          />
+        ))}
+      </Nav>
+      <Column fill padding="24" gap="8" background="surface">
+        <Text variant="heading-strong-s">{railTabs.find((tab) => tab.id === current)?.label}</Text>
+        <Text variant="body-default-s" onBackground="neutral-weak">
+          Hover the rail. It opens over this panel, which stays where it is.
+        </Text>
+      </Column>
+    </Row>
   );
 }

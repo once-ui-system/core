@@ -43,7 +43,7 @@ interface NavItemProps
  */
 const NavItem = forwardRef<HTMLElement, NavItemProps>(
   ({ label, icon, prefix, badge, indicator, size, className, ...toggle }, ref) => {
-    const { variant, density, sizes } = useNavStyle();
+    const { variant, density, sizes, collapsed } = useNavStyle();
     const count = typeof badge === "number" ? badge : undefined;
     // A number shows above 0, as it always did; any other badge shows unless empty.
     const showBadge =
@@ -91,9 +91,15 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
                 {prefix}
               </Row>
             )}
-            {label}
+            {collapsed ? (
+              <Row opacity={0} transition="micro-medium">
+                {label}
+              </Row>
+            ) : (
+              label
+            )}
           </Row>
-          {showBadge && (
+          {showBadge && !collapsed && (
             <Row
               minWidth="16"
               height="16"
@@ -109,7 +115,7 @@ const NavItem = forwardRef<HTMLElement, NavItemProps>(
               </Text>
             </Row>
           )}
-          {indicator && badge === undefined && (
+          {indicator && badge === undefined && !collapsed && (
             <Row width="8" height="8" radius="full" solid="brand-strong" aria-hidden="true" />
           )}
         </Row>

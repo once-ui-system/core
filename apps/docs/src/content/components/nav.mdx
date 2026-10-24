@@ -2,7 +2,7 @@
 title: "Nav, NavItem and NavGroup"
 export: "Nav"
 summary: "The rows a product sidebar is made of, one setting for their look, and the route matcher that decides which one is current."
-updatedAt: "2026-10-20"
+updatedAt: "2026-10-23"
 docs: "once-ui/components/nav.mdx"
 github: "components/NavItem.tsx"
 navLabel: "Nav"
@@ -251,6 +251,9 @@ sections is just a `Line`.
     density: "Row height and text size: compact (32px, small label), normal (40px) or spacious (48px).",
     variant: "How the current page stands out: solid fills it, subtle fills it and dims the rest, minimal uses weight and contrast only.",
     rail: "The vertical line down an open NavGroup. Off, the indent stays.",
+    collapsed: "Icons only. Labels, badges and headings fade out but stay the rows' accessible names; groups close.",
+    expandOnHover: "With collapsed, open over the page on a resting mouse or keyboard focus, without moving the layout.",
+    expandedWidth: "How wide expandOnHover opens: rem, or a spacing token. 16 by default.",
   }}
 />
 
@@ -261,6 +264,47 @@ sections is just a `Line`.
     action: "A control at the end of the heading, such as an add button.",
   }}
 />
+
+## An icon rail
+
+An editor or a dense app often keeps only the icons. Set `collapsed` and the
+`Nav` narrows to one icon column: labels, badges and section headings fade out,
+groups close, and every row still answers to its label for a screen reader.
+
+Add `expandOnHover` and the rail opens over the page, labels and all, while a
+mouse rests on it or the keyboard is in it, instead of a tooltip per icon. It
+keeps its collapsed width in the layout, so the panel beside it never moves.
+Touch never opens it, Escape closes it, and reduced motion drops the animation.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={<NavRailExample />}
+  codes={[
+    {
+      code:
+`<Row fill>
+    <Nav aria-label="Editor" collapsed expandOnHover expandedWidth={12} padding="8" borderRight>
+        <NavItem icon="pages" label="Pages" />
+        <NavItem icon="grid" label="Layouts" selected />
+        <NavItem icon="sparkle" label="Components" />
+        <NavItem icon="settings" label="Settings" />
+    </Nav>
+    <Column fill>{panel}</Column>
+</Row>`,
+      language: "tsx",
+      label: "Icon rail"
+    }
+  ]}
+/>
+
+- The rail lifts above what follows it, so keep it out of an ancestor that
+  clips overflow: a sidebar `Column` with `overflowY="auto"` cuts the open rail
+  off at its edge.
+- Give every row an `icon`. A collapsed row is its icon; one without shows as
+  an empty pill.
+- Without `expandOnHover`, `collapsed` is a static icon rail, for a host that
+  toggles it from a button of its own.
 
 ## Which row is current
 

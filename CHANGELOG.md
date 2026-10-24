@@ -15,6 +15,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
+  badges and section headings fade out but stay each row's accessible name, and
+  `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
+  mouse rests on it (after a short hover-intent delay) or the keyboard is in it,
+  instead of a tooltip per icon; it keeps its collapsed width in the layout, so the
+  content beside it never moves. Touch never opens it, Escape closes it, reduced
+  motion drops the animation. `expandedWidth` sets how wide it opens (16rem by
+  default).
 - **`feather` on `Mask`.** How much of the radius the edge fades over, from `0`, a sharp
   circle, to `100`, the soft fade from the centre the mask has always had and still
   defaults to. With `cursor`, `feather={0}` reads as a lens or a torch carried over the
