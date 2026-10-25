@@ -13,6 +13,9 @@
   "StyleProps"
  ],
  "props": {
+  "working": "\"cube\"",
+  "effects": "boolean | MascotEffect[]",
+  "poke": "boolean",
   "state": "MascotState = idle",
   "mood": "MascotMood = neutral",
   "seed": "string | number",
@@ -35,7 +38,9 @@
   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
   "brows": "boolean",
   "cheeks": "boolean",
-  "personality": "\"calm\" | \"default\" | \"bouncy\""
+  "personality": "\"calm\" | \"default\" | \"bouncy\"",
+  "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+  "face": "\"3d\" | \"flat\""
  },
  "tags": [
   "ai",
@@ -166,6 +171,18 @@
    "MediaStream",
    "AnalyserNode"
   ],
+  "MascotEffect": [
+   "heartEyes",
+   "starEyes",
+   "laughEyes",
+   "blush",
+   "sweat",
+   "tears",
+   "anger",
+   "hearts",
+   "sparkles",
+   "question"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -174,7 +191,14 @@
    "skeptical",
    "wink",
    "focused",
-   "determined"
+   "determined",
+   "love",
+   "excited",
+   "laughing",
+   "embarrassed",
+   "crying",
+   "angry",
+   "confused"
   ],
   "MascotState": [
    "idle",

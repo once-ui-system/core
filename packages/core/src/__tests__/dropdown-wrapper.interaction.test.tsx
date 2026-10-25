@@ -278,6 +278,51 @@ describe("DropdownWrapper picking", () => {
     expect(screen.getByRole("option", { name: "Bravo" })).toHaveFocus();
   });
 
+  /**
+   * A switcher or command menu: a search field above the list, arrow
+   * navigation still on. It opens with the caret in the field, so typing
+   * filters straight away, and ArrowDown from there walks into the list.
+   */
+  const searchable = (
+    <Column>
+      <Input id="dw-search" label="Search" />
+      <Column>
+        <Option value="a" label="Alpha" />
+        <Option value="b" label="Bravo" selected />
+      </Column>
+    </Column>
+  );
+
+  it("opens on a leading search field rather than the selected option", async () => {
+    const user = userEvent.setup();
+    render(<DropdownWrapper trigger={<Button>Actions</Button>} dropdown={searchable} />, {
+      wrapper: wrap,
+    });
+    await user.click(trigger());
+    const field = await screen.findByRole("textbox", { name: "Search" });
+    await waitFor(() => expect(field).toHaveFocus());
+    // Let every open-time effect settle: the field must keep focus, not lose
+    // it to the selected option a frame later.
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(field).toHaveFocus();
+
+    await user.keyboard("Br");
+    expect(field).toHaveValue("Br");
+    expect(trigger()).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("moves from a leading search field into the list with ArrowDown", async () => {
+    const user = userEvent.setup();
+    render(<DropdownWrapper trigger={<Button>Actions</Button>} dropdown={searchable} />, {
+      wrapper: wrap,
+    });
+    await user.click(trigger());
+    const field = await screen.findByRole("textbox", { name: "Search" });
+    await waitFor(() => expect(field).toHaveFocus());
+    await user.keyboard("{ArrowDown}");
+    await waitFor(() => expect(document.activeElement).toHaveAttribute("role", "option"));
+  });
+
   it("is one listbox named by its trigger, with no axe violations, while open", async () => {
     const user = userEvent.setup();
     render(<DropdownWrapper trigger={<Button>Actions</Button>} dropdown={list} />, {

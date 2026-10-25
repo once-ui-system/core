@@ -17,6 +17,7 @@
   "x": "number",
   "y": "number",
   "radius": "number = 50",
+  "feather": "number = 100",
   "reducedMotion": "boolean | \"auto\" = auto",
   "className": "string",
   "style": "React.CSSProperties",

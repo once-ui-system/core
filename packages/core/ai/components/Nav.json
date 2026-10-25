@@ -16,7 +16,10 @@
  "props": {
   "density": "NavDensity = normal",
   "variant": "NavVariant = solid",
-  "rail": "boolean = true"
+  "rail": "boolean = true",
+  "collapsed": "boolean = false",
+  "expandOnHover": "boolean = false",
+  "expandedWidth": "number | SpacingToken = 16"
  },
  "tags": [
   "navigation",
@@ -151,6 +154,32 @@
    "solid",
    "subtle",
    "minimal"
+  ],
+  "SpacingToken": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs",
+   "0",
+   "1",
+   "2",
+   "4",
+   "8",
+   "12",
+   "32",
+   "64",
+   "160",
+   "16",
+   "20",
+   "24",
+   "40",
+   "48",
+   "56",
+   "72",
+   "80",
+   "104",
+   "128"
   ]
  }
 }

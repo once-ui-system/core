@@ -13,8 +13,30 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+## [2.6.0] — 2026-10-24
+
 ### Added
 
+- **`Mascot` turns into a cube while it works.** `working="cube"` swaps the mascot for a
+  WebGL cube that scrambles and solves while `state` is `thinking`, then turns into the
+  Once UI logo and morphs back. `sides` colors the faces (`"tints"` derives them from
+  `color`), the gaps between pieces are hairline thin, and without WebGL or with
+  reduced motion the flat mascot stays.
+- **Poke the `Mascot`.** A click or tap squashes it with a surprised face; `poke={false}`
+  turns it off.
+- **Kawaii moods for `Mascot`.** `love`, `excited`, `laughing`, `embarrassed`, `crying`,
+  `angry` and `confused` draw an everyday mood plus effects: heart, star or laughing
+  eyes, blush, sweat, tears, an anger mark, and hearts, sparkles or a question mark
+  floating up. `effects` adds any of them to any mood (`effects={["blush"]}`) or turns
+  them off (`effects={false}`). Flat and cube draw the same glyphs.
+- **Icon rail for `Nav`.** `collapsed` narrows a `Nav` to one icon column: labels,
+  badges and section headings fade out but stay each row's accessible name, and
+  `NavGroup`s close. `expandOnHover` opens it over the page, labels and all, while a
+  mouse rests on it (after a short hover-intent delay) or the keyboard is in it,
+  instead of a tooltip per icon; it keeps its collapsed width in the layout, so the
+  content beside it never moves. Touch never opens it, Escape closes it, reduced
+  motion drops the animation. `expandedWidth` sets how wide it opens (16rem by
+  default).
 - **`feather` on `Mask`.** How much of the radius the edge fades over, from `0`, a sharp
   circle, to `100`, the soft fade from the centre the mask has always had and still
   defaults to. With `cursor`, `feather={0}` reads as a lens or a torch carried over the
@@ -63,6 +85,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **A `DropdownWrapper` that leads with a search field keeps the caret in it.** With arrow
+  navigation on, the field took focus as the panel opened and lost it a frame later to the
+  selected option, so a site switcher or command menu opened with nothing to type into.
+  The field now keeps focus (taken once it is actually visible: Input's transition keeps it
+  hidden for a frame after the panel is placed), and ArrowDown moves from it into the list.
+- **`DropdownWrapper` opens with a softer grow.** The panel scales from 0.96 rather than
+  0.9 as it fades in, still from the corner anchored to its trigger: a tall panel's far
+  edge travelled about 40px, which read as a pop rather than an opening.
 - **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
   of buttons, links and inputs: the native pointer showed beside it, and an input lost its
   I-beam. It now steps aside wherever the native cursor is back, and over a nested element

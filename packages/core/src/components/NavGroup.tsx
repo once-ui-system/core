@@ -55,10 +55,11 @@ const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
     { label, icon, children, open, onToggle, defaultOpen = false, selected = false, ...row },
     ref,
   ) => {
-    const { variant, rail, sizes } = useNavStyle();
+    const { variant, rail, sizes, collapsed } = useNavStyle();
     const emphasis = variant !== "solid";
     const [uncontrolled, setUncontrolled] = useState(defaultOpen);
-    const isOpen = open ?? uncontrolled;
+    // A collapsed nav shows the header's icon alone; the group reopens with the labels.
+    const isOpen = (open ?? uncontrolled) && !collapsed;
     const toggle = () => {
       if (open === undefined) setUncontrolled((v) => !v);
       onToggle?.();
@@ -106,7 +107,9 @@ const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
               onBackground={emphasis ? (selected ? "neutral-strong" : "neutral-weak") : undefined}
             >
               {icon && <Icon name={icon} onBackground="neutral-weak" size="xs" />}
-              {label}
+              <Row opacity={collapsed ? 0 : 100} transition="micro-medium">
+                {label}
+              </Row>
             </Row>
           }
         >

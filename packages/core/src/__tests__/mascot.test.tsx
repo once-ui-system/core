@@ -1,7 +1,7 @@
-import { act, render as baseRender, screen } from "@testing-library/react";
+import { act, render as baseRender, fireEvent, screen } from "@testing-library/react";
 import type { ReactElement, ReactNode } from "react";
 import { renderToString } from "react-dom/server";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { Mascot, mascotLook } from "../modules/ai/Mascot";
 import { expectNoAxeViolations } from "../test/axe";
@@ -102,6 +102,25 @@ describe("Mascot", () => {
       await new Promise((resolve) => requestAnimationFrame(() => resolve(null)));
     });
     expect(Number(img.style.getPropertyValue("--mascot-look-x"))).toBeGreaterThan(0);
+  });
+
+  it("looks surprised for a moment when poked, unless poke is off", () => {
+    vi.useFakeTimers();
+    try {
+      const { rerender } = render(<Mascot mood="happy" />);
+      const img = screen.getByRole("img");
+      fireEvent.pointerDown(img);
+      expect(img.getAttribute("data-mood")).toBe("surprised");
+      act(() => {
+        vi.advanceTimersByTime(700);
+      });
+      expect(img.getAttribute("data-mood")).toBe("happy");
+      rerender(<Mascot mood="happy" poke={false} />);
+      fireEvent.pointerDown(screen.getByRole("img"));
+      expect(screen.getByRole("img").getAttribute("data-mood")).toBe("happy");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("takes a pixel size and eye styles", () => {

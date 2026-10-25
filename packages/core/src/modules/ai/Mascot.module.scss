@@ -30,6 +30,16 @@
   overflow: visible;
 }
 
+/* The 3D mascot (working="cube") draws a little past its box, as the SVG does, so a turning
+   cube and the floor shadow are never cut off. */
+.canvas {
+  position: absolute;
+  inset: -12%;
+  width: 124%;
+  height: 124%;
+  pointer-events: none;
+}
+
 /* Surfaces. */
 .fill {
   fill: var(--mascot-color);
@@ -149,6 +159,11 @@
 /* A quick squash when the expression changes: anticipation, then settle. */
 .pop {
   animation: mascot-pop calc(0.45s * var(--tempo)) cubic-bezier(0.3, 0, 0.3, 1);
+}
+
+/* A poke: pressed in hard, then a springy wobble back. */
+.poke {
+  animation: mascot-poke calc(0.6s * var(--tempo)) cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
 /* Gaze: the face slides toward where it looks, and the eye nearer the edge
@@ -321,6 +336,75 @@
   }
 }
 
+/* Kawaii effects. Glyphs are drawn one eye-unit wide, so strokes are in those units. */
+.heart {
+  fill: #ff5c8a;
+}
+
+.sparkle {
+  fill: #ffd75e;
+}
+
+.glyphLine,
+.blushLine {
+  fill: none;
+  stroke: var(--mascot-eye);
+  stroke-width: 0.17;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.blush {
+  fill: #ff6b8a;
+  opacity: 0.45;
+}
+
+.blushLine {
+  stroke: #ff6b8a;
+  stroke-width: 0.07;
+  opacity: 0.8;
+}
+
+.water,
+.tear {
+  fill: #8fd3ff;
+}
+
+.sweat {
+  animation: mascot-sweat calc(2.4s * var(--tempo)) ease-in-out infinite;
+}
+
+.tear {
+  animation: mascot-tear 1.3s cubic-bezier(0.5, 0, 0.9, 0.6) infinite;
+}
+
+.anger {
+  animation: mascot-throb 0.7s ease-in-out infinite;
+
+  path {
+    fill: none;
+    stroke: #ff4d4f;
+    stroke-width: 0.13;
+    stroke-linecap: round;
+  }
+}
+
+.floater {
+  opacity: 0;
+  animation: mascot-floater 2.1s ease-out infinite;
+}
+
+.question {
+  fill: color-mix(in srgb, var(--mascot-color) 55%, white);
+  font-size: 1.3px;
+  font-weight: 800;
+}
+
+.kawaii * {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
 /* Moods. */
 .mascot[data-mood="happy"] {
   .eye {
@@ -474,6 +558,73 @@
   }
   100% {
     transform: scale(1, 1);
+  }
+}
+
+@keyframes mascot-poke {
+  0% {
+    transform: scale(1, 1);
+  }
+  18% {
+    transform: scale(calc(1 + 0.12 * var(--bounce)), calc(1 - 0.16 * var(--bounce)));
+  }
+  42% {
+    transform: scale(calc(1 - 0.05 * var(--bounce)), calc(1 + 0.08 * var(--bounce)));
+  }
+  64% {
+    transform: scale(calc(1 + 0.02 * var(--bounce)), calc(1 - 0.03 * var(--bounce)));
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@keyframes mascot-sweat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(0.08px) scale(0.94, 1.06);
+  }
+}
+
+@keyframes mascot-tear {
+  0% {
+    transform: translateY(0) scale(0.4);
+    opacity: 0;
+  }
+  15% {
+    transform: translateY(0.1px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(1.4px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+@keyframes mascot-throb {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+@keyframes mascot-floater {
+  0% {
+    transform: translateY(0.4px) scale(0.4);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-1.6px) scale(1);
+    opacity: 0;
   }
 }
 

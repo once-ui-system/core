@@ -158,6 +158,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - density?: NavDensity = normal
 - variant?: NavVariant = solid
 - rail?: boolean = true
+- collapsed, expandOnHover?: boolean = false
+- expandedWidth?: number | SpacingToken = 16
 
 ### NavGroup
 Extends Flex.
