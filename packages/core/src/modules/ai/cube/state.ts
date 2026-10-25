@@ -38,6 +38,10 @@ export interface CubeInput {
   personality: "calm" | "default" | "bouncy";
   /** How many times it has been poked; each new one squashes it. */
   pokes?: number;
+  /** Glyph eyes are drawn over the canvas, so the 3D eyes step aside. */
+  hideEyes?: boolean;
+  /** A wide open laughing grin. */
+  laugh?: boolean;
 }
 
 /** A quarter turn of one layer: `axis` x, y or z, the layer on the `side` (+1 or -1), and the direction. */
@@ -87,14 +91,16 @@ const BASE: Pose = {
 /* Each mood is a pose; the face eases toward it, so a change reads as an expression, not a cut. */
 const MOODS: Record<CubeMood | "sleepy", Partial<Pose>> = {
   neutral: {},
+  // Bright, not sleepy: eyes only a little narrowed and brows lifted, so it reads as
+  // glad even with no mouth.
   happy: {
-    esyL: 0.45,
-    esyR: 0.45,
-    edy: 0.05,
-    byL: 0.05,
-    byR: 0.05,
-    baL: -0.15,
-    baR: -0.15,
+    esyL: 0.82,
+    esyR: 0.82,
+    edy: 0.03,
+    byL: 0.09,
+    byR: 0.09,
+    baL: 0,
+    baR: 0,
     curve: 1,
     width: 0.2,
   },
@@ -143,8 +149,8 @@ const MOODS: Record<CubeMood | "sleepy", Partial<Pose>> = {
     width: 0.1,
   },
   determined: {
-    esyL: 0.72,
-    esyR: 0.72,
+    esyL: 0.82,
+    esyR: 0.82,
     byL: -0.04,
     byR: -0.04,
     baL: 0.5,
@@ -391,7 +397,7 @@ export class CubeMotion {
   }
 }
 
-export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level">): Pose {
+export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level" | "laugh">): Pose {
   const pose: Pose = { ...BASE, ...MOODS[mood] };
   if (input.state === "sleeping") Object.assign(pose, MOODS.sleepy);
   if (input.state === "listening") {
@@ -404,6 +410,8 @@ export function poseFor(mood: CubeMood, input: Pick<CubeInput, "state" | "level"
   }
   if (input.state === "speaking") {
     pose.open = clamp(0.25 + input.level * 0.75, 0, 1);
+  } else if (input.laugh) {
+    pose.open = 0.8;
   }
   return pose;
 }

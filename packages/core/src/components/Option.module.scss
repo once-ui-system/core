@@ -9,10 +9,12 @@
     }
 }
 
+// A tint, not a solid block: the item names a destructive action, the
+// confirmation that follows carries the weight.
 @mixin danger-active {
-    background: var(--danger-solid-strong);
-    color: var(--danger-on-solid-strong);
-    border-color: var(--danger-border-strong);
+    background: var(--danger-alpha-weak);
+    color: var(--danger-on-background-weak);
+    border-color: var(--danger-alpha-medium);
 }
 
 .option {
@@ -26,10 +28,10 @@
         border-color: var(--neutral-alpha-strong);
     }
     
-    // Selected state (medium priority)
+    // Selected state (medium priority): a quiet fill with no border, so it
+    // marks the current value without reading as a pressed button.
     &.selected:not(:hover):not(:focus) {
-        background: var(--neutral-alpha-medium);
-        border-color: var(--neutral-alpha-medium);
+        background: var(--neutral-alpha-weak);
     }
   
     // Hover/Focus state (highest priority - always overrides highlighted and selected)
@@ -45,8 +47,10 @@
         }
     }
   
+    // "weak" is the saturated end of the scale in both themes; "medium"
+    // reads almost white on a dark background.
     &.danger {
-        color: var(--danger-on-background-medium);
+        color: var(--danger-on-background-weak);
   
         &:focus {
             @include danger-active;
@@ -66,6 +70,10 @@
     @include active;
     outline: var(--static-space-2) solid var(--brand-solid-strong);
     outline-offset: calc(-1 * var(--static-space-2));
+
+    &.danger {
+        @include danger-active;
+    }
 }
 
 .focused {
