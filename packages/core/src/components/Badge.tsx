@@ -1,6 +1,6 @@
 import classNames from "clsx";
 import React, { forwardRef, useId } from "react";
-import { IconName } from "../icons";
+import type { IconName } from "../icons";
 import { Arrow } from "./Arrow";
 import styles from "./Badge.module.scss";
 import { Flex } from "./Flex";
@@ -50,20 +50,22 @@ const Badge = forwardRef<HTMLDivElement | HTMLAnchorElement, BadgeProps>(
         id={badgeId}
         as={as}
         inline={inline ?? (phrasing || undefined)}
-        paddingX="20"
-        paddingY="12"
+        paddingLeft={icon ? "8" : "12"}
+        paddingRight={arrow ? "8" : "12"}
+        paddingY="4"
+        gap="8"
         fitWidth
-        className={classNames(effect ? styles.animation : undefined, className)}
+        className={classNames(styles.badge, effect && styles.beam, className)}
         style={style}
         vertical="center"
         radius="full"
-        background="neutral-weak"
-        onBackground="brand-strong"
-        border="brand-alpha-medium"
-        textVariant="label-strong-s"
+        background="surface"
+        onBackground="neutral-strong"
+        border="neutral-alpha-medium"
+        textVariant="label-default-s"
         {...rest}
       >
-        {icon && <Icon marginRight="8" size="s" name={icon} onBackground="brand-medium" />}
+        {icon && <Icon size="xs" name={icon} onBackground="brand-medium" />}
         {title}
         {children}
         {arrow && <Arrow trigger={`[id="${badgeId}"]`} as={phrasing ? "span" : undefined} />}

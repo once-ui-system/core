@@ -1,69 +1,82 @@
-.animation {
-    position: relative;
-    overflow: hidden;
+// A badge is a small announcement pill. Its surface is quiet; colour comes
+// from the effect: a short brand-to-accent beam that travels round the edge.
 
+@property --badge-beam-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.badge {
+  position: relative;
+  isolation: isolate;
+  transition:
+    background-color var(--transition-micro-medium),
+    border-color var(--transition-micro-medium);
+
+  // A soft highlight along the top edge in dark mode, so the pill reads as
+  // raised glass.
+  :global([data-theme="dark"]) &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    border-radius: inherit;
+    background: linear-gradient(180deg, var(--neutral-alpha-weak), transparent 60%);
+    pointer-events: none;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--neutral-alpha-strong);
+    }
+  }
+}
+
+.beam {
+  // The beam: a conic gradient masked to the 1px border, turning slowly.
+  &::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--badge-beam-angle),
+      transparent 0deg 250deg,
+      var(--function-brand-600) 300deg,
+      var(--function-accent-600) 340deg,
+      transparent 360deg
+    );
+    z-index: -1;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+    animation: beam 6s linear infinite;
+  }
+
+  @media (hover: hover) {
+    &:hover::before {
+      animation-duration: 2.5s;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
     &::before {
-        content: '';
-        opacity: 0;
-        border-radius: var(--radius-full);
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(
-            120deg,
-            transparent 20%,
-            var(--brand-alpha-medium) 50%,
-            transparent 80%
-        );
-        transform: skewX(-20deg);
-        animation: shineDefault 9s ease-in-out infinite;
+      animation: none;
+      --badge-beam-angle: 45deg;
     }
-
-    @media (hover: hover) {
-        &:hover {
-            &::before {
-                animation: shineHover 3s ease-in-out infinite;
-            }
-        }
-    }
+  }
 }
 
-@keyframes shineDefault {
-    0% {
-        left: -100%;
-    }
-    1% {
-        left: -100%;
-        opacity: 1;
-    }
-    15% {
-        left: 100%;
-        opacity: 1;
-    }
-    16% {
-        opacity: 0;
-    }
-    100% {
-        left: -100%;
-    }
-}
-
-@keyframes shineHover {
-    0% {
-        left: -100%;
-    }
-    1% {
-        left: -100%;
-        opacity: 1;
-    }
-    45% {
-        left: 100%;
-        opacity: 1;
-    }
-    46% {
-        opacity: 0;
-    }
-    100% {
-        left: -100%;
-    }
+@keyframes beam {
+  to {
+    --badge-beam-angle: 360deg;
+  }
 }

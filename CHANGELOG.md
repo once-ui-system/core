@@ -23,6 +23,14 @@ item (see `ROADMAP.md`, Week 4).
   paint, so a dismissed banner never flashes in. Banner stays a server component, and a
   caller's own `background` now replaces the default brand strip instead of clashing with it.
 
+### Changed
+
+- **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface
+  colour with a hairline neutral border and neutral text, the icon in brand. The skewed
+  shine that swept across it every few seconds is replaced by a short brand-to-accent beam
+  that travels round the border, faster on hover and still under reduced motion. Padding,
+  colour and text props still override the defaults.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
