@@ -6,9 +6,10 @@
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
- * Table searches and sorts by the text inside each cell, so a cell that is a
- * component (the name with its email, the status Tag) should carry its text as
- * children, not only in a prop.
+ * `rows` are the records themselves: a column shows `row[key]`, or what its
+ * `cell` renders. Search reads the text of each cell, so a cell that is a
+ * component (the name with its email, the status Tag) carries its text as
+ * children, not only in a prop; sorting compares `row[key]`.
  */
 import {
   Button,
@@ -129,39 +130,49 @@ export function ListPageExample({
               </Button>
             </Column>
           }
+          rows={visible}
+          getRowId={(member) => member.email}
           columns={[
-            { header: "Name", key: "name", sortable: true },
-            { header: "Role", key: "role", sortable: true },
-            { header: "Status", key: "status", sortable: true },
-            { header: "Last active", key: "lastActive", sortable: true, align: "right" },
+            {
+              key: "name",
+              header: "Name",
+              sortable: true,
+              cell: (member) => (
+                <Column gap="4">
+                  <Text textVariant="label-default-s">{member.name}</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
+                    {member.email}
+                  </Text>
+                </Column>
+              ),
+            },
+            { key: "role", header: "Role", sortable: true },
+            {
+              key: "status",
+              header: "Status",
+              sortable: true,
+              cell: (member) => (
+                <Tag size="s" tone={statusTag[member.status].scheme}>
+                  {statusTag[member.status].label}
+                </Tag>
+              ),
+            },
+            { key: "lastActive", header: "Last active", sortable: true, align: "right" },
           ]}
-          rows={visible.map((member) => [
-            <Column key="name" gap="4">
-              <Text textVariant="label-default-s">{member.name}</Text>
-              <Text textVariant="body-default-xs" onBackground="neutral-weak">
-                {member.email}
-              </Text>
-            </Column>,
-            member.role,
-            <Tag key="status" size="s" tone={statusTag[member.status].scheme}>
-              {statusTag[member.status].label}
-            </Tag>,
-            member.lastActive,
-          ])}
           perPageOptions={[5, 10, 20, 50]}
           showFirstLast
           actions={[
             {
               icon: "edit",
               tooltip: "Edit member",
-              onClick: (_row, index) => onEdit?.(visible[index]),
+              onClick: (member) => onEdit?.(member),
             },
             {
               icon: "trash",
               tooltip: "Remove member",
               variant: "primary",
               tone: "danger",
-              onClick: (_row, index) => onRemove?.(visible[index]),
+              onClick: (member) => onRemove?.(member),
             },
           ]}
         />

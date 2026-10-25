@@ -2,7 +2,7 @@
 
 Three tiers, highlighted middle tier, feature comparison table, FAQ accordion
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules from `rules.compact.md` this page needs, the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -130,10 +130,6 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ### Defaults — omit these
 
 `position="relative"`, `direction` on Row/Column, `variant="primary"` on Button, `size="m"` when default, `fillWidth` beside `maxWidth`, `minWidth={0}` beside `fillWidth`, a border colour that restates the default.
-
-### Before building
-
-If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
 ## Components
 
@@ -416,6 +412,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ## Hooks
 
 - `useToast`: `() => ToastContextProps`
+- `useInViewport`: `(ref: RefObject<HTMLElement | null>, options?: IntersectionObserverInit) => boolean`
+- `useHotkeys`: `(keys: string | readonly string[], callback: (event: KeyboardEvent, hotkey: string) => void, options?: UseHotkeysOptions) => void`
 
 ## Mixins
 
@@ -565,6 +563,7 @@ type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"stro
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
+type UseHotkeysOptions = { enabled?: boolean; allowWhileTyping?: boolean; target?: RefObject<HTMLElement | null>; preventDefault?: boolean; sequenceTimeout?: number }
 type UserSelect = "text" | "auto" | "none" | "all"
 ```
 

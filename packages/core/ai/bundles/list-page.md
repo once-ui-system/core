@@ -2,7 +2,7 @@
 
 A page of records: title with the primary action, a status filter, a searchable, sortable, paginated Table with status tags and row actions, and an empty state
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules from `rules.compact.md` this page needs, the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -49,25 +49,6 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
 - Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
-
-### Decoration
-
-Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents="none"`, content `zIndex={1}`.
-
-- `zIndex` only inside that layer group (or on a sticky header over its pane). Never on a lone element, never a page-wide ladder.
-
-- Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
-- Glow colors: `brand-alpha-medium`, not `brand-background-weak`
-- Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
-
-### Motion
-
-- Every `duration`, `delay` and interval is **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x; `CelebrationFx`/`WeatherFx` `duration={5000}`, not `{5}`. `RevealFx`/`ShineFx`/`CountFx` take `duration`, `TypeFx` `charDuration` (`speed` there was 2.x)
-- `speed` is only a multiplier, `1` the default, or `"slow"`/`"medium"`/`"fast"` (0.5/1/2): `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx`, `LetterFx`
-- `RevealFx translateY`: a number is the token scale (`16` = 1rem); prefer `"8"`–`"16"` tokens
-- Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
-- Animate all siblings in a set or none — never one lone animated card
 
 ### Components
 
@@ -130,10 +111,6 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ### Defaults — omit these
 
 `position="relative"`, `direction` on Row/Column, `variant="primary"` on Button, `size="m"` when default, `fillWidth` beside `maxWidth`, `minWidth={0}` beside `fillWidth`, a border colour that restates the default.
-
-### Before building
-
-If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
 ## Components
 
@@ -435,6 +412,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 ## Hooks
 
 - `useToast`: `() => ToastContextProps`
+- `useHotkeys`: `(keys: string | readonly string[], callback: (event: KeyboardEvent, hotkey: string) => void, options?: UseHotkeysOptions) => void`
 
 ## Mixins
 
@@ -588,6 +566,7 @@ type TextVariant = `${"body" | "code" | "label" | "heading" | "display"}-${"stro
 type TextWeight = "strong" | "default" | "normal" | "medium"
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
+type UseHotkeysOptions = { enabled?: boolean; allowWhileTyping?: boolean; target?: RefObject<HTMLElement | null>; preventDefault?: boolean; sequenceTimeout?: number }
 type UserSelect = "text" | "auto" | "none" | "all"
 ```
 
@@ -625,9 +604,10 @@ type UserSelect = "text" | "auto" | "none" | "all"
  * filter, a searchable, sortable, paginated Table with status tags and row
  * actions, and an empty state that offers a way back.
  *
- * Table searches and sorts by the text inside each cell, so a cell that is a
- * component (the name with its email, the status Tag) should carry its text as
- * children, not only in a prop.
+ * `rows` are the records themselves: a column shows `row[key]`, or what its
+ * `cell` renders. Search reads the text of each cell, so a cell that is a
+ * component (the name with its email, the status Tag) carries its text as
+ * children, not only in a prop; sorting compares `row[key]`.
  */
 import {
   Button,
@@ -748,39 +728,49 @@ export function ListPageExample({
               </Button>
             </Column>
           }
+          rows={visible}
+          getRowId={(member) => member.email}
           columns={[
-            { header: "Name", key: "name", sortable: true },
-            { header: "Role", key: "role", sortable: true },
-            { header: "Status", key: "status", sortable: true },
-            { header: "Last active", key: "lastActive", sortable: true, align: "right" },
+            {
+              key: "name",
+              header: "Name",
+              sortable: true,
+              cell: (member) => (
+                <Column gap="4">
+                  <Text textVariant="label-default-s">{member.name}</Text>
+                  <Text textVariant="body-default-xs" onBackground="neutral-weak">
+                    {member.email}
+                  </Text>
+                </Column>
+              ),
+            },
+            { key: "role", header: "Role", sortable: true },
+            {
+              key: "status",
+              header: "Status",
+              sortable: true,
+              cell: (member) => (
+                <Tag size="s" tone={statusTag[member.status].scheme}>
+                  {statusTag[member.status].label}
+                </Tag>
+              ),
+            },
+            { key: "lastActive", header: "Last active", sortable: true, align: "right" },
           ]}
-          rows={visible.map((member) => [
-            <Column key="name" gap="4">
-              <Text textVariant="label-default-s">{member.name}</Text>
-              <Text textVariant="body-default-xs" onBackground="neutral-weak">
-                {member.email}
-              </Text>
-            </Column>,
-            member.role,
-            <Tag key="status" size="s" tone={statusTag[member.status].scheme}>
-              {statusTag[member.status].label}
-            </Tag>,
-            member.lastActive,
-          ])}
           perPageOptions={[5, 10, 20, 50]}
           showFirstLast
           actions={[
             {
               icon: "edit",
               tooltip: "Edit member",
-              onClick: (_row, index) => onEdit?.(visible[index]),
+              onClick: (member) => onEdit?.(member),
             },
             {
               icon: "trash",
               tooltip: "Remove member",
               variant: "primary",
               tone: "danger",
-              onClick: (_row, index) => onRemove?.(visible[index]),
+              onClick: (member) => onRemove?.(member),
             },
           ]}
         />

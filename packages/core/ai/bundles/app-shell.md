@@ -2,7 +2,7 @@
 
 Signed-in app frame shared by several routes: sidebar with nested nav groups and the current route highlighted, header with breadcrumb, account or workspace menu and command palette, phone drawer
 
-This file is complete for this task: the rules (all of `rules.compact.md`), the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
+This file is complete for this task: the rules from `rules.compact.md` this page needs, the props of every component below, their mixins and types, every gotcha for these components, the quality bar and a gold example. Write the page from it; reading the rules, catalog, gotchas, manifest or examples again only adds cost. Open `components/<Name>.json` only for a component not listed here, and then every one you need in a single step.
 
 ## Rules
 
@@ -49,25 +49,6 @@ Static panel recipe (pricing tiers, stats, settings sections):
 - Section titles: `display-strong-xs` or `display-strong-s` — not `heading-*`
 - Eyebrow: `<Text textVariant="label-default-s" onBackground="brand-medium">`
 - Text on layout: `textVariant` + `onBackground` on Row/Column instead of nesting Text
-
-### Decoration
-
-Absolute layers always: `position="absolute" top="0" left="0" fill pointerEvents="none"`, content `zIndex={1}`.
-
-- `zIndex` only inside that layer group (or on a sticky header over its pane). Never on a lone element, never a page-wide ladder.
-
-- Gradient `width`: quarter-percent (400 = 100%). Glows: 100–200.
-- Glow colors: `brand-alpha-medium`, not `brand-background-weak`
-- Ambient layers on full-bleed section wrapper, outside `maxWidth` column
-- Budget: one ambient layer per section; motion in hero + one CTA max
-
-### Motion
-
-- Every `duration`, `delay` and interval is **milliseconds**: `delay={index * 100}` — `* 0.1` was 1.8.x; `CelebrationFx`/`WeatherFx` `duration={5000}`, not `{5}`. `RevealFx`/`ShineFx`/`CountFx` take `duration`, `TypeFx` `charDuration` (`speed` there was 2.x)
-- `speed` is only a multiplier, `1` the default, or `"slow"`/`"medium"`/`"fast"` (0.5/1/2): `MatrixFx`, `WeatherFx`, `ParticleFx`, `CelebrationFx`, `Effect`, `Scroller` `auto.speed`, `GlitchFx`, `LetterFx`
-- `RevealFx translateY`: a number is the token scale (`16` = 1rem); prefer `"8"`–`"16"` tokens
-- Viewport-reveal with `useInViewport` + latch into `RevealFx revealed`; `CountFx` driven by `value`, no trigger prop
-- Animate all siblings in a set or none — never one lone animated card
 
 ### Components
 
@@ -130,10 +111,6 @@ Every type a prop names is defined in the slice's (or bundle's) `types`.
 ### Defaults — omit these
 
 `position="relative"`, `direction` on Row/Column, `variant="primary"` on Button, `size="m"` when default, `fillWidth` beside `maxWidth`, `minWidth={0}` beside `fillWidth`, a border colour that restates the default.
-
-### Before building
-
-If design intent unclear, ask: content style, layout width, color approach, decoration level, imagery. Default: restrained, centered `maxWidth="m"`, single brand accent, one subtle gradient, no placeholder images.
 
 ## Components
 
@@ -444,6 +421,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - `selectNavHref`: `(pathname: string, hrefs: string[]) => string | null`
 - `useTheme`: `() => ThemeProviderState`
 - `useToast`: `() => ToastContextProps`
+- `useHotkeys`: `(keys: string | readonly string[], callback: (event: KeyboardEvent, hotkey: string) => void, options?: UseHotkeysOptions) => void`
 
 ## Mixins
 
@@ -590,6 +568,7 @@ type Theme = "dark" | "light" | "system"
 type ThemeProviderState = { theme: Theme; resolvedTheme: "light" | "dark"; setTheme: (theme: Theme) => void }
 type ToastContextProps = { toasts: Toast[]; addToast: (toast: Omit<Toast, "id"> | LegacyToast) => string; removeToast: (id: string) => void }
 // type Tone is one of these strings: neutral brand accent info danger warning success
+type UseHotkeysOptions = { enabled?: boolean; allowWhileTyping?: boolean; target?: RefObject<HTMLElement | null>; preventDefault?: boolean; sequenceTimeout?: number }
 type UserSelect = "text" | "auto" | "none" | "all"
 ```
 
@@ -604,6 +583,7 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Tag is a div by default; inside a sentence (<Text as="p">, <p>) give it as="span".
 - overflow="hidden" on full-bleed sections clips glows into hard bands — only use when parent has radius.
 - Leaf components (Button, IconButton, ToggleButton, the fields, Switch, Checkbox, RadioButton, Text, Heading, Icon, Avatar, Spinner, StatusIndicator, Kbd, InlineCode, ProgressBar, Logo, SmartLink, NavIcon) take only margins, flex, fillWidth, position, top/right/bottom/left, className and style besides their own props. Padding, background, border, radius, sizes, hide and breakpoints go on a Row around it (a Column around Text or Heading; <Row fit> for an Icon's box).
+- Kbar brings its own behaviour, so don't rebuild it from Dialog and Input: ⌘K/Ctrl+K toggles it with no useHotkeys, a route change closes it, typing filters items by name, keywords and section, results are grouped under their section in the order of items (list a "Recent" section's items first to show it first), arrow keys and Enter choose, and "No results found" shows by itself. An item with href navigates; one with perform runs it and closes the palette. shortcut only displays keys: bind them with useHotkeys.
 
 ## Quality bar
 
@@ -614,129 +594,6 @@ type UserSelect = "text" | "auto" | "none" | "all"
 - Breadcrumbs from the route, and the account or workspace switcher as a Dropdown or a User with a dropdown of Option rows
 - A header Search button opens Kbar with `open` and `onOpenChange` (no children); ⌘K still toggles it
 
-## Layout shell
+## Frame
 
-### 1. App shell with a sidebar
-
-The one agents get wrong most often. A dashboard built without this scrolls the
-whole document, so the header and sidebar slide away and the nav has to be
-scrolled back to.
-
-```tsx
-// The drawer is open for the path it was opened on: a link in it closes it.
-const [menuPath, setMenuPath] = useState<string | null>(null);
-const menuOpen = menuPath === pathname;
-
-<Column fill horizontal="center" flex={1}>
-  <Row height="56" fillWidth vertical="center" paddingX="16" gap="8">  {/* 56px: --header-height */}
-    <Row hide s={{ hide: false }}>
-      <IconButton icon="moreHorizontal" variant="tertiary" tooltip="Menu"
-        aria-expanded={menuOpen} onClick={() => setMenuPath(pathname)} />
-    </Row>
-    {/* logo, search, account */}
-  </Row>
-  <Row fill paddingX="8">
-    <Column s={{ hide: true }} maxWidth="18rem" fitHeight position="sticky" top="56">
-      <SideNav nav={nav} pathname={pathname} />
-    </Column>
-    <Row fill horizontal="center" topRadius="l" overflow="hidden">
-      <Row
-        height="below-header"
-        overflowY="auto"
-        topRadius="l"
-        horizontal="center"
-        fillWidth
-        background="surface">
-        <Column maxWidth="xl" gap="m" paddingY="32" fitHeight>
-          {children}
-        </Column>
-      </Row>
-    </Row>
-  </Row>
-  <Drawer open={menuOpen} onClose={() => setMenuPath(null)} side="left" size="s" title="Menu" flush>
-    <Column paddingTop="64" paddingBottom="16">
-      <SideNav nav={nav} pathname={pathname} />
-    </Column>
-  </Drawer>
-</Column>
-```
-
-What each part is doing:
-
-- **The pane scrolls, not the page.** `height="below-header"` plus
-  `overflowY="auto"` is what keeps the header and sidebar in place. It is
-  `calc(100dvh - var(--header-height))`, written once as a utility class:
-  `dvh`, not `vh` — on mobile `vh` ignores the browser chrome and the pane runs
-  off-screen. Never restate the header height in a `calc()` of your own.
-- **`--header-height`** is 56px (`var(--static-space-56)`) by default, the
-  header this recipe uses. A shell with a different header sets it once on
-  `:root`; `height`, `minHeight` and `maxHeight` all take `"below-header"`,
-  and a mobile menu hanging from the header takes `maxHeight="below-header"`.
-- **`position="sticky" top="56"`** on the sidebar, matching the header height
-  (`top="calc(var(--header-height))"` follows a non-default one). `fitHeight`
-  so it does not stretch and fight the sticky.
-- **`topRadius="l"` + `background="surface"`** is what makes the content read as
-  a panel sitting on the page rather than the page itself. The radius is on the
-  top only, since the bottom is off-screen.
-- **`s={{ hide: true }}`** rather than a media query. The mobile nav is a
-  separate surface, not this one reflowed: a **`Drawer`** from the left,
-  holding the same `SideNav`, opened by a header button that only shows at `s`
-  (`hide s={{ hide: false }}`). Drawer brings the focus trap, scroll lock,
-  Escape and focus return a hand-made overlay misses; `flush` keeps its
-  `title` for screen readers only. Tie it to the path it was opened on, as
-  above, and following a link closes it without an effect.
-- **`maxWidth="xl"`** inside the pane. A dashboard is wider than a document;
-  `"m"` is for reading.
-### 2. Data-driven navigation
-
-```tsx
-import { Nav, NavGroup, NavItem, selectNavHref } from "@once-ui-system/core";
-
-const current = selectNavHref(pathname, nav.flatMap((i) =>
-  i.items ? i.items.map((s) => s.href) : [i.href],
-));
-
-<Nav fill paddingX="8" aria-label="Main">
-  {nav.map((item) =>
-    item.items ? (
-      <NavGroup
-        key={item.key}
-        label={item.label}
-        icon={item.icon}
-        defaultOpen={item.items.some((s) => s.href === current)}>
-        {item.items.map((sub) => (
-          <NavItem
-            key={sub.href}
-            href={sub.href}
-            label={sub.label}
-            badge={sub.badge}
-            selected={sub.href === current}
-          />
-        ))}
-      </NavGroup>
-    ) : (
-      <NavItem
-        key={item.href}
-        href={item.href}
-        icon={item.icon}
-        label={item.label}
-        selected={item.href === current}
-      />
-    ),
-  )}
-</Nav>
-```
-
-- **`Nav` sets the look once.** `density="compact"` for a dashboard's 32px
-  rows, `variant="subtle"` or `"minimal"` for a docs or chat sidebar,
-  `rail={false}` to drop the line down open groups. Every row inside follows.
-- **`selectNavHref` over `===` or `startsWith`.** An equality check leaves a
-  nested route (`/settings/billing/invoices/42`) with nothing highlighted; a
-  prefix check lights the parent up alongside its child. It returns the longest
-  href that matches, which is the right one.
-- **Compute `current` once** for the whole tree, not per item — a child needs to
-  know about its siblings to know it is the deepest match.
-- **`defaultOpen` from the match**, so the group holding the current page is open
-  on arrival.
-- Child items take **no icon**. The rail inside `NavGroup` carries the hierarchy;
-  a second column of icons competes with it.
+The frame is the app starter's `ai/starters/app/src/components/AppShell.tsx` (AGENTS.md, "Starting an app"): copy it, or with no shell read it with this bundle and write it in your reply. It already meets the frame items of the quality bar; build the pages inside it and change it only to change the frame.
