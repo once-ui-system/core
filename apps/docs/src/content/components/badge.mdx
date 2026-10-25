@@ -1,7 +1,7 @@
 ---
 title: "Badge"
 summary: "The Badge component displays highlighted information with optional icon and arrow in a pill-shaped container."
-updatedAt: "2026-10-11"
+updatedAt: "2026-10-25"
 docs: "once-ui/components/badge.mdx"
 github: "components/Badge.tsx"
 navLabel: "Badge"
@@ -113,7 +113,7 @@ Badges can be displayed without the arrow indicator by setting the `arrow` prop 
 
 ## Effect
 
-Disable the hover animation effect by setting the `effect` prop to `false`.
+By default a short brand-to-accent beam travels slowly round the badge's edge, and faster while it is hovered. It stops under reduced motion. Set `effect` to `false` for a static badge.
 
 <CodeBlock
   marginTop="16"
@@ -196,7 +196,7 @@ paragraph without breaking the HTML.
     icon: "Icon before the label.",
     href: "Makes it a link.",
     arrow: "Trailing arrow. On by default once href is set.",
-    effect: "The shine that runs across it. Turn it off for a static badge.",
+    effect: "The beam that travels round the edge. Turn it off for a static badge.",
     id: "Element id.",
   }}
   content={[
