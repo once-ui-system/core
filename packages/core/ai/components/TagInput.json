@@ -7,7 +7,8 @@
  "props": {
   "value": "string[]",
   "defaultValue": "readonly string[]",
-  "onChange": "(value: string[]) => void"
+  "onChange": "(value: string[]) => void",
+  "labels": "TagInputLabels"
  },
  "tags": [
   "form"
@@ -16,5 +17,11 @@
   "Input",
   "Chip"
  ],
- "mixinsRef": []
+ "mixinsRef": [],
+ "types": {
+  "TagInputLabels": {
+   "remove": "(tag: string) => string",
+   "removed": "(tag: string) => string"
+  }
+ }
 }

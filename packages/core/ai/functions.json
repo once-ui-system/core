@@ -29,6 +29,51 @@
    "signature": "() => boolean",
    "doc": "Whether the enclosing `Form` is submitting."
   },
+  "useAudioLevel": {
+   "group": "modules",
+   "kind": "hook",
+   "signature": "(source: AudioLevelSource | null | undefined) => number",
+   "doc": "The loudness of `source` from 0 to 1, updated every animation frame while there is a source."
+  },
+  "mascotLook": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(seed: string | number) => MascotLook",
+   "doc": "A whole look from a seed: a user id, a product name, any string or number."
+  },
+  "workingVerbs": {
+   "group": "modules",
+   "kind": "value",
+   "type": "readonly string[]",
+   "doc": "What `WorkingIndicator` cycles through by default."
+  },
+  "reactionMotion": {
+   "group": "modules",
+   "kind": "function",
+   "signature": "(option: Pick<ReactionOption, \"value\" | \"emoji\" | \"src\" | \"motion\">) => ReactionMotion",
+   "doc": "The gesture a reaction plays: its own `motion`, else one that suits the emoji."
+  },
+  "clusterPoints": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "function",
+   "signature": "<T>(items: readonly T[], getPosition: (item: T) => LngLat, zoom: number, options?: MapClusterOptions) => ClusterGroup<T>[]",
+   "doc": "Greedy distance clustering, the way supercluster does it, at one integer zoom."
+  },
+  "useMap": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "hook",
+   "signature": "() => MapContextValue",
+   "doc": "The map these components sit in."
+  },
+  "DEFAULT_MAP_STYLE": {
+   "group": "map",
+   "importFrom": "@once-ui-system/core/map",
+   "kind": "value",
+   "type": "{ readonly light: \"https://tiles.openfreemap.org/styles/positron\"; readonly dark: \"https://tiles.openfreemap.org/styles/dark\"; }",
+   "doc": "OpenFreeMap: OpenStreetMap vector tiles with no key, no account and no view limit, commercial use included."
+  },
   "useArrowNavigation": {
    "group": "hooks",
    "kind": "hook",
@@ -250,6 +295,11 @@
    "disabled": "boolean",
    "disableHighlighting": "boolean"
   },
+  "AudioLevelSource": [
+   "HTMLMediaElement",
+   "MediaStream",
+   "AnalyserNode"
+  ],
   "BodyLineHeight": [
    "90",
    "100",
@@ -293,6 +343,16 @@
    "flat",
    "outline",
    "gradient"
+  ],
+  "ClusterGroup": [
+   "{ type: \"item\"; item: T; position: LngLat; }",
+   "{ type: \"cluster\"; id: string; items: T[]; position: LngLat; }"
+  ],
+  "CursorPresetValue": [
+   "soft",
+   "rounded",
+   "dot",
+   "system"
   ],
   "DataThemeState": {
    "setChartOptions": "!(options: Partial<ChartOptions>) => void",
@@ -442,6 +502,41 @@
    "maxWidth": "!(key: BreakpointKey) => boolean",
    "minWidth": "!(key: BreakpointKey) => boolean"
   },
+  "LngLat": {
+   "[key: number]": "number"
+  },
+  "MapClusterOptions": {
+   "radius": "number",
+   "maxZoom": "number",
+   "minPoints": "number"
+  },
+  "MapContextValue": {
+   "map": "!MapLibreMap",
+   "lib": "!MapLibre",
+   "reducedMotion": "!boolean",
+   "theme": "!\"light\" | \"dark\"",
+   "styleVersion": "!number",
+   "fitTo": "!(positions: readonly LngLat[], options?: { padding?: number; maxZoom?: number }) => void"
+  },
+  "MapLibre": "typeof import(\"maplibre-gl\")",
+  "MascotLook": {
+   "color": "\"brand\" | \"accent\" | \"neutral\" | (string & {})",
+   "roundness": "number",
+   "aspect": "number",
+   "bodyPath": "string",
+   "surface": "\"glossy\" | \"matte\" | \"flat\" | \"glass\"",
+   "eyes": "\"tile\" | \"pill\" | \"round\" | \"wide\" | \"dot\" | { path: string }",
+   "eyeSize": "number",
+   "eyeSpacing": "number",
+   "eyeHeight": "number",
+   "eyeColor": "string",
+   "mouth": "\"none\" | \"smile\" | \"dot\" | \"line\"",
+   "brows": "boolean",
+   "cheeks": "boolean",
+   "personality": "\"calm\" | \"default\" | \"bouncy\"",
+   "sides": "\"classic\" | \"tints\" | \"mono\" | Partial<Record<\"top\" | \"front\" | \"right\" | \"bottom\" | \"back\" | \"left\", string>>",
+   "face": "\"3d\" | \"flat\""
+  },
   "MdxComponents": {
    "[key: string]": "ElementType"
   },
@@ -564,12 +659,34 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "brandSeed": "string",
    "accentSeed": "string",
    "neutralSeed": "string",
-   "brandScale": "SchemeScale",
-   "accentScale": "SchemeScale",
-   "neutralScale": "SchemeScale"
+   "brandScale": "ThemedSchemeScale",
+   "accentScale": "ThemedSchemeScale",
+   "neutralScale": "ThemedSchemeScale",
+   "pageBackground": "ThemeColor",
+   "surfaceBackground": "ThemeColor"
+  },
+  "ReactionMotion": [
+   "none",
+   "pop",
+   "beat",
+   "nod",
+   "shake",
+   "droop",
+   "flicker",
+   "spin",
+   "wave",
+   "bounce"
+  ],
+  "ReactionOption": {
+   "value": "!string",
+   "label": "string",
+   "emoji": "string",
+   "src": "string",
+   "motion": "ReactionMotion"
   },
   "ScalingSize": [
    "90",
@@ -593,6 +710,10 @@
    "1200"
   ],
   "SchemeScale": "Partial< Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string> >",
+  "SchemeScaleByTheme": {
+   "light": "SchemeScale",
+   "dark": "SchemeScale"
+  },
   "Schemes": [
    "blue",
    "indigo",
@@ -664,7 +785,8 @@
    "desktopSize": "DeviceFontSize",
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
-   "cursorInteractive": "InteractiveCursor"
+   "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue"
   },
   "StylePanelContextValue": {
    "value": "!StylePanelValue",
@@ -706,6 +828,7 @@
    "tabletSize": "DeviceFontSize",
    "mobileSize": "DeviceFontSize",
    "cursorInteractive": "InteractiveCursor",
+   "cursor": "CursorPresetValue",
    "setStyle": "!(style: Partial<StyleOptions>) => void"
   },
   "SurfaceStyle": [
@@ -717,11 +840,19 @@
    "light",
    "system"
   ],
+  "ThemeColor": [
+   "string",
+   "{ light?: string | undefined; dark?: string | undefined; }"
+  ],
   "ThemeProviderState": {
    "theme": "!Theme",
    "resolvedTheme": "!\"light\" | \"dark\"",
    "setTheme": "!(theme: Theme) => void"
   },
+  "ThemedSchemeScale": [
+   "Partial<Record<SchemeRampWeight | \"600-15\" | \"600-30\" | \"600-50\", string>>",
+   "SchemeScaleByTheme"
+  ],
   "ToastContextProps": {
    "toasts": "!Toast[]",
    "addToast": "!(toast: Omit<Toast, \"id\">) => string",
