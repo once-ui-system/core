@@ -13,6 +13,16 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Announcement banners.** `Banner variant="mesh"` draws a soft, slowly drifting
+  gradient wash from the theme's brand and accent scales (`meshColors` picks others) under
+  a scrim that keeps the text readable in dark and light. `link` adds an inline,
+  underlined call to action; `dismissible` adds a close button, and `dismissKey` remembers
+  the dismissal in the browser. `ThemeInit` reads remembered dismissals before the first
+  paint, so a dismissed banner never flashes in. Banner stays a server component, and a
+  caller's own `background` now replaces the default brand strip instead of clashing with it.
+
 ### Changed
 
 - **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface

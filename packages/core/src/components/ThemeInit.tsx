@@ -159,6 +159,10 @@ export const ThemeInit: React.FC<ThemeInitProps> = ({ config, dataStyle }) => {
                 }
               });
 
+              // Banners dismissed with a dismissKey stay hidden from the first paint.
+              const dismissedBanners = localStorage.getItem('once-ui-banners-dismissed');
+              if (dismissedBanners) root.setAttribute('data-banner-dismissed', dismissedBanners);
+
             } catch (e) {
               console.error('Failed to initialize theme:', e);
               // Fall back to the system preference, not a hardcoded theme: forcing
