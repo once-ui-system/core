@@ -77,7 +77,10 @@ async function runOne(client, letter, task, run) {
 
   for (let attempt = 0; attempt <= config.repair_rounds; attempt++) {
     let toolCalls = 0;
-    let reply = "";
+    // Every text block of the attempt, not only the last turn's: a model that
+    // writes a file beside a tool call and doesn't repeat it at the end still
+    // wrote it. A later block for the same path replaces an earlier one.
+    const texts = [];
     for (;;) {
       const req = {
         model: config.model,
@@ -102,9 +105,9 @@ async function runOne(client, letter, task, run) {
       }
       calls.push({ attempt, id: res.id, model: res.model, stop_reason: res.stop_reason, usage: res.usage });
       messages.push({ role: "assistant", content: res.content });
+      texts.push(...res.content.filter((b) => b.type === "text").map((b) => b.text));
       const uses = res.content.filter((b) => b.type === "tool_use");
       if (!uses.length || toolCalls >= config.generation.max_tool_calls_per_attempt) {
-        reply = res.content.filter((b) => b.type === "text").map((b) => b.text).join("\n");
         if (uses.length) {
           // Cap reached: answer the pending calls with an error and ask for the file.
           messages.push({
@@ -126,6 +129,7 @@ async function runOne(client, letter, task, run) {
       });
       messages.push({ role: "user", content: results });
     }
+    const reply = texts.join("\n\n");
     fs.writeFileSync(path.join(dir, `attempt-${attempt}.reply.md`), reply);
     let code;
     if (multi) {
@@ -180,9 +184,14 @@ function mockClient() {
   const page = `import { Column, Heading, Text } from "@once-ui-system/core";\nexport default function Page() {\n  return (\n    <Column as="main" fillWidth padding="40" gap="16">\n      <Heading>Mock page for the runner self-test</Heading>\n      <Text>This page only checks that the generation loop and the gates work end to end.</Text>\n    </Column>\n  );\n}\n`;
   const usage = { input_tokens: 100, output_tokens: 10 };
   // A multi-file task gets a two-route app: a shared component and two pages.
-  const reply = isMulti(taskById(taskIds[0]))
+  // The component comes beside the tool call, not in the final reply, so the
+  // self-test also checks that files written mid-attempt are kept.
+  const multi = isMulti(taskById(taskIds[0]));
+  const early = multi
+    ? "```tsx components/Panel.tsx\nimport { Column, Text } from \"@once-ui-system/core\";\nexport function Panel({ label }: { label: string }) {\n  return (\n    <Column padding=\"24\" gap=\"8\" border radius=\"l\">\n      <Text>{label}: a panel shared by both routes of the runner self-test app.</Text>\n    </Column>\n  );\n}\n```"
+    : null;
+  const reply = multi
     ? [
-        "```tsx components/Panel.tsx\nimport { Column, Text } from \"@once-ui-system/core\";\nexport function Panel({ label }: { label: string }) {\n  return (\n    <Column padding=\"24\" gap=\"8\" border radius=\"l\">\n      <Text>{label}: a panel shared by both routes of the runner self-test app.</Text>\n    </Column>\n  );\n}\n```",
         "```tsx app/page.tsx\n" + page.replace("<Text>", "<Panel label=\"Home\" />\n      <Text>").replace('import { Column', 'import { Panel } from "@/components/Panel";\nimport { Column') + "```",
         "```tsx app/settings/page.tsx\n" + page.replace("<Text>", "<Panel label=\"Settings\" />\n      <Text>").replace('import { Column', 'import { Panel } from "@/components/Panel";\nimport { Column') + "```",
       ].join("\n\n")
@@ -191,7 +200,7 @@ function mockClient() {
     messages: {
       create: async () =>
         n++ % 2 === 0
-          ? { id: `mock${n}`, model: "mock", stop_reason: "tool_use", usage, content: [{ type: "tool_use", id: `tu${n}`, name: "read_file", input: { path: "project/app/layout.tsx" } }] }
+          ? { id: `mock${n}`, model: "mock", stop_reason: "tool_use", usage, content: [...(early ? [{ type: "text", text: early }] : []), { type: "tool_use", id: `tu${n}`, name: "read_file", input: { path: "project/app/layout.tsx" } }] }
           : { id: `mock${n}`, model: "mock", stop_reason: "end_turn", usage, content: [{ type: "text", text: reply }] },
     },
   };
