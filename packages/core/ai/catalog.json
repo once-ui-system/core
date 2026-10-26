@@ -1,6 +1,6 @@
 {
- "version": "2.6.0",
- "generated": "2026-10-25",
+ "version": "2.7.0",
+ "generated": "2026-10-26",
  "iconNames": ["adjustments","arrowDown","arrowLeft","arrowRight","arrowUp","arrowUpRight","ball","banknotes","barChart","bell","bolt","book","bookmark","calendar","cart","chat","check","checkbox","chevronDoubleLeft","chevronDoubleRight","chevronDown","chevronLeft","chevronRight","chevronUp","chevronsLeftRight","clipboard","close","code","computer","copy","cube","danger","dark","dislike","document","download","edit","enter","eye","eyeDropper","eyeOff","file","filter","flag","folder","food","forward","gift","globe","grid","grip","heart","help","home","image","inbox","info","light","like","linearGauge","link","lock","logout","mail","maximize","menu","minimize","minus","moreHorizontal","newspaper","opacity","organization","pause","paw","payment","people","person","personRemove","play","plus","radialGauge","refresh","return","screen","search","security","send","settings","smiley","sparkle","star","starFill","store","symbol","tag","time","trash","trend","trendDown","trendUp","upload","video","volume","volumeOff","warning","wordmark","world"],
  "components": {
   "Accordion": {"purpose":"One collapsible section: a clickable title row that shows and hides its content"},
