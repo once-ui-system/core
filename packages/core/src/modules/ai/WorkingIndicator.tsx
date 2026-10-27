@@ -123,6 +123,7 @@ const WorkingIndicator = ({
       <Row gap="8" vertical="center" aria-hidden="true" minWidth={0}>
         <Text
           key={cycling ? index : undefined}
+          data-working-verb={cycling ? "" : undefined}
           textVariant={TEXT_VARIANT[size]}
           onBackground="neutral-medium"
           className={classNames(
