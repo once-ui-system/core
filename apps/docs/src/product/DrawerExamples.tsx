@@ -42,10 +42,14 @@ export function DrawerSidesExample() {
     <>
       <Row gap="8" wrap horizontal="center">
         {SIDES.map((option) => (
-          <Button key={option} variant="secondary" onClick={() => {
+          <Button
+            key={option}
+            variant="secondary"
+            onClick={() => {
               setSide(option);
               setOpen(true);
-            }}>
+            }}
+          >
             {option}
           </Button>
         ))}
