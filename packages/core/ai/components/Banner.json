@@ -13,14 +13,6 @@
   "SpacingProps",
   "StyleProps"
  ],
- "props": {
-  "variant": "\"solid\" | \"mesh\" = solid",
-  "meshColors": "ColorScheme[]",
-  "link": "{ label: ReactNode; href: string }",
-  "dismissible": "boolean",
-  "dismissKey": "string",
-  "dismissLabel": "string"
- },
  "tags": [
   "navigation",
   "marketing"
@@ -143,16 +135,5 @@
    "themeSurface": "SurfaceStyle",
    "radius": "RadiusSize | `${RadiusSize}-${RadiusNest}`"
   }
- },
- "types": {
-  "ColorScheme": [
-   "neutral",
-   "brand",
-   "accent",
-   "info",
-   "danger",
-   "warning",
-   "success"
-  ]
  }
 }
