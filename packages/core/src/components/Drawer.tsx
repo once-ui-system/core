@@ -116,6 +116,13 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
     const [visible, setVisible] = useState(open);
     const [entered, setEntered] = useState(false);
 
+    // Slide out toward the edge it came in from. A caller that resets `side`
+    // along with `open` (one state for both) would otherwise send the closing
+    // drawer off through its default edge.
+    const openSide = useRef(side);
+    if (open) openSide.current = side;
+    const shownSide = openSide.current;
+
     // `document` exists only after mount; a drawer rendered open on the server
     // appears on the first client pass instead of throwing.
     useEffect(() => setMounted(true), []);
@@ -273,10 +280,10 @@ const Drawer = forwardRef<HTMLDivElement, DrawerProps>(
             ref={setPanelRef}
             role="dialog"
             aria-modal="true"
-            data-side={side}
+            data-side={shownSide}
             className={classNames(
               styles.panel,
-              styles[side],
+              styles[shownSide],
               styles[size],
               entered && styles.open,
               className,
