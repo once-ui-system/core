@@ -35,23 +35,27 @@ export function DrawerExample() {
 const SIDES = ["left", "right", "top", "bottom"] as const;
 
 export function DrawerSidesExample() {
-  const [side, setSide] = useState<(typeof SIDES)[number] | null>(null);
+  const [side, setSide] = useState<(typeof SIDES)[number]>("right");
+  const [open, setOpen] = useState(false);
 
   return (
     <>
       <Row gap="8" wrap horizontal="center">
         {SIDES.map((option) => (
-          <Button key={option} variant="secondary" onClick={() => setSide(option)}>
+          <Button key={option} variant="secondary" onClick={() => {
+              setSide(option);
+              setOpen(true);
+            }}>
             {option}
           </Button>
         ))}
       </Row>
       <Drawer
-        open={side !== null}
-        onClose={() => setSide(null)}
-        side={side ?? "right"}
+        open={open}
+        onClose={() => setOpen(false)}
+        side={side}
         size="s"
-        title={`From the ${side ?? "right"}`}
+        title={`From the ${side}`}
       >
         <Text onBackground="neutral-weak">
           Escape, the close button or a click on the overlay closes it.
