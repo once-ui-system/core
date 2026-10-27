@@ -64,9 +64,10 @@ const FREEZE_CSS = `*, *::before, *::after {
 nextjs-portal, [data-nextjs-toast] { display: none !important; }
 /* Canvas effects (MatrixFx, WeatherFx, …) draw their first frame whenever
    the observer and the frame loop get to it, so a shot catches it or not by
-   timing; ParticleFx places its dots by Math.random in mount order. Their
-   box stays; only the drawing is hidden. */
-canvas, [data-fx-particle] { visibility: hidden !important; }`;
+   timing; ParticleFx places its dots by Math.random in mount order.
+   WorkingIndicator swaps its verb on a timer, so a shot catches whichever
+   one is up. Their box stays; only the drawing is hidden. */
+canvas, [data-fx-particle], [data-working-verb] { visibility: hidden !important; }`;
 
 const log = (...parts) => process.env.VISUAL_DEBUG && console.error(new Date().toISOString().slice(11, 19), ...parts);
 const sha = (text) => createHash("sha1").update(text).digest("hex").slice(0, 10);
