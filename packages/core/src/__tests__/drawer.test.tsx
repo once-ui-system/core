@@ -150,6 +150,23 @@ describe("Drawer: rendering", () => {
     act(() => vi.advanceTimersByTime(1));
     expect(screen.queryByRole("dialog", { hidden: true })).toBeNull();
   });
+
+  it("slides out toward the side it came in from, even if side resets on close", () => {
+    vi.useFakeTimers();
+    const { rerender } = renderDrawer({ side: "left" });
+    act(() => vi.advanceTimersByTime(0));
+
+    // One state for both: closing also drops `side` back to its default.
+    rerender(
+      <Drawer open={false} onClose={() => {}} title="Filters">
+        <button type="button">Apply</button>
+      </Drawer>,
+    );
+    const dialog = screen.getByRole("dialog", { hidden: true });
+    expect(dialog).toHaveClass(styles.left);
+    expect(dialog).not.toHaveClass(styles.right);
+    expect(dialog).toHaveAttribute("data-side", "left");
+  });
 });
 
 describe("Drawer: closing", () => {

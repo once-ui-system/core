@@ -104,6 +104,13 @@ const Drawer = ({
     exitMs: EXIT_MS,
   });
 
+  // Slide out toward the edge it came in from. A caller that resets `side`
+  // along with `open` (one state for both) would otherwise send the closing
+  // drawer off through its default edge.
+  const openSide = useRef(side);
+  if (open) openSide.current = side;
+  const shownSide = openSide.current;
+
   const setPanelRef = useCallback(
     (node: HTMLDivElement | null) => {
       panelRef.current = node;
@@ -170,10 +177,10 @@ const Drawer = ({
           ref={setPanelRef}
           role="dialog"
           aria-modal="true"
-          data-side={side}
+          data-side={shownSide}
           className={classNames(
             styles.panel,
-            styles[side],
+            styles[shownSide],
             styles[size],
             entered && styles.open,
             className,
