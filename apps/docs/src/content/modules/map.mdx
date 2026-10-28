@@ -25,7 +25,7 @@ npm install maplibre-gl
 ```tsx
 import { Map, MapMarker } from "@once-ui-system/core/map";
 
-<Map height={24} defaultViewport={{ center: [19.0402, 47.4979], zoom: 12 }}>
+<Map height={384} defaultViewport={{ center: [19.0402, 47.4979], zoom: 12 }}>
   <MapMarker position={[19.0402, 47.4979]} />
 </Map>
 ```
@@ -42,7 +42,7 @@ Positions are `[longitude, latitude]`, the order MapLibre and GeoJSON use. The m
 const [hovered, setHovered] = useState<string>();
 const [open, setOpen] = useState<Listing>();
 
-<Map height={32} bounds={listings.map((listing) => listing.position)}>
+<Map height={512} bounds={listings.map((listing) => listing.position)}>
   <MapMarkers
     items={listings}
     cluster
@@ -76,7 +76,7 @@ const [open, setOpen] = useState<Listing>();
 <MapAvatarExample />
 
 ```tsx
-<Map height={24} bounds={venues.map((venue) => venue.position)} controls={false}>
+<Map height={384} bounds={venues.map((venue) => venue.position)} controls={false}>
   {venues.map((venue) => (
     <MapMarker key={venue.id} position={venue.position} anchor="center">
       <Avatar size="m" value={venue.name[0]} />
@@ -92,7 +92,7 @@ const [open, setOpen] = useState<Listing>();
 <MapAreaExample />
 
 ```tsx
-<Map height={24} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
+<Map height={384} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
   <MapCircle position={[19.0545, 47.5065]} radius={400} />
 </Map>
 ```

@@ -44,7 +44,7 @@ const MapFrame: React.FC<MapProps> = ({
 }) => (
   <Column
     fillWidth
-    minHeight={16}
+    minHeight={256}
     radius="l"
     overflow="hidden"
     border="neutral-alpha-weak"
