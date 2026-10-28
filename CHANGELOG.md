@@ -31,6 +31,13 @@ item (see `ROADMAP.md`, Week 4).
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
 
+### Fixed
+
+- **`HeadingNav`, `Scroller` and `Swiper` respect reduced motion.** Their buttons, links and
+  drag snap scrolled with `behavior: "smooth"` whatever the visitor's setting; under
+  `prefers-reduced-motion: reduce` they now jump straight there. Everyone else still gets
+  the smooth scroll.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
