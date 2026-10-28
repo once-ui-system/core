@@ -31,6 +31,12 @@ item (see `ROADMAP.md`, Week 4).
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
 
+### Fixed
+
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
