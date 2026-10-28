@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Swiper } from "../components/Swiper";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -158,6 +159,21 @@ describe("Swiper: navigation", () => {
       vi.advanceTimersByTime(300);
     });
     expect(el.style.scrollSnapType).toBe("x mandatory");
+  });
+
+  it("jumps instead of smooth-scrolling under reduced motion", () => {
+    mockReducedMotion(true);
+    render(<Swiper items={items} />, { wrapper });
+    press(screen.getByRole("button", { name: "Next slide" }));
+    expect(scrollTo).toHaveBeenLastCalledWith({ left: 400, behavior: "auto" });
+    settle();
+
+    const el = scroller();
+    fireEvent.mouseDown(el, { clientX: 500 });
+    fireEvent.mouseMove(document, { clientX: 300 });
+    fireEvent.mouseUp(document);
+    expect(scrollTo).toHaveBeenCalledTimes(2);
+    expect(scrollTo).toHaveBeenLastCalledWith({ left: 400, behavior: "auto" });
   });
 });
 

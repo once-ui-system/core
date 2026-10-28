@@ -8,6 +8,7 @@ import { Row } from "../../components/Row";
 import { SmartLink } from "../../components/SmartLink";
 import { Text } from "../../components/Text";
 import { useHeadingLinks } from "../../hooks/useHeadingLinks";
+import { prefersReducedMotionNow } from "../../internal/reducedMotion";
 
 export interface HeadingNavProps extends React.ComponentProps<typeof Flex> {
   header?: boolean;
@@ -243,7 +244,7 @@ const HeadingNav = forwardRef<HTMLDivElement, HeadingNavProps>(
                               target.getBoundingClientRect().top + window.scrollY - 150;
                             window.scrollTo({
                               top: targetPosition,
-                              behavior: "smooth",
+                              behavior: prefersReducedMotionNow() ? "auto" : "smooth",
                             });
 
                             handleHeadingClick(heading.id, index);

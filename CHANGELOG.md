@@ -45,6 +45,10 @@ item (see `ROADMAP.md`, Week 4).
 - **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
   `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
   outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+- **`HeadingNav`, `Scroller` and `Swiper` respect reduced motion.** Their buttons, links and
+  drag snap scrolled with `behavior: "smooth"` whatever the visitor's setting; under
+  `prefers-reduced-motion: reduce` they now jump straight there. Everyone else still gets
+  the smooth scroll.
 
 ## [2.6.0] — 2026-10-24
 

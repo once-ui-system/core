@@ -1,6 +1,7 @@
 "use client";
 
 import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
+import { prefersReducedMotionNow } from "../internal/reducedMotion";
 import { useScrollableTabStop } from "../internal/scrollableTabStop";
 import { Column } from "./Column";
 import { Flex } from "./Flex";
@@ -121,7 +122,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
 
       container.scrollTo({
         left: slideWidth * index,
-        behavior: "smooth",
+        behavior: prefersReducedMotionNow() ? "auto" : "smooth",
       });
 
       // Reset flag after scroll animation completes
@@ -201,7 +202,7 @@ const Swiper = forwardRef<HTMLDivElement, SwiperProps>(
         // Smooth scroll to nearest slide
         container.scrollTo({
           left: targetScroll,
-          behavior: "smooth",
+          behavior: prefersReducedMotionNow() ? "auto" : "smooth",
         });
 
         setActiveIndex(nearestIndex);
