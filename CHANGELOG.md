@@ -18,6 +18,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`Mascot` turns into a cube while it works** (3.0.0-beta.1). `working="cube"` draws
+  the mascot in 3D, and while `state` is `thinking` it becomes the 2 × 2 Once UI cube,
+  scrambles and solves it with no face showing, shows the logo and softens back. `sides`
+  colors the faces (`classic`, `"tints"` of `color`, `mono`, or a color per side), `face="flat"`
+  paints the face on without light, and the gaps between pieces are hairline thin. Without
+  WebGL or with reduced motion the flat mascot stays. It survives React strict mode's
+  double effect, so it no longer falls back to the flat mascot in development.
+- **Poke the `Mascot`** (3.0.0-beta.1, as in 2.6.0). A click or tap squashes it with a
+  surprised face, flat or cube; `poke={false}` turns it off.
+- **Kawaii moods for `Mascot`** (3.0.0-beta.1, as in 2.6.0). `love`, `excited`, `laughing`,
+  `embarrassed`, `crying`, `angry` and `confused` draw an everyday mood plus effects: heart,
+  star or laughing eyes, blush, sweat, tears, an anger mark, and hearts, sparkles or a
+  question mark floating up. `effects` adds any of them to any mood (`effects={["blush"]}`)
+  or turns them off (`effects={false}`). Flat and cube draw the same glyphs.
 - **`@once-ui-system/foundations` is published** (3.0.0-beta.0 on `next`):
   the design tokens, utility CSS, SCSS sources and `tokens.json` for stacks
   without React. Core still inlines them, so a core app installs nothing new.

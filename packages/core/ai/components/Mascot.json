@@ -6,6 +6,8 @@
  ],
  "props": {
   "working": "\"cube\"",
+  "effects": "boolean | MascotEffect[]",
+  "poke": "boolean",
   "state": "MascotState = idle",
   "mood": "MascotMood = neutral",
   "seed": "string | number",
@@ -95,6 +97,18 @@
    "`clamp(${string})`",
    "`var(${string})`"
   ],
+  "MascotEffect": [
+   "heartEyes",
+   "starEyes",
+   "laughEyes",
+   "blush",
+   "sweat",
+   "tears",
+   "anger",
+   "hearts",
+   "sparkles",
+   "question"
+  ],
   "MascotMood": [
    "neutral",
    "happy",
@@ -103,7 +117,14 @@
    "skeptical",
    "wink",
    "focused",
-   "determined"
+   "determined",
+   "love",
+   "excited",
+   "laughing",
+   "embarrassed",
+   "crying",
+   "angry",
+   "confused"
   ],
   "MascotState": [
    "idle",
