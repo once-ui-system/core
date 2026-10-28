@@ -103,6 +103,10 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
+  cube drew the mood's line and a small open ring on top of each other, so a happy smile
+  showed a stray "o" in its middle. The mouth is now one outline that parts from the
+  mood's line into an open mouth with the voice and closes back onto it.
 - **A `DropdownWrapper` that leads with a search field keeps the caret in it.** With arrow
   navigation on, the field took focus as the panel opened and lost it a frame later to the
   selected option, so a site switcher or command menu opened with nothing to type into.
