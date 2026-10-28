@@ -1225,6 +1225,7 @@
    "default",
    "pointer"
   ],
+  "KbarFilter": "(items: KbarItem[], query: string) => KbarItem[]",
   "KbarItem": {
    "id": "!string",
    "name": "!string",
@@ -1236,6 +1237,13 @@
    "icon": "IconName",
    "description": "ReactNode",
    "placeholder": "string"
+  },
+  "KbarLabels": {
+   "dialog": "string",
+   "results": "string",
+   "noResults": "string",
+   "navigate": "string",
+   "goTo": "string"
   },
   "LayoutContextType": {
    "currentBreakpoint": "!BreakpointKey",
@@ -4329,6 +4337,8 @@
     "children": "React.ReactNode",
     "size": "TShirtSizes",
     "placeholder": "string",
+    "filter": "KbarFilter",
+    "labels": "KbarLabels",
     "open": "boolean",
     "defaultOpen": "boolean = false",
     "onOpenChange": "(open: boolean) => void"

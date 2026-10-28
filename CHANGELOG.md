@@ -444,6 +444,12 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
+  the items a query shows, in order, and the palette renders exactly that, sections in the
+  order of their first item, so an app can rank with typo tolerance or recent items first.
+  Without it the case-insensitive match on name, keywords and section is unchanged. Its
+  words (`labels`: dialog name, results, no results, the footer hints) can be translated;
+  English stays the default. `KbarFilter` and `KbarLabels` are exported types.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,

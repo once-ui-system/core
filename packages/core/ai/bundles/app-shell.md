@@ -258,6 +258,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - children?: React.ReactNode
 - size?: TShirtSizes
 - placeholder?: string
+- filter?: KbarFilter
+- labels?: KbarLabels
 - open?: boolean
 - defaultOpen?: boolean = false
 - onOpenChange?: (open: boolean) => void
@@ -558,7 +560,9 @@ type DropdownProps = Dropdown props
 type IconButtonProps = IconButton props
 // type IconName is one of these names, and only these:
 // symbol code link menu search time video filter image security opacity info danger warning adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check checkbox chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer copy cube dark dislike document download edit enter eye eyeDropper eyeOff file flag folder food forward gift globe grid grip heart help home inbox light like linearGauge lock logout mail mapPin maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove phone play plus radialGauge refresh return screen send settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type KbarFilter = (items: KbarItem[], query: string) => KbarItem[]
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
+type KbarLabels = { dialog?: string; results?: string; noResults?: string; navigate?: string; goTo?: string }
 type LegacyToast = { variant?: Tone; tone?: Tone; children?: ReactNode; message?: ReactNode; action?: ReactNode; duration?: number }
 type NavDensity = "normal" | "compact" | "spacious"
 type NavVariant = "solid" | "subtle" | "minimal"
