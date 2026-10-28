@@ -6,7 +6,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { resetScrollLockState } from "../components/ScrollLock";
 import { AdapterProvider } from "../contexts/AdapterProvider";
 import { LayoutProvider } from "../contexts/LayoutProvider";
-import { Kbar, type KbarItem } from "../modules/navigation/Kbar";
+import { Kbar, type KbarFilter, type KbarItem } from "../modules/navigation/Kbar";
 import { expectNoAxeViolations } from "../test/axe";
 import { resetDialogState } from "../test/dialogTestUtils";
 
@@ -234,5 +234,80 @@ describe("Kbar controlled", () => {
   it("stays open on mount when it starts open", async () => {
     render(<Kbar items={items} open onOpenChange={() => {}} />, { wrapper: wrap });
     expect(await screen.findByRole("dialog", { name: "Command palette" })).toBeInTheDocument();
+  });
+});
+
+/** `filter`: the app decides what a query shows and in what order; core ships no matcher. */
+describe("Kbar filter", () => {
+  const openWith = async (props: Partial<React.ComponentProps<typeof Kbar>>) => {
+    const user = userEvent.setup();
+    render(
+      <Kbar items={items} {...props}>
+        <span>Open command palette</span>
+      </Kbar>,
+      { wrapper: wrap },
+    );
+    await user.click(screen.getByText("Open command palette").parentElement as HTMLElement);
+    const dialog = await screen.findByRole("dialog", {
+      name: props.labels?.dialog ?? "Command palette",
+    });
+    const input = within(dialog).getByRole("combobox");
+    await waitFor(() => expect(input).toHaveFocus());
+    return { user, dialog, input };
+  };
+  const sectionNames = () =>
+    screen
+      .getAllByRole("group")
+      .map(
+        (group) =>
+          group.getAttribute("aria-labelledby") &&
+          document.getElementById(group.getAttribute("aria-labelledby") as string)?.textContent,
+      );
+
+  it("renders what the filter returns, in its order, with sections in order of their first item", async () => {
+    // A ranked result: the action first, then the docs link, the home link dropped.
+    const filter = vi.fn<KbarFilter>((list) => [list[2], list[1]]);
+    const { user, input } = await openWith({ filter });
+    await user.type(input, "t");
+
+    expect(filter).toHaveBeenLastCalledWith(items, "t");
+    expect(sectionNames()).toEqual(["Actions", "Navigation"]);
+    expect(screen.getAllByRole("option")).toHaveLength(2);
+    expect(activeOption(input)).toHaveAccessibleName("Toggle theme");
+    await user.keyboard("{ArrowDown}");
+    expect(activeOption(input)).toHaveAccessibleName("Docs");
+  });
+
+  it("shows the empty state when the filter returns nothing", async () => {
+    const { user, input } = await openWith({ filter: () => [] });
+    await user.type(input, "home");
+
+    expect(screen.queryByRole("option")).not.toBeInTheDocument();
+    expect(input).toHaveAttribute("aria-expanded", "false");
+    expect(screen.getByText("No results found")).toBeInTheDocument();
+  });
+
+  it("lists every item for an empty query without calling the filter", async () => {
+    const filter = vi.fn<KbarFilter>(() => []);
+    await openWith({ filter });
+    expect(filter).not.toHaveBeenCalled();
+    expect(screen.getAllByRole("option")).toHaveLength(3);
+  });
+
+  it("keeps the substring match without a filter", async () => {
+    const { user, input } = await openWith({});
+    await user.type(input, "dark");
+    expect(screen.getAllByRole("option")).toHaveLength(1);
+    expect(activeOption(input)).toHaveAccessibleName("Toggle theme");
+  });
+
+  it("takes translated words, keeping English for the rest", async () => {
+    const { user, input } = await openWith({
+      labels: { dialog: "Befehlspalette", noResults: "Keine Treffer" },
+    });
+    expect(screen.getByRole("listbox", { name: "Results" })).toBeInTheDocument();
+    expect(screen.getByText("Navigate")).toBeInTheDocument();
+    await user.type(input, "zzz");
+    expect(screen.getByText("Keine Treffer")).toBeInTheDocument();
   });
 });

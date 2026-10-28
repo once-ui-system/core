@@ -23,6 +23,13 @@ item (see `ROADMAP.md`, Week 4).
   paint, so a dismissed banner never flashes in. Banner stays a server component, and a
   caller's own `background` now replaces the default brand strip instead of clashing with it.
 
+- **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
+  the items a query shows, in order, and the palette renders exactly that, sections in the
+  order of their first item, so an app can rank with typo tolerance or recent items first.
+  Without it the case-insensitive match on name, keywords and section is unchanged. Its
+  words (`labels`: dialog name, results, no results, the footer hints) can be translated;
+  English stays the default. `KbarFilter` and `KbarLabels` are exported types.
+
 ### Changed
 
 - **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface
