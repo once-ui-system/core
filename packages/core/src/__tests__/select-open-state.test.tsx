@@ -97,6 +97,20 @@ describe("Select open state", () => {
     expect(await option("Charlie")).toHaveAttribute("aria-selected", "true");
   });
 
+  it("closes on a second click on the field", async () => {
+    const user = userEvent.setup();
+    render(<Single />, { wrapper: wrap });
+
+    await user.click(field());
+    await expectOpen();
+    await user.click(field());
+    await expectStaysClosed();
+    expect(field()).toHaveFocus();
+
+    await user.click(field());
+    await expectOpen();
+  });
+
   it("opens from the keyboard, picks with Enter and stays closed", async () => {
     const user = userEvent.setup();
     const onSelect = vi.fn();

@@ -261,6 +261,8 @@ const Select = ({
   const stopExpectingFocusRef = useRef<(() => void) | null>(null);
   const isOpenRef = useRef(isDropdownOpen);
   isOpenRef.current = isDropdownOpen;
+  /** Whether the list was open when the current press on the field began. */
+  const openOnPressRef = useRef(false);
 
   const expectReturningFocus = useCallback(() => {
     stopExpectingFocusRef.current?.();
@@ -552,9 +554,17 @@ const Select = ({
             // Focus alone cannot reopen a field that already has it: after a
             // pick, focus is back on the field with the list closed, and a
             // click there fires no focus event.
+            // A press on the field toggles the list, so the field closes what
+            // it opened. Whether it was open is read on mousedown, before the
+            // focus that the same press brings has opened it.
+            onMouseDown={(event: React.MouseEvent<HTMLInputElement>) => {
+              rest.onMouseDown?.(event);
+              openOnPressRef.current = isOpenRef.current;
+            }}
             onClick={(event: React.MouseEvent<HTMLInputElement>) => {
               rest.onClick?.(event);
-              setOpen(true);
+              setOpen(!openOnPressRef.current);
+              openOnPressRef.current = false;
             }}
             onKeyDown={handleFieldKeyDown}
             readOnly
@@ -600,7 +610,9 @@ const Select = ({
             aria-label={listboxLabel}
             aria-multiselectable={multiple || undefined}
             fillWidth
-            paddingTop="4"
+            // Space under the search field only: without one, the
+            // dropdown's own padding is the same above and below the list.
+            paddingTop={searchable ? "4" : undefined}
             gap="2"
             // The highlight follows the pointer, as it did when the options
             // took focus, so the active option is the one under it.
