@@ -226,6 +226,7 @@ export function MascotCube({
                 stroke={feature.stroke}
                 strokeWidth={feature.strokeWidth}
                 strokeLinecap="round"
+                strokeLinejoin="round"
                 opacity={feature.opacity}
               />
             ))}

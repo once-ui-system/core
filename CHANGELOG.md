@@ -407,6 +407,9 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the
   mood's line into an open mouth with the voice and closes back onto it.
+- **The cube Mascot's open mouth is one unbroken line.** The outline used to start and end
+  at its left corner, which left a visible nick there while it talked; the tube now closes
+  on itself (`tube(..., closed)`).
 - **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
   of buttons, links and inputs: the native pointer showed beside it, and an input lost its
   I-beam. It now steps aside wherever the native cursor is back, and over a nested element
