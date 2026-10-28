@@ -14,7 +14,9 @@ export { HeadingLink } from "./navigation/HeadingLink.js";
 // The types these components take, so consumers can annotate their own nav
 // data instead of letting the literals widen to `string`.
 export type {
+  KbarFilter,
   KbarItem,
+  KbarLabels,
   MegaMenuProps,
   MenuGroup,
   MenuLink,
