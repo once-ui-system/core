@@ -42,6 +42,9 @@ item (see `ROADMAP.md`, Week 4).
 - **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
   no template serves, so every such page carried a broken image. It now uses
   `/api/og/generate`, the same default `Meta.generate` uses for the social image.
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
 
 ## [2.6.0] — 2026-10-24
 
