@@ -55,6 +55,11 @@ item (see `ROADMAP.md`, Week 4).
   back to a hidden textarea and `document.execCommand("copy")`, and report the real
   outcome: the toast says when the link could not be copied, and CodeBlock's check only
   shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
 
 ## [2.6.0] — 2026-10-24
 
