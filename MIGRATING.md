@@ -516,18 +516,24 @@ props in one and are the most-written props in Once UI code. `Grid` now applies
 imports. The subset subpaths (`/components`, `/contexts`, `/hooks`, `/icons`,
 `/types`, `/interfaces`, `/utils`) and `/modules` only re-exported parts of
 the root, and `/components/*` made every file in `dist/components` public,
-internals included. Import from the root instead. Four components left it
+internals included. Import from the root instead. The exception is each public
+component's own path, `@once-ui-system/core/components/Button`: 3.0 lists one
+per component the root exports, and no internal module. Under Turbopack (Next
+16's default build), a server component that imports a client component from
+the root ships every client component, and its own path ships only that one.
+The codemod keeps such an import and drops a `.js` extension. Four components left it
 for a subpath, and twenty-two for a package of their own (below the table):
 
 | 2.x | 3.0 |
 | --- | --- |
-| `@once-ui-system/core/components`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils`, `/modules`, `/components/<Name>` | `@once-ui-system/core` |
+| `@once-ui-system/core/components`, `/contexts`, `/hooks`, `/icons`, `/types`, `/interfaces`, `/utils`, `/modules`, `/components/<Name>` of an internal module or a component 3.0 moved or renamed | `@once-ui-system/core` |
+| `/components/<Name>` of a public component (`/components/Button`, `/components/Row.js`) | stays, as `/components/Button` |
 | `EmojiPicker` (root) | `@once-ui-system/core/emoji`, so its emoji data (about 270 KB) is in no bundle that does not render it |
 | `Scrubber`, `CompareImage` (root); `MediaAudioPlayer`, `MediaVideoPlayer` (`/components/<Name>`) | `@once-ui-system/core/media`, beside `MediaUpload` |
 | The sixteen effects: `BlobFx`, `CelebrationFx`, `CountdownFx`, `CountFx`, `Effect`, `FlipFx`, `GlitchFx`, `HoloFx`, `LetterFx`, `MatrixFx`, `ParticleFx`, `RevealFx`, `ShineFx`, `TiltFx`, `TypeFx`, `WeatherFx`, with their props types | `@once-ui-system/fx` |
 | `Banner`, `Book`, `LogoCloud`, `ScrollToTop`, `StylePanel` (with `useStylePanel` and the `StylePanel*` types), `StyleOverlay` | `@once-ui-system/blocks` |
 
-The entry points are `.`, `/config`, `/server`, `/next`, `/data`, `/code`,
+The entry points are `.`, `/components/<Name>` for each public component, `/config`, `/server`, `/next`, `/data`, `/code`,
 `/media`, `/emoji`, `/mdx`, the `css/*` and `ai/*` files, `AGENTS.md` and
 `package.json`. The codemod's import pass moves every import, re-export and
 `import()` (splitting a statement that mixes names, joining an import of the

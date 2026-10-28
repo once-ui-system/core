@@ -39,14 +39,21 @@ describe("B2: the subset subpaths move to the root", () => {
 		);
 	});
 
-	it("moves a deep components/<Name> import to the root", () => {
+	it("keeps a deep import of a public component on its own 3.0 path", () => {
+		// A Turbopack build ships only that component; the root ships them all.
 		const src = 'import { Button, type ButtonProps } from "@once-ui-system/core/components/Button";\n';
-		assert.equal(idempotent(src), 'import { Button, type ButtonProps } from "@once-ui-system/core";\n');
+		assert.equal(idempotent(src), src);
+		assert.deepEqual(run(src).warnings, []);
 	});
 
-	it("accepts the file extension on a deep import", () => {
+	it("drops the file extension on a public component's deep import", () => {
 		const src = 'import { Row } from "@once-ui-system/core/components/Row.js";\n';
-		assert.equal(run(src).out, 'import { Row } from "@once-ui-system/core";\n');
+		assert.equal(run(src).out, 'import { Row } from "@once-ui-system/core/components/Row";\n');
+	});
+
+	it("moves a deep import of a component 3.0 no longer has on its own path", () => {
+		const src = 'import { Modal } from "@once-ui-system/core/components/Modal";\n';
+		assert.equal(run(src).out, 'import { Modal } from "@once-ui-system/core";\n');
 	});
 
 	it("moves a namespace import and an export-from", () => {
@@ -86,7 +93,7 @@ describe("B2: the subset subpaths move to the root", () => {
 	});
 
 	it("reports any other specifier 3.0 does not have (a mock, a dist path)", () => {
-		const src = 'vi.mock("@once-ui-system/core/components/Button");\nconst p = "@once-ui-system/core/dist/index.js";\n';
+		const src = 'vi.mock("@once-ui-system/core/components/Modal");\nconst p = "@once-ui-system/core/dist/index.js";\n';
 		const { warnings } = run(src);
 		assert.equal(warnings.length, 2);
 		assert.ok(warnings.every((w) => /not an entry point in 3.0/.test(w)));
@@ -333,9 +340,9 @@ describe("the full codemod runs the import pass", () => {
 		assert.match(out, /<EmojiPicker trigger=\{<b \/>\} \/>/);
 	});
 
-	it("moves a deep import", () => {
+	it("keeps a public component's deep import", () => {
 		const { out } = transform('import { Button } from "@once-ui-system/core/components/Button";\n<Button />;\n');
-		assert.match(out, /import \{ Button \} from "@once-ui-system\/core";/);
+		assert.match(out, /import \{ Button \} from "@once-ui-system\/core\/components\/Button";/);
 	});
 
 	it("renames Particle and FadingLettersFx before moving them to @once-ui-system/fx", () => {

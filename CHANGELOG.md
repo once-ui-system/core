@@ -18,7 +18,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
-- **One import path per component: `@once-ui-system/core/components/<Name>`.**
+- **One import path per public component: `@once-ui-system/core/components/<Name>`.**
+  Listed one by one for the modules the root re-exports, so unlike 2.x's
+  `./components/*` wildcard no internal module is public. The codemod keeps these
+  imports instead of moving them to the root.
   Next 16 builds with Turbopack, which ignores `optimizePackageImports`. As a result, a
   server component that imports `Button` from the package root shipped every client
   component. In a Next 16.2 static export of a page with a Button and four layout
