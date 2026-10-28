@@ -56,6 +56,8 @@ const GAP = 0.04;
 const BLOB_R = 1.12;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
+/** Points round the mouth's outline, from its left corner. */
+const MOUTH_POINTS = 25;
 
 const CLASSIC: Record<Exclude<CubeSide, "front">, RGB> = {
   top: [0.957, 0.957, 0.949],
@@ -513,32 +515,25 @@ function faceShapes(motion: CubeMotion, look: CubeLook, input: CubeInput, root: 
     place(0, eyeY - 0.22);
     const at: Vec3 = [t[0] + lx * 0.04, t[1] + ly * 0.04 - 0.02, mix(t[2], front, m) + raise];
     const q = tilt(1, pose.tilt);
-    if (pose.open < 0.85) {
-      const width = pose.width * (1 - pose.open * 0.9) + 0.005;
-      const pts: Point[] = [];
-      for (let i = 0; i <= 8; i++) {
-        const v = i / 4 - 1;
-        pts.push([v * width, pose.curve * 0.1 * (v * v - 1) + pose.curve * 0.05]);
-      }
-      const model = multiply(root, compose(at, q, [grow, grow, grow]));
-      out.push({
-        d: pathOf(shape(model, pts), false),
-        stroke: ink,
-        strokeWidth: 0.048 * scaleOf(model),
-      });
+    // One outline, as on the web: the mood's line along the top and back along the bottom, so a
+    // talking smile parts into an open mouth instead of showing a ring over the line.
+    const w = mix(pose.width + 0.005, 0.065, pose.open * 0.6);
+    const depth = pose.open * 0.16;
+    const pts: Point[] = [];
+    for (let i = 0; i < MOUTH_POINTS - 1; i++) {
+      const a = (i / (MOUTH_POINTS - 1)) * Math.PI * 2;
+      const v = -Math.cos(a);
+      const top = Math.sin(a) >= 0;
+      const bend = top ? pose.curve * (1 - pose.open * 0.7) : pose.curve;
+      const line = bend * 0.1 * (v * v - 1) + pose.curve * 0.05;
+      pts.push([v * w, line + (top ? 0.35 : -0.65) * depth * Math.abs(Math.sin(a))]);
     }
-    if (pose.open > 0.05) {
-      const s = grow * Math.max(0.001, pose.open);
-      const model = multiply(
-        root,
-        compose([at[0], at[1] - 0.01, at[2]], q, [s * 0.9, s * 1.15, s]),
-      );
-      out.push({
-        d: pathOf(shape(model, circleOutline(0.07, 24))),
-        stroke: ink,
-        strokeWidth: (0.048 * scaleOf(model)) / 0.9,
-      });
-    }
+    const model = multiply(root, compose(at, q, [grow, grow, grow]));
+    out.push({
+      d: pathOf(shape(model, pts)),
+      stroke: ink,
+      strokeWidth: 0.048 * scaleOf(model),
+    });
   }
   return out;
 }
