@@ -498,6 +498,8 @@ export interface KbarProps {
    */
   children?: React.ReactNode;
   inputSize?: TShirtSizes;
+  /** The search field's placeholder inside the palette. Defaults to "Search". */
+  placeholder?: string;
   /**
    * Controlled open state. Pair it with `onOpenChange`:
    * `<Button onClick={() => setOpen(true)} />` and
@@ -513,6 +515,7 @@ export const Kbar: React.FC<KbarProps> = ({
   items,
   children,
   inputSize,
+  placeholder,
   open: openProp,
   onOpenChange,
   ...rest
@@ -589,7 +592,13 @@ export const Kbar: React.FC<KbarProps> = ({
       )}
       {open &&
         createPortal(
-          <KbarContent open={open} onClose={handleClose} items={items} inputSize={inputSize} />,
+          <KbarContent
+            open={open}
+            onClose={handleClose}
+            items={items}
+            placeholder={placeholder}
+            inputSize={inputSize}
+          />,
           document.body,
         )}
     </>
