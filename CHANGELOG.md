@@ -403,6 +403,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
+  cube drew the mood's line and a small open ring on top of each other, so a happy smile
+  showed a stray "o" in its middle. The mouth is now one outline that parts from the
+  mood's line into an open mouth with the voice and closes back onto it.
 - **A node as `cursor` on `Flex` and `Grid` works with controls inside.** It stepped in front
   of buttons, links and inputs: the native pointer showed beside it, and an input lost its
   I-beam. It now steps aside wherever the native cursor is back, and over a nested element

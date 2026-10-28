@@ -10,7 +10,6 @@ import {
   quad,
   sphere,
   tileOutline,
-  torus,
   tube,
 } from "./geometry.js";
 import {
@@ -62,6 +61,8 @@ const GAP = 0.006;
 const BLOB_R = 1.12;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
+/** Points round the mouth's outline; the first and last meet at its left corner. */
+const MOUTH_POINTS = 25;
 
 const mixRGB = (a: RGB, b: RGB, t: number): RGB => [
   mix(a[0], b[0], t),
@@ -144,7 +145,6 @@ export class CubeView {
   private blob: { mesh: GpuMesh; data: MeshData; base: Float32Array };
   private core: GpuMesh;
   private quad: GpuMesh;
-  private ring: GpuMesh;
   private disc: GpuMesh;
   private mouth: { mesh: GpuMesh; data: MeshData };
   private shapes = new Map<string, GpuMesh>();
@@ -178,10 +178,9 @@ export class CubeView {
     // Round, so a turning layer never uncovers a corner of it.
     this.core = r.mesh(sphere(0.9));
     this.quad = r.mesh(quad());
-    this.ring = r.mesh(torus(0.07, 0.024, 32, 10));
     this.disc = r.mesh(flatShape(circleOutline(1, 24)));
     const mouth = tube(
-      Array.from({ length: 9 }, (_, i) => [i / 4 - 1, 0] as [number, number]),
+      Array.from({ length: MOUTH_POINTS }, () => [0, 0] as [number, number]),
       0.024,
     );
     this.mouth = { data: mouth, mesh: r.mesh(mouth, true) };
@@ -258,11 +257,24 @@ export class CubeView {
     }
   }
 
-  private buildMouth(curve: number, width: number) {
+  /**
+   * One outline for every mouth: the mood's line along the top and back along the bottom. Shut,
+   * the two lips lie on each other; opening parts them into an oval round the line, so a talking
+   * smile is one shape and never a line with a ring on it.
+   */
+  private buildMouth(curve: number, width: number, open: number) {
     const pts: [number, number][] = [];
-    for (let i = 0; i <= 8; i++) {
-      const u = i / 4 - 1;
-      pts.push([u * width, curve * 0.1 * (u * u - 1) + curve * 0.05]);
+    const w = mix(width, 0.065, open * 0.6);
+    const depth = open * 0.16;
+    for (let i = 0; i < MOUTH_POINTS; i++) {
+      // Around from the left corner: the top lip left to right, then the bottom lip back.
+      const a = (i / (MOUTH_POINTS - 1)) * Math.PI * 2;
+      const u = -Math.cos(a);
+      const top = Math.sin(a) >= 0;
+      // The top lip flattens as it opens, so a smile opens into a grin rather than a W.
+      const bend = top ? curve * (1 - open * 0.7) : curve;
+      const line = bend * 0.1 * (u * u - 1) + curve * 0.05;
+      pts.push([u * w, line + (top ? 0.35 : -0.65) * depth * Math.abs(Math.sin(a))]);
     }
     tube(pts, 0.024, 8, this.mouth.data);
     this.mouth.mesh.update(this.mouth.data);
@@ -477,22 +489,12 @@ export class CubeView {
       const my = t[1] + ly * 0.04 - 0.02;
       const mz = mix(t[2], front, m) + raise;
       const q = tilt(1, pose.tilt);
-      if (pose.open < 0.85) {
-        this.buildMouth(pose.curve, pose.width * (1 - pose.open * 0.9) + 0.005);
-        r.draw(
-          this.mouth.mesh,
-          multiply(root, compose([mx, my, mz], q, [grow, grow, grow]), this.m2),
-          ink,
-        );
-      }
-      if (pose.open > 0.05) {
-        const s = grow * Math.max(0.001, pose.open);
-        r.draw(
-          this.ring,
-          multiply(root, compose([mx, my - 0.01, mz], q, [s * 0.9, s * 1.15, s]), this.m2),
-          ink,
-        );
-      }
+      this.buildMouth(pose.curve, pose.width + 0.005, pose.open);
+      r.draw(
+        this.mouth.mesh,
+        multiply(root, compose([mx, my, mz], q, [grow, grow, grow]), this.m2),
+        ink,
+      );
     }
   }
 
