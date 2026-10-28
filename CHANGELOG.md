@@ -478,6 +478,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   back to a hidden textarea and `document.execCommand("copy")`, and report the real
   outcome: the toast says when the link could not be copied, and CodeBlock's check only
   shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
 - **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the
