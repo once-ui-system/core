@@ -50,7 +50,7 @@ const price = (value: number) =>
 
 export function MapBasicExample() {
   return (
-    <Map height={24} defaultViewport={{ center: BUDAPEST, zoom: 12 }} labels={{ map: "Budapest" }}>
+    <Map height={384} defaultViewport={{ center: BUDAPEST, zoom: 12 }} labels={{ map: "Budapest" }}>
       <MapMarker position={BUDAPEST} />
     </Map>
   );
@@ -63,7 +63,7 @@ export function MapListingsExample() {
 
   return (
     <Map
-      height={32}
+      height={512}
       bounds={listings.map((listing) => listing.position)}
       labels={{ map: "Listings" }}
     >
@@ -111,7 +111,7 @@ const VENUES = [
 
 export function MapAvatarExample() {
   return (
-    <Map height={24} bounds={VENUES.map((venue) => venue.position)} controls={false}>
+    <Map height={384} bounds={VENUES.map((venue) => venue.position)} controls={false}>
       {VENUES.map((venue) => (
         <MapMarker key={venue.id} position={venue.position} anchor="center">
           <Avatar size="m" value={venue.name.slice(0, 1)} aria-label={venue.name} />
@@ -123,7 +123,7 @@ export function MapAvatarExample() {
 
 export function MapAreaExample() {
   return (
-    <Map height={24} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
+    <Map height={384} defaultViewport={{ center: [19.0545, 47.5065], zoom: 14 }}>
       <MapCircle position={[19.0545, 47.5065]} radius={400} />
     </Map>
   );
@@ -150,7 +150,7 @@ export function MapControlledExample() {
           </Button>
         ))}
       </Row>
-      <Map height={24} viewport={viewport} onViewportChange={setViewport}>
+      <Map height={384} viewport={viewport} onViewportChange={setViewport}>
         {places.map((place) => (
           <MapMarker key={place.label} position={place.position}>
             <MapPin color="accent" aria-label={place.label} />

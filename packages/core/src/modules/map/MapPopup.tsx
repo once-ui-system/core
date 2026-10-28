@@ -82,8 +82,8 @@ const MapPopup: React.FC<MapPopupProps> = ({
         shadow="l"
         padding="16"
         gap="8"
-        minWidth={14}
-        maxWidth={20}
+        minWidth={224}
+        maxWidth={320}
         position="relative"
         style={{ zIndex: 3, cursor: "auto" }}
         {...flex}
