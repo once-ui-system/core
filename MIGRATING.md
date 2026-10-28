@@ -392,7 +392,15 @@ working, with Scroller's props.
 Two things work better and you may notice them. Dialog and Drawer share one
 overlay core, so Escape closes only the innermost open overlay (a Dialog opened
 from a Drawer closes alone), and focus goes back to the trigger as the overlay
-starts closing rather than after its exit animation. An uncontrolled
+starts closing rather than after its exit animation. Clicks outside follow
+the same rule: a click in a stacked Dialog no longer closes the one beneath it,
+and the Toaster stays clickable while a Dialog is open, so a toast's Undo works.
+A Dialog that mounts open now takes focus (its overlay used to be hidden for its
+first frame, so focus fell to `<body>`). The Dialog's `role="dialog"`, its name,
+its `className` and its `ref` are all on the panel now, not the full-screen
+overlay, and an `aria-label` names it instead of the title; a string `title`
+renders an `h2`, so the page keeps its only `h1`. Update a test that clicked the
+`role="dialog"` element to mean "outside": click its parent, the overlay. An uncontrolled
 `EmojiPicker trigger` now closes on a pick; 2.x's `EmojiPickerDropdown` closed
 only when controlled.
 

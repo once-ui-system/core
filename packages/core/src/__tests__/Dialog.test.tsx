@@ -40,7 +40,14 @@ const renderDialog = (props: Partial<React.ComponentProps<typeof Dialog>> = {}) 
 const getDialogPanel = (root: ParentNode = document.body) =>
   (root.querySelector('[tabindex="-1"]')?.parentElement ?? null) as HTMLElement | null;
 
-const getOverlay = () => screen.getByRole("dialog");
+/** The overlay: the portal's child of `document.body` the dialog sits in. */
+const overlayOf = (dialog: HTMLElement) => {
+  let node = dialog;
+  while (node.parentElement && node.parentElement !== document.body) node = node.parentElement;
+  return node;
+};
+
+const getOverlay = () => overlayOf(screen.getByRole("dialog"));
 
 const advanceTimers = (ms: number) => {
   act(() => {
@@ -73,15 +80,33 @@ describe("Dialog", () => {
       expect(document.body).toContainElement(getOverlay());
     });
 
-    it("sets aria-modal on the dialog overlay", () => {
-      renderDialog();
+    it("puts role, aria-modal and className on the panel, not the overlay", () => {
+      renderDialog({ className: "my-dialog" });
+      const dialog = screen.getByRole("dialog");
 
-      expect(getOverlay()).toHaveAttribute("aria-modal", "true");
+      expect(dialog).toHaveAttribute("aria-modal", "true");
+      expect(dialog).toHaveClass("my-dialog");
+      expect(dialog).not.toBe(getOverlay());
+      expect(getOverlay()).not.toHaveAttribute("role");
+    });
+
+    it("lets aria-label name the dialog instead of the title", () => {
+      renderDialog({ title: <nav>Tabs</nav>, "aria-label": "Settings" });
+
+      expect(screen.getByRole("dialog", { name: "Settings" })).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).not.toHaveAttribute("aria-labelledby");
+    });
+
+    it("renders a string title as an h2, so the page keeps its only h1", () => {
+      renderDialog({ title: "Simple title" });
+
+      expect(screen.getByRole("heading", { level: 2, name: "Simple title" })).toBeInTheDocument();
+      expect(screen.queryByRole("heading", { level: 1 })).not.toBeInTheDocument();
     });
 
     it("has a valid aria-labelledby pointing to an element in the DOM", () => {
       renderDialog();
-      const overlay = getOverlay();
+      const overlay = screen.getByRole("dialog");
       const labelledBy = overlay.getAttribute("aria-labelledby");
 
       expect(labelledBy).toBeTruthy();
@@ -118,7 +143,7 @@ describe("Dialog", () => {
     it("labels the dialog correctly when title is a ReactNode", () => {
       renderDialog({ title: <span>Custom title node</span> });
 
-      const overlay = getOverlay();
+      const overlay = screen.getByRole("dialog");
       const labelledBy = overlay.getAttribute("aria-labelledby");
 
       expect(labelledBy).toBeTruthy();
@@ -321,6 +346,44 @@ describe("Dialog", () => {
       expect(onClose).not.toHaveBeenCalled();
     });
 
+    it("closes only the top dialog when a click lands in a stacked one", () => {
+      vi.useFakeTimers();
+      const onBaseClose = vi.fn();
+      const onTopClose = vi.fn();
+      render(
+        <>
+          <Dialog {...defaultProps} title="Lower dialog" onClose={onBaseClose} />
+          <Dialog {...defaultProps} title="Top dialog" onClose={onTopClose}>
+            <button type="button">Top action</button>
+          </Dialog>
+        </>,
+        { wrapper: TestProviders },
+      );
+
+      advanceTimers(10);
+      fireEvent.mouseDown(screen.getByRole("button", { name: "Top action" }), { button: 0 });
+
+      expect(onBaseClose).not.toHaveBeenCalled();
+      expect(onTopClose).not.toHaveBeenCalled();
+    });
+
+    it("leaves an exempt region (the Toaster) clickable and not outside", () => {
+      vi.useFakeTimers();
+      const onClose = vi.fn();
+      const toaster = document.createElement("div");
+      toaster.setAttribute("data-overlay-exempt", "");
+      const undo = document.createElement("button");
+      toaster.appendChild(undo);
+      document.body.appendChild(toaster);
+      renderDialog({ onClose });
+
+      expect(toaster.inert).toBe(false);
+      advanceTimers(10);
+      fireEvent.mouseDown(undo, { button: 0 });
+
+      expect(onClose).not.toHaveBeenCalled();
+    });
+
     it("calls onClose when the close button is clicked", async () => {
       const onClose = vi.fn();
       const user = userEvent.setup();
@@ -438,7 +501,7 @@ describe("Dialog", () => {
         // The overlay core (shared with Drawer) hands focus back on close, not
         // after the exit transition: the closing dialog is already inert.
         expect(document.activeElement).toBe(opener);
-        expect(screen.getByRole("dialog", { hidden: true }).inert).toBe(true);
+        expect(overlayOf(screen.getByRole("dialog", { hidden: true })).inert).toBe(true);
 
         advanceTimers(299);
 
@@ -493,7 +556,7 @@ describe("Dialog", () => {
       renderDialog({ title: "Base dialog", base: true });
       renderDialog({ title: "Stacked dialog", stack: true });
 
-      const [baseOverlay] = screen.getAllByRole("dialog");
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
       const basePanel = getDialogPanel(baseOverlay);
 
       expect(baseOverlay.inert).toBe(true);
@@ -503,7 +566,7 @@ describe("Dialog", () => {
       vi.useFakeTimers();
       renderDialog({ title: "Base dialog", base: true });
       const stacked = renderDialog({ title: "Stacked dialog", stack: true });
-      const [baseOverlay] = screen.getAllByRole("dialog");
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
       const basePanel = getDialogPanel(baseOverlay) as HTMLElement;
 
       stacked.rerender(<Dialog {...defaultProps} title="Stacked dialog" open={false} stack />);
@@ -644,8 +707,8 @@ describe("Dialog", () => {
         </>,
         { wrapper: TestProviders },
       );
-      const [baseDialog] = screen.getAllByRole("dialog");
-      expect(baseDialog.inert).toBe(false);
+      const baseOverlay = overlayOf(screen.getAllByRole("dialog")[0]);
+      expect(baseOverlay.inert).toBe(false);
 
       rerender(
         <>
@@ -653,7 +716,7 @@ describe("Dialog", () => {
           <Dialog {...defaultProps} title="Stacked dialog" stack open />
         </>,
       );
-      expect(screen.getAllByRole("dialog")[0].inert).toBe(true);
+      expect(baseOverlay.inert).toBe(true);
 
       rerender(
         <>
@@ -661,7 +724,7 @@ describe("Dialog", () => {
           <Dialog {...defaultProps} title="Stacked dialog" stack open={false} />
         </>,
       );
-      expect(screen.getAllByRole("dialog")[0].inert).toBe(false);
+      expect(baseOverlay.inert).toBe(false);
     });
   });
 

@@ -84,7 +84,7 @@ describe("Modal", () => {
     expect(dialog()).toHaveAccessibleName("Release notes");
     expect(screen.getByRole("heading", { level: 2, name: "Release notes" })).toBeInTheDocument();
     expect(screen.getByText("What changed in 2.1.")).toBeInTheDocument();
-    expect(dialog()).toContainElement(screen.getByTestId("backdrop"));
+    expect(dialog()?.parentElement).toContainElement(screen.getByTestId("backdrop"));
     await expectNoAxeViolations(document.body);
   });
 
@@ -97,7 +97,8 @@ describe("Modal", () => {
     fireEvent.mouseDown(screen.getByText("What changed in 2.1."));
     expect(onClose).not.toHaveBeenCalled();
 
-    fireEvent.mouseDown(dialog() as HTMLElement);
+    // The overlay around the sheet.
+    fireEvent.mouseDown(dialog()?.parentElement as HTMLElement);
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
