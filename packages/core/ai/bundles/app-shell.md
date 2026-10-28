@@ -257,6 +257,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - items: KbarItem[]
 - children?: React.ReactNode
 - size?: TShirtSizes
+- placeholder?: string
 - open?: boolean
 - defaultOpen?: boolean = false
 - onOpenChange?: (open: boolean) => void

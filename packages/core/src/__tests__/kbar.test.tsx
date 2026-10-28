@@ -169,6 +169,24 @@ describe("Kbar accessibility", () => {
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(trigger).toHaveFocus();
   });
+
+  it("puts its placeholder on the palette's search, not on the trigger", async () => {
+    const user = userEvent.setup();
+    render(
+      <Kbar items={items} placeholder="Search posts">
+        <span>Open command palette</span>
+      </Kbar>,
+      { wrapper: wrap },
+    );
+    const trigger = screen.getByText("Open command palette").parentElement as HTMLElement;
+    expect(trigger).not.toHaveAttribute("placeholder");
+    await user.click(trigger);
+    const dialog = await screen.findByRole("dialog", { name: "Command palette" });
+    expect(within(dialog).getByRole("combobox", { name: "Search posts" })).toHaveAttribute(
+      "placeholder",
+      "Search posts",
+    );
+  });
 });
 
 /** Opening from a Button: the palette was only reachable through its own wrapper row. */
