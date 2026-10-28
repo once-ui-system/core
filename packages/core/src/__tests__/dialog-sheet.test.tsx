@@ -149,9 +149,10 @@ describe('Dialog variant="sheet" keeps Modal\'s look and slots', () => {
       { wrapper: wrap },
     );
     const dialog = await screen.findByRole("dialog");
+    const overlay = dialog.parentElement as HTMLElement;
     const backdrop = screen.getByTestId("backdrop");
-    expect(backdrop.parentElement).toBe(dialog);
-    expect(dialog.firstElementChild).toBe(backdrop);
+    expect(backdrop.parentElement).toBe(overlay);
+    expect(overlay.firstElementChild).toBe(backdrop);
   });
 
   it("titles the sheet with a display heading, as Modal did", async () => {
@@ -179,7 +180,10 @@ describe('Dialog variant="sheet" keeps Modal\'s look and slots', () => {
       .getByRole("button", { name: "Inside" })
       .dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
     expect(closed).toBe(0);
-    dialog.dispatchEvent(new MouseEvent("mousedown", { bubbles: true, button: 0 }));
+    // The overlay around the sheet.
+    (dialog.parentElement as HTMLElement).dispatchEvent(
+      new MouseEvent("mousedown", { bubbles: true, button: 0 }),
+    );
     expect(closed).toBe(1);
   });
 

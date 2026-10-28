@@ -83,6 +83,9 @@ const Toaster = ({
       aria-label="Notifications"
       aria-live="polite"
       aria-relevant="additions text"
+      // Stays clickable under an open Dialog or Drawer: a toast's action
+      // (Undo, Try again) must work while one is open. See useOverlay.
+      data-overlay-exempt=""
     >
       {toasts.map((toast, index, array) => {
         const reverseIndex = array.length - 1 - index;

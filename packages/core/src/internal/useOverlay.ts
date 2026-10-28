@@ -1,12 +1,19 @@
 "use client";
 
-import { type RefObject, useEffect, useLayoutEffect, useRef, useState } from "react";
+import { type RefObject, useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
 // Layout effects warn during a server render; these only matter in the browser.
 const useIsomorphicLayoutEffect = typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
 /** The open overlays, innermost last. Only the innermost one answers Escape. */
 const openOverlays: object[] = [];
+
+/**
+ * Marks a direct child of `document.body` that stays interactive under an open
+ * overlay, and whose clicks are not "outside" it: the Toaster, so a toast's
+ * Undo works while a dialog is open.
+ */
+export const OVERLAY_EXEMPT_ATTR = "data-overlay-exempt";
 
 export interface OverlayOptions {
   /** Whether the overlay is open. It never closes itself: `onClose` asks. */
@@ -30,6 +37,9 @@ export interface OverlayState {
   visible: boolean;
   /** Past its first frame: the class that runs the entrance transition. */
   entered: boolean;
+  /** Whether this is the innermost open overlay, the one that answers Escape
+   *  and clicks outside. Read it in an event handler, not during render. */
+  isInnermost: () => boolean;
 }
 
 /**
@@ -44,7 +54,8 @@ export interface OverlayState {
  * - focus handed back on close, and on unmount while open, to the element that
  *   had it (or `returnFocusRef`), after the page is interactive again;
  * - Escape, on the document, answered only by the innermost open overlay and
- *   never when something inside already handled it (`defaultPrevented`).
+ *   never when something inside already handled it (`defaultPrevented`);
+ *   `isInnermost` lets a component do the same for clicks outside.
  *
  * Tab containment and initial focus are FocusTrap's, and page scroll is
  * ScrollLock's; the components render those two themselves.
@@ -87,7 +98,12 @@ export function useOverlay({
     if (!open) return;
     const madeInert: HTMLElement[] = [];
     for (const node of Array.from(document.body.children)) {
-      if (node instanceof HTMLElement && node !== overlay && !node.inert) {
+      if (
+        node instanceof HTMLElement &&
+        node !== overlay &&
+        !node.inert &&
+        !node.hasAttribute(OVERLAY_EXEMPT_ATTR)
+      ) {
         node.inert = true;
         madeInert.push(node);
       }
@@ -130,9 +146,10 @@ export function useOverlay({
 
   const latest = useRef({ onClose, closeOnEscape });
   latest.current = { onClose, closeOnEscape };
+  const selfRef = useRef<object>({});
   useEffect(() => {
     if (!open) return;
-    const self = {};
+    const self = selfRef.current;
     openOverlays.push(self);
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Escape" || event.defaultPrevented) return;
@@ -149,5 +166,10 @@ export function useOverlay({
     };
   }, [open]);
 
-  return { mounted, visible, entered };
+  const isInnermost = useCallback(
+    () => openOverlays[openOverlays.length - 1] === selfRef.current,
+    [],
+  );
+
+  return { mounted, visible, entered, isInnermost };
 }
