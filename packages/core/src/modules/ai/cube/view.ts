@@ -61,8 +61,8 @@ const GAP = 0.006;
 const BLOB_R = 1.12;
 const DARK: RGB = [0.067, 0.071, 0.086];
 const WHITE: RGB = [1, 1, 1];
-/** Points round the mouth's outline; the first and last meet at its left corner. */
-const MOUTH_POINTS = 25;
+/** Points round the mouth's outline, from its left corner; the tube closes the loop. */
+const MOUTH_POINTS = 32;
 
 const mixRGB = (a: RGB, b: RGB, t: number): RGB => [
   mix(a[0], b[0], t),
@@ -205,6 +205,9 @@ export class CubeView {
     const mouth = tube(
       Array.from({ length: MOUTH_POINTS }, () => [0, 0] as [number, number]),
       0.024,
+      8,
+      undefined,
+      true,
     );
     this.mouth = { data: mouth, mesh: r.mesh(mouth, true) };
   }
@@ -291,7 +294,7 @@ export class CubeView {
     const depth = open * 0.16;
     for (let i = 0; i < MOUTH_POINTS; i++) {
       // Around from the left corner: the top lip left to right, then the bottom lip back.
-      const a = (i / (MOUTH_POINTS - 1)) * Math.PI * 2;
+      const a = (i / MOUTH_POINTS) * Math.PI * 2;
       const u = -Math.cos(a);
       const top = Math.sin(a) >= 0;
       // The top lip flattens as it opens, so a smile opens into a grin rather than a W.
@@ -299,7 +302,7 @@ export class CubeView {
       const line = bend * 0.1 * (u * u - 1) + curve * 0.05;
       pts.push([u * w, line + (top ? 0.35 : -0.65) * depth * Math.abs(Math.sin(a))]);
     }
-    tube(pts, 0.024, 8, this.mouth.data);
+    tube(pts, 0.024, 8, this.mouth.data, true);
     this.mouth.mesh.update(this.mouth.data);
   }
 
