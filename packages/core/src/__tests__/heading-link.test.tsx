@@ -115,6 +115,34 @@ describe("HeadingLink", () => {
     expect(await screen.findByText("Link copied to clipboard.")).toBeInTheDocument();
   });
 
+  it("names the link from its children by default", () => {
+    render(
+      <HeadingLink as="h2" id="why-overflow">
+        Why <code>overflow</code>
+      </HeadingLink>,
+      { wrapper: Layout },
+    );
+    expect(screen.getByRole("link", { name: "Copy link to Why overflow" })).toBeInTheDocument();
+  });
+
+  // A server component in the children (inline code, a link) can reach the
+  // client as a node whose text it cannot read; `label` names the link then.
+  it("names the link from `label` when given, whatever the children", async () => {
+    const Opaque = () => <code>overflow</code>;
+    const writeText = stubClipboard();
+    render(
+      <HeadingLink as="h2" id="why-overflow" label="Why overflow">
+        Why <Opaque />
+      </HeadingLink>,
+      { wrapper: Layout },
+    );
+    const link = screen.getByRole("link", { name: "Copy link to Why overflow" });
+    expect(link).toHaveAttribute("href", "#why-overflow");
+    expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Why overflow");
+    fireEvent.click(link);
+    await waitFor(() => expect(writeText).toHaveBeenCalledWith(sectionUrl("why-overflow")));
+  });
+
   it("keeps its own classes when given a className", () => {
     const { container } = render(
       <HeadingLink as="h2" id="install" className="custom">

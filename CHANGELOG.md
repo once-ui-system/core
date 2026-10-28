@@ -31,6 +31,14 @@ item (see `ROADMAP.md`, Week 4).
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
 
+### Fixed
+
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
