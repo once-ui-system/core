@@ -501,6 +501,8 @@ export interface KbarProps {
   children?: React.ReactNode;
   /** The search field's height. */
   size?: TShirtSizes;
+  /** The search field's placeholder inside the palette. Defaults to "Search". */
+  placeholder?: string;
   /** Open or not, controlled. Leave it out to let Kbar keep its own state,
    *  starting from `defaultOpen`. */
   open?: boolean;
@@ -516,6 +518,7 @@ export const Kbar = ({
   items,
   children,
   size,
+  placeholder,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -591,7 +594,13 @@ export const Kbar = ({
       )}
       {open &&
         createPortal(
-          <KbarContent open={open} onClose={handleClose} items={items} size={size} />,
+          <KbarContent
+            open={open}
+            onClose={handleClose}
+            items={items}
+            placeholder={placeholder}
+            size={size}
+          />,
           document.body,
         )}
     </>
