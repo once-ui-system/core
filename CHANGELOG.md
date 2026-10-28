@@ -18,6 +18,12 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **One import path per component: `@once-ui-system/core/components/<Name>`.**
+  Next 16 builds with Turbopack, which ignores `optimizePackageImports`. As a result, a
+  server component that imports `Button` from the package root shipped every client
+  component. In a Next 16.2 static export of a page with a Button and four layout
+  components, that was about 150 kB gzip of Once UI; with the subpath imports it was about
+  26 kB. Root imports are unchanged.
 - **`@once-ui-system/foundations` is published** (3.0.0-beta.0 on `next`):
   the design tokens, utility CSS, SCSS sources and `tokens.json` for stacks
   without React. Core still inlines them, so a core app installs nothing new.
