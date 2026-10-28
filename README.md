@@ -124,6 +124,18 @@ We welcome contributions! Before submitting a PR:
 
 Once UI is an indie project, kept going by the companies and people who use it.
 
+### Supported by
+
+<a href="https://neon.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/sponsors/neon-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset=".github/assets/sponsors/neon-logo-light.svg">
+    <img alt="Neon" src=".github/assets/sponsors/neon-logo-light.svg" height="40">
+  </picture>
+</a>
+
+Once UI is part of the [Neon](https://neon.com) Open Source Program. Neon is serverless Postgres.
+
 ### Company sponsors
 
 Founding and Ecosystem sponsors get their logo here.
