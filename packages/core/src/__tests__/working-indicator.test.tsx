@@ -35,6 +35,13 @@ describe("LogoSpinner", () => {
 });
 
 describe("WorkingIndicator", () => {
+  it("marks itself while the verb cycles, so the visual check can hide it", () => {
+    const { rerender } = render(<WorkingIndicator />);
+    expect(screen.getByRole("status").hasAttribute("data-working-cycling")).toBe(true);
+    rerender(<WorkingIndicator label="Searching the docs" />);
+    expect(screen.getByRole("status").hasAttribute("data-working-cycling")).toBe(false);
+  });
+
   beforeEach(() => vi.useFakeTimers());
   afterEach(() => vi.useRealTimers());
 
