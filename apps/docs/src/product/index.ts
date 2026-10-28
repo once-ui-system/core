@@ -33,6 +33,7 @@ export * from "./NavIconExample";
 export * from "./NavItemExamples";
 export * from "./PageList";
 export * from "./PaginationExamples";
+export * from "./PhotoViewerExamples";
 export * from "./Products";
 export * from "./ProgressBarExample";
 export * from "./PromptLibrary";

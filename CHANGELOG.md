@@ -450,6 +450,14 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   Without it the case-insensitive match on name, keywords and section is unchanged. Its
   words (`labels`: dialog name, results, no results, the footer hints) can be translated;
   English stays the default. `KbarFilter` and `KbarLabels` are exported types.
+- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
+  tile it opened from and closes back into it, swipe moves between photos (with resistance
+  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
+  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
+  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
+  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
+  the photo in the URL so it can be shared and Back closes it. Images go through the Image
+  adapter, and `Media` does not import it. 3.0 only.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
