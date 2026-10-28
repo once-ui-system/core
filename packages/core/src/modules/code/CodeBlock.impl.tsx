@@ -15,6 +15,7 @@ import { Text } from "../../components/Text";
 import { ToggleButton } from "../../components/ToggleButton";
 import { VisuallyHidden } from "../../components/VisuallyHidden";
 import type { IconName } from "../../icons";
+import { copyText } from "../../internal/copyText";
 import { useScrollableTabStop } from "../../internal/scrollableTabStop";
 import { SpacingToken } from "../../types";
 import { escapeHtml } from "../../utils/safe-html";
@@ -647,21 +648,21 @@ const CodeBlock: React.FC<CodeBlockProps> = ({
 
   const [copyIcon, setCopyIcon] = useState<IconName>("clipboard");
   const handleCopy = () => {
-    // No clipboard outside a secure context (plain http): reading
-    // `writeText` off undefined threw from the click handler.
-    if (codes.length > 0 && code && navigator.clipboard) {
-      navigator.clipboard
-        .writeText(typeof code === "string" ? code : code.content)
-        .then(() => {
-          setCopyIcon("check");
+    // copyText falls back to a textarea outside a secure context (plain
+    // http), where there is no `navigator.clipboard`, and reports whether the
+    // copy worked, so the check only shows for a real copy.
+    if (codes.length > 0 && code) {
+      void copyText(typeof code === "string" ? code : code.content).then((copied) => {
+        if (!copied) {
+          console.error("Failed to copy code");
+          return;
+        }
+        setCopyIcon("check");
 
-          setTimeout(() => {
-            setCopyIcon("clipboard");
-          }, 5000);
-        })
-        .catch((err) => {
-          console.error("Failed to copy code: ", err);
-        });
+        setTimeout(() => {
+          setCopyIcon("clipboard");
+        }, 5000);
+      });
     }
   };
 

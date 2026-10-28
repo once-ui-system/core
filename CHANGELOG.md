@@ -49,6 +49,12 @@ item (see `ROADMAP.md`, Week 4).
   drag snap scrolled with `behavior: "smooth"` whatever the visitor's setting; under
   `prefers-reduced-motion: reduce` they now jump straight there. Everyone else still gets
   the smooth scroll.
+- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
+  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
+  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
+  back to a hidden textarea and `document.execCommand("copy")`, and report the real
+  outcome: the toast says when the link could not be copied, and CodeBlock's check only
+  shows after a copy that worked. Where the Clipboard API works nothing changes.
 
 ## [2.6.0] — 2026-10-24
 
