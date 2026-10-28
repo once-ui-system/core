@@ -403,6 +403,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **`HeadingNav`, `Scroller` and the snap `Carousel` respect reduced motion.** Their
+  buttons, links and drag snap scrolled with `behavior: "smooth"` whatever the visitor's
+  setting; under `prefers-reduced-motion: reduce` they now jump straight there. Everyone
+  else still gets the smooth scroll.
 - **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the

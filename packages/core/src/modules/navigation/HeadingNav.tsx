@@ -8,6 +8,7 @@ import { Row } from "../../components/Row.js";
 import { SmartLink } from "../../components/SmartLink.js";
 import { Text } from "../../components/Text.js";
 import { useHeadingLinks } from "../../hooks/useHeadingLinks.js";
+import { prefersReducedMotionNow } from "../../internal/reducedMotion.js";
 
 /**
  * The indicator's offset: `calc(n * var(--static-space-32))` in a custom
@@ -255,7 +256,7 @@ const HeadingNav = ({ ref, className, style, header = true, ...rest }: HeadingNa
                             target.getBoundingClientRect().top + window.scrollY - 150;
                           window.scrollTo({
                             top: targetPosition,
-                            behavior: "smooth",
+                            behavior: prefersReducedMotionNow() ? "auto" : "smooth",
                           });
 
                           handleHeadingClick(heading.id, index);
