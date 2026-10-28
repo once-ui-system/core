@@ -541,7 +541,7 @@
     "pairsWith": ["Card", "Column", "TiltFx"]
   },
   "MediaAudioPlayer": {
-    "purpose": "Audio player with play/pause, seek bar and time; reports playback position (import from components/MediaAudioPlayer)",
+    "purpose": "Audio player with play/pause, seek bar and time; reports playback position",
     "tags": ["media"],
     "pairsWith": ["Column", "Text"]
   },
@@ -551,7 +551,7 @@
     "pairsWith": ["Avatar", "Column", "Button"]
   },
   "MediaVideoPlayer": {
-    "purpose": "Video player with play/pause, seek bar and time, for sources Media cannot sniff (import from components/MediaVideoPlayer)",
+    "purpose": "Video player with play/pause, seek bar and time, for sources Media cannot sniff",
     "tags": ["media"],
     "pairsWith": ["Media", "Column"]
   },
@@ -629,6 +629,11 @@
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "PhotoViewer": {
+    "purpose": "Full-screen viewer for photo sets: swipe, zoom, deep links",
+    "tags": ["media", "overlay"],
+    "pairsWith": ["Media", "Grid", "Column"]
   },
   "PieChart": {
     "purpose": "Pie or donut chart of parts of a whole, with legend and tooltip",

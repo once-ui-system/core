@@ -18,6 +18,7 @@ export * from "./DialogExample";
 export * from "./DrawerExamples";
 export * from "./HotkeysExamples";
 export * from "./PaginationExamples";
+export * from "./PhotoViewerExamples";
 export * from "./DataTableExamples";
 export * from "./DropdownExample";
 export * from "./DropdownWrapperExample";
