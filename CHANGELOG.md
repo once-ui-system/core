@@ -367,6 +367,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **Media `priority` fetches the image at high priority under Next.** The Next adapter
+  passed it on as next/image's `priority`, which Next 16 deprecated for `preload`: a
+  preload link, with the image itself at normal priority. It now renders
+  `loading="eager"` and `fetchPriority="high"`, as the DOM default already did.
 - **Several announcement tags on one page** no longer share `id="badge"`; each arrow
   follows hover on its own tag (2.x Badge).
 - **RadioGroup `error` and `errorMessage` reach its radios**: each is `aria-invalid`
