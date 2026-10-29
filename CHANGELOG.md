@@ -367,6 +367,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **A Button or IconButton nobody can press now says so in development.** With no
+  `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
+  a clickable Card and a dead control anywhere else. Lighthouse found such dead controls on
+  Aveiro's pages. Development now warns when no interactive element is around one.
 - **Media `priority` fetches the image at high priority under Next.** The Next adapter
   passed it on as next/image's `priority`, which Next 16 deprecated for `preload`: a
   preload link, with the image itself at normal priority. It now renders
