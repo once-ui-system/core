@@ -1,0 +1,31 @@
+{
+ "name": "LogoLoader",
+ "group": "components",
+ "props": {
+  "svg": "string",
+  "src": "string",
+  "height": "number | string = 120",
+  "color": "LogoLoaderColor = neutral",
+  "settled": "boolean = false",
+  "order": "\"reading\" | \"document\" = reading",
+  "onComplete": "() => void",
+  "ariaLabel": "string = Loading"
+ },
+ "tags": [
+  "feedback",
+  "media"
+ ],
+ "pairsWith": [
+  "Logo",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "LogoLoaderColor": [
+   "inherit",
+   "neutral",
+   "brand",
+   "accent"
+  ]
+ }
+}

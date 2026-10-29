@@ -15,6 +15,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
+  symbol (`svg` markup or a `src` URL): each letter and shape is traced, left to right by
+  default, then the logo fills in and holds. `onComplete` fires when the intro has played
+  and `settled` shows the filled logo without replaying it. Only the SVG's geometry is
+  read, so nothing else from the file reaches the page. With reduced motion the logo
+  fades in instead.
 - **Announcement banners.** `Banner variant="mesh"` draws a soft, slowly drifting
   gradient wash from the theme's brand and accent scales (`meshColors` picks others) under
   a scrim that keeps the text readable in dark and light. `link` adds an inline,

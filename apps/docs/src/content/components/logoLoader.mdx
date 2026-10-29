@@ -1,0 +1,102 @@
+---
+title: "LogoLoader"
+summary: "A page or app splash drawn from your own logo: each shape is traced, then the logo fills in and holds."
+updatedAt: "2026-10-29"
+docs: "once-ui/components/logoLoader.mdx"
+github: "components/LogoLoader.tsx"
+navLabel: "LogoLoader"
+navIcon: "components"
+---
+
+`LogoLoader` takes your product's wordmark or symbol as an SVG and plays it as a loading state: each letter and shape is traced in turn, then the logo fills in and stays. Use it for the splash while a page or app boots. `LogoSpinner` is the looping Once UI mark, and `Spinner` stays the neutral loader for buttons and fields.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <LogoLoader src="/trademarks/wordmark-dark.svg" height={64} />
+  }
+  codes={[
+    {
+      code:
+`<LogoLoader src="/trademarks/wordmark.svg" height={64} />`,
+      language: "tsx",
+      label: "From a file"
+    }
+  ]}
+/>
+
+## Your logo
+
+Pass the SVG as a URL (`src`, fetched on the client) or as markup (`svg`), for example a file a server component read, so the loader can draw on the first paint. The logo is drawn in one color, so one file covers both themes; `color` picks it.
+
+Every path, circle, rect, ellipse, polygon and line is drawn. A compound path splits into its parts, so each letter, and each counter inside one, gets its own stroke. Strokes draw left to right by default. With `order="document"` they keep the file's order instead, so a logo can list its symbol last to have it land after the letters. Groups' transforms, masks and gradients are not read: export the logo with flat, outlined paths.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`// In a server component: read the file once, hand the markup down.
+const wordmark = await readFile("public/trademarks/wordmark.svg", "utf8");
+
+<LogoLoader svg={wordmark} height={120} color="brand" />`,
+      language: "tsx",
+      label: "Inline markup"
+    }
+  ]}
+/>
+
+## Holding the splash
+
+The intro plays once, and the filled logo holds for as long as the loader is on the page. `onComplete` fires when the intro has played; keep the splash up until both that and your data are ready, and pass `settled` so a remount never replays the strokes.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const [introDone, setIntroDone] = useState(false);
+const showSplash = loading || !introDone;
+
+{showSplash && (
+  <Column fill center position="fixed" style={{ inset: 0, zIndex: 50 }}>
+    <LogoLoader
+      src="/trademarks/wordmark.svg"
+      height={120}
+      settled={introDone}
+      onComplete={() => setIntroDone(true)}
+    />
+  </Column>
+)}`,
+      language: "tsx",
+      label: "Splash"
+    }
+  ]}
+/>
+
+## Accessibility
+
+The loader is one `status` region named "Loading" unless you pass `ariaLabel`. With reduced motion the strokes are skipped and the logo fades in on the same schedule, so `onComplete` still fires.
+
+## API reference
+
+<PropsTable
+  component="LogoLoader"
+  describe={{
+    svg: "The logo as SVG markup. Wins over src.",
+    src: "URL of the logo's SVG file, fetched on the client.",
+    height: "Height in px or any CSS length; the width follows the viewBox.",
+    color: "brand, accent, neutral, or inherit for the text color.",
+    order: "reading (left to right) or document (the file's order).",
+    settled: "Show the filled logo without the intro.",
+    onComplete: "Fires once the intro has played.",
+    ariaLabel: "What assistive tech announces.",
+  }}
+  content={[
+    ["className"],
+    ["style"]
+  ]}
+/>
