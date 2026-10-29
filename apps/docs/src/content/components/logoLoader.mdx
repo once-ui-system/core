@@ -38,10 +38,14 @@ Every path, circle, rect, ellipse, polygon and line is drawn. A compound path sp
   codes={[
     {
       code:
-`// In a server component: read the file once, hand the markup down.
-const wordmark = await readFile("public/trademarks/wordmark.svg", "utf8");
+`import { readFile } from "node:fs/promises";
+import { LogoLoader } from "@once-ui-system/core";
 
-<LogoLoader svg={wordmark} height={120} color="brand" />`,
+// A server component reads the file once and hands the markup down.
+export default async function Splash() {
+  const wordmark = await readFile("public/trademarks/wordmark.svg", "utf8");
+  return <LogoLoader svg={wordmark} height={120} color="brand" />;
+}`,
       language: "tsx",
       label: "Inline markup"
     }
