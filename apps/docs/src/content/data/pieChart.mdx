@@ -118,6 +118,8 @@ crowded against it.
   component="PieChart"
   exclude={["data-viz-style"]}
   describe={{
+    valueFormat: "How values are written in the tooltip: \"compact\", \"percent\", Intl.NumberFormatOptions or a function.",
+    locale: "The locale numbers are written in, such as \"hu-HU\". Defaults to \"en-US\".",
     ring: "Inner and outer radius as percentages. inner: 0 is a solid pie.",
     dataKey: "Field holding the number that sizes each slice.",
     nameKey: "Field holding the slice label.",

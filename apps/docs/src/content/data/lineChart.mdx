@@ -63,6 +63,59 @@ This example uses the `useStreamingViewport` hook to smoothly pan the x-axis dom
     { date: "2025-01-01", "Area (km²)": 1.2, "Temp Anomaly (°C)": 1.4 }
   ]}
 />
+## Labels and numbers
+
+`xKey` names the column on the x axis; without it, the first key that is not a
+series is. A series' `label` is the name the legend and tooltip show, so the
+data can keep short keys. `valueFormat` writes the numbers on the axis and in
+the tooltip: `"compact"`, `"percent"`, any `Intl.NumberFormatOptions` (a
+currency, a unit), or a function. `locale` sets the language they are written
+in; it defaults to `en-US`, so the server and every browser agree.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Revenue in forints"
+  xKey="month"
+  locale="hu-HU"
+  valueFormat={{ style: "currency", currency: "HUF", maximumFractionDigits: 0 }}
+  series={[
+    { key: "web", label: "Web shop", color: "blue" },
+    { key: "store", label: "In store", color: "orange" }
+  ]}
+  data={[
+    { month: "Jan", web: 1240000, store: 880000 },
+    { month: "Feb", web: 1310000, store: 910000 },
+    { month: "Mar", web: 1580000, store: 860000 },
+    { month: "Apr", web: 1720000, store: 940000 },
+    { month: "May", web: 1950000, store: 990000 }
+  ]}
+/>
+
+## Stacked
+
+`stack` puts each series on top of the one before it, for parts that add up to
+a total. `stack="percent"` shows each as its share of the total instead.
+
+<LineChart
+  marginTop="16"
+  marginBottom="24"
+  title="Share of sessions by device"
+  stack="percent"
+  xKey="month"
+  series={[
+    { key: "desktop", label: "Desktop", color: "blue" },
+    { key: "mobile", label: "Mobile", color: "green" },
+    { key: "tablet", label: "Tablet", color: "violet" }
+  ]}
+  data={[
+    { month: "Jan", desktop: 520, mobile: 410, tablet: 70 },
+    { month: "Feb", desktop: 500, mobile: 450, tablet: 60 },
+    { month: "Mar", desktop: 480, mobile: 520, tablet: 65 },
+    { month: "Apr", desktop: 470, mobile: 580, tablet: 55 }
+  ]}
+/>
+
 ## Curve
 
 `curve` is Recharts' interpolation, and it is a claim about the data between
@@ -135,6 +188,10 @@ same chart with `animation={false}`.
   component="LineChart"
   exclude={["data-viz-style"]}
   describe={{
+    xKey: "The row key on the x axis. Defaults to the first key that is not a series.",
+    valueFormat: "How values are written on the axis and in the tooltip: \"compact\", \"percent\", Intl.NumberFormatOptions or a function.",
+    locale: "The locale numbers are written in, such as \"hu-HU\". Defaults to \"en-US\".",
+    stack: "Stack the series: true sums them, \"percent\" shows each as its share of the total.",
     curve: "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
     xAxisType: "Treat x values as numbers rather than equally spaced categories.",
     xDomain: "Visible x range. Requires xAxisType=\"number\".",

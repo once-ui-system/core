@@ -29,6 +29,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
   thumb turn danger, the thumb is `aria-invalid` and described by the message, and
   `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Charts** (LineChart, BarChart, LineBarChart, PieChart): `xKey`; series `label`
+  and `format`; `valueFormat` (`"compact"`, `"percent"`, `Intl.NumberFormatOptions`
+  or a function) and `locale` for the numbers on the axis and in the tooltip;
+  `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
+  `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
 - **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
   suffix, as PasswordInput did.
 - **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
@@ -149,6 +154,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
+  `onChange` only names the native DOM event. The codemod renames it in an inline
+  `date` object. Chart tooltips and axes write numbers through `valueFormat` in
+  `locale` when either is set; without them they draw as 2.x did. With no
+  `series`, the x column is no longer drawn as a series, and `label` never is.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
@@ -366,6 +376,10 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   them); bundles list neighbouring props of one type on one line.
 
 ### Fixed
+
+- **Two PieCharts on one page** no longer share gradient ids (one chart's colours
+  could paint the other's slices), and a chart's x-axis ticks no longer search the
+  whole data set each (slow on long series).
 
 - **A Button or IconButton nobody can press now says so in development.** With no
   `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
