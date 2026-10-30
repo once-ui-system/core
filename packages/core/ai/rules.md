@@ -287,7 +287,7 @@ because they are packages of their own (the effects and the blocks):
 
 | Import | From | Peer the app installs |
 |--------|------|-----------------------|
-| charts, gauges, chart chrome | `@once-ui-system/core/data` | `recharts` |
+| charts, gauges, chart chrome | `@once-ui-system/core/data` | none |
 | `CodeBlock` | `@once-ui-system/core/code` | `prismjs` |
 | `MediaUpload` | `@once-ui-system/core/media` | `compressorjs` |
 | `MediaAudioPlayer`, `MediaVideoPlayer`, `Scrubber`, `CompareImage` | `@once-ui-system/core/media` | none |

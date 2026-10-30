@@ -155,14 +155,10 @@
     "prismjs": "^1.30.0",
     "react": ">=19",
     "react-dom": ">=19",
-    "maplibre-gl": "^5.0.0 || ^6.0.0",
-    "recharts": "^3.10.1"
+    "maplibre-gl": "^5.0.0 || ^6.0.0"
   },
   "peerDependenciesMeta": {
     "next": {
-      "optional": true
-    },
-    "recharts": {
       "optional": true
     },
     "maplibre-gl": {

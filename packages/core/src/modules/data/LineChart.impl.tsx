@@ -10,15 +10,11 @@ import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
 import { RadiusSize, schemes } from "../../types.js";
+import { animationStyle, CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartStatus } from "./ChartStatus.js";
-import { DataTooltip } from "./DataTooltip.js";
-import { LinearGradient } from "./Gradient.js";
 import { ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
-import { Legend } from "./Legend.js";
-import { getRechartsComponents } from "./rechartsLoader.js";
-import { chartFormatters, chartSeries, rowsByX, valueAxisWidth } from "./utils/chartSeries.js";
-import { formatDate } from "./utils/formatDate.js";
+import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 
 export interface LineChartProps<T extends object = DataPoint> extends ChartProps<T> {
   curve?: CurveType;
@@ -77,25 +73,13 @@ const LineChart = ({
 }: LineChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
-  const {
-    variant: themeVariant,
-    mode,
-    height,
-    tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
-    axis: { stroke: axisLineStroke },
-  } = useDataTheme();
+  const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "top-left",
     direction: legendProp.direction,
   };
-  const [rc, setRc] = useState<any>(null);
-
-  useEffect(() => {
-    getRechartsComponents().then(setRc);
-  }, []);
-
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(
     date?.start && date?.end
       ? {
@@ -127,7 +111,6 @@ const LineChart = ({
     () => chartFormatters(valueFormat, locale, autoSeries, stack === "percent"),
     [valueFormat, locale, autoSeries, stack],
   );
-  const rowsAtX = useMemo(() => rowsByX(data, xAxisKey), [data, xAxisKey]);
   const axisWidth = useMemo(
     () =>
       valueAxisWidth(
@@ -175,67 +158,6 @@ const LineChart = ({
     [date],
   );
 
-  const legendContent = useCallback(
-    (props: any) => {
-      const customPayload = autoSeries.map(({ label, color }, index) => ({
-        value: label,
-        color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
-      }));
-
-      return (
-        <Legend
-          axisWidth={axisWidth}
-          payload={customPayload}
-          reverseY={reverseY}
-          labels={axis}
-          position={legend.position}
-          direction={legend.direction}
-          variant={variant as ChartVariant}
-        />
-      );
-    },
-    [autoSeries, axis, legend.position, legend.direction, variant, axisWidth],
-  );
-
-  const legendWrapperStyle = useMemo(
-    () => ({
-      position: "absolute" as const,
-      top:
-        legend.position === "top-center" ||
-        legend.position === "top-left" ||
-        legend.position === "top-right"
-          ? reverseX
-            ? 32
-            : 0
-          : undefined,
-      bottom:
-        legend.position === "bottom-center" ||
-        legend.position === "bottom-left" ||
-        legend.position === "bottom-right"
-          ? 0
-          : undefined,
-      paddingBottom:
-        legend.position === "bottom-center" ||
-        legend.position === "bottom-left" ||
-        legend.position === "bottom-right"
-          ? "var(--static-space-40)"
-          : undefined,
-      left:
-        (axis === "y" || axis === "both") &&
-        (legend.position === "top-center" || legend.position === "bottom-center")
-          ? "var(--static-space-64)"
-          : 0,
-      width:
-        (axis === "y" || axis === "both") &&
-        (legend.position === "top-center" || legend.position === "bottom-center")
-          ? "calc(100% - var(--static-space-64))"
-          : "100%",
-      right: 0,
-      margin: 0,
-    }),
-    [legend.position, reverseX, axis],
-  );
-
   return (
     <Column
       fillWidth
@@ -271,125 +193,35 @@ const LineChart = ({
           error={error}
           errorState={errorState}
         />
-        {!loading &&
-          !error &&
-          filteredData &&
-          filteredData.length > 0 &&
-          rc &&
-          (() => {
-            const {
-              ResponsiveContainer,
-              AreaChart,
-              Area,
-              XAxis,
-              YAxis,
-              CartesianGrid,
-              Tooltip,
-              Legend: RLegend,
-            } = rc;
-            return (
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart
-                  data={filteredData}
-                  margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
-                  {...(stack === "percent" ? { stackOffset: "expand" } : {})}
-                >
-                  <defs>
-                    {autoSeries.map(({ key, color }, index) => {
-                      const colorValue = color || schemes[index % schemes.length];
-                      const lineColor = cssColor(colorValue, "data-");
-                      return (
-                        <LinearGradient
-                          key={`gradient-${chartId}-${index}`}
-                          id={`barGradient${chartId}${index}`}
-                          variant={variant as ChartVariant}
-                          color={lineColor}
-                        />
-                      );
-                    })}
-                  </defs>
-                  <CartesianGrid
-                    vertical={grid === "x" || grid === "both"}
-                    horizontal={grid === "y" || grid === "both"}
-                    stroke="var(--neutral-alpha-weak)"
-                  />
-                  {legend.display && (
-                    <RLegend content={legendContent} wrapperStyle={legendWrapperStyle} />
-                  )}
-                  <XAxis
-                    height={32}
-                    tickMargin={6}
-                    dataKey={xAxisKey}
-                    {...(xAxisType ? { type: xAxisType } : {})}
-                    {...(xDomain ? { domain: xDomain as any } : {})}
-                    hide={!(axis === "x" || axis === "both")}
-                    orientation={reverseX ? "top" : "bottom"}
-                    axisLine={{ stroke: axisLineStroke }}
-                    tickLine={tickLine}
-                    tick={{ fill: tickFill, fontSize: tickFontSize }}
-                    tickFormatter={(value: any) => {
-                      return formatDate(value, date, rowsAtX.get(value));
-                    }}
-                  />
-                  {(axis === "y" || axis === "both") && (
-                    <YAxis
-                      width={axisWidth}
-                      padding={{ top: 40 }}
-                      allowDataOverflow
-                      orientation={reverseY ? "right" : "left"}
-                      tickLine={tickLine}
-                      tick={{ fill: tickFill, fontSize: tickFontSize }}
-                      axisLine={{ stroke: axisLineStroke }}
-                      {...(format.axis ? { tickFormatter: format.axis } : {})}
-                    />
-                  )}
-                  {tooltip && (
-                    <Tooltip
-                      cursor={{ stroke: "var(--neutral-border-strong)", strokeWidth: 1 }}
-                      content={(props: any) => (
-                        <DataTooltip
-                          {...props}
-                          variant={variant as ChartVariant}
-                          date={date}
-                          formatValue={format.tooltip}
-                        />
-                      )}
-                    />
-                  )}
-                  {autoSeries.map(({ key, label, color }, index) => {
-                    const colorValue = color || schemes[index % schemes.length];
-                    const lineColor = cssColor(colorValue, "data-");
-                    return (
-                      <Area
-                        key={key}
-                        type={curve}
-                        dataKey={key}
-                        name={label}
-                        {...(stack ? { stackId: "stack" } : {})}
-                        isAnimationActive={animation}
-                        animationBegin={animationBegin}
-                        animationDuration={animationDuration}
-                        animationEasing={animationEasing as any}
-                        stroke={lineColor}
-                        transform="translate(0, -1)"
-                        fill={
-                          variant === "outline"
-                            ? "transparent"
-                            : `url(#barGradient${chartId}${index})`
-                        }
-                        activeDot={{
-                          r: 4,
-                          fill: lineColor,
-                          stroke: "var(--background)",
-                          strokeWidth: 0,
-                        }}
-                      />
-                    );
-                  })}
-                </AreaChart>
-              </ResponsiveContainer>
-            );
-          })()}
+        {!loading && !error && filteredData && filteredData.length > 0 && (
+          <CartesianPlot
+            id={chartId}
+            rows={filteredData}
+            xKey={xAxisKey}
+            series={autoSeries.map(({ key, label, color }, index) => ({
+              key,
+              label,
+              color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
+              kind: "area",
+            }))}
+            variant={variant as ChartVariant}
+            axis={axis}
+            grid={grid}
+            legend={legend}
+            tooltip={tooltip}
+            date={date}
+            format={format}
+            axisWidth={axisWidth}
+            stack={stack}
+            reverseX={reverseX}
+            reverseY={reverseY}
+            curve={curve}
+            xType={xAxisType}
+            xDomain={xDomain}
+            animation={animation}
+            animationStyle={animationStyle(animationBegin, animationDuration, animationEasing)}
+          />
+        )}
       </Row>
     </Column>
   );

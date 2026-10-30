@@ -7,18 +7,13 @@ import { Row } from "../../components/Row.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
-import { cssColor } from "../../internal/cssColor.js";
-import { RadiusSize, schemes } from "../../types.js";
+import type { RadiusSize } from "../../types.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartStatus } from "./ChartStatus.js";
-import { DataTooltip } from "./DataTooltip.js";
-import { RadialGradient } from "./Gradient.js";
 import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js";
-import { Legend } from "./Legend.js";
-import { getRechartsComponents } from "./rechartsLoader.js";
+import { PiePlot } from "./PiePlot.js";
 
 import { chartFormatters } from "./utils/chartSeries.js";
-import { getDistributedColor } from "./utils/colorDistribution.js";
 
 export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartProps<T>, "xKey"> {
   /**
@@ -62,12 +57,6 @@ const PieChart = ({
   const data = rows as readonly DataPoint[];
   const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
-  const [rc, setRc] = useState<any>(null);
-
-  useEffect(() => {
-    getRechartsComponents().then(setRc);
-  }, []);
-
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "bottom-center",
@@ -95,15 +84,6 @@ const PieChart = ({
     setSelectedDateRange(newRange);
     date?.onRangeChange?.(newRange);
   };
-
-  const colorPalette = React.useMemo(() => {
-    if (!data || data.length === 0) return schemes.map((c) => cssColor(c, "data-"));
-
-    return Array.from({ length: data.length }, (_, index) => {
-      const colorKey = getDistributedColor(index, data.length);
-      return cssColor(String(colorKey), "data-");
-    });
-  }, [data]);
 
   const filteredData = React.useMemo(() => {
     if (!selectedDateRange || !data || data.length === 0) {
@@ -173,170 +153,22 @@ const PieChart = ({
           error={error}
           errorState={errorState}
         />
-        {!loading &&
-          !error &&
-          filteredData &&
-          filteredData.length > 0 &&
-          rc &&
-          (() => {
-            const {
-              ResponsiveContainer,
-              PieChart: RPieChart,
-              Pie,
-              Cell,
-              Tooltip,
-              Legend: RLegend,
-            } = rc;
-            return (
-              <ResponsiveContainer width="100%" height="100%">
-                <RPieChart>
-                  <defs>
-                    <pattern
-                      id="pieChartMasterPattern"
-                      patternUnits="userSpaceOnUse"
-                      width="100%"
-                      height="100%"
-                    >
-                      <RadialGradient
-                        id="pieChartMasterGradient"
-                        color="var(--page-background)"
-                        cx="50%"
-                        cy="50%"
-                        r="50%"
-                        fx="50%"
-                        fy="50%"
-                        variant={variant as ChartVariant}
-                      />
-                      <rect
-                        x="0"
-                        y="0"
-                        width="100%"
-                        height="100%"
-                        fill="url(#pieChartMasterGradient)"
-                      />
-                    </pattern>
-
-                    {Array.from(
-                      new Set(
-                        filteredData.map((entry, index) => {
-                          return entry.color || getDistributedColor(index, filteredData.length);
-                        }),
-                      ),
-                    ).map((colorKey) => {
-                      const baseColor = cssColor(String(colorKey), "data-");
-                      const patternId = getGradientId(colorKey as string);
-                      return (
-                        <pattern
-                          id={patternId}
-                          key={`pattern-${colorKey}`}
-                          patternUnits="userSpaceOnUse"
-                          width="100%"
-                          height="100%"
-                        >
-                          {variant !== "outline" && (
-                            <rect x="0" y="0" width="100%" height="100%" fill={baseColor} />
-                          )}
-                          {variant === "gradient" && (
-                            <rect
-                              x="0"
-                              y="0"
-                              width="100%"
-                              height="100%"
-                              fill="url(#pieChartMasterPattern)"
-                            />
-                          )}
-                        </pattern>
-                      );
-                    })}
-                  </defs>
-                  {legend.display && (
-                    <RLegend
-                      content={(props: any) => (
-                        <Legend
-                          {...props}
-                          variant={variant as ChartVariant}
-                          position={legend.position}
-                          direction={legend.direction}
-                          labels="none"
-                          colors={colorPalette}
-                        />
-                      )}
-                      wrapperStyle={{
-                        position: "absolute",
-                        top:
-                          legend.position === "top-center" ||
-                          legend.position === "top-left" ||
-                          legend.position === "top-right"
-                            ? 0
-                            : undefined,
-                        bottom:
-                          legend.position === "bottom-center" ||
-                          legend.position === "bottom-left" ||
-                          legend.position === "bottom-right"
-                            ? 0
-                            : undefined,
-                        right: 0,
-                        left: 0,
-                        margin: 0,
-                      }}
-                    />
-                  )}
-                  <Pie
-                    data={filteredData}
-                    cx={origo.x + "%"}
-                    cy={origo.y + "%"}
-                    labelLine={false}
-                    innerRadius={ring.inner + "%"}
-                    outerRadius={ring.outer + "%"}
-                    dataKey={dataKey}
-                    nameKey={nameKey}
-                    stroke={variant === "outline" ? undefined : "none"}
-                  >
-                    {filteredData.map((entry, index) => {
-                      const colorKey =
-                        entry.color || getDistributedColor(index, filteredData.length);
-                      const baseColor = cssColor(String(colorKey), "data-");
-                      const gradientId = getGradientId(String(colorKey));
-                      return (
-                        <Cell
-                          key={`cell-${index}`}
-                          fill={variant === "outline" ? "transparent" : `url(#${gradientId})`}
-                          strokeWidth={variant === "outline" ? 2 : 1}
-                          stroke={baseColor}
-                          style={{ outline: "none" }}
-                        />
-                      );
-                    })}
-                  </Pie>
-                  {tooltip && (
-                    <Tooltip
-                      content={(props: any) => {
-                        if (props.payload && props.payload.length > 0) {
-                          const entry = props.payload[0];
-                          const index = filteredData.findIndex(
-                            (item) => item[nameKey] === entry.name,
-                          );
-                          const colorKey =
-                            filteredData[index]?.color ||
-                            getDistributedColor(index, filteredData.length);
-                          props.payload[0].color = cssColor(String(colorKey), "data-");
-                        }
-                        return (
-                          <DataTooltip
-                            {...props}
-                            label={undefined}
-                            date={date}
-                            variant={variant as ChartVariant}
-                            formatValue={format.tooltip}
-                          />
-                        );
-                      }}
-                    />
-                  )}
-                </RPieChart>
-              </ResponsiveContainer>
-            );
-          })()}
+        {!loading && !error && filteredData && filteredData.length > 0 && (
+          <PiePlot
+            id={chartId}
+            rows={filteredData}
+            dataKey={dataKey}
+            nameKey={nameKey}
+            variant={variant as ChartVariant}
+            legend={legend}
+            tooltip={tooltip}
+            date={date}
+            formatValue={format.tooltip}
+            ring={ring}
+            origo={origo}
+            gradientId={getGradientId}
+          />
+        )}
       </Row>
     </Column>
   );

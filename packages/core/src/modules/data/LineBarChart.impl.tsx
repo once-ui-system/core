@@ -10,15 +10,11 @@ import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
 import { RadiusSize } from "../../types.js";
+import { CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
 import { ChartStatus } from "./ChartStatus.js";
-import { DataTooltip } from "./DataTooltip.js";
-import { LinearGradient } from "./Gradient.js";
 import { BarWidth, ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
-import { Legend } from "./Legend.js";
-import { getRechartsComponents } from "./rechartsLoader.js";
-import { chartFormatters, chartSeries, rowsByX, valueAxisWidth } from "./utils/chartSeries.js";
-import { formatDate } from "./utils/formatDate.js";
+import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 
 export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
@@ -61,25 +57,13 @@ const LineBarChart = ({
 }: LineBarChartProps) => {
   // `data` takes interface-typed rows too; each row is read by key all the same.
   const data = rows as readonly DataPoint[];
-  const {
-    variant: themeVariant,
-    mode,
-    height,
-    tick: { fill: tickFill, fontSize: tickFontSize, line: tickLine },
-    axis: { stroke: axisLineStroke },
-  } = useDataTheme();
+  const { variant: themeVariant, mode, height } = useDataTheme();
   const variant = variantProp || themeVariant;
   const legend = {
     display: legendProp.display !== undefined ? legendProp.display : true,
     position: legendProp.position || "top-left",
     direction: legendProp.direction,
   };
-  const [rc, setRc] = useState<any>(null);
-
-  useEffect(() => {
-    getRechartsComponents().then(setRc);
-  }, []);
-
   const [selectedDateRange, setSelectedDateRange] = useState<DateRange | undefined>(
     date?.start && date?.end
       ? {
@@ -106,7 +90,6 @@ const LineBarChart = ({
     () => chartFormatters(valueFormat, locale, resolvedSeries),
     [valueFormat, locale, resolvedSeries],
   );
-  const rowsAtX = useMemo(() => rowsByX(data, xAxisKey), [data, xAxisKey]);
   const axisWidth = useMemo(
     () =>
       valueAxisWidth(
@@ -170,59 +153,6 @@ const LineBarChart = ({
   const finalLineColor = cssColor(lineColor, "data-");
   const finalBarColor = cssColor(barColor, "data-");
 
-  const legendContent = useMemo(
-    () => (
-      <Legend
-        axisWidth={axisWidth}
-        variant={variant as ChartVariant}
-        colors={[finalLineColor, finalBarColor]}
-        labels={axis}
-        position={legend.position}
-        direction={legend.direction}
-      />
-    ),
-    [variant, finalLineColor, finalBarColor, axis, legend.position, legend.direction, axisWidth],
-  );
-
-  const legendWrapperStyle = useMemo(
-    () => ({
-      position: "absolute" as const,
-      top:
-        legend.position === "top-center" ||
-        legend.position === "top-left" ||
-        legend.position === "top-right"
-          ? reverseX
-            ? 32
-            : 0
-          : undefined,
-      bottom:
-        legend.position === "bottom-center" ||
-        legend.position === "bottom-left" ||
-        legend.position === "bottom-right"
-          ? 0
-          : undefined,
-      paddingBottom:
-        legend.position === "bottom-center" ||
-        legend.position === "bottom-left" ||
-        legend.position === "bottom-right"
-          ? "var(--static-space-40)"
-          : undefined,
-      left:
-        (axis === "y" || axis === "both") &&
-        (legend.position === "top-center" || legend.position === "bottom-center")
-          ? "var(--static-space-64)"
-          : 0,
-      width:
-        (axis === "y" || axis === "both") &&
-        (legend.position === "top-center" || legend.position === "bottom-center")
-          ? "calc(100% - var(--static-space-64))"
-          : "100%",
-      right: 0,
-      margin: 0,
-    }),
-    [legend.position, reverseX, axis],
-  );
-
   // useId, not Math.random: the server and the client must agree on the
   // gradient ids or hydration reports an attribute mismatch.
   const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -262,129 +192,37 @@ const LineBarChart = ({
           error={error}
           errorState={errorState}
         />
-        {!loading &&
-          !error &&
-          filteredData &&
-          filteredData.length > 0 &&
-          rc &&
-          (() => {
-            const {
-              ResponsiveContainer,
-              ComposedChart,
-              Bar,
-              Area,
-              XAxis,
-              YAxis,
-              CartesianGrid,
-              Tooltip,
-              Legend: RLegend,
-            } = rc;
-            return (
-              <ResponsiveContainer width="100%" height="100%">
-                <ComposedChart
-                  data={filteredData}
-                  margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
-                  barGap={4}
-                >
-                  <defs>
-                    <LinearGradient
-                      id={`barGradient${chartId}`}
-                      color={finalBarColor}
-                      variant={variant as ChartVariant}
-                    />
-                    <LinearGradient
-                      id={`lineGradient${chartId}`}
-                      color={finalLineColor}
-                      variant={variant as ChartVariant}
-                    />
-                  </defs>
-                  <CartesianGrid
-                    vertical={grid === "x" || grid === "both"}
-                    horizontal={grid === "y" || grid === "both"}
-                    stroke="var(--neutral-alpha-weak)"
-                  />
-                  {legend.display && (
-                    <RLegend content={legendContent} wrapperStyle={legendWrapperStyle} />
-                  )}
-                  <XAxis
-                    height={32}
-                    tickMargin={6}
-                    dataKey={xAxisKey}
-                    hide={!(axis === "x" || axis === "both")}
-                    orientation={reverseX ? "top" : "bottom"}
-                    axisLine={{ stroke: axisLineStroke }}
-                    tickLine={tickLine}
-                    tick={{ fill: tickFill, fontSize: tickFontSize }}
-                    tickFormatter={(value: any) => formatDate(value, date, rowsAtX.get(value))}
-                  />
-                  {(axis === "y" || axis === "both") && (
-                    <YAxis
-                      width={axisWidth}
-                      padding={{ top: 40 }}
-                      allowDataOverflow
-                      orientation={reverseY ? "right" : "left"}
-                      tickLine={tickLine}
-                      tick={{ fill: tickFill, fontSize: tickFontSize }}
-                      axisLine={{ stroke: axisLineStroke }}
-                      {...(format.axis ? { tickFormatter: format.axis } : {})}
-                    />
-                  )}
-                  {tooltip && (
-                    <Tooltip
-                      cursor={{ stroke: "var(--neutral-border-strong)", strokeWidth: 1 }}
-                      content={(props: any) => (
-                        <DataTooltip
-                          {...props}
-                          variant={variant as ChartVariant}
-                          date={date}
-                          dataKey={xAxisKey}
-                          formatValue={format.tooltip}
-                        />
-                      )}
-                    />
-                  )}
-                  <Area
-                    type={curve}
-                    dataKey={lineSeries.key}
-                    name={lineLabel}
-                    stroke={finalLineColor}
-                    transform="translate(0, -1)"
-                    fill={`url(#lineGradient${chartId})`}
-                    activeDot={{
-                      r: 4,
-                      fill: finalLineColor,
-                      stroke: "var(--background)",
-                      strokeWidth: 0,
-                    }}
-                  />
-                  <Bar
-                    dataKey={barSeries.key}
-                    name={barLabel}
-                    fill={`url(#barGradient${chartId})`}
-                    stroke={finalBarColor}
-                    strokeWidth={1}
-                    transform="translate(0, -1)"
-                    radius={[4, 4, 4, 4]}
-                    barSize={
-                      barWidth === "fill"
-                        ? "100%"
-                        : barWidth === "xs"
-                          ? 6
-                          : barWidth === "s"
-                            ? 12
-                            : barWidth === "m"
-                              ? 20
-                              : barWidth === "l"
-                                ? 40
-                                : barWidth === "xl"
-                                  ? 50
-                                  : barWidth
-                    }
-                  />
-                </ComposedChart>
-              </ResponsiveContainer>
-            );
-          })()}
+        {!loading && !error && filteredData && filteredData.length > 0 && (
+          <CartesianPlot
+            id={chartId}
+            rows={filteredData}
+            xKey={xAxisKey}
+            series={[
+              { key: lineSeries.key, label: lineLabel, color: finalLineColor, kind: "area" },
+              { key: barSeries.key, label: barLabel, color: finalBarColor, kind: "bar" },
+            ]}
+            variant={variant as ChartVariant}
+            axis={axis}
+            grid={grid}
+            legend={legend}
+            tooltip={tooltip}
+            date={date}
+            format={format}
+            axisWidth={axisWidth}
+            reverseX={reverseX}
+            reverseY={reverseY}
+            curve={curve}
+            barSize={
+              barWidth === "fill"
+                ? "fill"
+                : typeof barWidth === "number"
+                  ? barWidth
+                  : { xs: 6, s: 12, m: 20, l: 40, xl: 50 }[barWidth]
+            }
+            barRadius={() => [4, 4, 4, 4]}
+            tooltipDataKey={xAxisKey}
+          />
+        )}
       </Row>
     </Column>
   );

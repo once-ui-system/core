@@ -1,29 +1,15 @@
 "use client";
 
-import React, { Suspense } from "react";
-import { MissingDependency } from "../../utils/MissingDependency.js";
 import type { DataPoint } from "./interfaces.js";
-import type { LineBarChartProps } from "./LineBarChart.impl.js";
-
-const LineBarChartImpl = React.lazy<React.ComponentType<LineBarChartProps>>(() =>
-  import("./LineBarChart.impl.js").catch(() => {
-    console.warn(
-      '[@once-ui-system/core] <LineBarChart /> requires the "recharts" package. Install it with: npm install recharts',
-    );
-    return {
-      default: () => <MissingDependency component="LineBarChart" packageName="recharts" />,
-    };
-  }),
-);
+import LineBarChartImpl, { type LineBarChartProps } from "./LineBarChart.impl.js";
 
 /**
  * Generic over the row type: `<LineBarChart data={rows} series={{ key: "revenue" }} />`
  * takes your own `interface Row` as is, and checks `series` keys against it.
+ * Drawn as SVG on the server and in the browser, with no chart library.
  */
 const LineBarChart = <T extends object = DataPoint>(props: LineBarChartProps<T>) => (
-  <Suspense fallback={null}>
-    <LineBarChartImpl {...(props as unknown as LineBarChartProps)} />
-  </Suspense>
+  <LineBarChartImpl {...(props as unknown as LineBarChartProps)} />
 );
 
 LineBarChart.displayName = "LineBarChart";

@@ -1,0 +1,145 @@
+.plot {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  outline: none;
+}
+
+.plot:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--neutral-border-strong);
+}
+
+.svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+/* Before the plot is measured the SVG stretches to its box; strokes keep their width. */
+.svg :is(path, line, rect, circle) {
+  vector-effect: non-scaling-stroke;
+}
+
+.tick {
+  position: absolute;
+  line-height: 1;
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.tooltip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Lines and areas draw from left to right, bars grow from the axis, a pie sweeps round. */
+.reveal,
+.grow,
+.growX,
+.sweep {
+  animation-duration: var(--chart-duration, 1500ms);
+  animation-delay: var(--chart-delay, 0ms);
+  animation-timing-function: var(--chart-easing, ease);
+  animation-fill-mode: both;
+}
+
+.reveal {
+  animation-name: chart-reveal;
+}
+
+.grow,
+.growX {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation-name: chart-grow;
+}
+
+.growX {
+  transform-origin: left;
+  animation-name: chart-grow-x;
+}
+
+.sweep {
+  animation-name: chart-sweep;
+  mask-image: conic-gradient(
+    from 90deg at var(--chart-cx, 50%) var(--chart-cy, 50%),
+    transparent calc(360deg - var(--chart-angle)),
+    #000 0
+  );
+}
+
+@property --chart-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+@keyframes chart-reveal {
+  from {
+    clip-path: inset(-2px 100% -2px -2px);
+  }
+  to {
+    clip-path: inset(-2px -2px -2px -2px);
+  }
+}
+
+@keyframes chart-grow {
+  from {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes chart-grow-x {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes chart-sweep {
+  from {
+    --chart-angle: 0deg;
+  }
+  to {
+    --chart-angle: 360deg;
+  }
+}
+
+.legendItem {
+  all: unset;
+  display: flex;
+  align-items: center;
+  gap: var(--static-space-8);
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: var(--radius-xs);
+  transition: opacity 0.2s ease;
+}
+
+.legendItem:focus-visible {
+  outline: 2px solid var(--neutral-border-strong);
+  outline-offset: 2px;
+}
+
+.legendItem[aria-pressed="false"] {
+  opacity: 0.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .grow,
+  .growX,
+  .sweep {
+    animation: none;
+  }
+  .legendItem {
+    transition: none;
+  }
+}
