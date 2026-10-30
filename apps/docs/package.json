@@ -7,9 +7,9 @@
   },
   "type": "module",
   "scripts": {
-    "predev": "node scripts/sync-ai.mjs && npm run copy:blocks",
+    "predev": "node scripts/sync-ai.mjs && node scripts/build-llms.mjs && npm run copy:blocks",
     "dev": "next dev",
-    "prebuild": "node scripts/sync-ai.mjs && npm run copy:blocks",
+    "prebuild": "node scripts/sync-ai.mjs && node scripts/build-llms.mjs && npm run copy:blocks",
     "build": "next build",
     "start": "next start",
     "lint": "biome check .",

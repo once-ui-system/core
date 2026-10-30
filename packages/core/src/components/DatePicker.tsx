@@ -26,6 +26,9 @@ import { Row } from "./Row.js";
 import { SegmentedControl } from "./SegmentedControl.js";
 import { Text } from "./Text.js";
 
+/** The month an undated calendar renders before it knows today's (see Calendar). */
+const UNDATED_MONTH = new Date(2000, 0, 1);
+
 /**
  * The picker's own words, for a translated interface. Omitted fields keep the
  * English default; month and weekday names and the time's AM/PM come from
@@ -198,7 +201,6 @@ const Calendar = ({
   ...rest
 }: CalendarProps) => {
   const names = mergeLabels(DEFAULT_LABELS, labels);
-  const today = new Date();
   /** Where the picker starts: `value`, else `defaultValue` (2.x's `defaultDate` was never read). */
   const initialDate = value ?? defaultValue;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
@@ -239,16 +241,31 @@ const Calendar = ({
   const monthIsControlled =
     propCurrentMonth !== undefined && propCurrentYear !== undefined && onMonthChange !== undefined;
 
+  /**
+   * With no date to start from, the month is this month, which only the
+   * browser can say: a page prerendered in one month and opened in the next
+   * would hydrate a different grid (React #418). Such a calendar starts on a
+   * fixed month, hidden, and moves to this month once mounted.
+   */
+  const undated = !monthIsControlled && !initialDate;
   const [currentMonth, setCurrentMonth] = useState<number>(() =>
     monthIsControlled && propCurrentMonth !== undefined
       ? propCurrentMonth
-      : (initialDate ?? today).getMonth(),
+      : (initialDate ?? UNDATED_MONTH).getMonth(),
   );
   const [currentYear, setCurrentYear] = useState<number>(() =>
     monthIsControlled && propCurrentYear !== undefined
       ? propCurrentYear
-      : (initialDate ?? today).getFullYear(),
+      : (initialDate ?? UNDATED_MONTH).getFullYear(),
   );
+  const [placed, setPlaced] = useState(!undated);
+  useEffect(() => {
+    if (placed) return;
+    const now = new Date();
+    setCurrentMonth(now.getMonth());
+    setCurrentYear(now.getFullYear());
+    setPlaced(true);
+  }, [placed]);
 
   /** The day grid, so its keys act on its own day buttons and not another calendar's. */
   const gridRef = useRef<HTMLDivElement>(null);
@@ -861,7 +878,7 @@ const Calendar = ({
       }}
       ref={setRootRef}
       className={classNames(styles.calendar, className)}
-      style={style}
+      style={placed ? style : { ...style, visibility: "hidden" }}
       fillWidth
       horizontal="center"
       gap={size}
@@ -1265,13 +1282,22 @@ const RangeCalendars = ({
   });
 
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  // The first calendar starts on the range's start month, else this month.
+  // The first calendar starts on the range's start month, else this month,
+  // set once mounted for the reason Calendar gives.
   const [currentMonth, setCurrentMonth] = useState(
-    initial?.startDate ? initial.startDate.getMonth() : new Date().getMonth(),
+    (initial?.startDate ?? UNDATED_MONTH).getMonth(),
   );
   const [currentYear, setCurrentYear] = useState(
-    initial?.startDate ? initial.startDate.getFullYear() : new Date().getFullYear(),
+    (initial?.startDate ?? UNDATED_MONTH).getFullYear(),
   );
+  const [placed, setPlaced] = useState(Boolean(initial?.startDate));
+  useEffect(() => {
+    if (placed) return;
+    const now = new Date();
+    setCurrentMonth(now.getMonth());
+    setCurrentYear(now.getFullYear());
+    setPlaced(true);
+  }, [placed]);
 
   useEffect(() => {
     if (value) {
@@ -1318,7 +1344,12 @@ const RangeCalendars = ({
         };
 
   return (
-    <Flex ref={ref} gap="24" {...rest}>
+    <Flex
+      ref={ref}
+      gap="24"
+      {...rest}
+      style={placed ? rest.style : { ...rest.style, visibility: "hidden" }}
+    >
       <Calendar
         value={internalValue.startDate}
         onValueChange={handleDateChange}
