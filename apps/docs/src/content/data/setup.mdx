@@ -126,7 +126,10 @@ that is not a key of the row is a type error.
     data: "The rows. Each needs the keys named in `series`, plus whatever the x axis reads.",
     title: "Heading above the chart.",
     description: "Supporting line under the title.",
-    date: "Format and range for a time axis.",
+    xKey: "The row key on the x axis. Defaults to the first key that is not a series.",
+    valueFormat: "How values are written on the axis and in the tooltip: \"compact\", \"percent\", Intl.NumberFormatOptions or a function.",
+    locale: "The locale numbers are written in, such as \"hu-HU\". Defaults to \"en-US\".",
+    date: "Format and range for a time axis; `onRangeChange` reports the range picked in the header.",
     legend: "Legend position and visibility.",
     tooltip: "Show a tooltip on hover.",
     grid: "Which grid lines to draw. Chart types differ in what they default to.",
@@ -143,7 +146,7 @@ that is not a key of the row is a type error.
 
 Use the `series` and `data` props to define the chart data to render, and assign colors to override defaults.
 
-The `series` prop is an array of objects, where each object has a `key` property that defines the name of the series, and an optional `color` property that defines the color of the series. Match the `key` property with the property name in the `data` prop.
+The `series` prop is an array of objects, where each object has a `key` property that names the column it plots, and optional `label` (the name the legend and tooltip show), `color` and `format` (how its values are written) properties. Match the `key` property with the property name in the `data` prop. The x axis reads the column named by `xKey`, or the first one that is not a series.
 
 <CodeBlock
   marginTop="16"
@@ -197,7 +200,7 @@ The `series` prop is an array of objects, where each object has a `key` property
 
 <PropsTable
   content={[
-    ["series", "{[{key: string, color?: string}]}"],
+    ["series", "{[{key: string, label?: string, color?: string, format?: ValueFormat}]}"],
     ["data", "{[{date: string, [key: string]: number}]}"],
   ]}
 />

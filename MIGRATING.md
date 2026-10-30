@@ -134,6 +134,7 @@ which every change goes through, so `{...register("x")}` works on them too.
 | Accordion `open` without `onToggle` was only the starting state | `open` always controls it; use `defaultOpen` for a starting state | renames `open` to `defaultOpen` where no `onToggle`/`onOpenChange` is set; reports it beside a spread or a `defaultOpen`, and an `open={expr}` (2.x also followed the value when it changed later; control it with `onOpenChange` if it does) |
 | RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
 | Kbar, KbarContent `inputSize` | `size` | renames |
+| LineChart, BarChart, LineBarChart, PieChart `date={{ onChange }}` | `date={{ onRangeChange }}` | renames in an inline `date`; reports one built elsewhere |
 
 Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when
 it is clicked again, as a native radio; SegmentedControl no longer moves its
@@ -146,6 +147,13 @@ AccordionGroup item (which also fixes `autoCollapse={false}` items that could
 never open); `open`/`defaultOpen`/`onOpenChange` on Kbar; `onValueCommit` on
 Slider, on pointer release and after each key; a group `disabled` on
 SegmentedControl, whose `onValueChange` is no longer required.
+
+Charts gained, with nothing to migrate: `xKey` (the x column, guessed before),
+series `label` and `format`, `valueFormat` and `locale` (numbers on the axis and
+in the tooltip; `en-US` unless set), `stack` (`true` or `"percent"`) on
+LineChart and BarChart, and BarChart `orientation="horizontal"`. With no
+`series`, the x column is no longer drawn as a series of its own, and `label`
+never is. `curveType` is `CurveType`; the old name stays as a deprecated alias.
 
 ### 6. A number is on the token scale
 
