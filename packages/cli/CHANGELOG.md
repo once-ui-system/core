@@ -14,6 +14,10 @@ Changes to `@once-ui-system/cli`. Releases are tagged `cli-vX.Y.Z`.
   replacing files you haven't touched and keeping the ones you edited (`--force`
   replaces them too, `--dry-run` shows what would change). It also works in projects
   whose blocks were added before 0.2.
+- **`once-ui migrate 3.0`** rewrites a project for Once UI 3.0 in one command (and
+  `migrate 2.0` for 1.x projects). It runs the codemod from the newest 3.x release on
+  npm, prints every change and the lines to fix by hand, and names the install to run
+  next. `--dry-run` only prints.
 - **`once-ui whoami`** shows the account and what its plan unlocks.
 - **`once-ui.lock.json`** records what `add` installed, so `update` can tell your
   edits from the registry's.
