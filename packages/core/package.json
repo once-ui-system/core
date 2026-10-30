@@ -478,6 +478,7 @@
     "test": "vitest run",
     "check:package": "publint && attw --pack . --profile esm-only --exclude-entrypoints ./css/styles.css ./css/tokens.css ./AGENTS.md ./ai/rules.compact.md ./ai/rules.md ./ai/recipes.md ./ai/layouts.md",
     "test:watch": "vitest",
+    "check:size": "node scripts/bundle-size.mjs",
     "typecheck": "tsc --noEmit",
     "dev": "node scripts/dev.mjs",
     "prepack": "pnpm build",
@@ -495,11 +496,11 @@
   },
   "peerDependencies": {
     "compressorjs": "^1.3.0",
+    "maplibre-gl": "^5.0.0 || ^6.0.0",
     "next": ">=15.5",
     "prismjs": "^1.30.0",
     "react": ">=19",
     "react-dom": ">=19",
-    "maplibre-gl": "^5.0.0 || ^6.0.0",
     "recharts": "^3.10.1"
   },
   "peerDependenciesMeta": {
@@ -531,6 +532,7 @@
     "@types/react-dom": "19.2.3",
     "@vitest/ui": "^4.1.10",
     "axe-core": "^4.10.3",
+    "esbuild": "0.27.7",
     "jsdom": "^30.0.0",
     "maplibre-gl": "^6.15.0",
     "publint": "^0.3.23",
