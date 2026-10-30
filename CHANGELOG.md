@@ -31,6 +31,12 @@ item (see `ROADMAP.md`, Week 4).
   that travels round the border, faster on hover and still under reduced motion. Padding,
   colour and text props still override the defaults.
 
+### Fixed
+
+- **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
+  no template serves, so every such page carried a broken image. It now uses
+  `/api/og/generate`, the same default `Meta.generate` uses for the social image.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
