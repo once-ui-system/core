@@ -376,6 +376,9 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
+  and opened on 1 November threw React #418, "October" against "November". The month and year labels of a picker that opens on the clock's
+  month now render on the client, as its day grid already did.
 - **A Button or IconButton nobody can press now says so in development.** With no
   `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
   a clickable Card and a dead control anywhere else. Lighthouse found such dead controls on

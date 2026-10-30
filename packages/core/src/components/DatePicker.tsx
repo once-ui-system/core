@@ -1,7 +1,14 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { Reveal } from "../internal/Reveal.js";
 import { CondensedTShirtSizes } from "../types.js";
@@ -169,6 +176,22 @@ const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement
   return null;
 };
 
+const subscribeNever = () => () => {};
+
+/**
+ * False while the server renders and while the client hydrates, true after.
+ * A picker with no date opens on the visitor's month, which the server can't
+ * know: a page prerendered on 31 October and opened on 1 November would
+ * hydrate "October" against "November" and throw (React #418). So that
+ * picker's month and year labels wait for the client, as its day grid does.
+ */
+const useHydrated = () =>
+  useSyncExternalStore(
+    subscribeNever,
+    () => true,
+    () => false,
+  );
+
 const Calendar = ({
   ref,
   value,
@@ -201,6 +224,9 @@ const Calendar = ({
   const today = new Date();
   /** Where the picker starts: `value`, else `defaultValue` (2.x's `defaultDate` was never read). */
   const initialDate = value ?? defaultValue;
+  // With no date, the month shown is the clock's (or, in DateRangePicker, a
+  // month the range picker took from it), so its labels wait for the client.
+  const hydrated = useHydrated() || initialDate !== undefined;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
   const initialTime =
     defaultTime ??
@@ -940,10 +966,10 @@ const Calendar = ({
                       variant="secondary"
                       size="s"
                       // What the button is for, not only the month it shows.
-                      aria-label={names.month(monthNames[currentMonth])}
+                      aria-label={hydrated ? names.month(monthNames[currentMonth]) : undefined}
                     >
                       <Row vertical="center" gap="4">
-                        {monthNames[currentMonth]}
+                        {hydrated && monthNames[currentMonth]}
                         <Icon name="chevronDown" onBackground="neutral-weak" size="xs" />
                       </Row>
                     </Button>
@@ -1001,7 +1027,7 @@ const Calendar = ({
                     <Button
                       variant="secondary"
                       size="s"
-                      aria-label={names.year(currentYear)}
+                      aria-label={hydrated ? names.year(currentYear) : undefined}
                       onClick={(event: React.MouseEvent) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -1012,7 +1038,7 @@ const Calendar = ({
                       }}
                     >
                       <Row vertical="center" gap="4">
-                        {currentYear.toString()}
+                        {hydrated && currentYear.toString()}
                         <Icon name="chevronDown" onBackground="neutral-weak" size="xs" />
                       </Row>
                     </Button>
