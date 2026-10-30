@@ -13,7 +13,7 @@
 
   <br/>
 
-  The indie design system for Next.js apps
+  The open-source, agentic design system for React
 
   [![npm version](https://img.shields.io/npm/v/@once-ui-system/core.svg)](https://www.npmjs.com/package/@once-ui-system/core)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE.md)
@@ -80,3 +80,21 @@ Please read our [CONTRIBUTING.md](https://github.com/once-ui-system/core/blob/ma
 ## Sponsors
 
 Once UI is an indie project. [Sponsor us](https://github.com/sponsors/once-ui-system) and get featured on our site!
+
+Supported by [Neon](https://neon.com) through the Neon Open Source Program, [Sentry](https://sentry.io) through Sentry for Open Source, and [Claude](https://claude.com) through Anthropic's program for open-source maintainers.
+
+<a href="https://neon.com">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-light.svg">
+    <img alt="Neon" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-light.svg" height="40">
+  </picture>
+</a>
+&nbsp;&nbsp;&nbsp;
+<a href="https://sentry.io">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-light.svg">
+    <img alt="Sentry" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-light.svg" height="40">
+  </picture>
+</a>

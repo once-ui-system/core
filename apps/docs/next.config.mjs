@@ -64,11 +64,12 @@ const nextConfig = {
     // OG proxy route (`/api/og/proxy?url=…`), which next/image otherwise
     // refuses.
     localPatterns: [{ pathname: "**", search: "" }, { pathname: "/api/og/proxy" }],
+    // Only the remote images the docs show. Any https host would let anyone
+    // make the optimizer fetch and decode their file. OG demos go through
+    // the local /api/og/proxy pattern above.
     remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "**",
-      },
+      // Noto emoji used by the Reactions demos.
+      { protocol: "https", hostname: "fonts.gstatic.com", pathname: "/s/e/notoemoji/**" },
     ],
   },
 

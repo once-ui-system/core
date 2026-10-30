@@ -13,6 +13,24 @@ item (see `ROADMAP.md`, Week 4).
 
 ## [Unreleased]
 
+### Added
+
+- **Announcement banners.** `Banner variant="mesh"` draws a soft, slowly drifting
+  gradient wash from the theme's brand and accent scales (`meshColors` picks others) under
+  a scrim that keeps the text readable in dark and light. `link` adds an inline,
+  underlined call to action; `dismissible` adds a close button, and `dismissKey` remembers
+  the dismissal in the browser. `ThemeInit` reads remembered dismissals before the first
+  paint, so a dismissed banner never flashes in. Banner stays a server component, and a
+  caller's own `background` now replaces the default brand strip instead of clashing with it.
+
+### Changed
+
+- **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface
+  colour with a hairline neutral border and neutral text, the icon in brand. The skewed
+  shine that swept across it every few seconds is replaced by a short brand-to-accent beam
+  that travels round the border, faster on hover and still under reduced motion. Padding,
+  colour and text props still override the defaults.
+
 ## [2.6.0] — 2026-10-24
 
 ### Added
@@ -85,6 +103,13 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
+  cube drew the mood's line and a small open ring on top of each other, so a happy smile
+  showed a stray "o" in its middle. The mouth is now one outline that parts from the
+  mood's line into an open mouth with the voice and closes back onto it.
+- **The cube Mascot's open mouth is one unbroken line.** The outline used to start and end
+  at its left corner, which left a visible nick there while it talked; the tube now closes
+  on itself (`tube(..., closed)`).
 - **A `DropdownWrapper` that leads with a search field keeps the caret in it.** With arrow
   navigation on, the field took focus as the panel opened and lost it a frame later to the
   selected option, so a site switcher or command menu opened with nothing to type into.

@@ -1,0 +1,34 @@
+{
+ "name": "MapPin",
+ "group": "map",
+ "importFrom": "@once-ui-system/core/map",
+ "props": {
+  "children": "React.ReactNode",
+  "prefix": "React.ReactNode",
+  "variant": "\"pill\" | \"dot\"",
+  "active": "boolean = false",
+  "color": "MapColor = brand",
+  "href": "string",
+  "onClick": "(event: React.MouseEvent<HTMLElement>) => void"
+ },
+ "tags": [
+  "map",
+  "location"
+ ],
+ "pairsWith": [
+  "MapMarker",
+  "MapMarkers"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "MapColor": [
+   "neutral",
+   "brand",
+   "accent",
+   "info",
+   "danger",
+   "warning",
+   "success"
+  ]
+ }
+}

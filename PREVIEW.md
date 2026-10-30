@@ -8,8 +8,8 @@ and approves them; nothing technical waits on them.
    (CI, tests, tooling, refactors with no behaviour change, dependency bumps,
    typo fixes). Leave it unlabeled when it needs a demo.
 2. **`preview` deploys to a stable URL**,
-   https://core-docs-git-preview-dopler.vercel.app (Vercel builds only
-   `main` and `preview`). Everything on it must be safe to ship: unfinished work stays
+   https://core-docs-git-preview-dopler.vercel.app (built on demand right before
+   a ship, not on every merge; only `main` builds automatically). Everything on it must be safe to ship: unfinished work stays
    unlinked or behind a flag.
 3. **Demo per milestone, not per PR**: one message with screenshots of the
    preview site (desktop and phone), a short video for interactions, or a few

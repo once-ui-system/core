@@ -5,6 +5,7 @@
   "items": "!KbarItem[]",
   "children": "React.ReactNode",
   "inputSize": "TShirtSizes",
+  "placeholder": "string",
   "open": "boolean",
   "onOpenChange": "(open: boolean) => void"
  },

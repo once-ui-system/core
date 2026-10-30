@@ -5,6 +5,7 @@ import { add } from "./commands/add.js";
 import { create } from "./commands/create.js";
 import { list } from "./commands/list.js";
 import { login, logout, whoami } from "./commands/login.js";
+import { migrate } from "./commands/migrate.js";
 import { update } from "./commands/update.js";
 import { CliError, createClient } from "./lib/api.js";
 import { apiBase, getToken } from "./lib/config.js";
@@ -16,6 +17,8 @@ Usage
   once-ui add <block…> [--overwrite] [--no-install]
   once-ui update [block…] [--dry-run] [--force] [--no-install]
                                 Bring added blocks up to date; files you edited are kept
+  once-ui migrate <version> [dir] [--dry-run] [--force]
+                                Rewrite a project for a new Once UI major (2.0 or 3.0)
   once-ui list                  Surfaces and slices in the current Stack release, and which you own
   once-ui login [--no-browser]  Sign in through once-ui.com in your browser
   once-ui login --token oui_…   Or save an access token (pipe one in, or set ONCE_UI_TOKEN)
@@ -44,6 +47,7 @@ async function main(argv: string[]) {
       name: { type: "string" },
       url: { type: "string" },
       overwrite: { type: "boolean" },
+      css: { type: "boolean" },
       force: { type: "boolean" },
       "dry-run": { type: "boolean" },
       "no-install": { type: "boolean" },
@@ -81,6 +85,12 @@ async function main(argv: string[]) {
         force: values.force,
         dryRun: values["dry-run"],
         install: !values["no-install"],
+      });
+    case "migrate":
+      return migrate(rest[0], rest[1], {
+        dryRun: values["dry-run"],
+        force: values.force,
+        css: values.css,
       });
     default:
       throw new CliError(`Unknown command "${command}".\n\n${HELP}`);

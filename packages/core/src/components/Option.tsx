@@ -173,7 +173,8 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           borderStyle="solid"
           cursor={disabled ? "not-allowed" : "interactive"}
           transition="micro-medium"
-          onBackground="neutral-strong"
+          // A danger option takes its color from the stylesheet, label and icon alike.
+          onBackground={danger ? undefined : "neutral-strong"}
           className={classNames(styles.option, {
             [styles.danger]: danger,
             [styles.selected]: selected,
@@ -184,7 +185,11 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
         >
           {prefix && <Row className={styles.prefix}>{prefix}</Row>}
           <Column fillWidth align="left">
-            <Text onBackground="neutral-strong" variant="label-default-s" truncate>
+            <Text
+              onBackground={danger ? undefined : "neutral-strong"}
+              variant="label-default-s"
+              truncate
+            >
               {label || children}
             </Text>
             {description && (

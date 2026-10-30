@@ -271,20 +271,35 @@ export function pillowShape(pts: Point[], height = 0.14, bevel = 0.08, rings = 6
   return { positions, normals, indices };
 }
 
-/** A tube along points in the xy plane, written into `into` so a moving mouth reuses its buffers. */
-export function tube(points: Point[], radius: number, sides = 8, into?: MeshData): MeshData {
+/**
+ * A tube along points in the xy plane, written into `into` so a moving mouth reuses its buffers.
+ * `closed` joins the last point back to the first, so a loop has no seam.
+ */
+export function tube(
+  points: Point[],
+  radius: number,
+  sides = 8,
+  into?: MeshData,
+  closed = false,
+): MeshData {
   const n = points.length;
   const count = n * (sides + 1);
+  const segments = closed ? n : n - 1;
   const mesh: MeshData = into ?? {
     positions: new Float32Array(count * 3),
     normals: new Float32Array(count * 3),
-    indices: new Uint16Array((n - 1) * sides * 6),
+    indices: new Uint16Array(segments * sides * 6),
   };
   for (let i = 0; i < n; i++) {
-    const prev = points[Math.max(0, i - 1)];
-    const next = points[Math.min(n - 1, i + 1)];
-    const tx = next[0] - prev[0];
-    const ty = next[1] - prev[1];
+    const prev = closed ? points[(i - 1 + n) % n] : points[Math.max(0, i - 1)];
+    const next = closed ? points[(i + 1) % n] : points[Math.min(n - 1, i + 1)];
+    let tx = next[0] - prev[0];
+    let ty = next[1] - prev[1];
+    // A shut loop folds back on itself at its corners; there, run along the next stretch.
+    if (Math.hypot(tx, ty) < 1e-6) {
+      tx = next[0] - points[i][0];
+      ty = next[1] - points[i][1];
+    }
     const tl = Math.hypot(tx, ty) || 1;
     const nx = -ty / tl;
     const ny = tx / tl;
@@ -302,10 +317,10 @@ export function tube(points: Point[], radius: number, sides = 8, into?: MeshData
   }
   if (!into) {
     let k = 0;
-    for (let i = 0; i < n - 1; i++) {
+    for (let i = 0; i < segments; i++) {
       for (let j = 0; j < sides; j++) {
         const a = i * (sides + 1) + j;
-        const c = a + sides + 1;
+        const c = ((i + 1) % n) * (sides + 1) + j;
         mesh.indices.set([a, c, a + 1, a + 1, c, c + 1], k);
         k += 6;
       }

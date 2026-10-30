@@ -34,8 +34,24 @@
   "onPerPageChange": "(perPage: number) => void",
   "count": "number",
   "total": "number",
+  "searchable": "boolean = false",
+  "search": "string",
+  "defaultSearch": "string = \"\"",
+  "onSearchChange": "(search: string) => void",
+  "matchSearch": "(row: T, query: string) => boolean",
+  "filters": "DataTableFilters",
+  "defaultFilters": "DataTableFilters",
+  "onFiltersChange": "(filters: DataTableFilters) => void",
+  "columnVisibility": "Record<string, boolean>",
+  "defaultColumnVisibility": "Record<string, boolean>",
+  "onColumnVisibilityChange": "(visibility: Record<string, boolean>) => void",
+  "columnsMenu": "boolean = false",
+  "toolbar": "ReactNode",
+  "onQueryChange": "(query: DataTableQuery) => void",
   "loading": "boolean = false",
+  "keepRowsWhileLoading": "boolean = false",
   "emptyState": "ReactNode",
+  "noResultsState": "ReactNode",
   "stickyHeader": "boolean = false",
   "striped": "boolean = false",
   "hoverable": "boolean = true",
@@ -116,13 +132,13 @@
    "paddingBottom": "SpacingToken | number",
    "paddingX": "SpacingToken | number",
    "paddingY": "SpacingToken | number",
-   "margin": "SpacingToken | number",
-   "marginLeft": "SpacingToken | number",
-   "marginRight": "SpacingToken | number",
-   "marginTop": "SpacingToken | number",
-   "marginBottom": "SpacingToken | number",
-   "marginX": "SpacingToken | number",
-   "marginY": "SpacingToken | number",
+   "margin": "SpacingToken | number | \"auto\"",
+   "marginLeft": "SpacingToken | number | \"auto\"",
+   "marginRight": "SpacingToken | number | \"auto\"",
+   "marginTop": "SpacingToken | number | \"auto\"",
+   "marginBottom": "SpacingToken | number | \"auto\"",
+   "marginX": "SpacingToken | number | \"auto\"",
+   "marginY": "SpacingToken | number | \"auto\"",
    "gap": "SpacingToken | number | \"-1\"",
    "top": "SpacingToken | number | CSSUnit",
    "right": "SpacingToken | number | CSSUnit",
@@ -156,7 +172,7 @@
    "bottomLeftRadius": "RadiusSize",
    "bottomRightRadius": "RadiusSize",
    "shadow": "ShadowSize",
-   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | ReactNode",
+   "cursor": "CSSProperties[\"cursor\"] | \"interactive\" | CursorPresetValue | ReactNode",
    "blendMode": "BlendMode",
    "blur": "BlurSize | number",
    "backdropBlur": "BlurSize | number",
@@ -168,6 +184,14 @@
   }
  },
  "types": {
+  "BreakpointKey": [
+   "xl",
+   "l",
+   "m",
+   "s",
+   "xs"
+  ],
+  "ColumnHide": "Partial<Record<BreakpointKey, boolean>>",
   "DataTableColumn": {
    "key": "!string",
    "header": "!ReactNode",
@@ -175,17 +199,46 @@
    "sortable": "boolean",
    "sort": "(a: T, b: T) => number",
    "align": "\"left\" | \"center\" | \"right\"",
-   "width": "string"
+   "width": "string",
+   "label": "string",
+   "filter": "DataTableColumnFilter<T>",
+   "hide": "ColumnHide"
+  },
+  "DataTableColumnFilter": {
+   "options": "!{ value: string; label: ReactNode }[]",
+   "multiple": "boolean",
+   "match": "(row: T, value: DataTableFilterValue) => boolean"
+  },
+  "DataTableFilterValue": [
+   "string",
+   "string[]"
+  ],
+  "DataTableFilters": {
+   "[key: string]": "DataTableFilterValue"
   },
   "DataTableLabels": {
    "selectAll": "!string",
    "selectRow": "!string",
    "pagination": "!string",
+   "search": "string",
+   "filterAll": "string",
+   "columns": "string",
+   "noResults": "string",
+   "noResultsHint": "string",
+   "clearFilters": "string",
+   "results": "(count: number) => string",
    "previous": "!string",
    "next": "!string",
    "first": "!string",
    "last": "!string",
    "perPage": "!string"
+  },
+  "DataTableQuery": {
+   "page": "!number",
+   "perPage": "!number",
+   "sort": "!DataTableSort | null",
+   "search": "!string",
+   "filters": "!DataTableFilters"
   },
   "DataTableSort": {
    "key": "!string",
