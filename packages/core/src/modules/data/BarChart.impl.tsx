@@ -19,6 +19,9 @@ import { getRechartsComponents } from "./rechartsLoader.js";
 import { chartFormatters, chartSeries, rowsByX, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
+/** Where horizontal bars' category names start, from the card's left edge. */
+const CATEGORY_INSET = 20;
+
 export interface BarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
   hover?: boolean;
@@ -146,7 +149,8 @@ const BarChart = ({
       (n, row) => Math.max(n, String(formatDate(row[xAxisKey], date, row) ?? "").length),
       0,
     );
-    return Math.min(200, Math.max(64, Math.ceil(longest * 6.5) + 16));
+    // The inset before the names and a 12px gap to the bars.
+    return Math.min(200, Math.max(64, Math.ceil(longest * 6.5) + CATEGORY_INSET + 12));
   }, [horizontal, data, xAxisKey, date]);
 
   const barColors = autoSeries.map((s) => cssColor(s.color, "data-"));
@@ -160,6 +164,7 @@ const BarChart = ({
 
       return (
         <Legend
+          axisWidth={horizontal ? categoryWidth : axisWidth}
           variant={variant as ChartVariant}
           payload={customPayload}
           labels={axis}
@@ -168,7 +173,7 @@ const BarChart = ({
         />
       );
     },
-    [autoSeries, barColors, variant, axis, legend.position, legend.direction],
+    [autoSeries, barColors, variant, axis, legend.position, legend.direction, horizontal, categoryWidth, axisWidth],
   );
 
   const legendWrapperStyle = useMemo(
@@ -328,7 +333,30 @@ const BarChart = ({
                                 padding: { top: legend.display ? 40 : 0 },
                               }
                             : { orientation: reverseX ? "top" : "bottom" })}
-                          tick={showCategory ? { fill: tickFill, fontSize: tickFontSize } : false}
+                          tick={
+                            !showCategory
+                              ? false
+                              : horizontal && !reverseY
+                                ? // Names start where the title does, in one
+                                  // column, rather than ending at the bars.
+                                  (tickProps: any) => (
+                                    <text
+                                      x={CATEGORY_INSET}
+                                      y={tickProps.y}
+                                      dy="0.355em"
+                                      textAnchor="start"
+                                      fill={tickFill}
+                                      fontSize={tickFontSize}
+                                    >
+                                      {formatDate(
+                                        tickProps.payload.value,
+                                        date,
+                                        rowsAtX.get(tickProps.payload.value),
+                                      )}
+                                    </text>
+                                  )
+                                : { fill: tickFill, fontSize: tickFontSize }
+                          }
                           tickFormatter={(value: any) =>
                             formatDate(value, date, rowsAtX.get(value))
                           }

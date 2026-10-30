@@ -184,6 +184,7 @@ const LineChart = ({
 
       return (
         <Legend
+          axisWidth={axisWidth}
           payload={customPayload}
           reverseY={reverseY}
           labels={axis}
@@ -193,7 +194,7 @@ const LineChart = ({
         />
       );
     },
-    [autoSeries, axis, legend.position, legend.direction, variant],
+    [autoSeries, axis, legend.position, legend.direction, variant, axisWidth],
   );
 
   const legendWrapperStyle = useMemo(
