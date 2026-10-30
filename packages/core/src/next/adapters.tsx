@@ -48,8 +48,19 @@ const NextAdapterLink = ({
 );
 NextAdapterLink.displayName = "NextAdapterLink";
 
-const NextAdapterImage = ({ width, height, ...props }: AdapterImageProps) => (
-  <NextImage width={width} height={height} {...props} />
+// `priority` becomes `loading="eager"` plus `fetchPriority="high"`, as the
+// DOM default does, rather than next/image's own `priority`: Next 16
+// deprecated that for `preload`, which only adds a <link rel="preload"> and
+// leaves the image at normal fetch priority. On Stack and Aveiro the LCP image
+// waited 2.2 s and 4.2 s to start loading on mobile. A high-priority <img> in the
+// server HTML is what the browser's preload scanner already finds first.
+const NextAdapterImage = ({ width, height, priority, ...props }: AdapterImageProps) => (
+  <NextImage
+    width={width}
+    height={height}
+    {...(priority && { loading: "eager", fetchPriority: "high" })}
+    {...props}
+  />
 );
 
 const useNextNavigate = (): ((href: string) => void) => {

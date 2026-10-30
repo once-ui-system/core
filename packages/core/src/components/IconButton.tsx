@@ -108,6 +108,7 @@ const IconButton = ({
       id={id}
       href={href}
       ref={ref}
+      decorationOf="IconButton"
       {...dropdownTriggerProps(trigger, href, props.onClick)}
       disabled={disabled}
       // A loading button is still there but busy, which a screen reader can

@@ -97,6 +97,7 @@ const Button = ({
       id={id}
       href={href}
       ref={ref}
+      decorationOf="Button"
       {...dropdownTriggerProps(trigger, href, props.onClick)}
       disabled={disabled}
       // A loading button is still there but busy, which a screen reader can
