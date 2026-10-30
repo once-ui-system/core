@@ -34,6 +34,18 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   or a function) and `locale` for the numbers on the axis and in the tooltip;
   `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
   `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
+- **Chart summaries for screen readers**: each chart's plot is `role="img"`, named
+  by its title and a plain-language summary of its data in its `valueFormat` and
+  `locale` ("Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest
+  3,100 in Feb."; a pie: "Share by browser: Chrome 62%, Safari 21%."), with the data
+  as a visually hidden table inside the card. `summary` replaces the generated text
+  and `aria-label` the whole name. `ChartSummary` renders the table on its own.
+- **`Sparkline`**: a tiny trend line, area or bar strip for stat tiles and table
+  cells, in pure SVG (no recharts; it renders on the server and is on the root
+  barrel as well as `/data`). `data` as numbers or rows with `valueKey`, `variant`,
+  `color`, `width`/`height` (a number is px), `curve`, `showLast`, `min`/`max`, and a
+  generated `aria-label` ("Trend from 120 to 340, high 360") in `valueFormat` and
+  `locale`.
 - **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
   suffix, as PasswordInput did.
 - **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
