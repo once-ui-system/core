@@ -173,7 +173,17 @@ const BarChart = ({
         />
       );
     },
-    [autoSeries, barColors, variant, axis, legend.position, legend.direction, horizontal, categoryWidth, axisWidth],
+    [
+      autoSeries,
+      barColors,
+      variant,
+      axis,
+      legend.position,
+      legend.direction,
+      horizontal,
+      categoryWidth,
+      axisWidth,
+    ],
   );
 
   const legendWrapperStyle = useMemo(

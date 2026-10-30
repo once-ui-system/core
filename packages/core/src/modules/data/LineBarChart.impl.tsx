@@ -173,7 +173,7 @@ const LineBarChart = ({
   const legendContent = useMemo(
     () => (
       <Legend
-          axisWidth={axisWidth}
+        axisWidth={axisWidth}
         variant={variant as ChartVariant}
         colors={[finalLineColor, finalBarColor]}
         labels={axis}
