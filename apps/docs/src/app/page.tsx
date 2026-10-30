@@ -23,13 +23,14 @@ import { baseURL, meta, schema, layout } from "@/resources";
 import { PromoCard } from "@/components/PromoCard";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: meta.home.title,
     description: meta.home.description,
     baseURL: baseURL,
     path: meta.home.path,
     image: meta.home.image
   });
+  return { ...metadata, alternates: { canonical: metadata.openGraph.url } };
 }
 
 

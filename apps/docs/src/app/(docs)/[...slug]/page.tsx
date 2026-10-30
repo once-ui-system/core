@@ -36,8 +36,14 @@ export async function generateMetadata({
 
   if (!doc) return {};
 
-  return Meta.generate({
-    title: doc.metadata.title + " – " + schema.name,
+  // Web and React Native pages share names (Button, Avatar…); the platform in
+  // the title keeps them from competing as duplicates.
+  const platform = platformOfSlug(doc.slug);
+  const titleBase =
+    platform.id === "native" ? `${doc.metadata.title} for ${platform.label}` : doc.metadata.title;
+
+  const metadata = Meta.generate({
+    title: titleBase + " – " + schema.name,
     description: doc.metadata.summary,
     baseURL,
     path: `/${doc.slug}`,
@@ -45,6 +51,9 @@ export async function generateMetadata({
     publishedTime: doc.metadata.updatedAt,
     image: doc.metadata.image || `/api/og/generate?title=${encodeURIComponent(doc.metadata.title)}${slug.length > 1 ? `&section=${encodeURIComponent(slug[0])}` : ""}`,
   });
+
+  // Meta.generate writes a canonical only alongside language alternates.
+  return { ...metadata, alternates: { canonical: metadata.openGraph.url } };
 }
 
 export default async function Docs({
