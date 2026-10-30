@@ -82,6 +82,8 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Removed
 
+- **The `recharts` peer dependency** (and its `peerDependenciesMeta` entry). The
+  charts no longer use it; uninstall it unless your own code does.
 - **`Particle`**, the 2.0 alias of `ParticleFx`.
 - **Dialog `hideClose`.** Use `showClose={false}`, the name `Drawer` uses.
 - **CodeBlock's root `highlight`.** Set it on each entry of `codes`.
@@ -154,6 +156,21 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **Charts draw their own SVG; recharts is gone.** LineChart, BarChart,
+  LineBarChart and PieChart render with Once UI's own renderer (scales, stacks,
+  d3's curves, ticks and bar slots as recharts placed them), so the chart is in
+  the server HTML: no lazy chunk, no wait for `document.fonts.ready`, no
+  `MissingDependency` fallback. The plot sizes itself to its container with a
+  ResizeObserver, drawing at 640 × 320 until it is measured. The props are
+  unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
+  the tooltip through the points, a legend entry is a button that hides or
+  shows its series (or slice), and the entry animations follow
+  `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
+  (minified, React external), where recharts alone was 126 KB. A PieChart's
+  legend now lists slices in data order in their own colours (it sorted them
+  by name and coloured them by position), LineBarChart's legend names the line
+  first, and a top-left legend is offset past the y axis with `left` instead
+  of a `calc()` jsdom cannot compute.
 - **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
   `onChange` only names the native DOM event. The codemod renames it in an inline
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in

@@ -189,10 +189,10 @@ same chart with `animation={false}`.
   exclude={["data-viz-style"]}
   describe={{
     stack: "Stack the series: true sums them, \"percent\" shows each as its share of the total.",
-    curve: "Recharts interpolation: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants.",
+    curve: "Interpolation between points: natural, linear, step, stepBefore, stepAfter, monotone, basis, bump and their variants (d3's curve names).",
     xAxisType: "Treat x values as numbers rather than equally spaced categories.",
     xDomain: "Visible x range. Requires xAxisType=\"number\".",
-    animation: "Animate the line on data change. Turn it off for a chart that updates faster than the animation runs.",
+    animation: "Draw the lines in from the left when the chart mounts. Readers who ask for reduced motion never see it.",
     animationBegin: "Delay before the animation starts, in milliseconds.",
     animationDuration: "Animation length, in milliseconds.",
     animationEasing: "Recharts easing name.",
