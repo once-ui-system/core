@@ -18,6 +18,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
+  stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
+  installed version's `ai/` files. Its tools search components, return a
+  component's import, props and gotchas, resolve types, serve task bundles and
+  rules, and run the `once-ui-validate-ai-code` checks.
 - **`@once-ui-system/foundations` is published** (3.0.0-beta.0 on `next`):
   the design tokens, utility CSS, SCSS sources and `tokens.json` for stacks
   without React. Core still inlines them, so a core app installs nothing new.
