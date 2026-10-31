@@ -5,7 +5,9 @@
  * Every JS entry in package.json `exports` (".", "./data", "./components/Button"…)
  * and the two stylesheets are bundled the way an app's bundler would: minified,
  * with the package's own dependencies in and its peers (react, next, recharts,
- * maplibre-gl…) out, CSS modules included. Each is measured gzipped and
+ * maplibre-gl…) out, CSS modules included. What a lazy `import()` loads is
+ * split off and left out, as an app's bundler would, so the number is what
+ * the page loads up front. Each is measured gzipped and
  * compared with bundle-size.json. CI fails when one grows past its recorded
  * size by more than 5% and 512 bytes, so a shrink or a small change never
  * fails, and a component that suddenly pulls in half the library does.
@@ -19,7 +21,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { builtinModules } from "node:module";
-import { dirname, join } from "node:path";
+import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { build } from "esbuild";
@@ -60,12 +62,29 @@ async function measure(file) {
     target: "es2022",
     write: false,
     outdir: "out",
+    absWorkingDir: ROOT,
+    splitting: true,
+    metafile: true,
     external,
     logLevel: "silent",
     define: { "process.env.NODE_ENV": '"production"' },
   });
-  // JS and the CSS its modules import: both reach the user.
-  return result.outputFiles.reduce((sum, out) => sum + gzipSync(out.contents).length, 0);
+  // The entry and the chunks it imports statically, with the CSS of their
+  // modules: what reaches the user before anything lazy is asked for.
+  const outputs = result.metafile.outputs;
+  const eager = new Set();
+  const visit = (out) => {
+    if (eager.has(out) || !outputs[out]) return;
+    eager.add(out);
+    if (outputs[out].cssBundle) eager.add(outputs[out].cssBundle);
+    for (const dep of outputs[out].imports) if (dep.kind === "import-statement") visit(dep.path);
+  };
+  // A lazy import's chunk is an entry point too: start from this entry's own.
+  const entry = relative(ROOT, path);
+  for (const [out, meta] of Object.entries(outputs)) if (meta.entryPoint === entry) visit(out);
+  return result.outputFiles
+    .filter((out) => eager.has(relative(ROOT, out.path)))
+    .reduce((sum, out) => sum + gzipSync(out.contents).length, 0);
 }
 
 export function over(size, recorded) {
