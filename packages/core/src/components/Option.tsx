@@ -167,7 +167,6 @@ const Option = forwardRef<HTMLDivElement, OptionProps>(
           paddingX="12"
           paddingY="8"
           gap="12"
-          radius="m"
           tabIndex={-1}
           borderWidth={1}
           borderStyle="solid"
