@@ -3,6 +3,7 @@
 import classNames from "clsx";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels";
+import { prefersReducedMotionNow } from "../internal/reducedMotion";
 import { RadiusSize } from "../types";
 import { BaseColor, Fade } from "./Fade";
 import { Flex } from "./Flex";
@@ -108,7 +109,7 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
           direction === "row" ? scroller.clientWidth / 2 : scroller.clientHeight / 2;
         scroller.scrollBy({
           [direction === "row" ? "left" : "top"]: scrollAmount,
-          behavior: "smooth",
+          behavior: prefersReducedMotionNow() ? "auto" : "smooth",
         });
       }
     };
@@ -120,7 +121,7 @@ const Scroller = forwardRef<HTMLDivElement, ScrollerProps>(
           direction === "row" ? scroller.clientWidth / 2 : scroller.clientHeight / 2;
         scroller.scrollBy({
           [direction === "row" ? "left" : "top"]: -scrollAmount,
-          behavior: "smooth",
+          behavior: prefersReducedMotionNow() ? "auto" : "smooth",
         });
       }
     };

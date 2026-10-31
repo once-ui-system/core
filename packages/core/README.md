@@ -79,22 +79,27 @@ Please read our [CONTRIBUTING.md](https://github.com/once-ui-system/core/blob/ma
 
 ## Sponsors
 
-Once UI is an indie project. [Sponsor us](https://github.com/sponsors/once-ui-system) and get featured on our site!
+Once UI is an indie project. [Sponsor us](https://once-ui.com/sponsors) and get featured on our site.
 
-Supported by [Neon](https://neon.com) through the Neon Open Source Program, [Sentry](https://sentry.io) through Sentry for Open Source, and [Claude](https://claude.com) through Anthropic's program for open-source maintainers.
+Supported by:
 
-<a href="https://neon.com">
-  <picture>
+<p align="center">
+  <a href="https://neon.com"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-light.svg">
-    <img alt="Neon" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-light.svg" height="40">
-  </picture>
-</a>
-&nbsp;&nbsp;&nbsp;
-<a href="https://sentry.io">
-  <picture>
+    <img alt="Neon" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/neon-logo-light.svg" height="34">
+  </picture></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://sentry.io"><picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-light.svg">
-    <img alt="Sentry" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-light.svg" height="40">
-  </picture>
-</a>
+    <img alt="Sentry" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/sentry-logo-light.svg" height="32">
+  </picture></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://claude.com"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/claude-logo-dark.svg">
+    <img alt="Claude" src="https://raw.githubusercontent.com/once-ui-system/core/main/.github/assets/sponsors/claude-logo-light.svg" height="30">
+  </picture></a>
+</p>
+
+<p align="center">
+  <sub>Once UI is part of the <a href="https://neon.com">Neon</a> Open Source Program and <a href="https://sentry.io/for/open-source/">Sentry for Open Source</a>, and is built with <a href="https://claude.com">Claude</a>.</sub>
+</p>

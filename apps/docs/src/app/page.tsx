@@ -23,13 +23,14 @@ import { baseURL, meta, schema, layout } from "@/resources";
 import { PromoCard } from "@/components/PromoCard";
 
 export async function generateMetadata() {
-  return Meta.generate({
+  const metadata = Meta.generate({
     title: meta.home.title,
     description: meta.home.description,
     baseURL: baseURL,
     path: meta.home.path,
     image: meta.home.image
   });
+  return { ...metadata, alternates: { canonical: metadata.openGraph.url } };
 }
 
 
@@ -213,10 +214,10 @@ export default function Home() {
                 <Text onBackground="neutral-weak" variant="body-default-s">Free portfolio template that feels genuinely unique and professional</Text>
               </Column>
             </Card>
-            <Card fillWidth radius="l" border padding="24" background="overlay" href="https://once-ui.com/products">
+            <Card fillWidth radius="l" border padding="24" background="overlay" href="https://once-ui.com/stack">
               <Column fillWidth gap="16">
-                <Text variant="heading-strong-xs">Premium app templates</Text>
-                <Text onBackground="neutral-weak" variant="body-default-s">Ready-to-deploy templates: store, landing page, founder site, and more</Text>
+                <Text variant="heading-strong-xs">Stack</Text>
+                <Text onBackground="neutral-weak" variant="body-default-s">The app system built on Once UI: landing, dashboard, docs, store and more in one repository</Text>
               </Column>
             </Card>
           </Grid>

@@ -259,6 +259,8 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - children?: React.ReactNode
 - inputSize?: TShirtSizes
 - placeholder?: string
+- filter?: KbarFilter
+- labels?: KbarLabels
 - open?: boolean
 - onOpenChange?: (open: boolean) => void
 
@@ -533,7 +535,9 @@ type CursorPresetValue = "soft" | "rounded" | "dot" | "system"
 // type GridSize is one of these strings: 1 2 3 4 5 6 7 8 9 10 11 12
 // type IconName is one of these names, and only these:
 // symbol security opacity dark light copy help filter info danger warning code link menu search time video image enter send checkbox document grid adjustments arrowDown arrowLeft arrowRight arrowUp arrowUpRight ball banknotes barChart bell bolt book bookmark calendar cart chat check chevronDoubleLeft chevronDoubleRight chevronDown chevronLeft chevronRight chevronUp chevronsLeftRight clipboard close computer cube dislike download edit eye eyeDropper eyeOff file flag folder food forward gift globe grip heart home inbox like linearGauge lock logout mail maximize minimize minus moreHorizontal newspaper organization pause paw payment people person personRemove play plus radialGauge refresh return screen settings smiley sparkle star starFill store tag trash trend trendDown trendUp upload volume volumeOff wordmark world
+type KbarFilter = (items: KbarItem[], query: string) => KbarItem[]
 type KbarItem = { id: string; name: string; section: string; shortcut?: string[]; keywords?: string; href?: string; perform?: () => void; icon?: IconName; description?: ReactNode; placeholder?: string }
+type KbarLabels = { dialog?: string; results?: string; noResults?: string; navigate?: string; goTo?: string }
 type NavDensity = "normal" | "compact" | "spacious"
 type NavVariant = "solid" | "subtle" | "minimal"
 type NavigationLayout = "grid" | "row" | "column"

@@ -73,6 +73,7 @@ export * from "./Line";
 export * from "./List";
 export * from "./ListItem";
 export * from "./Logo";
+export * from "./LogoLoader";
 export * from "./LogoSpinner";
 export * from "./LogoCloud";
 export * from "./Mask";

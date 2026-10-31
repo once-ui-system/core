@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.6.0",
- "generated": "2026-10-28",
+ "generated": "2026-10-29",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -1212,6 +1212,7 @@
    "default",
    "pointer"
   ],
+  "KbarFilter": "(items: KbarItem[], query: string) => KbarItem[]",
   "KbarItem": {
    "id": "!string",
    "name": "!string",
@@ -1223,6 +1224,13 @@
    "icon": "IconName",
    "description": "ReactNode",
    "placeholder": "string"
+  },
+  "KbarLabels": {
+   "dialog": "string",
+   "results": "string",
+   "noResults": "string",
+   "navigate": "string",
+   "goTo": "string"
   },
   "LayoutContextType": {
    "currentBreakpoint": "!BreakpointKey",
@@ -1248,6 +1256,12 @@
   "LngLat": {
    "[key: number]": "number"
   },
+  "LogoLoaderColor": [
+   "inherit",
+   "neutral",
+   "brand",
+   "accent"
+  ],
   "LogoProps": "Logo props",
   "LogoSource": [
    "string",
@@ -3861,6 +3875,19 @@
     "brand": "{ copy?: boolean; url?: string }"
    }
   },
+  "LogoLoader": {
+   "group": "components",
+   "props": {
+    "svg": "string",
+    "src": "string",
+    "height": "number | string = 120",
+    "color": "LogoLoaderColor = neutral",
+    "settled": "boolean = false",
+    "order": "\"reading\" | \"document\" = reading",
+    "onComplete": "() => void",
+    "ariaLabel": "string = Loading"
+   }
+  },
   "LogoSpinner": {
    "group": "components",
    "extends": [
@@ -5363,6 +5390,8 @@
     "children": "React.ReactNode",
     "inputSize": "TShirtSizes",
     "placeholder": "string",
+    "filter": "KbarFilter",
+    "labels": "KbarLabels",
     "open": "boolean",
     "onOpenChange": "(open: boolean) => void"
    }
@@ -5420,6 +5449,7 @@
     "id": "!string",
     "as": "!\"h1\" | \"h2\" | \"h3\" | \"h4\" | \"h5\" | \"h6\"",
     "children": "!React.ReactNode",
+    "label": "string",
     "style": "React.CSSProperties"
    }
   },

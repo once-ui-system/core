@@ -475,6 +475,11 @@
     "tags": ["marketing", "social-proof"],
     "pairsWith": ["Grid", "Logo"]
   },
+  "LogoLoader": {
+    "purpose": "Page or app splash drawn from the product's own SVG logo: traces each shape, then fills and holds",
+    "tags": ["feedback", "media"],
+    "pairsWith": ["Logo", "Column"]
+  },
   "LogoSpinner": {
     "purpose": "Once UI mark loader, for AI and brand loading states",
     "tags": ["feedback", "chat", "ai"],

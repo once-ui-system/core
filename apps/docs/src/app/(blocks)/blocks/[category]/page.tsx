@@ -21,12 +21,13 @@ const describe = (category: string) =>
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { category } = await params;
-  return Meta.generate({
+  const metadata = Meta.generate({
     baseURL,
     title: `${formatCategoryName(category)} – Once UI Blocks`,
     description: describe(category),
     path: `/blocks/${category}`,
   });
+  return { ...metadata, alternates: { canonical: metadata.openGraph.url } };
 }
 
 /**
