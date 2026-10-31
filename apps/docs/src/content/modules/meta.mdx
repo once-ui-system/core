@@ -38,6 +38,18 @@ export async function generateMetadata() {
   ]}
 />
 
+## Canonical URL
+
+Each page names its own URL, `baseURL` plus `path`, as canonical, so search
+engines index one address for it. Pass `canonical` to name another, or
+`canonical: false` to leave the tag out.
+
+Call <InlineCode>Meta.generate</InlineCode> in pages, not in a layout. Next
+passes a layout's metadata down to every page that has none of its own, so a
+layout's canonical would make each of those pages name the layout's URL. If a
+layout sets site-wide metadata with it, pass `canonical: false` there.
+`once-ui-validate-ai-code` flags a layout that doesn't.
+
 ## Advanced setup
 
 For larger sites, store your metadata in a central configuration file to maintain
@@ -149,6 +161,8 @@ The `Meta.generate` function will generate all necessary meta tags for SEO and s
 <meta property="og:title" content="Once UI: Build the future">
 <meta property="og:description" content="An open-source design system for indie creators to ship like teams of 10+ alone.">
 <meta property="og:type" content="website">
+<link rel="canonical" href="https://once-ui.com">
+
 <meta property="og:url" content="https://once-ui.com">
 <meta property="og:image" content="https://once-ui.com/images/cover.jpg">
 

@@ -638,6 +638,12 @@ source maps that pointed at the unshipped `src/`, or the harness's generator
 input (`ai/catalog.seed.json`, `ai/eval-tasks.md`). Nothing that was reachable
 through `exports` or `bin` moved.
 
+**`Meta.generate` writes a canonical URL for every page.** It is `baseURL`
+plus `path` unless you pass `canonical`. If a layout calls `Meta.generate`,
+pass `canonical: false` there, or every page without its own metadata names
+the layout's URL as canonical; `once-ui-validate-ai-code` reports it as
+`Meta.layout`.
+
 **Once UI's CSS is in a cascade layer.** Every stylesheet the packages ship
 (`tokens.css`, `styles.css` and each component's CSS) sits in
 `@layer once-ui`. CSS outside any layer beats every layer, whatever its
