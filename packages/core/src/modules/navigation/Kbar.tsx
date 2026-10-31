@@ -22,6 +22,7 @@ import { Text } from "../../components/Text.js";
 import { useAdapters } from "../../contexts/AdapterProvider.js";
 import type { IconName } from "../../icons.js";
 import { KbdCap } from "../../internal/KbdCap.js";
+import { mergeLabels } from "../../internal/labels.js";
 import { useControllableState } from "../../internal/useControllableState.js";
 import type { TShirtSizes } from "../../types.js";
 import styles from "./Kbar.module.scss";
@@ -40,6 +41,47 @@ export interface KbarItem {
   description?: ReactNode;
   placeholder?: string;
 }
+
+/**
+ * Decides which items a query shows, and in what order. Kbar renders exactly
+ * what it returns: sections appear in the order of their first item, and items
+ * keep the returned order within their section. Only called for a non-empty
+ * query; an empty one lists every item.
+ */
+export type KbarFilter = (items: KbarItem[], query: string) => KbarItem[];
+
+/** The palette's own words. Omitted fields keep the English default. */
+export interface KbarLabels {
+  /** The dialog's accessible name. Defaults to `"Command palette"`. */
+  dialog?: string;
+  /** The results list's accessible name. Defaults to `"Results"`. */
+  results?: string;
+  /** Shown when a query matches nothing. Defaults to `"No results found"`. */
+  noResults?: string;
+  /** The footer hint beside the arrow keys. Defaults to `"Navigate"`. */
+  navigate?: string;
+  /** The footer hint beside Enter. Defaults to `"Go to"`. */
+  goTo?: string;
+}
+
+const DEFAULT_LABELS: Required<KbarLabels> = {
+  dialog: "Command palette",
+  results: "Results",
+  noResults: "No results found",
+  navigate: "Navigate",
+  goTo: "Go to",
+};
+
+/** Case-insensitive substring match on name, keywords and section, in the given order. */
+const matchItems: KbarFilter = (items, query) => {
+  const searchLower = query.toLowerCase();
+  return items.filter(
+    (item) =>
+      item.name.toLowerCase().includes(searchLower) ||
+      (item.keywords ? item.keywords.toLowerCase().includes(searchLower) : false) ||
+      (item.section ? item.section.toLowerCase().includes(searchLower) : false),
+  );
+};
 
 interface KbarOption {
   value: string;
@@ -129,6 +171,14 @@ export interface KbarContentProps {
   placeholder?: string;
   /** The search field's height. */
   size?: TShirtSizes;
+  /**
+   * Your own matching and ranking: return the items to show for `query`, in
+   * order. Without it, a case-insensitive substring match on name, keywords
+   * and section, in the items' own order.
+   */
+  filter?: KbarFilter;
+  /** The palette's own words, for a translated interface. */
+  labels?: KbarLabels;
 }
 
 export const KbarContent = ({
@@ -137,7 +187,10 @@ export const KbarContent = ({
   items,
   placeholder = "Search",
   size = "m",
+  filter,
+  labels,
 }: KbarContentProps) => {
+  const words = mergeLabels(DEFAULT_LABELS, labels);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIndex, setActiveIndex] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -158,19 +211,11 @@ export const KbarContent = ({
     });
   }, [onClose]);
 
-  // Filter items based on search query
-  const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      if (!searchQuery) return true;
-
-      const searchLower = searchQuery.toLowerCase();
-      return (
-        item.name.toLowerCase().includes(searchLower) ||
-        (item.keywords ? item.keywords.toLowerCase().includes(searchLower) : false) ||
-        (item.section ? item.section.toLowerCase().includes(searchLower) : false)
-      );
-    });
-  }, [items, searchQuery]);
+  // The items the query shows, in the order to show them.
+  const filteredItems = useMemo(
+    () => (searchQuery ? (filter ?? matchItems)(items, searchQuery) : items),
+    [items, searchQuery, filter],
+  );
 
   // Group items by section. `start` is the section's first index in the flat
   // list the arrow keys and `aria-activedescendant` count in.
@@ -376,7 +421,7 @@ export const KbarContent = ({
           onClick={(e) => e.stopPropagation()}
           role="dialog"
           aria-modal="true"
-          aria-label="Command palette"
+          aria-label={words.dialog}
         >
           <Row fillWidth padding="8">
             <KbarSearchInput
@@ -401,7 +446,7 @@ export const KbarContent = ({
             border
             role={hasResults ? "listbox" : undefined}
             id={hasResults ? listboxId : undefined}
-            aria-label={hasResults ? "Results" : undefined}
+            aria-label={hasResults ? words.results : undefined}
           >
             {sections.map((group, sectionIndex) => (
               // A labelled group per section, so the section name is read as
@@ -453,7 +498,7 @@ export const KbarContent = ({
                 textVariant="body-default-m"
                 onBackground="neutral-weak"
               >
-                No results found
+                {words.noResults}
               </Flex>
             )}
           </Column>
@@ -476,14 +521,14 @@ export const KbarContent = ({
                 </Row>
               </KbdCap>
               <Text marginLeft="8" marginRight="24">
-                Navigate
+                {words.navigate}
               </Text>
               <KbdCap minWidth="20">
                 <Row>
                   <Icon name="enter" size="xs" />
                 </Row>
               </KbdCap>
-              <Text marginLeft="8">Go to</Text>
+              <Text marginLeft="8">{words.goTo}</Text>
             </Row>
           </Row>
         </Column>
@@ -503,6 +548,15 @@ export interface KbarProps {
   size?: TShirtSizes;
   /** The search field's placeholder inside the palette. Defaults to "Search". */
   placeholder?: string;
+  /**
+   * Your own matching and ranking: return the items to show for `query`, in
+   * order, and Kbar renders exactly that (sections in the order of their first
+   * item). Without it, a case-insensitive substring match on name, keywords
+   * and section. Only called for a non-empty query.
+   */
+  filter?: KbarFilter;
+  /** The palette's own words, for a translated interface. */
+  labels?: KbarLabels;
   /** Open or not, controlled. Leave it out to let Kbar keep its own state,
    *  starting from `defaultOpen`. */
   open?: boolean;
@@ -519,6 +573,8 @@ export const Kbar = ({
   children,
   size,
   placeholder,
+  filter,
+  labels,
   open: openProp,
   defaultOpen = false,
   onOpenChange,
@@ -600,6 +656,8 @@ export const Kbar = ({
             items={items}
             placeholder={placeholder}
             size={size}
+            filter={filter}
+            labels={labels}
           />,
           document.body,
         )}

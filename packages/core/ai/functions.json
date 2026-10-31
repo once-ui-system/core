@@ -12,6 +12,18 @@
    "signature": "() => { inNav: boolean; sizes: { readonly toggle: \"m\"; readonly text: \"s\"; readonly height: \"32\"; readonly gap: \"2\"; readonly iconGap: \"8\"; readonly section: \"xs\"; readonly group: { readonly size: \"s\"; readonly inset: \"12\"; readonly top: \"4\"; readonly bottom: \"8\"; }; } | { ...; } | { ...; }; density: Density; variant: Nav...",
    "doc": "The look the nearest Nav set, or the defaults outside one."
   },
+  "photoViewerIndexFromUrl": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(items: PhotoViewerItem[], param?: string) => number",
+   "doc": "The photo a deep link points at: its index in `items`, or -1 when the page's URL has no such parameter or names no photo in the list."
+  },
+  "photoViewerSlug": {
+   "group": "components",
+   "kind": "function",
+   "signature": "(src: string) => string",
+   "doc": "The value a photo has in a deep link: its file name, which stays put as photos are added or reordered."
+  },
   "arrayMove": {
    "group": "components",
    "kind": "function",
@@ -787,6 +799,14 @@
    "neutralScale": "ThemedSchemeScale",
    "pageBackground": "ThemeColor",
    "surfaceBackground": "ThemeColor"
+  },
+  "PhotoViewerItem": {
+   "src": "!string",
+   "alt": "!string",
+   "title": "string",
+   "caption": "string",
+   "width": "number",
+   "height": "number"
   },
   "ReactionMotion": [
    "pop",

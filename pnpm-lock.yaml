@@ -287,6 +287,9 @@ importers:
       axe-core:
         specifier: ^4.10.3
         version: 4.10.3
+      esbuild:
+        specifier: 0.27.7
+        version: 0.27.7
       jsdom:
         specifier: ^30.0.0
         version: 30.0.0

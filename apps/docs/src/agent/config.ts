@@ -6,7 +6,11 @@ import {
   absolute,
   contentSignal,
 } from "@/agent/paths";
+import corePackage from "@once-ui-system/core/package.json";
 import { baseURL, schema } from "@/resources";
+
+/** The core release these docs describe; the MCP server ships in it. */
+const coreVersion: string = corePackage.version;
 
 export { agentDiscoveryPaths, contentSignal } from "@/agent/paths";
 export { agentLinkHeader } from "@/agent/link-header";
@@ -119,8 +123,8 @@ export function buildAgentSkillsIndex() {
         name: "once-ui-mcp",
         type: "mcp",
         description:
-          "Context7 MCP server for exploratory Once UI documentation queries",
-        url: "https://context7.com/once-ui-system/core",
+          "Once UI's local MCP server (stdio, ships in @once-ui-system/core): component search, props, types, task bundles, rules and code validation",
+        url: absolute(agentDiscoveryPaths.aiCoding),
       },
     ],
   };
@@ -131,8 +135,8 @@ export function buildMcpServerCard() {
     $schema:
       "https://raw.githubusercontent.com/modelcontextprotocol/modelcontextprotocol/main/docs/specification/draft/server-card.schema.json",
     serverInfo: {
-      name: "once-ui-context7",
-      version: "1.0.0",
+      name: "once-ui",
+      version: coreVersion,
       description: schema.description,
     },
     documentation: absolute(agentDiscoveryPaths.aiCoding),
@@ -140,13 +144,12 @@ export function buildMcpServerCard() {
       {
         type: "stdio",
         command: "npx",
-        args: ["-y", "@upstash/context7-mcp@latest"],
-        library: "/once-ui-system/core",
+        args: ["-y", "-p", `@once-ui-system/core@${coreVersion}`, "once-ui-mcp"],
       },
     ],
     capabilities: {
-      resources: true,
-      tools: false,
+      resources: false,
+      tools: true,
     },
   };
 }
@@ -161,7 +164,7 @@ This host does not expose authenticated APIs. Optional JSON endpoints (navigatio
 
 ## MCP and library docs
 
-For AI-assisted development, use the [AI Coding (MCP)](${absolute(agentDiscoveryPaths.aiCoding)}) guide and Context7 (\`@once-ui-system/core\`).
+For AI-assisted development, use the [AI Coding (MCP)](${absolute(agentDiscoveryPaths.aiCoding)}) guide: its MCP server ships in \`@once-ui-system/core\` (\`once-ui-mcp\`).
 
 ## Content usage
 

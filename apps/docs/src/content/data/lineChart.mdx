@@ -118,7 +118,7 @@ a total. `stack="percent"` shows each as its share of the total instead.
 
 ## Curve
 
-`curve` is Recharts' interpolation, and it is a claim about the data between
+`curve` is how the line runs between points (d3's curve names), and it is a claim about the data between
 your points. `natural` and `monotone` draw a smooth line, which implies the
 value moved continuously; `step` holds each value until the next reading, which
 is honest for something that changes in jumps — a price tier, a headcount, a
@@ -174,8 +174,9 @@ sample — see the live example above, which drives it from
 
 ## Animation
 
-Animation is on by default. The three `animation*` props are passed through to
-Recharts, so they take its values.
+Animation is on by default. The three `animation*` props set the entry
+animation's delay, length and CSS easing (`"ease-out"`, `"linear"` or any
+`cubic-bezier()`). It is skipped under `prefers-reduced-motion`.
 
 Turn animation **off** for a chart that updates faster than the animation runs:
 each new sample restarts the transition, so a streaming line spends its time
@@ -195,7 +196,7 @@ same chart with `animation={false}`.
     animation: "Draw the lines in from the left when the chart mounts. Readers who ask for reduced motion never see it.",
     animationBegin: "Delay before the animation starts, in milliseconds.",
     animationDuration: "Animation length, in milliseconds.",
-    animationEasing: "Recharts easing name.",
+    animationEasing: "A CSS easing: ease, ease-in-out, linear or a cubic-bezier().",
     reverseX: "Move the x axis to the top.",
     reverseY: "Move the y axis to the right.",
     grid: "Which grid lines to draw.",

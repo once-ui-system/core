@@ -50,6 +50,7 @@ const fixtures: Record<string, Record<string, unknown>> = {
     renderItem: (item: string) => item,
     loadMore: async () => false,
   },
+  PhotoViewer: { items: [{ src: "/photo.jpg", alt: "A photo" }], onClose: noop },
   Reaction: { value: "❤️" },
   Reactions: { options: [{ value: "❤️" }], counts: { "❤️": 1 } },
   SegmentedControl: {

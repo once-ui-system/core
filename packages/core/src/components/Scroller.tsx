@@ -4,6 +4,7 @@ import classNames from "clsx";
 import React, { useEffect, useRef, useState } from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { Marquee } from "../internal/Marquee.js";
+import { prefersReducedMotionNow } from "../internal/reducedMotion.js";
 import { ScrollTrack, type ScrollTrackControlPlacement } from "../internal/ScrollTrack.js";
 import type { RadiusSize, Speed } from "../types.js";
 import type { Column } from "./Column.js";
@@ -172,7 +173,7 @@ const ScrollBox = ({
         direction === "row" ? scroller.clientWidth / 2 : scroller.clientHeight / 2;
       scroller.scrollBy({
         [direction === "row" ? "left" : "top"]: scrollAmount,
-        behavior: "smooth",
+        behavior: prefersReducedMotionNow() ? "auto" : "smooth",
       });
     }
   };
@@ -184,7 +185,7 @@ const ScrollBox = ({
         direction === "row" ? scroller.clientWidth / 2 : scroller.clientHeight / 2;
       scroller.scrollBy({
         [direction === "row" ? "left" : "top"]: -scrollAmount,
-        behavior: "smooth",
+        behavior: prefersReducedMotionNow() ? "auto" : "smooth",
       });
     }
   };
