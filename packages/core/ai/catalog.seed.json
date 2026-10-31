@@ -106,6 +106,11 @@
     "tags": ["data", "chart", "feedback"],
     "pairsWith": ["LineChart", "BarChart", "PieChart"]
   },
+  "ChartSummary": {
+    "purpose": "A chart's data as a hidden table for screen readers; charts render one",
+    "tags": ["data", "chart", "accessibility"],
+    "pairsWith": ["LineChart", "BarChart", "Sparkline"]
+  },
   "ChatComposer": {
     "purpose": "Chat input bar: growing field, Enter to send, optional attach button with file chips, send button",
     "tags": ["chat", "form"],
@@ -751,6 +756,11 @@
     "tags": ["navigation", "basics"],
     "avoid": "Raw a elements",
     "pairsWith": ["Text", "Row"]
+  },
+  "Sparkline": {
+    "purpose": "Tiny SVG trend line, area or bars for a stat tile or table cell",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["Text", "Table", "Column"]
   },
   "Sortable": {
     "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows",

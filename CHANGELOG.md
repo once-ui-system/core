@@ -38,6 +38,23 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
   thumb turn danger, the thumb is `aria-invalid` and described by the message, and
   `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Charts** (LineChart, BarChart, LineBarChart, PieChart): `xKey`; series `label`
+  and `format`; `valueFormat` (`"compact"`, `"percent"`, `Intl.NumberFormatOptions`
+  or a function) and `locale` for the numbers on the axis and in the tooltip;
+  `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
+  `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
+- **Chart summaries for screen readers**: each chart's plot is `role="img"`, named
+  by its title and a plain-language summary of its data in its `valueFormat` and
+  `locale` ("Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest
+  3,100 in Feb."; a pie: "Share by browser: Chrome 62%, Safari 21%."), with the data
+  as a visually hidden table inside the card. `summary` replaces the generated text
+  and `aria-label` the whole name. `ChartSummary` renders the table on its own.
+- **`Sparkline`**: a tiny trend line, area or bar strip for stat tiles and table
+  cells, in pure SVG (no recharts; it renders on the server and is on the root
+  barrel as well as `/data`). `data` as numbers or rows with `valueKey`, `variant`,
+  `color`, `width`/`height` (a number is px), `curve`, `showLast`, `min`/`max`, and a
+  generated `aria-label` ("Trend from 120 to 340, high 360") in `valueFormat` and
+  `locale`.
 - **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
   suffix, as PasswordInput did.
 - **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
@@ -158,6 +175,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
+  `onChange` only names the native DOM event. The codemod renames it in an inline
+  `date` object. Chart tooltips and axes write numbers through `valueFormat` in
+  `locale` when either is set; without them they draw as 2.x did. With no
+  `series`, the x column is no longer drawn as a series, and `label` never is.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
@@ -376,6 +398,13 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
+  and opened on 1 November threw React #418, "October" against "November". The month and
+  year labels of a picker that opens on the clock's month now render on the client, as
+  its day grid already did.
+- **Two PieCharts on one page** no longer share gradient ids (one chart's colours
+  could paint the other's slices), and a chart's x-axis ticks no longer search the
+  whole data set each (slow on long series).
 - **A Button or IconButton nobody can press now says so in development.** With no
   `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
   a clickable Card and a dead control anywhere else. Lighthouse found such dead controls on
@@ -390,6 +419,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   passed it on as next/image's `priority`, which Next 16 deprecated for `preload`: a
   preload link, with the image itself at normal priority. It now renders
   `loading="eager"` and `fetchPriority="high"`, as the DOM default already did.
+- **Icon no longer brings the popover machinery with it.** Its `tooltip` prop imported
+  HoverCard, so Animation and floating-ui shipped with every component that draws an
+  icon: Button alone dropped from about 33 to 22 kB gzipped. The hover card now loads
+  only for an icon that has a tooltip; server-rendered pages keep their HTML while it
+  loads.
 - **Several announcement tags on one page** no longer share `id="badge"`; each arrow
   follows hover on its own tag (2.x Badge).
 - **RadioGroup `error` and `errorMessage` reach its radios**: each is `aria-invalid`

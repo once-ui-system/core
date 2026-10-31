@@ -21,6 +21,8 @@ interface LegendProps {
     | "top-center"
     | "bottom-center";
   variant?: ChartVariant;
+  /** The y axis' width in px, so a top-left legend starts where the plot does. Defaults to 64. */
+  axisWidth?: number;
 }
 
 const Legend = ({
@@ -31,6 +33,7 @@ const Legend = ({
   direction,
   colors,
   variant,
+  axisWidth = 64,
 }: LegendProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
@@ -47,7 +50,7 @@ const Legend = ({
         return {
           paddingLeft:
             (labels === "y" || labels === "both") && !reverseY
-              ? "var(--static-space-80)"
+              ? `calc(${axisWidth}px + var(--static-space-16))`
               : "var(--static-space-20)",
           top: "var(--static-space-12)",
         };
