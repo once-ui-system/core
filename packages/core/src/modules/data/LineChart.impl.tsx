@@ -4,24 +4,29 @@ import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column } from "../../components/Column.js";
 import type { DateRange } from "../../components/DatePicker.js";
-import { Row } from "../../components/Row.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
 import { RadiusSize, schemes } from "../../types.js";
 import { ChartHeader } from "./ChartHeader.js";
+import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
 import { DataTooltip } from "./DataTooltip.js";
 import { LinearGradient } from "./Gradient.js";
-import { ChartProps, ChartVariant, curveType, DataPoint, SeriesConfig } from "./interfaces.js";
+import { ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
 import { Legend } from "./Legend.js";
 import { getRechartsComponents } from "./rechartsLoader.js";
-import { getDistributedColor } from "./utils/colorDistribution.js";
+import { chartFormatters, chartSeries, rowsByX, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
 export interface LineChartProps<T extends object = DataPoint> extends ChartProps<T> {
-  curve?: curveType;
+  curve?: CurveType;
+  /**
+   * Stack the series on each other: `true` sums them, `"percent"` shows each
+   * as its share of the total at that point.
+   */
+  stack?: boolean | "percent";
   reverseY?: boolean;
   reverseX?: boolean;
   animation?: boolean;
@@ -63,6 +68,10 @@ const LineChart = ({
   animationEasing,
   xAxisType,
   xDomain,
+  xKey: xKeyProp,
+  valueFormat,
+  locale,
+  stack = false,
   "data-viz-style": dataVizStyle,
   ...flex
 }: LineChartProps) => {
@@ -105,33 +114,31 @@ const LineChart = ({
     }
   }, [date?.start, date?.end]);
 
-  const seriesArray = Array.isArray(series) ? series : series ? [series] : [];
-  const seriesKeys = seriesArray.map((s: SeriesConfig) => s.key);
-
   // Generate a unique ID for this chart instance
   // useId, not Math.random: the server and the client must agree on the
   // gradient ids or hydration reports an attribute mismatch.
   const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
 
-  const coloredSeriesArray = useMemo(
-    () =>
-      seriesArray.map((s, index) => ({
-        ...s,
-        color: s.color || getDistributedColor(index, seriesArray.length),
-      })),
-    [seriesArray],
+  const { xKey: xAxisKey, series: autoSeries } = useMemo(
+    () => chartSeries(data, series, xKeyProp),
+    [data, series, xKeyProp],
   );
-
-  const autoKeys = Object.keys(data[0] || {}).filter((key) => !seriesKeys.includes(key));
-  const autoSeries =
-    seriesArray.length > 0
-      ? coloredSeriesArray
-      : autoKeys.map((key, index) => ({
-          key,
-          color: getDistributedColor(index, autoKeys.length),
-        }));
-
-  const xAxisKey = Object.keys(data[0] || {}).find((key) => !seriesKeys.includes(key)) || "name";
+  const format = useMemo(
+    () => chartFormatters(valueFormat, locale, autoSeries, stack === "percent"),
+    [valueFormat, locale, autoSeries, stack],
+  );
+  const rowsAtX = useMemo(() => rowsByX(data, xAxisKey), [data, xAxisKey]);
+  const axisWidth = useMemo(
+    () =>
+      valueAxisWidth(
+        data,
+        autoSeries.map((s) => s.key),
+        // A percent stack's axis is 0% to 100%, whatever the values.
+        stack === "percent" ? undefined : format.axis,
+        !!stack && stack !== "percent",
+      ),
+    [data, autoSeries, format, stack],
+  );
 
   const filteredData = React.useMemo(() => {
     if (selectedDateRange?.startDate && selectedDateRange?.endDate && xAxisKey) {
@@ -163,22 +170,21 @@ const LineChart = ({
   const handleDateRangeChange = useCallback(
     (newRange: DateRange) => {
       setSelectedDateRange(newRange);
-      if (date?.onChange) {
-        date.onChange(newRange);
-      }
+      date?.onRangeChange?.(newRange);
     },
     [date],
   );
 
   const legendContent = useCallback(
     (props: any) => {
-      const customPayload = autoSeries.map(({ key, color }, index) => ({
-        value: key,
+      const customPayload = autoSeries.map(({ label, color }, index) => ({
+        value: label,
         color: cssColor(String(color || schemes[index % schemes.length]), "data-"),
       }));
 
       return (
         <Legend
+          axisWidth={axisWidth}
           payload={customPayload}
           reverseY={reverseY}
           labels={axis}
@@ -188,7 +194,7 @@ const LineChart = ({
         />
       );
     },
-    [autoSeries, axis, legend.position, legend.direction, variant],
+    [autoSeries, axis, legend.position, legend.direction, variant, axisWidth],
   );
 
   const legendWrapperStyle = useMemo(
@@ -249,7 +255,8 @@ const LineChart = ({
         presets={date?.presets}
       />
       {/* The plot takes the height the header leaves: `height` sizes the card once. */}
-      <Row
+      <ChartPlot
+        data={filteredData}
         fillWidth
         flex={1}
         borderTop={
@@ -283,7 +290,11 @@ const LineChart = ({
             } = rc;
             return (
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={filteredData} margin={{ left: 0, bottom: 0, top: 0, right: 0 }}>
+                <AreaChart
+                  data={filteredData}
+                  margin={{ left: 0, bottom: 0, top: 0, right: 0 }}
+                  {...(stack === "percent" ? { stackOffset: "expand" } : {})}
+                >
                   <defs>
                     {autoSeries.map(({ key, color }, index) => {
                       const colorValue = color || schemes[index % schemes.length];
@@ -318,30 +329,35 @@ const LineChart = ({
                     tickLine={tickLine}
                     tick={{ fill: tickFill, fontSize: tickFontSize }}
                     tickFormatter={(value: any) => {
-                      const dataPoint = data.find((item) => item[xAxisKey] === value);
-                      return formatDate(value, date, dataPoint);
+                      return formatDate(value, date, rowsAtX.get(value));
                     }}
                   />
                   {(axis === "y" || axis === "both") && (
                     <YAxis
-                      width={64}
+                      width={axisWidth}
                       padding={{ top: 40 }}
                       allowDataOverflow
                       orientation={reverseY ? "right" : "left"}
                       tickLine={tickLine}
                       tick={{ fill: tickFill, fontSize: tickFontSize }}
                       axisLine={{ stroke: axisLineStroke }}
+                      {...(format.axis ? { tickFormatter: format.axis } : {})}
                     />
                   )}
                   {tooltip && (
                     <Tooltip
                       cursor={{ stroke: "var(--neutral-border-strong)", strokeWidth: 1 }}
                       content={(props: any) => (
-                        <DataTooltip {...props} variant={variant as ChartVariant} date={date} />
+                        <DataTooltip
+                          {...props}
+                          variant={variant as ChartVariant}
+                          date={date}
+                          formatValue={format.tooltip}
+                        />
                       )}
                     />
                   )}
-                  {autoSeries.map(({ key, color }, index) => {
+                  {autoSeries.map(({ key, label, color }, index) => {
                     const colorValue = color || schemes[index % schemes.length];
                     const lineColor = cssColor(colorValue, "data-");
                     return (
@@ -349,7 +365,8 @@ const LineChart = ({
                         key={key}
                         type={curve}
                         dataKey={key}
-                        name={key}
+                        name={label}
+                        {...(stack ? { stackId: "stack" } : {})}
                         isAnimationActive={animation}
                         animationBegin={animationBegin}
                         animationDuration={animationDuration}
@@ -374,7 +391,7 @@ const LineChart = ({
               </ResponsiveContainer>
             );
           })()}
-      </Row>
+      </ChartPlot>
     </Column>
   );
 };

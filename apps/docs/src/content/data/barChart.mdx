@@ -91,6 +91,32 @@ The `BarChart` component provides a way to display bar charts with interactive f
     { name: "2025 (est.)", "Top 1%": 52.5, "Bottom 99%": 47.5 }
   ]}
 />
+## Horizontal and stacked
+
+`orientation="horizontal"` lays the bars along the x axis, one row per
+category: easier to read when the category names are long. `stack` puts the
+series on top of each other; `stack="percent"` makes every bar the same length
+and shows each series as its share.
+
+<BarChart
+  marginTop="16"
+  marginBottom="24"
+  title="Tickets by team"
+  orientation="horizontal"
+  stack
+  xKey="team"
+  series={[
+    { key: "open", label: "Open", color: "orange" },
+    { key: "closed", label: "Closed", color: "green" }
+  ]}
+  data={[
+    { team: "Customer success", open: 12, closed: 48 },
+    { team: "Platform", open: 7, closed: 31 },
+    { team: "Billing", open: 4, closed: 22 },
+    { team: "Design system", open: 3, closed: 19 }
+  ]}
+/>
+
 ## Bar width
 
 `barWidth` takes a t-shirt token, a pixel number, or `"fill"` to let the bars
@@ -169,6 +195,8 @@ lighting up, rather than just the bar you happened to hit.
   component="BarChart"
   exclude={["data-viz-style"]}
   describe={{
+    orientation: "\"horizontal\" lays the bars along the x axis, one row per category.",
+    stack: "Stack the series: true sums them, \"percent\" shows each as its share of the bar.",
     barWidth: "Bar thickness. \"fill\" removes the gap between bands.",
     hover: "Highlight the whole band on pointer-over.",
     reverseX: "Move the x axis to the top.",

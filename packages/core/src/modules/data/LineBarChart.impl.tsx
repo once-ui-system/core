@@ -4,31 +4,25 @@ import { isWithinInterval, parseISO } from "date-fns";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column } from "../../components/Column.js";
 import type { DateRange } from "../../components/DatePicker.js";
-import { Row } from "../../components/Row.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
 import { RadiusSize } from "../../types.js";
 import { ChartHeader } from "./ChartHeader.js";
+import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
 import { DataTooltip } from "./DataTooltip.js";
 import { LinearGradient } from "./Gradient.js";
-import {
-  BarWidth,
-  ChartProps,
-  ChartVariant,
-  curveType,
-  DataPoint,
-  SeriesConfig,
-} from "./interfaces.js";
+import { BarWidth, ChartProps, ChartVariant, CurveType, DataPoint } from "./interfaces.js";
 import { Legend } from "./Legend.js";
 import { getRechartsComponents } from "./rechartsLoader.js";
+import { chartFormatters, chartSeries, rowsByX, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
 export interface LineBarChartProps<T extends object = DataPoint> extends ChartProps<T> {
   barWidth?: BarWidth;
-  curve?: curveType;
+  curve?: CurveType;
   reverseY?: boolean;
   reverseX?: boolean;
   /**
@@ -59,6 +53,9 @@ const LineBarChart = ({
   curve = "natural",
   reverseY = false,
   reverseX = false,
+  xKey: xKeyProp,
+  valueFormat,
+  locale,
   "data-viz-style": dataVizStyle,
   ...flex
 }: LineBarChartProps) => {
@@ -101,10 +98,26 @@ const LineBarChart = ({
     }
   }, [date?.start, date?.end]);
 
-  const allSeriesArray = Array.isArray(series) ? series : series ? [series] : [];
-  const seriesKeys = allSeriesArray.map((s: SeriesConfig) => s.key);
-
-  const xAxisKey = Object.keys(data[0] || {}).find((key) => !seriesKeys.includes(key)) || "name";
+  const { xKey: xAxisKey, series: resolvedSeries } = useMemo(
+    () => chartSeries(data, series, xKeyProp),
+    [data, series, xKeyProp],
+  );
+  const format = useMemo(
+    () => chartFormatters(valueFormat, locale, resolvedSeries),
+    [valueFormat, locale, resolvedSeries],
+  );
+  const rowsAtX = useMemo(() => rowsByX(data, xAxisKey), [data, xAxisKey]);
+  const axisWidth = useMemo(
+    () =>
+      valueAxisWidth(
+        data,
+        resolvedSeries.map((s) => s.key),
+        // A percent stack's axis is 0% to 100%, whatever the values.
+        format.axis,
+        false,
+      ),
+    [data, resolvedSeries, format],
+  );
 
   const filteredData = React.useMemo(() => {
     if (selectedDateRange?.startDate && selectedDateRange?.endDate && xAxisKey) {
@@ -136,9 +149,7 @@ const LineBarChart = ({
   const handleDateRangeChange = useCallback(
     (newRange: DateRange) => {
       setSelectedDateRange(newRange);
-      if (date?.onChange) {
-        date.onChange(newRange);
-      }
+      date?.onRangeChange?.(newRange);
     },
     [date],
   );
@@ -150,6 +161,8 @@ const LineBarChart = ({
 
   const lineSeries = chartSeriesArray[0] || { key: "value1", color: "blue" };
   const barSeries = chartSeriesArray[1] || { key: "value2", color: "green" };
+  const lineLabel = lineSeries.label ?? lineSeries.key;
+  const barLabel = barSeries.label ?? barSeries.key;
 
   const lineColor = lineSeries.color || "blue";
   const barColor = barSeries.color || "green";
@@ -160,6 +173,7 @@ const LineBarChart = ({
   const legendContent = useMemo(
     () => (
       <Legend
+        axisWidth={axisWidth}
         variant={variant as ChartVariant}
         colors={[finalLineColor, finalBarColor]}
         labels={axis}
@@ -167,7 +181,7 @@ const LineBarChart = ({
         direction={legend.direction}
       />
     ),
-    [variant, finalLineColor, finalBarColor, axis, legend.position, legend.direction],
+    [variant, finalLineColor, finalBarColor, axis, legend.position, legend.direction, axisWidth],
   );
 
   const legendWrapperStyle = useMemo(
@@ -232,7 +246,8 @@ const LineBarChart = ({
         presets={date?.presets}
       />
       {/* The plot takes the height the header leaves: `height` sizes the card once. */}
-      <Row
+      <ChartPlot
+        data={filteredData}
         fillWidth
         flex={1}
         borderTop={
@@ -301,20 +316,18 @@ const LineBarChart = ({
                     axisLine={{ stroke: axisLineStroke }}
                     tickLine={tickLine}
                     tick={{ fill: tickFill, fontSize: tickFontSize }}
-                    tickFormatter={(value: any) => {
-                      const dataPoint = data.find((item) => item[xAxisKey] === value);
-                      return formatDate(value, date, dataPoint);
-                    }}
+                    tickFormatter={(value: any) => formatDate(value, date, rowsAtX.get(value))}
                   />
                   {(axis === "y" || axis === "both") && (
                     <YAxis
-                      width={64}
+                      width={axisWidth}
                       padding={{ top: 40 }}
                       allowDataOverflow
                       orientation={reverseY ? "right" : "left"}
                       tickLine={tickLine}
                       tick={{ fill: tickFill, fontSize: tickFontSize }}
                       axisLine={{ stroke: axisLineStroke }}
+                      {...(format.axis ? { tickFormatter: format.axis } : {})}
                     />
                   )}
                   {tooltip && (
@@ -326,6 +339,7 @@ const LineBarChart = ({
                           variant={variant as ChartVariant}
                           date={date}
                           dataKey={xAxisKey}
+                          formatValue={format.tooltip}
                         />
                       )}
                     />
@@ -333,7 +347,7 @@ const LineBarChart = ({
                   <Area
                     type={curve}
                     dataKey={lineSeries.key}
-                    name={lineSeries.key}
+                    name={lineLabel}
                     stroke={finalLineColor}
                     transform="translate(0, -1)"
                     fill={`url(#lineGradient${chartId})`}
@@ -346,7 +360,7 @@ const LineBarChart = ({
                   />
                   <Bar
                     dataKey={barSeries.key}
-                    name={barSeries.key}
+                    name={barLabel}
                     fill={`url(#barGradient${chartId})`}
                     stroke={finalBarColor}
                     strokeWidth={1}
@@ -372,7 +386,7 @@ const LineBarChart = ({
               </ResponsiveContainer>
             );
           })()}
-      </Row>
+      </ChartPlot>
     </Column>
   );
 };
