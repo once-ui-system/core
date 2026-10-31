@@ -29,8 +29,27 @@ type CurveType =
   | "stepAfter";
 
 type ChartVariant = "flat" | "gradient" | "outline";
+
+/**
+ * How a chart writes its numbers: on the value axis, in the tooltip and in
+ * the summary screen readers hear. Always in the chart's `locale`.
+ *
+ * - `"number"`: grouped digits (`12,400`; `12 400` in `hu-HU`). The default.
+ * - `"compact"`: `12.4K`, `1.2M`.
+ * - `"percent"`: a fraction as a percentage (`0.42` is `42%`).
+ * - `Intl.NumberFormatOptions`: anything Intl writes, such as
+ *   `{ style: "currency", currency: "HUF" }` or `{ style: "unit", unit: "kilogram" }`.
+ * - A function, for anything else.
+ */
+type ValueFormat =
+  | "number"
+  | "compact"
+  | "percent"
+  | Intl.NumberFormatOptions
+  | ((value: number) => string);
 type ChartMode = "categorical" | "divergent" | "sequential";
 type BarWidth = TShirtSizes | "fill" | number;
+/** @deprecated Use `CurveType`. */
 type curveType = CurveType;
 
 /**
@@ -46,10 +65,17 @@ interface DataPoint {
 /** The string keys of a row type: what a series can plot. */
 type SeriesKey<T> = Extract<keyof T, string>;
 
-/** One series: the row key it plots (`"revenue"`), and an optional colour. */
+/**
+ * One series: the row key it plots (`"revenue"`), and optionally the name the
+ * legend and tooltip show, its colour and how its values are written.
+ */
 interface SeriesConfig<T = DataPoint> {
   key: SeriesKey<T>;
+  /** The name shown in the legend and tooltip. Defaults to `key`. */
+  label?: string;
   color?: ColorValue;
+  /** How this series' values are written in the tooltip; defaults to the chart's `valueFormat`. */
+  format?: ValueFormat;
 }
 
 interface PresetsConfig {
@@ -66,7 +92,8 @@ interface DateConfig {
   format?: string;
   presets?: PresetsConfig;
   selector?: boolean;
-  onChange?: (range: DateRange) => void;
+  /** Called with the range the reader picks in the header's date picker. */
+  onRangeChange?: (range: DateRange) => void;
 }
 
 interface LegendConfig {
@@ -96,6 +123,19 @@ interface ChartProps<T extends object = DataPoint>
    * are taken as they are.
    */
   data: readonly T[];
+  /**
+   * The row key on the x axis (or the category axis of horizontal bars, the
+   * slice names of a pie). Without it, the first key of the first row that
+   * is not a series.
+   */
+  xKey?: SeriesKey<T>;
+  /** How values are written on the axis, in the tooltip and in the summary. */
+  valueFormat?: ValueFormat;
+  /**
+   * The BCP 47 locale numbers are written in (`"hu-HU"`). Defaults to
+   * `"en-US"`, the same on the server and in every browser.
+   */
+  locale?: string;
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
@@ -113,10 +153,12 @@ export type {
   ChartMode,
   ChartProps,
   ChartVariant,
+  CurveType,
   curveType,
   DataPoint,
   DateConfig,
   PresetsConfig,
   SeriesConfig,
   SeriesKey,
+  ValueFormat,
 };
