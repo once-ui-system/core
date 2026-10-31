@@ -3,20 +3,25 @@
 import { useCallback } from "react";
 import { IconButton } from "../../components/IconButton";
 import { useOptionalToast } from "../../contexts/ToastContext";
+import { copyText } from "../../internal/copyText";
 
 /**
  * Copies the URL of the section `id` to the clipboard, and confirms with a
- * toast when there is a ToastProvider. Without one it still copies.
+ * toast when there is a ToastProvider. Without one it still copies. On plain
+ * http, where there is no Clipboard API, it copies through a textarea.
  */
 export function useCopySectionLink(id: string) {
   const addToast = useOptionalToast()?.addToast;
 
   return useCallback(() => {
-    if (typeof navigator === "undefined" || !navigator.clipboard) return;
+    if (typeof window === "undefined") return;
     const url = `${window.location.origin}${window.location.pathname}#${id}`;
-    navigator.clipboard.writeText(url).then(
-      () => addToast?.({ variant: "success", message: "Link copied to clipboard." }),
-      () => addToast?.({ variant: "danger", message: "Failed to copy link." }),
+    void copyText(url).then((copied) =>
+      addToast?.(
+        copied
+          ? { variant: "success", message: "Link copied to clipboard." }
+          : { variant: "danger", message: "Failed to copy link." },
+      ),
     );
   }, [addToast, id]);
 }

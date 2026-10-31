@@ -6,6 +6,8 @@
   "children": "React.ReactNode",
   "inputSize": "TShirtSizes",
   "placeholder": "string",
+  "filter": "KbarFilter",
+  "labels": "KbarLabels",
   "open": "boolean",
   "onOpenChange": "(open: boolean) => void"
  },
@@ -128,6 +130,7 @@
    "wordmark",
    "world"
   ],
+  "KbarFilter": "(items: KbarItem[], query: string) => KbarItem[]",
   "KbarItem": {
    "id": "!string",
    "name": "!string",
@@ -139,6 +142,13 @@
    "icon": "IconName",
    "description": "ReactNode",
    "placeholder": "string"
+  },
+  "KbarLabels": {
+   "dialog": "string",
+   "results": "string",
+   "noResults": "string",
+   "navigate": "string",
+   "goTo": "string"
   },
   "TShirtSizes": [
    "xl",

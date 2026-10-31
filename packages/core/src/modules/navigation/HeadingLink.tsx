@@ -12,6 +12,12 @@ export interface HeadingLinkProps extends React.ComponentProps<typeof Row> {
   id: string;
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   children: React.ReactNode;
+  /**
+   * The heading's text, for the copy link's name ("Copy link to …"). Read
+   * from `children` when not given, which only sees strings and plain
+   * elements; pass it when a child renders text of its own.
+   */
+  label?: string;
   style?: React.CSSProperties;
 }
 
@@ -39,6 +45,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
   id,
   as,
   children,
+  label,
   style,
   className,
   ...flex
@@ -64,7 +71,7 @@ export const HeadingLink: React.FC<HeadingLinkProps> = ({
       >
         {children}
       </Heading>
-      <HeadingAnchor id={id} label={textOf(children)} className={styles.anchor} />
+      <HeadingAnchor id={id} label={label ?? textOf(children)} className={styles.anchor} />
     </Row>
   );
 };

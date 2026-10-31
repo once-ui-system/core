@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Scroller } from "../components/Scroller";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -101,6 +102,17 @@ describe("Scroller: scroll buttons", () => {
     expect(scrollBy).toHaveBeenLastCalledWith({ top: 200, behavior: "smooth" });
     scrollViewportTo(300, "scrollTop");
     expect(screen.getByRole("button", { name: "Scroll Previous" })).toBeInTheDocument();
+  });
+
+  it("jumps instead of smooth-scrolling under reduced motion", async () => {
+    mockReducedMotion(true);
+    const user = userEvent.setup();
+    render(<Items />, { wrapper });
+    await user.click(screen.getByRole("button", { name: "Scroll Next" }));
+    expect(scrollBy).toHaveBeenLastCalledWith({ left: 200, behavior: "auto" });
+    scrollViewportTo(300);
+    await user.click(screen.getByRole("button", { name: "Scroll Previous" }));
+    expect(scrollBy).toHaveBeenLastCalledWith({ left: -200, behavior: "auto" });
   });
 
   it("takes translated button names", () => {

@@ -29,6 +29,13 @@ item (see `ROADMAP.md`, Week 4).
   paint, so a dismissed banner never flashes in. Banner stays a server component, and a
   caller's own `background` now replaces the default brand strip instead of clashing with it.
 
+- **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
+  the items a query shows, in order, and the palette renders exactly that, sections in the
+  order of their first item, so an app can rank with typo tolerance or recent items first.
+  Without it the case-insensitive match on name, keywords and section is unchanged. Its
+  words (`labels`: dialog name, results, no results, the footer hints) can be translated;
+  English stays the default. `KbarFilter` and `KbarLabels` are exported types.
+
 ### Changed
 
 - **`Badge` redesign.** A compact pill (28px tall, `label-default-s`) on the surface
@@ -42,6 +49,24 @@ item (see `ROADMAP.md`, Week 4).
 - **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
   no template serves, so every such page carried a broken image. It now uses
   `/api/og/generate`, the same default `Meta.generate` uses for the social image.
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+- **`HeadingNav`, `Scroller` and `Swiper` respect reduced motion.** Their buttons, links and
+  drag snap scrolled with `behavior: "smooth"` whatever the visitor's setting; under
+  `prefers-reduced-motion: reduce` they now jump straight there. Everyone else still gets
+  the smooth scroll.
+- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
+  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
+  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
+  back to a hidden textarea and `document.execCommand("copy")`, and report the real
+  outcome: the toast says when the link could not be copied, and CodeBlock's check only
+  shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
 
 ## [2.6.0] — 2026-10-24
 
