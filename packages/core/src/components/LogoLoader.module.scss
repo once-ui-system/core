@@ -1,0 +1,54 @@
+/* Strokes use pathLength 100: each draws as its dash offset runs 100 → 0. */
+.root {
+    display: inline-flex;
+    flex-shrink: 0;
+    max-width: 100%;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+.stroke {
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+    animation:
+        logo-loader-draw var(--logo-loader-draw) linear var(--logo-loader-delay, 0s) forwards,
+        logo-loader-out 0.2s linear var(--logo-loader-fill-delay) forwards;
+}
+
+.playing .fill {
+    opacity: 0;
+    animation: logo-loader-in var(--logo-loader-fill) ease-out var(--logo-loader-fill-delay) forwards;
+}
+
+@keyframes logo-loader-draw {
+    to {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes logo-loader-out {
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes logo-loader-in {
+    to {
+        opacity: 1;
+    }
+}
+
+/* Reduced motion: no tracing, the logo fades in on the same schedule. */
+@media (prefers-reduced-motion: reduce) {
+    .stroke {
+        display: none;
+    }
+}
