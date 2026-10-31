@@ -180,6 +180,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **Once UI's CSS is in cascade layers** (`once-ui.tokens`, `once-ui.styles`,
+  `once-ui.components`), in core, fx, blocks and foundations. An app's unlayered CSS
+  and Tailwind utilities now override Once UI without `!important`, and the order
+  between tokens, utilities and components no longer depends on the order a bundler
+  loads the files in. See MIGRATING.md for the two cases that behave differently.
 - **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
   `onChange` only names the native DOM event. The codemod renames it in an inline
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in

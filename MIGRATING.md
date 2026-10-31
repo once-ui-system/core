@@ -638,6 +638,24 @@ source maps that pointed at the unshipped `src/`, or the harness's generator
 input (`ai/catalog.seed.json`, `ai/eval-tasks.md`). Nothing that was reachable
 through `exports` or `bin` moved.
 
+**Once UI's CSS is in cascade layers.** Every stylesheet the packages ship
+(`tokens.css`, `styles.css` and each component's CSS) sits in one of three
+layers, in this order: `once-ui.tokens`, `once-ui.styles`,
+`once-ui.components`. CSS outside any layer beats every layer, whatever its
+specificity, so an app's own `.card { padding: 0 }` or a Tailwind utility now
+overrides a Once UI style without `!important` or a longer selector. The
+codemod does not touch CSS, so look for these:
+
+- An override that was losing on purpose now wins. Most often that is a rule
+  written before Once UI's styles took over, which never showed until now.
+- An app `!important` against one of Once UI's own `!important` declarations
+  (a handful, on Button, Dialog, EmojiPicker, Input, Switch, Table and link
+  underlines) now loses: inside layers, `!important` runs the other way. Drop
+  the `!important` on yours, since it wins without it.
+- If your own CSS uses `@layer`, it sits below unlayered CSS too. To put it
+  above Once UI, declare the order once before anything loads:
+  `@layer once-ui.tokens, once-ui.styles, once-ui.components, app;`.
+
 ### 13. Leaf components take a small prop set
 
 Only the layout components (`Flex`, `Row`, `Column`, `Grid` and the components
