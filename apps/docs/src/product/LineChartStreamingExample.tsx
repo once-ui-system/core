@@ -20,12 +20,17 @@ type LineChartStreamingExampleProps = {
   animation?: boolean;
 };
 
+/*
+ * The first window is prerendered with the page, and the chart's hidden
+ * summary table writes its values out, so its noise is fixed: random values
+ * would differ between the server and the browser (React #418).
+ */
 function createInitialData(count: number): Point[] {
   const points: Point[] = [];
   for (let i = 0; i < count; i++) {
     const baseline = BASELINE;
-    const value =
-      baseline + Math.sin(i / 2) * AMPLITUDE + (Math.random() - 0.5) * NOISE;
+    const noise = ((i * 7919) % 13) / 13 - 0.5;
+    const value = baseline + Math.sin(i / 2) * AMPLITUDE + noise * NOISE;
     points.push({ t: i, Value: Math.round(value * 10) / 10, Baseline: baseline });
   }
   return points;
