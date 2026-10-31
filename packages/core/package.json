@@ -12,6 +12,7 @@
     "agent",
     "AGENTS.md",
     "scripts/init-agent.cjs",
+    "scripts/mcp.cjs",
     "scripts/validate-ai-code.cjs"
   ],
   "description": "The open-source, agentic design system for React",
@@ -52,6 +53,7 @@
   "type": "module",
   "bin": {
     "once-ui-init-agent": "scripts/init-agent.cjs",
+    "once-ui-mcp": "scripts/mcp.cjs",
     "once-ui-validate-ai-code": "scripts/validate-ai-code.cjs"
   },
   "sideEffects": [

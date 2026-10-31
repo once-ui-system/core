@@ -18,6 +18,11 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
+  stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
+  installed version's `ai/` files. Its tools search components, return a
+  component's import, props and gotchas, resolve types, serve task bundles and
+  rules, and run the `once-ui-validate-ai-code` checks.
 - **One import path per public component: `@once-ui-system/core/components/<Name>`.**
   Listed one by one for the modules the root re-exports, so unlike 2.x's
   `./components/*` wildcard no internal module is public. The codemod keeps these
