@@ -41,7 +41,7 @@
     "check:utilities": "node scripts/generate-utilities.mjs --check",
     "export:tokens": "node scripts/export-tokens.mjs",
     "check:tokens": "node scripts/export-tokens.mjs --check",
-    "build": "rimraf dist && pnpm generate:utilities && pnpm export:tokens && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed && node scripts/css-layers.cjs once-ui.tokens dist/css/tokens.css && node scripts/css-layers.cjs once-ui.styles dist/css/styles.css",
+    "build": "rimraf dist && pnpm generate:utilities && pnpm export:tokens && sass scss/styles/index.scss:dist/css/styles.css scss/tokens/index.scss:dist/css/tokens.css --style=compressed && node scripts/css-layers.cjs dist/css/tokens.css dist/css/styles.css",
     "clean": "rimraf dist",
     "prepare": "pnpm build",
     "lint": "biome check .",

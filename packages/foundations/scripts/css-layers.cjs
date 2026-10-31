@@ -1,32 +1,32 @@
-// Puts Once UI's shipped CSS in cascade layers (3.0).
+// Puts Once UI's shipped CSS in a cascade layer, `once-ui` (3.0).
 //
 // An app's own CSS is unlayered, and unlayered styles beat every layer
 // whatever their specificity, so an app's `.card { padding: 0 }` or a Tailwind
 // utility overrides a Once UI style without `!important` or a longer selector.
 //
-// Every file starts with the same order statement, so the order holds however
-// an app's bundler orders the files (the docs import styles.css before
-// tokens.css): tokens, then the global and utility styles, then components,
-// the order the files have always loaded in.
+// One layer, not one per file: inside it Once UI's rules still meet by
+// specificity and source order, as they did unlayered. tokens.css holds rules
+// as well as tokens (`.dark-flex` hides a `showIn="dark"` element), and they
+// win over a component's own `display` by specificity; layering tokens,
+// utilities and components apart would let the later layer win instead.
 //
-//   node scripts/css-layers.cjs <layer> <file.css>...   wrap files in place
+//   node scripts/css-layers.cjs <file.css>...   wrap files in place
 //
-// `@once-ui-system/core`, `fx` and `blocks` call `wrap` on their compiled CSS
-// modules from compile-css-modules.cjs.
+// `@once-ui-system/core`, `fx` and `blocks` call `wrapFile` on their compiled
+// CSS from compile-css-modules.cjs.
 
 const fs = require("node:fs");
 
-const ORDER = "@layer once-ui.tokens, once-ui.styles, once-ui.components;";
-const LAYERS = ["once-ui.tokens", "once-ui.styles", "once-ui.components"];
+const LAYER = "once-ui";
+const OPEN = `@layer ${LAYER} {`;
 
 /**
- * `css` inside `@layer <layer> { … }`, after the order statement. `@charset`
+ * `css` inside `@layer once-ui { … }`. `@charset`
  * and `@import` must come before any other rule, so they stay in front.
  * Already wrapped CSS comes back unchanged.
  */
-function wrap(css, layer) {
-  if (!LAYERS.includes(layer)) throw new Error(`css-layers: unknown layer ${layer}`);
-  if (css.startsWith(ORDER) || css.includes(`\n${ORDER}`)) return css;
+function wrap(css) {
+  if (css.includes(`${OPEN}\n`)) return css;
   // Compressed Sass marks non-ASCII output with a byte-order mark instead
   // of `@charset`; it has to stay the first thing in the file.
   let head = css.startsWith("\uFEFF") ? "\uFEFF" : "";
@@ -44,16 +44,16 @@ function wrap(css, layer) {
     tail = `${map[1]}\n`;
     body = body.slice(0, map.index);
   }
-  return `${head}${ORDER}\n@layer ${layer} {\n${body.replace(/^\s+|\s+$/g, "")}\n}\n${tail}`;
+  return `${head}${OPEN}\n${body.replace(/^\s+|\s+$/g, "")}\n}\n${tail}`;
 }
 
 /**
  * Wraps a file in place. Its source map, if Sass wrote one next to it, moves
- * down the two lines the wrapper adds in front.
+ * down the line the wrapper adds in front.
  */
-function wrapFile(file, layer) {
+function wrapFile(file) {
   const css = fs.readFileSync(file, "utf8");
-  const next = wrap(css, layer);
+  const next = wrap(css);
   if (next === css) return;
   fs.writeFileSync(file, next);
   const mapFile = `${file}.map`;
@@ -66,14 +66,14 @@ function wrapFile(file, layer) {
   }
 }
 
-module.exports = { wrap, wrapFile, ORDER, LAYERS };
+module.exports = { wrap, wrapFile, LAYER };
 
 if (require.main === module) {
-  const [layer, ...files] = process.argv.slice(2);
-  if (!layer || files.length === 0) {
-    console.error("Usage: node scripts/css-layers.cjs <layer> <file.css>...");
+  const files = process.argv.slice(2);
+  if (files.length === 0) {
+    console.error("Usage: node scripts/css-layers.cjs <file.css>...");
     process.exit(1);
   }
-  for (const file of files) wrapFile(file, layer);
-  console.log(`css-layers: ${files.length} file(s) in @layer ${layer}`);
+  for (const file of files) wrapFile(file);
+  console.log(`css-layers: ${files.length} file(s) in @layer ${LAYER}`);
 }

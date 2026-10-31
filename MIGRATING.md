@@ -638,13 +638,13 @@ source maps that pointed at the unshipped `src/`, or the harness's generator
 input (`ai/catalog.seed.json`, `ai/eval-tasks.md`). Nothing that was reachable
 through `exports` or `bin` moved.
 
-**Once UI's CSS is in cascade layers.** Every stylesheet the packages ship
-(`tokens.css`, `styles.css` and each component's CSS) sits in one of three
-layers, in this order: `once-ui.tokens`, `once-ui.styles`,
-`once-ui.components`. CSS outside any layer beats every layer, whatever its
+**Once UI's CSS is in a cascade layer.** Every stylesheet the packages ship
+(`tokens.css`, `styles.css` and each component's CSS) sits in
+`@layer once-ui`. CSS outside any layer beats every layer, whatever its
 specificity, so an app's own `.card { padding: 0 }` or a Tailwind utility now
-overrides a Once UI style without `!important` or a longer selector. The
-codemod does not touch CSS, so look for these:
+overrides a Once UI style without `!important` or a longer selector. Inside the
+layer, Once UI's own rules meet as they always did. The codemod does not touch
+CSS, so look for these:
 
 - An override that was losing on purpose now wins. Most often that is a rule
   written before Once UI's styles took over, which never showed until now.
@@ -652,9 +652,9 @@ codemod does not touch CSS, so look for these:
   (a handful, on Button, Dialog, EmojiPicker, Input, Switch, Table and link
   underlines) now loses: inside layers, `!important` runs the other way. Drop
   the `!important` on yours, since it wins without it.
-- If your own CSS uses `@layer`, it sits below unlayered CSS too. To put it
-  above Once UI, declare the order once before anything loads:
-  `@layer once-ui.tokens, once-ui.styles, once-ui.components, app;`.
+- If your own CSS uses `@layer`, it sits below unlayered CSS too, and its order
+  against Once UI's is the order the layers first appear. To put yours above,
+  declare the order once before anything loads: `@layer once-ui, app;`.
 
 ### 13. Leaf components take a small prop set
 

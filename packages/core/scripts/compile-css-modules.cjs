@@ -111,16 +111,16 @@ for (const file of walk(DIST, (name) => name.endsWith(".js") || name.endsWith(".
   if (match) failures.push(`${rel(file)}: still imports Sass (${match[0]})`);
 }
 
-// 4. Every stylesheet the package ships goes in the components layer (see
-// foundations' css-layers.cjs), the compiled modules and the plain CSS that
-// copy-files brought over alike. dist/css holds foundations' own files,
-// already in their layers.
+// 4. Every stylesheet the package ships goes in the `once-ui` cascade layer
+// (see foundations' css-layers.cjs), the compiled modules and the plain CSS
+// that copy-files brought over alike. dist/css holds foundations' own files,
+// already layered.
 const { wrapFile } = require(path.join(foundationsRoot, "scripts", "css-layers.cjs"));
 const stylesheets = walk(DIST, (name) => name.endsWith(".css")).filter(
   (file) => !path.relative(DIST, file).startsWith(`css${path.sep}`),
 );
 for (const file of stylesheets) {
-  wrapFile(file, "once-ui.components");
+  wrapFile(file);
 }
 
 for (const warning of new Set(warnings)) {
