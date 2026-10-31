@@ -123,6 +123,7 @@ import {
   LineChart,
   PieChart,
   RadialGauge,
+  Sparkline,
 } from "@once-ui-system/core/data";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { createMdxComponents } from "@once-ui-system/core/mdx";
@@ -192,6 +193,7 @@ import {
   CustomRemovableChipExample,
   CustomStyledRawDropdown,
   DataTableExample,
+  SparklineTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
   DataTableServerQueryExample,
@@ -452,6 +454,7 @@ const mdxComponents = createMdxComponents({
   LineBarChart,
   RadialGauge,
   LinearGauge,
+  Sparkline,
   ChartHeader,
 
   // ─── Product components ───
@@ -573,6 +576,7 @@ const mdxComponents = createMdxComponents({
   Pagination,
   PaginationControlledExample,
   DataTableExample,
+  SparklineTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
   DataTableServerQueryExample,

@@ -97,6 +97,8 @@ const fixtures: Record<string, Record<string, unknown>> = {
   ProgressBar: { value: 40 },
   Toast: { tone: "success", children: "Saved" },
   LinearGauge: { value: 40 },
+  ChartSummary: { series: [{ key: "a" }], data: [{ label: "Jan", a: 1 }] },
+  Sparkline: { data: [1, 3, 2] },
 };
 
 /** Components that need a parent to mean anything get it here. */

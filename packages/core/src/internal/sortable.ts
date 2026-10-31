@@ -865,8 +865,10 @@ export function keyDown(event: KeyboardEvent, item: HTMLElement) {
   s.teardown.push(() => {
     window.removeEventListener("keydown", keys, true);
     s.item.removeEventListener("focusout", blur);
-    // Leave the keyup swallow for the Space that dropped.
-    window.setTimeout(() => window.removeEventListener("keyup", swallowSpace, true), 300);
+    // Leave the keyup swallow for the Space that dropped. The window is held
+    // here, not read when the timer fires: by then a test's jsdom may be gone.
+    const win = window;
+    win.setTimeout(() => win.removeEventListener("keyup", swallowSpace, true), 300);
   });
   return true;
 }

@@ -141,6 +141,8 @@ that is not a key of the row is a type error.
     error: "Render the error state instead of the chart.",
     emptyState: "What to show when `data` is empty.",
     errorState: "What to show when `error` is set.",
+    summary: "What a screen reader hears for the plot, after the title, in place of the generated summary.",
+    "aria-label": "The plot's whole accessible name, in place of the title and summary.",
   }}
 />
 
@@ -988,3 +990,34 @@ the page does not jump when the data lands.
 `grid` and `axis` are separate on purpose: a bar chart usually wants horizontal
 guides to compare heights against (`grid="y"`) while still labelling both axes,
 and a sparkline-style chart wants `axis="none"` with the grid left on.
+
+## Accessibility
+
+Each chart's plot is a figure to a screen reader (`role="figure"`, so its legend buttons stay reachable inside it), named by its title and a short summary written from the data, in the chart's `valueFormat` and `locale`:
+
+- a line or bar chart: "Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest 3,100 in Feb."
+- a pie: "Share by browser: Chrome 62%, Safari 21%, Firefox 9%."
+
+Inside the card, hidden from sight, the chart also renders its data as a table, with the x values as rows and a column per series, so a reader who wants the numbers can walk them cell by cell. While a chart loads, fails or has no data, the plot is no figure, and its status is read as it is.
+
+The summary states only what is in the data. When the point of a chart is something the numbers do not say on their own, write it with `summary`; `aria-label` replaces the whole name, title included.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`<LineChart
+  title="Revenue"
+  summary="Revenue tripled over the summer and held through December."
+  data={rows}
+  series={{ key: "revenue", label: "Revenue" }}
+/>`,
+      language: "tsx",
+      label: "Summary"
+    }
+  ]}
+/>
+
+`ChartSummary` is the table on its own, from the same props, for a visual of your own built from chart data.

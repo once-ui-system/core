@@ -3,16 +3,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Column } from "../../components/Column.js";
 import type { DateRange } from "../../components/DatePicker.js";
-import { Row } from "../../components/Row.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
-import { RadiusSize } from "../../types.js";
+import type { RadiusSize } from "../../types.js";
 import { CartesianPlot } from "./CartesianPlot.js";
 import { ChartHeader } from "./ChartHeader.js";
+import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
-import { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces.js";
+import type { BarWidth, ChartProps, ChartVariant, DataPoint } from "./interfaces.js";
 import { chartFormatters, chartSeries, valueAxisWidth } from "./utils/chartSeries.js";
 import { formatDate } from "./utils/formatDate.js";
 
@@ -184,7 +184,8 @@ const BarChart = ({
         presets={date?.presets}
       />
       {/* The plot takes the height the header leaves: `height` sizes the card once. */}
-      <Row
+      <ChartPlot
+        data={filteredData}
         fillWidth
         flex={1}
         borderTop={
@@ -245,7 +246,7 @@ const BarChart = ({
             cursor={hover ? "band" : "none"}
           />
         )}
-      </Row>
+      </ChartPlot>
     </Column>
   );
 };

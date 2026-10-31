@@ -48,6 +48,12 @@ const shapes = (container: HTMLElement) =>
 /** The numbers in a path's `d`, in order. */
 const numbers = (d: string | null) => (d?.match(/-?\d+(\.\d+)?/g) ?? []).map(Number);
 
+/**
+ * Text drawn by the chart, not the visually hidden summary table that sits
+ * beside the plot and repeats each row's name and values.
+ */
+const drawn = (text: string) => screen.getAllByText(text).filter((el) => !el.closest("table"));
+
 describe("scales", () => {
   it("picks recharts' round value ticks, from zero", () => {
     expect(niceTicks(0, 180)).toEqual([0, 45, 90, 135, 180]);
@@ -226,8 +232,8 @@ describe("bars", () => {
     expect(rightEdge(bars[0])).toBeLessThan(rightEdge(bars[1]));
     expect(rightEdge(bars[1])).toBeLessThan(rightEdge(bars[2]));
     // The category names are written beside the bars, the values under them.
-    expect(screen.getByText("Feb")).toBeInTheDocument();
-    expect(screen.getByText("32")).toBeInTheDocument();
+    expect(drawn("Feb")).toHaveLength(1);
+    expect(drawn("32")).toHaveLength(1);
   });
 });
 
@@ -286,15 +292,15 @@ describe("interaction", () => {
     const plot = container.querySelector("[tabindex='0']") as HTMLElement;
     fireEvent.keyDown(plot, { key: "ArrowRight" });
     // The tooltip names the row and each series' value.
-    expect(screen.getAllByText("Jan").length).toBe(2);
+    expect(drawn("Jan").length).toBe(2);
     // Once in the legend, once in the tooltip.
-    expect(screen.getAllByText("store").length).toBe(2);
+    expect(drawn("store").length).toBe(2);
     fireEvent.keyDown(plot, { key: "ArrowRight" });
-    expect(screen.getAllByText("Feb").length).toBe(2);
+    expect(drawn("Feb").length).toBe(2);
     fireEvent.keyDown(plot, { key: "End" });
-    expect(screen.getAllByText("Mar").length).toBe(2);
+    expect(drawn("Mar").length).toBe(2);
     fireEvent.keyDown(plot, { key: "Escape" });
-    expect(screen.getAllByText("Mar").length).toBe(1);
+    expect(drawn("Mar").length).toBe(1);
   });
 
   it("shows a slice's name and value from the keyboard", () => {
@@ -311,8 +317,8 @@ describe("interaction", () => {
     );
     const plot = container.querySelector("[tabindex='0']") as HTMLElement;
     fireEvent.keyDown(plot, { key: "ArrowRight" });
-    expect(screen.getByText("Apples")).toBeInTheDocument();
+    expect(drawn("Apples")).toHaveLength(1);
     fireEvent.keyDown(plot, { key: "ArrowRight" });
-    expect(screen.getByText("Pears")).toBeInTheDocument();
+    expect(drawn("Pears")).toHaveLength(1);
   });
 });

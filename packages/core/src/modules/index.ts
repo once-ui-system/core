@@ -11,6 +11,10 @@
 
 export * from "./ai/index.js";
 export * from "./chat/index.js";
+// Sparkline is plain SVG with no recharts behind it, so the root can carry it
+// too: a server component imports it with the rest of the page.
+export type { SparklineCurve, SparklineProps } from "./data/Sparkline.js";
+export { Sparkline } from "./data/Sparkline.js";
 export { HeadingLink } from "./navigation/HeadingLink.js";
 // The types these components take, so consumers can annotate their own nav
 // data instead of letting the literals widen to `string`.

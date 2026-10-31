@@ -134,6 +134,18 @@ interface ChartProps<T extends object = DataPoint>
    * `"en-US"`, the same on the server and in every browser.
    */
   locale?: string;
+  /**
+   * What a screen reader hears for the plot, after the title. Without it the
+   * chart writes one from its data: the series, the x range and each series'
+   * highest and lowest point (`"Revenue and Cost, Jan to Dec. Revenue: highest
+   * 12,400 in Aug, lowest 3,100 in Feb."`), in `valueFormat` and `locale`.
+   */
+  summary?: string;
+  /**
+   * The plot's whole accessible name, title included, in place of the title
+   * and summary. The data table screen readers can walk stays either way.
+   */
+  "aria-label"?: string;
   legend?: LegendConfig;
   date?: DateConfig;
   emptyState?: React.ReactNode;
