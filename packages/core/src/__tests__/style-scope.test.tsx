@@ -16,6 +16,11 @@ describe("StyleScope", () => {
     expect(html).not.toContain("<style");
   });
 
+  it("writes an invert theme, which the stylesheet resolves against the page", () => {
+    const html = renderToStaticMarkup(<StyleScope config={{ theme: "invert" }}>hi</StyleScope>);
+    expect(html).toContain('data-theme="invert"');
+  });
+
   it("follows the page theme when the config's theme is system", () => {
     const html = renderToStaticMarkup(<StyleScope config={{ theme: "system" }}>hi</StyleScope>);
     expect(html).not.toContain("data-theme");
@@ -51,7 +56,7 @@ describe("StyleScope", () => {
         hi
       </StyleScope>,
     );
-    expect(html).toMatch(/\[data-style-scope="[^"]+"\]\[data-theme="light"\]/);
+    expect(html).toMatch(/\[data-style-scope="[^"]+"\]:is\(\[data-theme="light"\]/);
     expect(html).toContain("--scheme-brand-600:#ff0000");
     expect(html).toContain("--scheme-brand-600:#00ff00");
     expect(html).toContain("--page-background:#f7f4ef");
