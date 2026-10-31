@@ -180,6 +180,12 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **`Meta.generate` names every page's canonical URL**, `baseURL` plus `path`,
+  where 2.x wrote one only alongside language alternates. `canonical: false` leaves it
+  out. Call it in pages, not layouts: Next passes a layout's canonical down to every
+  page without metadata of its own. `once-ui-validate-ai-code` flags `Meta.generate`
+  in a layout (rule `Meta.layout`). A `baseURL` without a scheme now gives an absolute
+  `og:url` (`https://site.com/`, was `site.com/`).
 - **Once UI's CSS is in a cascade layer, `once-ui`**, in core, fx, blocks and
   foundations. An app's unlayered CSS and Tailwind utilities now override Once UI
   without `!important`; Once UI's own rules still meet by specificity and order inside

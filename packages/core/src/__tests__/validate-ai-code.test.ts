@@ -20,7 +20,11 @@ const {
 } = require("../../scripts/validate-ai-code.cjs");
 
 type Issue = { rule: string; message: string; fix?: string };
-type Options = { next?: boolean; icons?: { names: Set<string>; unresolved: boolean } };
+type Options = {
+  next?: boolean;
+  icons?: { names: Set<string>; unresolved: boolean };
+  file?: string;
+};
 
 const spec = loadSpec();
 const iconNames = parseIconNames(spec);
@@ -702,6 +706,27 @@ describe("Icon.names", () => {
     expect(
       rules(`<Icon name="anything" />`, { icons: { names: new Set(), unresolved: true } }),
     ).not.toContain("Icon.names");
+  });
+});
+
+describe("Meta.layout", () => {
+  const meta = `export const metadata = Meta.generate({ title: "T", description: "D", baseURL });\n`;
+
+  it("flags Meta.generate in a layout, by file name or by a Layout component", () => {
+    expect(rules(meta, { file: "src/app/layout.tsx" })).toContain("Meta.layout");
+    expect(rules(meta, { file: "app\\blog\\layout.js" })).toContain("Meta.layout");
+    expect(
+      rules(`${meta}export default function RootLayout({ children }) { return children; }`),
+    ).toContain("Meta.layout");
+  });
+
+  it("leaves pages, and a layout that opts out of the canonical, alone", () => {
+    expect(rules(meta, { file: "src/app/page.tsx" })).not.toContain("Meta.layout");
+    expect(
+      rules(meta.replace("baseURL }", "baseURL, canonical: false }"), {
+        file: "src/app/layout.tsx",
+      }),
+    ).not.toContain("Meta.layout");
   });
 });
 
