@@ -115,7 +115,7 @@ const plainText = (node: ReactNode) =>
   typeof node === "string" || typeof node === "number" ? String(node) : undefined;
 
 /**
- * A chart's plot region: a `Row` that is one image to assistive technology,
+ * A chart's plot region: a `Row` that is one figure to assistive technology,
  * named by the chart's summary, with the summary's data table in front of it
  * (hidden from sight, inside the card). While the chart loads, fails or has
  * no rows it is a plain `Row`, and the status inside it is read as it is.
@@ -151,7 +151,7 @@ function ChartPlot({
   return (
     <>
       {ready && <ChartSummary {...input} />}
-      <Row {...row} {...(name ? { role: "img", "aria-label": name } : {})}>
+      <Row {...row} {...(name ? { role: "figure", "aria-label": name } : {})}>
         {children}
       </Row>
     </>

@@ -14,8 +14,6 @@ import { ServerFlex } from "../components/ServerFlex";
 import { Text } from "../components/Text";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import type { BarChartProps } from "../modules/data/BarChart.impl";
-// The implementation, not the public shell: that loads lazily behind the
-// optional recharts peer and renders nothing synchronously.
 import LineChart, { type LineChartProps } from "../modules/data/LineChart.impl";
 import type { PieChartProps } from "../modules/data/PieChart.impl";
 import { expectNoAxeViolations } from "../test/axe";
@@ -115,7 +113,9 @@ describe("chart data typed with an interface", () => {
       series: { key: "revenue" },
       data: rows,
     };
-    const { container } = render(<LineChart {...(props as unknown as LineChartProps)} />);
+    const { container } = render(<LineChart {...(props as unknown as LineChartProps)} />, {
+      wrapper: wrap,
+    });
     expect(screen.getByText("Revenue")).toBeTruthy();
     expect((container.firstElementChild as HTMLElement).style.height).toBe("24rem");
   });

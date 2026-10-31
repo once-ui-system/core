@@ -506,14 +506,10 @@
     "next": ">=15.5",
     "prismjs": "^1.30.0",
     "react": ">=19",
-    "react-dom": ">=19",
-    "recharts": "^3.10.1"
+    "react-dom": ">=19"
   },
   "peerDependenciesMeta": {
     "next": {
-      "optional": true
-    },
-    "recharts": {
       "optional": true
     },
     "maplibre-gl": {

@@ -1,7 +1,7 @@
 import { render } from "@testing-library/react";
+import type React from "react";
 import { describe, expect, it } from "vitest";
-// The implementations, not the public shells: those load lazily behind the
-// optional recharts peer and render nothing synchronously.
+import { LayoutProvider } from "../contexts/LayoutProvider";
 import BarChart from "../modules/data/BarChart.impl";
 import LineBarChart from "../modules/data/LineBarChart.impl";
 import LineChart from "../modules/data/LineChart.impl";
@@ -30,10 +30,15 @@ const charts = {
   PieChart: <PieChart title="t" height={24} series={{ key: "a" }} data={data} />,
 };
 
+// The plot draws at once now, and its legend lays out through the layout context.
+const wrapper = ({ children }: { children: React.ReactNode }) => (
+  <LayoutProvider>{children}</LayoutProvider>
+);
+
 describe("chart plot height", () => {
   for (const [name, chart] of Object.entries(charts)) {
     it(`${name}: the card is the height and the plot has no minimum of its own`, () => {
-      const { container } = render(chart);
+      const { container } = render(chart, { wrapper });
       const card = container.firstElementChild as HTMLElement;
       const plot = card.lastElementChild as HTMLElement;
       expect(card.style.height).toBe(t(24));

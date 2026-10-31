@@ -172,10 +172,6 @@ beforeEach(() => {
   for (const level of ["error", "warn"] as const) {
     vi.spyOn(console, level).mockImplementation((...args: unknown[]) => {
       const text = args.map(String).join(" ");
-      // jsdom has no layout, so a chart whose lazy recharts chunk loads inside
-      // the tick below measures 0x0 and recharts warns. Whether it loads in
-      // time depends on the runner's speed, so it's noise, not bad markup.
-      if (/^The width\(0\) and height\(0\) of chart/.test(text)) return;
       logs.push(`console.${level}: ${args.map(String).join(" ").slice(0, 400)}`);
     });
   }

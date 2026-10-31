@@ -48,7 +48,8 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
   or a function) and `locale` for the numbers on the axis and in the tooltip;
   `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
   `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
-- **Chart summaries for screen readers**: each chart's plot is `role="img"`, named
+- **Chart summaries for screen readers**: each chart's plot is a `role="figure"`
+  (its legend buttons and keyboard focus stay inside it), named
   by its title and a plain-language summary of its data in its `valueFormat` and
   `locale` ("Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest
   3,100 in Feb."; a pie: "Share by browser: Chrome 62%, Safari 21%."), with the data
@@ -108,6 +109,8 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Removed
 
+- **The `recharts` peer dependency** (and its `peerDependenciesMeta` entry). The
+  charts no longer use it; uninstall it unless your own code does.
 - **`Particle`**, the 2.0 alias of `ParticleFx`.
 - **Dialog `hideClose`.** Use `showClose={false}`, the name `Drawer` uses.
 - **CodeBlock's root `highlight`.** Set it on each entry of `codes`.
@@ -180,6 +183,21 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **Charts draw their own SVG; recharts is gone.** LineChart, BarChart,
+  LineBarChart and PieChart render with Once UI's own renderer (scales, stacks,
+  d3's curves, ticks and bar slots as recharts placed them), so the chart is in
+  the server HTML: no lazy chunk, no wait for `document.fonts.ready`, no
+  `MissingDependency` fallback. The plot sizes itself to its container with a
+  ResizeObserver, drawing at 640 × 320 until it is measured. The props are
+  unchanged. New in the browser: the arrow keys (and Home, End, Escape) move
+  the tooltip through the points, a legend entry is a button that hides or
+  shows its series (or slice), and the entry animations follow
+  `prefers-reduced-motion`. The four charts' own code is 13.1 KB gzipped
+  (minified, React external), where recharts alone was 126 KB. A PieChart's
+  legend now lists slices in data order in their own colours (it sorted them
+  by name and coloured them by position), LineBarChart's legend names the line
+  first, and a top-left legend is offset past the y axis with `left` instead
+  of a `calc()` jsdom cannot compute.
 - **Once UI's CSS is in a cascade layer, `once-ui`**, in core, fx, blocks and
   foundations. An app's unlayered CSS and Tailwind utilities now override Once UI
   without `!important`; Once UI's own rules still meet by specificity and order inside

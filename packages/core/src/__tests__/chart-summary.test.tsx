@@ -1,5 +1,7 @@
-import { render, screen, within } from "@testing-library/react";
+import { render as rtlRender, screen, within } from "@testing-library/react";
+import type React from "react";
 import { describe, expect, it } from "vitest";
+import { LayoutProvider } from "../contexts/LayoutProvider";
 import { BarChart } from "../modules/data/BarChart";
 import { ChartSummary } from "../modules/data/ChartSummary";
 import { LineBarChart } from "../modules/data/LineBarChart";
@@ -9,10 +11,13 @@ import { chartSummary, chartSummaryTable } from "../modules/data/utils/chartSumm
 import { expectNoAxeViolations } from "../test/axe";
 
 /**
- * A chart is one image to a screen reader, named by a plain-language summary
+ * A chart is one figure to a screen reader, named by a plain-language summary
  * of its data, with the numbers in a hidden table inside the card. The text is
  * written from the same series, x key, format and locale the chart draws with.
  */
+// The charts draw their SVG in the first render, with the tooltip's layout context.
+const render = (ui: React.ReactElement) => rtlRender(ui, { wrapper: LayoutProvider });
+
 const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const revenue = [4200, 3100, 5000, 6100, 7200, 8000, 9100, 12400, 10200, 9900, 8800, 11000];
 const cost = [3000, 2800, 3200, 3300, 3500, 3600, 3900, 4100, 4000, 3900, 3800, 4200];
@@ -184,14 +189,14 @@ describe("charts carry the summary", () => {
   };
 
   for (const [name, chart] of Object.entries(charts)) {
-    it(`${name}: the plot is an image named by the summary, with the table in the card`, async () => {
+    it(`${name}: the plot is a figure named by the summary, with the table in the card`, async () => {
       const { container } = render(chart);
-      const plot = await screen.findByRole("img");
+      const plot = await screen.findByRole("figure");
       expect(plot.getAttribute("aria-label")).toBe(
         `Sales. ${chartSummary({ data: rows, series, xKey: "month" })}`,
       );
       const card = container.firstElementChild as HTMLElement;
-      // The table sits in the card, outside the image, so a reader can walk it.
+      // The table sits in the card, outside the figure, so a reader can walk it.
       const table = within(card).getByRole("table");
       expect(plot.contains(table)).toBe(false);
       expect(within(table).getAllByRole("row")).toHaveLength(rows.length + 1);
@@ -210,7 +215,7 @@ describe("charts carry the summary", () => {
         series={{ key: "value" }}
       />,
     );
-    const plot = await screen.findByRole("img");
+    const plot = await screen.findByRole("figure");
     expect(plot.getAttribute("aria-label")).toBe("Browsers: Chrome 62%, Safari 38%.");
     await expectNoAxeViolations(container);
   });
@@ -225,7 +230,7 @@ describe("charts carry the summary", () => {
         valueFormat="number"
       />,
     );
-    const plot = await screen.findByRole("img");
+    const plot = await screen.findByRole("figure");
     expect(plain(plot.getAttribute("aria-label"))).toBe(
       "Revenue, Jan to Dec. Revenue: highest 12 400 in Aug, lowest 3100 in Feb.",
     );
@@ -235,22 +240,22 @@ describe("charts carry the summary", () => {
     const { unmount } = render(
       <BarChart title="Sales" data={rows} series={series} summary="Revenue tripled in summer." />,
     );
-    expect((await screen.findByRole("img")).getAttribute("aria-label")).toBe(
+    expect((await screen.findByRole("figure")).getAttribute("aria-label")).toBe(
       "Sales. Revenue tripled in summer.",
     );
     unmount();
     const { container } = render(
       <BarChart title="Sales" data={rows} series={series} aria-label="Monthly sales" />,
     );
-    expect((await screen.findByRole("img")).getAttribute("aria-label")).toBe("Monthly sales");
+    expect((await screen.findByRole("figure")).getAttribute("aria-label")).toBe("Monthly sales");
     // Not left on the card as well.
     expect((container.firstElementChild as HTMLElement).getAttribute("aria-label")).toBeNull();
   });
 
-  it("is no image while loading or without data, so the status is read", async () => {
+  it("is no figure while loading or without data, so the status is read", async () => {
     render(<LineChart title="Sales" data={[]} series={series} />);
     await screen.findByText(/no data/i);
-    expect(screen.queryByRole("img")).toBeNull();
+    expect(screen.queryByRole("figure")).toBeNull();
     expect(screen.queryByRole("table")).toBeNull();
   });
 });

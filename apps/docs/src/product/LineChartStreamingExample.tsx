@@ -1,8 +1,8 @@
 "use client";
 
-import React from "react";
 import { Button, Column, Row, useStreamingViewport } from "@once-ui-system/core";
 import { LineChart } from "@once-ui-system/core/data";
+import React from "react";
 
 type Point = {
   t: number;
@@ -20,17 +20,17 @@ type LineChartStreamingExampleProps = {
   animation?: boolean;
 };
 
-/*
- * The first window is prerendered with the page, and the chart's hidden
- * summary table writes its values out, so its noise is fixed: random values
- * would differ between the server and the browser (React #418).
- */
+/** Noise that is the same on the server and the client: the chart draws in the first HTML. */
+function noise(i: number): number {
+  const x = Math.sin(i * 12.9898) * 43758.5453;
+  return x - Math.floor(x) - 0.5;
+}
+
 function createInitialData(count: number): Point[] {
   const points: Point[] = [];
   for (let i = 0; i < count; i++) {
     const baseline = BASELINE;
-    const noise = ((i * 7919) % 13) / 13 - 0.5;
-    const value = baseline + Math.sin(i / 2) * AMPLITUDE + noise * NOISE;
+    const value = baseline + Math.sin(i / 2) * AMPLITUDE + noise(i) * NOISE;
     points.push({ t: i, Value: Math.round(value * 10) / 10, Baseline: baseline });
   }
   return points;
@@ -58,11 +58,7 @@ export function LineChartStreamingExample({ animation = true }: LineChartStreami
     <Column fillWidth gap="12" marginTop="16" marginBottom="24">
       <Row fillWidth gap="8" horizontal="between" vertical="center">
         <Row gap="8">
-          <Button
-            size="s"
-            variant="secondary"
-            onClick={() => setRunning((v) => !v)}
-          >
+          <Button size="s" variant="secondary" onClick={() => setRunning((v) => !v)}>
             {running ? "Pause" : "Resume"}
           </Button>
           <Button
@@ -95,10 +91,7 @@ export function LineChartStreamingExample({ animation = true }: LineChartStreami
         animationEasing="linear"
         xAxisType="number"
         xDomain={xDomain}
-        series={[
-          { key: "Value" },
-          { key: "Baseline" },
-        ]}
+        series={[{ key: "Value" }, { key: "Baseline" }]}
         data={data}
       />
     </Column>

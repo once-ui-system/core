@@ -9,7 +9,9 @@ navLabel: "Setup"
 navIcon: "learn"
 ---
 
-The Once UI data-viz module is a collection of opinionated chart solutions built on top of [Recharts](https://recharts.org/) and [Date-fns](https://date-fns.org/). It was designed to help you create beautiful and interactive charts with minimal code.
+The Once UI data-viz module is a collection of opinionated charts, drawn as SVG by Once UI itself, with dates through [Date-fns](https://date-fns.org/). It was designed to help you create beautiful and interactive charts with minimal code.
+
+There is nothing to install beyond `@once-ui-system/core`: import the charts from `@once-ui-system/core/data`. They render on the server, so the first HTML already holds the chart, and size themselves to their container. In the browser, hover or move through the points with the arrow keys for the tooltip, and click a legend entry to hide or show its series. Animations are skipped for readers who prefer reduced motion.
 
 <LineChart
   marginTop="16"
@@ -991,12 +993,12 @@ and a sparkline-style chart wants `axis="none"` with the grid left on.
 
 ## Accessibility
 
-Each chart's plot is one image to a screen reader (`role="img"`), named by its title and a short summary written from the data, in the chart's `valueFormat` and `locale`:
+Each chart's plot is a figure to a screen reader (`role="figure"`, so its legend buttons stay reachable inside it), named by its title and a short summary written from the data, in the chart's `valueFormat` and `locale`:
 
 - a line or bar chart: "Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest 3,100 in Feb."
 - a pie: "Share by browser: Chrome 62%, Safari 21%, Firefox 9%."
 
-Inside the card, hidden from sight, the chart also renders its data as a table, with the x values as rows and a column per series, so a reader who wants the numbers can walk them cell by cell. While a chart loads, fails or has no data, the plot is no image, and its status is read as it is.
+Inside the card, hidden from sight, the chart also renders its data as a table, with the x values as rows and a column per series, so a reader who wants the numbers can walk them cell by cell. While a chart loads, fails or has no data, the plot is no figure, and its status is read as it is.
 
 The summary states only what is in the data. When the point of a chart is something the numbers do not say on their own, write it with `summary`; `aria-label` replaces the whole name, title included.
 
