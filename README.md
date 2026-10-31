@@ -124,54 +124,53 @@ We welcome contributions! Before submitting a PR:
 
 Once UI is an indie project, kept going by the companies and people who use it.
 
-### Supported by
+<h3 align="center">Supported by</h3>
 
-<a href="https://neon.com">
-  <picture>
+<p align="center">
+  <a href="https://neon.com"><picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/assets/sponsors/neon-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset=".github/assets/sponsors/neon-logo-light.svg">
-    <img alt="Neon" src=".github/assets/sponsors/neon-logo-light.svg" height="40">
-  </picture>
-</a>
-&nbsp;&nbsp;&nbsp;
-<a href="https://sentry.io">
-  <picture>
+    <img alt="Neon" src=".github/assets/sponsors/neon-logo-light.svg" height="34">
+  </picture></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://sentry.io"><picture>
     <source media="(prefers-color-scheme: dark)" srcset=".github/assets/sponsors/sentry-logo-dark.svg">
-    <source media="(prefers-color-scheme: light)" srcset=".github/assets/sponsors/sentry-logo-light.svg">
-    <img alt="Sentry" src=".github/assets/sponsors/sentry-logo-light.svg" height="40">
-  </picture>
-</a>
+    <img alt="Sentry" src=".github/assets/sponsors/sentry-logo-light.svg" height="32">
+  </picture></a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <a href="https://claude.com"><picture>
+    <source media="(prefers-color-scheme: dark)" srcset=".github/assets/sponsors/claude-logo-dark.svg">
+    <img alt="Claude" src=".github/assets/sponsors/claude-logo-light.svg" height="30">
+  </picture></a>
+</p>
 
-Once UI is part of the [Neon](https://neon.com) Open Source Program. Neon is serverless Postgres.
-Sentry supports us through [Sentry for Open Source](https://sentry.io/for/open-source/), and we build with [Claude](https://claude.com) through Anthropic's program for open-source maintainers.
+<p align="center">
+  <sub>Once UI is part of the <a href="https://neon.com">Neon</a> Open Source Program and <a href="https://sentry.io/for/open-source/">Sentry for Open Source</a>, and is built with <a href="https://claude.com">Claude</a>.</sub>
+</p>
 
-### Company sponsors
+<h3 align="center">Become a sponsor</h3>
 
-Founding and Ecosystem sponsors get their logo here.
-
-<table>
+<table align="center">
   <tr>
-    <td align="center" width="400">
-      <a href="https://once-ui.com/sponsors"><b>Founding</b></a><br/>
-      <sub>$2,000 / month · one partner at a time</sub><br/><br/>
-      <a href="https://once-ui.com/sponsors">Your logo here</a>
-    </td>
-    <td align="center" width="400">
-      <a href="https://once-ui.com/sponsors"><b>Ecosystem</b></a><br/>
-      <sub>$750 / month</sub><br/><br/>
-      <a href="https://once-ui.com/sponsors">Your logo here</a>
-    </td>
+    <th width="260">Founding</th>
+    <th width="260">Ecosystem</th>
+    <th width="260">Supporter</th>
+  </tr>
+  <tr align="center">
+    <td><b>$2,000</b> / month<br/><sub>One partner at a time</sub></td>
+    <td><b>$750</b> / month<br/><sub>Tools that sit next to Once UI</sub></td>
+    <td><b>$250</b> / month<br/><sub>Teams shipping on Once UI</sub></td>
+  </tr>
+  <tr>
+    <td valign="top"><sub>Logo in this README, on the docs site and on once-ui.com/sponsors · Named in every release · A standing line to the team</sub></td>
+    <td valign="top"><sub>Logo in this README and on once-ui.com/sponsors · Named in every release for the term</sub></td>
+    <td valign="top"><sub>Logo on once-ui.com/sponsors · Named in the quarter's release notes</sub></td>
   </tr>
 </table>
 
-| Tier | Price | Where your logo runs |
-| --- | --- | --- |
-| Founding | $2,000 / month | This README, the documentation site and once-ui.com/sponsors; named in every release; a standing line to the team |
-| Ecosystem | $750 / month | This README and once-ui.com/sponsors; named in every release for the term |
-| Supporter | $250 / month | once-ui.com/sponsors; named in the quarter's release notes |
+<p align="center">
+  <a href="https://once-ui.com/sponsors"><b>Sponsor Once UI →</b></a>
+</p>
 
-See [once-ui.com/sponsors](https://once-ui.com/sponsors) for the details, or get in touch through the form there.
-
-### Individual sponsors
-
-Individuals can [sponsor us through GitHub Sponsors](https://github.com/sponsors/once-ui-system) or [thanks.dev](https://thanks.dev/u/gh/once-ui-system) and get featured on our site.
+<p align="center">
+  <sub>Individuals can sponsor through <a href="https://github.com/sponsors/once-ui-system">GitHub Sponsors</a> or <a href="https://thanks.dev/u/gh/once-ui-system">thanks.dev</a> and get featured on our site.</sub>
+</p>
