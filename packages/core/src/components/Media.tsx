@@ -170,7 +170,10 @@ const Media = ({
       zIndex={0}
       margin="0"
       style={{
-        outline: "none",
+        // An enlargeable box takes focus, so it leaves the outline to
+        // `focus-ring` (keyboard focus only); an inline `outline: none`
+        // would beat that class and hide the ring.
+        outline: canEnlarge ? undefined : "none",
         isolation: "isolate",
         height:
           aspectRatio === "original"

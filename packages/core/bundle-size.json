@@ -54,6 +54,7 @@
   "./components/Option": 10030,
   "./components/OTPInput": 39069,
   "./components/Pagination": 51133,
+  "./components/PhotoViewer": 45705,
   "./components/ProgressBar": 8758,
   "./components/RadioButton": 37514,
   "./components/RadioGroup": 38360,

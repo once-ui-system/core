@@ -280,6 +280,10 @@
       "types": "./dist/components/Pagination.d.ts",
       "default": "./dist/components/Pagination.js"
     },
+    "./components/PhotoViewer": {
+      "types": "./dist/components/PhotoViewer.d.ts",
+      "default": "./dist/components/PhotoViewer.js"
+    },
     "./components/ProgressBar": {
       "types": "./dist/components/ProgressBar.d.ts",
       "default": "./dist/components/ProgressBar.js"

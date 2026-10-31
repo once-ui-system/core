@@ -444,6 +444,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
+  the items a query shows, in order, and the palette renders exactly that, sections in the
+  order of their first item, so an app can rank with typo tolerance or recent items first.
+  Without it the case-insensitive match on name, keywords and section is unchanged. Its
+  words (`labels`: dialog name, results, no results, the footer hints) can be translated;
+  English stays the default. `KbarFilter` and `KbarLabels` are exported types.
+- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
+  tile it opened from and closes back into it, swipe moves between photos (with resistance
+  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
+  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
+  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
+  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
+  the photo in the URL so it can be shared and Back closes it. Images go through the Image
+  adapter, and `Media` does not import it. 3.0 only.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
@@ -465,6 +479,24 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+- **`HeadingNav`, `Scroller` and the snap `Carousel` respect reduced motion.** Their
+  buttons, links and drag snap scrolled with `behavior: "smooth"` whatever the visitor's
+  setting; under `prefers-reduced-motion: reduce` they now jump straight there. Everyone
+  else still gets the smooth scroll.
+- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
+  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
+  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
+  back to a hidden textarea and `document.execCommand("copy")`, and report the real
+  outcome: the toast says when the link could not be copied, and CodeBlock's check only
+  shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
 - **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the

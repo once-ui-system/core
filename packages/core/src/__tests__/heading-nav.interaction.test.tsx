@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { LayoutProvider } from "../contexts/LayoutProvider";
 import { HeadingNav } from "../modules/navigation/HeadingNav";
 import { expectNoAxeViolations } from "../test/axe";
+import { mockReducedMotion } from "../test/fxTestUtils";
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
   <LayoutProvider>{children}</LayoutProvider>
@@ -92,6 +93,15 @@ describe("HeadingNav: interaction", () => {
     expect(window.scrollTo).toHaveBeenCalledWith({ top: 750, behavior: "smooth" });
     expect(link("Usage")).toHaveAttribute("aria-current", "location");
     expect(link("Install")).not.toHaveAttribute("aria-current");
+  });
+
+  it("jumps to the section instead of smooth-scrolling under reduced motion", async () => {
+    mockReducedMotion(true);
+    const user = userEvent.setup();
+    render(<Page />, { wrapper });
+    placeAt("usage", 900);
+    await user.click(link("Usage"));
+    expect(window.scrollTo).toHaveBeenCalledWith({ top: 750, behavior: "auto" });
   });
 
   it("follows a link from the keyboard", async () => {

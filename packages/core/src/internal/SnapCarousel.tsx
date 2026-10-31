@@ -6,6 +6,7 @@ import { Flex } from "../components/Flex.js";
 import { IconButton } from "../components/IconButton.js";
 import { Media } from "../components/Media.js";
 import { Row } from "../components/Row.js";
+import { prefersReducedMotionNow } from "./reducedMotion.js";
 import styles from "./SnapCarousel.module.scss";
 import { useScrollableTabStop } from "./scrollableTabStop.js";
 
@@ -123,7 +124,7 @@ const SnapCarousel = ({
 
     container.scrollTo({
       left: slideWidth * index,
-      behavior: "smooth",
+      behavior: prefersReducedMotionNow() ? "auto" : "smooth",
     });
 
     // Reset flag after scroll animation completes
@@ -203,7 +204,7 @@ const SnapCarousel = ({
       // Smooth scroll to nearest slide
       container.scrollTo({
         left: targetScroll,
-        behavior: "smooth",
+        behavior: prefersReducedMotionNow() ? "auto" : "smooth",
       });
 
       setActiveIndex(nearestIndex);
