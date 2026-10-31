@@ -161,7 +161,7 @@ This host does not expose authenticated APIs. Optional JSON endpoints (navigatio
 
 ## MCP and library docs
 
-For AI-assisted development, use the [AI Coding (MCP)](${absolute(agentDiscoveryPaths.aiCoding)}) guide and Context7 (\`@once-ui-system/core\`).
+For AI-assisted development, use the [Design system for AI coding agents](${absolute(agentDiscoveryPaths.aiCoding)}) guide and Context7 (\`@once-ui-system/core\`).
 
 ## Content usage
 
