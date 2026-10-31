@@ -111,6 +111,18 @@ for (const file of walk(DIST, (name) => name.endsWith(".js") || name.endsWith(".
   if (match) failures.push(`${rel(file)}: still imports Sass (${match[0]})`);
 }
 
+// 4. Every stylesheet the package ships goes in the `once-ui` cascade layer
+// (see foundations' css-layers.cjs), the compiled modules and the plain CSS
+// that copy-files brought over alike. dist/css holds foundations' own files,
+// already layered.
+const { wrapFile } = require(path.join(foundationsRoot, "scripts", "css-layers.cjs"));
+const stylesheets = walk(DIST, (name) => name.endsWith(".css")).filter(
+  (file) => !path.relative(DIST, file).startsWith(`css${path.sep}`),
+);
+for (const file of stylesheets) {
+  wrapFile(file);
+}
+
 for (const warning of new Set(warnings)) {
   console.warn(`compile-css-modules: warning: ${warning}`);
 }
@@ -119,5 +131,5 @@ if (failures.length > 0) {
   process.exit(1);
 }
 console.log(
-  `Compiled ${modules.length} Sass modules to CSS and repointed ${rewritten} imports in dist`,
+  `Compiled ${modules.length} Sass modules to CSS, repointed ${rewritten} imports and layered ${stylesheets.length} stylesheets in dist`,
 );
