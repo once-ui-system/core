@@ -15,6 +15,8 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **`closeLabel` on `Drawer`, `Dialog` and `Modal`.** The close button's tooltip and
+  accessible name, for a UI that isn't in English. Defaults to "Close", as before.
 - **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
   symbol (`svg` markup or a `src` URL): each letter and shape is traced, left to right by
   default, then the logo fills in and holds. `onComplete` fires when the intro has played
@@ -46,6 +48,9 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
 - **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
   no template serves, so every such page carried a broken image. It now uses
   `/api/og/generate`, the same default `Meta.generate` uses for the social image.

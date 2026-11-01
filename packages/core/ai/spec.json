@@ -1,7 +1,7 @@
 {
  "name": "@once-ui-system/core",
  "version": "2.6.0",
- "generated": "2026-10-29",
+ "generated": "2026-11-01",
  "format": "props are 'type', 'type = default', or '!type' (required). Components with 'mixins' also accept all props of those mixins. 'extends' means all props of that component are accepted. In 'types', an array lists a union's allowed values, an object gives a shape's fields in the same notation as props, and a string is the type as written — usually pointing at a component whose props are already listed. 'functions' are the hooks, functions and constants, each with its signature (or type) and the first line of its docs. Anything with 'importFrom' is imported from that specifier, not the package root.",
  "tokens": {
   "StaticSpacingToken": "\"0\" | \"1\" | \"2\" | \"4\" | \"8\" | \"12\" | \"16\" | \"20\" | \"24\" | \"32\" | \"40\" | \"48\" | \"56\" | \"64\" | \"72\" | \"80\" | \"104\" | \"128\" | \"160\"",
@@ -3139,6 +3139,7 @@
     "flush": "boolean = false",
     "showClose": "boolean = !hideClose",
     "hideClose": "boolean = false",
+    "closeLabel": "string = Close",
     "onHeightChange": "(height: number) => void",
     "minHeight": "number",
     "closeOnClickaway": "boolean = true"
@@ -3166,6 +3167,7 @@
     "description": "ReactNode",
     "footer": "ReactNode",
     "showClose": "boolean = true",
+    "closeLabel": "string = Close",
     "closeOnClickaway": "boolean = true",
     "flush": "boolean = false",
     "initialFocusRef": "RefObject<HTMLElement | null>",
@@ -4050,7 +4052,8 @@
     "backdrop": "React.ReactNode",
     "title": "!React.ReactNode",
     "open": "!boolean",
-    "onClose": "!() => void"
+    "onClose": "!() => void",
+    "closeLabel": "string = Close"
    }
   },
   "Nav": {

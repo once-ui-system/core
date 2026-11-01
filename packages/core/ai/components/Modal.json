@@ -6,7 +6,8 @@
   "backdrop": "React.ReactNode",
   "title": "!React.ReactNode",
   "open": "!boolean",
-  "onClose": "!() => void"
+  "onClose": "!() => void",
+  "closeLabel": "string = Close"
  },
  "tags": [
   "overlay"
