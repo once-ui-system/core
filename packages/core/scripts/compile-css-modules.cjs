@@ -111,15 +111,18 @@ for (const file of walk(DIST, (name) => name.endsWith(".js") || name.endsWith(".
   if (match) failures.push(`${rel(file)}: still imports Sass (${match[0]})`);
 }
 
-// 4. Every stylesheet the package ships goes in the `once-ui` cascade layer
-// (see foundations' css-layers.cjs), the compiled modules and the plain CSS
-// that copy-files brought over alike. dist/css holds foundations' own files,
-// already layered.
+// 4. Every stylesheet the package ships matches `data-theme="invert"` wherever
+// it keys off `data-theme="dark"` or `"light"` (foundations' theme-invert.cjs),
+// then goes in the `once-ui` cascade layer (css-layers.cjs), the compiled
+// modules and the plain CSS that copy-files brought over alike. dist/css holds
+// foundations' own files, already done.
+const { invertFile } = require(path.join(foundationsRoot, "scripts", "theme-invert.cjs"));
 const { wrapFile } = require(path.join(foundationsRoot, "scripts", "css-layers.cjs"));
 const stylesheets = walk(DIST, (name) => name.endsWith(".css")).filter(
   (file) => !path.relative(DIST, file).startsWith(`css${path.sep}`),
 );
 for (const file of stylesheets) {
+  invertFile(file);
   wrapFile(file);
 }
 

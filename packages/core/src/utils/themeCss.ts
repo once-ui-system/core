@@ -22,6 +22,23 @@ export interface ThemeStyleInput {
 
 const THEMES = ["light", "dark"] as const;
 
+/**
+ * An element in `theme`: `data-theme` set to it, or `data-theme="invert"`
+ * whose nearest themed ancestor is the other theme. Foundations' shipped CSS
+ * spells every `[data-theme=…]` this way (scripts/theme-invert.cjs); rules
+ * built at runtime use it so custom scales and backgrounds follow an invert
+ * subtree too. `:where()` weighs nothing and `:is()` takes its heaviest
+ * branch, so it has the specificity of `[data-theme="dark"]`.
+ */
+export function themeSelector(theme: "light" | "dark"): string {
+  const other = theme === "dark" ? "light" : "dark";
+  return (
+    `:is([data-theme="${theme}"],[data-theme="invert"]` +
+    `:where([data-theme="${other}"] *)` +
+    `:not(:where([data-theme="${other}"] [data-theme="${theme}"] *)))`
+  );
+}
+
 /** The steps `data-<scheme>="custom"` maps, as foundations' function.scss does. */
 const SCHEME_STEPS = [
   "100",
@@ -101,7 +118,7 @@ export function themeStyle({ seeds, scales, pageBackground, surfaceBackground }:
     const page = forTheme(pageBackground, theme);
     if (page) properties["--page-background"] = page;
     rules.push(
-      block(`html:root[data-theme="${theme}"],html:root [data-theme="${theme}"]`, properties),
+      block(`html:root[data-theme="${theme}"],html:root ${themeSelector(theme)}`, properties),
     );
   }
 
@@ -112,7 +129,7 @@ export function themeStyle({ seeds, scales, pageBackground, surfaceBackground }:
     if (!surface) continue;
     rules.push(
       block(
-        `html:root[data-surface="filled"][data-theme="${theme}"],html:root[data-surface="filled"] [data-theme="${theme}"]`,
+        `html:root[data-surface="filled"][data-theme="${theme}"],html:root[data-surface="filled"] ${themeSelector(theme)}`,
         { "--surface-background": surface },
       ),
     );

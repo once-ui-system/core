@@ -1543,6 +1543,23 @@ function validate(source, spec, iconNames, options = {}) {
     );
   }
 
+  // Meta.generate gives every page a canonical URL since 3.0. Next passes a
+  // layout's `alternates` down to each page without its own metadata, so in a
+  // layout it would make all of them canonicalise to the layout's URL.
+  const isLayout =
+    /(^|[\\/])layout\.[jt]sx?$/.test(options.file ?? "") ||
+    /export\s+default\s+(?:async\s+)?function\s+\w*Layout\b/.test(source);
+  if (
+    isLayout &&
+    /\b(?:Meta\.generate|createMetadata)\s*\(/.test(source) &&
+    !/\bcanonical\s*:\s*false\b/.test(source)
+  ) {
+    add(
+      "Meta.layout",
+      "Meta.generate in a layout: its canonical URL passes down to every page without metadata of its own, so they all name the layout's URL as canonical. Call it in each page, or pass canonical: false here",
+    );
+  }
+
   for (const [name, from] of packageImportsFromRoot(source, spec)) {
     add(
       "imports.package",
@@ -1814,7 +1831,7 @@ function main() {
     const next = flags.next ?? (importsNext(source) || isNextProject(dir));
     const icons = projectIconNames(projectRoot(dir));
 
-    const issues = validate(source, spec, iconNames, { next, icons });
+    const issues = validate(source, spec, iconNames, { next, icons, file });
 
     if (issues.length === 0) {
       console.log(`✓ ${file}: no mechanical issues`);

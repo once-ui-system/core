@@ -55,7 +55,10 @@ export async function generateMetadata() {
     description: meta.home.description,
     baseURL: baseURL,
     path: meta.home.path,
-    image: meta.home.image
+    image: meta.home.image,
+    // Every page sets its own; a canonical here would pass down to any page
+    // that doesn't and name the home page instead.
+    canonical: false,
   });
 
   return {
