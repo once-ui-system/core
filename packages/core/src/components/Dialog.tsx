@@ -42,6 +42,8 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
   /** Show the close button. On by default, as on `Drawer`; turn it off when
    *  only an action in the dialog should dismiss it. */
   showClose?: boolean;
+  /** The close button's tooltip and accessible name. Default "Close"; set it for a non-English UI. */
+  closeLabel?: string;
   onHeightChange?: (height: number) => void;
   /** The dialog's minimum height, on the token scale (`320` is 20rem). */
   minHeight?: number;
@@ -72,6 +74,7 @@ const Dialog = ({
   footer,
   flush = false,
   showClose = true,
+  closeLabel = "Close",
   onHeightChange,
   minHeight,
   ...rest
@@ -234,7 +237,7 @@ const Dialog = ({
                     <IconButton
                       icon="close"
                       onClick={onClose}
-                      tooltip="Close"
+                      tooltip={closeLabel}
                       tooltipPosition="left"
                       variant="secondary"
                     />
@@ -323,7 +326,7 @@ const Dialog = ({
                         icon="close"
                         size="m"
                         variant="tertiary"
-                        tooltip="Close"
+                        tooltip={closeLabel}
                         onClick={onClose}
                       />
                     )}
@@ -351,7 +354,7 @@ const Dialog = ({
                       icon="close"
                       size="m"
                       variant="tertiary"
-                      tooltip="Close"
+                      tooltip={closeLabel}
                       onClick={onClose}
                     />
                   </Flex>

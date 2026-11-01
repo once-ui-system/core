@@ -12,6 +12,7 @@ import { useAdapters } from "../../contexts/AdapterProvider.js";
 import type { IconName } from "../../icons.js";
 import styles from "./MegaMenu.module.scss";
 import { MegaMenuAccordion } from "./MegaMenuAccordion.js";
+import { clampPanelLeft } from "./panelPosition.js";
 
 export interface MenuLink {
   label: ReactNode;
@@ -59,6 +60,8 @@ export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
  * belongs here too, or the panel will be short by that much.
  */
 const DROPDOWN_CHROME = 26;
+
+const viewportWidth = () => document.documentElement.clientWidth || window.innerWidth;
 
 /** What a keyboard can land on inside a panel, custom `content` included. */
 const FOCUSABLE =
@@ -119,7 +122,7 @@ const MegaMenuBar = ({
 
         // Set initial position immediately
         setDropdownPosition({
-          left: rect.left - parentRect.left,
+          left: clampPanelLeft(rect.left, parentRect.left, 300, viewportWidth()),
           width: 300,
           height: 200, // Default height
         });
@@ -245,7 +248,7 @@ const MegaMenuBar = ({
                 activeContent.style.transition = originalTransition;
 
                 setDropdownPosition({
-                  left: rect.left - parentRect.left,
+                  left: clampPanelLeft(rect.left, parentRect.left, width, viewportWidth()),
                   width,
                   height: contentHeight + DROPDOWN_CHROME,
                 });
