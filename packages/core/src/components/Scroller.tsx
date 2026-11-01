@@ -152,7 +152,17 @@ const ScrollBox = ({
 
       // Add scroll event listener
       scroller.addEventListener("scroll", updateScrollButtonsVisibility);
-      return () => scroller.removeEventListener("scroll", updateScrollButtonsVisibility);
+      // A strip that grows or shrinks (a resized window, a sidebar opening)
+      // may start or stop overflowing without a scroll event.
+      const resize =
+        typeof ResizeObserver === "undefined"
+          ? undefined
+          : new ResizeObserver(() => updateScrollButtonsVisibility());
+      resize?.observe(scroller);
+      return () => {
+        scroller.removeEventListener("scroll", updateScrollButtonsVisibility);
+        resize?.disconnect();
+      };
     }
   }, [direction]);
 
@@ -218,6 +228,57 @@ const ScrollBox = ({
     return child;
   });
 
+  // With no fade colour (the default) the strip's own edges fade out under
+  // the buttons, a mask on the scroll box that reads on any background and
+  // costs no blur. A colour paints a Fade over the edge instead, for a strip
+  // that should melt into a known surface.
+  const edgeMask = fadeColor === "transparent";
+  const row = direction === "row";
+
+  // A function, not a component: a component declared in here would be a
+  // new type every render and remount the button, dropping its focus.
+  const edge = (side: "start" | "end", children: React.ReactNode) => {
+    const start = side === "start";
+    const place = {
+      position: "absolute" as const,
+      padding: "4" as const,
+      zIndex: 1 as const,
+      horizontal: row ? (start ? undefined : ("end" as const)) : ("center" as const),
+      vertical: row ? ("center" as const) : start ? ("start" as const) : ("end" as const),
+      fillHeight: row,
+      fillWidth: !row,
+      left: row && start ? ("0" as const) : undefined,
+      right: row && !start ? ("0" as const) : undefined,
+      top: !row && start ? ("0" as const) : undefined,
+      bottom: !row && !start ? ("0" as const) : undefined,
+    };
+    if (edgeMask) {
+      return (
+        <Flex {...place} fillWidth={false} fitWidth={row} pointerEvents="none">
+          <Flex pointerEvents="auto">{children}</Flex>
+        </Flex>
+      );
+    }
+    // Rounded like the strip, so its corners do not show past a rounded box.
+    const corner = radius
+      ? row
+        ? { [start ? "leftRadius" : "rightRadius"]: radius }
+        : { [start ? "topRadius" : "bottomRadius"]: radius }
+      : {};
+    return (
+      <Fade
+        {...place}
+        {...corner}
+        base={fadeColor}
+        to={row ? (start ? "right" : "left") : start ? "bottom" : "top"}
+        width={row ? "4rem" : undefined}
+        height={row ? undefined : "4rem"}
+      >
+        {children}
+      </Fade>
+    );
+  };
+
   return (
     <Flex
       ref={ref}
@@ -226,22 +287,9 @@ const ScrollBox = ({
       style={style}
       {...rest}
     >
-      {showPrevButton && (
-        <Fade
-          base={fadeColor}
-          position="absolute"
-          padding="4"
-          horizontal={direction === "column" ? "center" : undefined}
-          vertical={direction === "column" ? "start" : "center"}
-          to={direction === "row" ? "right" : "bottom"}
-          width={direction === "row" ? "4rem" : undefined}
-          height={direction === "column" ? "4rem" : undefined}
-          fillHeight={direction === "row"}
-          fillWidth={direction === "column"}
-          left={direction === "row" ? "0" : undefined}
-          top={direction === "column" ? "0" : undefined}
-          zIndex={1}
-        >
+      {showPrevButton &&
+        edge(
+          "start",
           <IconButton
             icon={direction === "row" ? "chevronLeft" : "chevronUp"}
             onClick={handleScrollPrev}
@@ -254,35 +302,24 @@ const ScrollBox = ({
             size="s"
             variant="secondary"
             aria-label={names.previous}
-          />
-        </Fade>
-      )}
+          />,
+        )}
       <Flex
         fillWidth
         zIndex={0}
         radius={radius}
         direction={direction}
-        className={classNames(styles.scroller, styles[direction])}
+        className={classNames(styles.scroller, styles[direction], {
+          [styles.fadeStart]: edgeMask && showPrevButton,
+          [styles.fadeEnd]: edgeMask && showNextButton,
+        })}
         ref={scrollerRef}
       >
         {wrappedChildren}
       </Flex>
-      {showNextButton && (
-        <Fade
-          base={fadeColor}
-          padding="4"
-          position="absolute"
-          horizontal={direction === "column" ? "center" : "end"}
-          vertical={direction === "column" ? "end" : "center"}
-          to={direction === "row" ? "left" : "top"}
-          width={direction === "row" ? "4rem" : undefined}
-          height={direction === "column" ? "4rem" : undefined}
-          fillHeight={direction === "row"}
-          fillWidth={direction === "column"}
-          right={direction === "row" ? "0" : undefined}
-          bottom={direction === "column" ? "0" : undefined}
-          zIndex={1}
-        >
+      {showNextButton &&
+        edge(
+          "end",
           <IconButton
             icon={direction === "row" ? "chevronRight" : "chevronDown"}
             onClick={handleScrollNext}
@@ -295,9 +332,8 @@ const ScrollBox = ({
             size="s"
             variant="secondary"
             aria-label={names.next}
-          />
-        </Fade>
-      )}
+          />,
+        )}
     </Flex>
   );
 };

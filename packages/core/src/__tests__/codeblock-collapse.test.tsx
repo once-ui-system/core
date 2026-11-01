@@ -41,10 +41,12 @@ describe("CodeBlock collapse", () => {
 
   // 2.x passed blur={100}, which its Fade never wrote outside pattern mode:
   // the fade blurred at the mask's 0.5rem. 3.0's Fade writes its blur, and
-  // 100rem made Chromium drop the backdrop filter. The 2.x look is the default.
-  it("blurs at 0.5rem, as 2.x did", async () => {
+  // 100rem made Chromium drop the backdrop filter. The 2.x look is the
+  // default, which the stylesheet holds: no radius of its own.
+  it("blurs at the default 0.5rem, as 2.x did", async () => {
     const fade = await collapsed();
-    expect(fade.style.backdropFilter).toBe("blur(0.5rem)");
+    expect(fade.style.getPropertyValue("--fade-blur")).toBe("");
+    expect(fade.style.backdropFilter).toBe("");
   });
 
   it("follows an explicit background", async () => {

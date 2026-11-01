@@ -135,13 +135,45 @@ describe("a component's own transform", () => {
 });
 
 describe("Fade", () => {
+  // The blur is painted on the Fade's ::before layer (so the mask does not
+  // fade its children); the prop reaches it as the `--fade-blur` radius.
   it("blurs by its blur prop outside pattern mode", () => {
     const { container } = inLayout(<Fade blur={2} />);
-    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe(`blur(${t(2)})`);
+    expect((container.firstElementChild as HTMLElement).style.getPropertyValue("--fade-blur")).toBe(
+      t(2),
+    );
   });
 
   it("blurs by its blur prop in pattern mode", () => {
     const { container } = inLayout(<Fade blur={1} pattern={{ display: true, size: "2" }} />);
-    expect((container.firstElementChild as HTMLElement).style.backdropFilter).toBe(`blur(${t(1)})`);
+    const fade = container.firstElementChild as HTMLElement;
+    expect(fade.style.getPropertyValue("--fade-blur")).toBe(t(1));
+    expect(fade.style.getPropertyValue("--fade-pattern-size")).toBe("var(--static-space-2)");
+  });
+
+  it("leaves the default radius to the stylesheet and drops the filter at 0", () => {
+    const { container } = inLayout(
+      <>
+        <Fade />
+        <Fade blur={0} />
+      </>,
+    );
+    const [plain, flat] = Array.from(container.children) as HTMLElement[];
+    expect(plain.style.getPropertyValue("--fade-blur")).toBe("");
+    expect(flat.style.getPropertyValue("--fade-blur")).toBe("");
+    expect(flat.className).not.toBe(plain.className);
+  });
+
+  it("is a positioned box for its fade layer unless told otherwise", () => {
+    const { container } = inLayout(
+      <>
+        <Fade />
+        <Fade position="absolute" />
+      </>,
+    );
+    const [inFlow, placed] = Array.from(container.children) as HTMLElement[];
+    expect(inFlow.className).toContain("position-relative");
+    expect(placed.className).toContain("position-absolute");
+    expect(placed.className).not.toContain("position-relative");
   });
 });

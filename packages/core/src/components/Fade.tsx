@@ -17,7 +17,7 @@ interface FadeProps extends React.ComponentProps<typeof Flex> {
   className?: string;
   to?: "bottom" | "top" | "left" | "right";
   base?: BaseColor;
-  /** Backdrop blur: a number is on the token scale (`8` is 0.5rem), a string a CSS length. Default 0.5rem. */
+  /** Backdrop blur: a number is on the token scale (`8` is 0.5rem), a string a CSS length, `0` none. Default 0.5rem. */
   blur?: number | CSSUnit;
   pattern?: {
     display?: boolean;
@@ -36,6 +36,7 @@ const Fade = ({
     size: "4",
   },
   blur,
+  position = "relative",
   children,
   className,
   style,
@@ -54,12 +55,17 @@ const Fade = ({
       : `var(--${scheme}-background-${weight})`;
   };
 
-  const backdropBlur = `blur(${blur === undefined ? "0.5rem" : cssLength(blur)})`;
+  const flat = blur === 0;
+  const blurRadius = blur === undefined || flat ? undefined : cssLength(blur);
 
   return (
     <Flex
       ref={ref}
       fillWidth
+      // The gradient, blur and pattern are painted on a layer behind the
+      // children (`.mask::before`), which needs a positioned box. An
+      // `absolute` or `fixed` Fade passes its own.
+      position={position}
       style={
         {
           "--base-color": getBaseVar(base),
@@ -71,18 +77,19 @@ const Fade = ({
                 : to === "bottom"
                   ? "180deg"
                   : "270deg",
-          // The `.mask` class blurs at a fixed 0.5rem; only pattern mode
-          // used to write `blur`, so outside it the prop did nothing.
-          backdropFilter: backdropBlur,
-          WebkitBackdropFilter: backdropBlur,
+          ...(blurRadius && { "--fade-blur": blurRadius }),
           ...(pattern.display && {
-            backgroundImage: `linear-gradient(var(--gradient-direction), var(--base-color), transparent), radial-gradient(transparent 1px, var(--base-color) 1px)`,
-            backgroundSize: `100% 100%, var(--static-space-${pattern.size}) var(--static-space-${pattern.size})`,
+            "--fade-pattern-size": `var(--static-space-${pattern.size ?? "4"})`,
           }),
           ...style,
         } as React.CSSProperties
       }
-      className={classNames(styles.mask, className)}
+      className={classNames(
+        styles.mask,
+        flat && styles.flat,
+        pattern.display && styles.pattern,
+        className,
+      )}
       {...rest}
     >
       {children}

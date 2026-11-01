@@ -459,6 +459,18 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`Fade` no longer fades its own children.** The gradient, blur and pattern are
+  painted on a layer behind them, so a button or label inside a Fade stays
+  solid and sharp (a `Scroller`'s scroll buttons, and so `SegmentedControl`'s,
+  came out half transparent). An in-flow Fade is now `position: relative` for
+  that layer. `blur={0}` drops the backdrop filter instead of running a
+  zero-radius one.
+- **`Scroller` and `SegmentedControl` edges read on any background.** With the
+  default `fadeColor` the strip's own edges fade with a mask under its scroll buttons, which reads on any
+  background, instead of a blur-only band that smeared the tab under it into
+  a grey box. A `fadeColor` keeps the colour fade, now rounded like the strip
+  when `radius` is set. The buttons also come and go when the strip is resized,
+  not only when it is scrolled.
 - **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
   and opened on 1 November threw React #418, "October" against "November". The month and
   year labels of a picker that opens on the clock's month now render on the client, as
