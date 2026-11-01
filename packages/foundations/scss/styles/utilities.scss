@@ -54,7 +54,7 @@
 
   // The edge.
   &::before {
-    padding: var(--border-glow-width, 1.5px);
+    padding: var(--border-glow-width, 1px);
     background: conic-gradient(
       from var(--border-glow-angle),
       var(--border-glow-from, var(--function-brand-600)),
