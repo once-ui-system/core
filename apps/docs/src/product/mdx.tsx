@@ -74,6 +74,7 @@ import {
   Option,
   OTPInput,
   Pagination,
+  PhotoViewer,
   ProgressBar,
   RadioButton,
   RadioGroup,
@@ -123,6 +124,7 @@ import {
   LineChart,
   PieChart,
   RadialGauge,
+  Sparkline,
 } from "@once-ui-system/core/data";
 import { EmojiPicker } from "@once-ui-system/core/emoji";
 import { createMdxComponents } from "@once-ui-system/core/mdx";
@@ -192,6 +194,7 @@ import {
   CustomRemovableChipExample,
   CustomStyledRawDropdown,
   DataTableExample,
+  SparklineTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
   DataTableServerQueryExample,
@@ -209,6 +212,7 @@ import {
   DrawerExample,
   DrawerNavigationExample,
   DrawerSidesExample,
+  PhotoViewerExample,
   DropdownWithIcons,
   IconButtonEmojiPickerDropdown,
   IconsRawDropdown,
@@ -406,6 +410,7 @@ const mdxComponents = createMdxComponents({
   // ─── Core overlay ───
   Dialog,
   Drawer,
+  PhotoViewer,
   Toast,
   Spinner,
   LogoSpinner,
@@ -452,6 +457,7 @@ const mdxComponents = createMdxComponents({
   LineBarChart,
   RadialGauge,
   LinearGauge,
+  Sparkline,
   ChartHeader,
 
   // ─── Product components ───
@@ -491,6 +497,7 @@ const mdxComponents = createMdxComponents({
   DrawerExample,
   DrawerSidesExample,
   DrawerNavigationExample,
+  PhotoViewerExample,
   UseHotkeysExample,
   BasicDatePickerExample,
   DateTimePickerExample,
@@ -573,6 +580,7 @@ const mdxComponents = createMdxComponents({
   Pagination,
   PaginationControlledExample,
   DataTableExample,
+  SparklineTableExample,
   DataTableSelectionExample,
   DataTableServerExample,
   DataTableServerQueryExample,

@@ -81,7 +81,11 @@ describe("the 3.0 exports map", () => {
   });
 
   it("lists exactly the public entry points", () => {
-    expect(Object.keys(manifest.exports).filter((key) => !key.startsWith("./ai/"))).toEqual([
+    // The per-component paths are checked in component-subpaths.test.ts.
+    const keys = Object.keys(manifest.exports).filter(
+      (key) => !key.startsWith("./ai/") && !key.startsWith("./components/"),
+    );
+    expect(keys).toEqual([
       ".",
       "./css/styles.css",
       "./css/tokens.css",
@@ -110,6 +114,9 @@ describe("the 3.0 exports map", () => {
     "./interfaces",
     "./utils",
     "./modules",
+    // Internal modules: never public, though they live in dist/components.
+    "./components/FormContext",
+    "./components/ScrollLock",
   ])("has no %s subpath (it duplicated the root, or exposed internals)", (subpath) => {
     expect(manifest.exports[subpath]).toBeUndefined();
   });

@@ -89,6 +89,32 @@ function Header() {
   ]}
 />
 
+## Your own matching
+
+By default a query matches item names, keywords and sections, case-insensitively, in the order you passed the items. To rank results yourself (typo tolerance, recent items first), pass `filter`: it gets the items and the query and returns the items to show, in order. Sections follow the order of their first item. Kbar only calls it for a non-empty query.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  codes={[
+    {
+      code:
+`const startsFirst: KbarFilter = (items, query) => {
+    const q = query.toLowerCase();
+    const hits = items.filter((item) => item.name.toLowerCase().includes(q));
+    return [
+      ...hits.filter((item) => item.name.toLowerCase().startsWith(q)),
+      ...hits.filter((item) => !item.name.toLowerCase().startsWith(q)),
+    ];
+};
+
+<Kbar items={kbarItems} filter={startsFirst} />`,
+      language: "tsx",
+      label: "Ranking"
+    }
+  ]}
+/>
+
 ## API reference
 
 <PropsTable
@@ -100,6 +126,8 @@ function Header() {
     open: "Open or not, controlled, for opening the palette from a Button, a menu item or anywhere else. Leave it out and Kbar keeps its own state.",
     defaultOpen: "The starting state when `open` is left out.",
     onOpenChange: "Called with the state Kbar moves to: on ⌘K, the trigger, Escape, an option and a route change.",
+    filter: "Your own matching and ranking: return the items to show for the query, in order. Without it, a case-insensitive match on name, keywords and section.",
+    labels: "The palette's own words (dialog, results, noResults, navigate, goTo), for a translated interface.",
   }}
   content={[
     ["children"]

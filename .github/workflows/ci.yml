@@ -79,6 +79,12 @@ jobs:
       - name: Test
         run: pnpm --filter @once-ui-system/core --filter @once-ui-system/fx --filter @once-ui-system/blocks test
 
+      # Gzipped size of every export entry, against packages/core/bundle-size.json
+      # (scripts/bundle-size.mjs). Fails when one grows more than 5% and 512 B;
+      # record an intended growth with `--update` in the same PR. A few seconds.
+      - name: Bundle size
+        run: pnpm --filter @once-ui-system/core check:size
+
       # Advisory: publint and arethetypeswrong (esm-only profile). Both pass
       # since the 3.0 real-ESM build (see AGENTS.md); the step still never
       # fails the run. Read its log for new failures.

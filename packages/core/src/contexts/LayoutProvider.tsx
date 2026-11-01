@@ -1,6 +1,13 @@
 "use client";
 
-import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
+import React, {
+  createContext,
+  ReactNode,
+  startTransition,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { useAdapters, warnIfFrameworkUnadapted } from "./AdapterProvider.js";
 
 // Default breakpoints
@@ -96,8 +103,9 @@ const LayoutProvider = ({ children }: LayoutProviderProps) => {
       timeoutId = setTimeout(updateWidth, 100);
     };
 
-    // Set initial width
-    updateWidth();
+    // Set initial width, as a transition so Suspense boundaries still
+    // hydrating keep their server HTML (see ThemeProvider).
+    startTransition(updateWidth);
 
     // Add resize listener with debouncing
     window.addEventListener("resize", debouncedUpdateWidth);

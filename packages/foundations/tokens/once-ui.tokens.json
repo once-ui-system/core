@@ -2519,7 +2519,7 @@
         "brand-solid-medium": "{function-brand-700}",
         "brand-solid-weak": "{function-brand-600}",
         "brand-on-solid-strong": "{static-black}",
-        "brand-on-solid-medium": "{function-brand-1100}",
+        "brand-on-solid-medium": "{function-brand-100}",
         "brand-on-solid-weak": "{function-brand-200}"
       }
     },
@@ -2533,7 +2533,7 @@
         "brand-solid-medium": "{function-brand-700}",
         "brand-solid-weak": "{function-brand-600}",
         "brand-on-solid-strong": "{static-black}",
-        "brand-on-solid-medium": "{function-brand-1100}",
+        "brand-on-solid-medium": "{function-brand-100}",
         "brand-on-solid-weak": "{function-brand-200}"
       }
     },

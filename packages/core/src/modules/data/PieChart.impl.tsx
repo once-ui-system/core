@@ -3,13 +3,13 @@
 import React, { useEffect, useState } from "react";
 import { Column } from "../../components/Column.js";
 import type { DateRange } from "../../components/DatePicker.js";
-import { Row } from "../../components/Row.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
 import type { DataStyle } from "../../contexts/ThemeProvider.js";
 import type { SizeProps } from "../../interfaces.js";
 import { cssColor } from "../../internal/cssColor.js";
 import { RadiusSize, schemes } from "../../types.js";
 import { ChartHeader } from "./ChartHeader.js";
+import { ChartPlot } from "./ChartPlot.js";
 import { ChartStatus } from "./ChartStatus.js";
 import { DataTooltip } from "./DataTooltip.js";
 import { RadialGradient } from "./Gradient.js";
@@ -17,9 +17,10 @@ import { ChartProps, ChartVariant, DataPoint, SeriesKey } from "./interfaces.js"
 import { Legend } from "./Legend.js";
 import { getRechartsComponents } from "./rechartsLoader.js";
 
+import { chartFormatters } from "./utils/chartSeries.js";
 import { getDistributedColor } from "./utils/colorDistribution.js";
 
-export interface PieChartProps<T extends object = DataPoint> extends ChartProps<T> {
+export interface PieChartProps<T extends object = DataPoint> extends Omit<ChartProps<T>, "xKey"> {
   /**
    * This chart's colour mode, overriding DataThemeProvider's `mode`. Typed as
    * `DataStyle`; any other string still compiles, for 2.0 callers, and draws
@@ -52,6 +53,8 @@ const PieChart = ({
   ring = { inner: 0, outer: 80 },
   dataKey = "value",
   nameKey = "name",
+  valueFormat,
+  locale,
   "data-viz-style": dataViz,
   ...flex
 }: PieChartProps) => {
@@ -90,9 +93,7 @@ const PieChart = ({
 
   const handleDateRangeChange = (newRange: DateRange) => {
     setSelectedDateRange(newRange);
-    if (date?.onChange) {
-      date.onChange(newRange);
-    }
+    date?.onRangeChange?.(newRange);
   };
 
   const colorPalette = React.useMemo(() => {
@@ -124,9 +125,18 @@ const PieChart = ({
     });
   }, [data, selectedDateRange]);
 
-  const getGradientId = React.useCallback((colorKey: string | number | Date): string => {
-    return `pieGradient-${String(colorKey)}`;
-  }, []);
+  const format = React.useMemo(
+    () => chartFormatters(valueFormat, locale, []),
+    [valueFormat, locale],
+  );
+  // Scoped to this chart: two pies with the same colours on one page used to
+  // share gradient ids, so one chart's variant painted the other's slices.
+  const chartId = React.useId().replace(/[^a-zA-Z0-9_-]/g, "");
+  const getGradientId = React.useCallback(
+    (colorKey: string | number | Date): string =>
+      `pieGradient-${chartId}-${String(colorKey).replace(/[^a-zA-Z0-9_-]/g, "")}`,
+    [chartId],
+  );
 
   return (
     <Column
@@ -147,7 +157,8 @@ const PieChart = ({
         presets={date?.presets}
       />
       {/* The plot takes the height the header leaves: `height` sizes the card once. */}
-      <Row
+      <ChartPlot
+        data={filteredData}
         fillWidth
         flex={1}
         borderTop={
@@ -317,6 +328,7 @@ const PieChart = ({
                             label={undefined}
                             date={date}
                             variant={variant as ChartVariant}
+                            formatValue={format.tooltip}
                           />
                         );
                       }}
@@ -326,7 +338,7 @@ const PieChart = ({
               </ResponsiveContainer>
             );
           })()}
-      </Row>
+      </ChartPlot>
     </Column>
   );
 };

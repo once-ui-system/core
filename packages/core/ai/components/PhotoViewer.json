@@ -1,0 +1,45 @@
+{
+ "name": "PhotoViewer",
+ "group": "components",
+ "props": {
+  "items": "!PhotoViewerItem[]",
+  "index": "number",
+  "defaultIndex": "number = 0",
+  "onIndexChange": "(index: number) => void",
+  "onClose": "!(index: number) => void",
+  "getOrigin": "(index: number) => HTMLElement | null",
+  "scrollToOrigin": "boolean = false",
+  "deepLink": "string",
+  "unoptimized": "boolean",
+  "labels": "PhotoViewerLabels"
+ },
+ "tags": [
+  "media",
+  "overlay"
+ ],
+ "pairsWith": [
+  "Media",
+  "Grid",
+  "Column"
+ ],
+ "mixinsRef": [],
+ "types": {
+  "PhotoViewerItem": {
+   "src": "!string",
+   "alt": "!string",
+   "title": "string",
+   "caption": "string",
+   "width": "number",
+   "height": "number"
+  },
+  "PhotoViewerLabels": {
+   "dialog": "string",
+   "close": "string",
+   "previous": "string",
+   "next": "string",
+   "counter": "(current: number, total: number) => string",
+   "error": "string",
+   "retry": "string"
+  }
+ }
+}

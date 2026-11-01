@@ -1,6 +1,7 @@
 export * from "./BarChart.js";
 export * from "./ChartHeader.js";
 export * from "./ChartStatus.js";
+export * from "./ChartSummary.js";
 export * from "./DataTooltip.js";
 export * from "./Gradient.js";
 export * from "./interfaces.js";
@@ -10,4 +11,5 @@ export * from "./LineBarChart.js";
 export * from "./LineChart.js";
 export * from "./PieChart.js";
 export * from "./RadialGauge.js";
+export * from "./Sparkline.js";
 export * from "./Swatch.js";

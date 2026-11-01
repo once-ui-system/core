@@ -2,6 +2,7 @@
 
 import {
   createContext,
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -305,6 +306,10 @@ const getDomResolvedTheme = (fallback: "light" | "dark"): "light" | "dark" => {
 // a plain effect on the server, where layout effects warn.
 const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
+const camelToKebab = (str: string): string => {
+  return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
+};
+
 export function ThemeProvider({
   children,
   theme: propTheme = "system",
@@ -351,9 +356,16 @@ export function ThemeProvider({
 
   useIsomorphicLayoutEffect(() => {
     if (isForced) return;
-    setTheme(getStoredTheme(store, defaultTheme));
-    setResolvedTheme((current) => getDomResolvedTheme(current));
-    setThemeSynced(true);
+    // A transition: ThemeInit has already painted the theme, so nothing is
+    // waiting on this. As an urgent update it reached every Suspense boundary
+    // still hydrating (a lazy CodeBlock or chart), and React threw away their
+    // server HTML for the empty fallback until their chunk loaded: the page
+    // collapsed and grew back, a layout shift on every page with one.
+    startTransition(() => {
+      setTheme(getStoredTheme(store, defaultTheme));
+      setResolvedTheme((current) => getDomResolvedTheme(current));
+      setThemeSynced(true);
+    });
   }, [isForced, store, defaultTheme]);
 
   const getResolvedTheme = useCallback((t: Theme): "light" | "dark" => {
@@ -490,64 +502,68 @@ export function ThemeProvider({
   });
 
   useEffect(() => {
-    setStyleState((prevStyle) => ({
-      ...prevStyle,
-      theme: theme,
-    }));
+    setStyleState((prevStyle) =>
+      prevStyle.theme === theme ? prevStyle : { ...prevStyle, theme: theme },
+    );
   }, [theme]);
 
-  const themeValue = {
-    theme,
-    resolvedTheme,
-    setTheme: setThemeAndSave,
-  };
+  // Memoized, like the style value below: a render that changes nothing
+  // (themeSynced flipping on mount) must not hand consumers a new object, or
+  // the context change reaches Suspense boundaries still hydrating.
+  const themeValue = useMemo(
+    () => ({
+      theme,
+      resolvedTheme,
+      setTheme: setThemeAndSave,
+    }),
+    [theme, resolvedTheme, setThemeAndSave],
+  );
 
-  const camelToKebab = (str: string): string => {
-    return str.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, "$1-$2").toLowerCase();
-  };
+  const styleValue: StyleProviderState = useMemo(
+    () => ({
+      ...style,
+      setStyle: (newStyle: Partial<StyleOptions>) => {
+        // A new density brings its scaling along, unless the scaling is the
+        // theme's own; that one is applied but not stored, so it is worked
+        // out again from the density on the next visit.
+        const derived =
+          newStyle.density && !newStyle.scaling && !scalingSet
+            ? densityScaling(newStyle.density)
+            : undefined;
+        if (newStyle.scaling) setScalingSet(true);
+        setStyleState((prevStyle) => ({
+          ...prevStyle,
+          ...newStyle,
+          ...(derived && { scaling: derived }),
+        }));
+        if (derived) document.documentElement.setAttribute("data-scaling", derived);
 
-  const styleValue: StyleProviderState = {
-    ...style,
-    setStyle: (newStyle: Partial<StyleOptions>) => {
-      // A new density brings its scaling along, unless the scaling is the
-      // theme's own; that one is applied but not stored, so it is worked
-      // out again from the density on the next visit.
-      const derived =
-        newStyle.density && !newStyle.scaling && !scalingSet
-          ? densityScaling(newStyle.density)
-          : undefined;
-      if (newStyle.scaling) setScalingSet(true);
-      setStyleState((prevStyle) => ({
-        ...prevStyle,
-        ...newStyle,
-        ...(derived && { scaling: derived }),
-      }));
-      if (derived) document.documentElement.setAttribute("data-scaling", derived);
+        Object.entries(newStyle).forEach(([key, value]) => {
+          if (value && key !== "setStyle") {
+            const attrName = `data-${camelToKebab(key)}`;
 
-      Object.entries(newStyle).forEach(([key, value]) => {
-        if (value && key !== "setStyle") {
-          const attrName = `data-${camelToKebab(key)}`;
-
-          if (key === "theme") {
-            if (value === "system") {
-              if (defaultTheme === "system") store?.remove?.("data-theme");
-              else store?.set("data-theme", "system");
-              const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-              document.documentElement.setAttribute(attrName, resolvedValue);
+            if (key === "theme") {
+              if (value === "system") {
+                if (defaultTheme === "system") store?.remove?.("data-theme");
+                else store?.set("data-theme", "system");
+                const resolvedValue = window.matchMedia("(prefers-color-scheme: dark)").matches
+                  ? "dark"
+                  : "light";
+                document.documentElement.setAttribute(attrName, resolvedValue);
+              } else {
+                store?.set("data-theme", value.toString());
+                document.documentElement.setAttribute(attrName, value.toString());
+              }
             } else {
-              store?.set("data-theme", value.toString());
               document.documentElement.setAttribute(attrName, value.toString());
+              store?.set(attrName, value.toString());
             }
-          } else {
-            document.documentElement.setAttribute(attrName, value.toString());
-            store?.set(attrName, value.toString());
           }
-        }
-      });
-    },
-  };
+        });
+      },
+    }),
+    [style, scalingSet, store, defaultTheme],
+  );
 
   useEffect(() => {
     if (typeof window !== "undefined") {

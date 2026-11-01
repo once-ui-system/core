@@ -99,6 +99,28 @@ describe("CodeBlock interaction", () => {
     expect(errors).toEqual([]);
   });
 
+  it("copies through a textarea without a clipboard (plain http)", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal("navigator", { ...navigator, clipboard: undefined });
+    const copied: string[] = [];
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      writable: true,
+      value: vi.fn(() => {
+        copied.push((document.activeElement as HTMLTextAreaElement).value);
+        return true;
+      }),
+    });
+    try {
+      render(<CodeBlock codes={[codes[0]]} />, { wrapper });
+      await codeShows("const a = 1;");
+      await user.click(screen.getByRole("button", { name: "Copy" }));
+      expect(copied).toEqual(["const a = 1;"]);
+    } finally {
+      delete (document as { execCommand?: unknown }).execCommand;
+    }
+  });
+
   it("hides the copy button with copyButton={false}", async () => {
     render(<CodeBlock codes={[codes[0]]} copyButton={false} />, { wrapper });
     await codeShows("const a = 1;");

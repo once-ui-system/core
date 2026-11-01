@@ -18,6 +18,11 @@ interface DataTooltipProps {
   date?: DateConfig;
   showSwatches?: boolean;
   variant?: ChartVariant;
+  /**
+   * Writes a value: the series' `format`, else the chart's `valueFormat`, in
+   * its `locale`. Without it, values count up with comma-grouped digits.
+   */
+  formatValue?: (value: number, dataKey?: string) => string;
 }
 
 const DataTooltip = ({
@@ -29,6 +34,7 @@ const DataTooltip = ({
   date = { format: "MMM d" },
   showSwatches = true,
   variant = "gradient",
+  formatValue,
 }: DataTooltipProps) => {
   if (!active || !payload || !payload.length) {
     return null;
@@ -71,7 +77,9 @@ const DataTooltip = ({
               </Text>
             </Row>
             <Text onBackground="neutral-strong" textVariant="label-default-s">
-              {typeof entry.value === "number" ? (
+              {typeof entry.value === "number" && formatValue ? (
+                formatValue(entry.value, entry.dataKey)
+              ) : typeof entry.value === "number" ? (
                 <CountUp value={entry.value} separator="," duration={500} easing="ease-in-out" />
               ) : (
                 entry.value

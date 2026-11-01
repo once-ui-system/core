@@ -3,5 +3,10 @@
   "installCommand": "npx -y pnpm@10.14.0 install",
   "buildCommand": "cd ../.. && pnpm --filter @once-ui-system/core build && cd apps/docs && pnpm build",
   "framework": "nextjs",
-  "ignoreCommand": "[ \"$VERCEL_GIT_COMMIT_REF\" != \"main\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"preview\" ] && [ \"$VERCEL_GIT_COMMIT_REF\" != \"feat/3-0-breaking-cleanup\" ]"
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true
+    }
+  }
 }

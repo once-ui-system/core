@@ -129,6 +129,24 @@ describe("Media", () => {
     expect(overlay(container)).toBeNull();
   });
 
+  it("leaves the outline to focus-ring when it enlarges, so Tab shows a ring", async () => {
+    const user = userEvent.setup();
+    render(<Media src="/photo.jpg" alt="Lake" enlarge />, { wrapper });
+    const box = screen.getByRole("button", { name: "Enlarge image: Lake" });
+    expect(box).toHaveClass("focus-ring");
+    // An inline outline would beat the class's :focus-visible rule.
+    expect(box.style.outline).toBe("");
+    await user.tab();
+    expect(box).toHaveFocus();
+  });
+
+  it("keeps the outline off a media box that does not enlarge", () => {
+    const { container } = render(<Media src="/photo.jpg" alt="Lake" />, { wrapper });
+    const box = container.firstElementChild as HTMLElement;
+    expect(box).not.toHaveClass("focus-ring");
+    expect(box.style.outline).toMatch(/none/);
+  });
+
   it("does nothing on click without enlarge", async () => {
     const user = userEvent.setup();
     const { container } = render(<Media src="/photo.jpg" alt="Lake" />, { wrapper });
