@@ -28,9 +28,9 @@ const OUT_DIR = path.join(ROOT, "ai");
 const OUT_FILE = path.join(OUT_DIR, "spec.json");
 
 // The subpath barrels are listed separately because they are not re-exported
-// from the root: `data`, `code` and `media` pull in recharts, prismjs and
-// compressorjs, which a bundler resolves whenever it walks the root barrel,
-// and `emoji` its dataset. `media` also holds the players, Scrubber and
+// from the root: `code` and `media` pull in prismjs and compressorjs, which a
+// bundler resolves whenever it walks the root barrel, `data` its charts
+// (recharts until 3.0) and `emoji` its dataset. `media` also holds the players, Scrubber and
 // CompareImage (3.0). Without them here an agent would never learn these
 // components exist, so each carries the specifier to import it from.
 const BARRELS = [
@@ -117,7 +117,6 @@ const ENTRY_POINTS = [
   {
     specifier: "@once-ui-system/core/data",
     use: "Charts, gauges and chart chrome",
-    peer: "recharts",
   },
   { specifier: "@once-ui-system/core/code", use: "CodeBlock", peer: "prismjs" },
   {

@@ -4,6 +4,7 @@ import React from "react";
 import { Row } from "../../components/Row.js";
 import { Text } from "../../components/Text.js";
 import { useDataTheme } from "../../contexts/DataThemeProvider.js";
+import styles from "./Chart.module.css";
 import { ChartVariant } from "./interfaces.js";
 import { Swatch } from "./Swatch.js";
 
@@ -23,6 +24,10 @@ interface LegendProps {
   variant?: ChartVariant;
   /** The y axis' width in px, so a top-left legend starts where the plot does. Defaults to 64. */
   axisWidth?: number;
+  /** Which entries the reader has hidden, by index; they show dimmed. */
+  hidden?: readonly boolean[];
+  /** Makes each entry a button that shows or hides its series. */
+  onToggle?: (index: number) => void;
 }
 
 const Legend = ({
@@ -34,6 +39,8 @@ const Legend = ({
   colors,
   variant,
   axisWidth = 64,
+  hidden,
+  onToggle,
 }: LegendProps) => {
   // Read the theme on every render: as a default parameter the hook ran only
   // when `variant` was omitted.
@@ -47,13 +54,18 @@ const Legend = ({
   const getPositionStyle = () => {
     switch (position) {
       case "top-left":
-        return {
-          paddingLeft:
-            (labels === "y" || labels === "both") && !reverseY
-              ? `calc(${axisWidth}px + var(--static-space-16))`
-              : "var(--static-space-20)",
-          top: "var(--static-space-12)",
-        };
+        // Past the y axis, the legend starts where the plot does: offset by
+        // the axis, not `calc(axis + space)`, which jsdom cannot compute and
+        // so broke every role query in a test that renders a chart.
+        return (labels === "y" || labels === "both") && !reverseY
+          ? {
+              left: `${axisWidth}px`,
+              right: 0,
+              width: "auto",
+              paddingLeft: "var(--static-space-16)",
+              top: "var(--static-space-12)",
+            }
+          : { paddingLeft: "var(--static-space-20)", top: "var(--static-space-12)" };
       case "top-right":
         return {
           paddingRight: "var(--static-space-20)",
@@ -117,12 +129,28 @@ const Legend = ({
     >
       {payload.map((entry: Record<string, any>, index: number) => {
         const color = colors && colors[index] ? colors[index] : entry.stroke || entry.color;
-        return (
-          <Row key={index} vertical="center" gap="8">
+        const content = (
+          <>
             <Swatch color={color} size="m" variant={chartVariant} />
             <Text textVariant="label-default-s" wrap="nowrap">
               {entry.value}
             </Text>
+          </>
+        );
+        // The legend lets the pointer through to the plot; only its buttons catch it.
+        return onToggle ? (
+          <button
+            key={index}
+            type="button"
+            className={styles.legendItem}
+            aria-pressed={!hidden?.[index]}
+            onClick={() => onToggle(index)}
+          >
+            {content}
+          </button>
+        ) : (
+          <Row key={index} vertical="center" gap="8">
+            {content}
           </Row>
         );
       })}

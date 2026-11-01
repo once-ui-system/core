@@ -142,7 +142,7 @@ export function DashboardExample() {
             <Column flex={1} center background="neutral-alpha-weak" radius="m" padding="48">
               <Icon name="linearGauge" size="l" onBackground="neutral-weak" />
               <Text textVariant="label-default-s" onBackground="neutral-weak">
-                Chart area — use recharts or your data viz module
+                Chart area — a LineChart from @once-ui-system/core/data
               </Text>
             </Column>
           </Column>

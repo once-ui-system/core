@@ -3,13 +3,11 @@ import type { FlexElementProps } from "../../interfaces.js";
 import type { ColorValue, TShirtSizes } from "../../types.js";
 
 /**
- * Recharts' own CurveType, inlined.
- *
- * Importing it left `recharts` in core's published .d.ts, so anyone who did
- * not install the optional peer failed to typecheck even when their bundle
- * never touched a chart. The interpolation names are a stable part of d3's
- * shape API; the CurveFactory arm of recharts' union is deliberately dropped,
- * as passing a factory was never part of this component's surface.
+ * How a line or area runs between its points: d3's curve names, which the
+ * charts' own SVG renderer draws (`natural` by default; `linear` for straight
+ * segments, `monotone` to never overshoot a point, `step`, `stepBefore` and
+ * `stepAfter` to hold a value until the next one). The `Closed`, `Open`, `X`
+ * and `Y` variants draw as their base curve.
  */
 type CurveType =
   | "basis"
