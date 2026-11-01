@@ -160,8 +160,28 @@ export const SUBPATHS_3_0 = [
 	"package.json",
 	"AGENTS.md",
 ];
+/**
+ * The components 3.0 publishes one by one (`@once-ui-system/core/components/Button`),
+ * read from core's exports map: a deep import of one of them stays deep, so a
+ * Turbopack build keeps shipping only that component.
+ */
+const PUBLIC_COMPONENTS = new Set(
+	Object.keys(
+		JSON.parse(
+			fs.readFileSync(
+				path.join(path.dirname(fileURLToPath(import.meta.url)), "../packages/core/package.json"),
+				"utf8",
+			),
+		).exports,
+	)
+		.filter((key) => key.startsWith("./components/"))
+		.map((key) => key.slice("./components/".length)),
+);
+
 const isEntry = (source) =>
 	source === ROOT ||
+	(/^@once-ui-system\/core\/components\/([A-Za-z]\w*)$/.test(source) &&
+		PUBLIC_COMPONENTS.has(source.slice(`${ROOT}/components/`.length))) ||
 	SUBPATHS_3_0.some((sub) => source === `${ROOT}/${sub}`) ||
 	/^@once-ui-system\/core\/(css|ai)\//.test(source);
 
@@ -242,6 +262,18 @@ export function transformImports(src) {
 			warnings.push(`${source}: an internal module that ./components/* exposed; 3.0 has no public equivalent`);
 			reported.add(source);
 			return whole;
+		}
+		// A public component's own path is a 3.0 entry: keep it, without an extension.
+		if (
+			removed?.module &&
+			PUBLIC_COMPONENTS.has(removed.module) &&
+			!parts.def &&
+			!(parts.named ?? []).some((spec) => MOVED_TO.has(spec.name))
+		) {
+			const target = `${ROOT}/components/${removed.module}`;
+			if (target === source) return whole;
+			hits.push(`${source} → ${target}`);
+			return `${kw} ${clause.trim()} from ${q}${target}${q}${semi}`;
 		}
 		if (parts.def) {
 			warnings.push(`${source}: a default import (${parts.def}); Once UI has named exports only, use { ${parts.def} }`);
@@ -332,7 +364,10 @@ export function transformImports(src) {
 	out = out.replace(/(?<![\w$.])import\s*\(\s*(["'])(@once-ui-system\/core\/[^"']+)\1\s*\)/g, (whole, q, source) => {
 		const removed = removedSource(source);
 		if (!removed || removed.unknownDeep || INTERNAL_MODULES.has(removed.module)) return whole;
-		const target = (removed.module && MOVED_TO.get(removed.module)) || ROOT;
+		const target = PUBLIC_COMPONENTS.has(removed.module)
+			? `${ROOT}/components/${removed.module}`
+			: (removed.module && MOVED_TO.get(removed.module)) || ROOT;
+		if (target === source) return whole;
 		hits.push(`import(${source}) → import(${target})`);
 		return `import(${q}${target}${q})`;
 	});

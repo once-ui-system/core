@@ -18,6 +18,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
+  stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
+  installed version's `ai/` files. Its tools search components, return a
+  component's import, props and gotchas, resolve types, serve task bundles and
+  rules, and run the `once-ui-validate-ai-code` checks.
+- **One import path per public component: `@once-ui-system/core/components/<Name>`.**
+  Listed one by one for the modules the root re-exports, so unlike 2.x's
+  `./components/*` wildcard no internal module is public. The codemod keeps these
+  imports instead of moving them to the root.
+  Next 16 builds with Turbopack, which ignores `optimizePackageImports`. As a result, a
+  server component that imports `Button` from the package root shipped every client
+  component. In a Next 16.2 static export of a page with a Button and four layout
+  components, that was about 150 kB gzip of Once UI; with the subpath imports it was about
+  26 kB. Root imports are unchanged.
 - **`Mascot` turns into a cube while it works** (3.0.0-beta.1). `working="cube"` draws
   the mascot in 3D, and while `state` is `thinking` it becomes the 2 × 2 Once UI cube,
   scrambles and solves it with no face showing, shows the logo and softens back. `sides`
@@ -43,6 +57,23 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 - **`error`, `errorMessage` and `size`** on Slider, in both modes (C6): the fill and
   thumb turn danger, the thumb is `aria-invalid` and described by the message, and
   `size` (`xs` to `xl`, or the `Form`'s) sets the thumb and track.
+- **Charts** (LineChart, BarChart, LineBarChart, PieChart): `xKey`; series `label`
+  and `format`; `valueFormat` (`"compact"`, `"percent"`, `Intl.NumberFormatOptions`
+  or a function) and `locale` for the numbers on the axis and in the tooltip;
+  `stack` (`true` or `"percent"`) on LineChart and BarChart; BarChart
+  `orientation="horizontal"`; the `CurveType` and `ValueFormat` types.
+- **Chart summaries for screen readers**: each chart's plot is `role="img"`, named
+  by its title and a plain-language summary of its data in its `valueFormat` and
+  `locale` ("Revenue and Cost, Jan to Dec. Revenue: highest 12,400 in Aug, lowest
+  3,100 in Feb."; a pie: "Share by browser: Chrome 62%, Safari 21%."), with the data
+  as a visually hidden table inside the card. `summary` replaces the generated text
+  and `aria-label` the whole name. `ChartSummary` renders the table on its own.
+- **`Sparkline`**: a tiny trend line, area or bar strip for stat tiles and table
+  cells, in pure SVG (no recharts; it renders on the server and is on the root
+  barrel as well as `/data`). `data` as numbers or rows with `valueKey`, `variant`,
+  `color`, `width`/`height` (a number is px), `curve`, `showLast`, `min`/`max`, and a
+  generated `aria-label` ("Trend from 120 to 340, high 360") in `valueFormat` and
+  `locale`.
 - **Input `reveal`** (default `true`): `type="password"` shows a show/hide toggle in the
   suffix, as PasswordInput did.
 - **Table** has DataTable's API, plus `searchable` (with `searchPlaceholder`), row
@@ -163,6 +194,21 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Changed
 
+- **`Meta.generate` names every page's canonical URL**, `baseURL` plus `path`,
+  where 2.x wrote one only alongside language alternates. `canonical: false` leaves it
+  out. Call it in pages, not layouts: Next passes a layout's canonical down to every
+  page without metadata of its own. `once-ui-validate-ai-code` flags `Meta.generate`
+  in a layout (rule `Meta.layout`). A `baseURL` without a scheme now gives an absolute
+  `og:url` (`https://site.com/`, was `site.com/`).
+- **Once UI's CSS is in a cascade layer, `once-ui`**, in core, fx, blocks and
+  foundations. An app's unlayered CSS and Tailwind utilities now override Once UI
+  without `!important`; Once UI's own rules still meet by specificity and order inside
+  the layer. See MIGRATING.md for the two cases that behave differently.
+- **Chart `date.onChange` is `date.onRangeChange`** (C8), on the 3.0 rule that
+  `onChange` only names the native DOM event. The codemod renames it in an inline
+  `date` object. Chart tooltips and axes write numbers through `valueFormat` in
+  `locale` when either is set; without them they draw as 2.x did. With no
+  `series`, the x column is no longer drawn as a series, and `label` never is.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
@@ -381,6 +427,32 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
+  and opened on 1 November threw React #418, "October" against "November". The month and
+  year labels of a picker that opens on the clock's month now render on the client, as
+  its day grid already did.
+- **Two PieCharts on one page** no longer share gradient ids (one chart's colours
+  could paint the other's slices), and a chart's x-axis ticks no longer search the
+  whole data set each (slow on long series).
+- **A Button or IconButton nobody can press now says so in development.** With no
+  `onClick`, `href` or button `type` it renders a div, which is right as decoration inside
+  a clickable Card and a dead control anywhere else. Lighthouse found such dead controls on
+  Aveiro's pages. Development now warns when no interactive element is around one.
+- **Pages with a CodeBlock or chart no longer collapse after hydration.** ThemeProvider,
+  DataThemeProvider and LayoutProvider updated urgently as they mounted, so React threw
+  away the server HTML of every lazy CodeBlock, chart, Map and MediaUpload still loading
+  and showed the empty fallback until its chunk came. Docs component pages lost and
+  regained 4,700 px of code examples (Lighthouse CLS 0.28 on mobile). Mount-time updates
+  are transitions now, and the context values are memoized.
+- **Media `priority` fetches the image at high priority under Next.** The Next adapter
+  passed it on as next/image's `priority`, which Next 16 deprecated for `preload`: a
+  preload link, with the image itself at normal priority. It now renders
+  `loading="eager"` and `fetchPriority="high"`, as the DOM default already did.
+- **Icon no longer brings the popover machinery with it.** Its `tooltip` prop imported
+  HoverCard, so Animation and floating-ui shipped with every component that draws an
+  icon: Button alone dropped from about 33 to 22 kB gzipped. The hover card now loads
+  only for an icon that has a tooltip; server-rendered pages keep their HTML while it
+  loads.
 - **Several announcement tags on one page** no longer share `id="badge"`; each arrow
   follows hover on its own tag (2.x Badge).
 - **RadioGroup `error` and `errorMessage` reach its radios**: each is `aria-invalid`
@@ -396,6 +468,20 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Added
 
+- **`Kbar` takes your own matching and ranking.** `filter={(items, query) => …}` returns
+  the items a query shows, in order, and the palette renders exactly that, sections in the
+  order of their first item, so an app can rank with typo tolerance or recent items first.
+  Without it the case-insensitive match on name, keywords and section is unchanged. Its
+  words (`labels`: dialog name, results, no results, the footer hints) can be translated;
+  English stays the default. `KbarFilter` and `KbarLabels` are exported types.
+- **`PhotoViewer`.** A full-screen viewer for a set of photos: a photo grows out of the
+  tile it opened from and closes back into it, swipe moves between photos (with resistance
+  at the ends), swipe down closes, pinch, double-tap or double-click zooms and drag pans.
+  Arrows and Escape work from the keyboard, focus returns to the tile, and reduced motion
+  turns every animation into a short fade. `items` (`{ src, alt, title?, caption? }`),
+  `index` / `defaultIndex` / `onIndexChange`, `onClose`, and an opt-in `deepLink` that keeps
+  the photo in the URL so it can be shared and Back closes it. Images go through the Image
+  adapter, and `Media` does not import it. 3.0 only.
 - **`StyleScope`.** One site's or tenant's look inside another page: a site builder's
   preview, an agency's site on a marketplace, a venue's pages on a shared app. `config`
   takes the same keys as the config's `style` (brand, accent, neutral, solid, solidStyle,
@@ -417,6 +503,24 @@ lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
 ### Fixed
 
+- **An enlargeable `Media` shows a focus ring.** Its inline `outline: none` beat the
+  `focus-ring` class, so tabbing to the image left no visible focus. The box now leaves the
+  outline to `focus-ring`, which draws only for keyboard focus; a click still shows nothing.
+- **`HeadingNav`, `Scroller` and the snap `Carousel` respect reduced motion.** Their
+  buttons, links and drag snap scrolled with `behavior: "smooth"` whatever the visitor's
+  setting; under `prefers-reduced-motion: reduce` they now jump straight there. Everyone
+  else still gets the smooth scroll.
+- **Copying a heading's link or a `CodeBlock` works on plain http.** Outside a secure
+  context (a dev server opened from a phone on the LAN) there is no `navigator.clipboard`,
+  so the heading anchor did nothing and CodeBlock's copy button did nothing. Both now fall
+  back to a hidden textarea and `document.execCommand("copy")`, and report the real
+  outcome: the toast says when the link could not be copied, and CodeBlock's check only
+  shows after a copy that worked. Where the Clipboard API works nothing changes.
+- **`HeadingLink` takes a `label`.** It always named its copy link ("Copy link to …") from
+  the text it could read in its children on the client, so a child that renders its own
+  text dropped out of the name and a caller could not set it. `label` sets the name, as
+  `MdxHeading` already does with a label built on the server; without it the name still
+  comes from the children.
 - **The cube Mascot talks with one mouth.** While speaking (and laughing) the 3D and flat
   cube drew the mood's line and a small open ring on top of each other, so a happy smile
   showed a stray "o" in its middle. The mouth is now one outline that parts from the

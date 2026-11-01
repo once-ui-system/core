@@ -307,13 +307,16 @@ export interface StyleProps {
   backdropBlur?: BlurSize | number | CSSUnit;
   /**
    * Render this subtree in the light or dark theme, whatever the page is in:
-   * `data-theme` on this element, typed. Not the same as `showIn`, which
-   * shows or hides an element depending on the theme around it and changes
-   * nothing about its colours.
+   * `data-theme` on this element, typed. `"invert"` takes the opposite of the
+   * theme around it, in CSS alone: dark on a light page, light on a dark one,
+   * right on the first paint under `theme="system"` too. Not the same as
+   * `showIn`, which shows or hides an element depending on the theme around
+   * it and changes nothing about its colours.
    *
    * @example <Column theme="dark" background="page">…</Column>
+   * @example <Row theme="invert" background="page">…</Row>
    */
-  theme?: "light" | "dark";
+  theme?: "light" | "dark" | "invert";
   /**
    * The subtree's corner style — `ThemeProvider`'s `border`, as `data-border`.
    * Named apart from `border`, which on a layout primitive is a border colour.

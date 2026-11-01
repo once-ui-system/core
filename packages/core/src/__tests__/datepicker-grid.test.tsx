@@ -103,6 +103,29 @@ describe("DatePicker grid", () => {
     expect(html).not.toContain('role="button"');
   });
 
+  it("leaves the clock's month out of the server markup when there is no date", () => {
+    // The server's month can differ from the visitor's, and hydrating one
+    // against the other throws. With a date, the month is the date's.
+    const html = renderToString(
+      <LayoutProvider>
+        <DatePicker onValueChange={() => {}} />
+      </LayoutProvider>,
+    );
+    const months = new Intl.DateTimeFormat("en-US", { month: "long" });
+    for (let m = 0; m < 12; m++) {
+      expect(html).not.toContain(`>${months.format(new Date(2026, m, 1))}<`);
+    }
+    expect(html).not.toContain(`>${new Date().getFullYear()}<`);
+  });
+
+  it("names the clock's month once mounted", async () => {
+    const now = new Date();
+    render(<DatePicker onValueChange={vi.fn()} />, { wrapper });
+    const month = new Intl.DateTimeFormat("en-US", { month: "long" }).format(now);
+    expect(await screen.findByText(month)).toBeTruthy();
+    expect(screen.getByText(String(now.getFullYear()))).toBeTruthy();
+  });
+
   it("is one tab stop, on the selected day, which follows the arrow keys", async () => {
     const user = userEvent.setup();
     render(<DatePicker value={jan(5)} onValueChange={vi.fn()} />, { wrapper });

@@ -8,7 +8,10 @@ import { ThemeInit } from "../components/ThemeInit";
 import { ThemeProvider } from "../contexts/ThemeProvider";
 import { expectNoAxeViolations } from "../test/axe";
 import { customSchemeProperties, customSchemeThemeProperties } from "../utils/colorScheme";
-import { themeStyle } from "../utils/themeCss";
+import { themeSelector, themeStyle } from "../utils/themeCss";
+
+const LIGHT = themeSelector("light");
+const DARK = themeSelector("dark");
 
 /**
  * Gaps agents hit after 2.3's scales: one ramp served both themes (a lime
@@ -78,9 +81,9 @@ describe("per-theme scheme scales", () => {
   it("ThemeInit renders each theme's ramp on the server and implies custom", () => {
     const html = renderToString(<ThemeInit config={{ accentScale: { light, dark } }} />);
     expect(html).toContain(
-      'html:root[data-theme="light"],html:root [data-theme="light"]{--scheme-accent-100:#0B1A00;',
+      `html:root[data-theme="light"],html:root ${LIGHT}{--scheme-accent-100:#0B1A00;`,
     );
-    expect(html).toContain('[data-theme="dark"]{--scheme-accent-100:#101A04;');
+    expect(html).toContain(`${DARK}{--scheme-accent-100:#101A04;`);
     // The subtree reads its own steps, not the ones <html> resolved.
     expect(html).toContain(
       'html:root[data-accent="custom"] [data-theme]{--function-accent-100:var(--scheme-accent-100);',
@@ -110,6 +113,26 @@ describe("per-theme scheme scales", () => {
     expect(hero.getPropertyValue("--function-brand-600").trim()).toBe("var(--scheme-brand-600)");
   });
 
+  it("an invert subtree takes the ramp of the theme it inverts to", () => {
+    addCss(themeInitCss({ brandScale: { light, dark } }));
+    root.setAttribute("data-brand", "custom");
+    for (const [page, expected] of [
+      ["light", "#B8F23A"],
+      ["dark", "#4E7A00"],
+    ] as const) {
+      root.setAttribute("data-theme", page);
+      const { getByTestId, unmount } = render(
+        <div data-theme="invert" data-testid="band">
+          x
+        </div>,
+      );
+      expect(
+        getComputedStyle(getByTestId("band")).getPropertyValue("--scheme-brand-600").trim(),
+      ).toBe(expected);
+      unmount();
+    }
+  });
+
   it("ThemeProvider writes per-theme rules to a stylesheet, not inline", () => {
     const { unmount } = render(
       <ThemeProvider brandScale={{ light, dark }}>
@@ -117,7 +140,7 @@ describe("per-theme scheme scales", () => {
       </ThemeProvider>,
     );
     const sheet = document.head.querySelector("style[data-once-ui-theme-style]");
-    expect(sheet?.textContent).toContain('[data-theme="dark"]{--scheme-brand-100:#101A04;');
+    expect(sheet?.textContent).toContain(`${DARK}{--scheme-brand-100:#101A04;`);
     // An inline value would beat the per-theme rules in both themes.
     expect(root.style.getPropertyValue("--scheme-brand-600")).toBe("");
     expect(root.getAttribute("data-brand")).toBe("custom");
@@ -134,19 +157,18 @@ describe("page and surface backgrounds", () => {
       pageBackground: { light: "#F7F5EF", dark: "neutral-background-strong" },
       surfaceBackground: "--my-card",
     });
-    expect(css).toContain('html:root [data-theme="light"]{--page-background:#F7F5EF;}');
+    expect(css).toContain(`html:root ${LIGHT}{--page-background:#F7F5EF;}`);
+    expect(css).toContain(`html:root ${DARK}{--page-background:var(--neutral-background-strong);}`);
     expect(css).toContain(
-      'html:root [data-theme="dark"]{--page-background:var(--neutral-background-strong);}',
+      `html:root[data-surface="filled"] ${LIGHT}{--surface-background:var(--my-card);}`,
     );
-    expect(css).toContain(
-      'html:root[data-surface="filled"] [data-theme="light"]{--surface-background:var(--my-card);}',
-    );
-    expect(css).toContain('[data-theme="dark"]{--surface-background:var(--my-card);}');
+    expect(css).toContain(`${DARK}{--surface-background:var(--my-card);}`);
   });
 
   it("a theme left out keeps the stylesheet's value", () => {
     const { css } = themeStyle({ seeds: {}, scales: {}, pageBackground: { light: "#fff" } });
-    expect(css).not.toContain('"dark"');
+    expect(css).not.toContain('html:root[data-theme="dark"]');
+    expect(css).not.toContain(DARK);
   });
 
   it("drops a value that could end the declaration", () => {

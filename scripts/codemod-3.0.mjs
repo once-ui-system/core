@@ -1702,6 +1702,8 @@ const TABLE_ACTION_VARIANT = (value) => {
 
 const RENAME_KEY = (to, hit) => (value) => ({ text: `${to}: ${value}`, hit });
 
+const CHARTS = ["LineChart", "BarChart", "LineBarChart", "PieChart"];
+
 // ─── Data built outside the element: Timeline items, Scrubber tracks ───────
 
 
@@ -2055,6 +2057,7 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
     "Table",
     "Scrubber",
     "Avatar",
+    ...CHARTS,
   ]);
   for (const tag of tags) {
     for (const name of namesFor(tag, bindings, isCore)) {
@@ -2105,6 +2108,9 @@ export function transformTone(src, { isCore = isCoreSource } = {}) {
         }
         if (tag === "Avatar")
           rewriteInlineKeys(out, attrs, "statusIndicator", "color", RENAME_KEY("scheme", "statusIndicator.color → scheme"), push, warn, "statusIndicator.color is statusIndicator.scheme in 3.0");
+        // C8: a chart's date picker reports its range through `date.onRangeChange`.
+        if (CHARTS.includes(tag))
+          rewriteInlineKeys(out, attrs, "date", "onChange", RENAME_KEY("onRangeChange", "date.onChange → onRangeChange"), push, warn, "date.onChange is date.onRangeChange in 3.0");
       }
     }
   }

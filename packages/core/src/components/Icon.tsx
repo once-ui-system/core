@@ -1,15 +1,15 @@
 "use client";
 
 import classNames from "clsx";
-import React, { ReactNode } from "react";
+import React, { lazy, ReactNode, Suspense } from "react";
 import { useIcons } from "../contexts/IconProvider.js";
 import { type IconComponent, IconName } from "../icons.js";
 import type { LeafPropsOf } from "../interfaces.js";
 import { ColorScheme, ColorWeight, TShirtSizes } from "../types.js";
 import { Flex } from "./Flex.js";
-import { HoverCard } from "./HoverCard.js";
 import styles from "./Icon.module.scss";
-import { Tooltip } from "./Tooltip.js";
+
+const IconTooltip = lazy(() => import("./IconTooltip.js"));
 
 interface IconProps extends LeafPropsOf<"div"> {
   name: IconName;
@@ -80,9 +80,9 @@ const Icon = ({
 
   if (tooltip) {
     return (
-      <HoverCard trigger={icon} placement={tooltipPosition} offsetDistance="4">
-        <Tooltip label={tooltip} />
-      </HoverCard>
+      <Suspense fallback={icon}>
+        <IconTooltip trigger={icon} tooltip={tooltip} placement={tooltipPosition} />
+      </Suspense>
     );
   }
 

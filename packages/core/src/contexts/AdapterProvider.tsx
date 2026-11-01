@@ -25,7 +25,7 @@ export interface AdapterImageProps
   alt: string;
   /** Absolutely fill the nearest positioned ancestor (next/image `fill` semantics). */
   fill?: boolean;
-  /** Eager-load and prioritize fetching (next/image `priority` semantics). */
+  /** Eager-load with `fetchPriority="high"`: for the LCP image. */
   priority?: boolean;
   /** Skip framework image optimization. No-op for the DOM default. */
   unoptimized?: boolean;

@@ -700,7 +700,9 @@
     --brand-solid-weak:           var(--function-brand-600);
 
     --brand-on-solid-strong:      var(--static-black);      
-    --brand-on-solid-medium:      var(--function-brand-1100);
+    /* The darkest brand step, as on-solid-weak's 200: 1100 is near-white
+       and read 1.9:1 on step 700. */
+    --brand-on-solid-medium:      var(--function-brand-100);
     --brand-on-solid-weak:        var(--function-brand-200);
 }
 

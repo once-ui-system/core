@@ -8,7 +8,7 @@ import {
   customSchemeThemeProperties,
   type ThemedSchemeScale,
 } from "../utils/colorScheme.js";
-import { type ThemeColor, themeCssValue } from "../utils/themeCss.js";
+import { type ThemeColor, themeCssValue, themeSelector } from "../utils/themeCss.js";
 import { Flex } from "./Flex.js";
 
 /** A font per role, as a CSS `font-family` value or a `var(--…)` from next/font. */
@@ -37,8 +37,12 @@ export type StyleScopeConfig = Pick<
   | "pageBackground"
   | "surfaceBackground"
 > & {
-  /** `"light"` or `"dark"` pins the subtree's theme; unset, it follows the page. */
-  theme?: "light" | "dark" | "system";
+  /**
+   * `"light"` or `"dark"` pins the subtree's theme; `"invert"` takes the
+   * opposite of the theme around it (light on a dark page, dark on a light
+   * one); unset, it follows the page.
+   */
+  theme?: "light" | "dark" | "invert" | "system";
 };
 
 export interface StyleScopeProps extends Omit<React.ComponentProps<typeof Flex>, "style"> {
@@ -143,7 +147,7 @@ const StyleScope = ({ ref, config = {}, fonts, style, children, ...rest }: Style
   for (const scheme of schemes) {
     if (!attributes[`data-${scheme}`]) attributes[`data-${scheme}`] = "custom";
   }
-  if (config.theme === "light" || config.theme === "dark") {
+  if (config.theme === "light" || config.theme === "dark" || config.theme === "invert") {
     attributes["data-theme"] = config.theme;
   }
 
@@ -171,7 +175,7 @@ const StyleScope = ({ ref, config = {}, fonts, style, children, ...rest }: Style
     if (surface) properties["--surface-background"] = surface;
     rules.push(
       block(
-        `${scope}[data-theme="${theme}"],:root[data-theme="${theme}"] ${scope}:not([data-theme]),${scope} [data-theme="${theme}"]`,
+        `${scope}${themeSelector(theme)},:root[data-theme="${theme}"] ${scope}:not([data-theme]),${scope} ${themeSelector(theme)}`,
         properties,
       ),
     );

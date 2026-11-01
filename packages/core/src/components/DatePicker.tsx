@@ -1,7 +1,14 @@
 "use client";
 
 import classNames from "clsx";
-import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { mergeLabels } from "../internal/labels.js";
 import { Reveal } from "../internal/Reveal.js";
 import { CondensedTShirtSizes } from "../types.js";
@@ -25,6 +32,9 @@ import { Option } from "./Option.js";
 import { Row } from "./Row.js";
 import { SegmentedControl } from "./SegmentedControl.js";
 import { Text } from "./Text.js";
+
+/** The month an undated calendar renders before it knows today's (see Calendar). */
+const UNDATED_MONTH = new Date(2000, 0, 1);
 
 /**
  * The picker's own words, for a translated interface. Omitted fields keep the
@@ -169,6 +179,22 @@ const FollowFocusedDay = ({ gridRef }: { gridRef: React.RefObject<HTMLDivElement
   return null;
 };
 
+const subscribeNever = () => () => {};
+
+/**
+ * False while the server renders and while the client hydrates, true after.
+ * A picker with no date opens on the visitor's month, which the server can't
+ * know: a page prerendered on 31 October and opened on 1 November would
+ * hydrate "October" against "November" and throw (React #418). So that
+ * picker's month and year labels wait for the client, as its day grid does.
+ */
+const useHydrated = () =>
+  useSyncExternalStore(
+    subscribeNever,
+    () => true,
+    () => false,
+  );
+
 const Calendar = ({
   ref,
   value,
@@ -198,9 +224,11 @@ const Calendar = ({
   ...rest
 }: CalendarProps) => {
   const names = mergeLabels(DEFAULT_LABELS, labels);
-  const today = new Date();
   /** Where the picker starts: `value`, else `defaultValue` (2.x's `defaultDate` was never read). */
   const initialDate = value ?? defaultValue;
+  // With no date, the month shown is the clock's (or, in DateRangePicker, a
+  // month the range picker took from it), so its labels wait for the client.
+  const hydrated = useHydrated() || initialDate !== undefined;
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(initialDate);
   const initialTime =
     defaultTime ??
@@ -239,16 +267,31 @@ const Calendar = ({
   const monthIsControlled =
     propCurrentMonth !== undefined && propCurrentYear !== undefined && onMonthChange !== undefined;
 
+  /**
+   * With no date to start from, the month is this month, which only the
+   * browser can say: a page prerendered in one month and opened in the next
+   * would hydrate a different grid (React #418). Such a calendar starts on a
+   * fixed month, hidden, and moves to this month once mounted.
+   */
+  const undated = !monthIsControlled && !initialDate;
   const [currentMonth, setCurrentMonth] = useState<number>(() =>
     monthIsControlled && propCurrentMonth !== undefined
       ? propCurrentMonth
-      : (initialDate ?? today).getMonth(),
+      : (initialDate ?? UNDATED_MONTH).getMonth(),
   );
   const [currentYear, setCurrentYear] = useState<number>(() =>
     monthIsControlled && propCurrentYear !== undefined
       ? propCurrentYear
-      : (initialDate ?? today).getFullYear(),
+      : (initialDate ?? UNDATED_MONTH).getFullYear(),
   );
+  const [placed, setPlaced] = useState(!undated);
+  useEffect(() => {
+    if (placed) return;
+    const now = new Date();
+    setCurrentMonth(now.getMonth());
+    setCurrentYear(now.getFullYear());
+    setPlaced(true);
+  }, [placed]);
 
   /** The day grid, so its keys act on its own day buttons and not another calendar's. */
   const gridRef = useRef<HTMLDivElement>(null);
@@ -861,7 +904,7 @@ const Calendar = ({
       }}
       ref={setRootRef}
       className={classNames(styles.calendar, className)}
-      style={style}
+      style={placed ? style : { ...style, visibility: "hidden" }}
       fillWidth
       horizontal="center"
       gap={size}
@@ -940,10 +983,10 @@ const Calendar = ({
                       variant="secondary"
                       size="s"
                       // What the button is for, not only the month it shows.
-                      aria-label={names.month(monthNames[currentMonth])}
+                      aria-label={hydrated ? names.month(monthNames[currentMonth]) : undefined}
                     >
                       <Row vertical="center" gap="4">
-                        {monthNames[currentMonth]}
+                        {hydrated && monthNames[currentMonth]}
                         <Icon name="chevronDown" onBackground="neutral-weak" size="xs" />
                       </Row>
                     </Button>
@@ -1001,7 +1044,7 @@ const Calendar = ({
                     <Button
                       variant="secondary"
                       size="s"
-                      aria-label={names.year(currentYear)}
+                      aria-label={hydrated ? names.year(currentYear) : undefined}
                       onClick={(event: React.MouseEvent) => {
                         event.preventDefault();
                         event.stopPropagation();
@@ -1012,7 +1055,7 @@ const Calendar = ({
                       }}
                     >
                       <Row vertical="center" gap="4">
-                        {currentYear.toString()}
+                        {hydrated && currentYear.toString()}
                         <Icon name="chevronDown" onBackground="neutral-weak" size="xs" />
                       </Row>
                     </Button>
@@ -1265,13 +1308,22 @@ const RangeCalendars = ({
   });
 
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
-  // The first calendar starts on the range's start month, else this month.
+  // The first calendar starts on the range's start month, else this month,
+  // set once mounted for the reason Calendar gives.
   const [currentMonth, setCurrentMonth] = useState(
-    initial?.startDate ? initial.startDate.getMonth() : new Date().getMonth(),
+    (initial?.startDate ?? UNDATED_MONTH).getMonth(),
   );
   const [currentYear, setCurrentYear] = useState(
-    initial?.startDate ? initial.startDate.getFullYear() : new Date().getFullYear(),
+    (initial?.startDate ?? UNDATED_MONTH).getFullYear(),
   );
+  const [placed, setPlaced] = useState(Boolean(initial?.startDate));
+  useEffect(() => {
+    if (placed) return;
+    const now = new Date();
+    setCurrentMonth(now.getMonth());
+    setCurrentYear(now.getFullYear());
+    setPlaced(true);
+  }, [placed]);
 
   useEffect(() => {
     if (value) {
@@ -1318,7 +1370,12 @@ const RangeCalendars = ({
         };
 
   return (
-    <Flex ref={ref} gap="24" {...rest}>
+    <Flex
+      ref={ref}
+      gap="24"
+      {...rest}
+      style={placed ? rest.style : { ...rest.style, visibility: "hidden" }}
+    >
       <Calendar
         value={internalValue.startDate}
         onValueChange={handleDateChange}

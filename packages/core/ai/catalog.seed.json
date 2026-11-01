@@ -106,6 +106,11 @@
     "tags": ["data", "chart", "feedback"],
     "pairsWith": ["LineChart", "BarChart", "PieChart"]
   },
+  "ChartSummary": {
+    "purpose": "A chart's data as a hidden table for screen readers; charts render one",
+    "tags": ["data", "chart", "accessibility"],
+    "pairsWith": ["LineChart", "BarChart", "Sparkline"]
+  },
   "ChatComposer": {
     "purpose": "Chat input bar: growing field, Enter to send, optional attach button with file chips, send button",
     "tags": ["chat", "form"],
@@ -541,7 +546,7 @@
     "pairsWith": ["Card", "Column", "TiltFx"]
   },
   "MediaAudioPlayer": {
-    "purpose": "Audio player with play/pause, seek bar and time; reports playback position (import from components/MediaAudioPlayer)",
+    "purpose": "Audio player with play/pause, seek bar and time; reports playback position",
     "tags": ["media"],
     "pairsWith": ["Column", "Text"]
   },
@@ -551,7 +556,7 @@
     "pairsWith": ["Avatar", "Column", "Button"]
   },
   "MediaVideoPlayer": {
-    "purpose": "Video player with play/pause, seek bar and time, for sources Media cannot sniff (import from components/MediaVideoPlayer)",
+    "purpose": "Video player with play/pause, seek bar and time, for sources Media cannot sniff",
     "tags": ["media"],
     "pairsWith": ["Media", "Column"]
   },
@@ -629,6 +634,11 @@
     "purpose": "Drifting particles that can react to the pointer, as an ambient layer",
     "tags": ["decoration", "effect"],
     "pairsWith": ["Background", "Effect"]
+  },
+  "PhotoViewer": {
+    "purpose": "Full-screen viewer for photo sets: swipe, zoom, deep links",
+    "tags": ["media", "overlay"],
+    "pairsWith": ["Media", "Grid", "Column"]
   },
   "PieChart": {
     "purpose": "Pie or donut chart of parts of a whole, with legend and tooltip",
@@ -751,6 +761,11 @@
     "tags": ["navigation", "basics"],
     "avoid": "Raw a elements",
     "pairsWith": ["Text", "Row"]
+  },
+  "Sparkline": {
+    "purpose": "Tiny SVG trend line, area or bars for a stat tile or table cell",
+    "tags": ["data", "chart", "dashboard"],
+    "pairsWith": ["Text", "Table", "Column"]
   },
   "Sortable": {
     "purpose": "List people reorder by mouse, touch or keyboard; lists sharing a group trade rows",

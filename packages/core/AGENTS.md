@@ -14,7 +14,7 @@ No `src/` folder? Copy into the project root instead.
 
 Can't run shell commands (you can only read files and reply with code)? Then nothing was copied, and an import of `AppShell` or `resources/app` breaks the build. Write the starter files your code imports (`components/AppShell.tsx`, `resources/app.ts`) in your reply, taking their content from `ai/starters/app/src/`, keep the project's own `app/layout.tsx`, and import only files you write or have opened in the project.
 
-The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript.
+The copy takes `src/` only: also set `experimental.optimizePackageImports: ["@once-ui-system/core"]` in `next.config`, as `ai/starters/app/next.config.ts` does, or every route that imports the package root from a server component ships about 110 kB of extra JavaScript. That setting only works with webpack. Under Turbopack (the default for `next build` in Next 16), a server component should import client components from their own path, `@once-ui-system/core/components/Button`, so that it does not ship every component.
 
 - `src/resources/app.ts`: product name, user and nav. The sidebar, breadcrumb and ⌘K palette all read it. Each nav href needs a page under `src/app/(app)/`; copy `home/page.tsx`.
 - `src/resources/once-ui.config.ts`: brand, accent, neutral and `defaultTheme` (`theme` itself stays `"system"`, or the theme switch stops working).

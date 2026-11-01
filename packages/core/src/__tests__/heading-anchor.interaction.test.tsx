@@ -21,8 +21,20 @@ const stubClipboard = (writeText = vi.fn().mockResolvedValue(undefined)) => {
   return writeText;
 };
 
+/** jsdom has no execCommand, the copy path on plain http where there is no clipboard. */
+const stubExecCommand = (result: boolean) => {
+  const execCommand = vi.fn(() => result);
+  Object.defineProperty(document, "execCommand", {
+    configurable: true,
+    writable: true,
+    value: execCommand,
+  });
+  return execCommand;
+};
+
 afterEach(() => {
   vi.unstubAllGlobals();
+  delete (document as { execCommand?: unknown }).execCommand;
 });
 
 const sectionUrl = (id: string) => `${window.location.origin}${window.location.pathname}#${id}`;
@@ -71,14 +83,25 @@ describe("HeadingAnchor", () => {
     expect(await screen.findByText("Failed to copy link.")).toBeInTheDocument();
   });
 
-  it("does nothing, and does not throw, without a clipboard", async () => {
+  // Plain http (a dev server opened from a phone on the LAN) has no clipboard API.
+  it("copies through a textarea without a clipboard, and says so", async () => {
+    const user = userEvent.setup();
+    vi.stubGlobal("navigator", { ...navigator, clipboard: undefined });
+    const execCommand = stubExecCommand(true);
+    render(<HeadingAnchor id="install" label="Install" />, { wrapper: withToasts });
+    await user.click(screen.getByRole("link", { name: "Copy link to Install" }));
+    expect(execCommand).toHaveBeenCalledExactlyOnceWith("copy");
+    expect(await screen.findByText("Link copied to clipboard.")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Copy link to Install" })).toHaveFocus();
+  });
+
+  it("shows a failure toast, and does not throw, when nothing can copy", async () => {
     const user = userEvent.setup();
     vi.stubGlobal("navigator", { ...navigator, clipboard: undefined });
     render(<HeadingAnchor id="install" label="Install" />, { wrapper: withToasts });
     await user.click(screen.getByRole("link", { name: "Copy link to Install" }));
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(await screen.findByText("Failed to copy link.")).toBeInTheDocument();
     expect(screen.queryByText("Link copied to clipboard.")).not.toBeInTheDocument();
-    expect(screen.queryByText("Failed to copy link.")).not.toBeInTheDocument();
   });
 
   it("shows its tooltip on focus", async () => {
