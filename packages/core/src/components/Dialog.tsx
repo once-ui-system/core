@@ -39,6 +39,8 @@ interface DialogProps extends Omit<React.ComponentProps<typeof Flex>, "title"> {
    * through 2.x; when both are set, `showClose` wins.
    */
   hideClose?: boolean;
+  /** The close button's tooltip and accessible name. Default "Close"; set it for a non-English UI. */
+  closeLabel?: string;
   onHeightChange?: (height: number) => void;
   minHeight?: number;
   closeOnClickaway?: boolean;
@@ -84,6 +86,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       flush = false,
       hideClose = false,
       showClose = !hideClose,
+      closeLabel = "Close",
       onHeightChange,
       minHeight,
       ...rest
@@ -370,7 +373,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                         icon="close"
                         size="m"
                         variant="tertiary"
-                        tooltip="Close"
+                        tooltip={closeLabel}
                         onClick={onClose}
                       />
                     )}
@@ -406,7 +409,7 @@ const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                       icon="close"
                       size="m"
                       variant="tertiary"
-                      tooltip="Close"
+                      tooltip={closeLabel}
                       onClick={onClose}
                     />
                   </Flex>

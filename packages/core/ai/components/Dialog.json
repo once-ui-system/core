@@ -24,6 +24,7 @@
   "flush": "boolean = false",
   "showClose": "boolean = !hideClose",
   "hideClose": "boolean = false",
+  "closeLabel": "string = Close",
   "onHeightChange": "(height: number) => void",
   "minHeight": "number",
   "closeOnClickaway": "boolean = true"

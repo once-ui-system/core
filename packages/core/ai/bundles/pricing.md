@@ -365,6 +365,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - base, stack?: boolean
 - flush, hideClose?: boolean = false
 - showClose?: boolean = !hideClose
+- closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 - closeOnClickaway?: boolean = true

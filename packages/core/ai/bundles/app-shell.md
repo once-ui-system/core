@@ -200,6 +200,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - size?: "s" | "m" | "l" | "full" = m
 - title, description, footer, children?: ReactNode
 - showClose, closeOnClickaway?: boolean = true
+- closeLabel?: string = Close
 - flush?: boolean = false
 - initialFocusRef, returnFocusRef?: RefObject<HTMLElement | null>
 
@@ -410,6 +411,7 @@ Mixins: CommonProps, DisplayProps, FlexProps, SizeProps, SpacingProps, StyleProp
 - base, stack?: boolean
 - flush, hideClose?: boolean = false
 - showClose?: boolean = !hideClose
+- closeLabel?: string = Close
 - onHeightChange?: (height: number) => void
 - minHeight?: number
 - closeOnClickaway?: boolean = true

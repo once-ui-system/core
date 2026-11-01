@@ -11,6 +11,7 @@ import { ToggleButton } from "../../components/ToggleButton";
 import { useAdapters } from "../../contexts/AdapterProvider";
 import type { IconName } from "../../icons";
 import styles from "./MegaMenu.module.scss";
+import { clampPanelLeft } from "./panelPosition";
 
 export interface MenuLink {
   label: ReactNode;
@@ -48,6 +49,8 @@ export interface MegaMenuProps extends React.ComponentProps<typeof Flex> {
  */
 const DROPDOWN_CHROME = 26;
 
+const viewportWidth = () => document.documentElement.clientWidth || window.innerWidth;
+
 /** What a keyboard can land on inside a panel, custom `content` included. */
 const FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -80,7 +83,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
 
         // Set initial position immediately
         setDropdownPosition({
-          left: rect.left - parentRect.left,
+          left: clampPanelLeft(rect.left, parentRect.left, 300, viewportWidth()),
           width: 300,
           height: 200, // Default height
         });
@@ -206,7 +209,7 @@ export const MegaMenu: React.FC<MegaMenuProps> = ({ menuGroups, className, ...re
                 activeContent.style.transition = originalTransition;
 
                 setDropdownPosition({
-                  left: rect.left - parentRect.left,
+                  left: clampPanelLeft(rect.left, parentRect.left, width, viewportWidth()),
                   width,
                   height: contentHeight + DROPDOWN_CHROME,
                 });
