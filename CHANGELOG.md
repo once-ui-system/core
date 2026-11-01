@@ -15,12 +15,12 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
-- **`borderGlow` on `Flex` and `Grid`.** An animated brand-to-accent edge that travels
-  round the border, with a halo around the element: `s` is the edge alone, `m` (or
-  `true`) a soft halo for bars and inputs, `l` a wide one for panels. It is a class, so
-  the element stays a server component; it stands still with reduced motion, lies over a
-  `border` of any width, and takes `--border-glow-from`, `--border-glow-to`,
-  `--border-glow-width` and `--border-glow-duration`.
+- **`emphasis` on `Flex` and `Grid`.** Draws attention to an element with an animated
+  brand-to-accent edge that travels round the border. Each value names a look: `edge` is
+  the edge alone, `glow` (or `true`) adds a soft halo for bars and inputs, `aura` a wide
+  one for panels. It is a class, so the element stays a server component; it stands still
+  with reduced motion, lies over a `border` of any width, and takes `--emphasis-from`,
+  `--emphasis-to`, `--emphasis-width` and `--emphasis-duration`.
 - **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
   symbol (`svg` markup or a `src` URL): each letter and shape is traced, left to right by
   default, then the logo fills in and holds. `onComplete` fires when the intro has played

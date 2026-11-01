@@ -57,9 +57,6 @@
 .border-8
 .border-bottom-1
 .border-dashed
-.border-glow
-.border-glow-l
-.border-glow-m
 .border-left-1
 .border-reset
 .border-right-1
@@ -211,6 +208,9 @@
 .font-weight-inherit
 .font-xl
 .font-xs
+.fx-emphasis
+.fx-emphasis-aura
+.fx-emphasis-glow
 .g-0
 .g-1
 .g-104

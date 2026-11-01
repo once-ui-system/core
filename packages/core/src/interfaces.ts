@@ -202,17 +202,17 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
   /**
-   * An animated glow on the border: a brand-to-accent edge that travels round
-   * it, with a halo around the element. `s` is the edge alone, `m` (or `true`)
-   * adds a soft halo for bars and inputs, `l` a wide one for panels and hero
-   * cards. It draws on `::before` and `::after` under the content, so an
+   * Draws attention to the element. Each value names a look: `"edge"` is a
+   * brand-to-accent edge travelling round the border, `"glow"` (or `true`)
+   * adds a soft halo for bars and inputs, `"aura"` a wide one for panels and
+   * hero cards. It draws on `::before` and `::after` under the content, so an
    * `overflow` that clips also clips the halo. Recolour or slow it with
-   * `--border-glow-from`, `--border-glow-to` and `--border-glow-duration`.
-   * Still under `prefers-reduced-motion`.
+   * `--emphasis-from`, `--emphasis-to`, `--emphasis-width` and
+   * `--emphasis-duration`. Still under `prefers-reduced-motion`.
    *
-   * @example <Row borderGlow radius="full" background="surface" padding="8">…</Row>
+   * @example <Row emphasis radius="full" background="surface" padding="8">…</Row>
    */
-  borderGlow?: boolean | "s" | "m" | "l";
+  emphasis?: boolean | "edge" | "glow" | "aura";
   /**
    * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
    * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that
