@@ -18,7 +18,7 @@ once-ui add hero1
 
 | Command | What it does |
 | --- | --- |
-| `once-ui create <dir> [--surfaces a,b] [--slices billing] [--name n] [--url u]` | Scaffolds a new app into `<dir>` from the surfaces you pick. Without `--surfaces`, it lists the ones you own and asks. |
+| `once-ui create <dir> [--surfaces a,b] [--slices billing] [--name n] [--url u] [--targets desktop,mobile] [--app-id id]` | Scaffolds a new app into `<dir>` from the surfaces you pick. Without `--surfaces`, it lists the ones you own and asks. `--targets` also ships it as a desktop app (Electron) and/or iOS and Android apps (Capacitor); they load the deployed site, so they need `--url`. |
 | `once-ui add <block…> [--overwrite] [--no-install]` | Writes the blocks and every block they import into your project, then installs any missing npm packages with your package manager. Files that already exist are skipped unless you pass `--overwrite`. |
 | `once-ui update [block…] [--dry-run] [--force] [--no-install]` | Brings added blocks up to the registry's current version. Files you haven't touched are replaced; files you edited are kept and named, unless you pass `--force`. Blocks a new version imports are added. Without names it updates every block in the project. |
 | `once-ui migrate <version> [dir] [--dry-run] [--force]` | Rewrites a project for a new Once UI major (`2.0` or `3.0`): renamed components and props, moved imports, and the new number scale. It prints each change, and the lines it can't rewrite safely to fix by hand. `--dry-run` only prints them. `--force` (3.0) runs on a project that still looks like 1.x. Then install the version it names. |
