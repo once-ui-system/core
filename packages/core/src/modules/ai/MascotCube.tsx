@@ -9,8 +9,15 @@ import { createAudioMeter } from "./audioLevel.js";
 import { clamp } from "./cube/math.js";
 import type { RGB } from "./cube/renderer.js";
 import { type CubeInput, CubeMotion } from "./cube/state.js";
-import { type CubeEyes, type CubeLook, type CubeSide, CubeView } from "./cube/view.js";
-import { type MascotLook, type MascotProps, type MascotState, mascotLook } from "./Mascot.js";
+import { type CubeEyes, type CubeLook, type CubeSide, CubeView, faceUnits } from "./cube/view.js";
+import { baseMood, EyeGlyph, effectsFor, eyeGlyph, KawaiiLayer } from "./kawaii.js";
+import {
+  type MascotLook,
+  type MascotProps,
+  type MascotState,
+  mascotLook,
+  useMascotPoke,
+} from "./Mascot.js";
 import styles from "./Mascot.module.scss";
 
 const SIZE = { s: 32, m: 48, l: 96, xl: 160 } as const;
@@ -147,6 +154,9 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
     source,
     size = "l",
     "aria-label": ariaLabel,
+    poke = true,
+    onPointerDown,
+    effects,
     className,
     style,
     ...flex
@@ -188,15 +198,29 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
   // Everything the frame loop reads lives in refs, so a prop change never restarts it.
   const input = useRef<CubeInput>({
     state,
-    mood,
+    mood: baseMood(mood),
     lookX: 0,
     lookY: 0,
     level: 0,
     reduced: false,
     personality: look.personality,
   });
+  const prod = useMascotPoke(poke, onPointerDown);
+  const shownMood = prod.poked ? "surprised" : mood;
+  const fx = effectsFor(shownMood, effects);
+  const glyph = eyeGlyph(fx);
   input.current.state = state;
-  input.current.mood = mood;
+  input.current.mood = baseMood(shownMood);
+  input.current.pokes = prod.pokes;
+  input.current.hideEyes = Boolean(glyph);
+  input.current.laugh = glyph === "laugh";
+  const overlay = useRef<SVGGElement | null>(null);
+  const units = faceUnits({
+    eyeSize: look.eyeSize,
+    eyeSpacing: look.eyeSpacing,
+    eyeHeight: look.eyeHeight,
+    aspect: look.aspect,
+  });
   input.current.personality = look.personality;
   const cubeLook = useRef<CubeLook | null>(null);
   const lookKey = JSON.stringify([look, eyeColor]);
@@ -309,6 +333,19 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
         input.current.reduced = Boolean(reduced?.matches);
         motion.update(dt, input.current);
         view.render(motion, look, input.current, width, height);
+        // Kawaii glyphs ride on the face, over the canvas.
+        const layer = overlay.current;
+        if (layer) {
+          const face = view.face;
+          if (face) {
+            const [[lx, ly], [rx, ry]] = face.eyes;
+            layer.setAttribute(
+              "transform",
+              `translate(${(lx + rx) / 2} ${(ly + ry) / 2}) scale(${face.unit})`,
+            );
+          }
+          layer.style.opacity = face ? String(face.opacity) : "0";
+        }
       }
       schedule();
     };
@@ -358,13 +395,60 @@ export function MascotCube({ props, fallback }: { props: MascotProps; fallback: 
       role="img"
       aria-label={ariaLabel ?? LABEL[state]}
       data-state={state}
-      data-mood={mood}
+      data-mood={baseMood(mood)}
       data-working="cube"
       className={classNames(styles.mascot, className)}
-      style={{ width: length, height: length, ...style } as React.CSSProperties}
+      style={
+        {
+          width: length,
+          height: length,
+          // The kawaii glyphs over the canvas color from these, as on the flat mascot.
+          "--mascot-color": ["brand", "accent", "neutral"].includes(String(look.color))
+            ? `var(--function-${look.color}-500)`
+            : look.color,
+          ...(eyeColor ? { "--mascot-eye": eyeColor } : {}),
+          ...style,
+        } as React.CSSProperties
+      }
       {...flex}
+      onPointerDown={prod.onPointerDown}
     >
       <canvas ref={canvas} className={styles.canvas} />
+      {fx.size > 0 && (
+        <svg
+          className={styles.canvas}
+          viewBox="0 0 1 1"
+          preserveAspectRatio="none"
+          overflow="visible"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <g ref={overlay} style={{ opacity: 0 }}>
+            {glyph &&
+              ([-1, 1] as const).map((side) => (
+                <g
+                  key={side}
+                  transform={`translate(${side * units.half} 0)`}
+                  className={styles.kawaii}
+                >
+                  <EyeGlyph kind={glyph} side={side} />
+                </g>
+              ))}
+            <KawaiiLayer
+              effects={fx}
+              at={{
+                eyes: [
+                  [-units.half, 0],
+                  [units.half, 0],
+                ],
+                unit: 1,
+                top: -units.top,
+                halfWidth: units.halfWidth,
+              }}
+            />
+          </g>
+        </svg>
+      )}
     </Flex>
   );
 }

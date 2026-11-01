@@ -93,6 +93,13 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
+/*
+ * Contexts given up on dispose, by canvas. Freeing waits a task, so a canvas that is
+ * mounted again straight away (React's strict mode runs effects twice) keeps a live
+ * context instead of getting a lost one back.
+ */
+const releasing = new WeakMap<HTMLCanvasElement, ReturnType<typeof setTimeout>>();
+
 export class Renderer {
   readonly gl: WebGLRenderingContext;
   private attribs: { position: number; normal: number };
@@ -100,6 +107,8 @@ export class Renderer {
   private normal = new Float32Array(9);
 
   constructor(canvas: HTMLCanvasElement) {
+    clearTimeout(releasing.get(canvas));
+    releasing.delete(canvas);
     const gl = canvas.getContext("webgl", {
       antialias: true,
       alpha: true,
@@ -203,6 +212,14 @@ export class Renderer {
   }
 
   dispose() {
-    this.gl.getExtension("WEBGL_lose_context")?.loseContext();
+    const { gl } = this;
+    const canvas = gl.canvas as HTMLCanvasElement;
+    releasing.set(
+      canvas,
+      setTimeout(() => {
+        releasing.delete(canvas);
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+      }),
+    );
   }
 }
