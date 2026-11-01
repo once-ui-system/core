@@ -202,6 +202,18 @@ export interface StyleProps extends HTMLAttributes<HTMLDivElement> {
   radius?: RadiusSize | `${RadiusSize}-${RadiusNest}`;
   shadow?: ShadowSize;
   /**
+   * An animated glow on the border: a brand-to-accent edge that travels round
+   * it, with a halo around the element. `s` is the edge alone, `m` (or `true`)
+   * adds a soft halo for bars and inputs, `l` a wide one for panels and hero
+   * cards. It draws on `::before` and `::after` under the content, so an
+   * `overflow` that clips also clips the halo. Recolour or slow it with
+   * `--border-glow-from`, `--border-glow-to` and `--border-glow-duration`.
+   * Still under `prefers-reduced-motion`.
+   *
+   * @example <Row borderGlow radius="full" background="surface" padding="8">…</Row>
+   */
+  borderGlow?: boolean | "s" | "m" | "l";
+  /**
    * A CSS cursor keyword; `"interactive"` for anything clickable; a preset
    * (`"soft"`, `"rounded"`, `"dot"`, or `"system"` to turn one off) that
    * restyles every cursor inside; or a node that follows the pointer over

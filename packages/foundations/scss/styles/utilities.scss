@@ -21,3 +21,87 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+// Border glow (`borderGlow` on Flex and Grid): a colour edge that travels
+// round the border, with a halo around the element. The edge is a conic
+// gradient shown only on a thin ring (::before); the halo is a shadow on its
+// own layer (::after), so it lights what is around the element and never its
+// own face. Both sit under the content, inside the element's stacking context.
+// Brand and accent come from the theme's function colours, so the edge stays
+// coloured where the theme's solids are contrast (white or black).
+//
+// Tune it with custom properties on the element or an ancestor:
+// --border-glow-from / --border-glow-to (colours), --border-glow-width (ring),
+// --border-glow-duration (one turn).
+
+@property --border-glow-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.border-glow {
+  isolation: isolate;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  // The edge.
+  &::before {
+    padding: var(--border-glow-width, 1.5px);
+    background: conic-gradient(
+      from var(--border-glow-angle),
+      var(--border-glow-from, var(--function-brand-600)),
+      var(--border-glow-to, var(--function-accent-600)) 25%,
+      var(--brand-alpha-weak) 45%,
+      var(--brand-alpha-weak) 55%,
+      var(--border-glow-to, var(--function-accent-600)) 75%,
+      var(--border-glow-from, var(--function-brand-600))
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    animation: border-glow-turn var(--border-glow-duration, 8s) linear infinite;
+  }
+
+  // With a border, the edge lies over it rather than just inside it.
+  &.border-1::before { inset: -1px; }
+  &.border-2::before { inset: -2px; }
+  &.border-4::before { inset: -4px; }
+  &.border-8::before { inset: -8px; }
+
+  // The halo. `s` has none: the edge alone.
+  &.border-glow-m::after {
+    box-shadow: 0 0 40px -12px var(--border-glow-from, var(--function-brand-600));
+  }
+
+  &.border-glow-l::after {
+    box-shadow:
+      0 0 96px -24px var(--border-glow-from, var(--function-brand-600)),
+      0 48px 140px -48px var(--border-glow-to, var(--function-accent-600));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::before {
+      animation: none;
+      --border-glow-angle: 45deg;
+    }
+  }
+}
+
+@keyframes border-glow-turn {
+  to {
+    --border-glow-angle: 360deg;
+  }
+}

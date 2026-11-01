@@ -174,6 +174,7 @@ weight (`brand-medium`, `neutral-alpha-weak`), never a hex.
     borderWidth: "Border thickness in pixels.",
     radius: "Corner roundness. Add a nest value to match an inner element.",
     shadow: "Elevation.",
+    borderGlow: "An animated brand-to-accent edge round the border. s is the edge alone, m (or true) adds a soft halo, l a wide one.",
     cursor: "Pointer style. \"interactive\" is the one to use for anything clickable.",
     textVariant: "Set the text style for everything inside in one prop.",
     blendMode: "mix-blend-mode, as a class. color-dodge and plus-lighter are the glow modes.",
@@ -213,6 +214,48 @@ function still goes in `style`.
 `transform` is deliberately not a prop. It is what animations drive, frame by
 frame, so it stays in `style`; for a static shift, `translateX` and
 `translateY` do the same without leaving the server.
+
+### Border glow
+
+`borderGlow` lights the border: a brand-to-accent edge travels round it, and a
+halo pools around the element. `s` is the edge alone, `m` (or `true`) adds a
+soft halo for bars and inputs, and `l` a wide one for panels and hero cards.
+It is a class, so the element stays a server component, and it stands still
+under `prefers-reduced-motion`. With a `border`, the edge lies over it.
+
+The edge and halo draw on `::before` and `::after`, under the content, so an
+`overflow` that clips the element clips the halo too. Recolour or slow it
+with custom properties: `--border-glow-from`, `--border-glow-to`,
+`--border-glow-width` and `--border-glow-duration`.
+
+<CodeBlock
+  marginTop="16"
+  marginBottom="24"
+  preview={
+    <Column fillWidth gap="32" paddingY="24" horizontal="center">
+      <Row borderGlow radius="full" background="surface" border="neutral-alpha-weak" paddingX="20" paddingY="12" gap="8">
+        <Text variant="label-default-s">Landing page</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">Docs</Text>
+        <Text variant="label-default-s" onBackground="neutral-weak">Dashboard</Text>
+      </Row>
+      <Row gap="24" wrap horizontal="center">
+        <Flex borderGlow="s" width="80" height="56" radius="m" background="surface" />
+        <Flex borderGlow="m" width="80" height="56" radius="m" background="surface" />
+        <Flex borderGlow="l" width="80" height="56" radius="l" background="surface" />
+      </Row>
+    </Column>
+  }
+  codes={[
+    {
+      code:
+`<Row borderGlow radius="full" background="surface" border="neutral-alpha-weak" paddingX="20" paddingY="12">...</Row>
+<Flex borderGlow="s" radius="m" background="surface" />
+<Column borderGlow="l" radius="xl" background="page" padding="32">...</Column>`,
+      language: "tsx",
+      label: "Border glow"
+    }
+  ]}
+/>
 
 ### A themed subtree
 
