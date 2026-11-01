@@ -866,9 +866,10 @@ export function keyDown(event: KeyboardEvent, item: HTMLElement) {
     window.removeEventListener("keydown", keys, true);
     s.item.removeEventListener("focusout", blur);
     // Leave the keyup swallow for the Space that dropped. The window is held
-    // here, not read when the timer fires: by then a test's jsdom may be gone.
+    // here, not read when the timer fires: by then a test's jsdom may be gone,
+    // and a torn-down jsdom window has no methods left, hence the `?.`.
     const win = window;
-    win.setTimeout(() => win.removeEventListener("keyup", swallowSpace, true), 300);
+    win.setTimeout(() => win.removeEventListener?.("keyup", swallowSpace, true), 300);
   });
   return true;
 }

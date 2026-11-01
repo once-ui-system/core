@@ -400,7 +400,15 @@ working, with Scroller's props.
 Two things work better and you may notice them. Dialog and Drawer share one
 overlay core, so Escape closes only the innermost open overlay (a Dialog opened
 from a Drawer closes alone), and focus goes back to the trigger as the overlay
-starts closing rather than after its exit animation. An uncontrolled
+starts closing rather than after its exit animation. Clicks outside follow
+the same rule: a click in a stacked Dialog no longer closes the one beneath it,
+and the Toaster stays clickable while a Dialog is open, so a toast's Undo works.
+A Dialog that mounts open now takes focus (its overlay used to be hidden for its
+first frame, so focus fell to `<body>`). The Dialog's `role="dialog"`, its name,
+its `className` and its `ref` are all on the panel now, not the full-screen
+overlay, and an `aria-label` names it instead of the title; a string `title`
+renders an `h2`, so the page keeps its only `h1`. Update a test that clicked the
+`role="dialog"` element to mean "outside": click its parent, the overlay. An uncontrolled
 `EmojiPicker trigger` now closes on a pick; 2.x's `EmojiPickerDropdown` closed
 only when controlled.
 
@@ -560,6 +568,29 @@ A bundler resolves every specifier under `/media` it reaches, so an app that
 imports the players, `Scrubber` or `CompareImage` from there needs
 `compressorjs` resolvable for `MediaUpload`'s lazy chunk, as `/media` users
 already did. If your bundler fails on a missing `compressorjs`, install it.
+
+**Uninstall recharts.** The charts (`LineChart`, `BarChart`, `LineBarChart`,
+`PieChart`) draw their own SVG in 3.0, and core no longer lists `recharts` as
+a peer or imports it anywhere. Remove it unless your own code uses it
+(`npm uninstall recharts`). The props are the same, and so are the axes, the
+legend and the tooltip; what changes is that the chart is in the server HTML
+instead of appearing after a lazy chunk loads, that a reader can click a
+legend entry to hide its series and move through the points with the arrow
+keys, and that the `/data` bundle is about 13 KB gzipped instead of carrying
+recharts' 126 KB. Two things read differently:
+
+- A PieChart's legend lists the slices in data order, with each slice's own
+  colour. It used to sort them by name and colour them by position, so a
+  legend entry could show another slice's colour. LineBarChart's legend names
+  the line first and the bar second, in their colours, for the same reason.
+- `animation` draws the lines in when the chart mounts; a data update redraws
+  at once instead of morphing. Readers who prefer reduced motion see no
+  animation at all.
+
+A test that renders a chart in jsdom now gets its SVG at once, at a default
+640 × 320 (jsdom has no layout), so wrap it in `LayoutProvider` like any other
+component that lays out; a test that waited for the lazy recharts chunk no
+longer needs to.
 
 **Install the effects and the blocks.** `@once-ui-system/fx` and
 `@once-ui-system/blocks` are packages of their own, versioned with core. Each

@@ -4,7 +4,7 @@ import classNames from "clsx";
 import type React from "react";
 import { type ReactNode, useCallback, useEffect, useId, useRef } from "react";
 import ReactDOM from "react-dom";
-import { useOverlay } from "../internal/useOverlay.js";
+import { OVERLAY_EXEMPT_ATTR, useOverlay } from "../internal/useOverlay.js";
 import { tokenLength } from "../utils/layoutClasses.js";
 import { Column } from "./Column.js";
 import styles from "./Dialog.module.scss";
@@ -78,7 +78,7 @@ const Dialog = ({
 }: DialogProps) => {
   const sheet = variant === "sheet";
   const overlayRef = useRef<HTMLDivElement | null>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLDivElement | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const dialogId = useId();
   const dialogTitleId = `${dialogId}-title`;
@@ -88,11 +88,17 @@ const Dialog = ({
     mounted,
     visible: isVisible,
     entered: isAnimating,
+    isInnermost,
   } = useOverlay({ open, onClose, overlayRef, closeOnEscape: !base });
 
-  const setOverlayRef = useCallback(
+  // The panel is the dialog: role, name and className sit on one element. An
+  // `aria-label` the caller passes names it instead of the title.
+  const labelledBy = rest["aria-label"] ? undefined : dialogTitleId;
+
+  // The ref is the dialog element: the panel with role="dialog".
+  const setDialogRef = useCallback(
     (node: HTMLDivElement | null) => {
-      overlayRef.current = node;
+      dialogRef.current = node;
       if (typeof ref === "function") ref(node);
       else if (ref) ref.current = node;
     },
@@ -116,11 +122,12 @@ const Dialog = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (event.button !== 0) return;
+      // Only the innermost dialog answers a click outside, as with Escape: a
+      // click in a stacked dialog is outside the one beneath it.
+      if (!isInnermost()) return;
 
-      const isInsideDropdownPortal =
-        (event.target as Element)?.closest(".dropdown-portal") !== null;
-
-      if (isInsideDropdownPortal) {
+      const target = event.target as Element | null;
+      if (target?.closest?.(`.dropdown-portal, [${OVERLAY_EXEMPT_ATTR}]`)) {
         return;
       }
 
@@ -148,7 +155,7 @@ const Dialog = ({
         });
       };
     }
-  }, [isVisible, onClose, stack, base, closeOnClickaway]);
+  }, [isVisible, onClose, stack, base, closeOnClickaway, isInnermost]);
 
   if (!mounted || !isVisible) return null;
 
@@ -169,7 +176,7 @@ const Dialog = ({
       <>
         <ScrollLock enabled={open} allowScrollInElement={contentRef} />
         <Row
-          ref={setOverlayRef}
+          ref={overlayRef}
           fill
           horizontal="center"
           paddingX="l"
@@ -184,14 +191,14 @@ const Dialog = ({
             transition: "opacity 300ms ease",
             inset: 0,
           }}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={dialogTitleId}
-          aria-describedby={description ? descriptionId : undefined}
         >
           {backdrop}
           <Column
-            ref={dialogRef}
+            ref={setDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={labelledBy}
+            aria-describedby={description ? descriptionId : undefined}
             maxWidth="52rem"
             fillHeight
             background="page"
@@ -252,7 +259,7 @@ const Dialog = ({
     <>
       <ScrollLock enabled={open} allowScrollInElement={dialogRef} />
       <Flex
-        ref={setOverlayRef}
+        ref={overlayRef}
         transition="macro-medium"
         background="overlay"
         position="fixed"
@@ -266,11 +273,6 @@ const Dialog = ({
         })}
         center
         padding="l"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby={title && !flush ? dialogTitleId : undefined}
-        // Read after the title when the dialog opens.
-        aria-describedby={description && !flush ? descriptionId : undefined}
       >
         {backdrop}
         <Flex
@@ -289,7 +291,12 @@ const Dialog = ({
             style={{
               minHeight: minHeight ? tokenLength(minHeight) : undefined,
             }}
-            ref={dialogRef}
+            ref={setDialogRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={title && !flush ? labelledBy : undefined}
+            // Read after the title when the dialog opens.
+            aria-describedby={description && !flush ? descriptionId : undefined}
             fillWidth
             transition="macro-medium"
             shadow="xl"
@@ -304,7 +311,8 @@ const Dialog = ({
                 <Column as="header" paddingX="24" paddingTop="24" paddingBottom="s" gap="4">
                   <Flex fillWidth horizontal="between" gap="8">
                     {typeof title === "string" ? (
-                      <Heading id={dialogTitleId} textVariant="heading-strong-l">
+                      // h2: the page keeps its own h1.
+                      <Heading id={dialogTitleId} as="h2" textVariant="heading-strong-l">
                         {title}
                       </Heading>
                     ) : (

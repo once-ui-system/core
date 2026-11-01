@@ -1,12 +1,15 @@
 @use "../styles/breakpoints.scss" as breakpoints;
 
 .overlay {
+    /* Transparent, not visibility: hidden, for its first frame: focus() does
+       nothing on a hidden element, and FocusTrap focuses the panel as soon as
+       it mounts, before the open class lands. */
     opacity: 0;
-    visibility: hidden;
+    pointer-events: none;
 
     &.open {
         opacity: 1;
-        visibility: visible;
+        pointer-events: auto;
     }
 }
 
