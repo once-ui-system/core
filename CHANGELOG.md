@@ -16,6 +16,19 @@ item (see `ROADMAP.md`, Week 4).
 Breaking. Built on the `feat/3-0-breaking-cleanup` branch; [MIGRATING.md](MIGRATING.md#2x--30)
 lists what to do and `scripts/codemod-3.0.mjs` does most of it.
 
+Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
+entry below that had landed by then:
+
+- **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
+  `blocks` at 3.0.0-beta.1 too. New since beta.0: all shipped CSS in one
+  `@layer once-ui`, so an app's own CSS wins; `data-theme="invert"`; one import
+  path per component for Turbopack; the `once-ui-mcp` server; `Meta.generate`
+  canonical URLs; chart props (`xKey`, series labels, `valueFormat`, stacks,
+  horizontal bars), chart summaries and `Sparkline`; Map on 3.0; the cube
+  Mascot; page sections in blocks; fixes to DatePicker, Select, Kbar, Drawer,
+  Media and OgCard.
+- **3.0.0-beta.0** (2026-10-21): the first 3.0 preview.
+
 ### Added
 
 - **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
