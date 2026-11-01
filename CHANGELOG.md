@@ -32,6 +32,8 @@ entry below that had landed by then:
 
 ### Added
 
+- **`closeLabel` on `Drawer` and `Dialog`.** The close button's tooltip and accessible
+  name, for a UI that isn't in English. Defaults to "Close".
 - **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
   stdio (`npx -y -p @once-ui-system/core once-ui-mcp`), answering from the
   installed version's `ai/` files. Its tools search components, return a
@@ -459,6 +461,9 @@ entry below that had landed by then:
 
 ### Fixed
 
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
 - **A DatePicker with no date hydrates in any month.** A page prerendered on 31 October
   and opened on 1 November threw React #418, "October" against "November". The month and
   year labels of a picker that opens on the clock's month now render on the client, as
