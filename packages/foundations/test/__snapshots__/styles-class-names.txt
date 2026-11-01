@@ -57,6 +57,9 @@
 .border-8
 .border-bottom-1
 .border-dashed
+.border-glow
+.border-glow-l
+.border-glow-m
 .border-left-1
 .border-reset
 .border-right-1
