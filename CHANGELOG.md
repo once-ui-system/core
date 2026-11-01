@@ -20,13 +20,14 @@ Pre-releases on npm `next` (`npm i @once-ui-system/core@next`), each with every
 entry below that had landed by then:
 
 - **3.0.0-beta.1** (2026-11-02), with `@once-ui-system/foundations`, `fx` and
-  `blocks` at 3.0.0-beta.1 too. New since beta.0: all shipped CSS in one
+  `blocks` at 3.0.0-beta.1 too. New since beta.0: charts draw their own SVG,
+  so recharts is no longer a dependency (uninstall it); all shipped CSS in one
   `@layer once-ui`, so an app's own CSS wins; `data-theme="invert"`; one import
   path per component for Turbopack; the `once-ui-mcp` server; `Meta.generate`
   canonical URLs; chart props (`xKey`, series labels, `valueFormat`, stacks,
   horizontal bars), chart summaries and `Sparkline`; Map on 3.0; the cube
-  Mascot; page sections in blocks; fixes to DatePicker, Select, Kbar, Drawer,
-  Media and OgCard.
+  Mascot; page sections in blocks; fixes to Dialog, DatePicker, Select, Kbar,
+  Drawer, Dropdown, Media and OgCard.
 - **3.0.0-beta.0** (2026-10-21): the first 3.0 preview.
 
 ### Added
