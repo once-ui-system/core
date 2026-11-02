@@ -48,6 +48,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **Theme providers render where storage is blocked.** In a sandboxed or third-party
+  iframe, or with cookies off, reading `localStorage` throws a SecurityError, and
+  `ThemeProvider` took the whole page down with it (seen in Sentry on Aveiro's embeds).
+  `ThemeProvider` and `DataThemeProvider` now carry on without storage: themes still
+  switch, the choice just isn't remembered.
 - **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
   right edge used to open past the side of the screen; it now moves left until it fits,
   16px from the edge, and a panel wider than the window keeps its left edge in view.

@@ -60,10 +60,27 @@ export type StylePersistenceAdapter = {
 
 export type StylePersistence = "local" | "none" | StylePersistenceAdapter;
 
+// Reading `window.localStorage` throws a SecurityError where storage is
+// blocked: a sandboxed or third-party iframe, or cookies turned off. The theme
+// then simply is not remembered, instead of the provider failing to render.
 const localAdapter: StylePersistenceAdapter = {
-  get: (key) => localStorage.getItem(key),
-  set: (key, value) => localStorage.setItem(key, value),
-  remove: (key) => localStorage.removeItem(key),
+  get: (key) => {
+    try {
+      return localStorage.getItem(key);
+    } catch {
+      return null;
+    }
+  },
+  set: (key, value) => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {}
+  },
+  remove: (key) => {
+    try {
+      localStorage.removeItem(key);
+    } catch {}
+  },
 };
 
 function resolvePersistence(persistence: StylePersistence = "local") {
