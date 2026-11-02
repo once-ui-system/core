@@ -15,6 +15,8 @@ export interface InfoTipProps extends Omit<FlexProps, "children"> {
   size?: TShirtSizes;
   /** Names the icon for screen readers. */
   ariaLabel?: string;
+  /** Finds the icon a test taps in end-to-end tests; the open tip gets `${testID}-tip`. */
+  testID?: string;
 }
 
 // Icon.module.scss sizes, in static spacing steps.
@@ -31,6 +33,7 @@ export function InfoTip({
   children,
   size = "xs",
   ariaLabel = "More information",
+  testID,
   ...flex
 }: InfoTipProps) {
   const theme = useTheme();
@@ -71,6 +74,7 @@ export function InfoTip({
         accessibilityLabel={ariaLabel}
         accessibilityHint={typeof children === "string" ? children : undefined}
         aria-expanded={open}
+        testID={testID}
         hitSlop={touchSlop(theme, px)}
         onPress={show}
         style={{ alignSelf: "flex-start", borderRadius: 9999 }}
@@ -94,6 +98,7 @@ export function InfoTip({
             background="page"
             radius="m"
             border="neutral-medium"
+            testID={testID && `${testID}-tip`}
             {...flex}
           >
             {typeof children === "string" || typeof children === "number" ? (

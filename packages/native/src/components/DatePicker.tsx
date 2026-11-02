@@ -33,6 +33,12 @@ export interface DatePickerProps extends Omit<FlexProps, "children"> {
   /** Month and weekday names, and the week's first day, in a BCP 47 locale such as "hu". */
   locale?: string;
   labels?: DatePickerLabels;
+  /**
+   * Finds the calendar in end-to-end tests. Each day gets
+   * `${testID}-${YYYY-MM-DD}`, and the month buttons `${testID}-previous` and
+   * `${testID}-next`.
+   */
+  testID?: string;
 }
 
 const sameDay = (a?: Date, b?: Date) =>
@@ -41,6 +47,10 @@ const sameDay = (a?: Date, b?: Date) =>
   a.getFullYear() === b.getFullYear() &&
   a.getMonth() === b.getMonth() &&
   a.getDate() === b.getDate();
+
+/** A day as `YYYY-MM-DD` in local time, for test IDs. */
+const isoDay = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 const dayStart = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
 
@@ -68,6 +78,7 @@ export function DatePicker({
   range,
   locale,
   labels,
+  testID,
   ...column
 }: DatePickerProps) {
   const theme = useTheme();
@@ -103,7 +114,7 @@ export function DatePicker({
   };
 
   return (
-    <Column gap="8" {...column}>
+    <Column gap="8" testID={testID} {...column}>
       <Row vertical="center" horizontal="between" gap="8">
         <IconButton
           icon="chevronLeft"
@@ -111,6 +122,7 @@ export function DatePicker({
           size="m"
           ariaLabel={labels?.previousMonth ?? "Previous month"}
           onPress={() => move(-1)}
+          testID={testID && `${testID}-previous`}
         />
         <Text variant="label-strong-m" accessibilityRole="header" accessibilityLiveRegion="polite">
           {names.monthYear(shown.month, shown.year)}
@@ -121,6 +133,7 @@ export function DatePicker({
           size="m"
           ariaLabel={labels?.nextMonth ?? "Next month"}
           onPress={() => move(1)}
+          testID={testID && `${testID}-next`}
         />
       </Row>
       <Row horizontal="between">
@@ -180,6 +193,7 @@ export function DatePicker({
                   aria-disabled={!!blocked}
                   disabled={!!blocked}
                   onPress={() => pick(day)}
+                  testID={testID && `${testID}-${isoDay(day)}`}
                   style={({ pressed }) => [
                     style,
                     pressed && !isSelected
@@ -230,6 +244,12 @@ export interface DateInputProps
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Finds the field a test taps in end-to-end tests. The open sheet gets
+   * `${testID}-sheet` and its calendar `${testID}-picker`, so a day is
+   * `${testID}-picker-${YYYY-MM-DD}`.
+   */
+  testID?: string;
 }
 
 /**
@@ -255,6 +275,7 @@ export function DateInput({
   style,
   accessibilityLabel,
   accessibilityHint,
+  testID,
   ...input
 }: DateInputProps) {
   const [own, setOwn] = useState(defaultValue);
@@ -282,6 +303,7 @@ export function DateInput({
         aria-expanded={isOpen}
         aria-disabled={disabled}
         disabled={disabled}
+        testID={testID}
         onPress={() => setOpen(true)}
       >
         <View pointerEvents="none">
@@ -299,13 +321,19 @@ export function DateInput({
       </Pressable>
       {/* The sheet is not the form's field: nothing in it takes the stacked corners. */}
       <FormCellContext.Provider value={null}>
-        <Dialog open={isOpen} onClose={() => setOpen(false)} title={label ?? accessibilityLabel}>
+        <Dialog
+          open={isOpen}
+          onClose={() => setOpen(false)}
+          title={label ?? accessibilityLabel}
+          testID={testID && `${testID}-sheet`}
+        >
           <DatePicker
             value={date}
             minDate={minDate}
             maxDate={maxDate}
             locale={locale}
             labels={labels}
+            testID={testID && `${testID}-picker`}
             onChange={(next) => {
               if (value === undefined) setOwn(next);
               onChange?.(next);

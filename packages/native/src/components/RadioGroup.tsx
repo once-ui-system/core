@@ -12,6 +12,7 @@ const RadioGroupContext = createContext<{
   value: string | undefined;
   disabled: boolean;
   select: (value: string) => void;
+  testID?: string;
 } | null>(null);
 
 export interface RadioButtonProps {
@@ -25,6 +26,11 @@ export interface RadioButtonProps {
   disabled?: boolean;
   ariaLabel?: string;
   style?: ViewStyle;
+  /**
+   * Finds the radio, the pressable a test taps, in end-to-end tests. In a
+   * `RadioGroup` with a `testID`, it defaults to `${groupTestID}-${value}`.
+   */
+  testID?: string;
 }
 
 /** Core's `RadioButton`: a 20pt circle, brand-filled with a dot when checked. */
@@ -38,6 +44,7 @@ export function RadioButton({
   disabled: disabledProp = false,
   ariaLabel = "Radio button",
   style,
+  testID,
 }: RadioButtonProps) {
   const theme = useTheme();
   // A RadioGroup around this button owns its checked state; outside one, or
@@ -57,6 +64,7 @@ export function RadioButton({
   return (
     <Pressable
       accessibilityRole="radio"
+      testID={testID ?? (inGroup && group.testID ? `${group.testID}-${value}` : undefined)}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={on}
       aria-disabled={disabled}
@@ -124,6 +132,8 @@ export interface RadioGroupProps {
    */
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the group in end-to-end tests; each radio in it gets `${testID}-${value}`. */
+  testID?: string;
 }
 
 /** Core's `RadioGroup`: one choice out of `options`, with an optional group label. */
@@ -138,14 +148,15 @@ export function RadioGroup({
   orientation = "vertical",
   children,
   style,
+  testID,
 }: RadioGroupProps) {
   const [selected, select] = useControlledValue<string | undefined>(value, defaultValue, (v) => {
     if (v !== undefined) onChange?.(v);
   });
   const List = orientation === "horizontal" ? Row : Column;
   return (
-    <RadioGroupContext.Provider value={{ value: selected, disabled, select }}>
-      <Column gap="12" accessibilityRole="radiogroup" style={style}>
+    <RadioGroupContext.Provider value={{ value: selected, disabled, select, testID }}>
+      <Column gap="12" accessibilityRole="radiogroup" style={style} testID={testID}>
         {(label || description) && (
           <Column gap="4">
             {label && <Text variant="label-default-m">{label}</Text>}

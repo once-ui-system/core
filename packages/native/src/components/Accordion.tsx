@@ -39,6 +39,8 @@ export interface AccordionProps extends Omit<FlexProps, "radius"> {
   contentProps?: FlexProps;
   toggleOnHeaderClick?: boolean;
   style?: ViewStyle;
+  /** Finds the header a test taps in end-to-end tests; the content gets `${testID}-content`. */
+  testID?: string;
 }
 
 /** Core's `Accordion`: a header that shows and hides the content under it. */
@@ -61,6 +63,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
     headerProps,
     contentProps,
     toggleOnHeaderClick = true,
+    testID,
     ...rest
   },
   ref,
@@ -109,6 +112,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
         accessibilityState={{ expanded: isOpen }}
         aria-expanded={isOpen}
         disabled={!toggleOnHeaderClick}
+        testID={testID}
         onPress={toggle}
         style={({ pressed }) => ({
           borderRadius: theme.radius(radius),
@@ -163,6 +167,7 @@ export const Accordion: RefComponent<AccordionProps, AccordionHandle> = forwardR
           paddingX={paddingX}
           paddingTop="8"
           paddingBottom="16"
+          testID={testID && `${testID}-content`}
           {...contentProps}
           {...rest}
         >

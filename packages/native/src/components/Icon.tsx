@@ -95,6 +95,8 @@ export interface IconProps {
   decorative?: boolean;
   ariaLabel?: string;
   style?: ViewStyle;
+  /** Finds the icon in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `Icon`: one of the built-in icons, or one registered with `IconProvider`. */
@@ -107,6 +109,7 @@ export function Icon({
   decorative = true,
   ariaLabel,
   style,
+  testID,
 }: IconProps) {
   const theme = useTheme();
   const icons = useIcons();
@@ -132,6 +135,7 @@ export function Icon({
       accessibilityLabel={decorative ? undefined : (ariaLabel ?? name)}
       aria-hidden={decorative}
       importantForAccessibility={decorative ? "no-hide-descendants" : "auto"}
+      testID={testID}
       style={[{ width: px, height: px, alignItems: "center", justifyContent: "center" }, style]}
     >
       {Custom ? (

@@ -24,6 +24,8 @@ export interface SegmentedControlProps {
   /** Outlined buttons without the frame around them, as in core. */
   compact?: boolean;
   style?: ViewStyle;
+  /** Finds the row in end-to-end tests; each button gets `${testID}-${value}`. */
+  testID?: string;
 }
 
 /** Core's `SegmentedControl`: a row of toggle buttons where one is selected. */
@@ -35,6 +37,7 @@ export function SegmentedControl({
   fillWidth = true,
   compact = false,
   style,
+  testID,
 }: SegmentedControlProps) {
   const theme = useTheme();
   const [selected, select] = useControlledValue<string>(
@@ -52,6 +55,7 @@ export function SegmentedControl({
       radius="l"
       border={compact ? undefined : "neutral-alpha-weak"}
       style={[fillWidth ? { alignSelf: "stretch" } : { alignSelf: "flex-start" }, style ?? {}]}
+      testID={testID}
     >
       {buttons.map((b) => {
         const on = b.value === selected;
@@ -62,6 +66,7 @@ export function SegmentedControl({
           <Pressable
             key={b.value}
             accessibilityRole="tab"
+            testID={testID && `${testID}-${b.value}`}
             aria-selected={on}
             aria-disabled={b.disabled}
             disabled={b.disabled}

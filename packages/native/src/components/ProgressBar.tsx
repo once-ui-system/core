@@ -14,6 +14,8 @@ export interface ProgressBarProps {
   /** The bar's solid colour, as core's `solid` prop: `"brand-strong"` by default. */
   barBackground?: Colors;
   style?: ViewStyle;
+  /** Finds the bar, the element with the `progressbar` role, in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `ProgressBar`: a rounded track that fills to `value`, with the value as a label. */
@@ -25,6 +27,7 @@ export function ProgressBar({
   labelPosition = "bottom",
   barBackground = "brand-strong",
   style,
+  testID,
 }: ProgressBarProps) {
   const theme = useTheme();
   const percent = Math.max(0, Math.min(100, ((value - min) / (max - min)) * 100));
@@ -40,6 +43,7 @@ export function ProgressBar({
     <View
       accessible
       accessibilityRole="progressbar"
+      testID={testID}
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={value}

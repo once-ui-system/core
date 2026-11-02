@@ -15,6 +15,8 @@ export interface CheckboxProps {
   disabled?: boolean;
   ariaLabel?: string;
   style?: ViewStyle;
+  /** Finds the checkbox, the pressable a test taps, in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `Checkbox`: a 20pt box, brand-filled with a check (or a dash when indeterminate). */
@@ -28,6 +30,7 @@ export function Checkbox({
   disabled = false,
   ariaLabel = "Checkbox",
   style,
+  testID,
 }: CheckboxProps) {
   const theme = useTheme();
   const [on, toggle] = useControllable(checked, defaultChecked, onToggle);
@@ -38,6 +41,7 @@ export function Checkbox({
   return (
     <Pressable
       accessibilityRole="checkbox"
+      testID={testID}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={indeterminate ? "mixed" : on}
       aria-disabled={disabled}
