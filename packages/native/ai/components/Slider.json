@@ -14,7 +14,8 @@
   "showValue": "boolean = false",
   "disabled": "boolean = false",
   "aria-label": "string",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

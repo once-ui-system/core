@@ -52,6 +52,14 @@ export interface TableProps extends Omit<FlexProps, "children"> {
   defaultPageSize?: number;
   pageSizeOptions?: number[];
   loadingState?: ReactNode;
+  /**
+   * Finds the table in end-to-end tests. Each row gets `${testID}-row-${index}`,
+   * its place in `data.rows` from 0, and its actions
+   * `${testID}-row-${index}-${icon}`; a sortable header gets
+   * `${testID}-sort-${key}`, the search field `${testID}-search` and the
+   * pages `${testID}-pagination`.
+   */
+  testID?: string;
 }
 
 /** The text of a cell, for search and sort, as core reads it. */
@@ -116,6 +124,7 @@ export function Table({
   defaultPageSize = 10,
   pageSizeOptions = [5, 10, 20, 50],
   loadingState,
+  testID,
   ...flex
 }: TableProps) {
   const theme = useTheme();
@@ -174,6 +183,7 @@ export function Table({
             key={header.key}
             accessibilityRole="button"
             accessibilityHint="Sorts by this column"
+            testID={testID && `${testID}-sort-${header.key}`}
             aria-sort={active ? (sort.direction === "asc" ? "ascending" : "descending") : "none"}
             onPress={() => {
               setSort({
@@ -235,6 +245,7 @@ export function Table({
         key={index}
         disabled={!onRowClick}
         accessibilityRole={onRowClick ? "button" : undefined}
+        testID={testID && `${testID}-row-${index}`}
         onPress={onRowClick ? () => onRowClick(index) : undefined}
         style={({ pressed }) => ({
           flexDirection: "row",
@@ -270,6 +281,7 @@ export function Table({
                 aria-label={action.label ?? action.tooltip ?? action.icon}
                 disabled={action.disabled?.(index)}
                 onPress={() => action.onClick(index)}
+                testID={testID && `${testID}-row-${index}-${action.icon}`}
               />
             ))}
           </Row>
@@ -279,7 +291,7 @@ export function Table({
   );
 
   return (
-    <Column gap="12" fillWidth {...flex}>
+    <Column gap="12" fillWidth testID={testID} {...flex}>
       {searchable && (
         <Input
           label={searchPlaceholder}
@@ -290,6 +302,7 @@ export function Table({
             setPage(1);
           }}
           prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+          testID={testID && `${testID}-search`}
         />
       )}
       <Column fillWidth radius="l" border="neutral-medium" overflow="hidden">
@@ -315,6 +328,7 @@ export function Table({
             setPage(1);
           }}
           size="s"
+          testID={testID && `${testID}-pagination`}
         />
       )}
     </Column>

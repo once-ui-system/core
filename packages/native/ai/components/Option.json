@@ -13,7 +13,8 @@
   "disabled": "boolean",
   "danger": "boolean",
   "onPress": "(value: string) => void",
-  "onClick": "(value: string) => void"
+  "onClick": "(value: string) => void",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

@@ -68,6 +68,24 @@ export function Sizes() {
   }
 ]} />
 
+## Long labels
+
+A label stays on one line and is cut off with an ellipsis when there is no room, as on the web. On a narrow screen, `wrap` lets it run onto more lines; the button grows taller to fit.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Button } from "@once-ui-system/native";
+
+export function Long() {
+  return <Button wrap fillWidth label="Book a table for the whole party tonight" onPress={() => {}} />;
+}`,
+    language: "tsx",
+    label: "Long.tsx"
+  }
+]} />
+
 Small sizes still take taps from a 44 point area around them, without being drawn larger.
 
 ## Icons
@@ -145,5 +163,6 @@ export function Save() {
 | `disabled` | `boolean` | `false` | Greys the button out and blocks presses. |
 | `fillWidth` | `boolean` | `false` | Stretches to the parent's width. Several in a row share it equally. |
 | `horizontal` | `"start" \| "center" \| "end" \| "between"` | `"center"` | Content alignment inside the button. |
+| `wrap` | `boolean` | `false` | Lets a long label wrap onto more lines; the button grows to fit. |
 | `onPress` | `(event) => void` | | Called on tap. |
 | `style` | `ViewStyle` | | Applied after the button's own style. |

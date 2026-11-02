@@ -40,6 +40,8 @@ export interface DrawerProps {
   "aria-label"?: string;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the panel in end-to-end tests while it is open. */
+  testID?: string;
 }
 
 const SIZES = { s: 20, m: 28, l: 40 } as const;
@@ -62,6 +64,7 @@ export function Drawer({
   "aria-label": ariaLabel,
   children,
   style,
+  testID,
 }: DrawerProps) {
   const theme = useTheme();
   const window = useWindowDimensions();
@@ -128,6 +131,7 @@ export function Drawer({
         aria-modal
         aria-label={ariaLabel}
         role="dialog"
+        testID={testID}
         style={[
           panel,
           { transform: [horizontal ? { translateX: translate } : { translateY: translate }] },

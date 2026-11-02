@@ -18,7 +18,8 @@
   "size": "\"s\" | \"m\" | \"l\" = \"m\"",
   "range": "{ startDate?: Date; endDate?: Date }",
   "locale": "string",
-  "labels": "DatePickerLabels"
+  "labels": "DatePickerLabels",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

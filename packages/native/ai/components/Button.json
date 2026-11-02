@@ -23,6 +23,7 @@
   "horizontal": "\"start\" | \"center\" | \"end\" | \"between\" = \"center\"",
   "onClick": "() => void",
   "href": "string",
+  "wrap": "boolean = false",
   "style": "ViewStyle"
  },
  "resolvedMixins": {},

@@ -10,7 +10,8 @@
   "tagProps": "TagProps = {}",
   "loading": "boolean = false",
   "avatarProps": "AvatarProps = {}",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {

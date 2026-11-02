@@ -22,7 +22,8 @@
   "headerProps": "FlexProps",
   "contentProps": "FlexProps",
   "toggleOnHeaderClick": "boolean = true",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

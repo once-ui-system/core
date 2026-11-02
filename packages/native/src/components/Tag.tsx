@@ -57,6 +57,8 @@ export interface TagProps {
   textVariant?: TextVariant;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the tag in end-to-end tests. */
+  testID?: string;
 }
 
 /** Padding, text and icon per size and look. s, m and l are 2.x's Tag; announce m is 2.x's Badge. */
@@ -119,6 +121,7 @@ export function Tag({
   textVariant,
   children,
   style,
+  testID,
 }: TagProps) {
   const theme = useTheme();
   // Left out, the theme's density picks it.
@@ -175,13 +178,19 @@ export function Tag({
       );
     };
     const box = [{ alignSelf: "flex-start" as const }, style];
-    if (!toggles) return <View style={box}>{body(false)}</View>;
+    if (!toggles)
+      return (
+        <View testID={testID} style={box}>
+          {body(false)}
+        </View>
+      );
     return (
       <Pressable
         accessibilityRole="button"
         aria-selected={on}
         onPress={handler}
         hitSlop={touchSlop(theme, theme.space("32"), Number.POSITIVE_INFINITY)}
+        testID={testID}
         style={box}
       >
         {({ pressed }) => body(pressed)}
@@ -234,12 +243,18 @@ export function Tag({
   );
 
   const box = [{ alignSelf: "flex-start" as const }, style];
-  if (!handler) return <View style={box}>{pill(false)}</View>;
+  if (!handler)
+    return (
+      <View testID={testID} style={box}>
+        {pill(false)}
+      </View>
+    );
   return (
     <Pressable
       accessibilityRole={href && !onPress && !onClick ? "link" : "button"}
       onPress={handler}
       hitSlop={touchSlop(theme, theme.space("32"), Number.POSITIVE_INFINITY)}
+      testID={testID}
       style={box}
     >
       {({ pressed }) => pill(pressed)}

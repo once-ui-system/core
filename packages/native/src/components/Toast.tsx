@@ -27,6 +27,8 @@ export interface ToastProps {
   /** Milliseconds before the toast hides itself. Defaults to 6000, as in core; `Infinity` keeps it. */
   duration?: number;
   style?: ViewStyle;
+  /** Finds the toast in end-to-end tests. */
+  testID?: string;
 }
 
 const ICONS: Partial<Record<Tone, IconName>> = {
@@ -45,6 +47,7 @@ export function Toast({
   action,
   duration = 6000,
   style,
+  testID,
 }: ToastProps) {
   const [visible, setVisible] = useState(true);
   const closed = useRef(onClose);
@@ -76,6 +79,7 @@ export function Toast({
       accessibilityRole={tone === "danger" ? "alert" : "summary"}
       accessibilityLiveRegion={tone === "danger" ? "assertive" : "polite"}
       style={style}
+      testID={testID}
     >
       {showIcon && <Icon size="s" onBackground={`${tone}-medium`} name={ICONS[tone] ?? "info"} />}
       <View style={{ flex: 1 }}>
@@ -95,6 +99,8 @@ export interface ToastOptions {
   message: ReactNode;
   action?: ReactNode;
   duration?: number;
+  /** Finds the toast in end-to-end tests. */
+  testID?: string;
 }
 
 interface ToastContextValue {
@@ -147,6 +153,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             tone={t.tone}
             action={t.action}
             duration={t.duration}
+            testID={t.testID}
             onClose={() => removeToast(t.id)}
           >
             {t.message}

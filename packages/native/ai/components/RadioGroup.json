@@ -16,7 +16,8 @@
   "disabled": "boolean = false",
   "orientation": "\"horizontal\" | \"vertical\" = \"vertical\"",
   "children": "ReactNode",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {
   "ControlChromeProps": {

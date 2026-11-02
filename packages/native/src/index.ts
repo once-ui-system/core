@@ -163,6 +163,7 @@ export {
   reactionMotion,
 } from "./components/reactionMotion";
 export { Scroller, type ScrollerProps, type ScrollerRef } from "./components/Scroller";
+export { SearchInput, type SearchInputProps } from "./components/SearchInput";
 export {
   type ButtonOption,
   SegmentedControl,

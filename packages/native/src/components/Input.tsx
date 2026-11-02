@@ -1,5 +1,12 @@
-import { forwardRef, type ReactNode, useContext, useState } from "react";
-import { TextInput, type TextInputProps, type TextStyle, View, type ViewStyle } from "react-native";
+import { forwardRef, type ReactNode, useCallback, useContext, useRef, useState } from "react";
+import {
+  Pressable,
+  TextInput,
+  type TextInputProps,
+  type TextStyle,
+  View,
+  type ViewStyle,
+} from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Column, Row } from "./Flex";
@@ -124,6 +131,16 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
     const size = ownSize ?? form.size ?? "m";
     const disabled = ownDisabled ?? form.disabled ?? false;
     const [focused, setFocused] = useState(false);
+    // Kept here as well as handed on, so a tap anywhere on the field can focus it.
+    const input = useRef<TextInputRef | null>(null);
+    const setInput = useCallback(
+      (node: TextInputRef | null) => {
+        input.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
     const [shown, setShown] = useState(false);
     const password = type === "password";
     const keyboard =
@@ -157,131 +174,135 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
 
     return (
       <Column gap="8" fillWidth style={style}>
-        <Row
-          vertical={multiline ? "start" : "center"}
-          radius="l"
-          border={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-strong"
-                  : "neutral-medium"
-          }
-          background={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-weak"
-                  : "neutral-alpha-weak"
-          }
-          style={{
-            minHeight: theme.space(HEIGHTS[size]),
-            opacity: disabled ? 0.5 : 1,
-            ...radii,
-            // A focused field in a stacked group paints its border over its neighbours'.
-            ...(focused && cell ? { zIndex: 1 } : {}),
-            ...(focused && !ghost ? { borderColor: theme.color("neutral-border-strong") } : {}),
-          }}
-        >
-          {prefix && <Row paddingLeft="12">{prefix}</Row>}
-          <View
+        {/* The text control is only as tall as a line of text, and on iOS a tap
+            beside it reached nothing: the whole field focuses it. */}
+        <Pressable accessible={false} disabled={disabled} onPress={() => input.current?.focus()}>
+          <Row
+            vertical={multiline ? "start" : "center"}
+            radius="l"
+            border={
+              ghost
+                ? "transparent"
+                : error
+                  ? "danger-medium"
+                  : light
+                    ? "neutral-strong"
+                    : "neutral-medium"
+            }
+            background={
+              ghost
+                ? "transparent"
+                : error
+                  ? "danger-medium"
+                  : light
+                    ? "neutral-weak"
+                    : "neutral-alpha-weak"
+            }
             style={{
-              flex: 1,
-              justifyContent: "center",
-              paddingHorizontal: theme.space("16"),
-              paddingVertical: floating || !label ? theme.space("8") : 0,
+              minHeight: theme.space(HEIGHTS[size]),
+              opacity: disabled ? 0.5 : 1,
+              ...radii,
+              // A focused field in a stacked group paints its border over its neighbours'.
+              ...(focused && cell ? { zIndex: 1 } : {}),
+              ...(focused && !ghost ? { borderColor: theme.color("neutral-border-strong") } : {}),
             }}
           >
-            {label && (
-              <Text
-                textVariant={floating ? "label-default-s" : "label-default-m"}
-                onBackground={error ? "danger-weak" : "neutral-medium"}
-              >
-                {label}
-              </Text>
-            )}
-            <TextInput
-              ref={ref}
-              accessibilityLabel={label}
-              aria-disabled={disabled}
-              editable={!disabled}
-              multiline={multiline}
-              placeholderTextColor={theme.color("neutral-on-background-weak")}
-              onFocus={(e) => {
-                setFocused(true);
-                onFocus?.(e);
+            {prefix && <Row paddingLeft="12">{prefix}</Row>}
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                paddingHorizontal: theme.space("16"),
+                paddingVertical: floating || !label ? theme.space("8") : 0,
               }}
-              onBlur={(e) => {
-                setFocused(false);
-                onBlur?.(e);
-              }}
-              onChangeText={(text) => {
-                setTyped(text);
-                onChangeText?.(text);
-                onValueChange?.(text);
-              }}
-              {...keyboard}
-              {...plain}
-              secureTextEntry={password && !shown}
-              {...rest}
-              style={[
-                {
-                  fontSize: body.fontSize,
-                  fontFamily: body.fontFamily,
-                  color: theme.color("neutral-on-background-strong"),
-                  padding: 0,
-                  // Until it floats, the label sits where the value goes; the
-                  // empty control covers the field so a tap still focuses it.
-                  ...(label && !floating
-                    ? {
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        left: theme.space("16"),
-                        right: theme.space("16"),
-                        opacity: 0,
-                      }
-                    : {}),
-                },
-                inputStyle,
-              ]}
-            />
-          </View>
-          {characterCount && rest.maxLength !== undefined && (
-            <Row paddingRight="12">
-              <Text
-                textVariant="label-default-s"
-                onBackground={
-                  left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
-                }
-              >
-                {left}
-              </Text>
-            </Row>
-          )}
-          {loading && (
-            <Row paddingRight="12">
-              <Spinner size="s" />
-            </Row>
-          )}
-          {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
-          {password && reveal && (
-            <Row paddingRight="12">
-              <IconButton
-                icon={shown ? "eyeOff" : "eye"}
-                variant="ghost"
-                size="s"
-                aria-label={shown ? "Hide password" : "Show password"}
-                disabled={disabled}
-                onPress={() => setShown((v) => !v)}
+            >
+              {label && (
+                <Text
+                  textVariant={floating ? "label-default-s" : "label-default-m"}
+                  onBackground={error ? "danger-weak" : "neutral-medium"}
+                >
+                  {label}
+                </Text>
+              )}
+              <TextInput
+                ref={setInput}
+                accessibilityLabel={label}
+                aria-disabled={disabled}
+                editable={!disabled}
+                multiline={multiline}
+                placeholderTextColor={theme.color("neutral-on-background-weak")}
+                onFocus={(e) => {
+                  setFocused(true);
+                  onFocus?.(e);
+                }}
+                onBlur={(e) => {
+                  setFocused(false);
+                  onBlur?.(e);
+                }}
+                onChangeText={(text) => {
+                  setTyped(text);
+                  onChangeText?.(text);
+                  onValueChange?.(text);
+                }}
+                {...keyboard}
+                {...plain}
+                secureTextEntry={password && !shown}
+                {...rest}
+                style={[
+                  {
+                    fontSize: body.fontSize,
+                    fontFamily: body.fontFamily,
+                    color: theme.color("neutral-on-background-strong"),
+                    padding: 0,
+                    // Until it floats, the label sits where the value goes; the
+                    // empty control covers the field so a tap still focuses it.
+                    ...(label && !floating
+                      ? {
+                          position: "absolute",
+                          top: 0,
+                          bottom: 0,
+                          left: theme.space("16"),
+                          right: theme.space("16"),
+                          opacity: 0,
+                        }
+                      : {}),
+                  },
+                  inputStyle,
+                ]}
               />
-            </Row>
-          )}
-        </Row>
+            </View>
+            {characterCount && rest.maxLength !== undefined && (
+              <Row paddingRight="12">
+                <Text
+                  textVariant="label-default-s"
+                  onBackground={
+                    left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
+                  }
+                >
+                  {left}
+                </Text>
+              </Row>
+            )}
+            {loading && (
+              <Row paddingRight="12">
+                <Spinner size="s" />
+              </Row>
+            )}
+            {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
+            {password && reveal && (
+              <Row paddingRight="12">
+                <IconButton
+                  icon={shown ? "eyeOff" : "eye"}
+                  variant="ghost"
+                  size="s"
+                  aria-label={shown ? "Hide password" : "Show password"}
+                  disabled={disabled}
+                  onPress={() => setShown((v) => !v)}
+                />
+              </Row>
+            )}
+          </Row>
+        </Pressable>
         {error && errorMessage && (
           <Text
             paddingX="16"

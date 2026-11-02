@@ -1,0 +1,56 @@
+---
+title: "SearchInput"
+summary: "A search field with a search icon, a clear button and the keyboard's Search key, for React Native."
+updatedAt: "2026-11-02"
+docs: "once-ui/native/form-controls/searchInput.mdx"
+github: "packages/native/src/components/SearchInput.tsx"
+navLabel: "SearchInput"
+navIcon: "search"
+status: "unreleased"
+---
+
+`SearchInput` is an [Input](/native/form-controls/input) for searching a list or a catalog. It shows a search icon before the value and a clear button once there is text, and the keyboard's return key reads Search. It has no floating label: the placeholder names it, and screen readers read it as a search field.
+
+## Basic usage
+
+Filter as people type with `onChangeText`, or run the search when they press the keyboard's Search key with `onSubmitEditing`.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { useState } from "react";
+import { SearchInput } from "@once-ui-system/native";
+
+export function Venues() {
+  const [query, setQuery] = useState("");
+  return (
+    <SearchInput
+      placeholder="Search venues"
+      value={query}
+      onChangeText={setQuery}
+      onSubmitEditing={() => search(query)}
+    />
+  );
+}`,
+    language: "tsx",
+    label: "Venues.tsx"
+  }
+]} />
+
+## Clearing
+
+The clear button empties the field, calls `onChangeText("")`, then `onClear`. It works whether the field is controlled with `value` or not.
+
+## Testing
+
+With a `testID`, the field is `testID` and the clear button is `${testID}-clear`, so Maestro and Testing Library can reach both.
+
+## API reference
+
+| Prop | Type | Default | Description |
+| --- | --- | --- | --- |
+| `...InputProps` | `InputProps` | | Every `Input` prop except `prefix`, `label` and `multiline`. |
+| `placeholder` | `string` | `"Search"` | Shown while empty, and the field's accessible name. |
+| `onClear` | `() => void` | | Called after the clear button empties the field. |
+| `size` | `TShirtSizes` | `"s"` | The field's height, as on `Input`. |
