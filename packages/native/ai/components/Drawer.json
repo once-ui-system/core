@@ -16,7 +16,8 @@
   "flush": "boolean = false",
   "aria-label": "string",
   "children": "ReactNode",
-  "style": "ViewStyle"
+  "style": "ViewStyle",
+  "testID": "string"
  },
  "resolvedMixins": {},
  "types": {}

@@ -25,7 +25,8 @@
   "paginated": "boolean = false",
   "defaultPageSize": "number = 10",
   "pageSizeOptions": "number[] = [5, 10, 20, 50]",
-  "loadingState": "ReactNode"
+  "loadingState": "ReactNode",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

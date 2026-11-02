@@ -11,11 +11,14 @@
   "empty": "boolean",
   "icon": "IconName",
   "statusIndicator": "{ scheme: \"green\" | \"yellow\" | \"red\" | \"gray\" }",
+  "ring": "boolean | ColorScheme",
+  "testID": "string",
   "style": "ViewStyle"
  },
  "resolvedMixins": {},
  "types": {
   "BuiltInIconName": "one of the names listed under Icons",
+  "ColorScheme": "\"neutral\" | \"brand\" | \"accent\" | \"info\" | \"danger\" | \"warning\" | \"success\"",
   "CondensedTShirtSizes": "\"s\" | \"m\" | \"l\"",
   "IconLibraryOverrides": "{} (an app augments it to register its own icon names)",
   "IconName": "BuiltInIconName | Extract<keyof IconLibraryOverrides, string>",

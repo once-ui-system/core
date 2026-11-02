@@ -24,7 +24,8 @@
   "showFirstLast": "boolean = false",
   "size": "\"s\" | \"m\" | \"l\" = \"m\"",
   "disabled": "boolean = false",
-  "labels": "Partial<PaginationLabels>"
+  "labels": "Partial<PaginationLabels>",
+  "testID": "string"
  },
  "resolvedMixins": {
   "FlexProps": {

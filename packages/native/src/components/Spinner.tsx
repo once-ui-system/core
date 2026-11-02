@@ -9,6 +9,8 @@ export interface SpinnerProps {
   /** The name read out while it spins; `"Loading"` by default. Core 3.0 removed `ariaLabel`. */
   "aria-label"?: string;
   style?: ViewStyle;
+  /** Finds the spinner in end-to-end tests. */
+  testID?: string;
 }
 
 // Spinner.module.scss sizes, in static spacing steps.
@@ -20,12 +22,14 @@ export function Spinner({
   color,
   "aria-label": ariaLabel = "Loading",
   style,
+  testID,
 }: SpinnerProps) {
   const theme = useTheme();
   const px = theme.space(SIZES[size]);
   return (
     <ActivityIndicator
       accessibilityLabel={ariaLabel}
+      testID={testID}
       color={color ?? theme.color("neutral-on-background-medium")}
       size={px >= 32 ? "large" : "small"}
       style={[{ width: px, height: px }, style]}

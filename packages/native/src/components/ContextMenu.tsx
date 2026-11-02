@@ -36,6 +36,8 @@ export interface ContextMenuProps {
   /** Long presses do nothing. */
   disabled?: boolean;
   style?: StyleProp<ViewStyle>;
+  /** Finds the open menu's panel in end-to-end tests. */
+  testID?: string;
 }
 
 /**
@@ -58,6 +60,7 @@ export function ContextMenu({
   selectedOption,
   disabled = false,
   style,
+  testID,
 }: ContextMenuProps) {
   const ref = useRef<ViewRef>(null);
   const [local, setLocal] = useState(false);
@@ -109,6 +112,7 @@ export function ContextMenu({
         maxWidth={maxWidth}
         minHeight={minHeight}
         selectedOption={selectedOption}
+        testID={testID}
         onSelect={(value) => {
           onSelect?.(value);
           if (closeAfterClick) setOpen(false);

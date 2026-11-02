@@ -63,6 +63,7 @@
   "Reactions": {"purpose":"The row under a post, a comment or a message."},
   "Row": {"purpose":"Horizontal flex layout — default direction row"},
   "Scroller": {"purpose":"Flex props lay out the content (`gap`, `padding`, `safeArea` for the home indicator), size props size the view."},
+  "SearchInput": {"purpose":"A search field: an `Input` with a search icon, a clear button once there is text, and the keyboard's Search key."},
   "SegmentedControl": {"purpose":"A row of toggle buttons where one is selected."},
   "Select": {"purpose":"An `Input`-styled field that opens its options in a bottom sheet."},
   "Skeleton": {"purpose":"A pulsing placeholder while content loads."},

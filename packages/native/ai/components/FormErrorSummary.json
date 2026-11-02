@@ -15,6 +15,7 @@
   "FeedbackProps": {
    "style": "ViewStyle",
    "children": "ReactNode",
+   "testID": "string",
    "description": "string",
    "tone": "Tone",
    "showIcon": "boolean",
