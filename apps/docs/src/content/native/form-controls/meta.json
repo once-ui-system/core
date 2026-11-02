@@ -14,13 +14,14 @@
     "rangeSlider": 10,
     "numberInput": 11,
     "passwordInput": 12,
-    "otpInput": 13,
-    "form": 14,
-    "field": 15,
-    "fieldset": 16,
-    "submitButton": 17,
-    "formErrorSummary": 18,
-    "datePicker": 19,
-    "dateInput": 20
+    "searchInput": 13,
+    "otpInput": 14,
+    "form": 15,
+    "field": 16,
+    "fieldset": 17,
+    "submitButton": 18,
+    "formErrorSummary": 19,
+    "datePicker": 20,
+    "dateInput": 21
   }
 }

@@ -17,6 +17,8 @@ export interface ModalProps {
   title: React.ReactNode;
   open: boolean;
   onClose: () => void;
+  /** The close button's tooltip and accessible name. Default "Close"; set it for a non-English UI. */
+  closeLabel?: string;
 }
 
 /**
@@ -30,7 +32,7 @@ export interface ModalProps {
  * fold it into `Dialog`.
  */
 const Modal = forwardRef<HTMLDivElement, ModalProps>(
-  ({ children, backdrop, title, open, onClose }, ref) => {
+  ({ children, backdrop, title, open, onClose, closeLabel = "Close" }, ref) => {
     const [visible, setVisible] = useState(false);
     const [mounted, setMounted] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
@@ -167,7 +169,7 @@ const Modal = forwardRef<HTMLDivElement, ModalProps>(
                   <IconButton
                     icon="close"
                     onClick={onClose}
-                    tooltip="Close"
+                    tooltip={closeLabel}
                     tooltipPosition="left"
                     variant="secondary"
                   />

@@ -21,6 +21,8 @@ export interface OptionProps {
   onPress?: (value: string) => void;
   /** Core's name for `onPress`; both work. */
   onClick?: (value: string) => void;
+  /** Finds the option in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `Option`: one row of a list to pick from. */
@@ -35,12 +37,14 @@ export function Option({
   danger,
   onPress,
   onClick,
+  testID,
 }: OptionProps) {
   const theme = useTheme();
   const handler = onPress ?? onClick;
   return (
     <Pressable
       accessibilityRole="menuitem"
+      testID={testID}
       aria-selected={selected}
       aria-disabled={disabled}
       disabled={disabled}
@@ -102,6 +106,12 @@ export interface SelectProps {
   accessibilityLabel?: string;
   accessibilityHint?: string;
   style?: ViewStyle;
+  /**
+   * Finds the field a test taps in end-to-end tests. In the open sheet, each
+   * option gets `${testID}-${value}`, the sheet `${testID}-sheet` and the
+   * search field `${testID}-search`.
+   */
+  testID?: string;
 }
 
 /** Core's `Select`: an `Input`-styled field that opens its options in a bottom sheet. */
@@ -123,6 +133,7 @@ export function Select({
   accessibilityLabel,
   accessibilityHint,
   style,
+  testID,
 }: SelectProps) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -153,6 +164,7 @@ export function Select({
     <View style={style}>
       <Pressable
         accessibilityRole="combobox"
+        testID={testID}
         accessibilityLabel={label ?? accessibilityLabel}
         accessibilityHint={accessibilityHint}
         // The field below is hidden from screen readers, so the choice is read from here.
@@ -187,6 +199,7 @@ export function Select({
             setQuery("");
           }}
           title={label ?? accessibilityLabel}
+          testID={testID && `${testID}-sheet`}
         >
           <Column gap="4">
             {searchable && (
@@ -197,6 +210,7 @@ export function Select({
                   onChangeText={setQuery}
                   size="s"
                   prefix={<Icon name="search" size="s" onBackground="neutral-weak" />}
+                  testID={testID && `${testID}-search`}
                 />
               </Row>
             )}
@@ -206,7 +220,13 @@ export function Select({
               </Text>
             ) : (
               visible.map((o) => (
-                <Option key={o.value} {...o} selected={chosen.includes(o.value)} onPress={pick} />
+                <Option
+                  key={o.value}
+                  {...o}
+                  selected={chosen.includes(o.value)}
+                  onPress={pick}
+                  testID={o.testID ?? (testID && `${testID}-${o.value}`)}
+                />
               ))
             )}
           </Column>

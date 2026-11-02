@@ -21,6 +21,13 @@ item (see `ROADMAP.md`, Week 4).
   one for panels. It is a class, so the element stays a server component; it stands still
   with reduced motion, lies over a `border` of any width, and takes `--emphasis-from`,
   `--emphasis-to`, `--emphasis-width` and `--emphasis-duration`.
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
+- **`closeLabel` on `Drawer`, `Dialog` and `Modal`.** The close button's tooltip and
+  accessible name, for a UI that isn't in English. Defaults to "Close", as before.
 - **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
   symbol (`svg` markup or a `src` URL): each letter and shape is traced, left to right by
   default, then the logo fills in and holds. `onComplete` fires when the intro has played
@@ -52,6 +59,14 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Fixed
 
+- **Theme providers render where storage is blocked.** In a sandboxed or third-party
+  iframe, or with cookies off, reading `localStorage` throws a SecurityError, and
+  `ThemeProvider` took the whole page down with it (seen in Sentry on Aveiro's embeds).
+  `ThemeProvider` and `DataThemeProvider` now carry on without storage: themes still
+  switch, the choice just isn't remembered.
+- **`MegaMenu` panels stay inside the window.** A wide panel under a trigger near the
+  right edge used to open past the side of the screen; it now moves left until it fits,
+  16px from the edge, and a panel wider than the window keeps its left edge in view.
 - **`Schema` image fallback.** With no `image`, JSON-LD pointed at `/og?title=…`, a route
   no template serves, so every such page carried a broken image. It now uses
   `/api/og/generate`, the same default `Meta.generate` uses for the social image.

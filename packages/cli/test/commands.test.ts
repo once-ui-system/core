@@ -111,6 +111,26 @@ describe("create", () => {
     expect(existsSync(join(dir, "package.json"))).toBe(true);
   });
 
+  it("sends platforms with their url and app id, and asks for a url first", async () => {
+    await expect(
+      create(createClient(base, null), join(tmp(), "a"), { surfaces: "docs", targets: "mobile" }),
+    ).rejects.toThrow(/needs --url/);
+    await create(createClient(base, null), join(tmp(), "a"), {
+      surfaces: "docs",
+      url: "https://a.com",
+      targets: "desktop, mobile",
+      appId: "com.a.app",
+    });
+    expect(requests.at(-1)?.body).toEqual({
+      surfaces: ["docs"],
+      slices: [],
+      name: "a",
+      url: "https://a.com",
+      targets: ["desktop", "mobile"],
+      appId: "com.a.app",
+    });
+  });
+
   it("will not unpack into a directory that has files in it", async () => {
     const dir = tmp();
     writeFileSync(join(dir, "keep.txt"), "mine");

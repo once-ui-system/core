@@ -36,6 +36,11 @@ export interface ButtonProps extends Omit<PressableProps, "children" | "style"> 
   disabled?: boolean;
   fillWidth?: boolean;
   horizontal?: "start" | "center" | "end" | "between";
+  /**
+   * Lets a long label wrap onto more lines instead of being cut off with an
+   * ellipsis; the button grows taller to fit. Off by default, as on the web.
+   */
+  wrap?: boolean;
   style?: ViewStyle;
 }
 
@@ -129,6 +134,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
       disabled = false,
       fillWidth = false,
       horizontal = "center",
+      wrap = false,
       style,
       ...rest
     },
@@ -171,7 +177,7 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
                 : row
                   ? {}
                   : { alignSelf: "flex-start" }),
-              height: theme.space(dims.height as "24"),
+              ...(wrap ? {} : { height: theme.space(dims.height as "24") }),
               minHeight: theme.space(dims.height as "24"),
               paddingHorizontal: theme.space(dims.x as "4"),
               paddingVertical: theme.space(dims.y as "2"),
@@ -202,8 +208,20 @@ export const Button: RefComponent<ButtonProps, ViewRef> = forwardRef<ViewRef, Bu
                   style={{
                     color,
                     ...(variant === "link" ? { textDecorationLine: "underline" } : {}),
+                    // Shrinks to the room left by the icons, so the label wraps inside the button.
+                    ...(wrap
+                      ? {
+                          flexShrink: 1,
+                          textAlign:
+                            horizontal === "start"
+                              ? "left"
+                              : horizontal === "end"
+                                ? "right"
+                                : "center",
+                        }
+                      : {}),
                   }}
-                  numberOfLines={1}
+                  numberOfLines={wrap ? undefined : 1}
                 >
                   {label || children}
                 </Text>

@@ -14,6 +14,10 @@ export type CreateFlags = {
   slices?: string;
   name?: string;
   url?: string;
+  /** Platforms beyond the web, comma-separated: `desktop`, `mobile`. */
+  targets?: string;
+  /** Bundle id for the desktop and mobile apps. */
+  appId?: string;
 };
 
 const split = (value: string | undefined) =>
@@ -36,6 +40,13 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
     throw new CliError(`${dir} already exists and is not empty.`);
   }
 
+  const targets = split(flags.targets);
+  if (targets.length && !flags.url) {
+    throw new CliError(
+      `--targets ${targets.join(",")} needs --url: the app loads your deployed site from it.`,
+    );
+  }
+
   let surfaces = split(flags.surfaces);
   if (!surfaces.length) {
     const catalog = await getCatalog(client);
@@ -56,6 +67,8 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
       slices: split(flags.slices),
       name: flags.name ?? packageNameFrom(target),
       ...(flags.url ? { url: flags.url } : {}),
+      ...(targets.length ? { targets } : {}),
+      ...(targets.length && flags.appId ? { appId: flags.appId } : {}),
     }),
   });
   if (!res.ok) throw await failureFrom(res);
@@ -82,4 +95,7 @@ export async function create(client: ApiClient, dir: string | undefined, flags: 
   if (shown !== ".") console.log(`  cd ${shown}`);
   console.log("  npm install");
   console.log("  npm run dev");
+  if (targets.includes("desktop"))
+    console.log("  npm run desktop     (the desktop app, once the site is deployed)");
+  if (targets.includes("mobile")) console.log("  npx cap add ios     (and android; see README.md)");
 }

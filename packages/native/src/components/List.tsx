@@ -63,11 +63,16 @@ export const ListItem: RefComponent<ListItemProps, ViewRef> = forwardRef<ViewRef
     const theme = useTheme();
     const list = useContext(ListContext);
     const marker = list?.ordered ? `${list.number}.` : "•";
-    const { style, ...text } = props;
+    const { style, testID, ...text } = props;
     const styles = Array.isArray(style) ? style : style ? [style] : [];
 
     return (
-      <View ref={ref} role="listitem" style={{ flexDirection: "row", alignSelf: "stretch" }}>
+      <View
+        ref={ref}
+        role="listitem"
+        testID={testID}
+        style={{ flexDirection: "row", alignSelf: "stretch" }}
+      >
         {/* Right-aligned in the list's indent, as a browser draws an outside marker. */}
         <Text
           variant={variant}

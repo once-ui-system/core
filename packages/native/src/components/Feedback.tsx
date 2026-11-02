@@ -14,6 +14,8 @@ export interface FeedbackProps {
   onClose?: () => void;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the alert in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `Feedback`: an inline alert tinted by its variant, announced when it appears. */
@@ -26,6 +28,7 @@ export function Feedback({
   onClose,
   children,
   style,
+  testID,
 }: FeedbackProps) {
   return (
     <Row
@@ -37,6 +40,7 @@ export function Feedback({
       accessibilityRole="alert"
       accessibilityLiveRegion="assertive"
       style={style}
+      testID={testID}
     >
       {icon && (
         <Row paddingY="16" paddingLeft="16">

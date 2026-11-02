@@ -107,6 +107,14 @@ describe("Drawer: rendering", () => {
     expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
   });
 
+  it("names the close button with closeLabel", async () => {
+    const onClose = vi.fn();
+    renderDrawer({ closeLabel: "Bezárás", onClose });
+    expect(screen.queryByRole("button", { name: "Close" })).toBeNull();
+    await userEvent.click(screen.getByRole("button", { name: "Bezárás" }));
+    expect(onClose).toHaveBeenCalled();
+  });
+
   it("keeps a flush drawer's title for screen readers only", () => {
     renderDrawer({ flush: true });
     expect(screen.queryByRole("heading")).toBeNull();

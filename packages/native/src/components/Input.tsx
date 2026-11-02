@@ -1,5 +1,21 @@
-import { forwardRef, type ReactNode, useContext, useState } from "react";
-import { TextInput, type TextInputProps, type TextStyle, View, type ViewStyle } from "react-native";
+import {
+  forwardRef,
+  type ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import {
+  Animated,
+  Pressable,
+  TextInput,
+  type TextInputProps,
+  type TextStyle,
+  View,
+  type ViewStyle,
+} from "react-native";
 import { useTheme } from "../theme/ThemeProvider";
 import type { TShirtSizes } from "../types";
 import { Column, Row } from "./Flex";
@@ -7,6 +23,7 @@ import { FormCellContext, useFormFieldDefaults } from "./FormContext";
 import type { RefComponent, TextInputRef } from "./refs";
 import { Spinner } from "./Spinner";
 import { Text } from "./Text";
+import { useReduceMotion } from "./useReduceMotion";
 
 export interface InputProps extends Omit<TextInputProps, "style" | "editable"> {
   /** Floats above the value once the field is focused or filled. */
@@ -92,6 +109,16 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
     const size = ownSize ?? form.size ?? "m";
     const disabled = ownDisabled ?? form.disabled ?? false;
     const [focused, setFocused] = useState(false);
+    // Kept here as well as handed on, so a tap anywhere on the field can focus it.
+    const input = useRef<TextInputRef | null>(null);
+    const setInput = useCallback(
+      (node: TextInputRef | null) => {
+        input.current = node;
+        if (typeof ref === "function") ref(node);
+        else if (ref) ref.current = node;
+      },
+      [ref],
+    );
     // Tracked when uncontrolled too, so a typed value keeps the label floating after blur.
     const [typed, setTyped] = useState(rest.defaultValue ?? "");
     const value = rest.value ?? typed;
@@ -99,11 +126,33 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
     // take the control out of the flow and collapse the field to one line.
     const floating = focused || value !== "" || !!rest.placeholder || !!multiline;
     const ghost = variant === "ghost";
+    // The label glides between the value's place and the top of the field, as
+    // on the web, instead of snapping there and moving the text control with it.
+    const reduceMotion = useReduceMotion();
+    const lift = useRef(new Animated.Value(floating ? 1 : 0)).current;
+    useEffect(() => {
+      if (reduceMotion) {
+        lift.setValue(floating ? 1 : 0);
+        return;
+      }
+      Animated.timing(lift, {
+        toValue: floating ? 1 : 0,
+        duration: 150,
+        useNativeDriver: true,
+      }).start();
+    }, [floating, reduceMotion, lift]);
+    const [boxHeight, setBoxHeight] = useState(0);
     // As core: on a light page a white field with a firmer edge, since a tinted
     // fill there reads as disabled.
     const light = theme.settings.theme === "light";
     const left = rest.maxLength !== undefined ? rest.maxLength - String(value).length : 0;
     const body = theme.text("body-default-m");
+    const floatText = theme.text("label-default-s");
+    const restText = theme.text("label-default-m");
+    const floatSize = Number(floatText.fontSize ?? 12);
+    const restSize = Number(restText.fontSize ?? 14);
+    const floatLine = Number(floatText.lineHeight ?? floatSize * 1.4);
+    const restLine = Number(restText.lineHeight ?? restSize * 1.4);
     const round = theme.radius("l");
     const keep = corners ? CORNERS[corners] : cell;
     const radii = keep
@@ -117,115 +166,143 @@ export const Input: RefComponent<InputProps, TextInputRef> = forwardRef<TextInpu
 
     return (
       <Column gap="8" fillWidth style={style}>
-        <Row
-          vertical={multiline ? "start" : "center"}
-          radius="l"
-          border={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-strong"
-                  : "neutral-medium"
-          }
-          background={
-            ghost
-              ? "transparent"
-              : error
-                ? "danger-medium"
-                : light
-                  ? "neutral-weak"
-                  : "neutral-alpha-weak"
-          }
-          style={{
-            minHeight: theme.space(HEIGHTS[size]),
-            opacity: disabled ? 0.5 : 1,
-            ...radii,
-            // A focused field in a stacked group paints its border over its neighbours'.
-            ...(focused && cell ? { zIndex: 1 } : {}),
-            ...(focused && !ghost ? { borderColor: theme.color("neutral-border-strong") } : {}),
-          }}
-        >
-          {prefix && <Row paddingLeft="12">{prefix}</Row>}
-          <View
+        {/* The text control is only as tall as a line of text, and on iOS a tap
+            beside it reached nothing: the whole field focuses it. */}
+        <Pressable accessible={false} disabled={disabled} onPress={() => input.current?.focus()}>
+          <Row
+            vertical={multiline ? "start" : "center"}
+            radius="l"
+            border={
+              ghost
+                ? "transparent"
+                : error
+                  ? "danger-medium"
+                  : light
+                    ? "neutral-strong"
+                    : "neutral-medium"
+            }
+            background={
+              ghost
+                ? "transparent"
+                : error
+                  ? "danger-medium"
+                  : light
+                    ? "neutral-weak"
+                    : "neutral-alpha-weak"
+            }
             style={{
-              flex: 1,
-              justifyContent: "center",
-              paddingHorizontal: theme.space("16"),
-              paddingVertical: floating || !label ? theme.space("8") : 0,
+              minHeight: theme.space(HEIGHTS[size]),
+              opacity: disabled ? 0.5 : 1,
+              ...radii,
+              // A focused field in a stacked group paints its border over its neighbours'.
+              ...(focused && cell ? { zIndex: 1 } : {}),
+              ...(focused && !ghost ? { borderColor: theme.color("neutral-border-strong") } : {}),
             }}
           >
-            {label && (
-              <Text
-                variant={floating ? "label-default-s" : "label-default-m"}
-                onBackground={error ? "danger-weak" : "neutral-medium"}
-              >
-                {label}
-              </Text>
+            {prefix && <Row paddingLeft="12">{prefix}</Row>}
+            <View
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                paddingHorizontal: theme.space("16"),
+                paddingVertical: theme.space("8"),
+                // Room above the value for the floating label, held whether it floats or not.
+                ...(label ? { paddingTop: theme.space("8") + floatLine } : {}),
+              }}
+              onLayout={(e) => setBoxHeight(e.nativeEvent.layout.height)}
+            >
+              {label && (
+                <Animated.View
+                  pointerEvents="none"
+                  style={{
+                    position: "absolute",
+                    top: theme.space("8"),
+                    left: theme.space("16"),
+                    right: theme.space("16"),
+                    transformOrigin: "left top",
+                    transform: [
+                      {
+                        // Resting, it sits centred where the value goes.
+                        translateY: lift.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [
+                            Math.max(0, (boxHeight - restLine) / 2 - theme.space("8")),
+                            0,
+                          ],
+                        }),
+                      },
+                      {
+                        scale: lift.interpolate({
+                          inputRange: [0, 1],
+                          outputRange: [restSize / floatSize, 1],
+                        }),
+                      },
+                    ],
+                  }}
+                >
+                  <Text
+                    variant="label-default-s"
+                    onBackground={error ? "danger-weak" : "neutral-medium"}
+                    numberOfLines={1}
+                  >
+                    {label}
+                  </Text>
+                </Animated.View>
+              )}
+              <TextInput
+                ref={setInput}
+                accessibilityLabel={label}
+                aria-disabled={disabled}
+                editable={!disabled}
+                multiline={multiline}
+                placeholderTextColor={theme.color("neutral-on-background-weak")}
+                onFocus={(e) => {
+                  setFocused(true);
+                  onFocus?.(e);
+                }}
+                onBlur={(e) => {
+                  setFocused(false);
+                  onBlur?.(e);
+                }}
+                onChangeText={(text) => {
+                  setTyped(text);
+                  onChangeText?.(text);
+                }}
+                {...rest}
+                style={[
+                  {
+                    fontSize: body.fontSize,
+                    fontFamily: body.fontFamily,
+                    color: theme.color("neutral-on-background-strong"),
+                    padding: 0,
+                    // The field's border already shows focus; a second ring around the
+                    // text line (react-native-web draws the browser's) doubled it.
+                    outlineWidth: 0,
+                  },
+                  inputStyle,
+                ]}
+              />
+            </View>
+            {characterCount && rest.maxLength !== undefined && (
+              <Row paddingRight="12">
+                <Text
+                  variant="label-default-s"
+                  onBackground={
+                    left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
+                  }
+                >
+                  {left}
+                </Text>
+              </Row>
             )}
-            <TextInput
-              ref={ref}
-              accessibilityLabel={label}
-              aria-disabled={disabled}
-              editable={!disabled}
-              multiline={multiline}
-              placeholderTextColor={theme.color("neutral-on-background-weak")}
-              onFocus={(e) => {
-                setFocused(true);
-                onFocus?.(e);
-              }}
-              onBlur={(e) => {
-                setFocused(false);
-                onBlur?.(e);
-              }}
-              onChangeText={(text) => {
-                setTyped(text);
-                onChangeText?.(text);
-              }}
-              {...rest}
-              style={[
-                {
-                  fontSize: body.fontSize,
-                  fontFamily: body.fontFamily,
-                  color: theme.color("neutral-on-background-strong"),
-                  padding: 0,
-                  // Until it floats, the label sits where the value goes; the
-                  // empty control covers the field so a tap still focuses it.
-                  ...(label && !floating
-                    ? {
-                        position: "absolute",
-                        top: 0,
-                        bottom: 0,
-                        left: theme.space("16"),
-                        right: theme.space("16"),
-                        opacity: 0,
-                      }
-                    : {}),
-                },
-                inputStyle,
-              ]}
-            />
-          </View>
-          {characterCount && rest.maxLength !== undefined && (
-            <Row paddingRight="12">
-              <Text
-                variant="label-default-s"
-                onBackground={
-                  left <= 5 ? "danger-weak" : left <= 10 ? "warning-weak" : "neutral-weak"
-                }
-              >
-                {left}
-              </Text>
-            </Row>
-          )}
-          {loading && (
-            <Row paddingRight="12">
-              <Spinner size="s" />
-            </Row>
-          )}
-          {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
-        </Row>
+            {loading && (
+              <Row paddingRight="12">
+                <Spinner size="s" />
+              </Row>
+            )}
+            {suffix && !loading && <Row paddingRight="12">{suffix}</Row>}
+          </Row>
+        </Pressable>
         {error && errorMessage && (
           <Text
             paddingX="16"
