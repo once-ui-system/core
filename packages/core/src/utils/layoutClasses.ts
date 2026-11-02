@@ -182,7 +182,7 @@ export function spacingValue(value: unknown): string | undefined {
   return undefined;
 }
 
-/** A spacing token's utility class (`p-16`), or nothing for a number or a CSS length. */
+/** A spacing token's utility class (`padding-16`), or nothing for a number or a CSS length. */
 export function spacingClass(prefix: string, value: unknown): string | false {
   return typeof value === "string" && value !== "" && !isCSSUnit(value) && `${prefix}-${value}`;
 }
@@ -213,20 +213,20 @@ export function scrollsOn(value: unknown): boolean {
  * token for every breakpoint.
  */
 const SPACING_PREFIX = {
-  padding: "p",
-  paddingLeft: "pl",
-  paddingRight: "pr",
-  paddingTop: "pt",
-  paddingBottom: "pb",
-  paddingX: "px",
-  paddingY: "py",
-  margin: "m",
-  marginLeft: "ml",
-  marginRight: "mr",
-  marginTop: "mt",
-  marginBottom: "mb",
-  marginX: "mx",
-  marginY: "my",
+  padding: "padding",
+  paddingLeft: "padding-left",
+  paddingRight: "padding-right",
+  paddingTop: "padding-top",
+  paddingBottom: "padding-bottom",
+  paddingX: "padding-x",
+  paddingY: "padding-y",
+  margin: "margin",
+  marginLeft: "margin-left",
+  marginRight: "margin-right",
+  marginTop: "margin-top",
+  marginBottom: "margin-bottom",
+  marginX: "margin-x",
+  marginY: "margin-y",
   gap: "g",
 } as const;
 
@@ -258,7 +258,7 @@ const OFFSET_SIDES = ["top", "right", "bottom", "left"] as const;
 /**
  * An offset with a class behind it. Foundations generates `top`, `right`,
  * `bottom` and `left` for the static steps only, at the base and at every
- * breakpoint (`.m-top-16`); a t-shirt size, a number and a CSS length have
+ * breakpoint (`.m-offset-top-16`); a t-shirt size, a number and a CSS length have
  * none.
  */
 export function isOffsetToken(value: unknown): value is StaticSpacingToken {
@@ -330,7 +330,7 @@ export function offsetClasses(
 ): (string | false)[] {
   if (!props) return [];
   return OFFSET_SIDES.map(
-    (side) => isOffsetToken(props[side]) && `${breakpoint}-${side}-${props[side]}`,
+    (side) => isOffsetToken(props[side]) && `${breakpoint}-offset-${side}-${props[side]}`,
   );
 }
 
@@ -691,7 +691,9 @@ export function textLayout({
       zIndex !== undefined && `z-index-${zIndex}`,
       // `-1` laps bordered children onto each other; with no direction, in a row.
       gap === "-1" ? "g-horizontal--1" : spacingClass("g", gap),
-      ...OFFSET_SIDES.map((side) => isOffsetToken(offsets[side]) && `${side}-${offsets[side]}`),
+      ...OFFSET_SIDES.map(
+        (side) => isOffsetToken(offsets[side]) && `offset-${side}-${offsets[side]}`,
+      ),
     ],
     style: withTokenLengths({
       gap: spacingValue(gap),

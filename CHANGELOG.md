@@ -32,6 +32,15 @@ entry below that had landed by then:
 
 ### Added
 
+- **Tailwind CSS v4 adapter, `@once-ui-system/core/tailwind.css`.** Import it
+  before Tailwind (`@import "@once-ui-system/core/tailwind.css"; @import
+  "tailwindcss";`) and Once UI's tokens become Tailwind classes that follow the
+  theme: `bg-surface`, `bg-brand-strong`, `text-neutral-weak`,
+  `border-neutral-medium`, `rounded-m`, `shadow-l`, `font-heading`,
+  `text-body-m`. `dark:` follows Once UI's `data-theme`. Tailwind's preflight
+  sits under Once UI and its utilities over it, so a `className="ml-auto"` on a
+  Once UI component still wins and no component changes a pixel. Also at
+  `@once-ui-system/foundations/tailwind.css`.
 - **`closeLabel` on `Drawer` and `Dialog`.** The close button's tooltip and accessible
   name, for a UI that isn't in English. Defaults to "Close".
 - **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
@@ -213,6 +222,17 @@ entry below that had landed by then:
 
 ### Changed
 
+- **Spacing, offset and grid-column classes are spelled out** (MIGRATING.md §
+  14). `p-16` is `padding-16`, `mt-8` `margin-top-8`, `top-16`
+  `offset-top-16`, `columns-2` `grid-columns-2`, at every breakpoint. Props are
+  unchanged. Tailwind CSS uses the short names with another scale, and its
+  rule would land on Once UI's elements in an app that has both. The codemod
+  rewrites hand-written classes.
+- **Every stylesheet names the layer order `properties, theme, base, once-ui,
+  components, utilities`.** A cascade layer keeps the place where its name
+  first appears, so whichever file loads first, Tailwind's preflight stays
+  under Once UI and Tailwind's utilities over it. Without Tailwind the other
+  layers are empty.
 - **Charts draw their own SVG; recharts is gone.** LineChart, BarChart,
   LineBarChart and PieChart render with Once UI's own renderer (scales, stacks,
   d3's curves, ticks and bar slots as recharts placed them), so the chart is in

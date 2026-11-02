@@ -131,7 +131,7 @@ describe("LogoCloud", () => {
 
   it("forwards grid props such as columns", () => {
     const { container } = render(<LogoCloud logos={logos.slice(0, 2)} columns="2" />, { wrapper });
-    expect((container.firstElementChild as HTMLElement).className).toMatch(/columns-2/);
+    expect((container.firstElementChild as HTMLElement).className).toMatch(/grid-columns-2/);
   });
 
   it("renders linked logos as links", async () => {

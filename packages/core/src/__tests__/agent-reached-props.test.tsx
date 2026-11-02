@@ -39,10 +39,10 @@ const classesOf = (el: React.ReactElement) => {
 
 describe('margin="auto"', () => {
   it("is a class on Row, Column, Text and Heading", () => {
-    expect(classesOf(<Row marginLeft="auto">x</Row>)).toContain("ml-auto");
-    expect(classesOf(<Column marginX="auto">x</Column>)).toContain("mx-auto");
-    expect(classesOf(<Text marginTop="auto">x</Text>)).toContain("mt-auto");
-    expect(classesOf(<Heading margin="auto">x</Heading>)).toContain("m-auto");
+    expect(classesOf(<Row marginLeft="auto">x</Row>)).toContain("margin-left-auto");
+    expect(classesOf(<Column marginX="auto">x</Column>)).toContain("margin-x-auto");
+    expect(classesOf(<Text marginTop="auto">x</Text>)).toContain("margin-top-auto");
+    expect(classesOf(<Heading margin="auto">x</Heading>)).toContain("margin-auto");
   });
 
   it("works at a breakpoint, both ways", () => {
@@ -51,7 +51,9 @@ describe('margin="auto"', () => {
         x
       </ServerFlex>,
     );
-    expect(classes).toEqual(expect.arrayContaining(["ml-auto", "s-ml-0", "m-my-auto"]));
+    expect(classes).toEqual(
+      expect.arrayContaining(["margin-left-auto", "s-margin-left-0", "m-margin-y-auto"]),
+    );
   });
 
   it("has a class behind every margin prop, at the base and at every breakpoint", () => {
@@ -59,7 +61,15 @@ describe('margin="auto"', () => {
       join(__dirname, "../../../foundations/scss/styles/spacing.generated.scss"),
       "utf8",
     );
-    for (const prefix of ["m", "mx", "my", "mt", "mr", "mb", "ml"]) {
+    for (const prefix of [
+      "margin",
+      "margin-x",
+      "margin-y",
+      "margin-top",
+      "margin-right",
+      "margin-bottom",
+      "margin-left",
+    ]) {
       expect(css).toContain(`.${prefix}-auto {`);
       for (const bp of ["xl", "l", "m", "s", "xs"])
         expect(css).toContain(`.${bp}-${prefix}-auto {`);

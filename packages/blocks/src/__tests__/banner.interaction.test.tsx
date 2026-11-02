@@ -44,8 +44,8 @@ describe("Banner", () => {
     expect(banner).toBe(container.firstElementChild);
     expect(banner).toHaveAttribute("id", "promo");
     expect(banner).toHaveClass("radius-s");
-    expect(banner).toHaveClass("py-16");
-    expect(banner).not.toHaveClass("py-8");
+    expect(banner).toHaveClass("padding-y-16");
+    expect(banner).not.toHaveClass("padding-y-8");
   });
 
   it("keeps its children interactive and in the tab order", async () => {

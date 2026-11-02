@@ -12,6 +12,15 @@
 //
 //   node scripts/css-layers.cjs <file.css>...   wrap files in place
 //
+// Every file also opens with the layer order Once UI needs next to Tailwind
+// CSS v4: `properties, theme, base, once-ui, components, utilities`. The
+// browser fixes a
+// layer's place where its name first appears, and Next.js, Vite or a CSS
+// module chunk can put any Once UI file before the app's own CSS. Naming the
+// order in each file means Tailwind's preflight (`base`) always sits under
+// Once UI, and Tailwind utilities (`utilities`) always over it, whichever
+// stylesheet loads first. Without Tailwind the other five layers stay empty.
+//
 // `@once-ui-system/core`, `fx` and `blocks` call `wrapFile` on their compiled
 // CSS from compile-css-modules.cjs.
 
@@ -19,9 +28,10 @@ const fs = require("node:fs");
 
 const LAYER = "once-ui";
 const OPEN = `@layer ${LAYER} {`;
+const ORDER = `@layer properties, theme, base, ${LAYER}, components, utilities;`;
 
 /**
- * `css` inside `@layer once-ui { … }`. `@charset`
+ * `css` inside `@layer once-ui { … }`, after the layer order. `@charset`
  * and `@import` must come before any other rule, so they stay in front.
  * Already wrapped CSS comes back unchanged.
  */
@@ -44,7 +54,7 @@ function wrap(css) {
     tail = `${map[1]}\n`;
     body = body.slice(0, map.index);
   }
-  return `${head}${OPEN}\n${body.replace(/^\s+|\s+$/g, "")}\n}\n${tail}`;
+  return `${head}${ORDER}\n${OPEN}\n${body.replace(/^\s+|\s+$/g, "")}\n}\n${tail}`;
 }
 
 /**
@@ -66,7 +76,7 @@ function wrapFile(file) {
   }
 }
 
-module.exports = { wrap, wrapFile, LAYER };
+module.exports = { wrap, wrapFile, LAYER, ORDER };
 
 if (require.main === module) {
   const files = process.argv.slice(2);
