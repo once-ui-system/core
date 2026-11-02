@@ -27,6 +27,8 @@ export interface ToastProps {
   /** Milliseconds before the toast hides itself. Defaults to 6000, as in core; `Infinity` keeps it. */
   duration?: number;
   style?: ViewStyle;
+  /** Finds the toast in end-to-end tests. */
+  testID?: string;
 }
 
 const ICONS: Record<ToastVariant, IconName> = {
@@ -45,6 +47,7 @@ export function Toast({
   action,
   duration = 6000,
   style,
+  testID,
 }: ToastProps) {
   const [visible, setVisible] = useState(true);
   const closed = useRef(onClose);
@@ -76,6 +79,7 @@ export function Toast({
       accessibilityRole={variant === "danger" ? "alert" : "summary"}
       accessibilityLiveRegion={variant === "danger" ? "assertive" : "polite"}
       style={style}
+      testID={testID}
     >
       {showIcon && <Icon size="s" onBackground={`${variant}-medium`} name={ICONS[variant]} />}
       <View style={{ flex: 1 }}>
@@ -92,6 +96,8 @@ export interface ToastOptions {
   message: ReactNode;
   action?: ReactNode;
   duration?: number;
+  /** Finds the toast in end-to-end tests. */
+  testID?: string;
 }
 
 interface ToastContextValue {
@@ -144,6 +150,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             variant={t.variant}
             action={t.action}
             duration={t.duration}
+            testID={t.testID}
             onClose={() => removeToast(t.id)}
           >
             {t.message}

@@ -19,6 +19,7 @@ interface TabsContextValue {
   select: (value: string) => void;
   /** Uncontrolled with no `defaultValue`: the first enabled tab becomes the selection. */
   adopt: (value: string) => void;
+  testID?: string;
 }
 
 const TabsContext = createContext<TabsContextValue | null>(null);
@@ -46,6 +47,8 @@ export interface TabsProps extends FlexProps {
   orientation?: "horizontal" | "vertical";
   /** Accepted for core's API; it is about arrow keys, which a touch screen does not have. */
   activation?: "automatic" | "manual";
+  /** Finds the tabs in end-to-end tests; each `Tab` without its own gets `${testID}-${value}`. */
+  testID?: string;
   children?: ReactNode;
 }
 
@@ -62,6 +65,7 @@ export const Tabs: RefComponent<TabsProps, ViewRef> = forwardRef<ViewRef, TabsPr
     orientation = "horizontal",
     activation: _activation,
     children,
+    testID,
     ...flex
   },
   ref,
@@ -83,12 +87,13 @@ export const Tabs: RefComponent<TabsProps, ViewRef> = forwardRef<ViewRef, TabsPr
       if (next !== current) setChosen(next);
     },
     adopt: (next) => setFirst((previous) => previous ?? next),
+    testID,
   };
 
   const Layout = orientation === "vertical" ? Row : Column;
   return (
     <TabsContext.Provider value={context}>
-      <Layout ref={ref} fillWidth gap="16" {...flex}>
+      <Layout ref={ref} fillWidth gap="16" testID={testID} {...flex}>
         {children}
       </Layout>
     </TabsContext.Provider>
@@ -129,7 +134,7 @@ export const Tab: RefComponent<TabProps, ViewRef> = forwardRef<ViewRef, TabProps
   { value, disabled = false, fillWidth, horizontal, onPress, onClick, ...rest },
   ref,
 ) {
-  const { baseId, value: selectedValue, orientation, select, adopt } = useTabs("Tab");
+  const { baseId, value: selectedValue, orientation, select, adopt, testID } = useTabs("Tab");
   const selected = selectedValue === value;
   const vertical = orientation === "vertical";
 
@@ -146,6 +151,7 @@ export const Tab: RefComponent<TabProps, ViewRef> = forwardRef<ViewRef, TabProps
       ref={ref}
       accessibilityRole="tab"
       nativeID={idFor(baseId, "tab", value)}
+      testID={rest.testID ?? (testID && `${testID}-${value}`)}
       selected={selected}
       disabled={disabled}
       onPress={(e) => {

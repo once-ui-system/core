@@ -79,6 +79,29 @@ export function Presence() {
   }
 ]} />
 
+## Ring
+
+`ring` draws a coloured ring around the avatar with a gap between, as for a story or a live state. `true` uses the brand colour; a scheme such as `"accent"` or `"success"` picks another. The avatar grows by the ring's width.
+
+<CodeBlock marginTop="8" marginBottom="24"
+codes={[
+  {
+    code:
+`import { Avatar, Row } from "@once-ui-system/native";
+
+export function Rings() {
+  return (
+    <Row gap="12" vertical="center">
+      <Avatar size="l" value="AB" ring />
+      <Avatar size="l" value="CD" ring="success" />
+    </Row>
+  );
+}`,
+    language: "tsx",
+    label: "Rings"
+  }
+]} />
+
 ## Differences from the web
 
 - No `empty` or `icon` props. An avatar with neither `src` nor `value` is an empty circle.
@@ -94,4 +117,6 @@ export function Presence() {
 | `value` | `string` | | Initials shown when there is no image. Also used in the screen reader label. |
 | `loading` | `boolean` | | Shows a circular skeleton instead. |
 | `statusIndicator` | `{ color: "green" \| "yellow" \| "red" \| "gray" }` | | A status dot in the corner. |
+| `ring` | `boolean \| ColorScheme` | | A coloured ring around the avatar; `true` is the brand colour. |
+| `testID` | `string` | | For tests and tools such as Maestro. |
 | `style` | `ViewStyle` | | Style for the outer view. |

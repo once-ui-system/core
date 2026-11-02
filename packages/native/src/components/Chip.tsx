@@ -17,6 +17,8 @@ export interface ChipProps {
   /** Core's name for `onPress`; both work. */
   onClick?: () => void;
   style?: ViewStyle;
+  /** Finds the chip in end-to-end tests; on the pressable when it has a handler. */
+  testID?: string;
 }
 
 /** Core's `Chip`: a rounded, selectable label, optionally removable. */
@@ -28,6 +30,7 @@ export function Chip({
   onPress,
   onClick,
   style,
+  testID,
 }: ChipProps) {
   const theme = useTheme();
   const handler = onPress ?? onClick;
@@ -62,11 +65,17 @@ export function Chip({
     </Row>
   );
   // Only a chip with a handler is a button; a removable one holds its own.
-  if (!handler) return <View style={[{ alignSelf: "flex-start" }, style]}>{chip(false)}</View>;
+  if (!handler)
+    return (
+      <View style={[{ alignSelf: "flex-start" }, style]} testID={testID}>
+        {chip(false)}
+      </View>
+    );
   return (
     <Pressable
       accessibilityRole="button"
       aria-selected={selected}
+      testID={testID}
       onPress={handler}
       hitSlop={touchSlop(theme, height, Number.POSITIVE_INFINITY)}
       style={[{ alignSelf: "flex-start" }, style]}

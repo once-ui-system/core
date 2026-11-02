@@ -15,6 +15,8 @@ export interface OTPInputProps {
   disabled?: boolean;
   autoFocus?: boolean;
   style?: ViewStyle;
+  /** Finds the code in end-to-end tests; each field gets `${testID}-${index}`, from 0. */
+  testID?: string;
 }
 
 /**
@@ -30,6 +32,7 @@ export function OTPInput({
   disabled = false,
   autoFocus = false,
   style,
+  testID,
 }: OTPInputProps) {
   const theme = useTheme();
   const [values, setValues] = useState<string[]>(() => Array(length).fill(""));
@@ -64,7 +67,7 @@ export function OTPInput({
   };
 
   return (
-    <Column gap="8" style={style}>
+    <Column gap="8" style={style} testID={testID}>
       <Row gap="8" center>
         {values.map((value, index) => (
           <Input
@@ -88,6 +91,7 @@ export function OTPInput({
               if (event.nativeEvent.key === "Backspace") handleBackspace(index);
             }}
             accessibilityLabel={`OTP digit ${index + 1} of ${length}`}
+            testID={testID && `${testID}-${index}`}
             // Core's 48, plus room for the field's side padding around a heading-size digit.
             style={{ width: theme.space("56") }}
             inputStyle={{

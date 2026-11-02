@@ -176,6 +176,8 @@ export interface MenuLayerProps {
   matchWidth?: boolean;
   selectedOption?: string;
   onSelect: (value: string) => void;
+  /** Set on the menu panel. */
+  testID?: string;
   children: ReactNode;
 }
 
@@ -196,6 +198,7 @@ export function MenuLayer({
   matchWidth,
   selectedOption,
   onSelect,
+  testID,
   children,
 }: MenuLayerProps) {
   const theme = useTheme();
@@ -249,6 +252,7 @@ export function MenuLayer({
           selectedOption={selectedOption}
           onSelect={onSelect}
           accessibilityViewIsModal
+          testID={testID}
         >
           {children}
         </Dropdown>
@@ -300,6 +304,8 @@ export interface DropdownWrapperProps {
   /** Makes the trigger ignore presses, as core's `disableTriggerClick`; `open` still works. */
   disableTriggerClick?: boolean;
   style?: StyleProp<ViewStyle>;
+  /** Finds the open menu's panel in end-to-end tests. Give the trigger its own. */
+  testID?: string;
 }
 
 /**
@@ -323,6 +329,7 @@ export function DropdownWrapper({
   minHeight,
   disableTriggerClick = false,
   style,
+  testID,
 }: DropdownWrapperProps) {
   const theme = useTheme();
   const ref = useRef<ViewRef>(null);
@@ -371,6 +378,7 @@ export function DropdownWrapper({
         minHeight={minHeight}
         matchWidth={fillWidth}
         selectedOption={selectedOption}
+        testID={testID}
         onSelect={(value) => {
           onSelect?.(value);
           if (closeAfterClick) setOpen(false);

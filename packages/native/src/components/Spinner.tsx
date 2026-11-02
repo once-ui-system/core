@@ -8,18 +8,21 @@ export interface SpinnerProps {
   color?: string;
   ariaLabel?: string;
   style?: ViewStyle;
+  /** Finds the spinner in end-to-end tests. */
+  testID?: string;
 }
 
 // Spinner.module.scss sizes, in static spacing steps.
 const SIZES = { xs: "16", s: "20", m: "24", l: "32", xl: "40" } as const;
 
 /** Core's `Spinner`, drawn by the platform's activity indicator. */
-export function Spinner({ size = "m", color, ariaLabel = "Loading", style }: SpinnerProps) {
+export function Spinner({ size = "m", color, ariaLabel = "Loading", style, testID }: SpinnerProps) {
   const theme = useTheme();
   const px = theme.space(SIZES[size]);
   return (
     <ActivityIndicator
       accessibilityLabel={ariaLabel}
+      testID={testID}
       color={color ?? theme.color("neutral-on-background-medium")}
       size={px >= 32 ? "large" : "small"}
       style={[{ width: px, height: px }, style]}
