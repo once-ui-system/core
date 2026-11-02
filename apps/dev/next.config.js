@@ -5,7 +5,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@once-ui-system/core", "@once-ui-system/fx", "@once-ui-system/blocks"],
+  transpilePackages: [
+    "@once-ui-system/core",
+    "@once-ui-system/fx",
+    "@once-ui-system/blocks",
+    "@once-ui-system/site-editor",
+  ],
   reactStrictMode: true,
   turbopack: {},
   webpack: (config) => {
