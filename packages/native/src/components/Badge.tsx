@@ -13,10 +13,20 @@ export interface BadgeProps {
   children?: ReactNode;
   onPress?: () => void;
   style?: ViewStyle;
+  /** Finds the badge in end-to-end tests; on the pressable when it has `onPress`. */
+  testID?: string;
 }
 
 /** Core's `Badge`: a pill that announces something, often leading to it. */
-export function Badge({ title, icon, arrow = false, children, onPress, style }: BadgeProps) {
+export function Badge({
+  title,
+  icon,
+  arrow = false,
+  children,
+  onPress,
+  style,
+  testID,
+}: BadgeProps) {
   const theme = useTheme();
   const color = theme.onBackground("neutral-strong");
   const pill = (pressed: boolean) => (
@@ -40,10 +50,16 @@ export function Badge({ title, icon, arrow = false, children, onPress, style }: 
       {arrow && <Icon name="chevronRight" size="xs" color={color} />}
     </Row>
   );
-  if (!onPress) return <Row style={style}>{pill(false)}</Row>;
+  if (!onPress)
+    return (
+      <Row style={style} testID={testID}>
+        {pill(false)}
+      </Row>
+    );
   return (
     <Pressable
       accessibilityRole="link"
+      testID={testID}
       onPress={onPress}
       style={[{ alignSelf: "flex-start" }, style]}
     >

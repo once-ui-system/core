@@ -16,6 +16,8 @@ export interface UserProps {
   loading?: boolean;
   avatarProps?: AvatarProps;
   style?: ViewStyle;
+  /** Finds the user row in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `User`: an avatar with a name, an optional tag and a subline, as in a list of people. */
@@ -27,9 +29,10 @@ export function User({
   loading = false,
   avatarProps = {},
   style,
+  testID,
 }: UserProps) {
   return (
-    <Row vertical="center" gap="8" style={style}>
+    <Row vertical="center" gap="8" style={style} testID={testID}>
       <Avatar size="m" loading={loading} {...avatarProps} />
       {children}
       {name && (

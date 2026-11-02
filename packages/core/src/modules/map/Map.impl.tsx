@@ -13,8 +13,16 @@ import { useReducedMotion } from "../../hooks/useReducedMotion";
 import styles from "./Map.module.scss";
 import { MapContext, type MapContextValue } from "./MapContext";
 import { DEFAULT_MAP_STYLE } from "./mapStyles";
+import { applyScene } from "./scene";
 import { tokenColor } from "./tokenColor";
-import type { LngLat, MapStyle, MapStyleSource, MapViewport } from "./types";
+import type {
+  LngLat,
+  MapBuildings,
+  MapProjection,
+  MapStyle,
+  MapStyleSource,
+  MapViewport,
+} from "./types";
 
 export interface MapLabels {
   /** The map's accessible name. Default "Map". */
@@ -56,6 +64,17 @@ export interface MapProps
    * map sits on the same surface as the page. Default true.
    */
   tint?: boolean;
+  /**
+   * `"globe"` curves the world into a globe when zoomed out and flattens it
+   * as you zoom in, for maps that travel between cities. Default `"mercator"`.
+   */
+  projection?: MapProjection;
+  /**
+   * `"3d"` extrudes buildings to their height from zoom 13, coloured from the
+   * neutral surface up to the brand colour for the tallest. Tilt the camera
+   * (`pitch` in the viewport) to see them. Default `"flat"`.
+   */
+  buildings?: MapBuildings;
   /** The zoom buttons. Default true. */
   controls?: boolean;
   /** False draws a static map: no pan, zoom or keyboard. Default true. */
@@ -166,6 +185,8 @@ const MapImpl: React.FC<MapProps> = ({
   boundsMaxZoom = 15,
   mapStyle = DEFAULT_MAP_STYLE,
   tint = true,
+  projection = "mercator",
+  buildings = "flat",
   controls = true,
   interactive = true,
   cooperativeGestures = false,
@@ -299,17 +320,35 @@ const MapImpl: React.FC<MapProps> = ({
     }
   }, [map, mapStyle, resolvedTheme, tint]);
 
+  // Globe and 3D buildings: after every style (re)load, since a swap drops
+  // them, and with the theme, since the building colours are tokens.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: resolvedTheme re-reads the colour tokens
+  useEffect(() => {
+    if (!map || styleVersion === 0) return;
+    try {
+      applyScene(map, { projection, buildings });
+    } catch {
+      // A style swap is mid-flight; the bump when it settles applies it.
+    }
+  }, [map, styleVersion, projection, buildings, resolvedTheme]);
+
   // Controlled viewport: follow the prop when it differs from the camera.
   useEffect(() => {
     if (!map || !viewport) return;
-    if (sameViewport(viewport, readViewport(map))) return;
-    map.easeTo({
+    const current = readViewport(map);
+    if (sameViewport(viewport, current)) return;
+    const camera = {
       center: viewport.center,
       zoom: viewport.zoom,
       bearing: viewport.bearing ?? 0,
       pitch: viewport.pitch ?? 0,
-      duration: reducedMotion ? 0 : 300,
-    });
+    };
+    // A jump to another city flies out and back in; a short move glides.
+    const far =
+      Math.abs(viewport.center[0] - current.center[0]) > 1 ||
+      Math.abs(viewport.center[1] - current.center[1]) > 1;
+    if (far && !reducedMotion) map.flyTo({ ...camera, maxDuration: 4000 });
+    else map.easeTo({ ...camera, duration: reducedMotion ? 0 : 300 });
   }, [map, viewport, reducedMotion]);
 
   // Fit: on a new set of positions, frame them.

@@ -21,6 +21,7 @@
   "description": "ReactNode",
   "footer": "ReactNode",
   "showClose": "boolean = true",
+  "closeLabel": "string = Close",
   "closeOnClickaway": "boolean = true",
   "flush": "boolean = false",
   "initialFocusRef": "RefObject<HTMLElement | null>",

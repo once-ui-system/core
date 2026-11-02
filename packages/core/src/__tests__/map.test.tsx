@@ -44,10 +44,29 @@ vi.mock("maplibre-gl", () => {
       if (options.center) this.center = { lng: options.center[0], lat: options.center[1] };
       if (options.zoom !== undefined) this.zoom = options.zoom;
     });
+    flyTo = vi.fn();
     fitBounds = vi.fn();
     panBy = vi.fn();
     setStyle = vi.fn();
     remove = vi.fn();
+    layers: any[] = [
+      { id: "background", type: "background" },
+      { id: "building", type: "fill", source: "openmaptiles", "source-layer": "building" },
+      { id: "place_label", type: "symbol" },
+    ];
+    setProjection = vi.fn();
+    setSky = vi.fn();
+    setPaintProperty = vi.fn();
+    setLayoutProperty = vi.fn();
+    getSource = (id: string) => (id === "openmaptiles" ? {} : undefined);
+    getLayer = (id: string) => this.layers.find((layer) => layer.id === id);
+    addLayer = vi.fn((layer: any, before?: string) => {
+      const at = this.layers.findIndex((l) => l.id === before);
+      this.layers.splice(at < 0 ? this.layers.length : at, 0, layer);
+    });
+    removeLayer = vi.fn((id: string) => {
+      this.layers = this.layers.filter((layer) => layer.id !== id);
+    });
     constructor(options: any) {
       super();
       if (calls.fail) throw new Error("Failed to initialize WebGL");
@@ -82,7 +101,7 @@ vi.mock("maplibre-gl", () => {
       return { contains: () => true };
     }
     getStyle() {
-      return { layers: [] };
+      return { layers: this.layers };
     }
     isStyleLoaded() {
       return true;
@@ -299,5 +318,30 @@ describe("Map", () => {
     expect(screen.queryByRole("button", { name: "Zoom in" })).toBeNull();
     calls.fail = false;
     warn.mockRestore();
+  });
+
+  it("draws a globe and 3D buildings once the style loads", async () => {
+    const view = renderMap(
+      <MapView
+        defaultViewport={{ center: [19, 47.5], zoom: 15, pitch: 50 }}
+        projection="globe"
+        buildings="3d"
+      />,
+    );
+    await settle();
+    const map = calls.maps[0];
+    act(() => map.fire("style.load"));
+    expect(map.setProjection).toHaveBeenCalledWith({ type: "globe" });
+    expect(map.setLayoutProperty).toHaveBeenCalledWith("building", "visibility", "none");
+    const layer = map.addLayer.mock.calls[0][0];
+    expect(layer.type).toBe("fill-extrusion");
+    expect(layer["source-layer"]).toBe("building");
+    // Under the labels, so names stay on top of the skyline.
+    expect(map.addLayer.mock.calls[0][1]).toBe("place_label");
+
+    view.rerender(<MapView defaultViewport={{ center: [19, 47.5], zoom: 15 }} buildings="flat" />);
+    expect(map.removeLayer).toHaveBeenCalledWith(layer.id);
+    expect(map.setLayoutProperty).toHaveBeenLastCalledWith("building", "visibility", "visible");
+    expect(map.setProjection).toHaveBeenLastCalledWith({ type: "mercator" });
   });
 });

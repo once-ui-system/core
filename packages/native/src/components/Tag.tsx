@@ -15,6 +15,8 @@ export interface TagProps {
   suffixIcon?: IconSlot;
   children?: ReactNode;
   style?: ViewStyle;
+  /** Finds the tag in end-to-end tests. */
+  testID?: string;
 }
 
 const PADDING = {
@@ -32,6 +34,7 @@ export function Tag({
   suffixIcon,
   children,
   style,
+  testID,
 }: TagProps) {
   const color = useTheme().onBackground(`${scheme}-medium`);
   return (
@@ -44,6 +47,7 @@ export function Tag({
       paddingX={PADDING[size].x}
       paddingY={PADDING[size].y}
       style={[{ alignSelf: "flex-start" }, style ?? {}]}
+      testID={testID}
     >
       {renderIcon(prefixIcon, "xs", color)}
       <Text variant="label-default-s" onBackground={`${scheme}-medium`} numberOfLines={1}>

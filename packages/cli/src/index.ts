@@ -14,6 +14,9 @@ const HELP = `once-ui — scaffold apps from Stack surfaces and add Once UI bloc
 
 Usage
   once-ui create <dir> [--surfaces landing,docs] [--slices billing] [--name my-app] [--url https://…]
+                [--targets desktop,mobile] [--app-id com.my.app]
+                                Desktop (Electron) and mobile (Capacitor) apps load
+                                the deployed site, so --targets needs --url
   once-ui add <block…> [--overwrite] [--no-install]
   once-ui update [block…] [--dry-run] [--force] [--no-install]
                                 Bring added blocks up to date; files you edited are kept
@@ -46,6 +49,8 @@ async function main(argv: string[]) {
       slices: { type: "string" },
       name: { type: "string" },
       url: { type: "string" },
+      targets: { type: "string" },
+      "app-id": { type: "string" },
       overwrite: { type: "boolean" },
       css: { type: "boolean" },
       force: { type: "boolean" },
@@ -74,7 +79,7 @@ async function main(argv: string[]) {
     case "list":
       return list(await client());
     case "create":
-      return create(await client(), rest[0], values);
+      return create(await client(), rest[0], { ...values, appId: values["app-id"] });
     case "add":
       return add(await client(), rest, {
         overwrite: values.overwrite,

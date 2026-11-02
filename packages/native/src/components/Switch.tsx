@@ -18,6 +18,8 @@ export interface SwitchProps {
   reverse?: boolean;
   ariaLabel?: string;
   style?: ViewStyle;
+  /** Finds the switch, the pressable a test taps, in end-to-end tests. */
+  testID?: string;
 }
 
 /** Core's `Switch`: a 40×24 track with a sliding knob, and an optional label. */
@@ -32,6 +34,7 @@ export function Switch({
   reverse = false,
   ariaLabel = "Toggle switch",
   style,
+  testID,
 }: SwitchProps) {
   const theme = useTheme();
   const [on, toggle] = useControllable(checked, defaultChecked, onToggle);
@@ -43,6 +46,7 @@ export function Switch({
   return (
     <Pressable
       accessibilityRole="switch"
+      testID={testID}
       accessibilityLabel={typeof label === "string" ? label : ariaLabel}
       aria-checked={on}
       aria-disabled={disabled}

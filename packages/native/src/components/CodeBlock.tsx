@@ -57,6 +57,8 @@ export interface CodeBlockProps extends FlexProps {
   isCollapsible?: boolean;
   hideCode?: boolean;
   onInstanceChange?: (index: number) => void;
+  /** Finds the block in end-to-end tests; its buttons get `${testID}-copy` and `${testID}-reload`. */
+  testID?: string;
   /**
    * @deprecated Set `highlight` on each entry of `codes` instead, as in core.
    * This one still applies to an entry that sets none.
@@ -226,6 +228,7 @@ export function CodeBlock({
       icon={copied ? "check" : "clipboard"}
       ariaLabel={copied ? "Copied" : "Copy code"}
       onPress={copy}
+      testID={props.testID && `${props.testID}-copy`}
     />
   );
 
@@ -287,6 +290,7 @@ export function CodeBlock({
             icon="refresh"
             ariaLabel="Reload"
             onPress={() => setRefreshKey((k) => k + 1)}
+            testID={props.testID && `${props.testID}-reload`}
           />
         )}
         {copyButton && copyIcon}

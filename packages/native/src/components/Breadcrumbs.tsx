@@ -32,13 +32,25 @@ export interface BreadcrumbsProps extends Omit<FlexProps, "children"> {
   maxItems?: number;
   /** Called with a pressed crumb's `href`, for crumbs without their own `onPress`. */
   onNavigate?: (href: string, item: BreadcrumbItem) => void;
+  /**
+   * Finds the trail in end-to-end tests. Each crumb gets `${testID}-${index}`,
+   * its place in `items` from 0, and the collapsed button `${testID}-more`.
+   */
+  testID?: string;
 }
 
 /**
  * Core's `Breadcrumbs`: where the current screen sits, as a trail of links
  * that wraps onto more lines when it is longer than the screen is wide.
  */
-export function Breadcrumbs({ items, separator, maxItems, onNavigate, ...flex }: BreadcrumbsProps) {
+export function Breadcrumbs({
+  items,
+  separator,
+  maxItems,
+  onNavigate,
+  testID,
+  ...flex
+}: BreadcrumbsProps) {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
@@ -69,10 +81,11 @@ export function Breadcrumbs({ items, separator, maxItems, onNavigate, ...flex }:
   );
 
   return (
-    <Row gap="8" wrap vertical="center" {...flex}>
+    <Row gap="8" wrap vertical="center" testID={testID} {...flex}>
       {visible.flatMap(({ item, position }, index) => {
         const current = position === items.length - 1;
         const color = theme.onBackground(current ? "neutral-strong" : "neutral-weak");
+        const crumbID = testID && `${testID}-${position}`;
         const press =
           item.onPress ??
           (item.href && onNavigate ? () => onNavigate(item.href as string, item) : undefined);
@@ -84,6 +97,7 @@ export function Breadcrumbs({ items, separator, maxItems, onNavigate, ...flex }:
                 accessibilityRole="link"
                 // The current crumb is announced as selected, as core's `aria-current="page"`.
                 accessibilityState={{ selected: current }}
+                testID={crumbID}
                 onPress={press}
                 hitSlop={theme.space("12")}
                 style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
@@ -91,7 +105,9 @@ export function Breadcrumbs({ items, separator, maxItems, onNavigate, ...flex }:
                 {crumbContent(item, color)}
               </Pressable>
             ) : (
-              <View accessibilityState={{ selected: current }}>{crumbContent(item, color)}</View>
+              <View accessibilityState={{ selected: current }} testID={crumbID}>
+                {crumbContent(item, color)}
+              </View>
             )}
           </Row>
         );
@@ -104,6 +120,7 @@ export function Breadcrumbs({ items, separator, maxItems, onNavigate, ...flex }:
               size="s"
               variant="tertiary"
               ariaLabel={`Show ${hidden} more`}
+              testID={testID && `${testID}-more`}
               onPress={() => setExpanded(true)}
             />
           </Row>,
