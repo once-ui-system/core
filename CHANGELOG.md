@@ -15,6 +15,11 @@ item (see `ROADMAP.md`, Week 4).
 
 ### Added
 
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
 - **`closeLabel` on `Drawer`, `Dialog` and `Modal`.** The close button's tooltip and
   accessible name, for a UI that isn't in English. Defaults to "Close", as before.
 - **`LogoLoader`.** A page or app splash drawn from a product's own SVG wordmark or
