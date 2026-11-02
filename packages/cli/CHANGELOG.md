@@ -2,6 +2,14 @@
 
 Changes to `@once-ui-system/cli`. Releases are tagged `cli-vX.Y.Z`.
 
+## [Unreleased]
+
+### Added
+
+- **`once-ui create --targets desktop,mobile`** ships the app to macOS, Windows and
+  Linux (Electron) and to iOS and Android (Capacitor) as well as the web. Both shells
+  load the deployed site, so `--targets` needs `--url`; `--app-id` sets the bundle id.
+
 ## [0.2.0]
 
 ### Added
