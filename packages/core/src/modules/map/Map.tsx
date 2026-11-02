@@ -29,6 +29,8 @@ const MapFrame: React.FC<MapProps> = ({
   boundsMaxZoom: _boundsMaxZoom,
   mapStyle: _mapStyle,
   tint: _tint,
+  projection: _projection,
+  buildings: _buildings,
   controls: _controls,
   interactive: _interactive,
   cooperativeGestures: _cooperativeGestures,

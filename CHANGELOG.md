@@ -32,6 +32,11 @@ entry below that had landed by then:
 
 ### Added
 
+- **Globe and 3D buildings on `Map`.** `projection="globe"` curves the world when zoomed
+  out, and `buildings="3d"` raises buildings to their height from zoom 13, coloured from
+  the neutral surface up to the brand colour and repainted when the theme changes. A
+  controlled `viewport` that jumps to another city now flies there instead of gliding
+  (instant with reduced motion).
 - **`closeLabel` on `Drawer` and `Dialog`.** The close button's tooltip and accessible
   name, for a UI that isn't in English. Defaults to "Close".
 - **An MCP server, `once-ui-mcp`.** It ships in the package and runs locally over
