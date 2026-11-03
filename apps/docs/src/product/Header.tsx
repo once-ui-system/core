@@ -22,7 +22,9 @@ import {
   isPlatformRoot,
   platformOfPath,
 } from "@/resources/platforms";
+import { FeedbackButtons } from "./FeedbackButtons";
 import { Sidebar, NavigationItem } from "./Sidebar";
+import { feedbackBoardUrl } from "@/resources/feedback";
 import { flattenSlugs } from "./DocsContextSwitcher";
 import { basePath } from "@/resources/versions";
 
@@ -299,6 +301,18 @@ export function Header() {
             data-border="rounded"
             vertical="center"
           >
+            {/* On a phone the logo, theme switcher and CTA need the room. */}
+            <Row gap="4" vertical="center" s={{ hide: true }}>
+              <FeedbackButtons
+                boardUrl={feedbackBoardUrl}
+                labels={{
+                  feedback: "Feedback",
+                  changelog: "What's new",
+                  openBoard: "Open the board",
+                  close: "Close",
+                }}
+              />
+            </Row>
             <ThemeSwitcher style={{ scale: 0.85 }} />
             <Line vert height="20" marginRight="8" s={{ hide: true }} />
 
