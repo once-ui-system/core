@@ -20,6 +20,7 @@
     "check:examples": "node scripts/check-examples.mjs",
     "check:props": "node scripts/check-props.mjs",
     "check:render": "node scripts/check-render.mjs",
+    "check:tailwind": "node scripts/check-tailwind.mjs",
     "check:docs": "node scripts/check-examples.mjs && node scripts/check-props.mjs",
     "clean": "rimraf .next",
     "copy:blocks": "node scripts/copy-blocks.mjs"
@@ -52,6 +53,7 @@
     "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
     "playwright-core": "1.56.1",
+    "tailwindcss": "4.3.3",
     "typescript": "^6.0.3"
   },
   "overrides": {
