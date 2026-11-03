@@ -15,8 +15,17 @@ import path from "node:path";
 import { chromium } from "playwright-core";
 import { ROOT, WORK, armByLetter, config, interactions, routesOf, shotName, taskById } from "./lib.mjs";
 
-const CHROMIUM = process.env.CHROMIUM_PATH ?? "/opt/pw-browsers/chromium-1194/chrome-linux/chrome";
-const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104 };
+// The pre-installed Chromium's folder carries its build number; take whichever is there.
+const CHROMIUM =
+  process.env.CHROMIUM_PATH ??
+  (fs.existsSync("/opt/pw-browsers")
+    ? fs
+        .readdirSync("/opt/pw-browsers")
+        .filter((d) => /^chromium-\d+$/.test(d))
+        .flatMap((d) => ["chrome-linux64", "chrome-linux"].map((s) => `/opt/pw-browsers/${d}/${s}/chrome`))
+        .find((p) => fs.existsSync(p))
+    : undefined);
+const PORTS = { A: 3101, B: 3102, C: 3103, D: 3104, M: 3105, K: 3106, T: 3107, S: 3108 };
 const AXE = fs.readFileSync(path.join(ROOT, "node_modules/axe-core/axe.min.js"), "utf8");
 const INTERACTION_VIEWPORTS = ["phone", "desktop"];
 
@@ -338,13 +347,17 @@ export async function runGates(letter, code, outDir, task = null) {
   res.files = Object.keys(files);
   fs.rmSync(path.join(dir, ".next"), { recursive: true, force: true });
 
-  if (["A", "B"].includes(letter)) {
+  if (["A", "B", "S"].includes(letter)) {
     const sources = Object.keys(files).filter((f) => /\.tsx?$/.test(f));
-    const v = run("node", ["node_modules/@once-ui-system/core/scripts/validate-ai-code.js", ...sources], dir, 60_000);
+    // 3.0 renamed the CommonJS bin to .cjs (the package is "type": "module").
+    const validator = ["cjs", "js"]
+      .map((ext) => `node_modules/@once-ui-system/core/scripts/validate-ai-code.${ext}`)
+      .find((file) => fs.existsSync(path.join(dir, file)));
+    const v = run("node", [validator, ...sources], dir, 60_000);
     // The validator changes between releases (rc.0 adds rules), so record which one
     // produced the count; counts are not comparable across validator versions.
     const pkg = JSON.parse(fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/package.json"), "utf8"));
-    const script = fs.readFileSync(path.join(dir, "node_modules/@once-ui-system/core/scripts/validate-ai-code.js"));
+    const script = fs.readFileSync(path.join(dir, validator));
     res.validate_ai_code = {
       exit: v.code,
       output: v.output.slice(0, 8000),

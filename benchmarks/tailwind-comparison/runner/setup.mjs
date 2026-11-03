@@ -7,6 +7,7 @@
 // Usage:
 //   node runner/setup.mjs --shadcn-src <path to a shadcn-ui/ui clone at the pinned commit>
 //                         [--once-version 2.1.0-rc.0 | --once-tarball <path>] [--skip-install]
+//                         [--docs-src work/docs-src]   (MUI, Chakra, Mantine docs; runner/fetch-docs.mjs)
 //
 // --once-version packs the published package from npm (the full run); --once-tarball
 // uses a local `pnpm pack` (the pilot). Either way the tarball's sha256 is recorded.
@@ -41,6 +42,8 @@ if (onceVersion) {
   onceTarball = path.join(packDir, file);
   console.log(`packed @once-ui-system/core@${onceVersion} -> ${path.relative(ROOT, onceTarball)}`);
 }
+const docsSrc = path.resolve(typeof args["docs-src"] === "string" ? args["docs-src"] : path.join(WORK, "docs-src"));
+const docsManifest = fs.existsSync(path.join(docsSrc, "manifest.json")) ? JSON.parse(fs.readFileSync(path.join(docsSrc, "manifest.json"), "utf8")) : null;
 const shadcnSrc = args["shadcn-src"] && path.resolve(args["shadcn-src"]);
 if (!shadcnSrc) {
   console.error("--shadcn-src is required (git clone https://github.com/shadcn-ui/ui and check out the pinned commit)");
@@ -66,11 +69,11 @@ if (onceTarball !== vendored) {
 
 // --- 1. install scaffolds ----------------------------------------------------
 if (!args["skip-install"]) {
-  for (const scaffold of ["once", "shadcn", "tailwind"]) {
+  for (const scaffold of [...new Set(Object.values(config.arms).map((a) => a.scaffold))]) {
     // A different Once UI tarball changes the lockfile's integrity entry for the
     // file: dependency, so that scaffold is re-resolved with `npm install` (commit
     // the updated arms/once/package-lock.json with the results).
-    const cmd = scaffold === "once" && onceVersion ? "install" : "ci";
+    const cmd = scaffold === "once" && (onceVersion || args["once-tarball"]) ? "install" : "ci";
     if (cmd === "install") {
       // `npm install` still enforces the lockfile's old integrity for a file:
       // tarball (EINTEGRITY), so drop that one entry and let npm re-record it.
@@ -134,6 +137,18 @@ for (const [letter, arm] of Object.entries(config.arms)) {
     fs.rmSync(tmp, { recursive: true, force: true });
   }
 
+  // MUI, Chakra UI, Mantine: the llms.txt snapshot from runner/fetch-docs.mjs.
+  if (["mui", "chakra", "mantine"].includes(arm.docs)) {
+    const src = path.join(docsSrc, arm.docs);
+    if (!fs.existsSync(src)) {
+      console.error(`${src} is missing: run node runner/fetch-docs.mjs first`);
+      process.exit(1);
+    }
+    const docs = path.join(base, "docs");
+    copyTree(src, docs);
+    fs.copyFileSync(path.join(ROOT, `prompts/${arm.docs}-docs-README.md`), path.join(docs, "README.md"));
+  }
+
   if (arm.docs === "shadcn") {
     const v4 = path.join(shadcnSrc, "apps/v4");
     const docs = path.join(base, "docs");
@@ -173,6 +188,7 @@ const manifest = {
   tokenizer: "proxy (see lib.mjs)",
   once_ui: { version: onceVersion ?? "local tarball", tarball_sha256: tarSha },
   shadcn_commit: shadcnHead,
+  docs_snapshot: docsManifest && { fetched: docsManifest.fetched, sha256: docsManifest.sha256, files: docsManifest.files },
   arms: {},
 };
 for (const arm of Object.values(config.arms)) {
