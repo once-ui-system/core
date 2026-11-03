@@ -1,0 +1,18 @@
+{
+  "files": [
+    "src/lib/data.ts",
+    "src/resources/once-ui.config.js",
+    "src/resources/seo.js",
+    "src/resources/custom.css",
+    "src/components/Providers.tsx",
+    "src/app/layout.tsx",
+    "src/components/site/SiteHeader.tsx",
+    "src/components/site/SiteFooter.tsx",
+    "src/components/site/SiteShell.tsx",
+    "src/app/page.tsx",
+    "src/components/pricing/PricingContent.tsx",
+    "src/app/pricing/page.tsx",
+    "src/app/not-found.tsx"
+  ],
+  "rejected": []
+}

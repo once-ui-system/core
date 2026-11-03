@@ -1,0 +1,201 @@
+{
+  "arm": "D",
+  "passed": true,
+  "failed_gate": null,
+  "failure_output": null,
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3071
+    },
+    "build": {
+      "ok": true,
+      "ms": 10567
+    },
+    "render": {
+      "ok": true,
+      "viewports": {
+        "phone": {
+          "text": 674,
+          "height": 962,
+          "width": 605,
+          "horizontal_overflow": true,
+          "errors": []
+        },
+        "tablet": {
+          "text": 680,
+          "height": 1024,
+          "width": 768,
+          "horizontal_overflow": false,
+          "errors": []
+        },
+        "desktop": {
+          "text": 680,
+          "height": 900,
+          "width": 1440,
+          "horizontal_overflow": false,
+          "errors": []
+        }
+      },
+      "routes": {
+        "/": {
+          "viewports": {
+            "phone": {
+              "text": 674,
+              "height": 962,
+              "width": 605,
+              "horizontal_overflow": true,
+              "errors": []
+            },
+            "tablet": {
+              "text": 680,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 680,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        },
+        "/members/m-02": {
+          "viewports": {
+            "phone": {
+              "text": 447,
+              "height": 1052,
+              "width": 375,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "tablet": {
+              "text": 447,
+              "height": 1024,
+              "width": 768,
+              "horizontal_overflow": false,
+              "errors": []
+            },
+            "desktop": {
+              "text": 447,
+              "height": 900,
+              "width": 1440,
+              "horizontal_overflow": false,
+              "errors": []
+            }
+          },
+          "axe": {
+            "rules": 0,
+            "nodes": 0,
+            "serious_or_critical": 0,
+            "ids": []
+          }
+        }
+      },
+      "errors": [],
+      "axe": {
+        "rules": 0,
+        "nodes": 0,
+        "serious_or_critical": 0,
+        "ids": []
+      },
+      "interaction": {
+        "phone": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        },
+        "desktop": {
+          "action": "click > click",
+          "found": true,
+          "steps": 2,
+          "errors": []
+        }
+      },
+      "settle": {
+        "/ phone": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/ tablet": {
+          "ms": 1767,
+          "settled": true
+        },
+        "/ desktop": {
+          "ms": 1760,
+          "settled": true
+        },
+        "/members/m-02 phone": {
+          "ms": 1759,
+          "settled": true
+        },
+        "/members/m-02 tablet": {
+          "ms": 1758,
+          "settled": true
+        },
+        "/members/m-02 desktop": {
+          "ms": 1761,
+          "settled": true
+        }
+      },
+      "style": {
+        "/": {
+          "elements": 192,
+          "distinct_fontSize": 4,
+          "distinct_color": 11,
+          "distinct_background": 18,
+          "distinct_radius": 3,
+          "distinct_shadow": 8,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.725
+        },
+        "/members/m-02": {
+          "elements": 56,
+          "distinct_fontSize": 5,
+          "distinct_color": 6,
+          "distinct_background": 7,
+          "distinct_radius": 4,
+          "distinct_shadow": 3,
+          "distinct_spacing": 10,
+          "spacing_on_4px_grid": 0.726
+        }
+      },
+      "weight": {
+        "/": {
+          "js_kb": 155.2,
+          "css_kb": 15,
+          "fcp_ms": 104,
+          "cls": 0,
+          "long_task_ms": 0
+        },
+        "/members/m-02": {
+          "js_kb": 155.2,
+          "css_kb": 15,
+          "fcp_ms": 132,
+          "cls": 0,
+          "long_task_ms": 0
+        }
+      }
+    }
+  },
+  "files": [
+    "lib/data.ts",
+    "components/badges.tsx",
+    "components/avatar.tsx",
+    "components/invite-dialog.tsx",
+    "components/row-actions.tsx",
+    "components/team-table.tsx",
+    "app/page.tsx",
+    "app/members/[id]/page.tsx"
+  ]
+}

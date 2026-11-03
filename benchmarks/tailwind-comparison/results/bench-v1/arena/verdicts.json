@@ -1,0 +1,3595 @@
+[
+  {
+    "id": "t1-r1-chakra-docs-mantine-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained, cohesive system with meaningful KPI cards (deltas, context), a tidy table, a clean sidebar and a well-composed settings page, while App 2 relies on generic pastel icon tiles, a cramped breadcrumb/header, a pill-badge look and a footer caption in the table that read as library defaults.",
+    "usage": {
+      "input_tokens": 12239,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 135,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-chakra-docs-mui-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system (subtle surfaces, delta chips on KPIs, monospace project keys, tidy type scale, considered settings layout) while App 1 reads as Material defaults with a crude bar chart, oversized stat cards, and a table with awkward empty space.",
+    "usage": {
+      "input_tokens": 12505,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 120,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-chakra-docs-once-harness",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "reason": "App 1 has a more distinctive, cohesive system (rounded floating content surface, grouped sidebar, black pill buttons, filter/sort affordances, labeled form fields, richer recent-activity list), while App 2 leans on generic library defaults like a default blue button, plain stacked cards, and a flat sidebar.",
+    "usage": {
+      "input_tokens": 12085,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-chakra-docs-shadcn-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, consistent card surfaces, and refined typography with intentional hierarchy, while App 2 leans on a default-looking blue accent, tinted badges and delta chips, and a more generic dashboard feel.",
+    "usage": {
+      "input_tokens": 12267,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 105,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-chakra-docs-stack",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more distinctive, cohesive visual system (bold black pill buttons, floating-card content surface, elevated type scale, floating-label inputs, tasteful outlined badges), whereas App 1 reads as a competent but generic default-blue SaaS template with uniform cards and stat chips.",
+    "usage": {
+      "input_tokens": 12085,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-chakra-docs-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive system—tinted page surface with elevated white cards, icon-badged stat cards, uppercase table headers, dot-status pills, grouped form fields, and a considered sidebar footer—while App 1 reads as flatter, more generic library-default with plain bordered cards and a default blue button.",
+    "usage": {
+      "input_tokens": 12239,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mantine-docs-mui-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, cohesive system with soft tinted icon chips, pill status badges, tidy table typography, and consistent spacing, whereas App 2 reads as Material defaults (outlined inputs, default blue button, heavy bold stat numbers, a bare project table with dead space) despite a nice chart.",
+    "usage": {
+      "input_tokens": 12491,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mantine-docs-once-harness",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive, restrained monochrome system with refined typography, grouped sidebar surface, floating content panel, and careful details (sortable headers, search, status pills, labelled inputs), whereas App 1 reads as a competent but generic admin template with multicolour icon tiles and default blue accents.",
+    "usage": {
+      "input_tokens": 12071,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mantine-docs-shadcn-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, consistent type scale, tighter spacing rhythm and cohesive components (mono key tags, quiet status pills, centered settings column) that feel like a deliberate product system, whereas App 2 relies on library-default look with pastel icon tiles, default blue accents, a bright highlighted nav and a left-aligned settings form leaving awkward empty space.",
+    "usage": {
+      "input_tokens": 12253,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mantine-docs-stack",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, a refined type scale, generous spacing, and cohesive custom-feeling components (pill tags, sortable columns, floating field labels), whereas App 2 relies on stock-looking colored icon tiles, default blue buttons, and generic card styling.",
+    "usage": {
+      "input_tokens": 12071,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mantine-docs-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: subtle surfaces, tinted page background, uppercase section labels in the sidebar, a tidy table with muted headers and dot-style status pills, and a quieter indigo accent, while App 1 leans on default-looking colorful icon tiles, heavier borders, a boxy full-width table, and a generic blue button.",
+    "usage": {
+      "input_tokens": 12225,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 142,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mui-docs-once-harness",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive, restrained system (grouped sidebar surface, pill status tags, monospace keys, sortable headers, consistent card rhythm and refined black accents), while App 2 reads as default Material components with a stock blue button, generic toggles, and a bright default-palette chart.",
+    "usage": {
+      "input_tokens": 12337,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mui-docs-shadcn-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "reason": "App 1 has a restrained monochrome palette, consistent type scale, tidy bordered cards, refined pill badges and a well-centered settings form, reading as a deliberate product design; App 2 leans on default Material styling (default blue buttons, stock toggles, heavy uppercase labels, loud chart colours) and has an awkward empty table footer and a left-aligned settings form with dead space.",
+    "usage": {
+      "input_tokens": 12519,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 144,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mui-docs-stack",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, refined typography, and consistent rounded surfaces that feel bespoke, whereas App 2 reads as Material defaults with default blue buttons, stock toggles, and a generic bar chart.",
+    "usage": {
+      "input_tokens": 12337,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 102,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-mui-docs-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a refined, cohesive look with a considered indigo accent, subtle surfaces, tidy cards with icon chips, pill status badges and consistent type and spacing, whereas App 2 reads as Material-library defaults with a default blue button, heavy bold headings, an empty padded table bottom and a generic chart.",
+    "usage": {
+      "input_tokens": 12491,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 130,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-once-harness-shadcn-docs",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a calmer, more cohesive system with a clean sidebar, restrained monochrome palette, consistent spacing and well-aligned tables and forms, whereas App 2 feels busier and more library-default with heavy gray nav group boxes, a mixed-style header, chevron-laden table headers, and a dark toggle that looks off.",
+    "usage": {
+      "input_tokens": 12099,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-once-harness-stack",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "slight",
+    "reason": "App 1 shows richer hierarchy and more considered details (status chips, filter pill, sortable-column indicators, icon-labelled toggles, role badge, subtitle context, richer activity list with attribution), while App 2 is clean but sparser and more generic, with a less tidy mobile activity list.",
+    "usage": {
+      "input_tokens": 11917,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-once-harness-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive, polished system with a refined indigo accent, clear sidebar hierarchy, consistent card/table styling and well-judged spacing, while App 2 looks heavier and more default-like with harsh black toggles/buttons, grey boxed nav groups, a stray dark icon button in the header, and awkward empty space beside the narrower settings column.",
+    "usage": {
+      "input_tokens": 12071,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 144,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-shadcn-docs-stack",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "slight",
+    "reason": "App 1 has a more refined, cohesive system (tight type scale, tasteful sidebar, thoughtful dashboard cards and settings layout with badges and dividers), while App 2 is polished but its dashboard is sparser and the settings page leaves awkward unused space with a pill-heavy, less restrained feel.",
+    "usage": {
+      "input_tokens": 12099,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-shadcn-docs-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, a refined type scale, purposeful toggles, and varied composition (centered narrow settings, filterable table, role badge), while App 2 reads as a more generic indigo-accented template with default checkboxes and a plain settings layout.",
+    "usage": {
+      "input_tokens": 12253,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 113,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t1-r1-stack-tailwind-memory",
+    "task": 1,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a distinctive, restrained monochrome identity with a refined type scale, pill-shaped controls, sortable table headers and a consistent rounded-card system, whereas App 2 reads as a polished but generic indigo SaaS template with default-looking checkboxes and standard card stacks.",
+    "usage": {
+      "input_tokens": 12071,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-mantine-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a calmer, more restrained system with a tidy top-nav, consistent card/table surfaces, quiet badges and a clear primary action, while App 2 leans on generic sidebar-plus-icon-tile defaults, loud uppercase pills and a filler 'tips' card with empty space and caption text under tables.",
+    "usage": {
+      "input_tokens": 12247,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 130,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-mui-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, cohesive system: subtle surfaces, tidy type scale, avatar+email member rows, soft status pills, a primary dark Invite button, and a well-adapted mobile layout with icon tabs, whereas App 2 looks more like default-styled Material-ish components with uppercase nav, outlined pills, and a cramped mobile header.",
+    "usage": {
+      "input_tokens": 12135,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 145,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-once-harness",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a tighter, more coherent system: a clean top nav with a clear active state, consistent card and table styling, well-judged tinted status badges and an intentional search field with the shortcut shown inline. App 2's empty sidebar, outlined pill badges, odd chevrons in table headers and larger heading scale feel less resolved.",
+    "usage": {
+      "input_tokens": 12093,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-shadcn-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more considered system: sidebar with user footer, stronger heading/subhead hierarchy, pill status badges with dots, a richer dashboard with the 'Jump anywhere' card, and polished mobile stacking; App 2 is clean but more generic, with a default-looking blue logo, plain stat cards and flat tinted badges.",
+    "usage": {
+      "input_tokens": 12429,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 137,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-stack",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a tighter, more professional system (top nav, real data table, clear type hierarchy, consistent badges and spacing), whereas App 2 relies on stacked rounded cards with outlined pills, a washed-out sidebar and an awkward nested panel that look more generic.",
+    "usage": {
+      "input_tokens": 12093,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 113,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-chakra-docs-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive system: tinted surfaces, purple-accented project key chips, uppercase table headers with a shaded header row, rounded containers, and a tighter dashboard with a compact recent list, while App 1 reads as plain white cards with default-feeling styling and weaker hierarchy.",
+    "usage": {
+      "input_tokens": 12135,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 124,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mantine-docs-mui-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a considered app shell with a sidebar, tinted icon tiles on the stat cards, pill status badges, avatar-based member rows, and a themed header, giving it clear hierarchy and a cohesive system, while App 1 is a plain top-nav page with generic bordered boxes and sparse styling.",
+    "usage": {
+      "input_tokens": 12093,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mantine-docs-once-harness",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more considered system: tinted icon tiles on stat cards, tinted status pills, a monospace key column, a denser dashboard with a useful secondary card, theme toggle, and a footer sign-in line, whereas App 1 is sparser with plain bordered cards and wide empty space.",
+    "usage": {
+      "input_tokens": 12051,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mantine-docs-shadcn-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more restrained, cohesive system with a clear typographic hierarchy, quiet neutral surfaces, consistent table and badge styling, and a considered mobile layout with a tabbed nav, whereas App 2 leans on library-default traits (saturated blue active nav, colourful icon tiles, uppercase pill badges, a sparse dashboard with empty space and a less polished mobile header).",
+    "usage": {
+      "input_tokens": 12387,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mantine-docs-stack",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a restrained monochrome palette, a distinctive typeface, a well-framed content surface, and clean list rows with outlined status pills and a clear primary action, which reads as a deliberate product. App 1 relies on familiar library-default patterns: a bright blue active nav state, multicolored icon tiles, and a plain table with generic filled badges.",
+    "usage": {
+      "input_tokens": 12051,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 140,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mantine-docs-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "slight",
+    "reason": "App 1 has a calmer, more cohesive system with a tidy top nav, consistent soft surfaces, restrained indigo accent, and a well-adapted mobile layout, while App 2 feels more like a generic dashboard template with a sidebar, stat cards with bright icon tiles, and heavy bold type, and its large empty areas and loud badges read less considered.",
+    "usage": {
+      "input_tokens": 12093,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mui-docs-once-harness",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive app shell with sidebar, breadcrumbs, a refined type hierarchy, and nicely composed stat cards with supporting captions and avatar-rich member rows, while App 2 reads as a more generic top-nav page with plain bordered boxes and a default-looking blue avatar/active nav.",
+    "usage": {
+      "input_tokens": 11939,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 130,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mui-docs-shadcn-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive sidebar layout with a refined type scale, purposeful surfaces, avatar/user footer, and considered mobile adaptation, while App 2 relies on default-blue accents, uppercase nav tabs, and plain stacked boxes that look library-default.",
+    "usage": {
+      "input_tokens": 12275,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 116,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mui-docs-stack",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a more considered, cohesive system: sidebar navigation, refined type hierarchy, icons on stat cards, soft surfaces and a neutral black accent. App 2 reads as a generic default-blue top-nav page with plain bordered boxes and tables.",
+    "usage": {
+      "input_tokens": 11939,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 112,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-mui-docs-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, cohesive system (tinted surfaces, project-key chips, soft status pills, stacked name/email cells, icon-led mobile nav and stats with context lines) while App 2 reads as default-styled with a stock blue, outlined pills, and uniform plain tables and boxy cards.",
+    "usage": {
+      "input_tokens": 11981,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-once-harness-shadcn-docs",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "once-harness",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive product feel with a branded sidebar, clear heading hierarchy with primary actions, tidy status pills and right-aligned numerics, and a thoughtful dashboard composition, while App 1 looks plainer with a stack of generic stat cards, a bare layout, and weaker hierarchy.",
+    "usage": {
+      "input_tokens": 12233,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-once-harness-stack",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "slight",
+    "reason": "App 1 has a more refined, cohesive system: stat cards with icons, project rows with key badges, a centered search pill, and a strong black primary action give clearer hierarchy and polish, while App 2 is clean but plainer, with a redundant breadcrumb, a bland 'Welcome back' header, and a table that leaves large dead space.",
+    "usage": {
+      "input_tokens": 11897,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-once-harness-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive visual system: a distinct indigo brand colour, coloured project-key chips, tinted stat cards, tighter type hierarchy, and a clean mobile header with tab nav, whereas App 2 feels more like generic monochrome library defaults with oversized headings, uniform outlined cards, plain text keys, and a stack of full-width stat cards on mobile.",
+    "usage": {
+      "input_tokens": 11939,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 152,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-shadcn-docs-stack",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, product-like system—dense stat cards with clear hierarchy, a proper table with mono key badges and status dots, a sidebar user card, and a coherent mobile tab nav—whereas App 2 relies on stacked uniform cards with generic gray-on-gray pills and a heavier, more template-like layout.",
+    "usage": {
+      "input_tokens": 12233,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 133,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-shadcn-docs-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive monochrome system with a sidebar, avatars, status dots, mono key badges and a purposeful dashboard hierarchy, whereas App 1 reads as a plainer top-nav layout with default indigo accents and sparser structure.",
+    "usage": {
+      "input_tokens": 12275,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 109,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t3-r1-stack-tailwind-memory",
+    "task": 3,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more distinctive, cohesive system (sidebar nav, refined monochrome palette, confident type scale, purposeful stat cards with icons, consistent list rows and badges) whereas App 1 reads as a generic indigo-accented SaaS template with a plain table and default-feeling cards.",
+    "usage": {
+      "input_tokens": 11939,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 124,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-mantine-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "chakra-docs",
+    "margin": "slight",
+    "reason": "App 2 has a cohesive app shell with a branded header, a distinctive orange accent, a well-organised two-column detail page and a tidy toolbar-in-card table; App 1 is clean and has nicely tinted avatars and outlined status pills, but it uses a default blue button, lacks a header and its mobile table crops badges awkwardly.",
+    "usage": {
+      "input_tokens": 8734,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-mui-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive branded system (header with logo, warm orange accent, soft tinted badges, tidy toolbar card, timeline activity feed) with a clear hierarchy, whereas App 1 reads as default Material UI with a default blue button, saturated colored avatars, outlined pills and a plain stacked detail page.",
+    "usage": {
+      "input_tokens": 9290,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-once-harness",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, restrained system (outlined pill badges, monochrome black CTA, clear type hierarchy, generous spacing, polished detail-page layout, and a mobile table that keeps status inline), while App 1 reads as a more generic admin template with filled-color badges and default-style card/table structure.",
+    "usage": {
+      "input_tokens": 8738,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-shadcn-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette with refined badges, tidy typography, and a cohesive mobile layout that stacks status under the name without horizontal clipping, whereas App 2 relies on a rainbow of pastel badges, a default-looking orange CTA, and a mobile table that crops the role column.",
+    "usage": {
+      "input_tokens": 8724,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-stack",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, distinctive system—considered typography, outlined badges with status icons, floating labeled inputs, a restrained black CTA and a cleaner profile layout—while App 1 reads as a competent but generic SaaS template with an orange default button and standard cards.",
+    "usage": {
+      "input_tokens": 8654,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 112,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-chakra-docs-tailwind-memory",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: tinted avatars, dot-status pills, uppercase table headers, a well-composed profile card with iconography, and tidy activity rows, whereas App 1 leans on flat grey avatars, generic badges and a plainer layout.",
+    "usage": {
+      "input_tokens": 8682,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 114,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mantine-docs-mui-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, custom-feeling system (soft tinted pastel badges, subtle typographic hierarchy, bordered dots in status pills, consistent spacing and a tidy timeline on the detail page), whereas App 2 reads as Material-style library defaults with saturated filled avatars and stock buttons, and its mobile table drops the status column into a cramped stacked layout.",
+    "usage": {
+      "input_tokens": 9248,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 151,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mantine-docs-once-harness",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a restrained, consistent system with a tidy mobile layout that stacks status under email without truncation, while App 2 leans on default blue buttons and loud pastel badges, and its mobile table truncates role/status badges to unreadable fragments.",
+    "usage": {
+      "input_tokens": 8696,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 106,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mantine-docs-shadcn-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 is restrained and cohesive with a monochrome palette, consistent spacing and a well-adapted mobile layout, whereas App 2 relies on a default blue button, rainbow avatar/badge colours and an uppercase-badge style that feels more generic, and its mobile table truncates badges awkwardly.",
+    "usage": {
+      "input_tokens": 8682,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mantine-docs-stack",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a more restrained, cohesive palette with a confident black primary button, consistent pill badges with icons, and a mobile layout that cleanly drops columns, while App 2 leans on a default blue button, mismatched colored avatars, and truncated badges ('O...', 'A...', 'ACT') on mobile.",
+    "usage": {
+      "input_tokens": 8612,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mantine-docs-tailwind-memory",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive branded system (top nav with logo, soft page surface, elevated cards, refined badge and avatar palette, consistent spacing, richer detail page with icons and aligned activity rows), whereas App 1 reads as plainer and more default, with a stock blue button, bare white page, and uppercase pill badges that feel heavier and less considered.",
+    "usage": {
+      "input_tokens": 8640,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 142,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mui-docs-once-harness",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a restrained, cohesive monochrome system with a strong black CTA, refined badges, and well-considered detail-page structure, while App 2 leans on default Material-style blue button, saturated avatar colors, and a more generic look.",
+    "usage": {
+      "input_tokens": 9252,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 102,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mui-docs-shadcn-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a restrained monochrome palette with subtle neutral initials avatars, a tidy toolbar combining filters, count and the primary action, and a more considered detail page with icon-labelled profile rows and a timeline, whereas App 1 reads as default Material UI with a stock blue button, saturated avatar colors and a plainer detail layout.",
+    "usage": {
+      "input_tokens": 9238,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mui-docs-stack",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a restrained, cohesive system (muted palette, softly tinted badges with status icons, refined type and generous spacing, a considered profile header with a large avatar), whereas App 1 reads as default Material UI with a stock blue button, saturated avatars and a generic card layout.",
+    "usage": {
+      "input_tokens": 9168,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-mui-docs-tailwind-memory",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive branded system (header, soft tinted surfaces, refined badges with status dots, icon-enhanced detail page, subtle shadows and spacing rhythm), whereas App 1 reads as default Material components with a stock blue button and plain bordered table.",
+    "usage": {
+      "input_tokens": 9196,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 114,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-once-harness-shadcn-docs",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette with a coherent type scale, tight layout, and a well-structured two-column detail page with a timeline, while App 2 leans on default-looking blue links, outlined pill badges in many colours, and a generic stacked-card detail page with an oversized avatar and loose spacing.",
+    "usage": {
+      "input_tokens": 8686,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-once-harness-stack",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 uses a cohesive tinted-badge system with icons, a refined green accent, a stacked name/email cell and consistent spacing, while App 2 relies on default blue links and thin outline badges that feel more generic, and its mobile layout is more crowded with inline status chips.",
+    "usage": {
+      "input_tokens": 8616,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 115,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-shadcn-docs-stack",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a more considered system: tinted semantic badges with icons, a green brand accent, generous row spacing, a larger avatar header on the detail page, and a clearer hierarchy, while App 2 looks like monochrome library defaults with a jarring saturated-red Suspended pill and a plainer layout.",
+    "usage": {
+      "input_tokens": 8602,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-shadcn-docs-tailwind-memory",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a restrained monochrome system with a confident type scale, a well-composed two-column detail page with a timeline, and a mobile table that reflows cleanly (status moved under the name), whereas App 1 relies on library-default-looking indigo and rainbow badges, and its mobile table clips the role and status columns.",
+    "usage": {
+      "input_tokens": 8630,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t5-r1-stack-tailwind-memory",
+    "task": 5,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, editorial feel with a restrained palette, floating-label inputs, icon-bearing status badges, and a stronger type hierarchy and spacing, while App 1 reads as a competent but generic SaaS template with a default-blue accent and standard card stacking.",
+    "usage": {
+      "input_tokens": 8560,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 116,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-chakra-docs-mantine-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cleaner, better-organized layout: the step indicator spans the width properly and the summary card is well structured with section labels and right-aligned values. App 1's stepper is stacked and awkward with orphaned connector lines, its form is crowded, and its welcome page checklist is messier.",
+    "usage": {
+      "input_tokens": 8830,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-chakra-docs-mui-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive branded header, a well-aligned step indicator, an avatar-led summary card and a clean done screen with a progress bar, while App 1's stepper is cramped and awkwardly stacked with disconnected lines, and its summary panel and welcome page feel more generic.",
+    "usage": {
+      "input_tokens": 8802,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 118,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-chakra-docs-once-harness",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive system: a branded header, a clean segmented progress bar, a well-structured summary card with icons, and a polished black/white palette with generous spacing, while App 1's stepper is cramped and its layout feels like default stacked components with a default blue button.",
+    "usage": {
+      "input_tokens": 8732,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 111,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-chakra-docs-stack",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive mint/black palette, a clean segmented progress bar with a branded header, and polished cards with consistent spacing; App 2 has a broken-looking step indicator (stacked steps with stray lines) and default blue buttons with a generic library feel.",
+    "usage": {
+      "input_tokens": 8746,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 113,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-chakra-docs-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "reason": "App 1 has a polished, cohesive system: a horizontal stepper with connector lines, a branded header, a distinct purple accent, clean card surfaces, and a well-structured summary list on a deliberate two-column layout. App 2's stepper is broken at desktop, with stacked labels and lines misaligned, and it uses a default-blue, generic look with a weaker hierarchy.",
+    "usage": {
+      "input_tokens": 8896,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 141,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mantine-docs-mui-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a stronger visual hierarchy with a labeled step indicator, a structured summary card with grouped sections and a status pill, and a cohesive, refined type scale and spacing, while App 1 feels like default Material components with a generic info banner and a sparse, less intentional layout.",
+    "usage": {
+      "input_tokens": 8788,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mantine-docs-once-harness",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a more refined, cohesive system (black primary buttons, icon-led summary list, segmented progress bar, balanced two-column layout, deliberate welcome page), while App 2 reads as library defaults with a stock blue button, a generic card layout, and a plainer layout with a lot of empty space.",
+    "usage": {
+      "input_tokens": 8718,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 124,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mantine-docs-shadcn-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system (monochrome palette, logo mark, icon-led summary rows, soft shadows, a progress bar on the done screen and card-based checklist items) while App 1 relies on default-blue buttons, flat bordered boxes and a plainer, more generic layout.",
+    "usage": {
+      "input_tokens": 8844,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mantine-docs-stack",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a distinctive mint/black palette, rounded pill inputs, a progress-bar stepper, and a polished welcome screen with icon tiles, whereas App 2 reads as default blue-button, bordered-card library styling with generic spacing.",
+    "usage": {
+      "input_tokens": 8732,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 107,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mantine-docs-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive system—branded logo header, tinted page surface with elevated white cards, a distinctive indigo accent, and a polished summary panel and welcome checklist—while App 2 reads as default blue buttons on a plain white page with a flatter, more generic look and weaker hierarchy.",
+    "usage": {
+      "input_tokens": 8882,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 124,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mui-docs-once-harness",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive, restrained system—black primary buttons, consistent iconography, a clean segmented step bar, and a well-structured summary card—while App 2 reads as default Material UI with a stock blue button, generic stepper, and a placeholder 'Your name / you@company.com' summary that feels less considered.",
+    "usage": {
+      "input_tokens": 8690,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 128,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mui-docs-shadcn-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "shadcn-docs",
+    "margin": "decisive",
+    "reason": "App 2 has a cohesive, restrained monochrome system with clear hierarchy, refined cards, icons, pill badges, and well-judged spacing, whereas App 1 reads as default Material UI (default blue buttons, boxy stepper, stock info banner) with weaker hierarchy and a crowded mobile layout.",
+    "usage": {
+      "input_tokens": 8816,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mui-docs-stack",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: a full-width segmented progress bar, confident type scale, tinted icon tiles, an owner pill and a considered mint/black palette, while App 1 reads as default Material blue with a plain stepper and a weaker, emptier summary card.",
+    "usage": {
+      "input_tokens": 8704,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 116,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-mui-docs-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive custom look with a refined indigo palette, a tidy step indicator with labelled sub-captions, clean label/value rows in the summary card, and consistent spacing and rounded surfaces, while App 2 reads as stock Material defaults (default blue button, uppercase text buttons, placeholder avatar/'you@company.com' summary) with a cruder step indicator and looser hierarchy.",
+    "usage": {
+      "input_tokens": 8854,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-once-harness-shadcn-docs",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "slight",
+    "reason": "App 1 has a more cohesive system with a segmented progress bar, a polished tinted-icon logo, a distinctive green success treatment, and a tighter two-column layout, while App 2 is clean but reads as a more generic card-stack with a weaker header and a stray empty stretch below the content.",
+    "usage": {
+      "input_tokens": 8746,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-once-harness-stack",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "slight",
+    "reason": "App 1 shows more considered hierarchy and polish, with a mint-green brand accent, a descriptive header subtitle, a centered completion screen with an owner badge and tinted icon tiles, and a cohesive card system; App 2 is clean but its welcome page feels left-heavy and its summary card is more generic.",
+    "usage": {
+      "input_tokens": 8634,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-once-harness-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "tailwind-memory"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a restrained monochrome palette, stronger type hierarchy, a slim segmented progress bar, an icon-led summary card and a left-aligned editorial welcome page, which feel deliberately designed, while App 2 reads as a polished but generic indigo-button template with a boxed checklist.",
+    "usage": {
+      "input_tokens": 8784,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 123,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-shadcn-docs-stack",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a more distinctive, cohesive system (mint accent, segmented progress bar, tinted icon tiles, branded header with team context) and a confident type hierarchy, whereas App 2 reads as a clean but generic shadcn-style default with stacked bordered cards and a plain stepper.",
+    "usage": {
+      "input_tokens": 8760,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-shadcn-docs-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, restrained monochrome system with a clear page title and subtitle, icon-led summary rows with pill chips, a polished welcome screen with progress bar, and better mobile stepper treatment, while App 1 relies on a default-feeling indigo/blue palette with a plainer summary list and a less cohesive welcome page.",
+    "usage": {
+      "input_tokens": 8910,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t8-r1-stack-tailwind-memory",
+    "task": 8,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a distinctive mint-and-black palette, a tighter type scale, a progress-bar stepper and a welcome page with icon-led steps, which feel designed rather than defaulted. App 2 is clean but reads as a generic indigo-button template with plain stacked cards.",
+    "usage": {
+      "input_tokens": 8798,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-mantine-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a stronger visual hierarchy with left-aligned editorial hero, meaningful product mockups (funnel chart, issue card, checklist) in the feature sections, a clearer header with CTA and active nav states, and a more cohesive warm stone palette, while App 1 is more generic with plain bordered boxes of bullet lists and a stacked left-aligned logo list that looks unfinished.",
+    "usage": {
+      "input_tokens": 23126,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 156,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-mui-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 2 has a stronger hierarchy and more intentional detail, with a left-aligned editorial hero, a subtle glow, big orange stat callouts that anchor each feature section, alternating section surfaces, and a clearer pricing toggle with explicit yearly price breakdowns. App 1 is competent but plainer: its logos stack in a left-aligned list with a centered label, which reads as unfinished, and its feature cards feel more generic.",
+    "usage": {
+      "input_tokens": 24114,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 169,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-once-harness",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 2 has a more polished, intentional system: logos in bordered tiles, a warm hero gradient, icon-led feature cards, a segmented billing toggle, a richer footer, and consistent surfaces, while App 1 leaves customer logos stacked left-aligned in a plain list, leaving large empty space, and looks sparser and more default.",
+    "usage": {
+      "input_tokens": 23434,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-shadcn-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more polished, cohesive system — a left-aligned editorial hero, a horizontal logo row, numbered feature sections with dividers, a richer header (sign in, CTA, toggle) and footer, and a tighter pricing page with a visible yearly state — while App 1's logos stack awkwardly in a left column on desktop, its hero is centered and generic, and it has more dead space.",
+    "usage": {
+      "input_tokens": 22750,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-stack",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a warm, cohesive stone-and-brown identity with a hero gradient, balanced alternating feature sections and a single-row logo strip, while App 2's left-aligned stacked logo list under a centered header looks unresolved and its palette is flatter and more generic.",
+    "usage": {
+      "input_tokens": 23374,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 112,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-chakra-docs-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive, intentional system (left-aligned editorial hero, icon tiles, tidy bordered list cards, a well-integrated CTA band, and a clean pricing page with a badge on the card edge and correct yearly price changes), whereas App 1's customer logos stack in a lonely left-aligned column leaving big empty space, and its pricing yearly state appears unchanged and its table feels less refined.",
+    "usage": {
+      "input_tokens": 22386,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mantine-docs-mui-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 gives each feature section a purposeful visual artifact (funnel bars, an issue card, a setup checklist), adds a closing CTA, has a more refined, consistent type scale and a tidy pricing header with a yearly price showing the monthly saving, whereas App 1 relies on large stat cards with sparse empty space and a plainer hero.",
+    "usage": {
+      "input_tokens": 23490,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mantine-docs-once-harness",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has stronger hierarchy with left-aligned editorial layout, a concrete funnel chart and ticket mock-up that give real product feeling, a tight spacing rhythm, and a polished pricing page with highlighted column and clear yearly savings, whereas App 1 is more generic with centered hero, boxed logo tiles, and repetitive checklist cards with a murky gradient.",
+    "usage": {
+      "input_tokens": 22810,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 152,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mantine-docs-shadcn-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "slight",
+    "reason": "App 1 has richer, more intentional home-page content (a funnel-visualization card, an issue-ticket card, a setup checklist) and warmer stone surfaces, while App 2's feature sections are generic checklist boxes on near-black, though its pricing page is cleaner.",
+    "usage": {
+      "input_tokens": 22126,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 113,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mantine-docs-stack",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 1 shows richer, more purposeful product visuals (funnel chart, issue ticket card, setup checklist), a clear hero-to-section hierarchy, and a coherent warm-stone surface system with consistent orange accents, whereas App 2's home page relies on repetitive icon-and-checklist cards with an empty hero and feels more generic.",
+    "usage": {
+      "input_tokens": 22750,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mantine-docs-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 1 shows more designed craft: real product mockups (funnel chart, issue ticket, setup checklist) paired with copy in each feature section, a clear eyebrow/headline/body rhythm, and a polished pricing page with a highlighted Team card and a shaded comparison column, while App 2 relies on generic bullet-list boxes in place of visuals and has a plainer, more template-like look.",
+    "usage": {
+      "input_tokens": 21762,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 151,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mui-docs-once-harness",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 1 has a stronger hierarchy and rhythm with large orange stat callouts, alternating feature layouts, a highlighted Team card with a clear primary CTA and a polished comparison table with a tinted Team column, while App 2 is dimmer and flatter with low-contrast grey body text, muted brown buttons and less distinct surfaces.",
+    "usage": {
+      "input_tokens": 23798,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mui-docs-shadcn-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 2 has stronger hierarchy and intentional detail: bold stat callouts in the feature sections, alternating section surfaces, a subtle hero glow, an underlined active nav item, an open FAQ item and a yearly-price explainer line. App 1 is clean but flatter, with uniform checklist cards, an empty right half of the hero, and a monotone surface treatment.",
+    "usage": {
+      "input_tokens": 23114,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 147,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mui-docs-stack",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 1 has a stronger, more intentional hierarchy with big serif stat callouts, alternating section surfaces, an eyebrow/underline-nav system, and a well-judged highlighted Team card and table column, while App 2 feels flatter with low-contrast muted text, an empty hero area, and a sparse left-aligned pricing header.",
+    "usage": {
+      "input_tokens": 23738,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 135,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-mui-docs-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mui-docs",
+    "margin": "clear",
+    "reason": "App 1 shows stronger hierarchy and intentionality: a subtle warm glow in the hero, eyebrow labels, large serif stat callouts that pair with each feature, alternating section surfaces, and a more refined pricing page with a glowing highlighted Team card, centered comparison table with a highlighted column, and polished toggle states; App 2 is clean but plainer, with feature lists in generic bordered boxes and a flatter pricing layout.",
+    "usage": {
+      "input_tokens": 22750,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 171,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-once-harness-shadcn-docs",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a tighter, more intentional system: a clear hero with strong hierarchy, consistent alternating feature sections with orange numerals, an obvious highlighted Team card with an animated yearly toggle, and a well-aligned comparison table with a tinted Team column; App 2 is competent but feels more generic, with a washed-out brown gradient hero, a hard-to-read grid of logo boxes crammed right under the hero, and a plainer comparison table.",
+    "usage": {
+      "input_tokens": 22434,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 175,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-once-harness-stack",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "slight",
+    "reason": "App 1 has a more intentional rhythm: a clean text-only logo row, alternating feature sections with generous spacing, and a left-aligned pricing hero with a full-width billing switch, while App 2 crowds the logo row into boxed tiles tight against the hero edge and adds a heavier CTA block that feels more template-like.",
+    "usage": {
+      "input_tokens": 23058,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-once-harness-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "tailwind-memory"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a more considered, editorial look: a centered hero with a warm gradient, eyebrow labels, alternating feature rows with icon tiles, a richer footer, and a refined pricing page with a subtle highlighted Team card. App 2 is clean but plainer and more generic, with an empty right half in the hero and a more default-feeling pricing toggle and card styling.",
+    "usage": {
+      "input_tokens": 22070,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-shadcn-docs-stack",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a tighter, more systematic look—consistent section rhythm with numbered features and dividers, a cleaner centered nav, a clear yearly toggle with correct price math, a tidy comparison table with highlighted Team column, and a closing CTA band—while App 1 has a large empty hero gradient, weaker header/footer structure, and a flatter pricing toggle.",
+    "usage": {
+      "input_tokens": 22374,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 153,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-shadcn-docs-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined system: a richer footer with columns, numbered feature sections, highlighted Team column in the comparison table, a polished pill-style toggle and badge, cleaner centered table alignment and an FAQ accordion with a lighter, more editorial treatment, whereas App 1 feels more generic with heavier bordered boxes and a plainer footer.",
+    "usage": {
+      "input_tokens": 21386,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 143,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t9-r1-stack-tailwind-memory",
+    "task": 9,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "stack",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 1 has a more considered, editorial look with a warm gradient hero, centered large serif headline, better spacing rhythm and alternating feature cards with icon tiles, while App 2 is competent but plainer, with left-aligned flat hero, empty right space, and more generic stacked list cards.",
+    "usage": {
+      "input_tokens": 22010,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-mantine-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mantine-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: tasteful gradient placeholders, a clean filter bar, dark price markers, a dark-mode toggle and tidy detail-page hierarchy, while App 1's flat cartoon house illustrations and plain pale-grey map feel more generic and childlike.",
+    "usage": {
+      "input_tokens": 20284,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-mui-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "mui-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive, refined system with a teal accent, dark price markers, soft gradient placeholders, and tidy fact tiles, whereas App 2 relies on default Material-style blue controls, a stock slider, and generic outlined fields.",
+    "usage": {
+      "input_tokens": 17828,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 108,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-once-harness",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "once-harness"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive teal system with a compact filter bar, polished price pills, and a map beside the list that fills the viewport, while App 2 looks more generic, with muddy gradient photo placeholders, default select styling, a heavy near-black CTA, and a weak map/list layout with empty space below the map.",
+    "usage": {
+      "input_tokens": 20492,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 125,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-shadcn-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "chakra-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more polished system: a branded header with logo, tidy filter bar with a clear-filters action, richer CSS illustrations on the cards, a well-organised detail page with tags, a save button and contact info, and cleaner marker styling; App 1 feels flatter and more generic, with abstract placeholders and a plainer hierarchy.",
+    "usage": {
+      "input_tokens": 17696,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-stack",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 2 has a stronger product feel: a compact sticky filter bar, a full-bleed interactive map with dark price pills, richer card thumbnails with consistent metadata icons, a polished detail page with a clear energy-rating scale, and a tidy contact form. App 1 is more generic, with muddy pink-brown placeholder gradients, a map boxed into a small card with a large empty area below, and a plainer detail layout.",
+    "usage": {
+      "input_tokens": 19908,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-chakra-docs-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "chakra-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "chakra-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive system: a full-height map with dark price markers, softer muted photo placeholders, tighter type hierarchy, and a detail page with refined form labels and per-m² context, while App 1's saturated bar-chart placeholders and short map feel more generic and leave large empty areas.",
+    "usage": {
+      "input_tokens": 20064,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 120,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mantine-docs-mui-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "mui-docs"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive green brand system with a polished two-column card grid, a full-height map, richer gallery with labelled photos and a stronger key-facts layout, whereas App 1 looks like default Material components with repetitive building illustrations and a cramped half-screen map.",
+    "usage": {
+      "input_tokens": 20740,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 113,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mantine-docs-once-harness",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "once-harness"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive, branded system: a sticky filter bar with a clean price slider, a full-height map beside the list, playful illustrated placeholders with consistent badges, a stronger detail page with a clear price hierarchy, and a polished contact card with a green CTA. App 2 feels more generic, with murky gradient placeholders, default select styling, a cramped map and a flat dark button.",
+    "usage": {
+      "input_tokens": 23404,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 152,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mantine-docs-shadcn-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: neutral black accents, a roomy filter bar with consistent dropdowns, richer illustrated placeholders, a tidier detail page with a clean contact card and polished error states, whereas App 1 uses a green-heavy default look with cramped filter controls and a more generic card style.",
+    "usage": {
+      "input_tokens": 20608,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mantine-docs-stack",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "stack"
+    ],
+    "shown_first": "mantine-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive, editorial feel: a single refined gradient/photo-placeholder system, restrained green accent, black CTA, consistent typography and a polished energy-rating scale, whereas App 1 uses a clutter of multi-colored cartoon houses and a busier, library-default-looking filter bar and layout.",
+    "usage": {
+      "input_tokens": 22820,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 132,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mantine-docs-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mantine-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "mantine-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive system: the detail page's labelled gallery, key-facts grid and the sticky map-first search layout feel like a shipped product, while App 1's identical bar-chart placeholders and plain listing layout look more generic.",
+    "usage": {
+      "input_tokens": 22976,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 104,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mui-docs-once-harness",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "once-harness"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a more cohesive, restrained system: a two-column card grid beside a sticky map, tonal gradient photo placeholders, neutral dark price pills, and a refined detail page with a clean gallery mosaic, key-fact tiles and consistent type scale. App 2 reads as library defaults, with Material-style outlined selects, a default blue slider, blue-outlined map markers, a single-column list with repetitive identical illustrations, and a stock blue button.",
+    "usage": {
+      "input_tokens": 20948,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 178,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mui-docs-shadcn-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "shadcn-docs"
+    ],
+    "shown_first": "shadcn-docs",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 1 has a restrained, cohesive system with refined neutral surfaces, a black primary button, consistent type scale and spacing, and polished tiled illustrations and markers, whereas App 2 reads as Material UI defaults with a default blue button, floating-label inputs, and pill markers that look stock.",
+    "usage": {
+      "input_tokens": 18152,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 124,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mui-docs-stack",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "stack"
+    ],
+    "shown_first": "mui-docs",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive, editorial look: a warm gradient palette, rounded surfaces, tasteful pill badges and a refined type scale, plus a polished detail page with a gallery mosaic and a segmented energy rating. App 1 reads as stock Material UI, with the default blue slider, outlined selects and a plain stacked layout.",
+    "usage": {
+      "input_tokens": 20364,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 138,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-mui-docs-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "mui-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive teal brand palette, richer card photo placeholders with a clear price-title-meta hierarchy, and a refined, consistent detail page, while App 2 leans on default Material-style controls (blue slider, outlined fields, uppercase button) and repetitive identical illustrations that feel assembled from library defaults.",
+    "usage": {
+      "input_tokens": 20520,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-once-harness-shadcn-docs",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "shadcn-docs"
+    ],
+    "shown_first": "once-harness",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a full-width filter bar with custom dropdowns, illustrated card placeholders, a map integrated edge to edge, a more refined detail page with icons and a tidy contact card, and inline red error states with messages; App 1 feels more generic with native selects, plain gradient blocks, and a cramped map placement leaving empty space below it.",
+    "usage": {
+      "input_tokens": 20816,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 136,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-once-harness-stack",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "stack"
+    ],
+    "shown_first": "once-harness",
+    "winner": "once-harness",
+    "margin": "clear",
+    "reason": "App 1 has a clearer hierarchy with varied gradient photo placeholders, tidy header, labeled gallery, concise key-fact tiles and an energy scale; App 2's identical pink placeholders, oversized pill badges, default selects and green link-style titles read as more generic and repetitive.",
+    "usage": {
+      "input_tokens": 23028,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 119,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-once-harness-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "once-harness",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "tailwind-memory",
+    "margin": "clear",
+    "reason": "App 1 has a cohesive teal brand system, a clear filter bar with labeled controls, consistent card structure with icons, a distinctive energy-rating treatment and polished contact card, while App 2 looks more generic with a flat dark button, faint labels, and washed-out placeholders.",
+    "usage": {
+      "input_tokens": 23184,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 117,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-shadcn-docs-stack",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "stack"
+    ],
+    "shown_first": "stack",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a cohesive product feel with a branded header, a full-height split map layout, illustrated card placeholders, and a richer detail page with clear spacing and well-aligned form states, whereas App 1 looks like a plain page with generic gradient placeholders and a map boxed away in a small panel.",
+    "usage": {
+      "input_tokens": 20232,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 121,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-shadcn-docs-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "shadcn-docs",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "shadcn-docs",
+    "margin": "clear",
+    "reason": "App 2 has a more refined, cohesive system: a custom dropdown menu, illustrated house placeholders with clearer hierarchy, a polished dark primary button, a gallery with captions, and a map and filters that feel more integrated, whereas App 1's identical bar-chart placeholders, native selects, and the awkward empty space under its map read as more generic.",
+    "usage": {
+      "input_tokens": 20388,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 140,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "id": "t10-r1-stack-tailwind-memory",
+    "task": 10,
+    "run": 1,
+    "arms": [
+      "stack",
+      "tailwind-memory"
+    ],
+    "shown_first": "tailwind-memory",
+    "winner": "stack",
+    "margin": "clear",
+    "reason": "App 2 has a more cohesive, restrained look: a unified warm gradient palette, a large editorial heading, a refined type scale, pill-style feature tags and a contact card with a strong black CTA, whereas App 1's multicolored bar-chart placeholders look random and its detail page and cards feel more generic and library-default.",
+    "usage": {
+      "input_tokens": 22600,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  }
+]

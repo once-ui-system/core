@@ -1,0 +1,163 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.header {
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  background: var(--mantine-color-body);
+}
+
+.headerInner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--mantine-spacing-md);
+  padding: 10px var(--mantine-spacing-md);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mantine-color-teal-8);
+  font-weight: 800;
+  font-size: 1.25rem;
+  text-decoration: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.filters {
+  padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  border-bottom: 1px solid light-dark(var(--mantine-color-gray-3), var(--mantine-color-dark-4));
+  background: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-7));
+}
+
+.filterGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+  align-items: end;
+}
+
+.priceField {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 62em) {
+  .filterGrid {
+    grid-template-columns: 160px minmax(260px, 1fr) 150px 190px auto;
+  }
+
+  .priceField {
+    grid-column: auto;
+  }
+}
+
+.body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 0;
+}
+
+.listPane {
+  padding: var(--mantine-spacing-md);
+  min-width: 0;
+}
+
+.mapPane {
+  min-width: 0;
+  height: calc(100dvh - 260px);
+  min-height: 380px;
+}
+
+/* Phones & small tablets: list and map are two views. */
+@media (max-width: 61.99em) {
+  .body[data-view="list"] .mapPane {
+    display: none;
+  }
+
+  .body[data-view="map"] .listPane {
+    display: none;
+  }
+
+  .toggleBar {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    pointer-events: none;
+  }
+
+  .toggleBar > * {
+    pointer-events: auto;
+    box-shadow: var(--mantine-shadow-lg);
+  }
+}
+
+@media (min-width: 62em) {
+  .body {
+    grid-template-columns: minmax(420px, 46%) 1fr;
+    height: calc(100dvh - 175px);
+    min-height: 520px;
+  }
+
+  .listPane {
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .mapPane {
+    height: 100%;
+  }
+
+  .toggleBar {
+    display: none;
+  }
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--mantine-spacing-md);
+}
+
+@media (min-width: 36em) and (max-width: 61.99em) {
+  .list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 90em) {
+  .list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.emptyState {
+  padding: var(--mantine-spacing-xl);
+  text-align: center;
+  border: 1px dashed light-dark(var(--mantine-color-gray-4), var(--mantine-color-dark-3));
+  border-radius: var(--mantine-radius-md);
+}

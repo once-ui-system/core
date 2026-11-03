@@ -1,0 +1,1220 @@
+[
+  {
+    "task": 10,
+    "arm": "M",
+    "run": 1,
+    "id": "R001",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 2,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent Material-style app with good detail page, but the map is missing on phone and tablet (the list/map toggle shows nothing), tablet cards clip the heart icon and cram text into narrow columns, and the phone detail page lacks the 'Listed' spacing polish seen on desktop.",
+    "usage": {
+      "input_tokens": 19463,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 162,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "A",
+    "run": 1,
+    "id": "R002",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working breadcrumbs, active-route highlight and a phone drawer. However, the phone projects table clips the Open issues column (counts invisible), the drawer opens with the Analytics group collapsed and no visible Overview/Reports after the expand interaction, the tablet layout reuses the phone hamburger shell, and a style is generic.",
+    "usage": {
+      "input_tokens": 11574,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 183,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "T",
+    "run": 1,
+    "id": "R003",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with highlighted nav, breadcrumbs and tidy cards, but the phone drawer was never shown, the collapsed sidebar state is unseen, the breadcrumb clips on phone, and the phone projects table hides the issues and updated columns behind a sideways scroll.",
+    "usage": {
+      "input_tokens": 11233,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "A",
+    "run": 1,
+    "id": "R004",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent search and detail pages with working hover highlight and inline form errors; the phone view shows no visible map markers or list/map toggle behaviour in the screenshots (the tablet view has no map at all), and the visual identity stays fairly generic.",
+    "usage": {
+      "input_tokens": 21399,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 147,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "T",
+    "run": 1,
+    "id": "R005",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent cards and detail page with a good desktop split layout, but the phone and tablet screenshots show no map at all (only a floating 'Show map' button that sits over the card content), and the hover-highlight and popup behaviours are only partly evidenced, so the map-centred search is weaker than required.",
+    "usage": {
+      "input_tokens": 22429,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 163,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "K",
+    "run": 1,
+    "id": "R006",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent and restrained app with working invite dialog validation and a good detail page; on phone the status column and row actions menu are cut off in the table (hidden to the side), and the row action menu itself is never shown open.",
+    "usage": {
+      "input_tokens": 10590,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "A",
+    "run": 1,
+    "id": "R007",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained wizard with a working step indicator, inline validation and a summary card that stacks properly, but the screenshots only show step 1 and the welcome page, and the design stays fairly generic.",
+    "usage": {
+      "input_tokens": 9719,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 122,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "K",
+    "run": 1,
+    "id": "R008",
+    "polish": 3,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 3,
+    "intentionality": 2,
+    "note": "Clean and functional wizard with working validation and a summary card, but the step indicator is awkward (stacked circles with stray lines, labels hidden on phone) and the look is generic with no shared shell or branding between routes.",
+    "usage": {
+      "input_tokens": 10125,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "C",
+    "run": 1,
+    "id": "R009",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained monochrome wizard with working inline validation and correctly placed summary card; step indicator and welcome checklist are present, but the look is fairly generic and the Back button is oddly shown on step 1.",
+    "usage": {
+      "input_tokens": 10097,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "M",
+    "run": 1,
+    "id": "R010",
+    "polish": 3,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 3,
+    "intentionality": 2,
+    "note": "Clean, functional stock Material-style wizard with working validation, a step indicator and a summary card that moves below the form on phones, but only step 1 and the welcome page are shown, the welcome page drops the shell/branding, and the overall look is generic.",
+    "usage": {
+      "input_tokens": 9887,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 137,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "S",
+    "run": 1,
+    "id": "R011",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent monochrome shell across all routes with a well-built palette overlay, but the interaction screenshot still shows the unfiltered list after typing 'inv' (no filtering or visible down-arrow highlight shown), and the look stays fairly generic.",
+    "usage": {
+      "input_tokens": 13415,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 150,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "A",
+    "run": 1,
+    "id": "R012",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Cohesive warm-stone dark theme with serif headings, orange brand buttons and 4px radii across both routes, but the yearly switch in the pricing screenshot still shows monthly, the light-theme toggle result looks washed out and low-contrast, and the logo-row and feature sections are a bit sparse.",
+    "usage": {
+      "input_tokens": 20406,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 159,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "S",
+    "run": 1,
+    "id": "R013",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained onboarding with correct step indicator, inline validation and summary card placement, but only step 1 is shown (steps 2-4 unseen) and the visual identity is fairly generic.",
+    "usage": {
+      "input_tokens": 9705,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "C",
+    "run": 1,
+    "id": "R014",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "A clean, consistent shell with a working palette (grouped results, filtering, visible highlight) and a header search button with shortcut hint; the Pages group is not visible when filtering 'inv', and the phone projects table scrolls sideways. The visual identity is tasteful but fairly stock.",
+    "usage": {
+      "input_tokens": 13751,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "C",
+    "run": 1,
+    "id": "R015",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark stone-grey and orange identity with serif headings, 4px radii and a working theme dropdown. Gaps: the hero is plain text with a large empty right side on desktop, the phone pricing comparison table clips the Business column inside its container, and the interaction screenshot shows only the dropdown, not the light theme.",
+    "usage": {
+      "input_tokens": 20018,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 172,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "K",
+    "run": 1,
+    "id": "R016",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with nested nav, active highlighting, breadcrumbs and a working phone drawer; the look is tidy but fairly generic, and in the drawer screenshot the Analytics chevron points right while its group is not visibly expanded.",
+    "usage": {
+      "input_tokens": 11658,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 147,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "S",
+    "run": 1,
+    "id": "R017",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 4,
+    "note": "Coherent dark brand with serif headings, orange primary buttons and warm neutrals, but the 'Yearly' switch shows no price change in the final screenshot, the theme toggle's light-mode result isn't demonstrated, and the middle feature section lacks its own heading, which weakens completeness.",
+    "usage": {
+      "input_tokens": 20898,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 162,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "M",
+    "run": 1,
+    "id": "R018",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working breadcrumb, active-route highlight and a drawer with nested groups; the phone projects table clips its right columns inside a scroll container (acceptable) and the look is a fairly stock Material style.",
+    "usage": {
+      "input_tokens": 12134,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 139,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "T",
+    "run": 1,
+    "id": "R019",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 3,
+    "intentionality": 3,
+    "note": "Clean, consistent and restrained team page with working dialog validation and a good detail route, but the phone table clips the actions column (acceptable horizontal scroll), the actions menu isn't shown open, and there is no persistent shell or navigation to tie the routes together.",
+    "usage": {
+      "input_tokens": 10520,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "C",
+    "run": 1,
+    "id": "R020",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained monochrome UI with consistent badges, good responsive reflow (table to stacked rows on phone) and working inline validation, but it looks fairly stock with no real shell/nav; the row actions menu isn't shown open so its contents can't be verified.",
+    "usage": {
+      "input_tokens": 10580,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 151,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "T",
+    "run": 1,
+    "id": "R021",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with good responsive adaptation (hamburger, card lists on phone, tables on larger screens), but the only palette screenshot shows just the filtered Actions group and the Invite dialog, other groups and header button on phone are not demonstrated, and the look is fairly generic.",
+    "usage": {
+      "input_tokens": 13849,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "M",
+    "run": 1,
+    "id": "R022",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with a working palette (filtered Actions group, highlight visible) and a header search button with shortcut hint; palette screenshot shows only a filtered group so the Pages/Recent groups and invite dialog can't be verified, and the look is tidy but fairly generic.",
+    "usage": {
+      "input_tokens": 13457,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 158,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "S",
+    "run": 1,
+    "id": "R023",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 3,
+    "intentionality": 3,
+    "note": "Clean, well-spaced search and detail pages with a working map, filters and validated form, but the placeholder imagery and plain header make it fairly generic, and the phone list/map toggle and map markers are only partly demonstrated.",
+    "usage": {
+      "input_tokens": 21361,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 137,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "T",
+    "run": 1,
+    "id": "R024",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained wizard with a working summary card and inline errors, but the screenshots only show step 1 (steps 2–4 and the Invite skip are never seen), the error state oddly flags prefilled-looking fields, and the visual identity is a fairly generic blue-on-white template.",
+    "usage": {
+      "input_tokens": 9929,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 160,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "M",
+    "run": 1,
+    "id": "R025",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent Material-style team page with proper table, badges, dialog validation and detail route; phone layout drops status/actions column and the row menu is missing there, and the look is fairly stock.",
+    "usage": {
+      "input_tokens": 11342,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "A",
+    "run": 1,
+    "id": "R026",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained and consistent team page with good responsive adaptation and validation dialog, but a fairly generic look, no visible actions menu or filter states, and the phone dialog rendering feels cramped.",
+    "usage": {
+      "input_tokens": 10538,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "S",
+    "run": 1,
+    "id": "R027",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working nested nav, breadcrumbs and drawer, but the visual identity is fairly generic and the drawer screenshot shows Analytics collapsed rather than expanded with children, so the interaction is not clearly demonstrated.",
+    "usage": {
+      "input_tokens": 11574,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "C",
+    "run": 1,
+    "id": "R028",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working breadcrumbs, nested nav and active highlighting, and sensible reflow; the phone drawer and collapsed sidebar states were not shown, and the look is a fairly stock shadcn-style aesthetic.",
+    "usage": {
+      "input_tokens": 11317,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "D",
+    "run": 1,
+    "id": "R029",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent teal-accented design with solid detail page, but the map is absent on tablet and shown only as a cut-off partial map at desktop with clipped markers, the map sits unused beside a short sticky area, and the phone map view isn't shown.",
+    "usage": {
+      "input_tokens": 21993,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 139,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "A",
+    "run": 1,
+    "id": "R030",
+    "polish": 4,
+    "completeness": 2,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with a good palette overlay, but the interaction shot shows the query 'inv' and the filtering not applied (all items still listed, no Recent group visible), and the phone header lacks a labelled search button; otherwise tidy and responsive.",
+    "usage": {
+      "input_tokens": 13415,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 149,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "K",
+    "run": 1,
+    "id": "R031",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent search and detail pages with a working map, hover linkage, validation errors and a phone list/map toggle, though the map never shows on tablet and the card styling is fairly template-like.",
+    "usage": {
+      "input_tokens": 18909,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 127,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "D",
+    "run": 1,
+    "id": "R032",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-stone dark theme with orange brand accents, serif headings and a working light/dark toggle; all required home and pricing elements are present and the layouts adapt well, though the comparison table is clipped on phone and the hero is rather plain.",
+    "usage": {
+      "input_tokens": 19538,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 146,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 8,
+    "arm": "D",
+    "run": 1,
+    "id": "R033",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent wizard with working validation, a step indicator and a summary card that moves below the form on phones; but only step 1 is shown, the /welcome screen sits in a different shell with no header, and the visual identity is fairly generic.",
+    "usage": {
+      "input_tokens": 10149,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 134,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 1,
+    "arm": "D",
+    "run": 1,
+    "id": "R034",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell with working breadcrumb, active-route highlight, nested groups and collapse control; the phone drawer was never shown open, and the look is polished but fairly template-like.",
+    "usage": {
+      "input_tokens": 11233,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 126,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "D",
+    "run": 1,
+    "id": "R035",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent and restrained design with a working invite dialog and detail page, but on phone the table is cut off so status and actions are hidden behind sideways scrolling, and the look is fairly generic.",
+    "usage": {
+      "input_tokens": 10440,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 129,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "M",
+    "run": 1,
+    "id": "R036",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Brand colour, serif/sans pairing, 4px radii, warm-stone dark theme and a working light toggle are applied consistently, and the pricing page has all required parts (yearly switch, highlighted Team plan, table, accordion). Minor gaps: the hero is plain and sparse, and the phone comparison table scrolls sideways with a cut-off Team column.",
+    "usage": {
+      "input_tokens": 20942,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 185,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 10,
+    "arm": "C",
+    "run": 1,
+    "id": "R037",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 4,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, consistent, well-spaced app with a working map and form validation. The map is hidden behind a toggle on tablet, and the look is fairly default, with pastel illustrated cards and a standard filter bar.",
+    "usage": {
+      "input_tokens": 19785,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 133,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "K",
+    "run": 1,
+    "id": "R038",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive dark-default warm-stone theme with orange brand accent, serif headings and a working toggle, but the logo row is left-aligned and sparse, the pricing yearly-switch state was not demonstrated, and the phone comparison table appears cropped/scrolling.",
+    "usage": {
+      "input_tokens": 21066,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 154,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "K",
+    "run": 1,
+    "id": "R039",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell and tidy tables with a working-looking palette (highlighted result, Esc hint), but the interaction shot only shows the filtered Actions group so Pages/Recent/dialog can't be verified, and the look is fairly generic.",
+    "usage": {
+      "input_tokens": 13611,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 140,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 9,
+    "arm": "T",
+    "run": 1,
+    "id": "R040",
+    "polish": 4,
+    "completeness": 5,
+    "responsiveness": 4,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 4,
+    "note": "Cohesive warm-stone dark theme with orange brand accent, serif headings and a working theme toggle plus yearly pricing switch; minor issues like the phone pricing table clipping the Team column and left-aligned content with an empty desktop hero right side.",
+    "usage": {
+      "input_tokens": 20898,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 5,
+    "arm": "S",
+    "run": 1,
+    "id": "R041",
+    "polish": 4,
+    "completeness": 3,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 4,
+    "intentionality": 3,
+    "note": "Clean, restrained, consistent design, but the phone table drops status badges and row action menus so the status and action features are missing at 375px, the role filter shows no open state, and the app has no persistent navigation shell.",
+    "usage": {
+      "input_tokens": 10370,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 131,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  },
+  {
+    "task": 3,
+    "arm": "D",
+    "run": 1,
+    "id": "R042",
+    "polish": 4,
+    "completeness": 4,
+    "responsiveness": 3,
+    "restraint": 5,
+    "coherence": 5,
+    "intentionality": 3,
+    "note": "Clean, consistent shell and a well-formed palette with a visible highlight, but the phone Projects table clips its columns and the phone nav lacks the avatar. Only the filtered 'inv' state is shown, so the other groups and the dialog go unverified.",
+    "usage": {
+      "input_tokens": 13457,
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cache_creation": {
+        "ephemeral_5m_input_tokens": 0,
+        "ephemeral_1h_input_tokens": 0
+      },
+      "output_tokens": 148,
+      "output_tokens_details": {
+        "thinking_tokens": 0
+      },
+      "service_tier": "standard",
+      "inference_geo": "global",
+      "speed": "standard"
+    }
+  }
+]

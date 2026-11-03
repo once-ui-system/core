@@ -1,0 +1,76 @@
+{
+  "games": 124,
+  "position_bias_first_wins": 0.5645161290322581,
+  "ratings": [
+    {
+      "arm": "shadcn-docs",
+      "letter": "C",
+      "elo": 1296,
+      "low": 1161,
+      "high": 1539,
+      "wins": 30,
+      "losses": 5,
+      "ties": 0
+    },
+    {
+      "arm": "stack",
+      "letter": "S",
+      "elo": 1166,
+      "low": 1047,
+      "high": 1334,
+      "wins": 26,
+      "losses": 10,
+      "ties": 0
+    },
+    {
+      "arm": "once-harness",
+      "letter": "A",
+      "elo": 986,
+      "low": 863,
+      "high": 1108,
+      "wins": 17,
+      "losses": 18,
+      "ties": 0
+    },
+    {
+      "arm": "tailwind-memory",
+      "letter": "D",
+      "elo": 986,
+      "low": 880,
+      "high": 1087,
+      "wins": 17,
+      "losses": 18,
+      "ties": 0
+    },
+    {
+      "arm": "mantine-docs",
+      "letter": "T",
+      "elo": 936,
+      "low": 815,
+      "high": 1042,
+      "wins": 15,
+      "losses": 21,
+      "ties": 0
+    },
+    {
+      "arm": "chakra-docs",
+      "letter": "K",
+      "elo": 897,
+      "low": 756,
+      "high": 1014,
+      "wins": 13,
+      "losses": 22,
+      "ties": 0
+    },
+    {
+      "arm": "mui-docs",
+      "letter": "M",
+      "elo": 731,
+      "low": 504,
+      "high": 862,
+      "wins": 6,
+      "losses": 30,
+      "ties": 0
+    }
+  ]
+}

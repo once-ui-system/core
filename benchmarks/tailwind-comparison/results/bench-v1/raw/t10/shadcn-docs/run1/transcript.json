@@ -1,0 +1,631 @@
+{
+  "system": "You are an expert front-end engineer. You write production-quality React and TypeScript for Next.js App Router projects.",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Build the app described below in an existing Next.js 16 project (App Router, React 19, strict TypeScript).\n\nStack: Tailwind CSS v4 with shadcn/ui (new-york style, neutral theme) is set up, every shadcn/ui component is already installed under `@/components/ui/*`, lucide-react is installed, sonner's `<Toaster />` is mounted in the root layout, and the shadcn/ui documentation is in the `docs/` folder, which you can read (start with `docs/README.md`).\n\nTask: Haven, a home search site for Lisbon. At `/`, a search page: a filter bar (type, price range, minimum bedrooms, and a sort by newest, price or size), a results count, and the results as cards (photo placeholder drawn with CSS, price, title, beds, baths, area, district, a badge for homes listed in the last 7 days, and a save toggle) beside an interactive map. The map uses `maplibre-gl` (installed, as is `react-map-gl`) with the free map style URL in the data, centred on the given point: this style URL and its tiles are the only network resources the app may load. Every home shows on the map as a price marker; hovering a card highlights its marker and hovering a marker highlights its card; clicking a marker opens a small popup card. Filters update the list, the count and the markers together. On phones, the list and the map are two views with a toggle. At `/homes/h-104` (and every home's own `/homes/[id]`), a detail page: a gallery strip of CSS placeholders, price and key facts, the features, an energy rating, a small map with the home's location, and a contact form for the agent (name, email, message, all required, with inline errors) beside the facts on desktop.\n\nUse this data for the content (define it in the code; you may put it in `lib/data.ts`):\n\n```json\n{\n  \"listings\": {\n    \"site\": \"Haven, a home search site for one city\",\n    \"city\": \"Lisbon\",\n    \"map_style_url\": \"https://basemaps.cartocdn.com/gl/positron-gl-style/style.json\",\n    \"map_center\": [\n      -9.1393,\n      38.7223\n    ],\n    \"currency\": \"EUR\",\n    \"agent\": {\n      \"name\": \"Inês Carvalho\",\n      \"agency\": \"Haven Homes\",\n      \"phone\": \"+351 210 000 123\",\n      \"email\": \"ines@havenhomes.example\"\n    },\n    \"homes\": [\n      {\n        \"id\": \"h-101\",\n        \"title\": \"Sunlit flat with river view\",\n        \"type\": \"Apartment\",\n        \"price\": 485000,\n        \"beds\": 2,\n        \"baths\": 1,\n        \"area_m2\": 84,\n        \"district\": \"Alfama\",\n        \"lat\": 38.7114,\n        \"lng\": -9.1305,\n        \"year\": 1962,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Balcony\",\n          \"River view\",\n          \"Renovated kitchen\"\n        ],\n        \"listed\": \"2026-10-21\"\n      },\n      {\n        \"id\": \"h-102\",\n        \"title\": \"Family house with garden\",\n        \"type\": \"House\",\n        \"price\": 895000,\n        \"beds\": 4,\n        \"baths\": 3,\n        \"area_m2\": 210,\n        \"district\": \"Restelo\",\n        \"lat\": 38.7037,\n        \"lng\": -9.2129,\n        \"year\": 1988,\n        \"energy\": \"B\",\n        \"features\": [\n          \"Garden\",\n          \"Garage\",\n          \"Fireplace\"\n        ],\n        \"listed\": \"2026-10-18\"\n      },\n      {\n        \"id\": \"h-103\",\n        \"title\": \"Compact studio near the metro\",\n        \"type\": \"Studio\",\n        \"price\": 219000,\n        \"beds\": 0,\n        \"baths\": 1,\n        \"area_m2\": 31,\n        \"district\": \"Arroios\",\n        \"lat\": 38.7316,\n        \"lng\": -9.1358,\n        \"year\": 1975,\n        \"energy\": \"D\",\n        \"features\": [\n          \"Metro 2 min\",\n          \"Furnished\"\n        ],\n        \"listed\": \"2026-10-29\"\n      },\n      {\n        \"id\": \"h-104\",\n        \"title\": \"Loft in a converted warehouse\",\n        \"type\": \"Apartment\",\n        \"price\": 640000,\n        \"beds\": 2,\n        \"baths\": 2,\n        \"area_m2\": 120,\n        \"district\": \"Marvila\",\n        \"lat\": 38.7486,\n        \"lng\": -9.1031,\n        \"year\": 2019,\n        \"energy\": \"A\",\n        \"features\": [\n          \"High ceilings\",\n          \"Terrace\",\n          \"Parking\"\n        ],\n        \"listed\": \"2026-10-11\"\n      },\n      {\n        \"id\": \"h-105\",\n        \"title\": \"Classic flat with tiled facade\",\n        \"type\": \"Apartment\",\n        \"price\": 529000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 112,\n        \"district\": \"Campo de Ourique\",\n        \"lat\": 38.7181,\n        \"lng\": -9.1662,\n        \"year\": 1940,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Original tiles\",\n          \"Lift\",\n          \"Storage room\"\n        ],\n        \"listed\": \"2026-10-25\"\n      },\n      {\n        \"id\": \"h-106\",\n        \"title\": \"Penthouse with rooftop pool\",\n        \"type\": \"Apartment\",\n        \"price\": 1450000,\n        \"beds\": 3,\n        \"baths\": 3,\n        \"area_m2\": 168,\n        \"district\": \"Avenidas Novas\",\n        \"lat\": 38.7392,\n        \"lng\": -9.1467,\n        \"year\": 2021,\n        \"energy\": \"A\",\n        \"features\": [\n          \"Rooftop pool\",\n          \"Concierge\",\n          \"2 parking spaces\"\n        ],\n        \"listed\": \"2026-10-02\"\n      },\n      {\n        \"id\": \"h-107\",\n        \"title\": \"Townhouse on a quiet lane\",\n        \"type\": \"House\",\n        \"price\": 735000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 156,\n        \"district\": \"Graça\",\n        \"lat\": 38.7176,\n        \"lng\": -9.1295,\n        \"year\": 1910,\n        \"energy\": \"D\",\n        \"features\": [\n          \"Patio\",\n          \"Restored beams\"\n        ],\n        \"listed\": \"2026-10-27\"\n      },\n      {\n        \"id\": \"h-108\",\n        \"title\": \"Two-bed flat by the park\",\n        \"type\": \"Apartment\",\n        \"price\": 412000,\n        \"beds\": 2,\n        \"baths\": 1,\n        \"area_m2\": 78,\n        \"district\": \"Alvalade\",\n        \"lat\": 38.753,\n        \"lng\": -9.1445,\n        \"year\": 1958,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Park view\",\n          \"Lift\"\n        ],\n        \"listed\": \"2026-10-30\"\n      },\n      {\n        \"id\": \"h-109\",\n        \"title\": \"Riverside new build\",\n        \"type\": \"Apartment\",\n        \"price\": 780000,\n        \"beds\": 3,\n        \"baths\": 2,\n        \"area_m2\": 131,\n        \"district\": \"Parque das Nações\",\n        \"lat\": 38.7681,\n        \"lng\": -9.0947,\n        \"year\": 2024,\n        \"energy\": \"A+\",\n        \"features\": [\n          \"Gym\",\n          \"Pool\",\n          \"Concierge\"\n        ],\n        \"listed\": \"2026-10-15\"\n      },\n      {\n        \"id\": \"h-110\",\n        \"title\": \"Bright studio with mezzanine\",\n        \"type\": \"Studio\",\n        \"price\": 265000,\n        \"beds\": 1,\n        \"baths\": 1,\n        \"area_m2\": 42,\n        \"district\": \"Bairro Alto\",\n        \"lat\": 38.7127,\n        \"lng\": -9.145,\n        \"year\": 1900,\n        \"energy\": \"E\",\n        \"features\": [\n          \"Mezzanine\",\n          \"Central\"\n        ],\n        \"listed\": \"2026-10-22\"\n      },\n      {\n        \"id\": \"h-111\",\n        \"title\": \"Villa with sea glimpse\",\n        \"type\": \"House\",\n        \"price\": 1290000,\n        \"beds\": 5,\n        \"baths\": 4,\n        \"area_m2\": 290,\n        \"district\": \"Belém\",\n        \"lat\": 38.6979,\n        \"lng\": -9.2063,\n        \"year\": 2001,\n        \"energy\": \"B\",\n        \"features\": [\n          \"Pool\",\n          \"Garden\",\n          \"Sea glimpse\"\n        ],\n        \"listed\": \"2026-09-30\"\n      },\n      {\n        \"id\": \"h-112\",\n        \"title\": \"Renovated flat near the market\",\n        \"type\": \"Apartment\",\n        \"price\": 455000,\n        \"beds\": 2,\n        \"baths\": 2,\n        \"area_m2\": 89,\n        \"district\": \"Cais do Sodré\",\n        \"lat\": 38.7066,\n        \"lng\": -9.1442,\n        \"year\": 1930,\n        \"energy\": \"C\",\n        \"features\": [\n          \"Renovated\",\n          \"Air conditioning\"\n        ],\n        \"listed\": \"2026-10-28\"\n      }\n    ]\n  }\n}\n```\n\nRequirements:\n- The app must serve these routes: `/`, `/homes/h-104`. Each route default-exports its page from its `page.tsx`; nested layouts are allowed.\n- Write as many files as the app needs, under `app/`, `components/` or `lib/`. Do not change any file that already exists in the project except `app/page.tsx`. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under `project/`.\n- Put \"use client\" at the top of every file that uses state, effects or event handlers.\n- Use realistic placeholder content defined in the files (no lorem ipsum). Load nothing from the network: no external image, font or API URLs.\n- The app must type-check under strict TypeScript, pass `next build`, and render every route without console errors.\n- Make it responsive from phone to desktop, and accessible.\n- Reply with every file, each in its own fenced code block whose opening line names the file's path, like ```tsx app/settings/page.tsx, and nothing else.\n"
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll start by exploring the project and docs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01CJcGSDU38kQ2Kz2Br9KkVN",
+          "name": "list_dir",
+          "input": {
+            "path": "."
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_013STJ5s5Xg7R5V1oxm7RBd3",
+          "name": "read_file",
+          "input": {
+            "path": "docs/README.md"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01CJcGSDU38kQ2Kz2Br9KkVN",
+          "content": "docs/\nproject/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013STJ5s5Xg7R5V1oxm7RBd3",
+          "content": "# shadcn/ui documentation (local copy)\n\nThis folder is a local copy of the shadcn/ui documentation and agent skill, pinned to one\ncommit of github.com/shadcn-ui/ui. Everything listed here is already set up in the project.\n\n- `skill/SKILL.md`: the official shadcn/ui agent skill (rules in `skill/rules/`). The\n  shadcn CLI is **not** available in this environment: every component is already\n  installed under `@/components/ui/*`, so skip any step that says to run `npx shadcn`.\n- `llms.txt`: the official documentation index. A link of the form\n  `https://ui.shadcn.com/docs/components/<name>` is available here as\n  `components/<name>.mdx`.\n- `components/*.mdx`: per-component docs (Radix flavour, matching the installed components).\n  A `<ComponentPreview name=\"x\" />` tag refers to the example source in `examples/x.tsx`.\n- `examples/*.tsx`: the example source behind each docs preview.\n- `blocks/`: the official shadcn/ui blocks (dashboard, login, sidebar, ...).\n- `installation/next.mdx`: Next.js setup notes (already done).\n\nImports in `examples/` and `blocks/` have been rewritten to the project's paths\n(`@/components/ui/*`, `@/lib/utils`, `@/hooks/*`), as the shadcn CLI does.\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_01ASxiuj4jjeModCmZa32EhD",
+          "name": "list_dir",
+          "input": {
+            "path": "project"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01ASxiuj4jjeModCmZa32EhD",
+          "content": "app/\ncomponents.json\ncomponents/\nhooks/\nlib/\nnext.config.mjs\npackage.json\npostcss.config.mjs\ntsconfig.json",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "tool_use",
+          "id": "toolu_013ZazMRJt1x2hqVEj88JkCn",
+          "name": "list_dir",
+          "input": {
+            "path": "project/app"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JEpPmg7LLgVvAhr6QPeHpD",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_011XrioALJs4CuHGZTuHZbDU",
+          "name": "list_dir",
+          "input": {
+            "path": "project/lib"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01K8p83JqkcxooEt6NM8wsA5",
+          "name": "read_file",
+          "input": {
+            "path": "project/package.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_018P258WTmtEHXQjgJ6G19G7",
+          "name": "read_file",
+          "input": {
+            "path": "project/tsconfig.json"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_013ZazMRJt1x2hqVEj88JkCn",
+          "content": "globals.css\nlayout.tsx\npage.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JEpPmg7LLgVvAhr6QPeHpD",
+          "content": "ui/",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_011XrioALJs4CuHGZTuHZbDU",
+          "content": "utils.ts",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01K8p83JqkcxooEt6NM8wsA5",
+          "content": "{\n  \"name\": \"bench-arm-shadcn\",\n  \"version\": \"0.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"build\": \"next build\",\n    \"start\": \"next start\",\n    \"typecheck\": \"tsc --noEmit\"\n  },\n  \"dependencies\": {\n    \"@base-ui/react\": \"1.9.0\",\n    \"@shadcn/react\": \"0.3.1\",\n    \"class-variance-authority\": \"0.7.1\",\n    \"clsx\": \"2.1.1\",\n    \"cmdk\": \"1.1.1\",\n    \"date-fns\": \"4.4.0\",\n    \"embla-carousel-react\": \"8.6.0\",\n    \"input-otp\": \"1.5.0\",\n    \"lucide-react\": \"1.55.0\",\n    \"maplibre-gl\": \"5.24.0\",\n    \"next\": \"16.2.12\",\n    \"next-themes\": \"0.4.6\",\n    \"radix-ui\": \"1.7.0\",\n    \"react\": \"19.2.8\",\n    \"react-day-picker\": \"10.0.2\",\n    \"react-dom\": \"19.2.8\",\n    \"react-hook-form\": \"7.89.0\",\n    \"react-map-gl\": \"8.1.3\",\n    \"react-resizable-panels\": \"4.14.4\",\n    \"recharts\": \"3.10.1\",\n    \"sonner\": \"2.0.8\",\n    \"tailwind-merge\": \"3.7.0\",\n    \"vaul\": \"1.1.2\"\n  },\n  \"devDependencies\": {\n    \"@tailwindcss/postcss\": \"4.3.3\",\n    \"@types/node\": \"22.20.5\",\n    \"@types/react\": \"19.2.17\",\n    \"@types/react-dom\": \"19.2.3\",\n    \"tailwindcss\": \"4.3.3\",\n    \"tw-animate-css\": \"1.4.0\",\n    \"typescript\": \"6.0.3\"\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_018P258WTmtEHXQjgJ6G19G7",
+          "content": "{\n  \"compilerOptions\": {\n    \"target\": \"ES2017\",\n    \"lib\": [\n      \"dom\",\n      \"dom.iterable\",\n      \"esnext\"\n    ],\n    \"allowJs\": false,\n    \"skipLibCheck\": true,\n    \"strict\": true,\n    \"noEmit\": true,\n    \"esModuleInterop\": true,\n    \"module\": \"esnext\",\n    \"moduleResolution\": \"bundler\",\n    \"resolveJsonModule\": true,\n    \"isolatedModules\": true,\n    \"jsx\": \"react-jsx\",\n    \"incremental\": false,\n    \"plugins\": [\n      {\n        \"name\": \"next\"\n      }\n    ],\n    \"paths\": {\n      \"@/*\": [\n        \"./*\"\n      ]\n    }\n  },\n  \"include\": [\n    \"next-env.d.ts\",\n    \"**/*.ts\",\n    \"**/*.tsx\",\n    \".next/types/**/*.ts\",\n    \".next/dev/types/**/*.ts\"\n  ],\n  \"exclude\": [\n    \"node_modules\",\n    \"docs-context\"\n  ]\n}\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "The project has `@base-ui/react` and `radix-ui`, so I'll check which flavour the components are, along with the layout and the existing page."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01RD7SCY2g3aunVLZwZTf7hZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/layout.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01XJB7jDUgm1oUiDe2gTD3NQ",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/page.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BQfz1oZYx49U8cPSkf5Cee",
+          "name": "read_file",
+          "input": {
+            "path": "project/app/globals.css"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Fzb4m6Voca2gQ3i3KPoWbw",
+          "name": "list_dir",
+          "input": {
+            "path": "project/components/ui"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Ru6mosJmR5KsLRY4JnHP2M",
+          "name": "read_file",
+          "input": {
+            "path": "project/next.config.mjs"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01RD7SCY2g3aunVLZwZTf7hZ",
+          "content": "import \"./globals.css\";\n\nimport type { Metadata } from \"next\";\nimport { Toaster } from \"@/components/ui/sonner\";\n\nexport const metadata: Metadata = { title: \"Benchmark\" };\n\nexport default function RootLayout({ children }: { children: React.ReactNode }) {\n  return (\n    <html lang=\"en\" suppressHydrationWarning>\n      <body className=\"font-sans antialiased\">\n        {children}\n        <Toaster />\n      </body>\n    </html>\n  );\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01XJB7jDUgm1oUiDe2gTD3NQ",
+          "content": "// Placeholder — the runner overwrites this file with the generated page.\nexport default function Page() {\n  return null;\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BQfz1oZYx49U8cPSkf5Cee",
+          "content": "@import \"tailwindcss\";\n@import \"tw-animate-css\";\n\n@custom-variant dark (&:is(.dark *));\n\n@theme inline {\n  --radius-sm: calc(var(--radius) * 0.6);\n  --radius-md: calc(var(--radius) * 0.8);\n  --radius-lg: var(--radius);\n  --radius-xl: calc(var(--radius) * 1.4);\n  --radius-2xl: calc(var(--radius) * 1.8);\n  --radius-3xl: calc(var(--radius) * 2.2);\n  --radius-4xl: calc(var(--radius) * 2.6);\n  --color-background: var(--background);\n  --color-foreground: var(--foreground);\n  --color-card: var(--card);\n  --color-card-foreground: var(--card-foreground);\n  --color-popover: var(--popover);\n  --color-popover-foreground: var(--popover-foreground);\n  --color-primary: var(--primary);\n  --color-primary-foreground: var(--primary-foreground);\n  --color-secondary: var(--secondary);\n  --color-secondary-foreground: var(--secondary-foreground);\n  --color-muted: var(--muted);\n  --color-muted-foreground: var(--muted-foreground);\n  --color-accent: var(--accent);\n  --color-accent-foreground: var(--accent-foreground);\n  --color-destructive: var(--destructive);\n  --color-border: var(--border);\n  --color-input: var(--input);\n  --color-ring: var(--ring);\n  --color-chart-1: var(--chart-1);\n  --color-chart-2: var(--chart-2);\n  --color-chart-3: var(--chart-3);\n  --color-chart-4: var(--chart-4);\n  --color-chart-5: var(--chart-5);\n  --color-sidebar: var(--sidebar);\n  --color-sidebar-foreground: var(--sidebar-foreground);\n  --color-sidebar-primary: var(--sidebar-primary);\n  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);\n  --color-sidebar-accent: var(--sidebar-accent);\n  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);\n  --color-sidebar-border: var(--sidebar-border);\n  --color-sidebar-ring: var(--sidebar-ring);\n}\n\n:root {\n  --radius: 0.625rem;\n  --background: oklch(1 0 0);\n  --foreground: oklch(0.145 0 0);\n  --card: oklch(1 0 0);\n  --card-foreground: oklch(0.145 0 0);\n  --popover: oklch(1 0 0);\n  --popover-foreground: oklch(0.145 0 0);\n  --primary: oklch(0.205 0 0);\n  --primary-foreground: oklch(0.985 0 0);\n  --secondary: oklch(0.97 0 0);\n  --secondary-foreground: oklch(0.205 0 0);\n  --muted: oklch(0.97 0 0);\n  --muted-foreground: oklch(0.556 0 0);\n  --accent: oklch(0.97 0 0);\n  --accent-foreground: oklch(0.205 0 0);\n  --destructive: oklch(0.577 0.245 27.325);\n  --border: oklch(0.922 0 0);\n  --input: oklch(0.922 0 0);\n  --ring: oklch(0.708 0 0);\n  --chart-1: oklch(0.646 0.222 41.116);\n  --chart-2: oklch(0.6 0.118 184.704);\n  --chart-3: oklch(0.398 0.07 227.392);\n  --chart-4: oklch(0.828 0.189 84.429);\n  --chart-5: oklch(0.769 0.188 70.08);\n  --sidebar: oklch(0.985 0 0);\n  --sidebar-foreground: oklch(0.145 0 0);\n  --sidebar-primary: oklch(0.205 0 0);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.97 0 0);\n  --sidebar-accent-foreground: oklch(0.205 0 0);\n  --sidebar-border: oklch(0.922 0 0);\n  --sidebar-ring: oklch(0.708 0 0);\n}\n\n.dark {\n  --background: oklch(0.145 0 0);\n  --foreground: oklch(0.985 0 0);\n  --card: oklch(0.205 0 0);\n  --card-foreground: oklch(0.985 0 0);\n  --popover: oklch(0.205 0 0);\n  --popover-foreground: oklch(0.985 0 0);\n  --primary: oklch(0.922 0 0);\n  --primary-foreground: oklch(0.205 0 0);\n  --secondary: oklch(0.269 0 0);\n  --secondary-foreground: oklch(0.985 0 0);\n  --muted: oklch(0.269 0 0);\n  --muted-foreground: oklch(0.708 0 0);\n  --accent: oklch(0.269 0 0);\n  --accent-foreground: oklch(0.985 0 0);\n  --destructive: oklch(0.704 0.191 22.216);\n  --border: oklch(1 0 0 / 10%);\n  --input: oklch(1 0 0 / 15%);\n  --ring: oklch(0.556 0 0);\n  --chart-1: oklch(0.488 0.243 264.376);\n  --chart-2: oklch(0.696 0.17 162.48);\n  --chart-3: oklch(0.769 0.188 70.08);\n  --chart-4: oklch(0.627 0.265 303.9);\n  --chart-5: oklch(0.645 0.246 16.439);\n  --sidebar: oklch(0.205 0 0);\n  --sidebar-foreground: oklch(0.985 0 0);\n  --sidebar-primary: oklch(0.488 0.243 264.376);\n  --sidebar-primary-foreground: oklch(0.985 0 0);\n  --sidebar-accent: oklch(0.269 0 0);\n  --sidebar-accent-foreground: oklch(0.985 0 0);\n  --sidebar-border: oklch(1 0 0 / 10%);\n  --sidebar-ring: oklch(0.556 0 0);\n}\n\n@layer base {\n  * {\n    @apply border-border outline-ring/50;\n  }\n  body {\n    @apply bg-background text-foreground;\n  }\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Fzb4m6Voca2gQ3i3KPoWbw",
+          "content": "accordion.tsx\nalert-dialog.tsx\nalert.tsx\naspect-ratio.tsx\nattachment.tsx\navatar.tsx\nbadge.tsx\nbreadcrumb.tsx\nbubble.tsx\nbutton-group.tsx\nbutton.tsx\ncalendar.tsx\ncard.tsx\ncarousel.tsx\nchart.tsx\ncheckbox.tsx\ncollapsible.tsx\ncombobox.tsx\ncommand.tsx\ncontext-menu.tsx\ndialog.tsx\ndirection.tsx\ndrawer.tsx\ndropdown-menu.tsx\nempty.tsx\nfield.tsx\nform.tsx\nhover-card.tsx\ninput-group.tsx\ninput-otp.tsx\ninput.tsx\nitem.tsx\nkbd.tsx\nlabel.tsx\nmarker.tsx\nmenubar.tsx\nmessage-scroller.tsx\nmessage.tsx\nnative-select.tsx\nnavigation-menu.tsx\npagination.tsx\npopover.tsx\nprogress.tsx\nradio-group.tsx\nresizable.tsx\nscroll-area.tsx\nselect.tsx\nseparator.tsx\nsheet.tsx\nsidebar.tsx\nskeleton.tsx\nslider.tsx\nsonner.tsx\nspinner.tsx\nswitch.tsx\ntable.tsx\ntabs.tsx\ntextarea.tsx\ntoggle-group.tsx\ntoggle.tsx\ntooltip.tsx",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Ru6mosJmR5KsLRY4JnHP2M",
+          "content": "/** @type {import('next').NextConfig} */\nconst nextConfig = {\n  // Identical across arms. Telemetry/lint are disabled via env in the runner.\n  reactStrictMode: true,\n};\n\nexport default nextConfig;\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll read the components I plan to use, to get their exact APIs."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Gp1fvV5BVJBpfm7JEPUB8G",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/select.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_016MTd8WtoLbgAkctqaFo6ti",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/button.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01BVvd28Rb2R9N2R2a1rz4xj",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/badge.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01LWFmAh329oqpv5srBFuGfM",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/field.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Rsopwvv7T7ECwP8FQEdbR3",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01MiDqi87VpqZY2N8ygTJ43m",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/marker.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Gp1fvV5BVJBpfm7JEPUB8G",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { CheckIcon, ChevronDownIcon, ChevronUpIcon } from \"lucide-react\"\nimport { Select as SelectPrimitive } from \"radix-ui\"\n\nfunction Select({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Root>) {\n  return <SelectPrimitive.Root data-slot=\"select\" {...props} />\n}\n\nfunction SelectGroup({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Group>) {\n  return <SelectPrimitive.Group data-slot=\"select-group\" {...props} />\n}\n\nfunction SelectValue({\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Value>) {\n  return <SelectPrimitive.Value data-slot=\"select-value\" {...props} />\n}\n\nfunction SelectTrigger({\n  className,\n  size = \"default\",\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Trigger> & {\n  size?: \"sm\" | \"default\"\n}) {\n  return (\n    <SelectPrimitive.Trigger\n      data-slot=\"select-trigger\"\n      data-size={size}\n      className={cn(\n        \"flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[placeholder]:text-muted-foreground data-[size=default]:h-9 data-[size=sm]:h-8 *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 dark:bg-input/30 dark:hover:bg-input/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n      <SelectPrimitive.Icon asChild>\n        <ChevronDownIcon className=\"size-4 opacity-50\" />\n      </SelectPrimitive.Icon>\n    </SelectPrimitive.Trigger>\n  )\n}\n\nfunction SelectContent({\n  className,\n  children,\n  position = \"item-aligned\",\n  align = \"center\",\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Content>) {\n  return (\n    <SelectPrimitive.Portal>\n      <SelectPrimitive.Content\n        data-slot=\"select-content\"\n        className={cn(\n          \"relative z-50 max-h-(--radix-select-content-available-height) min-w-[8rem] origin-(--radix-select-content-transform-origin) overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-md data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95\",\n          position === \"popper\" &&\n            \"data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1\",\n          className\n        )}\n        position={position}\n        align={align}\n        {...props}\n      >\n        <SelectScrollUpButton />\n        <SelectPrimitive.Viewport\n          className={cn(\n            \"p-1\",\n            position === \"popper\" &&\n              \"h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1\"\n          )}\n        >\n          {children}\n        </SelectPrimitive.Viewport>\n        <SelectScrollDownButton />\n      </SelectPrimitive.Content>\n    </SelectPrimitive.Portal>\n  )\n}\n\nfunction SelectLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Label>) {\n  return (\n    <SelectPrimitive.Label\n      data-slot=\"select-label\"\n      className={cn(\"px-2 py-1.5 text-xs text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectItem({\n  className,\n  children,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Item>) {\n  return (\n    <SelectPrimitive.Item\n      data-slot=\"select-item\"\n      className={cn(\n        \"relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 [&_svg:not([class*='text-'])]:text-muted-foreground *:[span]:last:flex *:[span]:last:items-center *:[span]:last:gap-2\",\n        className\n      )}\n      {...props}\n    >\n      <span\n        data-slot=\"select-item-indicator\"\n        className=\"absolute right-2 flex size-3.5 items-center justify-center\"\n      >\n        <SelectPrimitive.ItemIndicator>\n          <CheckIcon className=\"size-4\" />\n        </SelectPrimitive.ItemIndicator>\n      </span>\n      <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>\n    </SelectPrimitive.Item>\n  )\n}\n\nfunction SelectSeparator({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.Separator>) {\n  return (\n    <SelectPrimitive.Separator\n      data-slot=\"select-separator\"\n      className={cn(\"pointer-events-none -mx-1 my-1 h-px bg-border\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction SelectScrollUpButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollUpButton>) {\n  return (\n    <SelectPrimitive.ScrollUpButton\n      data-slot=\"select-scroll-up-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronUpIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollUpButton>\n  )\n}\n\nfunction SelectScrollDownButton({\n  className,\n  ...props\n}: React.ComponentProps<typeof SelectPrimitive.ScrollDownButton>) {\n  return (\n    <SelectPrimitive.ScrollDownButton\n      data-slot=\"select-scroll-down-button\"\n      className={cn(\n        \"flex cursor-default items-center justify-center py-1\",\n        className\n      )}\n      {...props}\n    >\n      <ChevronDownIcon className=\"size-4\" />\n    </SelectPrimitive.ScrollDownButton>\n  )\n}\n\nexport {\n  Select,\n  SelectContent,\n  SelectGroup,\n  SelectItem,\n  SelectLabel,\n  SelectScrollDownButton,\n  SelectScrollUpButton,\n  SelectSeparator,\n  SelectTrigger,\n  SelectValue,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_016MTd8WtoLbgAkctqaFo6ti",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst buttonVariants = cva(\n  \"inline-flex shrink-0 items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-all outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground hover:bg-primary/90\",\n        destructive:\n          \"bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40\",\n        outline:\n          \"border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50\",\n        secondary:\n          \"bg-secondary text-secondary-foreground hover:bg-secondary/80\",\n        ghost:\n          \"hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50\",\n        link: \"text-primary underline-offset-4 hover:underline\",\n      },\n      size: {\n        default: \"h-9 px-4 py-2 has-[>svg]:px-3\",\n        xs: \"h-6 gap-1 rounded-md px-2 text-xs has-[>svg]:px-1.5 [&_svg:not([class*='size-'])]:size-3\",\n        sm: \"h-8 gap-1.5 rounded-md px-3 has-[>svg]:px-2.5\",\n        lg: \"h-10 rounded-md px-6 has-[>svg]:px-4\",\n        icon: \"size-9\",\n        \"icon-xs\": \"size-6 rounded-md [&_svg:not([class*='size-'])]:size-3\",\n        \"icon-sm\": \"size-8\",\n        \"icon-lg\": \"size-10\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Button({\n  className,\n  variant = \"default\",\n  size = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"button\"> &\n  VariantProps<typeof buttonVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"button\"\n\n  return (\n    <Comp\n      data-slot=\"button\"\n      data-variant={variant}\n      data-size={size}\n      className={cn(buttonVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Button, buttonVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01BVvd28Rb2R9N2R2a1rz4xj",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border border-transparent px-2 py-0.5 text-xs font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-primary text-primary-foreground [a&]:hover:bg-primary/90\",\n        secondary:\n          \"bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90\",\n        destructive:\n          \"bg-destructive text-white focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40 [a&]:hover:bg-destructive/90\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost: \"[a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        link: \"text-primary underline-offset-4 [a&]:hover:underline\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01LWFmAh329oqpv5srBFuGfM",
+          "content": "\"use client\"\n\nimport { useMemo } from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\n\nimport { Label } from \"@/components/ui/label\"\nimport { Separator } from \"@/components/ui/separator\"\n\nfunction FieldSet({ className, ...props }: React.ComponentProps<\"fieldset\">) {\n  return (\n    <fieldset\n      data-slot=\"field-set\"\n      className={cn(\n        \"flex flex-col gap-6\",\n        \"has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=radio-group]]:gap-3\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLegend({\n  className,\n  variant = \"legend\",\n  ...props\n}: React.ComponentProps<\"legend\"> & { variant?: \"legend\" | \"label\" }) {\n  return (\n    <legend\n      data-slot=\"field-legend\"\n      data-variant={variant}\n      className={cn(\n        \"mb-3 font-medium\",\n        \"data-[variant=legend]:text-base\",\n        \"data-[variant=label]:text-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldGroup({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-group\"\n      className={cn(\n        \"group/field-group @container/field-group flex w-full flex-col gap-7 data-[slot=checkbox-group]:gap-3 [&>[data-slot=field-group]]:gap-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst fieldVariants = cva(\n  \"group/field flex w-full gap-3 data-[invalid=true]:text-destructive\",\n  {\n    variants: {\n      orientation: {\n        vertical: [\"flex-col [&>*]:w-full [&>.sr-only]:w-auto\"],\n        horizontal: [\n          \"flex-row items-center\",\n          \"[&>[data-slot=field-label]]:flex-auto\",\n          \"has-[>[data-slot=field-content]]:items-start has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n        responsive: [\n          \"flex-col @md/field-group:flex-row @md/field-group:items-center [&>*]:w-full @md/field-group:[&>*]:w-auto [&>.sr-only]:w-auto\",\n          \"@md/field-group:[&>[data-slot=field-label]]:flex-auto\",\n          \"@md/field-group:has-[>[data-slot=field-content]]:items-start @md/field-group:has-[>[data-slot=field-content]]:[&>[role=checkbox],[role=radio]]:mt-px\",\n        ],\n      },\n    },\n    defaultVariants: {\n      orientation: \"vertical\",\n    },\n  }\n)\n\nfunction Field({\n  className,\n  orientation = \"vertical\",\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof fieldVariants>) {\n  return (\n    <div\n      role=\"group\"\n      data-slot=\"field\"\n      data-orientation={orientation}\n      className={cn(fieldVariants({ orientation }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction FieldContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-content\"\n      className={cn(\n        \"group/field-content flex flex-1 flex-col gap-1.5 leading-snug\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldLabel({\n  className,\n  ...props\n}: React.ComponentProps<typeof Label>) {\n  return (\n    <Label\n      data-slot=\"field-label\"\n      className={cn(\n        \"group/field-label peer/field-label flex w-fit gap-2 leading-snug group-data-[disabled=true]/field:opacity-50\",\n        \"has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col has-[>[data-slot=field]]:rounded-md has-[>[data-slot=field]]:border [&>*]:data-[slot=field]:p-4\",\n        \"has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5 dark:has-data-[state=checked]:bg-primary/10\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"field-label\"\n      className={cn(\n        \"flex w-fit items-center gap-2 text-sm leading-snug font-medium group-data-[disabled=true]/field:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldDescription({ className, ...props }: React.ComponentProps<\"p\">) {\n  return (\n    <p\n      data-slot=\"field-description\"\n      className={cn(\n        \"text-sm leading-normal font-normal text-muted-foreground group-has-[[data-orientation=horizontal]]/field:text-balance\",\n        \"last:mt-0 nth-last-2:-mt-1 [[data-variant=legend]+&]:-mt-1.5\",\n        \"[&>a]:underline [&>a]:underline-offset-4 [&>a:hover]:text-primary\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction FieldSeparator({\n  children,\n  className,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  children?: React.ReactNode\n}) {\n  return (\n    <div\n      data-slot=\"field-separator\"\n      data-content={!!children}\n      className={cn(\n        \"relative -my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2\",\n        className\n      )}\n      {...props}\n    >\n      <Separator className=\"absolute inset-0 top-1/2\" />\n      {children && (\n        <span\n          className=\"relative mx-auto block w-fit bg-background px-2 text-muted-foreground\"\n          data-slot=\"field-separator-content\"\n        >\n          {children}\n        </span>\n      )}\n    </div>\n  )\n}\n\nfunction FieldError({\n  className,\n  children,\n  errors,\n  ...props\n}: React.ComponentProps<\"div\"> & {\n  errors?: Array<{ message?: string } | undefined>\n}) {\n  const content = useMemo(() => {\n    if (children) {\n      return children\n    }\n\n    if (!errors?.length) {\n      return null\n    }\n\n    const uniqueErrors = [\n      ...new Map(errors.map((error) => [error?.message, error])).values(),\n    ]\n\n    if (uniqueErrors?.length == 1) {\n      return uniqueErrors[0]?.message\n    }\n\n    return (\n      <ul className=\"ml-4 flex list-disc flex-col gap-1\">\n        {uniqueErrors.map(\n          (error, index) =>\n            error?.message && <li key={index}>{error.message}</li>\n        )}\n      </ul>\n    )\n  }, [children, errors])\n\n  if (!content) {\n    return null\n  }\n\n  return (\n    <div\n      role=\"alert\"\n      data-slot=\"field-error\"\n      className={cn(\"text-sm font-normal text-destructive\", className)}\n      {...props}\n    >\n      {content}\n    </div>\n  )\n}\n\nexport {\n  Field,\n  FieldLabel,\n  FieldDescription,\n  FieldError,\n  FieldGroup,\n  FieldLegend,\n  FieldSeparator,\n  FieldSet,\n  FieldContent,\n  FieldTitle,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Rsopwvv7T7ECwP8FQEdbR3",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Toggle as TogglePrimitive } from \"radix-ui\"\n\nconst toggleVariants = cva(\n  \"inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium whitespace-nowrap transition-[color,box-shadow] outline-none hover:bg-muted hover:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-transparent\",\n        outline:\n          \"border border-input bg-transparent shadow-xs hover:bg-accent hover:text-accent-foreground\",\n      },\n      size: {\n        default: \"h-9 min-w-9 px-2\",\n        sm: \"h-8 min-w-8 px-1.5\",\n        lg: \"h-10 min-w-10 px-2.5\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n      size: \"default\",\n    },\n  }\n)\n\nfunction Toggle({\n  className,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof TogglePrimitive.Root> &\n  VariantProps<typeof toggleVariants>) {\n  return (\n    <TogglePrimitive.Root\n      data-slot=\"toggle\"\n      className={cn(toggleVariants({ variant, size, className }))}\n      {...props}\n    />\n  )\n}\n\nexport { Toggle, toggleVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01MiDqi87VpqZY2N8ygTJ43m",
+          "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Slot } from \"radix-ui\"\n\nconst markerVariants = cva(\n  \"group/marker relative flex min-h-4 w-full items-center gap-2 text-left text-sm text-muted-foreground [&_svg:not([class*='size-'])]:size-4 [a]:underline [a]:underline-offset-3 [a]:hover:text-foreground\",\n  {\n    variants: {\n      variant: {\n        default: \"\",\n        separator:\n          \"before:mr-1 before:h-px before:min-w-0 before:flex-1 before:bg-border after:ml-1 after:h-px after:min-w-0 after:flex-1 after:bg-border\",\n        border: \"border-b border-border pb-2\",\n      },\n    },\n  }\n)\n\nfunction Marker({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"div\"> &\n  VariantProps<typeof markerVariants> & {\n    asChild?: boolean\n  }) {\n  const Comp = asChild ? Slot.Root : \"div\"\n\n  return (\n    <Comp\n      data-slot=\"marker\"\n      data-variant={variant}\n      className={cn(markerVariants({ variant, className }))}\n      {...props}\n    />\n  )\n}\n\nfunction MarkerIcon({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"marker-icon\"\n      aria-hidden=\"true\"\n      className={cn(\n        \"size-4 shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction MarkerContent({ className, ...props }: React.ComponentProps<\"span\">) {\n  return (\n    <span\n      data-slot=\"marker-content\"\n      className={cn(\n        \"min-w-0 wrap-break-word group-data-[variant=separator]/marker:flex-none group-data-[variant=separator]/marker:text-center *:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Marker, MarkerIcon, MarkerContent, markerVariants }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "Marker is not a map marker, so I'll build my own. Let me check the Input, Textarea, Label, Slider, Tabs and Card files."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01HSf7s9XLRKJNB8knrbUScG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/input.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01JG9CrYQAdguqu5cskSzZAm",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/textarea.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01WzypVDFnmto8yArqTLuMHZ",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/card.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01GWc6RGgnEhfh6wL5YAxsRx",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/label.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01N6xD5PmS5w4naPgaDYc3VY",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/toggle-group.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01HSf7s9XLRKJNB8knrbUScG",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Input({ className, type, ...props }: React.ComponentProps<\"input\">) {\n  return (\n    <input\n      type={type}\n      data-slot=\"input\"\n      className={cn(\n        \"h-9 w-full min-w-0 rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none selection:bg-primary selection:text-primary-foreground file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:bg-input/30\",\n        \"focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50\",\n        \"aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Input }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01JG9CrYQAdguqu5cskSzZAm",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Textarea({ className, ...props }: React.ComponentProps<\"textarea\">) {\n  return (\n    <textarea\n      data-slot=\"textarea\"\n      className={cn(\n        \"flex field-sizing-content min-h-16 w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-xs transition-[color,box-shadow] outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 md:text-sm dark:bg-input/30 dark:aria-invalid:ring-destructive/40\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Textarea }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01WzypVDFnmto8yArqTLuMHZ",
+          "content": "import * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\n\nfunction Card({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card\"\n      className={cn(\n        \"flex flex-col gap-6 rounded-xl border bg-card py-6 text-card-foreground shadow-sm\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardHeader({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-header\"\n      className={cn(\n        \"@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-title\"\n      className={cn(\"leading-none font-semibold\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardDescription({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-description\"\n      className={cn(\"text-sm text-muted-foreground\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardAction({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-action\"\n      className={cn(\n        \"col-start-2 row-span-2 row-start-1 self-start justify-self-end\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction CardContent({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-content\"\n      className={cn(\"px-6\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction CardFooter({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"card-footer\"\n      className={cn(\"flex items-center px-6 [.border-t]:pt-6\", className)}\n      {...props}\n    />\n  )\n}\n\nexport {\n  Card,\n  CardHeader,\n  CardFooter,\n  CardTitle,\n  CardAction,\n  CardDescription,\n  CardContent,\n}\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01GWc6RGgnEhfh6wL5YAxsRx",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Label as LabelPrimitive } from \"radix-ui\"\n\nfunction Label({\n  className,\n  ...props\n}: React.ComponentProps<typeof LabelPrimitive.Root>) {\n  return (\n    <LabelPrimitive.Root\n      data-slot=\"label\"\n      className={cn(\n        \"flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Label }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01N6xD5PmS5w4naPgaDYc3VY",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { ToggleGroup as ToggleGroupPrimitive } from \"radix-ui\"\n\nimport { toggleVariants } from \"@/components/ui/toggle\"\n\nconst ToggleGroupContext = React.createContext<\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }\n>({\n  size: \"default\",\n  variant: \"default\",\n  spacing: 0,\n})\n\nfunction ToggleGroup({\n  className,\n  variant,\n  size,\n  spacing = 0,\n  children,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Root> &\n  VariantProps<typeof toggleVariants> & {\n    spacing?: number\n  }) {\n  return (\n    <ToggleGroupPrimitive.Root\n      data-slot=\"toggle-group\"\n      data-variant={variant}\n      data-size={size}\n      data-spacing={spacing}\n      style={{ \"--gap\": spacing } as React.CSSProperties}\n      className={cn(\n        \"group/toggle-group flex w-fit items-center gap-[--spacing(var(--gap))] rounded-md data-[spacing=default]:data-[variant=outline]:shadow-xs\",\n        className\n      )}\n      {...props}\n    >\n      <ToggleGroupContext.Provider value={{ variant, size, spacing }}>\n        {children}\n      </ToggleGroupContext.Provider>\n    </ToggleGroupPrimitive.Root>\n  )\n}\n\nfunction ToggleGroupItem({\n  className,\n  children,\n  variant,\n  size,\n  ...props\n}: React.ComponentProps<typeof ToggleGroupPrimitive.Item> &\n  VariantProps<typeof toggleVariants>) {\n  const context = React.useContext(ToggleGroupContext)\n\n  return (\n    <ToggleGroupPrimitive.Item\n      data-slot=\"toggle-group-item\"\n      data-variant={context.variant || variant}\n      data-size={context.size || size}\n      data-spacing={context.spacing}\n      className={cn(\n        toggleVariants({\n          variant: context.variant || variant,\n          size: context.size || size,\n        }),\n        \"w-auto min-w-0 shrink-0 px-3 focus:z-10 focus-visible:z-10\",\n        \"data-[spacing=0]:rounded-none data-[spacing=0]:shadow-none data-[spacing=0]:first:rounded-l-md data-[spacing=0]:last:rounded-r-md data-[spacing=0]:data-[variant=outline]:border-l-0 data-[spacing=0]:data-[variant=outline]:first:border-l\",\n        className\n      )}\n      {...props}\n    >\n      {children}\n    </ToggleGroupPrimitive.Item>\n  )\n}\n\nexport { ToggleGroup, ToggleGroupItem }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I'm setting up the data helpers and the components for the homes search, with the map loaded client-side only; I'll start with the data file.\n\n",
+          "signature": "CAQS4Q4KEQgTGAI4AUIJbmFycmF0aW9uEgx69Z6/Qb3K1ID8tKcaDOjySi6Yg1ALGjSxyCIwlHiSLO37aat6vLXMT5HAizm0fNPOoBQkkEg8bGpxnDG92ESM0mp1QNOt5V5eNwROKv0NmvLIaZOz+qEbkR89ONcuvE7AM98Oi6xUN1WmjLFWe24kQdBrFxpJ4TbEdJ6yvlOctwbhhuVCTjnA+QfJZKEarDDbUrNY8VZ1+d1Nm8TbN50nlkr1r6bfBL2ZupWnOjauz7j0GtCUkptI2XkoYU+WmOBWnNEsivFmWXFdeZE1rG1K8Tta51l6VeImWLHtFLADBcRBPPN35ni+r68F6s11TKKXWuPFW5Fdq/gsAo9rH6bpSZW99Wehp8pzSdoyheOIoJyequZoACxGXiGmG2BI+zSlRgYt3+z93xSefpP1w1QNRPRf9t/t/6+7E51ryfsMm1loeCgnXkSA31kGCvJx9uP31Hq+b3c5oVzU1eXA7Q7sSKTft362fmS9K1/lkPBdjcfUY75ucLeVq1vF60yCYPOSGXJg4TvgwT6NV+yYmyH0N98Txvzggv9bBuebIJqmuyVfJNignkjOBZcaFtkRdfyWnU2nOX93keMXz7yyFq+YG8UqLcqLmbXG9HjlQZpAKVRlriOzygMAjnx1TXkKjOhleIui7mAXxnjLVwJGMvmv8JjcMkZG9DgZVQtaiYqNnXHMI6p+iUneBXVqSRaFaDcQNgnqcZ+NnH6ejoBsfp+ERQDMz4j6Ee5BS+ccMfiAynCNbMe6PStt0KJACTHW6WhYtLSWjJ6xoFR9nveKWgb9oGj4THvowMX2fY8FAwfNmjSnkzcrM0zabQh+O+jli2AIYrMU4+ne1E2ICsaMfyvHlnVEaFng0izTDTbReimxH/xBNWqVy/egyMUBFEcqdqpQ2pvUfHJeFQMtidM+4CfAYqevJb0zVrxxW9feWMublcJmf+t6xkwYutt9OxqLg0d9Q6ZGSXcFljt2iVpxpsGfj2T3KeDwtOg45IayG3OkpopK7T+jftDH2C/B/noucGT1XFkefwZnMXo5lgcV9hpBK/RnjgJffPYjrcAN16qituQdg9XW98xkUt2l7SrjOlKj1DJgqdXaa6w9zZ+m62NsrF+i9xDLkth10hFVENXBwCreoGzxP8Q4VvWhlyIhpdkwg4aDhfq9Cq8toAmcX08oSEx9GjXmFE5Kv+2Vbc712YGXLsD/XTTYRgl8tBqiE3tGj6U2khSO7tOPmQ1rYE0JshiHty6PVSoABHJu6xATJep7qO/fHrVVzuCdWjbmZuf7x3OzblePeOCdw3c1dL4mTgVRv1RUHwvWhRhYW7zVWWUAlXabGFl3dormwFQf/ZPCCYkh8n6NLwd/uHmesXMOd01UNRcrsZoWNdcWWkZNaiApCmMO9/5uHSz6kRzdvo/eYE/JlPLn7V0JG/GLsnyqZpuaKdI9LfRugJFQydHgaekRt9NPH2UpseQgOtXvvlV1m6b/78DfT9wmK4ra+kVqbLwa0WJlMopsTqKvcWrE0kCmroIMr/jeXNggH5Ww1ByCQFYtA9EKS6vWJqRKEpRFkU0MJ0Kf0No5cdj5jCV1ZVi/C2fPDPryE1kUapMsXFTXX2miyEo1mQmPoBi5wM14Km0SxfV8cOZMV9Ns50i6Z8Q66yrwpE+ivn+YAPROdCJNGW1SexUAR7r27ogFEegUoqSAqJDDd6Qb+rOjKiJVhq6qTEaRR47msg7EEho3dQu1G/kmxIj9EeKnYX8YE+EG22kY89LovdFqa0qCQ1+OOvK2hk5E02Mkz3zOoNUOv93g1C9+iDEPzy3elROneZq2wE9B8HuMObzhKNUlCGiy1JrwSqaQoQJ9VQNwGc/r7EitNU9snBOfatZgQgpe2+KNYsqmbn+8tfaNYxWLuKqBRfvaUjpH/VS4Vs6xdMTchEqzu1QAZGO6+dtDkwgPdj3ey0A3cZ9FYHNzWG0jZIhKO+HOG/wsKXWOYF61w/dlI44xNWbMxX5Rgr82RBpXXfzpuaQL1dMwQj+pPd1+ZSwJWvOM/2Ni/46zhZzYNKhywtkuW9JXNv1tXolm27hpF8QyZ9k0iE9Qi2BD5m1Cv7qDvaUPTSPHSpo4QRMlNMPWnp/3OP+toIWQdXcbM0MuHs5Wo/jQGPporRbEyWedtG8/DpiDmo1dXKN54rG0Y07rZIEZxdXX0lNpXjCTHTChtLDpW0/34dQzTKik8wjCGg83A0cQzybMgpyBVkSYbU8I+s7Jfb40J7E2DbgKi3tOoZOxIWDkWU8AdfhmnKE3IGokGalpHVVtnGi7OqFlxyJ9h3ZdDL5e1sBCC18YqyHTzJlza7IuNfpBilhUNTVmI/aXWTXjUb4SO3ziJcAOn35XWAYIvOf6j8Yr7omNq+1NBoI5zyUYCM2d95UyjkuvZnAv/pcoHieg52HZhyO87whlvKesPXZJ+eIRG8Tu/jENc8jGQBo91yz8lMV0TsdDFye6wOJ9OSrae9XL1CruzhgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01D9ntUT9Xkpgjh67aHyCJHk",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/slider.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_017grbMcV8K4NbRgJxRiSmh8",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/tabs.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_0138kKREHCwzsT31dmUdxyjG",
+          "name": "read_file",
+          "input": {
+            "path": "project/components/ui/sonner.tsx"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01D9ntUT9Xkpgjh67aHyCJHk",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cn } from \"@/lib/utils\"\nimport { Slider as SliderPrimitive } from \"radix-ui\"\n\nfunction Slider({\n  className,\n  defaultValue,\n  value,\n  min = 0,\n  max = 100,\n  ...props\n}: React.ComponentProps<typeof SliderPrimitive.Root>) {\n  const _values = React.useMemo(\n    () =>\n      Array.isArray(value)\n        ? value\n        : Array.isArray(defaultValue)\n          ? defaultValue\n          : [min, max],\n    [value, defaultValue, min, max]\n  )\n\n  return (\n    <SliderPrimitive.Root\n      data-slot=\"slider\"\n      defaultValue={defaultValue}\n      value={value}\n      min={min}\n      max={max}\n      className={cn(\n        \"relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col\",\n        className\n      )}\n      {...props}\n    >\n      <SliderPrimitive.Track\n        data-slot=\"slider-track\"\n        className={cn(\n          \"relative grow overflow-hidden rounded-full bg-muted data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5\"\n        )}\n      >\n        <SliderPrimitive.Range\n          data-slot=\"slider-range\"\n          className={cn(\n            \"absolute bg-primary data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full\"\n          )}\n        />\n      </SliderPrimitive.Track>\n      {Array.from({ length: _values.length }, (_, index) => (\n        <SliderPrimitive.Thumb\n          data-slot=\"slider-thumb\"\n          key={index}\n          className=\"block size-4 shrink-0 rounded-full border border-primary bg-white shadow-sm ring-ring/50 transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50\"\n        />\n      ))}\n    </SliderPrimitive.Root>\n  )\n}\n\nexport { Slider }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_017grbMcV8K4NbRgJxRiSmh8",
+          "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { cn } from \"@/lib/utils\"\nimport { Tabs as TabsPrimitive } from \"radix-ui\"\n\nfunction Tabs({\n  className,\n  orientation = \"horizontal\",\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.Root>) {\n  return (\n    <TabsPrimitive.Root\n      data-slot=\"tabs\"\n      data-orientation={orientation}\n      orientation={orientation}\n      className={cn(\n        \"group/tabs flex gap-2 data-[orientation=horizontal]:flex-col\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nconst tabsListVariants = cva(\n  \"group/tabs-list inline-flex w-fit items-center justify-center rounded-lg p-[3px] text-muted-foreground group-data-[orientation=horizontal]/tabs:h-9 group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col data-[variant=line]:rounded-none\",\n  {\n    variants: {\n      variant: {\n        default: \"bg-muted\",\n        line: \"gap-1 bg-transparent\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction TabsList({\n  className,\n  variant = \"default\",\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.List> &\n  VariantProps<typeof tabsListVariants>) {\n  return (\n    <TabsPrimitive.List\n      data-slot=\"tabs-list\"\n      data-variant={variant}\n      className={cn(tabsListVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction TabsTrigger({\n  className,\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.Trigger>) {\n  return (\n    <TabsPrimitive.Trigger\n      data-slot=\"tabs-trigger\"\n      className={cn(\n        \"relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium whitespace-nowrap text-foreground/60 transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start hover:text-foreground focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1 focus-visible:outline-ring disabled:pointer-events-none disabled:opacity-50 group-data-[variant=default]/tabs-list:data-[state=active]:shadow-sm group-data-[variant=line]/tabs-list:data-[state=active]:shadow-none dark:text-muted-foreground dark:hover:text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4\",\n        \"group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:border-transparent dark:group-data-[variant=line]/tabs-list:data-[state=active]:bg-transparent\",\n        \"data-[state=active]:bg-background data-[state=active]:text-foreground dark:data-[state=active]:border-input dark:data-[state=active]:bg-input/30 dark:data-[state=active]:text-foreground\",\n        \"after:absolute after:bg-foreground after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-[state=active]:after:opacity-100\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction TabsContent({\n  className,\n  ...props\n}: React.ComponentProps<typeof TabsPrimitive.Content>) {\n  return (\n    <TabsPrimitive.Content\n      data-slot=\"tabs-content\"\n      className={cn(\"flex-1 outline-none\", className)}\n      {...props}\n    />\n  )\n}\n\nexport { Tabs, TabsList, TabsTrigger, TabsContent, tabsListVariants }\n",
+          "is_error": false
+        },
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_0138kKREHCwzsT31dmUdxyjG",
+          "content": "\"use client\"\n\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\"\nimport { useTheme } from \"next-themes\"\nimport { Toaster as Sonner, type ToasterProps } from \"sonner\"\n\nconst Toaster = ({ ...props }: ToasterProps) => {\n  const { theme = \"system\" } = useTheme()\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      className=\"toaster group\"\n      icons={{\n        success: <CircleCheckIcon className=\"size-4\" />,\n        info: <InfoIcon className=\"size-4\" />,\n        warning: <TriangleAlertIcon className=\"size-4\" />,\n        error: <OctagonXIcon className=\"size-4\" />,\n        loading: <Loader2Icon className=\"size-4 animate-spin\" />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as React.CSSProperties\n      }\n      {...props}\n    />\n  )\n}\n\nexport { Toaster }\n",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I'll check how react-map-gl exposes its MapLibre entry point, to get the import path right."
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_015RJ6c4YMzkrHCKBdCbD8gA",
+          "name": "list_dir",
+          "input": {
+            "path": "project/node_modules/react-map-gl"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_015RJ6c4YMzkrHCKBdCbD8gA",
+          "content": "no such file or directory: project/node_modules/react-map-gl",
+          "is_error": true
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "thinking",
+          "thinking": "I can't read node_modules here, but I know react-map-gl v8's MapLibre entry point and its mapLib prop, so I'm writing the data file first.\n\n",
+          "signature": "CAQS0ggKEQgTGAI4AUIJbmFycmF0aW9uEgxVUHTlQeYkIetS/aEaDJ94ndyrgXNgiWqhOSIwxmy2u/ZoSYWLWIDWcfccUvHGDcgARcPJT/wVuSs02E/ZxcW/EMYgtQJo6HZIySxMKu4HauUXfvUyISz4lgRHUAteMnZbiIulKIZtP+uenmzR5KUr6+iF5szTeSpLHqwJN0R1cvTR901sj0/mGcLlI+iBfDzr1DnRicdcMpSxzGQRR8gAtU5MeAldEK3UEzFRDcBtMeoV5pYGoYvnrRZcvrPGReZsDHo4koHs7hJIqBctRXWbAWwBCS3/Yrwzhn1F8s79ddyQBQNl7y6duHvor584AgwSLYDtMnl9X75MvIHprrKHAh3hj4RCqyueLuy2jVf0UmxCSG2ko5IixBEhANzcygQQ7St4IRqO6mn50FnCBCLr+0ahTiHd7+OCe5Mg84fKjRGn+N5Pc3nMybyPmdY7x3LZphD1pnFeUV77drRVrB1vkTua056/dl3uJPNVl6lzc0HIngaXZQEam4dPNAFKhTZXCQ5fVVV9xeD8SQ9MI3jQ4QTdU+IOxdv8GLXPYKSGcqW4EvcHwn/b1/IzDGbbCmRUF5Qc8oHzrGTan/64+bTA8GoSnKRarRohSoQVGbE/TerW0mTYWD9/lCz4HFY2dxPZ7o7rjngVc5RpypHEZo/dzAigjcNG0vxyxInzB61e282oZVNB/J+0kkr5Le9eTpXCyvIFcKv/IvI9Z1E4yKdVtYqnSRVlegDbJwGg5Gcd4dEkW3vMFcE3Ic4Wu2CI2Pic+2K14GMsROwHeBD4v2NMwAq0jFIrlz+dLVoG7RxgktQiguVEOgHnKV6xVdZJPIHgb8g3/uKMNeJWrNjjKlzkbaDJoY9Y++/zVxhYSQMpT2LLadHbv8f20snx1KFalYSFDsURZucbZZuWNUOwzMqIGpluOy6I0wM46pR0UPtoSob6MKAY1M3sbvXAVrrxzTxzO9RaNriMps+txtZt6xXiwgJg7QI3gW6o1Z58ReWiQfATNLrIMBHGo85TiDqS36fHfBX+iO+0c84736AEX9TZnUqFouG3LLIgDy5XGzMsurWMOEim2wxt9UbXgmts/E1zkbkPWdXAbgeWIbD9bt4ss7P6fX2/NAaw+GjZRfWt3Y/G46Pqr+OZjn0mIwRsM/IIWoQ4CMkR/zbpg7wJHftcHSOFBuDcvFyTAVbXoaCAXxty1Db9R8cbMLZUvcNs11mY2dPVfGCnUHQcSK78SumFj5RFLJRNC7p6RRjx2s0aRRINkuf48/Mry1FwCy2lzv3OAQY8mcDOO57Bf/ODDgcdnFL6mCLKxF9lvZiM6MlGqYrp+mlXerIxFWMYzPQgiK3ZuF/wtvWA61+bed0+3zruHzT8vTPsn5bggfTSml8tQWGPI6ooQ8uaGEeQ3NCAjrgoJ329S3yO0lSfNRzR8UZCFZo6S62BCt7pYgSKfxgB"
+        },
+        {
+          "type": "tool_use",
+          "id": "toolu_01Q1bjFgbuBjLqiXjvMmiqJ1",
+          "name": "list_dir",
+          "input": {
+            "path": "project/hooks"
+          },
+          "caller": {
+            "type": "direct"
+          }
+        }
+      ]
+    },
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "tool_result",
+          "tool_use_id": "toolu_01Q1bjFgbuBjLqiXjvMmiqJ1",
+          "content": "use-mobile.ts",
+          "is_error": false
+        }
+      ]
+    },
+    {
+      "role": "assistant",
+      "content": [
+        {
+          "type": "text",
+          "text": "I have what I need. Writing all the files now.\n\n```ts lib/data.ts\nexport type HomeType = \"Apartment\" | \"House\" | \"Studio\";\n\nexport interface Home {\n  id: string;\n  title: string;\n  type: HomeType;\n  price: number;\n  beds: number;\n  baths: number;\n  area_m2: number;\n  district: string;\n  lat: number;\n  lng: number;\n  year: number;\n  energy: string;\n  features: string[];\n  listed: string;\n}\n\nexport const SITE = {\n  name: \"Haven\",\n  tagline: \"Haven, a home search site for one city\",\n  city: \"Lisbon\",\n  currency: \"EUR\",\n  mapStyleUrl: \"https://basemaps.cartocdn.com/gl/positron-gl-style/style.json\",\n  // [lng, lat]\n  mapCenter: [-9.1393, 38.7223] as [number, number],\n};\n\nexport const AGENT = {\n  name: \"Inês Carvalho\",\n  agency: \"Haven Homes\",\n  phone: \"+351 210 000 123\",\n  email: \"ines@havenhomes.example\",\n};\n\nexport const HOMES: Home[] = [\n  {\n    id: \"h-101\",\n    title: \"Sunlit flat with river view\",\n    type: \"Apartment\",\n    price: 485000,\n    beds: 2,\n    baths: 1,\n    area_m2: 84,\n    district: \"Alfama\",\n    lat: 38.7114,\n    lng: -9.1305,\n    year: 1962,\n    energy: \"C\",\n    features: [\"Balcony\", \"River view\", \"Renovated kitchen\"],\n    listed: \"2026-10-21\",\n  },\n  {\n    id: \"h-102\",\n    title: \"Family house with garden\",\n    type: \"House\",\n    price: 895000,\n    beds: 4,\n    baths: 3,\n    area_m2: 210,\n    district: \"Restelo\",\n    lat: 38.7037,\n    lng: -9.2129,\n    year: 1988,\n    energy: \"B\",\n    features: [\"Garden\", \"Garage\", \"Fireplace\"],\n    listed: \"2026-10-18\",\n  },\n  {\n    id: \"h-103\",\n    title: \"Compact studio near the metro\",\n    type: \"Studio\",\n    price: 219000,\n    beds: 0,\n    baths: 1,\n    area_m2: 31,\n    district: \"Arroios\",\n    lat: 38.7316,\n    lng: -9.1358,\n    year: 1975,\n    energy: \"D\",\n    features: [\"Metro 2 min\", \"Furnished\"],\n    listed: \"2026-10-29\",\n  },\n  {\n    id: \"h-104\",\n    title: \"Loft in a converted warehouse\",\n    type: \"Apartment\",\n    price: 640000,\n    beds: 2,\n    baths: 2,\n    area_m2: 120,\n    district: \"Marvila\",\n    lat: 38.7486,\n    lng: -9.1031,\n    year: 2019,\n    energy: \"A\",\n    features: [\"High ceilings\", \"Terrace\", \"Parking\"],\n    listed: \"2026-10-11\",\n  },\n  {\n    id: \"h-105\",\n    title: \"Classic flat with tiled facade\",\n    type: \"Apartment\",\n    price: 529000,\n    beds: 3,\n    baths: 2,\n    area_m2: 112,\n    district: \"Campo de Ourique\",\n    lat: 38.7181,\n    lng: -9.1662,\n    year: 1940,\n    energy: \"C\",\n    features: [\"Original tiles\", \"Lift\", \"Storage room\"],\n    listed: \"2026-10-25\",\n  },\n  {\n    id: \"h-106\",\n    title: \"Penthouse with rooftop pool\",\n    type: \"Apartment\",\n    price: 1450000,\n    beds: 3,\n    baths: 3,\n    area_m2: 168,\n    district: \"Avenidas Novas\",\n    lat: 38.7392,\n    lng: -9.1467,\n    year: 2021,\n    energy: \"A\",\n    features: [\"Rooftop pool\", \"Concierge\", \"2 parking spaces\"],\n    listed: \"2026-10-02\",\n  },\n  {\n    id: \"h-107\",\n    title: \"Townhouse on a quiet lane\",\n    type: \"House\",\n    price: 735000,\n    beds: 3,\n    baths: 2,\n    area_m2: 156,\n    district: \"Graça\",\n    lat: 38.7176,\n    lng: -9.1295,\n    year: 1910,\n    energy: \"D\",\n    features: [\"Patio\", \"Restored beams\"],\n    listed: \"2026-10-27\",\n  },\n  {\n    id: \"h-108\",\n    title: \"Two-bed flat by the park\",\n    type: \"Apartment\",\n    price: 412000,\n    beds: 2,\n    baths: 1,\n    area_m2: 78,\n    district: \"Alvalade\",\n    lat: 38.753,\n    lng: -9.1445,\n    year: 1958,\n    energy: \"C\",\n    features: [\"Park view\", \"Lift\"],\n    listed: \"2026-10-30\",\n  },\n  {\n    id: \"h-109\",\n    title: \"Riverside new build\",\n    type: \"Apartment\",\n    price: 780000,\n    beds: 3,\n    baths: 2,\n    area_m2: 131,\n    district: \"Parque das Nações\",\n    lat: 38.7681,\n    lng: -9.0947,\n    year: 2024,\n    energy: \"A+\",\n    features: [\"Gym\", \"Pool\", \"Concierge\"],\n    listed: \"2026-10-15\",\n  },\n  {\n    id: \"h-110\",\n    title: \"Bright studio with mezzanine\",\n    type: \"Studio\",\n    price: 265000,\n    beds: 1,\n    baths: 1,\n    area_m2: 42,\n    district: \"Bairro Alto\",\n    lat: 38.7127,\n    lng: -9.145,\n    year: 1900,\n    energy: \"E\",\n    features: [\"Mezzanine\", \"Central\"],\n    listed: \"2026-10-22\",\n  },\n  {\n    id: \"h-111\",\n    title: \"Villa with sea glimpse\",\n    type: \"House\",\n    price: 1290000,\n    beds: 5,\n    baths: 4,\n    area_m2: 290,\n    district: \"Belém\",\n    lat: 38.6979,\n    lng: -9.2063,\n    year: 2001,\n    energy: \"B\",\n    features: [\"Pool\", \"Garden\", \"Sea glimpse\"],\n    listed: \"2026-09-30\",\n  },\n  {\n    id: \"h-112\",\n    title: \"Renovated flat near the market\",\n    type: \"Apartment\",\n    price: 455000,\n    beds: 2,\n    baths: 2,\n    area_m2: 89,\n    district: \"Cais do Sodré\",\n    lat: 38.7066,\n    lng: -9.1442,\n    year: 1930,\n    energy: \"C\",\n    features: [\"Renovated\", \"Air conditioning\"],\n    listed: \"2026-10-28\",\n  },\n];\n\n/**\n * Fixed \"today\" so that the \"new\" badge renders identically on the server and\n * the client (the listing dates are in the data, so the site's clock is fixed).\n */\nexport const REFERENCE_DATE = \"2026-11-02\";\n\nconst DAY_MS = 24 * 60 * 60 * 1000;\n\nexport function daysSinceListed(home: Home): number {\n  const diff = Date.parse(REFERENCE_DATE) - Date.parse(home.listed);\n  return Math.floor(diff / DAY_MS);\n}\n\nexport function isNew(home: Home): boolean {\n  return daysSinceListed(home) <= 7;\n}\n\nexport function getHome(id: string): Home | undefined {\n  return HOMES.find((h) => h.id === id);\n}\n\nconst priceFormatter = new Intl.NumberFormat(\"en-IE\", {\n  style: \"currency\",\n  currency: SITE.currency,\n  maximumFractionDigits: 0,\n});\n\nexport function formatPrice(value: number): string {\n  return priceFormatter.format(value);\n}\n\n/** Short price for map markers, e.g. €485k or €1.45M */\nexport function formatPriceShort(value: number): string {\n  if (value >= 1_000_000) {\n    const m = value / 1_000_000;\n    return `€${Number.isInteger(m) ? m : m.toFixed(2).replace(/0$/, \"\")}M`;\n  }\n  return `€${Math.round(value / 1000)}k`;\n}\n\nexport function formatBeds(beds: number): string {\n  return beds === 0 ? \"Studio\" : `${beds} bed${beds === 1 ? \"\" : \"s\"}`;\n}\n\nexport function formatListed(home: Home): string {\n  const days = daysSinceListed(home);\n  if (days <= 0) return \"Listed today\";\n  if (days === 1) return \"Listed yesterday\";\n  return `Listed ${days} days ago`;\n}\n\nexport const ENERGY_SCALE = [\"A+\", \"A\", \"B\", \"C\", \"D\", \"E\", \"F\"] as const;\n```\n\n```tsx lib/saved-store.ts\n\"use client\";\n\nimport { useCallback, useSyncExternalStore } from \"react\";\n\nconst KEY = \"haven:saved\";\nconst EMPTY: string[] = [];\n\nlet cache: string[] | null = null;\nconst listeners = new Set<() => void>();\n\nfunction read(): string[] {\n  if (cache) return cache;\n  try {\n    const raw = window.localStorage.getItem(KEY);\n    const parsed: unknown = raw ? JSON.parse(raw) : [];\n    cache = Array.isArray(parsed)\n      ? parsed.filter((v): v is string => typeof v === \"string\")\n      : [];\n  } catch {\n    cache = [];\n  }\n  return cache;\n}\n\nfunction write(next: string[]) {\n  cache = next;\n  try {\n    window.localStorage.setItem(KEY, JSON.stringify(next));\n  } catch {\n    // storage unavailable: keep in-memory state only\n  }\n  listeners.forEach((l) => l());\n}\n\nfunction subscribe(listener: () => void) {\n  listeners.add(listener);\n  const onStorage = (e: StorageEvent) => {\n    if (e.key === KEY) {\n      cache = null;\n      listener();\n    }\n  };\n  window.addEventListener(\"storage\", onStorage);\n  return () => {\n    listeners.delete(listener);\n    window.removeEventListener(\"storage\", onStorage);\n  };\n}\n\nexport function useSaved() {\n  const saved = useSyncExternalStore(subscribe, read, () => EMPTY);\n\n  const toggle = useCallback((id: string) => {\n    const current = read();\n    write(\n      current.includes(id) ? current.filter((x) => x !== id) : [...current, id],\n    );\n  }, []);\n\n  return { saved, toggle };\n}\n```\n\n```tsx components/haven/home-placeholder.tsx\nimport { cn } from \"@/lib/utils\";\nimport type { Home } from \"@/lib/data\";\n\nconst PALETTES: ReadonlyArray<{ sky: string; wall: string; roof: string; accent: string }> = [\n  { sky: \"#dbeafe\", wall: \"#fde68a\", roof: \"#b45309\", accent: \"#0f766e\" },\n  { sky: \"#fce7f3\", wall: \"#e7e5e4\", roof: \"#9f1239\", accent: \"#1d4ed8\" },\n  { sky: \"#dcfce7\", wall: \"#fed7aa\", roof: \"#7c2d12\", accent: \"#4d7c0f\" },\n  { sky: \"#e0e7ff\", wall: \"#f5f5f4\", roof: \"#3730a3\", accent: \"#be123c\" },\n  { sky: \"#cffafe\", wall: \"#fef3c7\", roof: \"#92400e\", accent: \"#0369a1\" },\n  { sky: \"#ede9fe\", wall: \"#fecdd3\", roof: \"#6b21a8\", accent: \"#047857\" },\n];\n\nfunction hash(input: string): number {\n  let h = 0;\n  for (let i = 0; i < input.length; i++) h = (h * 31 + input.charCodeAt(i)) >>> 0;\n  return h;\n}\n\n/**\n * A photo placeholder drawn purely with CSS shapes. `variant` shifts the\n * palette and the scene so each gallery tile differs.\n */\nexport function HomePlaceholder({\n  home,\n  variant = 0,\n  className,\n  label,\n}: {\n  home: Home;\n  variant?: number;\n  className?: string;\n  label?: string;\n}) {\n  const p = PALETTES[(hash(home.id) + variant) % PALETTES.length];\n  const kind = (hash(home.id) + variant) % 3;\n  const isHouse = home.type === \"House\";\n\n  return (\n    <div\n      role=\"img\"\n      aria-label={label ?? `Photo placeholder of ${home.title}`}\n      className={cn(\"relative aspect-[4/3] w-full overflow-hidden\", className)}\n      style={{ background: `linear-gradient(180deg, ${p.sky} 0%, ${p.sky} 62%, ${p.accent}33 62%)` }}\n    >\n      {/* sun */}\n      <div\n        className=\"absolute rounded-full\"\n        style={{\n          width: \"14%\",\n          aspectRatio: \"1\",\n          top: \"10%\",\n          right: kind === 1 ? \"auto\" : \"12%\",\n          left: kind === 1 ? \"12%\" : \"auto\",\n          background: \"#fef08a\",\n        }}\n      />\n      {/* ground */}\n      <div className=\"absolute inset-x-0 bottom-0 h-[38%]\" style={{ background: `${p.accent}40` }} />\n      {isHouse ? (\n        <>\n          <div\n            className=\"absolute\"\n            style={{\n              left: \"24%\",\n              width: \"52%\",\n              bottom: \"20%\",\n              height: \"34%\",\n              background: p.wall,\n              boxShadow: \"inset 0 -6px 0 rgba(0,0,0,0.06)\",\n            }}\n          />\n          <div\n            className=\"absolute\"\n            style={{\n              left: \"20%\",\n              width: \"60%\",\n              bottom: \"54%\",\n              height: \"20%\",\n              background: p.roof,\n              clipPath: \"polygon(0 100%, 50% 0, 100% 100%)\",\n            }}\n          />\n          <div\n            className=\"absolute\"\n            style={{ left: \"45%\", width: \"10%\", bottom: \"20%\", height: \"18%\", background: p.accent }}\n          />\n          <div\n            className=\"absolute\"\n            style={{ left: \"30%\", width: \"9%\", bottom: \"34%\", height: \"10%\", background: \"#bae6fd\" }}\n          />\n          <div\n            className=\"absolute\"\n            style={{ left: \"61%\", width: \"9%\", bottom: \"34%\", height: \"10%\", background: \"#bae6fd\" }}\n          />\n        </>\n      ) : (\n        <>\n          <div\n            className=\"absolute\"\n            style={{\n              left: kind === 2 ? \"14%\" : \"20%\",\n              width: \"34%\",\n              bottom: \"18%\",\n              height: \"62%\",\n              background: p.wall,\n              boxShadow: \"inset -8px 0 0 rgba(0,0,0,0.05)\",\n            }}\n          />\n          <div\n            className=\"absolute\"\n            style={{\n              left: kind === 2 ? \"46%\" : \"50%\",\n              width: \"28%\",\n              bottom: \"18%\",\n              height: \"44%\",\n              background: p.accent,\n              opacity: 0.85,\n            }}\n          />\n          {[0, 1, 2].map((row) =>\n            [0, 1].map((col) => (\n              <div\n                key={`${row}-${col}`}\n                className=\"absolute\"\n                style={{\n                  left: `${(kind === 2 ? 18 : 24) + col * 14}%`,\n                  width: \"8%\",\n                  bottom: `${30 + row * 16}%`,\n                  height: \"9%\",\n                  background: \"#bae6fd\",\n                }}\n              />\n            )),\n          )}\n          <div\n            className=\"absolute\"\n            style={{ left: \"55%\", width: \"18%\", bottom: \"18%\", height: \"10%\", background: p.roof, opacity: 0.8 }}\n          />\n        </>\n      )}\n    </div>\n  );\n}\n```\n\n```tsx components/haven/save-button.tsx\n\"use client\";\n\nimport { Heart } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { cn } from \"@/lib/utils\";\nimport { useSaved } from \"@/lib/saved-store\";\n\nexport function SaveButton({\n  homeId,\n  title,\n  className,\n  withLabel = false,\n}: {\n  homeId: string;\n  title: string;\n  className?: string;\n  withLabel?: boolean;\n}) {\n  const { saved, toggle } = useSaved();\n  const isSaved = saved.includes(homeId);\n\n  return (\n    <Button\n      type=\"button\"\n      variant={withLabel ? \"outline\" : \"secondary\"}\n      size={withLabel ? \"default\" : \"icon-sm\"}\n      aria-pressed={isSaved}\n      aria-label={isSaved ? `Remove ${title} from saved homes` : `Save ${title}`}\n      onClick={(e) => {\n        e.preventDefault();\n        e.stopPropagation();\n        toggle(homeId);\n      }}\n      className={cn(\"rounded-full\", className)}\n    >\n      <Heart className={cn(isSaved && \"fill-rose-500 text-rose-500\")} aria-hidden=\"true\" />\n      {withLabel ? <span>{isSaved ? \"Saved\" : \"Save\"}</span> : null}\n    </Button>\n  );\n}\n```\n\n```tsx components/haven/site-header.tsx\nimport Link from \"next/link\";\nimport { Home as HomeIcon } from \"lucide-react\";\nimport { SITE } from \"@/lib/data\";\n\nexport function SiteHeader() {\n  return (\n    <header className=\"border-b bg-background\">\n      <div className=\"mx-auto flex h-14 max-w-screen-2xl items-center justify-between px-4\">\n        <Link\n          href=\"/\"\n          className=\"flex items-center gap-2 rounded-md font-semibold tracking-tight outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n        >\n          <span className=\"flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground\">\n            <HomeIcon className=\"size-4\" aria-hidden=\"true\" />\n          </span>\n          <span className=\"text-lg\">{SITE.name}</span>\n        </Link>\n        <p className=\"hidden text-sm text-muted-foreground sm:block\">\n          Homes for sale in {SITE.city}\n        </p>\n      </div>\n    </header>\n  );\n}\n```\n\n```tsx components/haven/home-card.tsx\n\"use client\";\n\nimport Link from \"next/link\";\nimport { Bath, BedDouble, MapPin, Ruler } from \"lucide-react\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { cn } from \"@/lib/utils\";\nimport { type Home, formatBeds, formatPrice, isNew } from \"@/lib/data\";\nimport { HomePlaceholder } from \"@/components/haven/home-placeholder\";\nimport { SaveButton } from \"@/components/haven/save-button\";\n\nexport function HomeCard({\n  home,\n  active,\n  onHover,\n}: {\n  home: Home;\n  active: boolean;\n  onHover: (id: string | null) => void;\n}) {\n  return (\n    <article\n      id={`card-${home.id}`}\n      data-active={active}\n      onMouseEnter={() => onHover(home.id)}\n      onMouseLeave={() => onHover(null)}\n      onFocus={() => onHover(home.id)}\n      onBlur={() => onHover(null)}\n      className={cn(\n        \"group relative overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm transition-shadow\",\n        active && \"ring-2 ring-primary shadow-md\",\n      )}\n    >\n      <div className=\"relative\">\n        <HomePlaceholder home={home} className=\"aspect-[16/10] transition-transform duration-300 group-hover:scale-[1.02]\" />\n        {isNew(home) ? (\n          <Badge className=\"absolute top-3 left-3 bg-emerald-600 text-white\">New this week</Badge>\n        ) : null}\n        <SaveButton homeId={home.id} title={home.title} className=\"absolute top-3 right-3 z-10\" />\n      </div>\n      <div className=\"flex flex-col gap-2 p-4\">\n        <p className=\"text-xl font-semibold tracking-tight\">{formatPrice(home.price)}</p>\n        <h3 className=\"leading-snug font-medium\">\n          <Link\n            href={`/homes/${home.id}`}\n            className=\"rounded-sm outline-none after:absolute after:inset-0 after:content-[''] focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n          >\n            {home.title}\n          </Link>\n        </h3>\n        <ul className=\"flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground\">\n          <li className=\"flex items-center gap-1.5\">\n            <BedDouble className=\"size-4\" aria-hidden=\"true\" />\n            {formatBeds(home.beds)}\n          </li>\n          <li className=\"flex items-center gap-1.5\">\n            <Bath className=\"size-4\" aria-hidden=\"true\" />\n            {home.baths} bath{home.baths === 1 ? \"\" : \"s\"}\n          </li>\n          <li className=\"flex items-center gap-1.5\">\n            <Ruler className=\"size-4\" aria-hidden=\"true\" />\n            {home.area_m2} m²\n          </li>\n        </ul>\n        <p className=\"flex items-center gap-1.5 text-sm text-muted-foreground\">\n          <MapPin className=\"size-4\" aria-hidden=\"true\" />\n          {home.district}, Lisbon · {home.type}\n        </p>\n      </div>\n    </article>\n  );\n}\n```\n\nThe map component comes next. It's loaded client-only because maplibre needs the browser.\n\n```tsx components/haven/homes-map.tsx\n\"use client\";\n\nimport \"maplibre-gl/dist/maplibre-gl.css\";\n\nimport { useEffect, useMemo, useRef } from \"react\";\nimport Link from \"next/link\";\nimport MapGL, { Marker, NavigationControl, Popup, type MapRef } from \"react-map-gl/maplibre\";\nimport { cn } from \"@/lib/utils\";\nimport { type Home, SITE, formatBeds, formatPrice, formatPriceShort } from \"@/lib/data\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { HomePlaceholder } from \"@/components/haven/home-placeholder\";\n\nexport default function HomesMap({\n  homes,\n  hoveredId,\n  onHover,\n  selectedId,\n  onSelect,\n}: {\n  homes: Home[];\n  hoveredId: string | null;\n  onHover: (id: string | null) => void;\n  selectedId: string | null;\n  onSelect: (id: string | null) => void;\n}) {\n  const mapRef = useRef<MapRef | null>(null);\n  const selected = useMemo(() => homes.find((h) => h.id === selectedId) ?? null, [homes, selectedId]);\n\n  // Keep the map sized correctly when its container changes (mobile view toggle).\n  useEffect(() => {\n    const map = mapRef.current?.getMap();\n    if (!map) return;\n    const container = map.getContainer();\n    const ro = new ResizeObserver(() => map.resize());\n    ro.observe(container);\n    return () => ro.disconnect();\n  }, []);\n\n  return (\n    <MapGL\n      ref={mapRef}\n      initialViewState={{ longitude: SITE.mapCenter[0], latitude: SITE.mapCenter[1], zoom: 11.6 }}\n      mapStyle={SITE.mapStyleUrl}\n      style={{ width: \"100%\", height: \"100%\" }}\n      attributionControl={{ compact: true }}\n      onClick={() => onSelect(null)}\n      cooperativeGestures={false}\n    >\n      <NavigationControl position=\"top-right\" showCompass={false} />\n      {homes.map((home) => {\n        const active = hoveredId === home.id || selectedId === home.id;\n        return (\n          <Marker\n            key={home.id}\n            longitude={home.lng}\n            latitude={home.lat}\n            anchor=\"bottom\"\n            style={{ zIndex: active ? 10 : 1 }}\n          >\n            <button\n              type=\"button\"\n              aria-label={`${formatPrice(home.price)}, ${home.title}, ${home.district}`}\n              aria-pressed={selectedId === home.id}\n              onMouseEnter={() => onHover(home.id)}\n              onMouseLeave={() => onHover(null)}\n              onFocus={() => onHover(home.id)}\n              onBlur={() => onHover(null)}\n              onClick={(e) => {\n                e.stopPropagation();\n                onSelect(home.id);\n              }}\n              className={cn(\n                \"relative rounded-full border px-2.5 py-1 text-xs font-semibold shadow-md transition-transform outline-none focus-visible:ring-[3px] focus-visible:ring-ring/60\",\n                active\n                  ? \"z-10 scale-110 border-primary bg-primary text-primary-foreground\"\n                  : \"border-border bg-background text-foreground hover:scale-105\",\n              )}\n            >\n              {formatPriceShort(home.price)}\n              <span\n                aria-hidden=\"true\"\n                className={cn(\n                  \"absolute top-full left-1/2 size-2 -translate-x-1/2 -translate-y-1 rotate-45 border-r border-b\",\n                  active ? \"border-primary bg-primary\" : \"border-border bg-background\",\n                )}\n              />\n            </button>\n          </Marker>\n        );\n      })}\n      {selected ? (\n        <Popup\n          longitude={selected.lng}\n          latitude={selected.lat}\n          anchor=\"bottom\"\n          offset={36}\n          closeOnClick={false}\n          onClose={() => onSelect(null)}\n          maxWidth=\"240px\"\n        >\n          <div className=\"w-56 overflow-hidden rounded-md text-foreground\">\n            <HomePlaceholder home={selected} className=\"aspect-[16/9]\" />\n            <div className=\"flex flex-col gap-1 p-2.5\">\n              <p className=\"text-base font-semibold\">{formatPrice(selected.price)}</p>\n              <p className=\"text-sm leading-snug font-medium\">{selected.title}</p>\n              <p className=\"text-xs text-muted-foreground\">\n                {formatBeds(selected.beds)} · {selected.baths} bath · {selected.area_m2} m² · {selected.district}\n              </p>\n              <div className=\"flex items-center justify-between pt-1\">\n                <Badge variant=\"secondary\">{selected.type}</Badge>\n                <Link\n                  href={`/homes/${selected.id}`}\n                  className=\"rounded-sm text-sm font-medium underline underline-offset-4 outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n                >\n                  View home\n                </Link>\n              </div>\n            </div>\n          </div>\n        </Popup>\n      ) : null}\n    </MapGL>\n  );\n}\n```\n\n```tsx components/haven/homes-map-loader.tsx\n\"use client\";\n\nimport dynamic from \"next/dynamic\";\nimport type { ComponentProps } from \"react\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\n\nconst HomesMap = dynamic(() => import(\"@/components/haven/homes-map\"), {\n  ssr: false,\n  loading: () => <Skeleton className=\"size-full rounded-none\" />,\n});\n\nexport function HomesMapLoader(props: ComponentProps<typeof HomesMap>) {\n  return <HomesMap {...props} />;\n}\n```\n\n```tsx components/haven/detail-map.tsx\n\"use client\";\n\nimport \"maplibre-gl/dist/maplibre-gl.css\";\n\nimport MapGL, { Marker, NavigationControl } from \"react-map-gl/maplibre\";\nimport { MapPin } from \"lucide-react\";\nimport { type Home, SITE } from \"@/lib/data\";\n\nexport default function DetailMap({ home }: { home: Home }) {\n  return (\n    <MapGL\n      initialViewState={{ longitude: home.lng, latitude: home.lat, zoom: 13.5 }}\n      mapStyle={SITE.mapStyleUrl}\n      style={{ width: \"100%\", height: \"100%\" }}\n      attributionControl={{ compact: true }}\n    >\n      <NavigationControl position=\"top-right\" showCompass={false} />\n      <Marker longitude={home.lng} latitude={home.lat} anchor=\"bottom\">\n        <div\n          role=\"img\"\n          aria-label={`${home.title} location in ${home.district}`}\n          className=\"flex size-9 items-center justify-center rounded-full border-2 border-background bg-primary text-primary-foreground shadow-lg\"\n        >\n          <MapPin className=\"size-4\" aria-hidden=\"true\" />\n        </div>\n      </Marker>\n    </MapGL>\n  );\n}\n```\n\n```tsx components/haven/detail-map-loader.tsx\n\"use client\";\n\nimport dynamic from \"next/dynamic\";\nimport type { ComponentProps } from \"react\";\nimport { Skeleton } from \"@/components/ui/skeleton\";\n\nconst DetailMap = dynamic(() => import(\"@/components/haven/detail-map\"), {\n  ssr: false,\n  loading: () => <Skeleton className=\"size-full rounded-none\" />,\n});\n\nexport function DetailMapLoader(props: ComponentProps<typeof DetailMap>) {\n  return <DetailMap {...props} />;\n}\n```\n\nNow the search view with filters, results, and the mobile toggle.\n\n```tsx components/haven/search-view.tsx\n\"use client\";\n\nimport { useMemo, useState } from \"react\";\nimport { List, Map as MapIcon, SearchX } from \"lucide-react\";\nimport { Button } from \"@/components/ui/button\";\nimport { Label } from \"@/components/ui/label\";\nimport {\n  Select,\n  SelectContent,\n  SelectItem,\n  SelectTrigger,\n  SelectValue,\n} from \"@/components/ui/select\";\nimport { cn } from \"@/lib/utils\";\nimport { HOMES, SITE } from \"@/lib/data\";\nimport { HomeCard } from \"@/components/haven/home-card\";\nimport { HomesMapLoader } from \"@/components/haven/homes-map-loader\";\n\ntype TypeFilter = \"any\" | \"Apartment\" | \"House\" | \"Studio\";\ntype SortKey = \"newest\" | \"price-asc\" | \"price-desc\" | \"size-desc\";\n\nconst MIN_PRICE_OPTIONS = [\n  { value: \"any\", label: \"No min\" },\n  { value: \"200000\", label: \"€200k\" },\n  { value: \"400000\", label: \"€400k\" },\n  { value: \"600000\", label: \"€600k\" },\n  { value: \"800000\", label: \"€800k\" },\n  { value: \"1000000\", label: \"€1M\" },\n];\n\nconst MAX_PRICE_OPTIONS = [\n  { value: \"any\", label: \"No max\" },\n  { value: \"300000\", label: \"€300k\" },\n  { value: \"500000\", label: \"€500k\" },\n  { value: \"700000\", label: \"€700k\" },\n  { value: \"900000\", label: \"€900k\" },\n  { value: \"1200000\", label: \"€1.2M\" },\n];\n\nconst BED_OPTIONS = [\n  { value: \"0\", label: \"Any\" },\n  { value: \"1\", label: \"1+\" },\n  { value: \"2\", label: \"2+\" },\n  { value: \"3\", label: \"3+\" },\n  { value: \"4\", label: \"4+\" },\n];\n\nfunction FilterSelect({\n  id,\n  label,\n  value,\n  onChange,\n  options,\n}: {\n  id: string;\n  label: string;\n  value: string;\n  onChange: (v: string) => void;\n  options: ReadonlyArray<{ value: string; label: string }>;\n}) {\n  return (\n    <div className=\"flex min-w-0 flex-col gap-1.5\">\n      <Label htmlFor={id} className=\"text-xs text-muted-foreground\">\n        {label}\n      </Label>\n      <Select value={value} onValueChange={onChange}>\n        <SelectTrigger id={id} className=\"w-full\" size=\"sm\">\n          <SelectValue />\n        </SelectTrigger>\n        <SelectContent position=\"popper\">\n          {options.map((o) => (\n            <SelectItem key={o.value} value={o.value}>\n              {o.label}\n            </SelectItem>\n          ))}\n        </SelectContent>\n      </Select>\n    </div>\n  );\n}\n\nexport function SearchView() {\n  const [type, setType] = useState<TypeFilter>(\"any\");\n  const [minPrice, setMinPrice] = useState(\"any\");\n  const [maxPrice, setMaxPrice] = useState(\"any\");\n  const [minBeds, setMinBeds] = useState(\"0\");\n  const [sort, setSort] = useState<SortKey>(\"newest\");\n  const [hoveredId, setHoveredId] = useState<string | null>(null);\n  const [selectedId, setSelectedId] = useState<string | null>(null);\n  const [mobileView, setMobileView] = useState<\"list\" | \"map\">(\"list\");\n\n  const results = useMemo(() => {\n    const min = minPrice === \"any\" ? 0 : Number(minPrice);\n    const max = maxPrice === \"any\" ? Infinity : Number(maxPrice);\n    const beds = Number(minBeds);\n    const filtered = HOMES.filter(\n      (h) =>\n        (type === \"any\" || h.type === type) &&\n        h.price >= min &&\n        h.price <= max &&\n        h.beds >= beds,\n    );\n    const sorted = [...filtered];\n    switch (sort) {\n      case \"newest\":\n        sorted.sort((a, b) => Date.parse(b.listed) - Date.parse(a.listed));\n        break;\n      case \"price-asc\":\n        sorted.sort((a, b) => a.price - b.price);\n        break;\n      case \"price-desc\":\n        sorted.sort((a, b) => b.price - a.price);\n        break;\n      case \"size-desc\":\n        sorted.sort((a, b) => b.area_m2 - a.area_m2);\n        break;\n    }\n    return sorted;\n  }, [type, minPrice, maxPrice, minBeds, sort]);\n\n  const filtersActive = type !== \"any\" || minPrice !== \"any\" || maxPrice !== \"any\" || minBeds !== \"0\";\n\n  function reset() {\n    setType(\"any\");\n    setMinPrice(\"any\");\n    setMaxPrice(\"any\");\n    setMinBeds(\"0\");\n  }\n\n  function handleSelect(id: string | null) {\n    setSelectedId(id);\n  }\n\n  return (\n    <div className=\"flex min-h-0 flex-1 flex-col\">\n      <section aria-label=\"Search filters\" className=\"border-b bg-background\">\n        <form\n          onSubmit={(e) => e.preventDefault()}\n          className=\"mx-auto grid max-w-screen-2xl grid-cols-2 gap-3 px-4 py-3 sm:grid-cols-3 lg:grid-cols-[repeat(5,minmax(0,1fr))_auto] lg:items-end\"\n        >\n          <FilterSelect\n            id=\"filter-type\"\n            label=\"Type\"\n            value={type}\n            onChange={(v) => setType(v as TypeFilter)}\n            options={[\n              { value: \"any\", label: \"All types\" },\n              { value: \"Apartment\", label: \"Apartment\" },\n              { value: \"House\", label: \"House\" },\n              { value: \"Studio\", label: \"Studio\" },\n            ]}\n          />\n          <FilterSelect id=\"filter-min-price\" label=\"Min price\" value={minPrice} onChange={setMinPrice} options={MIN_PRICE_OPTIONS} />\n          <FilterSelect id=\"filter-max-price\" label=\"Max price\" value={maxPrice} onChange={setMaxPrice} options={MAX_PRICE_OPTIONS} />\n          <FilterSelect id=\"filter-beds\" label=\"Bedrooms\" value={minBeds} onChange={setMinBeds} options={BED_OPTIONS} />\n          <FilterSelect\n            id=\"filter-sort\"\n            label=\"Sort by\"\n            value={sort}\n            onChange={(v) => setSort(v as SortKey)}\n            options={[\n              { value: \"newest\", label: \"Newest\" },\n              { value: \"price-asc\", label: \"Price: low to high\" },\n              { value: \"price-desc\", label: \"Price: high to low\" },\n              { value: \"size-desc\", label: \"Size: largest first\" },\n            ]}\n          />\n          <Button\n            type=\"button\"\n            variant=\"ghost\"\n            size=\"sm\"\n            onClick={reset}\n            disabled={!filtersActive}\n            className=\"col-span-2 sm:col-span-1\"\n          >\n            Clear filters\n          </Button>\n        </form>\n      </section>\n\n      {/* Mobile view toggle */}\n      <div className=\"border-b bg-background px-4 py-2 lg:hidden\">\n        <div role=\"group\" aria-label=\"Results view\" className=\"grid grid-cols-2 gap-1 rounded-lg bg-muted p-1\">\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            variant={mobileView === \"list\" ? \"default\" : \"ghost\"}\n            aria-pressed={mobileView === \"list\"}\n            onClick={() => setMobileView(\"list\")}\n          >\n            <List aria-hidden=\"true\" /> List\n          </Button>\n          <Button\n            type=\"button\"\n            size=\"sm\"\n            variant={mobileView === \"map\" ? \"default\" : \"ghost\"}\n            aria-pressed={mobileView === \"map\"}\n            onClick={() => setMobileView(\"map\")}\n          >\n            <MapIcon aria-hidden=\"true\" /> Map\n          </Button>\n        </div>\n      </div>\n\n      <div className=\"mx-auto flex min-h-0 w-full max-w-screen-2xl flex-1 flex-col lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] xl:grid-cols-[minmax(0,640px)_minmax(0,1fr)]\">\n        <section\n          aria-label=\"Search results\"\n          className={cn(\n            \"min-h-0 flex-col px-4 py-4 lg:flex lg:overflow-y-auto\",\n            mobileView === \"list\" ? \"flex\" : \"hidden\",\n          )}\n        >\n          <h1 className=\"text-2xl font-semibold tracking-tight\">Homes for sale in {SITE.city}</h1>\n          <p className=\"mt-1 mb-4 text-sm text-muted-foreground\" role=\"status\" aria-live=\"polite\">\n            <span className=\"font-medium text-foreground\">{results.length}</span>{\" \"}\n            {results.length === 1 ? \"home\" : \"homes\"} found\n          </p>\n          {results.length > 0 ? (\n            <ul className=\"grid grid-cols-1 gap-4 sm:grid-cols-2\">\n              {results.map((home) => (\n                <li key={home.id}>\n                  <HomeCard home={home} active={hoveredId === home.id} onHover={setHoveredId} />\n                </li>\n              ))}\n            </ul>\n          ) : (\n            <div className=\"flex flex-1 flex-col items-center justify-center gap-3 rounded-xl border border-dashed p-10 text-center\">\n              <SearchX className=\"size-8 text-muted-foreground\" aria-hidden=\"true\" />\n              <p className=\"font-medium\">No homes match these filters</p>\n              <p className=\"text-sm text-muted-foreground\">Try widening the price range or lowering the bedroom count.</p>\n              <Button type=\"button\" variant=\"outline\" size=\"sm\" onClick={reset}>\n                Clear filters\n              </Button>\n            </div>\n          )}\n        </section>\n\n        <section\n          aria-label=\"Map of results\"\n          className={cn(\n            \"relative min-h-[420px] flex-1 lg:sticky lg:top-0 lg:block lg:h-[calc(100svh-9.5rem)] lg:min-h-0 lg:flex-none\",\n            mobileView === \"map\" ? \"block\" : \"hidden\",\n          )}\n        >\n          <div className=\"absolute inset-0\">\n            <HomesMapLoader\n              homes={results}\n              hoveredId={hoveredId}\n              onHover={setHoveredId}\n              selectedId={selectedId}\n              onSelect={handleSelect}\n            />\n          </div>\n        </section>\n      </div>\n    </div>\n  );\n}\n```\n\nThe map is inside `hidden` on mobile when the list is shown, so the ResizeObserver in the map component handles resizing when it becomes visible. Next is the home page and the detail components.\n\n```tsx app/page.tsx\nimport { SiteHeader } from \"@/components/haven/site-header\";\nimport { SearchView } from \"@/components/haven/search-view\";\n\nexport default function Page() {\n  return (\n    <div className=\"flex min-h-svh flex-col lg:h-svh\">\n      <SiteHeader />\n      <main className=\"flex min-h-0 flex-1 flex-col\">\n        <SearchView />\n      </main>\n    </div>\n  );\n}\n```\n\n```tsx components/haven/contact-form.tsx\n\"use client\";\n\nimport { useState } from \"react\";\nimport { Mail, Phone } from \"lucide-react\";\nimport { toast } from \"sonner\";\nimport { Button } from \"@/components/ui/button\";\nimport { Input } from \"@/components/ui/input\";\nimport { Textarea } from \"@/components/ui/textarea\";\nimport { Field, FieldError, FieldGroup, FieldLabel } from \"@/components/ui/field\";\nimport { AGENT, type Home } from \"@/lib/data\";\n\ninterface Values {\n  name: string;\n  email: string;\n  message: string;\n}\ntype Errors = Partial<Record<keyof Values, string>>;\n\nconst EMAIL_RE = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\n\nfunction validate(v: Values): Errors {\n  const errors: Errors = {};\n  if (!v.name.trim()) errors.name = \"Enter your name.\";\n  if (!v.email.trim()) errors.email = \"Enter your email address.\";\n  else if (!EMAIL_RE.test(v.email.trim())) errors.email = \"Enter a valid email address, like name@example.com.\";\n  if (!v.message.trim()) errors.message = \"Write a short message for the agent.\";\n  return errors;\n}\n\nexport function ContactForm({ home }: { home: Home }) {\n  const [values, setValues] = useState<Values>({\n    name: \"\",\n    email: \"\",\n    message: `Hello, I'd like to arrange a viewing of \"${home.title}\" in ${home.district}.`,\n  });\n  const [errors, setErrors] = useState<Errors>({});\n  const [sent, setSent] = useState(false);\n\n  function update<K extends keyof Values>(key: K, value: string) {\n    setValues((prev) => ({ ...prev, [key]: value }));\n    if (errors[key]) setErrors((prev) => ({ ...prev, [key]: undefined }));\n  }\n\n  function onSubmit(e: React.FormEvent<HTMLFormElement>) {\n    e.preventDefault();\n    const next = validate(values);\n    setErrors(next);\n    const firstInvalid = ([\"name\", \"email\", \"message\"] as const).find((k) => next[k]);\n    if (firstInvalid) {\n      document.getElementById(`contact-${firstInvalid}`)?.focus();\n      return;\n    }\n    setSent(true);\n    toast.success(`Message sent to ${AGENT.name}`, {\n      description: \"She usually replies within one working day.\",\n    });\n  }\n\n  if (sent) {\n    return (\n      <div role=\"status\" className=\"flex flex-col gap-3 rounded-lg bg-muted p-4 text-sm\">\n        <p className=\"font-medium\">Thanks, {values.name.trim()}. Your message is on its way.</p>\n        <p className=\"text-muted-foreground\">\n          {AGENT.name} will reply to {values.email.trim()} about {home.title}.\n        </p>\n        <Button\n          type=\"button\"\n          variant=\"outline\"\n          size=\"sm\"\n          className=\"w-fit\"\n          onClick={() => {\n            setSent(false);\n            setValues((prev) => ({ ...prev, message: \"\" }));\n          }}\n        >\n          Send another message\n        </Button>\n      </div>\n    );\n  }\n\n  return (\n    <form onSubmit={onSubmit} noValidate aria-label={`Contact ${AGENT.name} about ${home.title}`}>\n      <FieldGroup className=\"gap-4\">\n        <Field data-invalid={!!errors.name}>\n          <FieldLabel htmlFor=\"contact-name\">Name</FieldLabel>\n          <Input\n            id=\"contact-name\"\n            name=\"name\"\n            autoComplete=\"name\"\n            required\n            value={values.name}\n            onChange={(e) => update(\"name\", e.target.value)}\n            aria-invalid={!!errors.name}\n            aria-describedby={errors.name ? \"contact-name-error\" : undefined}\n          />\n          <FieldError id=\"contact-name-error\">{errors.name}</FieldError>\n        </Field>\n        <Field data-invalid={!!errors.email}>\n          <FieldLabel htmlFor=\"contact-email\">Email</FieldLabel>\n          <Input\n            id=\"contact-email\"\n            name=\"email\"\n            type=\"email\"\n            autoComplete=\"email\"\n            required\n            value={values.email}\n            onChange={(e) => update(\"email\", e.target.value)}\n            aria-invalid={!!errors.email}\n            aria-describedby={errors.email ? \"contact-email-error\" : undefined}\n          />\n          <FieldError id=\"contact-email-error\">{errors.email}</FieldError>\n        </Field>\n        <Field data-invalid={!!errors.message}>\n          <FieldLabel htmlFor=\"contact-message\">Message</FieldLabel>\n          <Textarea\n            id=\"contact-message\"\n            name=\"message\"\n            rows={4}\n            required\n            value={values.message}\n            onChange={(e) => update(\"message\", e.target.value)}\n            aria-invalid={!!errors.message}\n            aria-describedby={errors.message ? \"contact-message-error\" : undefined}\n          />\n          <FieldError id=\"contact-message-error\">{errors.message}</FieldError>\n        </Field>\n        <Button type=\"submit\" size=\"lg\" className=\"w-full\">\n          Send message\n        </Button>\n      </FieldGroup>\n      <ul className=\"mt-4 flex flex-col gap-1.5 text-sm text-muted-foreground\">\n        <li className=\"flex items-center gap-2\">\n          <Phone className=\"size-4\" aria-hidden=\"true\" />\n          <a href={`tel:${AGENT.phone.replace(/\\s/g, \"\")}`} className=\"underline-offset-4 hover:underline\">\n            {AGENT.phone}\n          </a>\n        </li>\n        <li className=\"flex items-center gap-2\">\n          <Mail className=\"size-4\" aria-hidden=\"true\" />\n          <a href={`mailto:${AGENT.email}`} className=\"underline-offset-4 hover:underline\">\n            {AGENT.email}\n          </a>\n        </li>\n      </ul>\n    </form>\n  );\n}\n```\n\n`FieldError` renders `children` when present and returns `null` otherwise, so inline errors appear only on failure. Now the energy rating and the detail page.\n\n```tsx components/haven/energy-rating.tsx\nimport { cn } from \"@/lib/utils\";\nimport { ENERGY_SCALE } from \"@/lib/data\";\n\nconst COLORS: Record<string, string> = {\n  \"A+\": \"bg-green-700 text-white\",\n  A: \"bg-green-600 text-white\",\n  B: \"bg-lime-600 text-white\",\n  C: \"bg-yellow-400 text-neutral-900\",\n  D: \"bg-amber-500 text-neutral-900\",\n  E: \"bg-orange-600 text-white\",\n  F: \"bg-red-600 text-white\",\n};\n\nexport function EnergyRating({ rating }: { rating: string }) {\n  return (\n    <div>\n      <p className=\"mb-3 text-sm text-muted-foreground\">\n        Energy rating:{\" \"}\n        <span className=\"font-semibold text-foreground\">{rating}</span>\n      </p>\n      <ol aria-label=\"Energy rating scale\" className=\"flex flex-wrap gap-1.5\">\n        {ENERGY_SCALE.map((step) => {\n          const current = step === rating;\n          return (\n            <li\n              key={step}\n              aria-current={current ? \"true\" : undefined}\n              className={cn(\n                \"flex h-9 min-w-10 items-center justify-center rounded-md px-2 text-sm font-semibold transition-transform\",\n                COLORS[step],\n                current ? \"scale-110 ring-2 ring-foreground ring-offset-2 ring-offset-background\" : \"opacity-40\",\n              )}\n            >\n              {step}\n              {current ? <span className=\"sr-only\"> (this home)</span> : null}\n            </li>\n          );\n        })}\n      </ol>\n    </div>\n  );\n}\n```\n\n```tsx app/homes/[id]/page.tsx\nimport type { Metadata } from \"next\";\nimport Link from \"next/link\";\nimport { notFound } from \"next/navigation\";\nimport { ArrowLeft, Bath, BedDouble, Calendar, Check, MapPin, Ruler } from \"lucide-react\";\nimport { Badge } from \"@/components/ui/badge\";\nimport { Separator } from \"@/components/ui/separator\";\nimport {\n  AGENT,\n  HOMES,\n  formatBeds,\n  formatListed,\n  formatPrice,\n  getHome,\n  isNew,\n} from \"@/lib/data\";\nimport { SiteHeader } from \"@/components/haven/site-header\";\nimport { HomePlaceholder } from \"@/components/haven/home-placeholder\";\nimport { SaveButton } from \"@/components/haven/save-button\";\nimport { EnergyRating } from \"@/components/haven/energy-rating\";\nimport { DetailMapLoader } from \"@/components/haven/detail-map-loader\";\nimport { ContactForm } from \"@/components/haven/contact-form\";\n\nexport const dynamicParams = false;\n\nexport function generateStaticParams() {\n  return HOMES.map((h) => ({ id: h.id }));\n}\n\nexport async function generateMetadata({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}): Promise<Metadata> {\n  const { id } = await params;\n  const home = getHome(id);\n  if (!home) return { title: \"Home not found · Haven\" };\n  return { title: `${home.title}, ${home.district} · Haven` };\n}\n\nconst GALLERY_LABELS = [\"Living room\", \"Kitchen\", \"Bedroom\", \"Bathroom\", \"Exterior\"];\n\nexport default async function HomePage({\n  params,\n}: {\n  params: Promise<{ id: string }>;\n}) {\n  const { id } = await params;\n  const home = getHome(id);\n  if (!home) notFound();\n\n  const facts = [\n    { icon: BedDouble, label: \"Bedrooms\", value: home.beds === 0 ? \"Studio\" : String(home.beds) },\n    { icon: Bath, label: \"Bathrooms\", value: String(home.baths) },\n    { icon: Ruler, label: \"Area\", value: `${home.area_m2} m²` },\n    { icon: Calendar, label: \"Built\", value: String(home.year) },\n  ];\n\n  return (\n    <div className=\"min-h-svh bg-background\">\n      <SiteHeader />\n      <main className=\"mx-auto max-w-screen-xl px-4 py-6\">\n        <Link\n          href=\"/\"\n          className=\"mb-4 inline-flex items-center gap-1.5 rounded-sm text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-[3px] focus-visible:ring-ring/50\"\n        >\n          <ArrowLeft className=\"size-4\" aria-hidden=\"true\" />\n          Back to search\n        </Link>\n\n        <section aria-label=\"Photo gallery\" className=\"mb-8\">\n          <ul className=\"flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2\">\n            {GALLERY_LABELS.map((label, i) => (\n              <li key={label} className=\"w-[78%] shrink-0 snap-start sm:w-[44%] lg:w-[32%]\">\n                <HomePlaceholder\n                  home={home}\n                  variant={i}\n                  className=\"rounded-xl\"\n                  label={`${label} of ${home.title} (placeholder)`}\n                />\n                <p className=\"mt-1.5 text-xs text-muted-foreground\">{label}</p>\n              </li>\n            ))}\n          </ul>\n        </section>\n\n        <div className=\"grid gap-8 lg:grid-cols-[minmax(0,1fr)_380px] lg:items-start\">\n          <div className=\"flex min-w-0 flex-col gap-8\">\n            <header className=\"flex flex-col gap-3\">\n              <div className=\"flex flex-wrap items-center gap-2\">\n                <Badge variant=\"secondary\">{home.type}</Badge>\n                {isNew(home) ? <Badge className=\"bg-emerald-600 text-white\">New this week</Badge> : null}\n                <span className=\"text-sm text-muted-foreground\">{formatListed(home)}</span>\n              </div>\n              <h1 className=\"text-3xl font-semibold tracking-tight text-balance\">{home.title}</h1>\n              <p className=\"flex items-center gap-1.5 text-muted-foreground\">\n                <MapPin className=\"size-4\" aria-hidden=\"true\" />\n                {home.district}, Lisbon\n              </p>\n              <div className=\"flex flex-wrap items-center justify-between gap-3\">\n                <p className=\"text-3xl font-bold tracking-tight\">{formatPrice(home.price)}</p>\n                <SaveButton homeId={home.id} title={home.title} withLabel />\n              </div>\n            </header>\n\n            <section aria-labelledby=\"facts-heading\">\n              <h2 id=\"facts-heading\" className=\"sr-only\">\n                Key facts\n              </h2>\n              <dl className=\"grid grid-cols-2 gap-3 sm:grid-cols-4\">\n                {facts.map(({ icon: Icon, label, value }) => (\n                  <div key={label} className=\"rounded-xl border p-4\">\n                    <dt className=\"flex items-center gap-1.5 text-sm text-muted-foreground\">\n                      <Icon className=\"size-4\" aria-hidden=\"true\" />\n                      {label}\n                    </dt>\n                    <dd className=\"mt-1 text-xl font-semibold\">{value}</dd>\n                  </div>\n                ))}\n              </dl>\n            </section>\n\n            <Separator />\n\n            <section aria-labelledby=\"features-heading\">\n              <h2 id=\"features-heading\" className=\"mb-3 text-xl font-semibold\">\n                Features\n              </h2>\n              <ul className=\"grid gap-2 sm:grid-cols-2\">\n                {home.features.map((f) => (\n                  <li key={f} className=\"flex items-center gap-2\">\n                    <Check className=\"size-4 text-emerald-600\" aria-hidden=\"true\" />\n                    {f}\n                  </li>\n                ))}\n              </ul>\n            </section>\n\n            <section aria-labelledby=\"energy-heading\">\n              <h2 id=\"energy-heading\" className=\"mb-3 text-xl font-semibold\">\n                Energy rating\n              </h2>\n              <EnergyRating rating={home.energy} />\n            </section>\n\n            <section aria-labelledby=\"location-heading\">\n              <h2 id=\"location-heading\" className=\"mb-3 text-xl font-semibold\">\n                Location\n              </h2>\n              <div className=\"h-72 overflow-hidden rounded-xl border\">\n                <DetailMapLoader home={home} />\n              </div>\n            </section>\n          </div>\n\n          <aside\n            aria-labelledby=\"contact-heading\"\n            className=\"rounded-xl border bg-card p-5 shadow-sm lg:sticky lg:top-6\"\n          >\n            <h2 id=\"contact-heading\" className=\"text-lg font-semibold\">\n              Contact the agent\n            </h2>\n            <p className=\"mt-1 mb-4 text-sm text-muted-foreground\">\n              {AGENT.name}, {AGENT.agency}\n            </p>\n            <ContactForm home={home} />\n          </aside>\n        </div>\n      </main>\n    </div>\n  );\n}\n```"
+        }
+      ]
+    }
+  ]
+}
