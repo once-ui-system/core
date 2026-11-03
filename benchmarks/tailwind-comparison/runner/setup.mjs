@@ -8,6 +8,7 @@
 //   node runner/setup.mjs --shadcn-src <path to a shadcn-ui/ui clone at the pinned commit>
 //                         [--once-version 2.1.0-rc.0 | --once-tarball <path>] [--skip-install]
 //                         [--docs-src work/docs-src]   (MUI, Chakra, Mantine docs; runner/fetch-docs.mjs)
+//                         [--stack-src <once-ui-system/stack checkout>]   (the Stack arm)
 //
 // --once-version packs the published package from npm (the full run); --once-tarball
 // uses a local `pnpm pack` (the pilot). Either way the tarball's sha256 is recorded.
@@ -67,14 +68,52 @@ if (onceTarball !== vendored) {
   fs.copyFileSync(onceTarball, vendored);
 }
 
+// --- 0b. Stack arm: generate its scaffold from a Stack checkout ----------------
+// The Stack arm (S) starts from what a Stack user starts from: the scaffolder's
+// dashboard surface (product shell, orgs, auth in demo mode), named Lumen. It is
+// generated, not committed; the commit is recorded and the resolved lockfile is
+// pinned in arms/stack.package-lock.json (written on the first setup).
+const stackArm = Object.values(config.arms).some((a) => a.scaffold === "stack");
+let stackHead = null;
+if (stackArm) {
+  const stackSrc = typeof args["stack-src"] === "string" && path.resolve(args["stack-src"]);
+  if (!stackSrc) {
+    console.error("--stack-src is required for the Stack arm (a once-ui-system/stack checkout at the pinned commit)");
+    process.exit(1);
+  }
+  stackHead = execFileSync("git", ["-C", stackSrc, "rev-parse", "HEAD"]).toString().trim();
+  if (config.sources.stack?.commit && stackHead !== config.sources.stack.commit) {
+    console.warn(`WARNING: stack checkout ${stackHead} != pinned ${config.sources.stack.commit}`);
+  }
+  const out = path.join(ROOT, "arms/stack");
+  fs.rmSync(out, { recursive: true, force: true });
+  execFileSync("node", ["scripts/scaffold.mjs", "--surfaces", config.sources.stack?.surfaces ?? "dashboard", "--name", "Lumen", "--out", out], {
+    cwd: stackSrc,
+    stdio: ["ignore", "ignore", "inherit"],
+  });
+  // No surface serves "/", so the scaffolder redirects it to /app; the tasks
+  // serve "/" themselves, so the redirect goes.
+  const nc = path.join(out, "next.config.mjs");
+  const before = fs.readFileSync(nc, "utf8");
+  const after = before.replace(/\n  async redirects\(\) \{\n    return \[\n      \{ source: "\/", destination: "\/app", permanent: false \},\n    \];\n  \},/, "");
+  if (after === before) console.warn("WARNING: the Stack scaffold's root redirect was not found; check next.config.mjs");
+  fs.writeFileSync(nc, after);
+  // Same placeholder page as every arm, so "/" exists before the agent writes it.
+  fs.copyFileSync(path.join(ROOT, "arms/tailwind/app/page.tsx"), path.join(out, "src/app/page.tsx"));
+  const pinnedLock = path.join(ROOT, "arms/stack.package-lock.json");
+  if (fs.existsSync(pinnedLock)) fs.copyFileSync(pinnedLock, path.join(out, "package-lock.json"));
+  console.log(`generated arms/stack from stack ${stackHead.slice(0, 8)}`);
+}
+
 // --- 1. install scaffolds ----------------------------------------------------
 if (!args["skip-install"]) {
   for (const scaffold of [...new Set(Object.values(config.arms).map((a) => a.scaffold))]) {
     // A different Once UI tarball changes the lockfile's integrity entry for the
     // file: dependency, so that scaffold is re-resolved with `npm install` (commit
     // the updated arms/once/package-lock.json with the results).
-    const cmd = scaffold === "once" && (onceVersion || args["once-tarball"]) ? "install" : "ci";
-    if (cmd === "install") {
+    const stackUnpinned = scaffold === "stack" && !fs.existsSync(path.join(ROOT, "arms/stack.package-lock.json"));
+    const cmd = (scaffold === "once" && (onceVersion || args["once-tarball"])) || stackUnpinned ? "install" : "ci";
+    if (cmd === "install" && scaffold === "once") {
       // `npm install` still enforces the lockfile's old integrity for a file:
       // tarball (EINTEGRITY), so drop that one entry and let npm re-record it.
       const lockPath = path.join(ROOT, "arms/once/package-lock.json");
@@ -87,6 +126,7 @@ if (!args["skip-install"]) {
       cwd: path.join(ROOT, "arms", scaffold),
       stdio: "inherit",
     });
+    if (stackUnpinned) fs.copyFileSync(path.join(ROOT, "arms/stack/package-lock.json"), path.join(ROOT, "arms/stack.package-lock.json"));
   }
   // Gate working copies hard-link node_modules at creation; rebuild them.
   fs.rmSync(path.join(WORK, "gate"), { recursive: true, force: true });
@@ -96,7 +136,7 @@ if (!args["skip-install"]) {
 const SANDBOX = path.join(WORK, "sandbox");
 fs.rmSync(SANDBOX, { recursive: true, force: true });
 
-const PROJECT_EXCLUDE = /(^|\/)(node_modules|\.next|vendor)(\/|$)|next-env\.d\.ts$|package-lock\.json$|tsconfig\.tsbuildinfo$/;
+const PROJECT_EXCLUDE = /(^|\/)(node_modules|\.next|vendor)(\/|$)|next-env\.d\.ts$|package-lock\.json$|tsconfig\.tsbuildinfo$|\.(png|jpe?g|gif|webp|avif|ico|mp4|webm|woff2?|ttf|otf|pdf|zip)$/i;
 
 function copyTree(from, to, { exclude, transform } = {}) {
   for (const rel of listFiles(from)) {
@@ -120,6 +160,18 @@ const shadcnImports = (s) =>
 for (const [letter, arm] of Object.entries(config.arms)) {
   const base = path.join(SANDBOX, arm.id);
   copyTree(path.join(ROOT, "arms", arm.scaffold), path.join(base, "project"), { exclude: PROJECT_EXCLUDE });
+
+  // Stack: the agent map is the project's own AGENTS.md; the Once UI harness it
+  // points to is the one installed with the Stack (node_modules), as a Stack
+  // user has it.
+  if (arm.docs === "stack-core") {
+    const pkg = path.join(ROOT, "arms", arm.scaffold, "node_modules/@once-ui-system/core");
+    const docs = path.join(base, "docs");
+    fs.mkdirSync(docs, { recursive: true });
+    fs.copyFileSync(path.join(pkg, "AGENTS.md"), path.join(docs, "AGENTS.md"));
+    const excluded = new Set(config.sources.once_ui.excluded_from_context);
+    copyTree(path.join(pkg, "ai"), path.join(docs, "ai"), { exclude: { test: (rel) => excluded.has(`ai/${rel}`) } });
+  }
 
   if (arm.docs === "once-harness") {
     // The harness exactly as shipped in the package: AGENTS.md + ai/**,
@@ -188,6 +240,7 @@ const manifest = {
   tokenizer: "proxy (see lib.mjs)",
   once_ui: { version: onceVersion ?? "local tarball", tarball_sha256: tarSha },
   shadcn_commit: shadcnHead,
+  stack_commit: stackHead,
   docs_snapshot: docsManifest && { fetched: docsManifest.fetched, sha256: docsManifest.sha256, files: docsManifest.files },
   arms: {},
 };

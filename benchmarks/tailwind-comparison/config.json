@@ -82,6 +82,13 @@
       "id": "mantine-docs",
       "scaffold": "mantine",
       "docs": "mantine"
+    },
+    "S": {
+      "id": "stack",
+      "scaffold": "stack",
+      "docs": "stack-core",
+      "replace_any": true,
+      "$comment": "Once UI Stack: the scaffolder's dashboard surface (named Lumen), which the agent may change anywhere under src/. Scored separately from arm A."
     }
   },
   "primary_comparison": [
@@ -148,6 +155,13 @@
       "mui": "https://mui.com/material-ui/llms.txt + https://mui.com/x/llms.txt",
       "chakra": "https://chakra-ui.com/llms-{components,charts,styling,theming}.txt",
       "mantine": "https://mantine.dev/llms.txt"
+    },
+    "stack": {
+      "repo": "https://github.com/once-ui-system/stack",
+      "branch": "preview",
+      "commit": "9e8bc53e6957d90a3b4be1055ed38619efd2f2d2",
+      "surfaces": "dashboard",
+      "$comment": "setup.mjs --stack-src runs scripts/scaffold.mjs at this commit; the resolved lockfile is pinned in arms/stack.package-lock.json."
     }
   },
   "versions": {

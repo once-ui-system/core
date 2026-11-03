@@ -13,7 +13,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { ROOT, WORK, armByLetter, config, interactions, routesOf, shotName, taskById } from "./lib.mjs";
+import { ROOT, WORK, armByLetter, config, editableFiles, interactions, replacesAnything, routesOf, shotName, taskById } from "./lib.mjs";
 
 // The pre-installed Chromium's folder carries its build number; take whichever is there.
 const CHROMIUM =
@@ -133,29 +133,45 @@ function workdir(letter) {
 }
 
 // Put the generated files into the arm's working copy. Files an earlier attempt
-// wrote are removed first and app/page.tsx goes back to the scaffold's, so each
-// attempt builds on the scaffold alone. A file that already exists in the
-// scaffold (other than app/page.tsx) is never overwritten.
-function writeFiles(letter, dir, files) {
+// wrote are removed first (or, where the attempt replaced a scaffold file, put
+// back), and app/page.tsx goes back to the scaffold's, so each attempt builds on
+// the scaffold alone. A scaffold file may be replaced only where the arm and
+// task allow it (lib.mjs editableFiles / replacesAnything); any other is refused.
+function writeFiles(letter, dir, files, task) {
   const scaffold = path.join(ROOT, "arms", armByLetter(letter).scaffold);
   const ledger = path.join(dir, ".bench-generated.json");
   for (const f of fs.existsSync(ledger) ? JSON.parse(fs.readFileSync(ledger, "utf8")) : []) {
+    if (fs.existsSync(path.join(scaffold, f))) {
+      fs.copyFileSync(path.join(scaffold, f), path.join(dir, f));
+      continue;
+    }
     fs.rmSync(path.join(dir, f), { force: true });
     // Folders the attempt created go too, so an empty route folder can't linger.
     for (let d = path.dirname(path.join(dir, f)); d !== dir && fs.existsSync(d) && !fs.readdirSync(d).length; d = path.dirname(d)) {
       fs.rmdirSync(d);
     }
   }
-  fs.copyFileSync(path.join(scaffold, "app/page.tsx"), path.join(dir, "app/page.tsx"));
-  const clash = Object.keys(files).filter((f) => f !== "app/page.tsx" && fs.existsSync(path.join(scaffold, f)));
+  const page = ["app/page.tsx", "src/app/page.tsx"].find((f) => fs.existsSync(path.join(scaffold, f)));
+  if (page) fs.copyFileSync(path.join(scaffold, page), path.join(dir, page));
+  const allowed = new Set(["app/page.tsx", ...editableFiles(letter, task)]);
+  const clash = replacesAnything(letter)
+    ? []
+    : Object.keys(files).filter((f) => !allowed.has(f) && fs.existsSync(path.join(scaffold, f)));
   if (clash.length) return { error: `These files already exist in the project and must not be changed: ${clash.join(", ")}` };
+  // A project keeps its code either under src/ (Stack) or at the root (the
+  // other arms); Next.js ignores src/app when app/ exists, so the wrong side is refused.
+  const srcProject = fs.existsSync(path.join(scaffold, "src/app"));
+  const misplaced = Object.keys(files).filter((f) => f.startsWith("src/") !== srcProject);
+  if (misplaced.length) {
+    return { error: `This project keeps its code ${srcProject ? "under src/" : "at the project root (app/, components/, lib/), not under src/"}: ${misplaced.join(", ")}` };
+  }
   const added = [];
   for (const [f, src] of Object.entries(files)) {
     const target = path.join(dir, f);
     if (!target.startsWith(`${dir}${path.sep}`)) return { error: `Path outside the project: ${f}` };
     fs.mkdirSync(path.dirname(target), { recursive: true });
     fs.writeFileSync(target, src);
-    if (f !== "app/page.tsx") added.push(f);
+    if (f !== page) added.push(f);
   }
   fs.writeFileSync(ledger, JSON.stringify(added));
   return {};
@@ -339,7 +355,7 @@ export async function runGates(letter, code, outDir, task = null) {
     return finish();
   }
   const files = typeof code === "string" ? { "app/page.tsx": code } : code;
-  const written = writeFiles(letter, dir, files);
+  const written = writeFiles(letter, dir, files, taskById(task));
   if (written.error) {
     Object.assign(res, { failed_gate: "extract", failure_output: written.error });
     return finish();

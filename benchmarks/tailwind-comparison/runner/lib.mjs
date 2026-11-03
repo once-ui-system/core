@@ -59,13 +59,29 @@ export function proxyTokens(text) {
   return { o200k: enc.encode(text).length, claudeLegacy: legacyClaudeCount(text) };
 }
 
+// Which files the reply may write, per arm and task (gates.mjs enforces the same).
+// Most arms add files beside an untouched scaffold. The Stack arm starts from a
+// whole app, so it may replace any of its files. A task can name scaffold files
+// an arm may change (the rebrand task's theme files) in `editable[scaffold]`.
+export const editableFiles = (letter, task) => task?.editable?.[armByLetter(letter).scaffold] ?? [];
+export const replacesAnything = (letter) => Boolean(armByLetter(letter).replace_any);
+function filesRule(letter, task) {
+  if (replacesAnything(letter)) {
+    return "Write as many files as the app needs, under `src/app/`, `src/components/`, `src/lib/`, `src/content/` or `src/resources/`. You may change any file that already exists in the project: send the whole new file. Files you don't send stay as they are. You can read the project's existing files under `project/`.";
+  }
+  const extra = editableFiles(letter, task);
+  const keep = ["app/page.tsx", ...extra].map((f) => `\`${f}\``).join(", ");
+  return `Write as many files as the app needs, under \`app/\`, \`components/\` or \`lib/\`. Do not change any file that already exists in the project except ${keep}${extra.length ? " (send the whole new file)" : ""}. The root layout, global styles and the stack's standard providers already exist. You can read the project's existing files under \`project/\`.`;
+}
+
 export function buildPrompt(armLetter, taskId) {
   const task = taskById(taskId);
   const user = fs
     .readFileSync(path.join(ROOT, isMulti(task) ? "prompts/user-multi.md" : "prompts/user.md"), "utf8")
     .replace("{{STACK}}", stacks[armLetter])
     .replace("{{TASK}}", task.prompt)
-    .replace("{{ROUTES}}", routesOf(task).map((r) => `\`${r}\``).join(", "));
+    .replace("{{ROUTES}}", routesOf(task).map((r) => `\`${r}\``).join(", "))
+    .replace("{{FILES_RULE}}", filesRule(armLetter, task));
   const system = fs.readFileSync(path.join(ROOT, "prompts/system.md"), "utf8").trim();
   return { system, user };
 }
@@ -88,7 +104,10 @@ export function extractCode(reply) {
 // ```tsx app/settings/page.tsx. A later block for the same path replaces an
 // earlier one. Paths must stay inside app/, components/ or lib/; anything else
 // (an absolute path, `..`, another folder) is reported, not written.
-const FILE_PATH = /^(?:app|components|lib)\/[\w@()[\].\/-]+\.(?:tsx|ts|css)$/;
+// The Stack arm's project keeps its code under src/ and its copy under
+// src/content and src/resources, so those prefixes are allowed too; what an arm
+// may actually change is checked by the gates (writeFiles).
+const FILE_PATH = /^(?:src\/)?(?:app|components|lib|content|resources)\/[\w@()[\].\/-]+\.(?:tsx|ts|css|js|scss)$/;
 export function extractFiles(reply) {
   const files = {};
   const rejected = [];
