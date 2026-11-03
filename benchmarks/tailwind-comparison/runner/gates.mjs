@@ -13,7 +13,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { chromium } from "playwright-core";
-import { brandCheck, styleDiscipline } from "./design-metrics.mjs";
+import { brandCheck, pageWeight, styleDiscipline } from "./design-metrics.mjs";
 import { ROOT, WORK, armByLetter, config, editableFiles, interactions, replacesAnything, routesOf, shotName, taskById, views } from "./lib.mjs";
 
 // The pre-installed Chromium's folder carries its build number; take whichever is there.
@@ -269,6 +269,7 @@ async function renderOne(browser, origin, route, vp, outDir, task) {
     if (vp.name === "desktop") {
       // Before axe is injected, so its own nodes aren't counted.
       out.style = await styleDiscipline(page).catch((e) => ({ error: e.message }));
+      out.weight = await pageWeight(page).catch((e) => ({ error: e.message }));
       const brand = taskById(task)?.brand_check;
       if (brand && route === "/") out.brand = await brandCheck(page, brand).catch((e) => ({ error: e.message }));
       await page.addScriptTag({ content: AXE });
@@ -355,6 +356,7 @@ async function renderGate(letter, dir, outDir, task) {
           }
           if (r.settle) result.settle[`${route} ${vp.name}`] = r.settle;
           if (r.style) (result.style ??= {})[route] = r.style;
+          if (r.weight) (result.weight ??= {})[route] = r.weight;
           if (r.brand) result.brand = r.brand;
           const where = routes.length > 1 ? `${route} ` : "";
           result.errors.push(...r.errors.map((e) => `[${where}${vp.width}px] ${e}`));

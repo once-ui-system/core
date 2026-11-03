@@ -96,3 +96,37 @@ export async function brandCheck(page, brand) {
     { target, radius: Number.parseFloat(brand.radius) },
   );
 }
+
+// Weight and paint of one loaded page, from the browser's own timing APIs:
+// JS and CSS bytes as transferred (next start serves gzip), first contentful
+// paint, layout shift, and the summed long-task time past 50 ms (a TBT-like
+// figure). Read on the desktop render of every route, after the settle wait.
+export async function pageWeight(page) {
+  return page.evaluate(
+    () =>
+      new Promise((resolve) => {
+        const res = performance.getEntriesByType("resource");
+        const bytes = (re) => res.filter((r) => re.test(r.name)).reduce((s, r) => s + (r.encodedBodySize || r.transferSize || 0), 0);
+        let cls = 0;
+        let blocking = 0;
+        try {
+          new PerformanceObserver((l) => {
+            for (const e of l.getEntries()) if (!e.hadRecentInput) cls += e.value;
+          }).observe({ type: "layout-shift", buffered: true });
+          new PerformanceObserver((l) => {
+            for (const e of l.getEntries()) blocking += Math.max(0, e.duration - 50);
+          }).observe({ type: "longtask", buffered: true });
+        } catch {}
+        setTimeout(() => {
+          const fcp = performance.getEntriesByName("first-contentful-paint")[0]?.startTime ?? null;
+          resolve({
+            js_kb: Math.round(bytes(/\.js(\?|$)/) / 102.4) / 10,
+            css_kb: Math.round(bytes(/\.css(\?|$)/) / 102.4) / 10,
+            fcp_ms: fcp && Math.round(fcp),
+            cls: Math.round(cls * 1000) / 1000,
+            long_task_ms: Math.round(blocking),
+          });
+        }, 100);
+      }),
+  );
+}

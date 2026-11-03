@@ -1,0 +1,44 @@
+{
+  "arm": "T",
+  "passed": false,
+  "failed_gate": "build",
+  "failure_output": "Error: Failed to collect configuration for /pricing\n    at ignore-listed frames {\n  [cause]: TypeError: v.Button.extend is not a function\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_0pi4lvk._.js:1:18439)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.esmImport [as i] (.next/server/chunks/ssr/[turbopack]_runtime.js:281:20)\n      at module evaluation (.next/server/chunks/ssr/benchmarks_tailwind-comparison_work_gate_mantine-docs_0pi4lvk._.js:1:19844)\n      at instantiateModule (.next/server/chunks/ssr/[turbopack]_runtime.js:853:9)\n      at getOrInstantiateModuleFromParent (.next/server/chunks/ssr/[turbopack]_runtime.js:877:12)\n      at Context.commonJsRequire [as r] (.next/server/chunks/ssr/[turbopack]_runtime.js:302:12)\n      at K.layout (.next/server/chunks/ssr/1g7e_next_dist_esm_build_templates_app-page_0ie22n_.js:1:746)\n}\n\n> Build error occurred\nError: Failed to collect page data for /pricing\n    at ignore-listed frames {\n  type: 'Error'\n}",
+  "gates": {
+    "typecheck": {
+      "ok": true,
+      "ms": 3539
+    },
+    "build": {
+      "ok": false,
+      "ms": 10307
+    }
+  },
+  "files": [
+    "app/theme.ts",
+    "app/layout.tsx",
+    "lib/data.ts",
+    "components/SiteShell.tsx",
+    "components/SiteShell.module.css",
+    "components/ThemeToggle.tsx",
+    "components/ThemeToggle.module.css",
+    "components/SiteHeader.tsx",
+    "components/SiteHeader.module.css",
+    "components/SiteFooter.tsx",
+    "components/SiteFooter.module.css",
+    "components/Hero.tsx",
+    "components/Hero.module.css",
+    "components/CustomerLogos.tsx",
+    "components/CustomerLogos.module.css",
+    "components/FeatureSection.tsx",
+    "components/FeatureSection.module.css",
+    "components/Features.tsx",
+    "app/page.tsx",
+    "app/pricing/page.tsx",
+    "app/pricing/pricing.module.css",
+    "components/PricingPlans.tsx",
+    "components/PricingPlans.module.css",
+    "components/PlanComparison.tsx",
+    "components/PlanComparison.module.css",
+    "components/FaqAccordion.tsx"
+  ]
+}
