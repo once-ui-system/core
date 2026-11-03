@@ -153,18 +153,15 @@ describe("DatePicker focus", () => {
   });
 
   it("with autoFocus, focuses the first day that can be picked when none is selected", async () => {
-    render(
-      <DatePicker
-        onValueChange={vi.fn()}
-        autoFocus
-        currentMonth={0}
-        currentYear={2026}
-        onMonthChange={vi.fn()}
-        minDate={jan(3)}
-      />,
-      { wrapper },
-    );
-    const third = await day(jan(3));
-    await waitFor(() => expect(third).toHaveFocus());
+    // With no date the picker shows this month: pin the clock to January 2026.
+    vi.useFakeTimers({ toFake: ["Date"] });
+    vi.setSystemTime(jan(1));
+    try {
+      render(<DatePicker onValueChange={vi.fn()} autoFocus minDate={jan(3)} />, { wrapper });
+      const third = await day(jan(3));
+      await waitFor(() => expect(third).toHaveFocus());
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

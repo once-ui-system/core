@@ -166,3 +166,41 @@ describe("default* and size renames", () => {
     );
   });
 });
+
+describe("freeze sweep renames", () => {
+  it("renames Table's selection handler, before and after the DataTable merge", () => {
+    assert.equal(
+      body(`${core("Table")}<Table rows={r} selectable selected={s} onSelectionChange={setS} />`),
+      `<Table rows={r} selectable selected={s} onSelectedChange={setS} />`,
+    );
+    const { out } = transform(
+      `${core("DataTable")}<DataTable rows={r} selectable onSelectionChange={setS} />`,
+    );
+    assert.match(out, /<Table rows=\{r\} selectable onSelectedChange=\{setS\} \/>/);
+  });
+
+  it("renames CodeBlock isCollapsible to collapsible", () => {
+    assert.equal(
+      body(`${core("CodeBlock")}<CodeBlock codes={c} isCollapsible={false} />`),
+      `<CodeBlock codes={c} collapsible={false} />`,
+    );
+  });
+
+  it("renames MediaUpload initialPreviewImage to defaultPreviewImage", () => {
+    assert.equal(
+      body(`${core("MediaUpload")}<MediaUpload initialPreviewImage="/a.jpg" />`),
+      `<MediaUpload defaultPreviewImage="/a.jpg" />`,
+    );
+  });
+});
+
+describe("DatePicker month wiring", () => {
+  it("reports currentMonth, currentYear and onMonthChange", () => {
+    const { warnings } = transform(
+      `${core("DatePicker")}<DatePicker currentMonth={m} currentYear={y} onMonthChange={step} />`,
+    );
+    for (const name of ["currentMonth", "currentYear", "onMonthChange"]) {
+      assert.ok(warnings.some((w) => w.includes(`<DatePicker> ${name}`)), name);
+    }
+  });
+});

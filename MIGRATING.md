@@ -50,7 +50,10 @@ width: run your formatter on the files it lists afterwards (`biome check
 import `@once-ui-system/fx` or `@once-ui-system/blocks`, the closing note
 lists each package with the files that import it: add the package to your
 dependencies, and if your app generates other apps, to the dependency list
-of every template that ships one of those files.
+of every template that ships one of those files. It also reads the nearest
+`package.json` and reports what 3.0 asks of it: `react` and `react-dom` below
+19 (§ 2), and a `recharts` dependency your app no longer needs for Once UI's
+charts (§ 12).
 
 Source kept as text is checked too. JSX in a template literal (a code
 sample) is migrated by name, like MDX. A JSON string that is a byte-exact
@@ -135,6 +138,10 @@ which every change goes through, so `{...register("x")}` works on them too.
 | RevealFx, Carousel `revealedByDefault` | `defaultRevealed` | renames |
 | Kbar, KbarContent `inputSize` | `size` | renames |
 | LineChart, BarChart, LineBarChart, PieChart `date={{ onChange }}` | `date={{ onRangeChange }}` | renames in an inline `date`; reports one built elsewhere |
+| DataTable (Table in 3.0) `onSelectionChange(ids)` | `onSelectedChange(ids)`, beside `selected` / `defaultSelected` | renames, on DataTable and on a beta's Table |
+| CodeBlock `isCollapsible` | `collapsible`, an adjective like `searchable` and `closable` | renames |
+| MediaUpload `initialPreviewImage` | `defaultPreviewImage` | renames |
+| DatePicker `currentMonth`, `currentYear`, `onMonthChange(increment)` | removed: they were how DateRangePicker drove each calendar; start on a month with `defaultValue` | reports every use |
 
 Behaviour to check: a RadioButton outside a RadioGroup no longer unticks when
 it is clicked again, as a native radio; SegmentedControl no longer moves its

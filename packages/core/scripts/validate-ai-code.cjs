@@ -892,6 +892,10 @@ const PRE_3_PROPS = {
   RevealFx: { revealedByDefault: "defaultRevealed", speed: "duration" },
   Carousel: { revealedByDefault: "defaultRevealed" },
   Kbar: { inputSize: "size" },
+  // Freeze sweep (3.0.0-beta.2).
+  Table: { onSelectionChange: "onSelectedChange" },
+  CodeBlock: { isCollapsible: "collapsible" },
+  MediaUpload: { initialPreviewImage: "defaultPreviewImage" },
   // D5: a `speed` that was a length of time.
   ShineFx: { speed: "duration", variant: "textVariant" },
   CountFx: { speed: "duration", variant: "textVariant" },

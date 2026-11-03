@@ -194,7 +194,7 @@ describe("numbers between the steps keep jsdom's getComputedStyle working", () =
   it("CodeBlock collapsed, with its fade", async () => {
     render(
       <CodeBlock
-        isCollapsible
+        collapsible
         maxLines={2}
         codeHeight={300}
         codes={[{ code: "a\nb\nc\nd\ne", language: "ts", label: "a.ts" }]}

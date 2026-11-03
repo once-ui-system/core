@@ -248,6 +248,16 @@ entry below that had landed by then:
   `date` object. Chart tooltips and axes write numbers through `valueFormat` in
   `locale` when either is set; without them they draw as 2.x did. With no
   `series`, the x column is no longer drawn as a series, and `label` never is.
+- **Three more props follow the 3.0 naming rules** (3.0.0-beta.2). Table's
+  selection handler is `onSelectedChange`, beside `selected` and `defaultSelected`
+  (it was `onSelectionChange`, as on 2.x's DataTable). CodeBlock `isCollapsible`
+  is `collapsible`. MediaUpload `initialPreviewImage` is `defaultPreviewImage`.
+  The codemod renames all three. Chart `Legend` takes `hidden` / `defaultHidden` /
+  `onHiddenChange(hidden)` in place of beta.1's `onToggle(index)`. DatePicker's
+  `currentMonth`, `currentYear` and `onMonthChange(increment)` leave its public
+  props: they were the range picker's wiring, not a value contract, and the
+  codemod reports each use. The codemod also reports, from the nearest
+  `package.json`, React below 19 and a `recharts` dependency left from 2.x.
 - **Real ESM** (B3): `"type": "module"`, and every relative import in `dist` names its
   file (`./Button.js`, `../data/emoji-data.json` with `{ type: "json" }`), built with
   `module`/`moduleResolution: NodeNext` as `packages/cli` is. Plain Node resolves the
