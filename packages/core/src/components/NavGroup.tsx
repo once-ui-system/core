@@ -113,7 +113,8 @@ const NavGroup = forwardRef<HTMLDivElement, NavGroupProps>(
             </Row>
           }
         >
-          <Row fillWidth gap="8" paddingX="12">
+          {/* The rail runs down the centre of the header's icon. */}
+          <Row fillWidth gap="8" paddingLeft={sizes.group.rail} paddingRight="12">
             {/* Without the rail the children keep the indent, so switching it
                 off never shifts a label. */}
             {rail ? (

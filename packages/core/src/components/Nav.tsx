@@ -44,7 +44,7 @@ const DENSITY = {
     gap: "2",
     iconGap: "8",
     section: "xs",
-    group: { size: "s", inset: "12", top: "4", bottom: "8" },
+    group: { size: "s", inset: "12", rail: "8", top: "4", bottom: "8" },
   },
   normal: {
     toggle: "l",
@@ -53,7 +53,7 @@ const DENSITY = {
     gap: "4",
     iconGap: "12",
     section: "s",
-    group: { size: "m", inset: "24", top: "8", bottom: "16" },
+    group: { size: "m", inset: "24", rail: "16", top: "8", bottom: "16" },
   },
   spacious: {
     toggle: "l",
@@ -62,7 +62,7 @@ const DENSITY = {
     gap: "4",
     iconGap: "12",
     section: "s",
-    group: { size: "m", inset: "24", top: "8", bottom: "16" },
+    group: { size: "m", inset: "24", rail: "16", top: "8", bottom: "16" },
   },
 } as const satisfies Record<
   NavDensity,
@@ -75,9 +75,17 @@ const DENSITY = {
     section: "xs" | "s";
     /**
      * The NavGroup's Accordion size, the header inset that puts its icon in
-     * line with a NavItem's, and the space above and below its rows.
+     * line with a NavItem's, the rail's inset inside the open group (so it
+     * runs down the centre of that 16px icon: inset + 8, less the Accordion's
+     * content padding), and the space above and below its rows.
      */
-    group: { size: "s" | "m"; inset: SpacingToken; top: SpacingToken; bottom: SpacingToken };
+    group: {
+      size: "s" | "m";
+      inset: SpacingToken;
+      rail: SpacingToken;
+      top: SpacingToken;
+      bottom: SpacingToken;
+    };
   }
 >;
 
